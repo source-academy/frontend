@@ -115,11 +115,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -150,11 +150,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -310,11 +310,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -345,11 +345,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -505,11 +505,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -540,11 +540,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -700,11 +700,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -735,11 +735,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -895,11 +895,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -930,11 +930,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1090,11 +1090,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1125,11 +1125,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1285,11 +1285,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1320,11 +1320,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1480,11 +1480,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1515,11 +1515,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1675,11 +1675,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1710,11 +1710,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1870,11 +1870,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -1905,11 +1905,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -2065,11 +2065,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -2100,11 +2100,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -2260,11 +2260,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
@@ -2295,11 +2295,11 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     <div className=\\"deadline\\">
                       <div className=\\"deadline-details\\">
                         <div>
-                          <Blueprint3.Popover interactionKind=\\"hover\\" position=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+                          <Blueprint3.Popover interactionKind=\\"hover\\" placement=\\"top\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                             <Manager>
                               <span className=\\"bp3-popover-wrapper\\">
-                                <Reference innerRef={[Function: target]}>
-                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                                <Reference innerRef={[Function (anonymous)]}>
+                                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function (anonymous)]}>
                                     <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                       <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                         <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>

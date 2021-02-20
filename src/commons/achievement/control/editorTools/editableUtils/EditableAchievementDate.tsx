@@ -1,6 +1,5 @@
-import { Button, Dialog, PopoverInteractionKind, Position } from '@blueprintjs/core';
+import { Button, Dialog, Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
-import { Popover2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
 
 type EditableAchievementDateProps = {
@@ -23,10 +22,10 @@ function EditableAchievementDate(props: EditableAchievementDateProps) {
     <div className="deadline">
       <div className="deadline-details">
         <div>
-          <Popover2 interactionKind={PopoverInteractionKind.HOVER} placement={Position.TOP}>
+          <Popover interactionKind={PopoverInteractionKind.HOVER} placement={Position.TOP}>
             <Button onClick={() => setOpen(!isOpen)}>{`Change ${type}`}</Button>
             {generateDeadlineString()}
-          </Popover2>
+          </Popover>
         </div>
       </div>
       <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title={`Edit Achievement ${type}`}>
