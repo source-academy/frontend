@@ -1,4 +1,5 @@
-import { Position, Tooltip } from '@blueprintjs/core';
+import { Position } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { GradingCellProps } from '../../../../features/grading/GradingTypes';
@@ -20,9 +21,9 @@ class GradingGradeCell extends React.Component<GradingCellProps, {}> {
       } adj.)`;
       return (
         <div>
-          <Tooltip content={tooltip} position={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+          <Tooltip2 content={tooltip} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
             {`${this.props.data.currentGrade} / ${this.props.data.maxGrade}`}
-          </Tooltip>
+          </Tooltip2>
         </div>
       );
     } else {

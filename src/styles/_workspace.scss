@@ -1060,11 +1060,11 @@ $code-color-error: #ff4444;
 }
 
 .Popover-share {
-  .#{$ns}-popover-arrow-fill {
+  .#{$ns}-popover2-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .#{$ns}-popover-content {
+  .#{$ns}-popover2-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;
