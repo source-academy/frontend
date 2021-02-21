@@ -163,7 +163,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
               defaultColDef={this.defaultColumnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
-              rowHeight={50}
+              rowHeight={30}
               pagination={false}
               paginationPageSize={50}
             />
