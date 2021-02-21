@@ -12,8 +12,9 @@ import {
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
-  BackendifyGoalDefinition,
-  BackendifyGoalProgress
+  backendifyGoalDefinition,
+  backendifyGoalProgress,
+  convertBackendMetaToFrontend
 } from '../../features/achievement/AchievementBackender';
 import {
   AchievementAbility,
@@ -138,7 +139,6 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
   }
 
   const achievements = await resp.json();
-  console.log(achievements);
 
   return achievements.map(
     (achievement: any) =>
@@ -146,8 +146,8 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
         uuid: achievement.uuid || '',
         title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
-        deadline: new Date(achievement.deadline),
-        release: new Date(achievement.release),
+        deadline: achievement.deadline && new Date(achievement.deadline),
+        release: achievement.release && new Date(achievement.release),
         isTask: achievement.isTask,
         position: achievement.position,
         prerequisiteUuids: achievement.prerequisiteUuids,
@@ -185,7 +185,7 @@ export const getGoals = async (
       ({
         uuid: goal.uuid || '',
         text: goal.text || '',
-        meta: goal.meta as GoalMeta,
+        meta: convertBackendMetaToFrontend(goal.meta) as GoalMeta,
         xp: goal.xp,
         maxXp: goal.maxXp,
         completed: goal.completed
@@ -213,7 +213,7 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
       ({
         uuid: goal.uuid || '',
         text: goal.text || '',
-        meta: goal.meta as GoalMeta,
+        meta: convertBackendMetaToFrontend(goal.meta) as GoalMeta,
         xp: goal.xp,
         maxXp: goal.maxXp,
         completed: goal.completed
@@ -251,7 +251,7 @@ export async function bulkUpdateGoals(
   const resp = await request(`admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
     body: {
-      goals: goals.map(goal => BackendifyGoalDefinition(goal))
+      goals: goals.map(goal => backendifyGoalDefinition(goal))
     },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
@@ -291,7 +291,7 @@ export const editGoal = async (
   const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
     ...tokens,
     // Backendify call to be removed once UUID has been implemented
-    body: { definition: BackendifyGoalDefinition(definition) },
+    body: { definition: backendifyGoalDefinition(definition) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -310,7 +310,7 @@ export const updateGoalProgress = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
-    body: { progress: BackendifyGoalProgress(progress) },
+    body: { progress: backendifyGoalProgress(progress) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
