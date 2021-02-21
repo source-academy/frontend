@@ -138,6 +138,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
   }
 
   const achievements = await resp.json();
+  console.log(achievements);
 
   return achievements.map(
     (achievement: any) =>
@@ -150,7 +151,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
         isTask: achievement.isTask,
         position: achievement.position,
         prerequisiteUuids: achievement.prerequisiteUuids,
-        goalUuids: achievement.goalsUuids,
+        goalUuids: achievement.goalUuids,
         cardBackground: achievement.cardBackground || '',
         view: {
           coverImage: achievement.view.coverImage || '',
@@ -229,7 +230,7 @@ export async function bulkUpdateAchievements(
 ): Promise<Response | null> {
   const resp = await request(`admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { achievements: JSON.stringify(achievements) },
+    body: { achievements: achievements },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -250,7 +251,7 @@ export async function bulkUpdateGoals(
   const resp = await request(`admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
     body: {
-      goals: JSON.stringify(goals.map(goal => BackendifyGoalDefinition(goal)))
+      goals: goals.map(goal => BackendifyGoalDefinition(goal))
     },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
@@ -271,7 +272,7 @@ export const editAchievement = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
     ...tokens,
-    body: { achievement: JSON.stringify(achievement) },
+    body: { achievement: achievement },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -290,7 +291,7 @@ export const editGoal = async (
   const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
     ...tokens,
     // Backendify call to be removed once UUID has been implemented
-    body: { definition: JSON.stringify(BackendifyGoalDefinition(definition)) },
+    body: { definition: BackendifyGoalDefinition(definition) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -309,7 +310,7 @@ export const updateGoalProgress = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
-    body: { progress: JSON.stringify(BackendifyGoalProgress(progress)) },
+    body: { progress: BackendifyGoalProgress(progress) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
