@@ -1133,23 +1133,6 @@
     resize-observer-polyfill "^1.5.1"
     tslib "~1.13.0"
 
-"@blueprintjs/core@^3.38.2":
-  version "3.38.2"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.38.2.tgz#fae1ab6ae9c2b21af63d9afd8cb851bb94a7168f"
-  integrity sha512-YOTZ8UkaKCjP/g8fm9e2py5/9TvAWHwhhDQAH30NV53FD5oBOjYu0+mUU1hRys9TrBflvA3cQn8EgHRP1y/K9A==
-  dependencies:
-    "@blueprintjs/icons" "^3.24.0"
-    "@types/dom4" "^2.0.1"
-    classnames "^2.2"
-    dom4 "^2.1.5"
-    normalize.css "^8.0.1"
-    popper.js "^1.16.1"
-    react-lifecycles-compat "^3.0.4"
-    react-popper "^1.3.7"
-    react-transition-group "^2.9.0"
-    resize-observer-polyfill "^1.5.1"
-    tslib "~1.13.0"
-
 "@blueprintjs/core@^3.39.0":
   version "3.39.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.39.0.tgz#77c13aea4e5285568b9ad76f69004567ea7d75e5"
@@ -1186,12 +1169,12 @@
     classnames "^2.2"
     tslib "~1.13.0"
 
-"@blueprintjs/popover2@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/popover2/-/popover2-0.2.0.tgz#4712d98e0187c343e835dbe5c7fd0dfd29d2d64b"
-  integrity sha512-BvT6fuL+3hsHuOYXYdNwpNiOCCA4m0H7BD3TmpULo8+Vzw+BP5xHyB7Q1EPxJf8OqNNfSCO+oR+6WsPgzk6rXA==
+"@blueprintjs/popover2@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/popover2/-/popover2-0.3.0.tgz#be398e10de5589e9e4e764f0f51e213dccc07410"
+  integrity sha512-EtxKoaafkn3FRLKYh0V2CdtgPBgtSoOxIzrT7eZil5XBgEQiYap1lzyc/Rm+N+4yeW1+iOB6uY/3gdE4CRiPIg==
   dependencies:
-    "@blueprintjs/core" "^3.38.2"
+    "@blueprintjs/core" "^3.39.0"
     "@popperjs/core" "^2.5.4"
     classnames "^2.2"
     dom4 "^2.1.5"
@@ -1519,9 +1502,9 @@
     source-map "^0.7.3"
 
 "@popperjs/core@^2.5.4":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.7.0.tgz#5f7760965170f7f1e2910d2498c5be88b47a2a8c"
-  integrity sha512-V3WyEc8ZyAuOQ2fpFuTuYYOd2tV4NePeSdxaHYgYAOs7ERLxlcFi2XsmgI5LJFdAUmJKXsg8jaIiVTkTHQygQw==
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.8.2.tgz#1fd24b99e417176566f8ada718fd16dbc7ef2b7a"
+  integrity sha512-7PRna6st1As9DBTXO3Lf1lYw7bi+b/6kE2OPjvvdWHLfBxTI01FW1HSqt4akYzKe1Cta3bmhuwct4OAF2EVemA==
 
 "@redux-saga/core@^1.1.3":
   version "1.1.3"
