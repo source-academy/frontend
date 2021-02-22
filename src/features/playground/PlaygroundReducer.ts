@@ -2,9 +2,9 @@ import { Reducer } from 'redux';
 
 import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
-
 import {
   CHANGE_QUERY_STRING,
+  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PlaygroundState,
   TOGGLE_USING_SUBST,
   UPDATE_SHORT_URL
@@ -29,6 +29,11 @@ export const PlaygroundReducer: Reducer<PlaygroundState> = (
       return {
         ...state,
         shortURL: action.payload
+      };
+    case PLAYGROUND_UPDATE_PERSISTENCE_FILE:
+      return {
+        ...state,
+        persistenceFile: action.payload
       };
     default:
       return state;

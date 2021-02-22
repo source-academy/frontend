@@ -190,6 +190,11 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
     this.setState({
       currentPlayerProgress: currentTime / this.props.duration
     });
+
+    // listening on forcedPaused status
+    if (this.props.playbackStatus === PlaybackStatus.forcedPaused) {
+      this.handlePlayerPausing();
+    }
   };
 
   private handlePlayerProgressBarChange = (value: number) => {

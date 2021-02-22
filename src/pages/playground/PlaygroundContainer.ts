@@ -1,8 +1,7 @@
+import { Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { Variant } from 'js-slang/dist/types';
 
 import {
   beginDebuggerPause,
@@ -10,14 +9,12 @@ import {
   debuggerReset,
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
+import { logoutGoogle } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
-  finishInvite,
-  initInvite,
-  invalidEditorSessionId,
   setEditorSessionId,
-  setWebsocketStatus
+  setSharedbConnected
 } from '../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -28,12 +25,13 @@ import {
   changeEditorWidth,
   changeExecTime,
   changeSideContentHeight,
+  changeStepLimit,
   chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchChapter,
+  fetchSublanguage,
   navigateToDeclaration,
   promptAutocomplete,
   sendReplInputToOutput,
@@ -43,7 +41,13 @@ import {
   updateEditorValue,
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceLocations } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import {
+  persistenceInitialise,
+  persistenceOpenPicker,
+  persistenceSaveFile,
+  persistenceSaveFileAs
+} from '../../features/persistence/PersistenceActions';
 import {
   generateLzString,
   shortenURL,
@@ -57,6 +61,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
   execTime: state.workspaces.playground.execTime,
+  stepLimit: state.workspaces.playground.stepLimit,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   breakpoints: state.workspaces.playground.breakpoints,
   highlightedLines: state.workspaces.playground.highlightedLines,
@@ -68,17 +73,17 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
   replValue: state.workspaces.playground.replValue,
-  sharedbAceIsInviting: state.workspaces.playground.sharedbAceIsInviting,
-  sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   sourceVariant: state.workspaces.playground.context.variant,
-  websocketStatus: state.workspaces.playground.websocketStatus,
+  sharedbConnected: state.workspaces.playground.sharedbConnected,
   externalLibraryName: state.workspaces.playground.externalLibrary,
-  usingSubst: state.playground.usingSubst
+  usingSubst: state.playground.usingSubst,
+  persistenceUser: state.session.googleUser,
+  persistenceFile: state.playground.persistenceFile
 });
 
-const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
+const workspaceLocation: WorkspaceLocation = 'playground';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
@@ -89,10 +94,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
+      handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, workspaceLocation),
       handleChapterSelect: (chapter: number, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
+      handleFetchSublanguage: fetchSublanguage,
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
@@ -100,23 +107,20 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeEditorWidth(widthChange.toString(), workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleFinishInvite: () => finishInvite(workspaceLocation),
       handleGenerateLz: generateLzString,
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
-      handleInvalidEditorSessionId: () => invalidEditorSessionId(),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation),
-      handleInitInvite: (editorValue: string) => initInvite(editorValue, workspaceLocation),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
+        externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(workspaceLocation, editorSessionId),
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleSetWebsocketStatus: (websocketStatus: number) =>
-        setWebsocketStatus(workspaceLocation, websocketStatus),
+      handleSetSharedbConnected: (connected: boolean) =>
+        setSharedbConnected(workspaceLocation, connected),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
@@ -124,9 +128,14 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
-      handleFetchChapter: () => fetchChapter(),
+      handleFetchChapter: fetchSublanguage,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
+      handlePersistenceOpenPicker: persistenceOpenPicker,
+      handlePersistenceSaveFile: persistenceSaveFileAs,
+      handlePersistenceUpdateFile: persistenceSaveFile,
+      handlePersistenceInitialise: persistenceInitialise,
+      handlePersistenceLogOut: logoutGoogle
     },
     dispatch
   );

@@ -1,6 +1,8 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
@@ -11,6 +13,7 @@ import Playground, { PlaygroundProps } from '../Playground';
 const baseProps = {
   editorValue: '',
   execTime: 1000,
+  stepLimit: 1000,
   breakpoints: [],
   highlightedLines: [],
   isRunning: false,
@@ -19,20 +22,21 @@ const baseProps = {
   editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,
-  sharedbAceInitValue: '',
-  sharedbAceIsInviting: false,
   sideContentHeight: 40,
   sourceChapter: 2,
   sourceVariant: 'default' as Variant,
   externalLibraryName: ExternalLibraryName.NONE,
   output: [],
   replValue: '',
-  websocketStatus: 0,
+  sharedbConnected: false,
   usingSubst: false,
+  persistenceUser: undefined,
+  persistenceFile: undefined,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
+  handleChangeStepLimit: (stepLimit: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleDeclarationNavigate: (cursorPosition: Position) => {},
   handleEditorEval: () => {},
@@ -41,19 +45,17 @@ const baseProps = {
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
-  handleFinishInvite: () => {},
+  handleFetchSublanguage: () => {},
   handleGenerateLz: () => {},
   handleShortenURL: () => {},
   handleUpdateShortURL: (s: string) => {},
   handleInterruptEval: () => {},
-  handleInvalidEditorSessionId: () => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
   handleSendReplInputToOutput: (code: string) => {},
   handleSetEditorSessionId: (editorSessionId: string) => {},
-  handleInitInvite: (value: string) => {},
-  handleSetWebsocketStatus: (websocketStatus: number) => {},
+  handleSetSharedbConnected: (connected: boolean) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {},
   handleUsingSubst: (usingSubst: boolean) => {},
@@ -61,7 +63,12 @@ const baseProps = {
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
   handleFetchChapter: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
+  handlePersistenceOpenPicker: () => {},
+  handlePersistenceSaveFile: () => {},
+  handlePersistenceInitialise: () => {},
+  handlePersistenceUpdateFile: () => {},
+  handlePersistenceLogOut: () => {}
 };
 
 const testValueProps: PlaygroundProps = {
@@ -76,14 +83,24 @@ const playgroundLinkProps: PlaygroundProps = {
   editorValue: 'This should not show up'
 };
 
+const mockStore = mockInitialStore();
+
 test('Playground renders correctly', () => {
-  const app = <Playground {...testValueProps} />;
+  const app = (
+    <Provider store={mockStore}>
+      <Playground {...testValueProps} />
+    </Provider>
+  );
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('Playground with link renders correctly', () => {
-  const app = <Playground {...playgroundLinkProps} />;
+  const app = (
+    <Provider store={mockStore}>
+      <Playground {...playgroundLinkProps} />
+    </Provider>
+  );
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
 });

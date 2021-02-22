@@ -1,12 +1,14 @@
 import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
+import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import { Variant } from 'js-slang/dist/types';
-
-import { sourceLanguages, styliseChapter } from '../application/ApplicationTypes';
-import { Chapter } from '../application/types/ChapterTypes';
+import {
+  SourceLanguage,
+  sourceLanguages,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import {
   External,
   externalLibraries,
@@ -194,7 +196,7 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
-  private handleChapterSelect = (i: Chapter, _e?: React.SyntheticEvent<HTMLElement>) => {
+  private handleChapterSelect = (i: SourceLanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.chapter = i.chapter;
@@ -241,36 +243,30 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const chapters = sourceLanguages.map(lang => ({
-  chapter: lang.chapter,
-  variant: lang.variant,
-  displayName: styliseChapter(lang.chapter, lang.variant)
-}));
-
 const chapterSelect = (
   currentChap: number,
   variant: Variant = 'default',
-  handleSelect = (i: Chapter, e?: React.SyntheticEvent<HTMLElement>) => {}
+  handleSelect = (i: SourceLanguage, e?: React.SyntheticEvent<HTMLElement>) => {}
 ) => (
   <ChapterSelectComponent
     className={Classes.MINIMAL}
-    items={chapters}
+    items={sourceLanguages}
     onItemSelect={handleSelect}
     itemRenderer={chapterRenderer}
     filterable={false}
   >
     <Button
       className={Classes.MINIMAL}
-      text={styliseChapter(currentChap, variant)}
+      text={styliseSublanguage(currentChap, variant)}
       rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
   </ChapterSelectComponent>
 );
 
-const ChapterSelectComponent = Select.ofType<Chapter>();
+const ChapterSelectComponent = Select.ofType<SourceLanguage>();
 
-const chapterRenderer: ItemRenderer<Chapter> = (chap, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
+const chapterRenderer: ItemRenderer<SourceLanguage> = (chap, { handleClick, modifiers, query }) => (
+  <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
 );
 
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({

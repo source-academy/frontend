@@ -1,11 +1,11 @@
-import { decompressFromEncodedURIComponent } from 'lz-string';
+import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-
-import { Variant } from 'js-slang/dist/types';
+import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
+import Disabled from '../../pages/disabled/Disabled';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
@@ -13,45 +13,66 @@ import Playground from '../../pages/playground/PlaygroundContainer';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
-import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
-import { Role, sourceLanguages } from './ApplicationTypes';
-import { ExternalLibraryName } from './types/ExternalTypes';
+import { Role } from './ApplicationTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
-  handleClearContext: (
-    chapter: number,
-    variant: Variant,
-    externalLibraryName: ExternalLibraryName
-  ) => void;
-  handleEditorValueChange: (val: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleEnsureLibrariesLoaded: () => void;
   handleLogOut: () => void;
-  handleExternalLibrarySelect: (external: ExternalLibraryName) => void;
-  handleSetExecTime: (execTime: string) => void;
 };
 
 export type StateProps = {
-  accessToken?: string;
-  currentPlaygroundChapter: number;
-  currentPlaygroundVariant: Variant;
   role?: Role;
   title: string;
   name?: string;
-  currentExternalLibrary: ExternalLibraryName;
 };
 
-const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
+interface ApplicationState {
+  disabled: string | boolean;
+}
 
-class Application extends React.Component<ApplicationProps, {}> {
+class Application extends React.Component<ApplicationProps, ApplicationState> {
+  private intervalId: number | undefined;
+
+  public constructor(props: ApplicationProps) {
+    super(props);
+    this.state = { disabled: computeDisabledState() };
+  }
+
   public componentDidMount() {
-    parsePlayground(this.props);
+    if (Constants.disablePeriods.length > 0) {
+      this.intervalId = window.setInterval(() => {
+        const disabled = computeDisabledState();
+        if (this.state.disabled !== disabled) {
+          this.setState({ disabled });
+        }
+      }, 5000);
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.intervalId) {
+      window.clearInterval(this.intervalId);
+    }
   }
 
   public render() {
+    const loginPath = <Route path="/login" render={toLogin(this.props)} key="login" />;
+    const fullPaths = Constants.playgroundOnly
+      ? null
+      : [
+          <Route path="/academy" render={toAcademy(this.props)} key={0} />,
+          <Route
+            path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+            render={toIncubator}
+            key={1}
+          />,
+          <Route path="/achievement" render={toAchievement(this.props)} key={2} />,
+          loginPath
+        ];
+    const disabled = !['staff', 'admin'].includes(this.props.role!) && this.state.disabled;
+
     return (
       <div className="Application">
         <NavigationBar
@@ -61,24 +82,30 @@ class Application extends React.Component<ApplicationProps, {}> {
           title={this.props.title}
         />
         <div className="Application__main">
-          {/* Unfortunately Switches cannot contain fragments :( */}
-          {Constants.playgroundOnly ? (
+          {disabled && (
             <Switch>
-              <Route path="/playground" component={Playground} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route exact={true} path="/" render={this.redirectToPlayground} />
-              <Route component={NotFound} />
+              {!Constants.playgroundOnly && loginPath}
+              {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
+              {!this.props.role && !Constants.playgroundOnly
+                ? [
+                    <Route path="/academy" render={redirectToLogin} key={0} />,
+                    <Route exact={true} path="/" render={redirectToLogin} key={1} />
+                  ]
+                : []}
+              <Route render={this.renderDisabled.bind(this)} />
             </Switch>
-          ) : (
+          )}
+          {!disabled && (
             <Switch>
-              <Route path="/academy" component={toAcademy(this.props)} />
-              <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
               <Route path="/playground" component={Playground} />
-              <Route path="/login" render={toLogin(this.props)} />
               <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route exact={true} path="/" render={this.redirectToAcademy} />
+              <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+              {fullPaths}
+              <Route
+                exact={true}
+                path="/"
+                render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
+              />
               <Route component={NotFound} />
             </Switch>
           )}
@@ -87,19 +114,30 @@ class Application extends React.Component<ApplicationProps, {}> {
     );
   }
 
-  private redirectToPlayground = () => <Redirect to="/playground" />;
-  private redirectToAcademy = () => <Redirect to="/academy" />;
+  private renderDisabled = () => (
+    <Disabled reason={typeof this.state.disabled === 'string' ? this.state.disabled : undefined} />
+  );
 }
+
+const redirectToPlayground = () => <Redirect to="/playground" />;
+const redirectToAcademy = () => <Redirect to="/academy" />;
+const redirectToLogin = () => <Redirect to="/login" />;
 
 /**
  * A user routes to /academy,
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = (props: ApplicationProps) =>
-  props.accessToken === undefined || props.role === undefined
-    ? () => <Redirect to="/login" />
-    : () => <Academy accessToken={props.accessToken} role={props.role!} />;
+const toAcademy = ({ role }: ApplicationProps) =>
+  role === undefined ? redirectToLogin : () => <Academy role={role} />;
+
+/**
+ * A user routes to /achievement,
+ *  1. If the user is logged in, render the Achievement component
+ *  2. If the user is not logged in, redirect to /login
+ */
+const toAchievement = ({ role }: ApplicationProps) =>
+  role === undefined ? redirectToLogin : () => <Achievement />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);
@@ -116,56 +154,16 @@ const toLogin = (props: ApplicationProps) => () => {
   );
 };
 
-const parsePlayground = (props: ApplicationProps) => {
-  const prgrm = parsePrgrm(props);
-  const chapter = parseChapter(props) || props.currentPlaygroundChapter;
-  const variant = parseVariant(props, chapter) || props.currentPlaygroundVariant;
-  const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
-  const execTime = parseExecTime(props);
-  if (prgrm) {
-    props.handleEditorValueChange(prgrm);
-    props.handleEnsureLibrariesLoaded();
-    props.handleClearContext(chapter, variant, externalLibraryName);
-    props.handleExternalLibrarySelect(externalLibraryName);
-    props.handleSetExecTime(execTime);
+const toIncubator = () => <MissionControlContainer />;
+
+function computeDisabledState() {
+  const now = moment();
+  for (const { start, end, reason } of Constants.disablePeriods) {
+    if (start.isBefore(now) && end.isAfter(now)) {
+      return reason || true;
+    }
   }
-};
-
-const toIncubator = (routerProps: RouteComponentProps<any>) => <MissionControlContainer />;
-
-const parsePrgrm = (props: RouteComponentProps<{}>) => {
-  const qsParsed = parseQuery(props.location.hash);
-  // legacy support
-  const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm;
-  return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined;
-};
-
-const parseChapter = (props: RouteComponentProps<{}>) => {
-  return stringParamToInt(parseQuery(props.location.hash).chap) || undefined;
-};
-
-const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
-  const variantQuery = parseQuery(props.location.hash).variant;
-  // find a language with this variant and chapter (if any)
-  const matchingLang = sourceLanguages.find(
-    language => language.chapter === chap && language.variant === variantQuery
-  );
-
-  const variant: Variant = matchingLang ? matchingLang.variant : 'default';
-
-  return variant;
-};
-
-const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
-  const ext = parseQuery(props.location.hash).ext || '';
-  return Object.values(ExternalLibraryName).find(v => v === ext) || ExternalLibraryName.NONE;
-};
-
-const parseExecTime = (props: RouteComponentProps<{}>) => {
-  const time = parseQuery(props.location.hash).exec || '1000';
-  // Parse the time string to a number, defaulting execTime to 1000
-  const execTime = stringParamToInt(time) || 1000;
-  return `${execTime < 1000 ? 1000 : execTime}`;
-};
+  return false;
+}
 
 export default Application;

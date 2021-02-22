@@ -1,4 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
@@ -47,7 +48,6 @@ import {
   PlaybackData,
   PlaybackStatus
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-
 import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -77,7 +77,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
-  sourceVariant: state.workspaces.sourcecast.context.variant
+  sourceVariant: state.workspaces.sourcecast.context.variant,
+  uid: state.workspaces.sourcecast.uid
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -114,9 +115,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSetSourcecastData: (
         title: string,
         description: string,
+        uid: string,
         audioUrl: string,
         playbackData: PlaybackData
-      ) => setSourcecastData(title, description, audioUrl, playbackData, location),
+      ) => setSourcecastData(title, description, uid, audioUrl, playbackData, location),
       handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration, location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus, location),
@@ -132,6 +134,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const SourcecastContainer = connect(mapStateToProps, mapDispatchToProps)(Sourcecast);
+const SourcecastContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Sourcecast));
 
 export default SourcecastContainer;

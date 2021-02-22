@@ -1,14 +1,15 @@
 import { Variant } from 'js-slang/dist/types';
-
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
 import { OverallState } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
+import { AchievementItem } from '../features/achievement/AchievementTypes';
 
 export type SavedState = {
   session: Partial<SessionState>;
+  achievements: AchievementItem[];
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
@@ -40,8 +41,10 @@ export const saveState = (state: OverallState) => {
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken,
         role: state.session.role,
-        name: state.session.name
+        name: state.session.name,
+        userId: state.session.userId
       },
+      achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,

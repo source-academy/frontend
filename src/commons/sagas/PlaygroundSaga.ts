@@ -2,7 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, delay, put, race, select } from 'redux-saga/effects';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -14,6 +14,7 @@ import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/Playg
 import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(GENERATE_LZ_STRING, updateQueryString);
@@ -23,13 +24,22 @@ export default function* PlaygroundSaga(): SagaIterator {
     const keyword = action.payload;
     const errorMsg = 'ERROR';
 
-    const resp = yield call(shortenURLRequest, queryString, keyword);
-    if (!resp) {
+    let resp, timeout;
+
+    //we catch and move on if there are errors (plus have a timeout in case)
+    try {
+      const { result, hasTimedOut } = yield race({
+        result: call(shortenURLRequest, queryString, keyword),
+        hasTimedOut: delay(10000)
+      });
+
+      resp = result;
+      timeout = hasTimedOut;
+    } catch (_) {}
+
+    if (!resp || timeout) {
       yield put(updateShortURL(errorMsg));
-      return yield call(
-        showWarningMessage,
-        'Something went wrong trying to shorten the url. Please try again'
-      );
+      return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
     }
 
     if (resp.status !== 'success' && !resp.shorturl) {
@@ -83,15 +93,8 @@ export async function shortenURLRequest(
   queryString: string,
   keyword: string
 ): Promise<Response | null> {
-  let url = `${window.location.protocol}//${window.location.hostname}/playground#${queryString}`;
-  if (window.location.port !== '') {
-    url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/playground#${queryString}`;
-  }
+  const url = `${window.location.protocol}//${window.location.host}/playground#${queryString}`;
 
-  const method = 'GET';
-  const fetchOpts: any = {
-    method
-  };
   const params = {
     signature: Constants.urlShortenerSignature,
     action: 'shorturl',
@@ -99,12 +102,15 @@ export async function shortenURLRequest(
     keyword,
     url
   };
+  const fetchOpts: RequestInit = {
+    method: 'POST',
+    body: Object.entries(params).reduce((formData, [k, v]) => {
+      formData.append(k, v!);
+      return formData;
+    }, new FormData())
+  };
 
-  const query = Object.keys(params)
-    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-    .join('&');
-
-  const resp = await fetch(Constants.urlShortener + '?' + query, fetchOpts);
+  const resp = await fetch(Constants.urlShortener!, fetchOpts);
   if (!resp || !resp.ok) {
     return null;
   }

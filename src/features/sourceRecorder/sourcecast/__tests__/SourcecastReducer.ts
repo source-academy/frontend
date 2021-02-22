@@ -1,3 +1,5 @@
+import { action as generateAction } from 'typesafe-actions';
+
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import {
@@ -15,7 +17,6 @@ import {
 } from '../../SourceRecorderTypes';
 import { SourcecastReducer } from '../SourcecastReducer';
 import { UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
-import { action as generateAction } from 'typesafe-actions';
 
 describe('SAVE_SOURCECAST_DATA', () => {
   test('saves sourcecastData correctly', () => {
@@ -48,6 +49,7 @@ describe('SAVE_SOURCECAST_DATA', () => {
     const payload = {
       title: 'Test Title',
       description: 'Test Description',
+      uid: 'unique_id',
       audioUrl: 'someUrl.com',
       playbackData,
       workspaceLocation: undefined!,
@@ -167,6 +169,7 @@ describe('SET_SOURCECAST_DATA', () => {
     const payload = {
       title: 'Test Title',
       description: 'Test Description',
+      uid: 'unique_id',
       audioUrl: 'fakeAudioUrl.com/audio.mp3',
       playbackData,
       workspaceLocation: undefined!
@@ -220,6 +223,7 @@ describe('UPDATE_SOURCECAST_INDEX', () => {
       {
         title: 'Test Title',
         description: 'Test Description',
+        uid: 'unique_uid',
         inserted_at: '2019-07-17T15:54:57',
         updated_at: '2019-07-17T15:54:57',
         playbackData: '{}',

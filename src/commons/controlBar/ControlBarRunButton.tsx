@@ -1,6 +1,6 @@
-import { Tooltip } from '@blueprintjs/core';
+import { Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import { Tooltip2 } from '@blueprintjs/popover2';
 
 import controlButton from '../ControlButton';
 
@@ -16,8 +16,8 @@ type StateProps = {
 
 export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
   return (
-    <Tooltip content="...or press shift-enter in the editor">
+    <Tooltip2 content="...or press shift-enter in the editor" placement={Position.TOP}>
       {controlButton('Run', IconNames.PLAY, props.handleEditorEval)}
-    </Tooltip>
+    </Tooltip2>
   );
 }

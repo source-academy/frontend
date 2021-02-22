@@ -1,6 +1,6 @@
 import { parse } from 'acorn';
 import { FunctionExpression, Node } from 'estree';
-
+import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import createContext from 'js-slang/dist/createContext';
 import Closure from 'js-slang/dist/interpreter/closure';
 import { Context, Environment } from 'js-slang/dist/types';
@@ -43,5 +43,5 @@ export function mockClosure(): Closure {
 
 export function mockTypeError(): TypeError {
   // Typecast to Node to fix estree-acorn compatability.
-  return new TypeError(parse('') as Node, '', '', '');
+  return new TypeError(parse('', ACORN_PARSE_OPTIONS) as Node, '', '', '');
 }

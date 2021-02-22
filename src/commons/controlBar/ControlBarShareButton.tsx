@@ -1,9 +1,11 @@
-import { NonIdealState, Popover, Spinner, Text, Tooltip } from '@blueprintjs/core';
+import { NonIdealState, Position, Spinner, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 
@@ -37,52 +39,65 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
   }
 
   public render() {
-    return (
-      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
-        <Tooltip content="Get shareable link">
-          {controlButton('Share', IconNames.SHARE, () => this.toggleButton())}
-        </Tooltip>
-        {this.props.queryString === undefined ? (
-          <Text>
-            Share your programs! Type something into the editor (left), then click on this button
-            again.
-          </Text>
-        ) : (
-          <>
-            {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
-              !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
-                <div>
-                  <input placeholder={'Custom Alias (optional)'} onChange={this.handleChange} />
-                  {controlButton('Get Link', IconNames.SHARE, () => {
-                    this.props.handleShortenURL(this.state.keyword);
-                    this.setState({ isLoading: true });
-                  })}
-                </div>
-              ) : (
-                <div>
-                  <NonIdealState
-                    description="Generating Shareable Link..."
-                    icon={<Spinner size={Spinner.SIZE_SMALL} />}
-                  />
-                </div>
-              )
-            ) : (
-              <div key={this.props.shortURL}>
+    let url = '';
+    const { urlShortener } = Constants;
+    if (urlShortener) {
+      url = urlShortener.split('/').slice(0, -1).join('/') + '/';
+    }
+
+    const shareButtonPopoverContent =
+      this.props.queryString === undefined ? (
+        <Text>
+          Share your programs! Type something into the editor (left), then click on this button
+          again.
+        </Text>
+      ) : (
+        <>
+          {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
+            !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
+              <div>
+                {url}&nbsp;
                 <input
-                  defaultValue={this.props.shortURL}
-                  readOnly={true}
-                  ref={this.shareInputElem}
+                  placeholder={'custom string (optional)'}
+                  onChange={this.handleChange}
+                  style={{ width: 175 }}
                 />
-                <Tooltip content="Copy link to clipboard">
-                  <CopyToClipboard text={this.props.shortURL}>
-                    {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
-                  </CopyToClipboard>
-                </Tooltip>
+                {controlButton('Get Link', IconNames.SHARE, () => {
+                  this.props.handleShortenURL(this.state.keyword);
+                  this.setState({ isLoading: true });
+                })}
               </div>
-            )}
-          </>
-        )}
-      </Popover>
+            ) : (
+              <div>
+                <NonIdealState
+                  description="Generating Shareable Link..."
+                  icon={<Spinner size={Spinner.SIZE_SMALL} />}
+                />
+              </div>
+            )
+          ) : (
+            <div key={this.props.shortURL}>
+              <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} />
+              <Tooltip2 content="Copy link to clipboard">
+                <CopyToClipboard text={this.props.shortURL}>
+                  {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+                </CopyToClipboard>
+              </Tooltip2>
+            </div>
+          )}
+        </>
+      );
+
+    return (
+      <Popover2
+        popoverClassName="Popover-share"
+        inheritDarkTheme={false}
+        content={shareButtonPopoverContent}
+      >
+        <Tooltip2 content="Get shareable link" placement={Position.TOP}>
+          {controlButton('Share', IconNames.SHARE, () => this.toggleButton())}
+        </Tooltip2>
+      </Popover2>
     );
   }
 

@@ -14,10 +14,10 @@ import {
   NonIdealState,
   Position,
   Spinner,
-  Text,
-  Tooltip
+  Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -95,7 +95,9 @@ class Assessment extends React.Component<AssessmentProps, State> {
         assessmentId,
         questionId,
         notAttempted: overview.status === AssessmentStatuses.not_attempted,
-        closeDate: overview.closeAt
+        canSave:
+          !this.props.isStudent ||
+          (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt))
       };
       return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
     }
@@ -180,7 +182,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
       <>
         {submissionText}
         <p>
-          Early submissions grant you additional XP, but{' '}
+          Finalising your submission early grants you additional XP, but{' '}
           <span className="warning">this action is irreversible.</span>
         </p>
       </>
@@ -192,7 +194,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
         isCloseButtonShown={true}
         isOpen={this.state.betchaAssessment !== null}
         onClose={this.setBetchaAssessmentNull}
-        title="Betcha: Early Submission"
+        title="Finalise submission?"
       >
         <div className={Classes.DIALOG_BODY}>
           <Text>{betchaText}</Text>
@@ -200,7 +202,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
             {controlButton('Cancel', null, this.setBetchaAssessmentNull, { minimal: false })}
-            {controlButton('Finalise Submission', null, this.submitAssessment, {
+            {controlButton('Finalise', null, this.submitAssessment, {
               minimal: false,
               intent: Intent.DANGER
             })}
@@ -339,55 +341,56 @@ class Assessment extends React.Component<AssessmentProps, State> {
     index: number,
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
-  ) => (
-    <div key={index}>
-      <Card className="row listing" elevation={Elevation.ONE}>
-        <div className="col-xs-3 listing-picture">
-          <NotificationBadge
-            className="badge"
-            notificationFilter={filterNotificationsByAssessment(overview.id)}
-            large={true}
-          />
-          <img
-            alt="Assessment"
-            className={`cover-image-${overview.status}`}
-            src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-          />
-        </div>
-        <div className="col-xs-9 listing-text">
-          {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
-          <div className="listing-grade">
-            <H6>
-              {beforeNow(overview.openAt)
-                ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                : `Max Grade: ${overview.maxGrade}`}
-            </H6>
+  ) => {
+    const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
+    return (
+      <div key={index}>
+        <Card className="row listing" elevation={Elevation.ONE}>
+          <div className="col-xs-3 listing-picture">
+            <NotificationBadge
+              className="badge"
+              notificationFilter={filterNotificationsByAssessment(overview.id)}
+              large={true}
+            />
+            <img
+              alt="Assessment"
+              className={`cover-image-${overview.status}`}
+              src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+            />
           </div>
-          <div className="listing-xp">
-            <H6>
-              {beforeNow(overview.openAt)
-                ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}
-            </H6>
-          </div>
-          <div className="listing-description">
-            <Markdown content={overview.shortSummary} />
-          </div>
-          <div className="listing-footer">
-            <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-              {beforeNow(overview.openAt)
-                ? `Due: ${getPrettyDate(overview.closeAt)}`
-                : `Opens at: ${getPrettyDate(overview.openAt)}`}
-            </Text>
-            <div className="listing-button">
-              {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+          <div className="col-xs-9 listing-text">
+            {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
+            <div className="listing-grade">
+              <H6>
+                {showGrade
+                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+                  : `Max Grade: ${overview.maxGrade}`}
+              </H6>
+            </div>
+            <div className="listing-xp">
+              <H6>
+                {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}
+              </H6>
+            </div>
+            <div className="listing-description">
+              <Markdown content={overview.shortSummary} />
+            </div>
+            <div className="listing-footer">
+              <Text className="listing-due-date">
+                <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+                {beforeNow(overview.openAt)
+                  ? `Due: ${getPrettyDate(overview.closeAt)}`
+                  : `Opens at: ${getPrettyDate(overview.openAt)}`}
+              </Text>
+              <div className="listing-button">
+                {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
-    </div>
-  );
+        </Card>
+      </div>
+    );
+  };
 
   private makeOverviewCardTitle = (
     overview: AssessmentOverview,
@@ -399,12 +402,12 @@ class Assessment extends React.Component<AssessmentProps, State> {
         <H4 className="listing-title">
           {overview.title}
           {overview.private ? (
-            <Tooltip
+            <Tooltip2
               className="listing-title-tooltip"
               content="This assessment is password-protected."
             >
               <Icon icon="lock" />
-            </Tooltip>
+            </Tooltip2>
           ) : null}
           {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
@@ -444,9 +447,9 @@ const makeGradingStatus = (gradingStatus: string) => {
   }
 
   return (
-    <Tooltip className="listing-title-tooltip" content={tooltip} position={Position.RIGHT}>
+    <Tooltip2 className="listing-title-tooltip" content={tooltip} placement={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
-    </Tooltip>
+    </Tooltip2>
   );
 };
 

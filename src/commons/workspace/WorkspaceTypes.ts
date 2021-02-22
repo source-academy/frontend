@@ -5,7 +5,7 @@ import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcere
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -16,12 +16,12 @@ export const CHANGE_EDITOR_WIDTH = 'CHANGE_EDITOR_WIDTH';
 export const CHANGE_EXEC_TIME = 'CHANGE_EXEC_TIME';
 export const CHANGE_EXTERNAL_LIBRARY = 'CHANGE_EXTERNAL_LIBRARY';
 export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
+export const CHANGE_STEP_LIMIT = 'CHANGE_STEP_LIMIT';
 export const CHAPTER_SELECT = 'CHAPTER_SELECT';
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
 export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT';
 export const CLEAR_REPL_OUTPUT_LAST = 'CLEAR_REPL_OUTPUT_LAST';
 export const END_CLEAR_CONTEXT = 'END_CLEAR_CONTEXT';
-export const ENSURE_LIBRARIES_LOADED = 'ENSURE_LIBRARIES_LOADED';
 export const EVAL_EDITOR = 'EVAL_EDITOR';
 export const EVAL_REPL = 'EVAL_REPL';
 export const PROMPT_AUTOCOMPLETE = 'PROMPT_AUTOCOMPLETE';
@@ -42,29 +42,11 @@ export const UPDATE_EDITOR_BREAKPOINTS = 'UPDATE_EDITOR_BREAKPOINTS';
 export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
-export const FETCH_CHAPTER = 'FETCH_CHAPTER';
-export const UPDATE_CHAPTER = 'UPDATE_CHAPTER';
-export const CHANGE_CHAPTER = 'CHANGE_CHAPTER';
+export const FETCH_SUBLANGUAGE = 'FETCH_SUBLANGUAGE';
+export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
+export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
-/**
- * Used to differenciate between the sources of actions, as
- * two workspaces can work at the same time. To generalise this
- * or add more instances of `Workspace`s, one can add a string,
- * and call the actions with the respective string (taken
- * from the below enum).
- *
- * Note that the names must correspond with the name of the
- * object in IWorkspaceManagerState.
- */
-export enum WorkspaceLocations {
-  assessment = 'assessment',
-  playground = 'playground',
-  grading = 'grading',
-  sourcecast = 'sourcecast',
-  sourcereel = 'sourcereel'
-}
-
-export type WorkspaceLocation = keyof typeof WorkspaceLocations;
+export type WorkspaceLocation = keyof WorkspaceManagerState;
 
 type AssessmentWorkspaceAttr = {
   readonly currentAssessment?: number;
@@ -106,7 +88,7 @@ export type WorkspaceState = {
   readonly editorHeight: number;
   readonly editorWidth: string;
   readonly execTime: number;
-  readonly highlightedLines: number[][];
+  readonly highlightedLines: HighlightedLines[];
   readonly newCursorPosition?: Position;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
@@ -116,16 +98,24 @@ export type WorkspaceState = {
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
-  readonly sharedbAceInitValue: string;
-  readonly sharedbAceIsInviting: boolean;
+  readonly sharedbConnected: boolean;
   readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
-  readonly websocketStatus: number;
+  readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
+  readonly debuggerContext: DebuggerContext;
 };
 
 type ReplHistory = {
   browseIndex: null | number; // [0, 49] if browsing, else null
   records: string[];
   originalValue: string;
+};
+
+export type DebuggerContext = {
+  result: any;
+  lastDebuggerResult: any;
+  code: string;
+  context: Context;
+  workspaceLocation?: WorkspaceLocation;
 };

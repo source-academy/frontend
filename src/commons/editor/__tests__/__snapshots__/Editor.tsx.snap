@@ -1,9 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Editor renders correctly 1`] = `
-"<HotKeysEnabled className=\\"Editor\\" handlers={{...}}>
-  <div className=\\"row editor-react-ace\\">
-    <ReactAce className=\\"react-ace\\" commands={{...}} editorProps={{...}} markers={{...}} fontSize={17} height=\\"100%\\" highlightActiveLine={false} mode=\\"source1defaultNONE\\" onChange={[Function]} onCursorChange={[Function]} theme=\\"source\\" value=\\"\\" width=\\"100%\\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} showPrintMargin={true} tabSize={4} cursorStart={1} style={{...}} scrollMargin={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true} />
-  </div>
-</HotKeysEnabled>"
-`;
+exports[`Editor renders correctly 1`] = `"<Memo([object Object]) breakpoints={{...}} editorSessionId=\\"\\" editorValue=\\"\\" highlightedLines={{...}} isEditorAutorun={false} handleDeclarationNavigate={[Function: handleDeclarationNavigate]} handleEditorEval={[Function: handleEditorEval]} handleEditorValueChange={[Function: handleEditorValueChange]} handleEditorUpdateBreakpoints={[Function: handleEditorUpdateBreakpoints]} handleSetSharedbConnected={[Function: handleSetSharedbConnected]} handleUpdateHasUnsavedChanges={[Function: handleUpdateHasUnsavedChanges]} handlePromptAutocomplete={[Function: handlePromptAutocomplete]} hooks={{...}} />"`;

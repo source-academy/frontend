@@ -2,7 +2,7 @@ name: Build source-academy.github.io
 on:
   push:
     branches:
-      - sa_2021_refactor
+      - master
 
 jobs:
   deploy:
@@ -23,16 +23,16 @@ jobs:
       id: yarn-cache
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        key: 1-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          1-${{ runner.os }}-yarn-
     - uses: actions/cache@v2
       id: build-cache
       with:
         path: node_modules/.cache
-        key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+        key: 1-${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-build-
+          1-${{ runner.os }}-build-
     - name: yarn install and build
       run: |
         yarn install
@@ -46,11 +46,19 @@ jobs:
         REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
         REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
         REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
+        REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
+        REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
+        REACT_APP_GOOGLE_APP_ID: ${{ secrets.REACT_APP_GOOGLE_APP_ID }}
         REACT_APP_PLAYGROUND_ONLY: "TRUE"
-        REACT_APP_VERSION: ${{ format('pages-{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+        REACT_APP_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+        REACT_APP_ENVIRONMENT: "pages"
         REACT_APP_MODULE_BACKEND_URL: https://source-academy.github.io/modules
-        SW_EXCLUDE_REGEXES: '["^/source", "^/sicp", "^/modules"]'
+        REACT_APP_SHAREDB_BACKEND_URL: ${{ secrets.REACT_APP_SHAREDB_BACKEND_URL }}
+        REACT_APP_SW_EXCLUDE_REGEXES: '["^/source", "^/sicp", "^/modules", "^/ev3-source"]'
         PUBLIC_URL: "https://source-academy.github.io"
+        REACT_APP_DISABLE1_START: "2020-11-24T16:30+08"
+        REACT_APP_DISABLE1_END: "2020-11-24T20:30+08"
+        REACT_APP_DISABLE1_REASON: "CS1101S Final Assessment"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3

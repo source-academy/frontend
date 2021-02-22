@@ -2,6 +2,8 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
 
 import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';
 import {
@@ -19,7 +21,7 @@ import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarN
 import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { Position } from '../../../../commons/editor/EditorTypes';
+import { HighlightedLines, Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
@@ -37,8 +39,7 @@ export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library) => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -50,6 +51,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -76,7 +78,7 @@ export type StateProps = {
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -179,7 +181,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
+              isEditorAutorun: false,
+              sourceChapter: question?.library?.chapter || 4,
+              sourceVariant: 'default',
+              externalLibraryName: question?.library?.external?.name || 'NONE'
             }
           : undefined,
       editorHeight: this.props.editorHeight,
@@ -199,7 +204,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue
+        replValue: this.props.replValue,
+        sourceChapter: question?.library?.chapter || 4,
+        sourceVariant: 'default',
+        externalLibrary: question?.library?.external?.name || 'NONE',
+        replButtons: this.replButtons()
       }
     };
     return (
@@ -253,7 +262,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorPostpend,
       editorTestcases
     });
-    props.handleClearContext(question.library);
+    props.handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       props.handleEditorValueChange(editorValue);
@@ -295,13 +304,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             }
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
+        toSpawn: () => true
       },
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
-        id: SideContentType.questionOverview
+        id: SideContentType.questionOverview,
+        toSpawn: () => true
       },
       {
         label: `Autograder`,
@@ -313,23 +324,40 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder
+        id: SideContentType.autograder,
+        toSpawn: () => true
       }
     ];
 
-    const functionsAttached = props.grading![questionId].question.library.external.symbols;
+    const externalLibrary = props.grading![questionId].question.library.external;
+    const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
+        toSpawn: () => true
+      });
+    }
+
+    if (
+      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
+      externalLibrary.name === ExternalLibraryName.ALL
+    ) {
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+        id: SideContentType.videoDisplay,
+        toSpawn: () => true
       });
     }
 
     const sideContentProps: SideContentProps = {
       handleActiveTabChange: props.handleActiveTabChange,
-      tabs
+      tabs,
+      workspaceLocation: 'grading'
     };
 
     return sideContentProps;
@@ -346,21 +374,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const onClickNext = () =>
       history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
     const onClickReturn = () => history.push(listingPath);
-
-    const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
-    );
-
-    const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
-        key="eval_repl"
-      />
-    );
 
     const nextButton = (
       <ControlBarNextButton
@@ -389,10 +402,28 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     return {
       editorButtons: [runButton],
-      flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton]
+      flowButtons: [previousButton, questionView, nextButton]
     };
   };
+
+  private replButtons() {
+    const clearButton = (
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
+    );
+
+    const evalButton = (
+      <ControlBarEvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    return [evalButton, clearButton];
+  }
 }
 
 export default GradingWorkspace;

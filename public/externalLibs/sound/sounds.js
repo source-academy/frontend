@@ -1,5 +1,5 @@
 // Constants
-var FS = 44100; // Standard sampling rate for all problems
+const FS = 44100; // Standard sampling rate for all problems
 
 const fourier_expansion_level = 5; // expansion level for
                                    // square, sawtooth, triangle
@@ -9,16 +9,16 @@ const fourier_expansion_level = 5; // expansion level for
 // ---------------------------------------------
 
 function append(xs, ys) {
-    var v1 = list_to_vector(xs);
-    var v2 = list_to_vector(ys);
-    var vector = v1.concat(v2);
+    const v1 = list_to_vector(xs);
+    const v2 = list_to_vector(ys);
+    const vector = v1.concat(v2);
     return vector_to_list(vector);
 }
 
 function map(f, xs) {
-    var vector = list_to_vector(xs);
-    for (var i=0; i<vector.length; i++) {
-        vector[i] = f(vector[i]);
+    const vector = list_to_vector(xs);
+    for (let val of vector) {
+        val = f(val);
     }
     return vector_to_list(vector);
 }
@@ -27,6 +27,7 @@ function map(f, xs) {
 // Low-level sound support
 // ---------------------------------------------
 
+/*
 // Samples a continuous wave to a discrete waves at sampling rate for duration
 // in seconds
 function discretize(wave, duration) {
@@ -38,72 +39,24 @@ function discretize(wave, duration) {
 
     return vector;
 }
+*/
 
 // Discretizes a Sound to a Sound starting from elapsed_duration, for
 // sample_length seconds
 function discretize_from(wave, duration, elapsed_duration, sample_length, data) {
     if (elapsed_duration + sample_length > duration) {
-        for (var i = elapsed_duration * FS; i < duration * FS; i++) {
+        for (let i = elapsed_duration * FS; i < duration * FS; i++) {
             data[i - elapsed_duration * FS] = wave(i / FS);
         }
         return data;
     } else if (duration - elapsed_duration > 0) {
-        for (var i = elapsed_duration * FS;
+        for (let i = elapsed_duration * FS;
 	     i < (elapsed_duration + sample_length) * FS;
 	     i++) {
             data[i - elapsed_duration * FS] = wave(i / FS);
         }
         return data;
     }
-}
-
-// Quantize real amplitude values into standard 4-bit PCM levels
-function quantize(data) {
-    for (var i = 0; i < data.length; i++) {
-        data[i] = Math.round((data[i] + 1) * 126);
-    }
-    return data;
-}
-
-// Try to eliminate clicks by smoothening out sudden jumps at the end of a wave
-function simple_filter(data) {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] > 1) {
-          data[i] = 1;
-        }
-        if (data[i] < -1) {
-          data[i] = -1;
-        }
-    }
-    var old_value = 0;
-    for (var i = 0; i < data.length; i++) {
-        if (Math.abs(old_value - data[i]) > 0.01 && data[i] == 0) {
-            data[i] = old_value * 0.999;
-        }
-        old_value = data[i];
-    }
-    return data;
-}
-
-function copy(data) {
-    var ret = [];
-    for (var i = 0; i < data.length; i++) {
-        ret[i] = data[i];
-    }
-    return ret;
-}
-
-// Raw data to html5 audio element
-function raw_to_audio(_data) {
-    data = copy(_data);
-    data = simple_filter(data);
-    data = quantize(data);
-    var riffwave = new RIFFWAVE();
-    riffwave.header.sampleRate = FS;
-    riffwave.header.numChannels = 1;
-    riffwave.Make(data);
-    var audio = new Audio(riffwave.dataURI);
-    return audio;
 }
 
 // ---------------------------------------------
@@ -161,52 +114,58 @@ function is_sound(x) {
     ((typeof get_duration(x)) === 'number');
 }
 
-// Keeps track of whether play() is currently running,
-// and the current audio context.
-var _playing = false;
-var _player;
+// Singular audio context for all playback functions
+let _audioplayer;
+// Track if a sound is currently playing
+let _playing;
 
+// Instantiates new audio context
+function init_audioCtx() {
+    _audioplayer = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+// Real time playback of a sound, unsuitable for complex sounds
 function play_unsafe(sound) {
     // type-check sound
     if ( !is_sound(sound) ) {
-        throw new Error("play is expecting sound, but encountered " + sound);
+        throw new Error(`play is expecting sound, but encountered ${sound}`);
     // If a sound is already playing, terminate execution
-    } else if (_playing || _safeplaying) {
+    } else if (_playing) {
         throw new Error("play: audio system still playing previous sound");
     } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
         // Declaring duration and wave variables
-        var wave = get_wave(sound);
-        var duration = get_duration(sound);
+        let wave = get_wave(sound);
+        let duration = get_duration(sound);
         
         _playing = true;
-
-        // Create AudioContext (test this out might fix safari issue)
-        //const AudioContext = window.AudioContext || window.webkitAudioContext;
-        
-        // Main audio context
-        _player = new AudioContext();
+      
+        // Instantiate audio context if it has not been instantiated
+        if (!_audioplayer) {
+            init_audioCtx();
+        }
 
         // Controls Length of buffer in seconds.
-        var buffer_length = 0.1;
+        const buffer_length = 0.1;
 
         // Define Buffer Size
-        var bufferSize = FS * buffer_length;
+        const bufferSize = FS * buffer_length;
 
         // Create two buffers
-        var buffer1 = _player.createBuffer(1, bufferSize, FS);
-        var buffer2 = _player.createBuffer(1, bufferSize, FS);
+        let buffer1 = _audioplayer.createBuffer(1, bufferSize, FS);
+        let buffer2 = _audioplayer.createBuffer(1, bufferSize, FS);
 
         // Keep track of elapsed_duration & first run of ping_pong
-        var elapsed_duration = 0;
-        var first_run = true;
+        let elapsed_duration = 0;
+        let first_run = true;
 
         // Schedules playback of sounds
         function ping_pong(current_sound, next_sound, current_buffer, next_buffer) {
             // If sound has exceeded duration, early return to stop calls.
             if (elapsed_duration > duration || !_playing) { 
-                stop();
+                current_sound.disconnect(_audioplayer.destination);
+                _playing = false;
                 return;
             }
 
@@ -221,13 +180,13 @@ function play_unsafe(sound) {
                         buffer_length, current_data);
 
                 // Create current_sound.
-                current_sound = new AudioBufferSourceNode(_player);
+                current_sound = new AudioBufferSourceNode(_audioplayer);
 
                 // Set current_sound's buffer to current_buffer.
                 current_sound.buffer = current_buffer;
 
                 // Play current_sound.
-                current_sound.connect(_player.destination);
+                current_sound.connect(_audioplayer.destination);
                 current_sound.start();
 
                 // Increment elapsed duration.
@@ -243,97 +202,153 @@ function play_unsafe(sound) {
                         buffer_length, next_data);
 
             // Create next_sound.
-            next_sound = new AudioBufferSourceNode(_player);
+            next_sound = new AudioBufferSourceNode(_audioplayer);
 
             // Set next_sound's buffer to next_buffer.
             next_sound.buffer = next_buffer;
 
             // Schedule next_sound to play after current_sound.
-            next_sound.connect(_player.destination);
+            next_sound.connect(_audioplayer.destination);
             next_sound.start(start_time + elapsed_duration);
 
             // Increment elapsed duration.
             elapsed_duration += buffer_length;
 
             current_sound.onended =
-            event => 
+            () => 
                 ping_pong(next_sound, current_sound, next_buffer, current_buffer);
         }
-        var start_time = _player.currentTime;
+        let start_time = _audioplayer.currentTime;
         ping_pong(null, null, buffer1, buffer2);
         return sound;
     }
 }
 
-// "Safe" playing for overly complex sounds.
-// Discretizes full sound before playing
-// (i.e. plays sound properly, but possibly with
-// a delay).
-var _safeplaying = false;
-var _safeaudio = null;
-
+// Fully processes a sound before playback
+// Frontloads processing so the sound plays back properly,
+//   but possibly with a delay
 /**
  * plays a given Sound using your computer's sound device
  * @param {Sound} sound - given Sound
  * @returns {Sound} given Sound
  */
 function play(sound) {
+    // Type-check sound
+    if (!is_sound(sound)) {
+        throw new Error(`play is expecting sound, but encountered ${sound}`);
     // If a sound is already playing, terminate execution.
-    if (_safeplaying || _playing) {
+    } else if (_playing) {
         throw new Error("play: audio system still playing previous sound");
     } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
-        // Discretize the input sound
-        var data = discretize(get_wave(sound), get_duration(sound));
-        _safeaudio = raw_to_audio(data);
+        // Instantiate audio context if it has not been instantiated.
+        if (!_audioplayer) {
+            init_audioCtx();
+        }
 
-        _safeaudio.addEventListener('ended', stop);
-        _safeaudio.play();
-        _safeplaying = true;
+        // Create mono buffer
+        let theBuffer = _audioplayer.createBuffer(1, FS * get_duration(sound), FS);
+        let channel = theBuffer.getChannelData(0);
+
+        // Discretize the function and clip amplitude
+        // Discretize the function and clip amplitude
+        let temp;
+        let prev_value = 0;
+        
+        const wave = get_wave(sound);
+        for (let i = 0; i < channel.length; i++) {
+            temp = wave(i/FS);
+            // clip amplitude
+            channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
+
+            // smoothen out sudden cut-outs
+            if (channel[i] == 0 && Math.abs(channel[i] - prev_value) > 0.01) {
+                channel[i] = prev_value * 0.999;
+            }
+
+            prev_value = channel[i];
+        }
+
+        // Connect data to output destination
+        let source = _audioplayer.createBufferSource();
+        source.buffer = theBuffer;
+        
+        source.connect(_audioplayer.destination);
+        _playing = true;
+        source.start();
+        source.onended = () => {
+            source.disconnect(_audioplayer.destination);
+            _playing = false;
+        }
+
         return sound;
     }
 }
 
-// Requires 'All' libraries!
-function display_waveform(num_points_per_second, sound) {
-    let wave = get_wave(sound);
-    let duration = get_duration(sound);
-    let num_points = num_points_per_second * duration;
-    return draw_connected_full_view_proportional(num_points)(t => pair(t, wave(duration * t)));
-}
+/**
+ * plays a given sound without regard if a sound is already playing
+ * @param {Sound} sound - given sound
+ * @returns {undefined}  undefined
+ */
+function play_concurrently(sound) {
+    // Type-check sound
+    if (!is_sound(sound)) {
+        throw new Error(`play_concurrently is expecting sound, but encountered ${sound}`);
+    }  else if (get_duration(sound) <= 0) {
+        return;
+    } else {
+        // Instantiate audio context if it has not been instantiated
+        if (!_audioplayer) {
+            init_audioCtx();
+        }
 
-/* sound_to_string and string_to_sound would be really cool!!!
+        // Create mono buffer
+        let theBuffer = _audioplayer.createBuffer(1, FS * get_duration(sound), FS);
+        let channel = theBuffer.getChannelData(0);
 
-function sound_to_string(sound) {
-    let discretized_wave = discretize(wave(sound), duration(sound));
-    let discretized_sound = pair(discretized_wave, duration(sound));
-    return stringify(pair(data), tail(sound));
-}
+        // Discretize the function and clip amplitude
+        let temp;
+        let prev_value = 0;
 
-function string_to_sound(str) {
-    var discretized_sound = eval(str);
-    
-    return pair(t => ..., duration(data));
+        const wave = get_wave(sound);
+        for (let i = 0; i < channel.length; i++) {
+            temp = wave(i/FS);
+            // clip amplitude
+            channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
+
+            // smoothen out sudden cut-outs
+            if (channel[i] == 0 && Math.abs(channel[i] - prev_value) > 0.01) {
+                channel[i] = prev_value * 0.999;
+            }
+
+            prev_value = channel[i];
+        }
+
+        // Connect data to output destination
+        let source = _audioplayer.createBufferSource();
+        source.buffer = theBuffer;
+        
+        source.connect(_audioplayer.destination);
+        _playing = true;
+        source.start();
+        source.onended = () => {
+            source.disconnect(_audioplayer.destination);
+            _playing = false;
+        }
+        
+    }
+
 }
-*/
 
 /**
  * Stops playing the current sound
  * @returns {undefined} undefined
  */
 function stop() {
-    // If using normal play()
-    if (_playing) {
-        _player.close();
-    }
-    // If using play_safe()
-    if (_safeplaying) {
-        _safeaudio.pause();
-        _safeaudio = null;
-    }
+    _audioplayer.close();
+    _audioplayer = null;
     _playing = false;
-    _safeplaying = false;
 }
 
 // Concats a list of sounds
@@ -353,11 +368,11 @@ function stop() {
  */
 function consecutively(list_of_sounds) {
     function consec_two(ss1, ss2) {
-        var wave1 = head(ss1);
-        var wave2 = head(ss2);
-        var dur1 = tail(ss1);
-        var dur2 = tail(ss2);
-        var new_wave = t => t < dur1 ? wave1(t) : wave2(t - dur1);
+        const wave1 = head(ss1);
+        const wave2 = head(ss2);
+        const dur1 = tail(ss1);
+        const dur2 = tail(ss2);
+        const new_wave = t => t < dur1 ? wave1(t) : wave2(t - dur1);
         return pair(new_wave, dur1 + dur2);
     }
     return accumulate(consec_two, silence_sound(0), list_of_sounds);
@@ -374,21 +389,21 @@ function consecutively(list_of_sounds) {
  */
 function simultaneously(list_of_sounds) {
     function musher(ss1, ss2) {
-        var wave1 = head(ss1);
-        var wave2 = head(ss2);
-        var dur1 = tail(ss1);
-        var dur2 = tail(ss2);
+        const wave1 = head(ss1);
+        const wave2 = head(ss2);
+        const dur1 = tail(ss1);
+        const dur2 = tail(ss2);
         // new_wave assumes sound discipline (ie, wave(t) = 0 after t > dur)
-        var new_wave = t => wave1(t) + wave2(t);
+        const new_wave = t => wave1(t) + wave2(t);
         // new_dur is higher of the two dur
-        var new_dur = dur1 < dur2 ? dur2 : dur1;
+        const new_dur = dur1 < dur2 ? dur2 : dur1;
         return pair(new_wave, new_dur);
     }
 
-    var mushed_sounds = accumulate(musher, silence_sound(0), list_of_sounds);
-    var normalised_wave =  t =>
+    const mushed_sounds = accumulate(musher, silence_sound(0), list_of_sounds);
+    const normalised_wave =  t =>
 	(head(mushed_sounds))(t) / length(list_of_sounds);
-    var highest_duration = tail(mushed_sounds);
+    const highest_duration = tail(mushed_sounds);
     return pair(normalised_wave, highest_duration);
 }
 
@@ -421,93 +436,6 @@ function silence_sound(duration) {
     return make_sound(t => 0, duration);
 }
 
-// for mission 14
-
-/**
- * converts a letter name <CODE>str</CODE> to corresponding midi note.
- * Examples for letter names are <CODE>"A5"</CODE>, <CODE>"B3"</CODE>, <CODE>"D#4"</CODE>.
- * See <a href="https://i.imgur.com/qGQgmYr.png">mapping from
- * letter name to midi notes</a>
- * @param {string} str - given letter name
- * @returns {Number} midi value of the corresponding note
- */
-function letter_name_to_midi_note(note) {
-    // we don't consider double flat/ double sharp
-    var note = note.split("");
-    var res = 12; //MIDI notes for mysterious C0
-    var n = note[0].toUpperCase();
-    switch(n) {
-        case 'D': 
-            res = res + 2;
-            break;
-
-        case 'E': 
-            res = res + 4;
-            break;
-
-        case 'F': 
-            res = res + 5;
-            break;
-
-        case 'G': 
-            res = res + 7;
-            break;
-
-        case 'A': 
-            res = res + 9;
-            break;
-
-        case 'B': 
-            res = res + 11;
-            break;
-
-        default :
-            break;
-    }
-
-    if (note.length === 2) {
-        res = parseInt(note[1]) * 12 + res;
-    } else if (note.length === 3) {
-        switch (note[1]) {
-            case '#':
-                res = res + 1;
-                break;
-
-            case 'b':
-                res = res - 1;
-                break;
-
-            default:
-                break;
-        }
-        res = parseInt(note[2]) * 12 + res;
-    }
-
-    return res;
-}
-
-
-/**
- * converts a letter name <CODE>str</CODE> to corresponding frequency.
- * First converts <CODE>str</CODE> to a note using <CODE>letter_name_to_midi_note</CODE>
- * and then to a frequency using <CODE>midi_note_to_frequency</CODE>
- * @param {string} str - given letter name
- * @returns {Number} frequency of corresponding note in Hz
- */
-function letter_name_to_frequency(note) {
-    return midi_note_to_frequency(note_to_midi_note(note));
-}
-
-/**
- * converts a midi note <CODE>n</CODE> to corresponding frequency.
- * The note is given as an integer Number.
- * @param {Number} n - given midi note
- * @returns {Number} frequency of the note in Hz
- */
-function midi_note_to_frequency(note) {
-    return 8.1757989156 * Math.pow(2, (note / 12));
-}
-
 /**
  * makes a square wave Sound with given frequency and a given duration
  * @param {Number} freq - frequency of result Sound, in Hz, <CODE>freq</CODE> ≥ 0
@@ -516,8 +444,8 @@ function midi_note_to_frequency(note) {
  */
 function square_sound(freq, duration) {
     function fourier_expansion_square(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
+        let answer = 0;
+        for (let i = 1; i <= fourier_expansion_level; i++) {
             answer = answer +
 		Math.sin(2 * Math.PI * (2 * i - 1) * freq * t)
 		/
@@ -538,8 +466,8 @@ function square_sound(freq, duration) {
  */
 function triangle_sound(freq, duration) {
     function fourier_expansion_triangle(t) {
-        var answer = 0;
-        for (var i = 0; i < fourier_expansion_level; i++) {
+        let answer = 0;
+        for (let i = 0; i < fourier_expansion_level; i++) {
             answer = answer +
 		Math.pow(-1, i) *
 		Math.sin((2 * i + 1) * t * freq * Math.PI * 2)
@@ -561,8 +489,8 @@ function triangle_sound(freq, duration) {
  */
 function sawtooth_sound(freq, duration) {
     function fourier_expansion_sawtooth(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
+        let answer = 0;
+        for (let i = 1; i <= fourier_expansion_level; i++) {
             answer = answer + Math.sin(2 * Math.PI * i * freq * t) / i;
         }
         return answer;
@@ -573,16 +501,266 @@ function sawtooth_sound(freq, duration) {
 }
 
 /**
- * plays a given sound without regard if a sound is already playing
- * @param {sound} sound - given sound
- * @returns {undefined} undefined
+ * converts a letter name <CODE>str</CODE> to corresponding midi note.
+ * Examples for letter names are <CODE>"A5"</CODE>, <CODE>"B3"</CODE>, <CODE>"D#4"</CODE>.
+ * See <a href="https://i.imgur.com/qGQgmYr.png">mapping from
+ * letter name to midi notes</a>
+ * @param {string} str - given letter name
+ * @returns {Number} midi value of the corresponding note
  */
-function play_concurrently(sound) {
-    // Discretize the input sound
-    var data = discretize(get_wave(sound), get_duration(sound));
-    _safeaudio = raw_to_audio(data);
+function letter_name_to_midi_note(note) {
+    // we don't consider double flat/ double sharp
+    note = [...note];
+    let res = 12; // C0 is midi note 12
+    const n = note[0].toUpperCase();
+    switch (n) {
+        case 'D':
+            res = res + 2;
+            break;
 
-    _safeaudio.addEventListener('ended', stop);
-    _safeaudio.play();
-    _safeplaying = true;
+        case 'E':
+            res = res + 4;
+            break;
+
+        case 'F':
+            res = res + 5;
+            break;
+
+        case 'G':
+            res = res + 7;
+            break;
+
+        case 'A':
+            res = res + 9;
+            break;
+
+        case 'B':
+            res = res + 11;
+            break;
+
+        default:
+            break;
+    }
+  
+    if (note.length === 2) {
+        res = parseInt(note[1]) * 12 + res;
+    } else if (note.length === 3) {
+        switch (note[1]) {
+            case '#':
+                res = res + 1;
+                break;
+  
+            case 'b':
+                res = res - 1;
+                break;
+  
+            default:
+                break;
+        }
+    res = parseInt(note[2]) * 12 + res;
+    }
+  
+    return res;
+  }
+
+
+/**
+ * converts a midi note <CODE>n</CODE> to corresponding frequency.
+ * The note is given as an integer Number.
+ * @param {Number} n - given midi note
+ * @returns {Number} frequency of the note in Hz
+ */
+function midi_note_to_frequency(note) {
+    // A4 = 440Hz = midi note 69
+    return 440 * Math.pow(2, ((note - 69) / 12));
 }
+
+/**
+ * converts a letter name <CODE>str</CODE> to corresponding frequency.
+ * First converts <CODE>str</CODE> to a note using <CODE>letter_name_to_midi_note</CODE>
+ * and then to a frequency using <CODE>midi_note_to_frequency</CODE>
+ * @param {string} str - given letter name
+ * @returns {Number} frequency of corresponding note in Hz
+ */
+function letter_name_to_frequency(note) {
+    return midi_note_to_frequency(letter_name_to_midi_note(note));
+}
+
+// linear decay from 1 to 0 over decay_period
+function linear_decay(decay_period) {
+    return t => {
+        if ((t > decay_period) || (t < 0)) {
+            return 0;
+        } else {
+            return 1 - (t / decay_period);
+        }
+    }
+}
+  
+/**
+ * Returns an envelope: a function from Sound to Sound.
+ * When the envelope is applied to a Sound, it returns
+ * a new Sound that results from applying ADSR to
+ * the given Sound. The Attack, Sustain and
+ * Release ratios are given in the first, second and fourth
+ * arguments, and the Sustain level is given in 
+ * the third argument as a fraction between 0 and 1.
+ * @param {Number} attack_ratio - proportion of Sound in attack phase
+ * @param {Number} decay_ratio - proportion of Sound decay phase
+ * @param {Number} sustain_level - sustain level between 0 and 1
+ * @param {Number} release_ratio - proportion of Sound release phase
+ * @returns {function} envelope: function from Sound to Sound
+ */
+function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
+    return sound => {
+        let wave = get_wave(sound);
+        let duration = get_duration(sound);
+        let attack_time = duration * attack_ratio;
+        let decay_time = duration * decay_ratio;
+        let release_time = duration * release_ratio;
+        return make_sound( x => {
+            if (x < attack_time) {
+                return wave(x) * (x / attack_time);
+            } else if (x < attack_time + decay_time) {
+                return ((1 - sustain_level) * 
+                        (linear_decay(decay_time))(x - attack_time) + sustain_level) *
+                         wave(x);
+            } else if (x < duration - release_time) {
+                return wave(x) * sustain_level;
+            } else if (x <= duration) {
+                return wave(x) * sustain_level * 
+                        (linear_decay(release_time))(x - (duration - release_time));
+            } else {
+                return 0;
+            }
+        }, duration);
+    };
+  }
+  
+// waveform is a function that accepts freq, dur and returns Sound
+/**
+ * Returns a Sound that results from applying a list of envelopes
+ * to a given wave form. The wave form should be a Sound generator that
+ * takes a frequency and a duration as arguments and produces a
+ * Sound with the given frequency and duration. Each envelope is
+ * applied to a harmonic: the first harmonic has the given frequency,
+ * the second has twice the frequency, the third three times the
+ * frequency etc.
+ * @param {function} waveform - function from frequency and duration to Sound
+ * @param {Number} base_frequency - frequency of the first harmonic
+ * @param {Number} duration - duration of the produced Sound, in seconds
+ * @param {list_of_envelope} envelopes - each a function from Sound to Sound
+ * @returns {Sound} resulting Sound
+ */
+function stacking_adsr(waveform, base_frequency, duration, envelopes) {
+    function zip(lst, n) {
+      if (is_null(lst)) {
+        return lst;
+      } else {
+        return pair(pair(n, head(lst)), zip(tail(lst), n + 1));
+      }
+    }
+  
+    return simultaneously(accumulate(
+        (x, y) => pair((tail(x))
+               (waveform(base_frequency * head(x), duration))
+               , y)
+        , null
+        , zip(envelopes, 1)));
+}
+  
+// instruments for students
+
+/**
+ * returns a Sound that is reminiscent of a trombone, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting trombone Sound with given given pitch and duration
+ */
+function trombone(note, duration) {
+    return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
+        list(adsr(0.2, 0, 1, 0.1),
+        adsr(0.3236, 0.6, 0, 0.1)));
+}
+
+/**
+ * returns a Sound that is reminiscent of a piano, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting piano Sound with given given pitch and duration
+ */
+function piano(note, duration) {
+    return stacking_adsr(triangle_sound, midi_note_to_frequency(note), duration,
+        list(adsr(0, 0.515, 0, 0.05),
+        adsr(0, 0.32, 0, 0.05),
+        adsr(0, 0.2, 0, 0.05)));
+}
+
+/**
+ * returns a Sound that is reminiscent of a bell, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting bell Sound with given given pitch and duration
+ */
+function bell(note, duration) {
+    return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
+        list(adsr(0, 0.6, 0, 0.05),
+        adsr(0, 0.6618, 0, 0.05),
+        adsr(0, 0.7618, 0, 0.05),
+        adsr(0, 0.9071, 0, 0.05)));
+}
+
+/**
+ * returns a Sound that is reminiscent of a violin, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting violin Sound with given given pitch and duration
+ */
+function violin(note, duration) {
+    return stacking_adsr(sawtooth_sound, midi_note_to_frequency(note), duration,
+        list(adsr(0.35, 0, 1, 0.15),
+        adsr(0.35, 0, 1, 0.15),
+        adsr(0.45, 0, 1, 0.15),
+        adsr(0.45, 0, 1, 0.15)));
+}
+
+/**
+ * returns a Sound that is reminiscent of a cello, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting cello Sound with given given pitch and duration
+ */
+function cello(note, duration) {
+    return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
+        list(adsr(0.05, 0, 1, 0.1),
+        adsr(0.05, 0, 1, 0.15),
+        adsr(0, 0, 0.2, 0.15)));
+}
+
+// Requires 'All' libraries!
+function display_waveform(num_points_per_second, sound) {
+    const wave = get_wave(sound);
+    const duration = get_duration(sound);
+    const num_points = num_points_per_second * duration;
+    return draw_connected_full_view_proportional(num_points)(t => pair(t, wave(duration * t)));
+}
+
+/* sound_to_string and string_to_sound would be really cool!!!
+
+function sound_to_string(sound) {
+    let discretized_wave = discretize(wave(sound), duration(sound));
+    let discretized_sound = pair(discretized_wave, duration(sound));
+    return stringify(pair(data), tail(sound));
+}
+
+function string_to_sound(str) {
+    var discretized_sound = eval(str);
+    
+    return pair(t => ..., duration(data));
+}
+*/

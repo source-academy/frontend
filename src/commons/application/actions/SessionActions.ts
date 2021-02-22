@@ -6,8 +6,6 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story } from '../ApplicationTypes';
-import * as actionTypes from '../types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -17,6 +15,10 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
+  LOGOUT_GOOGLE,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
+  SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -29,7 +31,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  User
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -50,7 +53,7 @@ export const fetchGradingOverviews = (filterToGroup = true) =>
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 
-export const setGameState = (gameState: GameState) => action(actionTypes.SET_GAME_STATE, gameState);
+export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 
 export const setTokens = ({
   accessToken,
@@ -64,14 +67,9 @@ export const setTokens = ({
     refreshToken
   });
 
-export const setUser = (user: {
-  name: string;
-  role: Role;
-  group: string | null;
-  grade: number;
-  story?: Story;
-  gameState?: GameState;
-}) => action(SET_USER, user);
+export const setUser = (user: User) => action(SET_USER, user);
+
+export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {
@@ -110,6 +108,12 @@ export const submitGradingAndContinue = (
     xpAdjustment,
     comments
   });
+
+export const reautogradeSubmission = (submissionId: number) =>
+  action(REAUTOGRADE_SUBMISSION, submissionId);
+
+export const reautogradeAnswer = (submissionId: number, questionId: number) =>
+  action(REAUTOGRADE_ANSWER, { submissionId, questionId });
 
 export const updateHistoryHelpers = (loc: string) => action(UPDATE_HISTORY_HELPERS, loc);
 

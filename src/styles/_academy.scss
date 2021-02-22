@@ -33,6 +33,19 @@
   }
 }
 
+// Following two CSS declarations are intended to override the default monospace
+// font selected by Firefox on Windows
+.#{$ns}-code-block {
+  font-family: 'Consolas', monospace;
+}
+
+.#{$ns}-running-text {
+  pre,
+  code {
+    font-family: 'Consolas', monospace;
+  }
+}
+
 // Fix excessive margins applied by bp3-running-text style
 .md,
 .markdown-notification {
@@ -49,6 +62,10 @@
 }
 
 .#{$ns}-popover-content {
+  padding: 0.4rem;
+}
+
+.#{$ns}-popover2-content {
   padding: 0.4rem;
 }
 
@@ -237,30 +254,10 @@
   margin: 12px 0 12px 0;
 }
 
-.Grading {
-  /* To show the table borders that get cut out by a Card */
-  padding: 1px;
-
-  /** 
-   *  To prevent misalignment of column header and content 
-   *  for large displays. This effectively flushes the content left.
-   *  See https://github.com/source-academy/cadet-frontend/pull/148
-   */
-  .ag-body-container {
-    display: block;
-    /* Override ag-grid style to suppress unnecessary vertical scrollbar (bugfix) */
-    margin-bottom: 0;
-  }
-
-  .#{$ns}-icon {
-    /* Vertically centre appearance of blueprintjs icons in ag-grid */
-    margin-top: 6px;
-  }
-
-  .ag-paging-panel {
-    border-top: none;
-    font-weight: bold;
-    padding: 10px;
+.Grid {
+  .ag-center-cols-viewport {
+    /* Fixes spurious horizontal scrollbar in grid viewport at certain widths */
+    overflow-x: inherit;
   }
 
   :focus {
@@ -269,20 +266,24 @@
   }
 }
 
-.ag-grid-controls {
+.GridControls {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  .#{$ns}-icon {
-    /* Remove unnecessary margin to right when button text is hidden */
-    margin-right: 0;
-  }
+  .#{$ns}-button {
+    & > :first-child.#{$ns}-icon {
+      /* Remove unnecessary right margin when button text is hidden */
+      margin: 0;
+    }
 
-  .ag-grid-button-text {
-    margin-left: 7px;
+    & > span:not(:first-child) > span {
+      margin-left: 7px;
+    }
   }
+}
 
+.ag-grid-controls {
   .pagination-details.pagination-details.pagination-details {
     /* Chain selectors for increased specificity: set default cursor */
     cursor: default;
@@ -308,6 +309,10 @@
     justify-content: center;
     padding-left: 1em;
   }
+
+  &:not(.ag-header-cell-sortable) .ag-header-cell-label {
+    padding-right: 1em;
+  }
 }
 
 .ag-cell {
@@ -316,12 +321,6 @@
   padding-left: 0.375em !important;
   padding-right: 0.375em !important;
   text-align: center;
-}
-
-.ag-cell-focus,
-.ag-cell-no-focus {
-  /* Suppress blue border around focused cells from ag-grid stylesheet */
-  border: none !important;
 }
 
 #filterBar {

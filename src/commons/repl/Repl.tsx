@@ -1,27 +1,28 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
-import { HotKeys } from 'react-hotkeys';
-
 import { parseError } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import * as React from 'react';
+import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
-
-import ReplInput, { ReplInputProps } from './ReplInput';
+import ReplInput from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
-export type ReplProps = DispatchProps & StateProps;
+export type ReplProps = DispatchProps & StateProps & OwnProps;
 
 type StateProps = {
   output: InterpreterOutput[];
   replValue: string;
   hidden?: boolean;
+  inputHidden?: boolean;
   usingSubst?: boolean;
-  sourceChapter?: number;
-  sourceVariant?: Variant;
+  sourceChapter: number;
+  sourceVariant: Variant;
+  externalLibrary: ExternalLibraryName;
 };
 
 type DispatchProps = {
@@ -29,6 +30,10 @@ type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
+};
+
+type OwnProps = {
+  replButtons: Array<JSX.Element | null>;
 };
 
 class Repl extends React.PureComponent<ReplProps, {}> {
@@ -40,24 +45,25 @@ class Repl extends React.PureComponent<ReplProps, {}> {
     const cards = this.props.output.map((slice, index) => (
       <Output output={slice} key={index} usingSubst={this.props.usingSubst || false} />
     ));
-    const inputProps: ReplInputProps = this.props as ReplInputProps;
     return (
       <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
           {cards}
-          <HotKeys
-            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
-            handlers={handlers}
-          >
-            {this.props.sourceVariant !== 'concurrent' ? <ReplInput {...inputProps} /> : null}
-          </HotKeys>
+          {!this.props.inputHidden && (
+            <HotKeys
+              className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
+              handlers={handlers}
+            >
+              <ReplInput {...this.props} />
+            </HotKeys>
+          )}
         </div>
       </div>
     );
   }
 }
 
-export const Output: React.SFC<OutputProps> = (props: OutputProps) => {
+export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   switch (props.output.type) {
     case 'code':
       return (
@@ -72,7 +78,7 @@ export const Output: React.SFC<OutputProps> = (props: OutputProps) => {
         </Card>
       );
     case 'result':
-      // We check if we are using Substituter, so we can process the REPL results properly
+      // We check if we are using Stepper, so we can process the REPL results properly
       if (props.usingSubst && props.output.value instanceof Array) {
         return (
           <Card>

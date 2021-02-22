@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 
 const NotFound: React.SFC<{}> = () => (
-  <div className={classNames('NotFound', Classes.DARK)}>
+  <div className={classNames('NoPage', Classes.DARK)}>
     <NonIdealState
       icon={IconNames.ERROR}
       title="404 Not Found"

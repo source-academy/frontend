@@ -19,7 +19,6 @@ import {
   changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
-  chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -27,6 +26,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   resetWorkspace,
+  sendReplInputToOutput,
   setEditorBreakpoint,
   updateActiveTab,
   updateCurrentSubmissionId,
@@ -34,15 +34,10 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from '../../../../commons/workspace/WorkspaceActions';
-import {
-  WorkspaceLocation,
-  WorkspaceLocations,
-  WorkspaceState
-} from '../../../../commons/workspace/WorkspaceTypes';
-
+import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspace';
 
-const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
+const workspaceLocation: WorkspaceLocation = 'grading';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
@@ -76,9 +71,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, 'default', workspaceLocation),
-      handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
+      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
+        beginClearContext(workspaceLocation, library, shouldInitLibrary),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
@@ -93,6 +87,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>

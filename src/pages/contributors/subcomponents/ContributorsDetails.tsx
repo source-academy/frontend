@@ -16,47 +16,44 @@ class ContributorsDetails extends React.Component {
             The <i>Source Academy</i> is designed by and for students of the National University of
             Singapore. Students who completed the CS1101S module come back to coach their juniors as
             "Avengers" or to further develop and improve the Academy. This page includes all
-            developers who contributed to the Source Academy <i>Cadet</i> (2018), a re-development
-            of its precursors, the original Source Academy (2016) and Source Academy 2 (2017).
+            developers who contributed to the Source Academy <i>Knight</i> (2020) and its its
+            precursor, <i>Cadet</i> (2018). Both of these succeeded Source Academy 2 (2017) and
+            ultimately the original Source Academy (2016).
           </p>
           <div className="leadership">
             <H5>
               <strong>
-                <u>2019 Leadership</u>
+                <u>2021 Leadership</u>
               </strong>
             </H5>
             <p>
-              Liow Jia Chen
+              Tiffany Chong
               <br />
-              <strong>(Backend)</strong>
+              <strong>(Game)</strong>
             </p>
             {dot}
             <p>
-              Ge Shuming
+              Anthony Halim
               <br />
               <strong>(Frontend)</strong>
             </p>
             {dot}
-            <p>
-              Rahul Rajesh
-              <br />
-              <strong>(DevOps)</strong>
-            </p>
-            {dot}
-            <p>
-              Daryl Tan
+            <p className="wider">
+              Daryl Tan, Thomas Tan
               <br />
               <strong>(Source)</strong>
             </p>
             {dot}
-            <p>
-              She Jiayu
+            <p className="wider">
+              Tee Hao Wei
               <br />
-              <strong>(Tools)</strong>
+              <strong>(Backend &amp; DevOps)</strong>
             </p>
             {dot}
             <p>
-              Martin Henz
+              Martin Henz,
+              <br />
+              Boyd Anderson
               <br />
               <strong>(Coordination)</strong>
             </p>
@@ -85,6 +82,82 @@ class ContributorsDetails extends React.Component {
               Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei
             </p>
           </div>
+          <div className="leadership">
+            <p>
+              <strong>2019 Leadership</strong>
+            </p>
+            <br />
+            <p>
+              Liow Jia Chen
+              <br />
+              (Backend)
+            </p>
+            {dot}
+            <p>
+              Ge Shuming
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p>
+              Rahul Rajesh
+              <br />
+              (DevOps)
+            </p>
+            {dot}
+            <p>
+              Daryl Tan
+              <br />
+              (Source)
+            </p>
+            {dot}
+            <p>
+              She Jiayu
+              <br />
+              (Tools)
+            </p>
+          </div>
+          <div className="leadership">
+            <p>
+              <strong>2020 Leadership</strong>
+            </p>
+            <br />
+            <p>
+              Tiffany Chong
+              <br />
+              (Game)
+            </p>
+            {dot}
+            <p>
+              Anthony Halim
+              <br />
+              (Architecture)
+            </p>
+            {dot}
+            <p>
+              Kan Yip Keng, Jet
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p>
+              Low Jun Kai, Sean
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p>
+              Daryl Tan
+              <br />
+              (Source)
+            </p>
+            {dot}
+            <p className="wider">
+              Tee Hao Wei
+              <br />
+              (Backend &amp; DevOps)
+            </p>
+          </div>
           <div className="contributors">
             <H5>
               <strong>
@@ -93,7 +166,7 @@ class ContributorsDetails extends React.Component {
             </H5>
             <p>
               Below are all contributors to the{' '}
-              <a href={Links.githubOrg}>Github repositories of the Source Academy</a>.
+              <a href={Links.githubOrg}>GitHub repositories of the Source Academy</a>.
             </p>
           </div>
         </Card>

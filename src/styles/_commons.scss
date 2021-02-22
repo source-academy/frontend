@@ -7,6 +7,14 @@
     margin-left: 0px;
   }
 
+  .#{$ns}-non-ideal-state {
+    padding-bottom: 0.7rem;
+
+    > .#{$ns}-non-ideal-state-visual .#{$ns}-icon {
+      display: flex;
+    }
+  }
+
   .contentdisplay-content-parent {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -24,12 +32,10 @@
 }
 
 .#{$ns}-running-text.md {
-  pre {
-    > code {
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      background: transparent;
-    }
+  pre > code {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: transparent;
   }
 }
 
@@ -42,6 +48,7 @@
   https://github.com/palantir/blueprint/pull/3403
 */
 .#{$ns}-overlay {
+  /* breaks context menu :( */
   .#{$ns}-overlay-backdrop {
     position: sticky;
     height: 100%;
@@ -77,4 +84,11 @@
   > * + * {
     margin-top: 10px;
   }
+}
+
+.Centered {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }

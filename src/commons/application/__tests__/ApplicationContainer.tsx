@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
@@ -32,6 +30,6 @@ test('ApplicationContainer renders NotFound on unknown routes', () => {
     </Provider>
   );
   const tree = mount(app);
-  expect(tree.find('.NotFound').length).toBe(1);
+  expect(tree.find('.NoPage').length).toBe(1);
   expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
 });

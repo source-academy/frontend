@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/imports */
 import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
@@ -23,7 +24,8 @@ const SubstDefaultText = () => {
         <br />
         <br />
         On even-numbered steps, the part of the program that will be evaluated next is highlighted
-        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green.
+        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You
+        can change the maximum steps limit (500-5000, default 1000) in the control bar.
         <br />
         <br />
         <Divider />
@@ -97,7 +99,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
         <div>
-          <div className="sa-substituter">
+          <div className="sa-substituter bp3-dark">
             <Slider
               disabled={!hasRunCode}
               min={1}

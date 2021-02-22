@@ -1,1 +1,1 @@
-declare module 'sharedb-ace';
+declare module '@sourceacademy/sharedb-ace';

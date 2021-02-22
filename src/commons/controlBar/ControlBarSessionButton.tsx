@@ -1,29 +1,33 @@
-import { Classes, Colors, Menu, Popover } from '@blueprintjs/core';
+import { Classes, Colors, Menu } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { checkSessionIdExists, createNewSession } from '../collabEditing/CollabEditingHelper';
 import controlButton from '../ControlButton';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleInitInvite?: (value: string) => void;
-  handleInvalidEditorSessionId?: () => void;
   handleSetEditorSessionId?: (editorSessionId: string) => void;
 };
 
 type StateProps = {
   editorSessionId?: string;
   editorValue?: string | null;
-  websocketStatus?: number;
+  sharedbConnected?: boolean;
   key: string;
 };
 
 type State = {
   joinElemValue: string;
 };
+
+function handleError(error: any) {
+  showWarningMessage(`Could not connect: ${(error && error.message) || error || 'Unknown error'}`);
+}
 
 export class ControlBarSessionButtons extends React.PureComponent<
   ControlBarSessionButtonsProps,
@@ -42,69 +46,80 @@ export class ControlBarSessionButtons extends React.PureComponent<
 
   public render() {
     const handleStartInvite = () => {
+      // FIXME this handler should be a Saga action or at least in a controller
       if (this.props.editorSessionId === '') {
-        const onSessionCreated = (sessionId: string) => {
+        createNewSession(this.props.editorValue || '').then(sessionId => {
           this.props.handleSetEditorSessionId!(sessionId);
-          const code = this.props.editorValue || '// Collaborative Editing Mode!';
-          this.props.handleInitInvite!(code);
-        };
-        createNewSession(onSessionCreated);
+        }, handleError);
       }
     };
 
+    const inviteButtonPopoverContent = (
+      <>
+        <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
+        <CopyToClipboard text={'' + this.props.editorSessionId}>
+          {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
+        </CopyToClipboard>
+      </>
+    );
+
     const inviteButton = (
-      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+      <Popover2
+        popoverClassName="Popover-share"
+        inheritDarkTheme={false}
+        content={inviteButtonPopoverContent}
+      >
         {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
-        <>
-          <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
-          <CopyToClipboard text={'' + this.props.editorSessionId}>
-            {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
-          </CopyToClipboard>
-        </>
-      </Popover>
+      </Popover2>
     );
 
     const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
-      const onSessionIdExists = () =>
-        this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
-
-      const onSessionIdNotExist = () => {
-        this.props.handleInvalidEditorSessionId!();
-        this.props.handleSetEditorSessionId!('');
-      };
-
-      const onServerUnreachable = () => this.props.handleSetEditorSessionId!('');
-
-      checkSessionIdExists(
-        this.state.joinElemValue,
-        onSessionIdExists,
-        onSessionIdNotExist,
-        onServerUnreachable
-      );
       event.preventDefault();
+      // FIXME this handler should be a Saga action or at least in a controller
+      checkSessionIdExists(this.state.joinElemValue).then(
+        exists => {
+          if (exists) {
+            this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
+          } else {
+            this.props.handleSetEditorSessionId!('');
+            showWarningMessage('Could not find a session with that ID.');
+          }
+        },
+        error => {
+          this.props.handleSetEditorSessionId!('');
+          handleError(error);
+        }
+      );
     };
 
+    const joinButtonPopoverContent = (
+      // TODO: this form should use Blueprint
+      <form onSubmit={handleStartJoining}>
+        <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
+        <span className={Classes.POPOVER_DISMISS}>
+          {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+        </span>
+      </form>
+    );
+
     const joinButton = (
-      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+      <Popover2
+        popoverClassName="Popover-share"
+        inheritDarkTheme={false}
+        content={joinButtonPopoverContent}
+      >
         {controlButton('Join', IconNames.LOG_IN)}
-        <>
-          <form onSubmit={handleStartJoining}>
-            <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
-            <span className={Classes.POPOVER_DISMISS}>
-              {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
-            </span>
-          </form>
-        </>
-      </Popover>
+      </Popover2>
     );
 
     const leaveButton = controlButton('Leave', IconNames.FEED, () => {
+      // FIXME this handler should be a Saga action or at least in a controller
       this.props.handleSetEditorSessionId!('');
       this.setState({ joinElemValue: '' });
     });
 
     return (
-      <Popover
+      <Popover2
         content={
           <Menu large={true}>
             {inviteButton}
@@ -116,11 +131,11 @@ export class ControlBarSessionButtons extends React.PureComponent<
           iconColor:
             this.props.editorSessionId === ''
               ? undefined
-              : this.props.websocketStatus === 0
-              ? Colors.RED3
-              : Colors.GREEN3
+              : this.props.sharedbConnected
+              ? Colors.GREEN3
+              : Colors.RED3
         })}
-      </Popover>
+      </Popover2>
     );
   }
 

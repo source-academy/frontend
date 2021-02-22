@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { Testcase } from '../assessment/AssessmentTypes';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -25,12 +24,9 @@ import {
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
-import {
-  FINISH_INVITE,
-  INIT_INVITE,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
-} from '../collabEditing/CollabEditingTypes';
+import { Testcase } from '../assessment/AssessmentTypes';
+import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -42,6 +38,7 @@ import {
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
+  CHANGE_STEP_LIMIT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
@@ -54,15 +51,14 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_CHAPTER,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_SUBLANGUAGE,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState
 } from '../workspace/WorkspaceTypes';
 
@@ -85,7 +81,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   let lastOutput: InterpreterOutput;
 
   switch (workspaceLocation) {
-    case WorkspaceLocations.sourcecast:
+    case 'sourcecast':
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
       if (sourcecastState === state.sourcecast) {
         break;
@@ -94,7 +90,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         sourcecast: sourcecastState
       };
-    case WorkspaceLocations.sourcereel:
+    case 'sourcereel':
       const sourcereelState = SourcereelReducer(state.sourcereel, action);
       if (sourcereelState === state.sourcereel) {
         break;
@@ -227,6 +223,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           sideContentHeight: action.payload.height
         }
       };
+    case CHANGE_STEP_LIMIT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          stepLimit: action.payload.stepLimit
+        }
+      };
     case CLEAR_REPL_INPUT:
       return {
         ...state,
@@ -260,9 +264,11 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.moduleParams
           ),
-          globals: action.payload.library.globals
+          globals: action.payload.library.globals,
+          externalLibrary: action.payload.library.external.name
         }
       };
     case SEND_REPL_INPUT_TO_OUTPUT:
@@ -519,23 +525,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...action.payload.workspaceOptions
         }
       };
-    case INIT_INVITE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbAceInitValue: action.payload.editorValue,
-          sharedbAceIsInviting: true
-        }
-      };
-    case FINISH_INVITE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbAceIsInviting: false
-        }
-      };
     /**
      * Updates workspace without changing anything
      * which has not been specified
@@ -565,12 +554,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorReadonly: action.payload.editorReadonly
         }
       };
-    case SET_WEBSOCKET_STATUS:
+    case SET_SHAREDB_CONNECTED:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          websocketStatus: action.payload.websocketStatus
+          sharedbConnected: action.payload.connected
         }
       };
     case TOGGLE_EDITOR_AUTORUN:
@@ -647,19 +636,33 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
-    case UPDATE_CHAPTER:
+    case UPDATE_SUBLANGUAGE:
       return {
         ...state,
         playground: {
           ...state.playground,
           context: {
             ...state.playground.context,
-            chapter: action.payload.chapter,
-            variant: action.payload.variant
+            chapter: action.payload.sublang.chapter,
+            variant: action.payload.sublang.variant
           }
         }
       };
-
+    case NOTIFY_PROGRAM_EVALUATED:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          debuggerContext: {
+            ...state[workspaceLocation].debuggerContext,
+            result: action.payload.result,
+            lastDebuggerResult: action.payload.lastDebuggerResult,
+            code: action.payload.code,
+            context: action.payload.context,
+            workspaceLocation: action.payload.workspaceLocation
+          }
+        }
+      };
     default:
       return state;
   }

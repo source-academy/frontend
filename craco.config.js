@@ -1,14 +1,21 @@
 const cracoConfig = (module.exports = {
   webpack: {
     configure: webpackConfig => {
-      // modify Workbox configuration
-      if (cracoConfig.workbox) {
-        const workboxPlugin = webpackConfig.plugins.find(
-          plugin => plugin.constructor.name === 'GenerateSW'
-        );
-        if (workboxPlugin) {
-          workboxPlugin.config = cracoConfig.workbox(workboxPlugin.config);
-        }
+      // avoid the entire process.env being inserted into the service worker
+      // if SW_EXCLUDE_REGEXES is unset
+      const definePlugin = webpackConfig.plugins.find(
+        plugin => plugin.constructor.name === 'DefinePlugin'
+      );
+      const inlineProcessEnv = definePlugin.definitions['process.env'];
+      if (!inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES) {
+        inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES = undefined;
+      }
+
+      const injectManifestPlugin = webpackConfig.plugins.find(
+        plugin => plugin.constructor.name === 'InjectManifest'
+      );
+      if (injectManifestPlugin) {
+        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 10 * 1024 * 1024;
       }
 
       // add rules to pack WASM (for Sourceror)
@@ -23,7 +30,7 @@ const cracoConfig = (module.exports = {
           }
         });
       });
-      webpackConfig.output.webassemblyModuleFilename = "static/[hash].module.wasm";
+      webpackConfig.output.webassemblyModuleFilename = 'static/[hash].module.wasm';
 
       // workaround .mjs files by Acorn
       webpackConfig.module.rules.push({
@@ -31,6 +38,7 @@ const cracoConfig = (module.exports = {
         include: /node_modules/,
         type: 'javascript/auto'
       });
+
       return webpackConfig;
     }
   },
@@ -43,13 +51,5 @@ const cracoConfig = (module.exports = {
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
       return jestConfig;
     }
-  },
-  workbox: workboxConfig => {
-    if (process.env.SW_EXCLUDE_REGEXES) {
-      workboxConfig.navigateFallbackBlacklist.push(
-        ...JSON.parse(process.env.SW_EXCLUDE_REGEXES).map(str => new RegExp(str))
-      );
-    }
-    return workboxConfig;
   }
 });

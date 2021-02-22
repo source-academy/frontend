@@ -1,4 +1,5 @@
 import {
+  Button,
   Divider,
   H3,
   Icon,
@@ -16,6 +17,7 @@ import { Prompt } from 'react-router';
 import controlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
+import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
   showWarningMessage
@@ -35,6 +37,7 @@ type GradingSaveFunction = (
 export type DispatchProps = {
   handleGradingSave: GradingSaveFunction;
   handleGradingSaveAndContinue: GradingSaveFunction;
+  handleReautogradeAnswer: (submissionId: number, questionId: number) => void;
 };
 
 type OwnProps = {
@@ -96,13 +99,7 @@ const gradingEditorButtonClass = 'grading-editor-button';
 class GradingEditor extends React.Component<GradingEditorProps, State> {
   constructor(props: GradingEditorProps) {
     super(props);
-    this.state = {
-      gradeAdjustmentInput: props.gradeAdjustment.toString(),
-      xpAdjustmentInput: props.xpAdjustment.toString(),
-      editorValue: props.comments,
-      selectedTab: 'write',
-      currentlySaving: false
-    };
+    this.state = this.makeInitialState();
   }
 
   public render() {
@@ -160,7 +157,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           <div className="grading-editor-grades">
             <div className="autograder-grade">
               <div>Autograder grade:</div>
-              <div>{`${this.props.initialGrade} / ${this.props.maxGrade}`}</div>
+              <div>
+                {`${this.props.initialGrade} / ${this.props.maxGrade}`}{' '}
+                <Button
+                  icon="refresh"
+                  small
+                  minimal
+                  onClick={this.onClickReautogradeAnswer}
+                ></Button>
+              </div>
             </div>
             <div className="grade-adjustment">
               <div>Grade adjustment:</div>
@@ -275,6 +280,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     );
   }
 
+  public componentDidUpdate(prevProps: GradingEditorProps, prevState: State) {
+    if (
+      prevProps.submissionId !== this.props.submissionId ||
+      prevProps.questionId !== this.props.questionId
+    ) {
+      this.setState(this.makeInitialState());
+    }
+  }
+
   /**
    * A custom icons provider. It uses a bulky mapping function
    * defined below.
@@ -340,6 +354,22 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       );
     };
     this.setState({ ...this.state, currentlySaving: true }, callback);
+  };
+
+  private onClickReautogradeAnswer = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: (
+        <>
+          <p>Reautograde this answer?</p>
+          <p>Note: manual adjustments will be reset to 0.</p>
+        </>
+      ),
+      positiveLabel: 'Reautograde',
+      positiveIntent: 'danger'
+    });
+    if (confirm) {
+      this.props.handleReautogradeAnswer(this.props.submissionId, this.props.questionId);
+    }
   };
 
   /**
@@ -418,6 +448,16 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         openLinksInNewWindow={true}
       />
     );
+
+  private makeInitialState(): State {
+    return {
+      gradeAdjustmentInput: this.props.gradeAdjustment.toString(),
+      xpAdjustmentInput: this.props.xpAdjustment.toString(),
+      editorValue: this.props.comments,
+      selectedTab: 'write',
+      currentlySaving: false
+    };
+  }
 }
 
 /**

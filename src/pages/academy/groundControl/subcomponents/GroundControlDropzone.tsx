@@ -1,147 +1,139 @@
-import { Card, Elevation, Switch } from '@blueprintjs/core';
+import { Card, Elevation, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { FlexDirectionProperty } from 'csstype';
+import classNames from 'classnames';
 import * as React from 'react';
-import { useDropzone } from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 
 import controlButton from '../../../../commons/ControlButton';
+import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
-interface IDispatchProps {
-  handleUploadAssessment: (file: File) => void;
-  toggleForceUpdate: () => void;
-  toggleDisplayConfirmation: () => void;
-}
+export type DropzoneProps = DispatchProps;
 
-interface IStateProps {
-  forceUpdate: boolean;
-  displayConfirmation: boolean;
-}
-
-interface IDropzoneProps extends IDispatchProps, IStateProps {}
-
-// Dropzone styling
-const dropZoneStyle = {
-  baseStyle: {
-    flex: 1,
-    display: 'flex',
-    height: '30vh',
-    flexDirection: 'column' as FlexDirectionProperty,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    borderWidth: 2,
-    borderRadius: 2,
-    borderColor: '#eeeeee',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    outline: 'none',
-    transition: 'border .24s ease-in-out'
-  },
-
-  activeStyle: {
-    borderColor: '#2196f3'
-  },
-
-  acceptStyle: {
-    borderColor: '#00e676'
-  },
-
-  rejectStyle: {
-    borderColor: '#ff1744'
-  }
+type DispatchProps = {
+  handleUploadAssessment: (file: File, forceUpdate: boolean) => void;
 };
 
-const MaterialDropzone: React.FC<IDropzoneProps> = props => {
-  const [file, setFile] = React.useState<File>();
-  const [title, setTitle] = React.useState<string>();
-  const handleConfirmUpload = () => {
-    props.handleUploadAssessment(file!);
+const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
+  const [file, setFile] = React.useState<File | undefined>(undefined);
+  const [isWarningShown, setPromptShown] = React.useState<boolean>(false);
+  const [forceUpdate, setForceUpdate] = React.useState<boolean>(false);
+
+  const { handleUploadAssessment } = props;
+
+  const handleConfirmUpload = React.useCallback(() => {
+    if (file) {
+      handleUploadAssessment(file, forceUpdate);
+      setForceUpdate(false);
+    }
     setFile(undefined);
-  };
-  const handleCancelUpload = () => setFile(undefined);
+  }, [file, forceUpdate, handleUploadAssessment]);
+  const handleCancelUpload = React.useCallback(() => setFile(undefined), [setFile]);
+
+  const handleDropAccepted = React.useCallback(
+    (acceptedFiles: File[]) => {
+      setFile(acceptedFiles[0]);
+      setForceUpdate(false);
+    },
+    [setFile]
+  );
+  const handleDropRejected = React.useCallback((rejectedFiles: FileRejection[]) => {
+    if (rejectedFiles.length > 1) {
+      showWarningMessage('Uploading multiple files at once is not currently supported!', 2000);
+    }
+  }, []);
 
   const {
     getRootProps,
     getInputProps,
+    isFocused,
     isDragActive,
     isDragAccept,
-    isDragReject,
-    isFocused
+    isDragReject
   } = useDropzone({
-    onDrop: acceptedFiles => {
-      setFile(acceptedFiles[0]);
-      setTitle(acceptedFiles[0].name);
-    }
+    multiple: false,
+    onDropAccepted: handleDropAccepted,
+    onDropRejected: handleDropRejected
   });
-  const style = React.useMemo(
-    () => ({
-      ...dropZoneStyle.baseStyle,
-      ...(isDragActive ? dropZoneStyle.activeStyle : {}),
-      ...(isDragAccept ? dropZoneStyle.acceptStyle : {}),
-      ...(isDragReject ? dropZoneStyle.rejectStyle : {}),
-      ...(isFocused ? dropZoneStyle.activeStyle : {})
-    }),
-    [isDragActive, isDragAccept, isDragReject, isFocused]
+
+  const classList = React.useMemo(() => {
+    return classNames(
+      'dropzone-base',
+      isFocused || isDragActive ? 'dropzone-active' : undefined,
+      isDragAccept ? 'dropzone-accept' : undefined,
+      isDragReject ? 'dropzone-reject' : undefined
+    );
+  }, [isFocused, isDragActive, isDragAccept, isDragReject]);
+
+  const handleSwitchOnChange = React.useCallback(() => {
+    if (!forceUpdate) {
+      setPromptShown(true);
+    } else {
+      setForceUpdate(false);
+    }
+  }, [forceUpdate, setPromptShown, setForceUpdate]);
+
+  const toggleButton = React.useMemo(
+    () => (
+      <div className="toggle-button-wrapper">
+        <Switch checked={forceUpdate} onChange={handleSwitchOnChange} />
+      </div>
+    ),
+    [forceUpdate, handleSwitchOnChange]
   );
 
-  const handleToggleOnChange = () => {
-    if (!props.forceUpdate) {
-      props.toggleDisplayConfirmation();
-      props.toggleForceUpdate();
-    } else {
-      props.toggleForceUpdate();
-    }
-  };
+  const handleConfirmForceUpdate = React.useCallback(() => {
+    setForceUpdate(true);
+    setPromptShown(false);
+  }, [setForceUpdate]);
+  const handleCancelForceUpdate = React.useCallback(() => {
+    setPromptShown(false);
+  }, [setPromptShown]);
 
-  const toggleButton = () => {
-    return (
-      <div className="toggle-button-wrapper">
-        <Switch checked={props.forceUpdate} onChange={handleToggleOnChange} />
+  const confirmationPrompt = React.useMemo(
+    () => (
+      <div className="dropzone-controls">
+        {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate, {
+          minimal: false,
+          intent: Intent.DANGER
+        })}
+        {controlButton('No', IconNames.CROSS, handleCancelForceUpdate, {
+          minimal: false
+        })}
       </div>
-    );
-  };
-
-  const handleConfirmForceUpdate = () => {
-    props.toggleDisplayConfirmation();
-  };
-
-  const handleCancelForceUpdate = () => {
-    props.toggleDisplayConfirmation();
-    props.toggleForceUpdate();
-  };
-
-  const confirmationMessage = () => {
-    return (
-      <div>
-        <p>Are you sure that you want to force update the assessment?</p>
-        {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate)}
-        {controlButton('No', IconNames.CROSS, handleCancelForceUpdate)}
-      </div>
-    );
-  };
+    ),
+    [handleCancelForceUpdate, handleConfirmForceUpdate]
+  );
 
   return (
     <>
-      <Card className="contentdisplay-content" elevation={Elevation.THREE}>
-        <div {...getRootProps({ style })}>
+      <Card elevation={Elevation.TWO} interactive={true}>
+        <div {...getRootProps({ className: classList })}>
           <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>Drag 'n' drop a file here, or click to select a file</p>
         </div>
       </Card>
       {file && (
-        <Card>
-          <div>{title}</div>
-          <br />
-          {!props.displayConfirmation &&
-            controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload)}
-          {!props.displayConfirmation &&
-            controlButton('Cancel Upload', IconNames.DELETE, handleCancelUpload)}
-          <br />
-          <br />
-          {!props.displayConfirmation && <p>Force update opened assessment</p>}
-          {props.displayConfirmation && confirmationMessage()}
-          {!props.displayConfirmation && toggleButton()}
+        <Card className="dropzone-prompt" elevation={Elevation.TWO} interactive={true}>
+          <h3>{file?.name}</h3>
+          {!isWarningShown && (
+            <>
+              <div className="dropzone-controls">
+                {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload, {
+                  minimal: false,
+                  intent: Intent.DANGER
+                })}
+                {controlButton('Cancel Upload', IconNames.DELETE, handleCancelUpload, {
+                  minimal: false
+                })}
+              </div>
+              <div className="dropzone-controls">
+                <p>Force update opened assessment</p>
+                {toggleButton}
+              </div>
+            </>
+          )}
+          {isWarningShown && <p>Are you sure that you want to force update the assessment?</p>}
+          {isWarningShown && confirmationPrompt}
         </Card>
       )}
     </>

@@ -3,6 +3,7 @@ import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist
 import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
+
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
 /**
@@ -84,9 +85,9 @@ function visualiseList(list: any) {
   }
 }
 
-export function visualiseEnv(context: Context) {
+export function visualiseEnv({ context }: { context: Context }) {
   if ((window as any).EnvVisualizer) {
-    (window as any).EnvVisualizer.draw_env({ context });
+    (window as any).EnvVisualizer.draw_env(context);
   } else {
     throw new Error('Env visualizer is not enabled');
   }
@@ -127,9 +128,17 @@ export function createContext<T>(
   chapter: number,
   externals: string[],
   externalContext: T,
-  variant: Variant = 'default'
+  variant: Variant = 'default',
+  moduleParams?: any
 ) {
-  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
+  return createSlangContext<T>(
+    chapter,
+    variant,
+    externals,
+    externalContext,
+    externalBuiltIns,
+    moduleParams
+  );
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
@@ -146,7 +155,7 @@ function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuil
 export function makeElevatedContext(context: Context) {
   function ProxyFrame() {}
   ProxyFrame.prototype = context.runtime.environments[0].head;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const fakeFrame: { [key: string]: any } = new ProxyFrame();
   // Explanation: Proxy doesn't work for defineProperty in use-strict.

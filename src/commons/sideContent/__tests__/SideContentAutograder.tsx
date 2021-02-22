@@ -1,9 +1,9 @@
 import { mount, shallow } from 'enzyme';
+import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
-
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { mockGrading } from '../../mocks/GradingMocks';
 import SideContentAutograder, { SideContentAutograderProps } from '../SideContentAutograder';
 
 const mockErrors: SourceError[] = [
@@ -51,29 +51,32 @@ const mockHiddenTestcases: Testcase[] = [
 
 const hiddenTestcaseCardClasses = publicTestcaseCardClasses.slice(1);
 
-const mockAutogradingResults: AutogradingResult[] = [
-  { resultType: 'pass' },
-  { resultType: 'fail', expected: '8', actual: '5' },
-  {
-    resultType: 'error',
-    errors: [
-      { errorType: 'timeout' },
-      {
-        errorType: 'syntax',
-        line: 1,
-        location: 'student',
-        errorLine: 'function fibonacci(n) {',
-        errorExplanation: 'Just kidding!'
-      }
-    ]
-  }
-];
+// The five testcases have statuses: correct, (none), correct, incorrect and error
+const mockPrivateTestcases: Testcase[] = [
+  { program: `"lorem";`, score: 0, answer: `"lorem"`, result: `lorem` },
+  { program: `is_prime(2);`, score: 1, answer: `true` },
+  { program: `is_prime(3);`, score: 1, answer: `true`, result: true },
+  { program: `is_prime(4);`, score: 2, answer: `false`, result: true },
+  { program: `is_prime(5);`, score: 3, answer: `true`, errors: mockErrors }
+].map(proto => {
+  return { ...proto, type: TestcaseTypes.private };
+});
 
-const resultCardClasses = ['ResultCard correct', 'ResultCard wrong', 'ResultCard wrong'];
+const privateTestcaseCardClasses = publicTestcaseCardClasses.map(classes => `${classes} private`);
+
+const mockAutogradingResults: AutogradingResult[] = mockGrading[0].question.autogradingResults;
+
+const resultCardClasses = [
+  'ResultCard correct',
+  'ResultCard wrong',
+  'ResultCard wrong',
+  'ResultCard wrong',
+  'ResultCard wrong'
+];
 
 /*  ===== Tester comments =====
     Issue:
-      https://github.com/airbnb/enzyme/issues/836 
+      https://github.com/airbnb/enzyme/issues/836
     Description:
       tree.find(<HTML Selector>) returns two copies of every non-top-level element, as Enzyme
       returns both React component instances in addition to DOM nodes. This is INTENDED behaviour.
@@ -165,6 +168,40 @@ test('Autograder renders hidden testcases with different statuses correctly', ()
   });
 });
 
+test('Autograder renders private testcases with different statuses correctly', () => {
+  const props: SideContentAutograderProps = {
+    autogradingResults: [],
+    testcases: mockPrivateTestcases,
+    handleTestcaseEval: (testcaseId: number) => {}
+  };
+  const app = <SideContentAutograder {...props} />;
+  const tree = mount(app);
+  expect(tree.debug()).toMatchSnapshot();
+  // Expect only the header <div> for testcases section to be rendered
+  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(true);
+  expect(tree.find('.results-header').hostNodes().exists()).toEqual(false);
+  // No autograder result Card components should be rendered
+  expect(tree.find('.ResultCard')).toHaveLength(0);
+  // Expect each of the five testcases to have:
+  //    Correct result rendered in the 'Actual result' cell
+  //    Correct CSS styling applied to each Card (by className)
+  const cards = tree.find('.AutograderCard');
+  expect(cards).toHaveLength(5);
+  expect(cards.map(node => node.getDOMNode().className)).toEqual(privateTestcaseCardClasses);
+  const resultCells = cards.map(card => {
+    return card.find('.testcase-actual').hostNodes().getDOMNode();
+  });
+  // textContent returns the value wrapped by the opening and closing tags of the
+  // enclosing HTML node as a string
+  expect(resultCells.map(node => node.textContent)).toEqual([
+    '"lorem"',
+    'No Answer',
+    'true',
+    'true',
+    'Line 3: Name a not declared.'
+  ]);
+});
+
 test('Autograder renders autograder results with different statuses correctly', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: mockAutogradingResults,
@@ -183,7 +220,7 @@ test('Autograder renders autograder results with different statuses correctly', 
   //    Correct data rendered in the 'Testcase status', 'Expected result' and 'Actual result' cells
   //    Correct CSS styling applied to each Card
   const cards = tree.find('.ResultCard');
-  expect(cards).toHaveLength(3);
+  expect(cards).toHaveLength(5);
   expect(cards.map(node => node.getDOMNode().className)).toEqual(resultCardClasses);
   // Extract the text contained within the cells: see above comment for textContent
   const resultCellsValues = cards.map(card => {
@@ -194,11 +231,14 @@ test('Autograder renders autograder results with different statuses correctly', 
   expect(resultCellsValues).toEqual([
     ['1', 'PASS', '', ''],
     ['2', 'FAIL', '8', '5'],
+    ['3', 'ERROR', '', '[UNKNOWN] Autograder error: type dummyErrorType'],
+    ['4', 'ERROR', '', "[RUNTIME] Cannot read property 'getUniformLocation' of null"],
     [
-      '3',
+      '5',
       'ERROR',
       '',
-      'Timeout: Submission exceeded time limit for this test case.\nLine 1: Error: Just kidding!'
+      '[TIMEOUT] Submission exceeded time limit for this test case.\n\n' +
+        '[SYNTAX] Line 2: Error: Missing semicolon at the end of statement'
     ]
   ]);
 });

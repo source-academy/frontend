@@ -1,8 +1,6 @@
 ### Description
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-Fixes # (issue)
+<!-- Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change. -->
 
 ### Type of change
 
@@ -12,13 +10,13 @@ Fixes # (issue)
 - [ ] This change requires a documentation update
 - [ ] Code quality improvements
 
-### How to Test
+### How to test
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+<!-- Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration. -->
 
 ### Checklist
 
-Please delete options that are not relevant.
+<!-- Please delete options that are not relevant. -->
 
 - [ ] I have tested this code
 - [ ] I have updated the documentation

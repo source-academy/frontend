@@ -14,8 +14,9 @@ export enum ExternalLibraryName {
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
   BINARYTREES = 'BINARYTREES',
-  PIXNFLIX = 'PIX&FLIX',
+  PIXNFLIX = 'PIXNFLIX',
   MACHINELEARNING = 'MACHINELEARNING',
+  EV3 = 'EV3', // Remote execution device library
   ALL = 'ALL'
 }
 
@@ -68,19 +69,31 @@ const runesLibrary = [
   'anaglyph',
   'overlay_frac',
   'overlay',
-  'hollusion' // currently not documented; animation not working
+  'hollusion', // currently not documented; animation not working
+  'picture_mse'
 ];
 
 const curvesLibrary = [
   'make_point',
-  'draw_points_on',
+  'make_3D_point',
+  'make_color_point',
+  'make_3D_color_point',
   'draw_connected',
-  'draw_points_squeezed_to_window',
-  'draw_connected_squeezed_to_window',
   'draw_connected_full_view',
   'draw_connected_full_view_proportional',
+  'draw_points_on',
+  'draw_points_full_view_proportional',
+  'draw_3D_connected',
+  'draw_3D_connected_full_view',
+  'draw_3D_connected_full_view_proportional',
+  'draw_3D_points_on',
+  'draw_3D_points_full_view_proportional',
   'x_of',
   'y_of',
+  'z_of',
+  'r_of',
+  'g_of',
+  'b_of',
   'unit_line',
   'unit_line_at',
   'unit_circle',
@@ -104,14 +117,17 @@ const curvesLibrary = [
   'alternative_unit_circle', // undocumented
   'full_view_proportional', // undocumented
   'squeeze_full_view', // undocumented
-  'squeeze_rectangular_portion' // undocumented
+  'squeeze_rectangular_portion', // undocumented
+  'picture_mse'
 ];
 
 const soundsLibrary = [
   'make_sound',
   'get_wave',
   'get_duration',
+  'is_sound',
   'play',
+  'play_concurrently',
   'stop',
   'consecutively',
   'simultaneously',
@@ -124,8 +140,8 @@ const soundsLibrary = [
   'square_sound',
   'triangle_sound',
   'sawtooth_sound',
-  'play_unsafe',
-  'display_waveform',
+  'play_unsafe', // undocumented
+  'display_waveform', // undocumented
   /** Microphone Sounds */
   'init_record',
   'record',
@@ -154,18 +170,14 @@ const videoLibrary = [
   'red_of',
   'green_of',
   'blue_of',
-  'set_rgb',
-  'copy_pixel',
+  'alpha_of',
+  'set_rgba',
   'copy_image',
-  'constrain_color',
   'compose_filter',
-  'make_distortion_filter',
-  'make_static_distortion_filter',
-  'pixel_similar',
-  'get_video_width',
-  'get_video_height',
-  'apply_filter',
-  'reset_filter'
+  'install_filter',
+  'reset_filter',
+  'video_height',
+  'video_width'
 ];
 
 const machineLearningLibrary = [

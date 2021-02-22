@@ -1,6 +1,7 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 import controlButton from '../ControlButton';
 import { ControlBarRunButton } from './ControlBarRunButton';
@@ -21,54 +22,50 @@ type StateProps = {
   isEditorAutorun?: boolean;
   isRunning: boolean;
   key: string;
+  autorunDisabled?: boolean;
+  pauseDisabled?: boolean;
 };
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
-  const toggleAutorunButton = (
-    <div className="Switch">
-      <Switch label="" checked={props.isEditorAutorun} onChange={props.handleToggleEditorAutorun} />
-    </div>
-  );
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
 
-  const autoRunButton = controlButton('Auto', IconNames.AUTOMATIC_UPDATES);
-  const stopButton = controlButton('Stop', IconNames.STOP, props.handleInterruptEval);
-  const debuggerResetButton = controlButton(
-    'Stop Debugger',
-    IconNames.STOP,
-    props.handleDebuggerReset
-  );
-  const pauseButton = controlButton('Pause', IconNames.STOP, props.handleDebuggerPause);
-  const resumeButton = controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume);
-
-  const runButtonGrouping = () => {
-    if (props.isEditorAutorun) {
-      return autoRunButton;
-    }
-    if (props.isRunning) {
-      return stopButton;
-    }
-    if (props.isDebugging) {
-      return null;
-    }
-    return <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />;
-  };
-
-  const pauseButtonGrouping = () => {
-    if (props.isRunning && !props.isDebugging) {
-      return pauseButton;
-    }
-    if (!props.isRunning && props.isDebugging) {
-      return resumeButton;
-    }
-    return null;
-  };
-
-  return (
+  return isMobileBreakpoint ? (
     <>
-      {toggleAutorunButton}
-      {runButtonGrouping()}
-      {pauseButtonGrouping()}
-      {props.isDebugging ? debuggerResetButton : null}
+      {props.isRunning && controlButton('Stop', IconNames.STOP, props.handleInterruptEval)}
+      {(!props.pauseDisabled &&
+        props.isRunning &&
+        !props.isDebugging &&
+        controlButton('Pause', IconNames.STOP, props.handleDebuggerPause)) ||
+        (!props.isRunning &&
+          props.isDebugging &&
+          controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume))}
+      {props.isDebugging && controlButton('Stop', IconNames.STOP, props.handleDebuggerReset)}
+    </>
+  ) : (
+    <>
+      {!props.autorunDisabled && (
+        <div className="Switch">
+          <Switch
+            label=""
+            checked={props.isEditorAutorun}
+            onChange={props.handleToggleEditorAutorun}
+          />
+        </div>
+      )}
+      {(props.isEditorAutorun && controlButton('Auto', IconNames.AUTOMATIC_UPDATES)) ||
+        (props.isRunning && controlButton('Stop', IconNames.STOP, props.handleInterruptEval)) ||
+        (!props.isDebugging && (
+          <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />
+        ))}
+      {(!props.pauseDisabled &&
+        props.isRunning &&
+        !props.isDebugging &&
+        controlButton('Pause', IconNames.STOP, props.handleDebuggerPause)) ||
+        (!props.isRunning &&
+          props.isDebugging &&
+          controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume))}
+      {props.isDebugging &&
+        controlButton('Stop Debugger', IconNames.STOP, props.handleDebuggerReset)}
     </>
   );
 }

@@ -21,15 +21,17 @@ const DropdownHelp: React.SFC<DialogProps> = props => (
     <div className={Classes.DIALOG_BODY}>
       <p>Please use the following resources when you encounter issues with this system.</p>
       <p>
-        As of August 2019, we recommend the browsers <b>Google Chrome</b>, Version 75 or higher, or{' '}
-        <b>Mozilla Firefox</b>, Version 70 or higher, to visit the Source Academy. If you encounter
-        issues with the Source Academy using these browsers, please use the following resources.
+        As of August 2020, we recommend the browsers <b>Google Chrome</b> or <b>Microsoft Edge</b>,
+        Version 83 or higher, or <b>Mozilla Firefox</b>, Version 78 or higher, to visit the Source
+        Academy. If you encounter issues with the Source Academy using these browsers, please use
+        the following resources.
       </p>
       <ul>
         <li>
           For critical technical issues that seriously affect your learning experience, email the
           Technical Services of the NUS School of Computing at{' '}
-          <a href={Links.techSVC}>techsvc@comp.nus.edu.sg</a> or call 6516 2736.
+          <a href={Links.techSVC}>{new URL(Links.techSVC).pathname}</a> or call{' '}
+          {Links.techSVCNumber}.
         </li>
         <li>
           For non-critical technical issues, such as enhancement suggestions, please use the issue
@@ -37,7 +39,7 @@ const DropdownHelp: React.SFC<DialogProps> = props => (
         </li>
         <li>
           For issues related to the content of missions, quests, paths and contests, use the
-          respective forum at <a href={Links.piazza}> piazza</a>, or approach your Avenger,
+          respective forum at <a href={Links.piazza}>Piazza</a>, or approach your Avenger,
           Reflection instructor or lecturer.
         </li>
       </ul>

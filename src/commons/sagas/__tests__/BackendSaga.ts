@@ -1,5 +1,5 @@
-import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
+import { expectSaga } from 'redux-saga-test-plan';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
@@ -14,12 +14,14 @@ import {
   updateAssessmentOverviews,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, Story } from '../../application/ApplicationTypes';
+import { GameState, Role, SourceLanguage, Story } from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
   FETCH_AUTH,
   FETCH_NOTIFICATIONS,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -43,25 +45,29 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateChapter, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import { updateHasUnsavedChanges, updateSublanguage } from '../../workspace/WorkspaceActions';
 import {
-  CHANGE_CHAPTER,
-  FETCH_CHAPTER,
+  CHANGE_SUBLANGUAGE,
+  FETCH_SUBLANGUAGE,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
-  changeChapter,
   getAssessment,
   getAssessmentOverviews,
   getGradingSummary,
   getNotifications,
+  getSublanguage,
   getUser,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth
+  postAuth,
+  postReautogradeAnswer,
+  postReautogradeSubmission,
+  postSublanguage
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -94,7 +100,7 @@ const okResp = { ok: true };
 const errorResp = { ok: false };
 // ----------------------------------------
 
-describe('Test FETCH_AUTH Action', () => {
+describe('Test FETCH_AUTH action', () => {
   const code = 'luminusCode';
   const providerId = 'provider';
   const clientId = 'clientId';
@@ -106,6 +112,7 @@ describe('Test FETCH_AUTH Action', () => {
   const redirectUrl = computeRedirectUri(providerId);
 
   const user = {
+    userId: 123,
     name: 'user',
     role: 'student' as Role,
     group: '42D',
@@ -164,7 +171,7 @@ describe('Test FETCH_AUTH Action', () => {
   });
 });
 
-describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
+describe('Test FETCH_ASSESSMENT_OVERVIEWS action', () => {
   test('when assesments is obtained', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -188,8 +195,8 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
   });
 });
 
-describe('Test FETCH_ASSESSMENT Action', () => {
-  test('when assesment is obtained', () => {
+describe('Test FETCH_ASSESSMENT action', () => {
+  test('when assessment is obtained', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -200,7 +207,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
       .silentRun();
   });
 
-  test('when assesment is null', () => {
+  test('when assessment is null', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -213,13 +220,13 @@ describe('Test FETCH_ASSESSMENT Action', () => {
   });
 });
 
-describe('Test SUBMIT_ANSWER Action', () => {
+describe('Test SUBMIT_ANSWER action', () => {
   test('when response is ok', () => {
     const mockAnsweredAssessmentQuestion: Question =
       mockAssessmentQuestion.type === 'mcq'
         ? { ...mockAssessmentQuestion, answer: 42 }
         : { ...mockAssessmentQuestion, answer: '42' };
-    const mockNewQuestions: Question[] = mockAssessment.questions.slice().map(
+    const mockNewQuestions: Question[] = mockAssessment.questions.map(
       (question: Question): Question => {
         if (question.id === mockAnsweredAssessmentQuestion.id) {
           return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
@@ -257,16 +264,45 @@ describe('Test SUBMIT_ANSWER Action', () => {
   });
 
   test('when role is not student', () => {
-    const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
-    return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff } })
-      .call(showWarningMessage, 'Answer rejected - only students can submit answers.')
-      .not.call.fn(postAnswer)
-      .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(UPDATE_HAS_UNSAVED_CHANGES)
-      .hasFinalState({ session: { role: Role.Staff } })
+    const mockAnsweredAssessmentQuestion: Question =
+      mockAssessmentQuestion.type === 'mcq'
+        ? { ...mockAssessmentQuestion, answer: 42 }
+        : { ...mockAssessmentQuestion, answer: '42' };
+    const mockNewQuestions: Question[] = mockAssessment.questions.map(
+      (question: Question): Question => {
+        if (question.id === mockAnsweredAssessmentQuestion.id) {
+          return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
+        }
+        return question;
+      }
+    );
+    const mockNewAssessment = {
+      ...mockAssessment,
+      questions: mockNewQuestions
+    };
+    expectSaga(BackendSaga)
+      .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
+      .provide([
+        [
+          call(
+            postAnswer,
+            mockAnsweredAssessmentQuestion.id,
+            mockAnsweredAssessmentQuestion.answer || '',
+            mockTokens
+          ),
+          okResp
+        ]
+      ])
+      .not.call.fn(showWarningMessage)
+      .call(showSuccessMessage, 'Saved!', 1000)
+      .put(updateAssessment(mockNewAssessment))
+      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
+    // To make sure no changes in state
+    return expect(
+      mockStates.session.assessments.get(mockNewAssessment.id)!.questions[0].answer
+    ).toEqual(null);
   });
 
   test('when response is null', () => {
@@ -298,33 +334,9 @@ describe('Test SUBMIT_ANSWER Action', () => {
       .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-
-  test('when response has HTTP status code 403 (Forbidden)', () => {
-    const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
-    return expectSaga(BackendSaga)
-      .withState({ session: { ...mockTokens, role: Role.Student } })
-      .provide([
-        [
-          call(
-            postAnswer,
-            mockAnsweredAssessmentQuestion.id,
-            mockAnsweredAssessmentQuestion.answer,
-            mockTokens
-          ),
-          { ...errorResp, status: 403 }
-        ]
-      ])
-      .call(showWarningMessage, 'Answer rejected - assessment not open or already finalised.')
-      .not.call.fn(showSuccessMessage)
-      .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(UPDATE_HAS_UNSAVED_CHANGES)
-      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
-      .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
-      .silentRun();
-  });
 });
 
-describe('Test SUBMIT_ASSESSMENT Action', () => {
+describe('Test SUBMIT_ASSESSMENT action', () => {
   test('when response is ok', () => {
     const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
@@ -347,21 +359,6 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
     );
   });
 
-  test('when response has HTTP status code 403 (Forbidden)', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: { ...mockTokens, role: Role.Student } })
-      .provide([[call(postAssessment, 0, mockTokens), { ...errorResp, status: 403 }]])
-      .call(postAssessment, 0, mockTokens)
-      .call(
-        showWarningMessage,
-        'Not allowed to finalise - assessment not open or already finalised.'
-      )
-      .not.put.actionType(UPDATE_ASSESSMENT_OVERVIEWS)
-      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: 0 })
-      .silentRun();
-  });
-
   test('when response is null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Student } })
@@ -375,18 +372,29 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
   });
 
   test('when role is not a student', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff } })
-      .call(showWarningMessage, 'Submission rejected - only students can submit assessments.')
-      .not.call.fn(postAssessment)
-      .not.put.actionType(UPDATE_ASSESSMENT_OVERVIEWS)
-      .hasFinalState({ session: { role: Role.Staff } })
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: 0 })
+    const mockAssessmentId = mockAssessment.id;
+    const mockNewOverviews = mockAssessmentOverviews.map(overview => {
+      if (overview.id === mockAssessmentId) {
+        return { ...overview, status: AssessmentStatuses.submitted };
+      }
+      return overview;
+    });
+    expectSaga(BackendSaga)
+      .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
+      .provide([[call(postAssessment, mockAssessmentId, mockTokens), okResp]])
+      .not.call(showWarningMessage)
+      .call(showSuccessMessage, 'Submitted!', 2000)
+      .put(updateAssessmentOverviews(mockNewOverviews))
+      .dispatch({ type: SUBMIT_ASSESSMENT, payload: mockAssessmentId })
       .silentRun();
+    expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
+    return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
+      AssessmentStatuses.submitted
+    );
   });
 });
 
-describe('Test FETCH_NOTIFICATIONS Action', () => {
+describe('Test FETCH_NOTIFICATIONS action', () => {
   test('when notifications obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
@@ -397,7 +405,7 @@ describe('Test FETCH_NOTIFICATIONS Action', () => {
   });
 });
 
-describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
+describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
   test('when response is ok', () => {
     const ids = [1, 2, 3];
     const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
@@ -415,39 +423,53 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
       })
       .silentRun();
   });
+});
 
-  test('when response has HTTP status code 404 (Not Found)', () => {
-    const ids = mockNotifications.map(n => n.id);
+describe('Test FETCH_SUBLANGUAGE action', () => {
+  test('when sublanguage is obtained', () => {
+    const mockSublang: SourceLanguage = {
+      chapter: 4,
+      variant: 'gpu',
+      displayName: 'Source \xa74 GPU'
+    };
+
     return expectSaga(BackendSaga)
-      .withState(mockStates)
-      .provide([
-        [call(postAcknowledgeNotifications, mockTokens, ids), { ...errorResp, status: 404 }]
-      ])
-      .call(showWarningMessage, 'Something went wrong (got 404 response)')
-      .dispatch({ type: ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
+      .provide([[call(getSublanguage), mockSublang]])
+      .call(getSublanguage)
+      .put(updateSublanguage(mockSublang))
+      .dispatch({ type: FETCH_SUBLANGUAGE })
+      .silentRun();
+  });
+
+  test('when response is null', () => {
+    return expectSaga(BackendSaga)
+      .provide([[call(getSublanguage), null]])
+      .call(showWarningMessage, 'Failed to load default Source sublanguage for Playground!')
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_SUBLANGUAGE })
       .silentRun();
   });
 });
 
-describe('Test FETCH_CHAPTER Action', () => {
-  test('when chapter is obtained', () => {
-    return expectSaga(BackendSaga).dispatch({ type: FETCH_CHAPTER }).silentRun();
-  });
-});
-
-describe('Test CHANGE_CHAPTER Action', () => {
+describe('Test CHANGE_SUBLANGUAGE action', () => {
   test('when chapter is changed', () => {
+    const sublang: SourceLanguage = {
+      chapter: 4,
+      variant: 'gpu',
+      displayName: 'Source \xa74 GPU'
+    };
+
     return expectSaga(BackendSaga)
       .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(changeChapter, 1, 'default', mockTokens)
-      .put(updateChapter(1, 'default'))
-      .provide([[call(changeChapter, 1, 'default', mockTokens), { ok: true }]])
-      .dispatch({ type: CHANGE_CHAPTER, payload: { chapter: 1, variant: 'default' } })
+      .call(postSublanguage, sublang.chapter, sublang.variant, mockTokens)
+      .put(updateSublanguage(sublang))
+      .provide([[call(postSublanguage, 4, 'gpu', mockTokens), { ok: true }]])
+      .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
       .silentRun();
   });
 });
 
-describe('Test FETCH_GROUP_GRADING_SUMMARY Action', () => {
+describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
   test('when grading summary is obtained', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
@@ -466,6 +488,59 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY Action', () => {
       .not.put.actionType(UPDATE_GROUP_GRADING_SUMMARY)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
       .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .silentRun();
+  });
+});
+
+describe('Test REAUTOGRADE_SUBMISSION Action', () => {
+  const submissionId = 123;
+  test('when successful', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), okResp]])
+      .call(postReautogradeSubmission, submissionId, mockTokens)
+      .call.fn(showSuccessMessage)
+      .not.call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_SUBMISSION, payload: submissionId })
+      .silentRun();
+  });
+
+  test('when unsuccessful', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), errorResp]])
+      .call(postReautogradeSubmission, submissionId, mockTokens)
+      .not.call.fn(showSuccessMessage)
+      .call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_SUBMISSION, payload: submissionId })
+      .silentRun();
+  });
+});
+
+describe('Test REAUTOGRADE_ANSWER Action', () => {
+  const submissionId = 123;
+  const questionId = 456;
+
+  test('when successful', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), okResp]])
+      .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
+      .call.fn(showSuccessMessage)
+      .not.call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_ANSWER, payload: { submissionId, questionId } })
+      .silentRun();
+  });
+
+  test('when unsuccessful', () => {
+    const submissionId = 123;
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), errorResp]])
+      .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
+      .not.call.fn(showSuccessMessage)
+      .call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_ANSWER, payload: { submissionId, questionId } })
       .silentRun();
   });
 });

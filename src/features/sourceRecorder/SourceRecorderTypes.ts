@@ -1,4 +1,5 @@
 import { Ace } from 'ace-builds/ace';
+
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -17,6 +18,7 @@ export type InputTypeShape = {
   cursorPositionChange: Position;
   codeDelta: CodeDelta;
   externalLibrarySelect: ExternalLibraryName;
+  forcePause: null;
   keyboardCommand: KeyboardCommand;
   selectionRangeData: SelectionData;
 };
@@ -26,6 +28,7 @@ export enum KeyboardCommand {
 }
 
 export enum PlaybackStatus {
+  forcedPaused = 'forcedPaused',
   playing = 'playing',
   paused = 'paused'
 }
@@ -58,6 +61,7 @@ export type PlaybackData = {
 export type SourcecastData = {
   title: string;
   description: string;
+  uid: string;
   inserted_at: string;
   updated_at: string;
   playbackData: string;

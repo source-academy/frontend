@@ -1,0 +1,94 @@
+startingLoc: room
+
+objectives
+    visit
+    talk
+
+room
+    modes: talk, move
+    nav: hallway
+    talkTopics: cutscene
+    actions
+        show_dialogue(carpetFound) if checklist.visit
+
+    objects
+        + door, /objects/yourCarpet/normal.png, 300, 300
+            show_dialogue(whoddaThought) if checklist.visit
+        + chair, /objects/yourChair/normal.png, 90, 90
+        + carpet, /objects/yourCarpet/normal.png, 90, 90
+
+    boundingBoxes
+        + bbox1, 10, 10, 30, 30
+
+    characters
+        + scottie, Scottie, sad, left
+
+hallway
+    modes: talk, move
+    nav: classroom, room
+    actions
+        complete_objective(talk)
+
+
+classroom
+    modes: talk, move
+    nav: crashsite, hallway
+    talkTopics: whatHappened
+
+    objects
+        chalk, /objects/yourChair/normal.png, 30, 30
+
+emergency
+    modes: move
+    nav: classroom
+    actions
+        complete_objective(visit)
+
+dialogues
+    cutscene, Cut Scene
+        0
+        You've gone to the hallway, and are now back into the room.
+        Congrats on your first cutscene.
+        Have you ever seen what the classroom looks like?
+            add_popup(door)
+        Well here it is! Go ahead and explore it.
+
+        1
+        Well, you've really proven yourself to be a great anything.
+
+    whoddaThought
+        Who would have thought that there's something hidden at the top left corner?
+
+    found
+        Wow, I see you've used the power of source and found me
+
+    carpetFound
+        You found the other carpet! Go out and come back to see it :)
+
+    whatHappened, What happened?
+        @you
+        I'm tired
+
+        @narrator
+        The year is 1101 A.E.
+        Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
+        Today, you, {name}, have enrolled in...
+        The Source Academy!
+            add_popup(chair, middle)
+
+        @narrator
+        The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.
+        
+        @scottie, happy
+        If you exit through that door, the elevator will take you up to the hallway. From there you can access the rest of the ship. Follow the sign at the end of the corridor and you'll find the student quarters. Off you go now!
+        
+        @you
+        Oh, um, thanks!
+        
+        @narrator
+        You hastily make for the door, feeling a little embarassed.
+        You exit the elevator into a long hallway leading to various rooms. You look around for a sign leading to the student quarters.
+        
+        @you
+        Ah, there it is! I can't wait to unload my stuff. It's killing my back. I guess I should've packed lighter.
+        

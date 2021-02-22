@@ -1,49 +1,9 @@
-import {
-  finishInvite,
-  initInvite,
-  invalidEditorSessionId,
-  setEditorSessionId,
-  setWebsocketStatus
-} from '../../collabEditing/CollabEditingActions';
-import { WorkspaceLocation, WorkspaceLocations } from '../../workspace/WorkspaceTypes';
-import {
-  FINISH_INVITE,
-  INIT_INVITE,
-  INVALID_EDITOR_SESSION_ID,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
-} from '../CollabEditingTypes';
+import { setEditorSessionId, setSharedbConnected } from '../../collabEditing/CollabEditingActions';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../CollabEditingTypes';
 
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
-
-test('finishInvite generates correct action object', () => {
-  const action = finishInvite(playgroundWorkspace);
-  expect(action).toEqual({
-    type: FINISH_INVITE,
-    payload: {
-      workspaceLocation: playgroundWorkspace
-    }
-  });
-});
-
-test('initInvte generates correct action object', () => {
-  const action = initInvite('// Collaboration Editing!!!', playgroundWorkspace);
-  expect(action).toEqual({
-    type: INIT_INVITE,
-    payload: {
-      editorValue: '// Collaboration Editing!!!',
-      workspaceLocation: playgroundWorkspace
-    }
-  });
-});
-
-test('invalidEditorSessionId generates correct action object', () => {
-  const action = invalidEditorSessionId();
-  expect(action).toEqual({
-    type: INVALID_EDITOR_SESSION_ID
-  });
-});
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
 
 test('setEditorSessionId generates correct action object', () => {
   const editorSessionId = 'test-editor-session-id';
@@ -57,14 +17,14 @@ test('setEditorSessionId generates correct action object', () => {
   });
 });
 
-test('setWebsocketStatus generates correct action object', () => {
-  const websocketStatus = 0;
-  const action = setWebsocketStatus(playgroundWorkspace, websocketStatus);
+test('setSharedbConnected generates correct action object', () => {
+  const connected = false;
+  const action = setSharedbConnected(playgroundWorkspace, connected);
   expect(action).toEqual({
-    type: SET_WEBSOCKET_STATUS,
+    type: SET_SHAREDB_CONNECTED,
     payload: {
       workspaceLocation: playgroundWorkspace,
-      websocketStatus
+      connected
     }
   });
 });

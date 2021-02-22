@@ -7,7 +7,6 @@ $code-color-error: #ff4444;
   height: 100%;
   background-color: $cadet-color-1;
   display: flex;
-  padding-top: 0.5rem;
   flex: 1 1 auto;
   flex-direction: column;
 
@@ -31,7 +30,12 @@ $code-color-error: #ff4444;
     justify-content: space-between;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 0.6rem;
+
+    .ControlBar_editingWorkspace {
+      width: 10%;
+    }
   }
 
   .workspace-parent {
@@ -84,10 +88,8 @@ $code-color-error: #ff4444;
   .Editor {
     display: flex;
     flex-direction: column;
-    height: auto;
-    margin: 0 0.6rem 0.6rem 0.6rem;
-    padding-bottom: 0.6rem;
-    padding-left: 0.6rem;
+    height: 100%;
+    width: 100%;
 
     .editor-react-ace {
       flex: 1;
@@ -388,7 +390,7 @@ $code-color-error: #ff4444;
       }
     }
 
-    // Specific CSS for the Substituter tab, since REPL is hidden
+    // Specific CSS for the Stepper tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser {
       height: calc(100% - 60px);
       margin-top: -45px;
@@ -398,7 +400,7 @@ $code-color-error: #ff4444;
         margin-top: 70px;
 
         .sa-substituter {
-          margin: 11px;
+          margin: 15px;
           height: unset;
 
           .beforeMarker {
@@ -439,17 +441,17 @@ $code-color-error: #ff4444;
               margin: 0px;
               text-align: left;
               /**
-              * white-space, word-wrap and word-break
-              * are specified to allow all output to wrap.
-              */
+                * white-space, word-wrap and word-break
+                * are specified to allow all output to wrap.
+                */
               white-space: pre-wrap;
               word-wrap: break-word;
               word-break: break-word;
               /**
-              * Use same fonts as ace-editor for
-              * output. Taken from react-ace
-              * sourcecode, font size modified.
-              */
+                * Use same fonts as ace-editor for
+                * output. Taken from react-ace
+                * sourcecode, font size modified.
+                */
               font: 16px / normal 'Inconsolata', 'Consolas', monospace;
 
               .canvas-container {
@@ -545,6 +547,29 @@ $code-color-error: #ff4444;
         padding: 10px;
         background: $cadet-color-1;
         border-radius: 0 0 3px 3px;
+      }
+    }
+
+    .sa-remote-execution {
+      margin: 6px;
+
+      .devices-menu-container {
+        max-height: 60vh;
+        overflow-y: auto;
+        .#{$ns}-menu {
+          margin: 1px;
+          box-sizing: border-box;
+
+          .edit-buttons {
+            display: inline-block;
+            margin-left: 4px;
+
+            .#{$ns}-button.#{$ns}-small {
+              margin-top: -7px;
+              margin-bottom: -3px;
+            }
+          }
+        }
       }
     }
   }
@@ -701,17 +726,18 @@ $code-color-error: #ff4444;
         color: inherit;
         padding: 0px;
         margin: 0px;
-        /* white-space, word-wrap and word-break
-         * are specified to allow all output to wrap.
-         */
+        /**
+          * white-space, word-wrap and word-break
+          * are specified to allow all output to wrap.
+          */
         white-space: pre-wrap;
         word-wrap: break-word;
         word-break: break-word;
         /**
- * Use same fonts as ace-editor for
- * output. Taken from react-ace
- * sourcecode, font size modified.
- */
+          * Use same fonts as ace-editor for
+          * output. Taken from react-ace
+          * sourcecode, font size modified.
+          */
         font: 16px / normal 'Inconsolata', 'Consolas', monospace;
       }
 
@@ -748,6 +774,7 @@ $code-color-error: #ff4444;
     .repl-input-parent {
       padding: 0;
       margin-bottom: 0rem;
+      flex-wrap: nowrap;
     }
 
     .repl-react-ace {
@@ -781,9 +808,24 @@ $code-color-error: #ff4444;
   .Autograder {
     min-width: 640px;
 
-    > .collapse-button {
+    *:focus {
+      /* Disable blue border when an Autograder sub-element is in focus */
+      outline: none;
+    }
+
+    .collapse-button {
       width: 100%;
       background: rgba(0, 0, 0, 0.2);
+
+      > .#{$ns}-button-text {
+        > span:not(:last-child) {
+          margin-right: 7px;
+        }
+
+        > span:not(:first-child) {
+          margin-left: 7px;
+        }
+      }
     }
 
     .testcases-header,
@@ -795,7 +837,7 @@ $code-color-error: #ff4444;
       padding: 0.4rem 0.6rem;
 
       .#{$ns}-icon {
-        margin-right: 4px;
+        margin-left: 4px;
       }
     }
 
@@ -843,6 +885,7 @@ $code-color-error: #ff4444;
     .noResults {
       padding-top: 0.4rem;
       padding-bottom: 0.4rem;
+      text-align: center;
     }
   }
 
@@ -874,32 +917,17 @@ $code-color-error: #ff4444;
       }
     }
 
-    /* CSS animation styling for testcases when run */
-    @keyframes correct {
-      from {
-        background: rgba(125, 255, 125, 0.5);
-      }
-
-      to {
-        background: rgba(125, 255, 125, 0.2);
-      }
+    &.private > .#{$ns}-card {
+      background-color: rgba(192, 192, 192, 0.2);
     }
 
-    @keyframes wrong {
-      from {
-        background: rgba(255, 55, 55, 0.5);
-      }
-
-      to {
-        background: rgba(255, 55, 55, 0.2);
-      }
+    &.correct > .#{$ns}-card {
+      background-color: rgba(125, 255, 125, 0.2);
     }
 
     &.wrong {
       > .#{$ns}-card {
         background-color: rgba(255, 55, 55, 0.2);
-        animation-name: wrong;
-        animation-duration: 4s;
       }
 
       pre.testcase-actual,
@@ -908,17 +936,9 @@ $code-color-error: #ff4444;
       }
     }
 
-    &.correct {
-      > .#{$ns}-card {
-        background: rgba(125, 255, 125, 0.2);
-        animation-name: correct;
-        animation-duration: 4s;
-      }
-    }
-
     &:not(:first-child) {
       border-top-style: solid;
-      border-top-width: 2px;
+      border-top-width: 1px;
       border-color: #1a2530;
     }
   }
@@ -952,6 +972,49 @@ $code-color-error: #ff4444;
         height: 12rem !important;
         width: 12rem !important;
       }
+    }
+
+    /* CSS animation styling for testcases when run */
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    @keyframes private-revert {
+      to {
+        background: rgba(192, 192, 192, 0.2);
+      }
+    }
+
+    &.correct > .#{$ns}-card {
+      animation: 4s correct;
+    }
+
+    &.wrong > .#{$ns}-card {
+      animation: 4s wrong;
+    }
+
+    &.correct.private > .#{$ns}-card {
+      animation: 4s correct, 4s private-revert 4s forwards;
+    }
+
+    &.wrong.private > .#{$ns}-card {
+      animation: 4s wrong, 4s private-revert 4s forwards;
     }
   }
 
@@ -997,17 +1060,17 @@ $code-color-error: #ff4444;
 }
 
 .Popover-share {
-  .#{$ns}-popover-arrow-fill {
+  .#{$ns}-popover2-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .#{$ns}-popover-content {
+  .#{$ns}-popover2-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;
 
     input {
-      width: 25rem;
+      width: 15rem;
       margin-right: 0.58em;
       &:focus {
         outline: none;
@@ -1023,4 +1086,17 @@ $code-color-error: #ff4444;
 /* otherwise, a thick outline will show on click due to react-hotkeys */
 .workspace:focus {
   outline: 0;
+}
+
+/* Tooltip content is rendered in a Blueprint Portal outside the main body */
+.autograder-help-tooltip {
+  max-width: 275px;
+
+  > p {
+    margin-bottom: 6px;
+  }
+
+  > p:last-child {
+    margin-bottom: 0;
+  }
 }

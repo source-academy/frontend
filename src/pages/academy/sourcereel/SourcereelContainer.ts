@@ -31,7 +31,7 @@ import {
   updateEditorValue,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from '../../../features/sourceRecorder/sourcecast/SourcecastActions';
 import {
   saveSourcecastData,
@@ -59,7 +59,6 @@ import {
   timerStart,
   timerStop
 } from '../../../features/sourceRecorder/sourcereel/SourcereelActions';
-
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -93,7 +92,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   timeResumed: state.workspaces.sourcereel.timeResumed
 });
 
-const location: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const location: WorkspaceLocation = 'sourcereel';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
@@ -123,9 +122,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSaveSourcecastData: (
         title: string,
         description: string,
+        uid: string,
         audio: Blob,
         playbackData: PlaybackData
-      ) => saveSourcecastData(title, description, audio, playbackData, 'sourcecast'),
+      ) => saveSourcecastData(title, description, uid, audio, playbackData, 'sourcecast'),
       handleSetCurrentPlayerTime: (playerTime: number) =>
         setCurrentPlayerTime(playerTime, 'sourcecast'),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
@@ -134,9 +134,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSetSourcecastData: (
         title: string,
         description: string,
+        uid: string,
         audioUrl: string,
         playbackData: PlaybackData
-      ) => setSourcecastData(title, description, audioUrl, playbackData, 'sourcecast'),
+      ) => setSourcecastData(title, description, uid, audioUrl, playbackData, 'sourcecast'),
       handleSetSourcecastDuration: (duration: number) =>
         setSourcecastDuration(duration, 'sourcecast'),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>

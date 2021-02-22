@@ -1,11 +1,12 @@
-import { Collapse, Icon } from '@blueprintjs/core';
+import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
-import SideContentAutograderCard from './SideContentAutograderCard';
 import SideContentResultCard from './SideContentResultCard';
+import SideContentTestcaseCard from './SideContentTestcaseCard';
 
 export type SideContentAutograderProps = DispatchProps & StateProps;
 
@@ -18,116 +19,118 @@ type StateProps = {
   testcases: Testcase[];
 };
 
-type State = {
-  showTestcases: boolean;
-  showResults: boolean;
-};
+const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps> = props => {
+  const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
+  const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-class SideContentAutograder extends React.Component<SideContentAutograderProps, State> {
-  public constructor(props: SideContentAutograderProps) {
-    super(props);
+  const { testcases, autogradingResults, handleTestcaseEval } = props;
 
-    this.state = {
-      showTestcases: true,
-      showResults: true
-    };
-  }
-
-  public render() {
-    const testcasesHeader = (
-      <div className="testcases-header" key={-1}>
-        <div className="header-fn">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Testcase (click to run)
-        </div>
-        <div className="header-expected">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Expected result
-        </div>
-        <div className="header-actual">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Actual result
-        </div>
-      </div>
-    );
-
-    const resultsHeader = (
-      <div className="results-header" key={-1}>
-        <div className="header-data">
-          <div className="header-sn">
-            <Icon icon={IconNames.CARET_DOWN} />
-            S/N
-          </div>
-          <div className="header-status">
-            <Icon icon={IconNames.CARET_DOWN} />
-            Testcase status
-          </div>
-        </div>
-        <div className="header-expected">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Expected result
-        </div>
-        <div className="header-actual">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Actual result
-        </div>
-      </div>
-    );
-
-    const testcases =
-      this.props.testcases.length > 0 ? (
-        [testcasesHeader].concat(
-          this.props.testcases.map((testcase, index) => (
-            <SideContentAutograderCard
+  const testcaseCards = React.useMemo(
+    () =>
+      testcases.length > 0 ? (
+        <div>
+          {testcasesHeader}
+          {testcases.map((testcase, index) => (
+            <SideContentTestcaseCard
               key={index}
               index={index}
               testcase={testcase}
-              handleTestcaseEval={this.props.handleTestcaseEval}
+              handleTestcaseEval={handleTestcaseEval}
             />
-          ))
-        )
+          ))}
+        </div>
       ) : (
-        <div className="noResults">There are no testcases provided for this mission.</div>
-      );
+        <div className="noResults">There are no testcases provided for this question.</div>
+      ),
+    [testcases, handleTestcaseEval]
+  );
 
-    const results =
-      this.props.autogradingResults.length > 0 ? (
-        [resultsHeader].concat(
-          this.props.autogradingResults.map((result, index) => (
+  const resultCards = React.useMemo(
+    () =>
+      autogradingResults.length > 0 ? (
+        <div>
+          {resultsHeader}
+          {autogradingResults.map((result, index) => (
             <SideContentResultCard key={index} index={index} result={result} />
-          ))
-        )
+          ))}
+        </div>
       ) : (
         <div className="noResults">There are no results to show.</div>
-      );
+      ),
+    [autogradingResults]
+  );
 
-    const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
-      controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-        minimal: true,
-        className: 'collapse-button'
-      });
+  const toggleTestcases = React.useCallback(() => {
+    setTestcasesShown(!showsTestcases);
+  }, [showsTestcases]);
 
-    return (
-      <div className="Autograder">
-        {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}
-        <Collapse isOpen={this.state.showTestcases}>{testcases}</Collapse>
-        {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}
-        <Collapse isOpen={this.state.showResults}>{results}</Collapse>
-      </div>
-    );
-  }
+  const toggleResults = React.useCallback(() => setResultsShown(!showsResults), [showsResults]);
 
-  private toggleTestcases = () =>
-    this.setState({
-      ...this.state,
-      showTestcases: !this.state.showTestcases
-    });
+  return (
+    <div className="Autograder">
+      <Button
+        className="collapse-button"
+        icon={showsTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+        minimal={true}
+        onClick={toggleTestcases}
+      >
+        <span>Testcases</span>
+        <Tooltip2 content={autograderTooltip} placement={PopoverPosition.LEFT}>
+          <Icon icon={IconNames.HELP} />
+        </Tooltip2>
+      </Button>
+      <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
+        {testcaseCards}
+      </Collapse>
+      {collapseButton('Autograder Results', showsResults, toggleResults)}
+      <Collapse isOpen={showsResults} keepChildrenMounted={true}>
+        {resultCards}
+      </Collapse>
+    </div>
+  );
+};
 
-  private toggleResults = () =>
-    this.setState({
-      ...this.state,
-      showResults: !this.state.showResults
-    });
-}
+const autograderTooltip = (
+  <div className="autograder-help-tooltip">
+    <p>Click on each testcase below to execute it with the program in the editor.</p>
+    <p>
+      To execute all testcases at once, evaluate the program in the editor with this tab active.
+    </p>
+    <p>A green or red background indicates a passed or failed testcase respectively.</p>
+    <p>Private testcases (only visible to staff when grading) have a grey background.</p>
+  </div>
+);
+
+const columnHeader = (colClass: string, colTitle: string) => (
+  <div className={colClass}>
+    {colTitle}
+    <Icon icon={IconNames.CARET_DOWN} />
+  </div>
+);
+
+const testcasesHeader = (
+  <div className="testcases-header">
+    {columnHeader('header-fn', 'Testcase')}
+    {columnHeader('header-expected', 'Expected result')}
+    {columnHeader('header-actual', 'Actual result')}
+  </div>
+);
+
+const resultsHeader = (
+  <div className="results-header">
+    <div className="header-data">
+      {columnHeader('header-sn', 'S/N')}
+      {columnHeader('header-status', 'Testcase status')}
+    </div>
+    {columnHeader('header-expected', 'Expected result')}
+    {columnHeader('header-actual', 'Actual result')}
+  </div>
+);
+
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
+  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
+    className: 'collapse-button',
+    minimal: true
+  });
 
 export default SideContentAutograder;

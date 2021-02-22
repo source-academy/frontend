@@ -37,8 +37,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -58,8 +58,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
               <div className=\\"col-xs-10 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -85,14 +85,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -103,7 +103,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -147,7 +147,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -171,8 +171,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -198,14 +198,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -216,7 +216,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -260,7 +260,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -281,7 +281,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -315,52 +315,50 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
-                                            <Blueprint3.Tooltip className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                            <Blueprint3.Tooltip2 className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                                                 <Manager>
-                                                  <span className=\\"bp3-popover-wrapper listing-title-tooltip\\">
-                                                    <Reference innerRef={[Function: target]}>
-                                                      <InnerReference setReferenceNode={[Function]} innerRef={[Function: target]}>
-                                                        <Blueprint3.ResizeSensor onResize={[Function]}>
-                                                          <span onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"bp3-popover-target\\">
-                                                            <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                              <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
-                                                                <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                                                                  <desc>
-                                                                    lock
-                                                                  </desc>
-                                                                  <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
-                                                                </svg>
-                                                              </span>
-                                                            </Blueprint3.Icon>
+                                                  <Reference>
+                                                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
+                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                              <desc>
+                                                                lock
+                                                              </desc>
+                                                              <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
                                                           </span>
-                                                        </Blueprint3.ResizeSensor>
-                                                      </InnerReference>
-                                                    </Reference>
-                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
-                                                  </span>
+                                                        </Blueprint3.Icon>
+                                                      </span>
+                                                    </Blueprint3.ResizeSensor>
+                                                  </Reference>
+                                                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                                                  </Popper>
                                                 </Manager>
-                                              </Blueprint3.Popover>
-                                            </Blueprint3.Tooltip>
+                                              </Blueprint3.Popover2>
+                                            </Blueprint3.Tooltip2>
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -387,14 +385,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -404,7 +402,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -425,7 +423,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -459,14 +457,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -477,7 +475,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -504,14 +502,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -521,7 +519,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -542,7 +540,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -576,14 +574,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -594,7 +592,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -621,14 +619,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 3 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 2 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -638,7 +636,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -659,7 +657,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -695,14 +693,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -713,7 +711,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={false} icon=\\"confirm\\" intent=\\"danger\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                        <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -740,14 +738,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 2 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 1 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -757,7 +755,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -778,7 +776,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"edit\\">
                                                     <span icon=\\"edit\\" className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -813,8 +811,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
                             <span icon=\\"caret-right\\" className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
@@ -843,8 +841,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -890,8 +888,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -911,8 +909,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
               <div className=\\"col-xs-10 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -938,14 +936,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -956,7 +954,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1000,7 +998,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1021,7 +1019,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1054,8 +1052,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -1081,14 +1079,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1099,7 +1097,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1143,7 +1141,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1164,7 +1162,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1198,52 +1196,50 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
-                                            <Blueprint3.Tooltip className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                            <Blueprint3.Tooltip2 className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                                                 <Manager>
-                                                  <span className=\\"bp3-popover-wrapper listing-title-tooltip\\">
-                                                    <Reference innerRef={[Function: target]}>
-                                                      <InnerReference setReferenceNode={[Function]} innerRef={[Function: target]}>
-                                                        <Blueprint3.ResizeSensor onResize={[Function]}>
-                                                          <span onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"bp3-popover-target\\">
-                                                            <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                              <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
-                                                                <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                                                                  <desc>
-                                                                    lock
-                                                                  </desc>
-                                                                  <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
-                                                                </svg>
-                                                              </span>
-                                                            </Blueprint3.Icon>
+                                                  <Reference>
+                                                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
+                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                              <desc>
+                                                                lock
+                                                              </desc>
+                                                              <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
                                                           </span>
-                                                        </Blueprint3.ResizeSensor>
-                                                      </InnerReference>
-                                                    </Reference>
-                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
-                                                  </span>
+                                                        </Blueprint3.Icon>
+                                                      </span>
+                                                    </Blueprint3.ResizeSensor>
+                                                  </Reference>
+                                                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                                                  </Popper>
                                                 </Manager>
-                                              </Blueprint3.Popover>
-                                            </Blueprint3.Tooltip>
+                                              </Blueprint3.Popover2>
+                                            </Blueprint3.Tooltip2>
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1270,14 +1266,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1287,7 +1283,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1308,7 +1304,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1342,14 +1338,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1360,7 +1356,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1387,14 +1383,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1404,7 +1400,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1425,7 +1421,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1459,14 +1455,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1477,7 +1473,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1504,14 +1500,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 3 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 2 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1521,7 +1517,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1542,7 +1538,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1578,14 +1574,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function (anonymous)]} />
                                   </Connect(NotificationBadge)>
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true}>
+                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1596,7 +1592,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={false} icon=\\"confirm\\" intent=\\"danger\\" minimal={true} onClick={[Function: onClick]}>
-                                        <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                        <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
                                             <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1623,14 +1619,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 2 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 1 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1640,7 +1636,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1661,7 +1657,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" navigate={[Function: navigate]}>
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"edit\\">
                                                     <span icon=\\"edit\\" className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1696,8 +1692,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
                             <span icon=\\"caret-right\\" className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
@@ -1726,8 +1722,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>

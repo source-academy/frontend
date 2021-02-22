@@ -1,11 +1,15 @@
 import { Reducer } from 'redux';
 
+import {
+  REMOTE_EXEC_UPDATE_DEVICES,
+  REMOTE_EXEC_UPDATE_SESSION
+} from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
-import { SET_GAME_STATE } from '../types/ActionTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   SessionState,
+  SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -33,6 +37,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         ...action.payload
+      };
+    case SET_GOOGLE_USER:
+      return {
+        ...state,
+        googleUser: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;
@@ -77,10 +86,15 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         notifications: action.payload
       };
-    case SET_GAME_STATE:
+    case REMOTE_EXEC_UPDATE_DEVICES:
       return {
         ...state,
-        gameState: action.payload
+        remoteExecutionDevices: action.payload
+      };
+    case REMOTE_EXEC_UPDATE_SESSION:
+      return {
+        ...state,
+        remoteExecutionSession: action.payload
       };
     default:
       return state;

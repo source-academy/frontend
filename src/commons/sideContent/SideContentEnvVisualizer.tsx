@@ -29,11 +29,12 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
           <br />
           <br />
           It is activated by clicking on the gutter of the editor (where all the line numbers are,
-          on the left) to set a breakpoint, and then running the program.
+          on the left) to set a breakpoint, and then running the program. Only the first line of a
+          statement can have a breakpoint. The program halts just before the statement is evaluated.
           <br />
           <br />
           The environment model diagram follows a notation introduced in{' '}
-          <a href={Links.sourceDocsChapter3_2} rel="noopener noreferrer" target="_blank">
+          <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
             <i>
               Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 3,
               Section 2

@@ -10,12 +10,20 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
-
-import { stringify } from 'js-slang/dist/utils/stringify';
-
 import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
+import { isEqual } from 'lodash';
+import * as React from 'react';
+import {
+  CodeDelta,
+  Input,
+  KeyboardCommand,
+  SelectionRange
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+
+import { initSession, log } from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -38,21 +46,20 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
-import { Position } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
-import { beforeNow } from '../utils/DateHelper';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
-
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
@@ -60,8 +67,7 @@ export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library) => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -72,6 +78,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -88,7 +95,7 @@ export type OwnProps = {
   assessmentId: number;
   questionId: number;
   notAttempted: boolean;
-  closeDate: string;
+  canSave: boolean;
 };
 
 export type StateProps = {
@@ -101,7 +108,7 @@ export type StateProps = {
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -116,14 +123,20 @@ export type StateProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetTemplateOverlay: boolean }
+  {
+    showOverlay: boolean;
+    showResetTemplateOverlay: boolean;
+    sessionId: string;
+  }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetTemplateOverlay: false
+      showResetTemplateOverlay: false,
+      sessionId: ''
     };
+
     this.props.handleEditorValueChange('');
   }
 
@@ -140,7 +153,8 @@ class AssessmentWorkspace extends React.Component<
     if (!this.props.assessment) {
       return;
     }
-
+    // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
+    // checkWorkspaceReset does exactly the same thing.
     let questionId = this.props.questionId;
     if (this.props.questionId >= this.props.assessment.questions.length) {
       questionId = this.props.assessment.questions.length - 1;
@@ -165,8 +179,63 @@ class AssessmentWorkspace extends React.Component<
    * if a workspace reset is needed.
    */
   public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props);
+    this.checkWorkspaceReset();
   }
+
+  public pushLog = (newInput: Input) => {
+    log(this.state.sessionId, newInput);
+  };
+
+  private onChangeMethod = (newCode: string, delta: CodeDelta) => {
+    if (this.props.handleUpdateHasUnsavedChanges) {
+      this.props.handleUpdateHasUnsavedChanges(true);
+    }
+
+    this.props.handleEditorValueChange(newCode);
+
+    const input: Input = {
+      time: Date.now(),
+      type: 'codeDelta',
+      data: delta
+    };
+
+    this.pushLog(input);
+  };
+
+  private onCursorChangeMethod = (selection: any) => {
+    const input: Input = {
+      time: Date.now(),
+      type: 'cursorPositionChange',
+      data: selection.getCursor()
+    };
+
+    this.pushLog(input);
+  };
+
+  private onSelectionChangeMethod = (selection: any) => {
+    const range: SelectionRange = selection.getRange();
+    const isBackwards: boolean = selection.isBackwards();
+    if (!isEqual(range.start, range.end)) {
+      const input: Input = {
+        time: Date.now(),
+        type: 'selectionRangeData',
+        data: { range, isBackwards }
+      };
+
+      this.pushLog(input);
+    }
+  };
+
+  private handleEval = () => {
+    this.props.handleEditorEval();
+    const input: Input = {
+      time: Date.now(),
+      type: 'keyboardCommand',
+      data: KeyboardCommand.run
+    };
+
+    this.pushLog(input);
+  };
 
   public render() {
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
@@ -236,25 +305,30 @@ class AssessmentWorkspace extends React.Component<
         ? this.props.assessment.questions.length - 1
         : this.props.questionId;
     const question: Question = this.props.assessment.questions[questionId];
+    const editorProps =
+      question.type === QuestionTypes.programming
+        ? {
+            editorSessionId: '',
+            editorValue: this.props.editorValue!,
+            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+            handleEditorEval: this.props.handleEditorEval,
+            handleEditorValueChange: this.props.handleEditorValueChange,
+            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+            breakpoints: this.props.breakpoints,
+            highlightedLines: this.props.highlightedLines,
+            newCursorPosition: this.props.newCursorPosition,
+            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+            isEditorAutorun: false,
+            onChange: this.onChangeMethod,
+            onCursorChange: this.onCursorChangeMethod,
+            onSelectionChange: this.onSelectionChangeMethod
+          }
+        : undefined;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
-      editorProps:
-        question.type === QuestionTypes.programming
-          ? {
-              editorSessionId: '',
-              editorValue: this.props.editorValue!,
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
-            }
-          : undefined,
+      editorProps: editorProps,
+
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
       handleEditorHeightChange: this.props.handleEditorHeightChange,
@@ -274,7 +348,11 @@ class AssessmentWorkspace extends React.Component<
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue
+        replValue: this.props.replValue,
+        sourceChapter: question?.library?.chapter || 4,
+        sourceVariant: 'default',
+        externalLibrary: question?.library?.external?.name || 'NONE',
+        replButtons: this.replButtons()
       }
     };
     return (
@@ -290,7 +368,7 @@ class AssessmentWorkspace extends React.Component<
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
+  private checkWorkspaceReset() {
     /* Don't reset workspace if assessment not fetched yet. */
     if (this.props.assessment === undefined) {
       return;
@@ -326,6 +404,20 @@ class AssessmentWorkspace extends React.Component<
       if (!editorValue) {
         editorValue = questionData.solutionTemplate!;
       }
+
+      // Initialize session once the editorValue is known.
+      if (!this.state.sessionId) {
+        this.setState({
+          sessionId: initSession(
+            `${(this.props.assessment as any).number}/${this.props.questionId}`,
+            {
+              chapter: question.library.chapter,
+              externalLibrary: question?.library?.external?.name || 'NONE',
+              editorValue
+            }
+          )
+        });
+      }
     }
 
     this.props.handleEditorUpdateBreakpoints([]);
@@ -337,7 +429,7 @@ class AssessmentWorkspace extends React.Component<
       editorPostpend,
       editorTestcases
     });
-    this.props.handleClearContext(question.library);
+    this.props.handleClearContext(question.library, true);
     this.props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       this.props.handleEditorValueChange(editorValue);
@@ -349,18 +441,21 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
+    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const tabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
-        id: SideContentType.questionOverview
+        id: SideContentType.questionOverview,
+        toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
-        id: SideContentType.briefing
+        id: SideContentType.briefing,
+        toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Autograder`,
@@ -368,14 +463,16 @@ class AssessmentWorkspace extends React.Component<
         body: (
           <SideContentAutograder
             testcases={props.editorTestcases}
-            autogradingResults={props.autogradingResults}
+            autogradingResults={
+              isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
+            }
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder
+        id: SideContentType.autograder,
+        toSpawn: () => true
       }
     ];
-    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
       tabs.push({
         label: `Report Card`,
@@ -391,23 +488,41 @@ class AssessmentWorkspace extends React.Component<
             comments={props.assessment!.questions[questionId].comments}
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
+        toSpawn: () => true
       });
     }
 
-    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
+    const externalLibrary = props.assessment!.questions[questionId].library.external;
+    const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
+        toSpawn: () => true
       });
     }
+
+    if (
+      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
+      externalLibrary.name === ExternalLibraryName.ALL
+    ) {
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+        id: SideContentType.videoDisplay,
+        toSpawn: () => true
+      });
+    }
+
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
-      tabs
+      tabs,
+      workspaceLocation: 'assessment'
     };
   };
 
@@ -466,21 +581,6 @@ class AssessmentWorkspace extends React.Component<
       this.setState({ showResetTemplateOverlay: true });
     };
 
-    const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
-    );
-
-    const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
-        key="eval_repl"
-      />
-    );
-
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
@@ -515,12 +615,10 @@ class AssessmentWorkspace extends React.Component<
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = (
-      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
-    );
+    const runButton = <ControlBarRunButton handleEditorEval={this.handleEval} key="run" />;
 
     const saveButton =
-      !beforeNow(this.props.closeDate) &&
+      this.props.canSave &&
       this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={this.props.hasUnsavedChanges}
@@ -543,10 +641,28 @@ class AssessmentWorkspace extends React.Component<
 
     return {
       editorButtons: [runButton, saveButton, resetButton, chapterSelect],
-      flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton]
+      flowButtons: [previousButton, questionView, nextButton]
     };
   };
+
+  private replButtons() {
+    const clearButton = (
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
+    );
+
+    const evalButton = (
+      <ControlBarEvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    return [evalButton, clearButton];
+  }
 }
 
 export default AssessmentWorkspace;

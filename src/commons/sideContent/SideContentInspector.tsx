@@ -19,7 +19,7 @@ class SideContentInspector extends React.Component<{}, State> {
 
   public render() {
     return (
-      <div ref={r => (this.$parent = r)} className="sa-inspector">
+      <div ref={r => (this.$parent = r)} className="sa-inspector bp3-dark">
         <p id="inspector-default-text" className={Classes.RUNNING_TEXT}>
           The inspector generates a list of variable bindings based on breakpoints set in the
           editor.

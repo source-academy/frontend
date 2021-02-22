@@ -19,7 +19,6 @@ import {
   changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
-  chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -27,6 +26,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   resetWorkspace,
+  sendReplInputToOutput,
   setEditorBreakpoint,
   updateActiveTab,
   updateCurrentAssessmentId,
@@ -72,9 +72,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, 'default', workspaceLocation),
-      handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
+      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
+        beginClearContext(workspaceLocation, library, shouldInitLibrary),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
@@ -88,6 +87,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,

@@ -21,10 +21,8 @@ import {
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import {
-  FINISH_INVITE,
-  INIT_INVITE,
   SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
+  SET_SHAREDB_CONNECTED
 } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import Constants from '../../utils/Constants';
@@ -56,15 +54,14 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState
 } from '../WorkspaceTypes';
 
-const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
-const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
-const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const assessmentWorkspace: WorkspaceLocation = 'assessment';
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
+const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
+const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 
 function generateActions(type: string, payload: any = {}): any[] {
   return [
@@ -497,18 +494,19 @@ describe('END_CLEAR_CONTEXT', () => {
         'default'
       );
 
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          context: {
-            ...context,
-            runtime: expect.anything(),
-            contextId: expect.any(Number)
-          },
-          globals: mockGlobals
-        }
-      });
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceManager,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            context,
+            globals: mockGlobals,
+            externalLibrary: 'SOUNDS' as const
+          }
+        })
+      );
     });
   });
 });
@@ -923,28 +921,6 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
   });
 });
 
-describe('INIT_INVITE', () => {
-  test('sets sharedbAceInitValue and sharedbAceIsInviting correctly', () => {
-    const sharedbAceInitValue = 'test sharedbAce init value';
-    const actions = generateActions(INIT_INVITE, {
-      editorValue: sharedbAceInitValue
-    });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sharedbAceInitValue,
-          sharedbAceIsInviting: true
-        }
-      });
-    });
-  });
-});
-
 describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
@@ -1039,28 +1015,10 @@ describe('HIGHLIGHT_LINE', () => {
   });
 });
 
-describe('FINISH_INVITE', () => {
-  test('sets sharedbAceIsInviting to false', () => {
-    const actions = generateActions(FINISH_INVITE);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sharedbAceIsInviting: false
-        }
-      });
-    });
-  });
-});
-
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const newPlayground: PlaygroundWorkspaceState = {
-      ...createDefaultWorkspace(WorkspaceLocations.playground),
+      ...createDefaultWorkspace('playground'),
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [
@@ -1069,7 +1027,7 @@ describe('LOG_OUT', () => {
       ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
-      websocketStatus: 0,
+      sharedbConnected: false,
       usingSubst: false
     };
 
@@ -1145,19 +1103,19 @@ describe('RESET_WORKSPACE', () => {
       const result = WorkspaceReducer(resetWorkspaceDefaultState, action);
       const location = action.payload.workspaceLocation;
       const newContext = createDefaultWorkspace(location);
-      expect(result).toEqual({
-        ...resetWorkspaceDefaultState,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          ...newContext,
-          ...workspaceOptions,
-          context: {
-            ...newContext.context,
-            runtime: expect.anything(),
-            contextId: expect.any(Number)
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...resetWorkspaceDefaultState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            ...newContext,
+            ...workspaceOptions,
+            context: newContext.context
           }
-        }
-      });
+        })
+      );
     });
   });
 });
@@ -1260,10 +1218,10 @@ describe('SET_EDITOR_SESSION_ID', () => {
   });
 });
 
-describe('SET_WEBSOCKET_STATUS', () => {
-  test('sets websocketStatus correctly', () => {
-    const websocketStatus = 1;
-    const actions = generateActions(SET_WEBSOCKET_STATUS, { websocketStatus });
+describe('SET_SHAREDB_CONNECTED', () => {
+  test('sets sharedbConnected correctly', () => {
+    const connected = true;
+    const actions = generateActions(SET_SHAREDB_CONNECTED, { connected });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1272,7 +1230,7 @@ describe('SET_WEBSOCKET_STATUS', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          websocketStatus: 1
+          sharedbConnected: connected
         }
       });
     });

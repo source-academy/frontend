@@ -1,13 +1,8 @@
-import * as React from 'react';
-
 import { shallow } from 'enzyme';
+import * as React from 'react';
 
 import Editor, { EditorProps } from '../Editor';
 import { Position } from '../EditorTypes';
-
-const componentDidMountSpy = jest.fn();
-
-jest.spyOn(Editor.prototype, 'componentDidMount').mockImplementation(componentDidMountSpy);
 
 test('Editor renders correctly', () => {
   const props: EditorProps = {
@@ -16,19 +11,15 @@ test('Editor renders correctly', () => {
     editorValue: '',
     highlightedLines: [],
     isEditorAutorun: false,
-    sharedbAceInitValue: '',
-    sharedbAceIsInviting: false,
     handleDeclarationNavigate: (cursorPosition: Position) => {},
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
     handleEditorUpdateBreakpoints: breakpoints => {},
-    handleFinishInvite: () => {},
-    handleSetWebsocketStatus: websocketStatus => {},
+    handleSetSharedbConnected: () => {},
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };
   const app = <Editor {...props} />;
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
-  expect(componentDidMountSpy).toHaveBeenCalled();
 });

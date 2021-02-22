@@ -107,7 +107,7 @@ export const mockTestcases: Testcase[] = [
   { type: TestcaseTypes.private, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
-const mockGrading: Grading = [
+export const mockGrading: Grading = [
   {
     question: {
       answer: `function remainder(n, d) {
@@ -155,14 +155,31 @@ function remainder(n, d) {
           resultType: 'error',
           errors: [
             {
+              errorType: 'dummyErrorType'
+            }
+          ]
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'systemError',
+              errorMessage: "Cannot read property 'getUniformLocation' of null"
+            }
+          ]
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
               errorType: 'timeout'
             },
             {
               errorType: 'syntax',
-              line: 1,
+              line: 2,
               location: 'student',
-              errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
+              errorLine: 'return (n - d) < 0 ? n : remainder(n - d, d)',
+              errorExplanation: 'Missing semicolon at the end of statement'
             }
           ]
         }

@@ -1,12 +1,9 @@
-import {
-  WorkspaceLocation,
-  WorkspaceLocations
-} from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
 import { SourcecastData } from '../../SourceRecorderTypes';
 import { fetchSourcecastIndex, updateSourcecastIndex } from '../SourcecastActions';
 import { FETCH_SOURCECAST_INDEX, UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
 
-const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
+const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 
 test('fetchSourcecastIndex generates correct action object', () => {
   const action = fetchSourcecastIndex(sourcecastWorkspace);
@@ -22,6 +19,7 @@ test('updateSourcecastIndex generates correct action object', () => {
   const sourcecastData: SourcecastData = {
     title: 'Test Title',
     description: 'Test Description',
+    uid: 'uid',
     inserted_at: '2019-07-17T15:54:57',
     updated_at: '2019-07-17T15:54:57',
     playbackData: '{}',
