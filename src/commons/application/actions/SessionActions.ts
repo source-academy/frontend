@@ -1,7 +1,11 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentOverview,
+  ContestVotingSubmission
+} from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -71,7 +75,7 @@ export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const submitAnswer = (id: number, answer: string | number) =>
+export const submitAnswer = (id: number, answer: string | number | ContestVotingSubmission) =>
   action(SUBMIT_ANSWER, {
     id,
     answer

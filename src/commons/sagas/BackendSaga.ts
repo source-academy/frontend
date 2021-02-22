@@ -6,13 +6,10 @@ import { call, put, select } from 'redux-saga/effects';
 import { OverallState, Role, SourceLanguage } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
-  ContestEntry,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
-  QuestionTypes,
   SUBMIT_ASSESSMENT
 } from '../../commons/assessment/AssessmentTypes';
 import {
@@ -67,7 +64,6 @@ import {
   deleteSourcecastEntry,
   getAssessment,
   getAssessmentOverviews,
-  getContestEntries,
   getGrading,
   getGradingOverviews,
   getGradingSummary,
@@ -148,31 +144,6 @@ function* BackendSaga(): SagaIterator {
 
     const assessment: Assessment | null = yield call(getAssessment, id, tokens);
     if (assessment) {
-      // if is contestvoting assessment type - then load voting questions with contest entries.
-      // precondition: if is contest voting assessment type - then first assessment question (index 0) must be of 'voting' type
-      if (
-        assessment.category === AssessmentCategories.Practical &&
-        assessment.questions[0]?.type === 'voting'
-      ) {
-        const userId: User['userId'] | null = yield select(
-          (state: OverallState) => state.session.userId
-        );
-        if (userId) {
-          const contestEntries: ContestEntry[] = yield call(
-            getContestEntries,
-            assessment.id,
-            userId,
-            tokens
-          );
-          const qs = assessment.questions;
-          assessment.questions = qs.map(q => {
-            if (q.type === QuestionTypes.voting) {
-              q.contestEntries = contestEntries;
-            }
-            return q;
-          });
-        }
-      }
       yield put(actions.updateAssessment(assessment));
     }
   });

@@ -116,12 +116,13 @@ export interface IMCQQuestion extends BaseQuestion {
 }
 
 export interface IContestVotingQuestion extends BaseQuestion {
+  answer: ContestVotingSubmission;
   contestEntries: ContestEntry[];
   type: 'voting';
 }
 
 export type BaseQuestion = {
-  answer: string | number | number[] | null;
+  answer: string | number | number[] | ContestVotingSubmission | null;
   comments?: string;
   content: string;
   editorValue?: string | null;

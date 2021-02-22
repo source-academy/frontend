@@ -6,7 +6,7 @@ import {
   Assessment,
   AssessmentCategory,
   AssessmentOverview,
-  ContestEntry,
+  ContestVotingSubmission,
   GradingStatus,
   IProgrammingQuestion,
   QuestionType,
@@ -332,41 +332,6 @@ export const getAssessmentOverviews = async (
 };
 
 /**
- * Used to fetch entries linked to userid & asssessment id based for contest voting questions
- * GET /contestvoting/{assessmentId}/{userId}
- * @param assessmentId id of the contest assignment
- * @param userId id of unique user
- */
-export const getContestEntries = async (
-  assessmentId: number,
-  userId: User['userId'],
-  tokens: Tokens
-): Promise<ContestEntry[]> => {
-  // TODO: FIX THIS CORS ERROR
-  const resp = await request(`contestvoting/${assessmentId}/${userId}`, 'GET', {
-    ...tokens,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  if (!resp || !resp.ok) {
-    return [];
-  }
-
-  return ((await resp?.json()) as ContestEntry[]) ?? [];
-  // return [
-  //   {
-  //     submission_id: 'e0111x',
-  //     answer: "console.log('hello world')"
-  //   },
-  //   {
-  //     submission_id: 'e0222x',
-  //     answer: 'Student 2'
-  //   }
-  // ];
-};
-
-/**
  * GET /assessments/{assessmentId}
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
@@ -442,12 +407,12 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
  */
 export const postAnswer = async (
   id: number,
-  answer: string | number,
+  answer: string | number | ContestVotingSubmission,
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/question/${id}/submit`, 'POST', {
     ...tokens,
-    body: { answer: `${answer}` },
+    body: typeof answer == 'object' ? { answer: answer } : { answer: `${answer}` },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
 
-export type SideContentContestVoterContainerProps = DispatchProps & StateProps;
+export type SideContentContestVotingContainerProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleSave: (votingSubmission: ContestVotingSubmission) => void;
 };
 
 type StateProps = {
@@ -18,8 +19,8 @@ type StateProps = {
  * Stores component-level voting ranking state
  * (maybe handles API calls?)
  */
-const SideContentContestVoterContainer: React.FunctionComponent<SideContentContestVoterContainerProps> = props => {
-  const { contestEntries, handleContestEntryClick } = props;
+const SideContentContestVotingContainer: React.FunctionComponent<SideContentContestVotingContainerProps> = props => {
+  const { contestEntries, handleSave, handleContestEntryClick } = props;
   const [votingSubmission, setVotingSubmission] = useState<ContestVotingSubmission>({});
 
   // TODO: Write Backend API call to submit VotingSubmission { } JSON Data
@@ -28,9 +29,10 @@ const SideContentContestVoterContainer: React.FunctionComponent<SideContentConte
   // TODO: Find a way to persist and incorportate submission of the data
   // TODO: Conditionally render tabs based on contest state (finished, pending)
 
-  // Submitted to the backend as result
-  const handleVotingSubmissionChange = (entryId: number, rank: number): void => {
-    setVotingSubmission({ ...votingSubmission, [entryId]: rank });
+  const handleVotingSubmissionChange = (submission_id: number, rank: number): void => {
+    const updatedSubmission = { ...votingSubmission, [submission_id]: rank };
+    setVotingSubmission(updatedSubmission);
+    handleSave(updatedSubmission);
   };
 
   return (
@@ -43,4 +45,4 @@ const SideContentContestVoterContainer: React.FunctionComponent<SideContentConte
   );
 };
 
-export default SideContentContestVoterContainer;
+export default SideContentContestVotingContainer;

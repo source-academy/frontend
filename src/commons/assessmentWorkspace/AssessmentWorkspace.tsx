@@ -30,6 +30,7 @@ import {
   AssessmentCategories,
   AutogradingResult,
   ContestEntry,
+  ContestVotingSubmission,
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -85,7 +86,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleSave: (id: number, answer: number | string) => void;
+  handleSave: (id: number, answer: number | string | ContestVotingSubmission) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
@@ -111,7 +112,6 @@ export type StateProps = {
   editorValue: string | null;
   editorPostpend: string;
   editorTestcases: Testcase[];
-  contestEntries?: ContestEntry[];
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
@@ -398,7 +398,6 @@ class AssessmentWorkspace extends React.Component<
     let editorPrepend: string = '';
     let editorPostpend: string = '';
     let editorTestcases: Testcase[] = [];
-    let contestEntries: ContestEntry[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IProgrammingQuestion;
@@ -425,9 +424,6 @@ class AssessmentWorkspace extends React.Component<
           )
         });
       }
-    } else if (question.type === QuestionTypes.voting) {
-      const questionData = question as IContestVotingQuestion;
-      contestEntries = questionData.contestEntries;
     }
 
     this.props.handleEditorUpdateBreakpoints([]);
@@ -437,8 +433,7 @@ class AssessmentWorkspace extends React.Component<
       editorPrepend,
       editorValue,
       editorPostpend,
-      editorTestcases,
-      contestEntries
+      editorTestcases
     });
     this.props.handleClearContext(question.library, true);
     this.props.handleUpdateHasUnsavedChanges(false);
@@ -470,6 +465,9 @@ class AssessmentWorkspace extends React.Component<
       }
     ];
 
+    const contestVotingQuestion = this.props.assessment?.questions[
+      questionId
+    ] as IContestVotingQuestion;
     const contestVotingTabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
@@ -490,8 +488,11 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.NEW_LAYERS,
         body: (
           <SideContentContestVotingContainer
+            handleSave={votingSubmission =>
+              this.props.handleSave(contestVotingQuestion.id, votingSubmission)
+            }
             handleContestEntryClick={handleContestEntryClick}
-            contestEntries={this.props.contestEntries ?? []}
+            contestEntries={contestVotingQuestion?.contestEntries ?? []}
           />
         ),
         toSpawn: () => true
@@ -652,6 +653,7 @@ class AssessmentWorkspace extends React.Component<
         this.props.assessment!.questions[questionId].id,
         this.props.editorValue!
       );
+
     const onClickResetTemplate = () => {
       this.setState({ showResetTemplateOverlay: true });
     };
