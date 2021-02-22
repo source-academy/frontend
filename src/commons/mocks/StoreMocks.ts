@@ -12,7 +12,7 @@ import {
   OverallState
 } from '../application/ApplicationTypes';
 
-export function mockInitialStore<P>(): Store<OverallState> {
+export function mockInitialStore(): Store<OverallState> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
     academy: defaultAcademy,
