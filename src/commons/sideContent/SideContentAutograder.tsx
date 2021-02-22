@@ -1,5 +1,6 @@
-import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
+import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
@@ -74,9 +75,9 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
         onClick={toggleTestcases}
       >
         <span>Testcases</span>
-        <Tooltip content={autograderTooltip} position={PopoverPosition.LEFT} boundary={'window'}>
+        <Tooltip2 content={autograderTooltip} placement={PopoverPosition.LEFT}>
           <Icon icon={IconNames.HELP} />
-        </Tooltip>
+        </Tooltip2>
       </Button>
       <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
         {testcaseCards}

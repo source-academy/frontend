@@ -22,7 +22,7 @@ function EditableAchievementDate(props: EditableAchievementDateProps) {
     <div className="deadline">
       <div className="deadline-details">
         <div>
-          <Popover interactionKind={PopoverInteractionKind.HOVER} position={Position.TOP}>
+          <Popover interactionKind={PopoverInteractionKind.HOVER} placement={Position.TOP}>
             <Button onClick={() => setOpen(!isOpen)}>{`Change ${type}`}</Button>
             {generateDeadlineString()}
           </Popover>

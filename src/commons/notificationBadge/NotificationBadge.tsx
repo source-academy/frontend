@@ -1,4 +1,5 @@
-import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
+import { Intent, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
+import { Popover2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { filterNotificationsById } from './NotificationBadgeHelper';
@@ -62,17 +63,17 @@ const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
     const notificationTags = <div className="col">{notifications.map(makeNotificationTag)}</div>;
 
     return (
-      <Popover
+      <Popover2
         className={props.className}
         content={notificationTags}
         interactionKind={PopoverInteractionKind.HOVER}
-        position={Position.RIGHT}
+        placement={Position.RIGHT}
         hoverOpenDelay={50}
         hoverCloseDelay={50}
         lazy={true}
       >
         {notificationIcon}
-      </Popover>
+      </Popover2>
     );
   }
 
