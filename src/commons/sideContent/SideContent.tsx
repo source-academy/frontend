@@ -67,7 +67,6 @@ const SideContent = (props: SideContentProps) => {
     (state: OverallState) =>
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
-
   React.useEffect(() => {
     const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
     setDynamicTabs(allActiveTabs);
