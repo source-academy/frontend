@@ -12,10 +12,6 @@ import {
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
-  backendifyGoalDefinition,
-  backendifyGoalProgress,
-} from '../../features/achievement/AchievementBackender';
-import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem,
@@ -31,6 +27,7 @@ import {
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
+import { backendifyGoalDefinition } from '../achievement/utils/AchievementBackender';
 import { Tokens, User } from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -309,7 +306,7 @@ export const updateGoalProgress = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
-    body: { progress: backendifyGoalProgress(progress) },
+    body: { progress: progress },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
