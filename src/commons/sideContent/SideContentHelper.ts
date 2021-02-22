@@ -1,5 +1,7 @@
+import React from 'react';
+
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { SideContentTab } from './SideContentTypes';
+import { Modules, ModuleSideContent, SideContentTab } from './SideContentTypes';
 
 const potentialTabs: SideContentTab[] = [];
 
@@ -9,7 +11,10 @@ const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
 >();
 
 export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
-  const spawnedTabs = potentialTabs.filter(tab => tab.toSpawn(debuggerContext));
+  const spawnedTabs = [
+    ...getModuleTabs(debuggerContext).filter(tab => tab.toSpawn(debuggerContext)),
+    ...potentialTabs.filter(tab => tab.toSpawn(debuggerContext))
+  ];
 
   if (debuggerContext.workspaceLocation) {
     currentlyActiveTabsLabel.set(
@@ -19,6 +24,31 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
   }
 
   return spawnedTabs;
+};
+
+/**
+ * Extracts and processes included Modules' side contents from DebuggerContext
+ * @param debuggerContext - DebuggerContext object from redux store
+ */
+export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
+  // Get module side contents from DebuggerContext
+  const rawModuleTabs = debuggerContext.context?.modules as Modules[] | undefined;
+  if (rawModuleTabs == null) return [];
+
+  // Extract all the tabs from all the modules
+  const unprocessedTabs = rawModuleTabs.reduce<ModuleSideContent[]>((accumulator, current) => {
+    return accumulator.concat(current.sideContents);
+  }, []);
+
+  // Initialize module side contents to convert to SideContentTab type
+  const moduleTabs: SideContentTab[] = unprocessedTabs.map((sideContent: ModuleSideContent) => ({
+    ...sideContent,
+    /**
+     * @todo Convert the props_placeholder string to actual props or completely remove it.
+     */
+    body: sideContent.body(React)('props_placeholder')
+  }));
+  return moduleTabs;
 };
 
 export const getCurrentlyActiveTabs = (
