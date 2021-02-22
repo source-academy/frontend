@@ -1,5 +1,6 @@
-import { NumericInput, Tooltip } from '@blueprintjs/core';
+import { NumericInput, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 
 type ControlBarStepLimitProps = DispatchProps & StateProps;
 
@@ -14,7 +15,7 @@ type StateProps = {
 
 export function ControlBarStepLimit(props: ControlBarStepLimitProps) {
   return (
-    <Tooltip content="Step Limit">
+    <Tooltip2 content="Step Limit" placement={Position.TOP}>
       <NumericInput
         leftIcon={IconNames.VERTICAL_BAR_CHART_ASC}
         style={{ width: 80 }}
@@ -23,6 +24,6 @@ export function ControlBarStepLimit(props: ControlBarStepLimitProps) {
         value={props.stepLimit}
         onValueChange={props.handleChangeStepLimit}
       />
-    </Tooltip>
+    </Tooltip2>
   );
 }
