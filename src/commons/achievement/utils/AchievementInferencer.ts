@@ -164,7 +164,7 @@ class AchievementInferencer {
    */
   public resetToDelete() {
     this.achievementsToDelete = [];
-    this.goalsToDelete = []
+    this.goalsToDelete = [];
   }
 
   /**
