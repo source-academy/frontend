@@ -14,7 +14,6 @@ import {
 import {
   backendifyGoalDefinition,
   backendifyGoalProgress,
-  convertBackendMetaToFrontend
 } from '../../features/achievement/AchievementBackender';
 import {
   AchievementAbility,
@@ -185,7 +184,7 @@ export const getGoals = async (
       ({
         uuid: goal.uuid || '',
         text: goal.text || '',
-        meta: convertBackendMetaToFrontend(goal.meta) as GoalMeta,
+        meta: goal.meta as GoalMeta,
         xp: goal.xp,
         maxXp: goal.maxXp,
         completed: goal.completed
@@ -213,7 +212,7 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
       ({
         uuid: goal.uuid || '',
         text: goal.text || '',
-        meta: convertBackendMetaToFrontend(goal.meta) as GoalMeta,
+        meta: goal.meta as GoalMeta,
         xp: goal.xp,
         maxXp: goal.maxXp,
         completed: goal.completed

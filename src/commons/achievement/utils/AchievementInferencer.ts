@@ -160,6 +160,14 @@ class AchievementInferencer {
   }
 
   /**
+   * Resets the array so the same achievement/goal is not deleted twice
+   */
+  public resetToDelete() {
+    this.achievementsToDelete = [];
+    this.goalsToDelete = []
+  }
+
+  /**
    * Inserts a new AchievementItem into the Inferencer,
    * then returns the newly assigned achievementUuid
    *

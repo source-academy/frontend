@@ -58,8 +58,8 @@ function AchievementEditor(props: AchievementEditorProps) {
             .getAllAchievementUuids()
             .sort(
               (a, b) =>
-                inferencer.getAchievementPositionByUuid(b) -
-                inferencer.getAchievementPositionByUuid(a)
+                inferencer.getAchievementPositionByUuid(a) -
+                inferencer.getAchievementPositionByUuid(b)
             )
         )}
       </ul>

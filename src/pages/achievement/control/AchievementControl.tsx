@@ -53,6 +53,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
     bulkUpdateAchievements(inferencer.getAllAchievements());
     inferencer.getAchievementsToDelete().forEach(removeAchievement);
     inferencer.getGoalsToDelete().forEach(removeGoal);
+    inferencer.resetToDelete();
     setAwaitPublish(false);
   };
   const requestPublish = () => {
