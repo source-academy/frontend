@@ -40,18 +40,14 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
   const rawModuleTabs = debuggerContext.context?.modules as Modules[] | undefined;
   if (rawModuleTabs == null) return [];
 
-  // Extract all the tabs from all the modules
-  const unprocessedTabs = rawModuleTabs.reduce<ModuleSideContent[]>((accumulator, current) => {
-    return accumulator.concat(current.sideContents);
-  }, []);
+  console.log(rawModuleTabs[0](React));
+  // Pass React into functions
+  const unprocessedTabs: ModuleSideContent[] = rawModuleTabs.map((tab: any) => tab(React));
 
   // Initialize module side contents to convert to SideContentTab type
   const moduleTabs: SideContentTab[] = unprocessedTabs.map((sideContent: ModuleSideContent) => ({
     ...sideContent,
-    /**
-     * @todo Convert the props_placeholder string to actual props or completely remove it.
-     */
-    body: sideContent.body(React)('props_placeholder')
+    body: sideContent.body(debuggerContext)
   }));
   return moduleTabs;
 };
