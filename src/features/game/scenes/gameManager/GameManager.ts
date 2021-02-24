@@ -245,6 +245,20 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
+    this.getInputManager().registerKeyboardListener(
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
+      'down',
+      async () => {
+        const backgroundAni = this.getBackgroundManager().backgroundAsset;
+        if (backgroundAni instanceof Phaser.GameObjects.Sprite) {
+          if (backgroundAni.anims.isPlaying) {
+            await backgroundAni.anims.stop();
+          } else {
+            await backgroundAni.anims.restart();
+          }
+        }
+      }
+    );
   }
 
   /**

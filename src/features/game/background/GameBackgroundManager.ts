@@ -4,6 +4,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import { LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { resizeOverflow } from '../utils/SpriteUtils';
+// import { GameInputManager } from '..\input\GameInputManager.ts'
 
 /**
  * Manager for game's background.
@@ -11,6 +12,8 @@ import { resizeOverflow } from '../utils/SpriteUtils';
  */
 export default class GameBackgroundManager {
   load: any;
+  backgroundAsset?: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
+
   /**
    * Render the background with the asset attached to the location ID.
    *
@@ -31,36 +34,33 @@ export default class GameBackgroundManager {
   private renderBackgroundImage(assetKey: AssetKey) {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
     const picture = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
-    let backgroundAsset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
+    // this.backgroundAsset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
 
     switch (picture?.assetType) {
       case AssetTypes.Sprite:
-        backgroundAsset = new Phaser.GameObjects.Sprite(
+        this.backgroundAsset = new Phaser.GameObjects.Sprite(
           GameGlobalAPI.getInstance().getGameManager(),
           screenCenter.x,
           screenCenter.y,
-          //picture.assetConfig.frameWidth,
-          // picture.assetConfig.frameHeight,
           assetKey
-          //picture.assetConfig.endFrame
         );
         break;
       default:
-        backgroundAsset = new Phaser.GameObjects.Image(
+        this.backgroundAsset = new Phaser.GameObjects.Image(
           GameGlobalAPI.getInstance().getGameManager(),
           screenCenter.x,
           screenCenter.y,
           assetKey
         );
-        resizeOverflow(backgroundAsset, screenSize.x, screenSize.y);
+        resizeOverflow(this.backgroundAsset, screenSize.x, screenSize.y);
         break;
     }
 
-    GameGlobalAPI.getInstance().addToLayer(Layer.Background, backgroundAsset);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Background, this.backgroundAsset);
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
     const game = GameGlobalAPI.getInstance().getGameManager();
 
-    if (backgroundAsset instanceof Phaser.GameObjects.Sprite) {
+    if (this.backgroundAsset instanceof Phaser.GameObjects.Sprite) {
       const config = {
         key: assetKey,
         frames: game.anims.generateFrameNumbers(assetKey, {
@@ -73,7 +73,10 @@ export default class GameBackgroundManager {
       };
 
       game.anims.create(config);
-      backgroundAsset.play(assetKey);
+      this.backgroundAsset.play(assetKey);
     }
   }
+
+  // public isBackgroundAnimas = () => this.backgroundAsset instanceof Phaser.GameObjects.Sprite;
+  // public isPlaying = () => this.backgroundAsset.
 }
