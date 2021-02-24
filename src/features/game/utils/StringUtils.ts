@@ -240,6 +240,7 @@ export default class StringUtils {
   }
 
   /**
+<<<<<<< Updated upstream
    * Return a string whose content within the regions is removed
    * for each region; regions contain two elements: the index of
    * the first character to ignore, and the index of the last character
@@ -254,6 +255,13 @@ export default class StringUtils {
    * @param text the text to be removed from
    * @param regions contains all the regions of comments
    * @returns {string}
+=======
+   * Return a string 
+   *
+   * @param text
+   * @param regions
+   * @returns string
+>>>>>>> Stashed changes
    */
   public static removeCommentRegions(text: string, regions: [number, number][]) {
     let newString = '';
