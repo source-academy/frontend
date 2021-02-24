@@ -1,5 +1,6 @@
-import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
@@ -47,13 +48,13 @@ export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtons
   );
   const saveAsButton = controlButton('Save as', IconNames.SEND_TO, props.onClickSaveAs);
   const logoutButton = props.loggedInAs && (
-    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
+    <Tooltip2 content={`Logged in as ${props.loggedInAs}`}>
       {controlButton('Log out', IconNames.LOG_OUT, props.onClickLogOut)}
-    </Tooltip>
+    </Tooltip2>
   );
 
   return (
-    <Popover
+    <Popover2
       autoFocus={false}
       content={
         <div>
@@ -69,6 +70,6 @@ export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtons
       popoverClassName={Classes.POPOVER_DISMISS}
     >
       {mainButton}
-    </Popover>
+    </Popover2>
   );
 };

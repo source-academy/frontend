@@ -7,10 +7,10 @@ import {
   NavbarDivider,
   NavbarGroup,
   NavbarHeading,
-  Position,
-  Tooltip
+  Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -133,14 +133,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && (
         <>
           <NavbarDivider className="default-divider" />
-          <Tooltip content="Toggle Menu" position={Position.BOTTOM}>
+          <Tooltip2 content="Toggle Menu" placement={Position.BOTTOM}>
             <Button
               onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
               icon={IconNames.COMPASS}
               minimal={true}
               style={{ outline: 'none' }}
             />
-          </Tooltip>
+          </Tooltip2>
         </>
       )}
 
