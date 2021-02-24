@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import AchievementInferencer from './utils/AchievementInferencer';
-import AchievementLevel from './utils/AchievementLevel';
+import AchievementLevel from './overview/AchievementLevel';
 
 type AchievementOverviewProps = {
   name: string;
   studio: string;
-  inferencer: AchievementInferencer;
 };
 
 function AchievementOverview(props: AchievementOverviewProps) {
-  const { name, studio, inferencer } = props;
+  const { name, studio } = props;
 
-  const studentExp = inferencer.getTotalExp();
+  const inferencer = useContext(AchievementContext);
+  const studentXp = inferencer.getTotalXp();
 
   return (
     <div className="achievement-overview">
-      <AchievementLevel studentExp={studentExp} />
+      <AchievementLevel studentXp={studentXp} />
       <h3>{name}</h3>
       <h3>{studio}</h3>
     </div>
