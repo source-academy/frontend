@@ -383,6 +383,10 @@ class GameGlobalAPI {
     this.getGameManager().getBackgroundManager().renderBackgroundLayerContainer(locationId);
   }
 
+  public getBackgroundAsset() {
+    return this.getGameManager().getBackgroundManager().getBackgroundAsset();
+  }
+
   /////////////////////
   //    Assessment   //
   /////////////////////

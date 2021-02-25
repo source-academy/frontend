@@ -40,6 +40,16 @@ export default class GameActionExecuter {
       case GameActionType.ChangeBackground:
         globalAPI.renderBackgroundLayerContainer(actionParams.id);
         return;
+      case GameActionType.StartAnimation:
+        console.log(actionParams);
+        globalAPI
+          .getGameManager()
+          .getBackgroundManager()
+          .startAnimation(actionParams.id, actionParams.startFrame, actionParams.frameRate);
+        return;
+      case GameActionType.StopAnimation:
+        globalAPI.getGameManager().getBackgroundManager().stopAnimation();
+        return;
       case GameActionType.PreviewLocation:
         globalAPI.renderBackgroundLayerContainer(actionParams.id);
         globalAPI.renderObjectLayerContainer(actionParams.id);
@@ -111,6 +121,8 @@ export default class GameActionExecuter {
       case GameActionType.NavigateToAssessment:
       case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
+      case GameActionType.StartAnimation:
+      case GameActionType.StopAnimation:
       case GameActionType.ObtainCollectible:
       case GameActionType.CompleteObjective:
       case GameActionType.ShowDialogue:
