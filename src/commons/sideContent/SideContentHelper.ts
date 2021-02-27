@@ -39,11 +39,8 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
   // Get module side contents from DebuggerContext
   const rawModuleTabs = debuggerContext.context?.modules as Modules[] | undefined;
   if (rawModuleTabs == null) return [];
-
-  console.log(rawModuleTabs[0](React));
   // Pass React into functions
   const unprocessedTabs: ModuleSideContent[] = rawModuleTabs.map((tab: any) => tab(React));
-
   // Initialize module side contents to convert to SideContentTab type
   const moduleTabs: SideContentTab[] = unprocessedTabs.map((sideContent: ModuleSideContent) => ({
     ...sideContent,
