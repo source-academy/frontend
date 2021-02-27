@@ -30,7 +30,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   padding: 20px 15px 100px 15px;
   background-color: $cadet-color-2;
   white-space: pre-wrap;
-  overflow: scroll;
+  overflow: auto;
 
   .sa-substituter {
     overflow-x: visible;
