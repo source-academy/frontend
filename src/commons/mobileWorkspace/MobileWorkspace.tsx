@@ -5,12 +5,12 @@ import ReactAce from 'react-ace/lib/ace';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
-import Keyboard from 'react-simple-keyboard';
 
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import MobileKeyboard from './MobileKeyboard';
 import DraggableRepl from './mobileSideContent/DraggableRepl';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
@@ -205,6 +205,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     setDraggableReplPosition({ x: 0, y: 0 });
   };
 
+  const draggableReplProps = {
+    handleShowRepl: handleShowRepl,
+    handleHideRepl: handleHideRepl,
+    disableRepl: setIsDraggableReplDisabled
+  };
+
   const mobileEditorTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Editor',
@@ -243,60 +249,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
-  const draggableReplProps = {
-    handleShowRepl: handleShowRepl,
-    handleHideRepl: handleHideRepl,
-    disableRepl: setIsDraggableReplDisabled
-  };
-
-  const keyboardRef = React.useRef<Keyboard>();
-
-  React.useEffect(() => {
-    keyboardRef.current!.setInput(props.editorProps!.editorValue);
-  });
-
-  const handleKeyboardChange = (input: string) => {
-    // if (props.editorProps) {
-    //   props.editorProps.handleEditorValueChange(input);
-    //   const position = editorRef.current!.editor.getCursorPosition();
-    //   const row = position.row;
-    //   const column = input.length;
-    //   editorRef.current!.editor.navigateTo(row, column);
-    // }
-  };
-
-  const handleKeyPress = (button: string) => {
-    if (button === '{arrowleft}') {
-      editorRef.current!.editor.navigateLeft();
-    } else if (button === '{arrowright}') {
-      editorRef.current!.editor.navigateRight();
-    } else if (button === '{bksp}') {
-      editorRef.current!.editor.remove('left');
-    } else if (button === '{tab}') {
-      editorRef.current!.editor.insert('\t');
-    } else if (['+', '-', '*', '/', '%', '=>', '===', '&&', '||'].includes(button)) {
-      editorRef.current!.editor.insert(' ' + button + ' ');
-    } else {
-      editorRef.current!.editor.insert(button);
-    }
-  };
-
-  const keyboardProps = {
-    keyboardRef: (r: any) => (keyboardRef.current = r),
-    onChange: handleKeyboardChange,
-    onKeyPress: handleKeyPress,
-    layout: {
-      default: [
-        '{ } ( ) " _ => === ;',
-        '{tab} && || ! < > = //',
-        '+ - * / % {arrowleft} {arrowright}'
-      ]
-    },
-    theme: 'hg-theme-default',
-    preventMouseDownDefault: true,
-    disableCaretPositioning: false
-  };
-
   return (
     <div className="workspace mobile-workspace">
       {props.hasUnsavedChanges ? (
@@ -315,7 +267,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
       <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
 
-      <Keyboard {...keyboardProps} />
+      <MobileKeyboard editorRef={editorRef} />
     </div>
   );
 };
