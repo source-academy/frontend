@@ -665,17 +665,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
 
   const editorProps = {
-    onChange: onChangeMethod, //mobile
+    onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     sourceChapter: props.sourceChapter,
     externalLibraryName: props.externalLibraryName,
     sourceVariant: props.sourceVariant,
-    editorValue: props.editorValue, //mobile
+    editorValue: props.editorValue,
     editorSessionId: props.editorSessionId,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
-    handleEditorValueChange: onEditorValueChange, //mobile
+    handleEditorValueChange: onEditorValueChange,
     handleSendReplInputToOutput: props.handleSendReplInputToOutput,
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     isEditorAutorun: props.isEditorAutorun,
