@@ -53,7 +53,7 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
             }
             min={1}
             max={maxRank}
-            placeholder={`Enter rank for entry ${contestEntry.submission_id}`}
+            placeholder={`Enter rank for entry ${entryNumber}`}
             allowNumericCharactersOnly
             fill
           />
