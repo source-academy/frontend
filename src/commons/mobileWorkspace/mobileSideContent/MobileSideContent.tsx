@@ -104,10 +104,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           }
         : tab.body;
 
-      return tab.id === SideContentType.mobileEditorRun ? (
-        // Always render the draggable Repl
-        tabBody
-      ) : tab.id === SideContentType.mobileEditor ? (
+      if (tab.id === SideContentType.mobileEditorRun) {
+        return;
+      }
+
+      return tab.id === SideContentType.mobileEditor ? (
         // Render the Editor Panel when the selected tab is 'Editor' or 'Run'
         selectedTabId === SideContentType.mobileEditor ||
         selectedTabId === SideContentType.mobileEditorRun ? (
