@@ -133,7 +133,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
   const programLz = qs.lz ?? qs.prgrm;
   const program = programLz && decompressFromEncodedURIComponent(programLz);
   if (program) {
-    props.handleEditorValueChange(program); 
+    props.handleEditorValueChange(program);
   }
 
   const chapter = stringParamToInt(qs.chap) || undefined;
