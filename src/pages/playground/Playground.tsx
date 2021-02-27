@@ -133,7 +133,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
   const programLz = qs.lz ?? qs.prgrm;
   const program = programLz && decompressFromEncodedURIComponent(programLz);
   if (program) {
-    props.handleEditorValueChange(program);
+    props.handleEditorValueChange(program); 
   }
 
   const chapter = stringParamToInt(qs.chap) || undefined;
@@ -665,17 +665,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
 
   const editorProps = {
-    onChange: onChangeMethod,
+    onChange: onChangeMethod, //mobile
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     sourceChapter: props.sourceChapter,
     externalLibraryName: props.externalLibraryName,
     sourceVariant: props.sourceVariant,
-    editorValue: props.editorValue,
+    editorValue: props.editorValue, //mobile
     editorSessionId: props.editorSessionId,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
-    handleEditorValueChange: onEditorValueChange,
+    handleEditorValueChange: onEditorValueChange, //mobile
     handleSendReplInputToOutput: props.handleSendReplInputToOutput,
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     isEditorAutorun: props.isEditorAutorun,
