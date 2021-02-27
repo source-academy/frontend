@@ -1,4 +1,4 @@
-@import "react-simple-keyboard/build/css/index.css";
+@import 'react-simple-keyboard/build/css/index.css';
 
 $shadow-dark: rgba(0, 0, 0, 0.5);
 $shadow-light: rgba(0, 0, 0, 0.2);
@@ -19,9 +19,9 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     background: $cadet-color-2;
   }
 
-  .hg-activeButton{
+  .hg-activeButton {
     background: $cadet-color-1;
-  } 
+  }
 }
 
 .mobile-selected-panel {
