@@ -1,8 +1,27 @@
+@import "react-simple-keyboard/build/css/index.css";
+
 $shadow-dark: rgba(0, 0, 0, 0.5);
 $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-workspace {
   position: relative;
+}
+
+.react-simple-keyboard {
+  width: 90%;
+  z-index: 4;
+  position: absolute;
+  top: 50vh;
+  color: $cadet-color-5;
+  background: $cadet-color-1;
+
+  .hg-button {
+    background: $cadet-color-2;
+  }
+
+  .hg-activeButton{
+    background: $cadet-color-1;
+  } 
 }
 
 .mobile-selected-panel {
