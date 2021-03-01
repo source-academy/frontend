@@ -229,7 +229,6 @@ function connect_ends(curve1, curve2) {
   )
 }
 
-
 // function connect_ends(curve1, curve2) {...}
 
 // FRACTAL CURVES
