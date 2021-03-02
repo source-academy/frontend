@@ -76,7 +76,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-editor-panel {
   width: 100vw;
-  height: 100%;
+  height: calc(100% - 70px);
   z-index: 1;
 }
 
