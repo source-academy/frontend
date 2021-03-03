@@ -7,20 +7,95 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
-.react-simple-keyboard {
-  width: 90%;
+.mobile-floating-keyboard {
+  width: 42px; // default value, toggled by floating-toggle to 95%
+  height: 50px;
+  max-width: 600px;
   z-index: 4;
   position: absolute;
-  top: 50vh;
-  color: $cadet-color-5;
+  top: 30vh;
+  right: 0;
   background: $cadet-color-1;
+  border-radius: 25px 0 0 25px;
+  display: flex;
+  overflow: hidden;
+  transition: width 1s;
 
-  .hg-button {
+  button {
+    height: 50px;
+    border: transparent;
+    background: transparent;
+    color: $cadet-color-4;
+    display: inline-block;
+    opacity: 0.5;
+  }
+  button:active {
     background: $cadet-color-2;
+    color: $cadet-color-1;
   }
 
-  .hg-activeButton {
-    background: $cadet-color-1;
+  .mobile-floating-toggle {
+    width: 32px;
+    font-size: 18px;
+    padding: 0 2px 0 12px;
+  }
+
+  .mobile-keyboard-toggle-container {
+    width: 95%;
+    height: 46px;
+    display: none; // default value, toggled by floating-toggle to flex
+
+    .mobile-keyboard-container {
+      width: 95%;
+      overflow-y: hidden;
+      position: relative;
+
+      .simple-keyboard-shortcut {
+        width: 100%;
+        position: absolute;
+        top: 0; // default value, toggled by row-toggle to -45 -90
+        color: $cadet-color-4;
+        background: $cadet-color-1;
+        transition: top 0.6s;
+
+        .hg-row {
+          height: 40px;
+
+          .hg-button {
+            background: $cadet-color-2;
+          }
+
+          .mobile-navigation {
+            background: $cadet-color-3;
+            color: $cadet-color-1;
+            padding: 4px 1px 6px 1px;
+            font-size: 30px;
+          }
+
+          .hg-activeButton {
+            background: $cadet-color-1;
+            color: $cadet-color-4;
+          }
+        }
+      }
+    }
+
+    .mobile-keyboard-row-toggle {
+      width: 28px;
+      font-size: 28px;
+      padding: 0 2px 0 0;
+    }
+  }
+
+  #floating-dragHandle {
+    padding: 0 5px;
+    height: 50px;
+    width: 14px;
+    border-radius: 10px 0 0 10px;
+    background: $cadet-color-2;
+    opacity: 0.28;
+    color: $cadet-color-4;
+    font-size: 32px;
   }
 }
 
@@ -144,7 +219,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
   .REPL-content {
     width: 100%;
-    height: var(--mobile-repl-inner-height, 0px);
+    height: calc(var(--mobile-repl-height, 0px) - 10px);
     padding: 0 10px 10px 10px;
     overflow: auto;
 
