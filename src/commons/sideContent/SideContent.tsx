@@ -2,6 +2,7 @@ import { Card, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
+import { incrementFirstMaxXp } from '../achievement/utils/eventHandler';
 import { OverallState } from '../application/ApplicationTypes';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './SideContentHelper';
@@ -128,6 +129,7 @@ const SideContent = (props: SideContentProps) => {
        * To be run when tabs are changed.
        * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
        */
+      incrementFirstMaxXp();
       const resetAlert = (prevTabId: TabId) => {
         const iconId = generateIconId(prevTabId);
         const icon = document.getElementById(iconId);

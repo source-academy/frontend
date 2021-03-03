@@ -111,6 +111,33 @@
     }
   }
 
+  .achievement-manual-editor {
+    $default-spacing: 0.5em;
+
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    padding: $default-spacing;
+    color: white;
+    
+    input {
+      display: inline-flex;
+      margin: 0 $default-spacing;
+    }
+
+    button {
+      background: white;
+      display: inline-flex;
+      margin: 0 $default-spacing;
+
+    }
+
+    h3 {
+      margin: 0 $default-spacing;
+      display: inline-flex;
+    }
+  }
+
   .achievement-main {
     $border-glow-radius: 10px;
     // Cover aspect ratio 2:1

@@ -1,24 +1,28 @@
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
+import { Role } from 'src/commons/application/ApplicationTypes';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
+import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
 import AchievementOverview from '../../../commons/achievement/AchievementOverview';
 import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
-import { FilterStatus } from '../../../features/achievement/AchievementTypes';
+import { FilterStatus, GoalProgress } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   getAchievements: () => void;
   getOwnGoals: () => void;
+  updateGoalProgress: (studentId: number, progress: GoalProgress) => void
 };
 
 export type StateProps = {
   group: string | null;
   inferencer: AchievementInferencer;
   name?: string;
+  role?: Role
 };
 
 /**
@@ -43,7 +47,7 @@ export const generateAchievementTasks = (
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { group, getAchievements, getOwnGoals, inferencer, name } = props;
+  const { group, getAchievements, getOwnGoals, updateGoalProgress, inferencer, name, role } = props;
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
@@ -69,6 +73,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
+        {role != Role.Student && <AchievementManualEditor studio={group || 'Staff'} updateGoalProgress={updateGoalProgress} />}
 
         <div className="achievement-main">
           <div className="filter-container">
