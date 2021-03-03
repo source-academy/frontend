@@ -24,6 +24,10 @@ class SideContentListVisualizer extends React.Component<{}, State> {
     // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <div ref={r => (this.$parent = r)} className={classNames('sa-list-visualizer', Classes.DARK)}>
+        <button onClick={this.onPrevButtonClick}>Prev</button>
+        <button onClick={this.onNextButtonClick}>Next</button>
+        
+        {(window as any).ListVisualizer?.getCurrentStep() ?? '0'}/{(window as any).ListVisualizer?.getLayerCount() ?? 'no visualizer'}
         <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
           The data visualizer visualises data structures.
           <br />
@@ -46,6 +50,18 @@ class SideContentListVisualizer extends React.Component<{}, State> {
         )}
       </div>
     );
+  }
+
+  private onPrevButtonClick = () => {
+    const element = (window as any).ListVisualizer;
+    element.previous();
+    this.setState({});
+  }
+
+  private onNextButtonClick = () => {
+    const element = (window as any).ListVisualizer;
+    element.next();
+    this.setState({});
   }
 
   private tryToLoad = () => {

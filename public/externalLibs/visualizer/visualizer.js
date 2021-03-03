@@ -1,12 +1,11 @@
 ; (function (exports) {
   /**
-   * Setup Stage
+   * Setup Stage for 1 data structure
    */
   const container = document.createElement('div');
   container.id = 'list-visualizer-container';
   container.hidden = true;
   document.body.appendChild(container);
-
   const drawingConfig = {
     strokeWidth: 2,
     stroke: 'white',
@@ -788,12 +787,24 @@
     }
   }
 
-  // A list of layers drawn, used for history
-  let layerList = [];
-  // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
-  let currentListVisualizer = -1;
+  // A list of steps drawn, used for history
+  // Every step has 1 or more layers, one for each structure
+  let stepList = [];
+
+  // ID of the current draw_data call shown. Avoid changing this value externally as layer is not updated.
+  let currentStep = -1;
   // label numbers when the data cannot be fit into the box
   let nodeLabel = 0;
+  
+  function createPanes(count) {
+    for (let i = 0; i < count; i++) {
+      console.log("pls");
+      const layerContainer = document.createElement('div');
+      layerContainer.id = 'list-visualizer-pane' + i;
+      container.appendChild(layerContainer);
+    }
+  }
+
   /**
    *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
    *  Then shift it to the left end.
@@ -809,6 +820,8 @@
       icon.classList.add('side-content-tab-alert');
     }
 
+    createPanes(2);
+
     /**
      * Create konva stage according to calculated width and height of drawing.
      * Theoretically, as each box is 90px wide and successive boxes overlap by half,
@@ -817,23 +830,35 @@
      * In practice, likely due to browser auto-scaling, for large drawings this results in
      * some of the drawing being cut off. Hence the width and height formulas used are approximations.
      */
-    let stage = new Konva.Stage({
+    
+    let leftStage = new Konva.Stage({
       width: findListWidth(xs) * 60 + 60,
       height: findListHeight(xs) * 60 + 100,
-      container: 'list-visualizer-container'
-    });
+      container: 'list-visualizer-pane' + 0
+    })
+    let rightStage = new Konva.Stage({
+      width: findListWidth(xs) * 60 + 60,
+      height: findListHeight(xs) * 60 + 100,
+      container: 'list-visualizer-pane' + 1
+    });;
     minLeft = 500;
     nodelist = [];
     fnNodeList = [];
     nodeLabel = 0;
     // hides all other layers
-    for (let i = 0; i < layerList.length; i++) {
-      layerList[i].hide();
+    for (let i = 0; i < stepList.length; i++) {
+      // stepList[i].draw();
+      leftStage.add(stepList[i]);
+      rightStage.add(stepList[i]);
     }
     // creates a new layer and add to the stage
-    const layer = new Konva.Layer();
-    stage.add(layer);
-    layerList.push(layer);
+    const layer = new Konva.Layer();  
+
+    const dataStructureLayers = []
+    dataStructureLayers.push(layer);
+    dataStructureLayers.push(layer);
+
+    stepList.push(dataStructureLayers);
 
     if (is_pair(xs)) {
       Tree.fromSourceTree(xs).beginDrawingOn(layer).draw(500, 50);
@@ -857,29 +882,43 @@
     layer.offsetY(0);
     layer.draw();
 
+    const layer1 = layer.clone();
+
+    leftStage.add(layer);
+    rightStage.add(layer1);
+
     // update current ID
-    currentListVisualizer = layerList.length - 1;
+    currentStep = stepList.length - 1;
   }
 
   /**
-   *  Shows the layer with a given ID while hiding the others.
+   *  Shows the step with a given ID while hiding the others.
    */
-  function showListVisualizer(id) {
-    for (let i = 0; i < layerList.length; i++) {
-      layerList[i].hide();
-    }
-    if (layerList[id]) {
-      layerList[id].show();
-      currentListVisualizer = id;
+  function showStep(id) {
+    console.log(stepList);
+    // for (let step in stepList) {
+    //   for (let layer in step) {
+    //     layer.hide();
+    //   }
+    // }
+    const currentStep = stepList[id];
+    container.children = [];
+    for (const [dataStructure, index] in currentStep.entries()) {
+      const layerContainer = document.createElement('div');
+      layerContainer.id = 'list-visualizer-pane' + index;
+      container.appendChild(layerContainer);
+      dataStructure.show();
+      dataStructure.draw();
+      currentStep = id;
     }
   }
 
   function clearListVisualizer() {
-    currentListVisualizer = -1;
-    for (let i = 0; i < layerList.length; i++) {
-      layerList[i].hide();
+    currentStep = -1;
+    for (let i = 0; i < stepList.length; i++) {
+      stepList[i].forEach((layer) => layer.hide());
     }
-    layerList = [];
+    stepList = [];
   }
 
   function is_function(data) {
@@ -964,16 +1003,20 @@
       parent.appendChild(container);
     },
     next: function () {
-      if (currentListVisualizer > 0) {
-        currentListVisualizer--;
-      }
-      showListVisualizer(currentListVisualizer);
+      currentStep++;
+      currentStep = Math.min(currentStep, stepList.length - 1);
+      showStep(currentStep);
     },
     previous: function () {
-      if (currentListVisualizer > 0) {
-        currentListVisualizer--;
-      }
-      showListVisualizer(currentListVisualizer);
+      currentStep--;
+      currentStep = Math.max(currentStep, 0);
+      showStep(currentStep);
+    },
+    getLayerCount: function () {
+      return stepList.length;
+    },
+    getCurrentStep: function() {
+      return currentStep + 1;
     }
   };
 
