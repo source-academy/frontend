@@ -76,13 +76,16 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
       {
         class: 'mobile-navigation',
         buttons: '{arrowleft} {arrowright}'
+      },
+      {
+        class: 'big-buttons',
+        buttons: '=== &&'
       }
     ],
     theme: 'hg-theme-default',
     preventMouseDownDefault: true,
     disableCaretPositioning: false
   };
-
 
   return (
     <Draggable

@@ -35,9 +35,9 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   }
 
   .mobile-floating-toggle {
-    width: 32px;
+    width: 30px;
     font-size: 18px;
-    padding: 0 2px 0 12px;
+    padding: 0 2px 0 10px;
   }
 
   .mobile-keyboard-toggle-container {
@@ -63,13 +63,18 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
           .hg-button {
             background: $cadet-color-2;
+            min-width: 24px;
           }
 
           .mobile-navigation {
             background: $cadet-color-3;
             color: $cadet-color-1;
-            padding: 4px 1px 6px 1px;
-            font-size: 30px;
+            padding: 2px 0 4px 0;
+            font-size: 28px;
+          }
+
+          .big-buttons {
+            padding: 5px 0;
           }
 
           .hg-activeButton {
@@ -90,12 +95,13 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   #floating-dragHandle {
     padding: 0 5px;
     height: 50px;
-    width: 14px;
+    width: 20px;
+    min-width: 20px;
     border-radius: 10px 0 0 10px;
     background: $cadet-color-2;
-    opacity: 0.28;
+    opacity: 0.25;
     color: $cadet-color-4;
-    font-size: 32px;
+    font-size: 34px;
   }
 }
 
