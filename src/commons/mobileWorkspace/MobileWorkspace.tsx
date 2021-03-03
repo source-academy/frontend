@@ -158,7 +158,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   /**
    * The following 3 'react-draggable' handlers include the updating of 2 CSS variables
-   * '--mobile-repl-height' and '--mobile-repl-inner-height'.
+   * '--mobile-repl-height'.
    *
    * 'position: absolute' for the 'react-draggable' component is used in conjunction with the
    * modification of the mobile browser's meta viewport height to ensure that the draggable
@@ -175,16 +175,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * MobileSideContentTabs.
    *
    * To ensure proper scrolling of overflowing Repl outputs inside the dynamically resizing
-   * draggable component, '--mobile-repl-inner-height' is also dynamically updated.
+   * draggable component, '--mobile-repl-height' is also dynamically updated.
    */
   const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
     document.documentElement.style.setProperty(
       '--mobile-repl-height',
       Math.max(-position.y, 0) + 'px'
-    );
-    document.documentElement.style.setProperty(
-      '--mobile-repl-inner-height',
-      Math.max(-position.y - 10, 0) + 'px'
     );
     setDraggableReplPosition(position);
   };
@@ -192,16 +188,11 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const handleShowRepl = () => {
     const offset = -300;
     document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
-    document.documentElement.style.setProperty(
-      '--mobile-repl-inner-height',
-      Math.max(-offset - 10, 0) + 'px'
-    );
     setDraggableReplPosition({ x: 0, y: offset });
   };
 
   const handleHideRepl = () => {
     document.documentElement.style.setProperty('--mobile-repl-height', '0px');
-    document.documentElement.style.setProperty('--mobile-repl-inner-height', '0px');
     setDraggableReplPosition({ x: 0, y: 0 });
   };
 
