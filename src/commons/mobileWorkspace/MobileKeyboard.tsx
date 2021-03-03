@@ -83,6 +83,7 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
     disableCaretPositioning: false
   };
 
+
   return (
     <Draggable
       axis="y"

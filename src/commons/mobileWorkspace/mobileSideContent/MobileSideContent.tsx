@@ -1,5 +1,6 @@
 import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import classNames from 'classnames';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -227,7 +228,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           defaultSelectedTabId={props.defaultSelectedTabId}
           renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
           selectedTabId={props.selectedTabId}
-          className={Classes.DARK}
+          className={classNames(Classes.DARK, 'mobile-side-content')}
         >
           {renderedTabs}
           <MobileControlBar {...props.mobileControlBarProps} />
