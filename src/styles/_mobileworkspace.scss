@@ -157,7 +157,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-editor-panel {
   width: 100vw;
-  height: 100%;
+  height: calc(100% - 70px);
   z-index: 1;
 }
 
@@ -173,6 +173,10 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   bottom: 0;
   box-shadow: 0 -4px 8px $shadow-dark, 0 -6px 16px $shadow-light,
     inset 0 14px 14px -16px rgba(206, 217, 224, 0.1);
+
+  .mobile-side-content {
+    overflow-x: auto;
+  }
 
   .mobile-control-bar-button {
     margin-bottom: 5px;
