@@ -8,7 +8,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 }
 
 .mobile-floating-keyboard {
-  width: 42px; // default value, toggled by floating-toggle to 95%
+  width: 42px; // default value, toggled by floating-toggle to 99vw
   height: 50px;
   max-width: 600px;
   z-index: 4;
@@ -19,7 +19,8 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   border-radius: 25px 0 0 25px;
   display: flex;
   overflow: hidden;
-  transition: width 0.8s;
+  opacity: 0.8; // initial value, toggled by floating-toggle to 1 or 0.6
+  transition: width 0.8s, opacity 1.2s;
 
   button {
     height: 50px;
@@ -41,12 +42,12 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   }
 
   .mobile-keyboard-toggle-container {
-    width: 95%;
+    width: 100%;
     height: 46px;
     display: none; // default value, toggled by floating-toggle to flex
 
     .mobile-keyboard-container {
-      width: 95%;
+      width: 100%;
       overflow-y: hidden;
       position: relative;
 
@@ -93,13 +94,13 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   }
 
   #floating-dragHandle {
-    padding: 0 5px;
+    padding: 0 0 0 8px;
     height: 50px;
-    width: 20px;
-    min-width: 20px;
+    width: 22px;
+    min-width: 22px;
     border-radius: 10px 0 0 10px;
     background: $cadet-color-2;
-    opacity: 0.25;
+    opacity: 0.3;
     color: $cadet-color-4;
     font-size: 34px;
   }
