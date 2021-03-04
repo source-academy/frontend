@@ -31,7 +31,7 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
       //do hiding
       document.getElementById('mobile-floating-toggle')!.style.setProperty('width', '42px');
       document.getElementById('mobile-keyboard-toggle')!.style.setProperty('display', 'none');
-      document.getElementById('mobile-floating-toggle')!.style.setProperty('opacity', '0.5');
+      document.getElementById('mobile-floating-toggle')!.style.setProperty('opacity', '0.6');
       setButtonContent('ᐸ');
       setIsKeyoardShown(false);
     } else {
