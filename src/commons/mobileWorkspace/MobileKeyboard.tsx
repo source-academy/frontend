@@ -22,7 +22,12 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
     setKeyboardPosition(position);
   };
 
+  const handlePreventDefault = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+  };
+
   const handleHiding = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
     if (isKeyboardShown) {
       //do hiding
       document.getElementById('mobile-floating-toggle')!.style.setProperty('width', '42px');
@@ -38,7 +43,8 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
     }
   };
 
-  const handleRowToggle = () => {
+  const handleRowToggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
     setSelectedIndex((selectedIndex + 1) % 3);
     const keyboardClass = document.getElementsByClassName('simple-keyboard-shortcut');
     Array.from(keyboardClass as HTMLCollectionOf<HTMLElement>)[0].style.top =
@@ -96,7 +102,11 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
       onDrag={onDrag}
     >
       <div className="mobile-floating-keyboard" id="mobile-floating-toggle">
-        <button className="mobile-floating-toggle" onClick={handleHiding}>
+        <button
+          className="mobile-floating-toggle"
+          onClick={handleHiding}
+          onMouseDown={handlePreventDefault}
+        >
           {buttonContent}
         </button>
 
@@ -104,7 +114,11 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
           <div className="mobile-keyboard-container">
             <Keyboard {...keyboardProps} />
           </div>
-          <button className="mobile-keyboard-row-toggle" onClick={handleRowToggle}>
+          <button
+            className="mobile-keyboard-row-toggle"
+            onClick={handleRowToggle}
+            onMouseDown={handlePreventDefault}
+          >
             ⤸
           </button>
         </div>
