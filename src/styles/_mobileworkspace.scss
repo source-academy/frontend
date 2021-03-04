@@ -19,6 +19,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   border-radius: 25px 0 0 25px;
   display: flex;
   overflow: hidden;
+  opacity: 0.5; // default value, toggled by floating-toggle to 1
   transition: width 0.8s, opacity 2s;
 
   button {
