@@ -32,6 +32,8 @@ const baseProps = {
   usingSubst: false,
   persistenceUser: undefined,
   persistenceFile: undefined,
+  githubUser: undefined,
+  githubFile: undefined,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},

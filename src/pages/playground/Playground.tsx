@@ -26,6 +26,7 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
 import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -48,6 +49,7 @@ import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
+import { GitHubFile } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -95,6 +97,11 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
+  handleGitHubOpenPicker: () => void;
+  handleGitHubSaveFile: () => void;
+  handleGitHubUpdateFile: (file: GitHubFile) => void;
+  handleGitHubInitialise: () => void;
+  handleGitHubLogIn: () => void;
 };
 
 export type StateProps = {
@@ -123,6 +130,8 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
+  githubUser: string | undefined;
+  githubFile: GitHubFile | undefined;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -424,6 +433,34 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
+  const { githubUser, githubFile, handleGitHubUpdateFile } = props;
+  // Compute this here to avoid re-rendering the button every keystroke
+  const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
+  const githubButtons = React.useMemo(() => {
+    return (
+      <ControlBarGitHubButtons
+        currentFile={githubFile}
+        loggedInAs={githubUser}
+        isDirty={githubIsDirty}
+        key="github"
+        onClickOpen={props.handleGitHubOpenPicker}
+        onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
+        onClickSaveAs={props.handleGitHubSaveFile}
+        onClickLogIn={props.handleGitHubLogIn}
+        onPopoverOpening={props.handleGitHubInitialise}
+      />
+    );
+  }, [
+    githubUser,
+    githubFile,
+    githubIsDirty,
+    props.handleGitHubSaveFile,
+    props.handleGitHubOpenPicker,
+    props.handleGitHubLogIn,
+    props.handleGitHubInitialise,
+    handleGitHubUpdateFile
+  ]);
+
   const executionTime = React.useMemo(
     () => (
       <ControlBarExecutionTime
@@ -711,6 +748,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
+        githubButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
       ]
     },
