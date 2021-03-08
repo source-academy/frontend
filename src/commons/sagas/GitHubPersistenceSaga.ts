@@ -7,35 +7,20 @@ import {
   GITHUB_SAVE_FILE,
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
-import {
-  LOGIN_GITHUB,
-  LOGOUT_GITHUB
-} from '../application/types/SessionTypes';
+import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 
 export function* GithubPersistenceSaga(): SagaIterator {
-  yield takeLatest(LOGIN_GITHUB, function* () {
+  yield takeLatest(LOGIN_GITHUB, function* () {});
 
-  });
+  yield takeLatest(LOGOUT_GITHUB, function* () {});
 
-  yield takeLatest(LOGOUT_GITHUB, function* () {
-      
-  });
+  yield takeLatest(GITHUB_OPEN_PICKER, function* () {});
 
-  yield takeLatest(GITHUB_OPEN_PICKER, function* () {
-        
-  });
+  yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {});
 
-  yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {
-        
-  });
+  yield takeLatest(GITHUB_SAVE_FILE, function* () {});
 
-  yield takeLatest(GITHUB_SAVE_FILE, function* () {
-        
-  });
-
-  yield takeLatest(GITHUB_INITIALISE, function* () {
-          
-  });
+  yield takeLatest(GITHUB_INITIALISE, function* () {});
 }
 
 export default GithubPersistenceSaga;
