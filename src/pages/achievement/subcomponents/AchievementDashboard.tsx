@@ -7,95 +7,98 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
+import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleGetAchievements: () => void;
-  // TODO: handleGetGoals: () => void;
-  // TODO: handleGetOwnGoals: () => void;
+  getAchievements: () => void;
+  getOwnGoals: () => void;
 };
 
 export type StateProps = {
+  group: string | null;
   inferencer: AchievementInferencer;
   name?: string;
-  group: string | null;
 };
 
 /**
  * Generates <AchievementTask /> components
  *
- * @param taskIds an array of achievementId
+ * @param taskUuids an array of achievementUuid
+ * @param filterStatus the dashboard filter status
+ * @param focusState the focused achievement state
  */
 export const generateAchievementTasks = (
-  inferencer: AchievementInferencer,
+  taskUuids: string[],
   filterStatus: FilterStatus,
-  focusState: [number, any]
-) => {
-  const taskIds = inferencer.listTaskIdsbyPosition();
-  return taskIds.map(taskId => (
+  focusState: [string, any]
+) =>
+  taskUuids.map(taskUuid => (
     <AchievementTask
-      key={taskId}
-      id={taskId}
-      inferencer={inferencer}
+      key={taskUuid}
+      uuid={taskUuid}
       filterStatus={filterStatus}
       focusState={focusState}
     />
   ));
-};
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleGetAchievements } = props;
+  const { group, getAchievements, getOwnGoals, inferencer, name } = props;
 
+  /**
+   * Fetch the latest achievements and goals from backend when the page is rendered
+   */
   useEffect(() => {
-    if (Constants.useBackend) {
-      handleGetAchievements();
-      // TODO: handleGetGoals();
+    if (Constants.useAchievementBackend) {
+      getOwnGoals();
+      getAchievements();
     }
-  }, [handleGetAchievements]);
+  }, [getAchievements, getOwnGoals]);
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
 
-  // If an achievement is focused, the cards glow and dashboard displays the AchievementView
-  const focusState = useState<number>(-1);
-  const [focusId] = focusState;
+  /**
+   * Marks the achievement uuid that is currently on focus (selected)
+   * If an achievement is focused, the cards glow and dashboard displays the AchievementView
+   */
+  const focusState = useState<string>('');
+  const [focusUuid] = focusState;
 
   return (
-    <div className="AchievementDashboard">
-      <AchievementOverview
-        name={name || 'User'}
-        studio={group || 'Staff'}
-        inferencer={inferencer}
-      />
+    <AchievementContext.Provider value={inferencer}>
+      <div className="AchievementDashboard">
+        <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
 
-      <div className="achievement-main">
-        <div className="filter-container">
-          <AchievementFilter
-            ownStatus={FilterStatus.ALL}
-            icon={IconNames.GLOBE}
-            filterState={filterState}
-          />
-          <AchievementFilter
-            ownStatus={FilterStatus.ACTIVE}
-            icon={IconNames.LOCATE}
-            filterState={filterState}
-          />
-          <AchievementFilter
-            ownStatus={FilterStatus.COMPLETED}
-            icon={IconNames.ENDORSED}
-            filterState={filterState}
-          />
-        </div>
+        <div className="achievement-main">
+          <div className="filter-container">
+            <AchievementFilter
+              filterState={filterState}
+              icon={IconNames.GLOBE}
+              ownStatus={FilterStatus.ALL}
+            />
+            <AchievementFilter
+              filterState={filterState}
+              icon={IconNames.LOCATE}
+              ownStatus={FilterStatus.ACTIVE}
+            />
+            <AchievementFilter
+              filterState={filterState}
+              icon={IconNames.ENDORSED}
+              ownStatus={FilterStatus.COMPLETED}
+            />
+          </div>
 
-        <ul className="task-container">
-          {generateAchievementTasks(inferencer, filterStatus, focusState)}
-        </ul>
+          <ul className="task-container">
+            {generateAchievementTasks(inferencer.listSortedTaskUuids(), filterStatus, focusState)}
+          </ul>
 
-        <div className="view-container">
-          <AchievementView inferencer={inferencer} focusId={focusId} />
+          <div className="view-container">
+            <AchievementView focusUuid={focusUuid} />
+          </div>
         </div>
       </div>
-    </div>
+    </AchievementContext.Provider>
   );
 }
 

@@ -1,4 +1,5 @@
-import { Card, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
+import { Card, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -67,7 +68,6 @@ const SideContent = (props: SideContentProps) => {
     (state: OverallState) =>
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
-
   React.useEffect(() => {
     const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
     setDynamicTabs(allActiveTabs);
@@ -79,16 +79,24 @@ const SideContent = (props: SideContentProps) => {
    */
   const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 
+  /**
+   * Adds'side-content-tab-alert' style to newly spawned module tabs
+   */
+  const generateClassName = (id: string | undefined) =>
+    id === SideContentType.module
+      ? 'side-content-tooltip side-content-tab-alert'
+      : 'side-content-tooltip';
+
   const renderedTabs = React.useMemo(() => {
     const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
       const iconSize = 20;
-      const tabId = tab.id === undefined ? tab.label : tab.id;
+      const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
       const tabTitle: JSX.Element = (
-        <Tooltip content={tab.label}>
-          <div className="side-content-tooltip" id={generateIconId(tabId)}>
+        <Tooltip2 content={tab.label}>
+          <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
             <Icon icon={tab.iconName} iconSize={iconSize} />
           </div>
-        </Tooltip>
+        </Tooltip2>
       );
 
       const tabBody: JSX.Element = workspaceLocation

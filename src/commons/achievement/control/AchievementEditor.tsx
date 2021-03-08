@@ -1,71 +1,67 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import AchievementInferencer from '../utils/AchievementInferencer';
-import EditableAchievementCard from './editorTools/EditableAchievementCard';
-import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
+import AchievementAdder from './achievementEditor/AchievementAdder';
+import EditableCard from './achievementEditor/EditableCard';
 
 type AchievementEditorProps = {
-  inferencer: AchievementInferencer;
-  updateAchievements: any;
-  editAchievement: any;
-  forceRender: any;
-  addUnsavedChange: any;
-  removeUnsavedChange: any;
-  removeGoal: any;
-  removeAchievement: any;
+  requestPublish: () => void;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const {
-    inferencer,
-    updateAchievements,
-    editAchievement,
-    forceRender,
-    addUnsavedChange,
-    removeUnsavedChange,
-    removeGoal,
-    removeAchievement
-  } = props;
+  const { requestPublish } = props;
+
+  const inferencer = useContext(AchievementContext);
 
   /**
-   * NOTE: This helps us to ensure that only ONE achievement is added
-   * every time.
+   * newUuid helps us to ensure that only ONE achievement is added at any point of time.
    *
-   * Refering to AchievementAdder, if the adderId is -1, this
-   * means that currently no achievement is being added and the admin is able to
-   * add a new achievement.
+   * By default,  the newUuid is an empty string, which means currently no new achievement
+   * is being added and the admin is able to add a new achievement.
    *
-   * Alternatievly, if the adderId is not -1, this means that currently an achievement
-   * is being added to the systen and the admin is not allowed to add two achievements
-   * at one go.
+   * Conversely, if the newUuid is not an empty string, this means currently an achievement
+   * is being added to the system and the admin is not allowed to add two achievements
+   * at one go. The newUuid holds the newly created achievement uuid until the new achievement
+   * is added into the inferencer.
+   *
+   * NOTE: was previously NaN by default, unsure how this should change for uuid
    */
-  const [adderId, setAdderId] = useState<number>(-1);
+  const [newUuid, setNewUuid] = useState<string>('');
+  const allowNewUuid = newUuid === '';
+  const releaseUuid = (uuid: string) => (uuid === newUuid ? setNewUuid('') : undefined);
 
-  const mapAchievementIdsToEditableCard = (achievementIds: number[]) =>
-    achievementIds.map(id => (
-      <EditableAchievementCard
-        key={id}
-        achievement={inferencer.getAchievementItem(id)}
-        inferencer={inferencer}
-        updateAchievements={updateAchievements}
-        editAchievement={editAchievement}
-        forceRender={forceRender}
-        adderId={adderId}
-        setAdderId={setAdderId}
-        addUnsavedChange={addUnsavedChange}
-        removeUnsavedChange={removeUnsavedChange}
-        removeGoal={removeGoal}
-        removeAchievement={removeAchievement}
+  /**
+   * Generates <EditableAchievementCard /> components
+   *
+   * @param achievementUuids an array of achievementUuid
+   */
+  const generateEditableCards = (achievementUuids: string[]) =>
+    achievementUuids.map(uuid => (
+      <EditableCard
+        key={uuid}
+        uuid={uuid}
+        releaseUuid={releaseUuid}
+        requestPublish={requestPublish}
       />
     ));
 
+  // NOTE: editable cards used to be sorted by id in descending order
+  // However, UUID removes the guarantee of order preserving IDs
   return (
     <div className="achievement-editor">
-      <div className="achievement-command">
-        <AchievementAdder inferencer={inferencer} adderId={adderId} setAdderId={setAdderId} />
+      <div className="command">
+        <AchievementAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
       </div>
       <ul className="achievement-container">
-        {mapAchievementIdsToEditableCard(inferencer.listIds())}
+        {generateEditableCards(
+          inferencer
+            .getAllAchievementUuids()
+            .sort(
+              (a, b) =>
+                inferencer.getAchievementPositionByUuid(a) -
+                inferencer.getAchievementPositionByUuid(b)
+            )
+        )}
       </ul>
     </div>
   );

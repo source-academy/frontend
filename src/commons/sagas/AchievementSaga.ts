@@ -2,6 +2,8 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
 import {
+  BULK_UPDATE_ACHIEVEMENTS,
+  BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
   GET_ACHIEVEMENTS,
@@ -14,6 +16,8 @@ import {
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
 import {
+  bulkUpdateAchievements,
+  bulkUpdateGoals,
   editAchievement,
   editGoal,
   getAchievements,
@@ -26,6 +30,42 @@ import {
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* AchievementSaga(): SagaIterator {
+  yield takeEvery(
+    BULK_UPDATE_ACHIEVEMENTS,
+    function* (action: ReturnType<typeof actions.bulkUpdateAchievements>) {
+      const tokens = yield select((state: OverallState) => ({
+        accessToken: state.session.accessToken,
+        refreshToken: state.session.refreshToken
+      }));
+
+      const achievements = action.payload;
+
+      const resp = yield call(bulkUpdateAchievements, achievements, tokens);
+
+      if (!resp) {
+        return;
+      }
+    }
+  );
+
+  yield takeEvery(
+    BULK_UPDATE_GOALS,
+    function* (action: ReturnType<typeof actions.bulkUpdateGoals>) {
+      const tokens = yield select((state: OverallState) => ({
+        accessToken: state.session.accessToken,
+        refreshToken: state.session.refreshToken
+      }));
+
+      const goals = action.payload;
+
+      const resp = yield call(bulkUpdateGoals, goals, tokens);
+
+      if (!resp) {
+        return;
+      }
+    }
+  );
+
   yield takeEvery(EDIT_ACHIEVEMENT, function* (action: ReturnType<typeof actions.editAchievement>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,

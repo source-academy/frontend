@@ -1,5 +1,6 @@
-import { Button, ButtonGroup, Divider, NumericInput, Tooltip } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { parseError } from 'js-slang';
 import * as React from 'react';
 
@@ -163,7 +164,7 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
           <Divider />
           <div className="sa-video-header-element">
             <div className="sa-video-header-numeric-input">
-              <Tooltip content="Change width">
+              <Tooltip2 content="Change width">
                 <NumericInput
                   leftIcon={IconNames.HORIZONTAL_DISTRIBUTION}
                   style={{ width: 70 }}
@@ -174,10 +175,10 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
                   majorStepSize={100}
                   max={500}
                 />
-              </Tooltip>
+              </Tooltip2>
             </div>
             <div className="sa-video-header-numeric-input">
-              <Tooltip content="Change height">
+              <Tooltip2 content="Change height">
                 <NumericInput
                   leftIcon={IconNames.VERTICAL_DISTRIBUTION}
                   style={{ width: 70 }}
@@ -188,10 +189,10 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
                   majorStepSize={100}
                   max={500}
                 />
-              </Tooltip>
+              </Tooltip2>
             </div>
             <div className="sa-video-header-numeric-input">
-              <Tooltip content="Change FPS">
+              <Tooltip2 content="Change FPS">
                 <NumericInput
                   leftIcon={IconNames.STOPWATCH}
                   style={{ width: 60 }}
@@ -203,7 +204,7 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
                   max={30}
                   min={2}
                 />
-              </Tooltip>
+              </Tooltip2>
             </div>
           </div>
         </div>

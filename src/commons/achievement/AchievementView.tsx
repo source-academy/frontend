@@ -1,40 +1,50 @@
-import React from 'react';
+import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import React, { useContext } from 'react';
 
 import {
+  AchievementContext,
   getAbilityBackground,
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-import AchievementInferencer from './utils/AchievementInferencer';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
-  inferencer: AchievementInferencer;
-  focusId: number;
+  focusUuid: string;
 };
 
 function AchievementView(props: AchievementViewProps) {
-  const { inferencer, focusId } = props;
+  const { focusUuid } = props;
 
-  if (focusId < 0) return null;
+  const inferencer = useContext(AchievementContext);
 
-  const achievement = inferencer.getAchievementItem(focusId);
+  // NOTE: was originally isNaN, not sure how this should change for uuid
+  if (focusUuid === '') {
+    return (
+      <div className="no-view">
+        <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
+        <h2>Select an achievement</h2>
+      </div>
+    );
+  }
+
+  const achievement = inferencer.getAchievement(focusUuid);
   const { ability, deadline, title, view } = achievement;
-  const { canvasUrl, completionText, description } = view;
-
-  const awardedExp = inferencer.getExp(focusId);
-  const goals = inferencer.getGoals(focusId);
-  const prereqGoals = inferencer.getPrerequisiteGoals(focusId);
-  const status = inferencer.getStatus(focusId);
+  const { coverImage, completionText, description } = view;
+  const awardedXp = inferencer.getAchievementXp(focusUuid);
+  const goals = inferencer.listGoals(focusUuid);
+  const prereqGoals = inferencer.listPrerequisiteGoals(focusUuid);
+  const status = inferencer.getStatus(focusUuid);
 
   return (
     <div className="view" style={{ ...getAbilityGlow(ability), ...getAbilityBackground(ability) }}>
       <div
-        className="canvas"
+        className="cover"
         style={{
-          background: `url(${canvasUrl}) center/cover`
+          background: `url(${coverImage}) center/cover`
         }}
       >
         <h1>{title.toUpperCase()}</h1>
@@ -53,7 +63,7 @@ function AchievementView(props: AchievementViewProps) {
       {status === AchievementStatus.COMPLETED && (
         <>
           <hr />
-          <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
+          <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />
         </>
       )}
     </div>

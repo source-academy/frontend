@@ -1,32 +1,35 @@
-import React, { useState } from 'react';
+import { Collapse } from '@blueprintjs/core';
+import React, { useContext, useState } from 'react';
 
-import { getAbilityColor } from '../../features/achievement/AchievementConstants';
+import {
+  AchievementContext,
+  getAbilityColor
+} from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
-import AchievementCard from './utils/AchievementCard';
-import AchievementInferencer from './utils/AchievementInferencer';
+import AchievementCard from './AchievementCard';
 
 type AchievementTaskProps = {
-  id: number;
-  inferencer: AchievementInferencer;
+  uuid: string;
   filterStatus: FilterStatus;
-  focusState: [number, any];
+  focusState: [string, any];
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { id, inferencer, filterStatus, focusState } = props;
+  const { uuid, filterStatus, focusState } = props;
+
+  const inferencer = useContext(AchievementContext);
+  const prerequisiteUuids = [...inferencer.getImmediateChildren(uuid)];
+  const taskColor = getAbilityColor(inferencer.getAchievement(uuid).ability);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-
-  const prerequisiteIds = [...inferencer.getImmediateChildren(id)];
-  const taskColor = getAbilityColor(inferencer.getAchievementItem(id).ability);
 
   /**
    * Checks whether the AchievementItem (can be a task or prereq) should be rendered
    * based on the achievement dashboard filterStatus.
    */
-  const shouldRender = (id: number): boolean => {
-    const status = inferencer.getStatus(id);
+  const shouldRender = (uuid: string): boolean => {
+    const status = inferencer.getStatus(uuid);
     switch (filterStatus) {
       case FilterStatus.ALL:
         return true;
@@ -46,8 +49,8 @@ function AchievementTask(props: AchievementTaskProps) {
    * If there is at least 1 prerequisite that needs to be rendered,
    * the whole AchievementTask will be rendered together.
    */
-  const shouldRenderPrerequisites = (id: number) => {
-    const children = [...inferencer.getImmediateChildren(id)];
+  const shouldRenderPrerequisites = (uuid: string) => {
+    const children = [...inferencer.getImmediateChildren(uuid)];
     return children.reduce((canRender, prerequisite) => {
       return canRender || shouldRender(prerequisite);
     }, false);
@@ -57,24 +60,23 @@ function AchievementTask(props: AchievementTaskProps) {
    * If the main achievement or any of the prerequisites need to be rendered,
    * the whole achievement task will be rendered
    */
-  const shouldRenderTask = (id: number) => shouldRender(id) || shouldRenderPrerequisites(id);
+  const shouldRenderTask = (uuid: string) => shouldRender(uuid) || shouldRenderPrerequisites(uuid);
 
   return (
     <>
-      {shouldRenderTask(id) && (
+      {shouldRenderTask(uuid) && (
         <li className="task">
           <AchievementCard
-            id={id}
-            inferencer={inferencer}
-            shouldRender={shouldRender(id)}
+            uuid={uuid}
             focusState={focusState}
             isDropdownOpen={isDropdownOpen}
+            shouldRender={shouldRender(uuid)}
             toggleDropdown={toggleDropdown}
           />
-          {isDropdownOpen && (
+          <Collapse isOpen={isDropdownOpen} keepChildrenMounted={true}>
             <div className="prerequisite-container">
-              {prerequisiteIds.map(prerequisiteId => (
-                <div className="prerequisite" key={prerequisiteId}>
+              {prerequisiteUuids.map(prerequisiteUuid => (
+                <div className="prerequisite" key={prerequisiteUuid}>
                   <div
                     className="dropdown-lines"
                     style={{
@@ -83,15 +85,14 @@ function AchievementTask(props: AchievementTaskProps) {
                     }}
                   ></div>
                   <AchievementCard
-                    id={prerequisiteId}
-                    inferencer={inferencer}
-                    shouldRender={shouldRender(prerequisiteId)}
+                    uuid={prerequisiteUuid}
                     focusState={focusState}
+                    shouldRender={shouldRender(prerequisiteUuid)}
                   />
                 </div>
               ))}
             </div>
-          )}
+          </Collapse>
         </li>
       )}
     </>
