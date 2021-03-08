@@ -13,6 +13,7 @@ export const FETCH_GRADING_OVERVIEWS = 'FETCH_GRADING_OVERVIEWS';
 export const LOGIN = 'LOGIN';
 export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
 export const LOGIN_GITHUB = 'LOGIN_GITHUB';
+export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
