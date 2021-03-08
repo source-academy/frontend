@@ -1,4 +1,4 @@
-import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -13,40 +13,68 @@ export type ControlBarGitHubButtonsProps = {
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
   onClickLogIn?: () => any;
+  onClickLogOut?: () => any;
   onPopoverOpening?: () => any;
 };
 
 const stateToIntent: { [state in GitHubState]: Intent } = {
-  INACTIVE: Intent.NONE,
-  SAVED: Intent.PRIMARY,
-  DIRTY: Intent.WARNING
+  LOGGED_OUT: Intent.NONE,
+  LOGGED_IN: Intent.NONE
 };
 
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  const state: GitHubState = props.currentFile ? (props.isDirty ? 'DIRTY' : 'SAVED') : 'INACTIVE';
+  const isLoggedIn = props.loggedInAs !== undefined;
+  const shouldDisableButtons = !isLoggedIn;
+  const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
+
+  console.log(props.loggedInAs);
+  console.log("We are logged in: " + isLoggedIn);
+
   const mainButton = controlButton(
-    (props.currentFile && props.currentFile.name) || 'GitHub',
+    //(props.currentFile && props.currentFile.name) || 'GitHub',
+    'GitHub',
     IconNames.GIT_BRANCH,
     null,
     {
       intent: stateToIntent[state]
     }
   );
-  const openButton = controlButton('Open', IconNames.DOCUMENT_OPEN, props.onClickOpen);
+  
+  const openButton = controlButton(
+    'Open',
+    IconNames.DOCUMENT_OPEN,
+    props.onClickOpen,
+    undefined,
+    shouldDisableButtons
+  );
+  
   const saveButton = controlButton(
     'Save',
     IconNames.FLOPPY_DISK,
     props.onClickSave,
     undefined,
-    // disable if logged_in only (i.e. not linked to a file)
-    state === 'INACTIVE'
+    shouldDisableButtons
   );
-  const saveAsButton = controlButton('Save as', IconNames.SEND_TO, props.onClickSaveAs);
+  
+  const saveAsButton = controlButton(
+    'Save as',
+    IconNames.SEND_TO,
+    props.onClickSaveAs,
+    undefined,
+    shouldDisableButtons
+  );
+  
+  const loginButton = isLoggedIn
+    ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
+    : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
+
+  /*
   const loginButton = props.loggedInAs && (
     <Tooltip content={`Logged in as ${props.loggedInAs}`}>
       {controlButton('Log out', IconNames.LOG_IN, props.onClickLogIn)}
     </Tooltip>
   );
+  */
 
   return (
     <Popover

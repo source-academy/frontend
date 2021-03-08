@@ -16,6 +16,7 @@ import {
   FETCH_NOTIFICATIONS,
   LOGIN,
   LOGIN_GITHUB,
+  LOGOUT_GITHUB,
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
@@ -58,6 +59,8 @@ export const login = (providerId: string) => action(LOGIN, providerId);
 export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 
 export const loginGitHub = () => action(LOGIN_GITHUB);
+
+export const logoutGitHub = () => action(LOGOUT_GITHUB);
 
 export const setTokens = ({
   accessToken,

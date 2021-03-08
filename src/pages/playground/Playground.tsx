@@ -102,6 +102,7 @@ export type DispatchProps = {
   handleGitHubUpdateFile: (file: GitHubFile) => void;
   handleGitHubInitialise: () => void;
   handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -447,6 +448,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
         onClickSaveAs={props.handleGitHubSaveFile}
         onClickLogIn={props.handleGitHubLogIn}
+        onClickLogOut={props.handleGitHubLogOut}
         onPopoverOpening={props.handleGitHubInitialise}
       />
     );
@@ -457,6 +459,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleGitHubSaveFile,
     props.handleGitHubOpenPicker,
     props.handleGitHubLogIn,
+    props.handleGitHubLogOut,
     props.handleGitHubInitialise,
     handleGitHubUpdateFile
   ]);
