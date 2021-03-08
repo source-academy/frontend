@@ -141,7 +141,13 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       const iconSize = 20;
       const tabId = tab.id === undefined ? tab.label : tab.id;
       const tabTitle: JSX.Element = (
-        <Tooltip2 content={tab.label}>
+        <Tooltip2
+          content={tab.label}
+          onOpening={() => {
+            // Handles iOS hover requiring double taps to press the button
+            document.getElementById(generateIconId(tabId))?.click();
+          }}
+        >
           <div className="side-content-tooltip" id={generateIconId(tabId)}>
             <Icon icon={tab.iconName} iconSize={iconSize} />
           </div>
