@@ -25,6 +25,7 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
   const isLoggedIn = props.loggedInAs !== undefined;
   const shouldDisableButtons = !isLoggedIn;
+  //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
   const mainButton = controlButton(
