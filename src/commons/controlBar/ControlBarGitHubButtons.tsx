@@ -27,9 +27,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   const shouldDisableButtons = !isLoggedIn;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
-  console.log(props.loggedInAs);
-  console.log("We are logged in: " + isLoggedIn);
-
   const mainButton = controlButton(
     //(props.currentFile && props.currentFile.name) || 'GitHub',
     'GitHub',
@@ -39,7 +36,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
       intent: stateToIntent[state]
     }
   );
-  
+
   const openButton = controlButton(
     'Open',
     IconNames.DOCUMENT_OPEN,
@@ -47,7 +44,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     undefined,
     shouldDisableButtons
   );
-  
+
   const saveButton = controlButton(
     'Save',
     IconNames.FLOPPY_DISK,
@@ -55,7 +52,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     undefined,
     shouldDisableButtons
   );
-  
+
   const saveAsButton = controlButton(
     'Save as',
     IconNames.SEND_TO,
@@ -63,7 +60,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     undefined,
     shouldDisableButtons
   );
-  
+
   const loginButton = isLoggedIn
     ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
     : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);

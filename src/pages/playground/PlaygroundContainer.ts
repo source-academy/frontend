@@ -9,7 +9,11 @@ import {
   debuggerReset,
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
-import { loginGitHub, logoutGitHub, logoutGoogle } from '../../commons/application/actions/SessionActions';
+import {
+  loginGitHub,
+  logoutGitHub,
+  logoutGoogle
+} from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
