@@ -28,96 +28,86 @@ export type StateProps = {
   name?: string;
 };
 
-interface ApplicationState {
-  disabled: string | boolean;
-}
+const Application: React.FC<ApplicationProps> = props => {
+  const intervalId = React.useRef<number | undefined>(undefined);
+  const [isDisabled, setIsDisabled] = React.useState(computeDisabledState());
 
-class Application extends React.Component<ApplicationProps, ApplicationState> {
-  private intervalId: number | undefined;
-
-  public constructor(props: ApplicationProps) {
-    super(props);
-    this.state = { disabled: computeDisabledState() };
-  }
-
-  public componentDidMount() {
+  React.useEffect(() => {
     if (Constants.disablePeriods.length > 0) {
-      this.intervalId = window.setInterval(() => {
+      intervalId.current = window.setInterval(() => {
         const disabled = computeDisabledState();
-        if (this.state.disabled !== disabled) {
-          this.setState({ disabled });
+        if (isDisabled !== disabled) {
+          setIsDisabled(disabled);
         }
       }, 5000);
     }
-  }
 
-  public componentWillUnmount() {
-    if (this.intervalId) {
-      window.clearInterval(this.intervalId);
-    }
-  }
+    return () => {
+      if (intervalId.current) {
+        window.clearInterval(intervalId.current);
+      }
+    };
+  }, [isDisabled]);
 
-  public render() {
-    const loginPath = <Route path="/login" render={toLogin(this.props)} key="login" />;
-    const fullPaths = Constants.playgroundOnly
-      ? null
-      : [
-          <Route path="/academy" render={toAcademy(this.props)} key={0} />,
-          <Route
-            path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-            render={toIncubator}
-            key={1}
-          />,
-          <Route path="/achievement" render={toAchievement(this.props)} key={2} />,
-          loginPath
-        ];
-    const disabled = !['staff', 'admin'].includes(this.props.role!) && this.state.disabled;
+  const loginPath = <Route path="/login" render={toLogin(props)} key="login" />;
+  const fullPaths = Constants.playgroundOnly
+    ? null
+    : [
+        <Route path="/academy" render={toAcademy(props)} key={0} />,
+        <Route
+          path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+          render={toIncubator}
+          key={1}
+        />,
+        <Route path="/achievement" render={toAchievement(props)} key={2} />,
+        loginPath
+      ];
+  const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
-    return (
-      <div className="Application">
-        <NavigationBar
-          handleLogOut={this.props.handleLogOut}
-          role={this.props.role}
-          name={this.props.name}
-          title={this.props.title}
-        />
-        <div className="Application__main">
-          {disabled && (
-            <Switch>
-              {!Constants.playgroundOnly && loginPath}
-              {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
-              {!this.props.role && !Constants.playgroundOnly
-                ? [
-                    <Route path="/academy" render={redirectToLogin} key={0} />,
-                    <Route exact={true} path="/" render={redirectToLogin} key={1} />
-                  ]
-                : []}
-              <Route render={this.renderDisabled.bind(this)} />
-            </Switch>
-          )}
-          {!disabled && (
-            <Switch>
-              <Route path="/playground" component={Playground} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-              {fullPaths}
-              <Route
-                exact={true}
-                path="/"
-                render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
-              />
-              <Route component={NotFound} />
-            </Switch>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  private renderDisabled = () => (
-    <Disabled reason={typeof this.state.disabled === 'string' ? this.state.disabled : undefined} />
+  const renderDisabled = () => (
+    <Disabled reason={typeof isDisabled === 'string' ? isDisabled : undefined} />
   );
-}
+
+  return (
+    <div className="Application">
+      <NavigationBar
+        handleLogOut={props.handleLogOut}
+        role={props.role}
+        name={props.name}
+        title={props.title}
+      />
+      <div className="Application__main">
+        {disabled && (
+          <Switch>
+            {!Constants.playgroundOnly && loginPath}
+            {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
+            {!props.role && !Constants.playgroundOnly
+              ? [
+                  <Route path="/academy" render={redirectToLogin} key={0} />,
+                  <Route exact={true} path="/" render={redirectToLogin} key={1} />
+                ]
+              : []}
+            <Route render={renderDisabled} />
+          </Switch>
+        )}
+        {!disabled && (
+          <Switch>
+            <Route path="/playground" component={Playground} />
+            <Route path="/contributors" component={Contributors} />
+            <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+            {fullPaths}
+            <Route
+              exact={true}
+              path="/"
+              render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
+            />
+            <Route component={NotFound} />
+          </Switch>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
