@@ -1,5 +1,6 @@
-import { ButtonGroup, Classes, Intent, Popover } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { GitHubFile, GitHubState } from '../../features/github/GitHubTypes';
@@ -75,7 +76,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   */
 
   return (
-    <Popover
+    <Popover2
       autoFocus={false}
       content={
         <div>
@@ -91,6 +92,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
       popoverClassName={Classes.POPOVER_DISMISS}
     >
       {mainButton}
-    </Popover>
+    </Popover2>
   );
 };
