@@ -5,7 +5,11 @@ import AchievementInferencer from '../../../commons/achievement/utils/Achievemen
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements, mockGoals } from '../../../commons/mocks/AchievementMocks';
 import Constants from '../../../commons/utils/Constants';
-import { getAchievements, getOwnGoals, updateGoalProgress } from '../../../features/achievement/AchievementActions';
+import {
+  getAchievements,
+  getOwnGoals,
+  updateGoalProgress
+} from '../../../features/achievement/AchievementActions';
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

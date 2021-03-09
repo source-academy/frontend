@@ -15,14 +15,14 @@ import { FilterStatus, GoalProgress } from '../../../features/achievement/Achiev
 export type DispatchProps = {
   getAchievements: () => void;
   getOwnGoals: () => void;
-  updateGoalProgress: (studentId: number, progress: GoalProgress) => void
+  updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
 };
 
 export type StateProps = {
   group: string | null;
   inferencer: AchievementInferencer;
   name?: string;
-  role?: Role
+  role?: Role;
 };
 
 /**
@@ -73,7 +73,12 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
-        {role != Role.Student && <AchievementManualEditor studio={group || 'Staff'} updateGoalProgress={updateGoalProgress} />}
+        {role != Role.Student && (
+          <AchievementManualEditor
+            studio={group || 'Staff'}
+            updateGoalProgress={updateGoalProgress}
+          />
+        )}
 
         <div className="achievement-main">
           <div className="filter-container">

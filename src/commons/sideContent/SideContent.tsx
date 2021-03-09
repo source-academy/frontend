@@ -129,6 +129,7 @@ const SideContent = (props: SideContentProps) => {
        * To be run when tabs are changed.
        * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
        */
+      // Achievements test code!
       incrementFirstMaxXp();
       const resetAlert = (prevTabId: TabId) => {
         const iconId = generateIconId(prevTabId);

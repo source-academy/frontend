@@ -18,14 +18,14 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
   const { studio, updateGoalProgress } = props;
 
   const inferencer = useContext(AchievementContext);
-  const manualAchievements: AchievementGoal[] = inferencer.getAllGoals().filter(
-    goals => goals.meta.type === 'Manual'
-  );
+  const manualAchievements: AchievementGoal[] = inferencer
+    .getAllGoals()
+    .filter(goals => goals.meta.type === 'Manual');
 
   const [goal, changeGoal] = useState(manualAchievements[0]);
   const [userId, changeUserId] = useState(0);
   const [xp, changeXp] = useState(goal ? goal.xp : 0);
-  
+
   const updateGoal = () => {
     if (goal) {
       const progress: GoalProgress = {
@@ -33,9 +33,9 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
         xp: xp,
         maxXp: goal.maxXp,
         completed: xp >= goal.maxXp
-      }
+      };
       updateGoalProgress(userId, progress);
-    } 
+    }
   };
 
   if (studio !== 'Staff') {
@@ -45,7 +45,7 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
       <div className="achievement-manual-editor">
         <h3>{studio}</h3>
       </div>
-    )
+    );
   } else {
     return (
       <div className="achievement-manual-editor">
@@ -65,32 +65,23 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
           itemRenderer={goalRenderer}
           onItemSelect={changeGoal}
         >
-          <Button 
-            outlined={true} 
-            text={goal ? goal.text : 'No Goal Selected'}
-            color="White"
-          />
+          <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
         </GoalSelect>
 
         <h3>XP: </h3>
-          <NumericInput
-            value={xp}
-            min={0}
-            max={goal ? goal.maxXp : 0}
-            allowNumericCharactersOnly={true}
-            placeholder="XP"
-            onValueChange={changeXp}
-          />
+        <NumericInput
+          value={xp}
+          min={0}
+          max={goal ? goal.maxXp : 0}
+          allowNumericCharactersOnly={true}
+          placeholder="XP"
+          onValueChange={changeXp}
+        />
 
         <h3> </h3>
-        <Button 
-          outlined={true}
-          text="Update Goal"
-          onClick={updateGoal}
-          intent="primary"
-        />
+        <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
       </div>
-    )
+    );
   }
 }
 
