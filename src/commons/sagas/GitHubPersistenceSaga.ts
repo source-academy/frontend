@@ -11,16 +11,16 @@ import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 
 export function* GithubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, function* () {
-		console.log("YEET SKEET LOGINEET");
-		
-		const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-		const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
-		const windowName = 'Connect With OAuth'
-		const windowSpecs = 'height=600,width=400';
+    console.log('YEET SKEET LOGINEET');
 
-		window.open(githubOauthLoginLink, windowName, windowSpecs);
+    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+    const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+    const windowName = 'Connect With OAuth';
+    const windowSpecs = 'height=600,width=400';
 
-		console.log("PEKO PEKO PAIN PEKO PAIN PAIN PAIN");
+    window.open(githubOauthLoginLink, windowName, windowSpecs);
+
+    console.log('PEKO PEKO PAIN PEKO PAIN PAIN PAIN');
   });
 
   yield takeLatest(LOGOUT_GITHUB, function* () {});
