@@ -6,6 +6,7 @@ import Achievement from 'src/pages/achievement/AchievementContainer';
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
+import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
@@ -100,6 +101,7 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
               <Route path="/playground" component={Playground} />
               <Route path="/contributors" component={Contributors} />
               <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+              <Route path="/callback/github" component={GitHubCallback} />
               {fullPaths}
               <Route
                 exact={true}
