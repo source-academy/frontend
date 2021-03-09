@@ -14,10 +14,10 @@ import {
   NonIdealState,
   Position,
   Spinner,
-  Text,
-  Tooltip
+  Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -402,12 +402,12 @@ class Assessment extends React.Component<AssessmentProps, State> {
         <H4 className="listing-title">
           {overview.title}
           {overview.private ? (
-            <Tooltip
+            <Tooltip2
               className="listing-title-tooltip"
               content="This assessment is password-protected."
             >
               <Icon icon="lock" />
-            </Tooltip>
+            </Tooltip2>
           ) : null}
           {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
@@ -447,9 +447,9 @@ const makeGradingStatus = (gradingStatus: string) => {
   }
 
   return (
-    <Tooltip className="listing-title-tooltip" content={tooltip} position={Position.RIGHT}>
+    <Tooltip2 className="listing-title-tooltip" content={tooltip} placement={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
-    </Tooltip>
+    </Tooltip2>
   );
 };
 

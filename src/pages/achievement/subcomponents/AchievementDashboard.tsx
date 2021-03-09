@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
@@ -73,7 +73,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
-        {role != Role.Student && (
+        {role !== Role.Student && (
           <AchievementManualEditor
             studio={group || 'Staff'}
             updateGoalProgress={updateGoalProgress}
