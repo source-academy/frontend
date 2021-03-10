@@ -79,13 +79,21 @@ const SideContent = (props: SideContentProps) => {
    */
   const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 
+  /**
+   * Adds'side-content-tab-alert' style to newly spawned module tabs
+   */
+  const generateClassName = (id: string | undefined) =>
+    id === SideContentType.module
+      ? 'side-content-tooltip side-content-tab-alert'
+      : 'side-content-tooltip';
+
   const renderedTabs = React.useMemo(() => {
     const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
       const iconSize = 20;
-      const tabId = tab.id === undefined ? tab.label : tab.id;
+      const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
       const tabTitle: JSX.Element = (
         <Tooltip2 content={tab.label}>
-          <div className="side-content-tooltip" id={generateIconId(tabId)}>
+          <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
             <Icon icon={tab.iconName} iconSize={iconSize} />
           </div>
         </Tooltip2>
