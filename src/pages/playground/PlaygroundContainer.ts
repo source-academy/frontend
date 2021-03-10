@@ -91,7 +91,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
-  githubUser: state.session.githubUser,
+  githubOctokitInstance: state.session.githubOctokitInstance,
   githubFile: state.playground.githubFile
 });
 

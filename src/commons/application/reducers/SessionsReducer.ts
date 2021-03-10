@@ -5,6 +5,7 @@ import {
   REMOTE_EXEC_UPDATE_SESSION
 } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { SourceActionType } from '../../utils/ActionsHelper';
+import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
@@ -47,7 +48,7 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_GITHUB_OCTOKIT_INSTANCE:
       return {
         ...state,
-        githubUser: action.payload
+        githubOctokitInstance: generateOctokitInstance(action.payload || '')
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;

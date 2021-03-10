@@ -1,3 +1,5 @@
+import { Octokit } from '@octokit/rest';
+
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
@@ -57,7 +59,7 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
-  readonly githubUser?: string;
+  readonly githubOctokitInstance?: Octokit;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };

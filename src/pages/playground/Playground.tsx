@@ -1,5 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -131,7 +132,7 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
-  githubUser: string | undefined;
+  githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
 };
 
@@ -434,14 +435,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { githubUser, githubFile, handleGitHubUpdateFile } = props;
+  const { githubOctokitInstance, githubFile, handleGitHubUpdateFile } = props;
   // Compute this here to avoid re-rendering the button every keystroke
   const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
     return (
       <ControlBarGitHubButtons
         currentFile={githubFile}
-        loggedInAs={githubUser}
+        loggedInAs={githubOctokitInstance}
         isDirty={githubIsDirty}
         key="github"
         onClickOpen={props.handleGitHubOpenPicker}
@@ -453,7 +454,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       />
     );
   }, [
-    githubUser,
+    githubOctokitInstance,
     githubFile,
     githubIsDirty,
     props.handleGitHubSaveFile,
