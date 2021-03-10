@@ -20,7 +20,7 @@ import {
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
-  SET_GITHUB_USER,
+  SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -78,7 +78,8 @@ export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const setGitHubUser = (user?: string) => action(SET_GITHUB_USER, user);
+export const setGitHubOctokitInstance = (user?: string) =>
+  action(SET_GITHUB_OCTOKIT_INSTANCE, user);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {
