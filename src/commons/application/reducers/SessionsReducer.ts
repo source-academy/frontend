@@ -9,7 +9,7 @@ import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   SessionState,
-  SET_GITHUB_USER,
+  SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -44,7 +44,7 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         googleUser: action.payload
       };
-    case SET_GITHUB_USER:
+    case SET_GITHUB_OCTOKIT_INSTANCE:
       return {
         ...state,
         githubUser: action.payload
