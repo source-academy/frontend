@@ -14,14 +14,10 @@ export function GitHubCallback() {
 
     const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 
-    const messageBody =
-      encodeURIComponent('code') +
-      '=' +
-      encodeURIComponent(accessCode) +
-      '&' +
-      encodeURIComponent('clientId') +
-      '=' +
-      encodeURIComponent(clientId);
+    const messageBody = [
+      [encodeURIComponent('code'), encodeURIComponent(accessCode)].join('='),
+      [encodeURIComponent('clientId'), encodeURIComponent(clientId)].join('=')
+    ].join('&');
 
     if (accessCode == null) {
       setMessage('Access code not found in callback URL.');
