@@ -36,7 +36,6 @@ function loadAllLibs() {
     '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
-    '/externalLibs/graphics/webGLhi_graph.js',
     '/externalLibs/graphics/webGLhi_graph_ce.js',
     '/externalLibs/graphics/webGLgraphics.js',
     '/externalLibs/graphics/webGLcurve.js',
