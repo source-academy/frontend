@@ -101,20 +101,12 @@ function deriv_t(n) {
   }
 }
 
-function scale_x_y(a, b) {
+function scale(a1, b1, c1) {
+  a1 = a1 == undefined ? 1 : a1;
+  b1 = b1 == undefined ? 1 : b1;
+  c1 = c1 == undefined ? 1 : c1;
   return function(curve) {
     var transformation = c => (function(t) {
-      var ct = c(t)
-      return make_3D_color_point(a * x_of(ct), b * y_of(ct), z_of(ct), r_of(ct), g_of(ct), b_of(ct))
-    })
-    return transformation(curve)
-  }
-}
-
-function scale_x_y_z(a1, b1, c1) {
-  return function(curve) {
-    var transformation = c => (function(t) {
-      c1 = c1 == undefined ? 1 : c1
       var ct = c(t)
       return make_3D_color_point(a1 * x_of(ct), b1 * y_of(ct), c1 * z_of(ct), r_of(ct), g_of(ct), b_of(ct))
     })
@@ -123,7 +115,7 @@ function scale_x_y_z(a1, b1, c1) {
 }
 
 function scale_proportional(s) {
-  return scale_x_y_z(s, s, s)
+  return scale(s, s, s)
 }
 
 // SQUEEZE-RECTANGULAR-PORTION translates and scales a curve

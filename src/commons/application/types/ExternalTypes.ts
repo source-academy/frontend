@@ -103,15 +103,8 @@ const curvesLibrary = [
   'translate_curve',
   'scale_proportional',
   /** Contest functions */
-  'rotate_pi_over_2',
-  'scale_x_y',
-  'scale_x_y_z',
-  'gosperize',
-  'gosper_curve',
-  'show_connected_gosper',
+  'scale',
   'repeated',
-  'param_gosper',
-  'param_gosperize',
   'rotate_around_origin',
   'arc', // used in GOSPERIZE
   'invert', // used in DRAGONIZE
@@ -119,7 +112,6 @@ const curvesLibrary = [
   'full_view_proportional', // undocumented
   'squeeze_full_view', // undocumented
   'squeeze_rectangular_portion', // undocumented
-  'picture_mse'
 ];
 
 const soundsLibrary = [
