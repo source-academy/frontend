@@ -8,9 +8,10 @@ import { Prompt } from 'react-router';
 
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
-import Repl, { ReplProps } from '../repl/Repl';
+import { ReplProps } from '../repl/Repl';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import DraggableRepl from './mobileSideContent/DraggableRepl';
+import DraggableRepl from './DraggableRepl';
+import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
 export type MobileWorkspaceProps = StateProps;
@@ -157,7 +158,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   /**
    * The following 3 'react-draggable' handlers include the updating of 2 CSS variables
-   * '--mobile-repl-height' and '--mobile-repl-inner-height'.
+   * '--mobile-repl-height'.
    *
    * 'position: absolute' for the 'react-draggable' component is used in conjunction with the
    * modification of the mobile browser's meta viewport height to ensure that the draggable
@@ -174,16 +175,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * MobileSideContentTabs.
    *
    * To ensure proper scrolling of overflowing Repl outputs inside the dynamically resizing
-   * draggable component, '--mobile-repl-inner-height' is also dynamically updated.
+   * draggable component, '--mobile-repl-height' is also dynamically updated.
    */
   const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
     document.documentElement.style.setProperty(
       '--mobile-repl-height',
       Math.max(-position.y, 0) + 'px'
-    );
-    document.documentElement.style.setProperty(
-      '--mobile-repl-inner-height',
-      Math.max(-position.y - 10, 0) + 'px'
     );
     setDraggableReplPosition(position);
   };
@@ -191,17 +188,18 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const handleShowRepl = () => {
     const offset = -300;
     document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
-    document.documentElement.style.setProperty(
-      '--mobile-repl-inner-height',
-      Math.max(-offset - 10, 0) + 'px'
-    );
     setDraggableReplPosition({ x: 0, y: offset });
   };
 
   const handleHideRepl = () => {
     document.documentElement.style.setProperty('--mobile-repl-height', '0px');
-    document.documentElement.style.setProperty('--mobile-repl-inner-height', '0px');
     setDraggableReplPosition({ x: 0, y: 0 });
+  };
+
+  const draggableReplProps = {
+    handleShowRepl: handleShowRepl,
+    handleHideRepl: handleHideRepl,
+    disableRepl: setIsDraggableReplDisabled
   };
 
   const mobileEditorTab: SideContentTab = React.useMemo(
@@ -220,19 +218,11 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     () => ({
       label: 'Run',
       iconName: IconNames.PLAY,
-      body: (
-        <DraggableRepl
-          key={'repl'}
-          position={draggableReplPosition}
-          onDrag={onDrag}
-          body={<Repl {...props.replProps} />}
-          disabled={isDraggableReplDisabled}
-        />
-      ),
+      body: <div></div>, // placeholder div since run tab does not have a specific panel body
       id: SideContentType.mobileEditorRun,
       toSpawn: () => true
     }),
-    [props.replProps, draggableReplPosition, isDraggableReplDisabled]
+    []
   );
 
   const updatedMobileSideContentProps = () => {
@@ -242,14 +232,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
-  const draggableReplProps = {
-    handleShowRepl: handleShowRepl,
-    handleHideRepl: handleHideRepl,
-    disableRepl: setIsDraggableReplDisabled
-  };
-
   return (
-    <div className="workspace">
+    <div className="workspace mobile-workspace">
       {props.hasUnsavedChanges ? (
         <Prompt
           message={'You have changes that may not be saved. Are you sure you want to leave?'}
@@ -264,7 +248,17 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         title="Please turn back to portrait orientation!"
       />
 
+      <DraggableRepl
+        key={'repl'}
+        position={draggableReplPosition}
+        onDrag={onDrag}
+        disabled={isDraggableReplDisabled}
+        replProps={props.replProps}
+      />
+
       <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+
+      <MobileKeyboard editorRef={editorRef} />
     </div>
   );
 };

@@ -1,18 +1,20 @@
 import React from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 
+import Repl, { ReplProps } from '../repl/Repl';
+
 type DragReplProps = {
   position: { x: number; y: number };
   onDrag: DraggableEventHandler;
-  body: JSX.Element;
   disabled: boolean;
+  replProps: ReplProps;
 };
 
 const DraggableRepl: React.FC<DragReplProps> = props => {
   return (
     <Draggable
       axis="y"
-      handle="#draghandle"
+      handle="#dragHandle"
       position={props.position}
       bounds={{ top: -500, left: 0, right: 0, bottom: 0 }}
       onDrag={props.onDrag}
@@ -20,7 +22,7 @@ const DraggableRepl: React.FC<DragReplProps> = props => {
     >
       <div className="mobile-draggable">
         {!props.disabled ? (
-          <div className="handle enabled" id="draghandle">
+          <div className="handle enabled" id="dragHandle">
             {['1', '2', '3'].map(i => (
               <div className="circle" key={i} />
             ))}
@@ -32,7 +34,9 @@ const DraggableRepl: React.FC<DragReplProps> = props => {
             ))}
           </div>
         )}
-        <div className="REPL-content">{props.body}</div>
+        <div className="REPL-content">
+          <Repl {...props.replProps} />
+        </div>
       </div>
     </Draggable>
   );
