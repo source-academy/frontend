@@ -103,7 +103,7 @@ function deriv_t(n) {
   }
 }
 
-function scale(a1, b1, c1) {
+function scale_curve(a1, b1, c1) {
   return function(curve) {
     var transformation = c => (function(t) {
       var ct = c(t)
@@ -117,7 +117,7 @@ function scale(a1, b1, c1) {
 }
 
 function scale_proportional(s) {
-  return scale(s, s, s)
+  return scale_curve(s, s, s)
 }
 
 // SQUEEZE-RECTANGULAR-PORTION translates and scales a curve

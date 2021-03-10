@@ -103,7 +103,7 @@ const curvesLibrary = [
   'translate_curve',
   'scale_proportional',
   /** Contest functions */
-  'scale',
+  'scale_curve',
   'repeated',
   'rotate_around_origin',
   'arc', // used in GOSPERIZE
