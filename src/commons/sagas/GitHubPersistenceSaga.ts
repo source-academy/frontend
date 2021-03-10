@@ -27,7 +27,9 @@ export function* GithubPersistenceSaga(): SagaIterator {
     });
   });
 
-  yield takeLatest(LOGOUT_GITHUB, function* () {});
+  yield takeLatest(LOGOUT_GITHUB, function* () {
+    yield store.dispatch(actions.removeGitHubOctokitInstance());
+  });
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {});
 
