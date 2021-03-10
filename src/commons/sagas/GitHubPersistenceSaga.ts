@@ -7,7 +7,9 @@ import {
   GITHUB_SAVE_FILE,
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
+import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
+import { actions } from '../utils/ActionsHelper';
 
 export function* GithubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, function* () {
@@ -21,7 +23,7 @@ export function* GithubPersistenceSaga(): SagaIterator {
     yield window.open(githubOauthLoginLink, windowName, windowSpecs);
 
     yield (broadcastChannel.onmessage = receivedMessage => {
-      console.log(receivedMessage.data);
+      store.dispatch(actions.setGitHubUser(receivedMessage.data));
     });
   });
 

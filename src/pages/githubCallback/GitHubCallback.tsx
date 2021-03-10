@@ -24,7 +24,7 @@ export function GitHubCallback() {
       encodeURIComponent(clientId);
 
     if (accessCode == null) {
-      setMessage('Access code returned null');
+      setMessage('Access code not found in callback URL.');
       return;
     }
 
@@ -40,12 +40,15 @@ export function GitHubCallback() {
         const requestSuccess = typeof res.access_token != 'undefined';
 
         if (requestSuccess) {
-          // POST back to main thread
           broadcastChannel.postMessage(res.access_token);
-          setMessage('Access Token: ' + res.access_token);
+          setMessage('Log-in successful! This window will close soon.');
+          setTimeout(() => {
+            window.close();
+          }, 3000);
         } else {
-          // Yeet skeet mageet
-          setMessage('Request denied');
+          setMessage(
+            'Connection with server was denied. Please try again or contact the website administrator.'
+          );
         }
       });
   }, []);

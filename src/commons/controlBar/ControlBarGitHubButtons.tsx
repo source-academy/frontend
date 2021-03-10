@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { GitHubFile, GitHubState } from '../../features/github/GitHubTypes';
+import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
 
 export type ControlBarGitHubButtonsProps = {
@@ -23,7 +24,13 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
 };
 
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  const isLoggedIn = props.loggedInAs !== undefined;
+  const yeet = store.getState().session.githubUser;
+  console.log('github buttons: ' + yeet);
+
+  // Replace this everywhere! Stop using the props!
+  //const isLoggedIn = props.loggedInAs !== undefined;
+
+  const isLoggedIn = store.getState().session.githubUser !== undefined;
   const shouldDisableButtons = !isLoggedIn;
   //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';

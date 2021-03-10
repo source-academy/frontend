@@ -9,6 +9,7 @@ import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   SessionState,
+  SET_GITHUB_USER,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -42,6 +43,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         googleUser: action.payload
+      };
+    case SET_GITHUB_USER:
+      return {
+        ...state,
+        githubUser: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;
