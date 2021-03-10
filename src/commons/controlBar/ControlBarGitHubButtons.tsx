@@ -27,7 +27,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   const yeet = store.getState().session.githubUser;
   console.log('github buttons: ' + yeet);
 
-  // Replace this everywhere! Stop using the props!
+  // >>>>> Replace this everywhere! Stop using the isLoggedIn property! <<<<<
   //const isLoggedIn = props.loggedInAs !== undefined;
 
   const isLoggedIn = store.getState().session.githubUser !== undefined;
