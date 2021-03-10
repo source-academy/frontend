@@ -64,7 +64,7 @@ function invert(curve) {
 function rotate_pi_over_2(curve) {
   return t => {
     var ct = curve(t)
-    return make_color_point(-y_of(ct), x_of(ct), r_of(ct), g_of(ct), b_of(ct))
+    return make_3D_color_point(-y_of(ct), x_of(ct), z_of(ct), r_of(ct), g_of(ct), b_of(ct))
   }
 }
 
@@ -72,11 +72,12 @@ function rotate_pi_over_2(curve) {
 
 // TRANSLATE is of type (JS-Num, JS-Num --> Curve-Transform)
 
-function translate(x0, y0) {
+function translate_curve(x0, y0, z0) {
   return function(curve) {
     var transformation = c => (function(t) {
+      z0 = z0 == undefined ? 0 : z0
       var ct = c(t)
-      return make_color_point(x0 + x_of(ct), y0 + y_of(ct), r_of(ct), g_of(ct), b_of(ct))
+      return make_3D_color_point(x0 + x_of(ct), y0 + y_of(ct), z0 + z_of(ct), r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
   }
@@ -92,7 +93,8 @@ function rotate_around_origin(theta) {
       var ct = c(t)
       var x = x_of(ct)
       var y = y_of(ct)
-      return make_color_point(cth * x - sth * y, sth * x + cth * y, r_of(ct), g_of(ct), b_of(ct))
+      var z = z_of(ct)
+      return make_3D_color_point(cth * x - sth * y, sth * x + cth * y, z, r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
   }
@@ -104,7 +106,7 @@ function deriv_t(n) {
     var transformation = c => (function(t) {
       var ct = c(t)
       var ctdelta = c(t + delta_t)
-      return make_color_point((x_of(ctdelta) - x_of(ct)) / delta_t, (y_of(ctdelta) - y_of(ct)) / delta_t, r_of(ct), g_of(ct), b_of(ct))
+      return make_3D_color_point((x_of(ctdelta) - x_of(ct)) / delta_t, (y_of(ctdelta) - y_of(ct)) / delta_t, z_of(ct), r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
   }
@@ -114,14 +116,25 @@ function scale_x_y(a, b) {
   return function(curve) {
     var transformation = c => (function(t) {
       var ct = c(t)
-      return make_color_point(a * x_of(ct), b * y_of(ct), r_of(ct), g_of(ct), b_of(ct))
+      return make_3D_color_point(a * x_of(ct), b * y_of(ct), z_of(ct), r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
   }
 }
 
-function scale(s) {
-  return scale_x_y(s, s)
+function scale_x_y_z(a1, b1, c1) {
+  return function(curve) {
+    var transformation = c => (function(t) {
+      c1 = c1 == undefined ? 1 : c1
+      var ct = c(t)
+      return make_3D_color_point(a1 * x_of(ct), b1 * y_of(ct), c1 * z_of(ct), r_of(ct), g_of(ct), b_of(ct))
+    })
+    return transformation(curve)
+  }
+}
+
+function scale_proportional(s) {
+  return scale_x_y_z(s, s, s)
 }
 
 // SQUEEZE-RECTANGULAR-PORTION translates and scales a curve
@@ -136,7 +149,7 @@ function squeeze_rectangular_portion(xlo, xhi, ylo, yhi) {
   if (width === 0 || height === 0) {
     throw 'attempt to squeeze window to zero'
   } else {
-    return compose(scale_x_y(1 / width, 1 / height), translate(-xlo, -ylo))
+    return compose(scale_x_y(1 / width, 1 / height), translate_curve(-xlo, -ylo))
   }
 }
 
@@ -153,7 +166,7 @@ function squeeze_full_view(xlo, xhi, ylo, yhi) {
   } else {
     return compose(
       scale_x_y(0.99 * 1 / width, 0.99 * 1 / height),
-      translate(-(xlo - 0.01), -(ylo - 0.01))
+      translate_curve(-(xlo - 0.01), -(ylo - 0.01))
     )
   }
 }
@@ -170,7 +183,7 @@ function full_view_proportional(xlo, xhi, ylo, yhi) {
     var new_mid_x = scale_factor * (xlo + xhi) / 2
     var new_mid_y = scale_factor * (ylo + yhi) / 2
     return compose(
-      translate(0.5 - new_mid_x, 0.5 - new_mid_y),
+      translate_curve(0.5 - new_mid_x, 0.5 - new_mid_y),
       scale_x_y(scale_factor, scale_factor)
     )
   }
@@ -185,12 +198,12 @@ function full_view_proportional(xlo, xhi, ylo, yhi) {
 
 function put_in_standard_position(curve) {
   var start_point = curve(0)
-  var curve_started_at_origin = translate(-x_of(start_point), -y_of(start_point))(curve)
+  var curve_started_at_origin = translate_curve(-x_of(start_point), -y_of(start_point))(curve)
   var new_end_point = curve_started_at_origin(1)
   var theta = Math.atan2(y_of(new_end_point), x_of(new_end_point))
   var curve_ended_at_x_axis = rotate_around_origin(-theta)(curve_started_at_origin)
   var end_point_on_x_axis = x_of(curve_ended_at_x_axis(1))
-  return scale(1 / end_point_on_x_axis)(curve_ended_at_x_axis)
+  return scale_proportional(1 / end_point_on_x_axis)(curve_ended_at_x_axis)
 }
 
 // Binary-transform = (Curve,Curve --> Curve)
@@ -209,13 +222,13 @@ function connect_ends(curve1, curve2) {
   var end_point_of_curve1 = curve1(1)
   return connect_rigidly(
     curve1,
-    translate(
+    translate_curve(
       x_of(end_point_of_curve1) - x_of(start_point_of_curve2),
-      y_of(end_point_of_curve1) - y_of(start_point_of_curve2)
+      y_of(end_point_of_curve1) - y_of(start_point_of_curve2),
+      z_of(end_point_of_curve1) - z_of(start_point_of_curve2)
     )(curve2)
   )
 }
-
 
 // function connect_ends(curve1, curve2) {...}
 
@@ -224,10 +237,10 @@ function connect_ends(curve1, curve2) {
 // GOSPERIZE is a Curve-Transform
 
 function gosperize(curve) {
-  var scaled_curve = scale_x_y(Math.sqrt(2) / 2, Math.sqrt(2) / 2)(curve)
+  var scaled_curve = scale_x_y_z(Math.sqrt(2) / 2, Math.sqrt(2) / 2)(curve)
   return connect_rigidly(
     rotate_around_origin(Math.PI / 4)(scaled_curve),
-    translate(0.5, 0.5)(rotate_around_origin(-Math.PI / 4)(scaled_curve))
+    translate_curve(0.5, 0.5)(rotate_around_origin(-Math.PI / 4)(scaled_curve))
   )
 }
 
@@ -254,10 +267,10 @@ function param_gosper(level, angle_at) {
 function param_gosperize(theta) {
   return function(curve) {
     var scale_factor = 1 / Math.cos(theta) / 2
-    var scaled_curve = scale(scale_factor)(curve)
+    var scaled_curve = scale_proportional(scale_factor)(curve)
     return connect_rigidly(
       rotate_around_origin(theta)(scaled_curve),
-      translate(0.5, Math.sin(theta) * scale_factor)(rotate_around_origin(-theta)(scaled_curve))
+      translate_curve(0.5, Math.sin(theta) * scale_factor)(rotate_around_origin(-theta)(scaled_curve))
     )
   }
 }
