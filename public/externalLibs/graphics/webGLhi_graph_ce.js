@@ -64,6 +64,7 @@ function invert(curve) {
 function translate_curve(x0, y0, z0) {
   return function(curve) {
     var transformation = c => (function(t) {
+      x0 = x0 == undefined ? 0 : x0
       y0 = y0 == undefined ? 0 : y0
       z0 = z0 == undefined ? 0 : z0
       var ct = c(t)
@@ -106,8 +107,9 @@ function scale(a1, b1, c1) {
   return function(curve) {
     var transformation = c => (function(t) {
       var ct = c(t)
-      b1 = b1 == undefined ? 1 : b1;
-      c1 = c1 == undefined ? 1 : c1;
+      a1 = a1 == undefined ? 1 : a1
+      b1 = b1 == undefined ? 1 : b1
+      c1 = c1 == undefined ? 1 : c1
       return make_3D_color_point(a1 * x_of(ct), b1 * y_of(ct), c1 * z_of(ct), r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
