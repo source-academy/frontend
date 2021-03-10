@@ -10,13 +10,9 @@ function thrice(f) {
   return compose(compose(f, f), f)
 }
 
-function identity(t) {
-  return t
-}
-
 function repeated(f, n) {
   if (n === 0) {
-    return identity
+    return t => t
   } else {
     return compose(f, repeated(f, n - 1))
   }
@@ -61,13 +57,6 @@ function invert(curve) {
   return t => curve(1 - t)
 }
 
-function rotate_pi_over_2(curve) {
-  return t => {
-    var ct = curve(t)
-    return make_3D_color_point(-y_of(ct), x_of(ct), z_of(ct), r_of(ct), g_of(ct), b_of(ct))
-  }
-}
-
 // CONSTRUCTORS OF CURVE-TRANSFORMS
 
 // TRANSLATE is of type (JS-Num, JS-Num --> Curve-Transform)
@@ -75,6 +64,8 @@ function rotate_pi_over_2(curve) {
 function translate_curve(x0, y0, z0) {
   return function(curve) {
     var transformation = c => (function(t) {
+      x0 = x0 == undefined ? 0 : x0
+      y0 = y0 == undefined ? 0 : y0
       z0 = z0 == undefined ? 0 : z0
       var ct = c(t)
       return make_3D_color_point(x0 + x_of(ct), y0 + y_of(ct), z0 + z_of(ct), r_of(ct), g_of(ct), b_of(ct))
@@ -112,21 +103,13 @@ function deriv_t(n) {
   }
 }
 
-function scale_x_y(a, b) {
+function scale_curve(a1, b1, c1) {
   return function(curve) {
     var transformation = c => (function(t) {
       var ct = c(t)
-      return make_3D_color_point(a * x_of(ct), b * y_of(ct), z_of(ct), r_of(ct), g_of(ct), b_of(ct))
-    })
-    return transformation(curve)
-  }
-}
-
-function scale_x_y_z(a1, b1, c1) {
-  return function(curve) {
-    var transformation = c => (function(t) {
+      a1 = a1 == undefined ? 1 : a1
+      b1 = b1 == undefined ? 1 : b1
       c1 = c1 == undefined ? 1 : c1
-      var ct = c(t)
       return make_3D_color_point(a1 * x_of(ct), b1 * y_of(ct), c1 * z_of(ct), r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
@@ -134,7 +117,7 @@ function scale_x_y_z(a1, b1, c1) {
 }
 
 function scale_proportional(s) {
-  return scale_x_y_z(s, s, s)
+  return scale_curve(s, s, s)
 }
 
 // SQUEEZE-RECTANGULAR-PORTION translates and scales a curve
@@ -228,74 +211,4 @@ function connect_ends(curve1, curve2) {
       z_of(end_point_of_curve1) - z_of(start_point_of_curve2)
     )(curve2)
   )
-}
-
-// function connect_ends(curve1, curve2) {...}
-
-// FRACTAL CURVES
-
-// GOSPERIZE is a Curve-Transform
-
-function gosperize(curve) {
-  var scaled_curve = scale_x_y_z(Math.sqrt(2) / 2, Math.sqrt(2) / 2)(curve)
-  return connect_rigidly(
-    rotate_around_origin(Math.PI / 4)(scaled_curve),
-    translate_curve(0.5, 0.5)(rotate_around_origin(-Math.PI / 4)(scaled_curve))
-  )
-}
-
-// GOSPER-CURVE is of type (JS-Num --> Curve)
-
-function gosper_curve(level) {
-  return repeated(gosperize, level)(unit_line)
-}
-
-// DRAWING GOSPER CURVES
-
-function show_connected_gosper(level) {
-  return draw_connected(200)(squeeze_rectangular_portion(-0.5, 1.5, -0.5, 1.5)(gosper_curve(level)))
-}
-
-function param_gosper(level, angle_at) {
-  if (level === 0) {
-    return unit_line
-  } else {
-    return param_gosperize(angle_at(level))(param_gosper(level - 1, angle_at))
-  }
-}
-
-function param_gosperize(theta) {
-  return function(curve) {
-    var scale_factor = 1 / Math.cos(theta) / 2
-    var scaled_curve = scale_proportional(scale_factor)(curve)
-    return connect_rigidly(
-      rotate_around_origin(theta)(scaled_curve),
-      translate_curve(0.5, Math.sin(theta) * scale_factor)(rotate_around_origin(-theta)(scaled_curve))
-    )
-  }
-}
-
-// DRAGONIZE
-
-// zc-dragonize is a Curve-Transform
-
-function zc_dragonize(n, curve) {
-  if (n === 0) {
-    return curve
-  } else {
-    var c = zc_dragonize(n - 1, curve)
-    return put_in_standard_position(connect_ends(rotate_around_origin(-Math.PI / 2)(c), c))
-  }
-}
-
-function mingyu_rotate(theta) {
-  // rotates around origin, but less efficiently
-  var cth = Math.cos(theta)
-  var sth = Math.sin(theta)
-  return function(curve) {
-    return function(t) {
-      var ct = curve(t)
-      return make_color_point(cth * x_of(ct) - sth * y_of(ct), sth * x_of(ct) + cth * y_of(ct), r_of(ct), g_of(ct), b_of(ct))
-    }
-  }
 }
