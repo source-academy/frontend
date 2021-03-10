@@ -78,7 +78,7 @@ export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const setGitHubUser = (user?: string) => action(SET_GITHUB_OCTOKIT_INSTANCE, user);
+export const setGitHubOctokitInstance = (user?: string) => action(SET_GITHUB_OCTOKIT_INSTANCE, user);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {

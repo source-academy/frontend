@@ -23,7 +23,7 @@ export function* GithubPersistenceSaga(): SagaIterator {
     yield window.open(githubOauthLoginLink, windowName, windowSpecs);
 
     yield (broadcastChannel.onmessage = receivedMessage => {
-      store.dispatch(actions.setGitHubUser(receivedMessage.data));
+      store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
     });
   });
 
