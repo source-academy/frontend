@@ -1150,6 +1150,23 @@
     resize-observer-polyfill "^1.5.1"
     tslib "~1.13.0"
 
+"@blueprintjs/core@^3.40.1":
+  version "3.40.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.40.1.tgz#786f3bffa9f7c6e0f80b2935ae13a425a237b7c0"
+  integrity sha512-trZMuv84vbIJKJYZ7YkMB+Eth1H74KeJrY07pJhlbmbsGTbBc7Pj1Lx2858PgyIaO9HpaHaBS2+VPmMFkt8muw==
+  dependencies:
+    "@blueprintjs/icons" "^3.25.1"
+    "@types/dom4" "^2.0.1"
+    classnames "^2.2"
+    dom4 "^2.1.5"
+    normalize.css "^8.0.1"
+    popper.js "^1.16.1"
+    react-lifecycles-compat "^3.0.4"
+    react-popper "^1.3.7"
+    react-transition-group "^2.9.0"
+    resize-observer-polyfill "^1.5.1"
+    tslib "~1.13.0"
+
 "@blueprintjs/datetime@^3.20.0":
   version "3.20.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/datetime/-/datetime-3.20.0.tgz#e755620c00c8114ae2e1d01cc1356e0fa260bac7"
@@ -1165,6 +1182,14 @@
   version "3.24.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.24.0.tgz#aa7e6042e40806d22f85da8d62990ff0296adcf2"
   integrity sha512-OvDDI5EUueS1Y3t594iS8LAGoHhLhYjC2GuN/01a85n+ASLSp0jf0/+uix2JeCOj41iTdRRCINbWuRwVQNNGPw==
+  dependencies:
+    classnames "^2.2"
+    tslib "~1.13.0"
+
+"@blueprintjs/icons@^3.25.1":
+  version "3.25.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.25.1.tgz#530c06a72b759da5c3cfbb01eaf2ab987a67129d"
+  integrity sha512-AppGf5IyjjKa/Zlre4pHWbDnsI7nefurXKku8Yf/B14bDAB2a8lzP6HCoTowAW4fHryTwE5Pzp9zEJYvofkUEg==
   dependencies:
     classnames "^2.2"
     tslib "~1.13.0"

@@ -1,5 +1,6 @@
 import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 
