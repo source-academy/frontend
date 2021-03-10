@@ -14,15 +14,20 @@ export function GitHubCallback() {
 
     const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 
+    if (accessCode === '') {
+      setMessage('Access code not found in callback URL. Please try again or contact the website administrator.');
+      return;
+    }
+
+    if (clientId === '') {
+      setMessage('Client ID not included with deployment. Please contact the website administrator.');
+      return;
+    }
+
     const messageBody = [
       [encodeURIComponent('code'), encodeURIComponent(accessCode)].join('='),
       [encodeURIComponent('clientId'), encodeURIComponent(clientId)].join('=')
     ].join('&');
-
-    if (accessCode == null) {
-      setMessage('Access code not found in callback URL.');
-      return;
-    }
 
     fetch(backendLink, {
       method: 'POST',
