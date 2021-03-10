@@ -32,6 +32,20 @@ export const showWarningMessage = (
     key
   );
 
+export const showDangerMessage = (
+  message: string | JSX.Element,
+  timeout: number = 2000,
+  key?: string
+) =>
+  notification.show(
+    {
+      intent: Intent.DANGER,
+      message,
+      timeout
+    },
+    key
+  );
+
 export const showMessage = (props: IToastProps, key?: string) => notification.show(props, key);
 
 export const dismiss = (key: string) => notification.dismiss(key);

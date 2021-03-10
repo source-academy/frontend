@@ -30,11 +30,11 @@ test('getAchievements generates correct action object', () => {
 });
 
 test('removeAchievement generates correct action object', () => {
-  const action = removeAchievement(mockAchievements[0]);
+  const action = removeAchievement(mockAchievements[0].uuid);
 
   expect(action).toEqual({
     type: REMOVE_ACHIEVEMENT,
-    payload: mockAchievements[0]
+    payload: mockAchievements[0].uuid
   });
 });
 
