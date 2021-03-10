@@ -15,12 +15,16 @@ export function GitHubCallback() {
     const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 
     if (accessCode === '') {
-      setMessage('Access code not found in callback URL. Please try again or contact the website administrator.');
+      setMessage(
+        'Access code not found in callback URL. Please try again or contact the website administrator.'
+      );
       return;
     }
 
     if (clientId === '') {
-      setMessage('Client ID not included with deployment. Please contact the website administrator.');
+      setMessage(
+        'Client ID not included with deployment. Please contact the website administrator.'
+      );
       return;
     }
 
