@@ -1,26 +1,7 @@
 import { useEffect, useState } from 'react';
 
-class URIField {
-  name: string;
-  value?: string | number | boolean;
-
-  constructor(name: string, value?: string | number | boolean) {
-    this.name = name;
-    this.value = value;
-  }
-}
-
-function EncodeAsURL(messageBodyPrototype: URIField[]) {
-  const uriComponents: string[] = [];
-
-  messageBodyPrototype.forEach(element => {
-    uriComponents.push(
-      [encodeURIComponent(element.name || ''), encodeURIComponent(element.value || '')].join('=')
-    );
-  });
-
-  return uriComponents.join('&');
-}
+import { URIField } from '../../features/github/GitHubClasses';
+import { encodeAsURL } from '../../features/github/GitHubUtils';
 
 export function GitHubCallback() {
   const [message, setMessage] = useState('You have reached the GitHub callback page');
@@ -45,12 +26,12 @@ export function GitHubCallback() {
 
     if (clientId === '') {
       setMessage(
-        'Client ID not included with deployment. Please contact the website administrator.'
+        'Client ID not included with deployment. Please try again or contact the website administrator.'
       );
       return;
     }
 
-    const messageBody = EncodeAsURL([
+    const messageBody = encodeAsURL([
       new URIField('code', accessCode),
       new URIField('clientId', clientId)
     ]);
