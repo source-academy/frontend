@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { URIField } from '../../features/github/GitHubClasses';
-import { encodeAsURL, grabAccessCodeFromURL } from '../../features/github/GitHubUtils';
+import { encodeAsURL } from '../../features/github/GitHubUtils';
 
 export type GitHubCallbackProps = {
   clientID?: string;
@@ -9,12 +9,16 @@ export type GitHubCallbackProps = {
     backendLink: string,
     messageBody: string
   ) => Promise<Response>;
-
   grabAccessCodeFromURL: (currentURLAddress: string) => string;
 };
 
 export function GitHubCallback(props: GitHubCallbackProps) {
   const [message, setMessage] = useState('You have reached the GitHub callback page');
+
+  const clientId = props.clientID || '';
+  const grabAccessCodeFromURL = props.grabAccessCodeFromURL;
+  const exchangeAccessCodeForAuthTokenContainingObject =
+    props.exchangeAccessCodeForAuthTokenContainingObject;
 
   useEffect(() => {
     const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
@@ -23,8 +27,6 @@ export function GitHubCallback(props: GitHubCallbackProps) {
 
     const currentAddress = window.location.search;
     const accessCode = grabAccessCodeFromURL(currentAddress);
-
-    const clientId = props.clientID || '';
 
     if (accessCode === '') {
       setMessage(
@@ -45,8 +47,7 @@ export function GitHubCallback(props: GitHubCallbackProps) {
       new URIField('clientId', clientId)
     ]);
 
-    props
-      .exchangeAccessCodeForAuthTokenContainingObject(backendLink, messageBody)
+    exchangeAccessCodeForAuthTokenContainingObject(backendLink, messageBody)
       .then(res => res.json())
       .then(res => {
         const requestSuccess = typeof res.access_token != 'undefined';
@@ -63,7 +64,7 @@ export function GitHubCallback(props: GitHubCallbackProps) {
           );
         }
       });
-  }, []);
+  }, [clientId, grabAccessCodeFromURL, exchangeAccessCodeForAuthTokenContainingObject]);
 
   return <div>{message}</div>;
 }

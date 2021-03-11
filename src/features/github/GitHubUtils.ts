@@ -3,7 +3,7 @@ import { URIField } from './GitHubClasses';
 export async function exchangeAccessCodeForAuthTokenContainingObject(
   backendLink: string,
   messageBody: string
-) {
+): Promise<Response> {
   return await fetch(backendLink, {
     method: 'POST',
     headers: {
@@ -13,7 +13,7 @@ export async function exchangeAccessCodeForAuthTokenContainingObject(
   });
 }
 
-export function grabAccessCodeFromURL(currentURLAddress: string) {
+export function grabAccessCodeFromURL(currentURLAddress: string): string {
   const urlParams = new URLSearchParams(currentURLAddress);
   const accessCode = urlParams.get('code') || '';
   return accessCode;

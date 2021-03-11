@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Access code not found in return url renders correctly 1`] = `
+"<div>
+  You have reached the GitHub callback page
+</div>"
+`;
+
+exports[`Application Client ID not deployed renders correctly 1`] = `
+"<div>
+  You have reached the GitHub callback page
+</div>"
+`;
+
+exports[`Cannot connect to server renders correctly 1`] = `
+"<div>
+  You have reached the GitHub callback page
+</div>"
+`;
+
+exports[`Successful retrieval of auth token renders correctly 1`] = `
+"<div>
+  You have reached the GitHub callback page
+</div>"
+`;
