@@ -33,8 +33,11 @@ export function* GitHubLoginSaga() {
   const windowName = 'Connect With OAuth';
   const windowSpecs = 'height=600,width=400';
 
+  // Creates a window directed towards the GitHub oauth link for this app
+  // After the app has been approved by the user, it will be redirected to our GitHub callback page
   yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
 
+  // We expect the GitHub callback page to send us the auth token through this channel
   yield (broadcastChannel.onmessage = receivedMessage => {
     store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
   });
