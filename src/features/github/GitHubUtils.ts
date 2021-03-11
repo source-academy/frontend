@@ -1,5 +1,12 @@
 import { URIField } from './GitHubClasses';
 
+/**
+ * Exchanges the Access Code with the back-end to receive an Auth-Token
+ *
+ * @param {string} backendLink The address where the back-end microservice is deployed
+ * @param {string} messageBody The message body. Must be URL-encoded
+ * @return {Promise<Response>} A promise for a HTML response with an 'auth_token' field
+ */
 export async function exchangeAccessCodeForAuthTokenContainingObject(
   backendLink: string,
   messageBody: string
@@ -13,13 +20,25 @@ export async function exchangeAccessCodeForAuthTokenContainingObject(
   });
 }
 
+/**
+ * Grabs the value of the field 'code' of the URL address passed as an argument
+ *
+ * @param {string} currentURLAddress The current address of the current browser window
+ * @return {string} The access code
+ */
 export function grabAccessCodeFromURL(currentURLAddress: string): string {
   const urlParams = new URLSearchParams(currentURLAddress);
   const accessCode = urlParams.get('code') || '';
   return accessCode;
 }
 
-export function encodeAsURL(messageBodyPrototype: URIField[]) {
+/**
+ * Converts an array of URI fragments into a single URL-encoded string
+ *
+ * @param {URIField[]} messageBodyPrototype An array of URIFields, each corresponding to a URI fragment
+ * @return {string} The URL-encoded string
+ */
+export function encodeAsURL(messageBodyPrototype: URIField[]): string {
   const uriComponents: string[] = [];
 
   messageBodyPrototype.forEach(element => {
