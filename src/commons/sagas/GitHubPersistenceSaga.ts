@@ -26,21 +26,22 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 }
 
 export function* GitHubLoginSaga() {
-  const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
-
   const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
   const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
   const windowName = 'Connect With OAuth';
   const windowSpecs = 'height=600,width=400';
 
+  // Create the broadcast channel
+  const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
+
+  broadcastChannel.onmessage = receivedMessage => {
+    store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+  };
+
   // Creates a window directed towards the GitHub oauth link for this app
   // After the app has been approved by the user, it will be redirected to our GitHub callback page
+  // We receive the auth token through our broadcast channel
   yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
-
-  // We expect the GitHub callback page to send us the auth token through this channel
-  yield (broadcastChannel.onmessage = receivedMessage => {
-    store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
-  });
 }
 
 export function* GitHubLogoutSaga() {

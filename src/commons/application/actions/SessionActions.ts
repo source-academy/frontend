@@ -6,6 +6,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
+import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -79,8 +80,8 @@ export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const setGitHubOctokitInstance = (user?: string) =>
-  action(SET_GITHUB_OCTOKIT_INSTANCE, user);
+export const setGitHubOctokitInstance = (authToken?: string) =>
+  action(SET_GITHUB_OCTOKIT_INSTANCE, generateOctokitInstance(authToken || ''));
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
