@@ -1,5 +1,18 @@
 import { URIField } from './GitHubClasses';
 
+export async function exchangeAccessCodeForAuthTokenContainingObject(
+  backendLink: string,
+  messageBody: string
+) {
+  return await fetch(backendLink, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: messageBody
+  });
+}
+
 export function encodeAsURL(messageBodyPrototype: URIField[]) {
   const uriComponents: string[] = [];
 

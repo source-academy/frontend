@@ -3,7 +3,15 @@ import { useEffect, useState } from 'react';
 import { URIField } from '../../features/github/GitHubClasses';
 import { encodeAsURL } from '../../features/github/GitHubUtils';
 
-export function GitHubCallback() {
+export type GitHubCallbackProps = {
+  clientID?: string;
+  exchangeAccessCodeForAuthTokenContainingObject: (
+    backendLink: string,
+    messageBody: string
+  ) => Promise<Response>;
+};
+
+export function GitHubCallback(props: GitHubCallbackProps) {
   const [message, setMessage] = useState('You have reached the GitHub callback page');
 
   useEffect(() => {
@@ -15,7 +23,7 @@ export function GitHubCallback() {
     const urlParams = new URLSearchParams(currentAddress);
     const accessCode = urlParams.get('code') || '';
 
-    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
+    const clientId = props.clientID || '';
 
     if (accessCode === '') {
       setMessage(
@@ -36,13 +44,8 @@ export function GitHubCallback() {
       new URIField('clientId', clientId)
     ]);
 
-    fetch(backendLink, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: messageBody
-    })
+    props
+      .exchangeAccessCodeForAuthTokenContainingObject(backendLink, messageBody)
       .then(res => res.json())
       .then(res => {
         const requestSuccess = typeof res.access_token != 'undefined';
