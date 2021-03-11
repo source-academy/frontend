@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { URIField } from '../../features/github/GitHubClasses';
-import { encodeAsURL } from '../../features/github/GitHubUtils';
+import { encodeAsURL, grabAccessCodeFromURL } from '../../features/github/GitHubUtils';
 
 export type GitHubCallbackProps = {
   clientID?: string;
@@ -9,6 +9,8 @@ export type GitHubCallbackProps = {
     backendLink: string,
     messageBody: string
   ) => Promise<Response>;
+
+  grabAccessCodeFromURL: (currentURLAddress: string) => string;
 };
 
 export function GitHubCallback(props: GitHubCallbackProps) {
@@ -20,8 +22,7 @@ export function GitHubCallback(props: GitHubCallbackProps) {
     const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
 
     const currentAddress = window.location.search;
-    const urlParams = new URLSearchParams(currentAddress);
-    const accessCode = urlParams.get('code') || '';
+    const accessCode = grabAccessCodeFromURL(currentAddress);
 
     const clientId = props.clientID || '';
 

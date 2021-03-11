@@ -1,6 +1,6 @@
 import GitHubCallback from '../GitHubCallback';
 
-test('Access code not found in ', () => {});
+test('Access code not found in return url', () => {});
 
 test('Application Client ID not deployed renders correctly', () => {});
 

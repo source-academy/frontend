@@ -13,6 +13,12 @@ export async function exchangeAccessCodeForAuthTokenContainingObject(
   });
 }
 
+export function grabAccessCodeFromURL(currentURLAddress: string) {
+  const urlParams = new URLSearchParams(currentURLAddress);
+  const accessCode = urlParams.get('code') || '';
+  return accessCode;
+}
+
 export function encodeAsURL(messageBodyPrototype: URIField[]) {
   const uriComponents: string[] = [];
 
