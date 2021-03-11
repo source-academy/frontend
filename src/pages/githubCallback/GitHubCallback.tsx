@@ -1,5 +1,27 @@
 import { useEffect, useState } from 'react';
 
+class URIField {
+  name: string;
+  value?: string | number | boolean;
+
+  constructor(name: string, value?: string | number | boolean) {
+    this.name = name;
+    this.value = value;
+  }
+}
+
+function EncodeAsURL(messageBodyPrototype: URIField[]) {
+  const uriComponents: string[] = [];
+
+  messageBodyPrototype.forEach(element => {
+    uriComponents.push(
+      [encodeURIComponent(element.name || ''), encodeURIComponent(element.value || '')].join('=')
+    );
+  });
+
+  return uriComponents.join('&');
+}
+
 export function GitHubCallback() {
   const [message, setMessage] = useState('You have reached the GitHub callback page');
 
@@ -28,10 +50,10 @@ export function GitHubCallback() {
       return;
     }
 
-    const messageBody = [
-      [encodeURIComponent('code'), encodeURIComponent(accessCode)].join('='),
-      [encodeURIComponent('clientId'), encodeURIComponent(clientId)].join('=')
-    ].join('&');
+    const messageBody = EncodeAsURL([
+      new URIField('code', accessCode),
+      new URIField('clientId', clientId)
+    ]);
 
     fetch(backendLink, {
       method: 'POST',
