@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { takeLatest } from 'redux-saga/effects';
+import { call, takeLatest } from 'redux-saga/effects';
 
 import {
   GITHUB_INITIALISE,
@@ -11,25 +11,10 @@ import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 
-export function* GithubPersistenceSaga(): SagaIterator {
-  yield takeLatest(LOGIN_GITHUB, function* () {
-    const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
+export function* GitHubPersistenceSaga(): SagaIterator {
+  yield takeLatest(LOGIN_GITHUB, GitHubLoginSaga);
 
-    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-    const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
-    const windowName = 'Connect With OAuth';
-    const windowSpecs = 'height=600,width=400';
-
-    yield window.open(githubOauthLoginLink, windowName, windowSpecs);
-
-    yield (broadcastChannel.onmessage = receivedMessage => {
-      store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
-    });
-  });
-
-  yield takeLatest(LOGOUT_GITHUB, function* () {
-    yield store.dispatch(actions.removeGitHubOctokitInstance());
-  });
+  yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {});
 
@@ -40,4 +25,23 @@ export function* GithubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_INITIALISE, function* () {});
 }
 
-export default GithubPersistenceSaga;
+export function* GitHubLoginSaga() {
+  const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
+
+  const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+  const windowName = 'Connect With OAuth';
+  const windowSpecs = 'height=600,width=400';
+
+  yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
+
+  yield (broadcastChannel.onmessage = receivedMessage => {
+    store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+  });
+}
+
+export function* GitHubLogoutSaga() {
+  yield store.dispatch(actions.removeGitHubOctokitInstance());
+}
+
+export default GitHubPersistenceSaga;
