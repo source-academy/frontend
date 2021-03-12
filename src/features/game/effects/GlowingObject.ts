@@ -1,3 +1,5 @@
+import { AssetType } from '../assets/AssetsTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { resize } from '../utils/SpriteUtils';
 import { blink } from './FadeEffect';
 
@@ -35,7 +37,7 @@ export default class GlowingImage {
   ) {
     this.scene = scene;
     this.container = new Phaser.GameObjects.Container(scene, x, y);
-    const image = new Phaser.GameObjects.Image(scene, 0, 0, assetKey);
+
     this.imageGlow = new Phaser.GameObjects.Image(scene, 0, 0, assetKey)
       .setAlpha(0)
       .setBlendMode(Phaser.BlendModes.ADD);
@@ -43,13 +45,30 @@ export default class GlowingImage {
       .setAlpha(0.01)
       .setInteractive({ pixelPerfect: true });
 
-    if (width) {
-      resize(image, width, height);
-      resize(this.imageGlow, width, height);
-      resize(this.clickArea, width, height);
+    const image = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
+    let imageAsset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
+
+    switch (image?.type) {
+      case AssetType.Sprite:
+        const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
+        animationManager.startAnimation(
+          image,
+          image.config?.start || 0,
+          image.config?.frameRate || 20
+        );
+        imageAsset = animationManager.getAnimation(image);
+        break;
+      default:
+        imageAsset = new Phaser.GameObjects.Image(scene, 0, 0, assetKey);
+        if (width) {
+          resize(imageAsset, width, height);
+          resize(this.imageGlow, width, height);
+          resize(this.clickArea, width, height);
+        }
+        break;
     }
 
-    this.container.add([image, this.imageGlow, this.clickArea]);
+    this.container.add([imageAsset, this.imageGlow, this.clickArea]);
   }
 
   public startGlow() {

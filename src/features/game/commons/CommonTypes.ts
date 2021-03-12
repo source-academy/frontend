@@ -29,24 +29,6 @@ export type AssetKey = string;
 /** @typedef {string} AssetPath - path associated with an asset */
 export type AssetPath = string;
 
-export type AssetConfig = {
-  frameWidth: number;
-  frameHeight: number;
-  endFrame: number;
-};
-
-export type PictureAsset = {
-  assetPath: AssetPath;
-  assetType: AssetTypes;
-  assetConfig: AssetConfig;
-};
-
-export enum AssetTypes {
-  Image = 'Image',
-  Sprite = 'Sprite',
-  Atlas = 'Atlas'
-}
-
 /**
  * Encapsulate tracked interaction.
  *

@@ -90,6 +90,10 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         actionParamObj.startFrame = +actionParams[1];
         actionParamObj.frameRate = +actionParams[2];
+        actionParamObj.assetCategory = actionParams[3];
+        break;
+      case GameActionType.StopAnimation:
+        actionParamObj.id = actionParams[0];
         break;
       case GameActionType.ShowDialogue:
         actionParamObj.id = actionParams[0];

@@ -1,4 +1,5 @@
-import { AssetTypes } from '../commons/CommonTypes';
+import { AssetType } from '../assets/AssetsTypes';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { createEmptyLocation } from '../location/GameMapHelper';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
@@ -18,11 +19,7 @@ export default class LocationDetailsParser {
    */
   public static parse(locationDetails: string[]) {
     locationDetails.forEach(locationDetail => {
-      const [id, shortPath, name, type, width, height, frame] = StringUtils.splitWithLimit(
-        locationDetail,
-        ',',
-        6
-      );
+      const [id, shortPath, name, type, frame] = StringUtils.splitByChar(locationDetail, ',');
       Parser.validator.registerId(id);
 
       Parser.checkpoint.map.addLocation(id, {
@@ -31,13 +28,17 @@ export default class LocationDetailsParser {
         name,
         assetKey: this.locationAssetKey(shortPath)
       });
+
       Parser.checkpoint.map.addMapAsset(this.locationAssetKey(shortPath), {
-        assetPath: this.locationPath(shortPath),
-        assetType: AssetTypes[type] || AssetTypes.Image,
-        assetConfig: {
-          frameWidth: +width || 0,
-          frameHeight: +height || 0,
-          endFrame: +frame - 1 || 0
+        type: AssetType[type] || AssetType.Image,
+        key: id,
+        path: this.locationPath(shortPath),
+        config: {
+          frameWidth: screenSize.x,
+          frameHeight: screenSize.y,
+          centreX: screenCenter.x,
+          centreY: screenCenter.y,
+          endFrame: parseInt(frame) - 1 || 0
         }
       });
     });

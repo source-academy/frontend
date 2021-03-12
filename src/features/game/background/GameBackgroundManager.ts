@@ -1,9 +1,9 @@
+import { AssetType, ImageAsset } from '../assets/AssetsTypes';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { AssetKey, AssetTypes, PictureAsset } from '../commons/CommonTypes';
+import { AssetKey } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { mandatory } from '../utils/GameUtils';
 import { resizeOverflow } from '../utils/SpriteUtils';
 // import { GameInputManager } from '..\input\GameInputManager.ts'
 
@@ -12,9 +12,7 @@ import { resizeOverflow } from '../utils/SpriteUtils';
  * Loads the background for a location on navigate and change_background action.
  */
 export default class GameBackgroundManager {
-  private backgroundPicture?: PictureAsset;
-  private backgroundAsset?: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
-
+  private currentBackground?: ImageAsset;
   /**
    * Render the background with the asset attached to the location ID.
    *
@@ -34,79 +32,31 @@ export default class GameBackgroundManager {
    */
   private renderBackgroundImage(assetKey: AssetKey) {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
-    this.backgroundPicture = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
+    this.currentBackground = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
+    let asset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
 
-    switch (this.backgroundPicture?.assetType) {
-      case AssetTypes.Sprite:
-        this.backgroundAsset = new Phaser.GameObjects.Sprite(
-          GameGlobalAPI.getInstance().getGameManager(),
-          screenCenter.x,
-          screenCenter.y,
-          assetKey
-        );
+    switch (this.currentBackground?.type) {
+      case AssetType.Sprite:
+        const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
+        animationManager.startAnimation(this.currentBackground, 0, 20);
+        asset = animationManager.getAnimation(this.currentBackground);
         break;
       default:
-        this.backgroundAsset = new Phaser.GameObjects.Image(
+        asset = new Phaser.GameObjects.Image(
           GameGlobalAPI.getInstance().getGameManager(),
           screenCenter.x,
           screenCenter.y,
           assetKey
         );
-        resizeOverflow(this.backgroundAsset, screenSize.x, screenSize.y);
+        resizeOverflow(asset, screenSize.x, screenSize.y);
         break;
     }
 
-    GameGlobalAPI.getInstance().addToLayer(Layer.Background, this.backgroundAsset);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Background, asset);
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
-    console.log(assetKey);
-    this.startAnimation(assetKey, 0, 20);
   }
 
-  public startAnimation(assetKey: AssetKey, startFrame: number, frameRate: number) {
-    const game = GameGlobalAPI.getInstance().getGameManager();
-    //const assetKey = GameGlobalAPI.getInstance().getLocationAtId(locationId).assetKey;
-    this.backgroundPicture = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
-    console.log(this.backgroundPicture);
-    if (this.backgroundPicture?.assetType === AssetTypes.Sprite) {
-      console.log('here');
-      GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
-      this.backgroundAsset = new Phaser.GameObjects.Sprite(
-        game,
-        screenCenter.x,
-        screenCenter.y,
-        assetKey
-      );
-
-      if (this.backgroundAsset instanceof Phaser.GameObjects.Sprite) {
-        const config = {
-          key: assetKey,
-          frames: game.anims.generateFrameNumbers(assetKey, {
-            start: startFrame,
-            end: this.backgroundPicture?.assetConfig.endFrame,
-            first: 0
-          }),
-          frameRate: frameRate,
-          repeat: -1
-        };
-
-        GameGlobalAPI.getInstance().addToLayer(Layer.Background, this.backgroundAsset);
-        GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
-
-        game.anims.create(config);
-        this.backgroundAsset.play(assetKey);
-      }
-    }
-  }
-
-  public stopAnimation() {
-    if (this.backgroundAsset instanceof Phaser.GameObjects.Sprite) {
-      if (this.backgroundAsset.anims.isPlaying) {
-        this.backgroundAsset.anims.stop();
-      }
-    }
-  }
-
-  // public isBackgroundAnimas = () => this.backgroundAsset instanceof Phaser.GameObjects.Sprite;
-  // public isPlaying = () => this.backgroundAsset.
-  public getBackgroundAsset = () => mandatory(this.backgroundAsset);
+  public getLocationAssetKey = (locId: LocationId) => {
+    return GameGlobalAPI.getInstance().getGameMap().getLocationAtId(locId).assetKey;
+  };
 }
