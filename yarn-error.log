@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\CG\Documents\GitHub\cadet-frontend\node_modules\cssnano\node_modules\cosmiconfig\node_modules\.bin'
+  Error: EPERM: operation not permitted, unlink 'C:\Users\CG\Documents\GitHub\cadet-frontend\node_modules\execa\node_modules\cross-spawn\node_modules\.bin'
 
 npm manifest: 
   {
