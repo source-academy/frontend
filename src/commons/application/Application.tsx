@@ -143,18 +143,18 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
             <Route
-                path="/callback/github"
-                render={props => (
-                  <GitHubCallback
-                    {...props}
-                    clientID={process.env.REACT_APP_GITHUB_CLIENT_ID}
-                    exchangeAccessCodeForAuthTokenContainingObject={
-                      exchangeAccessCodeForAuthTokenContainingObject
-                    }
-                    grabAccessCodeFromURL={grabAccessCodeFromURL}
-                  />
-                )}
-              />
+              path="/callback/github"
+              render={props => (
+                <GitHubCallback
+                  {...props}
+                  clientID={process.env.REACT_APP_GITHUB_CLIENT_ID}
+                  exchangeAccessCodeForAuthTokenContainingObject={
+                    exchangeAccessCodeForAuthTokenContainingObject
+                  }
+                  grabAccessCodeFromURL={grabAccessCodeFromURL}
+                />
+              )}
+            />
             {fullPaths}
             <Route
               exact={true}
