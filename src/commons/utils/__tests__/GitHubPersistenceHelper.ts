@@ -26,7 +26,7 @@ test('Octokit instance is generated with input auth value', async () => {
         expect(values[i] === 'oauth');
       }
     }
-    
+
     expect(existsKeyToken).toBe(true);
     expect(existsKeyTokenType).toBe(true);
   });

@@ -191,7 +191,7 @@ test('setGitHubOctokitInstance generates correct action object', async () => {
         expect(values[i] === 'oauth');
       }
     }
-    
+
     expect(existsKeyToken).toBe(true);
     expect(existsKeyTokenType).toBe(true);
   });
