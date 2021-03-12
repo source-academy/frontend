@@ -7,8 +7,11 @@ test('Octokit instance is generated with input auth value', async () => {
   // We need to do this because the auth() function returns a unknown Promise
   // Typescript will not allow us to directly call the properties
   generatedOctokitInstance.auth().then(authObject => {
-    const keys = Object.keys(authObject);
-    const values = Object.values(authObject);
+    const stringified = JSON.stringify(authObject);
+    const json = JSON.parse(stringified);
+
+    const keys = Object.keys(json);
+    const values = Object.values(json);
 
     expect(keys.length).toEqual(values.length);
 
