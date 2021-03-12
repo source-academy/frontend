@@ -1,28 +1,33 @@
 import React from 'react';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { Modules, ModuleSideContent, SideContentTab } from './SideContentTypes';
-
-const potentialTabs: SideContentTab[] = [];
+import { Modules, ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
   WorkspaceLocation,
   string[]
 >();
 
+/**
+ * Returns an array of SideContentTabs to be spawned
+ * @param debuggerContext - DebuggerContext object from redux store
+ */
 export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
+  const tabsToSpawn = getModuleTabs(debuggerContext).filter(tab => tab.toSpawn(debuggerContext));
   const spawnedTabs = [
-    ...getModuleTabs(debuggerContext).filter(tab => tab.toSpawn(debuggerContext)),
-    ...potentialTabs.filter(tab => tab.toSpawn(debuggerContext))
+    ...tabsToSpawn.map(tab => {
+      // set tab.id as module
+      tab.id = SideContentType.module;
+      return tab;
+    })
   ];
-
+  // only set if debuggerContext.workspaceLocation is not undefined
   if (debuggerContext.workspaceLocation) {
     currentlyActiveTabsLabel.set(
       debuggerContext.workspaceLocation,
       spawnedTabs.map(tab => tab.label)
     );
   }
-
   return spawnedTabs;
 };
 
@@ -49,27 +54,4 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
     body: sideContent.body(React)('props_placeholder')
   }));
   return moduleTabs;
-};
-
-export const getCurrentlyActiveTabs = (
-  workspaceLocation?: WorkspaceLocation
-): string[] | undefined => {
-  if (workspaceLocation) {
-    return currentlyActiveTabsLabel.get(workspaceLocation);
-  }
-  return undefined;
-};
-
-export const isCurrentlyActive = (
-  label: string,
-  workspaceLocation?: WorkspaceLocation
-): boolean => {
-  const activeTabs = getCurrentlyActiveTabs(workspaceLocation);
-  return activeTabs
-    ? activeTabs.findIndex((activeTabLabel: string) => activeTabLabel === label) !== -1
-    : false;
-};
-
-export const isEmptyDebuggerContext = (debuggerContext: DebuggerContext): boolean => {
-  return Object.keys(debuggerContext).length === 0;
 };

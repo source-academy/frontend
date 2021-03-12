@@ -1,5 +1,110 @@
+@import 'react-simple-keyboard/build/css/index.css';
+
 $shadow-dark: rgba(0, 0, 0, 0.5);
 $shadow-light: rgba(0, 0, 0, 0.2);
+
+.mobile-workspace {
+  position: relative;
+}
+
+.mobile-floating-keyboard {
+  width: 42px; // default value, toggled by floating-toggle to 99vw
+  height: 50px;
+  max-width: 600px;
+  z-index: 4;
+  position: absolute;
+  top: 30vh;
+  right: 0;
+  background: $cadet-color-1;
+  border-radius: 25px 0 0 25px;
+  display: flex;
+  overflow: hidden;
+  opacity: 0.8; // initial value, toggled by floating-toggle to 1 or 0.6
+  transition: width 0.8s, opacity 1.2s;
+
+  button {
+    height: 50px;
+    border: transparent;
+    background: transparent;
+    color: $cadet-color-4;
+    display: inline-block;
+    opacity: 0.5;
+  }
+  button:active {
+    background: $cadet-color-2;
+    color: $cadet-color-1;
+  }
+
+  .mobile-floating-toggle {
+    width: 30px;
+    font-size: 18px;
+    padding: 0 2px 0 10px;
+  }
+
+  .mobile-keyboard-toggle-container {
+    width: 100%;
+    height: 46px;
+    display: none; // default value, toggled by floating-toggle to flex
+
+    .mobile-keyboard-container {
+      width: 100%;
+      overflow-y: hidden;
+      position: relative;
+
+      .simple-keyboard-shortcut {
+        width: 100%;
+        position: absolute;
+        top: 0; // default value, toggled by row-toggle to -45 -90
+        color: $cadet-color-4;
+        background: $cadet-color-1;
+        transition: top 0.6s;
+
+        .hg-row {
+          height: 40px;
+
+          .hg-button {
+            background: $cadet-color-2;
+            min-width: 24px;
+          }
+
+          .mobile-navigation {
+            background: $cadet-color-3;
+            color: $cadet-color-1;
+            padding: 2px 0 4px 0;
+            font-size: 28px;
+          }
+
+          .big-buttons {
+            padding: 5px 0;
+          }
+
+          .hg-activeButton {
+            background: $cadet-color-1;
+            color: $cadet-color-4;
+          }
+        }
+      }
+    }
+
+    .mobile-keyboard-row-toggle {
+      width: 28px;
+      font-size: 28px;
+      padding: 0 2px 0 0;
+    }
+  }
+
+  #floating-dragHandle {
+    padding: 0 0 0 8px;
+    height: 50px;
+    width: 22px;
+    min-width: 22px;
+    border-radius: 10px 0 0 10px;
+    background: $cadet-color-2;
+    opacity: 0.3;
+    color: $cadet-color-4;
+    font-size: 34px;
+  }
+}
 
 .mobile-selected-panel {
   height: 100%;
@@ -7,7 +112,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   padding: 20px 15px 100px 15px;
   background-color: $cadet-color-2;
   white-space: pre-wrap;
-  overflow: scroll;
+  overflow: auto;
 
   .sa-substituter {
     overflow-x: visible;
@@ -53,7 +158,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-editor-panel {
   width: 100vw;
-  height: 100%;
+  height: calc(100% - 70px);
   z-index: 1;
 }
 
@@ -69,6 +174,10 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   bottom: 0;
   box-shadow: 0 -4px 8px $shadow-dark, 0 -6px 16px $shadow-light,
     inset 0 14px 14px -16px rgba(206, 217, 224, 0.1);
+
+  .mobile-side-content {
+    overflow-x: auto;
+  }
 
   .mobile-control-bar-button {
     margin-bottom: 5px;
@@ -121,7 +230,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
   .REPL-content {
     width: 100%;
-    height: var(--mobile-repl-inner-height, 0px);
+    height: calc(var(--mobile-repl-height, 0px) - 10px);
     padding: 0 10px 10px 10px;
     overflow: auto;
 
