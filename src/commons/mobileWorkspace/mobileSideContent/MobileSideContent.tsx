@@ -1,4 +1,6 @@
-import { Classes, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
+import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
+import classNames from 'classnames';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -103,10 +105,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           }
         : tab.body;
 
-      return tab.id === SideContentType.mobileEditorRun ? (
-        // Always render the draggable Repl
-        tabBody
-      ) : tab.id === SideContentType.mobileEditor ? (
+      if (tab.id === SideContentType.mobileEditorRun) {
+        return;
+      }
+
+      return tab.id === SideContentType.mobileEditor ? (
         // Render the Editor Panel when the selected tab is 'Editor' or 'Run'
         selectedTabId === SideContentType.mobileEditor ||
         selectedTabId === SideContentType.mobileEditorRun ? (
@@ -138,11 +141,17 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       const iconSize = 20;
       const tabId = tab.id === undefined ? tab.label : tab.id;
       const tabTitle: JSX.Element = (
-        <Tooltip content={tab.label}>
+        <Tooltip2
+          content={tab.label}
+          onOpening={() => {
+            // Handles iOS hover requiring double taps to press the button
+            document.getElementById(generateIconId(tabId))?.click();
+          }}
+        >
           <div className="side-content-tooltip" id={generateIconId(tabId)}>
             <Icon icon={tab.iconName} iconSize={iconSize} />
           </div>
-        </Tooltip>
+        </Tooltip2>
       );
 
       return (
@@ -225,7 +234,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           defaultSelectedTabId={props.defaultSelectedTabId}
           renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
           selectedTabId={props.selectedTabId}
-          className={Classes.DARK}
+          className={classNames(Classes.DARK, 'mobile-side-content')}
         >
           {renderedTabs}
           <MobileControlBar {...props.mobileControlBarProps} />

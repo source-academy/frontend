@@ -17,8 +17,7 @@ import {
   AchievementItem,
   GoalDefinition,
   GoalMeta,
-  GoalProgress,
-  GoalType
+  GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
@@ -28,6 +27,7 @@ import {
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
+import { backendifyGoalDefinition } from '../achievement/utils/AchievementBackender';
 import { Tokens, User } from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -139,13 +139,21 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
   return achievements.map(
     (achievement: any) =>
       ({
-        ...achievement,
-        id: achievement.id,
+        uuid: achievement.uuid || '',
+        title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
-        deadline: new Date(achievement.deadline),
-        release: new Date(achievement.release),
-        goals: achievement.goals || [],
-        prerequisiteIds: achievement.prerequisiteIds || []
+        deadline: achievement.deadline && new Date(achievement.deadline),
+        release: achievement.release && new Date(achievement.release),
+        isTask: achievement.isTask,
+        position: achievement.position,
+        prerequisiteUuids: achievement.prerequisiteUuids,
+        goalUuids: achievement.goalUuids,
+        cardBackground: achievement.cardBackground || '',
+        view: {
+          coverImage: achievement.view.coverImage || '',
+          completionText: achievement.view.completionText || '',
+          description: achievement.view.description || ''
+        }
       } as AchievementItem)
   );
 };
@@ -171,18 +179,21 @@ export const getGoals = async (
   return achievementGoals.map(
     (goal: any) =>
       ({
-        ...goal,
-        type: goal.type as GoalType,
-        meta: goal.meta as GoalMeta
+        uuid: goal.uuid || '',
+        text: goal.text || '',
+        meta: goal.meta as GoalMeta,
+        xp: goal.xp,
+        maxXp: goal.maxXp,
+        completed: goal.completed
       } as AchievementGoal)
   );
 };
 
 /**
- * GET achievements/goals
+ * GET self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
-  const resp = await request('achievements/goals', 'GET', {
+  const resp = await request('self/goals', 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -196,21 +207,66 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
   return achievementGoals.map(
     (goal: any) =>
       ({
-        ...goal,
-        type: goal.type as GoalType,
-        meta: goal.meta as GoalMeta
+        uuid: goal.uuid || '',
+        text: goal.text || '',
+        meta: goal.meta as GoalMeta,
+        xp: goal.xp,
+        maxXp: goal.maxXp,
+        completed: goal.completed
       } as AchievementGoal)
   );
 };
 
 /**
- * POST /achievements/{achievementId}
+ * PUT /admin/achievements
+ */
+export async function bulkUpdateAchievements(
+  achievements: AchievementItem[],
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`admin/achievements`, 'PUT', {
+    accessToken: tokens.accessToken,
+    body: { achievements: achievements },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+  // TODO: confirmation notification
+}
+
+/**
+ * PUT /admin/goals
+ */
+export async function bulkUpdateGoals(
+  goals: GoalDefinition[],
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`admin/goals`, 'PUT', {
+    accessToken: tokens.accessToken,
+    body: {
+      goals: goals.map(goal => backendifyGoalDefinition(goal))
+    },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+  // TODO: confirmation notification
+}
+
+/**
+ * POST /achievements/:achievement_uuid
  */
 export const editAchievement = async (
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.id}`, 'POST', {
+  const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
     ...tokens,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -222,15 +278,16 @@ export const editAchievement = async (
 };
 
 /**
- * POST /achievements/goals/{goalId}
+ * POST /achievements/goals/{goalUuid}
  */
 export const editGoal = async (
   definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${definition.id}`, 'POST', {
+  const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
     ...tokens,
-    body: { definition: definition },
+    // Backendify call to be removed once UUID has been implemented
+    body: { definition: backendifyGoalDefinition(definition) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -240,14 +297,14 @@ export const editGoal = async (
 };
 
 /**
- * POST /achievements/goals/{goalId}/{studentId}
+ * POST /achievements/goals/{goalUuid}/{studentId}
  */
 export const updateGoalProgress = async (
   studentId: number,
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
+  const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
     body: { progress: progress },
     noHeaderAccept: true,
@@ -259,15 +316,12 @@ export const updateGoalProgress = async (
 };
 
 /**
- * DELETE /achievements/{achievementId}
+ * DELETE /admin/achievements/{achievementUuid}
  */
-export const removeAchievement = async (
-  achievement: AchievementItem,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
+export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
+  const resp = await request(`admin/achievements/${uuid}`, 'DELETE', {
     ...tokens,
-    body: { achievement: achievement },
+    body: { uuid: uuid },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -277,16 +331,12 @@ export const removeAchievement = async (
 };
 
 /**
- * DELETE /achievements/goals
- *
+ * DELETE /admin/goals/{goalUuid}
  */
-export const removeGoal = async (
-  definition: GoalDefinition,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${definition.id}`, 'DELETE', {
+export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
+  const resp = await request(`admin/goals/${uuid}`, 'DELETE', {
     ...tokens,
-    body: { definition: definition },
+    body: { uuid: uuid },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

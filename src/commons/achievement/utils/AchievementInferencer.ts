@@ -1,108 +1,213 @@
-import assert from 'assert';
+import { uniq } from 'lodash';
+import { v4 } from 'uuid';
 
+import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
 import {
   AchievementGoal,
   AchievementItem,
-  AchievementStatus
+  AchievementStatus,
+  defaultGoalProgress,
+  GoalDefinition
 } from '../../../features/achievement/AchievementTypes';
 import { isExpired } from './DateHelper';
 
 /**
- * An InferencerNode item encapsulates all important information of an achievement item
+ * An AchievementNode item encapsulates all important information of an achievement item
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
- * @param {number} maxExp total achievable EXP of the achievement
+ * @param {number} xp attained XP of the achievement
+ * @param {number} maxXp maximum attainable XP of the achievement
  * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
- * @param {Set<number>} children a set of immediate prerequisites id
- * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
+ * @param {Set<string>} children a set of immediate prerequisites uuid
+ * @param {Set<string>} descendant a set of all descendant prerequisites uuid (including immediate prerequisites)
  */
-class InferencerNode {
+class AchievementNode {
   public achievement: AchievementItem;
   public displayDeadline?: Date;
-  public maxExp: number;
+  public xp: number;
+  public maxXp: number;
   public progressFrac: number;
   public status: AchievementStatus;
-  public children: Set<number>;
-  public descendant: Set<number>;
+  public children: Set<string>;
+  public descendant: Set<string>;
 
   constructor(achievement: AchievementItem) {
-    const { deadline, prerequisiteIds } = achievement;
+    const { deadline, prerequisiteUuids } = achievement;
 
     this.achievement = achievement;
     this.displayDeadline = deadline;
-    this.maxExp = 0;
+    this.xp = 0;
+    this.maxXp = 0;
     this.progressFrac = 0;
     this.status = AchievementStatus.ACTIVE;
-    this.children = new Set(prerequisiteIds);
-    this.descendant = new Set(prerequisiteIds);
+    this.children = new Set(prerequisiteUuids);
+    this.descendant = new Set(prerequisiteUuids);
   }
 }
 
 /**
  * The AchievementInferencer consumes achievements and goals, then infers useful React props
  *
- * Note: The inferencer is responsible for assigning new IDs to AchievementItem and AchievementGoal
+ * Note: The inferencer is responsible for assigning new UUIDs to AchievementItem and AchievementGoal
  */
 class AchievementInferencer {
-  private nodeList: Map<number, InferencerNode> = new Map(); // key = achievementId, value = InferencerNode
-  private goalList: Map<number, AchievementGoal> = new Map(); // key = goalId, value = AchievementGoal
+  private nodeList: Map<string, AchievementNode> = new Map(); // key = achievementUuid, value = AchievementNode
+  private goalList: Map<string, AchievementGoal> = new Map(); // key = goalUuid, value = AchievementGoal
+  private textToUuid: Map<string, string> = new Map(); // key = goalText, value = goalUuid
+  private titleToUuid: Map<string, string> = new Map(); // key = achievementTitle, value = achievementUuid
+  private achievementsToDelete: string[] = [];
+  private goalsToDelete: string[] = [];
 
   constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
     this.nodeList = this.constructNodeList(achievements);
     this.goalList = this.constructGoalList(goals);
     this.processNodes();
-  }
-
-  /**
-   * Returns true if the achievement exists
-   *
-   * @param id Achievement Id
-   */
-  public doesAchievementExist(id: number) {
-    return this.nodeList.has(id);
+    this.processGoals();
   }
 
   /**
    * Returns an array of AchievementItem
    */
-  public getAchievements() {
+  public getAllAchievements() {
     return [...this.nodeList.values()].map(node => node.achievement);
+  }
+
+  /**
+   * Returns an array of achievementUuid
+   */
+  public getAllAchievementUuids() {
+    return [...this.nodeList.keys()];
+  }
+
+  /**
+   * Returns an array of AchievementGoal
+   */
+  public getAllGoals() {
+    return [...this.goalList.values()];
+  }
+
+  /**
+   * Returns an array of goalUuid
+   */
+  public getAllGoalUuids() {
+    return [...this.goalList.keys()];
+  }
+
+  /**
+   * Returns true if achievement exists
+   */
+  public hasAchievement(uuid: string) {
+    return this.nodeList.has(uuid);
   }
 
   /**
    * Returns the AchievementItem
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getAchievementItem(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.achievement;
+  public getAchievement(uuid: string) {
+    return this.nodeList.get(uuid)!.achievement;
+  }
+
+  /**
+   * Returns true if goal exists
+   */
+  public hasGoal(uuid: string) {
+    return this.goalList.has(uuid);
+  }
+
+  /**
+   * Returns the AchievementGoal
+   *
+   * @param uuid Goal Uuid
+   */
+  public getGoal(uuid: string) {
+    return this.goalList.get(uuid)!;
+  }
+
+  /**
+   * Returns the GoalDefinition
+   *
+   * @param uuid Goal Uuid
+   */
+  public getGoalDefinition(uuid: string) {
+    return this.goalList.get(uuid)! as GoalDefinition;
+  }
+
+  /**
+   * Returns the position of the achievement
+   *
+   * @param uuid Achievement Uuid
+   */
+  public getAchievementPositionByUuid(uuid: string) {
+    return this.nodeList.get(uuid)!.achievement.position;
+  }
+
+  /**
+   * Returns the uuids of the achievements that were deleted
+   */
+  public getAchievementsToDelete() {
+    return this.achievementsToDelete;
+  }
+
+  /**
+   * Returns the uuids of the goals that were deleted
+   */
+  public getGoalsToDelete() {
+    return this.goalsToDelete;
+  }
+
+  /**
+   * Resets the array so the same achievement/goal is not deleted twice
+   */
+  public resetToDelete() {
+    this.achievementsToDelete = [];
+    this.goalsToDelete = [];
   }
 
   /**
    * Inserts a new AchievementItem into the Inferencer,
-   * then returns the newly assigned achievementId
+   * then returns the newly assigned achievementUuid
    *
    * @param achievement the AchievementItem
    */
   public insertAchievement(achievement: AchievementItem) {
-    // first, generate a new unique id by finding the max id
-    let newId = 0;
-    if (this.nodeList.size > 0) {
-      newId = Math.max(...this.nodeList.keys(), 0) + 1;
-    }
+    // first, generate a new unique uuid
+    const newUuid = v4();
 
-    // then assign the new unique id by overwriting the achievement item supplied by param
+    // then assign the new unique uuid by overwriting the achievement item supplied by param
     // and insert it into nodeList
-    achievement.id = newId;
-    this.nodeList.set(newId, new InferencerNode(achievement));
+    achievement.uuid = newUuid;
+    this.nodeList.set(newUuid, new AchievementNode(achievement));
 
     // finally, process the nodeList
     this.processNodes();
+    this.normalizePositions(achievement.uuid, achievement.position);
 
-    return newId;
+    return newUuid;
+  }
+
+  /**
+   * Inserts a new GoalDefinition into the Inferencer,
+   * then returns the newly assigned goalUuid
+   *
+   * @param definition the GoalDefinition
+   */
+  public insertGoalDefinition(definition: GoalDefinition) {
+    // first, generate a new unique uuid by finding the max uuid
+    const newUuid = v4();
+
+    // then assign the new unique uuid by overwriting the goal item supplied by param
+    // and insert it into goalList
+    definition.uuid = newUuid;
+    this.goalList.set(newUuid, { ...definition, ...defaultGoalProgress });
+
+    // finally, process the goalList
+    this.processGoals();
+
+    return newUuid;
   }
 
   /**
@@ -111,294 +216,304 @@ class AchievementInferencer {
    * @param achievement the AchievementItem
    */
   public modifyAchievement(achievement: AchievementItem) {
-    // directly replace the InferencerNode in nodeList
-    this.nodeList.set(achievement.id, new InferencerNode(achievement));
+    // directly replace the AchievementNode in nodeList
+    this.nodeList.set(achievement.uuid, new AchievementNode(achievement));
 
     // then, process the nodeList
     this.processNodes();
+    this.normalizePositions(achievement.uuid, achievement.position);
+  }
+
+  /**
+   * Updates the GoalDefinition in the Inferencer
+   *
+   * @param definition the GoalDefinition
+   */
+  public modifyGoalDefinition(definition: GoalDefinition) {
+    // directly replace the GoalDefinition in goalList
+    this.goalList.set(definition.uuid, { ...definition, ...defaultGoalProgress });
+
+    // then, process the nodeList and goalList
+    this.processNodes();
+    this.processGoals();
   }
 
   /**
    * Removes the AchievementItem from the Inferencer
    *
-   * @param targetId Achievement Id
+   * @param targetUuid Achievement Uuid
    */
-  public removeAchievement(targetId: number) {
-    const hasTarget = (node: InferencerNode) => node.children.has(targetId);
+  public removeAchievement(targetUuid: string) {
+    const hasTarget = (node: AchievementNode) => node.children.has(targetUuid);
 
-    const sanitizeNode = (node: InferencerNode) => {
-      const newPrerequisiteIds = node.achievement.prerequisiteIds.filter(id => id !== targetId);
-      node.achievement.prerequisiteIds = newPrerequisiteIds;
+    const sanitizeNode = (node: AchievementNode) => {
+      const newPrerequisiteUuids = node.achievement.prerequisiteUuids.filter(
+        uuid => uuid !== targetUuid
+      );
+      node.achievement.prerequisiteUuids = newPrerequisiteUuids;
 
-      return new InferencerNode(node.achievement);
+      return new AchievementNode(node.achievement);
     };
 
     // first, remove achievement from node list
-    this.nodeList.delete(targetId);
+    this.nodeList.delete(targetUuid);
     // then, remove reference of the target in other achievement's prerequisite
-    this.nodeList.forEach((node, id) => {
+    this.nodeList.forEach((node, uuid) => {
       if (hasTarget(node)) {
-        this.nodeList.set(id, sanitizeNode(node));
+        this.nodeList.set(uuid, sanitizeNode(node));
       }
     });
 
+    // add the achievement to the list of things to delete
+    this.achievementsToDelete.push(targetUuid);
+
     // finally, process the nodeList
     this.processNodes();
+    this.normalizePositions();
   }
 
   /**
-   * Returns an array of achievementId
+   * Removes the GoalDefinition from the Inferencer
+   *
+   * @param targetUuid Goal Uuid
    */
-  public listIds() {
-    return [...this.nodeList.keys()];
+  public removeGoalDefinition(targetUuid: string) {
+    const findTargetIndex = (node: AchievementNode) =>
+      node.achievement.goalUuids.findIndex(uuid => uuid === targetUuid);
+
+    const sanitizeNode = (node: AchievementNode) => {
+      const targetIndex = findTargetIndex(node);
+      if (targetIndex !== -1) {
+        node.achievement.goalUuids.splice(targetIndex, 1);
+      }
+    };
+
+    // first, remove goal from goal list
+    this.goalList.delete(targetUuid);
+    // then, remove the goalUuid from all achievement goalUuids
+    this.nodeList.forEach(node => sanitizeNode(node));
+
+    // add the goal to the list of things to delete
+    this.goalsToDelete.push(targetUuid);
+
+    // finally, process the nodeList and goalList
+    this.processNodes();
+    this.processGoals();
   }
 
   /**
-   * Returns an array of achievementId that isTask
+   * Returns an array of achievementUuid that isTask
    */
-  public listTaskIds() {
-    return this.getAchievements()
+  public listTaskUuids() {
+    return this.getAllAchievements()
       .filter(achievement => achievement.isTask)
-      .map(task => task.id);
+      .map(task => task.uuid);
   }
 
   /**
-   * Returns a sorted array of achievementId that isTask
+   * Returns an array of achievementId that isTask sorted by position
    */
-  public listTaskIdsbyPosition() {
-    return this.getAchievements()
+  public listSortedTaskUuids() {
+    return this.getAllAchievements()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position)
-      .map(sortedTask => sortedTask.id);
-  }
-
-  /**
-   * Returns an array of achievementId that not isTask
-   */
-  public listNonTaskIds() {
-    return this.getAchievements()
-      .filter(achievement => !achievement.isTask)
-      .map(nonTask => nonTask.id);
-  }
-
-  /**
-   * Set the achievement item as isTask
-   *
-   * @param achievement the AchievementItem
-   */
-  public setTask(achievement: AchievementItem) {
-    achievement.isTask = true;
-    achievement.position = this.listTaskIds().length + 1;
-
-    this.modifyAchievement(achievement);
-  }
-
-  /**
-   * Set the achievement item as not isTask
-   *
-   * @param achievement the AchievementItem
-   */
-  public setNonTask(achievement: AchievementItem) {
-    achievement.prerequisiteIds = [];
-    achievement.isTask = false;
-    achievement.position = 0; // position 0 is reserved for non-task achievements
-
-    this.modifyAchievement(achievement);
+      .map(sortedTask => sortedTask.uuid);
   }
 
   /**
    * Returns an array of AchievementGoal which belongs to the achievement
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getGoals(id: number) {
-    assert(this.nodeList.has(id));
-    const { goalIds } = this.nodeList.get(id)!.achievement;
-    return goalIds.map(goalId => this.goalList.get(goalId)!);
+  public listGoals(uuid: string) {
+    const { goalUuids } = this.getAchievement(uuid);
+    return goalUuids.map(goalUuid => this.getGoal(goalUuid));
   }
 
   /**
    * Returns an array of AchievementGoal which belongs to the prerequisites of the achievement
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getPrerequisiteGoals(id: number) {
-    assert(this.nodeList.has(id));
-
-    const childGoalIds: number[] = [];
-    for (const childId of this.nodeList.get(id)!.children) {
-      const { goalIds } = this.nodeList.get(childId)!.achievement;
-      goalIds.forEach(goalId => childGoalIds.push(goalId));
+  public listPrerequisiteGoals(uuid: string) {
+    const childGoalUuids: string[] = [];
+    for (const childUuid of this.getImmediateChildren(uuid)) {
+      const { goalUuids } = this.getAchievement(childUuid);
+      goalUuids.forEach(goalUuid => childGoalUuids.push(goalUuid));
     }
 
-    return childGoalIds.map(goalId => this.goalList.get(goalId)!);
+    return childGoalUuids.map(goalUuid => this.getGoal(goalUuid));
   }
 
   /**
-   * Returns EXP earned from the achievement
+   * Returns the Goal Uuid associate to the Goal Text or undefined
    *
-   * @param id Achievement Id
+   * @param text goalText
    */
-  public getExp(id: number) {
-    assert(this.nodeList.has(id));
-    const { goalIds } = this.nodeList.get(id)!.achievement;
-    return goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
+  public getUuidByText(text: string) {
+    return this.textToUuid.get(text);
   }
 
   /**
-   * Returns the maximum attainable EXP from the achievement
+   * Returns the Goal Text associate to the Goal Uuid or undefined
    *
-   * @param id Achievement Id
+   * @param text goalUuid
    */
-  public getMaxExp(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.maxExp;
+  public getTextByUuid(uuid: string) {
+    return this.goalList.get(uuid)?.text;
   }
 
   /**
-   * Returns EXP earned from the goal
+   * Returns the Achievement Uuid associate to the Achievement Title or undefined
    *
-   * @param goalId Goal Id
+   * @param title achievementTitle
    */
-  public getGoalExp(goalId: number) {
-    assert(this.goalList.has(goalId));
-    return this.goalList.get(goalId)!.exp;
+  public getUuidByTitle(title: string) {
+    return this.titleToUuid.get(title);
   }
 
   /**
-   * Returns the maximum attainable EXP from the goal
+   * Returns the Achievement Title associate to the Achievement Uuid or undefined
    *
-   * @param goalId Goal Id
+   * @param text achievementUuid
    */
-  public getGoalMaxExp(goalId: number) {
-    assert(this.goalList.has(goalId));
-    return this.goalList.get(goalId)!.maxExp;
+  public getTitleByUuid(uuid: string) {
+    return this.nodeList.get(uuid)?.achievement.title;
   }
 
   /**
-   * Returns total EXP earned from all goals
+   * Returns XP earned from the achievement
+   *
+   * @param uuid Achievement Uuid
    */
-  public getTotalExp() {
-    return [...this.goalList.values()].reduce((totalExp, goal) => totalExp + goal.exp, 0);
+  public getAchievementXp(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.xp : 0;
+  }
+
+  /**
+   * Returns the maximum attainable XP from the achievement
+   *
+   * @param uuid Achievement Uuid
+   */
+  public getAchievementMaxXp(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.maxXp : 0;
+  }
+
+  /**
+   * Returns total XP earned from all goals
+   *
+   * Note: Goals that do not belong to any achievement is also added into the total XP
+   * calculation
+   */
+  public getTotalXp() {
+    return this.getAllGoals().reduce((totalXp, goal) => totalXp + goal.xp, 0);
   }
 
   /**
    * Returns the achievement progress percentage in fraction
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getProgressFrac(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.progressFrac;
+  public getProgressFrac(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.progressFrac : 0;
   }
 
   /**
    * Returns the achievement status
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getStatus(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.status;
+  public getStatus(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.status : AchievementStatus.ACTIVE;
   }
 
   /**
    * Returns the achievement display deadline
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getDisplayDeadline(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.displayDeadline;
+  public getDisplayDeadline(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.displayDeadline : undefined;
   }
 
   /**
    * Returns true if the child is a prerequisite of parent achievement
    *
-   * @param id Parent Achievement Id
-   * @param childId Child Achievement Id
+   * @param uuid Parent Achievement Uuid
+   * @param childUuid Child Achievement Uuid
    */
-  public isImmediateChild(id: number, childId: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.children.has(childId);
+  public isImmediateChild(uuid: string, childUuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.children.has(childUuid) : false;
   }
 
   /**
-   * Returns a set of prerequisite id
+   * Returns a set of prerequisite uuid
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getImmediateChildren(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.children;
+  public getImmediateChildren(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.children : new Set<string>();
   }
 
   /**
    * Returns true if an achievement is a descendant of ancestor achievement
    *
-   * @param id Ancestor Achievement Id
-   * @param childId Descendant Achievement Id
+   * @param uuid Ancestor Achievement Uuid
+   * @param childUuid Descendant Achievement Uuid
    */
-  public isDescendant(id: number, childId: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.descendant.has(childId);
+  public isDescendant(uuid: string, childUuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.descendant.has(childUuid) : false;
   }
 
   /**
-   * Returns a set of descendant id
+   * Returns a set of descendant uuid
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public getDescendants(id: number) {
-    assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.descendant;
+  public getDescendants(uuid: string) {
+    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.descendant : new Set<string>();
   }
 
   /**
-   * Returns a list of achievementId that may be a prerequisite of the achievement
+   * Returns a list of achievementUuid that may be a prerequisite of the achievement
    *
-   * @param id Achievement Id
+   * @param uuid Achievement Uuid
    */
-  public listAvailablePrerequisites(id: number) {
-    return this.listIds().filter(
-      target => target !== id && !this.isDescendant(id, target) && !this.isDescendant(target, id)
+  public listAvailablePrerequisiteUuids(uuid: string) {
+    return this.getAllAchievementUuids().filter(
+      target =>
+        target !== uuid && !this.isDescendant(uuid, target) && !this.isDescendant(target, uuid)
     );
   }
 
   /**
-   * Changes the position of the achievement
-   *
-   * Note: positions of achievements are 1-indexed
-   *
-   * @param achievement the AchievementItem
-   * @param newPosition the new position
-   */
-  public changeAchievementPosition(achievement: AchievementItem, newPosition: number) {
-    const achievements = this.getAchievements()
-      .filter(achievement => achievement.isTask)
-      .sort((taskA, taskB) => taskA.position - taskB.position);
-
-    const targetAchievement = achievements.splice(achievement.position - 1, 1)[0];
-    achievements.splice(newPosition - 1, 0, targetAchievement);
-
-    for (let i = Math.min(newPosition - 1, achievement.position); i < achievements.length; i++) {
-      const editedAchievement = achievements[i];
-      editedAchievement.position = i + 1;
-    }
-  }
-
-  /**
-   * Recalculates the InferencerNode data of each achievements, O(N) operation
+   * Recalculates the AchievementNode data of each achievements, O(N) operation
    */
   private processNodes() {
+    this.titleToUuid = new Map();
+
     this.nodeList.forEach(node => {
+      const { title, uuid } = node.achievement;
+      this.titleToUuid.set(title, uuid);
+
+      node.achievement.prerequisiteUuids = uniq(node.achievement.prerequisiteUuids);
+      node.achievement.goalUuids = uniq(node.achievement.goalUuids);
+
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
-      this.generateMaxExp(node);
+      this.generateXpAndMaxXp(node);
       this.generateProgressFrac(node);
       this.generateStatus(node);
     });
-    this.normalizePositions();
+  }
+
+  private processGoals() {
+    this.textToUuid = new Map();
+
+    this.goalList.forEach(goal => {
+      const { text, uuid } = goal;
+      this.textToUuid.set(text, uuid);
+    });
   }
 
   /**
@@ -407,9 +522,9 @@ class AchievementInferencer {
    * @param achievements an array of AchievementItem
    */
   private constructNodeList(achievements: AchievementItem[]) {
-    const nodeList = new Map<number, InferencerNode>();
+    const nodeList = new Map<string, AchievementNode>();
     achievements.forEach(achievement =>
-      nodeList.set(achievement.id, new InferencerNode(achievement))
+      nodeList.set(achievement.uuid, new AchievementNode(achievement))
     );
     return nodeList;
   }
@@ -420,24 +535,28 @@ class AchievementInferencer {
    * @param goals an array of AchievementGoal
    */
   private constructGoalList(goals: AchievementGoal[]) {
-    const goalList = new Map<number, AchievementGoal>();
-    goals.forEach(goal => goalList.set(goal.id, goal));
+    const goalList = new Map<string, AchievementGoal>();
+    goals.forEach(goal => goalList.set(goal.uuid, goal));
     return goalList;
   }
 
   /**
-   * Recursively append grandchildren's id to children, O(N) operation
+   * Recursively append grandchildren's uuid to children, O(N) operation
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateDescendant(node: InferencerNode) {
-    for (const childId of node.descendant) {
-      if (childId === node.achievement.id) {
-        console.error('Circular dependency detected');
+  private generateDescendant(node: AchievementNode) {
+    for (const childUuid of node.descendant) {
+      if (childUuid === node.achievement.uuid) {
+        const { title } = node.achievement;
+        // Note: not the best error handling practice, but as long as admin verifies the
+        // data in AchievementPreview and do not publish new achievements with circular
+        // dependency error, it should be suffice
+        showDangerMessage(`Circular dependency detected in achievement ${title}`, 30000);
       }
-      for (const grandchildId of this.nodeList.get(childId)!.descendant) {
+      for (const grandchildUuid of this.getDescendants(childUuid)) {
         // Newly added grandchild is appended to the back of the set.
-        node.descendant.add(grandchildId);
+        node.descendant.add(grandchildUuid);
         // Hence the great grandchildren will be added when the iterator reaches there
       }
     }
@@ -446,11 +565,12 @@ class AchievementInferencer {
   /**
    * Set the node's display deadline by comparing with all descendants' deadlines
    *
-   * Note: display deadline is the closest unexpired deadline of all descendants
+   * Displays the closest unexpired deadline of all descendants. If none (e.g. descendant
+   * deadlines are expired or undefined), then display the node's own deadline
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateDisplayDeadline(node: InferencerNode) {
+  private generateDisplayDeadline(node: AchievementNode) {
     // Comparator of two deadlines
     const compareDeadlines = (
       displayDeadline: Date | undefined,
@@ -471,9 +591,9 @@ class AchievementInferencer {
     };
 
     // Temporary array of all descendants' deadlines
-    const descendantDeadlines = [];
-    for (const childId of node.descendant) {
-      const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
+    const descendantDeadlines: (Date | undefined)[] = [];
+    for (const childUuid of node.descendant) {
+      const childDeadline = this.getAchievement(childUuid).deadline;
       descendantDeadlines.push(childDeadline);
     }
 
@@ -482,20 +602,26 @@ class AchievementInferencer {
   }
 
   /**
-   * Calculates the achievement maximum attainable EXP
+   * Calculates the achievement attained XP and maximum attainable XP
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateMaxExp(node: InferencerNode) {
-    const { goalIds } = node.achievement;
-    node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
+  private generateXpAndMaxXp(node: AchievementNode) {
+    const { goalUuids } = node.achievement;
+    node.xp = goalUuids.reduce((xp, goalUuid) => xp + this.getGoal(goalUuid).xp, 0);
+    node.maxXp = goalUuids.reduce((maxXp, goalUuid) => maxXp + this.getGoal(goalUuid).maxXp, 0);
   }
 
-  private generateProgressFrac(node: InferencerNode) {
-    const { goalIds } = node.achievement;
-    const exp = goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
+  /**
+   * Calculates the achievement progress percentage between [0..1]
+   *
+   * @param node the AchievementNode
+   */
+  private generateProgressFrac(node: AchievementNode) {
+    const { goalUuids } = node.achievement;
+    const xp = goalUuids.reduce((xp, goalUuid) => xp + this.getGoal(goalUuid).xp, 0);
 
-    node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
+    node.progressFrac = node.maxXp === 0 ? 0 : Math.min(xp / node.maxXp, 1);
   }
 
   /**
@@ -505,51 +631,57 @@ class AchievementInferencer {
    * AchievementStatus.ACTIVE if has at least 1 active descendant
    * AchievementStatus.EXPIRED if none of the above
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateStatus(node: InferencerNode) {
-    const { deadline, goalIds } = node.achievement;
+  private generateStatus(node: AchievementNode) {
+    const { goalUuids } = node.achievement;
+
     const achievementCompleted =
-      goalIds.length !== 0 &&
-      goalIds
-        .map(goalId => this.goalList.get(goalId)!.completed)
+      goalUuids.length !== 0 &&
+      goalUuids
+        .map(goalUuid => this.getGoal(goalUuid).completed)
         .reduce((result, goalCompleted) => result && goalCompleted, true);
 
-    // Temporary array of all descendants' deadlines
-    const descendantDeadlines = [];
-    for (const childId of node.descendant) {
-      const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
-      descendantDeadlines.push(childDeadline);
-    }
-    const hasUnexpiredDeadline = descendantDeadlines.reduce(
-      (result, deadline) => result || !isExpired(deadline),
-      !isExpired(deadline)
-    );
+    const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
-    if (achievementCompleted) {
-      node.status = AchievementStatus.COMPLETED;
-    } else if (hasUnexpiredDeadline) {
-      node.status = AchievementStatus.ACTIVE;
-    } else {
-      node.status = AchievementStatus.EXPIRED;
-    }
+    node.status = achievementCompleted
+      ? AchievementStatus.COMPLETED
+      : hasUnexpiredDeadline
+      ? AchievementStatus.ACTIVE
+      : AchievementStatus.EXPIRED;
   }
 
   /**
-   * Reassign the achievement position number without changing their orders
+   * Reassign the achievement position number without changing their orders.
+   * If anchorUuid and anchorPosition is supplied, the anchor achievement is
+   * guaranteed to have its position set at anchorPosition.
+   *
+   * @param anchorUuid anchor achievementUuid
+   * @param anchorPosition anchor position
    */
-  private normalizePositions() {
-    const posToId = new Map<number, number>();
-    this.getAchievements().forEach(achievement =>
-      posToId.set(achievement.position, achievement.id)
-    );
-
-    const sortedPosToId = [...posToId.entries()].sort();
-
+  private normalizePositions(anchorUuid?: string, anchorPosition?: number) {
     let newPosition = 1;
-    for (const [pos, id] of sortedPosToId) {
-      if (pos !== 0) {
-        this.nodeList.get(id)!.achievement.position = newPosition++;
+    this.getAllAchievements()
+      .filter(achievement => achievement.isTask)
+      .sort((taskA, taskB) => taskA.position - taskB.position)
+      .forEach(sortedTask => (sortedTask.position = newPosition++));
+    this.getAllAchievements()
+      .filter(achievement => !achievement.isTask)
+      .forEach(nonTask => (nonTask.position = 0));
+
+    // If some achievement got misplaced at the anchorPosition, swap it
+    // back with the anchor achievement
+    if (anchorUuid && anchorPosition && anchorPosition !== 0) {
+      const anchorAchievement = this.getAchievement(anchorUuid);
+      const newPosition = anchorAchievement.position;
+      if (newPosition !== anchorPosition) {
+        const misplacedAchievement = this.getAllAchievements().find(
+          achievement => achievement.position === anchorPosition
+        );
+        if (misplacedAchievement) {
+          misplacedAchievement.position = newPosition;
+          anchorAchievement.position = anchorPosition;
+        }
       }
     }
   }

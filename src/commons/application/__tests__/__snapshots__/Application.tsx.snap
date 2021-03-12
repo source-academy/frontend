@@ -28,7 +28,7 @@ exports[`Application shows disabled when in disabled period 1`] = `
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
-      <Route render={[Function: bound ]} />
+      <Route render={[Function: renderDisabled]} />
     </Switch>
   </div>
 </div>"
