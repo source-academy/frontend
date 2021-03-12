@@ -8,6 +8,7 @@ import { ExternalLibraryName } from '../../../commons/application/types/External
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
+import { GitHubFile } from '../../../features/github/GitHubTypes';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {
@@ -32,7 +33,7 @@ const baseProps = {
   usingSubst: false,
   persistenceUser: undefined,
   persistenceFile: undefined,
-  githubUser: undefined,
+  githubOctokitInstance: undefined,
   githubFile: undefined,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
@@ -70,7 +71,13 @@ const baseProps = {
   handlePersistenceSaveFile: () => {},
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
-  handlePersistenceLogOut: () => {}
+  handlePersistenceLogOut: () => {},
+  handleGitHubOpenPicker: () => {},
+  handleGitHubSaveFile: () => {},
+  handleGitHubUpdateFile: (file: GitHubFile) => {},
+  handleGitHubInitialise: () => {},
+  handleGitHubLogIn: () => {},
+  handleGitHubLogOut: () => {}
 };
 
 const testValueProps: PlaygroundProps = {
