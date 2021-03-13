@@ -3,7 +3,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { incrementFirstMaxXp } from '../achievement/utils/eventHandler';
+import { processEvent } from '../achievement/utils/eventHandler';
 import { OverallState } from '../application/ApplicationTypes';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './SideContentHelper';
@@ -129,8 +129,9 @@ const SideContent = (props: SideContentProps) => {
        * To be run when tabs are changed.
        * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
        */
+
       // Achievements test code!
-      incrementFirstMaxXp();
+      processEvent('Run Code');
       const resetAlert = (prevTabId: TabId) => {
         const iconId = generateIconId(prevTabId);
         const icon = document.getElementById(iconId);

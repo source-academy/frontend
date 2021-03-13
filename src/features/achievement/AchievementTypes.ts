@@ -101,10 +101,16 @@ export const defaultGoalProgress = {
 export enum GoalType {
   ASSESSMENT = 'Assessment',
   BINARY = 'Binary',
-  MANUAL = 'Manual'
+  MANUAL = 'Manual',
+  EVENT = 'Event'
 }
 
-export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
+export enum EventType {
+  NONE = 'None', // This is just for the purposes of a default value
+  RUNCODE = 'Run Code'
+}
+
+export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta | EventMeta;
 
 export type AssessmentMeta = {
   type: GoalType.ASSESSMENT;
@@ -120,6 +126,13 @@ export type BinaryMeta = {
 
 export type ManualMeta = {
   type: GoalType.MANUAL;
+  maxXp: number;
+};
+
+export type EventMeta = {
+  type: GoalType.EVENT;
+  eventName: EventType;
+  targetCount: number;
   maxXp: number;
 };
 

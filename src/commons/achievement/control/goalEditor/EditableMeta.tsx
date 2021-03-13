@@ -4,6 +4,7 @@ import React from 'react';
 import {
   AssessmentMeta,
   BinaryMeta,
+  EventMeta,
   GoalMeta,
   GoalType,
   ManualMeta
@@ -12,6 +13,7 @@ import {
 import { metaTemplate } from './GoalTemplate';
 import EditableAssessmentMeta from './metaDetails/EditableAssessmentMeta';
 import EditableBinaryMeta from './metaDetails/EditableBinaryMeta';
+import EditableEventMeta from './metaDetails/EditableEventMeta';
 import EditableManualMeta from './metaDetails/EditableManualMeta';
 
 type EditableMetaProps = {
@@ -40,6 +42,8 @@ function EditableMeta(props: EditableMetaProps) {
         return <EditableBinaryMeta binaryMeta={meta as BinaryMeta} changeMeta={changeMeta} />;
       case GoalType.MANUAL:
         return <EditableManualMeta changeMeta={changeMeta} manualMeta={meta as ManualMeta} />;
+      case GoalType.EVENT:
+        return <EditableEventMeta eventMeta={meta as EventMeta} changeMeta={changeMeta} />;
       default:
         return null;
     }

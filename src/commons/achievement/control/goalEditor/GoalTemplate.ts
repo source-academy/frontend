@@ -1,5 +1,6 @@
 import {
   AchievementGoal,
+  EventType,
   GoalDefinition,
   GoalMeta,
   GoalProgress,
@@ -23,6 +24,13 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
     case GoalType.MANUAL:
       return {
         type: GoalType.MANUAL,
+        maxXp: 0
+      };
+    case GoalType.EVENT:
+      return {
+        type: GoalType.EVENT,
+        eventName: EventType.NONE,
+        targetCount: 0,
         maxXp: 0
       };
   }

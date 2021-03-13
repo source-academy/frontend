@@ -204,8 +204,6 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 
   const achievementGoals = await resp.json();
 
-  console.log(achievementGoals);
-
   return achievementGoals.map(
     (goal: any) =>
       ({
