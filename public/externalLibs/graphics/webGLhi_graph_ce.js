@@ -76,18 +76,49 @@ function translate_curve(x0, y0, z0) {
 
 // ROTATE-AROUND-ORIGIN is of type (JS-Num --> Curve-Transform)
 
-function rotate_around_origin(theta) {
-  var cth = Math.cos(theta)
-  var sth = Math.sin(theta)
-  return function(curve) {
-    var transformation = c => (function(t) {
-      var ct = c(t)
-      var x = x_of(ct)
-      var y = y_of(ct)
-      var z = z_of(ct)
-      return make_3D_color_point(cth * x - sth * y, sth * x + cth * y, z, r_of(ct), g_of(ct), b_of(ct))
-    })
-    return transformation(curve)
+function rotate_around_origin(theta1, theta2, theta3) {
+  if (theta3 == undefined && theta1 != undefined && theta2 != undefined) {
+    // 2 args
+    throw new Error('Expected 1 or 3 arguments, but received 2')
+  } else if (theta1 != undefined && theta2 == undefined && theta3 == undefined) {
+    // 1 args
+    var cth = Math.cos(theta1)
+    var sth = Math.sin(theta1)
+    return function(curve) {
+      var transformation = c => (function(t) {
+        var ct = c(t)
+        var x = x_of(ct)
+        var y = y_of(ct)
+        var z = z_of(ct)
+        return make_3D_color_point(cth * x - sth * y, sth * x + cth * y, z, r_of(ct), g_of(ct), b_of(ct))
+      })
+      return transformation(curve)
+    }
+  } else {
+    var cthx = Math.cos(theta1)
+    var sthx = Math.sin(theta1)
+    var cthy = Math.cos(theta2)
+    var sthy = Math.sin(theta2)
+    var cthz = Math.cos(theta3)
+    var sthz = Math.sin(theta3)
+    return function(curve) {
+      var transformation = c => (function(t) {
+        var ct = c(t)
+        var coord = [x_of(ct), y_of(ct), z_of(ct)]
+        var mat = [
+          [cthz * cthy, cthz * sthy * sthx - sthz * cthx, cthz * sthy * cthx + sthz * sthx],
+          [sthz * cthy, sthz * sthy * sthx + cthz * cthx, sthz * sthy * cthx - cthz * sthx],
+          [-sthy, cthy * sthx, cthy * cthx]]
+        var xf = 0, yf = 0, zf = 0;
+        for (var i = 0; i < 3; i++) {
+          xf += mat[0][i] * coord[i]
+          yf += mat[1][i] * coord[i]
+          zf += mat[2][i] * coord[i]
+        }
+        return make_3D_color_point(xf, yf, zf, r_of(ct), g_of(ct), b_of(ct))
+      })
+      return transformation(curve)
+    }
   }
 }
 
