@@ -28,6 +28,7 @@ import { User } from '../application/types/SessionTypes';
 import {
   Assessment,
   AssessmentCategories,
+  AssessmentStatus,
   AutogradingResult,
   ContestEntry,
   ContestVotingSubmission,
@@ -126,6 +127,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
+  assessmentStatus: AssessmentStatus;
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -488,6 +490,7 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.NEW_LAYERS,
         body: (
           <SideContentContestVotingContainer
+            assessmentStatus={this.props.assessmentStatus}
             handleSave={votingSubmission =>
               this.props.handleSave(contestVotingQuestion.id, votingSubmission)
             }

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
-import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
+import {
+  AssessmentStatus,
+  ContestEntry,
+  ContestVotingSubmission
+} from '../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
 
 export type SideContentContestVotingContainerProps = DispatchProps & StateProps;
@@ -11,6 +15,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  assessmentStatus: AssessmentStatus;
   contestEntries: ContestEntry[];
 };
 
@@ -20,7 +25,7 @@ type StateProps = {
  * (maybe handles API calls?)
  */
 const SideContentContestVotingContainer: React.FunctionComponent<SideContentContestVotingContainerProps> = props => {
-  const { contestEntries, handleSave, handleContestEntryClick } = props;
+  const { assessmentStatus, contestEntries, handleSave, handleContestEntryClick } = props;
   const [votingSubmission, setVotingSubmission] = useState<ContestVotingSubmission>({});
 
   // TODO: Write Backend API call to submit VotingSubmission { } JSON Data
@@ -37,6 +42,7 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
 
   return (
     <SideContentContestVoting
+      assessmentStatus={assessmentStatus}
       handleContestEntryClick={handleContestEntryClick}
       handleVotingSubmissionChange={handleVotingSubmissionChange}
       votingSubmission={votingSubmission}
