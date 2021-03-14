@@ -3,6 +3,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
+import { EventType } from '../../features/achievement/AchievementTypes';
 import { processEvent } from '../achievement/utils/eventHandler';
 import { OverallState } from '../application/ApplicationTypes';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -131,7 +132,7 @@ const SideContent = (props: SideContentProps) => {
        */
 
       // Achievements test code!
-      processEvent('Run Code');
+      processEvent(EventType.RUNCODE);
       const resetAlert = (prevTabId: TabId) => {
         const iconId = generateIconId(prevTabId);
         const icon = document.getElementById(iconId);

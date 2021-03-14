@@ -110,6 +110,19 @@ export enum EventType {
   RUNCODE = 'Run Code'
 }
 
+export enum EventConditions {
+  NONE = 'None',
+  TIME = 'Time', // HHMM
+  DATETIME = 'Datetime' // YYYYMMDDHHMM
+}
+
+// Consider splitting Conditions up into one for each condition, just like GoalMeta
+export type Condition = {
+  type: EventConditions;
+  leftBound: number;
+  rightBound: number;
+};
+
 export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta | EventMeta;
 
 export type AssessmentMeta = {
@@ -131,8 +144,9 @@ export type ManualMeta = {
 
 export type EventMeta = {
   type: GoalType.EVENT;
-  eventName: EventType;
+  eventNames: EventType[];
   targetCount: number;
+  condition: Condition;
   maxXp: number;
 };
 
