@@ -14,14 +14,15 @@ import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
+
+import { initSession, log } from '../../features/eventLogging';
 import {
   CodeDelta,
   Input,
   KeyboardCommand,
   SelectionRange
-} from 'src/features/sourceRecorder/SourceRecorderTypes';
-
-import { initSession, log } from '../../features/eventLogging';
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -48,6 +49,8 @@ import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
+import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
+import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
@@ -121,46 +124,40 @@ export type StateProps = {
   storedQuestionId?: number;
 };
 
-class AssessmentWorkspace extends React.Component<
-  AssessmentWorkspaceProps,
-  {
-    showOverlay: boolean;
-    showResetTemplateOverlay: boolean;
-    sessionId: string;
-  }
-> {
-  public constructor(props: AssessmentWorkspaceProps) {
-    super(props);
-    this.state = {
-      showOverlay: false,
-      showResetTemplateOverlay: false,
-      sessionId: ''
-    };
+const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
+  const [sessionId, setSessionId] = React.useState('');
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
 
-    this.props.handleEditorValueChange('');
-  }
+  React.useEffect(() => {
+    props.handleEditorValueChange('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * After mounting (either an older copy of the assessment
    * or a loading screen), try to fetch a newer assessment,
    * and show the briefing.
    */
-  public componentDidMount() {
-    this.props.handleAssessmentFetch(this.props.assessmentId);
-    if (this.props.questionId === 0 && this.props.notAttempted) {
-      this.setState({ showOverlay: true });
+  React.useEffect(() => {
+    props.handleAssessmentFetch(props.assessmentId);
+
+    if (props.questionId === 0 && props.notAttempted) {
+      setShowOverlay(true);
     }
-    if (!this.props.assessment) {
+    if (!props.assessment) {
       return;
     }
     // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
     // checkWorkspaceReset does exactly the same thing.
-    let questionId = this.props.questionId;
-    if (this.props.questionId >= this.props.assessment.questions.length) {
-      questionId = this.props.assessment.questions.length - 1;
+    let questionId = props.questionId;
+    if (props.questionId >= props.assessment.questions.length) {
+      questionId = props.assessment.questions.length - 1;
     }
 
-    const question: Question = this.props.assessment.questions[questionId];
+    const question: Question = props.assessment.questions[questionId];
 
     let answer = '';
     if (question.type === QuestionTypes.programming) {
@@ -171,27 +168,31 @@ class AssessmentWorkspace extends React.Component<
       }
     }
 
-    this.props.handleEditorValueChange(answer);
-  }
+    props.handleEditorValueChange(answer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Once there is an update (due to the assessment being fetched), check
    * if a workspace reset is needed.
    */
-  public componentDidUpdate() {
-    this.checkWorkspaceReset();
-  }
+  React.useEffect(() => {
+    checkWorkspaceReset();
+  });
 
-  public pushLog = (newInput: Input) => {
-    log(this.state.sessionId, newInput);
+  /* ==================
+     onChange handlers
+     ================== */
+  const pushLog = (newInput: Input) => {
+    log(sessionId, newInput);
   };
 
-  private onChangeMethod = (newCode: string, delta: CodeDelta) => {
-    if (this.props.handleUpdateHasUnsavedChanges) {
-      this.props.handleUpdateHasUnsavedChanges(true);
+  const onChangeMethod = (newCode: string, delta: CodeDelta) => {
+    if (props.handleUpdateHasUnsavedChanges) {
+      props.handleUpdateHasUnsavedChanges(true);
     }
 
-    this.props.handleEditorValueChange(newCode);
+    props.handleEditorValueChange(newCode);
 
     const input: Input = {
       time: Date.now(),
@@ -199,20 +200,20 @@ class AssessmentWorkspace extends React.Component<
       data: delta
     };
 
-    this.pushLog(input);
+    pushLog(input);
   };
 
-  private onCursorChangeMethod = (selection: any) => {
+  const onCursorChangeMethod = (selection: any) => {
     const input: Input = {
       time: Date.now(),
       type: 'cursorPositionChange',
       data: selection.getCursor()
     };
 
-    this.pushLog(input);
+    pushLog(input);
   };
 
-  private onSelectionChangeMethod = (selection: any) => {
+  const onSelectionChangeMethod = (selection: any) => {
     const range: SelectionRange = selection.getRange();
     const isBackwards: boolean = selection.isBackwards();
     if (!isEqual(range.start, range.end)) {
@@ -222,170 +223,43 @@ class AssessmentWorkspace extends React.Component<
         data: { range, isBackwards }
       };
 
-      this.pushLog(input);
+      pushLog(input);
     }
   };
 
-  private handleEval = () => {
-    this.props.handleEditorEval();
+  const handleEval = () => {
+    props.handleEditorEval();
     const input: Input = {
       time: Date.now(),
       type: 'keyboardCommand',
       data: KeyboardCommand.run
     };
 
-    this.pushLog(input);
+    pushLog(input);
   };
 
-  public render() {
-    if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
-      return (
-        <NonIdealState
-          className={classNames('WorkspaceParent', Classes.DARK)}
-          description="Getting mission ready..."
-          icon={<Spinner size={Spinner.SIZE_LARGE} />}
-        />
-      );
-    }
-
-    const overlay = (
-      <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
-        <Card>
-          <Markdown content={this.props.assessment.longSummary} />
-          <Button
-            className="assessment-briefing-button"
-            // tslint:disable-next-line jsx-no-lambda
-            onClick={() => this.setState({ showOverlay: false })}
-            text="Continue"
-          />
-        </Card>
-      </Dialog>
-    );
-
-    const closeOverlay = () => this.setState({ showResetTemplateOverlay: false });
-    const resetTemplateOverlay = (
-      <Dialog
-        className="assessment-reset"
-        icon={IconNames.ERROR}
-        isCloseButtonShown={true}
-        isOpen={this.state.showResetTemplateOverlay}
-        onClose={closeOverlay}
-        title="Confirmation: Reset editor?"
-      >
-        <div className={Classes.DIALOG_BODY}>
-          <Markdown content="Are you sure you want to reset the template?" />
-          <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <ButtonGroup>
-            {controlButton('Cancel', null, closeOverlay, {
-              minimal: false
-            })}
-            {controlButton(
-              'Confirm',
-              null,
-              () => {
-                closeOverlay();
-                this.props.handleEditorValueChange(
-                  (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
-                    .solutionTemplate
-                );
-                this.props.handleUpdateHasUnsavedChanges(true);
-              },
-              { minimal: false, intent: Intent.DANGER }
-            )}
-          </ButtonGroup>
-        </div>
-      </Dialog>
-    );
-
-    /* If questionId is out of bounds, set it to the max. */
-    const questionId =
-      this.props.questionId >= this.props.assessment.questions.length
-        ? this.props.assessment.questions.length - 1
-        : this.props.questionId;
-    const question: Question = this.props.assessment.questions[questionId];
-    const editorProps =
-      question.type === QuestionTypes.programming
-        ? {
-            editorSessionId: '',
-            editorValue: this.props.editorValue!,
-            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-            breakpoints: this.props.breakpoints,
-            highlightedLines: this.props.highlightedLines,
-            newCursorPosition: this.props.newCursorPosition,
-            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-            isEditorAutorun: false,
-            onChange: this.onChangeMethod,
-            onCursorChange: this.onCursorChangeMethod,
-            onSelectionChange: this.onSelectionChangeMethod
-          }
-        : undefined;
-    const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(questionId),
-      editorProps: editorProps,
-
-      editorHeight: this.props.editorHeight,
-      editorWidth: this.props.editorWidth,
-      handleEditorHeightChange: this.props.handleEditorHeightChange,
-      handleEditorWidthChange: this.props.handleEditorWidthChange,
-      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      hasUnsavedChanges: this.props.hasUnsavedChanges,
-      mcqProps: {
-        mcq: question as IMCQQuestion,
-        handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
-      },
-      sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props, questionId),
-      replProps: {
-        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
-        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
-        handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange,
-        output: this.props.output,
-        replValue: this.props.replValue,
-        sourceChapter: question?.library?.chapter || 4,
-        sourceVariant: 'default',
-        externalLibrary: question?.library?.external?.name || 'NONE',
-        replButtons: this.replButtons()
-      }
-    };
-    return (
-      <div className={classNames('WorkspaceParent', Classes.DARK)}>
-        {overlay}
-        {resetTemplateOverlay}
-        <Workspace {...workspaceProps} />
-      </div>
-    );
-  }
-
+  /* ================
+     Helper Functions
+     ================ */
   /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  private checkWorkspaceReset() {
+  const checkWorkspaceReset = () => {
     /* Don't reset workspace if assessment not fetched yet. */
-    if (this.props.assessment === undefined) {
+    if (props.assessment === undefined) {
       return;
     }
 
     /* Reset assessment if it has changed.*/
-    const assessmentId = this.props.assessmentId;
-    const questionId = this.props.questionId;
+    const assessmentId = props.assessmentId;
+    const questionId = props.questionId;
 
-    if (
-      this.props.storedAssessmentId === assessmentId &&
-      this.props.storedQuestionId === questionId
-    ) {
+    if (props.storedAssessmentId === assessmentId && props.storedQuestionId === questionId) {
       return;
     }
 
-    const question = this.props.assessment.questions[questionId];
+    const question = props.assessment.questions[questionId];
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
@@ -406,38 +280,38 @@ class AssessmentWorkspace extends React.Component<
       }
 
       // Initialize session once the editorValue is known.
-      if (!this.state.sessionId) {
-        this.setState({
-          sessionId: initSession(
-            `${(this.props.assessment as any).number}/${this.props.questionId}`,
-            {
-              chapter: question.library.chapter,
-              externalLibrary: question?.library?.external?.name || 'NONE',
-              editorValue
-            }
-          )
-        });
+      if (!sessionId) {
+        setSessionId(
+          initSession(`${(props.assessment as any).number}/${props.questionId}`, {
+            chapter: question.library.chapter,
+            externalLibrary: question?.library?.external?.name || 'NONE',
+            editorValue
+          })
+        );
       }
     }
 
-    this.props.handleEditorUpdateBreakpoints([]);
-    this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-    this.props.handleResetWorkspace({
+    props.handleEditorUpdateBreakpoints([]);
+    props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
+    props.handleResetWorkspace({
       autogradingResults,
       editorPrepend,
       editorValue,
       editorPostpend,
       editorTestcases
     });
-    this.props.handleClearContext(question.library, true);
-    this.props.handleUpdateHasUnsavedChanges(false);
+    props.handleClearContext(question.library, true);
+    props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      this.props.handleEditorValueChange(editorValue);
+      props.handleEditorValueChange(editorValue);
     }
-  }
+  };
 
-  /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
+  /**
+   * sideContentProps() will only be called when props.assessment is not undefined
+   * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
+   */
+  const sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
@@ -466,7 +340,7 @@ class AssessmentWorkspace extends React.Component<
             autogradingResults={
               isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
             }
-            handleTestcaseEval={this.props.handleTestcaseEval}
+            handleTestcaseEval={props.handleTestcaseEval}
           />
         ),
         id: SideContentType.autograder,
@@ -518,22 +392,35 @@ class AssessmentWorkspace extends React.Component<
       });
     }
 
+    const onChangeTabs = (
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
+        return;
+      }
+      setSelectedTab(newTabId);
+    };
+
     return {
       handleActiveTabChange: props.handleActiveTabChange,
-      defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
+      defaultSelectedTabId: isGraded ? SideContentType.grading : selectedTab,
+      selectedTabId: selectedTab,
       tabs,
+      onChange: onChangeTabs,
       workspaceLocation: 'assessment'
     };
   };
 
-  /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`;
-    const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`;
-    const questionProgress: [number, number] = [
-      questionId + 1,
-      this.props.assessment!.questions.length
-    ];
+  /**
+   * controlBarProps() will only be called when props.assessment is not undefined
+   * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
+   */
+  const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
+    const listingPath = `/academy/${assessmentCategoryLink(props.assessment!.category)}`;
+    const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -548,20 +435,20 @@ class AssessmentWorkspace extends React.Component<
         // Perform question blocking - determine the highest question number previously accessed
         // by counting the number of questions that have a non-null answer
         const blockedQuestionId =
-          this.props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
+          props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
 
         // If the current question does not block the next question, proceed as usual
         if (questionId < blockedQuestionId) {
           return deferredNavigate();
         }
         // Else evaluate its correctness - proceed iff the answer to the current question is correct
-        const question: Question = this.props.assessment!.questions[questionId];
+        const question: Question = props.assessment!.questions[questionId];
         if (question.type === QuestionTypes.mcq) {
           if (question.answer !== (question as IMCQQuestion).solution) {
             return showWarningMessage('Your MCQ solution is incorrect!', 750);
           }
         } else if (question.type === QuestionTypes.programming) {
-          const isCorrect = this.props.editorTestcases.reduce((acc, testcase) => {
+          const isCorrect = props.editorTestcases.reduce((acc, testcase) => {
             return acc && stringify(testcase.result) === testcase.answer;
           }, true);
           if (!isCorrect) {
@@ -573,23 +460,20 @@ class AssessmentWorkspace extends React.Component<
     };
 
     const onClickSave = () =>
-      this.props.handleSave(
-        this.props.assessment!.questions[questionId].id,
-        this.props.editorValue!
-      );
+      props.handleSave(props.assessment!.questions[questionId].id, props.editorValue!);
     const onClickResetTemplate = () => {
-      this.setState({ showResetTemplateOverlay: true });
+      setShowResetTemplateOverlay(true);
     };
 
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          this.props.assessment!.category === AssessmentCategories.Path
+          props.assessment!.category === AssessmentCategories.Path
             ? onClickProgress(onClickNext)
             : onClickNext
         }
         onClickReturn={
-          this.props.assessment!.category === AssessmentCategories.Path
+          props.assessment!.category === AssessmentCategories.Path
             ? onClickProgress(onClickReturn)
             : onClickReturn
         }
@@ -611,17 +495,20 @@ class AssessmentWorkspace extends React.Component<
     );
 
     const resetButton =
-      this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+      props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = <ControlBarRunButton handleEditorEval={this.handleEval} key="run" />;
+    const runButton = !isMobileBreakpoint ? (
+      <ControlBarRunButton handleEditorEval={handleEval} key="run" />
+    ) : (
+      <></>
+    );
 
     const saveButton =
-      this.props.canSave &&
-      this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+      props.canSave && props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ControlButtonSaveButton
-          hasUnsavedChanges={this.props.hasUnsavedChanges}
+          hasUnsavedChanges={props.hasUnsavedChanges}
           onClickSave={onClickSave}
           key="save"
         />
@@ -632,7 +519,7 @@ class AssessmentWorkspace extends React.Component<
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
-        sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
+        sourceChapter={props.assessment!.questions[questionId].library.chapter}
         sourceVariant={Constants.defaultSourceVariant as Variant}
         disabled={true}
         key="chapter"
@@ -645,24 +532,188 @@ class AssessmentWorkspace extends React.Component<
     };
   };
 
-  private replButtons() {
+  const mobileSideContentProps: (q: number) => MobileSideContentProps = (questionId: number) => {
+    const onChangeTabs = (
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
+        return;
+      }
+
+      // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
+      if (
+        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
+      ) {
+        setSelectedTab(newTabId);
+      }
+    };
+    return {
+      mobileControlBarProps: {
+        ...controlBarProps(questionId)
+      },
+      ...sideContentProps(props, questionId),
+      onChange: onChangeTabs,
+      selectedTabId: selectedTab,
+      handleEditorEval: handleEval
+    };
+  };
+
+  const replButtons = () => {
     const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
+      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
       <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
         key="eval_repl"
       />
     );
 
     return [evalButton, clearButton];
+  };
+
+  /* ===============
+     Rendering Logic
+     =============== */
+  if (props.assessment === undefined || props.assessment.questions.length === 0) {
+    return (
+      <NonIdealState
+        className={classNames('WorkspaceParent', Classes.DARK)}
+        description="Getting mission ready..."
+        icon={<Spinner size={Spinner.SIZE_LARGE} />}
+      />
+    );
   }
-}
+
+  const overlay = (
+    <Dialog className="assessment-briefing" isOpen={showOverlay}>
+      <Card>
+        <Markdown content={props.assessment.longSummary} />
+        <Button
+          className="assessment-briefing-button"
+          onClick={() => setShowOverlay(false)}
+          text="Continue"
+        />
+      </Card>
+    </Dialog>
+  );
+
+  const closeOverlay = () => setShowResetTemplateOverlay(false);
+  const resetTemplateOverlay = (
+    <Dialog
+      className="assessment-reset"
+      icon={IconNames.ERROR}
+      isCloseButtonShown={true}
+      isOpen={showResetTemplateOverlay}
+      onClose={closeOverlay}
+      title="Confirmation: Reset editor?"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <Markdown content="Are you sure you want to reset the template?" />
+        <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <ButtonGroup>
+          {controlButton('Cancel', null, closeOverlay, {
+            minimal: false
+          })}
+          {controlButton(
+            'Confirm',
+            null,
+            () => {
+              closeOverlay();
+              props.handleEditorValueChange(
+                (props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+              );
+              props.handleUpdateHasUnsavedChanges(true);
+            },
+            { minimal: false, intent: Intent.DANGER }
+          )}
+        </ButtonGroup>
+      </div>
+    </Dialog>
+  );
+
+  /* If questionId is out of bounds, set it to the max. */
+  const questionId =
+    props.questionId >= props.assessment.questions.length
+      ? props.assessment.questions.length - 1
+      : props.questionId;
+  const question: Question = props.assessment.questions[questionId];
+  const editorProps =
+    question.type === QuestionTypes.programming
+      ? {
+          editorSessionId: '',
+          editorValue: props.editorValue!,
+          handleDeclarationNavigate: props.handleDeclarationNavigate,
+          handleEditorEval: props.handleEditorEval,
+          handleEditorValueChange: props.handleEditorValueChange,
+          handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
+          breakpoints: props.breakpoints,
+          highlightedLines: props.highlightedLines,
+          newCursorPosition: props.newCursorPosition,
+          handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
+          handlePromptAutocomplete: props.handlePromptAutocomplete,
+          isEditorAutorun: false,
+          onChange: onChangeMethod,
+          onCursorChange: onCursorChangeMethod,
+          onSelectionChange: onSelectionChangeMethod
+        }
+      : undefined;
+  const mcqProps = {
+    mcq: question as IMCQQuestion,
+    handleMCQSubmit: (option: number) =>
+      props.handleSave(props.assessment!.questions[questionId].id, option)
+  };
+  const replProps = {
+    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleReplEval: props.handleReplEval,
+    handleReplValueChange: props.handleReplValueChange,
+    output: props.output,
+    replValue: props.replValue,
+    sourceChapter: question?.library?.chapter || 4,
+    sourceVariant: 'default' as Variant,
+    externalLibrary: question?.library?.external?.name || 'NONE',
+    replButtons: replButtons()
+  };
+  const workspaceProps: WorkspaceProps = {
+    controlBarProps: controlBarProps(questionId),
+    editorProps: editorProps,
+    editorHeight: props.editorHeight,
+    editorWidth: props.editorWidth,
+    handleEditorHeightChange: props.handleEditorHeightChange,
+    handleEditorWidthChange: props.handleEditorWidthChange,
+    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    hasUnsavedChanges: props.hasUnsavedChanges,
+    mcqProps: mcqProps,
+    sideContentHeight: props.sideContentHeight,
+    sideContentProps: sideContentProps(props, questionId),
+    replProps: replProps
+  };
+  const mobileWorkspaceProps: MobileWorkspaceProps = {
+    editorProps: editorProps,
+    hasUnsavedChanges: props.hasUnsavedChanges,
+    mcqProps: mcqProps,
+    replProps: replProps,
+    mobileSideContentProps: mobileSideContentProps(questionId)
+  };
+
+  return (
+    <div className={classNames('WorkspaceParent', Classes.DARK)}>
+      {overlay}
+      {resetTemplateOverlay}
+      {!isMobileBreakpoint ? (
+        <Workspace {...workspaceProps} />
+      ) : (
+        <MobileWorkspace {...mobileWorkspaceProps} />
+      )}
+    </div>
+  );
+};
 
 export default AssessmentWorkspace;
