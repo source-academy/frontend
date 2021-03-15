@@ -139,31 +139,23 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     -0.5,// amount to rotate in radians
     [0, 0, 1])     // axis to rotate around Z (dynamic)
     cubeRotation += 0.1 * Math.PI
+  } else {
+    min_z = max_z = 0
   }
 
   if (scaleMode == 'fit') {
-    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var center = [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2]
     var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
     scale = scale === 0 ? 1 : scale;
-    space == '3D' 
-      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 2 / scale))
-      : mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
-                                     // use 2 because the value is in [-1, 1]
-    space == '3D' 
-      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
-      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+    mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 2 / scale))
+    mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
   } else if (scaleMode == 'stretch') {
-    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var center = [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2]
     var x_scale = max_x === min_x ? 1 : (max_x - min_x)
     var y_scale = max_y === min_y ? 1 : (max_y - min_y)
     var z_scale = max_z === min_z ? 1 : (max_z - min_z)
-    space == '3D'
-      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 2 / z_scale))
-      : mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
-                                    // use 2 because the value is in [-1, 1]
-    space == '3D' 
-      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
-      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+    mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 2 / z_scale))
+    mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
   }
 
   if(space == '3D'){
