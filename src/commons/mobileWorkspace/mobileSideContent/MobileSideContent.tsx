@@ -53,8 +53,8 @@ type OwnProps = {
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
   const { tabs, defaultSelectedTabId, selectedTabId, handleActiveTabChange, onChange } = props;
-
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
+  const isIOS = /iPhone|iPod/.test(navigator.platform);
 
   React.useEffect(() => {
     // Set initial sideContentActiveTab for this workspace
@@ -141,7 +141,9 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           content={tab.label}
           onOpening={() => {
             // Handles iOS hover requiring double taps to press the button
-            document.getElementById(generateIconId(tabId))?.click();
+            if (isIOS) {
+              document.getElementById(generateIconId(tabId))?.click();
+            }
           }}
         >
           <div className="side-content-tooltip" id={generateIconId(tabId)}>
@@ -162,7 +164,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     };
 
     return dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
-  }, [dynamicTabs, props.workspaceLocation]);
+  }, [dynamicTabs, props.workspaceLocation, isIOS]);
 
   const changeTabsCallback = React.useCallback(
     (
@@ -197,7 +199,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
        * when the component is 'hidden'. We have to manually trigger the editor
        * to update the visible value when switching to the mobile editor tab.
        */
-      if (newTabId == SideContentType.mobileEditor) {
+      if (newTabId === SideContentType.mobileEditor) {
         // props.editorRef.current is null when MCQ is rendered instead of the editor
         props.editorRef.current?.editor.renderer.updateFull();
       }
