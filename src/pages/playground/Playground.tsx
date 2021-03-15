@@ -751,7 +751,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
-      mobileTabs,
+      tabs: mobileTabs,
       workspaceLocation: 'playground',
       handleEditorEval: props.handleEditorEval
     }

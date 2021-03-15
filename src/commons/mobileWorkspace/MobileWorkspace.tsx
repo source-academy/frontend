@@ -151,7 +151,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const updatedMobileSideContentProps = () => {
     return {
       ...props.mobileSideContentProps,
-      mobileTabs: [mobileEditorTab, ...props.mobileSideContentProps.mobileTabs, mobileRunTab]
+      tabs: [mobileEditorTab, ...props.mobileSideContentProps.tabs, mobileRunTab]
     };
   };
 
@@ -196,7 +196,11 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         ref={replRef}
       />
 
-      <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+      <MobileSideContent
+        {...updatedMobileSideContentProps()}
+        {...draggableReplProps}
+        editorRef={editorRef}
+      />
 
       <MobileKeyboard editorRef={keyboardInputRef} />
     </div>
