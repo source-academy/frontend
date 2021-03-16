@@ -499,11 +499,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = !isMobileBreakpoint ? (
-      <ControlBarRunButton handleEditorEval={handleEval} key="run" />
-    ) : (
-      <></>
-    );
+    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
 
     const saveButton =
       props.canSave && props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
@@ -527,7 +523,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     return {
-      editorButtons: [runButton, saveButton, resetButton, chapterSelect],
+      editorButtons: !isMobileBreakpoint
+        ? [runButton, saveButton, resetButton, chapterSelect]
+        : [saveButton, resetButton, chapterSelect],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
