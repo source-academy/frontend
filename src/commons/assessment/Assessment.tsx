@@ -20,6 +20,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
@@ -64,6 +65,7 @@ export type StateProps = {
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
@@ -166,7 +168,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderGradingStatus: boolean
   ) => {
     const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
-    return (
+    return !isMobileBreakpoint ? (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
           <div className="col-xs-3 listing-picture">
@@ -207,6 +209,60 @@ const Assessment: React.FC<AssessmentProps> = props => {
               </Text>
               <div className="listing-button">
                 {renderAttemptButton ? makeAssessmentInteractButton(overview) : null}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    ) : (
+      <div key={index}>
+        <Card className="row listing" elevation={Elevation.ONE}>
+          <div className="col-xs-12">
+            {makeOverviewCardTitle(overview, index, renderGradingStatus)}
+          </div>
+          <div className="col-xs-12">
+            <div className="row">
+              <div className="col-xs-6 listing-picture-mobile">
+                <NotificationBadge
+                  className="badge"
+                  notificationFilter={filterNotificationsByAssessment(overview.id)}
+                  large={true}
+                />
+                <img
+                  alt="Assessment"
+                  className={`cover-image-${overview.status}`}
+                  src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+                />
+              </div>
+              <div className="col-xs-6 listing-text-mobile">
+                <div className="listing-grade">
+                  <H6>
+                    {showGrade
+                      ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+                      : `Max Grade: ${overview.maxGrade}`}
+                  </H6>
+                </div>
+                <div className="listing-xp">
+                  <H6>
+                    {showGrade
+                      ? `XP: ${overview.xp} / ${overview.maxXp}`
+                      : `Max XP: ${overview.maxXp}`}
+                  </H6>
+                </div>
+                <div className="listing-description-mobile">
+                  <Markdown content={overview.shortSummary} />
+                </div>
+              </div>
+              <div className="listing-footer col-xs-12">
+                <Text className="listing-due-date">
+                  <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+                  {beforeNow(overview.openAt)
+                    ? `Due: ${getPrettyDate(overview.closeAt)}`
+                    : `Opens at: ${getPrettyDate(overview.openAt)}`}
+                </Text>
+                <div className="listing-button">
+                  {renderAttemptButton ? makeAssessmentInteractButton(overview) : null}
+                </div>
               </div>
             </div>
           </div>
