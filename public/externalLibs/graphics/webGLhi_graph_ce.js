@@ -40,10 +40,6 @@ function unit_line_at(y) {
   }
 }
 
-function alternative_unit_circle(t) {
-  return make_point(Math.sin(2 * Math.PI * square(t)), Math.cos(2 * Math.PI * square(t)))
-}
-
 // made available for Mission 6
 function arc(t) {
   return make_point(Math.sin(Math.PI * t), Math.cos(Math.PI * t))
@@ -149,58 +145,6 @@ function scale_curve(a1, b1, c1) {
 
 function scale_proportional(s) {
   return scale_curve(s, s, s)
-}
-
-// SQUEEZE-RECTANGULAR-PORTION translates and scales a curve
-// so the portion of the curve in the rectangle
-// with corners xlo xhi ylo yhi will appear in a display window
-// which has x, y coordinates from 0 to 1.
-// It is of type (JS-Num, JS-Num, JS-Num, JS-Num --> Curve-Transform).
-
-function squeeze_rectangular_portion(xlo, xhi, ylo, yhi) {
-  var width = xhi - xlo
-  var height = yhi - ylo
-  if (width === 0 || height === 0) {
-    throw 'attempt to squeeze window to zero'
-  } else {
-    return compose(scale_x_y(1 / width, 1 / height), translate_curve(-xlo, -ylo))
-  }
-}
-
-// SQUEEZE-FULL-VIEW translates and scales a curve such that
-// the ends are fully visible.
-// It is very similar to the squeeze-rectangular-portion procedure
-// only that that procedure does not allow the edges to be easily seen
-
-function squeeze_full_view(xlo, xhi, ylo, yhi) {
-  var width = xhi - xlo
-  var height = yhi - ylo
-  if (width === 0 || height === 0) {
-    throw 'attempt to squeeze window to zero'
-  } else {
-    return compose(
-      scale_x_y(0.99 * 1 / width, 0.99 * 1 / height),
-      translate_curve(-(xlo - 0.01), -(ylo - 0.01))
-    )
-  }
-}
-
-// FULL-VIEW
-
-function full_view_proportional(xlo, xhi, ylo, yhi) {
-  var width = xhi - xlo
-  var height = yhi - ylo
-  if (width === 0 || height === 0) {
-    throw 'attempt to squeeze window to zero'
-  } else {
-    var scale_factor = Math.min(0.9 * 1 / width, 0.9 * 1 / height)
-    var new_mid_x = scale_factor * (xlo + xhi) / 2
-    var new_mid_y = scale_factor * (ylo + yhi) / 2
-    return compose(
-      translate_curve(0.5 - new_mid_x, 0.5 - new_mid_y),
-      scale_x_y(scale_factor, scale_factor)
-    )
-  }
 }
 
 // PUT-IN-STANDARD-POSITION is a Curve-Transform.
