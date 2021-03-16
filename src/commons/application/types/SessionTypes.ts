@@ -17,6 +17,7 @@ export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
 export const LOGIN_GITHUB = 'LOGIN_GITHUB';
 export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
 export const SET_GITHUB_USER_REPOS = 'SET_GITHUB_USER_REPOS';
+export const SET_GITHUB_USERNAME = 'SET_GITHUB_USERNAME';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
@@ -65,6 +66,7 @@ export type SessionState = {
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
   readonly userRepos?: [] | null;
+  readonly username?: string;
   readonly isPickerOpen?: boolean;
 };
 

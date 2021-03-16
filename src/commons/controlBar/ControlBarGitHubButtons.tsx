@@ -34,15 +34,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
 
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
 
-  // const githubUserRepos = store.getState().session.userRepos;
-
-  // const isPickerOpen = store.getState().session.isPickerOpen;
-  const { isPickerOpen } = props;
-
-  React.useEffect(() => {
-    console.log('ControlBar IsPicker==>', isPickerOpen);
-  }, [isPickerOpen]);
-
   const shouldDisableButtons = !isLoggedIn;
   //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
@@ -107,4 +98,3 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     </>
   );
 };
-//      <GitHubOverlay userRepos={githubUserRepos} isPickerOpen={isPickerOpen} />

@@ -30,12 +30,15 @@ export function* GithubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGOUT_GITHUB, function* () {});
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {
-    store.dispatch(actions.setPickerDialog(true));
     const octokitInstance = store.getState().session.githubOctokitInstance || {
-      repos: { listForAuthenticatedUser: () => {} }
-    };
+      repos: { listForAuthenticatedUser: () => {} },
+      users: { getAuthenticated: () => {} }
+    }; // getAuthenticated.data.login .data.name .data.email
     const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGithubUserRepos(userRepos.data));
+    const userName = yield call(octokitInstance.users.getAuthenticated);
+    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+    store.dispatch(actions.setGitHubUsername(userName.data.login));
+    store.dispatch(actions.setPickerDialog(true));
   });
 
   yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {});

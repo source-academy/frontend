@@ -12,6 +12,7 @@ import {
   SessionState,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_USER_REPOS,
+  SET_GITHUB_USERNAME,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
   SET_TOKENS,
@@ -38,16 +39,20 @@ export const SessionsReducer: Reducer<SessionState> = (
         refreshToken: action.payload.refreshToken
       };
     case SET_PICKER_DIALOG:
-      console.log('PICKER===>', action.payload);
       return {
         ...state,
         isPickerOpen: action.payload
       };
     case SET_GITHUB_USER_REPOS:
-      console.log('REPOS==>', JSON.stringify(action.payload));
       return {
         ...state,
         userRepos: action.payload
+      };
+    case SET_GITHUB_USERNAME:
+      console.log('USERNAME IS HERE ==>>' + action.payload);
+      return {
+        ...state,
+        username: action.payload
       };
     case SET_USER:
       return {
