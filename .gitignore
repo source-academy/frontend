@@ -28,6 +28,7 @@ cadet-frontend.iml
 
 npm-debug.log*
 .eslintcache
+yarn-error.log
 
 # emacs backup files
 
