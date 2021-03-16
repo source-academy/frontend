@@ -150,9 +150,36 @@
     }
   }
 
+  .listing-picture-mobile {
+    position: relative;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    img.cover-image-submitted {
+      filter: gray; /* IE6-9 */
+      -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+      filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+    }
+
+    /* Disable grayscale on hover */
+    img.cover-image-submitted:hover {
+      -webkit-filter: grayscale(0);
+      filter: none;
+    }
+  }
+
   .listing-text {
     padding: 0.5rem 0.5rem 0.5rem 1rem;
     border: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .listing-text-mobile {
     display: flex;
     flex-direction: column;
   }
@@ -195,6 +222,19 @@
     & > * {
       /* Limit height of description on smaller screens */
       max-height: 30vh;
+      /* Add padding to visually separate scrollbar from content */
+      padding-right: 0.5rem;
+      overflow-y: auto;
+    }
+  }
+
+  .listing-description-mobile {
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin: 0;
+
+    & > * {
+      height: 100px;
       /* Add padding to visually separate scrollbar from content */
       padding-right: 0.5rem;
       overflow-y: auto;
