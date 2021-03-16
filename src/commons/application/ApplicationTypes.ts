@@ -302,7 +302,9 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  notifications: []
+  notifications: [],
+  userRepos: [],
+  isPickerOpen: false
 };
 
 export const defaultState: OverallState = {

@@ -90,6 +90,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
+  isPickerOpen: state.session.isPickerOpen,
+  userRepos: state.session.userRepos,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitInstance: state.session.githubOctokitInstance,
   githubFile: state.playground.githubFile

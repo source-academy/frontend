@@ -11,6 +11,7 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { GitHubOverlay } from 'src/commons/gitHubOverlay/GitHubOverlay';
 
 import {
   InterpreterOutput,
@@ -134,6 +135,7 @@ export type StateProps = {
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
+  isPickerOpen: boolean | undefined;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -444,6 +446,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         currentFile={githubFile}
         loggedInAs={githubOctokitInstance}
         isDirty={githubIsDirty}
+        isPickerOpen={props.isPickerOpen}
         key="github"
         onClickOpen={props.handleGitHubOpenPicker}
         onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
@@ -457,6 +460,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubOctokitInstance,
     githubFile,
     githubIsDirty,
+    props.isPickerOpen,
     props.handleGitHubSaveFile,
     props.handleGitHubOpenPicker,
     props.handleGitHubLogIn,
@@ -808,6 +812,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handlers={handlers}
     >
       <Workspace {...workspaceProps} />
+      <GitHubOverlay {...props} />
     </HotKeys>
   );
 };

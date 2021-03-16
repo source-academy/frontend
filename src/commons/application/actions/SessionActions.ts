@@ -21,7 +21,9 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SET_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
+  SET_PICKER_DIALOG,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -78,8 +80,12 @@ export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
+export const setPickerDialog = (isOpen?: boolean) => action(SET_PICKER_DIALOG, isOpen);
+
 export const setGitHubOctokitInstance = (user?: string) =>
   action(SET_GITHUB_OCTOKIT_INSTANCE, user);
+
+export const setGithubUserRepos = (repos?: []) => action(SET_GITHUB_USER_REPOS, repos);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {

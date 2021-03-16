@@ -16,6 +16,7 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
 export const LOGIN_GITHUB = 'LOGIN_GITHUB';
 export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
+export const SET_GITHUB_USER_REPOS = 'SET_GITHUB_USER_REPOS';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
@@ -35,6 +36,7 @@ export const UPDATE_GRADING = 'UPDATE_GRADING';
 export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
+export const SET_PICKER_DIALOG = 'SET_PICKER_DIALOG';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -62,6 +64,8 @@ export type SessionState = {
   readonly githubOctokitInstance?: Octokit;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
+  readonly userRepos?: [] | null;
+  readonly isPickerOpen?: boolean;
 };
 
 export type Tokens = {

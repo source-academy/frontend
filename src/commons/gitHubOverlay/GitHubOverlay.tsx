@@ -1,112 +1,93 @@
-import { Classes, DialogStep, MultistepDialog } from '@blueprintjs/core';
-// import { Octokit } from '@octokit/rest';
+import { Classes, DialogStep, MultistepDialog, Radio, RadioGroup } from '@blueprintjs/core';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import * as React from 'react';
 
-export type GitHubOverlayProps = DispatchProps & StateProps & OwnProps;
+import { store } from '../../pages/createStore';
 
-export type DispatchProps = {};
-// handleRepositoryFetch: (repositoryName: string) => void;
-// handleFileFetch: (filePath: string) => void;
-
-export type OwnProps = {};
-
-export type StateProps = {};
+export interface GitHubOverlayProps {
+  loggedInAs?: Octokit;
+  userRepos?: [] | null;
+  isPickerOpen?: boolean;
+}
 
 export interface GitHubOverlayState {
+  autoFocus: boolean;
+  canEscapeKeyClose: boolean;
+  canOutsideClickClose: boolean;
+  enforceFocus: boolean;
+  isOpen: boolean;
+  usePortal: boolean;
   value?: string;
+  repoName?: string;
 }
 
 /*
-const octokit = new Octokit({
-  auth: '5475faa033272e69c3a2e2013938c04d074bf4a0',
-  userAgent: "chekjun",
-  baseUrl: 'https://api.github.com',
-  log: {
-    debug: () => {},
-    info: () => {},
-    warn: console.warn,
-    error: console.error
-  },
-  request: {
-    agent: undefined,
-    fetch: undefined,
-    timeout: 0
-  }
-});
+  PureComponent is exactly the same as Component except that it handles the shouldComponentUpdate method for you.
+  When props or state changes, PureComponent will do a shallow comparison on both props and state.
+  Component on the other hand won't compare current props and state to next out of the box
 */
-
-class GitHubOverlay extends React.Component<
-  GitHubOverlayProps,
-  {
-    showOverlay: boolean;
-    value: string;
-  }
-> {
-  public constructor(props: GitHubOverlayProps) {
-    super(props);
-    this.state = {
-      showOverlay: false,
-      value: ''
-    };
-  }
-
-  handleStringChange(handler: (value: string) => void) {
-    return (event: React.FormEvent<HTMLElement>) =>
-      handler((event.target as HTMLInputElement).value);
-  }
-
-  handleSelectionChange = async () => {
-    return this.handleStringChange(value => this.setState({ value }));
+export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
+  public state: GitHubOverlayState = {
+    autoFocus: true,
+    canEscapeKeyClose: true,
+    canOutsideClickClose: true,
+    enforceFocus: true,
+    isOpen: false,
+    usePortal: true,
+    repoName: ''
   };
 
+  isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+  isPickerOpen = store.getState().session.isPickerOpen;
+  userRepos = store.getState().session.userRepos;
+  setRepoName = (e: any)=>{ 
+    this.setState({repoName: e.target.value})
+  }
+
   public render() {
-    const overlay = (
-      <MultistepDialog className="GitHubPicker" isOpen={this.state.showOverlay}>
+    return (
+      <MultistepDialog className="GitHubPicker" isOpen={this.props.isPickerOpen}>
         <DialogStep
           id="Repository"
-          panel={
-            <RepositoryExplorerPanel
-              onChange={this.handleSelectionChange}
-              selectedValue={this.state.value}
-            />
-          }
+          panel={<RepositoryExplorerPanel userRepos={this.props.userRepos} repoName={this.state.repoName} setRepoName={this.setRepoName} {...this.props} />}
           title="Select Repository"
         />
-        <DialogStep
-          id="Files"
-          panel={<FileExplorerPanel selectedValue={this.state.value} />}
-          title="Select File"
-        />
+        <DialogStep id="Files" panel={<FileExplorerPanel />} title="Select File" />
       </MultistepDialog>
     );
-
-    return <div>{overlay}</div>;
   }
 }
 
 export interface IRepositoryExplorerPanelProps {
-  selectedValue: string;
-  onChange: (event: React.FormEvent<HTMLInputElement>) => void;
+  [a: string]: any;
 }
-
-const RepositoryExplorerPanel: React.FunctionComponent<IRepositoryExplorerPanelProps> = props => (
-  <div className={classNames(Classes.DIALOG_BODY, 'docs-multistep-dialog-example-step')}>
-    <p>Repo List: </p>
-  </div>
-);
+// <pre>{JSON.stringify(props.userRepos, null, 2)}</pre>
+const RepositoryExplorerPanel: React.FunctionComponent<IRepositoryExplorerPanelProps> = props => {
+  const  { userRepos, repoName, setRepoName } = props;
+  return (
+    <div className={classNames(Classes.DIALOG_BODY, 'multistep-dialog-repo-step')}>
+      <p>Repo List: </p>
+      <RadioGroup onChange={setRepoName} selectedValue={repoName}>
+        {
+          userRepos.map((repo: any, i: number) => (
+            <Radio label={repo.name} key={repo.id} value={repo.name} tabIndex={i} />
+            )
+          )
+        }
+      </RadioGroup>
+    </div>
+  )
+};
 
 export interface IFileExplorerPanelProps {
-  selectedValue: string;
+  [a: string]: never;
 }
 
 const FileExplorerPanel: React.FunctionComponent<IFileExplorerPanelProps> = props => {
   return (
-    <div className={classNames(Classes.DIALOG_BODY, 'docs-multistep-dialog-example-step')}>
-      <p>Browsing {props.selectedValue}.</p>
+    <div className={classNames(Classes.DIALOG_BODY, 'multistep-dialog-file-step')}>
       <p>File List: </p>
     </div>
   );
 };
-
-export default GitHubOverlay;

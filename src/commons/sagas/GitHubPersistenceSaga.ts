@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { takeLatest } from 'redux-saga/effects';
+import { call, takeLatest } from 'redux-saga/effects';
 
 import {
   GITHUB_INITIALISE,
@@ -29,7 +29,14 @@ export function* GithubPersistenceSaga(): SagaIterator {
 
   yield takeLatest(LOGOUT_GITHUB, function* () {});
 
-  yield takeLatest(GITHUB_OPEN_PICKER, function* () {});
+  yield takeLatest(GITHUB_OPEN_PICKER, function* () {
+    store.dispatch(actions.setPickerDialog(true));
+    const octokitInstance = store.getState().session.githubOctokitInstance || {
+      repos: { listForAuthenticatedUser: () => {} }
+    };
+    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+    store.dispatch(actions.setGithubUserRepos(userRepos.data));
+  });
 
   yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {});
 

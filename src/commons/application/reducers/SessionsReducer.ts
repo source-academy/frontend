@@ -11,7 +11,9 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   SessionState,
   SET_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
+  SET_PICKER_DIALOG,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -34,6 +36,18 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken
+      };
+    case SET_PICKER_DIALOG:
+      console.log('PICKER===>', action.payload);
+      return {
+        ...state,
+        isPickerOpen: action.payload
+      };
+    case SET_GITHUB_USER_REPOS:
+      console.log('REPOS==>', JSON.stringify(action.payload));
+      return {
+        ...state,
+        userRepos: action.payload
       };
     case SET_USER:
       return {

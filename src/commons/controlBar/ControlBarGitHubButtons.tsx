@@ -7,11 +7,13 @@ import * as React from 'react';
 import { GitHubFile, GitHubState } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
+// import { GitHubOverlay } from '../gitHubOverlay/GitHubOverlay';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
   currentFile?: GitHubFile;
   isDirty?: boolean;
+  isPickerOpen?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
@@ -31,6 +33,16 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   // Or else, the re-render has to be triggered by something else
 
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+
+  // const githubUserRepos = store.getState().session.userRepos;
+
+  // const isPickerOpen = store.getState().session.isPickerOpen;
+  const { isPickerOpen } = props;
+
+  React.useEffect(() => {
+    console.log('ControlBar IsPicker==>', isPickerOpen);
+  }, [isPickerOpen]);
+
   const shouldDisableButtons = !isLoggedIn;
   //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
@@ -73,31 +85,26 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
     : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
 
-  /*
-  const loginButton = props.loggedInAs && (
-    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
-      {controlButton('Log out', IconNames.LOG_IN, props.onClickLogIn)}
-    </Tooltip>
-  );
-  */
-
   return (
-    <Popover2
-      autoFocus={false}
-      content={
-        <div>
-          <ButtonGroup large={true}>
-            {openButton}
-            {saveButton}
-            {saveAsButton}
-            {loginButton}
-          </ButtonGroup>
-        </div>
-      }
-      onOpening={props.onPopoverOpening}
-      popoverClassName={Classes.POPOVER_DISMISS}
-    >
-      {mainButton}
-    </Popover2>
+    <>
+      <Popover2
+        autoFocus={false}
+        content={
+          <div>
+            <ButtonGroup large={true}>
+              {openButton}
+              {saveButton}
+              {saveAsButton}
+              {loginButton}
+            </ButtonGroup>
+          </div>
+        }
+        onOpening={props.onPopoverOpening}
+        popoverClassName={Classes.POPOVER_DISMISS}
+      >
+        {mainButton}
+      </Popover2>
+    </>
   );
 };
+//      <GitHubOverlay userRepos={githubUserRepos} isPickerOpen={isPickerOpen} />
