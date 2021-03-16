@@ -422,10 +422,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
 
-    const onClickPrevious = () =>
+    const onClickPrevious = () => {
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-    const onClickNext = () =>
+      if (isMobileBreakpoint) {
+        setSelectedTab(SideContentType.questionOverview);
+      }
+    };
+    const onClickNext = () => {
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+      if (isMobileBreakpoint) {
+        setSelectedTab(SideContentType.questionOverview);
+      }
+    };
     const onClickReturn = () => history.push(listingPath);
 
     // Returns a nullary function that defers the navigation of the browser window, until the
