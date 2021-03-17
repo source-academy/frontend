@@ -11,23 +11,10 @@ import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 
-export function* GithubPersistenceSaga(): SagaIterator {
-  yield takeLatest(LOGIN_GITHUB, function* () {
-    const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
+export function* GitHubPersistenceSaga(): SagaIterator {
+  yield takeLatest(LOGIN_GITHUB, GitHubLoginSaga);
 
-    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-    const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
-    const windowName = 'Connect With OAuth';
-    const windowSpecs = 'height=600,width=400';
-
-    yield window.open(githubOauthLoginLink, windowName, windowSpecs);
-
-    yield (broadcastChannel.onmessage = receivedMessage => {
-      store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
-    });
-  });
-
-  yield takeLatest(LOGOUT_GITHUB, function* () {});
+  yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
@@ -48,4 +35,27 @@ export function* GithubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_INITIALISE, function* () {});
 }
 
-export default GithubPersistenceSaga;
+export function* GitHubLoginSaga() {
+  const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+  const windowName = 'Connect With OAuth';
+  const windowSpecs = 'height=600,width=400';
+
+  // Create the broadcast channel
+  const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
+
+  broadcastChannel.onmessage = receivedMessage => {
+    store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+  };
+
+  // Creates a window directed towards the GitHub oauth link for this app
+  // After the app has been approved by the user, it will be redirected to our GitHub callback page
+  // We receive the auth token through our broadcast channel
+  yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
+}
+
+export function* GitHubLogoutSaga() {
+  yield store.dispatch(actions.removeGitHubOctokitInstance());
+}
+
+export default GitHubPersistenceSaga;

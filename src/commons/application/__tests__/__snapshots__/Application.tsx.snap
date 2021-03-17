@@ -8,7 +8,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/sourcecast/:sourcecastId?\\" component={[Function: C] { displayName: 'withRouter(Connect(Sourcecast))', WrappedComponent: [Function: Sourcecast], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-      <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
+      <Route path=\\"/callback/github\\" render={[Function: render]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
       <Route path=\\"/achievement\\" render={[Function: redirectToLogin]} />
@@ -28,7 +28,7 @@ exports[`Application shows disabled when in disabled period 1`] = `
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
-      <Route render={[Function: bound ]} />
+      <Route render={[Function: renderDisabled]} />
     </Switch>
   </div>
 </div>"

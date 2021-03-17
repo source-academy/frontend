@@ -75,7 +75,7 @@ export type SideContentTab = {
 export type ModuleSideContent = {
   label: string;
   iconName: IconName;
-  body: (React: any) => (props: any) => JSX.Element;
+  body: (props: any) => JSX.Element;
   toSpawn: (context: DebuggerContext) => boolean;
 };
 
@@ -86,7 +86,4 @@ export type ModuleSideContent = {
  *
  * @property sideContents an array of side content tabs to display on the front end
  */
-export type Modules = {
-  functions: { [key: string]: Function };
-  sideContents: ModuleSideContent[];
-};
+export type Modules = (React: any) => ModuleSideContent;

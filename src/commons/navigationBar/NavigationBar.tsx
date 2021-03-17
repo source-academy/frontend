@@ -2,6 +2,7 @@ import {
   Alignment,
   Button,
   Classes,
+  FocusStyleManager,
   Icon,
   Navbar,
   NavbarDivider,
@@ -38,6 +39,8 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
   const [desktopMenuOpen, setDesktopMenuOpen] = React.useState(true);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+
+  FocusStyleManager.onlyShowFocusOnTabs();
 
   const playgroundOnlyNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>

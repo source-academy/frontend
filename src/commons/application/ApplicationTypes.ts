@@ -303,8 +303,8 @@ export const defaultSession: SessionState = {
   },
   xp: 0,
   notifications: [],
-  userRepos: [],
   username: '',
+  userRepos: [],
   isPickerOpen: false
 };
 

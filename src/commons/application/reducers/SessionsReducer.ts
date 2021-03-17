@@ -5,10 +5,10 @@ import {
   REMOTE_EXEC_UPDATE_SESSION
 } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { SourceActionType } from '../../utils/ActionsHelper';
-import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
+  REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_USER_REPOS,
@@ -38,21 +38,20 @@ export const SessionsReducer: Reducer<SessionState> = (
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken
       };
-    case SET_PICKER_DIALOG:
+    case SET_GITHUB_USERNAME:
       return {
         ...state,
-        isPickerOpen: action.payload
+        username: action.payload
       };
     case SET_GITHUB_USER_REPOS:
       return {
         ...state,
         userRepos: action.payload
       };
-    case SET_GITHUB_USERNAME:
-      console.log('USERNAME IS HERE ==>>' + action.payload);
+    case SET_PICKER_DIALOG:
       return {
         ...state,
-        username: action.payload
+        isPickerOpen: action.payload
       };
     case SET_USER:
       return {
@@ -67,7 +66,7 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_GITHUB_OCTOKIT_INSTANCE:
       return {
         ...state,
-        githubOctokitInstance: generateOctokitInstance(action.payload || '')
+        githubOctokitInstance: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;
@@ -121,6 +120,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         remoteExecutionSession: action.payload
+      };
+    case REMOVE_GITHUB_OCTOKIT_INSTANCE:
+      return {
+        ...state,
+        githubOctokitInstance: undefined
       };
     default:
       return state;

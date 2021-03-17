@@ -16,8 +16,9 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
 export const LOGIN_GITHUB = 'LOGIN_GITHUB';
 export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
-export const SET_GITHUB_USER_REPOS = 'SET_GITHUB_USER_REPOS';
 export const SET_GITHUB_USERNAME = 'SET_GITHUB_USERNAME';
+export const SET_GITHUB_USER_REPOS = 'SET_GITHUB_USER_REPOS';
+export const SET_PICKER_DIALOG = 'SET_PICKER_DIALOG';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
@@ -28,6 +29,7 @@ export const SUBMIT_GRADING = 'SUBMIT_GRADING';
 export const SUBMIT_GRADING_AND_CONTINUE = 'SUBMIT_GRADING_AND_CONTINUE';
 export const REAUTOGRADE_SUBMISSION = 'REAUTOGRADE_SUBMISSION';
 export const REAUTOGRADE_ANSWER = 'REAUTOGRADE_ANSWER';
+export const REMOVE_GITHUB_OCTOKIT_INSTANCE = 'REMOVE_GITHUB_OCTOKIT_INSTANCE';
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
 export const UPDATE_HISTORY_HELPERS = 'UPDATE_HISTORY_HELPERS';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
@@ -37,7 +39,6 @@ export const UPDATE_GRADING = 'UPDATE_GRADING';
 export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
-export const SET_PICKER_DIALOG = 'SET_PICKER_DIALOG';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -63,11 +64,11 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitInstance?: Octokit;
+  readonly username?: string;
+  readonly userRepos?: [] | null;
+  readonly isPickerOpen?: boolean;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
-  readonly userRepos?: [] | null;
-  readonly username?: string;
-  readonly isPickerOpen?: boolean;
 };
 
 export type Tokens = {
