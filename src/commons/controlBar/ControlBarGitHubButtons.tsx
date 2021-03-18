@@ -31,11 +31,9 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
 
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
   const shouldDisableButtons = !isLoggedIn;
-  //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
   const mainButton = controlButton(
-    //(props.currentFile && props.currentFile.name) || 'GitHub',
     'GitHub',
     IconNames.GIT_BRANCH,
     null,
@@ -71,14 +69,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   const loginButton = isLoggedIn
     ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
     : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
-
-  /*
-  const loginButton = props.loggedInAs && (
-    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
-      {controlButton('Log out', IconNames.LOG_IN, props.onClickLogIn)}
-    </Tooltip>
-  );
-  */
 
   return (
     <Popover
