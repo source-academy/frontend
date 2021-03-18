@@ -1,4 +1,4 @@
-import { AssetType } from '../assets/AssetsTypes';
+import { AnimType, AssetType } from '../assets/AssetsTypes';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { createEmptyLocation } from '../location/GameMapHelper';
 import StringUtils from '../utils/StringUtils';
@@ -38,7 +38,8 @@ export default class LocationDetailsParser {
           frameHeight: screenSize.y,
           centreX: screenCenter.x,
           centreY: screenCenter.y,
-          endFrame: parseInt(frame) - 1 || 0
+          endFrame: parseInt(frame) - 1 || 0,
+          animType: AnimType.Background
         }
       });
     });

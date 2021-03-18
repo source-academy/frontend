@@ -1,4 +1,4 @@
-import { AssetType } from '../assets/AssetsTypes';
+import { AnimType, AssetType } from '../assets/AssetsTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
@@ -91,7 +91,8 @@ export default class ObjectParser {
         frameWidth: parseInt(width) || -1,
         centreX: 0,
         centreY: 0,
-        endFrame: parseInt(frame) - 1 || 0
+        endFrame: parseInt(frame) - 1 || 0,
+        animType: AnimType.Object
       }
     });
 

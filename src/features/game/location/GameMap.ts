@@ -140,6 +140,9 @@ class GameMap {
   public getLocationAtId = (locId: LocationId) =>
     mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
 
+  public getAssetByKey = (key: AssetKey) =>
+    mandatory(this.mapAssets.get(key), `Asset ${key} not found!`);
+
   public getLocationIds(): LocationId[] {
     return Array.from(this.locations.keys());
   }

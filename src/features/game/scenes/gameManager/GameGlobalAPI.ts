@@ -334,6 +334,22 @@ class GameGlobalAPI {
   }
 
   /////////////////////
+  //    Animations   //
+  /////////////////////
+
+  public startAnimation(assetKey: AssetKey, startFrame: number, frameRate: number) {
+    const startImage = this.getAssetByKey(assetKey);
+    this.getGameManager()
+      .getAnimationManager()
+      .initiateAnimation(startImage, startFrame, frameRate);
+  }
+
+  public stopAnimation(assetKey: AssetKey) {
+    const stopImage = this.getAssetByKey(assetKey);
+    this.getGameManager().getAnimationManager().stopAnimation(stopImage);
+  }
+
+  /////////////////////
   //      Input      //
   /////////////////////
 
@@ -443,6 +459,9 @@ class GameGlobalAPI {
 
   public getBBoxById(bboxId: ItemId): BBoxProperty {
     return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
+  }
+  public getAssetByKey(assetKey: AssetKey) {
+    return this.getGameMap().getAssetByKey(assetKey);
   }
 }
 

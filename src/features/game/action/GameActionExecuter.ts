@@ -2,7 +2,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { mandatory, sleep } from '../utils/GameUtils';
+import { sleep } from '../utils/GameUtils';
 import { GameActionType } from './GameActionTypes';
 
 /**
@@ -41,26 +41,11 @@ export default class GameActionExecuter {
         globalAPI.renderBackgroundLayerContainer(actionParams.id);
         return;
       case GameActionType.StartAnimation:
-        const startImage = mandatory(
-          globalAPI.getGameMap().getMapAssets().get(actionParams.id),
-          `Asset: ${actionParams.id} not found`
-        );
-        globalAPI
-          .getGameManager()
-          .getAnimationManager()
-          .initiateAnimation(
-            startImage,
-            actionParams.startFrame,
-            actionParams.frameRate,
-            actionParams.assetCategory
-          );
+        // TODO param check
+        globalAPI.startAnimation(actionParams.id, actionParams.startFrame, actionParams.frameRate);
         return;
       case GameActionType.StopAnimation:
-        const stopImage = mandatory(
-          globalAPI.getGameMap().getMapAssets().get(actionParams.id),
-          `Asset: ${actionParams.id} not found`
-        );
-        globalAPI.getGameManager().getAnimationManager().stopAnimation(stopImage);
+        globalAPI.stopAnimation(actionParams.id);
         return;
       case GameActionType.PreviewLocation:
         globalAPI.renderBackgroundLayerContainer(actionParams.id);

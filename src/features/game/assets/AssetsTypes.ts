@@ -12,11 +12,6 @@ export type ImageAsset = {
   config?: ImageConfig;
 };
 
-export enum AssetType {
-  Image = 'Image',
-  Sprite = 'Sprite'
-}
-
 export type ImageConfig = {
   frameWidth: number;
   frameHeight: number;
@@ -25,7 +20,18 @@ export type ImageConfig = {
   endFrame?: number;
   start?: number;
   frameRate?: number;
+  animType?: AnimType;
 };
+
+export enum AssetType {
+  Image = 'Image',
+  Sprite = 'Sprite'
+}
+
+export enum AnimType {
+  Background = 'Background',
+  Object = 'Object'
+}
 
 export type SoundAsset = {
   key: string;

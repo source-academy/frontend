@@ -56,6 +56,7 @@ export default class GlowingImage {
           image.config?.start || 0,
           image.config?.frameRate || 20
         );
+        this.clickArea.setAlpha(0);
         imageAsset = animationManager.getAnimation(image);
         break;
       default:

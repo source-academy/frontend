@@ -1,4 +1,4 @@
-import { AssetType, ImageAsset } from '../assets/AssetsTypes';
+import { AnimType, AssetType, ImageAsset } from '../assets/AssetsTypes';
 import { AssetKey } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -7,30 +7,31 @@ export default class GameAnimationManager {
   private animationInstanceMap = new Map<AssetKey, Phaser.GameObjects.Sprite>();
   private game = GameGlobalAPI.getInstance().getGameManager();
 
-  public initiateAnimation(
-    image: ImageAsset,
-    startFrame: number,
-    frameRate: number,
-    assetCategory: string
-  ) {
+  public initiateAnimation(image: ImageAsset, startFrame: number, frameRate: number) {
     const img = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(image.path);
     if (img && img.config) {
       img.config.start = startFrame;
       img.config.frameRate = frameRate;
     }
 
-    if (assetCategory === 'Object') {
-      const loc = GameGlobalAPI.getInstance().getCurrLocId();
-      GameGlobalAPI.getInstance().addItem(GameItemType.objects, loc, image.key);
-    } else if (assetCategory === 'Background') {
-      GameGlobalAPI.getInstance()
-        .getGameManager()
-        .getBackgroundManager()
-        .renderBackgroundLayerContainer(image.path);
+    switch (img?.config?.animType) {
+      case AnimType.Object:
+        const loc = GameGlobalAPI.getInstance().getCurrLocId();
+        GameGlobalAPI.getInstance().addItem(GameItemType.objects, loc, image.key);
+        break;
+      case AnimType.Background:
+        GameGlobalAPI.getInstance()
+          .getGameManager()
+          .getBackgroundManager()
+          .renderBackgroundLayerContainer(image.path);
+        break;
+      default:
+        break;
     }
   }
 
   public startAnimation(image: ImageAsset, startFrame: number, frameRate: number) {
+    // check for animation
     this.removeAnimation(image);
     const sprite = new Phaser.GameObjects.Sprite(
       this.game,
@@ -56,8 +57,6 @@ export default class GameAnimationManager {
   public stopAnimation(image: ImageAsset) {
     const sprite = this.animationInstanceMap.get(image.key);
     if (image.type === AssetType.Sprite && sprite !== undefined && sprite.anims !== undefined) {
-      console.log(sprite);
-      console.log(sprite.anims);
       sprite.anims.stop();
     }
   }
