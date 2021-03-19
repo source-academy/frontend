@@ -1,7 +1,5 @@
+import * as QueryString from 'query-string';
 import { useEffect, useState } from 'react';
-
-import { URIField } from '../../features/github/GitHubClasses';
-import { encodeAsURL } from '../../features/github/GitHubUtils';
 
 export type GitHubCallbackProps = {
   clientID?: string;
@@ -46,11 +44,10 @@ export function GitHubCallback(props: GitHubCallbackProps) {
       return;
     }
 
-    // Create message body to be sent to back-end microservice
-    const messageBody = encodeAsURL([
-      new URIField('code', accessCode),
-      new URIField('clientId', clientId)
-    ]);
+    const messageBody = QueryString.stringify({
+      code: accessCode,
+      clientId: clientId
+    });
 
     exchangeAccessCodeForAuthTokenContainingObject(backendLink, messageBody)
       .then(res => res.json())

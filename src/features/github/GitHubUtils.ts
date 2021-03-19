@@ -1,5 +1,3 @@
-import { URIField } from './GitHubClasses';
-
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
  *
@@ -30,25 +28,4 @@ export function grabAccessCodeFromURL(currentURLAddress: string): string {
   const urlParams = new URLSearchParams(currentURLAddress);
   const accessCode = urlParams.get('code') || '';
   return accessCode;
-}
-
-/**
- * Converts an array of URI fragments into a single URL-encoded string
- *
- * @param {URIField[]} messageBodyPrototype An array of URIFields, each corresponding to a URI fragment
- * @return {string} The URL-encoded string
- */
-export function encodeAsURL(messageBodyPrototype: URIField[]): string {
-  const uriComponents: string[] = [];
-
-  messageBodyPrototype.forEach(element => {
-    const field = element.name || '';
-
-    // We need to check for the edge-case where the value is literally false
-    const value = element.value === false ? false : element.value || '';
-
-    uriComponents.push([encodeURIComponent(field), encodeURIComponent(value)].join('='));
-  });
-
-  return uriComponents.join('&');
 }
