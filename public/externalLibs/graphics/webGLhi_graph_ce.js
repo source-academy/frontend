@@ -40,10 +40,6 @@ function unit_line_at(y) {
   }
 }
 
-function alternative_unit_circle(t) {
-  return make_point(Math.sin(2 * Math.PI * square(t)), Math.cos(2 * Math.PI * square(t)))
-}
-
 // made available for Mission 6
 function arc(t) {
   return make_point(Math.sin(Math.PI * t), Math.cos(Math.PI * t))
@@ -76,18 +72,49 @@ function translate_curve(x0, y0, z0) {
 
 // ROTATE-AROUND-ORIGIN is of type (JS-Num --> Curve-Transform)
 
-function rotate_around_origin(theta) {
-  var cth = Math.cos(theta)
-  var sth = Math.sin(theta)
-  return function(curve) {
-    var transformation = c => (function(t) {
-      var ct = c(t)
-      var x = x_of(ct)
-      var y = y_of(ct)
-      var z = z_of(ct)
-      return make_3D_color_point(cth * x - sth * y, sth * x + cth * y, z, r_of(ct), g_of(ct), b_of(ct))
-    })
-    return transformation(curve)
+function rotate_around_origin(theta1, theta2, theta3) {
+  if (theta3 == undefined && theta1 != undefined && theta2 != undefined) {
+    // 2 args
+    throw new Error('Expected 1 or 3 arguments, but received 2')
+  } else if (theta1 != undefined && theta2 == undefined && theta3 == undefined) {
+    // 1 args
+    var cth = Math.cos(theta1)
+    var sth = Math.sin(theta1)
+    return function(curve) {
+      var transformation = c => (function(t) {
+        var ct = c(t)
+        var x = x_of(ct)
+        var y = y_of(ct)
+        var z = z_of(ct)
+        return make_3D_color_point(cth * x - sth * y, sth * x + cth * y, z, r_of(ct), g_of(ct), b_of(ct))
+      })
+      return transformation(curve)
+    }
+  } else {
+    var cthx = Math.cos(theta1)
+    var sthx = Math.sin(theta1)
+    var cthy = Math.cos(theta2)
+    var sthy = Math.sin(theta2)
+    var cthz = Math.cos(theta3)
+    var sthz = Math.sin(theta3)
+    return function(curve) {
+      var transformation = c => (function(t) {
+        var ct = c(t)
+        var coord = [x_of(ct), y_of(ct), z_of(ct)]
+        var mat = [
+          [cthz * cthy, cthz * sthy * sthx - sthz * cthx, cthz * sthy * cthx + sthz * sthx],
+          [sthz * cthy, sthz * sthy * sthx + cthz * cthx, sthz * sthy * cthx - cthz * sthx],
+          [-sthy, cthy * sthx, cthy * cthx]]
+        var xf = 0, yf = 0, zf = 0;
+        for (var i = 0; i < 3; i++) {
+          xf += mat[0][i] * coord[i]
+          yf += mat[1][i] * coord[i]
+          zf += mat[2][i] * coord[i]
+        }
+        return make_3D_color_point(xf, yf, zf, r_of(ct), g_of(ct), b_of(ct))
+      })
+      return transformation(curve)
+    }
   }
 }
 
@@ -118,58 +145,6 @@ function scale_curve(a1, b1, c1) {
 
 function scale_proportional(s) {
   return scale_curve(s, s, s)
-}
-
-// SQUEEZE-RECTANGULAR-PORTION translates and scales a curve
-// so the portion of the curve in the rectangle
-// with corners xlo xhi ylo yhi will appear in a display window
-// which has x, y coordinates from 0 to 1.
-// It is of type (JS-Num, JS-Num, JS-Num, JS-Num --> Curve-Transform).
-
-function squeeze_rectangular_portion(xlo, xhi, ylo, yhi) {
-  var width = xhi - xlo
-  var height = yhi - ylo
-  if (width === 0 || height === 0) {
-    throw 'attempt to squeeze window to zero'
-  } else {
-    return compose(scale_x_y(1 / width, 1 / height), translate_curve(-xlo, -ylo))
-  }
-}
-
-// SQUEEZE-FULL-VIEW translates and scales a curve such that
-// the ends are fully visible.
-// It is very similar to the squeeze-rectangular-portion procedure
-// only that that procedure does not allow the edges to be easily seen
-
-function squeeze_full_view(xlo, xhi, ylo, yhi) {
-  var width = xhi - xlo
-  var height = yhi - ylo
-  if (width === 0 || height === 0) {
-    throw 'attempt to squeeze window to zero'
-  } else {
-    return compose(
-      scale_x_y(0.99 * 1 / width, 0.99 * 1 / height),
-      translate_curve(-(xlo - 0.01), -(ylo - 0.01))
-    )
-  }
-}
-
-// FULL-VIEW
-
-function full_view_proportional(xlo, xhi, ylo, yhi) {
-  var width = xhi - xlo
-  var height = yhi - ylo
-  if (width === 0 || height === 0) {
-    throw 'attempt to squeeze window to zero'
-  } else {
-    var scale_factor = Math.min(0.9 * 1 / width, 0.9 * 1 / height)
-    var new_mid_x = scale_factor * (xlo + xhi) / 2
-    var new_mid_y = scale_factor * (ylo + yhi) / 2
-    return compose(
-      translate_curve(0.5 - new_mid_x, 0.5 - new_mid_y),
-      scale_x_y(scale_factor, scale_factor)
-    )
-  }
 }
 
 // PUT-IN-STANDARD-POSITION is a Curve-Transform.
