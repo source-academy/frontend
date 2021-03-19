@@ -49,19 +49,33 @@ export function GitHubCallback(props: GitHubCallbackProps) {
       clientId: clientId
     });
 
-    exchangeAccessCodeForAuthTokenContainingObject(backendLink, messageBody)
-      .then(res => res.json())
-      .then(res => updatePageAccordingToResponse(res, setMessage));
+    retrieveAuthTokenUpdatePage(
+      backendLink,
+      messageBody,
+      exchangeAccessCodeForAuthTokenContainingObject,
+      setMessage
+    );
   }, [clientId, grabAccessCodeFromURL, exchangeAccessCodeForAuthTokenContainingObject]);
 
   return <div>{message}</div>;
 }
 
-function updatePageAccordingToResponse(
-  response: any,
+async function retrieveAuthTokenUpdatePage(
+  backendLink: string,
+  messageBody: string,
+  exchangeAccessCodeForAuthTokenContainingObject: (
+    backendLink: string,
+    messageBody: string
+  ) => Promise<Response>,
   setMessage: (value: React.SetStateAction<string>) => void
 ) {
-  const requestSuccess = typeof response.access_token != 'undefined';
+  const responseObject = await exchangeAccessCodeForAuthTokenContainingObject(
+    backendLink,
+    messageBody
+  );
+  const response = await responseObject.json();
+
+  const requestSuccess = typeof response.access_token !== 'undefined';
 
   if (requestSuccess) {
     // Send auth token back to the main browser page
