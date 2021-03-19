@@ -26,7 +26,7 @@ test('Application Client ID not deployed renders correctly', () => {
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(0);
 
-  const tree = component.toJSON();
+  const tree = component?.toJSON();
   expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
@@ -57,7 +57,7 @@ test('Access code not found in return url renders correctly', () => {
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(0);
 
-  const tree = component.toJSON();
+  const tree = component?.toJSON();
   expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
@@ -88,7 +88,7 @@ test('Cannot connect to server renders correctly', () => {
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
-  const tree = component.toJSON();
+  const tree = component?.toJSON();
   expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
@@ -119,7 +119,7 @@ test('Successful retrieval of auth token renders correctly', () => {
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
-  const tree = component.toJSON();
+  const tree = component?.toJSON();
   expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
