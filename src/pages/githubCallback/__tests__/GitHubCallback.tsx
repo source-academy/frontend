@@ -28,7 +28,7 @@ test('Application Client ID not deployed renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (component) {
+  if (typeof component !== 'undefined') {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   }
@@ -63,7 +63,7 @@ test('Access code not found in return url renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (component) {
+  if (typeof component !== 'undefined') {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   }
@@ -98,7 +98,7 @@ test('Cannot connect to server renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (component) {
+  if (typeof component !== 'undefined') {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   }
@@ -133,7 +133,7 @@ test('Successful retrieval of auth token renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (component) {
+  if (typeof component !== 'undefined') {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   }
