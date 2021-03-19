@@ -169,35 +169,35 @@ test('setGitHubOctokitInstance generates correct action object', async () => {
 
   expect(action.type).toEqual(SET_GITHUB_OCTOKIT_INSTANCE);
 
-  // We need to do this because the auth() function returns a unknown Promise
+  const authObject = await action.payload.auth();
+
+  // Workaround: auth() function returns a unknown Promise
   // Typescript will not allow us to directly call the properties
-  action.payload.auth().then(authObject => {
-    const stringified = JSON.stringify(authObject);
-    const json = JSON.parse(stringified);
+  const stringified = JSON.stringify(authObject);
+  const json = JSON.parse(stringified);
 
-    const keys = Object.keys(json);
-    const values = Object.values(json);
+  const keys = Object.keys(json);
+  const values = Object.values(json);
 
-    expect(keys.length).toEqual(values.length);
+  expect(keys.length).toEqual(values.length);
 
-    let existsKeyToken = false;
-    let existsKeyTokenType = false;
+  let existsKeyToken = false;
+  let existsKeyTokenType = false;
 
-    for (let i = 0; i < keys.length; i++) {
-      if (keys[i] === 'token') {
-        existsKeyToken = true;
-        expect(values[i] === authToken);
-      }
-
-      if (keys[i] === 'tokenType') {
-        existsKeyTokenType = true;
-        expect(values[i] === 'oauth');
-      }
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i] === 'token') {
+      existsKeyToken = true;
+      expect(values[i] === authToken);
     }
 
-    expect(existsKeyToken).toBe(true);
-    expect(existsKeyTokenType).toBe(true);
-  });
+    if (keys[i] === 'tokenType') {
+      existsKeyTokenType = true;
+      expect(values[i] === 'oauth');
+    }
+  }
+
+  expect(existsKeyToken).toBe(true);
+  expect(existsKeyTokenType).toBe(true);
 });
 
 test('submitAnswer generates correct action object', () => {

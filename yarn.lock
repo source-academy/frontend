@@ -1497,9 +1497,9 @@
     "@octokit/types" "^6.0.3"
 
 "@octokit/core@^3.2.3":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@octokit/core/-/core-3.3.0.tgz#58afc26c302e22cf97491bad9a30b2f33e2bcaed"
-  integrity sha512-GGMpjaodCBY7JrtOwfolMocwZw9Pj5NxuQqfaJhGau4tkyonm0JRV9D6juQYLMb1Kl261++4Q980o0FlAtg8jg==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@octokit/core/-/core-3.3.1.tgz#c6bb6ba171ad84a5f430853a98892cfe8f93d8cd"
+  integrity sha512-Dc5NNQOYjgZU5S1goN6A/E500yXOfDUFRGQB8/2Tl16AcfvS3H9PudyOe3ZNE/MaVyHPIfC0htReHMJb1tMrvw==
   dependencies:
     "@octokit/auth-token" "^2.4.4"
     "@octokit/graphql" "^4.5.8"
@@ -1533,9 +1533,9 @@
   integrity sha512-NxF1yfYOUO92rCx3dwvA2onF30Vdlg7YUkMVXkeptqpzA3tRLplThhFleV/UKWFgh7rpKu1yYRbvNDUtzSopKA==
 
 "@octokit/plugin-paginate-rest@^2.6.2":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-2.11.0.tgz#3568c43896a3355f4a0bbb3a64f443b2abdc760d"
-  integrity sha512-7L9xQank2G3r1dGqrVPo1z62V5utbykOUzlmNHPz87Pww/JpZQ9KyG5CHtUzgmB4n5iDRKYNK/86A8D98HP0yA==
+  version "2.13.2"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-2.13.2.tgz#7b8244a0dd7a31135ba2adc58a533213837bfe87"
+  integrity sha512-mjfBcla00UNS4EI/NN7toEbUM45ow3kk4go+LxsXAFLQodsrXcIZbftUhXTqi6ZKd+r6bcqMI+Lv4dshLtFjww==
   dependencies:
     "@octokit/types" "^6.11.0"
 
@@ -11269,10 +11269,10 @@ react-shallow-renderer@^16.13.1:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0"
 
-react-simple-keyboard@^2.5.179:
-  version "2.5.179"
-  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-2.5.179.tgz#1371f3b7e37ffe90f4593278f2ced643d2998c4e"
-  integrity sha512-ACoaFbl61WKOab/WViHUdxzjJQVbJ/2pX+To7I0Ljv1b164EYDf6raryEqsdo9DmzQI5e1qNg9Wu6xmhmrs4iA==
+react-simple-keyboard@^2.5.160:
+  version "2.5.160"
+  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-2.5.160.tgz#2a6954ac0e59d13a8a2233aafe4b359ba574949c"
+  integrity sha512-gDRFC61yV3sjbR+y4K/ZhtCwlNULeTLASkHfADytv7SeVJtwEKygwpLERmeOs85iH+9gAj4nAgmI/rezUVydFg==
 
 react-sortable-hoc@^1.11.0:
   version "1.11.0"
