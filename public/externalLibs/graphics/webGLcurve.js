@@ -63,9 +63,6 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       max_y = Math.max(max_y, y)
       min_z = Math.min(min_z, z)
       max_z = Math.max(max_z, z)
-      if (Math.max(max_x, max_y, max_z, -min_x, -min_y, -min_z) > Math.pow(10, 32)) {
-        throw "The absolute value of the coordinates of the curve is too big!"
-      }
     }
   }
   evaluator(numPoints, func)
@@ -84,7 +81,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   }
 
   // box generation
-  if(space == '3D'){
+  if (space == '3D') {
     drawCubeArray.push(
       -1, 1, 1, -1, -1, 1,
       -1, -1, -1, -1, 1, -1,
@@ -95,78 +92,78 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       -1, 1, 1, -1, 1, -1,
       1, 1, -1, 1, 1, 1
     )
-    var scale_x, scale_y, scale_z
-    scale_x = scale_y = scale_z = 2
-    var translate_x, translate_y, translate_z
-    translate_x = translate_y = translate_z = 0
-    if (scaleMode == 'fit') {
-      var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
-      scale = scale === 0 ? 1 : scale;
-      scale_x = scale_y = scale_z = scale
-      translate_x = (min_x + max_x) / 2
-      translate_y = (min_y + max_y) / 2
-      translate_z = (min_z + max_z) / 2
-    } else if (scaleMode == 'stretch') {
-      var scale_x = max_x === min_x ? 1 : (max_x - min_x)
-      var scale_y = max_y === min_y ? 1 : (max_y - min_y)
-      var scale_z = max_z === min_z ? 1 : (max_z - min_z)
-      translate_x = (min_x + max_x) / 2
-      translate_y = (min_y + max_y) / 2
-      translate_z = (min_z + max_z) / 2
-    }
-
-    for (var i = 0; i < drawCubeArray.length; i++) {
-      if (i % 3 == 0) {
-        drawCubeArray[i] /= 2 / scale_x
-        drawCubeArray[i] += translate_x
-      } else if (i % 3 == 1) {
-        drawCubeArray[i] /= 2 / scale_y
-        drawCubeArray[i] += translate_y
-      } else {
-        drawCubeArray[i] /= 2 / scale_z
-        drawCubeArray[i] += translate_z
-      }
-    }
-    var scale = Math.sqrt(1 / 3.1) 
-    mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, scale))
-    curveObject.drawCube = drawCubeArray
-
-    mat4.translate(transMat, transMat, [0, 0, -5])
-    //Rotation
-    mat4.rotate(transMat, transMat, -(Math.PI/2), [1, 0, 0]) // axis to rotate around X (static)
-    mat4.rotate(transMat, transMat,
-    // cubeRotation * .7,// amount to rotate in radians
-    -0.5,// amount to rotate in radians
-    [0, 0, 1])     // axis to rotate around Z (dynamic)
-    cubeRotation += 0.1 * Math.PI
+  } else {
+    min_z = max_z = 0
   }
 
   if (scaleMode == 'fit') {
-    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var center = [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2]
     var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
     scale = scale === 0 ? 1 : scale;
-    space == '3D' 
-      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 2 / scale))
-      : mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
-                                     // use 2 because the value is in [-1, 1]
-    space == '3D' 
-      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
-      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+    if (space == '3D') {
+      for (var i = 0; i < curvePosArray.length; i++) {
+        if (i % 3 == 0) {
+          curvePosArray[i] -= center[0]
+          curvePosArray[i] /= scale/2
+        } else if (i % 3 == 1) {
+          curvePosArray[i] -= center[1]
+          curvePosArray[i] /= scale/2
+        } else {
+          curvePosArray[i] -= center[2]
+          curvePosArray[i] /= scale/2
+        }
+      }
+    } else {
+      for (var i = 0; i < curvePosArray.length; i++) {
+        if (i % 2 == 0) {
+          curvePosArray[i] -= center[0]
+          curvePosArray[i] /= scale/2
+        } else {
+          curvePosArray[i] -= center[1]
+          curvePosArray[i] /= scale/2
+        }
+      }
+    }
   } else if (scaleMode == 'stretch') {
-    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var center = [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2]
     var x_scale = max_x === min_x ? 1 : (max_x - min_x)
     var y_scale = max_y === min_y ? 1 : (max_y - min_y)
     var z_scale = max_z === min_z ? 1 : (max_z - min_z)
-    space == '3D'
-      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 2 / z_scale))
-      : mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
-                                    // use 2 because the value is in [-1, 1]
-    space == '3D' 
-      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
-      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+    if (space == '3D') {
+      for (var i = 0; i < curvePosArray.length; i++) {
+        if (i % 3 == 0) {
+          curvePosArray[i] -= center[0]
+          curvePosArray[i] /= x_scale/2
+        } else if (i % 3 == 1) {
+          curvePosArray[i] -= center[1]
+          curvePosArray[i] /= y_scale/2
+        } else {
+          curvePosArray[i] -= center[2]
+          curvePosArray[i] /= z_scale/2
+        }
+      }
+    } else {
+      for (var i = 0; i < curvePosArray.length; i++) {
+        if (i % 2 == 0) {
+          curvePosArray[i] -= center[0]
+          curvePosArray[i] /= x_scale/2
+        } else {
+          curvePosArray[i] -= center[1]
+          curvePosArray[i] /= y_scale/2
+        }
+      }
+    }
   }
 
-  if(space == '3D'){
+  if (space == '3D') {
+    var scale = Math.sqrt(1 / 3.1)
+    mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, scale))
+    curveObject.drawCube = drawCubeArray
+    mat4.translate(transMat, transMat, [0, 0, -5])
+    mat4.rotate(transMat, transMat, -(Math.PI / 2), [1, 0, 0])  // axis to rotate around X
+    mat4.rotate(transMat, transMat, -0.5, [0, 0, 1])            // axis to rotate around Z
+    cubeRotation += 0.1 * Math.PI
+
     const fieldOfView = 45 * Math.PI / 180;
     const aspect = gl.canvas.width / gl.canvas.height;
     const zNear = 0;
