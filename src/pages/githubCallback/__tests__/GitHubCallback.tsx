@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 
 import GitHubCallback from '../GitHubCallback';
 
+/*
 test('Access code not found in return url renders correctly', () => {
   const props = {
     clientID: '12345',
@@ -76,3 +77,4 @@ async function stubExchangeAccessCodeForAuthTokenSimulateSuccess(
     return res;
   });
 }
+*/

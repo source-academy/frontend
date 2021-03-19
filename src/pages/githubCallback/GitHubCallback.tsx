@@ -1,30 +1,21 @@
 import * as QueryString from 'query-string';
 import { useEffect, useState } from 'react';
 
-export type GitHubCallbackProps = {
-  clientID?: string;
-  exchangeAccessCodeForAuthTokenContainingObject: (
-    backendLink: string,
-    messageBody: string
-  ) => Promise<Response>;
-  grabAccessCodeFromURL: (currentURLAddress: string) => string;
-};
+import {
+  exchangeAccessCodeForAuthTokenContainingObject,
+  grabAccessCodeFromURL
+} from '../../features/github/GitHubUtils';
 
 /**
  * The page that the user is redirected to after they have approved the app through GitHub.
  * This page will complete the OAuth workflow by sending the access code the back-end to retrieve the auth-token.
  * The auth-token is then broadcasted back to the main browser page.
  */
-export function GitHubCallback(props: GitHubCallbackProps) {
+export function GitHubCallback() {
   const [message, setMessage] = useState('You have reached the GitHub callback page');
 
-  // Destructure the properties outside of 'useEffect'
-  const clientId = props.clientID || '';
-  const grabAccessCodeFromURL = props.grabAccessCodeFromURL;
-  const exchangeAccessCodeForAuthTokenContainingObject =
-    props.exchangeAccessCodeForAuthTokenContainingObject;
-
   useEffect(() => {
+    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
     const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
 
     const currentAddress = window.location.search;
@@ -49,13 +40,8 @@ export function GitHubCallback(props: GitHubCallbackProps) {
       clientId: clientId
     });
 
-    retrieveAuthTokenUpdatePage(
-      backendLink,
-      messageBody,
-      exchangeAccessCodeForAuthTokenContainingObject,
-      setMessage
-    );
-  }, [clientId, grabAccessCodeFromURL, exchangeAccessCodeForAuthTokenContainingObject]);
+    retrieveAuthTokenUpdatePage(backendLink, messageBody, setMessage);
+  }, []);
 
   return <div>{message}</div>;
 }
@@ -63,10 +49,6 @@ export function GitHubCallback(props: GitHubCallbackProps) {
 async function retrieveAuthTokenUpdatePage(
   backendLink: string,
   messageBody: string,
-  exchangeAccessCodeForAuthTokenContainingObject: (
-    backendLink: string,
-    messageBody: string
-  ) => Promise<Response>,
   setMessage: (value: React.SetStateAction<string>) => void
 ) {
   const responseObject = await exchangeAccessCodeForAuthTokenContainingObject(
