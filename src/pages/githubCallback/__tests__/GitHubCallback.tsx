@@ -21,12 +21,13 @@ test('Application Client ID not deployed renders correctly', () => {
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
   });
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(0);
+
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -51,12 +52,13 @@ test('Access code not found in return url renders correctly', () => {
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
   });
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(0);
+
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -81,12 +83,13 @@ test('Cannot connect to server renders correctly', () => {
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
   });
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
+
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -111,12 +114,13 @@ test('Successful retrieval of auth token renders correctly', () => {
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
   });
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
+
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
