@@ -12,9 +12,9 @@ import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
-  yield takeLatest(LOGIN_GITHUB, GitHubLoginSaga);
+  yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
 
-  yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
+  yield takeLatest(LOGOUT_GITHUB, githubLogoutSaga);
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {});
 
@@ -25,7 +25,7 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_INITIALISE, function* () {});
 }
 
-export function* GitHubLoginSaga() {
+function* githubLoginSaga() {
   const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
   const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
   const windowName = 'Connect With OAuth';
@@ -44,7 +44,7 @@ export function* GitHubLoginSaga() {
   yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
 }
 
-export function* GitHubLogoutSaga() {
+function* githubLogoutSaga() {
   yield store.dispatch(actions.removeGitHubOctokitInstance());
 }
 
