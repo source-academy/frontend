@@ -16,13 +16,13 @@ test('Application Client ID not deployed renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-  let component: renderer.ReactTestRenderer;
+  let component;
 
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
   });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
@@ -46,14 +46,13 @@ test('Access code not found in return url renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-  let component: renderer.ReactTestRenderer;
+  let component;
 
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
   });
-
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
@@ -77,13 +76,13 @@ test('Cannot connect to server renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateFailure);
 
-  let component: renderer.ReactTestRenderer;
+  let component;
 
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
   });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
@@ -107,13 +106,13 @@ test('Successful retrieval of auth token renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-  let component: renderer.ReactTestRenderer;
+  let component;
 
   renderer.act(() => {
     component = renderer.create(<GitHubCallback />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();  
   });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
@@ -132,21 +131,20 @@ function returnEmptyString() {
   return '';
 }
 
+async function connectBackendSimulateSuccess(
+  messageBody: string,
+  backendLink: string
+): Promise<Response> {
+  return new Promise(() => {
+    return new Response(JSON.stringify({ access_token: '12345' }));
+  });
+}
+
 async function connectBackendSimulateFailure(
   messageBody: string,
   backendLink: string
 ): Promise<Response> {
   return new Promise(() => {
     return new Response();
-  });
-}
-
-async function connectBackendSimulateSuccess(
-  messageBody: string,
-  backendLink: string
-): Promise<Response> {
-  return new Promise(() => {
-    const res = new Response(JSON.stringify({ access_token: '123456' }));
-    return res;
   });
 }
