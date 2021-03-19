@@ -51,27 +51,32 @@ export function GitHubCallback(props: GitHubCallbackProps) {
 
     exchangeAccessCodeForAuthTokenContainingObject(backendLink, messageBody)
       .then(res => res.json())
-      .then(res => {
-        const requestSuccess = typeof res.access_token != 'undefined';
-
-        if (requestSuccess) {
-          // Send auth token back to the main browser page
-          const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
-          broadcastChannel.postMessage(res.access_token);
-
-          setMessage('Log-in successful! This window will close soon.');
-          setTimeout(() => {
-            window.close();
-          }, 3000);
-        } else {
-          setMessage(
-            'Connection with server was denied. Please try again or contact the website administrator.'
-          );
-        }
-      });
+      .then(res => updatePageAccordingToResponse(res, setMessage));
   }, [clientId, grabAccessCodeFromURL, exchangeAccessCodeForAuthTokenContainingObject]);
 
   return <div>{message}</div>;
+}
+
+function updatePageAccordingToResponse(
+  response: any,
+  setMessage: (value: React.SetStateAction<string>) => void
+) {
+  const requestSuccess = typeof response.access_token != 'undefined';
+
+  if (requestSuccess) {
+    // Send auth token back to the main browser page
+    const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
+    broadcastChannel.postMessage(response.access_token);
+
+    setMessage('Log-in successful! This window will close soon.');
+    setTimeout(() => {
+      window.close();
+    }, 3000);
+  } else {
+    setMessage(
+      'Connection with server was denied. Please try again or contact the website administrator.'
+    );
+  }
 }
 
 export default GitHubCallback;
