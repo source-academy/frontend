@@ -1,7 +1,7 @@
 import GameActionManager from '../../action/GameActionManager';
+import GameAnimationManager from '../../animations/GameAnimationManager';
 import { AssetType, ImageAsset } from '../../assets/AssetsTypes';
 import GameAwardsManager from '../../awards/GameAwardsManager';
-import GameAnimationManager from '../../background/GameAnimationManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
 import { GameCheckpoint } from '../../chapter/GameChapterTypes';
@@ -123,6 +123,12 @@ class GameManager extends Phaser.Scene {
     });
   }
 
+  /**
+   * Loads each asset type (image, sprite) appropriately
+   *
+   * @param image ImageAsset object to be loaded
+   * @param assetKey asset key of ImageAsset
+   */
   private loadImage(image: ImageAsset, assetKey: AssetKey) {
     switch (image.type) {
       case AssetType.Image:
@@ -152,7 +158,7 @@ class GameManager extends Phaser.Scene {
    *
    * Start Action, Notification, Cutscene
    *
-   * Start action is only played whe startAction argument is set to true;
+   * Start action is only played when startAction argument is set to true;
    * commonly only the first time user loads the checkpoint.
    *
    * @param locationId id of the location to render
@@ -244,20 +250,6 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
-    // this.getInputManager().registerKeyboardListener(
-    //   Phaser.Input.Keyboard.KeyCodes.SPACE,
-    //   'down',
-    //   async () => {
-    //     const backgroundAni = this.getBackgroundManager().backgroundAsset;
-    //     if (backgroundAni instanceof Phaser.GameObjects.Sprite) {
-    //       if (backgroundAni.anims.isPlaying) {
-    //         await backgroundAni.anims.stop();
-    //       } else {
-    //         await backgroundAni.anims.restart();
-    //       }
-    //     }
-    //   }
-    // );
   }
 
   /**

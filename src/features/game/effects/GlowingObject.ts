@@ -46,21 +46,14 @@ export default class GlowingImage {
       .setInteractive({ pixelPerfect: true });
 
     const image = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
-    let imageAsset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
+    const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
+    const imageAsset = animationManager.createImageAsset(assetKey, image);
 
     switch (image?.type) {
       case AssetType.Sprite:
-        const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
-        animationManager.startAnimation(
-          image,
-          image.config?.start || 0,
-          image.config?.frameRate || 20
-        );
         this.clickArea.setAlpha(0);
-        imageAsset = animationManager.getAnimation(image);
         break;
       default:
-        imageAsset = new Phaser.GameObjects.Image(scene, 0, 0, assetKey);
         if (width) {
           resize(imageAsset, width, height);
           resize(this.imageGlow, width, height);

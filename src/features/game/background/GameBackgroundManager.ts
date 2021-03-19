@@ -1,11 +1,10 @@
-import { AssetType, ImageAsset } from '../assets/AssetsTypes';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { ImageAsset } from '../assets/AssetsTypes';
+import { screenSize } from '../commons/CommonConstants';
 import { AssetKey } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { resizeOverflow } from '../utils/SpriteUtils';
-// import { GameInputManager } from '..\input\GameInputManager.ts'
 
 /**
  * Manager for game's background.
@@ -33,24 +32,10 @@ export default class GameBackgroundManager {
   private renderBackgroundImage(assetKey: AssetKey) {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
     this.currentBackground = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
-    let asset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite;
+    const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
+    const asset = animationManager.createImageAsset(assetKey, this.currentBackground);
 
-    switch (this.currentBackground?.type) {
-      case AssetType.Sprite:
-        const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
-        animationManager.startAnimation(this.currentBackground, 0, 20);
-        asset = animationManager.getAnimation(this.currentBackground);
-        break;
-      default:
-        asset = new Phaser.GameObjects.Image(
-          GameGlobalAPI.getInstance().getGameManager(),
-          screenCenter.x,
-          screenCenter.y,
-          assetKey
-        );
-        resizeOverflow(asset, screenSize.x, screenSize.y);
-        break;
-    }
+    resizeOverflow(asset, screenSize.x, screenSize.y);
 
     GameGlobalAPI.getInstance().addToLayer(Layer.Background, asset);
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);

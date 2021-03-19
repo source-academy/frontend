@@ -3,10 +3,20 @@ import { AssetKey } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { mandatory } from '../utils/GameUtils';
+
+/**
+ *
+ */
 export default class GameAnimationManager {
   private animationInstanceMap = new Map<AssetKey, Phaser.GameObjects.Sprite>();
   private game = GameGlobalAPI.getInstance().getGameManager();
 
+  /**
+   *
+   * @param image
+   * @param startFrame
+   * @param frameRate
+   */
   public initiateAnimation(image: ImageAsset, startFrame: number, frameRate: number) {
     const img = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(image.path);
     if (img && img.config) {
@@ -30,6 +40,12 @@ export default class GameAnimationManager {
     }
   }
 
+  /**
+   *
+   * @param image
+   * @param startFrame
+   * @param frameRate
+   */
   public startAnimation(image: ImageAsset, startFrame: number, frameRate: number) {
     // check for animation
     this.removeAnimation(image);
@@ -54,6 +70,10 @@ export default class GameAnimationManager {
     sprite.play(image.path);
   }
 
+  /**
+   *
+   * @param image
+   */
   public stopAnimation(image: ImageAsset) {
     const sprite = this.animationInstanceMap.get(image.key);
     if (image.type === AssetType.Sprite && sprite !== undefined && sprite.anims !== undefined) {
@@ -61,10 +81,30 @@ export default class GameAnimationManager {
     }
   }
 
-  public getAnimation(image: ImageAsset): Phaser.GameObjects.Sprite {
-    return mandatory(this.animationInstanceMap.get(image.key), `Image: ${image.path} not found`);
+  public createImageAsset(
+    assetKey: AssetKey,
+    image?: ImageAsset
+  ): Phaser.GameObjects.Image | Phaser.GameObjects.Sprite {
+    switch (image?.type) {
+      case AssetType.Sprite:
+        this.startAnimation(image, image.config?.start || 0, image.config?.frameRate || 20);
+        return this.getAnimation(image);
+        break;
+      default:
+        return new Phaser.GameObjects.Image(
+          this.game,
+          image?.config?.centreX || 0,
+          image?.config?.centreY || 0,
+          assetKey
+        );
+        break;
+    }
   }
 
+  /**
+   *
+   * @param image
+   */
   public removeAnimation(image: ImageAsset) {
     const anim = this.animationInstanceMap.get(image.key);
     if (anim !== undefined) {
@@ -72,5 +112,14 @@ export default class GameAnimationManager {
       anim.destroy();
       this.animationInstanceMap.delete(image.key);
     }
+  }
+
+  /**
+   *
+   * @param image
+   * @returns
+   */
+  public getAnimation(image: ImageAsset): Phaser.GameObjects.Sprite {
+    return mandatory(this.animationInstanceMap.get(image.key), `Image: ${image.path} not found`);
   }
 }
