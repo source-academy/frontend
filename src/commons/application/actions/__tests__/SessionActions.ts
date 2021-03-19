@@ -168,7 +168,7 @@ test('setGitHubOctokitInstance generates correct action object', async () => {
   const action = setGitHubOctokitInstance(authToken);
   expect(action.type).toEqual(SET_GITHUB_OCTOKIT_INSTANCE);
 
-  const authObject = await action.payload.auth() as any;
+  const authObject = (await action.payload.auth()) as any;
   expect('token' in authObject).toBe(true);
   expect(authObject.token).toBe('testAuthToken12345');
   expect('tokenType' in authObject).toBe(true);
