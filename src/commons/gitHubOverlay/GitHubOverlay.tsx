@@ -1,4 +1,4 @@
-import { Classes, DialogStep, MultistepDialog, Radio, RadioGroup } from '@blueprintjs/core';
+import { Classes, DialogStep, IButtonProps, ITreeNode, MultistepDialog, Radio, RadioGroup, Tree } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 
@@ -6,51 +6,137 @@ import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 
 export interface GitHubOverlayProps {
-  userRepos?: [] | null;
+  userRepos?: [];
   isPickerOpen?: boolean;
 }
 
 export interface GitHubOverlayState {
-  repoName?: string;
   username?: string;
-  fileList?: any[];
+  repoName?: string;
+  repoFiles?: ITreeNode<{}>[];
+  fileIndex: number;
 }
 
-/*
-  PureComponent is exactly the same as Component except that it handles the shouldComponentUpdate method for you.
-  When props or state changes, PureComponent will do a shallow comparison on both props and state.
-  Component on the other hand won't compare current props and state to next out of the box
-*/
 export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
+  constructor(props: GitHubOverlayProps | Readonly<GitHubOverlayProps>) {
+    super(props);
+    this.setRepoName = this.setRepoName.bind(this);
+    this.getContent = this.getContent.bind(this);
+    this.createNode = this.createNode.bind(this);
+    this.setRepoFiles = this.setRepoFiles.bind(this);
+  }
+
   public state: GitHubOverlayState = {
-    repoName: ''
+    username: store.getState().session.username,
+    repoName: '',
+    repoFiles: [],
+    fileIndex: 0
   };
 
   userRepos = store.getState().session.userRepos;
-  username = store.getState().session.username;
   isPickerOpen = store.getState().session.isPickerOpen;
 
   setRepoName = (e: any) => {
     this.setState({ repoName: e.target.value });
   };
 
-  setFileList = async () => {};
+  async getContent (username: string, repoName: string, filePath: string) {
+    const octokit = store.getState().session.githubOctokitInstance;
+    if (octokit === undefined) return;
+    const results = await octokit.repos.getContent({
+      owner: username,
+      repo: repoName,
+      path: filePath
+    });
+    const files = results.data;
+    return files;
+  }
+
+  async createNode(username: string, repoName: string, thisFile: any) {
+    const index = this.state.fileIndex++;
+    if (thisFile.type === "dir") {
+      const files = await this.getContent(username, repoName, thisFile.path);
+      const folder: ITreeNode<{}>[] = [];
+      if (Array.isArray(files)) {
+        files.forEach(async file => {
+          folder.push(await this.createNode(username, repoName, file));
+        });
+      }
+      const node: ITreeNode<{}> = {
+
+        id: index,
+        hasCaret: true,
+        icon: "folder-close",
+        label: thisFile.name,
+        childNodes: folder
+      }
+      return node;
+    }
+    if (thisFile.type === "file") {
+      const node: ITreeNode<{}> = {
+        id: index,
+        hasCaret: false,
+        icon: "document",
+        label: thisFile.name
+      }
+      return node;
+    }
+    const node : ITreeNode<{}> = {
+      id: this.state.fileIndex++,
+      hasCaret: false,
+      icon: "document",
+      label: "test"
+    };
+    this.setState({fileIndex: index});
+    return node;
+  }
+  
+  async setRepoFiles(username: string, repoName:string) {
+    console.log(this.state.username);
+    console.log(this.state.repoName);
+    if (username === '' || repoName === '') return;
+    this.setState({repoFiles: []});
+    const files = await this.getContent(username, repoName, '');
+    if (Array.isArray(files)) {
+      files.forEach(async file => {
+        this.state.repoFiles?.push(await this.createNode(username, repoName, file));        
+      });
+    }
+    console.log(this.state.repoFiles);
+  }
+
+  handleClose() {
+    store.dispatch(actions.setPickerDialog(false));
+  }
+
+  handleSubmit() {
+    this.handleClose();
+  }
 
   public render() {
+    const finalButtonProps: Partial<IButtonProps> = {
+      intent: "primary",
+      onClick: this.handleSubmit,
+      text: "Close", // To change to Open or Save
+    };
+
     return (
       <MultistepDialog
         className="GitHubPicker"
         onClose={this.handleClose}
         isOpen={this.props.isPickerOpen}
-        title="RepoFile Picker"
+        finalButtonProps={finalButtonProps}
+        title="Opening Repository File"
       >
         <DialogStep
           id="Repository"
           panel={
             <RepositoryExplorerPanel
               userRepos={this.props.userRepos}
+              userName={this.state.username}
               repoName={this.state.repoName}
               setRepoName={this.setRepoName}
+              setRepoFiles={this.setRepoFiles}
               {...this.props}
             />
           }
@@ -61,8 +147,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           id="Files"
           panel={
             <FileExplorerPanel
-              repoName={this.state.repoName}
-              username={this.state.username}
+              repoFiles={this.state.repoFiles}
               {...this.props}
             />
           }
@@ -71,10 +156,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       </MultistepDialog>
     );
   }
-
-  private handleClose() {
-    store.dispatch(actions.setPickerDialog(false));
-  }
 }
 
 export interface IRepositoryExplorerPanelProps {
@@ -82,33 +163,22 @@ export interface IRepositoryExplorerPanelProps {
 }
 
 const RepositoryExplorerPanel: React.FunctionComponent<IRepositoryExplorerPanelProps> = props => {
-  const { userRepos, repoName, setRepoName } = props;
+  const { userRepos, username, repoName, setRepoName, setRepoFiles } = props;
+
+  React.useEffect(() => {
+    setRepoFiles(username, repoName);
+  }, [username, repoName, setRepoFiles]);
+
   return (
     <div className={classNames(Classes.DIALOG_BODY, 'repo-step')}>
       <p>Repo List: </p>
       <RadioGroup onChange={setRepoName} selectedValue={repoName}>
         {userRepos.map((repo: any, i: number) => (
-          <Radio label={repo.name} key={repo.id} value={repo.name} tabIndex={i} />
+          <Radio label={repo.name} key={repo.id} value={repo.name} />
         ))}
       </RadioGroup>
     </div>
   );
-};
-
-const retrieveFiles = async (repoName: string, username: string, filePath: string) => {
-  const octokit = store.getState().session.githubOctokitInstance;
-  if (octokit === undefined) {
-    return [];
-  } else {
-    const results = await octokit.repos.getContent({
-      owner: username,
-      repo: repoName,
-      path: filePath
-    });
-    const files = results.data;
-    console.log('inside' + files);
-    return files;
-  }
 };
 
 export interface IFileExplorerPanelProps {
@@ -116,14 +186,36 @@ export interface IFileExplorerPanelProps {
 }
 
 const FileExplorerPanel: React.FunctionComponent<IFileExplorerPanelProps> = props => {
-  const { repoName, username } = props;
-  const filePath = '';
-  const files = retrieveFiles(repoName, username, filePath);
-  console.log('outside' + files);
+  const { repoFiles } = props;
+
+  const handleNodeCollapse = (nodeData: ITreeNode) => {
+    nodeData.isExpanded = false;
+  };
+
+  const handleNodeExpand = (nodeData: ITreeNode) => {
+    nodeData.isExpanded = true;
+  };
 
   return (
     <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
       <p>File List: </p>
+      <Tree
+        contents={repoFiles}
+        onNodeCollapse={handleNodeCollapse}
+        onNodeExpand={handleNodeExpand}
+        className={Classes.ELEVATION_0}
+      />
     </div>
   );
 };
+
+/*
+  {
+    id: index,
+    hasCaret: true,
+    icon: "folder-close",
+    label: (e.name), childNodes:[]
+  }
+*/
+
+//ITreeNode<{}>[] | ({ id: number; hasCaret: boolean; icon: string; label: any; folder?: undefined; } | { id: number; hasCaret: boolean; icon: string; label: any; folder: {}[]; } | undefined)[] | undefined = []

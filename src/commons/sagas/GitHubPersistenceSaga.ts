@@ -21,10 +21,10 @@ export function* GitHubPersistenceSaga(): SagaIterator {
       repos: { listForAuthenticatedUser: () => {} },
       users: { getAuthenticated: () => {} }
     }; // getAuthenticated.data.login .data.name .data.email
+    const username = yield call(octokitInstance.users.getAuthenticated);
     const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    const userName = yield call(octokitInstance.users.getAuthenticated);
+    store.dispatch(actions.setGitHubUsername(username.data.login));
     store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-    store.dispatch(actions.setGitHubUsername(userName.data.login));
     store.dispatch(actions.setPickerDialog(true));
   });
 

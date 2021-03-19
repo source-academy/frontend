@@ -73,14 +73,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
     : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
 
-  /*
-  const loginButton = props.loggedInAs && (
-    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
-      {controlButton('Log out', IconNames.LOG_IN, props.onClickLogIn)}
-    </Tooltip>
-  );
-  */
-
   return (
     <Popover
       autoFocus={false}
