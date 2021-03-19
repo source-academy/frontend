@@ -1,80 +1,151 @@
-import { shallow } from 'enzyme';
+import renderer from 'react-test-renderer';
 
+import * as GitHubUtils from '../../../features/github/GitHubUtils';
 import GitHubCallback from '../GitHubCallback';
 
-/*
-test('Access code not found in return url renders correctly', () => {
-  const props = {
-    clientID: '12345',
-    exchangeAccessCodeForAuthTokenContainingObject: stubExchangeAccessCodeForAuthTokenSimulateSuccess,
-    grabAccessCodeFromURL: stubGrabAccessCodeFromURLReturnsEmptyString
-  };
+test('Application Client ID not deployed renders correctly', () => {
+  const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
+  getClientIdMock.mockImplementation(returnEmptyString);
 
-  const app = <GitHubCallback {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const grabAccessCodeFromURLMock = jest.spyOn(GitHubUtils, 'grabAccessCodeFromURL');
+  grabAccessCodeFromURLMock.mockImplementation(returnLegitimateCode);
+
+  const exchangeAccessCodeMock = jest.spyOn(
+    GitHubUtils,
+    'exchangeAccessCodeForAuthTokenContainingObject'
+  );
+  exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
+
+  let component: renderer.ReactTestRenderer;
+
+  renderer.act(() => {
+    component = renderer.create(<GitHubCallback />);
+  });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  expect(getClientIdMock).toBeCalledTimes(1);
+  expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
+  expect(exchangeAccessCodeMock).toBeCalledTimes(0);
+
+  getClientIdMock.mockRestore();
+  grabAccessCodeFromURLMock.mockRestore();
+  exchangeAccessCodeMock.mockRestore();
 });
 
-test('Application Client ID not deployed renders correctly', () => {
-  const props = {
-    clientID: '',
-    exchangeAccessCodeForAuthTokenContainingObject: stubExchangeAccessCodeForAuthTokenSimulateSuccess,
-    grabAccessCodeFromURL: stubGrabAccessCodeFromURLReturnsProperly
-  };
+test('Access code not found in return url renders correctly', () => {
+  const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
+  getClientIdMock.mockImplementation(returnLegitimateCode);
 
-  const app = <GitHubCallback {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const grabAccessCodeFromURLMock = jest.spyOn(GitHubUtils, 'grabAccessCodeFromURL');
+  grabAccessCodeFromURLMock.mockImplementation(returnEmptyString);
+
+  const exchangeAccessCodeMock = jest.spyOn(
+    GitHubUtils,
+    'exchangeAccessCodeForAuthTokenContainingObject'
+  );
+  exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
+
+  let component: renderer.ReactTestRenderer;
+
+  renderer.act(() => {
+    component = renderer.create(<GitHubCallback />);
+  });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  expect(getClientIdMock).toBeCalledTimes(1);
+  expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
+  expect(exchangeAccessCodeMock).toBeCalledTimes(0);
+
+  getClientIdMock.mockRestore();
+  grabAccessCodeFromURLMock.mockRestore();
+  exchangeAccessCodeMock.mockRestore();
 });
 
 test('Cannot connect to server renders correctly', () => {
-  const props = {
-    clientID: '12345',
-    exchangeAccessCodeForAuthTokenContainingObject: stubExchangeAccessCodeForAuthTokenSimulateFailure,
-    grabAccessCodeFromURL: stubGrabAccessCodeFromURLReturnsProperly
-  };
+  const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
+  getClientIdMock.mockImplementation(returnLegitimateCode);
 
-  const app = <GitHubCallback {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const grabAccessCodeFromURLMock = jest.spyOn(GitHubUtils, 'grabAccessCodeFromURL');
+  grabAccessCodeFromURLMock.mockImplementation(returnLegitimateCode);
+
+  const exchangeAccessCodeMock = jest.spyOn(
+    GitHubUtils,
+    'exchangeAccessCodeForAuthTokenContainingObject'
+  );
+  exchangeAccessCodeMock.mockImplementation(connectBackendSimulateFailure);
+
+  let component: renderer.ReactTestRenderer;
+
+  renderer.act(() => {
+    component = renderer.create(<GitHubCallback />);
+  });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  expect(getClientIdMock).toBeCalledTimes(1);
+  expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
+  expect(exchangeAccessCodeMock).toBeCalledTimes(1);
+
+  getClientIdMock.mockRestore();
+  grabAccessCodeFromURLMock.mockRestore();
+  exchangeAccessCodeMock.mockRestore();
 });
 
 test('Successful retrieval of auth token renders correctly', () => {
-  const props = {
-    clientID: '12345',
-    exchangeAccessCodeForAuthTokenContainingObject: stubExchangeAccessCodeForAuthTokenSimulateSuccess,
-    grabAccessCodeFromURL: stubGrabAccessCodeFromURLReturnsProperly
-  };
+  const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
+  getClientIdMock.mockImplementation(returnLegitimateCode);
 
-  const app = <GitHubCallback {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const grabAccessCodeFromURLMock = jest.spyOn(GitHubUtils, 'grabAccessCodeFromURL');
+  grabAccessCodeFromURLMock.mockImplementation(returnLegitimateCode);
+
+  const exchangeAccessCodeMock = jest.spyOn(
+    GitHubUtils,
+    'exchangeAccessCodeForAuthTokenContainingObject'
+  );
+  exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
+
+  let component: renderer.ReactTestRenderer;
+
+  renderer.act(() => {
+    component = renderer.create(<GitHubCallback />);
+  });
+  const tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  expect(getClientIdMock).toBeCalledTimes(1);
+  expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
+  expect(exchangeAccessCodeMock).toBeCalledTimes(1);
+
+  getClientIdMock.mockRestore();
+  grabAccessCodeFromURLMock.mockRestore();
+  exchangeAccessCodeMock.mockRestore();
 });
 
-function stubGrabAccessCodeFromURLReturnsEmptyString(currentURLAddress: string): string {
+function returnLegitimateCode() {
+  return '12345';
+}
+
+function returnEmptyString() {
   return '';
 }
 
-function stubGrabAccessCodeFromURLReturnsProperly(currentURLAddress: string): string {
-  return 'SauceAcademy123456';
-}
-
-async function stubExchangeAccessCodeForAuthTokenSimulateFailure(
-  backendLink: string,
-  messageBody: string
+async function connectBackendSimulateFailure(
+  messageBody: string,
+  backendLink: string
 ): Promise<Response> {
   return new Promise(() => {
     return new Response();
   });
 }
 
-async function stubExchangeAccessCodeForAuthTokenSimulateSuccess(
-  backendLink: string,
-  messageBody: string
+async function connectBackendSimulateSuccess(
+  messageBody: string,
+  backendLink: string
 ): Promise<Response> {
   return new Promise(() => {
     const res = new Response(JSON.stringify({ access_token: '123456' }));
     return res;
   });
 }
-*/

@@ -29,3 +29,12 @@ export function grabAccessCodeFromURL(currentURLAddress: string): string {
   const accessCode = urlParams.get('code') || '';
   return accessCode;
 }
+
+/**
+ * Returns the client ID. This function is meant to allow us to mock the client ID.
+ *
+ * @return {string} The client ID.
+ */
+export function getClientId(): string {
+  return process.env.REACT_APP_GITHUB_CLIENT_ID || '';
+}

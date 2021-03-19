@@ -1,10 +1,7 @@
 import * as QueryString from 'query-string';
 import { useEffect, useState } from 'react';
 
-import {
-  exchangeAccessCodeForAuthTokenContainingObject,
-  grabAccessCodeFromURL
-} from '../../features/github/GitHubUtils';
+import * as GitHubUtils from '../../features/github/GitHubUtils';
 
 /**
  * The page that the user is redirected to after they have approved the app through GitHub.
@@ -15,11 +12,11 @@ export function GitHubCallback() {
   const [message, setMessage] = useState('You have reached the GitHub callback page');
 
   useEffect(() => {
-    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-    const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
-
     const currentAddress = window.location.search;
-    const accessCode = grabAccessCodeFromURL(currentAddress);
+    const accessCode = GitHubUtils.grabAccessCodeFromURL(currentAddress);
+
+    const clientId = GitHubUtils.getClientId();
+    const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
 
     if (accessCode === '') {
       setMessage(
@@ -51,7 +48,7 @@ async function retrieveAuthTokenUpdatePage(
   messageBody: string,
   setMessage: (value: React.SetStateAction<string>) => void
 ) {
-  const responseObject = await exchangeAccessCodeForAuthTokenContainingObject(
+  const responseObject = await GitHubUtils.exchangeAccessCodeForAuthTokenContainingObject(
     backendLink,
     messageBody
   );
