@@ -28,10 +28,8 @@ test('Application Client ID not deployed renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (typeof component !== 'undefined') {
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  }
+  const tree = (component as any).toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -63,10 +61,8 @@ test('Access code not found in return url renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (typeof component !== 'undefined') {
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  }
+  const tree = (component as any).toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -98,10 +94,8 @@ test('Cannot connect to server renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (typeof component !== 'undefined') {
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  }
+  const tree = (component as any).toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -133,10 +127,8 @@ test('Successful retrieval of auth token renders correctly', () => {
 
   expect(component).toBeDefined();
 
-  if (typeof component !== 'undefined') {
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  }
+  const tree = (component as any).toJSON();
+  expect(tree).toMatchSnapshot();
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
