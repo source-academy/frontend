@@ -155,6 +155,22 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
+  const replRef = React.useRef<ReactAce>(null);
+  const emptyRef = React.useRef<ReactAce>(null);
+  const [keyboardInputRef, setKeyboardInputRef] = React.useState(emptyRef);
+
+  React.useEffect(() => {
+    editorRef.current!.editor.on('focus', () => {
+      setKeyboardInputRef(editorRef);
+    });
+    replRef.current!.editor.on('focus', () => {
+      setKeyboardInputRef(replRef);
+    });
+    const clearRef = () => setKeyboardInputRef(emptyRef);
+    editorRef.current!.editor.on('blur', clearRef);
+    replRef.current!.editor.on('blur', clearRef);
+  });
+
   return (
     <div className="workspace mobile-workspace">
       {props.hasUnsavedChanges ? (
@@ -177,11 +193,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         onDrag={onDrag}
         disabled={isDraggableReplDisabled}
         replProps={props.replProps}
+        ref={replRef}
       />
 
       <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
 
-      <MobileKeyboard editorRef={editorRef} />
+      <MobileKeyboard editorRef={keyboardInputRef} />
     </div>
   );
 };
