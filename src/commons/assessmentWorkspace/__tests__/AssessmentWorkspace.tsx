@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { Library } from '../../assessment/AssessmentTypes';
+import { ContestVotingSubmission, Library } from '../../assessment/AssessmentTypes';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import { SideContentType } from '../../sideContent/SideContentTypes';
@@ -37,7 +37,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleReplValueChange: (newValue: string) => {},
   handleSendReplInputToOutput: (code: string) => {},
   handleResetWorkspace: () => {},
-  handleSave: (id: number, answer: string | number) => {},
+  handleSave: (id: number, answer: number | string | ContestVotingSubmission) => {},
   handleSideContentHeightChange: (heightChange: number) => {},
   handleTestcaseEval: (testcaseId: number) => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
@@ -82,6 +82,13 @@ const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   assessment: mockAssessments[0],
   assessmentId: 0,
   questionId: 2
+};
+
+const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
+  ...defaultProps,
+  assessment: mockAssessments[6],
+  assessmentId: 7,
+  questionId: 1
 };
 
 test('AssessmentWorkspace page "loading" content renders correctly', () => {
@@ -137,6 +144,12 @@ test('AssessmentWorkspace page with MCQ question renders correctly', () => {
       Current workaround is to mount AssessmentWorkspace shallowly since the behaviour is correct
       during user testing
 */
+
+test('AssessmentWorkspace page with ContestVoting question renders correctly', () => {
+  const app = <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />;
+  const tree = shallow(app);
+  expect(tree.debug()).toMatchSnapshot();
+});
 
 test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', () => {
   const app = <AssessmentWorkspace {...mockGradedProgrammingAssessmentWorkspaceProps} />;

@@ -16,7 +16,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  assessmentStatus: AssessmentStatus;
+  assessmentStatus?: AssessmentStatus;
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   votingSubmission: ContestVotingSubmission;
   contestEntries: ContestEntry[];

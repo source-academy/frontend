@@ -15,24 +15,17 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  assessmentStatus: AssessmentStatus;
+  assessmentStatus?: AssessmentStatus;
   contestEntries: ContestEntry[];
 };
 
 /**
  * Container to separate behaviour concerns from rendering concerns
  * Stores component-level voting ranking state
- * (maybe handles API calls?)
  */
 const SideContentContestVotingContainer: React.FunctionComponent<SideContentContestVotingContainerProps> = props => {
   const { assessmentStatus, contestEntries, handleSave, handleContestEntryClick } = props;
   const [votingSubmission, setVotingSubmission] = useState<ContestVotingSubmission>({});
-
-  // TODO: Write Backend API call to submit VotingSubmission { } JSON Data
-  // TODO: Write Backend API call to fetch ordered leaderboard entries (with names)
-  // TODO: Validate VotingSubmission Data
-  // TODO: Find a way to persist and incorportate submission of the data
-  // TODO: Conditionally render tabs based on contest state (finished, pending)
 
   const handleVotingSubmissionChange = (submission_id: number, rank: number): void => {
     const updatedSubmission = { ...votingSubmission, [submission_id]: rank };

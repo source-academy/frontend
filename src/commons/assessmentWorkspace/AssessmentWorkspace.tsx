@@ -127,7 +127,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
-  assessmentStatus: AssessmentStatus;
+  assessmentStatus?: AssessmentStatus;
 };
 
 class AssessmentWorkspace extends React.Component<

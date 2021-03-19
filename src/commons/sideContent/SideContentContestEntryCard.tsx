@@ -16,7 +16,7 @@ type DispatchProps = {
 
 type StateProps = {
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
-  assessmentStatus: AssessmentStatus;
+  assessmentStatus?: AssessmentStatus;
   contestEntry: ContestEntry;
   entryNumber: number;
   votingSubmission: ContestVotingSubmission;
@@ -46,7 +46,7 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
         <Pre className="contestentry-entryid">{entryNumber}</Pre>
         <Pre className="contestentry-rank">
           <NumericInput
-            disabled={assessmentStatus === 'submitted'}
+            disabled={assessmentStatus ? assessmentStatus === 'submitted' : false}
             value={votingSubmission[contestEntry.submission_id] ?? contestEntry.score}
             onValueChange={(rank: number) =>
               handleVotingSubmissionChange(contestEntry.submission_id, rank)

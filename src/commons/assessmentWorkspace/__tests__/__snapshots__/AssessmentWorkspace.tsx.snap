@@ -2,6 +2,34 @@
 
 exports[`AssessmentWorkspace page "loading" content renders correctly 1`] = `"<Blueprint3.NonIdealState className=\\"WorkspaceParent bp3-dark\\" description=\\"Getting mission ready...\\" icon={{...}} />"`;
 
+exports[`AssessmentWorkspace page with ContestVoting question renders correctly 1`] = `
+"<div className=\\"WorkspaceParent bp3-dark\\">
+  <Blueprint3.Dialog className=\\"assessment-briefing\\" isOpen={false} canOutsideClickClose={true}>
+    <Blueprint3.Card elevation={0} interactive={false}>
+      <Memo(Markdown) content=\\"Vote for your favourite contest entries here!\\" />
+      <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
+    </Blueprint3.Card>
+  </Blueprint3.Dialog>
+  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
+    <div className=\\"bp3-dialog-body\\">
+      <Memo(Markdown) content=\\"Are you sure you want to reset the template?\\" />
+      <Memo(Markdown) content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
+    </div>
+    <div className=\\"bp3-dialog-footer\\">
+      <Blueprint3.ButtonGroup>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
+          Cancel
+        </Blueprint3.Button>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
+          Confirm
+        </Blueprint3.Button>
+      </Blueprint3.ButtonGroup>
+    </div>
+  </Blueprint3.Dialog>
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+</div>"
+`;
+
 exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
 "<div className=\\"WorkspaceParent bp3-dark\\">
   <Blueprint3.Dialog className=\\"assessment-briefing\\" isOpen={false} canOutsideClickClose={true}>
