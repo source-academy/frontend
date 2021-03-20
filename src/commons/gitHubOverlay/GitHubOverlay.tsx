@@ -1,4 +1,13 @@
-import { Classes, DialogStep, IButtonProps, ITreeNode, MultistepDialog, Radio, RadioGroup, Tree } from '@blueprintjs/core';
+import {
+  Classes,
+  DialogStep,
+  IButtonProps,
+  ITreeNode,
+  MultistepDialog,
+  Radio,
+  RadioGroup,
+  Tree
+} from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 
@@ -37,8 +46,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   userRepos = store.getState().session.userRepos;
   isPickerOpen = store.getState().session.isPickerOpen;
 
-  setRepoName(e:any) {
-    this.setState({repoName: e.target.value});
+  setRepoName(e: any) {
+    this.setState({ repoName: e.target.value });
   }
 
   async getContent(username: string, repoName: string, filePath: string) {
@@ -55,16 +64,16 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   async createNode(username: string, repoName: string, thisFile: any) {
     const index = this.state.fileIndex++;
-    if (thisFile.type === "file") {
+    if (thisFile.type === 'file') {
       const node: ITreeNode<{}> = {
         id: index,
         hasCaret: false,
-        icon: "document",
+        icon: 'document',
         label: thisFile.name
-      }
+      };
       return node;
     }
-    if (thisFile.type === "dir") {
+    if (thisFile.type === 'dir') {
       const files = await this.getContent(username, repoName, thisFile.path);
       const folder: ITreeNode<{}>[] = [];
       if (Array.isArray(files)) {
@@ -75,36 +84,39 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       const node: ITreeNode<{}> = {
         id: index,
         hasCaret: true,
-        icon: "folder-close",
+        icon: 'folder-close',
         label: thisFile.name,
         childNodes: folder
-      }
+      };
       return node;
     }
     const node: ITreeNode<{}> = {
       id: this.state.fileIndex++,
       hasCaret: false,
-      icon: "document",
-      label: "test"
+      icon: 'document',
+      label: 'test'
     };
     return node;
   }
-  
-  async setRepoFiles(username: string, repoName:string) {
-    this.setState({fileIndex: 0});
-    this.setState({repoFiles: []});
-    this.getContent(username, repoName, '').then(value => {
-      // fulfillment
-      const files = value;
-      if (Array.isArray(files)) {
-        files.forEach(async file => {
-          this.state.repoFiles?.push(await this.createNode(username, repoName, file));        
-        });
+
+  async setRepoFiles(username: string, repoName: string) {
+    this.setState({ fileIndex: 0 });
+    this.setState({ repoFiles: [] });
+    this.getContent(username, repoName, '').then(
+      value => {
+        // fulfillment
+        const files = value;
+        if (Array.isArray(files)) {
+          files.forEach(async file => {
+            this.state.repoFiles?.push(await this.createNode(username, repoName, file));
+          });
+        }
+      },
+      reason => {
+        // rejection
+        console.log(reason);
       }
-    }, reason => {
-      // rejection
-      console.log(reason);
-    });
+    );
     console.log(this.state.repoFiles);
   }
 
@@ -122,9 +134,9 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   public render() {
     const finalButtonProps: Partial<IButtonProps> = {
-      intent: "primary",
+      intent: 'primary',
       onClick: this.handleSubmit,
-      text: "Close", // To change to Open or Save
+      text: 'Close' // To change to Open or Save
     };
 
     return (
@@ -188,10 +200,14 @@ const RepositoryExplorerPanel = (props: any) => {
 const FileExplorerPanel = (props: any) => {
   const { repoFiles, refreshPage } = props;
 
-  const handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
+  const handleNodeClick = (
+    nodeData: ITreeNode,
+    _nodePath: number[],
+    e: React.MouseEvent<HTMLElement>
+  ) => {
     const originallySelected = nodeData.isSelected;
     if (!e.shiftKey) {
-        forEachNode(repoFiles, n => (n.isSelected = false));
+      forEachNode(repoFiles, n => (n.isSelected = false));
     }
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
     refreshPage();
@@ -213,12 +229,12 @@ const FileExplorerPanel = (props: any) => {
     }
 
     for (const node of nodes) {
-        callback(node);
-        if (node.childNodes !== undefined) {
-          forEachNode(node.childNodes, callback);
-        }
+      callback(node);
+      if (node.childNodes !== undefined) {
+        forEachNode(node.childNodes, callback);
+      }
     }
-  }
+  };
 
   return (
     <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
