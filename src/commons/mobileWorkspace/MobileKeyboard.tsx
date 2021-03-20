@@ -29,8 +29,8 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
   const handleHiding = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (isKeyboardShown) {
       //do hiding
-      document.getElementById('mobile-floating-toggle')!.style.setProperty('width', '42px');
       document.getElementById('mobile-keyboard-toggle')!.style.setProperty('display', 'none');
+      document.getElementById('mobile-floating-toggle')!.style.setProperty('width', '42px');
       document.getElementById('mobile-floating-toggle')!.style.setProperty('opacity', '0.6');
       setButtonContent('ᐸ');
       setIsKeyoardShown(false);
@@ -52,18 +52,22 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
   };
 
   const handleKeyPress = (button: string) => {
+    if (!props.editorRef.current) {
+      return;
+    }
+    const editor = props.editorRef.current.editor;
     if (button === '{arrowleft}') {
-      props.editorRef.current!.editor.navigateLeft();
+      editor.navigateLeft();
     } else if (button === '{arrowright}') {
-      props.editorRef.current!.editor.navigateRight();
+      editor.navigateRight();
     } else if (button === '{bksp}') {
-      props.editorRef.current!.editor.remove('left');
+      editor.remove('left');
     } else if (button === '{tab}') {
-      props.editorRef.current!.editor.insert('\t');
+      editor.insert('\t');
     } else if (['+', '-', '*', '/', '%', '=>', '===', '&&', '||'].includes(button)) {
-      props.editorRef.current!.editor.insert(' ' + button + ' ');
+      editor.insert(' ' + button + ' ');
     } else {
-      props.editorRef.current!.editor.insert(button);
+      editor.insert(button);
     }
   };
 
