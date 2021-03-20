@@ -41,7 +41,7 @@ class ContributorsDetails extends React.Component {
             <p className="wider">
               Daryl Tan,
               <br />
-	      Thomas Tan
+              Thomas Tan
               <br />
               <strong>(Source)</strong>
             </p>
