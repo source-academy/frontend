@@ -64,9 +64,9 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitInstance?: Octokit;
-  readonly username?: string;
-  readonly userRepos?: [] | null;
-  readonly isPickerOpen?: boolean;
+  readonly username: string;
+  readonly userRepos: [];
+  readonly isPickerOpen: boolean;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };

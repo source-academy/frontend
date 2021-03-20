@@ -7,13 +7,13 @@ import { actions } from '../utils/ActionsHelper';
 
 export interface GitHubOverlayProps {
   userRepos?: [];
-  isPickerOpen?: boolean;
+  isPickerOpen: boolean;
 }
 
 export interface GitHubOverlayState {
-  username?: string;
-  repoName?: string;
-  repoFiles?: ITreeNode<{}>[];
+  username: string;
+  repoName: string;
+  repoFiles: ITreeNode<{}>[];
   fileIndex: number;
 }
 
@@ -24,6 +24,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.getContent = this.getContent.bind(this);
     this.createNode = this.createNode.bind(this);
     this.setRepoFiles = this.setRepoFiles.bind(this);
+    this.refreshPage = this.refreshPage.bind(this);
   }
 
   public state: GitHubOverlayState = {
@@ -36,11 +37,11 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   userRepos = store.getState().session.userRepos;
   isPickerOpen = store.getState().session.isPickerOpen;
 
-  setRepoName = (e: any) => {
-    this.setState({ repoName: e.target.value });
-  };
+  setRepoName(e:any) {
+    this.setState({repoName: e.target.value});
+  }
 
-  async getContent (username: string, repoName: string, filePath: string) {
+  async getContent(username: string, repoName: string, filePath: string) {
     const octokit = store.getState().session.githubOctokitInstance;
     if (octokit === undefined) return;
     const results = await octokit.repos.getContent({
@@ -54,24 +55,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   async createNode(username: string, repoName: string, thisFile: any) {
     const index = this.state.fileIndex++;
-    if (thisFile.type === "dir") {
-      const files = await this.getContent(username, repoName, thisFile.path);
-      const folder: ITreeNode<{}>[] = [];
-      if (Array.isArray(files)) {
-        files.forEach(async file => {
-          folder.push(await this.createNode(username, repoName, file));
-        });
-      }
-      const node: ITreeNode<{}> = {
-
-        id: index,
-        hasCaret: true,
-        icon: "folder-close",
-        label: thisFile.name,
-        childNodes: folder
-      }
-      return node;
-    }
     if (thisFile.type === "file") {
       const node: ITreeNode<{}> = {
         id: index,
@@ -81,27 +64,47 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       }
       return node;
     }
-    const node : ITreeNode<{}> = {
+    if (thisFile.type === "dir") {
+      const files = await this.getContent(username, repoName, thisFile.path);
+      const folder: ITreeNode<{}>[] = [];
+      if (Array.isArray(files)) {
+        files.forEach(async file => {
+          folder.push(await this.createNode(username, repoName, file));
+        });
+      }
+      const node: ITreeNode<{}> = {
+        id: index,
+        hasCaret: true,
+        icon: "folder-close",
+        label: thisFile.name,
+        childNodes: folder
+      }
+      return node;
+    }
+    const node: ITreeNode<{}> = {
       id: this.state.fileIndex++,
       hasCaret: false,
       icon: "document",
       label: "test"
     };
-    this.setState({fileIndex: index});
     return node;
   }
   
   async setRepoFiles(username: string, repoName:string) {
-    console.log(this.state.username);
-    console.log(this.state.repoName);
-    if (username === '' || repoName === '') return;
+    this.setState({fileIndex: 0});
     this.setState({repoFiles: []});
-    const files = await this.getContent(username, repoName, '');
-    if (Array.isArray(files)) {
-      files.forEach(async file => {
-        this.state.repoFiles?.push(await this.createNode(username, repoName, file));        
-      });
-    }
+    this.getContent(username, repoName, '').then(value => {
+      // fulfillment
+      const files = value;
+      if (Array.isArray(files)) {
+        files.forEach(async file => {
+          this.state.repoFiles?.push(await this.createNode(username, repoName, file));        
+        });
+      }
+    }, reason => {
+      // rejection
+      console.log(reason);
+    });
     console.log(this.state.repoFiles);
   }
 
@@ -110,7 +113,11 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 
   handleSubmit() {
-    this.handleClose();
+    store.dispatch(actions.setPickerDialog(false));
+  }
+
+  refreshPage() {
+    this.setState(this.state);
   }
 
   public render() {
@@ -132,8 +139,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           id="Repository"
           panel={
             <RepositoryExplorerPanel
-              userRepos={this.props.userRepos}
-              userName={this.state.username}
+              userRepos={this.userRepos}
+              username={this.state.username}
               repoName={this.state.repoName}
               setRepoName={this.setRepoName}
               setRepoFiles={this.setRepoFiles}
@@ -148,6 +155,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           panel={
             <FileExplorerPanel
               repoFiles={this.state.repoFiles}
+              refreshPage={this.refreshPage}
               {...this.props}
             />
           }
@@ -158,11 +166,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 }
 
-export interface IRepositoryExplorerPanelProps {
-  [a: string]: any;
-}
-
-const RepositoryExplorerPanel: React.FunctionComponent<IRepositoryExplorerPanelProps> = props => {
+const RepositoryExplorerPanel = (props: any) => {
   const { userRepos, username, repoName, setRepoName, setRepoFiles } = props;
 
   React.useEffect(() => {
@@ -173,7 +177,7 @@ const RepositoryExplorerPanel: React.FunctionComponent<IRepositoryExplorerPanelP
     <div className={classNames(Classes.DIALOG_BODY, 'repo-step')}>
       <p>Repo List: </p>
       <RadioGroup onChange={setRepoName} selectedValue={repoName}>
-        {userRepos.map((repo: any, i: number) => (
+        {userRepos.map((repo: any) => (
           <Radio label={repo.name} key={repo.id} value={repo.name} />
         ))}
       </RadioGroup>
@@ -181,26 +185,47 @@ const RepositoryExplorerPanel: React.FunctionComponent<IRepositoryExplorerPanelP
   );
 };
 
-export interface IFileExplorerPanelProps {
-  [a: string]: any;
-}
+const FileExplorerPanel = (props: any) => {
+  const { repoFiles, refreshPage } = props;
 
-const FileExplorerPanel: React.FunctionComponent<IFileExplorerPanelProps> = props => {
-  const { repoFiles } = props;
+  const handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
+    const originallySelected = nodeData.isSelected;
+    if (!e.shiftKey) {
+        forEachNode(repoFiles, n => (n.isSelected = false));
+    }
+    nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+    refreshPage();
+  };
 
   const handleNodeCollapse = (nodeData: ITreeNode) => {
     nodeData.isExpanded = false;
+    refreshPage();
   };
 
   const handleNodeExpand = (nodeData: ITreeNode) => {
     nodeData.isExpanded = true;
+    refreshPage();
   };
+
+  const forEachNode = (nodes: ITreeNode[], callback: (node: ITreeNode) => void) => {
+    if (nodes == null) {
+      return;
+    }
+
+    for (const node of nodes) {
+        callback(node);
+        if (node.childNodes !== undefined) {
+          forEachNode(node.childNodes, callback);
+        }
+    }
+  }
 
   return (
     <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
       <p>File List: </p>
       <Tree
         contents={repoFiles}
+        onNodeClick={handleNodeClick}
         onNodeCollapse={handleNodeCollapse}
         onNodeExpand={handleNodeExpand}
         className={Classes.ELEVATION_0}

@@ -88,11 +88,11 @@ export const setGitHubOctokitInstance = (authToken?: string) =>
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
-export const setGitHubUsername = (username?: string) => action(SET_GITHUB_USERNAME, username);
+export const setGitHubUsername = (username: string) => action(SET_GITHUB_USERNAME, username);
 
-export const setGitHubUserRepos = (repos?: []) => action(SET_GITHUB_USER_REPOS, repos);
+export const setGitHubUserRepos = (repos: []) => action(SET_GITHUB_USER_REPOS, repos);
 
-export const setPickerDialog = (isOpen?: boolean) => action(SET_PICKER_DIALOG, isOpen);
+export const setPickerDialog = (isOpen: boolean) => action(SET_PICKER_DIALOG, isOpen);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {

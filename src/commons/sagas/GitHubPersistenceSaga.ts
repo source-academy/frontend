@@ -18,8 +18,8 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
-      repos: { listForAuthenticatedUser: () => {} },
-      users: { getAuthenticated: () => {} }
+      users: { getAuthenticated: () => {} },
+      repos: { listForAuthenticatedUser: () => {} }
     }; // getAuthenticated.data.login .data.name .data.email
     const username = yield call(octokitInstance.users.getAuthenticated);
     const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);

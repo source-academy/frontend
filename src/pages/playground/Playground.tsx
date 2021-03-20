@@ -135,7 +135,7 @@ export type StateProps = {
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
-  isPickerOpen: boolean | undefined;
+  isPickerOpen: boolean;
 };
 
 const keyMap = { goGreen: 'h u l k' };
