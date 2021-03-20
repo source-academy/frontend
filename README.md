@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
 [![License](https://img.shields.io/github/license/source-academy/cadet-frontend)](https://github.com/source-academy/cadet-frontend/blob/master/LICENSE)
 
-The Source Academy is a gamified platform designed to teach students coding while having fun! This repository in particular houses the source code for the frontend written in ReactJS with Redux.
+The Source Academy is an immersive online experiential environment for learning programming, developed in the School of Computing at the National University of Singapore. This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
 
 ## Features
 - Playground to write and test programs
