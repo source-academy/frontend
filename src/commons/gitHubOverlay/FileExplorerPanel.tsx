@@ -1,6 +1,6 @@
-import { Classes, ITreeNode, Tree } from "@blueprintjs/core";
-import classNames from "classnames";
-import React, { Component } from "react";
+import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
+import classNames from 'classnames';
+import React, { Component } from 'react';
 
 export interface IFileExplorerPanelProps {
   repoFiles: ITreeNode<{}>[];
@@ -23,39 +23,42 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     repoFiles: this.props.repoFiles
   };
 
-  private handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
+  private handleNodeClick = (
+    nodeData: ITreeNode,
+    _nodePath: number[],
+    e: React.MouseEvent<HTMLElement>
+  ) => {
     const originallySelected = nodeData.isSelected;
     if (!e.shiftKey) {
-        this.forEachNode(this.state.repoFiles, n => (n.isSelected = false));
+      this.forEachNode(this.state.repoFiles, n => (n.isSelected = false));
     }
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
     this.setState(this.state);
   };
 
   private handleNodeCollapse = (nodeData: ITreeNode) => {
-      nodeData.isExpanded = false;
-      this.setState(this.state);
+    nodeData.isExpanded = false;
+    this.setState(this.state);
   };
 
   private handleNodeExpand = (nodeData: ITreeNode) => {
-      nodeData.isExpanded = true;
-      this.setState(this.state);
+    nodeData.isExpanded = true;
+    this.setState(this.state);
   };
 
   private forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
-      if (nodes == null) {
-          return;
-      }
+    if (nodes == null) {
+      return;
+    }
 
-      for (const node of nodes) {
-          callback(node);
-          if (node.childNodes !== undefined) {
-            this.forEachNode(node.childNodes, callback);
-          }
-
+    for (const node of nodes) {
+      callback(node);
+      if (node.childNodes !== undefined) {
+        this.forEachNode(node.childNodes, callback);
       }
+    }
   }
-  
+
   render() {
     return (
       <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>

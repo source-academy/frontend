@@ -1,6 +1,6 @@
-import { Classes, Radio, RadioGroup } from "@blueprintjs/core";
-import classNames from "classnames";
-import { useEffect } from "react";
+import { Classes, Radio, RadioGroup } from '@blueprintjs/core';
+import classNames from 'classnames';
+import { useEffect } from 'react';
 
 export const RepositoryExplorerPanel = (props: any) => {
   const { userRepos, username, repoName, setRepoName, setRepoFiles } = props;

@@ -1,9 +1,4 @@
-import {
-  DialogStep,
-  IButtonProps,
-  ITreeNode,
-  MultistepDialog
-} from '@blueprintjs/core';
+import { DialogStep, IButtonProps, ITreeNode, MultistepDialog } from '@blueprintjs/core';
 import React from 'react';
 
 import { store } from '../../pages/createStore';
@@ -161,11 +156,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
         <DialogStep
           id="Files"
-          panel={
-            <FileExplorerPanel
-              repoFiles={this.state.repoFiles}
-            />
-          }
+          panel={<FileExplorerPanel repoFiles={this.state.repoFiles} />}
           title="Select File"
         />
       </MultistepDialog>
