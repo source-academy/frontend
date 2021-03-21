@@ -3,11 +3,12 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 
 export interface IFileExplorerPanelProps {
-  repoFiles: ITreeNode<{}>[];
+  repoFiles: ITreeNode[];
+  setFilePath: any;
 }
 
 export interface IFileExplorerPanelState {
-  repoFiles: ITreeNode<{}>[];
+  repoFiles: ITreeNode[];
 }
 
 export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
@@ -33,6 +34,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
       this.forEachNode(this.state.repoFiles, n => (n.isSelected = false));
     }
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+    this.props.setFilePath(nodeData.nodeData);
     this.setState(this.state);
   };
 

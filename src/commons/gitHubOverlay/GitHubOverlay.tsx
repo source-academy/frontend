@@ -14,25 +14,30 @@ export interface GitHubOverlayProps {
 export interface GitHubOverlayState {
   username: string;
   repoName: string;
-  repoFiles: ITreeNode<{}>[];
+  repoFiles: ITreeNode[];
   fileIndex: number;
+  filePath: string;
 }
 
 export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
   constructor(props: GitHubOverlayProps | Readonly<GitHubOverlayProps>) {
     super(props);
     this.setRepoName = this.setRepoName.bind(this);
+    this.setFilePath = this.setFilePath.bind(this);
     this.getContent = this.getContent.bind(this);
     this.createNode = this.createNode.bind(this);
     this.setRepoFiles = this.setRepoFiles.bind(this);
-    this.refreshPage = this.refreshPage.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getFileContents = this.getFileContents.bind(this);
   }
 
   public state: GitHubOverlayState = {
     username: store.getState().session.username,
     repoName: '',
     repoFiles: [],
-    fileIndex: 0
+    fileIndex: 0,
+    filePath: ''
   };
 
   userRepos = store.getState().session.userRepos;
@@ -40,6 +45,11 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   setRepoName(e: any) {
     this.setState({ repoName: e.target.value });
+  }
+
+  setFilePath(e: any) {
+    this.setState({ filePath: e });
+    this.forceUpdate();
   }
 
   async getContent(username: string, repoName: string, filePath: string) {
@@ -56,36 +66,34 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   async createNode(username: string, repoName: string, thisFile: any) {
     const index = this.state.fileIndex++;
-    if (thisFile.type === 'file') {
-      const node: ITreeNode<{}> = {
+    if (thisFile.type === "file") {
+      const node: ITreeNode = {
         id: index,
-        hasCaret: false,
+        nodeData: thisFile.path,
         icon: 'document',
         label: thisFile.name
       };
       return node;
     }
-    if (thisFile.type === 'dir') {
+    if (thisFile.type === "dir") {
       const files = await this.getContent(username, repoName, thisFile.path);
-      const folder: ITreeNode<{}>[] = [];
+      const folder: ITreeNode[] = [];
       if (Array.isArray(files)) {
         files.forEach(async file => {
           folder.push(await this.createNode(username, repoName, file));
         });
       }
-      const node: ITreeNode<{}> = {
+      const node: ITreeNode = {
         id: index,
-        hasCaret: true,
+        nodeData: thisFile.path,
         icon: 'folder-close',
         label: thisFile.name,
         childNodes: folder
       };
       return node;
     }
-    const node: ITreeNode<{}> = {
+    const node: ITreeNode = {
       id: this.state.fileIndex++,
-      hasCaret: false,
-      icon: 'document',
       label: 'test'
     };
     return node;
@@ -97,31 +105,41 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.getContent(username, repoName, '').then(
       value => {
         // fulfillment
-        const files = value;
-        if (Array.isArray(files)) {
-          files.forEach(async file => {
-            this.state.repoFiles?.push(await this.createNode(username, repoName, file));
+        if (Array.isArray(value)) {
+          value.forEach(async file => {
+            this.state.repoFiles.push(await this.createNode(username, repoName, file));
           });
         }
       },
       reason => {
         // rejection
-        console.log(reason);
+        console.error(reason);
       }
     );
-    console.log(this.state.repoFiles);
+    this.forceUpdate();
   }
 
-  handleClose() {
-    store.dispatch(actions.setPickerDialog(false));
-  }
-
-  handleSubmit() {
-    store.dispatch(actions.setPickerDialog(false));
-  }
-
-  refreshPage() {
-    this.setState(this.state);
+  // Replace this with OPEN / SAVE HANDLING FUNCTION
+  async getFileContents() {  
+    const octokit = store.getState().session.githubOctokitInstance;
+    if (octokit === undefined || this.state.filePath === '') return;
+    octokit.repos.getContent({
+      owner: this.state.username,
+      repo: this.state.repoName,
+      path: this.state.filePath
+    }).then(
+      value => {
+        // fulfillment
+        const { content } = {...value.data };
+        if (content) {
+          console.log(Buffer.from(content, 'base64').toString());
+        }
+      },
+      reason => {
+        // rejection
+        console.error(reason);
+      }
+    );
   }
 
   public render() {
@@ -156,10 +174,50 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
         <DialogStep
           id="Files"
-          panel={<FileExplorerPanel repoFiles={this.state.repoFiles} />}
+          panel={<FileExplorerPanel
+            repoFiles={this.state.repoFiles}
+            setFilePath={this.setFilePath}
+            />}
           title="Select File"
         />
       </MultistepDialog>
     );
   }
+
+  handleClose() {
+    store.dispatch(actions.setPickerDialog(false));
+  }
+
+  handleSubmit() {
+    this.getFileContents();
+    store.dispatch(actions.setPickerDialog(false));
+  }
 }
+
+/*
+  sortNodeList (nodeList: ITreeNode<{}>[]) {
+    nodeList.sort(function(x, y) {
+      if (x.hasCaret === y.hasCaret) {
+        if (x.label < y.label) {
+          return -1;
+        }
+        const tempid = x.id;
+        x.id = y.id;
+        y.id = tempid;
+        return 1;
+      } else if (x.hasCaret === true && y.hasCaret === false) {
+        return -1;
+      } else {
+        const tempid = x.id;
+        x.id = y.id;
+        y.id = tempid;
+        return 1;
+      }
+    });
+    nodeList.forEach(node => {
+      if (node.childNodes !== undefined) {
+        this.sortNodeList(node.childNodes);
+      }
+    });
+  }
+*/
