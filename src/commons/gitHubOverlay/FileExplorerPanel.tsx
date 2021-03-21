@@ -7,7 +7,7 @@ export interface IFileExplorerPanelProps {
 }
 
 export interface IFileExplorerPanelState {
-  nodes: ITreeNode<{}>[];
+  repoFiles: ITreeNode<{}>[];
 }
 
 export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
@@ -20,13 +20,13 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
   }
 
   public state: IFileExplorerPanelState = {
-    nodes: this.props.repoFiles
+    repoFiles: this.props.repoFiles
   };
 
   private handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
     const originallySelected = nodeData.isSelected;
     if (!e.shiftKey) {
-        this.forEachNode(this.state.nodes, n => (n.isSelected = false));
+        this.forEachNode(this.state.repoFiles, n => (n.isSelected = false));
     }
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
     this.setState(this.state);
@@ -61,7 +61,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
       <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
         <p>File List: </p>
         <Tree
-          contents={this.state.nodes}
+          contents={this.state.repoFiles}
           onNodeClick={this.handleNodeClick}
           onNodeCollapse={this.handleNodeCollapse}
           onNodeExpand={this.handleNodeExpand}

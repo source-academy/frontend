@@ -1,18 +1,15 @@
 import {
-  Classes,
   DialogStep,
   IButtonProps,
   ITreeNode,
-  MultistepDialog,
-  Radio,
-  RadioGroup
+  MultistepDialog
 } from '@blueprintjs/core';
-import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 import { FileExplorerPanel } from './FileExplorerPanel';
+import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
 
 export interface GitHubOverlayProps {
   userRepos?: [];
@@ -52,7 +49,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   async getContent(username: string, repoName: string, filePath: string) {
     const octokit = store.getState().session.githubOctokitInstance;
-    if (octokit === undefined) return;
+    if (octokit === undefined || repoName === '') return;
     const results = await octokit.repos.getContent({
       owner: username,
       repo: repoName,
@@ -175,33 +172,3 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     );
   }
 }
-
-const RepositoryExplorerPanel = (props: any) => {
-  const { userRepos, username, repoName, setRepoName, setRepoFiles } = props;
-
-  React.useEffect(() => {
-    setRepoFiles(username, repoName);
-  }, [username, repoName, setRepoFiles]);
-
-  return (
-    <div className={classNames(Classes.DIALOG_BODY, 'repo-step')}>
-      <p>Repo List: </p>
-      <RadioGroup onChange={setRepoName} selectedValue={repoName}>
-        {userRepos.map((repo: any) => (
-          <Radio label={repo.name} key={repo.id} value={repo.name} />
-        ))}
-      </RadioGroup>
-    </div>
-  );
-};
-
-/*
-  {
-    id: index,
-    hasCaret: true,
-    icon: "folder-close",
-    label: (e.name), childNodes:[]
-  }
-*/
-
-//ITreeNode<{}>[] | ({ id: number; hasCaret: boolean; icon: string; label: any; folder?: undefined; } | { id: number; hasCaret: boolean; icon: string; label: any; folder: {}[]; } | undefined)[] | undefined = []
