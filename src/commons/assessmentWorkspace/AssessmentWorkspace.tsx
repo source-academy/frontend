@@ -533,7 +533,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return {
       editorButtons: !isMobileBreakpoint
         ? [runButton, saveButton, resetButton, chapterSelect]
-        : [saveButton, resetButton, chapterSelect],
+        : [saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };

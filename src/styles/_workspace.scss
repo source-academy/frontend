@@ -10,6 +10,12 @@ $code-color-error: #ff4444;
   flex: 1 1 auto;
   flex-direction: column;
 
+  // Hides scrollbar in mobile workspace
+  @media screen and (max-width: 768px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .row {
     margin-right: 0px;
     margin-left: 0px;
@@ -32,6 +38,8 @@ $code-color-error: #ff4444;
     margin-right: 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.6rem;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     .ControlBar_editingWorkspace {
       width: 10%;

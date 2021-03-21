@@ -6,6 +6,7 @@ import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
+import ControlBar from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
@@ -187,6 +188,17 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         title="Please turn back to portrait orientation!"
       />
 
+      {/* Render the top ControlBar when it is the Assessment Workspace */}
+      {props.mobileSideContentProps.workspaceLocation === 'assessment' && (
+        <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
+      )}
+
+      <MobileSideContent
+        {...updatedMobileSideContentProps()}
+        {...draggableReplProps}
+        editorRef={editorRef}
+      />
+
       <DraggableRepl
         key={'repl'}
         position={draggableReplPosition}
@@ -194,12 +206,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         disabled={isDraggableReplDisabled}
         replProps={props.replProps}
         ref={replRef}
-      />
-
-      <MobileSideContent
-        {...updatedMobileSideContentProps()}
-        {...draggableReplProps}
-        editorRef={editorRef}
       />
 
       <MobileKeyboard editorRef={keyboardInputRef} />
