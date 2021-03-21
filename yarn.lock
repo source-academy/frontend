@@ -7949,10 +7949,26 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
-js-slang@^0.4.60, js-slang@^0.4.71:
+js-slang@^0.4.60:
   version "0.4.71"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.71.tgz#d9ba5ec634eff92f4b48bc1cbe93fc3124c5da0a"
   integrity sha512-IG2BuzPJOmLyUVjF9UmMJO1oJQBXQUkn0KG5R2ovXxGo/YQ4pa2/3ENBNI79vx7pzKm4hMj9bfiRpqKIbfLaZw==
+  dependencies:
+    "@types/estree" "0.0.45"
+    acorn "^8.0.3"
+    acorn-loose "^8.0.0"
+    acorn-walk "^8.0.0"
+    astring "^1.4.3"
+    gpu.js "^2.10.4"
+    lodash "^4.17.20"
+    node-getopt "^0.3.2"
+    source-map "^0.7.3"
+    xmlhttprequest-ts "^1.0.1"
+
+js-slang@^0.4.73:
+  version "0.4.73"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.73.tgz#c98aa788192b96b96cdc265733209af80dd8fe5c"
+  integrity sha512-koBhv5269tCIPBj2C497/oIdEh3Sb8EACwtpblxmZr9YzTlLkPEVQJ5hK50X64dt+p9gTpU6Xui2n2BOE98fAA==
   dependencies:
     "@types/estree" "0.0.45"
     acorn "^8.0.3"
@@ -11129,6 +11145,11 @@ react-shallow-renderer@^16.13.1:
   dependencies:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0"
+
+react-simple-keyboard@^2.5.160:
+  version "2.5.160"
+  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-2.5.160.tgz#2a6954ac0e59d13a8a2233aafe4b359ba574949c"
+  integrity sha512-gDRFC61yV3sjbR+y4K/ZhtCwlNULeTLASkHfADytv7SeVJtwEKygwpLERmeOs85iH+9gAj4nAgmI/rezUVydFg==
 
 react-sortable-hoc@^1.11.0:
   version "1.11.0"
