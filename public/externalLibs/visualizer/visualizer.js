@@ -1,11 +1,12 @@
 ; (function (exports) {
   /**
-   * Setup Stage for 1 data structure
+   * Setup Stage
    */
   const container = document.createElement('div');
   container.id = 'list-visualizer-container';
   container.hidden = true;
   document.body.appendChild(container);
+
   const drawingConfig = {
     strokeWidth: 2,
     stroke: 'white',
@@ -787,6 +788,9 @@
     }
   }
 
+  // A pane encapsulates a drawing of a single data structure of a single step
+  // It contains layer, which is the Konva.Layer representing the layer
+  // It also contains a config object, which contains the desired width and height of the layer to be drawn
   class Pane {
     constructor(layer, config) {
       this.layer = layer;
@@ -794,7 +798,7 @@
     }
   }
 
-
+  // A single step in the stepper; consists of multiple panes, one for each data structure passed into draw_data(a, b, c, ...)
   class Step {
     constructor(panes) {
       this.panes = panes;
@@ -810,14 +814,22 @@
   let currentStepIndex = -1;
   // label numbers when the data cannot be fit into the box
   let nodeLabel = 0;
-  
+
+  /**
+   * Creates a given number of panes (Konva.Stages) to place data structure drawings (Konva.Layer) in
+   * @param {Number} count The number of panes to create
+   */
   function createPanes(count) {
     stages = [];
     for (let i = 0; i < count; i++) {
       const layerContainer = document.createElement('div');
-      const containerLabel = document.createElement('h3');
-      containerLabel.innerHTML = 'Structure ' + (i + 1);
-      container.appendChild(containerLabel);
+      // If there is only 1 Pane (i.e. one data structure at this step)
+      // Then do not show a label
+      if (count > 1) {
+        const containerLabel = document.createElement('h3');
+        containerLabel.innerHTML = 'Structure ' + (i + 1);
+        container.appendChild(containerLabel);
+      }
       layerContainer.id = 'list-visualizer-pane' + i;
       container.appendChild(layerContainer);
       stages.push(new Konva.Stage({
@@ -827,8 +839,11 @@
   }
 
   /**
-   *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
-   *  Then shift it to the left end.
+   *  Converts a list into a tree object, shifts it to the left end, and adds it to a Konva.Layer.
+   *  The Konva.Layer is encapsulated in a Pane, which is added to the list of panes to be drawn.
+   *  This function is called exactly once per draw_data call in Source.
+   * 
+   * @param {list} xs The list to be drawn
    */
   function appendDrawing(xs) {
     // Hides the default text
@@ -841,32 +856,33 @@
       icon.classList.add('side-content-tab-alert');
     }
 
-    let structures = [xs, xs];
+    let structures = [xs];
 
-    /**
-     * Create konva stage according to calculated width and height of drawing.
-     * Theoretically, as each box is 90px wide and successive boxes overlap by half,
-     * the width of the drawing should be roughly (width * 45), with a similar calculation
-     * for height.
-     * In practice, likely due to browser auto-scaling, for large drawings this results in
-     * some of the drawing being cut off. Hence the width and height formulas used are approximations.
-     */
-    
+
     minLeft = 500;
     nodelist = [];
     fnNodeList = [];
     nodeLabel = 0;
 
-    const panes = []
+    const panes = [];
 
-    // IF THIS IS THE FIRST STEP, SHOW IT
+    // If this is the first step, create the Konva.Stages used to display the Konva.Layers
     if (stepList.length == 0)
-      createPanes(2);
+      createPanes(structures.length);
 
     // Create a Pane for each structure
     for (let i = 0; i < structures.length; i++) {
       const xs = structures[i]
       const stage = stages[i];
+
+      /**
+       * Size stage according to calculated width and height of drawing.
+       * Theoretically, as each box is 90px wide and successive boxes overlap by half,
+       * the width of the drawing should be roughly (width * 45), with a similar calculation
+       * for height.
+       * In practice, likely due to browser auto-scaling, for large drawings this results in
+       * some of the drawing being cut off. Hence the width and height formulas used are approximations.
+       */
       const config = {
         width: findListWidth(xs) * 60 + 60,
         height: findListHeight(xs) * 60 + 100,
@@ -908,11 +924,14 @@
     // Create a Step, and add to list of steps to be passed on to UI
     stepList.push(new Step(panes));
 
+    // Set the first step as the step to be displayed
     currentStepIndex = 0;
   }
 
   /**
-   *  Shows the step with a given ID while hiding the others.
+   * Shows the step with a given id while hiding the others.
+   * 
+   * @param {Number} id The id of the step to be shown
    */
   function showStep(id) {
     const step = stepList[id];
