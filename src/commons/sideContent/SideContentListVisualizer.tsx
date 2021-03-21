@@ -12,7 +12,7 @@ type State = {
 
 const listVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
-  NEXT_STEP: 'right',
+  NEXT_STEP: 'right'
 };
 
 class SideContentListVisualizer extends React.Component<{}, State> {
@@ -30,34 +30,42 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   public render() {
     const listVisualizerHandlers = {
       PREVIOUS_STEP: this.onPrevButtonClick,
-      NEXT_STEP: this.onNextButtonClick,
-    }
+      NEXT_STEP: this.onNextButtonClick
+    };
     // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
-        <div ref={r => (this.$parent = r)} className={classNames('sa-list-visualizer', Classes.DARK)}>
-          {
-            ((window as any).ListVisualizer?.getStepCount() ?? 0) > 1 ?
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Button
-              large={true}
-              outlined={true}
-              icon={IconNames.ARROW_LEFT}
-              onClick={this.onPrevButtonClick}>
+        <div
+          ref={r => (this.$parent = r)}
+          className={classNames('sa-list-visualizer', Classes.DARK)}
+        >
+          {((window as any).ListVisualizer?.getStepCount() ?? 0) > 1 ? (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Button
+                large={true}
+                outlined={true}
+                icon={IconNames.ARROW_LEFT}
+                onClick={this.onPrevButtonClick}
+              >
                 Prev
-            </Button>
-              <h3 className='bp3-text-large' style={{alignSelf: 'center', display: 'inline', margin: 0}}>
-                Call {(window as any).ListVisualizer?.getCurrentStep() ?? '0'}/{(window as any).ListVisualizer?.getStepCount()}
+              </Button>
+              <h3
+                className="bp3-text-large"
+                style={{ alignSelf: 'center', display: 'inline', margin: 0 }}
+              >
+                Call {(window as any).ListVisualizer?.getCurrentStep() ?? '0'}/
+                {(window as any).ListVisualizer?.getStepCount()}
               </h3>
               <Button
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
-                onClick={this.onNextButtonClick}>
+                onClick={this.onNextButtonClick}
+              >
                 Next
               </Button>
-            </div> : null
-          }
+            </div>
+          ) : null}
           <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
             The data visualizer visualises data structures.
             <br />
@@ -87,13 +95,13 @@ class SideContentListVisualizer extends React.Component<{}, State> {
     const element = (window as any).ListVisualizer;
     element.previous();
     this.setState({});
-  }
+  };
 
   private onNextButtonClick = () => {
     const element = (window as any).ListVisualizer;
     element.next();
     this.setState({});
-  }
+  };
 
   private tryToLoad = () => {
     const element = (window as any).ListVisualizer;
