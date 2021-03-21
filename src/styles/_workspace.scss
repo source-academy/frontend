@@ -41,8 +41,10 @@ $code-color-error: #ff4444;
     overflow-x: auto;
     overflow-y: hidden;
 
-    .ControlBar_editingWorkspace {
-      width: 10%;
+    @media screen and (min-width: 769px) {
+      .ControlBar_editingWorkspace {
+        width: 10%;
+      }
     }
   }
 
