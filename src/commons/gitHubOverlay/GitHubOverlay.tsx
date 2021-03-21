@@ -5,14 +5,14 @@ import {
   ITreeNode,
   MultistepDialog,
   Radio,
-  RadioGroup,
-  Tree
+  RadioGroup
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
+import { FileExplorerPanel } from './FileExplorerPanel';
 
 export interface GitHubOverlayProps {
   userRepos?: [];
@@ -167,8 +167,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           panel={
             <FileExplorerPanel
               repoFiles={this.state.repoFiles}
-              refreshPage={this.refreshPage}
-              {...this.props}
             />
           }
           title="Select File"
@@ -193,59 +191,6 @@ const RepositoryExplorerPanel = (props: any) => {
           <Radio label={repo.name} key={repo.id} value={repo.name} />
         ))}
       </RadioGroup>
-    </div>
-  );
-};
-
-const FileExplorerPanel = (props: any) => {
-  const { repoFiles, refreshPage } = props;
-
-  const handleNodeClick = (
-    nodeData: ITreeNode,
-    _nodePath: number[],
-    e: React.MouseEvent<HTMLElement>
-  ) => {
-    const originallySelected = nodeData.isSelected;
-    if (!e.shiftKey) {
-      forEachNode(repoFiles, n => (n.isSelected = false));
-    }
-    nodeData.isSelected = originallySelected == null ? true : !originallySelected;
-    refreshPage();
-  };
-
-  const handleNodeCollapse = (nodeData: ITreeNode) => {
-    nodeData.isExpanded = false;
-    refreshPage();
-  };
-
-  const handleNodeExpand = (nodeData: ITreeNode) => {
-    nodeData.isExpanded = true;
-    refreshPage();
-  };
-
-  const forEachNode = (nodes: ITreeNode[], callback: (node: ITreeNode) => void) => {
-    if (nodes == null) {
-      return;
-    }
-
-    for (const node of nodes) {
-      callback(node);
-      if (node.childNodes !== undefined) {
-        forEachNode(node.childNodes, callback);
-      }
-    }
-  };
-
-  return (
-    <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
-      <p>File List: </p>
-      <Tree
-        contents={repoFiles}
-        onNodeClick={handleNodeClick}
-        onNodeCollapse={handleNodeCollapse}
-        onNodeExpand={handleNodeExpand}
-        className={Classes.ELEVATION_0}
-      />
     </div>
   );
 };
