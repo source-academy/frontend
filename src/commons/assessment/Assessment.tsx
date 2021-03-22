@@ -168,10 +168,11 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderGradingStatus: boolean
   ) => {
     const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
-    return !isMobileBreakpoint ? (
+    const ratio = isMobileBreakpoint ? 5 : 3;
+    return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
-          <div className="col-xs-3 listing-picture">
+          <div className={`col-xs-${String(ratio)} listing-picture`}>
             <NotificationBadge
               className="badge"
               notificationFilter={filterNotificationsByAssessment(overview.id)}
@@ -183,7 +184,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
               src={overview.coverImage ? overview.coverImage : defaultCoverImage}
             />
           </div>
-          <div className="col-xs-9 listing-text">
+          <div className={`col-xs-${String(12 - ratio)} listing-text`}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
             <div className="listing-grade">
               <H6>
@@ -209,60 +210,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
               </Text>
               <div className="listing-button">
                 {renderAttemptButton ? makeAssessmentInteractButton(overview) : null}
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-    ) : (
-      <div key={index}>
-        <Card className="row listing" elevation={Elevation.ONE}>
-          <div className="col-xs-12">
-            {makeOverviewCardTitle(overview, index, renderGradingStatus)}
-          </div>
-          <div className="col-xs-12">
-            <div className="row">
-              <div className="col-xs-6 listing-picture-mobile">
-                <NotificationBadge
-                  className="badge"
-                  notificationFilter={filterNotificationsByAssessment(overview.id)}
-                  large={true}
-                />
-                <img
-                  alt="Assessment"
-                  className={`cover-image-${overview.status}`}
-                  src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-                />
-              </div>
-              <div className="col-xs-6 listing-text-mobile">
-                <div className="listing-grade">
-                  <H6>
-                    {showGrade
-                      ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                      : `Max Grade: ${overview.maxGrade}`}
-                  </H6>
-                </div>
-                <div className="listing-xp">
-                  <H6>
-                    {showGrade
-                      ? `XP: ${overview.xp} / ${overview.maxXp}`
-                      : `Max XP: ${overview.maxXp}`}
-                  </H6>
-                </div>
-                <div className="listing-description-mobile">
-                  <Markdown content={overview.shortSummary} />
-                </div>
-              </div>
-              <div className="listing-footer col-xs-12">
-                <Text className="listing-due-date">
-                  <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-                  {beforeNow(overview.openAt)
-                    ? `Due: ${getPrettyDate(overview.closeAt)}`
-                    : `Opens at: ${getPrettyDate(overview.openAt)}`}
-                </Text>
-                <div className="listing-button">
-                  {renderAttemptButton ? makeAssessmentInteractButton(overview) : null}
-                </div>
               </div>
             </div>
           </div>
@@ -423,7 +370,11 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Finally, render the ContentDisplay.
   return (
     <div className="Assessment">
-      <ContentDisplay display={display} loadContentDispatch={props.handleAssessmentOverviewFetch} />
+      <ContentDisplay
+        fullWidth={isMobileBreakpoint}
+        display={display}
+        loadContentDispatch={props.handleAssessmentOverviewFetch}
+      />
       {betchaDialog}
     </div>
   );

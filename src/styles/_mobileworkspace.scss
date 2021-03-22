@@ -6,6 +6,35 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 .mobile-workspace {
   position: relative;
 
+  .ControlBar {
+    // for assesment workspace top control bar
+    .#{$ns}-button:not(.#{$ns}-disabled) {
+      padding: 5px;
+
+      .#{$ns}-icon {
+        margin: 0;
+      }
+
+      .#{$ns}-button-text {
+        display: none;
+      }
+    }
+
+    .ControlBar_flow {
+      .#{$ns}-disabled {
+        padding: 5px 5px 5px 0;
+        font-size: 12px !important;
+      }
+
+      :last-child {
+        .#{$ns}-button-text {
+          display: flex;
+          font-size: 12px !important;
+        }
+      }
+    }
+  }
+
   .mobile-floating-keyboard {
     width: 42px; // default value, toggled by floating-toggle to 99vw
     height: 50px;
