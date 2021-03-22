@@ -1,9 +1,9 @@
-import renderer from 'react-test-renderer';
+import { act, render, screen } from '@testing-library/react';
 
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
 import GitHubCallback from '../GitHubCallback';
 
-test('Application Client ID not deployed renders correctly', () => {
+test('Application Client ID not deployed renders correctly', async () => {
   const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
   getClientIdMock.mockImplementation(returnEmptyString);
 
@@ -16,27 +16,24 @@ test('Application Client ID not deployed renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-  let component;
-
-  renderer.act(() => {
-    component = renderer.create(<GitHubCallback />);
+  act(() => {
+    render(<GitHubCallback />);
   });
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(0);
 
-  expect(component).toBeDefined();
-
-  const tree = (component as any).toJSON();
-  expect(tree).toMatchSnapshot();
+  await screen.findByText(
+    'Client ID not included with deployment. Please try again or contact the website administrator.'
+  );
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
   exchangeAccessCodeMock.mockRestore();
 });
 
-test('Access code not found in return url renders correctly', () => {
+test('Access code not found in return url renders correctly', async () => {
   const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
   getClientIdMock.mockImplementation(returnLegitimateCode);
 
@@ -49,27 +46,24 @@ test('Access code not found in return url renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-  let component;
-
-  renderer.act(() => {
-    component = renderer.create(<GitHubCallback />);
+  act(() => {
+    render(<GitHubCallback />);
   });
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(0);
 
-  expect(component).toBeDefined();
-
-  const tree = (component as any).toJSON();
-  expect(tree).toMatchSnapshot();
+  await screen.findByText(
+    'Access code not found in callback URL. Please try again or contact the website administrator.'
+  );
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
   exchangeAccessCodeMock.mockRestore();
 });
 
-test('Cannot connect to server renders correctly', () => {
+test('Cannot connect to server renders correctly', async () => {
   const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
   getClientIdMock.mockImplementation(returnLegitimateCode);
 
@@ -82,27 +76,24 @@ test('Cannot connect to server renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateFailure);
 
-  let component;
-
-  renderer.act(() => {
-    component = renderer.create(<GitHubCallback />);
+  act(() => {
+    render(<GitHubCallback />);
   });
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
-  expect(component).toBeDefined();
-
-  const tree = (component as any).toJSON();
-  expect(tree).toMatchSnapshot();
+  await screen.findByText(
+    'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
+  );
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
   exchangeAccessCodeMock.mockRestore();
 });
 
-test('Successful retrieval of auth token renders correctly', () => {
+test('Successful retrieval of auth token renders correctly', async () => {
   const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
   getClientIdMock.mockImplementation(returnLegitimateCode);
 
@@ -115,20 +106,15 @@ test('Successful retrieval of auth token renders correctly', () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-  let component;
-
-  renderer.act(() => {
-    component = renderer.create(<GitHubCallback />);
+  act(() => {
+    render(<GitHubCallback />);
   });
 
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
-  expect(component).toBeDefined();
-
-  const tree = (component as any).toJSON();
-  expect(tree).toMatchSnapshot();
+  await screen.findByText('Log-in successful! This window will close soon.');
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
@@ -147,8 +133,8 @@ async function connectBackendSimulateSuccess(
   messageBody: string,
   backendLink: string
 ): Promise<Response> {
-  return new Promise(() => {
-    return new Response(JSON.stringify({ access_token: '12345' }));
+  return new Promise((resolve, reject) => {
+    resolve(new Response(JSON.stringify({ access_token: 12345 })));
   });
 }
 
@@ -156,7 +142,7 @@ async function connectBackendSimulateFailure(
   messageBody: string,
   backendLink: string
 ): Promise<Response> {
-  return new Promise(() => {
-    return new Response();
+  return new Promise((resolve, reject) => {
+    resolve(new Response());
   });
 }

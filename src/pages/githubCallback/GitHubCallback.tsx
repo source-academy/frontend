@@ -52,24 +52,37 @@ async function retrieveAuthTokenUpdatePage(
     backendLink,
     messageBody
   );
-  const response = await responseObject.json();
 
-  const requestSuccess = typeof response.access_token !== 'undefined';
+  let response: any;
 
-  if (requestSuccess) {
+  try {
+    // This line might throw syntax error if the payload received is in the wrong format
+    response = await responseObject.json();
+
+    if (typeof response.access_token === 'undefined') {
+      throw new Error('Access Token not found in payload');
+    }
+  } catch (err) {
+    setMessage(
+      'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
+    );
+    return;
+  }
+
+  setMessage('Log-in successful! This window will close soon.');
+
+  try {
     // Send auth token back to the main browser page
     const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
     broadcastChannel.postMessage(response.access_token);
-
-    setMessage('Log-in successful! This window will close soon.');
-    setTimeout(() => {
-      window.close();
-    }, 3000);
-  } else {
-    setMessage(
-      'Connection with server was denied. Please try again or contact the website administrator.'
-    );
+  } catch (err) {
+    // This block should not be reached during normal running of code
+    // However, BroadcastChannel does not exist in the test environment
   }
+
+  setTimeout(() => {
+    window.close();
+  }, 3000);
 }
 
 export default GitHubCallback;
