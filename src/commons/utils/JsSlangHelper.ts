@@ -76,10 +76,11 @@ function cadetAlert(value: any) {
  *
  * @param list the list to be visualised.
  */
-function visualiseList(list: any) {
+function visualiseList(...xs: any[]) {
   if ((window as any).ListVisualizer) {
-    (window as any).ListVisualizer.draw(list);
-    return list;
+    // Pass in xs[0] since xs is in the form; [(Array of drawbables), "playground"]
+    (window as any).ListVisualizer.draw(xs[0]);
+    return xs[0];
   } else {
     throw new Error('List visualizer is not enabled');
   }
