@@ -38,8 +38,8 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   .Autograder {
     min-width: 0 !important;
     width: 100vw;
-    position: absolute;
-    left: 0;
+    position: relative;
+    left: -15px;
 
     button {
       margin: 0 20px;
