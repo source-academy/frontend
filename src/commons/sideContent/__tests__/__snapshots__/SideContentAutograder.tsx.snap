@@ -318,7 +318,7 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
     <Blueprint3.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp3-collapse\\" style={{...}}>
         <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
-          <div>
+          <div className=\\"testcaseCards\\">
             <div className=\\"testcases-header\\">
               <div className=\\"header-fn\\">
                 Testcase
@@ -526,7 +526,7 @@ exports[`Autograder renders private testcases with different statuses correctly 
     <Blueprint3.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp3-collapse\\" style={{...}}>
         <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
-          <div>
+          <div className=\\"testcaseCards\\">
             <div className=\\"testcases-header\\">
               <div className=\\"header-fn\\">
                 Testcase
@@ -771,7 +771,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
     <Blueprint3.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp3-collapse\\" style={{...}}>
         <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
-          <div>
+          <div className=\\"testcaseCards\\">
             <div className=\\"testcases-header\\">
               <div className=\\"header-fn\\">
                 Testcase

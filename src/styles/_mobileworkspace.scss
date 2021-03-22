@@ -35,6 +35,28 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     }
   }
 
+  .Autograder {
+    min-width: 0 !important;
+    width: 100vw;
+    position: absolute;
+    left: 0;
+
+    button {
+      margin: 0 20px;
+      width: calc(100% - 40px) !important;
+    }
+
+    .#{$ns}-collapse-body {
+      width: 100%;
+      padding: 0 15px 10px 15px;
+      overflow-x: auto;
+
+      .testcaseCards {
+        width: 640px;
+      }
+    }
+  }
+
   .mobile-floating-keyboard {
     width: 42px; // default value, toggled by floating-toggle to 99vw
     height: 50px;
