@@ -1,3 +1,5 @@
+import Constants from '../../commons/utils/Constants';
+
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
  *
@@ -36,5 +38,5 @@ export function grabAccessCodeFromURL(currentURLAddress: string): string {
  * @return {string} The client ID.
  */
 export function getClientId(): string {
-  return process.env.REACT_APP_GITHUB_CLIENT_ID || '';
+  return Constants.githubClientId;
 }

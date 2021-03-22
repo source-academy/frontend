@@ -1,6 +1,7 @@
 import * as QueryString from 'query-string';
 import { useEffect, useState } from 'react';
 
+import Constants from '../../commons/utils/Constants';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 
 /**
@@ -16,7 +17,8 @@ export function GitHubCallback() {
     const accessCode = GitHubUtils.grabAccessCodeFromURL(currentAddress);
 
     const clientId = GitHubUtils.getClientId();
-    const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
+    //const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
+    const backendLink = Constants.githubOAuthProxyUrl;
 
     if (accessCode === '') {
       setMessage(
