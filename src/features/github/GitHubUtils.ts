@@ -12,7 +12,7 @@ export async function exchangeAccessCodeForAuthTokenContainingObject(
   return await fetch(backendLink, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     },
     body: messageBody
   });
