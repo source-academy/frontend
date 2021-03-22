@@ -38,7 +38,6 @@
     "@sentry/browser": "^5.30.0",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.0.1",
-    "@testing-library/react": "^11.2.5",
     "@types/uuid": "^8.3.0",
     "ace-builds": "^1.4.12",
     "acorn": "^8.0.4",
@@ -84,6 +83,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.1.1",
+    "@testing-library/react": "^11.2.5",
     "@types/acorn": "^4.0.5",
     "@types/classnames": "^2.2.11",
     "@types/common-tags": "^1.8.0",
