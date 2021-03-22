@@ -82,7 +82,7 @@ async function retrieveAuthTokenUpdatePage(
 
   setTimeout(() => {
     window.close();
-  }, 3000);
+  }, 1000);
 }
 
 export default GitHubCallback;
