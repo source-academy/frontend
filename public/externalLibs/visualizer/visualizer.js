@@ -845,7 +845,7 @@
    * 
    * @param {list} xs The list to be drawn
    */
-  function appendDrawing(xs) {
+  function appendDrawing(structures) {
     // Hides the default text
     (document.getElementById('data-visualizer-default-text')).hidden = true;
 
@@ -855,9 +855,6 @@
     if (icon) {
       icon.classList.add('side-content-tab-alert');
     }
-
-    let structures = [xs];
-
 
     minLeft = 500;
     nodelist = [];
