@@ -250,7 +250,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           className={classNames(Classes.DARK, 'mobile-side-content')}
         >
           {renderedTabs}
-          <MobileControlBar {...props.mobileControlBarProps} />
+
+          {/* Render the bottom ControlBar 'Cog' button only in the Playground Workspace */}
+          {props.workspaceLocation === 'playground' && (
+            <MobileControlBar {...props.mobileControlBarProps} />
+          )}
         </Tabs>
       </div>
     </>
