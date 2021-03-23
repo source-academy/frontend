@@ -9,6 +9,7 @@ import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
 export interface GitHubOverlayProps {
   userRepos?: [];
   isPickerOpen: boolean;
+  handleEditorValueChange: (val: string) => void;
 }
 
 export interface GitHubOverlayState {
@@ -24,10 +25,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     super(props);
     this.setRepoName = this.setRepoName.bind(this);
     this.setFilePath = this.setFilePath.bind(this);
-    this.getContent = this.getContent.bind(this);
     this.createNode = this.createNode.bind(this);
     this.setRepoFiles = this.setRepoFiles.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getFileContents = this.getFileContents.bind(this);
   }
@@ -40,6 +41,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     filePath: ''
   };
 
+  octokit = store.getState().session.githubOctokitInstance;
   userRepos = store.getState().session.userRepos;
   isPickerOpen = store.getState().session.isPickerOpen;
 
@@ -49,81 +51,76 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   setFilePath(e: any) {
     this.setState({ filePath: e });
-    this.forceUpdate();
   }
 
-  async getContent(username: string, repoName: string, filePath: string) {
-    const octokit = store.getState().session.githubOctokitInstance;
-    if (octokit === undefined || repoName === '') return;
-    const results = await octokit.repos.getContent({
-      owner: username,
-      repo: repoName,
-      path: filePath
-    });
-    const files = results.data;
-    return files;
-  }
-
-  async createNode(username: string, repoName: string, thisFile: any) {
+  async createNode(thisFile: any) {
     const index = this.state.fileIndex++;
-    if (thisFile.type === "file") {
-      const node: ITreeNode = {
-        id: index,
-        nodeData: thisFile.path,
-        icon: 'document',
-        label: thisFile.name
-      };
-      return node;
-    }
-    if (thisFile.type === "dir") {
-      const files = await this.getContent(username, repoName, thisFile.path);
-      const folder: ITreeNode[] = [];
-      if (Array.isArray(files)) {
-        files.forEach(async file => {
-          folder.push(await this.createNode(username, repoName, file));
-        });
+    if (this.octokit !== undefined) {
+      if (thisFile.type === "file") {
+        const node: ITreeNode = {
+          id: index,
+          nodeData: thisFile.path,
+          icon: 'document',
+          label: thisFile.name
+        };
+        return node;
       }
-      const node: ITreeNode = {
-        id: index,
-        nodeData: thisFile.path,
-        icon: 'folder-close',
-        label: thisFile.name,
-        childNodes: folder
-      };
-      return node;
+      if (thisFile.type === "dir") {
+        const files = await this.octokit.repos.getContent({
+          owner: this.state.username,
+          repo: this.state.repoName,
+          path: thisFile.path
+        });
+        const folder: ITreeNode[] = [];
+        if (Array.isArray(files)) {
+          for (let i = 0; i < files.length; i++) {
+            folder.push(await this.createNode(files[i]));
+          }
+        }
+        const node: ITreeNode = {
+          id: index,
+          nodeData: thisFile.path,
+          icon: 'folder-close',
+          label: thisFile.name,
+          childNodes: folder
+        };
+        return node;
+      }
     }
     const node: ITreeNode = {
       id: this.state.fileIndex++,
-      label: 'test'
+      label: 'dummy file'
     };
     return node;
   }
 
-  async setRepoFiles(username: string, repoName: string) {
+  async setRepoFiles() {
     this.setState({ fileIndex: 0 });
-    this.setState({ repoFiles: [] });
-    this.getContent(username, repoName, '').then(
-      value => {
-        // fulfillment
-        if (Array.isArray(value)) {
-          value.forEach(async file => {
-            this.state.repoFiles.push(await this.createNode(username, repoName, file));
-          });
+    const newRepoFiles: ITreeNode[] = [];
+    if (this.octokit === undefined || this.state.repoName === '') return;
+    try {
+      const results = await this.octokit.repos.getContent({
+        owner: this.state.username,
+        repo: this.state.repoName,
+        path: ''
+      });
+      const files = results.data;
+      if (Array.isArray(files)) {
+        for (let i = 0; i < files.length; i++) {
+          const newNode = await this.createNode(files[i]);
+          newRepoFiles.push(newNode);
         }
-      },
-      reason => {
-        // rejection
-        console.error(reason);
       }
-    );
-    this.forceUpdate();
+      this.setState({ repoFiles: newRepoFiles });
+    } catch (err) {
+      console.error(err);
+    }
+    console.log(this.state.repoFiles);
   }
 
-  // Replace this with OPEN / SAVE HANDLING FUNCTION
   async getFileContents() {  
-    const octokit = store.getState().session.githubOctokitInstance;
-    if (octokit === undefined || this.state.filePath === '') return;
-    octokit.repos.getContent({
+    if (this.octokit === undefined) return;
+    this.octokit.repos.getContent({
       owner: this.state.username,
       repo: this.state.repoName,
       path: this.state.filePath
@@ -132,7 +129,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         // fulfillment
         const { content } = {...value.data };
         if (content) {
-          console.log(Buffer.from(content, 'base64').toString());
+          // console.log(Buffer.from(content, 'base64').toString());
+          this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
         }
       },
       reason => {
@@ -146,15 +144,16 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     const finalButtonProps: Partial<IButtonProps> = {
       intent: 'primary',
       onClick: this.handleSubmit,
-      text: 'Close' // To change to Open or Save
+      text: 'Open' // To change to Open or Save
     };
 
     return (
       <MultistepDialog
         className="GitHubPicker"
-        onClose={this.handleClose}
-        isOpen={this.props.isPickerOpen}
         finalButtonProps={finalButtonProps}
+        isOpen={this.props.isPickerOpen}
+        nextButtonProps={{ disabled: this.state.repoFiles.length === 0 }}
+        onClose={this.handleClose}
         title="Opening Repository File"
       >
         <DialogStep
@@ -162,7 +161,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           panel={
             <RepositoryExplorerPanel
               userRepos={this.userRepos}
-              username={this.state.username}
               repoName={this.state.repoName}
               setRepoName={this.setRepoName}
               setRepoFiles={this.setRepoFiles}
@@ -174,9 +172,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
         <DialogStep
           id="Files"
-          panel={<FileExplorerPanel
-            repoFiles={this.state.repoFiles}
-            setFilePath={this.setFilePath}
+          panel={
+            <FileExplorerPanel
+              repoFiles={this.state.repoFiles}
+              setFilePath={this.setFilePath}
             />}
           title="Select File"
         />
@@ -188,6 +187,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     store.dispatch(actions.setPickerDialog(false));
   }
 
+  handleSelect() {
+    this.setRepoFiles();
+  }
+
   handleSubmit() {
     this.getFileContents();
     store.dispatch(actions.setPickerDialog(false));
@@ -195,24 +198,21 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 }
 
 /*
-  sortNodeList (nodeList: ITreeNode<{}>[]) {
+  sortNodeList (nodeList: ITreeNode[]) {
+    console.log("sorted nodelist");
     nodeList.sort(function(x, y) {
-      if (x.hasCaret === y.hasCaret) {
-        if (x.label < y.label) {
-          return -1;
+      if (x.hasCaret === false && y.hasCaret === true) {
+        const tempNode = x;
+        x = y;
+        y = tempNode;
+      } else if (x.hasCaret === y.hasCaret) {
+        if (x.label > y.label) {
+          const tempNode = x;
+          x = y;
+          y = tempNode;
         }
-        const tempid = x.id;
-        x.id = y.id;
-        y.id = tempid;
-        return 1;
-      } else if (x.hasCaret === true && y.hasCaret === false) {
-        return -1;
-      } else {
-        const tempid = x.id;
-        x.id = y.id;
-        y.id = tempid;
-        return 1;
       }
+      return -1;
     });
     nodeList.forEach(node => {
       if (node.childNodes !== undefined) {

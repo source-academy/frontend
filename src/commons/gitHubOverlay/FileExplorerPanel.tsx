@@ -24,6 +24,8 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     repoFiles: this.props.repoFiles
   };
 
+
+
   private handleNodeClick = (
     nodeData: ITreeNode,
     _nodePath: number[],
@@ -64,7 +66,6 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
   render() {
     return (
       <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
-        <p>File List: </p>
         <Tree
           contents={this.state.repoFiles}
           onNodeClick={this.handleNodeClick}
