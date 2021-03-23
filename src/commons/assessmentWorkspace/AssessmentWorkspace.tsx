@@ -320,14 +320,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />,
+        body: (
+          <Markdown
+            className="sidecontent-overview"
+            content={props.assessment!.questions[questionId].content}
+          />
+        ),
         id: SideContentType.questionOverview,
         toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />,
+        body: <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />,
         id: SideContentType.briefing,
         toSpawn: () => true
       },
