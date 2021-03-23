@@ -18,19 +18,39 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 
   yield takeLatest(GITHUB_OPEN_PICKER, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} },
+      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
       repos: { listForAuthenticatedUser: () => {} }
-    }; // getAuthenticated.data.login .data.name .data.email
-    const username = yield call(octokitInstance.users.getAuthenticated);
+    };
+    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
     const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGitHubUsername(username.data.login));
+    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+    store.dispatch(actions.setGitHubName(AuthUser.data.name));
+    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
     store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+    store.dispatch(actions.setPickerType('Open'));
     store.dispatch(actions.setPickerDialog(true));
   });
 
   yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {});
 
-  yield takeLatest(GITHUB_SAVE_FILE, function* () {});
+  yield takeLatest(GITHUB_SAVE_FILE, function* () {
+    const octokitInstance = store.getState().session.githubOctokitInstance || {
+      users: { getAuthenticated: () => {} },
+      repos: {
+        createOrUpdateFileContents: () => {},
+        getContent: () => {},
+        listForAuthenticatedUser: () => {}
+      }
+    }; // getAuthenticated.data.login .data.name .data.email
+    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
+    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+    store.dispatch(actions.setGitHubName(AuthUser.data.name));
+    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
+    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+    store.dispatch(actions.setPickerType('Save'));
+    store.dispatch(actions.setPickerDialog(true));
+  });
 
   yield takeLatest(GITHUB_INITIALISE, function* () {});
 }

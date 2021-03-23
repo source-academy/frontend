@@ -10,11 +10,14 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
+  SET_GITHUB_EMAIL,
+  SET_GITHUB_LOGIN,
+  SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_USER_REPOS,
-  SET_GITHUB_USERNAME,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
+  SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -32,41 +35,56 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
-    case SET_TOKENS:
+    case SET_GITHUB_EMAIL:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken
+        gitHubEmail: action.payload
       };
-    case SET_GITHUB_USERNAME:
+    case SET_GITHUB_LOGIN:
       return {
         ...state,
-        username: action.payload
+        gitHubLogin: action.payload
+      };
+    case SET_GITHUB_NAME:
+      return {
+        ...state,
+        gitHubName: action.payload
+      };
+    case SET_GITHUB_OCTOKIT_INSTANCE:
+      return {
+        ...state,
+        githubOctokitInstance: action.payload
       };
     case SET_GITHUB_USER_REPOS:
       return {
         ...state,
         userRepos: action.payload
       };
-    case SET_PICKER_DIALOG:
-      return {
-        ...state,
-        isPickerOpen: action.payload
-      };
-    case SET_USER:
-      return {
-        ...state,
-        ...action.payload
-      };
     case SET_GOOGLE_USER:
       return {
         ...state,
         googleUser: action.payload
       };
-    case SET_GITHUB_OCTOKIT_INSTANCE:
+    case SET_PICKER_DIALOG:
       return {
         ...state,
-        githubOctokitInstance: action.payload
+        isPickerOpen: action.payload
+      };
+    case SET_PICKER_TYPE:
+      return {
+        ...state,
+        pickerType: action.payload
+      };
+    case SET_TOKENS:
+      return {
+        ...state,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken
+      };
+    case SET_USER:
+      return {
+        ...state,
+        ...action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;

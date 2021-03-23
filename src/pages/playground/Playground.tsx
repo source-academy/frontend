@@ -135,6 +135,8 @@ export type StateProps = {
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
+  userRepos: [];
+  pickerType: string;
   isPickerOpen: boolean;
 };
 

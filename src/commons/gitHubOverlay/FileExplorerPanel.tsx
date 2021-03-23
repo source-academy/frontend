@@ -24,8 +24,6 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     repoFiles: this.props.repoFiles
   };
 
-
-
   private handleNodeClick = (
     nodeData: ITreeNode,
     _nodePath: number[],

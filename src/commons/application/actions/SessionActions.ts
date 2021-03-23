@@ -22,11 +22,14 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_EMAIL,
+  SET_GITHUB_LOGIN,
+  SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_USER_REPOS,
-  SET_GITHUB_USERNAME,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
+  SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -88,9 +91,15 @@ export const setGitHubOctokitInstance = (authToken?: string) =>
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
-export const setGitHubUsername = (username: string) => action(SET_GITHUB_USERNAME, username);
+export const setGitHubLogin = (gitHubLogin: string) => action(SET_GITHUB_LOGIN, gitHubLogin);
 
-export const setGitHubUserRepos = (repos: []) => action(SET_GITHUB_USER_REPOS, repos);
+export const setGitHubName = (gitHubName: string) => action(SET_GITHUB_NAME, gitHubName);
+
+export const setGitHubEmail = (gitHubEmail: string) => action(SET_GITHUB_EMAIL, gitHubEmail);
+
+export const setGitHubUserRepos = (userRepos: []) => action(SET_GITHUB_USER_REPOS, userRepos);
+
+export const setPickerType = (pickerType: string) => action(SET_PICKER_TYPE, pickerType);
 
 export const setPickerDialog = (isOpen: boolean) => action(SET_PICKER_DIALOG, isOpen);
 

@@ -303,8 +303,11 @@ export const defaultSession: SessionState = {
   },
   xp: 0,
   notifications: [],
-  username: '',
+  gitHubLogin: '',
+  gitHubName: '',
+  gitHubEmail: '',
   userRepos: [],
+  pickerType: '',
   isPickerOpen: false
 };
 
