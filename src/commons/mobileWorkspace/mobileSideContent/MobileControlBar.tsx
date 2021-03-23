@@ -5,8 +5,14 @@ import classNames from 'classnames';
 
 import { ControlBarProps } from '../../controlBar/ControlBar';
 
-function MobileControlBar(props: ControlBarProps) {
-  const controlBarMenu = <div className="mobile-control-bar">{props.editorButtons}</div>;
+const MobileControlBar: React.FC<ControlBarProps> = props => {
+  const controlBarMenu = (
+    <div className="mobile-control-bar">
+      {props.editorButtons}
+      {props.flowButtons}
+      {props.editingWorkspaceButtons}
+    </div>
+  );
 
   return (
     <Popover2 content={controlBarMenu} autoFocus={false}>
@@ -16,6 +22,6 @@ function MobileControlBar(props: ControlBarProps) {
       />
     </Popover2>
   );
-}
+};
 
 export default MobileControlBar;
