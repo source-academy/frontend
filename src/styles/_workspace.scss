@@ -38,8 +38,11 @@ $code-color-error: #ff4444;
     margin-right: 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.6rem;
-    overflow-x: auto;
-    overflow-y: hidden;
+
+    @media screen and (max-width: 768px) {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
 
     @media screen and (min-width: 769px) {
       .ControlBar_editingWorkspace {

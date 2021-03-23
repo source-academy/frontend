@@ -132,6 +132,7 @@
           max-height: 52px;
           overflow-y: auto;
           font-size: 12px;
+          margin: 0.5rem 0;
           .#{$ns}-running-text {
             font-size: 12px;
           }
@@ -233,9 +234,6 @@
     flex-shrink: 0;
     /* Creates space between the description text, buttons and title */
     margin: 0.5rem 0rem 0.5rem 0.5rem;
-    @media only screen and (max-width: 768px) {
-      margin: 0.5rem 0;
-    }
 
     & > * {
       /* Limit height of description on smaller screens */
