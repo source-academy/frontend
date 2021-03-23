@@ -370,11 +370,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Finally, render the ContentDisplay.
   return (
     <div className="Assessment">
-      <ContentDisplay
-        fullWidth={isMobileBreakpoint}
-        display={display}
-        loadContentDispatch={props.handleAssessmentOverviewFetch}
-      />
+      <ContentDisplay display={display} loadContentDispatch={props.handleAssessmentOverviewFetch} />
       {betchaDialog}
     </div>
   );

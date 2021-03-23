@@ -6,9 +6,9 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
     <Router history={{...}}>
       <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
-          <ContentDisplay fullWidth={false} display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
+          <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.NonIdealState description=\\"Fetching assessment...\\" icon={{...}}>
@@ -53,9 +53,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
     <Router history={{...}}>
       <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={true} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
-          <ContentDisplay fullWidth={false} display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
+          <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
@@ -857,9 +857,9 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
     <Router history={{...}}>
       <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
-          <ContentDisplay fullWidth={false} display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
+          <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.NonIdealState title=\\"There are no assessments.\\" icon=\\"flame\\">
@@ -904,9 +904,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
     <Router history={{...}}>
       <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
-          <ContentDisplay fullWidth={false} display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
+          <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
