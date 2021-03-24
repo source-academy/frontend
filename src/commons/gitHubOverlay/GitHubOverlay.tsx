@@ -105,9 +105,9 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         repo: this.state.repoName,
         path: filePath
       });
-  
+
       const childFiles = results.data;
-  
+
       if (Array.isArray(childFiles)) {
         childFiles.forEach(childFile => {
           childNodes.push(this.createNode(childFile));

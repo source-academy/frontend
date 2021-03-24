@@ -27,7 +27,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     repoFiles: this.props.repoFiles
   };
 
-  private handleNodeClick (
+  private handleNodeClick(
     treeNode: ITreeNode<GitHubFileNodeData>,
     _nodePath: number[],
     e: React.MouseEvent<HTMLElement>
@@ -44,14 +44,14 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
 
     this.props.setFilePath(newFilePath);
     this.setState(this.state);
-  };
+  }
 
-  private handleNodeCollapse (treeNode: ITreeNode<GitHubFileNodeData>) {
+  private handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
     treeNode.isExpanded = false;
     this.setState(this.state);
-  };
+  }
 
-  private async handleNodeExpand (treeNode: ITreeNode<GitHubFileNodeData>) {
+  private async handleNodeExpand(treeNode: ITreeNode<GitHubFileNodeData>) {
     treeNode.isExpanded = true;
 
     if (treeNode.nodeData !== undefined && !treeNode.nodeData.childrenRetrieved) {
@@ -60,7 +60,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     }
 
     this.setState(this.state);
-  };
+  }
 
   private forEachNode(
     treeNodes: ITreeNode<GitHubFileNodeData>[],
