@@ -27,7 +27,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     super(props);
     this.setRepoName = this.setRepoName.bind(this);
     this.setFilePath = this.setFilePath.bind(this);
-    this.setRepoFiles = this.setRepoFiles.bind(this);
+    this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
     this.getFileContents = this.getFileContents.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,7 +52,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setState({ filePath: e });
   }
 
-  async setRepoFiles() {
+  async refreshRepoFiles() {
     const newRepoFiles = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes(
       this.state.repoName
     );
@@ -107,7 +107,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
               userRepos={this.userRepos}
               repoName={this.state.repoName}
               setRepoName={this.setRepoName}
-              setRepoFiles={this.setRepoFiles}
+              refreshRepoFiles={this.refreshRepoFiles}
               {...this.props}
             />
           }

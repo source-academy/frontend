@@ -3,11 +3,11 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 
 export const RepositoryExplorerPanel = (props: any) => {
-  const { userRepos, repoName, setRepoName, setRepoFiles } = props;
+  const { userRepos, repoName, setRepoName, refreshRepoFiles } = props;
 
   useEffect(() => {
-    setRepoFiles();
-  }, [repoName, setRepoFiles]);
+    refreshRepoFiles();
+  }, [repoName, refreshRepoFiles]);
 
   return (
     <div className={classNames(Classes.DIALOG_BODY, 'repo-step')}>
