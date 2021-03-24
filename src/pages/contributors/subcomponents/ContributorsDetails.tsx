@@ -43,8 +43,6 @@ class ContributorsDetails extends React.Component {
               <br />
               Thomas Tan
               <br />
-              Thomas Tan
-              <br />
               <strong>(Source)</strong>
             </p>
             {dot}
