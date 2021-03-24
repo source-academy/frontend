@@ -53,12 +53,14 @@ export default class GlowingImage {
       case AssetType.Sprite:
         this.clickArea.setAlpha(0);
         break;
-      default:
+      case AssetType.Image:
         if (width) {
           resize(imageAsset, width, height);
           resize(this.imageGlow, width, height);
           resize(this.clickArea, width, height);
         }
+        break;
+      default:
         break;
     }
 

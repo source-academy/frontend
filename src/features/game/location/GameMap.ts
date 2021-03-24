@@ -4,7 +4,7 @@ import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, ItemId } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
+import { AnyId, GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
@@ -28,7 +28,6 @@ import { mandatory } from '../utils/GameUtils';
 class GameMap {
   private soundAssets: SoundAsset[];
   private mapAssets: Map<AssetKey, ImageAsset>;
-
   private locations: Map<LocationId, GameLocation>;
   private dialogues: Map<ItemId, Dialogue>;
   private objects: Map<ItemId, ObjectProperty>;
@@ -145,6 +144,13 @@ class GameMap {
 
   public getLocationIds(): LocationId[] {
     return Array.from(this.locations.keys());
+  }
+
+  public getAssetKeyFromId(id: AnyId): AssetKey {
+    return mandatory(
+      this.objects.get(id)?.assetKey || this.locations.get(id)?.assetKey,
+      `Id ${id} not found!`
+    );
   }
 }
 
