@@ -3,13 +3,17 @@ import { ITreeNode } from '@blueprintjs/core';
 import { store } from '../../pages/createStore';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
+/**
+ * A utility class for the GitHub overlay file explorer that handles the creation of ITreeNodes
+ */
 export class GitHubTreeNodeCreator {
   static fileIndex: number = 0;
   static currentRepoName: string = '';
 
   /**
    * Generates an array of ITreeNodes corresponding to the first level of a given repository.
-   * When loading a new repository, this function should always be called first as node creation is stateful.
+   * 
+	 * When loading a new repository, this function should always be called first as node creation is stateful.
    *
    * @param repoName The name of the repository where the file exists
    */
