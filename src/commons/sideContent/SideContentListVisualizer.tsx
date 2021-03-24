@@ -32,6 +32,8 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       PREVIOUS_STEP: this.onPrevButtonClick,
       NEXT_STEP: this.onNextButtonClick
     };
+
+    const listVisualizer  = (window as any).ListVisualizer;
     // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
@@ -39,13 +41,14 @@ class SideContentListVisualizer extends React.Component<{}, State> {
           ref={r => (this.$parent = r)}
           className={classNames('sa-list-visualizer', Classes.DARK)}
         >
-          {((window as any).ListVisualizer?.getStepCount() ?? 0) > 1 ? (
+          {(listVisualizer?.getStepCount() ?? 0) > 1 ? (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Button
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_LEFT}
                 onClick={this.onPrevButtonClick}
+                disabled={(listVisualizer?.getCurrentStep() ?? 1) === 1}
               >
                 Prev
               </Button>
@@ -53,25 +56,28 @@ class SideContentListVisualizer extends React.Component<{}, State> {
                 className="bp3-text-large"
                 style={{ alignSelf: 'center', display: 'inline', margin: 0 }}
               >
-                Call {(window as any).ListVisualizer?.getCurrentStep() ?? '0'}/
-                {(window as any).ListVisualizer?.getStepCount()}
+                Call {listVisualizer?.getCurrentStep() ?? '0'}/
+                {listVisualizer?.getStepCount()}
               </h3>
               <Button
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
                 onClick={this.onNextButtonClick}
+                disabled={listVisualizer ? (listVisualizer.getCurrentStep() === listVisualizer.getStepCount()) : true}
               >
                 Next
               </Button>
             </div>
           ) : null}
-          <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-            The data visualizer visualises data structures.
+          <p
+            id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}
+            hidden={listVisualizer?.hasDrawing() ?? false}>
+            The data visualizer visualizes data structures.
             <br />
             <br />
             It is activated by calling the function <code>draw_data(the_data)</code>, where{' '}
-            <code>the_data</code> would be the data structure that you want to visualise.
+            <code>the_data</code> would be the data structure that you want to visualize.
             <br />
             <br />
             The data visualizer uses box-and-pointer diagrams, as introduced in{' '}

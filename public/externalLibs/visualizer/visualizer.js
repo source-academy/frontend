@@ -1,9 +1,10 @@
-; (function (exports) {
+(function (exports) {
   /**
    * Setup Stage
    */
   const container = document.createElement('div');
   container.id = 'list-visualizer-container';
+  container.style.overflow = 'auto';
   container.hidden = true;
   document.body.appendChild(container);
 
@@ -167,10 +168,6 @@
       right: pointer to the right subtree
   */
   class PairTreeNode extends DrawableTreeNode {
-    constructor() {
-      super();
-    }
-
     drawOnLayer(x, y, parentX, parentY, layer) {
       const leftData = this.left instanceof DataTreeNode ? this.left : null;
       const rightData = this.right instanceof DataTreeNode ? this.right : null;
@@ -197,10 +194,6 @@
   }
 
   class FunctionTreeNode extends DrawableTreeNode {
-    constructor() {
-      super();
-    }
-
     drawOnLayer(x, y, parentX, parentY, layer) {
       const circle = new FunctionDrawable();
       const node = new Konva.Group();
@@ -817,7 +810,7 @@
 
   /**
    * Creates a given number of panes (Konva.Stages) to place data structure drawings (Konva.Layer) in
-   * @param {Number} count The number of panes to create
+   * @param {number} count The number of panes to create
    */
   function createPanes(count) {
     stages = [];
@@ -846,9 +839,6 @@
    * @param {list} xs The list to be drawn
    */
   function appendDrawing(structures) {
-    // Hides the default text
-    (document.getElementById('data-visualizer-default-text')).hidden = true;
-
     // Blink icon
     const icon = document.getElementById('data_visualiser-icon');
 
@@ -857,8 +847,6 @@
     }
 
     minLeft = 500;
-    nodelist = [];
-    fnNodeList = [];
     nodeLabel = 0;
 
     const panes = [];
@@ -909,7 +897,7 @@
       layer.draw();
 
       // Show the first structure
-      if (stepList.length == 0) {
+      if (stepList.length === 0) {
         stage.add(layer);
         stage.width(config.width);
         stage.height(config.height);
@@ -928,7 +916,7 @@
   /**
    * Shows the step with a given id while hiding the others.
    * 
-   * @param {Number} id The id of the step to be shown
+   * @param {number} id The id of the step to be shown
    */
   function showStep(id) {
     const step = stepList[id];
@@ -1060,6 +1048,9 @@
     },
     getCurrentStep: function() {
       return currentStepIndex + 1;
+    },
+    hasDrawing: function() {
+      return stepList.length > 0;
     }
   };
 
