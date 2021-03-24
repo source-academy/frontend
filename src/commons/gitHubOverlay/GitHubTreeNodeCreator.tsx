@@ -36,17 +36,21 @@ export class GitHubTreeNodeCreator {
    * @param filePath The filePath of the folder
    */
   public static async getChildNodes(repoName: string, filePath: string) {
+    const childNodes: ITreeNode<GitHubFileNodeData>[] = [];
+
     // Ensures that we will only generate children if the repoNames match
     if (repoName !== GitHubTreeNodeCreator.currentRepoName) {
-      return [];
+      return childNodes;
     }
-
-    const childNodes: ITreeNode<GitHubFileNodeData>[] = [];
 
     const octokit = store.getState().session.githubOctokitInstance;
     const gitHubLogin = store.getState().session.gitHubLogin;
 
-    if (octokit !== undefined) {
+    if (octokit === undefined) {
+      return childNodes;
+    }
+
+    try {
       const results = await octokit.repos.getContent({
         owner: gitHubLogin,
         repo: repoName,
@@ -60,6 +64,8 @@ export class GitHubTreeNodeCreator {
           childNodes.push(this.createNode(childFile));
         });
       }
+    } catch (err) {
+      console.error(err);
     }
 
     return childNodes;
