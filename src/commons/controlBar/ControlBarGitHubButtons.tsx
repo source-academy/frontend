@@ -62,7 +62,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   );
 
   const saveAsButton = controlButton(
-    'Save as',
+    'Save As',
     IconNames.SEND_TO,
     props.onClickSaveAs,
     undefined,

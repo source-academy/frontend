@@ -4,8 +4,8 @@ import { call, takeLatest } from 'redux-saga/effects';
 import {
   GITHUB_INITIALISE,
   GITHUB_OPEN_PICKER,
-  GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS
+  GITHUB_SAVE_FILE_AS,
+  GITHUB_SAVE_PICKER
 } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
@@ -31,17 +31,26 @@ export function* GitHubPersistenceSaga(): SagaIterator {
     store.dispatch(actions.setPickerDialog(true));
   });
 
-  yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {});
-
-  yield takeLatest(GITHUB_SAVE_FILE, function* () {
+  yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} },
-      repos: {
-        createOrUpdateFileContents: () => {},
-        getContent: () => {},
-        listForAuthenticatedUser: () => {}
-      }
-    }; // getAuthenticated.data.login .data.name .data.email
+      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+      repos: { listForAuthenticatedUser: () => {} }
+    };
+    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
+    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+    store.dispatch(actions.setGitHubName(AuthUser.data.name));
+    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
+    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+    store.dispatch(actions.setPickerType('Save'));
+    store.dispatch(actions.setPickerDialog(true));
+  });
+
+  yield takeLatest(GITHUB_SAVE_PICKER, function* () {
+    const octokitInstance = store.getState().session.githubOctokitInstance || {
+      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+      repos: { listForAuthenticatedUser: () => {} }
+    };
     const AuthUser = yield call(octokitInstance.users.getAuthenticated);
     const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
     store.dispatch(actions.setGitHubLogin(AuthUser.data.login));

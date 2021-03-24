@@ -1,4 +1,4 @@
-import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
+import { Classes, InputGroup, ITreeNode, Tree } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 
@@ -12,6 +12,7 @@ export interface IFileExplorerPanelProps {
 
 export interface IFileExplorerPanelState {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
+  fileName: string;
 }
 
 export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
@@ -21,10 +22,12 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     this.handleNodeCollapse = this.handleNodeCollapse.bind(this);
     this.handleNodeExpand = this.handleNodeExpand.bind(this);
     this.forEachNode = this.forEachNode.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   public state: IFileExplorerPanelState = {
-    repoFiles: this.props.repoFiles
+    repoFiles: this.props.repoFiles,
+    fileName: ''
   };
 
   private handleNodeClick(
@@ -39,9 +42,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     }
 
     treeNode.isSelected = originallySelected == null ? true : !originallySelected;
-
     const newFilePath = treeNode.nodeData !== undefined ? treeNode.nodeData.filePath : '';
-
     this.props.setFilePath(newFilePath);
     this.setState(this.state);
   }
@@ -88,7 +89,17 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
           onNodeExpand={this.handleNodeExpand}
           className={Classes.ELEVATION_0}
         />
+        <InputGroup 
+          onChange={this.handleChange}
+          placeholder={'Enter File Name'}
+          value={this.state.fileName}
+        />
       </div>
     );
   }
+
+  handleChange(e: any) {
+    this.setState({ fileName: e.target.value });
+  }
 }
+

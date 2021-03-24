@@ -7,14 +7,14 @@ import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
 
-export interface GitHubOverlayProps {
-  // userRepos: [];
-  // pickerType: string;
+type GitHubOverlayProps = {
+  userRepos?: [];
+  pickerType: string;
   isPickerOpen: boolean;
   handleEditorValueChange: (val: string) => void;
 }
 
-export interface GitHubOverlayState {
+type GitHubOverlayState = {
   repoName: string;
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   fileIndex: number;
@@ -27,9 +27,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setRepoName = this.setRepoName.bind(this);
     this.setFilePath = this.setFilePath.bind(this);
     this.createNode = this.createNode.bind(this);
-    this.setRepoFiles = this.setRepoFiles.bind(this);
+    this.initRepoFiles = this.initRepoFiles.bind(this);
     this.getChildNodes = this.getChildNodes.bind(this);
-    this.getFileContents = this.getFileContents.bind(this);
+    this.openFile = this.openFile.bind(this);
+    this.saveFile = this.saveFile.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -59,7 +60,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
    * @param thisFile The file to be generated and mounted
    */
   createNode(thisFile: any) {
-    const index = this.state.fileIndex++;
+    const index = this.state.fileIndex;
+    this.setState({ fileIndex: index + 1 });
 
     let node: ITreeNode<GitHubFileNodeData> = {
       id: index,
@@ -118,8 +120,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     return childNodes;
   }
 
-  // TODO: Rename to initRepoFiles
-  async setRepoFiles() {
+  async initRepoFiles() {
     this.setState({ fileIndex: 0 });
     this.setState({ repoFiles: [] });
 
@@ -152,29 +153,70 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     }
   }
 
-  async getFileContents() {
+  async openFile() {
     const octokit = store.getState().session.githubOctokitInstance;
     const gitHubLogin = store.getState().session.gitHubLogin;
     if (octokit === undefined) return;
-    octokit.repos
-      .getContent({
+    try {
+      const results = await octokit.repos.getContent({
         owner: gitHubLogin,
         repo: this.state.repoName,
         path: this.state.filePath
-      })
-      .then(
-        value => {
-          // fulfillment
-          const { content } = { ...value.data };
-          if (content) {
-            this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
-          }
-        },
-        reason => {
-          // rejection
-          console.error(reason);
-        }
-      );
+      });
+      const { content } = { ...results.data };
+      if (content) {
+        this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
+      }
+      store.dispatch(actions.setPickerDialog(false));
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+
+  async saveFile() {
+    const octokit = store.getState().session.githubOctokitInstance;
+    if (octokit === undefined) return;
+    const gitHubLogin = store.getState().session.gitHubLogin;
+    const gitHubName = store.getState().session.gitHubName;
+    const gitHubEmail = store.getState().session.gitHubEmail;
+    const content = store.getState().workspaces.playground.editorValue || '';
+    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
+    try {
+      await octokit.repos.getContent({
+        method: 'HEAD',
+        owner: gitHubLogin,
+        repo: this.state.repoName,
+        path: this.state.filePath
+      });
+      // file exists
+    } catch (error) {
+      if (error.status === 404) {
+        // file does not exist
+        
+      } else {
+        // handle connection errors
+      }
+    }
+
+
+    try {
+      const { data } = await octokit.repos.createOrUpdateFileContents({
+        owner: gitHubLogin,
+        repo: this.state.repoName,
+        path: 'README.MD',
+        message: 'TEST PUSH FROM CADET_FRONTEND',
+        content: contentEncoded,
+        // sha: ,
+        committer: {name: gitHubName, email: gitHubEmail},
+        author: {name: gitHubName, email: gitHubEmail}
+      });
+      console.log(data);
+      store.dispatch(actions.setPickerDialog(false));
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   public render() {
@@ -189,7 +231,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         className="GitHubPicker"
         finalButtonProps={finalButtonProps}
         isOpen={this.props.isPickerOpen}
-        nextButtonProps={{ disabled: this.state.repoFiles.length === 0 }}
         onClose={this.handleClose}
         title="Opening Repository File"
       >
@@ -200,7 +241,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
               userRepos={this.userRepos}
               repoName={this.state.repoName}
               setRepoName={this.setRepoName}
-              setRepoFiles={this.setRepoFiles}
+              setRepoFiles={this.initRepoFiles}
               {...this.props}
             />
           }
@@ -227,47 +268,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 
   handleSubmit() {
-    this.getFileContents();
-    store.dispatch(actions.setPickerDialog(false));
+    if (store.getState().session.pickerType === 'Open') {
+      this.openFile();
+    } else {
+      this.saveFile();
+    }
   }
 }
-
-/*
-  async setFileContents() {
-    if (this.octokit === undefined) return;
-    this.octokit.repos.createOrUpdateFileContents({
-      owner: this.state.gitHubLogin,
-      repo: this.state.repoName,
-      path: this.state.filePath,
-      message: 'TEST PUSH FROM OCTOKIT',
-      content: 'TEST CONTENT',
-      name: this.state.gitHubName,
-      email: this.state.gitHubEmail
-    });
-  }
-*/
-
-/*
-  sortNodeList (nodeList: ITreeNode[]) {
-    console.log('sorted nodelist');
-    nodeList.sort(function(x, y) {
-      if (x.hasCaret === false && y.hasCaret === true) {
-        const tempNode = x;
-        x = y;
-        y = tempNode;
-      } else if (x.hasCaret === y.hasCaret) {
-        if (x.label > y.label) {
-          const tempNode = x;
-          x = y;
-          y = tempNode;
-        }
-      }
-      return -1;
-    });
-    nodeList.forEach(node => {
-      if (node.childNodes !== undefined) {
-        this.sortNodeList(node.childNodes);
-      }
-    });
-  }
-*/

@@ -100,8 +100,7 @@ export type DispatchProps = {
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
   handleGitHubOpenPicker: () => void;
-  handleGitHubSaveFile: () => void;
-  handleGitHubUpdateFile: (file: GitHubFile) => void;
+  handleGitHubSavePicker: () => void;
   handleGitHubInitialise: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
@@ -439,7 +438,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { githubOctokitInstance, githubFile, handleGitHubUpdateFile } = props;
+  const { githubOctokitInstance, githubFile } = props;
   // Compute this here to avoid re-rendering the button every keystroke
   const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
@@ -451,8 +450,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isPickerOpen={props.isPickerOpen}
         key="github"
         onClickOpen={props.handleGitHubOpenPicker}
-        onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
-        onClickSaveAs={props.handleGitHubSaveFile}
+        onClickSave={props.handleGitHubSavePicker}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
         onPopoverOpening={props.handleGitHubInitialise}
@@ -463,12 +461,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubFile,
     githubIsDirty,
     props.isPickerOpen,
-    props.handleGitHubSaveFile,
     props.handleGitHubOpenPicker,
+    props.handleGitHubSavePicker,
     props.handleGitHubLogIn,
     props.handleGitHubLogOut,
-    props.handleGitHubInitialise,
-    handleGitHubUpdateFile
+    props.handleGitHubInitialise
   ]);
 
   const executionTime = React.useMemo(
