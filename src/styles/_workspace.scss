@@ -587,6 +587,34 @@ $code-color-error: #ff4444;
     }
   }
 
+  .sidecontent-overview {
+    // fix overflow for assessment sidecontent
+
+    pre {
+      // for code block in pre
+      overflow-x: auto;
+    }
+
+    ::-webkit-scrollbar {
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: $cadet-color-4;
+      border-radius: 2px;
+    }
+
+    p {
+      // for image in p
+      img {
+        max-width: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
   .side-content-tooltip {
     border-radius: 3px;
     // size of rounded box under tab icon

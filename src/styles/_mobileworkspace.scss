@@ -207,21 +207,6 @@ $shadow-light: rgba(0, 0, 0, 0.2);
         }
       }
     }
-
-    .sidecontent-overview {
-      // fix overflow for assessment sidecontent
-      pre {
-        // for code block in pre
-        overflow-x: auto;
-      }
-      p {
-        // for image in p
-        img {
-          max-width: calc(100vw - 30px);
-          object-fit: contain;
-        }
-      }
-    }
   }
 
   .mobile-unselected-panel {
