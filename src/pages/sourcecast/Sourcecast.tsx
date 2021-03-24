@@ -3,7 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -107,15 +109,21 @@ export type StateProps = {
   uid: string | null;
 };
 
-class Sourcecast extends React.Component<SourcecastProps> {
-  public componentDidMount() {
-    this.props.handleFetchSourcecastIndex();
-  }
+const Sourcecast: React.FC<SourcecastProps> = props => {
+  const prevProps = props;
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
+  React.useEffect(() => {
+    props.handleFetchSourcecastIndex();
+  });
+  React.useEffect(() => {
+    console.log(isMobileBreakpoint);
+  });
 
-  public componentDidUpdate(prevProps: SourcecastProps) {
-    this.handleQueryParam();
+  React.useEffect(() => {
+    handleQueryParam();
 
-    const { inputToApply } = this.props;
+    const { inputToApply } = props;
 
     if (!inputToApply || inputToApply === prevProps.inputToApply) {
       return;
@@ -123,176 +131,211 @@ class Sourcecast extends React.Component<SourcecastProps> {
 
     switch (inputToApply.type) {
       case 'activeTabChange':
-        this.props.handleActiveTabChange(inputToApply.data);
+        props.handleActiveTabChange(inputToApply.data);
         break;
       case 'chapterSelect':
-        this.props.handleChapterSelect(inputToApply.data);
+        props.handleChapterSelect(inputToApply.data);
         break;
       case 'externalLibrarySelect':
-        this.props.handleExternalSelect(inputToApply.data);
+        props.handleExternalSelect(inputToApply.data);
         break;
       case 'forcePause':
-        this.props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
+        props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
     }
-  }
+  }, [prevProps]);
 
-  public render() {
-    const autorunButtons = (
-      <ControlBarAutorunButtons
-        handleDebuggerPause={this.props.handleDebuggerPause}
-        handleDebuggerReset={this.props.handleDebuggerReset}
-        handleDebuggerResume={this.props.handleDebuggerResume}
-        handleEditorEval={this.props.handleEditorEval}
-        handleInterruptEval={this.props.handleInterruptEval}
-        handleToggleEditorAutorun={this.props.handleToggleEditorAutorun}
-        isDebugging={this.props.isDebugging}
-        isEditorAutorun={this.props.isEditorAutorun}
-        isRunning={this.props.isRunning}
-        key="autorun"
-      />
-    );
+  const autorunButtons = (
+    <ControlBarAutorunButtons
+      handleDebuggerPause={props.handleDebuggerPause}
+      handleDebuggerReset={props.handleDebuggerReset}
+      handleDebuggerResume={props.handleDebuggerResume}
+      handleEditorEval={props.handleEditorEval}
+      handleInterruptEval={props.handleInterruptEval}
+      handleToggleEditorAutorun={props.handleToggleEditorAutorun}
+      isDebugging={props.isDebugging}
+      isEditorAutorun={props.isEditorAutorun}
+      isRunning={props.isRunning}
+      key="autorun"
+    />
+  );
 
-    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
-      this.props.handleChapterSelect(chapter);
+  const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
+    props.handleChapterSelect(chapter);
 
-    const chapterSelect = (
-      <ControlBarChapterSelect
-        handleChapterSelect={chapterSelectHandler}
-        sourceChapter={this.props.sourceChapter}
-        sourceVariant={this.props.sourceVariant}
-        key="chapter"
-      />
-    );
+  const chapterSelect = (
+    <ControlBarChapterSelect
+      handleChapterSelect={chapterSelectHandler}
+      sourceChapter={props.sourceChapter}
+      sourceVariant={props.sourceVariant}
+      key="chapter"
+    />
+  );
 
-    const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
-    );
+  const clearButton = (
+    <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+  );
 
-    const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
-        key="eval_repl"
-      />
-    );
+  const evalButton = (
+    <ControlBarEvalButton
+      handleReplEval={props.handleReplEval}
+      isRunning={props.isRunning}
+      key="eval_repl"
+    />
+  );
 
-    const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
-      this.props.handleExternalSelect(name);
+  const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
+    props.handleExternalSelect(name);
 
-    const externalLibrarySelect = (
-      <ControlBarExternalLibrarySelect
-        externalLibraryName={this.props.externalLibraryName}
-        handleExternalSelect={externalSelectHandler}
-        key="external_library"
-      />
-    );
+  const externalLibrarySelect = (
+    <ControlBarExternalLibrarySelect
+      externalLibraryName={props.externalLibraryName}
+      handleExternalSelect={externalSelectHandler}
+      key="external_library"
+    />
+  );
 
-    const editorProps: SourceRecorderEditorProps = {
-      codeDeltasToApply: this.props.codeDeltasToApply,
-      editorReadonly: this.props.editorReadonly,
-      editorValue: this.props.editorValue,
-      editorSessionId: '',
-      handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-      handleEditorEval: this.props.handleEditorEval,
-      handleEditorValueChange: this.props.handleEditorValueChange,
-      isEditorAutorun: this.props.isEditorAutorun,
-      inputToApply: this.props.inputToApply,
-      isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
-      breakpoints: this.props.breakpoints,
-      highlightedLines: this.props.highlightedLines,
-      newCursorPosition: this.props.newCursorPosition,
-      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
-    };
-    const workspaceProps: WorkspaceProps = {
-      controlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
+  const onChangeTabs = (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    if (newTabId === prevTabId) {
+      return;
+    }
+    setSelectedTab(newTabId);
+  };
+
+  const editorProps: SourceRecorderEditorProps = {
+    codeDeltasToApply: props.codeDeltasToApply,
+    editorReadonly: props.editorReadonly,
+    editorValue: props.editorValue,
+    editorSessionId: '',
+    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleEditorEval: props.handleEditorEval,
+    handleEditorValueChange: props.handleEditorValueChange,
+    isEditorAutorun: props.isEditorAutorun,
+    inputToApply: props.inputToApply,
+    isPlaying: props.playbackStatus === PlaybackStatus.playing,
+    breakpoints: props.breakpoints,
+    highlightedLines: props.highlightedLines,
+    newCursorPosition: props.newCursorPosition,
+    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
+  };
+  const replProps = {
+    output: props.output,
+    replValue: props.replValue,
+    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleReplEval: props.handleReplEval,
+    handleReplValueChange: props.handleReplValueChange,
+    sourceChapter: props.sourceChapter,
+    sourceVariant: props.sourceVariant,
+    externalLibrary: props.externalLibraryName,
+    replButtons: [evalButton, clearButton]
+  };
+
+  const tabs: SideContentTab[] = [
+    {
+      label: 'Sourcecast Table',
+      iconName: IconNames.COMPASS,
+      body: (
+        <div>
+          <span className="Multi-line">
+            <Pre>
+              {props.title
+                ? 'Title: ' + props.title + '\nDescription: ' + props.description
+                : INTRODUCTION}
+            </Pre>
+          </span>
+          <SourceRecorderTable
+            handleSetSourcecastData={props.handleSetSourcecastData}
+            sourcecastIndex={props.sourcecastIndex}
+          />
+        </div>
+      ),
+      id: SideContentType.introduction,
+      toSpawn: () => true
+    },
+    listVisualizerTab,
+    inspectorTab,
+    envVisualizerTab
+  ];
+
+  const workspaceProps: WorkspaceProps = {
+    controlBarProps: {
+      editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
+    },
+    customEditor: <SourceRecorderEditor {...editorProps} />,
+    editorHeight: props.editorHeight,
+    editorWidth: props.editorWidth,
+    handleEditorHeightChange: props.handleEditorHeightChange,
+    handleEditorWidthChange: props.handleEditorWidthChange,
+    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    replProps: replProps,
+    sideContentHeight: props.sideContentHeight,
+    sideContentProps: {
+      handleActiveTabChange: props.handleActiveTabChange,
+      selectedTabId: props.sideContentActiveTab,
+      tabs: tabs,
+      workspaceLocation: 'sourcecast'
+    }
+  };
+  const mobileWorkspaceProps: MobileWorkspaceProps = {
+    customEditor: <SourceRecorderEditor {...editorProps} />,
+    replProps: replProps,
+    mobileSideContentProps: {
+      mobileControlBarProps: {
+        editorButtons: [
+          autorunButtons,
+          chapterSelect,
+          props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null
+        ]
       },
-      customEditor: <SourceRecorderEditor {...editorProps} />,
-      editorHeight: this.props.editorHeight,
-      editorWidth: this.props.editorWidth,
-      handleEditorHeightChange: this.props.handleEditorHeightChange,
-      handleEditorWidthChange: this.props.handleEditorWidthChange,
-      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      replProps: {
-        output: this.props.output,
-        replValue: this.props.replValue,
-        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
-        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
-        handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange,
-        sourceChapter: this.props.sourceChapter,
-        sourceVariant: this.props.sourceVariant,
-        externalLibrary: this.props.externalLibraryName,
-        replButtons: [evalButton, clearButton]
-      },
-      sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: {
-        handleActiveTabChange: this.props.handleActiveTabChange,
-        selectedTabId: this.props.sideContentActiveTab,
-        tabs: [
-          {
-            label: 'Sourcecast Table',
-            iconName: IconNames.COMPASS,
-            body: (
-              <div>
-                <span className="Multi-line">
-                  <Pre>
-                    {this.props.title
-                      ? 'Title: ' + this.props.title + '\nDescription: ' + this.props.description
-                      : INTRODUCTION}
-                  </Pre>
-                </span>
-                <SourceRecorderTable
-                  handleSetSourcecastData={this.props.handleSetSourcecastData}
-                  sourcecastIndex={this.props.sourcecastIndex}
-                />
-              </div>
-            ),
-            id: SideContentType.introduction,
-            toSpawn: () => true
-          },
-          listVisualizerTab,
-          inspectorTab,
-          envVisualizerTab
-        ],
-        workspaceLocation: 'sourcecast'
-      }
-    };
-    const sourcecastControlbarProps: SourceRecorderControlBarProps = {
-      handleEditorValueChange: this.props.handleEditorValueChange,
-      handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-      handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
-      handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
-      handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-      handleSetInputToApply: this.props.handleSetInputToApply,
-      handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
-      handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
-      audioUrl: this.props.audioUrl,
-      currentPlayerTime: this.props.currentPlayerTime,
-      duration: this.props.playbackDuration,
-      playbackData: this.props.playbackData,
-      playbackStatus: this.props.playbackStatus,
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleExternalSelect: this.props.handleExternalSelect
-    };
-    return (
-      <div className={classNames('Sourcecast', Classes.DARK)}>
-        <SourceRecorderControlBar {...sourcecastControlbarProps} />
+      defaultSelectedTabId: selectedTab,
+      selectedTabId: selectedTab,
+      handleActiveTabChange: props.handleActiveTabChange,
+      onChange: onChangeTabs,
+      tabs: tabs,
+      workspaceLocation: 'sourcecast',
+      handleEditorEval: props.handleEditorEval
+    }
+  };
+  const sourcecastControlbarProps: SourceRecorderControlBarProps = {
+    handleEditorValueChange: props.handleEditorValueChange,
+    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    handleSetCurrentPlayerTime: props.handleSetCurrentPlayerTime,
+    handleSetCodeDeltasToApply: props.handleSetCodeDeltasToApply,
+    handleSetEditorReadonly: props.handleSetEditorReadonly,
+    handleSetInputToApply: props.handleSetInputToApply,
+    handleSetSourcecastDuration: props.handleSetSourcecastDuration,
+    handleSetSourcecastStatus: props.handleSetSourcecastStatus,
+    audioUrl: props.audioUrl,
+    currentPlayerTime: props.currentPlayerTime,
+    duration: props.playbackDuration,
+    playbackData: props.playbackData,
+    playbackStatus: props.playbackStatus,
+    handleChapterSelect: props.handleChapterSelect,
+    handleExternalSelect: props.handleExternalSelect
+  };
+
+  return (
+    <div className={classNames('Sourcecast', Classes.DARK)}>
+      <SourceRecorderControlBar {...sourcecastControlbarProps} />
+      {isMobileBreakpoint ? (
+        <MobileWorkspace {...mobileWorkspaceProps} />
+      ) : (
         <Workspace {...workspaceProps} />
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 
-  private handleQueryParam() {
-    const newUid = this.props.match.params.sourcecastId;
-    if (newUid && newUid !== this.props.uid && this.props.sourcecastIndex) {
-      const cast = this.props.sourcecastIndex.find(data => data.uid === newUid);
+  function handleQueryParam() {
+    const newUid = props.match.params.sourcecastId;
+    if (newUid && newUid !== props.uid && props.sourcecastIndex) {
+      const cast = props.sourcecastIndex.find(data => data.uid === newUid);
       if (cast) {
-        this.props.handleSetSourcecastData(
+        props.handleSetSourcecastData(
           cast.title,
           cast.description,
           cast.uid,
@@ -302,7 +345,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
       }
     }
   }
-}
+};
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
 
