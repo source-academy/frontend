@@ -9,14 +9,13 @@ export interface IFileExplorerPanelProps {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   repoName: string;
   pickerType: string;
+  filePath: string;
   setFilePath: any;
-  setFileName: any;
   setCommitMessage: any;
 }
 
 export interface IFileExplorerPanelState {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
-  fileName: string;
   commitMessage:string;
 }
 
@@ -33,7 +32,6 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
 
   public state: IFileExplorerPanelState = {
     repoFiles: this.props.repoFiles,
-    fileName: '',
     commitMessage: ''
   };
 
@@ -50,13 +48,12 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
 
     treeNode.isSelected = originallySelected == null ? true : !originallySelected;
     const newFilePath = treeNode.nodeData !== undefined ? treeNode.nodeData.filePath : '';
-    this.props.setFilePath(newFilePath);
-
-    if (treeNode.isSelected && !treeNode.childNodes) {
-      this.setState({ fileName: treeNode.label as string });
+    if (treeNode.isSelected) {
+      this.props.setFilePath(newFilePath);
     } else {
-      this.setState({ fileName: '' });
+      this.props.setFilePath('');
     }
+    this.setState(this.state);
   }
 
   private handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
@@ -110,7 +107,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
             <InputGroup 
               onChange={this.handleFileNameChange}
               placeholder={'Enter File Name'}
-              value={this.state.fileName}
+              value={this.props.filePath}
             />
             <InputGroup 
               onChange={this.handleCommitMessageChange}
@@ -125,8 +122,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
   }
 
   handleFileNameChange(e: any) {
-    this.setState({ fileName: e.target.value });
-    this.props.setFileName(e.target.value)
+    this.props.setFilePath(e.target.value)
   }
 
   handleCommitMessageChange(e: any) {
