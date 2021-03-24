@@ -44,11 +44,19 @@ type AssertionDetail = {
 export default class ParserValidator {
   private gameItemAsserts: Map<GameItemType, AssertionDetail[]>;
   private gameEntityAsserts: Map<GameEntityType, AssertionDetail[]>;
+  private gameAnimAsserts: AssertionDetail[];
+  private gameAnimMaps = [
+    // Game Locations Map
+    Parser.checkpoint.map.getLocations(),
+    // Game Object Prop Map
+    Parser.checkpoint.map[GameItemType.objects]
+  ];
   private allItemIds: Set<string>;
 
   constructor() {
     this.gameItemAsserts = new Map<GameItemType, AssertionDetail[]>();
     this.gameEntityAsserts = new Map<GameEntityType, AssertionDetail[]>();
+    this.gameAnimAsserts = [];
     this.allItemIds = new Set();
   }
 
@@ -76,6 +84,7 @@ export default class ParserValidator {
   public verifyAssertions() {
     this.verifyGameItemAssert();
     this.verifyGameEntityAsserts();
+    this.verifyGameAnimAsserts();
   }
 
   //////////////////////////////////////////////
@@ -207,6 +216,37 @@ export default class ParserValidator {
         });
       }
     );
+  }
+
+  //////////////////////////////////////////////
+  //  Type assertion manager - Game Anim Type //
+  //////////////////////////////////////////////
+
+  /**
+   *
+   * @param itemId
+   * @param actionType
+   */
+  public assertAnimType(itemId: ItemId, actionType?: string) {
+    this.gameAnimAsserts.push({ itemId, actionType });
+  }
+
+  /**
+   *
+   */
+  private verifyGameAnimAsserts() {
+    this.gameAnimAsserts.forEach((assertionDetail: AssertionDetail) => {
+      const { itemId, actionType } = assertionDetail;
+      let idFound = false;
+      this.gameAnimMaps.forEach(map => {
+        if (map.get(itemId)) {
+          idFound = true;
+        }
+      });
+      if (!idFound && actionType) {
+        this.actionAssertionError(itemId, 'locationId or itemId', actionType);
+      }
+    });
   }
 
   private actionAssertionError(itemId: string, attribute: string, actionType: string) {

@@ -110,7 +110,6 @@ class GameManager extends Phaser.Scene {
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
-    console.log(GameGlobalAPI.getInstance().getGameMap().getMapAssets());
   }
 
   /**
