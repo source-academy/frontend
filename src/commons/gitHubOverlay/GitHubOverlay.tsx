@@ -5,6 +5,7 @@ import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
+import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
 
 export interface GitHubOverlayProps {
@@ -26,9 +27,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     super(props);
     this.setRepoName = this.setRepoName.bind(this);
     this.setFilePath = this.setFilePath.bind(this);
-    this.createNode = this.createNode.bind(this);
-    this.setRepoFiles = this.setRepoFiles.bind(this);
-    this.getChildNodes = this.getChildNodes.bind(this);
+    this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
     this.getFileContents = this.getFileContents.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,103 +52,11 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setState({ filePath: e });
   }
 
-  /**
-   * Returns the an ITreeNode to be mounted in the file explorer display
-   *
-   * @param thisFile The file to be generated and mounted
-   */
-  createNode(thisFile: any) {
-    const index = this.state.fileIndex++;
-
-    let node: ITreeNode<GitHubFileNodeData> = {
-      id: index,
-      label: 'dummy file'
-    };
-
-    if (thisFile.type === 'file') {
-      node = {
-        id: index,
-        nodeData: new GitHubFileNodeData(thisFile.path, 'file'),
-        icon: 'document',
-        label: thisFile.name
-      };
-    }
-
-    if (thisFile.type === 'dir') {
-      node = {
-        id: index,
-        nodeData: new GitHubFileNodeData(thisFile.path, 'dir'),
-        icon: 'folder-close',
-        label: thisFile.name,
-        childNodes: [] // Child nodes are initially empty
-      };
-    }
-
-    return node;
-  }
-
-  /**
-   * Returns the childNodes of a folder
-   *
-   * @param filePath The filepath of the folder whose children need to be retrieved
-   */
-  async getChildNodes(filePath: string) {
-    const childNodes: ITreeNode<GitHubFileNodeData>[] = [];
-
-    const octokit = store.getState().session.githubOctokitInstance;
-    const gitHubLogin = store.getState().session.gitHubLogin;
-
-    if (octokit !== undefined) {
-      const results = await octokit.repos.getContent({
-        owner: gitHubLogin,
-        repo: this.state.repoName,
-        path: filePath
-      });
-
-      const childFiles = results.data;
-
-      if (Array.isArray(childFiles)) {
-        childFiles.forEach(childFile => {
-          childNodes.push(this.createNode(childFile));
-        });
-      }
-    }
-
-    return childNodes;
-  }
-
-  // TODO: Rename to initRepoFiles
-  async setRepoFiles() {
-    this.setState({ fileIndex: 0 });
-    this.setState({ repoFiles: [] });
-
-    const octokit = store.getState().session.githubOctokitInstance;
-
-    const gitHubLogin = store.getState().session.gitHubLogin;
-
-    if (octokit === undefined || this.state.repoName === '') return;
-
-    try {
-      const newRepoFiles: ITreeNode<GitHubFileNodeData>[] = [];
-
-      const results = await octokit.repos.getContent({
-        owner: gitHubLogin,
-        repo: this.state.repoName,
-        path: ''
-      });
-
-      const files = results.data;
-
-      if (Array.isArray(files)) {
-        for (let i = 0; i < files.length; i++) {
-          newRepoFiles.push(this.createNode(files[i]));
-        }
-      }
-
-      this.setState({ repoFiles: newRepoFiles });
-    } catch (err) {
-      console.error(err);
-    }
+  async refreshRepoFiles() {
+    const newRepoFiles = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes(
+      this.state.repoName
+    );
+    this.setState({ repoFiles: newRepoFiles });
   }
 
   async getFileContents() {
@@ -200,7 +107,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
               userRepos={this.userRepos}
               repoName={this.state.repoName}
               setRepoName={this.setRepoName}
-              setRepoFiles={this.setRepoFiles}
+              refreshRepoFiles={this.refreshRepoFiles}
               {...this.props}
             />
           }
@@ -212,8 +119,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           panel={
             <FileExplorerPanel
               repoFiles={this.state.repoFiles}
+              repoName={this.state.repoName}
               setFilePath={this.setFilePath}
-              getChildNodes={this.getChildNodes}
             />
           }
           title="Select File"
