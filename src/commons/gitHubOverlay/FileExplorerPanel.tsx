@@ -8,12 +8,16 @@ import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 export interface IFileExplorerPanelProps {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   repoName: string;
+  pickerType: string;
   setFilePath: any;
+  setFileName: any;
+  setCommitMessage: any;
 }
 
 export interface IFileExplorerPanelState {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   fileName: string;
+  commitMessage:string;
 }
 
 export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
@@ -23,12 +27,14 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     this.handleNodeCollapse = this.handleNodeCollapse.bind(this);
     this.handleNodeExpand = this.handleNodeExpand.bind(this);
     this.forEachNode = this.forEachNode.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleFileNameChange = this.handleFileNameChange.bind(this);
+    this.handleCommitMessageChange = this.handleCommitMessageChange.bind(this);
   }
 
   public state: IFileExplorerPanelState = {
     repoFiles: this.props.repoFiles,
-    fileName: ''
+    fileName: '',
+    commitMessage: ''
   };
 
   private handleNodeClick(
@@ -45,7 +51,12 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     treeNode.isSelected = originallySelected == null ? true : !originallySelected;
     const newFilePath = treeNode.nodeData !== undefined ? treeNode.nodeData.filePath : '';
     this.props.setFilePath(newFilePath);
-    this.setState(this.state);
+
+    if (treeNode.isSelected && !treeNode.childNodes) {
+      this.setState({ fileName: treeNode.label as string });
+    } else {
+      this.setState({ fileName: '' });
+    }
   }
 
   private handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
@@ -94,17 +105,32 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
           onNodeExpand={this.handleNodeExpand}
           className={Classes.ELEVATION_0}
         />
-        <InputGroup 
-          onChange={this.handleChange}
-          placeholder={'Enter File Name'}
-          value={this.state.fileName}
-        />
+        { this.props.pickerType === 'Save' &&
+          <div>
+            <InputGroup 
+              onChange={this.handleFileNameChange}
+              placeholder={'Enter File Name'}
+              value={this.state.fileName}
+            />
+            <InputGroup 
+              onChange={this.handleCommitMessageChange}
+              placeholder={'Enter Commit Message'}
+              value={this.state.commitMessage}
+            />
+          </div>
+
+        }
       </div>
     );
   }
 
-  handleChange(e: any) {
+  handleFileNameChange(e: any) {
     this.setState({ fileName: e.target.value });
+    this.props.setFileName(e.target.value)
+  }
+
+  handleCommitMessageChange(e: any) {
+    this.setState({ commitMessage: e.target.value });
+    this.props.setCommitMessage(e.target.value)
   }
 }
-

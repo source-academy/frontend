@@ -20,6 +20,8 @@ type GitHubOverlayState = {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   fileIndex: number;
   filePath: string;
+  fileName: string;
+  commitMessage: string;
 }
 
 export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
@@ -27,6 +29,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     super(props);
     this.setRepoName = this.setRepoName.bind(this);
     this.setFilePath = this.setFilePath.bind(this);
+    this.setFileName = this.setFileName.bind(this);
+    this.setCommitMessage = this.setCommitMessage.bind(this);
     this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
     this.openFile = this.openFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
@@ -38,7 +42,9 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     repoName: '',
     repoFiles: [],
     fileIndex: 0,
-    filePath: ''
+    filePath: '',
+    fileName: '',
+    commitMessage: ''
   };
 
   userRepos = store.getState().session.userRepos;
@@ -51,6 +57,14 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   setFilePath(e: string) {
     this.setState({ filePath: e });
+  }
+
+  setFileName(e: string) {
+    this.setState({ fileName: e });
+  }
+
+  setCommitMessage(e: string) {
+    this.setState({ commitMessage: e });
   }
 
   async refreshRepoFiles() {
@@ -89,7 +103,22 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     const gitHubEmail = store.getState().session.gitHubEmail;
     const content = store.getState().workspaces.playground.editorValue || '';
     const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+    try {
+      const data = await octokit.repos.createOrUpdateFileContents({
+        owner: gitHubLogin,
+        repo: this.state.repoName,
+        path: this.state.filePath + '/' + this.state.fileName,
+        message: this.state.commitMessage,
+        content: contentEncoded,
+        committer: {name: gitHubName, email: gitHubEmail},
+        author: {name: gitHubName, email: gitHubEmail}
+      });
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
 
+/*
     try {
       await octokit.repos.getContent({
         method: 'HEAD',
@@ -98,32 +127,35 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         path: this.state.filePath
       });
       // file exists
+      await octokit.repos.createOrUpdateFileContents({
+        owner: gitHubLogin,
+        repo: this.state.repoName,
+        path: this.state.filePath + '/' + this.state.fileName,
+        message: this.state.commitMessage,
+        sha: '',
+        content: contentEncoded,
+        committer: {name: gitHubName, email: gitHubEmail},
+        author: {name: gitHubName, email: gitHubEmail}
+      });
+      store.dispatch(actions.setPickerDialog(false));
     } catch (error) {
       if (error.status === 404) {
         // file does not exist
-        
+        await octokit.repos.createOrUpdateFileContents({
+          owner: gitHubLogin,
+          repo: this.state.repoName,
+          path: this.state.filePath + '/' + this.state.fileName,
+          message: this.state.commitMessage,
+          content: contentEncoded,
+          committer: {name: gitHubName, email: gitHubEmail},
+          author: {name: gitHubName, email: gitHubEmail}
+        });
+        store.dispatch(actions.setPickerDialog(false));
       } else {
         // handle connection errors
       }
     }
-
-
-    try {
-      const { data } = await octokit.repos.createOrUpdateFileContents({
-        owner: gitHubLogin,
-        repo: this.state.repoName,
-        path: 'README.MD',
-        message: 'TEST PUSH FROM CADET_FRONTEND',
-        content: contentEncoded,
-        // sha: ,
-        committer: {name: gitHubName, email: gitHubEmail},
-        author: {name: gitHubName, email: gitHubEmail}
-      });
-      console.log(data);
-      store.dispatch(actions.setPickerDialog(false));
-    } catch (err) {
-      console.error(err);
-    }
+    */
   }
 
   public render() {
@@ -139,7 +171,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         finalButtonProps={finalButtonProps}
         isOpen={this.props.isPickerOpen}
         onClose={this.handleClose}
-        title="Opening Repository File"
+        title={store.getState().session.pickerType + ' file'}
       >
         <DialogStep
           id="Repository"
@@ -161,7 +193,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
             <FileExplorerPanel
               repoFiles={this.state.repoFiles}
               repoName={this.state.repoName}
+              pickerType={store.getState().session.pickerType}
               setFilePath={this.setFilePath}
+              setFileName={this.setFileName}
+              setCommitMessage={this.setCommitMessage}
             />
           }
           title="Select File"
