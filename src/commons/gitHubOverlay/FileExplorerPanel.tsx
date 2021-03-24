@@ -2,13 +2,16 @@ import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 
+import { GitHubFileNodeData } from './GitHubFileNodeData';
+
 export interface IFileExplorerPanelProps {
-  repoFiles: ITreeNode[];
+  repoFiles: ITreeNode<GitHubFileNodeData>[];
   setFilePath: any;
+  getChildNodes: (thisFile: any) => Promise<ITreeNode<GitHubFileNodeData>[]>;
 }
 
 export interface IFileExplorerPanelState {
-  repoFiles: ITreeNode[];
+  repoFiles: ITreeNode<GitHubFileNodeData>[];
 }
 
 export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
@@ -24,36 +27,50 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     repoFiles: this.props.repoFiles
   };
 
-  private handleNodeClick = (
-    nodeData: ITreeNode,
+  private handleNodeClick (
+    treeNode: ITreeNode<GitHubFileNodeData>,
     _nodePath: number[],
     e: React.MouseEvent<HTMLElement>
-  ) => {
-    const originallySelected = nodeData.isSelected;
+  ) {
+    const originallySelected = treeNode.isSelected;
+
     if (!e.shiftKey) {
       this.forEachNode(this.state.repoFiles, n => (n.isSelected = false));
     }
-    nodeData.isSelected = originallySelected == null ? true : !originallySelected;
-    this.props.setFilePath(nodeData.nodeData);
+
+    treeNode.isSelected = originallySelected == null ? true : !originallySelected;
+
+    const newFilePath = treeNode.nodeData !== undefined ? treeNode.nodeData.filePath : '';
+
+    this.props.setFilePath(newFilePath);
     this.setState(this.state);
   };
 
-  private handleNodeCollapse = (nodeData: ITreeNode) => {
-    nodeData.isExpanded = false;
+  private handleNodeCollapse (treeNode: ITreeNode<GitHubFileNodeData>) {
+    treeNode.isExpanded = false;
     this.setState(this.state);
   };
 
-  private handleNodeExpand = (nodeData: ITreeNode) => {
-    nodeData.isExpanded = true;
+  private async handleNodeExpand (treeNode: ITreeNode<GitHubFileNodeData>) {
+    treeNode.isExpanded = true;
+
+    if (treeNode.nodeData !== undefined && !treeNode.nodeData.childrenRetrieved) {
+      treeNode.childNodes = await this.props.getChildNodes(treeNode.nodeData.filePath);
+      treeNode.nodeData.childrenRetrieved = true;
+    }
+
     this.setState(this.state);
   };
 
-  private forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
-    if (nodes == null) {
+  private forEachNode(
+    treeNodes: ITreeNode<GitHubFileNodeData>[],
+    callback: (node: ITreeNode<GitHubFileNodeData>) => void
+  ) {
+    if (treeNodes == null) {
       return;
     }
 
-    for (const node of nodes) {
+    for (const node of treeNodes) {
       callback(node);
       if (node.childNodes !== undefined) {
         this.forEachNode(node.childNodes, callback);
