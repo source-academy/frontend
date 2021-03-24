@@ -12,8 +12,8 @@ export class GitHubTreeNodeCreator {
 
   /**
    * Generates an array of ITreeNodes corresponding to the first level of a given repository.
-   * 
-	 * When loading a new repository, this function should always be called first as node creation is stateful.
+   *
+   * When loading a new repository, this function should always be called first as node creation is stateful.
    *
    * @param repoName The name of the repository where the file exists
    */
