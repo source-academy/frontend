@@ -3,11 +3,12 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 
 import { GitHubFileNodeData } from './GitHubFileNodeData';
+import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
 export interface IFileExplorerPanelProps {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
+  repoName: string;
   setFilePath: any;
-  getChildNodes: (thisFile: any) => Promise<ITreeNode<GitHubFileNodeData>[]>;
 }
 
 export interface IFileExplorerPanelState {
@@ -55,7 +56,11 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     treeNode.isExpanded = true;
 
     if (treeNode.nodeData !== undefined && !treeNode.nodeData.childrenRetrieved) {
-      treeNode.childNodes = await this.props.getChildNodes(treeNode.nodeData.filePath);
+      treeNode.childNodes = await GitHubTreeNodeCreator.getChildNodes(
+        this.props.repoName,
+        treeNode.nodeData.filePath
+      );
+      //treeNode.childNodes = await this.props.getChildNodes(treeNode.nodeData.filePath);
       treeNode.nodeData.childrenRetrieved = true;
     }
 
