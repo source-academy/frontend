@@ -33,7 +33,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       NEXT_STEP: this.onNextButtonClick
     };
 
-    const listVisualizer  = (window as any).ListVisualizer;
+    const listVisualizer = (window as any).ListVisualizer;
     // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
@@ -56,23 +56,28 @@ class SideContentListVisualizer extends React.Component<{}, State> {
                 className="bp3-text-large"
                 style={{ alignSelf: 'center', display: 'inline', margin: 0 }}
               >
-                Call {listVisualizer?.getCurrentStep() ?? '0'}/
-                {listVisualizer?.getStepCount()}
+                Call {listVisualizer?.getCurrentStep() ?? '0'}/{listVisualizer?.getStepCount()}
               </h3>
               <Button
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
                 onClick={this.onNextButtonClick}
-                disabled={listVisualizer ? (listVisualizer.getCurrentStep() === listVisualizer.getStepCount()) : true}
+                disabled={
+                  listVisualizer
+                    ? listVisualizer.getCurrentStep() === listVisualizer.getStepCount()
+                    : true
+                }
               >
                 Next
               </Button>
             </div>
           ) : null}
           <p
-            id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}
-            hidden={listVisualizer?.hasDrawing() ?? false}>
+            id="data-visualizer-default-text"
+            className={Classes.RUNNING_TEXT}
+            hidden={listVisualizer?.hasDrawing() ?? false}
+          >
             The data visualizer visualizes data structures.
             <br />
             <br />
