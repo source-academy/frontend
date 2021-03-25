@@ -849,7 +849,18 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     xp: 0,
     maxXp: 0,
     answer: {},
-    contestEntries: [],
+    contestEntries: [
+      {
+        submission_id: 1,
+        answer: { code: "display('hello world')" },
+        score: 1
+      },
+      {
+        submission_id: 2,
+        answer: { code: 'function test() { return 1; }' },
+        score: 2
+      }
+    ],
     library: mockRuneLibrary,
     roomId: null
   }
