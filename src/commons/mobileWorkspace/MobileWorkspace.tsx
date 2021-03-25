@@ -1,11 +1,12 @@
 import { Dialog, FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import React, { RefObject } from 'react';
 import ReactAce from 'react-ace/lib/ace';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
+import ControlBar from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
@@ -67,7 +68,23 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   }, [isPortrait, isIOS]);
 
+  // Handle custom keyboard input into AceEditor (Editor and Repl Components)
   const editorRef = React.useRef<ReactAce>(null);
+  const replRef = React.useRef<ReactAce>(null);
+  const emptyRef = React.useRef<ReactAce>(null);
+  const [keyboardInputRef, setKeyboardInputRef] = React.useState<RefObject<ReactAce>>(emptyRef);
+
+  React.useEffect(() => {
+    editorRef.current?.editor.on('focus', () => {
+      setKeyboardInputRef(editorRef);
+    });
+    replRef.current?.editor.on('focus', () => {
+      setKeyboardInputRef(replRef);
+    });
+    const clearRef = () => setKeyboardInputRef(emptyRef);
+    editorRef.current?.editor.on('blur', clearRef);
+    replRef.current?.editor.on('blur', clearRef);
+  }, []);
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
@@ -151,7 +168,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const updatedMobileSideContentProps = () => {
     return {
       ...props.mobileSideContentProps,
-      mobileTabs: [mobileEditorTab, ...props.mobileSideContentProps.mobileTabs, mobileRunTab]
+      tabs: [mobileEditorTab, ...props.mobileSideContentProps.tabs, mobileRunTab]
     };
   };
 
@@ -171,17 +188,27 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         title="Please turn back to portrait orientation!"
       />
 
+      {/* Render the top ControlBar when it is the Assessment Workspace */}
+      {props.mobileSideContentProps.workspaceLocation === 'assessment' && (
+        <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
+      )}
+
+      <MobileSideContent
+        {...updatedMobileSideContentProps()}
+        {...draggableReplProps}
+        editorRef={editorRef}
+      />
+
       <DraggableRepl
         key={'repl'}
         position={draggableReplPosition}
         onDrag={onDrag}
         disabled={isDraggableReplDisabled}
         replProps={props.replProps}
+        ref={replRef}
       />
 
-      <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
-
-      <MobileKeyboard editorRef={editorRef} />
+      <MobileKeyboard editorRef={keyboardInputRef} />
     </div>
   );
 };

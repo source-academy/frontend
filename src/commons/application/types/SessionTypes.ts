@@ -1,3 +1,5 @@
+import { Octokit } from '@octokit/rest';
+
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
@@ -12,15 +14,19 @@ export const FETCH_GRADING = 'FETCH_GRADING';
 export const FETCH_GRADING_OVERVIEWS = 'FETCH_GRADING_OVERVIEWS';
 export const LOGIN = 'LOGIN';
 export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
+export const LOGIN_GITHUB = 'LOGIN_GITHUB';
+export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
+export const SET_GITHUB_OCTOKIT_INSTANCE = 'SET_GITHUB_OCTOKIT_INSTANCE';
 export const SUBMIT_ANSWER = 'SUBMIT_ANSWER';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
 export const SUBMIT_GRADING = 'SUBMIT_GRADING';
 export const SUBMIT_GRADING_AND_CONTINUE = 'SUBMIT_GRADING_AND_CONTINUE';
 export const REAUTOGRADE_SUBMISSION = 'REAUTOGRADE_SUBMISSION';
 export const REAUTOGRADE_ANSWER = 'REAUTOGRADE_ANSWER';
+export const REMOVE_GITHUB_OCTOKIT_INSTANCE = 'REMOVE_GITHUB_OCTOKIT_INSTANCE';
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
 export const UPDATE_HISTORY_HELPERS = 'UPDATE_HISTORY_HELPERS';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
@@ -54,6 +60,7 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
+  readonly githubOctokitInstance?: Octokit;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };
