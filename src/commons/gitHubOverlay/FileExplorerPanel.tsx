@@ -16,7 +16,7 @@ export interface IFileExplorerPanelProps {
 
 export interface IFileExplorerPanelState {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
-  commitMessage:string;
+  commitMessage: string;
 }
 
 export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
@@ -102,31 +102,30 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
           onNodeExpand={this.handleNodeExpand}
           className={Classes.ELEVATION_0}
         />
-        { this.props.pickerType === 'Save' &&
+        {this.props.pickerType === 'Save' && (
           <div>
-            <InputGroup 
+            <InputGroup
               onChange={this.handleFileNameChange}
               placeholder={'Enter File Name'}
               value={this.props.filePath}
             />
-            <InputGroup 
+            <InputGroup
               onChange={this.handleCommitMessageChange}
               placeholder={'Enter Commit Message'}
               value={this.state.commitMessage}
             />
           </div>
-
-        }
+        )}
       </div>
     );
   }
 
   handleFileNameChange(e: any) {
-    this.props.setFilePath(e.target.value)
+    this.props.setFilePath(e.target.value);
   }
 
   handleCommitMessageChange(e: any) {
     this.setState({ commitMessage: e.target.value });
-    this.props.setCommitMessage(e.target.value)
+    this.props.setCommitMessage(e.target.value);
   }
 }

@@ -93,9 +93,9 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   persistenceFile: state.playground.persistenceFile,
   githubOctokitInstance: state.session.githubOctokitInstance,
   githubFile: state.playground.githubFile,
-  gitHubLogin: state.session.gitHubLogin,
-  gitHubName: state.session.gitHubName,
-  gitHubEmail: state.session.gitHubEmail,
+  githubLoginID: state.session.githubLoginID,
+  githubName: state.session.githubName,
+  githubEmail: state.session.githubEmail,
   userRepos: state.session.userRepos,
   pickerType: state.session.pickerType,
   isPickerOpen: state.session.isPickerOpen

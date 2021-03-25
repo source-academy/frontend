@@ -67,9 +67,9 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitInstance?: Octokit;
-  readonly gitHubLogin: string;
-  readonly gitHubName: string;
-  readonly gitHubEmail: string;
+  readonly githubLoginID: string;
+  readonly githubName: string;
+  readonly githubEmail: string;
   readonly userRepos: [];
   readonly pickerType: string;
   readonly isPickerOpen: boolean;

@@ -38,17 +38,17 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_GITHUB_EMAIL:
       return {
         ...state,
-        gitHubEmail: action.payload
+        githubEmail: action.payload
       };
     case SET_GITHUB_LOGIN:
       return {
         ...state,
-        gitHubLogin: action.payload
+        githubLoginID: action.payload
       };
     case SET_GITHUB_NAME:
       return {
         ...state,
-        gitHubName: action.payload
+        githubName: action.payload
       };
     case SET_GITHUB_OCTOKIT_INSTANCE:
       return {
