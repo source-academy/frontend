@@ -223,16 +223,19 @@ export default class ParserValidator {
   //////////////////////////////////////////////
 
   /**
+   * This function stores game anim type assertions.
    *
-   * @param itemId
-   * @param actionType
+   * @param itemId id of item that needs to be checked
+   * @param actionType action type e.g. start_animation
    */
-  public assertAnimType(itemId: ItemId, actionType?: string) {
+  public assertAnimType(itemId: ItemId, actionType: string) {
     this.gameAnimAsserts.push({ itemId, actionType });
   }
 
   /**
-   *
+   * This function verifies game entity assertions that have
+   * been stored, by ensuring that the itemIds are declared
+   * in at least one of the animation types.
    */
   private verifyGameAnimAsserts() {
     this.gameAnimAsserts.forEach((assertionDetail: AssertionDetail) => {
@@ -243,8 +246,8 @@ export default class ParserValidator {
           idFound = true;
         }
       });
-      if (!idFound && actionType) {
-        this.actionAssertionError(itemId, 'locationId or itemId', actionType);
+      if (!idFound) {
+        this.actionAssertionError(itemId, 'locationId or itemId', actionType!);
       }
     });
   }

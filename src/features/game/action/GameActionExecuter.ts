@@ -41,7 +41,6 @@ export default class GameActionExecuter {
         globalAPI.renderBackgroundLayerContainer(actionParams.id);
         return;
       case GameActionType.StartAnimation:
-        // TODO param check
         globalAPI.startAnimation(actionParams.id, actionParams.startFrame, actionParams.frameRate);
         return;
       case GameActionType.StopAnimation:
