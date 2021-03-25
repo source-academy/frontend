@@ -303,9 +303,9 @@ export const defaultSession: SessionState = {
   },
   xp: 0,
   notifications: [],
-  gitHubLogin: '',
-  gitHubName: '',
-  gitHubEmail: '',
+  githubLoginID: '',
+  githubName: '',
+  githubEmail: '',
   userRepos: [],
   pickerType: '',
   isPickerOpen: false

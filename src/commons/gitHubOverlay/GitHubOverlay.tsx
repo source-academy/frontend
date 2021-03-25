@@ -1,6 +1,7 @@
 import { DialogStep, IButtonProps, ITreeNode, MultistepDialog } from '@blueprintjs/core';
 import React from 'react';
 
+import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
@@ -69,12 +70,12 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 
   async openFile() {
-    const octokit = store.getState().session.githubOctokitInstance;
-    const gitHubLogin = store.getState().session.gitHubLogin;
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    const githubLoginID = GitHubUtils.getGitHubLoginID();
     if (octokit === undefined) return;
     try {
       const results = await octokit.repos.getContent({
-        owner: gitHubLogin,
+        owner: githubLoginID,
         repo: this.state.repoName,
         path: this.state.filePath
       });
@@ -95,17 +96,17 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 
   async saveFile() {
-    const octokit = store.getState().session.githubOctokitInstance;
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
     if (octokit === undefined) return;
-    const gitHubLogin = store.getState().session.gitHubLogin;
-    const gitHubName = store.getState().session.gitHubName;
-    const gitHubEmail = store.getState().session.gitHubEmail;
+    const githubLoginID = GitHubUtils.getGitHubLoginID();
+    const githubName = GitHubUtils.getGitHubName();
+    const githubEmail = GitHubUtils.getGitHubEmail();
     const content = store.getState().workspaces.playground.editorValue || '';
     let sha: string;
     const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
     try {
       const results = await octokit.repos.getContent({
-        owner: gitHubLogin,
+        owner: githubLoginID,
         repo: this.state.repoName,
         path: this.state.filePath
       });
@@ -114,14 +115,14 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       if (!Array.isArray(files)) {
         sha = files.sha;
         await octokit.repos.createOrUpdateFileContents({
-          owner: gitHubLogin,
+          owner: githubLoginID,
           repo: this.state.repoName,
           path: this.state.filePath,
           message: this.state.commitMessage,
           content: contentEncoded,
           sha: sha,
-          committer: {name: gitHubName, email: gitHubEmail},
-          author: {name: gitHubName, email: gitHubEmail}
+          committer: {name: githubName, email: githubEmail},
+          author: {name: githubName, email: githubEmail}
         });
         showSuccessMessage("Successfully saved file!", 1000);
         store.dispatch(actions.setPickerDialog(false));
@@ -131,13 +132,13 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       if (error.status === 404) {
         // file does not exist
         await octokit.repos.createOrUpdateFileContents({
-          owner: gitHubLogin,
+          owner: githubLoginID,
           repo: this.state.repoName,
           path: this.state.filePath,
           message: this.state.commitMessage,
           content: contentEncoded,
-          committer: {name: gitHubName, email: gitHubEmail},
-          author: {name: gitHubName, email: gitHubEmail}
+          committer: {name: githubName, email: githubEmail},
+          author: {name: githubName, email: githubEmail}
         });
         showSuccessMessage("Successfully created file!", 1000);
         store.dispatch(actions.setPickerDialog(false));

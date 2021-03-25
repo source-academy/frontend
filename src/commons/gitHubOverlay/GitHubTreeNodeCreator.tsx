@@ -1,6 +1,6 @@
 import { ITreeNode } from '@blueprintjs/core';
 
-import { store } from '../../pages/createStore';
+import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
 /**
@@ -43,8 +43,8 @@ export class GitHubTreeNodeCreator {
       return childNodes;
     }
 
-    const octokit = store.getState().session.githubOctokitInstance;
-    const gitHubLogin = store.getState().session.gitHubLogin;
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    const githubLoginID = GitHubUtils.getGitHubLoginID();
 
     if (octokit === undefined) {
       return childNodes;
@@ -52,7 +52,7 @@ export class GitHubTreeNodeCreator {
 
     try {
       const results = await octokit.repos.getContent({
-        owner: gitHubLogin,
+        owner: githubLoginID,
         repo: repoName,
         path: filePath
       });

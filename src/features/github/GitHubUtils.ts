@@ -1,3 +1,4 @@
+import { store } from '../../pages/createStore';
 import { URIField } from './GitHubClasses';
 
 /**
@@ -51,4 +52,40 @@ export function encodeAsURL(messageBodyPrototype: URIField[]): string {
   });
 
   return uriComponents.join('&');
+}
+
+/**
+ * Returns the Octokit instance saved in session state.
+ * 
+ * This function allows for mocking Octokit behaviour in tests.
+ */
+export function getGitHubOctokitInstance(): any {
+  return store.getState().session.githubOctokitInstance;
+}
+
+/**
+ * Returns the username used by the user to login to GitHub.
+ * 
+ * This function allows for mocking Octokit behaviour in tests.
+ */
+export function getGitHubLoginID(): string {
+  return store.getState().session.githubLoginID;
+}
+
+/**
+ * Returns the actual name associated with a GitHub account.
+ * 
+ * This function allows for mocking Octokit behaviour in tests.
+ */
+export function getGitHubName(): string {
+  return store.getState().session.githubName;
+}
+
+/**
+ * Returns the email address associated with a GitHub account.
+ * 
+ * This function allows for mocking Octokit behaviour in tests.
+ */
+export function getGitHubEmail(): string {
+  return store.getState().session.githubEmail;
 }

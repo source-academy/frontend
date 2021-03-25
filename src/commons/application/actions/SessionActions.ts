@@ -91,11 +91,11 @@ export const setGitHubOctokitInstance = (authToken?: string) =>
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
-export const setGitHubLogin = (gitHubLogin: string) => action(SET_GITHUB_LOGIN, gitHubLogin);
+export const setGitHubLogin = (githubLoginID: string) => action(SET_GITHUB_LOGIN, githubLoginID);
 
-export const setGitHubName = (gitHubName: string) => action(SET_GITHUB_NAME, gitHubName);
+export const setGitHubName = (githubName: string) => action(SET_GITHUB_NAME, githubName);
 
-export const setGitHubEmail = (gitHubEmail: string) => action(SET_GITHUB_EMAIL, gitHubEmail);
+export const setGitHubEmail = (githubEmail: string) => action(SET_GITHUB_EMAIL, githubEmail);
 
 export const setGitHubUserRepos = (userRepos: []) => action(SET_GITHUB_USER_REPOS, userRepos);
 
