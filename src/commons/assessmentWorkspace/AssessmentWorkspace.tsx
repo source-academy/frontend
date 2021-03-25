@@ -30,7 +30,6 @@ import {
   AssessmentCategories,
   AssessmentStatus,
   AutogradingResult,
-  ContestEntry,
   ContestVotingSubmission,
   IContestVotingQuestion,
   IMCQQuestion,
@@ -55,7 +54,7 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
-import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
+// import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
@@ -456,16 +455,16 @@ class AssessmentWorkspace extends React.Component<
     };
 
     // to be synced up with the Elixir backend and API calls be made
-    const dummyEntries: ContestEntry[] = [
-      {
-        submission_id: 1,
-        answer: { code: "console.log('hello world')" }
-      },
-      {
-        submission_id: 2,
-        answer: { code: 'Student 2' }
-      }
-    ];
+    // const dummyEntries: ContestEntry[] = [
+    //   {
+    //     submission_id: 1,
+    //     answer: { code: "console.log('hello world')" }
+    //   },
+    //   {
+    //     submission_id: 2,
+    //     answer: { code: 'Student 2' }
+    //   }
+    // ];
 
     const contestVotingQuestion = this.props.assessment?.questions[
       questionId
@@ -499,18 +498,19 @@ class AssessmentWorkspace extends React.Component<
           />
         ),
         toSpawn: () => true
-      },
-      {
-        label: 'Contest Leaderboard',
-        iconName: IconNames.CROWN,
-        body: (
-          <SideContentContestLeaderboard
-            handleContestEntryClick={handleContestEntryClick}
-            orderedContestEntries={dummyEntries}
-          />
-        ),
-        toSpawn: () => true
       }
+      // WIP: will not be spawned till backend supports it
+      // {
+      //   label: 'Contest Leaderboard',
+      //   iconName: IconNames.CROWN,
+      //   body: (
+      //     <SideContentContestLeaderboard
+      //       handleContestEntryClick={handleContestEntryClick}
+      //       orderedContestEntries={dummyEntries}
+      //     />
+      //   ),
+      //   toSpawn: () => false
+      // }
     ];
 
     const defaultTabs: SideContentTab[] = [
