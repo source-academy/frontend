@@ -339,9 +339,7 @@ class GameGlobalAPI {
 
   public startAnimation(id: AnyId, startFrame: number, frameRate: number) {
     const startImage = this.getAssetByKey(this.getGameMap().getAssetKeyFromId(id));
-    this.getGameManager()
-      .getAnimationManager()
-      .initiateAnimation(startImage, startFrame, frameRate);
+    this.getGameManager().getAnimationManager().displayAnimation(startImage, startFrame, frameRate);
   }
 
   public stopAnimation(id: AnyId) {

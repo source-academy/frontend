@@ -31,17 +31,17 @@ export default class GameBackgroundManager {
    */
   private renderBackgroundImage(assetKey: AssetKey) {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
-    this.currentBackground = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
+    this.currentBackground = GameGlobalAPI.getInstance().getAssetByKey(assetKey);
     const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
-    const asset = animationManager.createImageAsset(assetKey, this.currentBackground);
+    let asset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite | undefined;
 
-    resizeOverflow(asset, screenSize.x, screenSize.y);
+    if (this.currentBackground) {
+      asset = animationManager.createImage(this.currentBackground, assetKey);
+      animationManager.startAnimation(this.currentBackground);
 
-    GameGlobalAPI.getInstance().addToLayer(Layer.Background, asset);
-    GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
+      resizeOverflow(asset, screenSize.x, screenSize.y);
+      GameGlobalAPI.getInstance().addToLayer(Layer.Background, asset);
+      GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
+    }
   }
-
-  public getLocationAssetKey = (locId: LocationId) => {
-    return GameGlobalAPI.getInstance().getGameMap().getLocationAtId(locId).assetKey;
-  };
 }

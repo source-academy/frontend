@@ -47,24 +47,25 @@ export default class GlowingImage {
 
     const image = GameGlobalAPI.getInstance().getGameMap().getMapAssets().get(assetKey);
     const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
-    const imageAsset = animationManager.createImageAsset(assetKey, image);
-
-    switch (image?.type) {
-      case AssetType.Sprite:
-        this.clickArea.setAlpha(0);
-        break;
-      case AssetType.Image:
-        if (width) {
-          resize(imageAsset, width, height);
-          resize(this.imageGlow, width, height);
-          resize(this.clickArea, width, height);
-        }
-        break;
-      default:
-        break;
+    if (image) {
+      const imageAsset = animationManager.createImage(image, assetKey);
+      switch (image?.type) {
+        case AssetType.Sprite:
+          this.clickArea.setAlpha(0);
+          animationManager.startAnimation(image);
+          break;
+        case AssetType.Image:
+          if (width) {
+            resize(imageAsset, width, height);
+            resize(this.imageGlow, width, height);
+            resize(this.clickArea, width, height);
+          }
+          break;
+        default:
+          break;
+      }
+      this.container.add([imageAsset, this.imageGlow, this.clickArea]);
     }
-
-    this.container.add([imageAsset, this.imageGlow, this.clickArea]);
   }
 
   public startGlow() {
