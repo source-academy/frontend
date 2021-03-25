@@ -56,7 +56,7 @@ export function encodeAsURL(messageBodyPrototype: URIField[]): string {
 
 /**
  * Returns the Octokit instance saved in session state.
- * 
+ *
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubOctokitInstance(): any {
@@ -65,7 +65,7 @@ export function getGitHubOctokitInstance(): any {
 
 /**
  * Returns the username used by the user to login to GitHub.
- * 
+ *
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubLoginID(): string {
@@ -74,7 +74,7 @@ export function getGitHubLoginID(): string {
 
 /**
  * Returns the actual name associated with a GitHub account.
- * 
+ *
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubName(): string {
@@ -83,7 +83,7 @@ export function getGitHubName(): string {
 
 /**
  * Returns the email address associated with a GitHub account.
- * 
+ *
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubEmail(): string {

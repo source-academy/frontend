@@ -15,7 +15,7 @@ type GitHubOverlayProps = {
   pickerType: string;
   isPickerOpen: boolean;
   handleEditorValueChange: (val: string) => void;
-}
+};
 
 type GitHubOverlayState = {
   repoName: string;
@@ -23,7 +23,7 @@ type GitHubOverlayState = {
   fileIndex: number;
   filePath: string;
   commitMessage: string;
-}
+};
 
 export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
   constructor(props: GitHubOverlayProps | Readonly<GitHubOverlayProps>) {
@@ -86,7 +86,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         const { content } = { ...results.data };
         if (content) {
           this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
-          showSuccessMessage("Successfully loaded file!", 1000);
+          showSuccessMessage('Successfully loaded file!', 1000);
           store.dispatch(actions.setPickerDialog(false));
         }
       }
@@ -121,10 +121,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           message: this.state.commitMessage,
           content: contentEncoded,
           sha: sha,
-          committer: {name: githubName, email: githubEmail},
-          author: {name: githubName, email: githubEmail}
+          committer: { name: githubName, email: githubEmail },
+          author: { name: githubName, email: githubEmail }
         });
-        showSuccessMessage("Successfully saved file!", 1000);
+        showSuccessMessage('Successfully saved file!', 1000);
         store.dispatch(actions.setPickerDialog(false));
       }
       showWarningMessage("Can't save over a folder!");
@@ -137,14 +137,13 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
           path: this.state.filePath,
           message: this.state.commitMessage,
           content: contentEncoded,
-          committer: {name: githubName, email: githubEmail},
-          author: {name: githubName, email: githubEmail}
+          committer: { name: githubName, email: githubEmail },
+          author: { name: githubName, email: githubEmail }
         });
-        showSuccessMessage("Successfully created file!", 1000);
+        showSuccessMessage('Successfully created file!', 1000);
         store.dispatch(actions.setPickerDialog(false));
       } else {
         // handle connection errors
-
       }
     }
   }
