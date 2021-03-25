@@ -1,4 +1,5 @@
 import { DialogStep, IButtonProps, ITreeNode, MultistepDialog } from '@blueprintjs/core';
+import { Octokit } from '@octokit/rest';
 import React from 'react';
 
 import * as GitHubUtils from '../../features/github/GitHubUtils';
@@ -9,7 +10,6 @@ import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
-import { Octokit } from '@octokit/rest';
 
 type GitHubOverlayProps = {
   userRepos?: [];
