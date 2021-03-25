@@ -61,7 +61,7 @@ export default class GameAnimationManager {
       img.config.frameRate = frameRate;
     }
 
-    switch (img?.config?.animType) {
+    switch (img.config?.animType) {
       case AnimType.Object:
         const currLoc = GameGlobalAPI.getInstance().getCurrLocId();
         GameGlobalAPI.getInstance().addItem(GameItemType.objects, currLoc, image.key);
