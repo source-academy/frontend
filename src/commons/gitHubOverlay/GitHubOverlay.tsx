@@ -9,6 +9,7 @@ import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
+import { Octokit } from '@octokit/rest';
 
 type GitHubOverlayProps = {
   userRepos?: [];
@@ -70,7 +71,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 
   async openFile() {
-    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
     const githubLoginID = GitHubUtils.getGitHubLoginID();
     if (octokit === undefined) return;
     try {
