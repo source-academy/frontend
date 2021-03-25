@@ -8,18 +8,18 @@ test('Test generate first level of a repo', async () => {
   const getGitHubLoginIDMock = jest.spyOn(GitHubUtils, 'getGitHubLoginID');
   getGitHubLoginIDMock.mockImplementation(getUsernameMock);
 
-  const yeet = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
+  const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
 
-  expect(yeet.length).toBe(2);
+  expect(fileNodes.length).toBe(2);
   expect(GitHubTreeNodeCreator.fileIndex).toBe(2);
 
-  const firstElement = yeet[0];
+  const firstElement = fileNodes[0];
   expect(firstElement.id).toBe(0);
   expect(firstElement.label).toBe('TestFile');
   expect(firstElement.nodeData.fileType).toBe('file');
   expect(firstElement.nodeData.filePath).toBe('TestFile');
 
-  const secondElement = yeet[1];
+  const secondElement = fileNodes[1];
   expect(secondElement.id).toBe(1);
   expect(secondElement.label).toBe('TestFolder');
   expect(secondElement.nodeData.fileType).toBe('dir');
