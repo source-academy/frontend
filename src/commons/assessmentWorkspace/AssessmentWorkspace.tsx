@@ -246,132 +246,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     pushLog(input);
   };
 
-  public render() {
-    if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
-      return (
-        <NonIdealState
-          className={classNames('WorkspaceParent', Classes.DARK)}
-          description="Getting mission ready..."
-          icon={<Spinner size={Spinner.SIZE_LARGE} />}
-        />
-      );
-    }
-
-    const overlay = (
-      <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
-        <Card>
-          <Markdown content={this.props.assessment.longSummary} />
-          <Button
-            className="assessment-briefing-button"
-            // tslint:disable-next-line jsx-no-lambda
-            onClick={() => this.setState({ showOverlay: false })}
-            text="Continue"
-          />
-        </Card>
-      </Dialog>
-    );
-
-    const closeOverlay = () => this.setState({ showResetTemplateOverlay: false });
-    const resetTemplateOverlay = (
-      <Dialog
-        className="assessment-reset"
-        icon={IconNames.ERROR}
-        isCloseButtonShown={true}
-        isOpen={this.state.showResetTemplateOverlay}
-        onClose={closeOverlay}
-        title="Confirmation: Reset editor?"
-      >
-        <div className={Classes.DIALOG_BODY}>
-          <Markdown content="Are you sure you want to reset the template?" />
-          <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <ButtonGroup>
-            {controlButton('Cancel', null, closeOverlay, {
-              minimal: false
-            })}
-            {controlButton(
-              'Confirm',
-              null,
-              () => {
-                closeOverlay();
-                this.props.handleEditorValueChange(
-                  (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
-                    .solutionTemplate
-                );
-                this.props.handleUpdateHasUnsavedChanges(true);
-              },
-              { minimal: false, intent: Intent.DANGER }
-            )}
-          </ButtonGroup>
-        </div>
-      </Dialog>
-    );
-
-    /* If questionId is out of bounds, set it to the max. */
-    const questionId =
-      this.props.questionId >= this.props.assessment.questions.length
-        ? this.props.assessment.questions.length - 1
-        : this.props.questionId;
-    const question: Question = this.props.assessment.questions[questionId];
-    const editorProps =
-      question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
-        ? {
-            editorSessionId: '',
-            editorValue: this.props.editorValue!,
-            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-            breakpoints: this.props.breakpoints,
-            highlightedLines: this.props.highlightedLines,
-            newCursorPosition: this.props.newCursorPosition,
-            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-            isEditorAutorun: false,
-            onChange: this.onChangeMethod,
-            onCursorChange: this.onCursorChangeMethod,
-            onSelectionChange: this.onSelectionChangeMethod
-          }
-        : undefined;
-    const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(questionId),
-      editorProps: editorProps,
-
-      editorHeight: this.props.editorHeight,
-      editorWidth: this.props.editorWidth,
-      handleEditorHeightChange: this.props.handleEditorHeightChange,
-      handleEditorWidthChange: this.props.handleEditorWidthChange,
-      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      hasUnsavedChanges: this.props.hasUnsavedChanges,
-      mcqProps: {
-        mcq: question as IMCQQuestion,
-        handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
-      },
-      sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props, questionId),
-      replProps: {
-        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
-        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
-        handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange,
-        output: this.props.output,
-        replValue: this.props.replValue,
-        sourceChapter: question?.library?.chapter || 4,
-        sourceVariant: 'default',
-        externalLibrary: question?.library?.external?.name || 'NONE'
-      }
-    };
-    return (
-      <div className={classNames('WorkspaceParent', Classes.DARK)}>
-        {overlay}
-        {resetTemplateOverlay}
-        <Workspace {...workspaceProps} />
-      </div>
-    );
-  }
-
   /* ================
      Helper Functions
      ================ */
@@ -450,26 +324,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     questionId: number
   ) => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
+    // first question of contest voting assessment is voting.
     const isContestVoting = props.assessment!.questions[0]?.type === 'voting';
     const handleContestEntryClick = (submission_id: number, answer: string) => {
-      this.props.handleEditorValueChange(answer);
+      props.handleEditorValueChange(answer);
     };
 
-    // to be synced up with the Elixir backend and API calls be made
-    // const dummyEntries: ContestEntry[] = [
-    //   {
-    //     submission_id: 1,
-    //     answer: { code: "console.log('hello world')" }
-    //   },
-    //   {
-    //     submission_id: 2,
-    //     answer: { code: 'Student 2' }
-    //   }
-    // ];
-
-    const contestVotingQuestion = this.props.assessment?.questions[
-      questionId
-    ] as IContestVotingQuestion;
+    const contestVotingQuestion = props.assessment?.questions[questionId] as IContestVotingQuestion;
     const contestVotingTabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
@@ -490,9 +351,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.NEW_LAYERS,
         body: (
           <SideContentContestVotingContainer
-            assessmentStatus={this.props.assessmentStatus}
+            assessmentStatus={props.assessmentStatus}
             handleSave={votingSubmission =>
-              this.props.handleSave(contestVotingQuestion.id, votingSubmission)
+              props.handleSave(contestVotingQuestion.id, votingSubmission)
             }
             handleContestEntryClick={handleContestEntryClick}
             contestEntries={contestVotingQuestion?.contestEntries ?? []}
@@ -674,10 +535,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     const onClickSave = () =>
-      this.props.handleSave(
-        this.props.assessment!.questions[questionId].id,
-        this.props.editorValue!
-      );
+      props.handleSave(props.assessment!.questions[questionId].id, props.editorValue!);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -861,7 +719,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       : props.questionId;
   const question: Question = props.assessment.questions[questionId];
   const editorProps =
-    question.type === QuestionTypes.programming
+    question.type === QuestionTypes.programming || QuestionTypes.voting
       ? {
           editorSessionId: '',
           editorValue: props.editorValue!,
