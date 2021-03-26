@@ -12,12 +12,12 @@ type FileExplorerPanelProps = {
   filePath: string;
   setFilePath: any;
   setCommitMessage: any;
-}
+};
 
 type FileExplorerPanelState = {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   commitMessage: string;
-}
+};
 
 export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExplorerPanelState> {
   constructor(props: FileExplorerPanelProps) {
@@ -93,16 +93,13 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
   }
 
   render() {
-    const divStyle={
+    const divStyle = {
       overflowY: 'auto',
       maxHeight: '440px'
     } as React.CSSProperties;
 
     return (
-      <div
-        className={classNames(Classes.DIALOG_BODY, 'file-step')}
-        style={divStyle}
-      >
+      <div className={classNames(Classes.DIALOG_BODY, 'file-step')} style={divStyle}>
         <Tree
           contents={this.state.repoFiles}
           onNodeClick={this.handleNodeClick}

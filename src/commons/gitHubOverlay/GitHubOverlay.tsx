@@ -88,7 +88,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       });
       const files = results.data;
       if (this.state.filePath === '') {
-        showWarningMessage("Nothing selected!", 1000);
+        showWarningMessage('Nothing selected!', 1000);
       } else if (Array.isArray(files)) {
         showWarningMessage("Can't open folder as a file!", 1000);
       } else {
@@ -114,7 +114,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     const { content } = { ...results.data };
     if (content) {
       this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
-      showSuccessMessage("Successfully loaded file!", 1000);
+      showSuccessMessage('Successfully loaded file!', 1000);
       store.dispatch(actions.setPickerDialog(false));
     }
   }
@@ -207,7 +207,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       onClick: this.handleSubmit,
       text: this.props.pickerType
     };
-    
+
     return (
       <div>
         <MultistepDialog
@@ -246,7 +246,11 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
             title="Select File"
           />
         </MultistepDialog>
-        <ConfirmOpen isOpen={this.state.isConfirmOpen} pickerType={this.props.pickerType} overwrite={this.overwrite} />
+        <ConfirmOpen
+          isOpen={this.state.isConfirmOpen}
+          pickerType={this.props.pickerType}
+          overwrite={this.overwrite}
+        />
       </div>
     );
   }

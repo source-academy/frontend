@@ -2,7 +2,7 @@
 
 exports[`Test empty repository list renders correctly 1`] = `
 "<RepositoryExplorerPanel userRepos={{...}} repoName=\\"\\" setRepoName={[Function: setRepoName]} refreshRepoFiles={[Function: refreshRepoFiles]}>
-  <div className=\\"bp3-dialog-body repo-step\\">
+  <div className=\\"bp3-dialog-body repo-step\\" style={{...}}>
     <Blueprint3.RadioGroup onChange={[Function: setRepoName]} selectedValue=\\"\\">
       <div className={[undefined]} />
     </Blueprint3.RadioGroup>
@@ -12,7 +12,7 @@ exports[`Test empty repository list renders correctly 1`] = `
 
 exports[`Test repository list renders correctly 1`] = `
 "<RepositoryExplorerPanel userRepos={{...}} repoName=\\"\\" setRepoName={[Function: setRepoName]} refreshRepoFiles={[Function: refreshRepoFiles]}>
-  <div className=\\"bp3-dialog-body repo-step\\">
+  <div className=\\"bp3-dialog-body repo-step\\" style={{...}}>
     <Blueprint3.RadioGroup onChange={[Function: setRepoName]} selectedValue=\\"\\">
       <div className={[undefined]}>
         <Blueprint3.Radio label=\\"repoName1\\" value=\\"repoName1\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]}>
