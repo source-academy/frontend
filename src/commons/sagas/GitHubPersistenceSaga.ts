@@ -15,37 +15,11 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 
   yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
 
-  yield takeLatest(GITHUB_DISPLAY_OPEN_PICKER, function* () {
-    const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
-      repos: { listForAuthenticatedUser: () => {} }
-    };
-    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
-    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-    store.dispatch(actions.setGitHubName(AuthUser.data.name));
-    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-    store.dispatch(actions.setPickerType('Open'));
-    store.dispatch(actions.setPickerDialog(true));
-  });
+  yield takeLatest(GITHUB_DISPLAY_OPEN_PICKER, githubDisplayOpenPickerSaga);
+
+  yield takeLatest(GITHUB_DISPLAY_SAVE_PICKER, githubDisplaySavePickerSaga);
 
   yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {
-    const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
-      repos: { listForAuthenticatedUser: () => {} }
-    };
-    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
-    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-    store.dispatch(actions.setGitHubName(AuthUser.data.name));
-    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-    store.dispatch(actions.setPickerType('Save'));
-    store.dispatch(actions.setPickerDialog(true));
-  });
-
-  yield takeLatest(GITHUB_DISPLAY_SAVE_PICKER, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
       users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
       repos: { listForAuthenticatedUser: () => {} }
@@ -82,6 +56,36 @@ export function* GitHubLoginSaga() {
 
 export function* GitHubLogoutSaga() {
   yield store.dispatch(actions.removeGitHubOctokitInstance());
+}
+
+function* githubDisplayOpenPickerSaga() {
+  const octokitInstance = store.getState().session.githubOctokitInstance || {
+    users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+    repos: { listForAuthenticatedUser: () => {} }
+  };
+  const AuthUser = yield call(octokitInstance.users.getAuthenticated);
+  const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+  store.dispatch(actions.setGitHubName(AuthUser.data.name));
+  store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
+  store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+  store.dispatch(actions.setPickerType('Open'));
+  store.dispatch(actions.setPickerDialog(true));
+}
+
+function* githubDisplaySavePickerSaga() {
+  const octokitInstance = store.getState().session.githubOctokitInstance || {
+    users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+    repos: { listForAuthenticatedUser: () => {} }
+  };
+  const AuthUser = yield call(octokitInstance.users.getAuthenticated);
+  const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+  store.dispatch(actions.setGitHubName(AuthUser.data.name));
+  store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
+  store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+  store.dispatch(actions.setPickerType('Save'));
+  store.dispatch(actions.setPickerDialog(true));
 }
 
 export default GitHubPersistenceSaga;
