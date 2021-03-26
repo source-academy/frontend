@@ -26,7 +26,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
       </Blueprint3.ButtonGroup>
     </div>
   </Blueprint3.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={[undefined]} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -54,7 +54,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
       </Blueprint3.ButtonGroup>
     </div>
   </Blueprint3.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={[undefined]} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
