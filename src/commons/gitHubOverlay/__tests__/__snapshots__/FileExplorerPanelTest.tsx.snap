@@ -2,7 +2,7 @@
 
 exports[`Test file list renders correctly 1`] = `
 "<FileExplorerPanel repoFiles={{...}} repoName=\\"YEETREPO\\" pickerType=\\"Open\\" filePath=\\"\\" setFilePath={[Function: setFilePath]} setCommitMessage={[Function: setCommitMessage]}>
-  <div className=\\"bp3-dialog-body file-step\\">
+  <div className=\\"bp3-dialog-body file-step\\" style={{...}}>
     <Blueprint3.Tree contents={{...}} onNodeClick={[Function: bound handleNodeClick]} onNodeCollapse={[Function: bound handleNodeCollapse]} onNodeExpand={[Function: bound handleNodeExpand]} className=\\"bp3-elevation-0\\">
       <div className=\\"bp3-tree bp3-elevation-0\\">
         <ul className=\\"bp3-tree-node-list bp3-tree-root\\">

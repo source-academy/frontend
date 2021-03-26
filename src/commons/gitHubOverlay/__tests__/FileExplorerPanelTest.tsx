@@ -1,5 +1,6 @@
 import { Tree } from '@blueprintjs/core';
 import { mount } from 'enzyme';
+
 import { FileExplorerPanel } from '../FileExplorerPanel';
 
 test('Test file list renders correctly', () => {
@@ -12,7 +13,7 @@ test('Test file list renders correctly', () => {
           childrenRetrieved: true,
           filePath: 'folder1',
           fileType: 'dir',
-          
+
           constructor(path: string, type: string) {
             this.filePath = path;
             this.fileType = type;
@@ -26,7 +27,7 @@ test('Test file list renders correctly', () => {
               childrenRetrieved: false,
               filePath: 'folder1/file1',
               fileType: 'file',
-              
+
               constructor(path: string, type: string) {
                 this.filePath = path;
                 this.fileType = type;
@@ -40,7 +41,7 @@ test('Test file list renders correctly', () => {
               childrenRetrieved: false,
               filePath: 'folder1/file2',
               fileType: 'file',
-              
+
               constructor(path: string, type: string) {
                 this.filePath = path;
                 this.fileType = type;
@@ -56,7 +57,7 @@ test('Test file list renders correctly', () => {
           childrenRetrieved: false,
           filePath: 'folder2',
           fileType: 'dir',
-          
+
           constructor(path: string, type: string) {
             this.filePath = path;
             this.fileType = type;
@@ -70,7 +71,7 @@ test('Test file list renders correctly', () => {
           childrenRetrieved: false,
           filePath: 'file3',
           fileType: 'file',
-          
+
           constructor(path: string, type: string) {
             this.filePath = path;
             this.fileType = type;
@@ -84,12 +85,9 @@ test('Test file list renders correctly', () => {
     setFilePath: () => {},
     setCommitMessage: () => {}
   };
-  const FEP = mount(
-    <FileExplorerPanel {...props} />
-    
-  );
+  const FEP = mount(<FileExplorerPanel {...props} />);
   expect(FEP.debug()).toMatchSnapshot();
 
   // handleClick
-  <Tree contents={props.repoFiles} />
+  <Tree contents={props.repoFiles} />;
 });
