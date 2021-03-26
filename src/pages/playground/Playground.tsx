@@ -101,7 +101,6 @@ export type DispatchProps = {
   handlePersistenceLogOut: () => void;
   handleGitHubOpenPicker: () => void;
   handleGitHubSavePicker: () => void;
-  handleGitHubInitialise: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
 };
@@ -453,7 +452,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSave={props.handleGitHubSavePicker}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
-        onPopoverOpening={props.handleGitHubInitialise}
       />
     );
   }, [
@@ -464,8 +462,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleGitHubOpenPicker,
     props.handleGitHubSavePicker,
     props.handleGitHubLogIn,
-    props.handleGitHubLogOut,
-    props.handleGitHubInitialise
+    props.handleGitHubLogOut
   ]);
 
   const executionTime = React.useMemo(

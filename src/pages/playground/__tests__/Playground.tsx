@@ -75,7 +75,6 @@ const baseProps = {
   handleGitHubOpenPicker: () => {},
   handleGitHubSaveFile: () => {},
   handleGitHubUpdateFile: (file: GitHubFile) => {},
-  handleGitHubInitialise: () => {},
   handleGitHubLogIn: () => {},
   handleGitHubLogOut: () => {}
 };

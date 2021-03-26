@@ -2,7 +2,6 @@ import { SagaIterator } from 'redux-saga';
 import { call, takeLatest } from 'redux-saga/effects';
 
 import {
-  GITHUB_INITIALISE,
   GITHUB_OPEN_PICKER,
   GITHUB_SAVE_FILE_AS,
   GITHUB_SAVE_PICKER
@@ -60,8 +59,6 @@ export function* GitHubPersistenceSaga(): SagaIterator {
     store.dispatch(actions.setPickerType('Save'));
     store.dispatch(actions.setPickerDialog(true));
   });
-
-  yield takeLatest(GITHUB_INITIALISE, function* () {});
 }
 
 export function* GitHubLoginSaga() {

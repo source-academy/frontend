@@ -47,7 +47,6 @@ import {
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
-  githubInitialise,
   githubOpenPicker,
   githubSaveFileAs,
   githubSavePicker
@@ -157,7 +156,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleGitHubOpenPicker: githubOpenPicker,
       handleGitHubSavePicker: githubSavePicker,
       handleGitHubUpdateFile: githubSaveFileAs,
-      handleGitHubInitialise: githubInitialise,
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub
     },
