@@ -93,8 +93,16 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
   }
 
   render() {
+    const divStyle={
+      overflowY: 'auto',
+      maxHeight: '440px'
+    } as React.CSSProperties;
+
     return (
-      <div className={classNames(Classes.DIALOG_BODY, 'file-step')}>
+      <div
+        className={classNames(Classes.DIALOG_BODY, 'file-step')}
+        style={divStyle}
+      >
         <Tree
           contents={this.state.repoFiles}
           onNodeClick={this.handleNodeClick}
