@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
-export interface IFileExplorerPanelProps {
+type FileExplorerPanelProps = {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   repoName: string;
   pickerType: string;
@@ -14,13 +14,13 @@ export interface IFileExplorerPanelProps {
   setCommitMessage: any;
 }
 
-export interface IFileExplorerPanelState {
+type FileExplorerPanelState = {
   repoFiles: ITreeNode<GitHubFileNodeData>[];
   commitMessage: string;
 }
 
-export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileExplorerPanelState> {
-  constructor(props: IFileExplorerPanelProps) {
+export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExplorerPanelState> {
+  constructor(props: FileExplorerPanelProps) {
     super(props);
     this.handleNodeClick = this.handleNodeClick.bind(this);
     this.handleNodeCollapse = this.handleNodeCollapse.bind(this);
@@ -30,7 +30,7 @@ export class FileExplorerPanel extends Component<IFileExplorerPanelProps, IFileE
     this.handleCommitMessageChange = this.handleCommitMessageChange.bind(this);
   }
 
-  public state: IFileExplorerPanelState = {
+  public state: FileExplorerPanelState = {
     repoFiles: this.props.repoFiles,
     commitMessage: ''
   };

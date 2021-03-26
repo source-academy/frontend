@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test file list renders correctly 1`] = `
+"<FileExplorerPanel repoFiles={{...}} repoName=\\"YEETREPO\\" pickerType=\\"Open\\" filePath=\\"\\" setFilePath={[Function: setFilePath]} setCommitMessage={[Function: setCommitMessage]}>
+  <div className=\\"bp3-dialog-body file-step\\">
+    <Blueprint3.Tree contents={{...}} onNodeClick={[Function: bound handleNodeClick]} onNodeCollapse={[Function: bound handleNodeCollapse]} onNodeExpand={[Function: bound handleNodeExpand]} className=\\"bp3-elevation-0\\">
+      <div className=\\"bp3-tree bp3-elevation-0\\">
+        <ul className=\\"bp3-tree-node-list bp3-tree-root\\">
+          <Blueprint3.TreeNode id={0} label=\\"folder1\\" nodeData={{...}} childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+            <li className=\\"bp3-tree-node\\">
+              <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
+                  <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp3-icon bp3-icon-chevron-right bp3-tree-node-caret bp3-tree-node-caret-closed\\" title={[undefined]}>
+                    <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                      <desc>
+                        chevron-right
+                      </desc>
+                      <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
+                    </svg>
+                  </span>
+                </Blueprint3.Icon>
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <span className=\\"bp3-tree-node-label\\">
+                  folder1
+                </span>
+              </div>
+              <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                <div className=\\"bp3-collapse\\" style={{...}}>
+                  <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                </div>
+              </Blueprint3.Collapse>
+            </li>
+          </Blueprint3.TreeNode>
+          <Blueprint3.TreeNode id={1} label=\\"folder2\\" nodeData={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+            <li className=\\"bp3-tree-node\\">
+              <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                <span className=\\"bp3-tree-node-caret-none\\" />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <span className=\\"bp3-tree-node-label\\">
+                  folder2
+                </span>
+              </div>
+              <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                <div className=\\"bp3-collapse\\" style={{...}}>
+                  <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                </div>
+              </Blueprint3.Collapse>
+            </li>
+          </Blueprint3.TreeNode>
+          <Blueprint3.TreeNode id={2} label=\\"file 3\\" nodeData={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+            <li className=\\"bp3-tree-node\\">
+              <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                <span className=\\"bp3-tree-node-caret-none\\" />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <span className=\\"bp3-tree-node-label\\">
+                  file 3
+                </span>
+              </div>
+              <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                <div className=\\"bp3-collapse\\" style={{...}}>
+                  <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                </div>
+              </Blueprint3.Collapse>
+            </li>
+          </Blueprint3.TreeNode>
+        </ul>
+      </div>
+    </Blueprint3.Tree>
+  </div>
+</FileExplorerPanel>"
+`;

@@ -6,6 +6,7 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { ConfirmOpen } from './ConfirmDialog';
 import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
@@ -24,6 +25,7 @@ type GitHubOverlayState = {
   fileIndex: number;
   filePath: string;
   commitMessage: string;
+  isConfirmOpen: boolean;
 };
 
 export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
@@ -34,7 +36,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setCommitMessage = this.setCommitMessage.bind(this);
     this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
     this.openFile = this.openFile.bind(this);
+    this.confirmOpenFile = this.confirmOpenFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
+    this.confirmSaveFile = this.confirmSaveFile.bind(this);
+    this.overwrite = this.overwrite.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -44,7 +49,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     repoFiles: [],
     fileIndex: 0,
     filePath: '',
-    commitMessage: ''
+    commitMessage: '',
+    isConfirmOpen: false
   };
 
   userRepos = store.getState().session.userRepos;
@@ -81,14 +87,14 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         path: this.state.filePath
       });
       const files = results.data;
-      if (Array.isArray(files)) {
-        showWarningMessage("Can't open a folder as a file!", 1000);
+      if (this.state.filePath === '') {
+        showWarningMessage("Nothing selected!", 1000);
+      } else if (Array.isArray(files)) {
+        showWarningMessage("Can't open folder as a file!", 1000);
       } else {
         const { content } = { ...results.data };
         if (content) {
-          this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
-          showSuccessMessage('Successfully loaded file!', 1000);
-          store.dispatch(actions.setPickerDialog(false));
+          this.setState({ isConfirmOpen: true });
         }
       }
     } catch (err) {
@@ -96,15 +102,27 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     }
   }
 
+  async confirmOpenFile() {
+    const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
+    const githubLoginID = GitHubUtils.getGitHubLoginID();
+    if (octokit === undefined) return;
+    const results = await octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: this.state.repoName,
+      path: this.state.filePath
+    });
+    const { content } = { ...results.data };
+    if (content) {
+      this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
+      showSuccessMessage("Successfully loaded file!", 1000);
+      store.dispatch(actions.setPickerDialog(false));
+    }
+  }
+
   async saveFile() {
     const octokit = GitHubUtils.getGitHubOctokitInstance();
     if (octokit === undefined) return;
     const githubLoginID = GitHubUtils.getGitHubLoginID();
-    const githubName = GitHubUtils.getGitHubName();
-    const githubEmail = GitHubUtils.getGitHubEmail();
-    const content = store.getState().workspaces.playground.editorValue || '';
-    let sha: string;
-    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
     try {
       const results = await octokit.repos.getContent({
         owner: githubLoginID,
@@ -113,25 +131,18 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       });
       // file exists
       const files = results.data;
-      if (!Array.isArray(files)) {
-        sha = files.sha;
-        await octokit.repos.createOrUpdateFileContents({
-          owner: githubLoginID,
-          repo: this.state.repoName,
-          path: this.state.filePath,
-          message: this.state.commitMessage,
-          content: contentEncoded,
-          sha: sha,
-          committer: { name: githubName, email: githubEmail },
-          author: { name: githubName, email: githubEmail }
-        });
-        showSuccessMessage('Successfully saved file!', 1000);
-        store.dispatch(actions.setPickerDialog(false));
+      if (Array.isArray(files)) {
+        showWarningMessage("Can't save over a folder!");
+      } else {
+        this.setState({ isConfirmOpen: true });
       }
-      showWarningMessage("Can't save over a folder!");
     } catch (error) {
       if (error.status === 404) {
         // file does not exist
+        const githubName = GitHubUtils.getGitHubName();
+        const githubEmail = GitHubUtils.getGitHubEmail();
+        const content = store.getState().workspaces.playground.editorValue || '';
+        const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
         await octokit.repos.createOrUpdateFileContents({
           owner: githubLoginID,
           repo: this.state.repoName,
@@ -149,50 +160,94 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     }
   }
 
+  async confirmSaveFile() {
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    if (octokit === undefined) return;
+    const content = store.getState().workspaces.playground.editorValue || '';
+    let sha: string;
+    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+    const results = await octokit.repos.getContent({
+      owner: GitHubUtils.getGitHubLoginID(),
+      repo: this.state.repoName,
+      path: this.state.filePath
+    });
+    const files = results.data;
+    if (!Array.isArray(files)) {
+      sha = files.sha;
+      await octokit.repos.createOrUpdateFileContents({
+        owner: GitHubUtils.getGitHubLoginID(),
+        repo: this.state.repoName,
+        path: this.state.filePath,
+        message: this.state.commitMessage,
+        content: contentEncoded,
+        sha: sha,
+        committer: { name: GitHubUtils.getGitHubName(), email: GitHubUtils.getGitHubEmail() },
+        author: { name: GitHubUtils.getGitHubName(), email: GitHubUtils.getGitHubEmail() }
+      });
+      showSuccessMessage('Successfully saved file!', 1000);
+      store.dispatch(actions.setPickerDialog(false));
+    }
+  }
+
+  overwrite(setConfirm: string) {
+    if (setConfirm) {
+      if (this.props.pickerType === 'Open') {
+        this.confirmOpenFile();
+      } else {
+        this.confirmSaveFile();
+      }
+      store.dispatch(actions.setPickerDialog(false));
+    }
+    this.setState({ isConfirmOpen: false });
+  }
+
   public render() {
     const finalButtonProps: Partial<IButtonProps> = {
       intent: 'primary',
       onClick: this.handleSubmit,
       text: this.props.pickerType
     };
-
+    
     return (
-      <MultistepDialog
-        className="GitHubPicker"
-        finalButtonProps={finalButtonProps}
-        isOpen={this.props.isPickerOpen}
-        onClose={this.handleClose}
-        title={this.props.pickerType + ' file'}
-      >
-        <DialogStep
-          id="Repository"
-          panel={
-            <RepositoryExplorerPanel
-              userRepos={this.userRepos}
-              repoName={this.state.repoName}
-              setRepoName={this.setRepoName}
-              refreshRepoFiles={this.refreshRepoFiles}
-              {...this.props}
-            />
-          }
-          title="Select Repository"
-        />
-
-        <DialogStep
-          id="Files"
-          panel={
-            <FileExplorerPanel
-              repoFiles={this.state.repoFiles}
-              repoName={this.state.repoName}
-              pickerType={this.props.pickerType}
-              filePath={this.state.filePath}
-              setFilePath={this.setFilePath}
-              setCommitMessage={this.setCommitMessage}
-            />
-          }
-          title="Select File"
-        />
-      </MultistepDialog>
+      <div>
+        <MultistepDialog
+          className="GitHubPicker"
+          finalButtonProps={finalButtonProps}
+          isOpen={this.props.isPickerOpen}
+          onClose={this.handleClose}
+          title={this.props.pickerType + ' file'}
+          usePortal={false}
+        >
+          <DialogStep
+            id="Repository"
+            panel={
+              <RepositoryExplorerPanel
+                userRepos={this.userRepos}
+                repoName={this.state.repoName}
+                setRepoName={this.setRepoName}
+                refreshRepoFiles={this.refreshRepoFiles}
+                {...this.props}
+              />
+            }
+            title="Select Repository"
+          />
+          <DialogStep
+            id="Files"
+            panel={
+              <FileExplorerPanel
+                repoFiles={this.state.repoFiles}
+                repoName={this.state.repoName}
+                pickerType={this.props.pickerType}
+                filePath={this.state.filePath}
+                setFilePath={this.setFilePath}
+                setCommitMessage={this.setCommitMessage}
+              />
+            }
+            title="Select File"
+          />
+        </MultistepDialog>
+        <ConfirmOpen isOpen={this.state.isConfirmOpen} pickerType={this.props.pickerType} overwrite={this.overwrite} />
+      </div>
     );
   }
 

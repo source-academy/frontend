@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test empty repository list renders correctly 1`] = `
+"<RepositoryExplorerPanel userRepos={{...}} repoName=\\"\\" setRepoName={[Function: setRepoName]} refreshRepoFiles={[Function: refreshRepoFiles]}>
+  <div className=\\"bp3-dialog-body repo-step\\">
+    <Blueprint3.RadioGroup onChange={[Function: setRepoName]} selectedValue=\\"\\">
+      <div className={[undefined]} />
+    </Blueprint3.RadioGroup>
+  </div>
+</RepositoryExplorerPanel>"
+`;
+
+exports[`Test repository list renders correctly 1`] = `
+"<RepositoryExplorerPanel userRepos={{...}} repoName=\\"\\" setRepoName={[Function: setRepoName]} refreshRepoFiles={[Function: refreshRepoFiles]}>
+  <div className=\\"bp3-dialog-body repo-step\\">
+    <Blueprint3.RadioGroup onChange={[Function: setRepoName]} selectedValue=\\"\\">
+      <div className={[undefined]}>
+        <Blueprint3.Radio label=\\"repoName1\\" value=\\"repoName1\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]}>
+          <Control label=\\"repoName1\\" value=\\"repoName1\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]} type=\\"radio\\" typeClassName=\\"bp3-radio\\">
+            <label className=\\"bp3-control bp3-radio\\" style={[undefined]}>
+              <input value=\\"repoName1\\" checked={false} disabled={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]} type=\\"radio\\" />
+              <span className=\\"bp3-control-indicator\\" />
+              repoName1
+            </label>
+          </Control>
+        </Blueprint3.Radio>
+        <Blueprint3.Radio label=\\"repoName2\\" value=\\"repoName2\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]}>
+          <Control label=\\"repoName2\\" value=\\"repoName2\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]} type=\\"radio\\" typeClassName=\\"bp3-radio\\">
+            <label className=\\"bp3-control bp3-radio\\" style={[undefined]}>
+              <input value=\\"repoName2\\" checked={false} disabled={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]} type=\\"radio\\" />
+              <span className=\\"bp3-control-indicator\\" />
+              repoName2
+            </label>
+          </Control>
+        </Blueprint3.Radio>
+        <Blueprint3.Radio label=\\"repoName3\\" value=\\"repoName3\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]}>
+          <Control label=\\"repoName3\\" value=\\"repoName3\\" checked={false} className={[undefined]} disabled={[undefined]} inline={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]} type=\\"radio\\" typeClassName=\\"bp3-radio\\">
+            <label className=\\"bp3-control bp3-radio\\" style={[undefined]}>
+              <input value=\\"repoName3\\" checked={false} disabled={[undefined]} name=\\"Blueprint3.RadioGroup-0\\" onChange={[Function: setRepoName]} type=\\"radio\\" />
+              <span className=\\"bp3-control-indicator\\" />
+              repoName3
+            </label>
+          </Control>
+        </Blueprint3.Radio>
+      </div>
+    </Blueprint3.RadioGroup>
+  </div>
+</RepositoryExplorerPanel>"
+`;
