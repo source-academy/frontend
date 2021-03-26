@@ -8,7 +8,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.NonIdealState description=\\"Fetching assessment...\\" icon={{...}}>
@@ -37,8 +37,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -55,11 +55,11 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -171,8 +171,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleOpenAssessments]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -327,33 +327,31 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
-                                            <Blueprint3.Tooltip className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                            <Blueprint3.Tooltip2 className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                                                 <Manager>
-                                                  <span className=\\"bp3-popover-wrapper listing-title-tooltip\\">
-                                                    <Reference innerRef={[Function: target]}>
-                                                      <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
-                                                        <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
-                                                          <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
-                                                            <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                              <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
-                                                                <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                                                                  <desc>
-                                                                    lock
-                                                                  </desc>
-                                                                  <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
-                                                                </svg>
-                                                              </span>
-                                                            </Blueprint3.Icon>
+                                                  <Reference>
+                                                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
+                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                              <desc>
+                                                                lock
+                                                              </desc>
+                                                              <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
                                                           </span>
-                                                        </Blueprint3.ResizeSensor>
-                                                      </InnerReference>
-                                                    </Reference>
-                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
-                                                  </span>
+                                                        </Blueprint3.Icon>
+                                                      </span>
+                                                    </Blueprint3.ResizeSensor>
+                                                  </Reference>
+                                                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                                                  </Popper>
                                                 </Manager>
-                                              </Blueprint3.Popover>
-                                            </Blueprint3.Tooltip>
+                                              </Blueprint3.Popover2>
+                                            </Blueprint3.Tooltip2>
                                           </h4>
                                         </Component>
                                       </div>
@@ -813,8 +811,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleClosedAssessments]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
                             <span icon=\\"caret-right\\" className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
@@ -843,8 +841,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -861,7 +859,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.NonIdealState title=\\"There are no assessments.\\" icon=\\"flame\\">
@@ -890,8 +888,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -908,11 +906,11 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
-              <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+              <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -1054,8 +1052,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleOpenAssessments]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -1210,33 +1208,31 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
-                                            <Blueprint3.Tooltip className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                            <Blueprint3.Tooltip2 className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                                                 <Manager>
-                                                  <span className=\\"bp3-popover-wrapper listing-title-tooltip\\">
-                                                    <Reference innerRef={[Function: target]}>
-                                                      <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
-                                                        <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
-                                                          <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
-                                                            <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                              <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
-                                                                <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                                                                  <desc>
-                                                                    lock
-                                                                  </desc>
-                                                                  <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
-                                                                </svg>
-                                                              </span>
-                                                            </Blueprint3.Icon>
+                                                  <Reference>
+                                                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
+                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                              <desc>
+                                                                lock
+                                                              </desc>
+                                                              <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
                                                           </span>
-                                                        </Blueprint3.ResizeSensor>
-                                                      </InnerReference>
-                                                    </Reference>
-                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
-                                                  </span>
+                                                        </Blueprint3.Icon>
+                                                      </span>
+                                                    </Blueprint3.ResizeSensor>
+                                                  </Reference>
+                                                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                                                  </Popper>
                                                 </Manager>
-                                              </Blueprint3.Popover>
-                                            </Blueprint3.Tooltip>
+                                              </Blueprint3.Popover2>
+                                            </Blueprint3.Tooltip2>
                                           </h4>
                                         </Component>
                                       </div>
@@ -1696,8 +1692,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </div>
                       </div>
                     </Blueprint3.Collapse>
-                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleClosedAssessments]}>
+                      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                         <Blueprint3.Icon icon={{...}}>
                           <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
                             <span icon=\\"caret-right\\" className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
@@ -1726,8 +1722,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function (anonymous)]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: setBetchaAssessmentNull]} title=\\"Finalise submission?\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>

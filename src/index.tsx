@@ -2,8 +2,7 @@ import 'src/styles/index.scss';
 
 import * as Sentry from '@sentry/browser';
 import { ConnectedRouter } from 'connected-react-router';
-import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
-import * as React from 'react';
+import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';
@@ -32,7 +31,7 @@ console.log(
   'font-weight: bold;'
 );
 
-setBackendStaticURL(Constants.moduleBackendUrl);
+setModulesStaticURL(Constants.moduleBackendUrl);
 console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
 render(

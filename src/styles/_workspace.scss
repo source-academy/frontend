@@ -7,10 +7,15 @@ $code-color-error: #ff4444;
   height: 100%;
   background-color: $cadet-color-1;
   display: flex;
-  padding-top: 0.5rem;
   flex: 1 1 auto;
   flex-direction: column;
 
+  // Hides scrollbar in mobile workspace
+  @media screen and (max-width: 768px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .row {
     margin-right: 0px;
     margin-left: 0px;
@@ -31,7 +36,16 @@ $code-color-error: #ff4444;
     justify-content: space-between;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 0.6rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    @media screen and (min-width: 769px) {
+      .ControlBar_editingWorkspace {
+        width: 10%;
+      }
+    }
   }
 
   .workspace-parent {
@@ -84,10 +98,8 @@ $code-color-error: #ff4444;
   .Editor {
     display: flex;
     flex-direction: column;
-    height: auto;
-    margin: 0 0.6rem 0.6rem 0.6rem;
-    padding-bottom: 0.6rem;
-    padding-left: 0.6rem;
+    height: 100%;
+    width: 100%;
 
     .editor-react-ace {
       flex: 1;
@@ -772,6 +784,7 @@ $code-color-error: #ff4444;
     .repl-input-parent {
       padding: 0;
       margin-bottom: 0rem;
+      flex-wrap: nowrap;
     }
 
     .repl-react-ace {
@@ -1087,17 +1100,17 @@ $code-color-error: #ff4444;
 }
 
 .Popover-share {
-  .#{$ns}-popover-arrow-fill {
+  .#{$ns}-popover2-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .#{$ns}-popover-content {
+  .#{$ns}-popover2-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;
 
     input {
-      width: 25rem;
+      width: 15rem;
       margin-right: 0.58em;
       &:focus {
         outline: none;

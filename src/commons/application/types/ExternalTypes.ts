@@ -75,46 +75,52 @@ const runesLibrary = [
 
 const curvesLibrary = [
   'make_point',
-  'draw_points_on',
+  'make_3D_point',
+  'make_color_point',
+  'make_3D_color_point',
   'draw_connected',
-  'draw_points_squeezed_to_window',
-  'draw_connected_squeezed_to_window',
   'draw_connected_full_view',
   'draw_connected_full_view_proportional',
+  'draw_points_on',
+  'draw_points_full_view_proportional',
+  'draw_3D_connected',
+  'draw_3D_connected_full_view',
+  'draw_3D_connected_full_view_proportional',
+  'draw_3D_points_on',
+  'draw_3D_points_full_view_proportional',
   'x_of',
   'y_of',
+  'z_of',
+  'r_of',
+  'g_of',
+  'b_of',
   'unit_line',
   'unit_line_at',
   'unit_circle',
   'connect_rigidly',
   'connect_ends',
   'put_in_standard_position',
-  'translate',
-  'scale',
+  'translate_curve',
+  'scale_proportional',
   /** Contest functions */
-  'rotate_pi_over_2',
-  'scale_x_y',
-  'gosperize',
-  'gosper_curve',
-  'show_connected_gosper',
+  'scale_curve',
   'repeated',
-  'param_gosper',
-  'param_gosperize',
   'rotate_around_origin',
   'arc', // used in GOSPERIZE
   'invert', // used in DRAGONIZE
   'alternative_unit_circle', // undocumented
   'full_view_proportional', // undocumented
   'squeeze_full_view', // undocumented
-  'squeeze_rectangular_portion', // undocumented
-  'picture_mse'
+  'squeeze_rectangular_portion' // undocumented
 ];
 
 const soundsLibrary = [
   'make_sound',
   'get_wave',
   'get_duration',
+  'is_sound',
   'play',
+  'play_concurrently',
   'stop',
   'consecutively',
   'simultaneously',
@@ -127,8 +133,8 @@ const soundsLibrary = [
   'square_sound',
   'triangle_sound',
   'sawtooth_sound',
-  'play_unsafe',
-  'display_waveform',
+  'play_unsafe', // undocumented
+  'display_waveform', // undocumented
   /** Microphone Sounds */
   'init_record',
   'record',

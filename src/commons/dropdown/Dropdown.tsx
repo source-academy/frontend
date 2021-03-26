@@ -1,5 +1,6 @@
-import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
+import { Menu, MenuItem, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import controlButton from '../ControlButton';
@@ -36,13 +37,13 @@ class Dropdown extends React.Component<DropdownProps, State> {
   public render() {
     return (
       <>
-        <Popover
+        <Popover2
           content={this.menu(this.props)}
           inheritDarkTheme={false}
-          position={Position.BOTTOM}
+          placement={Position.BOTTOM}
         >
           {controlButton('', IconNames.CARET_DOWN)}
-        </Popover>
+        </Popover2>
         <DropdownAbout isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
         <DropdownHelp isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
         {this.props.name ? (

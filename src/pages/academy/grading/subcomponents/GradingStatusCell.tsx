@@ -1,5 +1,6 @@
-import { Icon, IconName, Intent, Position, Tooltip } from '@blueprintjs/core';
+import { Icon, IconName, Intent, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { GradingStatuses } from '../../../../commons/assessment/AssessmentTypes';
@@ -47,9 +48,9 @@ class GradingStatusCell extends React.Component<GradingCellProps, {}> {
 
     return (
       <div>
-        <Tooltip content={tooltip} position={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+        <Tooltip2 content={tooltip} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
           <Icon icon={iconName} intent={intent} />
-        </Tooltip>
+        </Tooltip2>
       </div>
     );
   }

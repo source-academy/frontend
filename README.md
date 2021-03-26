@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
 [![License](https://img.shields.io/github/license/source-academy/cadet-frontend)](https://github.com/source-academy/cadet-frontend/blob/master/LICENSE)
 
-The Source Academy is a gamified platform designed to teach students coding while having fun! This repository in particular houses the source code for the frontend written in ReactJS with Redux.
+The Source Academy (<https://source-academy.github.io/>) is an immersive online experiential environment for learning programming, developed in the School of Computing at the National University of Singapore. This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
 
 ## Features
 - Playground to write and test programs
@@ -127,8 +127,6 @@ There are a few additional environment variables that are used when building and
 1. `REACT_APP_VERSION`: A version string shown in the console on app launch.
 1. `REACT_APP_ENVIRONMENT`: An environment string. Currently it is only used to differentiate different deploys in Sentry.
 1. `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
-1. `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
-1. `REACT_APP_CADET_LOGGER`: Log server url. To enable, build with the serviceworker. (`yarn build`, then `yarn build-serviceworker`)
-   - To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
-   - The custom serviceworker is only built with `yarn build`, then `yarn build-serviceworker`. It is not available in any other version.
+1. `REACT_APP_SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. The service worker will ignore paths matching any of these regexes. This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
+1. `REACT_APP_CADET_LOGGER`: Log server URL. To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
 1. `REACT_APP_CADET_LOGGER_INTERVAL`: The interval (in ms) that the frontend should upload logs.

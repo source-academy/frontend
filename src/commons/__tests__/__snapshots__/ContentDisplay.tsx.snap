@@ -3,7 +3,7 @@
 exports[`ContentDisplay page renders correctly 1`] = `
 "<ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
   <div className=\\"ContentDisplay row center-xs\\">
-    <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+    <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
       <Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
         <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
           <div>

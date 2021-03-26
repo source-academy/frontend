@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 
 type AchievementViewGoalProps = {
@@ -7,18 +5,18 @@ type AchievementViewGoalProps = {
 };
 
 /**
- * Maps an array of goalId to Goal component
+ * Maps an array of goalUuid to Goal component
  *
- * @param goal an array of goalId
+ * @param goal an array of goalUuid
  */
 const mapGoalToJSX = (goal: AchievementGoal) => {
-  const { id, text, maxExp, exp } = goal;
+  const { uuid, text, maxXp, xp } = goal;
   return (
-    <div className="goal" key={id}>
+    <div className="goal" key={uuid}>
       <div className="goal-badge">
         <span className="goal-icon" />
         <p>
-          {exp} / {maxExp} XP
+          {xp} / {maxXp} XP
         </p>
       </div>
       <p>{text}</p>

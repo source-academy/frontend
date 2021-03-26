@@ -1,10 +1,20 @@
 import { mount } from 'enzyme';
-import * as React from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 
 import { mockInitialStore } from '../../mocks/StoreMocks';
 import ApplicationContainer from '../ApplicationContainer';
+
+// JSDOM does not implement window.matchMedia, so we have to mock it.
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {}
+    };
+  };
 
 /* TODO: currently crashes w/ ReferenceError---PIXI libraries are not loaded in this test
 test('ApplicationContainer redirects from / to /academy', () => {

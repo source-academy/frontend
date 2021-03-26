@@ -1,10 +1,20 @@
 import { shallow } from 'enzyme';
 import moment from 'moment';
-import * as React from 'react';
 import Constants from 'src/commons/utils/Constants';
 
 import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Application, { ApplicationProps } from '../Application';
+
+// JSDOM does not implement window.matchMedia, so we have to mock it.
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {}
+    };
+  };
 
 const props: ApplicationProps = {
   ...mockRouterProps('/academy', {}),

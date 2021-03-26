@@ -3,6 +3,8 @@ import { action } from 'typesafe-actions';
 import {
   AchievementGoal,
   AchievementItem,
+  BULK_UPDATE_ACHIEVEMENTS,
+  BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
   GET_ACHIEVEMENTS,
@@ -17,6 +19,11 @@ import {
   UPDATE_GOAL_PROGRESS
 } from './AchievementTypes';
 
+export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
+  action(BULK_UPDATE_ACHIEVEMENTS, achievements);
+
+export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_GOALS, goals);
+
 export const editAchievement = (achievement: AchievementItem) =>
   action(EDIT_ACHIEVEMENT, achievement);
 
@@ -28,10 +35,9 @@ export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
 
-export const removeAchievement = (achievement: AchievementItem) =>
-  action(REMOVE_ACHIEVEMENT, achievement);
+export const removeAchievement = (uuid: string) => action(REMOVE_ACHIEVEMENT, uuid);
 
-export const removeGoal = (definition: GoalDefinition) => action(REMOVE_GOAL, definition);
+export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
 
 /*
   Note: This updates the frontend Achievement Redux store.

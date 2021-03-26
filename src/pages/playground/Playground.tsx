@@ -1,5 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -8,10 +9,8 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
-import { parseQuery } from 'src/commons/utils/QueryHelper';
-import { initSession, log } from 'src/features/eventLogging';
 
 import {
   InterpreterOutput,
@@ -28,12 +27,16 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
 import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
+import MobileWorkspace, {
+  MobileWorkspaceProps
+} from '../../commons/mobileWorkspace/MobileWorkspace';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
@@ -43,7 +46,11 @@ import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSub
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
+import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
+import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { initSession, log } from '../../features/eventLogging';
+import { GitHubFile } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -91,6 +98,12 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
+  handleGitHubOpenPicker: () => void;
+  handleGitHubSaveFile: () => void;
+  handleGitHubUpdateFile: (file: GitHubFile) => void;
+  handleGitHubInitialise: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -119,6 +132,8 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
+  githubOctokitInstance: Octokit | undefined;
+  githubFile: GitHubFile | undefined;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -154,6 +169,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const propsRef = React.useRef(props);
   propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -206,6 +222,27 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleHash(hash, propsRef.current);
   }, [hash]);
 
+  /**
+   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
+   */
+  React.useEffect(() => {
+    if (
+      isMobileBreakpoint &&
+      (selectedTab === SideContentType.introduction ||
+        selectedTab === SideContentType.remoteExecution)
+    ) {
+      props.handleActiveTabChange(SideContentType.mobileEditor);
+      setSelectedTab(SideContentType.mobileEditor);
+    } else if (
+      !isMobileBreakpoint &&
+      (selectedTab === SideContentType.mobileEditor ||
+        selectedTab === SideContentType.mobileEditorRun)
+    ) {
+      setSelectedTab(SideContentType.introduction);
+      props.handleActiveTabChange(SideContentType.introduction);
+    }
+  }, [isMobileBreakpoint, props, selectedTab]);
+
   const handlers = React.useMemo(
     () => ({
       goGreen: () => setIsGreen(!isGreen)
@@ -230,16 +267,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       const { handleUsingSubst, handleReplOutputClear, sourceChapter } = propsRef.current;
 
-      if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
-        handleUsingSubst(true);
-      }
+      /**
+       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+       */
+      if (
+        !(
+          prevTabId === SideContentType.substVisualizer &&
+          newTabId === SideContentType.mobileEditorRun
+        )
+      ) {
+        if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
+          handleUsingSubst(true);
+        }
 
-      if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
+        if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
+          handleReplOutputClear();
+          handleUsingSubst(false);
+        }
 
-      setSelectedTab(newTabId);
+        setSelectedTab(newTabId);
+      }
     },
     [hasBreakpoints]
   );
@@ -388,6 +435,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
+  const { githubOctokitInstance, githubFile, handleGitHubUpdateFile } = props;
+  // Compute this here to avoid re-rendering the button every keystroke
+  const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
+  const githubButtons = React.useMemo(() => {
+    return (
+      <ControlBarGitHubButtons
+        currentFile={githubFile}
+        loggedInAs={githubOctokitInstance}
+        isDirty={githubIsDirty}
+        key="github"
+        onClickOpen={props.handleGitHubOpenPicker}
+        onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
+        onClickSaveAs={props.handleGitHubSaveFile}
+        onClickLogIn={props.handleGitHubLogIn}
+        onClickLogOut={props.handleGitHubLogOut}
+        onPopoverOpening={props.handleGitHubInitialise}
+      />
+    );
+  }, [
+    githubOctokitInstance,
+    githubFile,
+    githubIsDirty,
+    props.handleGitHubSaveFile,
+    props.handleGitHubOpenPicker,
+    props.handleGitHubLogIn,
+    props.handleGitHubLogOut,
+    props.handleGitHubInitialise,
+    handleGitHubUpdateFile
+  ]);
+
   const executionTime = React.useMemo(
     () => (
       <ControlBarExecutionTime
@@ -475,7 +552,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Introduction',
-      iconName: IconNames.COMPASS,
+      iconName: IconNames.HOME,
       body: (
         <Markdown
           content={generateSourceIntroduction(props.sourceChapter, props.sourceVariant)}
@@ -546,6 +623,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant,
     usingRemoteExecution
   ]);
+
+  // Remove Intro and Remote Execution tabs for mobile
+  const mobileTabs = [...tabs];
+  mobileTabs.shift();
+  mobileTabs.pop();
 
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
@@ -622,6 +704,45 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const replDisabled =
     props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
+
+  const editorProps = {
+    onChange: onChangeMethod,
+    onCursorChange: onCursorChangeMethod,
+    onSelectionChange: onSelectionChangeMethod,
+    sourceChapter: props.sourceChapter,
+    externalLibraryName: props.externalLibraryName,
+    sourceVariant: props.sourceVariant,
+    editorValue: props.editorValue,
+    editorSessionId: props.editorSessionId,
+    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleEditorEval: props.handleEditorEval,
+    handleEditorValueChange: onEditorValueChange,
+    handleSendReplInputToOutput: props.handleSendReplInputToOutput,
+    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    isEditorAutorun: props.isEditorAutorun,
+    breakpoints: props.breakpoints,
+    highlightedLines: props.highlightedLines,
+    newCursorPosition: props.newCursorPosition,
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+    handleSetSharedbConnected: props.handleSetSharedbConnected
+  };
+
+  const replProps = {
+    sourceChapter: props.sourceChapter,
+    sourceVariant: props.sourceVariant,
+    externalLibrary: props.externalLibraryName,
+    output: props.output,
+    replValue: props.replValue,
+    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleReplEval: props.handleReplEval,
+    handleReplValueChange: props.handleReplValueChange,
+    hidden: selectedTab === SideContentType.substVisualizer,
+    inputHidden: replDisabled,
+    usingSubst: props.usingSubst,
+    replButtons: [replDisabled ? null : evalButton, clearButton]
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -631,53 +752,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
+        githubButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
-      ],
-      replButtons: [replDisabled ? null : evalButton, clearButton]
+      ]
     },
-    editorProps: {
-      onChange: onChangeMethod,
-      onCursorChange: onCursorChangeMethod,
-      onSelectionChange: onSelectionChangeMethod,
-      sourceChapter: props.sourceChapter,
-      externalLibraryName: props.externalLibraryName,
-      sourceVariant: props.sourceVariant,
-      editorValue: props.editorValue,
-      editorSessionId: props.editorSessionId,
-      handleDeclarationNavigate: props.handleDeclarationNavigate,
-      handleEditorEval: props.handleEditorEval,
-      handleEditorValueChange: onEditorValueChange,
-      handleSendReplInputToOutput: props.handleSendReplInputToOutput,
-      handlePromptAutocomplete: props.handlePromptAutocomplete,
-      isEditorAutorun: props.isEditorAutorun,
-      breakpoints: props.breakpoints,
-      highlightedLines: props.highlightedLines,
-      newCursorPosition: props.newCursorPosition,
-      handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-      handleSetSharedbConnected: props.handleSetSharedbConnected
-    },
+    editorProps: editorProps,
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
-    replProps: {
-      sourceChapter: props.sourceChapter,
-      sourceVariant: props.sourceVariant,
-      externalLibrary: props.externalLibraryName,
-      output: props.output,
-      replValue: props.replValue,
-      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-      handleReplEval: props.handleReplEval,
-      handleReplValueChange: props.handleReplValueChange,
-      hidden: selectedTab === SideContentType.substVisualizer,
-      inputHidden: replDisabled,
-      usingSubst: props.usingSubst
-    },
+    replProps: replProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       defaultSelectedTabId: selectedTab,
+      selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
@@ -686,7 +775,33 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
 
-  return (
+  const mobileWorkspaceProps: MobileWorkspaceProps = {
+    editorProps: editorProps,
+    replProps: replProps,
+    mobileSideContentProps: {
+      mobileControlBarProps: {
+        editorButtons: [
+          autorunButtons,
+          chapterSelect,
+          props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
+          shareButton,
+          sessionButtons,
+          persistenceButtons
+        ]
+      },
+      defaultSelectedTabId: selectedTab,
+      selectedTabId: selectedTab,
+      handleActiveTabChange: props.handleActiveTabChange,
+      onChange: onChangeTabs,
+      tabs: mobileTabs,
+      workspaceLocation: 'playground',
+      handleEditorEval: props.handleEditorEval
+    }
+  };
+
+  return isMobileBreakpoint ? (
+    <MobileWorkspace {...mobileWorkspaceProps} />
+  ) : (
     <HotKeys
       className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
       keyMap={keyMap}

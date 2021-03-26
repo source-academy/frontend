@@ -67,20 +67,19 @@
         }
       }
 
-      /* Temporarily removed
       .milestone {
-        background-color: rgba(0, 0, 0, 0.7);
-        border: 1px solid #90ff12;
-        box-shadow: 0 0 10px #90ff12;
+        background-color: rgba(0, 0, 0, 0.9);
+        border: 1px solid yellow;
+        box-shadow: 0 0 10px yellow;
         display: flex;
         flex-direction: column;
-        margin: 20em 0 0 1em;
-        padding: 1em 2em;
+        margin: 20em 0 0 0;
+        padding: 0.5em 2.5em;
         position: absolute;
         z-index: 2;
 
         h2 {
-          margin: 0;
+          margin: $default-spacing;
           text-align: center;
           text-decoration: underline;
         }
@@ -89,12 +88,21 @@
           align-items: center;
           display: flex;
           flex-direction: row;
+          margin: $default-spacing;
 
           .description {
-            padding: 1em 0 0 0;
+            margin: 0;
+            padding: 0 0 0 $default-spacing;
           }
         }
-      } */
+
+        .footer {
+          color: cyan;
+          font-size: 80%;
+          text-align: center;
+          margin: $default-spacing;
+        }
+      }
     }
 
     .level,
@@ -105,9 +113,9 @@
 
   .achievement-main {
     $border-glow-radius: 10px;
-    // Canvas aspect ratio 2:1
-    $canvas-height: 18em;
-    $canvas-width: 36em;
+    // Cover aspect ratio 2:1
+    $cover-height: 18em;
+    $cover-width: 36em;
     // Card aspect ratio 2:1
     $card-height: 5em;
     $card-width: 30em;
@@ -115,7 +123,7 @@
     $default-spacing: 1em;
     // View aspect ratio 18:25
     $view-height: 50em;
-    $view-width: $canvas-width;
+    $view-width: $cover-width;
 
     align-items: center;
     display: flex;
@@ -222,7 +230,7 @@
               }
 
               .deadline,
-              .exp {
+              .xp {
                 align-items: center;
                 display: flex;
                 flex: 1 1 25%;
@@ -284,7 +292,7 @@
     }
 
     .view-container {
-      $canvas-spacing: 0.3em;
+      $cover-spacing: 0.3em;
       $content-spacing: 0.5em;
 
       @extend %container;
@@ -294,6 +302,18 @@
       scrollbar-color: white #444;
       scrollbar-width: thin;
 
+      .no-view {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        height: $view-height;
+        justify-content: center;
+        margin: auto;
+        width: $view-width;
+      }
+
       .view {
         color: white;
         display: flex;
@@ -302,27 +322,27 @@
         min-height: $view-height;
         width: $view-width;
 
-        .canvas {
+        .cover {
           display: flex;
           flex-direction: column;
-          height: $canvas-height;
-          width: $canvas-width;
+          height: $cover-height;
+          text-align: center;
+          width: $cover-width;
 
           h1 {
             margin: 0.5em auto 0;
-            padding: $canvas-spacing;
+            padding: $cover-spacing;
           }
 
           p {
             margin: 0 auto;
-            padding: $canvas-spacing;
+            padding: $cover-spacing;
           }
 
           .description {
             color: yellow;
             font-size: 0.85em;
             margin: auto auto 1em;
-            text-align: center;
             width: 80%;
           }
         }

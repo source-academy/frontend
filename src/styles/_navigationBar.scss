@@ -36,6 +36,15 @@ a.NavigationBar__link {
   }
 }
 
+a.NavigationBar__link__mobile {
+  color: inherit;
+  text-decoration: none;
+
+  > :first-child {
+    margin-right: 0.5rem;
+  }
+}
+
 /*
  * Style for the navigation bar of the entire site (used in Application)
  */
@@ -47,21 +56,6 @@ a.NavigationBar__link {
   .#{$ns}-navbar-heading {
     text-transform: uppercase;
     padding: 0 0 3.5px 4px;
-  }
-
-  .navbar-username {
-    margin-left: 0;
-  }
-}
-
-.Popover-share {
-  h4 {
-    margin: 0.3rem 0.5rem 0.3rem 0;
-  }
-
-  .Popover-status-content {
-    display: flex;
-    justify-content: center;
   }
 }
 

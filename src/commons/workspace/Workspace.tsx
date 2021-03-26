@@ -1,3 +1,4 @@
+import { FocusStyleManager } from '@blueprintjs/core';
 import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
@@ -31,121 +32,71 @@ type StateProps = {
   sideContentIsResizeable?: boolean;
 };
 
-class Workspace extends React.Component<WorkspaceProps, {}> {
-  private editorDividerDiv?: HTMLDivElement = undefined;
-  private leftParentResizable?: Resizable = undefined;
-  private maxDividerHeight?: number = undefined;
-  private sideDividerDiv?: HTMLDivElement = undefined;
+const Workspace: React.FC<WorkspaceProps> = props => {
+  const editorDividerDiv = React.useRef<HTMLDivElement | null>(null);
+  const leftParentResizable = React.useRef<Resizable | null>(null);
+  const maxDividerHeight = React.useRef<number | null>(null);
+  const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
 
-  public constructor(props: WorkspaceProps) {
-    super(props);
-  }
+  FocusStyleManager.onlyShowFocusOnTabs();
 
-  public componentDidMount() {
-    this.maxDividerHeight = this.sideDividerDiv!.clientHeight;
-  }
+  React.useEffect(() => {
+    if (props.sideContentIsResizeable && maxDividerHeight.current === null) {
+      maxDividerHeight.current = sideDividerDiv.current!.clientHeight;
+    }
+  });
 
-  /**
-   * side-content-divider gives the side content a bottom margin. I use a div
-   * element instead of CSS so that when the user resizes the side-content all
-   * the way up in order to hide it, there won't be a padding there to stop the
-   * REPL from being flush with the top of the editor
-   */
-  public render() {
-    const sideContent = <SideContent {...this.props.sideContentProps} />;
-    const resizableSideContent = (
-      <Resizable {...this.sideContentResizableProps()}>
-        {sideContent}
-        <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
-      </Resizable>
-    );
+  const controlBarProps = () => {
+    return { ...props.controlBarProps };
+  };
 
-    return (
-      <div className="workspace">
-        {this.props.hasUnsavedChanges ? (
-          <Prompt
-            message={'You have changes that may not be saved. Are you sure you want to leave?'}
-          />
-        ) : null}
-        <ControlBar {...this.controlBarProps()} />
-        <div className="row workspace-parent">
-          <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
-          <Resizable {...this.editorResizableProps()}>
-            {this.createWorkspaceInput(this.props)}
-          </Resizable>
-          <div className="right-parent">
-            {this.props.sideContentIsResizeable === undefined || this.props.sideContentIsResizeable
-              ? resizableSideContent
-              : sideContent}
-            <Repl {...this.props.replProps} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private controlBarProps() {
-    return { ...this.props.controlBarProps };
-  }
-
-  private editorResizableProps() {
+  const editorResizableProps = () => {
     const onResizeStop: ResizeCallback = (_a, _b, _c, diff) =>
-      this.props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
-    const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable);
+      props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
     return {
       className: 'resize-editor left-parent',
       enable: rightResizeOnly,
       minWidth: 0,
-      onResize: this.toggleEditorDividerDisplay,
+      onResize: toggleEditorDividerDisplay,
       onResizeStop,
-      ref,
-      size: { width: this.props.editorWidth, height: '100%' },
+      ref: leftParentResizable,
+      size: { width: props.editorWidth, height: '100%' },
       as: undefined as any // re-resizable bug - wrong typedef
     } as ResizableProps;
-  }
+  };
 
-  private sideContentResizableProps() {
+  const sideContentResizableProps = () => {
     const onResizeStop: ResizeCallback = (_a, _b, ref, _c) =>
-      this.props.handleSideContentHeightChange(ref.clientHeight);
+      props.handleSideContentHeightChange(ref.clientHeight);
     return {
       bounds: 'parent',
       className: 'resize-side-content',
       enable: bottomResizeOnly,
-      onResize: this.toggleDividerDisplay,
-      onResizeStop,
-      size:
-        /* It will always be undefined...
-          Default workspace state does not have sideContentHeight...
-        */
-        this.props.sideContentHeight === undefined
-          ? undefined
-          : {
-              height: this.props.sideContentHeight,
-              width: '100%'
-            }
+      onResize: toggleDividerDisplay,
+      onResizeStop
     } as ResizableProps;
-  }
+  };
 
   /**
    * Snaps the left-parent resizable to 100% or 0% when percentage width goes
    * above 95% or below 5% respectively. Also changes the editor divider width
    * in the case of < 5%.
    */
-  private toggleEditorDividerDisplay: ResizeCallback = (_a, _b, ref) => {
-    const leftThreshold = 2;
+  const toggleEditorDividerDisplay: ResizeCallback = (_a, _b, ref) => {
+    const leftThreshold = 5;
     const rightThreshold = 95;
     const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
-      this.leftParentResizable!.updateSize({ width: '100%', height: '100%' });
+      leftParentResizable.current!.updateSize({ width: '100%', height: '100%' });
     } else if (editorWidthPercentage < leftThreshold) {
-      this.leftParentResizable!.updateSize({ width: '0%', height: '100%' });
+      leftParentResizable.current!.updateSize({ width: '0%', height: '100%' });
     }
     // Update divider margin
     if (editorWidthPercentage < leftThreshold) {
-      this.editorDividerDiv!.style.marginRight = '0.6rem';
+      editorDividerDiv.current!.style.marginRight = '0.5rem';
     } else {
-      this.editorDividerDiv!.style.marginRight = '0';
+      editorDividerDiv.current!.style.marginRight = '0';
     }
   };
 
@@ -153,18 +104,17 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * Hides the side-content-divider div when side-content is resized downwards
    * so that it's bottom border snaps flush with editor's bottom border
    */
-  private toggleDividerDisplay: ResizeCallback = (_a, _b, ref) => {
-    /* This is actually broken... */
-    this.maxDividerHeight =
-      this.sideDividerDiv!.clientHeight > this.maxDividerHeight!
-        ? this.sideDividerDiv!.clientHeight
-        : this.maxDividerHeight;
+  const toggleDividerDisplay: ResizeCallback = (_a, _b, ref) => {
+    maxDividerHeight.current =
+      sideDividerDiv.current!.clientHeight > maxDividerHeight.current!
+        ? sideDividerDiv.current!.clientHeight
+        : maxDividerHeight.current;
     const resizableHeight = (ref as HTMLDivElement).clientHeight;
     const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight;
-    if (resizableHeight + this.maxDividerHeight! + 2 > rightParentHeight) {
-      this.sideDividerDiv!.style.display = 'none';
+    if (resizableHeight + maxDividerHeight.current! + 2 > rightParentHeight) {
+      sideDividerDiv.current!.style.display = 'none';
     } else {
-      this.sideDividerDiv!.style.display = 'initial';
+      sideDividerDiv.current!.style.display = 'initial';
     }
   };
 
@@ -172,7 +122,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * Pre-condition: `this.props.editorProps`
    * XOR `this.props.mcq` are defined.
    */
-  private createWorkspaceInput = (props: WorkspaceProps) => {
+  const createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.customEditor) {
       return props.customEditor;
     } else if (props.editorProps) {
@@ -181,7 +131,36 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       return <McqChooser {...props.mcqProps!} />;
     }
   };
-}
+
+  const sideContent = <SideContent {...props.sideContentProps} />;
+  const resizableSideContent = (
+    <Resizable {...sideContentResizableProps()}>
+      {sideContent}
+      <div className="side-content-divider" ref={sideDividerDiv} />
+    </Resizable>
+  );
+
+  return (
+    <div className="workspace">
+      {props.hasUnsavedChanges ? (
+        <Prompt
+          message={'You have changes that may not be saved. Are you sure you want to leave?'}
+        />
+      ) : null}
+      <ControlBar {...controlBarProps()} />
+      <div className="row workspace-parent">
+        <div className="editor-divider" ref={editorDividerDiv} />
+        <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
+        <div className="right-parent">
+          {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
+            ? resizableSideContent
+            : sideContent}
+          <Repl {...props.replProps} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const rightResizeOnly = {
   top: false,

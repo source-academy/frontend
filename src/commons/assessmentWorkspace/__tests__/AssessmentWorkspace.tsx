@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
 
 import { ContestVotingSubmission, Library } from '../../assessment/AssessmentTypes';
 import { Position } from '../../editor/EditorTypes';

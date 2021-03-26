@@ -1,13 +1,12 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
 
 export type ControlBarProps = OwnProps;
 
 type OwnProps = {
   editorButtons: Array<JSX.Element | null>;
   flowButtons?: Array<JSX.Element | null>;
-  replButtons: Array<JSX.Element | null>;
+  editingWorkspaceButtons?: Array<JSX.Element | null>;
 };
 
 function ControlBar(props: ControlBarProps) {
@@ -29,9 +28,11 @@ function ControlBar(props: ControlBarProps) {
     );
   };
 
-  const replControl = () => {
+  const editingWorkspaceControl = () => {
     return (
-      <div className={classNames('ControlBar_repl', Classes.BUTTON_GROUP)}>{props.replButtons}</div>
+      <div className={classNames('ControlBar_editingWorkspace', Classes.BUTTON_GROUP)}>
+        {props.editingWorkspaceButtons}
+      </div>
     );
   };
 
@@ -39,7 +40,7 @@ function ControlBar(props: ControlBarProps) {
     <div className="ControlBar">
       {editorControl()}
       {flowControl()}
-      {replControl()}
+      {editingWorkspaceControl()}
     </div>
   );
 }

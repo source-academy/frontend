@@ -52,7 +52,7 @@
     }
     /**
      * Returns a TreeDrawer that provides an interface to draw the tree.
-     * @param {Kinetic.Layer} layer The layer to draw the tree on.
+     * @param {Konva.Layer} layer The layer to draw the tree on.
      */
     beginDrawingOn(layer) {
       return new TreeDrawer(this, layer);
@@ -157,7 +157,7 @@
   class DrawableTreeNode extends TreeNode {
     constructor() {
       super();
-      this.kineticGroup = null;
+      this.konvaGroup = null;
     }
   }
 
@@ -176,7 +176,7 @@
       const rightData = this.right instanceof DataTreeNode ? this.right : null;
 
       const box = new PairDrawable(leftData, rightData);
-      const node = new Kinetic.Group();
+      const node = new Konva.Group();
 
       box.addTo(node);
 
@@ -189,7 +189,7 @@
       node.setY(y);
       layer.add(node);
 
-      this.kineticGroup = node;
+      this.konvaGroup = node;
 
       // update left extreme of the tree
       minLeft = Math.min(minLeft, x);
@@ -203,7 +203,7 @@
 
     drawOnLayer(x, y, parentX, parentY, layer) {
       const circle = new FunctionDrawable();
-      const node = new Kinetic.Group();
+      const node = new Konva.Group();
 
       circle.addTo(node);
 
@@ -215,7 +215,7 @@
       node.setY(y);
       layer.add(node);
 
-      this.kineticGroup = node;
+      this.konvaGroup = node;
 
       // update left extreme of the tree
       minLeft = Math.min(minLeft, x);
@@ -270,7 +270,7 @@
             this.drawLeft(node.left, x, y);
           } else {
             // if its left child is part of a cycle and it's been drawn, link back to that node instead
-            const drawnNode = this.tree.getNodeById(node.left).kineticGroup;
+            const drawnNode = this.tree.getNodeById(node.left).konvaGroup;
             this.backwardLeftEdge(x, y, drawnNode.getX(), drawnNode.getY());
           }
         }
@@ -279,7 +279,7 @@
           if (node.right instanceof TreeNode) {
             this.drawRight(node.right, x, y);
           } else {
-            const drawnNode = this.tree.getNodeById(node.right).kineticGroup;
+            const drawnNode = this.tree.getNodeById(node.right).konvaGroup;
             this.backwardRightEdge(x, y, drawnNode.getX(), drawnNode.getY());
           }
         }
@@ -421,14 +421,14 @@
         endY - Math.sin(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength
       ];
       // pointy arrow
-      const arrow = new Kinetic.Line({
+      const arrow = new Konva.Line({
         points: arrowPath,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
 
       // first segment of the path
-      const pointerHead = new Kinetic.Line({
+      const pointerHead = new Konva.Line({
         points: [
           x1 + drawingConfig.boxWidth / 4,
           y1 + drawingConfig.boxHeight / 2,
@@ -440,7 +440,7 @@
       });
 
       // following segments of the path
-      const pointer = new Kinetic.Line({
+      const pointer = new Konva.Line({
         points: path,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
@@ -520,12 +520,12 @@
         endX + Math.cos(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
         endY - Math.sin(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength
       ];
-      const arrow = new Kinetic.Line({
+      const arrow = new Konva.Line({
         points: arrowPath,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
-      const pointerHead = new Kinetic.Line({
+      const pointerHead = new Konva.Line({
         points: [
           x1 + drawingConfig.boxWidth * 3 / 4,
           y1 + drawingConfig.boxHeight / 2,
@@ -535,7 +535,7 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
-      const pointer = new Kinetic.Line({
+      const pointer = new Konva.Line({
         points: path,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
@@ -598,8 +598,8 @@
         end = { x: x + drawingConfig.boxWidth * 3 / 4, y: y + drawingConfig.boxHeight / 2 };
       }
 
-      const pointer = new Kinetic.Line({
-        points: [start, end],
+      const pointer = new Konva.Line({
+        points: [start.x, start.y, end.x, end.y],
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
@@ -628,8 +628,8 @@
         };
       }
 
-      const arrow = new Kinetic.Line({
-        points: [left, start, right],
+      const arrow = new Konva.Line({
+        points: [left.x, left.y, start.x, start.y, right.x, right.y],
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
@@ -640,7 +640,7 @@
 
     /**
      * 
-     * @param {Kinetic.Group} container The Kinetic Group
+     * @param {Konva.Group} container The Konva Group
      */
     addTo(container) {
       container.add(this.image);
@@ -655,10 +655,10 @@
     constructor(leftNode, rightNode) {
       super();
       // this.image is the inner content
-      this.image = new Kinetic.Group();
+      this.image = new Konva.Group();
 
       // outer rectangle
-      const rect = new Kinetic.Rect({
+      const rect = new Konva.Rect({
         width: drawingConfig.boxWidth,
         height: drawingConfig.boxHeight,
         strokeWidth: drawingConfig.strokeWidth,
@@ -667,7 +667,7 @@
       });
 
       // vertical bar seen in the box
-      const line = new Kinetic.Line({
+      const line = new Konva.Line({
         points: [drawingConfig.boxWidth * drawingConfig.vertBarPos, 0, drawingConfig.boxWidth * drawingConfig.vertBarPos, drawingConfig.boxHeight],
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
@@ -682,7 +682,7 @@
               nodeLabel++;
               displaySpecialContent(nodeLabel, nodeValue);
             }
-            return new Kinetic.Text({
+            return new Konva.Text({
               text: textValue ?? '*' + nodeLabel,
               align: 'center',
               width: drawingConfig.vertBarPos * drawingConfig.boxWidth,
@@ -711,14 +711,14 @@
   }
 
   /**
-  *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
+  *  Creates a Konva.Group used to represent a function object. Similar to NodeBox().
   */
   class FunctionDrawable extends NodeDrawable {
     constructor() {
       super();
-      this.image = new Kinetic.Group();
+      this.image = new Konva.Group();
 
-      const leftCircle = new Kinetic.Circle({
+      const leftCircle = new Konva.Circle({
         radius: 15,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
@@ -726,7 +726,7 @@
         y: drawingConfig.boxHeight / 2
       });
 
-      const rightCircle = new Kinetic.Circle({
+      const rightCircle = new Konva.Circle({
         radius: 15,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
@@ -734,7 +734,7 @@
         y: drawingConfig.boxHeight / 2
       });
 
-      const leftDot = new Kinetic.Circle({
+      const leftDot = new Konva.Circle({
         radius: 4,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
@@ -743,7 +743,7 @@
         y: drawingConfig.boxHeight / 2
       });
 
-      const rightDot = new Kinetic.Circle({
+      const rightDot = new Konva.Circle({
         radius: 4,
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
@@ -765,7 +765,7 @@
   class NullDrawable extends NodeDrawable {
     constructor(x, y) {
       super();
-      this.image = new Kinetic.Line({
+      this.image = new Konva.Line({
         x: x,
         y: y,
         points: [
@@ -810,14 +810,14 @@
     }
 
     /**
-     * Create kinetic stage according to calculated width and height of drawing.
+     * Create konva stage according to calculated width and height of drawing.
      * Theoretically, as each box is 90px wide and successive boxes overlap by half,
      * the width of the drawing should be roughly (width * 45), with a similar calculation
      * for height.
      * In practice, likely due to browser auto-scaling, for large drawings this results in
      * some of the drawing being cut off. Hence the width and height formulas used are approximations.
      */
-    let stage = new Kinetic.Stage({
+    let stage = new Konva.Stage({
       width: findListWidth(xs) * 60 + 60,
       height: findListHeight(xs) * 60 + 100,
       container: 'list-visualizer-container'
@@ -831,7 +831,7 @@
       layerList[i].hide();
     }
     // creates a new layer and add to the stage
-    const layer = new Kinetic.Layer();
+    const layer = new Konva.Layer();
     stage.add(layer);
     layerList.push(layer);
 
@@ -840,7 +840,7 @@
     } else if (is_function(xs)) {
       new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
     } else {
-      const text = new Kinetic.Text({
+      const text = new Konva.Text({
         text: toText(xs, true),
         align: 'center',
         x: 500,
@@ -853,7 +853,8 @@
     }
 
     // adjust the position
-    layer.setOffset(minLeft - 20, 0);
+    layer.offsetX(minLeft - 20);
+    layer.offsetY(0);
     layer.draw();
 
     // update current ID

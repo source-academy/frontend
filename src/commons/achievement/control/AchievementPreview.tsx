@@ -1,49 +1,59 @@
-import { Button, Icon } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
 
 import AchievementView from '../AchievementView';
-import AchievementInferencer from '../utils/AchievementInferencer';
 
 type AchievementPreviewProps = {
-  inferencer: AchievementInferencer;
+  awaitPublish: boolean;
+  publishChanges: () => void;
 };
 
 function AchievementPreview(props: AchievementPreviewProps) {
-  const { inferencer } = props;
+  const { awaitPublish, publishChanges } = props;
 
-  const [viewMode, setViewMode] = useState<boolean>(false);
-  const toggleMode = () => setViewMode(!viewMode);
+  const inferencer = useContext(AchievementContext);
 
-  // If an achievement is focused, the cards glow
-  const focusState = useState<number>(-1);
-  const [focusId] = focusState;
+  // Show AchievementView when viewMode is true, otherwise show AchievementTask
+  const [viewMode, toggleMode] = useReducer(mode => !mode, false);
+
+  /**
+   * Marks the achievement uuid that is currently on focus (selected)
+   * If an achievement is focused, the cards glow and dashboard displays the AchievementView
+   */
+  const focusState = useState<string>('');
+  const [focusUuid] = focusState;
 
   return (
     <div className="achievement-preview">
-      <Button
-        className="command-button"
-        icon={viewMode && IconNames.ARROW_LEFT}
-        rightIcon={!viewMode && IconNames.ARROW_RIGHT}
-        text={viewMode ? 'Task' : 'View'}
-        onClick={toggleMode}
-      />
+      <div className="command">
+        <Button
+          className="command-button"
+          icon={viewMode && IconNames.ARROW_LEFT}
+          rightIcon={!viewMode && IconNames.ARROW_RIGHT}
+          text={viewMode ? 'Task' : 'View'}
+          onClick={toggleMode}
+        />
+        {awaitPublish && (
+          <Button
+            className="command-button"
+            icon={IconNames.CLOUD_UPLOAD}
+            intent="primary"
+            text="Publish Changes"
+            onClick={publishChanges}
+          />
+        )}
+      </div>
       {viewMode ? (
         <div className="preview-container">
-          {focusId < 0 ? (
-            <div className="no-view">
-              <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
-              <h2>Select an achievement</h2>
-            </div>
-          ) : (
-            <AchievementView inferencer={inferencer} focusId={focusId} />
-          )}
+          <AchievementView focusUuid={focusUuid} />
         </div>
       ) : (
         <ul className="preview-container">
-          {generateAchievementTasks(inferencer, FilterStatus.ALL, focusState)}
+          {generateAchievementTasks(inferencer.listSortedTaskUuids(), FilterStatus.ALL, focusState)}
         </ul>
       )}
     </div>

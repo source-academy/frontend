@@ -1,5 +1,5 @@
-import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
+import { expectSaga } from 'redux-saga-test-plan';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';

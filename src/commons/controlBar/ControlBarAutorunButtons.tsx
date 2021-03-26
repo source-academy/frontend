@@ -1,6 +1,7 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 import controlButton from '../ControlButton';
 import { ControlBarRunButton } from './ControlBarRunButton';
@@ -26,7 +27,21 @@ type StateProps = {
 };
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
-  return (
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+
+  return isMobileBreakpoint ? (
+    <>
+      {props.isRunning && controlButton('Stop', IconNames.STOP, props.handleInterruptEval)}
+      {(!props.pauseDisabled &&
+        props.isRunning &&
+        !props.isDebugging &&
+        controlButton('Pause', IconNames.STOP, props.handleDebuggerPause)) ||
+        (!props.isRunning &&
+          props.isDebugging &&
+          controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume))}
+      {props.isDebugging && controlButton('Stop', IconNames.STOP, props.handleDebuggerReset)}
+    </>
+  ) : (
     <>
       {!props.autorunDisabled && (
         <div className="Switch">

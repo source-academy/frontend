@@ -1,4 +1,4 @@
-/* eslint-disable simple-import-sort/sort */
+/* eslint-disable simple-import-sort/imports */
 import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
@@ -99,7 +99,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
         <div>
-          <div className="sa-substituter">
+          <div className="sa-substituter bp3-dark">
             <Slider
               disabled={!hasRunCode}
               min={1}

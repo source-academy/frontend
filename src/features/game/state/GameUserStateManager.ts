@@ -91,22 +91,22 @@ export default class GameUserStateManager {
     const goals = SourceAcademyGame.getInstance().getGoals();
 
     // Convert goals to map
-    const goalMapping = new Map<number, AchievementGoal>();
-    goals.forEach(goal => goalMapping.set(goal.id, goal));
+    const goalMapping = new Map<string, AchievementGoal>();
+    goals.forEach(goal => goalMapping.set(goal.uuid, goal));
 
     achievements.forEach(achievement => {
-      const achievementId = achievement.id.toString();
-      const isCompleted = achievement.goalIds.reduce(
-        (result, goalId) => result && goalMapping.get(goalId)!.completed,
+      const achievementUuid = achievement.uuid.toString();
+      const isCompleted = achievement.goalUuids.reduce(
+        (result, goalUuid) => result && goalMapping.get(goalUuid)!.completed,
         true
       );
-      const awardProp = getAwardProp(achievementId);
+      const awardProp = getAwardProp(achievementUuid);
 
       let newAwardProp: AwardProperty;
       if (!awardProp) {
         // If there is no mapping, we create one from available information
         newAwardProp = {
-          id: achievementId,
+          id: achievementUuid,
           assetKey: Constants.nullInteractionId,
           assetPath: Constants.nullInteractionId,
           title: achievement.title,
@@ -117,8 +117,8 @@ export default class GameUserStateManager {
         // If there is mapping, we update the complete attribute
         newAwardProp = { ...awardProp, completed: isCompleted };
       }
-      SourceAcademyGame.getInstance().addAwardMapping(achievementId, newAwardProp);
-      this.achievements.add(achievementId);
+      SourceAcademyGame.getInstance().addAwardMapping(achievementUuid, newAwardProp);
+      this.achievements.add(achievementUuid);
     });
   }
 
