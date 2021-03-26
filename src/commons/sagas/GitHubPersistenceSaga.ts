@@ -2,9 +2,9 @@ import { SagaIterator } from 'redux-saga';
 import { call, takeLatest } from 'redux-saga/effects';
 
 import {
-  GITHUB_OPEN_PICKER,
+  GITHUB_DISPLAY_OPEN_PICKER,
   GITHUB_SAVE_FILE_AS,
-  GITHUB_SAVE_PICKER
+  GITHUB_DISPLAY_SAVE_PICKER
 } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
@@ -15,7 +15,7 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 
   yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
 
-  yield takeLatest(GITHUB_OPEN_PICKER, function* () {
+  yield takeLatest(GITHUB_DISPLAY_OPEN_PICKER, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
       users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
       repos: { listForAuthenticatedUser: () => {} }
@@ -45,7 +45,7 @@ export function* GitHubPersistenceSaga(): SagaIterator {
     store.dispatch(actions.setPickerDialog(true));
   });
 
-  yield takeLatest(GITHUB_SAVE_PICKER, function* () {
+  yield takeLatest(GITHUB_DISPLAY_SAVE_PICKER, function* () {
     const octokitInstance = store.getState().session.githubOctokitInstance || {
       users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
       repos: { listForAuthenticatedUser: () => {} }

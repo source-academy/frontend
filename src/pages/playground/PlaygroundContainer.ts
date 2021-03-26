@@ -47,9 +47,9 @@ import {
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
-  githubOpenPicker,
+  githubDisplayOpenPicker,
   githubSaveFileAs,
-  githubSavePicker
+  githubDisplaySavePicker
 } from '../../features/github/GitHubActions';
 import {
   persistenceInitialise,
@@ -153,8 +153,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
-      handleGitHubOpenPicker: githubOpenPicker,
-      handleGitHubSavePicker: githubSavePicker,
+      handleGitHubDisplayOpenPicker: githubDisplayOpenPicker,
+      handleGitHubDisplaySavePicker: githubDisplaySavePicker,
       handleGitHubUpdateFile: githubSaveFileAs,
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub

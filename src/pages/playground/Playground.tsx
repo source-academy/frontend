@@ -99,8 +99,8 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleGitHubOpenPicker: () => void;
-  handleGitHubSavePicker: () => void;
+  handleGitHubDisplayOpenPicker: () => void;
+  handleGitHubDisplaySavePicker: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
 };
@@ -448,8 +448,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isDirty={githubIsDirty}
         isPickerOpen={props.isPickerOpen}
         key="github"
-        onClickOpen={props.handleGitHubOpenPicker}
-        onClickSave={props.handleGitHubSavePicker}
+        onClickOpen={props.handleGitHubDisplayOpenPicker}
+        onClickSave={props.handleGitHubDisplaySavePicker}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
       />
@@ -459,8 +459,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubFile,
     githubIsDirty,
     props.isPickerOpen,
-    props.handleGitHubOpenPicker,
-    props.handleGitHubSavePicker,
+    props.handleGitHubDisplayOpenPicker,
+    props.handleGitHubDisplaySavePicker,
     props.handleGitHubLogIn,
     props.handleGitHubLogOut
   ]);
