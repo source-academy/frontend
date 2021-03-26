@@ -3,8 +3,8 @@ import { call, takeLatest } from 'redux-saga/effects';
 
 import {
   GITHUB_DISPLAY_OPEN_PICKER,
-  GITHUB_SAVE_FILE_AS,
-  GITHUB_DISPLAY_SAVE_PICKER
+  GITHUB_DISPLAY_SAVE_PICKER,
+  GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';

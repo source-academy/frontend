@@ -48,8 +48,8 @@ import {
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   githubDisplayOpenPicker,
-  githubSaveFileAs,
-  githubDisplaySavePicker
+  githubDisplaySavePicker,
+  githubSaveFileAs
 } from '../../features/github/GitHubActions';
 import {
   persistenceInitialise,
