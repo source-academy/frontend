@@ -22,10 +22,13 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_COMMIT_MESSAGE,
   SET_GITHUB_EMAIL,
   SET_GITHUB_LOGIN,
   SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_REPOSITORY_FILEPATH,
+  SET_GITHUB_REPOSITORY_NAME,
   SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
@@ -98,6 +101,15 @@ export const setGitHubName = (githubName: string) => action(SET_GITHUB_NAME, git
 export const setGitHubEmail = (githubEmail: string) => action(SET_GITHUB_EMAIL, githubEmail);
 
 export const setGitHubUserRepos = (userRepos: []) => action(SET_GITHUB_USER_REPOS, userRepos);
+
+export const setGitHubRepositoryName = (repoName: string) =>
+  action(SET_GITHUB_REPOSITORY_NAME, repoName);
+
+export const setGitHubRepositoryFilepath = (filePath: string) =>
+  action(SET_GITHUB_REPOSITORY_FILEPATH, filePath);
+
+export const setGitHubCommitMessage = (commitMessage: string) =>
+  action(SET_GITHUB_COMMIT_MESSAGE, commitMessage);
 
 export const setPickerType = (pickerType: string) => action(SET_PICKER_TYPE, pickerType);
 

@@ -95,6 +95,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   githubLoginID: state.session.githubLoginID,
   githubName: state.session.githubName,
   githubEmail: state.session.githubEmail,
+  githubCommitMessage: state.session.githubCommitMessage,
   userRepos: state.session.userRepos,
   pickerType: state.session.pickerType,
   isPickerOpen: state.session.isPickerOpen

@@ -36,12 +36,10 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setCommitMessage = this.setCommitMessage.bind(this);
     this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
     this.openFile = this.openFile.bind(this);
-    this.confirmOpenFile = this.confirmOpenFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
-    this.confirmSaveFile = this.confirmSaveFile.bind(this);
-    this.overwrite = this.overwrite.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setConfirmDialogOpen = this.setConfirmDialogOpen.bind(this);
   }
 
   public state: GitHubOverlayState = {
@@ -58,15 +56,22 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   isPickerOpen = store.getState().session.isPickerOpen;
 
   setRepoName(e: any) {
-    this.setState({ repoName: e.target.value });
+    const repositoryName = e.target.value;
+    this.setState({ repoName: repositoryName });
+    store.dispatch(actions.setGitHubRepositoryName(repositoryName));
   }
 
   setFilePath(e: string) {
     this.setState({ filePath: e });
+    store.dispatch(actions.setGitHubRepositoryFilepath(e));
   }
 
   setCommitMessage(e: string) {
-    this.setState({ commitMessage: e });
+    store.dispatch(actions.setGitHubCommitMessage(e));
+  }
+
+  setConfirmDialogOpen(isConfirmOpenNewValue: boolean) {
+    this.setState({ isConfirmOpen: isConfirmOpenNewValue });
   }
 
   async refreshRepoFiles() {
@@ -79,20 +84,31 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   async openFile() {
     const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
     const githubLoginID = GitHubUtils.getGitHubLoginID();
+
     if (octokit === undefined) return;
+
+    const repoName = store.getState().session.githubRepositoryName;
+    const filePath = store.getState().session.githubRepositoryFilepath;
+
+    console.log(repoName);
+    console.log(filePath);
+
     try {
       const results = await octokit.repos.getContent({
         owner: githubLoginID,
-        repo: this.state.repoName,
-        path: this.state.filePath
+        repo: repoName,
+        path: filePath
       });
+
       const files = results.data;
-      if (this.state.filePath === '') {
+
+      if (filePath === '') {
         showWarningMessage('Nothing selected!', 1000);
       } else if (Array.isArray(files)) {
         showWarningMessage("Can't open folder as a file!", 1000);
       } else {
         const { content } = { ...results.data };
+
         if (content) {
           this.setState({ isConfirmOpen: true });
         }
@@ -102,103 +118,58 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     }
   }
 
-  async confirmOpenFile() {
-    const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
-    const githubLoginID = GitHubUtils.getGitHubLoginID();
-    if (octokit === undefined) return;
-    const results = await octokit.repos.getContent({
-      owner: githubLoginID,
-      repo: this.state.repoName,
-      path: this.state.filePath
-    });
-    const { content } = { ...results.data };
-    if (content) {
-      this.props.handleEditorValueChange(Buffer.from(content, 'base64').toString());
-      showSuccessMessage('Successfully loaded file!', 1000);
-      store.dispatch(actions.setPickerDialog(false));
-    }
-  }
-
   async saveFile() {
     const octokit = GitHubUtils.getGitHubOctokitInstance();
+
     if (octokit === undefined) return;
+
     const githubLoginID = GitHubUtils.getGitHubLoginID();
+    const repoName = store.getState().session.githubRepositoryName;
+    const filePath = store.getState().session.githubRepositoryFilepath;
+
     try {
       const results = await octokit.repos.getContent({
         owner: githubLoginID,
-        repo: this.state.repoName,
-        path: this.state.filePath
+        repo: repoName,
+        path: filePath
       });
-      // file exists
+
+      // If no error is thrown, the file exists
       const files = results.data;
+
       if (Array.isArray(files)) {
         showWarningMessage("Can't save over a folder!");
       } else {
         this.setState({ isConfirmOpen: true });
       }
     } catch (error) {
+      // A 404 error is thrown, meaning that the file doesn't exist
+      // We are creating a new file on GitHub
       if (error.status === 404) {
-        // file does not exist
         const githubName = GitHubUtils.getGitHubName();
         const githubEmail = GitHubUtils.getGitHubEmail();
+        const commitMessage = store.getState().session.githubCommitMessage;
+
         const content = store.getState().workspaces.playground.editorValue || '';
         const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
         await octokit.repos.createOrUpdateFileContents({
           owner: githubLoginID,
-          repo: this.state.repoName,
-          path: this.state.filePath,
-          message: this.state.commitMessage,
+          repo: repoName,
+          path: filePath,
+          message: commitMessage,
           content: contentEncoded,
           committer: { name: githubName, email: githubEmail },
           author: { name: githubName, email: githubEmail }
         });
+
         showSuccessMessage('Successfully created file!', 1000);
         store.dispatch(actions.setPickerDialog(false));
       } else {
         // handle connection errors
+        console.error(error);
       }
     }
-  }
-
-  async confirmSaveFile() {
-    const octokit = GitHubUtils.getGitHubOctokitInstance();
-    if (octokit === undefined) return;
-    const content = store.getState().workspaces.playground.editorValue || '';
-    let sha: string;
-    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-    const results = await octokit.repos.getContent({
-      owner: GitHubUtils.getGitHubLoginID(),
-      repo: this.state.repoName,
-      path: this.state.filePath
-    });
-    const files = results.data;
-    if (!Array.isArray(files)) {
-      sha = files.sha;
-      await octokit.repos.createOrUpdateFileContents({
-        owner: GitHubUtils.getGitHubLoginID(),
-        repo: this.state.repoName,
-        path: this.state.filePath,
-        message: this.state.commitMessage,
-        content: contentEncoded,
-        sha: sha,
-        committer: { name: GitHubUtils.getGitHubName(), email: GitHubUtils.getGitHubEmail() },
-        author: { name: GitHubUtils.getGitHubName(), email: GitHubUtils.getGitHubEmail() }
-      });
-      showSuccessMessage('Successfully saved file!', 1000);
-      store.dispatch(actions.setPickerDialog(false));
-    }
-  }
-
-  overwrite(setConfirm: string) {
-    if (setConfirm) {
-      if (this.props.pickerType === 'Open') {
-        this.confirmOpenFile();
-      } else {
-        this.confirmSaveFile();
-      }
-      store.dispatch(actions.setPickerDialog(false));
-    }
-    this.setState({ isConfirmOpen: false });
   }
 
   public render() {
@@ -248,8 +219,9 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         </MultistepDialog>
         <ConfirmOpen
           isOpen={this.state.isConfirmOpen}
+          setOpen={this.setConfirmDialogOpen}
           pickerType={this.props.pickerType}
-          overwrite={this.overwrite}
+          handleEditorValueChange={this.props.handleEditorValueChange}
         />
       </div>
     );

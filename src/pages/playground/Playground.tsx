@@ -133,6 +133,7 @@ export type StateProps = {
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
+  githubCommitMessage: string;
   userRepos: [];
   pickerType: string;
   isPickerOpen: boolean;
@@ -449,7 +450,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isPickerOpen={props.isPickerOpen}
         key="github"
         onClickOpen={props.handleGitHubDisplayOpenPicker}
-        onClickSave={props.handleGitHubDisplaySavePicker}
+        onClickSaveAs={props.handleGitHubDisplaySavePicker}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
       />

@@ -307,6 +307,9 @@ export const defaultSession: SessionState = {
   githubName: '',
   githubEmail: '',
   userRepos: [],
+  githubRepositoryFilepath: '',
+  githubRepositoryName: '',
+  githubCommitMessage: '',
   pickerType: '',
   isPickerOpen: false
 };

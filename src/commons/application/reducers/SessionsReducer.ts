@@ -10,10 +10,13 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
+  SET_GITHUB_COMMIT_MESSAGE,
   SET_GITHUB_EMAIL,
   SET_GITHUB_LOGIN,
   SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_REPOSITORY_FILEPATH,
+  SET_GITHUB_REPOSITORY_NAME,
   SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
@@ -59,6 +62,21 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         userRepos: action.payload
+      };
+    case SET_GITHUB_REPOSITORY_FILEPATH:
+      return {
+        ...state,
+        githubRepositoryFilepath: action.payload
+      };
+    case SET_GITHUB_REPOSITORY_NAME:
+      return {
+        ...state,
+        githubRepositoryName: action.payload
+      };
+    case SET_GITHUB_COMMIT_MESSAGE:
+      return {
+        ...state,
+        githubCommitMessage: action.payload
       };
     case SET_GOOGLE_USER:
       return {

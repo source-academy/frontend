@@ -1,15 +1,13 @@
 import { AnchorButton, Button, Classes, Dialog } from '@blueprintjs/core';
+import { Octokit } from '@octokit/rest';
+
+import * as GitHubUtils from '../../features/github/GitHubUtils';
+import { store } from '../../pages/createStore';
+import { actions } from '../utils/ActionsHelper';
+import { showSuccessMessage } from '../utils/NotificationsHelper';
 
 export const ConfirmOpen = (props: any) => {
-  const { isOpen, pickerType, overwrite } = props;
-
-  function handleCancel() {
-    overwrite(false);
-  }
-
-  function handleConfirm() {
-    overwrite(true);
-  }
+  const { isOpen, setOpen, pickerType, handleEditorValueChange } = props;
 
   return (
     <Dialog isOpen={isOpen} usePortal={false}>
@@ -26,11 +24,105 @@ export const ConfirmOpen = (props: any) => {
         </div>
       )}
       <div className={Classes.DIALOG_FOOTER}>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <AnchorButton intent={'primary'} onClick={handleConfirm}>
+        <Button onClick={() => overwriteCancelHandler(setOpen)}>Cancel</Button>
+        <AnchorButton
+          intent={'primary'}
+          onClick={() => overwriteConfirmHandler(pickerType, handleEditorValueChange, setOpen)}
+        >
           Confirm
         </AnchorButton>
       </div>
     </Dialog>
   );
 };
+
+function overwriteConfirmHandler(pickerType: string, handleEditorValueChange: any, setOpen: any) {
+  if (pickerType === 'Open') {
+    confirmOpenFile(handleEditorValueChange);
+  }
+
+  if (pickerType === 'Save') {
+    confirmSaveFile();
+  }
+
+  setOpen(false);
+}
+
+function overwriteCancelHandler(setOpen: any) {
+  setOpen(false);
+}
+
+async function confirmSaveFile() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+
+  if (octokit === undefined) {
+    return;
+  }
+
+  const content = store.getState().workspaces.playground.editorValue || '';
+  const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const githubName = GitHubUtils.getGitHubName();
+  const githubEmail = GitHubUtils.getGitHubEmail();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+  const commitMessage = store.getState().session.githubCommitMessage;
+
+  try {
+    const results = await octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath
+    });
+
+    const files = results.data;
+
+    // Cannot save over folder
+    if (Array.isArray(files)) {
+      return;
+    }
+
+    const sha = files.sha;
+
+    await octokit.repos.createOrUpdateFileContents({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath,
+      message: commitMessage,
+      content: contentEncoded,
+      sha: sha,
+      committer: { name: githubName, email: githubEmail },
+      author: { name: githubName, email: githubEmail }
+    });
+
+    showSuccessMessage('Successfully saved file!', 1000);
+    store.dispatch(actions.setPickerDialog(false));
+  } catch (err) {
+    console.error(err);
+    showSuccessMessage('Something went wrong when trying to save the file.', 1000);
+  }
+}
+
+async function confirmOpenFile(handleEditorValueChange: any) {
+  const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+
+  if (octokit === undefined) return;
+
+  const results = await octokit.repos.getContent({
+    owner: githubLoginID,
+    repo: repoName,
+    path: filePath
+  });
+
+  const { content } = { ...results.data };
+
+  if (content) {
+    handleEditorValueChange(Buffer.from(content, 'base64').toString());
+    showSuccessMessage('Successfully loaded file!', 1000);
+    store.dispatch(actions.setPickerDialog(false));
+  }
+}
