@@ -41,9 +41,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
     this.openConfirmDialog = this.openConfirmDialog.bind(this);
 
-    this.checkIfFileCanBeOpened = this.checkIfFileCanBeOpened.bind(this);
-    this.checkIfFileCanBeSaved = this.checkIfFileCanBeSaved.bind(this);
-
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -89,134 +86,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       this.state.repoName
     );
     this.setState({ repoFiles: newRepoFiles });
-  }
-
-  async checkIfFileCanBeOpened() {
-    const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
-
-    if (octokit === undefined) {
-      showWarningMessage('Please log in and try again', 2000);
-      return false;
-    }
-
-    const githubLoginID = GitHubUtils.getGitHubLoginID();
-    const repoName = store.getState().session.githubRepositoryName;
-    const filePath = store.getState().session.githubRepositoryFilepath;
-
-    if (filePath === '') {
-      showWarningMessage('Please select a file!', 2000);
-      return false;
-    }
-
-    let files;
-
-    try {
-      const results = await octokit.repos.getContent({
-        owner: githubLoginID,
-        repo: repoName,
-        path: filePath
-      });
-
-      files = results.data;
-    } catch (err) {
-      showWarningMessage('Connection denied or file does not exist.', 2000);
-      console.error(err);
-      return false;
-    }
-
-    if (Array.isArray(files)) {
-      showWarningMessage("Can't open folder as a file!", 2000);
-      return false;
-    }
-
-    return true;
-  }
-
-  async checkIfFileCanBeSaved() {
-    const octokit = GitHubUtils.getGitHubOctokitInstance();
-
-    if (octokit === undefined) {
-      showWarningMessage('Please log in and try again', 2000);
-      return false;
-    }
-
-    const githubLoginID = GitHubUtils.getGitHubLoginID();
-    const repoName = store.getState().session.githubRepositoryName;
-    const filePath = store.getState().session.githubRepositoryFilepath;
-
-    let files;
-
-    try {
-      const results = await octokit.repos.getContent({
-        owner: githubLoginID,
-        repo: repoName,
-        path: filePath
-      });
-
-      files = results.data;
-    } catch (err) {
-      // 404 status means that the file could not be found.
-      // In this case, the dialog should still continue as the user should be given
-      // the option of creating a new file on their remote repository.
-      if (err.status !== 404) {
-        showWarningMessage('Connection denied or file does not exist.', 2000);
-        console.error(err);
-        return false;
-      }
-    }
-
-    if (Array.isArray(files)) {
-      showWarningMessage("Can't save over a folder!", 2000);
-      return false;
-    }
-
-    return true;
-
-    /*
-    try {
-      const results = await octokit.repos.getContent({
-        owner: githubLoginID,
-        repo: repoName,
-        path: filePath
-      });
-
-      files = results.data;
-
-      if (Array.isArray(files)) {
-        showWarningMessage("Can't save over a folder!");
-      } else {
-        //this.setState({ isConfirmOpen: true });
-        this.openConfirmDialog();
-      }
-    } catch (error) {
-      // A 404 error is thrown, meaning that the file doesn't exist
-      // We are creating a new file on GitHub
-      if (error.status === 404) {
-        const githubName = GitHubUtils.getGitHubName();
-        const githubEmail = GitHubUtils.getGitHubEmail();
-        const commitMessage = store.getState().session.githubCommitMessage;
-
-        const content = store.getState().workspaces.playground.editorValue || '';
-        const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-
-        await octokit.repos.createOrUpdateFileContents({
-          owner: githubLoginID,
-          repo: repoName,
-          path: filePath,
-          message: commitMessage,
-          content: contentEncoded,
-          committer: { name: githubName, email: githubEmail },
-          author: { name: githubName, email: githubEmail }
-        });
-
-        showSuccessMessage('Successfully created file!', 1000);
-        store.dispatch(actions.setPickerDialog(false));
-      } else {
-        // handle connection errors
-        console.error(error);
-      }
-    }
-    */
   }
 
   public render() {
@@ -282,15 +151,143 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     let success = false;
 
     if (this.props.pickerType === 'Open') {
-      success = await this.checkIfFileCanBeOpened();
+      success = await checkIfFileCanBeOpened();
     }
 
     if (this.props.pickerType === 'Save') {
-      success = await this.checkIfFileCanBeSaved();
+      success = await checkIfFileCanBeSaved();
     }
 
     if (success) {
       this.openConfirmDialog();
     }
   }
+}
+
+async function checkIfFileCanBeOpened() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
+
+  if (octokit === undefined) {
+    showWarningMessage('Please log in and try again', 2000);
+    return false;
+  }
+
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+
+  if (filePath === '') {
+    showWarningMessage('Please select a file!', 2000);
+    return false;
+  }
+
+  let files;
+
+  try {
+    const results = await octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath
+    });
+
+    files = results.data;
+  } catch (err) {
+    showWarningMessage('Connection denied or file does not exist.', 2000);
+    console.error(err);
+    return false;
+  }
+
+  if (Array.isArray(files)) {
+    showWarningMessage("Can't open folder as a file!", 2000);
+    return false;
+  }
+
+  return true;
+}
+
+async function checkIfFileCanBeSaved() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+
+  if (octokit === undefined) {
+    showWarningMessage('Please log in and try again', 2000);
+    return false;
+  }
+
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+
+  let files;
+
+  try {
+    const results = await octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath
+    });
+
+    files = results.data;
+  } catch (err) {
+    // 404 status means that the file could not be found.
+    // In this case, the dialog should still continue as the user should be given
+    // the option of creating a new file on their remote repository.
+    if (err.status !== 404) {
+      showWarningMessage('Connection denied or file does not exist.', 2000);
+      console.error(err);
+      return false;
+    }
+  }
+
+  if (Array.isArray(files)) {
+    showWarningMessage("Can't save over a folder!", 2000);
+    return false;
+  }
+
+  return true;
+
+  /*
+  try {
+    const results = await octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath
+    });
+
+    files = results.data;
+
+    if (Array.isArray(files)) {
+      showWarningMessage("Can't save over a folder!");
+    } else {
+      //this.setState({ isConfirmOpen: true });
+      this.openConfirmDialog();
+    }
+  } catch (error) {
+    // A 404 error is thrown, meaning that the file doesn't exist
+    // We are creating a new file on GitHub
+    if (error.status === 404) {
+      const githubName = GitHubUtils.getGitHubName();
+      const githubEmail = GitHubUtils.getGitHubEmail();
+      const commitMessage = store.getState().session.githubCommitMessage;
+
+      const content = store.getState().workspaces.playground.editorValue || '';
+      const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
+      await octokit.repos.createOrUpdateFileContents({
+        owner: githubLoginID,
+        repo: repoName,
+        path: filePath,
+        message: commitMessage,
+        content: contentEncoded,
+        committer: { name: githubName, email: githubEmail },
+        author: { name: githubName, email: githubEmail }
+      });
+
+      showSuccessMessage('Successfully created file!', 1000);
+      store.dispatch(actions.setPickerDialog(false));
+    } else {
+      // handle connection errors
+      console.error(error);
+    }
+  }
+  */
 }
