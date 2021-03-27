@@ -27,7 +27,9 @@ export const ConfirmOpen = (props: any) => {
         <Button onClick={() => overwriteCancelHandler(closeConfirmDialog)}>Cancel</Button>
         <AnchorButton
           intent={'primary'}
-          onClick={() => overwriteConfirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)}
+          onClick={() =>
+            overwriteConfirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)
+          }
         >
           Confirm
         </AnchorButton>
@@ -36,7 +38,11 @@ export const ConfirmOpen = (props: any) => {
   );
 };
 
-function overwriteConfirmHandler(pickerType: string, handleEditorValueChange: any, closeConfirmDialog: any) {
+function overwriteConfirmHandler(
+  pickerType: string,
+  handleEditorValueChange: any,
+  closeConfirmDialog: any
+) {
   if (pickerType === 'Open') {
     confirmOpenFile(handleEditorValueChange);
   }

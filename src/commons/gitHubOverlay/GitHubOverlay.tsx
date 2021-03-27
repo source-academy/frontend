@@ -19,7 +19,6 @@ type GitHubOverlayProps = {
   handleEditorValueChange: (val: string) => void;
 };
 
-
 // import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 type GitHubOverlayState = {
@@ -44,7 +43,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
     this.checkIfFileCanBeOpened = this.checkIfFileCanBeOpened.bind(this);
     this.checkIfFileCanBeSaved = this.checkIfFileCanBeSaved.bind(this);
-    
+
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -119,8 +118,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       });
 
       files = results.data;
-
-    } catch(err) {
+    } catch (err) {
       showWarningMessage('Connection denied or file does not exist.', 2000);
       console.error(err);
       return false;
@@ -156,8 +154,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       });
 
       files = results.data;
-
-    } catch(err) {
+    } catch (err) {
       // 404 status means that the file could not be found.
       // In this case, the dialog should still continue as the user should be given
       // the option of creating a new file on their remote repository.
@@ -174,8 +171,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     }
 
     return true;
-
-
 
     /*
     try {
@@ -298,5 +293,4 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       this.openConfirmDialog();
     }
   }
-
 }
