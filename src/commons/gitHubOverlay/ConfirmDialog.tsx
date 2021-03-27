@@ -23,6 +23,12 @@ export const ConfirmOpen = (props: any) => {
           <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
         </div>
       )}
+      {pickerType === 'SaveNew' && (
+        <div className={Classes.DIALOG_BODY}>
+          <p>Warning: You are create a new file in the repository.</p>
+          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        </div>
+      )}
       <div className={Classes.DIALOG_FOOTER}>
         <Button onClick={() => overwriteCancelHandler(closeConfirmDialog)}>Cancel</Button>
         <AnchorButton
@@ -48,7 +54,11 @@ function overwriteConfirmHandler(
   }
 
   if (pickerType === 'Save') {
-    confirmSaveFile();
+    confirmOverwriteFile();
+  }
+
+  if (pickerType === 'SaveNew') {
+    confirmSaveNewFile();
   }
 
   closeConfirmDialog();
@@ -58,7 +68,7 @@ function overwriteCancelHandler(closeConfirmDialog: any) {
   closeConfirmDialog();
 }
 
-async function confirmSaveFile() {
+async function confirmOverwriteFile() {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
 
   if (octokit === undefined) {
@@ -131,4 +141,36 @@ async function confirmOpenFile(handleEditorValueChange: any) {
     showSuccessMessage('Successfully loaded file!', 1000);
     store.dispatch(actions.setPickerDialog(false));
   }
+}
+
+async function confirmSaveNewFile() {
+
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+
+  if (octokit === undefined) {
+    return;
+  }
+
+  const content = store.getState().workspaces.playground.editorValue || '';
+  const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const githubName = GitHubUtils.getGitHubName();
+  const githubEmail = GitHubUtils.getGitHubEmail();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+  const commitMessage = store.getState().session.githubCommitMessage;
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner: githubLoginID,
+    repo: repoName,
+    path: filePath,
+    message: commitMessage,
+    content: contentEncoded,
+    committer: { name: githubName, email: githubEmail },
+    author: { name: githubName, email: githubEmail }
+  });
+
+  showSuccessMessage('Successfully created file!', 1000);
+  store.dispatch(actions.setPickerDialog(false));
 }

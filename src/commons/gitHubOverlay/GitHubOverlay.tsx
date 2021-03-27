@@ -154,7 +154,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       success = await checkIfFileCanBeOpened();
     }
 
-    if (this.props.pickerType === 'Save') {
+    if (this.props.pickerType === 'Save' || this.props.pickerType === 'SaveNew') {
       success = await checkIfFileCanBeSaved();
     }
 
@@ -236,6 +236,8 @@ async function checkIfFileCanBeSaved() {
       console.error(err);
       return false;
     }
+
+    store.dispatch(actions.setPickerType('SaveNew'));
   }
 
   if (Array.isArray(files)) {
@@ -244,50 +246,4 @@ async function checkIfFileCanBeSaved() {
   }
 
   return true;
-
-  /*
-  try {
-    const results = await octokit.repos.getContent({
-      owner: githubLoginID,
-      repo: repoName,
-      path: filePath
-    });
-
-    files = results.data;
-
-    if (Array.isArray(files)) {
-      showWarningMessage("Can't save over a folder!");
-    } else {
-      //this.setState({ isConfirmOpen: true });
-      this.openConfirmDialog();
-    }
-  } catch (error) {
-    // A 404 error is thrown, meaning that the file doesn't exist
-    // We are creating a new file on GitHub
-    if (error.status === 404) {
-      const githubName = GitHubUtils.getGitHubName();
-      const githubEmail = GitHubUtils.getGitHubEmail();
-      const commitMessage = store.getState().session.githubCommitMessage;
-
-      const content = store.getState().workspaces.playground.editorValue || '';
-      const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-
-      await octokit.repos.createOrUpdateFileContents({
-        owner: githubLoginID,
-        repo: repoName,
-        path: filePath,
-        message: commitMessage,
-        content: contentEncoded,
-        committer: { name: githubName, email: githubEmail },
-        author: { name: githubName, email: githubEmail }
-      });
-
-      showSuccessMessage('Successfully created file!', 1000);
-      store.dispatch(actions.setPickerDialog(false));
-    } else {
-      // handle connection errors
-      console.error(error);
-    }
-  }
-  */
 }
