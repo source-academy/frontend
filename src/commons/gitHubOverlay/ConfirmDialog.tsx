@@ -33,9 +33,7 @@ export const ConfirmOpen = (props: any) => {
         <Button onClick={() => cancelHandler(closeConfirmDialog)}>Cancel</Button>
         <AnchorButton
           intent={'primary'}
-          onClick={() =>
-            confirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)
-          }
+          onClick={() => confirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)}
         >
           Confirm
         </AnchorButton>
@@ -44,11 +42,7 @@ export const ConfirmOpen = (props: any) => {
   );
 };
 
-function confirmHandler(
-  pickerType: string,
-  handleEditorValueChange: any,
-  closeConfirmDialog: any
-) {
+function confirmHandler(pickerType: string, handleEditorValueChange: any, closeConfirmDialog: any) {
   if (pickerType === 'Open') {
     confirmOpenFile(handleEditorValueChange);
   }
@@ -144,7 +138,6 @@ async function confirmOpenFile(handleEditorValueChange: any) {
 }
 
 async function confirmSaveNewFile() {
-
   const octokit = GitHubUtils.getGitHubOctokitInstance();
 
   if (octokit === undefined) {
