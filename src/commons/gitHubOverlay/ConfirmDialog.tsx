@@ -4,7 +4,7 @@ import { Octokit } from '@octokit/rest';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export const ConfirmOpen = (props: any) => {
   const { isOpen, closeConfirmDialog, pickerType, handleEditorValueChange } = props;
@@ -30,11 +30,11 @@ export const ConfirmOpen = (props: any) => {
         </div>
       )}
       <div className={Classes.DIALOG_FOOTER}>
-        <Button onClick={() => overwriteCancelHandler(closeConfirmDialog)}>Cancel</Button>
+        <Button onClick={() => cancelHandler(closeConfirmDialog)}>Cancel</Button>
         <AnchorButton
           intent={'primary'}
           onClick={() =>
-            overwriteConfirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)
+            confirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)
           }
         >
           Confirm
@@ -44,7 +44,7 @@ export const ConfirmOpen = (props: any) => {
   );
 };
 
-function overwriteConfirmHandler(
+function confirmHandler(
   pickerType: string,
   handleEditorValueChange: any,
   closeConfirmDialog: any
@@ -64,7 +64,7 @@ function overwriteConfirmHandler(
   closeConfirmDialog();
 }
 
-function overwriteCancelHandler(closeConfirmDialog: any) {
+function cancelHandler(closeConfirmDialog: any) {
   closeConfirmDialog();
 }
 
@@ -116,7 +116,7 @@ async function confirmOverwriteFile() {
     store.dispatch(actions.setPickerDialog(false));
   } catch (err) {
     console.error(err);
-    showSuccessMessage('Something went wrong when trying to save the file.', 1000);
+    showWarningMessage('Something went wrong when trying to save the file.', 1000);
   }
 }
 

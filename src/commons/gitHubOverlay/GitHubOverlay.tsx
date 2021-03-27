@@ -19,8 +19,6 @@ type GitHubOverlayProps = {
   handleEditorValueChange: (val: string) => void;
 };
 
-// import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
-
 type GitHubOverlayState = {
   repoName: string;
   repoFiles: ITreeNode<GitHubFileNodeData>[];
