@@ -5,7 +5,7 @@ import React from 'react';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 import { ConfirmOpen } from './ConfirmDialog';
 import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
@@ -19,6 +19,9 @@ type GitHubOverlayProps = {
   handleEditorValueChange: (val: string) => void;
 };
 
+
+// import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+
 type GitHubOverlayState = {
   repoName: string;
   repoFiles: ITreeNode<GitHubFileNodeData>[];
@@ -31,15 +34,19 @@ type GitHubOverlayState = {
 export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHubOverlayState> {
   constructor(props: GitHubOverlayProps | Readonly<GitHubOverlayProps>) {
     super(props);
+
     this.setRepoName = this.setRepoName.bind(this);
     this.setFilePath = this.setFilePath.bind(this);
     this.setCommitMessage = this.setCommitMessage.bind(this);
     this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
-    this.openFile = this.openFile.bind(this);
-    this.saveFile = this.saveFile.bind(this);
+    this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
+    this.openConfirmDialog = this.openConfirmDialog.bind(this);
+
+    this.checkIfFileCanBeOpened = this.checkIfFileCanBeOpened.bind(this);
+    this.checkIfFileCanBeSaved = this.checkIfFileCanBeSaved.bind(this);
+    
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.setConfirmDialogOpen = this.setConfirmDialogOpen.bind(this);
   }
 
   public state: GitHubOverlayState = {
@@ -70,8 +77,12 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     store.dispatch(actions.setGitHubCommitMessage(e));
   }
 
-  setConfirmDialogOpen(isConfirmOpenNewValue: boolean) {
-    this.setState({ isConfirmOpen: isConfirmOpenNewValue });
+  closeConfirmDialog() {
+    this.setState({ isConfirmOpen: false });
+  }
+
+  openConfirmDialog() {
+    this.setState({ isConfirmOpen: true });
   }
 
   async refreshRepoFiles() {
@@ -81,17 +92,24 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setState({ repoFiles: newRepoFiles });
   }
 
-  async openFile() {
+  async checkIfFileCanBeOpened() {
     const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
+
+    if (octokit === undefined) {
+      showWarningMessage('Please log in and try again', 2000);
+      return false;
+    }
+
     const githubLoginID = GitHubUtils.getGitHubLoginID();
-
-    if (octokit === undefined) return;
-
     const repoName = store.getState().session.githubRepositoryName;
     const filePath = store.getState().session.githubRepositoryFilepath;
 
-    console.log(repoName);
-    console.log(filePath);
+    if (filePath === '') {
+      showWarningMessage('Please select a file!', 2000);
+      return false;
+    }
+
+    let files;
 
     try {
       const results = await octokit.repos.getContent({
@@ -100,32 +118,35 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         path: filePath
       });
 
-      const files = results.data;
+      files = results.data;
 
-      if (filePath === '') {
-        showWarningMessage('Nothing selected!', 1000);
-      } else if (Array.isArray(files)) {
-        showWarningMessage("Can't open folder as a file!", 1000);
-      } else {
-        const { content } = { ...results.data };
-
-        if (content) {
-          this.setState({ isConfirmOpen: true });
-        }
-      }
-    } catch (err) {
+    } catch(err) {
+      showWarningMessage('Connection denied or file does not exist.', 2000);
       console.error(err);
+      return false;
     }
+
+    if (Array.isArray(files)) {
+      showWarningMessage("Can't open folder as a file!", 2000);
+      return false;
+    }
+
+    return true;
   }
 
-  async saveFile() {
+  async checkIfFileCanBeSaved() {
     const octokit = GitHubUtils.getGitHubOctokitInstance();
 
-    if (octokit === undefined) return;
+    if (octokit === undefined) {
+      showWarningMessage('Please log in and try again', 2000);
+      return false;
+    }
 
     const githubLoginID = GitHubUtils.getGitHubLoginID();
     const repoName = store.getState().session.githubRepositoryName;
     const filePath = store.getState().session.githubRepositoryFilepath;
+
+    let files;
 
     try {
       const results = await octokit.repos.getContent({
@@ -134,13 +155,43 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         path: filePath
       });
 
-      // If no error is thrown, the file exists
-      const files = results.data;
+      files = results.data;
+
+    } catch(err) {
+      // 404 status means that the file could not be found.
+      // In this case, the dialog should still continue as the user should be given
+      // the option of creating a new file on their remote repository.
+      if (err.status !== 404) {
+        showWarningMessage('Connection denied or file does not exist.', 2000);
+        console.error(err);
+        return false;
+      }
+    }
+
+    if (Array.isArray(files)) {
+      showWarningMessage("Can't save over a folder!", 2000);
+      return false;
+    }
+
+    return true;
+
+
+
+    /*
+    try {
+      const results = await octokit.repos.getContent({
+        owner: githubLoginID,
+        repo: repoName,
+        path: filePath
+      });
+
+      files = results.data;
 
       if (Array.isArray(files)) {
         showWarningMessage("Can't save over a folder!");
       } else {
-        this.setState({ isConfirmOpen: true });
+        //this.setState({ isConfirmOpen: true });
+        this.openConfirmDialog();
       }
     } catch (error) {
       // A 404 error is thrown, meaning that the file doesn't exist
@@ -170,6 +221,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         console.error(error);
       }
     }
+    */
   }
 
   public render() {
@@ -219,7 +271,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
         </MultistepDialog>
         <ConfirmOpen
           isOpen={this.state.isConfirmOpen}
-          setOpen={this.setConfirmDialogOpen}
+          closeConfirmDialog={this.closeConfirmDialog}
           pickerType={this.props.pickerType}
           handleEditorValueChange={this.props.handleEditorValueChange}
         />
@@ -231,11 +283,20 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     store.dispatch(actions.setPickerDialog(false));
   }
 
-  handleSubmit() {
+  async handleSubmit() {
+    let success = false;
+
     if (this.props.pickerType === 'Open') {
-      this.openFile();
-    } else {
-      this.saveFile();
+      success = await this.checkIfFileCanBeOpened();
+    }
+
+    if (this.props.pickerType === 'Save') {
+      success = await this.checkIfFileCanBeSaved();
+    }
+
+    if (success) {
+      this.openConfirmDialog();
     }
   }
+
 }

@@ -7,7 +7,7 @@ import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage } from '../utils/NotificationsHelper';
 
 export const ConfirmOpen = (props: any) => {
-  const { isOpen, setOpen, pickerType, handleEditorValueChange } = props;
+  const { isOpen, closeConfirmDialog, pickerType, handleEditorValueChange } = props;
 
   return (
     <Dialog isOpen={isOpen} usePortal={false}>
@@ -24,10 +24,10 @@ export const ConfirmOpen = (props: any) => {
         </div>
       )}
       <div className={Classes.DIALOG_FOOTER}>
-        <Button onClick={() => overwriteCancelHandler(setOpen)}>Cancel</Button>
+        <Button onClick={() => overwriteCancelHandler(closeConfirmDialog)}>Cancel</Button>
         <AnchorButton
           intent={'primary'}
-          onClick={() => overwriteConfirmHandler(pickerType, handleEditorValueChange, setOpen)}
+          onClick={() => overwriteConfirmHandler(pickerType, handleEditorValueChange, closeConfirmDialog)}
         >
           Confirm
         </AnchorButton>
@@ -36,7 +36,7 @@ export const ConfirmOpen = (props: any) => {
   );
 };
 
-function overwriteConfirmHandler(pickerType: string, handleEditorValueChange: any, setOpen: any) {
+function overwriteConfirmHandler(pickerType: string, handleEditorValueChange: any, closeConfirmDialog: any) {
   if (pickerType === 'Open') {
     confirmOpenFile(handleEditorValueChange);
   }
@@ -45,11 +45,11 @@ function overwriteConfirmHandler(pickerType: string, handleEditorValueChange: an
     confirmSaveFile();
   }
 
-  setOpen(false);
+  closeConfirmDialog();
 }
 
-function overwriteCancelHandler(setOpen: any) {
-  setOpen(false);
+function overwriteCancelHandler(closeConfirmDialog: any) {
+  closeConfirmDialog();
 }
 
 async function confirmSaveFile() {
