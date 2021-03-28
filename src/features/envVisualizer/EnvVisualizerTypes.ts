@@ -51,7 +51,7 @@ export type FnTypes = {
   functionName: string;
 
   node: any;
-}
+};
 
 /** the types of data in the JS Slang context */
 export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
