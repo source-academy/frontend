@@ -29,7 +29,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
     .ControlBar_flow {
       .#{$ns}-disabled {
-        padding: 5px 5px 5px 0;
+        padding: 5px;
         font-size: 12px !important;
       }
 
@@ -164,7 +164,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   }
 
   .mobile-selected-panel {
-    height: calc(100% - 70px);
+    height: var(--mobile-panel-height, calc(100% - 70px));
     width: 100vw;
     padding: 20px 15px 20px 15px;
     background-color: $cadet-color-2;
@@ -215,7 +215,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
   .mobile-editor-panel {
     width: 100vw;
-    height: calc(100% - 70px);
+    height: var(--mobile-panel-height, calc(100% - 70px));
     z-index: 1;
 
     .MCQChooser {

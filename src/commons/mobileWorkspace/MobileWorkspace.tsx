@@ -39,6 +39,22 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   // Get rid of the focus border on blueprint components
   FocusStyleManager.onlyShowFocusOnTabs();
 
+  // Handles the panel height when the mobile top controlbar is rendered in the Assessment Workspace
+  React.useEffect(() => {
+    if (props.mobileSideContentProps.workspaceLocation === 'assessment') {
+      document.documentElement.style.setProperty(
+        '--mobile-panel-height',
+        'calc(100% - 100px - 1.1rem)'
+      );
+    }
+
+    return () => {
+      document.documentElement.style.setProperty('--mobile-panel-height', 'calc(100% - 70px)');
+    };
+    // This effect should only trigger once during the initial rendering of the workspace
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /**
    * The following effect prevents the bottom MobileSideContent tabs from floating above the
    * soft keyboard on Android devices. This is due to the viewport height changing when the soft
@@ -97,7 +113,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   /**
-   * The following 3 'react-draggable' handlers include the updating of 2 CSS variables
+   * The following 3 'react-draggable' handlers include the updating of CSS variable:
    * '--mobile-repl-height'.
    *
    * 'position: absolute' for the 'react-draggable' component is used in conjunction with the
@@ -114,8 +130,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * component is 'properly closed' and does not continue to display content underneath the
    * MobileSideContentTabs.
    *
-   * To ensure proper scrolling of overflowing Repl outputs inside the dynamically resizing
-   * draggable component, '--mobile-repl-height' is also dynamically updated.
+   * This also ensures proper scrolling of overflowing Repl outputs inside the dynamically resizing
+   * draggable component.
    */
   const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
     document.documentElement.style.setProperty(
