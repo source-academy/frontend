@@ -3,6 +3,7 @@ import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist
 import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
@@ -86,9 +87,9 @@ function visualiseList(list: any) {
 }
 
 export function visualiseEnv({ context }: { context: Context }) {
-  if ((window as any).EnvVisualizer) {
-    (window as any).EnvVisualizer.draw_env(context);
-  } else {
+  try {
+    EnvVisualizer.drawEnv(context);
+  } catch (err) {
     throw new Error('Env visualizer is not enabled');
   }
 }

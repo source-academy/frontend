@@ -18,6 +18,8 @@ export default class EnvVisualizer {
   /** updates the visualization state in the SideContentEnvVis component based on
    * the JS Slang context passed in */
   static drawEnv(context: Context) {
+    if (!this.setVis) throw new Error('env visualizer not initialized');
+
     Layout.setContext(context);
     this.setVis(Layout.draw());
   }
