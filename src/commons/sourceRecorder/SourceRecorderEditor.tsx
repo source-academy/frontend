@@ -5,6 +5,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
+import ReactAce from 'react-ace/lib/ace';
 import { HotKeys } from 'react-hotkeys';
 
 import {
@@ -23,7 +24,7 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
  *           of the editor's content, using `slang`
  * @property editorReadonly - Used for sourcecast only
  */
-export type SourceRecorderEditorProps = DispatchProps & StateProps;
+export type SourceRecorderEditorProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
   getTimerDuration?: () => number;
@@ -47,6 +48,10 @@ type StateProps = {
   isPlaying?: boolean;
   isRecording?: boolean;
   newCursorPosition?: Position;
+};
+
+type OwnProps = {
+  forwardedRef?: React.RefObject<ReactAce>;
 };
 
 class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}> {
@@ -210,7 +215,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             editorProps={{
               $blockScrolling: Infinity
             }}
-            ref={this.AceEditor}
+            ref={mergeRefs(this.AceEditor, this.props.forwardedRef)}
             markers={this.getMarkers()}
             fontSize={17}
             height="100%"
@@ -302,6 +307,30 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
   goGreen: () => {}
+};
+
+/**
+ * Custom mergeRef function for class components.
+ * For functional components, please use useMergedRef defined in commons/utils/Hooks.ts
+ *
+ * This function is defined here as it is used only in SourceRecorderEditor.tsx
+ * It will unlikely be used elsewhere since we are migrating to React Hooks.
+ */
+
+// @ts-ignore
+const mergeRefs = (...refs) => {
+  const filteredRefs = refs.filter(Boolean);
+  if (!filteredRefs.length) return null;
+  if (filteredRefs.length === 1) return filteredRefs[0];
+  return (inst: any) => {
+    for (const ref of filteredRefs) {
+      if (typeof ref === 'function') {
+        ref(inst);
+      } else if (ref) {
+        ref.current = inst;
+      }
+    }
+  };
 };
 
 export default SourcecastEditor;

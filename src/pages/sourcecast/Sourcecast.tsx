@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import ReactAce from 'react-ace/lib/ace';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
@@ -110,9 +111,9 @@ export type StateProps = {
 };
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
-  const prevProps = props;
   const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
+
   const handleQueryParam = React.useCallback(() => {
     const newUid = props.match.params.sourcecastId;
     if (newUid && newUid !== props.uid && props.sourcecastIndex) {
@@ -131,14 +132,16 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   React.useEffect(() => {
     props.handleFetchSourcecastIndex();
-  });
+    // This effect should only fire once on component mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     handleQueryParam();
 
     const { inputToApply } = props;
 
-    if (!inputToApply || inputToApply === prevProps.inputToApply) {
+    if (!inputToApply) {
       return;
     }
 
@@ -156,7 +159,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
         props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
     }
-  }, [prevProps, handleQueryParam, props]);
+    // This effect should only fire when props.inputToApply changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleQueryParam, props.inputToApply]);
 
   const autorunButtons = (
     <ControlBarAutorunButtons
@@ -208,46 +213,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     />
   );
 
-  const onChangeTabs = (
-    newTabId: SideContentType,
-    prevTabId: SideContentType,
-    event: React.MouseEvent<HTMLElement>
-  ) => {
-    if (newTabId === prevTabId) {
-      return;
-    }
-    setSelectedTab(newTabId);
-  };
-
-  const editorProps: SourceRecorderEditorProps = {
-    codeDeltasToApply: props.codeDeltasToApply,
-    editorReadonly: props.editorReadonly,
-    editorValue: props.editorValue,
-    editorSessionId: '',
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
-    handleEditorEval: props.handleEditorEval,
-    handleEditorValueChange: props.handleEditorValueChange,
-    isEditorAutorun: props.isEditorAutorun,
-    inputToApply: props.inputToApply,
-    isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
-  };
-  const replProps = {
-    output: props.output,
-    replValue: props.replValue,
-    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-    handleReplEval: props.handleReplEval,
-    handleReplValueChange: props.handleReplValueChange,
-    sourceChapter: props.sourceChapter,
-    sourceVariant: props.sourceVariant,
-    externalLibrary: props.externalLibraryName,
-    replButtons: [evalButton, clearButton]
-  };
-
+  // TODO: The table is not appearing in the mobile workspace
   const tabs: SideContentTab[] = [
     {
       label: 'Sourcecast Table',
@@ -275,11 +241,54 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     envVisualizerTab
   ];
 
+  const onChangeTabs = (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    if (newTabId === prevTabId) {
+      return;
+    }
+    setSelectedTab(newTabId);
+  };
+
+  const editorProps: SourceRecorderEditorProps = {
+    codeDeltasToApply: props.codeDeltasToApply,
+    editorReadonly: props.editorReadonly,
+    editorValue: props.editorValue,
+    editorSessionId: '',
+    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleEditorEval: props.handleEditorEval,
+    handleEditorValueChange: props.handleEditorValueChange,
+    isEditorAutorun: props.isEditorAutorun,
+    inputToApply: props.inputToApply,
+    isPlaying: props.playbackStatus === PlaybackStatus.playing,
+    breakpoints: props.breakpoints,
+    highlightedLines: props.highlightedLines,
+    newCursorPosition: props.newCursorPosition,
+    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
+  };
+
+  const replProps = {
+    output: props.output,
+    replValue: props.replValue,
+    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleReplEval: props.handleReplEval,
+    handleReplValueChange: props.handleReplValueChange,
+    sourceChapter: props.sourceChapter,
+    sourceVariant: props.sourceVariant,
+    externalLibrary: props.externalLibraryName,
+    replButtons: [evalButton, clearButton]
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
     },
-    customEditor: <SourceRecorderEditor {...editorProps} />,
+    customEditor: (ref?: React.RefObject<ReactAce>) => (
+      <SourceRecorderEditor {...editorProps} forwardedRef={ref} />
+    ),
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
@@ -289,21 +298,21 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       handleActiveTabChange: props.handleActiveTabChange,
-      selectedTabId: props.sideContentActiveTab,
+      // selectedTabId: props.sideContentActiveTab,
+      selectedTabId: selectedTab, // track selectedTab in this component instead of Redux store
+      onChange: onChangeTabs,
       tabs: tabs,
       workspaceLocation: 'sourcecast'
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    customEditor: <SourceRecorderEditor {...editorProps} />,
+    customEditor: (ref?: React.RefObject<ReactAce>) => (
+      <SourceRecorderEditor {...editorProps} forwardedRef={ref} />
+    ),
     replProps: replProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
-        editorButtons: [
-          autorunButtons,
-          chapterSelect,
-          props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null
-        ]
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
@@ -314,6 +323,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       handleEditorEval: props.handleEditorEval
     }
   };
+
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
     handleEditorValueChange: props.handleEditorValueChange,
     handlePromptAutocomplete: props.handlePromptAutocomplete,

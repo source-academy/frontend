@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import ReactAce from 'react-ace/lib/ace';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -270,7 +271,9 @@ class Sourcereel extends React.Component<SourcereelProps> {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
-      customEditor: <SourcecastEditor {...editorProps} />,
+      customEditor: (ref?: React.RefObject<ReactAce>) => (
+        <SourcecastEditor {...editorProps} forwardedRef={ref} />
+      ),
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
       handleEditorHeightChange: this.props.handleEditorHeightChange,
