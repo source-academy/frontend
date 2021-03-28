@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 import { GitHubFile, GitHubState } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
@@ -30,6 +31,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   // However, keeping it in will ensure that the component re-renders immediately
   // Or else, the re-render has to be triggered by something else
 
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
   const shouldDisableButtons = !isLoggedIn;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
@@ -71,7 +73,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
       autoFocus={false}
       content={
         <div>
-          <ButtonGroup large={true}>
+          <ButtonGroup large={!isMobileBreakpoint}>
             {openButton}
             {saveButton}
             {saveAsButton}
