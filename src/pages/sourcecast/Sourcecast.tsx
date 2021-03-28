@@ -227,7 +227,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     />
   );
 
-  // TODO: The table is not appearing in the mobile workspace
   const tabs: SideContentTab[] = [
     {
       label: 'Sourcecast Table',
