@@ -417,7 +417,8 @@
       const arrow = new Konva.Line({
         points: arrowPath,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
 
       // first segment of the path
@@ -429,14 +430,16 @@
           y1 + drawingConfig.boxSpacingY * 3 / 4
         ],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
 
       // following segments of the path
       const pointer = new Konva.Line({
         points: path,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       this.layer.add(pointerHead);
       this.layer.add(pointer);
@@ -516,7 +519,8 @@
       const arrow = new Konva.Line({
         points: arrowPath,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       const pointerHead = new Konva.Line({
         points: [
@@ -526,12 +530,14 @@
           y1 + drawingConfig.boxSpacingY * 3 / 4
         ],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       const pointer = new Konva.Line({
         points: path,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       this.layer.add(pointerHead);
       this.layer.add(pointer);
@@ -594,7 +600,8 @@
       const pointer = new Konva.Line({
         points: [start.x, start.y, end.x, end.y],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       // the angle of the incoming arrow
       const angle = Math.atan((end.y - start.y) / (end.x - start.x));
@@ -624,7 +631,8 @@
       const arrow = new Konva.Line({
         points: [left.x, left.y, start.x, start.y, right.x, right.y],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
 
       this.image.getParent().add(pointer);
@@ -657,6 +665,7 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         fill: '#17181A',
+        preventDefault: false,
       });
 
       // vertical bar seen in the box
@@ -664,6 +673,7 @@
         points: [drawingConfig.boxWidth * drawingConfig.vertBarPos, 0, drawingConfig.boxWidth * drawingConfig.vertBarPos, drawingConfig.boxHeight],
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
+        preventDefault: false,
       });
 
       const createChildText = (childNode, isLeftNode) => {
@@ -682,7 +692,8 @@
               x: isLeftNode ? 0 : drawingConfig.vertBarPos * drawingConfig.boxWidth,
               y: Math.floor((drawingConfig.boxHeight - 1.2 * 12) / 2),
               fontStyle: textValue === undefined ? 'italic' : 'normal',
-              fill: 'white'
+              fill: 'white',
+              preventDefault: false,
             });
           } else if (is_null(nodeValue)) {
             return new NullDrawable(isLeftNode ? -drawingConfig.boxWidth * drawingConfig.vertBarPos : 0, 0).getImage();
@@ -716,7 +727,8 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         x: drawingConfig.boxWidth / 2 - 20,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       const rightCircle = new Konva.Circle({
@@ -724,7 +736,8 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         x: drawingConfig.boxWidth / 2 + 10,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       const leftDot = new Konva.Circle({
@@ -733,7 +746,8 @@
         stroke: 'white',
         fill: 'white',
         x: drawingConfig.boxWidth / 2 - 20,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       const rightDot = new Konva.Circle({
@@ -742,7 +756,8 @@
         stroke: 'white',
         fill: 'white',
         x: drawingConfig.boxWidth / 2 + 10,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       this.image.add(leftCircle);
@@ -776,7 +791,8 @@
           0
         ],
         strokeWidth: drawingConfig.strokeWidth - 1,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
     }
   }
@@ -887,7 +903,8 @@
           y: 50,
           fontStyle: 'normal',
           fontSize: 20,
-          fill: 'white'
+          fill: 'white',
+          preventDefault: false,
         });
         layer.add(text);
       }
