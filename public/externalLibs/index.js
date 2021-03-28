@@ -36,7 +36,6 @@ function loadAllLibs() {
     '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
-    '/externalLibs/graphics/webGLhi_graph.js',
     '/externalLibs/graphics/webGLhi_graph_ce.js',
     '/externalLibs/graphics/webGLgraphics.js',
     '/externalLibs/graphics/webGLcurve.js',
@@ -66,22 +65,27 @@ function loadAllLibs() {
 function loadLib(externalLibraryName) {
   let files
   switch (externalLibraryName) {
+    /**
+     * Appears that loadAllLibs() have loaded the libraries 
+     * for RUNES and CURVES, and no longer necessary for 
+     * WorkspaceSaga.ts to call loadLib() for individual libraries.
+     */
     case 'RUNES':
       files = [
         // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLrune.js'
+        // '/externalLibs/graphics/gl-matrix.js',
+        // '/externalLibs/graphics/webGLgraphics.js',
+        // '/externalLibs/graphics/webGLrune.js'
       ]
       break
     case 'CURVES':
       files = [
         // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLhi_graph.js',
-        '/externalLibs/graphics/webGLhi_graph_ce.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLcurve.js'
+        // '/externalLibs/graphics/gl-matrix.js',
+        // '/externalLibs/graphics/webGLhi_graph.js',
+        // '/externalLibs/graphics/webGLhi_graph_ce.js',
+        // '/externalLibs/graphics/webGLgraphics.js',
+        // '/externalLibs/graphics/webGLcurve.js'
       ]
       break
       case 'MACHINELEARNING':

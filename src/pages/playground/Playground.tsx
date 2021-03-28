@@ -1,5 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -26,6 +27,7 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
 import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -48,6 +50,7 @@ import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
+import { GitHubFile } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -95,6 +98,12 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
+  handleGitHubOpenPicker: () => void;
+  handleGitHubSaveFile: () => void;
+  handleGitHubUpdateFile: (file: GitHubFile) => void;
+  handleGitHubInitialise: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -123,6 +132,8 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
+  githubOctokitInstance: Octokit | undefined;
+  githubFile: GitHubFile | undefined;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -158,7 +169,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const propsRef = React.useRef(props);
   propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -216,21 +227,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
    */
   React.useEffect(() => {
     if (
-      isMobile &&
+      isMobileBreakpoint &&
       (selectedTab === SideContentType.introduction ||
         selectedTab === SideContentType.remoteExecution)
     ) {
       props.handleActiveTabChange(SideContentType.mobileEditor);
       setSelectedTab(SideContentType.mobileEditor);
     } else if (
-      !isMobile &&
+      !isMobileBreakpoint &&
       (selectedTab === SideContentType.mobileEditor ||
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.introduction);
       props.handleActiveTabChange(SideContentType.introduction);
     }
-  }, [isMobile, props, selectedTab]);
+  }, [isMobileBreakpoint, props, selectedTab]);
 
   const handlers = React.useMemo(
     () => ({
@@ -422,6 +433,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handlePersistenceLogOut,
     props.handlePersistenceInitialise,
     handlePersistenceUpdateFile
+  ]);
+
+  const { githubOctokitInstance, githubFile, handleGitHubUpdateFile } = props;
+  // Compute this here to avoid re-rendering the button every keystroke
+  const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
+  const githubButtons = React.useMemo(() => {
+    return (
+      <ControlBarGitHubButtons
+        currentFile={githubFile}
+        loggedInAs={githubOctokitInstance}
+        isDirty={githubIsDirty}
+        key="github"
+        onClickOpen={props.handleGitHubOpenPicker}
+        onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
+        onClickSaveAs={props.handleGitHubSaveFile}
+        onClickLogIn={props.handleGitHubLogIn}
+        onClickLogOut={props.handleGitHubLogOut}
+        onPopoverOpening={props.handleGitHubInitialise}
+      />
+    );
+  }, [
+    githubOctokitInstance,
+    githubFile,
+    githubIsDirty,
+    props.handleGitHubSaveFile,
+    props.handleGitHubOpenPicker,
+    props.handleGitHubLogIn,
+    props.handleGitHubLogOut,
+    props.handleGitHubInitialise,
+    handleGitHubUpdateFile
   ]);
 
   const executionTime = React.useMemo(
@@ -711,6 +752,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
+        githubButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
       ]
     },
@@ -751,13 +793,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
-      mobileTabs,
+      tabs: mobileTabs,
       workspaceLocation: 'playground',
       handleEditorEval: props.handleEditorEval
     }
   };
 
-  return isMobile ? (
+  return isMobileBreakpoint ? (
     <MobileWorkspace {...mobileWorkspaceProps} />
   ) : (
     <HotKeys

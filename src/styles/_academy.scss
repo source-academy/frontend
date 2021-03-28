@@ -65,6 +65,10 @@
   padding: 0.4rem;
 }
 
+.#{$ns}-popover2-content {
+  padding: 0.4rem;
+}
+
 .#{$ns}-non-ideal-state {
   padding-top: 0.7rem;
 
@@ -97,6 +101,48 @@
 
 .Assessment {
   color: $cadet-color-3;
+
+  @media only screen and (max-width: 768px) {
+    // for mobile display
+    .ContentDisplay {
+      .contentdisplay-content.#{$ns}-card {
+        padding: 10px;
+      }
+
+      .listing {
+        height: 160px;
+      }
+
+      .listing-picture {
+        height: 100%;
+        padding: 0;
+      }
+
+      .listing-text {
+        padding: 0 0 0 0.5rem;
+
+        .#{$ns}-heading {
+          margin: 0;
+        }
+        .listing-header {
+          margin-bottom: 0;
+        }
+
+        .listing-description {
+          max-height: 52px;
+          overflow-y: auto;
+          font-size: 12px;
+          .#{$ns}-running-text {
+            font-size: 12px;
+          }
+        }
+
+        .listing-footer {
+          font-size: 12px;
+        }
+      }
+    }
+  }
 
   .contentdisplay-content.#{$ns}-card {
     padding: 10px 20px 10px 20px;
@@ -187,6 +233,9 @@
     flex-shrink: 0;
     /* Creates space between the description text, buttons and title */
     margin: 0.5rem 0rem 0.5rem 0.5rem;
+    @media only screen and (max-width: 768px) {
+      margin: 0.5rem 0;
+    }
 
     & > * {
       /* Limit height of description on smaller screens */

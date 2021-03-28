@@ -1,7 +1,10 @@
+import React from 'react';
+
+import AchievementInferencer from '../../commons/achievement/utils/AchievementInferencer';
 import { Links } from '../../commons/utils/Constants';
 import { AchievementAbility, FilterStatus } from './AchievementTypes';
 
-export const expPerLevel = 1000;
+export const AchievementContext = React.createContext(new AchievementInferencer([], []));
 
 export enum DeadlineColors {
   RED = '#f00',
@@ -13,8 +16,39 @@ export enum FilterColors {
   WHITE = '#fff'
 }
 
-export const getFilterColor = (globalStatus: FilterStatus, ownStatus: FilterStatus) =>
-  globalStatus === ownStatus ? FilterColors.BLUE : FilterColors.WHITE;
+export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
+export const backgroundUrl = `${achievementAssets}/view-background`;
+export const cardBackgroundUrl = `${achievementAssets}/card-background`;
+export const coverImageUrl = `${achievementAssets}/cover-image`;
+
+export const getAbilityBackground = (ability: AchievementAbility) => {
+  switch (ability) {
+    case AchievementAbility.CORE:
+      return {
+        background: `url(${backgroundUrl}/core.png) no-repeat center/cover`
+      };
+    case AchievementAbility.EFFORT:
+      return {
+        background: `url(${backgroundUrl}/effort.png) no-repeat center/cover`
+      };
+    case AchievementAbility.EXPLORATION:
+      return {
+        background: `url(${backgroundUrl}/exploration.png) no-repeat center/cover`
+      };
+    case AchievementAbility.COMMUNITY:
+      return {
+        background: `url(${backgroundUrl}/community.png) no-repeat center/cover`
+      };
+    case AchievementAbility.FLEX:
+      return {
+        background: `url(${backgroundUrl}/flex.png) no-repeat center/cover`
+      };
+    default:
+      return {
+        background: ``
+      };
+  }
+};
 
 export const getAbilityColor = (ability: AchievementAbility) => {
   switch (ability) {
@@ -47,39 +81,11 @@ export const getAbilityGlow = (ability: AchievementAbility) =>
         boxShadow: `0 0 10px ${getAbilityColor(ability)}`
       };
 
-export const handleGlow = (id: number, focusId: number, ability: AchievementAbility) =>
-  ability === AchievementAbility.FLEX || id === focusId ? getAbilityGlow(ability) : undefined;
+export const getFilterColor = (globalStatus: FilterStatus, ownStatus: FilterStatus) =>
+  globalStatus === ownStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
-export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
-export const backgroundUrl = `${achievementAssets}/background`;
-export const canvasUrl = `${achievementAssets}/canvas`;
-export const cardTileUrl = `${achievementAssets}/card-tile`;
+// Make selected achievements + view and Flex achievements glow
+export const handleGlow = (uuid: string, focusUuid: string, ability: AchievementAbility) =>
+  ability === AchievementAbility.FLEX || uuid === focusUuid ? getAbilityGlow(ability) : undefined;
 
-export const getAbilityBackground = (ability: AchievementAbility) => {
-  switch (ability) {
-    case AchievementAbility.CORE:
-      return {
-        background: `url(${backgroundUrl}/core-background.png) no-repeat center/cover`
-      };
-    case AchievementAbility.EFFORT:
-      return {
-        background: `url(${backgroundUrl}/effort-background.png) no-repeat center/cover`
-      };
-    case AchievementAbility.EXPLORATION:
-      return {
-        background: `url(${backgroundUrl}/exploration-background.png) no-repeat center/cover`
-      };
-    case AchievementAbility.COMMUNITY:
-      return {
-        background: `url(${backgroundUrl}/community-background.png) no-repeat center/cover`
-      };
-    case AchievementAbility.FLEX:
-      return {
-        background: `url(${backgroundUrl}/flex-background.png) no-repeat center/cover`
-      };
-    default:
-      return {
-        background: ``
-      };
-  }
-};
+export const xpPerLevel = 1000;

@@ -11,7 +11,7 @@ class ContributorsDetails extends React.Component {
     return (
       <div className="outsideDetails">
         <Card className="contributorsDetails" elevation={Elevation.ONE}>
-          <H3>The people behind Source Academy</H3>
+          <H3>The People behind Source Academy</H3>
           <p>
             The <i>Source Academy</i> is designed by and for students of the National University of
             Singapore. Students who completed the CS1101S module come back to coach their juniors as
@@ -23,7 +23,7 @@ class ContributorsDetails extends React.Component {
           <div className="leadership">
             <H5>
               <strong>
-                <u>2020 Leadership</u>
+                <u>2021 Leadership</u>
               </strong>
             </H5>
             <p>
@@ -35,23 +35,13 @@ class ContributorsDetails extends React.Component {
             <p>
               Anthony Halim
               <br />
-              <strong>(Architecture)</strong>
-            </p>
-            {dot}
-            <p>
-              Kan Yip Keng, Jet
-              <br />
               <strong>(Frontend)</strong>
             </p>
             {dot}
-            <p>
-              Low Jun Kai, Sean
+            <p className="wider">
+              Daryl Tan,
               <br />
-              <strong>(Frontend)</strong>
-            </p>
-            {dot}
-            <p>
-              Daryl Tan
+              Thomas Tan
               <br />
               <strong>(Source)</strong>
             </p>
@@ -63,7 +53,9 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
-              Martin Henz
+              Martin Henz,
+              <br />
+              Boyd Anderson
               <br />
               <strong>(Coordination)</strong>
             </p>
@@ -93,39 +85,79 @@ class ContributorsDetails extends React.Component {
             </p>
           </div>
           <div className="leadership">
-            <H5>
-              <strong>
-                <u>2019 Leadership</u>
-              </strong>
-            </H5>
+            <p>
+              <strong>2019 Leadership</strong>
+            </p>
+            <br />
             <p>
               Liow Jia Chen
               <br />
-              <strong>(Backend)</strong>
+              (Backend)
             </p>
             {dot}
             <p>
               Ge Shuming
               <br />
-              <strong>(Frontend)</strong>
+              (Frontend)
             </p>
             {dot}
             <p>
               Rahul Rajesh
               <br />
-              <strong>(DevOps)</strong>
+              (DevOps)
             </p>
             {dot}
             <p>
               Daryl Tan
               <br />
-              <strong>(Source)</strong>
+              (Source)
             </p>
             {dot}
             <p>
               She Jiayu
               <br />
-              <strong>(Tools)</strong>
+              (Tools)
+            </p>
+          </div>
+          <div className="leadership">
+            <p>
+              <strong>2020 Leadership</strong>
+            </p>
+            <br />
+            <p>
+              Tiffany Chong
+              <br />
+              (Game)
+            </p>
+            {dot}
+            <p>
+              Anthony Halim
+              <br />
+              (Architecture)
+            </p>
+            {dot}
+            <p>
+              Kan Yip Keng, Jet
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p>
+              Low Jun Kai, Sean
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p>
+              Daryl Tan
+              <br />
+              (Source)
+            </p>
+            {dot}
+            <p className="wider">
+              Tee Hao Wei
+              <br />
+              (Backend &amp; DevOps)
             </p>
           </div>
           <div className="contributors">

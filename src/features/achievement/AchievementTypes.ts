@@ -1,3 +1,7 @@
+import { BooleanExpression } from './ExpressionTypes';
+
+export const BULK_UPDATE_ACHIEVEMENTS = 'BULK_UPDATE_ACHIEVEMENTS';
+export const BULK_UPDATE_GOALS = 'BULK_UPDATE_GOALS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
 export const EDIT_GOAL = 'EDIT_GOAL';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
@@ -32,29 +36,29 @@ export enum FilterStatus {
 /**
  * Information of an achievement item
  *
- * @param {number} id unique id of the achievement item
+ * @param {string} uuid unique uuid of the achievement item
  * @param {string} title title of the achievement
  * @param {AchievementAbility} ability ability of the achievement, string enum
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task
  * @param {number} position ordering of the achievement task, 0 for non-task
- * @param {number[]} prerequisiteIds an array of prerequisite ids
- * @param {number[]} goalIds an array of goal ids
- * @param {string} cardTileUrl background image URL of the achievement card
+ * @param {string[]} prerequisiteUuids an array of prerequisite uuids
+ * @param {string[]} goalUuids an array of goal uuids
+ * @param {string} cardBackground background image URL of the achievement card
  * @param {AchievementView} view the achievement view
  */
 export type AchievementItem = {
-  id: number;
+  uuid: string;
   title: string;
   ability: AchievementAbility;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
   position: number;
-  prerequisiteIds: number[];
-  goalIds: number[];
-  cardTileUrl: string;
+  prerequisiteUuids: string[];
+  goalUuids: string[];
+  cardBackground: string;
   view: AchievementView;
 };
 
@@ -62,34 +66,36 @@ export type AchievementGoal = GoalDefinition & GoalProgress;
 
 /**
  * Information of an achievement goal definition
- * NOTE: Achievement EXP named to deconflict with Assessment XP
  *
- * @param {number} id unique id of the goal
+ * @param {string} uuid unique uuid of the goal
  * @param {string} text goal description
- * @param {number} maxExp maximum attainable exp of the goal
- * @param {GoalType} type type of goal, string enum
  * @param {GoalMeta} meta contains meta data relevant to the goal type
  */
 export type GoalDefinition = {
-  id: number;
+  uuid: string;
   text: string;
-  maxExp: number;
-  type: GoalType;
   meta: GoalMeta;
 };
 
 /**
  * Information of an achievement goal progress
- * NOTE: Achievement EXP named to deconflict with Assessment XP
  *
- * @param {number} id unique id of the goal
- * @param {number} exp student's current exp of the goal
+ * @param {string} uuid unique uuid of the goal
+ * @param {number} xp student's current XP of the goal
+ * @param {number} maxXp maximum attainable XP of the goal (computed by server)
  * @param {boolean} completed student's completion status of the goal
  */
 export type GoalProgress = {
-  id: number;
-  exp: number;
+  uuid: string;
+  xp: number;
+  maxXp: number;
   completed: boolean;
+};
+
+export const defaultGoalProgress = {
+  xp: 0,
+  maxXp: 0,
+  completed: false
 };
 
 export enum GoalType {
@@ -101,27 +107,31 @@ export enum GoalType {
 export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
 
 export type AssessmentMeta = {
-  assessmentId: number;
-  requiredCompletionExp: number;
+  type: GoalType.ASSESSMENT;
+  assessmentNumber: string; // e.g. 'M1A', 'P2'
+  requiredCompletionFrac: number; // between [0..1]
 };
 
 export type BinaryMeta = {
-  condition: string;
+  type: GoalType.BINARY;
+  condition: BooleanExpression;
+  maxXp: number;
 };
 
 export type ManualMeta = {
-  // currently nothing
+  type: GoalType.MANUAL;
+  maxXp: number;
 };
 
 /**
  * Information of an achievement view
  *
- * @param {string} canvasUrl canvas image URL
+ * @param {string} coverImage cover image URL
  * @param {string} description fixed text that displays under title
  * @param {string} completionText text that displays after student completes the achievement
  */
 export type AchievementView = {
-  canvasUrl: string;
+  coverImage: string;
   description: string;
   completionText: string;
 };

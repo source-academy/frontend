@@ -1,14 +1,14 @@
 type AchievementViewCompletionProps = {
-  awardedExp: number;
+  awardedXp: number;
   completionText: string;
 };
 
 function AchievementViewCompletion(props: AchievementViewCompletionProps) {
-  const { awardedExp, completionText } = props;
+  const { awardedXp, completionText } = props;
 
   return (
     <div className="completion">
-      <h1>{`AWARDED ${awardedExp}XP`}</h1>
+      <h1>{`AWARDED ${awardedXp}XP`}</h1>
       <p>{completionText}</p>
     </div>
   );

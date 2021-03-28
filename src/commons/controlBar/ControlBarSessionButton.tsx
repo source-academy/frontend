@@ -1,5 +1,6 @@
-import { Classes, Colors, Menu, Popover } from '@blueprintjs/core';
+import { Classes, Colors, Menu } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -53,16 +54,23 @@ export class ControlBarSessionButtons extends React.PureComponent<
       }
     };
 
+    const inviteButtonPopoverContent = (
+      <>
+        <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
+        <CopyToClipboard text={'' + this.props.editorSessionId}>
+          {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
+        </CopyToClipboard>
+      </>
+    );
+
     const inviteButton = (
-      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+      <Popover2
+        popoverClassName="Popover-share"
+        inheritDarkTheme={false}
+        content={inviteButtonPopoverContent}
+      >
         {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
-        <>
-          <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
-          <CopyToClipboard text={'' + this.props.editorSessionId}>
-            {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
-          </CopyToClipboard>
-        </>
-      </Popover>
+      </Popover2>
     );
 
     const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
@@ -84,19 +92,24 @@ export class ControlBarSessionButtons extends React.PureComponent<
       );
     };
 
+    const joinButtonPopoverContent = (
+      // TODO: this form should use Blueprint
+      <form onSubmit={handleStartJoining}>
+        <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
+        <span className={Classes.POPOVER_DISMISS}>
+          {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+        </span>
+      </form>
+    );
+
     const joinButton = (
-      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+      <Popover2
+        popoverClassName="Popover-share"
+        inheritDarkTheme={false}
+        content={joinButtonPopoverContent}
+      >
         {controlButton('Join', IconNames.LOG_IN)}
-        {/* FIXME this form should use Blueprint */}
-        <>
-          <form onSubmit={handleStartJoining}>
-            <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
-            <span className={Classes.POPOVER_DISMISS}>
-              {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
-            </span>
-          </form>
-        </>
-      </Popover>
+      </Popover2>
     );
 
     const leaveButton = controlButton('Leave', IconNames.FEED, () => {
@@ -106,7 +119,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
     });
 
     return (
-      <Popover
+      <Popover2
         content={
           <Menu large={true}>
             {inviteButton}
@@ -122,7 +135,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
               ? Colors.GREEN3
               : Colors.RED3
         })}
-      </Popover>
+      </Popover2>
     );
   }
 

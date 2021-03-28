@@ -1,4 +1,5 @@
-import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
+import { Button, InputGroup, Menu, MenuItem, Position } from '@blueprintjs/core';
+import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
 import {
   s3AssetFolders,
@@ -48,23 +49,25 @@ const AssetFileUploader = () => {
     setShowFolderOverwrite(true);
   }
 
+  const uploadButtonPopoverContent = (
+    <Menu>
+      {s3AssetFolders.map(folder => (
+        <MenuItem onClick={handleChangeUploadFolder} id={folder} key={folder} text={folder} />
+      ))}
+      <MenuItem
+        onClick={showSpecifyFolder}
+        id={specifyFolderText}
+        key={specifyFolderText}
+        text={specifyFolderText}
+      ></MenuItem>
+    </Menu>
+  );
   return (
     <div className="LeftAlign">
       <h4>Choose Folder</h4>
-      <Popover position={Position.BOTTOM}>
+      <Popover2 placement={Position.BOTTOM} content={uploadButtonPopoverContent}>
         <Button text={uploadFolder} />
-        <Menu>
-          {s3AssetFolders.map(folder => (
-            <MenuItem onClick={handleChangeUploadFolder} id={folder} key={folder} text={folder} />
-          ))}
-          <MenuItem
-            onClick={showSpecifyFolder}
-            id={specifyFolderText}
-            key={specifyFolderText}
-            text={specifyFolderText}
-          ></MenuItem>
-        </Menu>
-      </Popover>
+      </Popover2>
       {showfolderOverwrite && (
         <InputGroup
           placeholder={folderOverwritePlaceholder}

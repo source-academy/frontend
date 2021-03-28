@@ -2,15 +2,16 @@ import {
   Alignment,
   Button,
   Classes,
+  FocusStyleManager,
   Icon,
   Navbar,
   NavbarDivider,
   NavbarGroup,
   NavbarHeading,
-  Position,
-  Tooltip
+  Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -37,7 +38,9 @@ type StateProps = {
 const NavigationBar: React.FC<NavigationBarProps> = props => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
   const [desktopMenuOpen, setDesktopMenuOpen] = React.useState(true);
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+
+  FocusStyleManager.onlyShowFocusOnTabs();
 
   const playgroundOnlyNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
@@ -130,17 +133,17 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text hidden-sm hidden-xs">Contributors</div>
       </NavLink>
 
-      {!Constants.playgroundOnly && props.role && !isMobile && (
+      {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && (
         <>
           <NavbarDivider className="default-divider" />
-          <Tooltip content="Toggle Menu" position={Position.BOTTOM}>
+          <Tooltip2 content="Toggle Menu" placement={Position.BOTTOM}>
             <Button
               onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
               icon={IconNames.COMPASS}
               minimal={true}
               style={{ outline: 'none' }}
             />
-          </Tooltip>
+          </Tooltip2>
         </>
       )}
 
@@ -160,13 +163,13 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
         {Constants.playgroundOnly
           ? playgroundOnlyNavbarLeft
-          : isMobile
+          : isMobileBreakpoint
           ? mobileNavbarLeft
           : desktopNavbarLeft}
         {commonNavbarRight}
       </Navbar>
 
-      {!Constants.playgroundOnly && props.role && !isMobile && desktopMenuOpen && (
+      {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
         <AcademyNavigationBar role={props.role} />
       )}
     </>

@@ -9,7 +9,11 @@ import {
   debuggerReset,
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
-import { logoutGoogle } from '../../commons/application/actions/SessionActions';
+import {
+  loginGitHub,
+  logoutGitHub,
+  logoutGoogle
+} from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -42,6 +46,12 @@ import {
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import {
+  githubInitialise,
+  githubOpenPicker,
+  githubSaveFile,
+  githubSaveFileAs
+} from '../../features/github/GitHubActions';
 import {
   persistenceInitialise,
   persistenceOpenPicker,
@@ -80,7 +90,9 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
-  persistenceFile: state.playground.persistenceFile
+  persistenceFile: state.playground.persistenceFile,
+  githubOctokitInstance: state.session.githubOctokitInstance,
+  githubFile: state.playground.githubFile
 });
 
 const workspaceLocation: WorkspaceLocation = 'playground';
@@ -135,7 +147,13 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceSaveFile: persistenceSaveFileAs,
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
-      handlePersistenceLogOut: logoutGoogle
+      handlePersistenceLogOut: logoutGoogle,
+      handleGitHubOpenPicker: githubOpenPicker,
+      handleGitHubSaveFile: githubSaveFileAs,
+      handleGitHubUpdateFile: githubSaveFile,
+      handleGitHubInitialise: githubInitialise,
+      handleGitHubLogIn: loginGitHub,
+      handleGitHubLogOut: logoutGitHub
     },
     dispatch
   );
