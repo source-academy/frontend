@@ -51,9 +51,6 @@ function loadAllLibs() {
     '/externalLibs/video/video_lib.js',
     // inspector
     '/externalLibs/inspector/inspector.js',
-    // env visualizer
-    '/externalLibs/env_visualizer/ConcreteJs.js',
-    '/externalLibs/env_visualizer/visualizer.js'
   ]
 
   for (var i = 0; i < files.length; i++) {
