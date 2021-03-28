@@ -231,7 +231,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const tabs: SideContentTab[] = [
     {
       label: 'Sourcecast Table',
-      iconName: IconNames.COMPASS,
+      iconName: IconNames.HOME,
       body: (
         <div>
           <span className="Multi-line">
