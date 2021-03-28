@@ -28,9 +28,9 @@ type StateProps = {
 };
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
-  const isIOS = /iPhone|iPod/.test(navigator.platform);
+  const isAndroid = /Android/.test(navigator.platform);
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
-  const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
+  const isMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent);
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
   // For disabling draggable Repl when in stepper tab
@@ -45,7 +45,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * keyboard is up on Android devices. IOS devices are not affected.
    */
   React.useEffect(() => {
-    if (isPortrait && !isIOS) {
+    if (isPortrait && isAndroid) {
       document.documentElement.style.setProperty('overflow', 'auto');
       const metaViewport = document.querySelector('meta[name=viewport]');
       metaViewport!.setAttribute(
@@ -56,7 +56,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
     // Reset above CSS and hides draggable Repl on orientation change
     return () => {
-      if (!isIOS) {
+      if (isAndroid) {
         document.documentElement.style.setProperty('overflow', 'hidden');
         const metaViewport = document.querySelector('meta[name=viewport]');
         metaViewport!.setAttribute(
@@ -66,7 +66,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       }
       handleHideRepl();
     };
-  }, [isPortrait, isIOS]);
+  }, [isPortrait, isAndroid]);
 
   // Handle custom keyboard input into AceEditor (Editor and Repl Components)
   const editorRef = React.useRef<ReactAce>(null);
