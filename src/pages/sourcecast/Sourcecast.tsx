@@ -163,6 +163,20 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleQueryParam, props.inputToApply]);
 
+  /**
+   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
+   */
+  React.useEffect(() => {
+    if (
+      !isMobileBreakpoint &&
+      (selectedTab === SideContentType.mobileEditor ||
+        selectedTab === SideContentType.mobileEditorRun)
+    ) {
+      setSelectedTab(SideContentType.introduction);
+      props.handleActiveTabChange(SideContentType.introduction);
+    }
+  }, [isMobileBreakpoint, props, selectedTab]);
+
   const autorunButtons = (
     <ControlBarAutorunButtons
       handleDebuggerPause={props.handleDebuggerPause}
