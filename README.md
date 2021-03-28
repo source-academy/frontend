@@ -31,7 +31,7 @@ In this edition, you will only see the Playground with all its tools, but no log
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
-5. Run `yarn run start` to start the server at `localhost:8000`.
+5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
 
 ### Setting up your environment
 
