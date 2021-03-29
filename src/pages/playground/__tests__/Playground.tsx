@@ -34,6 +34,11 @@ const baseProps = {
   persistenceFile: undefined,
   githubOctokitInstance: undefined,
   githubFile: undefined,
+  githubCommitMessage: '',
+  userRepos: [],
+  pickerType: 'Open',
+  isGitHubConfirmationDialogOpen: false,
+  isPickerOpen: false,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -74,8 +79,14 @@ const baseProps = {
   handleGitHubBeginOpenDialog: () => {},
   handleGitHubBeginSaveAsDialog: () => {},
   handleGitHubBeginSaveDialog: () => {},
+  handleGitHubCloseFileExplorerDialog: () => {},
   handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {}
+  handleGitHubLogOut: () => {},
+  handleGitHubBeginConfirmationDialog: () => {},
+  handleGitHubCancelConfirmationDialog: () => {},
+  handleGitHubConfirmOpen: () => {},
+  handleGitHubConfirmCreatingSave: () => {},
+  handleGitHubConfirmOverwritingSave: () => {}
 };
 
 const testValueProps: PlaygroundProps = {

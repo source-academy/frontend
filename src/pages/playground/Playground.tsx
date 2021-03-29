@@ -142,7 +142,7 @@ export type StateProps = {
   githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
   githubCommitMessage: string;
-  userRepos: [];
+  userRepos: any[];
   pickerType: string;
   isGitHubConfirmationDialogOpen: boolean;
   isPickerOpen: boolean;

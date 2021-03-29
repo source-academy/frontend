@@ -75,7 +75,7 @@ export type SessionState = {
   readonly githubLoginID: string;
   readonly githubName: string;
   readonly githubEmail: string;
-  readonly userRepos: [];
+  readonly userRepos: any[];
   readonly githubRepositoryName: string;
   readonly githubRepositoryFilepath: string;
   readonly githubCommitMessage: string;
