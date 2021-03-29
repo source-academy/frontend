@@ -16,14 +16,19 @@ test('Test generate first level of a repo', async () => {
   const firstElement = fileNodes[0];
   expect(firstElement.id).toBe(0);
   expect(firstElement.label).toBe('TestFile');
-  expect(firstElement.nodeData.fileType).toBe('file');
-  expect(firstElement.nodeData.filePath).toBe('TestFile');
+  expect(firstElement.nodeData).toBeDefined();
+  if (firstElement.nodeData !== undefined) {
+    expect(firstElement.nodeData.fileType).toBe('file');
+    expect(firstElement.nodeData.filePath).toBe('TestFile');
+  }
 
   const secondElement = fileNodes[1];
   expect(secondElement.id).toBe(1);
   expect(secondElement.label).toBe('TestFolder');
-  expect(secondElement.nodeData.fileType).toBe('dir');
-  expect(secondElement.nodeData.filePath).toBe('TestFolder');
+  if (secondElement.nodeData !== undefined) {
+    expect(secondElement.nodeData.fileType).toBe('dir');
+    expect(secondElement.nodeData.filePath).toBe('TestFolder');
+  }
 
   getGitHubOctokitInstanceMock.mockRestore();
   getGitHubLoginIDMock.mockRestore();
@@ -58,14 +63,18 @@ test('Test attempt to create child nodes from two different repositories', async
   const firstElement = fileNodes[0];
   expect(firstElement.id).toBe(0);
   expect(firstElement.label).toBe('TestFile');
-  expect(firstElement.nodeData.fileType).toBe('file');
-  expect(firstElement.nodeData.filePath).toBe('TestFile');
+  if (firstElement.nodeData !== undefined) {
+    expect(firstElement.nodeData.fileType).toBe('file');
+    expect(firstElement.nodeData.filePath).toBe('TestFile');
+  }
 
   const secondElement = fileNodes[1];
   expect(secondElement.id).toBe(1);
   expect(secondElement.label).toBe('TestFolder');
-  expect(secondElement.nodeData.fileType).toBe('dir');
-  expect(secondElement.nodeData.filePath).toBe('TestFolder');
+  if (secondElement.nodeData?.filePath !== undefined) {
+    expect(secondElement.nodeData.fileType).toBe('dir');
+    expect(secondElement.nodeData.filePath).toBe('TestFolder');
+  }
 
   expect(secondFileNodes.length).toBe(0);
 
