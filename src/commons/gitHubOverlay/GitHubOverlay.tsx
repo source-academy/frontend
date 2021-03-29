@@ -6,7 +6,6 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { ConfirmOpen } from './ConfirmDialog';
 import { FileExplorerPanel } from './FileExplorerPanel';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
@@ -17,6 +16,7 @@ type GitHubOverlayProps = {
   pickerType: string;
   isPickerOpen: boolean;
   handleEditorValueChange: (val: string) => void;
+  handleGitHubBeginConfirmationDialog: () => void;
 };
 
 type GitHubOverlayState = {
@@ -36,7 +36,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     this.setFilePath = this.setFilePath.bind(this);
     this.setCommitMessage = this.setCommitMessage.bind(this);
     this.refreshRepoFiles = this.refreshRepoFiles.bind(this);
-    this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
     this.openConfirmDialog = this.openConfirmDialog.bind(this);
 
     this.handleClose = this.handleClose.bind(this);
@@ -71,12 +70,8 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     store.dispatch(actions.setGitHubCommitMessage(e));
   }
 
-  closeConfirmDialog() {
-    this.setState({ isConfirmOpen: false });
-  }
-
   openConfirmDialog() {
-    this.setState({ isConfirmOpen: true });
+    this.props.handleGitHubBeginConfirmationDialog();
   }
 
   async refreshRepoFiles() {
@@ -131,12 +126,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
             title="Select File"
           />
         </MultistepDialog>
-        <ConfirmOpen
-          isOpen={this.state.isConfirmOpen}
-          closeConfirmDialog={this.closeConfirmDialog}
-          pickerType={this.props.pickerType}
-          handleEditorValueChange={this.props.handleEditorValueChange}
-        />
       </div>
     );
   }
@@ -205,6 +194,7 @@ async function checkIfFileCanBeOpened() {
 
 async function checkIfFileCanBeSaved() {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
+  let githubSaveMode = 'Overwrite';
 
   if (octokit === undefined) {
     showWarningMessage('Please log in and try again', 2000);
@@ -235,7 +225,7 @@ async function checkIfFileCanBeSaved() {
       return false;
     }
 
-    store.dispatch(actions.setPickerType('SaveNew'));
+    githubSaveMode = 'Create';
   }
 
   if (Array.isArray(files)) {
@@ -243,5 +233,6 @@ async function checkIfFileCanBeSaved() {
     return false;
   }
 
+  store.dispatch(actions.setGitHubSaveMode(githubSaveMode));
   return true;
 }

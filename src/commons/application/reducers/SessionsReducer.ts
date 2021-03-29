@@ -11,6 +11,7 @@ import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
   SET_GITHUB_COMMIT_MESSAGE,
+  SET_GITHUB_CONFIRM_DIALOG_STATUS,
   SET_GITHUB_EMAIL,
   SET_GITHUB_LOGIN,
   SET_GITHUB_NAME,
@@ -82,6 +83,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         googleUser: action.payload
+      };
+    case SET_GITHUB_CONFIRM_DIALOG_STATUS:
+      return {
+        ...state,
+        isGitHubConfirmationDialogOpen: action.payload
       };
     case SET_PICKER_DIALOG:
       return {

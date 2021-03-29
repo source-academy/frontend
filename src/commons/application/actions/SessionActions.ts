@@ -23,12 +23,14 @@ import {
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_COMMIT_MESSAGE,
+  SET_GITHUB_CONFIRM_DIALOG_STATUS,
   SET_GITHUB_EMAIL,
   SET_GITHUB_LOGIN,
   SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_REPOSITORY_FILEPATH,
   SET_GITHUB_REPOSITORY_NAME,
+  SET_GITHUB_SAVE_MODE,
   SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
@@ -113,7 +115,12 @@ export const setGitHubCommitMessage = (commitMessage: string) =>
 
 export const setPickerType = (pickerType: string) => action(SET_PICKER_TYPE, pickerType);
 
+export const setGitHubSaveMode = (saveMode: string) => action(SET_GITHUB_SAVE_MODE, saveMode);
+
 export const setPickerDialog = (isOpen: boolean) => action(SET_PICKER_DIALOG, isOpen);
+
+export const setGitHubConfirmationDialogStatus = (isOpen: boolean) =>
+  action(SET_GITHUB_CONFIRM_DIALOG_STATUS, isOpen);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {

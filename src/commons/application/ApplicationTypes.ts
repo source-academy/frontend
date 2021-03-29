@@ -308,10 +308,12 @@ export const defaultSession: SessionState = {
   githubEmail: '',
   userRepos: [],
   githubRepositoryFilepath: '',
+  githubSaveMode: '',
   githubRepositoryName: '',
   githubCommitMessage: '',
   pickerType: '',
-  isPickerOpen: false
+  isPickerOpen: false,
+  isGitHubConfirmationDialogOpen: false
 };
 
 export const defaultState: OverallState = {

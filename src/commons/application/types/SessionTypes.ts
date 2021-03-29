@@ -24,6 +24,8 @@ export const SET_GITHUB_REPOSITORY_NAME = 'SET_GITHUB_REPOSITORY_NAME';
 export const SET_GITHUB_REPOSITORY_FILEPATH = 'SET_GITHUB_REPOSITORY_FILEPATH';
 export const SET_GITHUB_COMMIT_MESSAGE = 'SET_GITHUB_COMMIT_MESSAGE';
 export const SET_PICKER_TYPE = 'SET_PICKER_TYPE';
+export const SET_GITHUB_SAVE_MODE = 'SET_GITHUB_SAVE_MODE';
+export const SET_GITHUB_CONFIRM_DIALOG_STATUS = 'SET_GITHUB_CONFIRM_DIALOG_STATUS';
 export const SET_PICKER_DIALOG = 'SET_PICKER_DIALOG';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
@@ -79,6 +81,8 @@ export type SessionState = {
   readonly githubCommitMessage: string;
   readonly pickerType: string;
   readonly isPickerOpen: boolean;
+  readonly isGitHubConfirmationDialogOpen: boolean;
+  readonly githubSaveMode: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };
