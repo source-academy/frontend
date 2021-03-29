@@ -95,7 +95,9 @@ function* githubQuicksaveSaga() {
   yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));
 }
 
-function* githubCloseFileExplorerSaga() {}
+function* githubCloseFileExplorerSaga() {
+  yield store.dispatch(actions.setPickerDialog(false));
+}
 
 function* githubBeginConfirmationDialogSaga() {
   yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));

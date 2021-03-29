@@ -16,6 +16,7 @@ type GitHubOverlayProps = {
   pickerType: string;
   isPickerOpen: boolean;
   handleEditorValueChange: (val: string) => void;
+  handleGitHubCloseFileExplorerDialog: () => void;
   handleGitHubBeginConfirmationDialog: () => void;
 };
 
@@ -131,7 +132,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
   }
 
   handleClose() {
-    store.dispatch(actions.setPickerDialog(false));
+    this.props.handleGitHubCloseFileExplorerDialog();
   }
 
   async handleSubmit() {
