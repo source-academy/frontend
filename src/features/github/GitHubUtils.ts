@@ -78,7 +78,7 @@ export function getGitHubLoginID(): string {
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubName(): string {
-  return store.getState().session.githubName;
+  return store.getState().session.githubName || '';
 }
 
 /**
@@ -87,5 +87,5 @@ export function getGitHubName(): string {
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubEmail(): string {
-  return store.getState().session.githubEmail;
+  return store.getState().session.githubEmail || 'no public email provided';
 }

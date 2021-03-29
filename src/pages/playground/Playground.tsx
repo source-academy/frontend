@@ -11,7 +11,6 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { GitHubOverlay } from 'src/commons/gitHubOverlay/GitHubOverlay';
 
 import {
   InterpreterOutput,
@@ -34,6 +33,8 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import ConfirmDialog from '../../commons/gitHubOverlay/ConfirmDialog';
+import { GitHubOverlay } from '../../commons/gitHubOverlay/GitHubOverlay';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -99,11 +100,17 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleGitHubOpenPicker: () => void;
-  handleGitHubSavePicker: () => void;
-  handleGitHubInitialise: () => void;
+  handleGitHubBeginOpenDialog: () => void;
+  handleGitHubBeginSaveAsDialog: () => void;
+  handleGitHubBeginSaveDialog: () => void;
+  handleGitHubCloseFileExplorerDialog: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  handleGitHubBeginConfirmationDialog: () => void;
+  handleGitHubCancelConfirmationDialog: () => void;
+  handleGitHubConfirmOpen: () => void;
+  handleGitHubConfirmCreatingSave: () => void;
+  handleGitHubConfirmOverwritingSave: () => void;
 };
 
 export type StateProps = {
@@ -134,8 +141,10 @@ export type StateProps = {
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
   githubFile: GitHubFile | undefined;
+  githubCommitMessage: string;
   userRepos: [];
   pickerType: string;
+  isGitHubConfirmationDialogOpen: boolean;
   isPickerOpen: boolean;
 };
 
@@ -449,11 +458,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isDirty={githubIsDirty}
         isPickerOpen={props.isPickerOpen}
         key="github"
-        onClickOpen={props.handleGitHubOpenPicker}
-        onClickSave={props.handleGitHubSavePicker}
+        onClickOpen={props.handleGitHubBeginOpenDialog}
+        onClickSave={props.handleGitHubBeginSaveDialog}
+        onClickSaveAs={props.handleGitHubBeginSaveAsDialog}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
-        onPopoverOpening={props.handleGitHubInitialise}
       />
     );
   }, [
@@ -461,11 +470,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubFile,
     githubIsDirty,
     props.isPickerOpen,
-    props.handleGitHubOpenPicker,
-    props.handleGitHubSavePicker,
+    props.handleGitHubBeginOpenDialog,
+    props.handleGitHubBeginSaveAsDialog,
+    props.handleGitHubBeginSaveDialog,
     props.handleGitHubLogIn,
-    props.handleGitHubLogOut,
-    props.handleGitHubInitialise
+    props.handleGitHubLogOut
   ]);
 
   const executionTime = React.useMemo(
@@ -812,6 +821,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     >
       <Workspace {...workspaceProps} />
       <GitHubOverlay {...props} />
+      <ConfirmDialog
+        isOpen={props.isGitHubConfirmationDialogOpen}
+        handleGitHubCancelConfirmationDialog={props.handleGitHubCancelConfirmationDialog}
+        handleGitHubConfirmOpen={props.handleGitHubConfirmOpen}
+        handleGitHubConfirmCreatingSave={props.handleGitHubConfirmCreatingSave}
+        handleGitHubConfirmOverwritingSave={props.handleGitHubConfirmOverwritingSave}
+      />
     </HotKeys>
   );
 };

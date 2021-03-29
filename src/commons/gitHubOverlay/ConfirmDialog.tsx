@@ -1,15 +1,42 @@
 import { AnchorButton, Button, Classes, Dialog } from '@blueprintjs/core';
 
-export const ConfirmOpen = (props: any) => {
-  const { isOpen, pickerType, overwrite } = props;
+import { store } from '../../pages/createStore';
 
-  function handleCancel() {
-    overwrite(false);
-  }
+const ConfirmDialog = (props: any) => {
+  const {
+    isOpen,
+    handleGitHubCancelConfirmationDialog,
+    handleGitHubConfirmOpen,
+    handleGitHubConfirmCreatingSave,
+    handleGitHubConfirmOverwritingSave
+  } = props;
 
-  function handleConfirm() {
-    overwrite(true);
-  }
+  const pickerType = store.getState().session.pickerType;
+  const githubSaveMode = store.getState().session.githubSaveMode;
+
+  const confirmHandler = () => {
+    if (pickerType === 'Open') {
+      handleGitHubConfirmOpen();
+    }
+
+    if (pickerType === 'Save') {
+      console.log(githubSaveMode);
+
+      if (githubSaveMode === 'Overwrite') {
+        handleGitHubConfirmOverwritingSave();
+      }
+
+      if (githubSaveMode === 'Create') {
+        handleGitHubConfirmCreatingSave();
+      }
+    }
+
+    handleGitHubCancelConfirmationDialog();
+  };
+
+  const cancelHandler = () => {
+    handleGitHubCancelConfirmationDialog();
+  };
 
   return (
     <Dialog isOpen={isOpen} usePortal={false}>
@@ -19,18 +46,26 @@ export const ConfirmOpen = (props: any) => {
           <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
         </div>
       )}
-      {pickerType === 'Save' && (
+      {pickerType === 'Save' && githubSaveMode === 'Overwrite' && (
         <div className={Classes.DIALOG_BODY}>
           <p>Warning: You are saving over an existing file in the repository.</p>
           <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
         </div>
       )}
+      {pickerType === 'Save' && githubSaveMode === 'Create' && (
+        <div className={Classes.DIALOG_BODY}>
+          <p>Warning: You are creating a new file in the repository.</p>
+          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        </div>
+      )}
       <div className={Classes.DIALOG_FOOTER}>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <AnchorButton intent={'primary'} onClick={handleConfirm}>
+        <Button onClick={cancelHandler}>Cancel</Button>
+        <AnchorButton intent={'primary'} onClick={confirmHandler}>
           Confirm
         </AnchorButton>
       </div>
     </Dialog>
   );
 };
+
+export default ConfirmDialog;

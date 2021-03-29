@@ -1,67 +1,38 @@
+import { Octokit } from '@octokit/rest';
 import { SagaIterator } from 'redux-saga';
-import { call, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 import {
-  GITHUB_INITIALISE,
-  GITHUB_OPEN_PICKER,
-  GITHUB_SAVE_FILE_AS,
-  GITHUB_SAVE_PICKER
+  GITHUB_BEGIN_CONFIRMATION_DIALOG,
+  GITHUB_BEGIN_OPEN_DIALOG,
+  GITHUB_BEGIN_SAVE_AS_DIALOG,
+  GITHUB_BEGIN_SAVE_DIALOG,
+  GITHUB_CANCEL_CONFIRMATION_DIALOG,
+  GITHUB_CLOSE_FILE_EXPLORER_DIALOG,
+  GITHUB_CONFIRM_CREATING_SAVE,
+  GITHUB_CONFIRM_OPEN,
+  GITHUB_CONFIRM_OVERWRITING_SAVE
 } from '../../features/github/GitHubTypes';
+import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, GitHubLoginSaga);
-
   yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
 
-  yield takeLatest(GITHUB_OPEN_PICKER, function* () {
-    const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
-      repos: { listForAuthenticatedUser: () => {} }
-    };
-    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
-    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-    store.dispatch(actions.setGitHubName(AuthUser.data.name));
-    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-    store.dispatch(actions.setPickerType('Open'));
-    store.dispatch(actions.setPickerDialog(true));
-  });
+  yield takeLatest(GITHUB_BEGIN_OPEN_DIALOG, githubDisplayOpenPickerSaga);
+  yield takeLatest(GITHUB_BEGIN_SAVE_AS_DIALOG, githubDisplaySavePickerSaga);
+  yield takeLatest(GITHUB_BEGIN_SAVE_DIALOG, githubQuicksaveSaga);
+  yield takeLatest(GITHUB_CLOSE_FILE_EXPLORER_DIALOG, githubCloseFileExplorerSaga);
 
-  yield takeLatest(GITHUB_SAVE_FILE_AS, function* () {
-    const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
-      repos: { listForAuthenticatedUser: () => {} }
-    };
-    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
-    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-    store.dispatch(actions.setGitHubName(AuthUser.data.name));
-    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-    store.dispatch(actions.setPickerType('Save'));
-    store.dispatch(actions.setPickerDialog(true));
-  });
-
-  yield takeLatest(GITHUB_SAVE_PICKER, function* () {
-    const octokitInstance = store.getState().session.githubOctokitInstance || {
-      users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
-      repos: { listForAuthenticatedUser: () => {} }
-    };
-    const AuthUser = yield call(octokitInstance.users.getAuthenticated);
-    const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-    store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-    store.dispatch(actions.setGitHubName(AuthUser.data.name));
-    store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-    store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-    store.dispatch(actions.setPickerType('Save'));
-    store.dispatch(actions.setPickerDialog(true));
-  });
-
-  yield takeLatest(GITHUB_INITIALISE, function* () {});
+  yield takeLatest(GITHUB_BEGIN_CONFIRMATION_DIALOG, githubBeginConfirmationDialogSaga);
+  yield takeLatest(GITHUB_CANCEL_CONFIRMATION_DIALOG, githubCancelConfirmationDialogSaga);
+  yield takeLatest(GITHUB_CONFIRM_OPEN, githubConfirmOpenSaga);
+  yield takeLatest(GITHUB_CONFIRM_OVERWRITING_SAVE, githubConfirmOverwritingSaveSaga);
+  yield takeLatest(GITHUB_CONFIRM_CREATING_SAVE, githubConfirmCreatingSaveSaga);
 }
 
 export function* GitHubLoginSaga() {
@@ -85,6 +56,168 @@ export function* GitHubLoginSaga() {
 
 export function* GitHubLogoutSaga() {
   yield store.dispatch(actions.removeGitHubOctokitInstance());
+}
+
+function* githubDisplayOpenPickerSaga() {
+  const octokitInstance = store.getState().session.githubOctokitInstance || {
+    users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+    repos: { listForAuthenticatedUser: () => {} }
+  };
+  const AuthUser = yield call(octokitInstance.users.getAuthenticated);
+  const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+  store.dispatch(actions.setGitHubName(AuthUser.data.name));
+  store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
+  store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+  store.dispatch(actions.setPickerType('Open'));
+  store.dispatch(actions.setPickerDialog(true));
+}
+
+function* githubDisplaySavePickerSaga() {
+  const octokitInstance = store.getState().session.githubOctokitInstance || {
+    users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+    repos: { listForAuthenticatedUser: () => {} }
+  };
+  const AuthUser = yield call(octokitInstance.users.getAuthenticated);
+  const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
+  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+  store.dispatch(actions.setGitHubName(AuthUser.data.name));
+  store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
+  store.dispatch(actions.setGitHubUserRepos(userRepos.data));
+  store.dispatch(actions.setPickerType('Save'));
+  store.dispatch(actions.setPickerDialog(true));
+}
+
+function* githubQuicksaveSaga() {
+  store.dispatch(actions.setPickerType('Save'));
+  store.dispatch(actions.setGitHubSaveMode('Overwrite'));
+  store.dispatch(actions.setGitHubCommitMessage('Changes made from SourceAcademy'));
+  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));
+}
+
+function* githubCloseFileExplorerSaga() {
+  yield store.dispatch(actions.setPickerDialog(false));
+}
+
+function* githubBeginConfirmationDialogSaga() {
+  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));
+}
+
+function* githubCancelConfirmationDialogSaga() {
+  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(false));
+}
+
+function* githubConfirmOpenSaga() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance() as Octokit;
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+
+  if (octokit === undefined) return;
+
+  const results = yield octokit.repos.getContent({
+    owner: githubLoginID,
+    repo: repoName,
+    path: filePath
+  });
+
+  const content = results.data.content;
+
+  if (content) {
+    //handleEditorValueChange(Buffer.from(content, 'base64').toString());
+    const newEditorValue = Buffer.from(content, 'base64').toString();
+    yield put(actions.updateEditorValue(newEditorValue, 'playground'));
+    showSuccessMessage('Successfully loaded file!', 1000);
+    store.dispatch(actions.setPickerDialog(false));
+  }
+}
+
+function* githubConfirmOverwritingSaveSaga() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+
+  if (octokit === undefined) {
+    return;
+  }
+
+  const content = store.getState().workspaces.playground.editorValue || '';
+  const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const githubName = GitHubUtils.getGitHubName();
+  const githubEmail = GitHubUtils.getGitHubEmail();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+  const commitMessage = store.getState().session.githubCommitMessage;
+
+  try {
+    const results = yield octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath
+    });
+
+    const files = results.data;
+
+    // Cannot save over folder
+    if (Array.isArray(files)) {
+      return;
+    }
+
+    const sha = files.sha;
+
+    yield octokit.repos.createOrUpdateFileContents({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath,
+      message: commitMessage,
+      content: contentEncoded,
+      sha: sha,
+      committer: { name: githubName, email: githubEmail },
+      author: { name: githubName, email: githubEmail }
+    });
+
+    showSuccessMessage('Successfully saved file!', 1000);
+    store.dispatch(actions.setPickerDialog(false));
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to save the file.', 1000);
+  }
+}
+
+function* githubConfirmCreatingSaveSaga() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+
+  if (octokit === undefined) {
+    return;
+  }
+
+  const content = store.getState().workspaces.playground.editorValue || '';
+  const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
+  const githubLoginID = GitHubUtils.getGitHubLoginID();
+  const githubName = GitHubUtils.getGitHubName();
+  const githubEmail = GitHubUtils.getGitHubEmail();
+  const repoName = store.getState().session.githubRepositoryName;
+  const filePath = store.getState().session.githubRepositoryFilepath;
+  const commitMessage = store.getState().session.githubCommitMessage;
+
+  try {
+    yield octokit.repos.createOrUpdateFileContents({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath,
+      message: commitMessage,
+      content: contentEncoded,
+      committer: { name: githubName, email: githubEmail },
+      author: { name: githubName, email: githubEmail }
+    });
+
+    showSuccessMessage('Successfully created file!', 1000);
+    store.dispatch(actions.setPickerDialog(false));
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to save the file.', 1000);
+  }
 }
 
 export default GitHubPersistenceSaga;

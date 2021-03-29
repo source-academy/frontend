@@ -72,10 +72,9 @@ const baseProps = {
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
   handlePersistenceLogOut: () => {},
-  handleGitHubOpenPicker: () => {},
-  handleGitHubSaveFile: () => {},
-  handleGitHubUpdateFile: (file: GitHubFile) => {},
-  handleGitHubInitialise: () => {},
+  handleGitHubBeginOpenDialog: () => {},
+  handleGitHubBeginSaveAsDialog: () => {},
+  handleGitHubBeginSaveDialog: () => {},
   handleGitHubLogIn: () => {},
   handleGitHubLogOut: () => {}
 };
