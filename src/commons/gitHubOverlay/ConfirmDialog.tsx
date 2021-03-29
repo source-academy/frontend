@@ -20,6 +20,8 @@ const ConfirmOpen = (props: any) => {
     }
 
     if (pickerType === 'Save') {
+      console.log(githubSaveMode);
+
       if (githubSaveMode === 'Overwrite') {
         handleGitHubConfirmOverwritingSave();
       }

@@ -88,7 +88,12 @@ function* githubDisplaySavePickerSaga() {
   store.dispatch(actions.setPickerDialog(true));
 }
 
-function* githubQuicksaveSaga() {}
+function* githubQuicksaveSaga() {
+  store.dispatch(actions.setPickerType('Save'));
+  store.dispatch(actions.setGitHubSaveMode('Overwrite'));
+  store.dispatch(actions.setGitHubCommitMessage('Changes made from SourceAcademy'));
+  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));
+}
 
 function* githubCloseFileExplorerSaga() {}
 
@@ -193,7 +198,7 @@ function* githubConfirmCreatingSaveSaga() {
   const repoName = store.getState().session.githubRepositoryName;
   const filePath = store.getState().session.githubRepositoryFilepath;
   const commitMessage = store.getState().session.githubCommitMessage;
-
+  
   try {
     yield octokit.repos.createOrUpdateFileContents({
       owner: githubLoginID,

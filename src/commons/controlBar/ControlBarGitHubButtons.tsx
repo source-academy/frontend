@@ -31,7 +31,10 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   // Or else, the re-render has to be triggered by something else
 
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+
   const shouldDisableButtons = !isLoggedIn;
+  const shouldDisableSaveButton = store.getState().session.githubRepositoryName === '';
+
   //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
@@ -58,7 +61,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     IconNames.FLOPPY_DISK,
     props.onClickSave,
     undefined,
-    shouldDisableButtons
+    shouldDisableButtons || shouldDisableSaveButton
   );
 
   const saveAsButton = controlButton(

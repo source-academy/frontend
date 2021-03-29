@@ -459,6 +459,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isPickerOpen={props.isPickerOpen}
         key="github"
         onClickOpen={props.handleGitHubBeginOpenDialog}
+        onClickSave={props.handleGitHubBeginSaveDialog}
         onClickSaveAs={props.handleGitHubBeginSaveAsDialog}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
@@ -471,6 +472,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.isPickerOpen,
     props.handleGitHubBeginOpenDialog,
     props.handleGitHubBeginSaveAsDialog,
+    props.handleGitHubBeginSaveDialog,
     props.handleGitHubLogIn,
     props.handleGitHubLogOut
   ]);

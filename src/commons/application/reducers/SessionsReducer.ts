@@ -18,6 +18,7 @@ import {
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_REPOSITORY_FILEPATH,
   SET_GITHUB_REPOSITORY_NAME,
+  SET_GITHUB_SAVE_MODE,
   SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
   SET_PICKER_DIALOG,
@@ -98,6 +99,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         pickerType: action.payload
+      };
+    case SET_GITHUB_SAVE_MODE:
+      return {
+        ...state,
+        githubSaveMode: action.payload
       };
     case SET_TOKENS:
       return {
