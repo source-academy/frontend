@@ -1078,6 +1078,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.12.5":
+  version "7.13.10"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
+  integrity sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.10.4", "@babel/template@^7.12.7", "@babel/template@^7.3.3":
   version "7.12.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.12.7.tgz#c817233696018e39fbb6c491d2fb684e05ed43bc"
@@ -1876,6 +1883,28 @@
     "@svgr/plugin-svgo" "^5.4.0"
     loader-utils "^2.0.0"
 
+"@testing-library/dom@^7.28.1":
+  version "7.30.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.30.0.tgz#53697851f7708a1448cc30b74a2ea056dd709cd6"
+  integrity sha512-v4GzWtltaiDE0yRikLlcLAfEiiK8+ptu6OuuIebm9GdC2XlZTNDPGEfM2UkEtnH7hr9TRq2sivT5EA9P1Oy7bw==
+  dependencies:
+    "@babel/code-frame" "^7.10.4"
+    "@babel/runtime" "^7.12.5"
+    "@types/aria-query" "^4.2.0"
+    aria-query "^4.2.2"
+    chalk "^4.1.0"
+    dom-accessibility-api "^0.5.4"
+    lz-string "^1.4.4"
+    pretty-format "^26.6.2"
+
+"@testing-library/react@^11.2.5":
+  version "11.2.5"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-11.2.5.tgz#ae1c36a66c7790ddb6662c416c27863d87818eb9"
+  integrity sha512-yEx7oIa/UWLe2F2dqK0FtMF9sJWNXD+2PPtp39BvE0Kh9MJ9Kl0HrZAgEuhUJR+Lx8Di6Xz+rKwSdEPY2UV8ZQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@testing-library/dom" "^7.28.1"
+
 "@types/acorn@^4.0.5":
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/@types/acorn/-/acorn-4.0.5.tgz#e29fdf884695e77be4e99e67d748f5147255752d"
@@ -1887,6 +1916,11 @@
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@types/anymatch/-/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"
   integrity sha512-/+CRPXpBDpo2RK9C68N3b2cOvO0Cf5B9aPijHsoDQTHivnGSObdOF2BRQOYjojWTDy6nQvMjmqRXIxH55VjxxA==
+
+"@types/aria-query@^4.2.0":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.1.tgz#78b5433344e2f92e8b306c06a5622c50c245bf6b"
+  integrity sha512-S6oPal772qJZHoRZLFc/XoZW2gFvwXusYUmXPXkgxJLuEk2vOt7jc4Yo6z/vtI0EBkbPBVrJJ0B+prLIKiWqHg==
 
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.7":
   version "7.1.12"
@@ -3896,7 +3930,7 @@ chalk@^1.1.1, chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@^4.0.0:
+chalk@^4.0.0, chalk@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.0.tgz#4e14870a618d9e2edd97dd8345fd9d9dc315646a"
   integrity sha512-qwx12AxXe2Q5xQ43Ac//I6v5aXTipYrSESdOgzrN+9XjgEpyjpKuvSGaN4qE93f7TQTlerQQ8S+EQ0EyDoVL1A==
@@ -5035,6 +5069,11 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
+
+dom-accessibility-api@^0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.5.4.tgz#b06d059cdd4a4ad9a79275f9d414a5c126241166"
+  integrity sha512-TvrjBckDy2c6v6RLxPv5QXOnU+SmF9nBII5621Ve5fu6Z/BDrENurBEvlC1f44lKEUVqOpK4w9E5Idc5/EgkLQ==
 
 dom-converter@^0.2:
   version "0.2.0"
@@ -8067,26 +8106,10 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
-js-slang@^0.4.60:
-  version "0.4.71"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.71.tgz#d9ba5ec634eff92f4b48bc1cbe93fc3124c5da0a"
-  integrity sha512-IG2BuzPJOmLyUVjF9UmMJO1oJQBXQUkn0KG5R2ovXxGo/YQ4pa2/3ENBNI79vx7pzKm4hMj9bfiRpqKIbfLaZw==
-  dependencies:
-    "@types/estree" "0.0.45"
-    acorn "^8.0.3"
-    acorn-loose "^8.0.0"
-    acorn-walk "^8.0.0"
-    astring "^1.4.3"
-    gpu.js "^2.10.4"
-    lodash "^4.17.20"
-    node-getopt "^0.3.2"
-    source-map "^0.7.3"
-    xmlhttprequest-ts "^1.0.1"
-
-js-slang@^0.4.73:
-  version "0.4.73"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.73.tgz#c98aa788192b96b96cdc265733209af80dd8fe5c"
-  integrity sha512-koBhv5269tCIPBj2C497/oIdEh3Sb8EACwtpblxmZr9YzTlLkPEVQJ5hK50X64dt+p9gTpU6Xui2n2BOE98fAA==
+js-slang@^0.4.60, js-slang@^0.4.75:
+  version "0.4.75"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.75.tgz#3f55956ab32e11e6689d23b45191b29d9876c4f1"
+  integrity sha512-PdtDYm6sDTE4bXB0v0WC6c3EmSzEEdFnSpEuDwp55xuc6qVqhdXnzq0G1wQArGxYPYvK7Ok7vuxp1MHQ8hWxVw==
   dependencies:
     "@types/estree" "0.0.45"
     acorn "^8.0.3"

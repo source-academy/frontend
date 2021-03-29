@@ -1,5 +1,5 @@
+import Constants from '../../commons/utils/Constants';
 import { store } from '../../pages/createStore';
-import { URIField } from './GitHubClasses';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -15,7 +15,7 @@ export async function exchangeAccessCodeForAuthTokenContainingObject(
   return await fetch(backendLink, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     },
     body: messageBody
   });
@@ -34,26 +34,6 @@ export function grabAccessCodeFromURL(currentURLAddress: string): string {
 }
 
 /**
- * Converts an array of URI fragments into a single URL-encoded string
- *
- * @param {URIField[]} messageBodyPrototype An array of URIFields, each corresponding to a URI fragment
- * @return {string} The URL-encoded string
- */
-export function encodeAsURL(messageBodyPrototype: URIField[]): string {
-  const uriComponents: string[] = [];
-
-  messageBodyPrototype.forEach(element => {
-    const field = element.name || '';
-
-    // We need to check for the edge-case where the value is literally false
-    const value = element.value === false ? false : element.value || '';
-
-    uriComponents.push([encodeURIComponent(field), encodeURIComponent(value)].join('='));
-  });
-
-  return uriComponents.join('&');
-}
-
 /**
  * Returns the Octokit instance saved in session state.
  *
@@ -88,4 +68,13 @@ export function getGitHubName(): string {
  */
 export function getGitHubEmail(): string {
   return store.getState().session.githubEmail || 'no public email provided';
+}
+
+/**
+ * Returns the client ID. This function is meant to allow us to mock the client ID.
+ *
+ * @return {string} The client ID.
+ */
+export function getClientId(): string {
+  return Constants.githubClientId;
 }

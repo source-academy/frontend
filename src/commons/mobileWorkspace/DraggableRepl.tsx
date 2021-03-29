@@ -1,4 +1,5 @@
 import React from 'react';
+import AceEditor from 'react-ace';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 
 import Repl, { ReplProps } from '../repl/Repl';
@@ -10,7 +11,7 @@ type DragReplProps = {
   replProps: ReplProps;
 };
 
-const DraggableRepl: React.FC<DragReplProps> = props => {
+const DraggableRepl = React.forwardRef<AceEditor, DragReplProps>((props, ref) => {
   return (
     <Draggable
       axis="y"
@@ -35,11 +36,11 @@ const DraggableRepl: React.FC<DragReplProps> = props => {
           </div>
         )}
         <div className="REPL-content">
-          <Repl {...props.replProps} />
+          <Repl {...props.replProps} ref={ref} />
         </div>
       </div>
     </Draggable>
   );
-};
+});
 
 export default DraggableRepl;
