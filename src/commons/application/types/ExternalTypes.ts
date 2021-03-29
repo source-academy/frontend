@@ -149,14 +149,13 @@ const machineLearningLibrary = [
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryName.NONE, []],
   [ExternalLibraryName.RUNES, runesLibrary],
-  [ExternalLibraryName.CURVES, curvesLibrary],
   [ExternalLibraryName.SOUNDS, soundsLibrary],
   [ExternalLibraryName.BINARYTREES, binaryTreesLibrary],
   [ExternalLibraryName.PIXNFLIX, videoLibrary],
   [ExternalLibraryName.MACHINELEARNING, machineLearningLibrary],
   [
     ExternalLibraryName.ALL,
-    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
+    runesLibrary.concat(soundsLibrary, binaryTreesLibrary, videoLibrary)
   ]
 ];
 
