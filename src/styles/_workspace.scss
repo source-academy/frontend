@@ -38,8 +38,11 @@ $code-color-error: #ff4444;
     margin-right: 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.6rem;
-    overflow-x: auto;
-    overflow-y: hidden;
+
+    @media screen and (max-width: 768px) {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
 
     @media screen and (min-width: 769px) {
       .ControlBar_editingWorkspace {
@@ -580,6 +583,34 @@ $code-color-error: #ff4444;
             }
           }
         }
+      }
+    }
+  }
+
+  .sidecontent-overview {
+    // fix overflow for assessment sidecontent
+
+    pre {
+      // for code block in pre
+      overflow-x: auto;
+    }
+
+    ::-webkit-scrollbar {
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: $cadet-color-4;
+      border-radius: 2px;
+    }
+
+    p {
+      // for image in p
+      img {
+        max-width: 100%;
+        object-fit: contain;
       }
     }
   }

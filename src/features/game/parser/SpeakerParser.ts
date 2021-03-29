@@ -1,3 +1,4 @@
+import { AssetType } from '../assets/AssetsTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 import StringUtils from '../utils/StringUtils';
 import CharacterParser from './CharacterParser';
@@ -62,9 +63,10 @@ export default class SpeakerParser {
       CharacterParser.characterAssetKey(charId, expression || charExpression)
     );
 
-    Parser.checkpoint.map.addMapAsset(
-      CharacterParser.characterAssetKey(charId, charExpression),
-      CharacterParser.characterAssetPath(charId, charExpression)
-    );
+    Parser.checkpoint.map.addMapAsset(CharacterParser.characterAssetKey(charId, charExpression), {
+      path: CharacterParser.characterAssetPath(charId, charExpression),
+      type: AssetType.Image,
+      key: charId
+    });
   }
 }

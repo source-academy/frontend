@@ -1,9 +1,10 @@
-; (function (exports) {
+(function (exports) {
   /**
    * Setup Stage
    */
   const container = document.createElement('div');
   container.id = 'list-visualizer-container';
+  container.style.overflow = 'auto';
   container.hidden = true;
   document.body.appendChild(container);
 
@@ -167,10 +168,6 @@
       right: pointer to the right subtree
   */
   class PairTreeNode extends DrawableTreeNode {
-    constructor() {
-      super();
-    }
-
     drawOnLayer(x, y, parentX, parentY, layer) {
       const leftData = this.left instanceof DataTreeNode ? this.left : null;
       const rightData = this.right instanceof DataTreeNode ? this.right : null;
@@ -197,10 +194,6 @@
   }
 
   class FunctionTreeNode extends DrawableTreeNode {
-    constructor() {
-      super();
-    }
-
     drawOnLayer(x, y, parentX, parentY, layer) {
       const circle = new FunctionDrawable();
       const node = new Konva.Group();
@@ -424,7 +417,8 @@
       const arrow = new Konva.Line({
         points: arrowPath,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
 
       // first segment of the path
@@ -436,14 +430,16 @@
           y1 + drawingConfig.boxSpacingY * 3 / 4
         ],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
 
       // following segments of the path
       const pointer = new Konva.Line({
         points: path,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       this.layer.add(pointerHead);
       this.layer.add(pointer);
@@ -523,7 +519,8 @@
       const arrow = new Konva.Line({
         points: arrowPath,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       const pointerHead = new Konva.Line({
         points: [
@@ -533,12 +530,14 @@
           y1 + drawingConfig.boxSpacingY * 3 / 4
         ],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       const pointer = new Konva.Line({
         points: path,
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       this.layer.add(pointerHead);
       this.layer.add(pointer);
@@ -601,7 +600,8 @@
       const pointer = new Konva.Line({
         points: [start.x, start.y, end.x, end.y],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
       // the angle of the incoming arrow
       const angle = Math.atan((end.y - start.y) / (end.x - start.x));
@@ -631,7 +631,8 @@
       const arrow = new Konva.Line({
         points: [left.x, left.y, start.x, start.y, right.x, right.y],
         strokeWidth: drawingConfig.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
 
       this.image.getParent().add(pointer);
@@ -664,6 +665,7 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         fill: '#17181A',
+        preventDefault: false,
       });
 
       // vertical bar seen in the box
@@ -671,6 +673,7 @@
         points: [drawingConfig.boxWidth * drawingConfig.vertBarPos, 0, drawingConfig.boxWidth * drawingConfig.vertBarPos, drawingConfig.boxHeight],
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
+        preventDefault: false,
       });
 
       const createChildText = (childNode, isLeftNode) => {
@@ -689,7 +692,8 @@
               x: isLeftNode ? 0 : drawingConfig.vertBarPos * drawingConfig.boxWidth,
               y: Math.floor((drawingConfig.boxHeight - 1.2 * 12) / 2),
               fontStyle: textValue === undefined ? 'italic' : 'normal',
-              fill: 'white'
+              fill: 'white',
+              preventDefault: false,
             });
           } else if (is_null(nodeValue)) {
             return new NullDrawable(isLeftNode ? -drawingConfig.boxWidth * drawingConfig.vertBarPos : 0, 0).getImage();
@@ -723,7 +727,8 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         x: drawingConfig.boxWidth / 2 - 20,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       const rightCircle = new Konva.Circle({
@@ -731,7 +736,8 @@
         strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         x: drawingConfig.boxWidth / 2 + 10,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       const leftDot = new Konva.Circle({
@@ -740,7 +746,8 @@
         stroke: 'white',
         fill: 'white',
         x: drawingConfig.boxWidth / 2 - 20,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       const rightDot = new Konva.Circle({
@@ -749,7 +756,8 @@
         stroke: 'white',
         fill: 'white',
         x: drawingConfig.boxWidth / 2 + 10,
-        y: drawingConfig.boxHeight / 2
+        y: drawingConfig.boxHeight / 2,
+        preventDefault: false,
       });
 
       this.image.add(leftCircle);
@@ -783,25 +791,70 @@
           0
         ],
         strokeWidth: drawingConfig.strokeWidth - 1,
-        stroke: 'white'
+        stroke: 'white',
+        preventDefault: false,
       });
     }
   }
 
-  // A list of layers drawn, used for history
-  let layerList = [];
-  // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
-  let currentListVisualizer = -1;
+  // A pane encapsulates a drawing of a single data structure of a single step
+  // It contains layer, which is the Konva.Layer representing the layer
+  // It also contains a config object, which contains the desired width and height of the layer to be drawn
+  class Pane {
+    constructor(layer, config) {
+      this.layer = layer;
+      this.config = config;
+    }
+  }
+
+  // A single step in the stepper; consists of multiple panes, one for each data structure passed into draw_data(a, b, c, ...)
+  class Step {
+    constructor(panes) {
+      this.panes = panes;
+    }
+  }
+
+  // A list of steps drawn, used for history
+  // Every step has 1 or more layers, one for each structure
+  let stepList = [];
+  let stages = [];
+
+  // ID of the current draw_data call shown. Avoid changing this value externally as layer is not updated.
+  let currentStepIndex = -1;
   // label numbers when the data cannot be fit into the box
   let nodeLabel = 0;
-  /**
-   *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
-   *  Then shift it to the left end.
-   */
-  function draw(xs) {
-    // Hides the default text
-    (document.getElementById('data-visualizer-default-text')).hidden = true;
 
+  /**
+   * Creates a given number of panes (Konva.Stages) to place data structure drawings (Konva.Layer) in
+   * @param {number} count The number of panes to create
+   */
+  function createPanes(count) {
+    stages = [];
+    for (let i = 0; i < count; i++) {
+      const layerContainer = document.createElement('div');
+      // If there is only 1 Pane (i.e. one data structure at this step)
+      // Then do not show a label
+      if (count > 1) {
+        const containerLabel = document.createElement('h3');
+        containerLabel.innerHTML = 'Structure ' + (i + 1);
+        container.appendChild(containerLabel);
+      }
+      layerContainer.id = 'list-visualizer-pane' + i;
+      container.appendChild(layerContainer);
+      stages.push(new Konva.Stage({
+        container: 'list-visualizer-pane' + i
+      }));
+    }
+  }
+
+  /**
+   *  Converts a list into a tree object, shifts it to the left end, and adds it to a Konva.Layer.
+   *  The Konva.Layer is encapsulated in a Pane, which is added to the list of panes to be drawn.
+   *  This function is called exactly once per draw_data call in Source.
+   * 
+   * @param {list} xs The list to be drawn
+   */
+  function appendDrawing(structures) {
     // Blink icon
     const icon = document.getElementById('data_visualiser-icon');
 
@@ -809,77 +862,111 @@
       icon.classList.add('side-content-tab-alert');
     }
 
-    /**
-     * Create konva stage according to calculated width and height of drawing.
-     * Theoretically, as each box is 90px wide and successive boxes overlap by half,
-     * the width of the drawing should be roughly (width * 45), with a similar calculation
-     * for height.
-     * In practice, likely due to browser auto-scaling, for large drawings this results in
-     * some of the drawing being cut off. Hence the width and height formulas used are approximations.
-     */
-    let stage = new Konva.Stage({
-      width: findListWidth(xs) * 60 + 60,
-      height: findListHeight(xs) * 60 + 100,
-      container: 'list-visualizer-container'
-    });
     minLeft = 500;
-    nodelist = [];
-    fnNodeList = [];
     nodeLabel = 0;
-    // hides all other layers
-    for (let i = 0; i < layerList.length; i++) {
-      layerList[i].hide();
+
+    const panes = [];
+
+    // If this is the first step, create the Konva.Stages used to display the Konva.Layers
+    if (stepList.length == 0)
+      createPanes(structures.length);
+
+    // Create a Pane for each structure
+    for (let i = 0; i < structures.length; i++) {
+      const xs = structures[i]
+      const stage = stages[i];
+
+      /**
+       * Size stage according to calculated width and height of drawing.
+       * Theoretically, as each box is 90px wide and successive boxes overlap by half,
+       * the width of the drawing should be roughly (width * 45), with a similar calculation
+       * for height.
+       * In practice, likely due to browser auto-scaling, for large drawings this results in
+       * some of the drawing being cut off. Hence the width and height formulas used are approximations.
+       */
+      const config = {
+        width: findListWidth(xs) * 60 + 60,
+        height: findListHeight(xs) * 60 + 100,
+      };
+      // creates a new layer and add to the stage
+      const layer = new Konva.Layer();
+
+      if (is_pair(xs)) {
+        Tree.fromSourceTree(xs).beginDrawingOn(layer).draw(500, 50);
+      } else if (is_function(xs)) {
+        new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
+      } else {
+        const text = new Konva.Text({
+          text: toText(xs, true),
+          align: 'center',
+          x: 500,
+          y: 50,
+          fontStyle: 'normal',
+          fontSize: 20,
+          fill: 'white',
+          preventDefault: false,
+        });
+        layer.add(text);
+      }
+      // adjust the position
+      layer.offsetX(minLeft - 20);
+      layer.offsetY(0);
+      layer.draw();
+
+      // Show the first structure
+      if (stepList.length === 0) {
+        stage.add(layer);
+        stage.width(config.width);
+        stage.height(config.height);
+      }
+
+      panes.push(new Pane(layer, config));
     }
-    // creates a new layer and add to the stage
-    const layer = new Konva.Layer();
-    stage.add(layer);
-    layerList.push(layer);
 
-    if (is_pair(xs)) {
-      Tree.fromSourceTree(xs).beginDrawingOn(layer).draw(500, 50);
-    } else if (is_function(xs)) {
-      new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
-    } else {
-      const text = new Konva.Text({
-        text: toText(xs, true),
-        align: 'center',
-        x: 500,
-        y: 50,
-        fontStyle: 'normal',
-        fontSize: 20,
-        fill: 'white'
-      });
-      layer.add(text);
-    }
+    // Create a Step, and add to list of steps to be passed on to UI
+    stepList.push(new Step(panes));
 
-    // adjust the position
-    layer.offsetX(minLeft - 20);
-    layer.offsetY(0);
-    layer.draw();
-
-    // update current ID
-    currentListVisualizer = layerList.length - 1;
+    // Set the first step as the step to be displayed
+    currentStepIndex = 0;
   }
 
   /**
-   *  Shows the layer with a given ID while hiding the others.
+   * Shows the step with a given id while hiding the others.
+   * 
+   * @param {number} id The id of the step to be shown
    */
-  function showListVisualizer(id) {
-    for (let i = 0; i < layerList.length; i++) {
-      layerList[i].hide();
+  function showStep(id) {
+    const step = stepList[id];
+    const panes = step.panes;
+    while (container.firstChild) {
+      container.firstChild.remove();
     }
-    if (layerList[id]) {
-      layerList[id].show();
-      currentListVisualizer = id;
+    createPanes(panes.length);
+
+    for (let i = 0; i < panes.length; i++) {
+      const pane = panes[i];
+      const layer = pane.layer;
+      const config = pane.config;
+      stages[i].width(config.width);
+      stages[i].height(config.height);
+      layer.show();
+      layer.draw();
+      stages[i].add(layer);
+      currentStepIndex = id;
     }
   }
 
   function clearListVisualizer() {
-    currentListVisualizer = -1;
-    for (let i = 0; i < layerList.length; i++) {
-      layerList[i].hide();
+    currentStepIndex = -1;
+    for (let step in stepList) {
+      for (let pane in step.panes) {
+        pane.layer.hide();
+      }
     }
-    layerList = [];
+    stepList = [];
+    while (container.firstChild) {
+      container.firstChild.remove();
+    }
   }
 
   function is_function(data) {
@@ -955,25 +1042,32 @@
     return helper(xs);
   }
 
-  exports.draw = draw;
+  exports.draw = appendDrawing;
   exports.ListVisualizer = {
-    draw: draw,
+    draw: appendDrawing,
     clear: clearListVisualizer,
     init: function (parent) {
       container.hidden = false;
       parent.appendChild(container);
     },
     next: function () {
-      if (currentListVisualizer > 0) {
-        currentListVisualizer--;
-      }
-      showListVisualizer(currentListVisualizer);
+      currentStepIndex++;
+      currentStepIndex = Math.min(currentStepIndex, stepList.length - 1);
+      showStep(currentStepIndex);
     },
     previous: function () {
-      if (currentListVisualizer > 0) {
-        currentListVisualizer--;
-      }
-      showListVisualizer(currentListVisualizer);
+      currentStepIndex--;
+      currentStepIndex = Math.max(currentStepIndex, 0);
+      showStep(currentStepIndex);
+    },
+    getStepCount: function () {
+      return stepList.length;
+    },
+    getCurrentStep: function() {
+      return currentStepIndex + 1;
+    },
+    hasDrawing: function() {
+      return stepList.length > 0;
     }
   };
 

@@ -1,3 +1,4 @@
+import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 
 export type AssetMap<T> = {
@@ -5,9 +6,32 @@ export type AssetMap<T> = {
 };
 
 export type ImageAsset = {
-  key: string;
-  path: string;
+  type: AssetType;
+  key: AssetKey;
+  path: AssetPath;
+  config?: ImageConfig;
 };
+
+export type ImageConfig = {
+  frameWidth: number;
+  frameHeight: number;
+  centreX: number;
+  centreY: number;
+  endFrame?: number;
+  start?: number;
+  frameRate?: number;
+  animType?: AnimType;
+};
+
+export enum AssetType {
+  Image = 'Image',
+  Sprite = 'Sprite'
+}
+
+export enum AnimType {
+  Background = 'Background',
+  Object = 'Object'
+}
 
 export type SoundAsset = {
   key: string;

@@ -43,6 +43,8 @@ const stringToActionTypeMap = {
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
   change_background: GameActionType.ChangeBackground,
+  start_animation: GameActionType.StartAnimation,
+  stop_animation: GameActionType.StopAnimation,
   show_dialogue: GameActionType.ShowDialogue,
   add_mode: GameActionType.AddLocationMode,
   remove_mode: GameActionType.RemoveLocationMode,
