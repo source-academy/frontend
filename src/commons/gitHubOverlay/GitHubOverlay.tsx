@@ -12,7 +12,7 @@ import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 import { RepositoryExplorerPanel } from './RepositoryExplorerPanel';
 
 type GitHubOverlayProps = {
-  userRepos?: [];
+  userRepos?: any[];
   pickerType: string;
   isPickerOpen: boolean;
   handleEditorValueChange: (val: string) => void;

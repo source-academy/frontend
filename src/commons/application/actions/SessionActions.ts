@@ -102,7 +102,7 @@ export const setGitHubName = (githubName: string) => action(SET_GITHUB_NAME, git
 
 export const setGitHubEmail = (githubEmail: string) => action(SET_GITHUB_EMAIL, githubEmail);
 
-export const setGitHubUserRepos = (userRepos: []) => action(SET_GITHUB_USER_REPOS, userRepos);
+export const setGitHubUserRepos = (userRepos: any[]) => action(SET_GITHUB_USER_REPOS, userRepos);
 
 export const setGitHubRepositoryName = (repoName: string) =>
   action(SET_GITHUB_REPOSITORY_NAME, repoName);
