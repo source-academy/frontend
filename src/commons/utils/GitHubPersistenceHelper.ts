@@ -7,7 +7,6 @@ export function generateOctokitInstance(authToken: string) {
   const octokit = new Octokit({
     auth: authToken,
     userAgent: 'Source Academy Playground',
-    previews: ['jean-grey', 'symmetra'],
     baseUrl: 'https://api.github.com',
     log: {
       debug: () => {},

@@ -166,38 +166,11 @@ test('setUser generates correct action object', () => {
 test('setGitHubOctokitInstance generates correct action object', async () => {
   const authToken = 'testAuthToken12345';
   const action = setGitHubOctokitInstance(authToken);
-
   expect(action.type).toEqual(SET_GITHUB_OCTOKIT_INSTANCE);
 
-  // We need to do this because the auth() function returns a unknown Promise
-  // Typescript will not allow us to directly call the properties
-  action.payload.auth().then(authObject => {
-    const stringified = JSON.stringify(authObject);
-    const json = JSON.parse(stringified);
-
-    const keys = Object.keys(json);
-    const values = Object.values(json);
-
-    expect(keys.length).toEqual(values.length);
-
-    let existsKeyToken = false;
-    let existsKeyTokenType = false;
-
-    for (let i = 0; i < keys.length; i++) {
-      if (keys[i] === 'token') {
-        existsKeyToken = true;
-        expect(values[i] === authToken);
-      }
-
-      if (keys[i] === 'tokenType') {
-        existsKeyTokenType = true;
-        expect(values[i] === 'oauth');
-      }
-    }
-
-    expect(existsKeyToken).toBe(true);
-    expect(existsKeyTokenType).toBe(true);
-  });
+  const authObject = (await action.payload.auth()) as any;
+  expect(authObject.token).toBe('testAuthToken12345');
+  expect(authObject.tokenType).toBe('oauth');
 });
 
 test('submitAnswer generates correct action object', () => {

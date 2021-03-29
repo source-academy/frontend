@@ -3,10 +3,6 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import Achievement from 'src/pages/achievement/AchievementContainer';
 
-import {
-  exchangeAccessCodeForAuthTokenContainingObject,
-  grabAccessCodeFromURL
-} from '../../features/github/GitHubUtils';
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
@@ -142,19 +138,7 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            <Route
-              path="/callback/github"
-              render={props => (
-                <GitHubCallback
-                  {...props}
-                  clientID={process.env.REACT_APP_GITHUB_CLIENT_ID}
-                  exchangeAccessCodeForAuthTokenContainingObject={
-                    exchangeAccessCodeForAuthTokenContainingObject
-                  }
-                  grabAccessCodeFromURL={grabAccessCodeFromURL}
-                />
-              )}
-            />
+            <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
             <Route
               exact={true}

@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
 [![License](https://img.shields.io/github/license/source-academy/cadet-frontend)](https://github.com/source-academy/cadet-frontend/blob/master/LICENSE)
 
-The Source Academy is a gamified platform designed to teach students coding while having fun! This repository in particular houses the source code for the frontend written in ReactJS with Redux.
+The Source Academy (<https://source-academy.github.io/>) is an immersive online experiential environment for learning programming, developed in the School of Computing at the National University of Singapore. This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
 
 ## Features
 - Playground to write and test programs
@@ -31,7 +31,7 @@ In this edition, you will only see the Playground with all its tools, but no log
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
-5. Run `yarn run start` to start the server at `localhost:8000`.
+5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
 
 ### Setting up your environment
 

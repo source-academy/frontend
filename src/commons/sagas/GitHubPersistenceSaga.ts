@@ -20,8 +20,8 @@ import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
-  yield takeLatest(LOGIN_GITHUB, GitHubLoginSaga);
-  yield takeLatest(LOGOUT_GITHUB, GitHubLogoutSaga);
+  yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
+  yield takeLatest(LOGOUT_GITHUB, githubLogoutSaga);
 
   yield takeLatest(GITHUB_BEGIN_OPEN_DIALOG, githubDisplayOpenPickerSaga);
   yield takeLatest(GITHUB_BEGIN_SAVE_AS_DIALOG, githubDisplaySavePickerSaga);
@@ -35,9 +35,9 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_CONFIRM_CREATING_SAVE, githubConfirmCreatingSaveSaga);
 }
 
-export function* GitHubLoginSaga() {
+function* githubLoginSaga() {
   const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo`;
+  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
   const windowName = 'Connect With OAuth';
   const windowSpecs = 'height=600,width=400';
 
@@ -54,7 +54,7 @@ export function* GitHubLoginSaga() {
   yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
 }
 
-export function* GitHubLogoutSaga() {
+function* githubLogoutSaga() {
   yield store.dispatch(actions.removeGitHubOctokitInstance());
 }
 

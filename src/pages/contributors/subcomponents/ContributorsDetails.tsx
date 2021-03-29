@@ -11,7 +11,7 @@ class ContributorsDetails extends React.Component {
     return (
       <div className="outsideDetails">
         <Card className="contributorsDetails" elevation={Elevation.ONE}>
-          <H3>The people behind Source Academy</H3>
+          <H3>The People behind Source Academy</H3>
           <p>
             The <i>Source Academy</i> is designed by and for students of the National University of
             Singapore. Students who completed the CS1101S module come back to coach their juniors as
@@ -39,7 +39,9 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p className="wider">
-              Daryl Tan, Thomas Tan
+              Daryl Tan,
+              <br />
+              Thomas Tan
               <br />
               Thomas Tan
               <br />

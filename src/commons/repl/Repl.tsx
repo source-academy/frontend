@@ -4,12 +4,13 @@ import { parseError } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
+import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
-import ReplInput from './ReplInput';
+import { ReplInput } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
 export type ReplProps = DispatchProps & StateProps & OwnProps;
@@ -36,32 +37,26 @@ type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-class Repl extends React.PureComponent<ReplProps, {}> {
-  public constructor(props: ReplProps) {
-    super(props);
-  }
-
-  public render() {
-    const cards = this.props.output.map((slice, index) => (
-      <Output output={slice} key={index} usingSubst={this.props.usingSubst || false} />
-    ));
-    return (
-      <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
-        <div className="repl-output-parent">
-          {cards}
-          {!this.props.inputHidden && (
-            <HotKeys
-              className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
-              handlers={handlers}
-            >
-              <ReplInput {...this.props} />
-            </HotKeys>
-          )}
-        </div>
+const Repl = React.forwardRef<AceEditor, ReplProps>((props, ref) => {
+  const cards = props.output.map((slice, index) => (
+    <Output output={slice} key={index} usingSubst={props.usingSubst || false} />
+  ));
+  return (
+    <div className="Repl" style={{ display: props.hidden ? 'none' : undefined }}>
+      <div className="repl-output-parent">
+        {cards}
+        {!props.inputHidden && (
+          <HotKeys
+            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
+            handlers={handlers}
+          >
+            <ReplInput {...props} ref={ref} />
+          </HotKeys>
+        )}
       </div>
-    );
-  }
-}
+    </div>
+  );
+});
 
 export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   switch (props.output.type) {

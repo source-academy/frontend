@@ -1,5 +1,6 @@
-import { ButtonGroup, Classes, Intent, Popover } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 
@@ -48,6 +49,12 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     }
   );
 
+  /*
+  const mainButton = controlButton('GitHub', IconNames.GIT_BRANCH, null, {
+    intent: stateToIntent[state]
+  });
+  */
+
   const openButton = controlButton(
     'Open',
     IconNames.DOCUMENT_OPEN,
@@ -77,7 +84,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
 
   return (
-    <Popover
+    <Popover2
       autoFocus={false}
       content={
         <div>
@@ -93,6 +100,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
       popoverClassName={Classes.POPOVER_DISMISS}
     >
       {mainButton}
-    </Popover>
+    </Popover2>
   );
 };
