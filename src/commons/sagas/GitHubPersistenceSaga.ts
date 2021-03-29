@@ -198,7 +198,7 @@ function* githubConfirmCreatingSaveSaga() {
   const repoName = store.getState().session.githubRepositoryName;
   const filePath = store.getState().session.githubRepositoryFilepath;
   const commitMessage = store.getState().session.githubCommitMessage;
-  
+
   try {
     yield octokit.repos.createOrUpdateFileContents({
       owner: githubLoginID,
