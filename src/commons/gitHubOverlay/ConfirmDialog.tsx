@@ -2,7 +2,7 @@ import { AnchorButton, Button, Classes, Dialog } from '@blueprintjs/core';
 
 import { store } from '../../pages/createStore';
 
-const ConfirmOpen = (props: any) => {
+const ConfirmDialog = (props: any) => {
   const {
     isOpen,
     handleGitHubCancelConfirmationDialog,
@@ -68,4 +68,4 @@ const ConfirmOpen = (props: any) => {
   );
 };
 
-export default ConfirmOpen;
+export default ConfirmDialog;
