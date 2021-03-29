@@ -786,7 +786,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
           sessionButtons,
-          persistenceButtons
+          persistenceButtons,
+          githubButtons
         ]
       },
       defaultSelectedTabId: selectedTab,

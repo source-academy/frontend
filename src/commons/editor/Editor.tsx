@@ -204,6 +204,20 @@ const EditorBase = React.memo(
       handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
     }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
+    // Handles input into AceEditor causing app to scroll to the top on iOS Safari
+    React.useEffect(() => {
+      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+      if (isIOS) {
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      }
+
+      return () => {
+        document.body.style.position = '';
+        document.body.style.width = '';
+      };
+    }, []);
+
     const [sourceChapter, sourceVariant, externalLibraryName] = [
       props.sourceChapter || 1,
       props.sourceVariant || 'default',
