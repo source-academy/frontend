@@ -1,4 +1,4 @@
-import { Slider } from '@blueprintjs/core';
+import { ButtonGroup, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -66,7 +66,7 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
     );
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     return (
-      <div className="Bar">
+      <div className="SourcecastControlBar">
         <audio
           src={this.props.audioUrl}
           ref={this.audio}
@@ -78,13 +78,11 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
           // controls={true}
         />
         <br />
-        <div>
-          <div className="PlayerControl">
-            <div className="PlayerControl">
-              {this.props.playbackStatus === PlaybackStatus.paused && PlayerPlayButton}
-              {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
-            </div>
-          </div>
+        <div className="PlayerControl">
+          <ButtonGroup className="PlayerControlButton">
+            {this.props.playbackStatus === PlaybackStatus.paused && PlayerPlayButton}
+            {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
+          </ButtonGroup>
           <div className="Slider">
             <Slider
               min={0}
@@ -96,7 +94,6 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
             />
           </div>
         </div>
-        <br />
       </div>
     );
   }
