@@ -317,6 +317,7 @@ const handlers = {
  * It will unlikely be used elsewhere since we are migrating to React Hooks.
  */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const mergeRefs = (...refs) => {
   const filteredRefs = refs.filter(Boolean);
