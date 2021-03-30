@@ -155,8 +155,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   const handleHideRepl = () => {
-    document.documentElement.style.setProperty('--mobile-repl-height', '0px');
     setDraggableReplPosition({ x: 0, y: 0 });
+    document.documentElement.style.setProperty('--mobile-repl-height', '0px');
   };
 
   const draggableReplProps = {
