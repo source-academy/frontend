@@ -1,6 +1,6 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import userEvent from '@testing-library/user-event'
-import { mount } from "enzyme";
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { mount } from 'enzyme';
 
 import { FileExplorerPanel } from '../FileExplorerPanel';
 
@@ -21,9 +21,9 @@ test('Test file name input typed calls setFilePath', () => {
   act(() => {
     render(<FileExplorerPanel {...props} />);
   });
-  userEvent.type(screen.getByPlaceholderText("Enter File Name"), 'a');
+  userEvent.type(screen.getByPlaceholderText('Enter File Name'), 'a');
   expect(props.setFilePath).toHaveBeenCalledTimes(1);
-  userEvent.type(screen.getByPlaceholderText("Enter File Name"), 'file3');
+  userEvent.type(screen.getByPlaceholderText('Enter File Name'), 'file3');
   expect(props.setFilePath).toHaveBeenCalledTimes(6);
 });
 
@@ -31,9 +31,9 @@ test('Test commit message input typed calls setCommitMessage', () => {
   act(() => {
     render(<FileExplorerPanel {...props} />);
   });
-  userEvent.type(screen.getByPlaceholderText("Enter Commit Message"), 'a');
+  userEvent.type(screen.getByPlaceholderText('Enter Commit Message'), 'a');
   expect(props.setCommitMessage).toHaveBeenCalledTimes(1);
-  userEvent.type(screen.getByPlaceholderText("Enter Commit Message"), 'message');
+  userEvent.type(screen.getByPlaceholderText('Enter Commit Message'), 'message');
   expect(props.setCommitMessage).toHaveBeenCalledTimes(8);
 });
 
@@ -115,7 +115,7 @@ const repoFiles = [
       }
     }
   }
-]
+];
 
 const props = {
   repoFiles: repoFiles,

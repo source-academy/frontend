@@ -1,5 +1,5 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { mount } from "enzyme";
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { mount } from 'enzyme';
 
 import { RepositoryExplorerPanel } from '../RepositoryExplorerPanel';
 
@@ -11,7 +11,7 @@ test('Test refreshRepoFiles called on mount', () => {
   expect(props.refreshRepoFiles).toHaveBeenCalledTimes(1);
 });
 
-test("Test Radio clicked calls setRepoName", () => {
+test('Test Radio clicked calls setRepoName', () => {
   act(() => {
     render(<RepositoryExplorerPanel {...props} />);
   });
