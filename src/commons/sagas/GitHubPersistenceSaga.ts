@@ -65,12 +65,12 @@ function* githubDisplayOpenPickerSaga() {
   };
   const AuthUser = yield call(octokitInstance.users.getAuthenticated);
   const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+  store.dispatch(actions.setGitHubLoginID(AuthUser.data.login));
   store.dispatch(actions.setGitHubName(AuthUser.data.name));
   store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
   store.dispatch(actions.setGitHubUserRepos(userRepos.data));
   store.dispatch(actions.setPickerType('Open'));
-  store.dispatch(actions.setPickerDialog(true));
+  store.dispatch(actions.setPickerDialogStatus(true));
 }
 
 function* githubDisplaySavePickerSaga() {
@@ -80,12 +80,12 @@ function* githubDisplaySavePickerSaga() {
   };
   const AuthUser = yield call(octokitInstance.users.getAuthenticated);
   const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
+  store.dispatch(actions.setGitHubLoginID(AuthUser.data.login));
   store.dispatch(actions.setGitHubName(AuthUser.data.name));
   store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
   store.dispatch(actions.setGitHubUserRepos(userRepos.data));
   store.dispatch(actions.setPickerType('Save'));
-  store.dispatch(actions.setPickerDialog(true));
+  store.dispatch(actions.setPickerDialogStatus(true));
 }
 
 function* githubQuicksaveSaga() {
@@ -96,7 +96,7 @@ function* githubQuicksaveSaga() {
 }
 
 function* githubCloseFileExplorerSaga() {
-  yield store.dispatch(actions.setPickerDialog(false));
+  yield store.dispatch(actions.setPickerDialogStatus(false));
 }
 
 function* githubBeginConfirmationDialogSaga() {
@@ -128,7 +128,7 @@ function* githubConfirmOpenSaga() {
     const newEditorValue = Buffer.from(content, 'base64').toString();
     yield put(actions.updateEditorValue(newEditorValue, 'playground'));
     showSuccessMessage('Successfully loaded file!', 1000);
-    store.dispatch(actions.setPickerDialog(false));
+    store.dispatch(actions.setPickerDialogStatus(false));
   }
 }
 
@@ -177,7 +177,7 @@ function* githubConfirmOverwritingSaveSaga() {
     });
 
     showSuccessMessage('Successfully saved file!', 1000);
-    store.dispatch(actions.setPickerDialog(false));
+    store.dispatch(actions.setPickerDialogStatus(false));
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
@@ -213,7 +213,7 @@ function* githubConfirmCreatingSaveSaga() {
     });
 
     showSuccessMessage('Successfully created file!', 1000);
-    store.dispatch(actions.setPickerDialog(false));
+    store.dispatch(actions.setPickerDialogStatus(false));
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);

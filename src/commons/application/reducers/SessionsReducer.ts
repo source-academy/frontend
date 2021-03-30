@@ -13,15 +13,15 @@ import {
   SET_GITHUB_COMMIT_MESSAGE,
   SET_GITHUB_CONFIRM_DIALOG_STATUS,
   SET_GITHUB_EMAIL,
-  SET_GITHUB_LOGIN,
+  SET_GITHUB_LOGIN_ID,
   SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_REPOSITORY_FILEPATH,
+  SET_GITHUB_FILEPATH,
   SET_GITHUB_REPOSITORY_NAME,
   SET_GITHUB_SAVE_MODE,
   SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
-  SET_PICKER_DIALOG,
+  SET_PICKER_DIALOG_STATUS,
   SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
@@ -45,7 +45,7 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         githubEmail: action.payload
       };
-    case SET_GITHUB_LOGIN:
+    case SET_GITHUB_LOGIN_ID:
       return {
         ...state,
         githubLoginID: action.payload
@@ -65,7 +65,7 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         userRepos: action.payload
       };
-    case SET_GITHUB_REPOSITORY_FILEPATH:
+    case SET_GITHUB_FILEPATH:
       return {
         ...state,
         githubRepositoryFilepath: action.payload
@@ -90,7 +90,7 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         isGitHubConfirmationDialogOpen: action.payload
       };
-    case SET_PICKER_DIALOG:
+    case SET_PICKER_DIALOG_STATUS:
       return {
         ...state,
         isPickerOpen: action.payload

@@ -35,14 +35,9 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
 
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
-  const mainButton = controlButton(
-    'GitHub',
-    IconNames.GIT_BRANCH,
-    null,
-    {
-      intent: stateToIntent[state]
-    }
-  );
+  const mainButton = controlButton('GitHub', IconNames.GIT_BRANCH, null, {
+    intent: stateToIntent[state]
+  });
 
   const openButton = controlButton(
     'Open',
