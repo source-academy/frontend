@@ -180,6 +180,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     checkWorkspaceReset();
   });
 
+  /**
+   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
+   */
+  React.useEffect(() => {
+    if (
+      !isMobileBreakpoint &&
+      (selectedTab === SideContentType.mobileEditor ||
+        selectedTab === SideContentType.mobileEditorRun)
+    ) {
+      setSelectedTab(SideContentType.questionOverview);
+      props.handleActiveTabChange(SideContentType.questionOverview);
+    }
+  }, [isMobileBreakpoint, props, selectedTab]);
+
   /* ==================
      onChange handlers
      ================== */
