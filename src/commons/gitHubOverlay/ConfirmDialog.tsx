@@ -1,6 +1,6 @@
 import { AnchorButton, Button, Classes, Dialog } from '@blueprintjs/core';
 
-import { store } from '../../pages/createStore';
+import { getGitHubSaveMode, getPickerType } from '../../features/github/GitHubUtils';
 
 const ConfirmDialog = (props: any) => {
   const {
@@ -11,8 +11,8 @@ const ConfirmDialog = (props: any) => {
     handleGitHubConfirmOverwritingSave
   } = props;
 
-  const pickerType = store.getState().session.pickerType;
-  const githubSaveMode = store.getState().session.githubSaveMode;
+  const pickerType = getPickerType();
+  const githubSaveMode = getGitHubSaveMode();
 
   const confirmHandler = () => {
     if (pickerType === 'Open') {
@@ -20,8 +20,6 @@ const ConfirmDialog = (props: any) => {
     }
 
     if (pickerType === 'Save') {
-      console.log(githubSaveMode);
-
       if (githubSaveMode === 'Overwrite') {
         handleGitHubConfirmOverwritingSave();
       }
