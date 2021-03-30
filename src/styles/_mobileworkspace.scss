@@ -261,6 +261,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     background-color: $cadet-color-3;
     border-radius: 5px;
     box-shadow: 0 0px 8px $shadow-dark, 0 0 16px $shadow-light;
+    transition: 0.3s;
 
     .handle {
       display: flex;
@@ -294,6 +295,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
       height: calc(var(--mobile-repl-height, 0px) - 10px);
       padding: 0 10px 10px 10px;
       overflow: auto;
+      transition: 1s;
 
       // showing top shadow only when scroll down
       background: linear-gradient($cadet-color-3 100%, rgba(44, 62, 80, 0)),
