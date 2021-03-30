@@ -78,3 +78,21 @@ export function getGitHubEmail(): string {
 export function getClientId(): string {
   return Constants.githubClientId;
 }
+
+/**
+ * Returns the pickerType. Should be 'Open' or 'Save'.
+ *
+ * @return {string} The pickerType.
+ */
+export function getPickerType(): string {
+  return store.getState().session.pickerType || '';
+}
+
+/**
+ * Returns the GitHub save mode. Should be 'Create' or 'Overwrite'.
+ *
+ * @return {string} The save mode.
+ */
+export function getGitHubSaveMode(): string {
+  return store.getState().session.githubSaveMode || '';
+}
