@@ -8,16 +8,16 @@
   .SourcecastControlBar {
     width: 95%;
     margin: 0 auto;
-  
+
     .PlayerControl {
       display: flex;
       flex-direction: row;
       justify-content: space-around;
-  
+
       .PlayerControlButton {
         .#{$ns}-button {
           top: -11px;
-      
+
           .#{$ns}-icon {
             @media only screen and (max-width: 768px) {
               margin: 0;
@@ -30,7 +30,7 @@
           }
         }
       }
-  
+
       .Slider {
         margin: 0 auto;
         width: calc(95% - 65px);
@@ -41,25 +41,25 @@
   .SourcecastTable {
     /* To show the table borders that get cut out by a Card  */
     padding: 1px;
-  
+
     .ag-header-cell-label {
       float: none !important;
       width: auto !important;
       justify-content: center;
       text-align: center;
     }
-  
+
     .ag-header-cell-menu-button {
       position: absolute;
       float: none;
     }
-  
+
     :focus {
       /* Disable rendering blue border when a sub-component in grid is in focus */
       outline: none;
     }
   }
-  
+
   .Multi-line {
     white-space: 'pre-line';
     overflow-wrap: 'break-word';

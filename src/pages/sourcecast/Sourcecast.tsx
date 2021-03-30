@@ -352,7 +352,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     playbackData: props.playbackData,
     playbackStatus: props.playbackStatus,
     handleChapterSelect: props.handleChapterSelect,
-    handleExternalSelect: props.handleExternalSelect
+    handleExternalSelect: props.handleExternalSelect,
+    setSelectedTab: setSelectedTab
   };
 
   return (

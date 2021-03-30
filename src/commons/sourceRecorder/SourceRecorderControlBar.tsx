@@ -11,8 +11,9 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import controlButton from '../ControlButton';
+import { SideContentType } from '../sideContent/SideContentTypes';
 
-export type SourceRecorderControlBarProps = DispatchProps & StateProps;
+export type SourceRecorderControlBarProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
   handleEditorValueChange: (newCode: string) => void;
@@ -33,6 +34,14 @@ type StateProps = {
   duration: number;
   playbackData: PlaybackData;
   playbackStatus: PlaybackStatus;
+};
+
+type OwnProps = {
+  /**
+   * setSelectedTab is optional since it is only used in Sourcecast and not Sourcereel
+   * due to the addition of the MobileWorkspace to Sourcecast.
+   */
+  setSelectedTab?: (newTab: SideContentType) => void;
 };
 
 type State = {
@@ -170,6 +179,9 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
     this.props.handleSetEditorReadonly(true);
     this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
     this.stopPreviousPlaybackAndApplyFromStart(this.props.playbackData);
+    if (this.props.setSelectedTab) {
+      this.props.setSelectedTab(SideContentType.mobileEditor);
+    }
   };
 
   private handlePlayerStopping = () => {
