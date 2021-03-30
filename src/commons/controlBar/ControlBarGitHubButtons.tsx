@@ -5,13 +5,12 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { GitHubFile, GitHubState } from '../../features/github/GitHubTypes';
+import { GitHubState } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
-  currentFile?: GitHubFile;
   isDirty?: boolean;
   isPickerOpen?: boolean;
   onClickOpen?: () => any;
