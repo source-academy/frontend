@@ -27,21 +27,15 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
 };
 
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  // The 'loggedInAs' is not used directly in this code block
-  // However, keeping it in will ensure that the component re-renders immediately
-  // Or else, the re-render has to be triggered by something else
-
   const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;
   const shouldDisableSaveButton = store.getState().session.githubRepositoryName === '';
 
-  //const shouldDisableButtons = false;
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
   const mainButton = controlButton(
-    //(props.currentFile && props.currentFile.name) || 'GitHub',
     'GitHub',
     IconNames.GIT_BRANCH,
     null,
@@ -49,12 +43,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
       intent: stateToIntent[state]
     }
   );
-
-  /*
-  const mainButton = controlButton('GitHub', IconNames.GIT_BRANCH, null, {
-    intent: stateToIntent[state]
-  });
-  */
 
   const openButton = controlButton(
     'Open',
