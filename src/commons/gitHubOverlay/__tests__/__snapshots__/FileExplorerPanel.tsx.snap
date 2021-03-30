@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Test file list renders correctly 1`] = `
-"<FileExplorerPanel repoFiles={{...}} repoName=\\"YEETREPO\\" pickerType=\\"Open\\" filePath=\\"\\" setFilePath={[Function: setFilePath]} setCommitMessage={[Function: setCommitMessage]}>
+"<FileExplorerPanel repoFiles={{...}} repoName=\\"YEETREPO\\" pickerType=\\"Save\\" filePath=\\"\\" setFilePath={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} setCommitMessage={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }}>
   <div className=\\"bp3-dialog-body file-step\\" style={{...}}>
     <Blueprint3.Tree contents={{...}} onNodeClick={[Function: bound handleNodeClick]} onNodeCollapse={[Function: bound handleNodeCollapse]} onNodeExpand={[Function: bound handleNodeExpand]} className=\\"bp3-elevation-0\\">
       <div className=\\"bp3-tree bp3-elevation-0\\">
         <ul className=\\"bp3-tree-node-list bp3-tree-root\\">
-          <Blueprint3.TreeNode id={0} label=\\"folder1\\" nodeData={{...}} childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={0} label=\\"folder1\\" nodeData={{...}} childNodes={{...}} isSelected={false} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
@@ -31,7 +31,7 @@ exports[`Test file list renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={1} label=\\"folder2\\" nodeData={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={1} label=\\"folder2\\" nodeData={{...}} isSelected={false} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
@@ -47,13 +47,13 @@ exports[`Test file list renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={2} label=\\"file 3\\" nodeData={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-            <li className=\\"bp3-tree-node\\">
+          <Blueprint3.TreeNode id={2} label=\\"file3\\" nodeData={{...}} isSelected={true} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+            <li className=\\"bp3-tree-node bp3-tree-node-selected\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  file 3
+                  file3
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -66,6 +66,18 @@ exports[`Test file list renders correctly 1`] = `
         </ul>
       </div>
     </Blueprint3.Tree>
+    <div>
+      <Blueprint3.InputGroup onChange={[Function: bound handleFileNameChange]} placeholder=\\"Enter File Name\\" value=\\"\\">
+        <div className=\\"bp3-input-group\\">
+          <input type=\\"text\\" onChange={[Function: bound handleFileNameChange]} placeholder=\\"Enter File Name\\" value=\\"\\" className=\\"bp3-input\\" style={{...}} />
+        </div>
+      </Blueprint3.InputGroup>
+      <Blueprint3.InputGroup onChange={[Function: bound handleCommitMessageChange]} placeholder=\\"Enter Commit Message\\" value=\\"\\">
+        <div className=\\"bp3-input-group\\">
+          <input type=\\"text\\" onChange={[Function: bound handleCommitMessageChange]} placeholder=\\"Enter Commit Message\\" value=\\"\\" className=\\"bp3-input\\" style={{...}} />
+        </div>
+      </Blueprint3.InputGroup>
+    </div>
   </div>
 </FileExplorerPanel>"
 `;
