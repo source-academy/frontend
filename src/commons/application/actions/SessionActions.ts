@@ -25,10 +25,10 @@ import {
   SET_GITHUB_COMMIT_MESSAGE,
   SET_GITHUB_CONFIRM_DIALOG_STATUS,
   SET_GITHUB_EMAIL,
+  SET_GITHUB_FILEPATH,
   SET_GITHUB_LOGIN_ID,
   SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_FILEPATH,
   SET_GITHUB_REPOSITORY_NAME,
   SET_GITHUB_SAVE_MODE,
   SET_GITHUB_USER_REPOS,
@@ -108,8 +108,7 @@ export const setGitHubUserRepos = (userRepos: any[]) => action(SET_GITHUB_USER_R
 export const setGitHubRepositoryName = (repoName: string) =>
   action(SET_GITHUB_REPOSITORY_NAME, repoName);
 
-export const setGitHubFilepath = (filePath: string) =>
-  action(SET_GITHUB_FILEPATH, filePath);
+export const setGitHubFilepath = (filePath: string) => action(SET_GITHUB_FILEPATH, filePath);
 
 export const setGitHubCommitMessage = (commitMessage: string) =>
   action(SET_GITHUB_COMMIT_MESSAGE, commitMessage);
