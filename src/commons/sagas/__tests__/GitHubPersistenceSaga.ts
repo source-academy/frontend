@@ -2,7 +2,6 @@ import { expectSaga } from 'redux-saga-test-plan';
 
 import { actions } from '../../../commons/utils/ActionsHelper';
 import * as GitHubActions from '../../../features/github/GitHubActions';
-
 import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SET_GITHUB_CONFIRM_DIALOG_STATUS,
