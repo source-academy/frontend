@@ -5,6 +5,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-workspace {
   position: relative;
+  overflow-y: hidden;
 
   .ControlBar {
     // for assesment workspace top control bar
