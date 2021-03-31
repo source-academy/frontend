@@ -52,7 +52,6 @@ import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
-import { GitHubFile } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -140,7 +139,6 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
-  githubFile: GitHubFile | undefined;
   githubCommitMessage: string;
   userRepos: any[];
   pickerType: string;
@@ -447,15 +445,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { githubOctokitInstance, githubFile } = props;
+  const { githubOctokitInstance } = props;
   // Compute this here to avoid re-rendering the button every keystroke
-  const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
     return (
       <ControlBarGitHubButtons
-        currentFile={githubFile}
         loggedInAs={githubOctokitInstance}
-        isDirty={githubIsDirty}
         isPickerOpen={props.isPickerOpen}
         key="github"
         onClickOpen={props.handleGitHubBeginOpenDialog}
@@ -467,8 +462,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [
     githubOctokitInstance,
-    githubFile,
-    githubIsDirty,
     props.isPickerOpen,
     props.handleGitHubBeginOpenDialog,
     props.handleGitHubBeginSaveAsDialog,

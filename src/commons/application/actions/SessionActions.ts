@@ -25,15 +25,15 @@ import {
   SET_GITHUB_COMMIT_MESSAGE,
   SET_GITHUB_CONFIRM_DIALOG_STATUS,
   SET_GITHUB_EMAIL,
-  SET_GITHUB_LOGIN,
+  SET_GITHUB_FILEPATH,
+  SET_GITHUB_LOGIN_ID,
   SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_REPOSITORY_FILEPATH,
   SET_GITHUB_REPOSITORY_NAME,
   SET_GITHUB_SAVE_MODE,
   SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
-  SET_PICKER_DIALOG,
+  SET_PICKER_DIALOG_STATUS,
   SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
@@ -96,7 +96,8 @@ export const setGitHubOctokitInstance = (authToken?: string) =>
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
-export const setGitHubLogin = (githubLoginID: string) => action(SET_GITHUB_LOGIN, githubLoginID);
+export const setGitHubLoginID = (githubLoginID: string) =>
+  action(SET_GITHUB_LOGIN_ID, githubLoginID);
 
 export const setGitHubName = (githubName: string) => action(SET_GITHUB_NAME, githubName);
 
@@ -107,8 +108,7 @@ export const setGitHubUserRepos = (userRepos: any[]) => action(SET_GITHUB_USER_R
 export const setGitHubRepositoryName = (repoName: string) =>
   action(SET_GITHUB_REPOSITORY_NAME, repoName);
 
-export const setGitHubRepositoryFilepath = (filePath: string) =>
-  action(SET_GITHUB_REPOSITORY_FILEPATH, filePath);
+export const setGitHubFilepath = (filePath: string) => action(SET_GITHUB_FILEPATH, filePath);
 
 export const setGitHubCommitMessage = (commitMessage: string) =>
   action(SET_GITHUB_COMMIT_MESSAGE, commitMessage);
@@ -117,7 +117,7 @@ export const setPickerType = (pickerType: string) => action(SET_PICKER_TYPE, pic
 
 export const setGitHubSaveMode = (saveMode: string) => action(SET_GITHUB_SAVE_MODE, saveMode);
 
-export const setPickerDialog = (isOpen: boolean) => action(SET_PICKER_DIALOG, isOpen);
+export const setPickerDialogStatus = (isOpen: boolean) => action(SET_PICKER_DIALOG_STATUS, isOpen);
 
 export const setGitHubConfirmationDialogStatus = (isOpen: boolean) =>
   action(SET_GITHUB_CONFIRM_DIALOG_STATUS, isOpen);

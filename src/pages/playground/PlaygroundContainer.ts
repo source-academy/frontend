@@ -97,7 +97,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitInstance: state.session.githubOctokitInstance,
-  githubFile: state.playground.githubFile,
   githubLoginID: state.session.githubLoginID,
   githubName: state.session.githubName,
   githubEmail: state.session.githubEmail,

@@ -13,7 +13,18 @@ import {
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_GITHUB_COMMIT_MESSAGE,
+  SET_GITHUB_CONFIRM_DIALOG_STATUS,
+  SET_GITHUB_EMAIL,
+  SET_GITHUB_FILEPATH,
+  SET_GITHUB_LOGIN_ID,
+  SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_REPOSITORY_NAME,
+  SET_GITHUB_SAVE_MODE,
+  SET_GITHUB_USER_REPOS,
+  SET_PICKER_DIALOG_STATUS,
+  SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -39,7 +50,18 @@ import {
   login,
   reautogradeAnswer,
   reautogradeSubmission,
+  setGitHubCommitMessage,
+  setGitHubConfirmationDialogStatus,
+  setGitHubEmail,
+  setGitHubFilepath,
+  setGitHubLoginID,
+  setGitHubName,
   setGitHubOctokitInstance,
+  setGitHubRepositoryName,
+  setGitHubSaveMode,
+  setGitHubUserRepos,
+  setPickerDialogStatus,
+  setPickerType,
   setTokens,
   setUser,
   submitAnswer,
@@ -171,6 +193,83 @@ test('setGitHubOctokitInstance generates correct action object', async () => {
   const authObject = (await action.payload.auth()) as any;
   expect(authObject.token).toBe('testAuthToken12345');
   expect(authObject.tokenType).toBe('oauth');
+});
+
+test('setGitHubLoginID generates correct action object', () => {
+  const loginID = 'HartinMenz';
+  const action = setGitHubLoginID(loginID);
+  expect(action.type).toEqual(SET_GITHUB_LOGIN_ID);
+  expect(action.payload).toEqual(loginID);
+});
+
+test('setGitHubName generates correct action object', () => {
+  const githubName = 'HartinMenz';
+  const action = setGitHubName(githubName);
+  expect(action.type).toEqual(SET_GITHUB_NAME);
+  expect(action.payload).toEqual(githubName);
+});
+
+test('setGitHubEmail generates correct action object', () => {
+  const githubEmail = 'source@acad.emy';
+  const action = setGitHubEmail(githubEmail);
+  expect(action.type).toEqual(SET_GITHUB_EMAIL);
+  expect(action.payload).toEqual(githubEmail);
+});
+
+test('setGitHubUserRepos generates correct action object', () => {
+  const userRepos = [1, 2, 3];
+  const action = setGitHubUserRepos(userRepos);
+  expect(action.type).toEqual(SET_GITHUB_USER_REPOS);
+  expect(action.payload).toEqual(userRepos);
+});
+
+test('setGitHubRepositoryName generates correct action object', () => {
+  const githubRepoName = 'reponame';
+  const action = setGitHubRepositoryName(githubRepoName);
+  expect(action.type).toEqual(SET_GITHUB_REPOSITORY_NAME);
+  expect(action.payload).toEqual(githubRepoName);
+});
+
+test('setGitHubFilepath generates correct action object', () => {
+  const githubFilepath = '/path/to/file';
+  const action = setGitHubFilepath(githubFilepath);
+  expect(action.type).toEqual(SET_GITHUB_FILEPATH);
+  expect(action.payload).toEqual(githubFilepath);
+});
+
+test('setGitHubCommitMessage generates correct action object', () => {
+  const commitMessage = 'fixed several errors in previous edit';
+  const action = setGitHubCommitMessage(commitMessage);
+  expect(action.type).toEqual(SET_GITHUB_COMMIT_MESSAGE);
+  expect(action.payload).toEqual(commitMessage);
+});
+
+test('setPickerType generates correct action object', () => {
+  const pickerType = 'Save';
+  const action = setPickerType(pickerType);
+  expect(action.type).toEqual(SET_PICKER_TYPE);
+  expect(action.payload).toEqual(pickerType);
+});
+
+test('setGitHubSaveMode generates correct action object', () => {
+  const saveMode = 'Overwrite';
+  const action = setGitHubSaveMode(saveMode);
+  expect(action.type).toEqual(SET_GITHUB_SAVE_MODE);
+  expect(action.payload).toEqual(saveMode);
+});
+
+test('setPickerDialogStatus generates correct action object', () => {
+  const pickerDialogStatus = true;
+  const action = setPickerDialogStatus(pickerDialogStatus);
+  expect(action.type).toEqual(SET_PICKER_DIALOG_STATUS);
+  expect(action.payload).toEqual(pickerDialogStatus);
+});
+
+test('setGitHubConfirmationDialogStatus generates correct action object', () => {
+  const confirmationDialogStatus = true;
+  const action = setGitHubConfirmationDialogStatus(confirmationDialogStatus);
+  expect(action.type).toEqual(SET_GITHUB_CONFIRM_DIALOG_STATUS);
+  expect(action.payload).toEqual(confirmationDialogStatus);
 });
 
 test('submitAnswer generates correct action object', () => {

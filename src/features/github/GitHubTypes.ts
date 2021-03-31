@@ -10,9 +10,3 @@ export const GITHUB_CONFIRM_CREATING_SAVE = 'GITHUB_CONFIRM_CREATING_SAVE';
 export const GITHUB_CANCEL_CONFIRMATION_DIALOG = 'GITHUB_CANCEL_CONFIRMATION_DIALOG';
 
 export type GitHubState = 'LOGGED_IN' | 'LOGGED_OUT';
-
-export type GitHubFile = {
-  id: string;
-  name: string;
-  lastSaved?: Date;
-};

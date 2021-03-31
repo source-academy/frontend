@@ -55,56 +55,57 @@ function* githubLoginSaga() {
 }
 
 function* githubLogoutSaga() {
-  yield store.dispatch(actions.removeGitHubOctokitInstance());
+  yield put(actions.removeGitHubOctokitInstance());
 }
 
 function* githubDisplayOpenPickerSaga() {
-  const octokitInstance = store.getState().session.githubOctokitInstance || {
+  const octokitInstance = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
     repos: { listForAuthenticatedUser: () => {} }
   };
   const AuthUser = yield call(octokitInstance.users.getAuthenticated);
   const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-  store.dispatch(actions.setGitHubName(AuthUser.data.name));
-  store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-  store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-  store.dispatch(actions.setPickerType('Open'));
-  store.dispatch(actions.setPickerDialog(true));
+  yield put(actions.setGitHubLoginID(AuthUser.data.login));
+  yield put(actions.setGitHubName(AuthUser.data.name));
+  yield put(actions.setGitHubEmail(AuthUser.data.email));
+  yield put(actions.setGitHubUserRepos(userRepos.data));
+  yield put(actions.setPickerType('Open'));
+  yield put(actions.setPickerDialogStatus(true));
 }
 
 function* githubDisplaySavePickerSaga() {
-  const octokitInstance = store.getState().session.githubOctokitInstance || {
+  const octokitInstance = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
     repos: { listForAuthenticatedUser: () => {} }
   };
+
   const AuthUser = yield call(octokitInstance.users.getAuthenticated);
   const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
-  store.dispatch(actions.setGitHubLogin(AuthUser.data.login));
-  store.dispatch(actions.setGitHubName(AuthUser.data.name));
-  store.dispatch(actions.setGitHubEmail(AuthUser.data.email));
-  store.dispatch(actions.setGitHubUserRepos(userRepos.data));
-  store.dispatch(actions.setPickerType('Save'));
-  store.dispatch(actions.setPickerDialog(true));
+  yield put(actions.setGitHubLoginID(AuthUser.data.login));
+  yield put(actions.setGitHubName(AuthUser.data.name));
+  yield put(actions.setGitHubEmail(AuthUser.data.email));
+  yield put(actions.setGitHubUserRepos(userRepos.data));
+  yield put(actions.setPickerType('Save'));
+  yield put(actions.setPickerDialogStatus(true));
 }
 
 function* githubQuicksaveSaga() {
-  store.dispatch(actions.setPickerType('Save'));
-  store.dispatch(actions.setGitHubSaveMode('Overwrite'));
-  store.dispatch(actions.setGitHubCommitMessage('Changes made from SourceAcademy'));
-  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));
+  yield put(actions.setPickerType('Save'));
+  yield put(actions.setGitHubSaveMode('Overwrite'));
+  yield put(actions.setGitHubCommitMessage('Changes made from SourceAcademy'));
+  yield put(actions.setGitHubConfirmationDialogStatus(true));
 }
 
 function* githubCloseFileExplorerSaga() {
-  yield store.dispatch(actions.setPickerDialog(false));
+  yield put(actions.setPickerDialogStatus(false));
 }
 
 function* githubBeginConfirmationDialogSaga() {
-  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(true));
+  yield put(actions.setGitHubConfirmationDialogStatus(true));
 }
 
 function* githubCancelConfirmationDialogSaga() {
-  yield store.dispatch(actions.setGitHubConfirmationDialogStatus(false));
+  yield put(actions.setGitHubConfirmationDialogStatus(false));
 }
 
 function* githubConfirmOpenSaga() {
@@ -128,7 +129,7 @@ function* githubConfirmOpenSaga() {
     const newEditorValue = Buffer.from(content, 'base64').toString();
     yield put(actions.updateEditorValue(newEditorValue, 'playground'));
     showSuccessMessage('Successfully loaded file!', 1000);
-    store.dispatch(actions.setPickerDialog(false));
+    yield put(actions.setPickerDialogStatus(false));
   }
 }
 
@@ -177,7 +178,7 @@ function* githubConfirmOverwritingSaveSaga() {
     });
 
     showSuccessMessage('Successfully saved file!', 1000);
-    store.dispatch(actions.setPickerDialog(false));
+    yield put(actions.setPickerDialogStatus(false));
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
@@ -213,7 +214,7 @@ function* githubConfirmCreatingSaveSaga() {
     });
 
     showSuccessMessage('Successfully created file!', 1000);
-    store.dispatch(actions.setPickerDialog(false));
+    yield put(actions.setPickerDialogStatus(false));
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
