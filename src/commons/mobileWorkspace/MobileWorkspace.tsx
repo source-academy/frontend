@@ -24,8 +24,12 @@ type StateProps = {
    * The component is wrapped in a lambda function in order to pass the editorRef
    * created in MobileWorkspace.tsx into the customEditor component's Ace Editor child.
    * This is to allow for the MobileKeyboard component to work with custom editors.
+   * A handler for showing the draggable repl is also passed into the customEditor.
    */
-  customEditor?: (ref?: React.RefObject<ReactAce>) => JSX.Element;
+  customEditor?: (
+    ref: React.RefObject<ReactAce>,
+    handleShowDraggableRepl: () => void
+  ) => JSX.Element;
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
@@ -111,7 +115,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      return props.customEditor(editorRef);
+      return props.customEditor(editorRef, handleSourcecastShowRepl);
     } else if (props.editorProps) {
       return <Editor {...props.editorProps} ref={editorRef} />;
     } else {
@@ -163,6 +167,13 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     handleShowRepl: handleShowRepl,
     handleHideRepl: handleHideRepl,
     disableRepl: setIsDraggableReplDisabled
+  };
+
+  // Handler passed into Sourcecast's customEditor to handle the showing of the draggable repl
+  const handleSourcecastShowRepl = () => {
+    const offset = -100;
+    document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
+    setDraggableReplPosition({ x: 0, y: offset });
   };
 
   const mobileEditorTab: SideContentTab = React.useMemo(

@@ -51,7 +51,8 @@ type StateProps = {
 };
 
 type OwnProps = {
-  forwardedRef?: React.RefObject<ReactAce>;
+  forwardedRef?: React.RefObject<ReactAce>; // for the mobile Sourcecast Workspace
+  setDraggableReplPosition?: () => void; // for the mobile Sourcecast Workspace
 };
 
 class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}> {
@@ -142,6 +143,10 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
         switch (keyboardCommand) {
           case 'run':
             this.props.handleEditorEval();
+            // Popup mobile draggable repl when there is a recorded 'run' evaluation
+            if (this.props.setDraggableReplPosition) {
+              this.props.setDraggableReplPosition();
+            }
             break;
         }
         break;

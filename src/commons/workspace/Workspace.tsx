@@ -1,7 +1,6 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
@@ -21,7 +20,7 @@ type DispatchProps = {
 type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
-  customEditor?: (ref?: React.RefObject<ReactAce>) => JSX.Element;
+  customEditor?: JSX.Element;
   editorProps?: EditorProps;
   editorHeight?: string | number;
   editorWidth: string;
@@ -125,7 +124,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
    */
   const createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.customEditor) {
-      return props.customEditor();
+      return props.customEditor;
     } else if (props.editorProps) {
       return <Editor {...props.editorProps} />;
     } else {

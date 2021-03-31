@@ -299,9 +299,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
     },
-    customEditor: (ref?: React.RefObject<ReactAce>) => (
-      <SourceRecorderEditor {...editorProps} forwardedRef={ref} />
-    ),
+    customEditor: <SourceRecorderEditor {...editorProps} />,
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
@@ -319,8 +317,12 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    customEditor: (ref?: React.RefObject<ReactAce>) => (
-      <SourceRecorderEditor {...editorProps} forwardedRef={ref} />
+    customEditor: (ref: React.RefObject<ReactAce>, handleShowDraggableRepl: () => void) => (
+      <SourceRecorderEditor
+        {...editorProps}
+        forwardedRef={ref}
+        setDraggableReplPosition={handleShowDraggableRepl}
+      />
     ),
     replProps: replProps,
     mobileSideContentProps: {
