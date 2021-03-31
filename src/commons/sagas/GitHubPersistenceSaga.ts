@@ -59,7 +59,7 @@ function* githubLogoutSaga() {
 }
 
 function* githubDisplayOpenPickerSaga() {
-  const octokitInstance = store.getState().session.githubOctokitInstance || {
+  const octokitInstance = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
     repos: { listForAuthenticatedUser: () => {} }
   };
@@ -74,10 +74,11 @@ function* githubDisplayOpenPickerSaga() {
 }
 
 function* githubDisplaySavePickerSaga() {
-  const octokitInstance = store.getState().session.githubOctokitInstance || {
+  const octokitInstance = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
     repos: { listForAuthenticatedUser: () => {} }
   };
+
   const AuthUser = yield call(octokitInstance.users.getAuthenticated);
   const userRepos = yield call(octokitInstance.repos.listForAuthenticatedUser);
   yield put(actions.setGitHubLoginID(AuthUser.data.login));
