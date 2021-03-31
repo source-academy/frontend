@@ -17,6 +17,18 @@ test('Test file/folder click calls setFilePath', () => {
   expect(props.setFilePath).toHaveBeenCalledTimes(3);
 });
 
+test('Test file/folder clicked twice sets filepath to empty string', () => {
+  act(() => {
+    render(<FileExplorerPanel {...props} />);
+  });
+  const leftClick = { button: 1 };
+  fireEvent.click(screen.getByText('file3'), leftClick);
+  expect(props.setFilePath).toHaveBeenCalledTimes(1);
+  fireEvent.click(screen.getByText('file3'), leftClick);
+  expect(props.setFilePath).toHaveBeenCalledTimes(2);
+  expect(props.filePath).toBe('');
+});
+
 test('Test file name input typed calls setFilePath', () => {
   act(() => {
     render(<FileExplorerPanel {...props} />);

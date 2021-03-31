@@ -237,3 +237,5 @@ async function checkIfFileCanBeSaved() {
   store.dispatch(actions.setGitHubSaveMode(githubSaveMode));
   return true;
 }
+
+export default GitHubOverlay;
