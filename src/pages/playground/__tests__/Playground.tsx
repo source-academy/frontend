@@ -33,7 +33,6 @@ const baseProps = {
   persistenceUser: undefined,
   persistenceFile: undefined,
   githubOctokitInstance: undefined,
-  githubFile: undefined,
   githubCommitMessage: '',
   userRepos: [],
   pickerType: 'Open',

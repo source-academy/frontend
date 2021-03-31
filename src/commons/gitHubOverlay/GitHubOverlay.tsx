@@ -64,7 +64,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
 
   setFilePath(e: string) {
     this.setState({ filePath: e });
-    store.dispatch(actions.setGitHubRepositoryFilepath(e));
+    store.dispatch(actions.setGitHubFilepath(e));
   }
 
   setCommitMessage(e: string) {
