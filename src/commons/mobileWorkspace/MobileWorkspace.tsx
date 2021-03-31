@@ -1,4 +1,4 @@
-import { Dialog, FocusStyleManager } from '@blueprintjs/core';
+import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { RefObject } from 'react';
 import ReactAce from 'react-ace/lib/ace';
@@ -28,9 +28,8 @@ type StateProps = {
 };
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
-  const isAndroid = /Android/.test(navigator.platform);
+  const isAndroid = /Android/.test(navigator.userAgent);
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
-  const isMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent);
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
   // For disabling draggable Repl when in stepper tab
@@ -195,14 +194,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
           message={'You have changes that may not be saved. Are you sure you want to leave?'}
         />
       ) : null}
-
-      <Dialog
-        isOpen={!isPortrait && isMobile}
-        canEscapeKeyClose={false}
-        canOutsideClickClose={false}
-        isCloseButtonShown={false}
-        title="Please turn back to portrait orientation!"
-      />
 
       {/* Render the top ControlBar when it is the Assessment Workspace */}
       {props.mobileSideContentProps.workspaceLocation === 'assessment' && (
