@@ -53,11 +53,13 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
-              Boyd Anderson,
-              <br />
               Martin Henz,
               <br />
-              Low Kok Lim
+              Boyd Anderson,
+              <br />
+              Low Kok Lim,
+              <br />
+              Eldric Liew
               <br />
               <strong>(Coordination)</strong>
             </p>
