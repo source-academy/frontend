@@ -142,7 +142,7 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
       success = await checkIfFileCanBeOpened();
     }
 
-    if (this.props.pickerType === 'Save' || this.props.pickerType === 'SaveNew') {
+    if (this.props.pickerType === 'Save') {
       success = await checkIfFileCanBeSaved();
     }
 
