@@ -53,9 +53,11 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
+              Boyd Anderson,
+              <br />
               Martin Henz,
               <br />
-              Boyd Anderson
+              Low Kok Lim
               <br />
               <strong>(Coordination)</strong>
             </p>
@@ -81,7 +83,7 @@ class ContributorsDetails extends React.Component {
               <strong>Graphic design</strong>
             </p>
             <p>
-              Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei
+              Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei {dot} Sigmund Chianasta
             </p>
           </div>
           <div className="leadership">
