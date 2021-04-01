@@ -10,7 +10,7 @@ import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
 import { promptWithChoices } from '../../effects/Prompt';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
+import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
 import { GameMode } from '../../mode/GameModeTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -334,6 +334,20 @@ class GameGlobalAPI {
   }
 
   /////////////////////
+  //    Animations   //
+  /////////////////////
+
+  public startAnimation(id: AnyId, startFrame: number, frameRate: number) {
+    const startImage = this.getAssetByKey(this.getGameMap().getAssetKeyFromId(id));
+    this.getGameManager().getAnimationManager().displayAnimation(startImage, startFrame, frameRate);
+  }
+
+  public stopAnimation(id: AnyId) {
+    const stopImage = this.getAssetByKey(this.getGameMap().getAssetKeyFromId(id));
+    this.getGameManager().getAnimationManager().stopAnimation(stopImage);
+  }
+
+  /////////////////////
   //      Input      //
   /////////////////////
 
@@ -443,6 +457,9 @@ class GameGlobalAPI {
 
   public getBBoxById(bboxId: ItemId): BBoxProperty {
     return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
+  }
+  public getAssetByKey(assetKey: AssetKey) {
+    return this.getGameMap().getAssetByKey(assetKey);
   }
 }
 

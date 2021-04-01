@@ -8,6 +8,11 @@ import { GameMode } from '../mode/GameModeTypes';
 export type LocationId = string;
 
 /**
+ * @typedef {LocationId | ItemId} AnyId - a general id type for a location or any object id
+ */
+export type AnyId = LocationId | ItemId;
+
+/**
  * @typedef {GameLocation} - encapsulates data about a location in a GameMap
  * @prop {ItemId[]} actionIds - ids of all actions that play when that location is visited
  * @prop {LocationId} id - the id to indentify that location
