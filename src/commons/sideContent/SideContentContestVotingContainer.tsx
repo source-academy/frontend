@@ -30,32 +30,47 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
    * @param votingSubmission voting scores by user for each contest entry.
    * @returns boolean value for whether the scores are within the min-max range.
    */
-  const isValidVotingSubmission = (votingSubmission: ContestEntry[]) => {
+  const isSubmissionValid = (votingSubmission: ContestEntry[]) => {
     return votingSubmission.reduce((isValid, vote) => {
       return isValid && vote.score! >= 1 && vote.score! <= contestEntries.length;
     }, true);
   };
 
-  const handleVotingSubmissionChange = (submissionId: number, score: number): void => {
+  const submissionHasNoNull = (votingSubmission: ContestEntry[]) => {
+    return votingSubmission.reduce((hasNull, vote) => {
+      return hasNull && vote.score !== undefined && vote.score !== null;
+    }, true);
+  };
+
+  const handleVotingSubmissionChange = (submissionId: number, rank: number): void => {
     // update the votes
+    console.log('changed');
     const updatedSubmission = votingSubmission.map(vote =>
-      vote.submission_id === submissionId ? { ...vote, score: score } : vote
+      vote.submission_id === submissionId ? { ...vote, score: rank } : vote
     );
-    // only save if valid - else trigger error in UI
-    if (isValidVotingSubmission(updatedSubmission)) {
-      setVotingSubmission(updatedSubmission);
-      const noDuplicates =
-        new Set(updatedSubmission.map(vote => vote.score)).size === updatedSubmission.length;
-      // validate that scores are unique
-      if (noDuplicates) {
-        handleSave(updatedSubmission);
-        setIsValid(true);
-      } else {
-        showWarningMessage('Vote scores are not unique. Please try again.');
-        setIsValid(false);
-      }
+    setVotingSubmission(updatedSubmission);
+    const noDuplicates =
+      new Set(updatedSubmission.map(vote => vote.score)).size === updatedSubmission.length;
+    // validate that scores are unique
+    if (noDuplicates && isSubmissionValid(updatedSubmission)) {
+      handleSave(updatedSubmission);
+      setIsValid(true);
+    } else if (noDuplicates && submissionHasNoNull(updatedSubmission)) {
+      showWarningMessage(
+        `Vote rankings invalid. Please input rankings between 1 - ${contestEntries.length}.`
+      );
+      setIsValid(false);
+    } else if (!noDuplicates) {
+      showWarningMessage('Vote scores are not unique. Please input unique rankings.');
+      setIsValid(false);
     }
   };
+
+  // if (!validateScore(rank)) {
+  //   showWarningMessage(
+  //     `Vote rankings invalid. Please input rankings between 1 - ${contestEntries.length}.`
+  // );
+  // setIsValid(false);
 
   return (
     <SideContentContestVoting
