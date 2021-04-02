@@ -593,7 +593,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
 
     const saveButton =
-      props.canSave && props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+      props.canSave &&
+      props.assessment!.questions[questionId].type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={props.hasUnsavedChanges}
           onClickSave={onClickSave}

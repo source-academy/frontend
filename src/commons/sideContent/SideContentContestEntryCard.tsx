@@ -42,16 +42,18 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
         <Pre className="contestentry-entryid">{entryNumber}</Pre>
         <Pre className="contestentry-rank">
           <NumericInput
-            disabled={canSave}
+            disabled={!canSave}
             value={votingSubmission[contestEntry.submission_id] ?? contestEntry.score}
             onValueChange={(rank: number) =>
               handleVotingSubmissionChange(contestEntry.submission_id, rank)
             }
+            placeholder={`Enter rank for entry ${entryNumber}`}
             min={1}
             max={maxRank}
-            placeholder={`Enter rank for entry ${entryNumber}`}
+            clampValueOnBlur
             allowNumericCharactersOnly
             fill
+            minorStepSize={null} // limits input to integers
           />
         </Pre>
       </Card>

@@ -1,4 +1,4 @@
-import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
+import { Button, Collapse, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
