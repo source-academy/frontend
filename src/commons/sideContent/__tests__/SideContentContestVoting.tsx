@@ -27,14 +27,9 @@ test('SideContentContestVotingContainer component renders correctly for unsubmit
   const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
   const tree = mount(contestVotingContainer);
   expect(tree.debug()).toMatchSnapshot();
+  expect(tree.find('SideContentContestEntryCard')).toHaveLength(mockContestEntries.length);
 
-  const additionalContestEntry = [
-    ...mockContestEntries,
-    { submission_id: 3, answer: { code: '' } }
-  ];
-  // check that number of elements in list is based on contest entries
-  tree.setProps({ contestEntries: additionalContestEntry });
-  expect(tree.find('SideContentContestEntryCard')).toHaveLength(3);
+  tree.unmount();
 });
 
 const mockPropsSubmitted = {
@@ -51,7 +46,8 @@ const mockPropsSubmitted = {
       submission_id: 2,
       answer: { code: 'function test() { return 1; }' },
       score: 2
-    }
+    },
+    { submission_id: 3, answer: { code: '' } }
   ]
 };
 
@@ -61,6 +57,9 @@ test('SideContentVotingContainer component renders correctly for submitted statu
   );
   const tree = mount(contestVotingContainerSubmitted);
   expect(tree.debug()).toMatchSnapshot();
+  expect(tree.find('SideContentContestEntryCard')).toHaveLength(
+    mockPropsSubmitted.contestEntries.length
+  );
 
   tree.unmount();
 });
