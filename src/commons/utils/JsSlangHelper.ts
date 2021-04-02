@@ -73,14 +73,15 @@ function cadetAlert(value: any) {
 /**
  * A dummy function to pass into createContext.
  * An actual implementation will have to be added
- * with the list visualiser implementation. See #187
+ * with the list visualizer implementation. See #187
  *
- * @param list the list to be visualised.
+ * @param list the list to be visualized.
  */
-function visualiseList(list: any) {
+function visualizeList(...xs: any[]) {
   if ((window as any).ListVisualizer) {
-    (window as any).ListVisualizer.draw(list);
-    return list;
+    // Pass in xs[0] since xs is in the form; [(Array of drawbables), "playground"]
+    (window as any).ListVisualizer.draw(xs[0]);
+    return xs[0];
   } else {
     throw new Error('List visualizer is not enabled');
   }
@@ -117,7 +118,7 @@ export const externalBuiltIns = {
   rawDisplay,
   prompt: cadetPrompt,
   alert: cadetAlert,
-  visualiseList
+  visualiseList: visualizeList
 };
 
 /**

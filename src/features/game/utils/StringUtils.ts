@@ -209,7 +209,7 @@ export default class StringUtils {
       const commentRegions: [number, number][] = [];
       const openIns = this.findAllInstances(line, openCommentChars);
       const closeIns = this.findAllInstances(line, closeCommentChars);
-      let activeIndex = 0; // current valid comment index in line
+      let activeIndex = -1; // current valid comment index in line
       let openInd = 0; // open comment index in openIns
       let closeInd = 0; // close comment index in closeIns
       let region = commentOpen ? [0] : [];
