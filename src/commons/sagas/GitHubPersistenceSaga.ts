@@ -36,8 +36,8 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 }
 
 function* githubLoginSaga() {
-  const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+  const clientId = GitHubUtils.getClientId();
+  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo`;
   const windowName = 'Connect With OAuth';
   const windowSpecs = 'height=600,width=400';
 
