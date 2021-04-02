@@ -7,21 +7,28 @@ import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentT
 type SideContentConstestEntryCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleContestEntryClick: (submissionId: number, answer: string) => void;
 };
 
 type StateProps = {
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   canSave: boolean;
+  isValid: boolean;
   contestEntry: ContestEntry;
   entryNumber: number;
   votingSubmission: ContestVotingSubmission;
   maxRank: number;
 };
 
+/**
+ * Pure Contest Entry Card to to provide numeric input box for contest entry voting.
+ * @param props functions for handling input and contest entry details tied to contest entry card.
+ * @returns card which provides numeric input to vote for contest entry.
+ */
 const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEntryCardProps> = props => {
   const {
     canSave,
+    isValid,
     handleContestEntryClick,
     handleVotingSubmissionChange,
     votingSubmission,
@@ -31,7 +38,7 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
   } = props;
 
   return (
-    <div className={classNames('ContestEntryCard')}>
+    <div className={classNames('ContestEntryCard', { wrong: !isValid })}>
       <Card
         className={Classes.INTERACTIVE}
         elevation={Elevation.ONE}

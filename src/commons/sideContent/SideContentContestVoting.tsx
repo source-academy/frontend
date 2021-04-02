@@ -9,11 +9,12 @@ import SideContentContestEntryCard from './SideContentContestEntryCard';
 export type SideContentContestVotingProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleContestEntryClick: (submissionId: number, answer: string) => void;
 };
 
 type StateProps = {
   canSave: boolean;
+  isValid: boolean;
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   votingSubmission: ContestVotingSubmission;
   contestEntries: ContestEntry[];
@@ -50,6 +51,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     contestEntries,
     votingSubmission,
     canSave,
+    isValid,
     handleContestEntryClick,
     handleVotingSubmissionChange
   } = props;
@@ -61,6 +63,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         {contestEntryHeader}
         {contestEntries.map((contestEntry: ContestEntry, index) => (
           <SideContentContestEntryCard
+            isValid={isValid}
             canSave={canSave}
             entryNumber={index + 1}
             key={contestEntry.submission_id}
@@ -73,7 +76,9 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         ))}
       </div>
     ),
+    // determines when to re-render
     [
+      isValid,
       canSave,
       contestEntries,
       handleContestEntryClick,
