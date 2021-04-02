@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
@@ -29,6 +29,8 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
     handleSave(updatedSubmission);
   };
 
+  console.log('rerender');
+
   return (
     <SideContentContestVoting
       canSave={canSave}
@@ -40,4 +42,4 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
   );
 };
 
-export default SideContentContestVotingContainer;
+export default memo(SideContentContestVotingContainer);

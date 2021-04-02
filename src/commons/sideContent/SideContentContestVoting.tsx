@@ -1,5 +1,6 @@
-import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
+import { Button, Collapse, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
 import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
@@ -90,13 +91,9 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         onClick={() => setShowContestEntries(!showContestEntries)}
       >
         <span>Contest Voting</span>
-        <Tooltip
-          content={contestEntryTooltipContent(contestEntries.length)}
-          position={PopoverPosition.LEFT}
-          boundary={'window'}
-        >
+        <Tooltip2 content={contestEntryTooltipContent(contestEntries.length)}>
           <Icon icon={IconNames.HELP} />
-        </Tooltip>
+        </Tooltip2>
       </Button>
       <Collapse isOpen={showContestEntries} keepChildrenMounted>
         {contestEntryCards}
