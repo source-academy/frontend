@@ -52,15 +52,16 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
     const noDuplicates =
       new Set(updatedSubmission.map(vote => vote.score)).size === updatedSubmission.length;
     // validate that scores are unique
-    if (noDuplicates && isSubmissionValid(updatedSubmission)) {
+    const noNull = submissionHasNoNull(updatedSubmission);
+    if (noDuplicates && noNull && isSubmissionValid(updatedSubmission)) {
       handleSave(updatedSubmission);
       setIsValid(true);
-    } else if (noDuplicates && submissionHasNoNull(updatedSubmission)) {
+    } else if (noDuplicates && noNull) {
       showWarningMessage(
         `Vote rankings invalid. Please input rankings between 1 - ${contestEntries.length}.`
       );
       setIsValid(false);
-    } else if (!noDuplicates) {
+    } else if (!noDuplicates && noNull) {
       showWarningMessage('Vote scores are not unique. Please input unique rankings.');
       setIsValid(false);
     }
