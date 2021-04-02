@@ -7,7 +7,7 @@ import { ContestEntry } from '../assessment/AssessmentTypes';
 type SideContentLeaderboardCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleContestEntryClick: (submissionId: number, answer: string) => void;
 };
 
 type StateProps = {

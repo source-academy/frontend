@@ -848,7 +848,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     maxGrade: 0,
     xp: 0,
     maxXp: 0,
-    answer: {},
+    answer: [],
     contestEntries: [
       {
         submission_id: 1,

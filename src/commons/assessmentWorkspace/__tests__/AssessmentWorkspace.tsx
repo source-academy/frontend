@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 
-import { ContestVotingSubmission, Library } from '../../assessment/AssessmentTypes';
+import { ContestEntry, Library } from '../../assessment/AssessmentTypes';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import { SideContentType } from '../../sideContent/SideContentTypes';
@@ -36,7 +36,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleReplValueChange: (newValue: string) => {},
   handleSendReplInputToOutput: (code: string) => {},
   handleResetWorkspace: () => {},
-  handleSave: (id: number, answer: number | string | ContestVotingSubmission) => {},
+  handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
   handleSideContentHeightChange: (heightChange: number) => {},
   handleTestcaseEval: (testcaseId: number) => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},

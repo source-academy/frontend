@@ -3,19 +3,19 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
-import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
+import { ContestEntry } from '../assessment/AssessmentTypes';
 import SideContentContestEntryCard from './SideContentContestEntryCard';
 
 export type SideContentContestVotingProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleContestEntryClick: (submissionId: number, answer: string) => void;
 };
 
 type StateProps = {
   canSave: boolean;
+  isValid: boolean;
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
-  votingSubmission: ContestVotingSubmission;
   contestEntries: ContestEntry[];
 };
 
@@ -48,8 +48,8 @@ const contestEntryTooltipContent = (numOfEntries: number) => (
 const SideContentContestVoting: React.FunctionComponent<SideContentContestVotingProps> = props => {
   const {
     contestEntries,
-    votingSubmission,
     canSave,
+    isValid,
     handleContestEntryClick,
     handleVotingSubmissionChange
   } = props;
@@ -61,11 +61,11 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         {contestEntryHeader}
         {contestEntries.map((contestEntry: ContestEntry, index) => (
           <SideContentContestEntryCard
+            isValid={isValid}
             canSave={canSave}
             entryNumber={index + 1}
             key={contestEntry.submission_id}
             handleContestEntryClick={handleContestEntryClick}
-            votingSubmission={votingSubmission}
             handleVotingSubmissionChange={handleVotingSubmissionChange}
             contestEntry={contestEntry}
             maxRank={contestEntries.length}
@@ -73,13 +73,8 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         ))}
       </div>
     ),
-    [
-      canSave,
-      contestEntries,
-      handleContestEntryClick,
-      handleVotingSubmissionChange,
-      votingSubmission
-    ]
+    // determines when to re-render
+    [isValid, canSave, contestEntries, handleContestEntryClick, handleVotingSubmissionChange]
   );
 
   return (

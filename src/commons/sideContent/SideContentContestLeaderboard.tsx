@@ -9,7 +9,7 @@ import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleContestEntryClick: (submissionId: number, answer: string) => void;
 };
 
 type StateProps = {

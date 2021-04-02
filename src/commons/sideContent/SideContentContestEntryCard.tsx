@@ -2,36 +2,41 @@ import { Card, Classes, Elevation, NumericInput, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
-import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
+import { ContestEntry } from '../assessment/AssessmentTypes';
 
 type SideContentConstestEntryCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (submission_id: number, answer: string) => void;
+  handleContestEntryClick: (submissionId: number, answer: string) => void;
 };
 
 type StateProps = {
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   canSave: boolean;
+  isValid: boolean;
   contestEntry: ContestEntry;
   entryNumber: number;
-  votingSubmission: ContestVotingSubmission;
   maxRank: number;
 };
 
+/**
+ * Pure Contest Entry Card to to provide numeric input box for contest entry voting.
+ * @param props functions for handling input and contest entry details tied to contest entry card.
+ * @returns card which provides numeric input to vote for contest entry.
+ */
 const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEntryCardProps> = props => {
   const {
     canSave,
+    isValid,
     handleContestEntryClick,
     handleVotingSubmissionChange,
-    votingSubmission,
     contestEntry,
     entryNumber,
     maxRank
   } = props;
 
   return (
-    <div className={classNames('ContestEntryCard')}>
+    <div className={classNames('ContestEntryCard', { wrong: !isValid })}>
       <Card
         className={Classes.INTERACTIVE}
         elevation={Elevation.ONE}
@@ -43,14 +48,13 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
         <Pre className="contestentry-rank">
           <NumericInput
             disabled={!canSave}
-            value={votingSubmission[contestEntry.submission_id] ?? contestEntry.score}
+            value={contestEntry.score}
             onValueChange={(rank: number) =>
               handleVotingSubmissionChange(contestEntry.submission_id, rank)
             }
             placeholder={`Enter rank for entry ${entryNumber}`}
             min={1}
             max={maxRank}
-            clampValueOnBlur
             allowNumericCharactersOnly
             fill
             minorStepSize={null} // limits input to integers
