@@ -51,10 +51,10 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
       setVotingSubmission(updatedSubmission);
       const noDuplicates =
         new Set(Object.values(updatedSubmission)).size === Object.values(updatedSubmission).length;
-      // valid that scores are unique
+      // validate that scores are unique
       if (noDuplicates) {
-        setIsValid(true);
         handleSave(updatedSubmission);
+        setIsValid(true);
       } else {
         showWarningMessage('Vote scores are not unique. Please try again.');
         setIsValid(false);

@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SideContentContestVotingContainer component renders correctly for unsubmit status. 1`] = `
-"<Memo(SideContentContestVotingContainer) handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
-  <SideContentContestVoting canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} votingSubmission={{...}} contestEntries={{...}}>
+"<SideContentContestVotingContainer handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
+  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} votingSubmission={{...}} contestEntries={{...}}>
     <div className=\\"ContestEntryVoting\\">
       <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
         <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: onClick]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
@@ -81,7 +81,7 @@ exports[`SideContentContestVotingContainer component renders correctly for unsub
                   </Blueprint3.Icon>
                 </div>
               </div>
-              <SideContentContestEntryCard canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
                 <div className=\\"ContestEntryCard\\">
                   <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                     <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
@@ -143,7 +143,7 @@ exports[`SideContentContestVotingContainer component renders correctly for unsub
                   </Blueprint3.Card>
                 </div>
               </SideContentContestEntryCard>
-              <SideContentContestEntryCard canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
                 <div className=\\"ContestEntryCard\\">
                   <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                     <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
@@ -211,12 +211,12 @@ exports[`SideContentContestVotingContainer component renders correctly for unsub
       </Blueprint3.Collapse>
     </div>
   </SideContentContestVoting>
-</Memo(SideContentContestVotingContainer)>"
+</SideContentContestVotingContainer>"
 `;
 
 exports[`SideContentVotingContainer component renders correctly for submitted status. 1`] = `
-"<Memo(SideContentContestVotingContainer) handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
-  <SideContentContestVoting canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} votingSubmission={{...}} contestEntries={{...}}>
+"<SideContentContestVotingContainer handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
+  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} votingSubmission={{...}} contestEntries={{...}}>
     <div className=\\"ContestEntryVoting\\">
       <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
         <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: onClick]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
@@ -295,7 +295,7 @@ exports[`SideContentVotingContainer component renders correctly for submitted st
                   </Blueprint3.Icon>
                 </div>
               </div>
-              <SideContentContestEntryCard canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
                 <div className=\\"ContestEntryCard\\">
                   <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                     <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
@@ -357,7 +357,7 @@ exports[`SideContentVotingContainer component renders correctly for submitted st
                   </Blueprint3.Card>
                 </div>
               </SideContentContestEntryCard>
-              <SideContentContestEntryCard canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} votingSubmission={{...}} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
                 <div className=\\"ContestEntryCard\\">
                   <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                     <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
@@ -425,5 +425,5 @@ exports[`SideContentVotingContainer component renders correctly for submitted st
       </Blueprint3.Collapse>
     </div>
   </SideContentContestVoting>
-</Memo(SideContentContestVotingContainer)>"
+</SideContentContestVotingContainer>"
 `;
