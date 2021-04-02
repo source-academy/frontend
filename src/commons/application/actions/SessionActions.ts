@@ -1,11 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import {
-  Assessment,
-  AssessmentOverview,
-  ContestVotingSubmission
-} from '../../assessment/AssessmentTypes';
+import { Assessment, AssessmentOverview, ContestEntry } from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -89,7 +85,7 @@ export const setGitHubOctokitInstance = (authToken?: string) =>
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
-export const submitAnswer = (id: number, answer: string | number | ContestVotingSubmission) =>
+export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {
     id,
     answer

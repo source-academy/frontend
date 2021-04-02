@@ -29,7 +29,7 @@ import {
   Assessment,
   AssessmentCategories,
   AutogradingResult,
-  ContestVotingSubmission,
+  ContestEntry,
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -87,7 +87,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleSave: (id: number, answer: number | string | ContestVotingSubmission) => void;
+  handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
@@ -371,19 +371,24 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         ),
         toSpawn: () => true
       }
-      // WIP: will not be spawned till backend supports it
-      // {
-      //   label: 'Contest Leaderboard',
-      //   iconName: IconNames.CROWN,
-      //   body: (
-      //     <SideContentContestLeaderboard
-      //       handleContestEntryClick={handleContestEntryClick}
-      //       orderedContestEntries={dummyEntries}
-      //     />
-      //   ),
-      //   toSpawn: () => false
-      // }
     ];
+
+    // if (props.canSave) {
+    //   contestVotingTabs.push(
+    //     // WIP: will not be spawned till backend supports it
+    //     {
+    //       label: 'Contest Leaderboard',
+    //       iconName: IconNames.CROWN,
+    //       body: (
+    //         <SideContentContestLeaderboard
+    //           handleContestEntryClick={handleContestEntryClick}
+    //           orderedContestEntries={dummyEntries}
+    //         />
+    //       ),
+    //       toSpawn: () => false
+    //     }
+    //   );
+    // }
 
     const defaultTabs: SideContentTab[] = [
       {

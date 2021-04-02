@@ -6,7 +6,7 @@ import {
   Assessment,
   AssessmentCategory,
   AssessmentOverview,
-  ContestVotingSubmission,
+  ContestEntry,
   GradingStatus,
   IProgrammingQuestion,
   QuestionType,
@@ -457,7 +457,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
  */
 export const postAnswer = async (
   id: number,
-  answer: string | number | ContestVotingSubmission,
+  answer: string | number | ContestEntry[],
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/question/${id}/submit`, 'POST', {

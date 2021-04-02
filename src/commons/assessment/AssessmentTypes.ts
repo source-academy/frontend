@@ -116,13 +116,13 @@ export interface IMCQQuestion extends BaseQuestion {
 }
 
 export interface IContestVotingQuestion extends BaseQuestion {
-  answer: ContestVotingSubmission;
+  answer: ContestEntry[];
   contestEntries: ContestEntry[];
   type: 'voting';
 }
 
 export type BaseQuestion = {
-  answer: string | number | ContestVotingSubmission | null;
+  answer: string | number | ContestEntry[] | null;
   comments?: string;
   content: string;
   editorValue?: string | null;
@@ -173,10 +173,6 @@ export type ContestEntry = {
 
 export type ContestEntestCodeAnswer = {
   code: string;
-};
-
-export type ContestVotingSubmission = {
-  [key: string]: number;
 };
 
 export type MCQChoice = {

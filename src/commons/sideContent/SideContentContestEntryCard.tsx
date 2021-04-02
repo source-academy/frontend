@@ -2,7 +2,7 @@ import { Card, Classes, Elevation, NumericInput, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
-import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
+import { ContestEntry } from '../assessment/AssessmentTypes';
 
 type SideContentConstestEntryCardProps = DispatchProps & StateProps;
 
@@ -16,7 +16,6 @@ type StateProps = {
   isValid: boolean;
   contestEntry: ContestEntry;
   entryNumber: number;
-  votingSubmission: ContestVotingSubmission;
   maxRank: number;
 };
 
@@ -31,7 +30,6 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
     isValid,
     handleContestEntryClick,
     handleVotingSubmissionChange,
-    votingSubmission,
     contestEntry,
     entryNumber,
     maxRank
@@ -50,14 +48,13 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
         <Pre className="contestentry-rank">
           <NumericInput
             disabled={!canSave}
-            value={votingSubmission[contestEntry.submission_id] ?? contestEntry.score}
+            value={contestEntry.score}
             onValueChange={(rank: number) =>
               handleVotingSubmissionChange(contestEntry.submission_id, rank)
             }
             placeholder={`Enter rank for entry ${entryNumber}`}
             min={1}
             max={maxRank}
-            clampValueOnBlur
             allowNumericCharactersOnly
             fill
             minorStepSize={null} // limits input to integers
