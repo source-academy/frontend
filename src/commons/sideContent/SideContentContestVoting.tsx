@@ -2,11 +2,7 @@ import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/c
 import { IconNames } from '@blueprintjs/icons';
 import React, { useMemo, useState } from 'react';
 
-import {
-  AssessmentStatus,
-  ContestEntry,
-  ContestVotingSubmission
-} from '../assessment/AssessmentTypes';
+import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
 import SideContentContestEntryCard from './SideContentContestEntryCard';
 
 export type SideContentContestVotingProps = DispatchProps & StateProps;
@@ -16,7 +12,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  assessmentStatus?: AssessmentStatus;
+  canSave: boolean;
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   votingSubmission: ContestVotingSubmission;
   contestEntries: ContestEntry[];
@@ -52,7 +48,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   const {
     contestEntries,
     votingSubmission,
-    assessmentStatus,
+    canSave,
     handleContestEntryClick,
     handleVotingSubmissionChange
   } = props;
@@ -64,7 +60,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         {contestEntryHeader}
         {contestEntries.map((contestEntry: ContestEntry, index) => (
           <SideContentContestEntryCard
-            assessmentStatus={assessmentStatus}
+            canSave={canSave}
             entryNumber={index + 1}
             key={contestEntry.submission_id}
             handleContestEntryClick={handleContestEntryClick}
@@ -77,7 +73,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
       </div>
     ),
     [
-      assessmentStatus,
+      canSave,
       contestEntries,
       handleContestEntryClick,
       handleVotingSubmissionChange,

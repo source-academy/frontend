@@ -2,11 +2,7 @@ import { Card, Classes, Elevation, NumericInput, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
-import {
-  AssessmentStatus,
-  ContestEntry,
-  ContestVotingSubmission
-} from '../assessment/AssessmentTypes';
+import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
 
 type SideContentConstestEntryCardProps = DispatchProps & StateProps;
 
@@ -16,7 +12,7 @@ type DispatchProps = {
 
 type StateProps = {
   handleVotingSubmissionChange: (entryId: number, rank: number) => void;
-  assessmentStatus?: AssessmentStatus;
+  canSave: boolean;
   contestEntry: ContestEntry;
   entryNumber: number;
   votingSubmission: ContestVotingSubmission;
@@ -25,7 +21,7 @@ type StateProps = {
 
 const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEntryCardProps> = props => {
   const {
-    assessmentStatus,
+    canSave,
     handleContestEntryClick,
     handleVotingSubmissionChange,
     votingSubmission,
@@ -46,7 +42,7 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
         <Pre className="contestentry-entryid">{entryNumber}</Pre>
         <Pre className="contestentry-rank">
           <NumericInput
-            disabled={assessmentStatus ? assessmentStatus === 'submitted' : false}
+            disabled={canSave}
             value={votingSubmission[contestEntry.submission_id] ?? contestEntry.score}
             onValueChange={(rank: number) =>
               handleVotingSubmissionChange(contestEntry.submission_id, rank)

@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-  AssessmentStatus,
-  ContestEntry,
-  ContestVotingSubmission
-} from '../assessment/AssessmentTypes';
+import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
 
 export type SideContentContestVotingContainerProps = DispatchProps & StateProps;
@@ -15,7 +11,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  assessmentStatus?: AssessmentStatus;
+  canSave: boolean;
   contestEntries: ContestEntry[];
 };
 
@@ -24,7 +20,7 @@ type StateProps = {
  * Stores component-level voting ranking state
  */
 const SideContentContestVotingContainer: React.FunctionComponent<SideContentContestVotingContainerProps> = props => {
-  const { assessmentStatus, contestEntries, handleSave, handleContestEntryClick } = props;
+  const { canSave, contestEntries, handleSave, handleContestEntryClick } = props;
   const [votingSubmission, setVotingSubmission] = useState<ContestVotingSubmission>({});
 
   const handleVotingSubmissionChange = (submission_id: number, rank: number): void => {
@@ -35,7 +31,7 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
 
   return (
     <SideContentContestVoting
-      assessmentStatus={assessmentStatus}
+      canSave={canSave}
       handleContestEntryClick={handleContestEntryClick}
       handleVotingSubmissionChange={handleVotingSubmissionChange}
       votingSubmission={votingSubmission}

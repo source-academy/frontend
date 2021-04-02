@@ -1,5 +1,6 @@
-import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
+import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
@@ -32,7 +33,7 @@ const contestEntryHeader = (
   </div>
 );
 
-const contestLeaderboardTooltipContent = <span>View the top-rated contest entries!</span>;
+const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
 
 const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestLeaderboardProps> = props => {
   const { orderedContestEntries, handleContestEntryClick } = props;
@@ -64,13 +65,9 @@ const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestL
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
         <span>Contest Leaderboard</span>
-        <Tooltip
-          content={contestLeaderboardTooltipContent}
-          position={PopoverPosition.LEFT}
-          boundary={'window'}
-        >
+        <Tooltip2 content={contestLeaderboardTooltipContent}>
           <Icon icon={IconNames.HELP} />
-        </Tooltip>
+        </Tooltip2>
       </Button>
       <Collapse isOpen={showLeaderboard} keepChildrenMounted>
         {contestEntryCards}

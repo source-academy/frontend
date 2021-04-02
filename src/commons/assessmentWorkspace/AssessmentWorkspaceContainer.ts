@@ -59,10 +59,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion,
-    assessmentStatus: state.session.assessmentOverviews!.filter(
-      overview => overview.id === props.assessmentId
-    )[0].status
+    storedQuestionId: state.workspaces.assessment.currentQuestion
   };
 };
 

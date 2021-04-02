@@ -122,7 +122,7 @@ export interface IContestVotingQuestion extends BaseQuestion {
 }
 
 export type BaseQuestion = {
-  answer: string | number | number[] | ContestVotingSubmission | null;
+  answer: string | number | ContestVotingSubmission | null;
   comments?: string;
   content: string;
   editorValue?: string | null;
@@ -167,11 +167,11 @@ export type Testcase = {
 
 export type ContestEntry = {
   submission_id: number;
-  answer: Answer; //contest entry program to be input into editor
+  answer: ContestEntestCodeAnswer; //contest entry program to be input into editor
   score?: number;
 };
 
-export type Answer = {
+export type ContestEntestCodeAnswer = {
   code: string;
 };
 

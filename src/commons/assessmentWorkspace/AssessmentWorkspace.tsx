@@ -25,11 +25,9 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { User } from '../application/types/SessionTypes';
 import {
   Assessment,
   AssessmentCategories,
-  AssessmentStatus,
   AutogradingResult,
   ContestVotingSubmission,
   IContestVotingQuestion,
@@ -108,7 +106,6 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  userId?: User['userId'];
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
@@ -129,7 +126,6 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
-  assessmentStatus?: AssessmentStatus;
 };
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
@@ -340,7 +336,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     // first question of contest voting assessment is voting.
     const isContestVoting = props.assessment!.questions[0]?.type === 'voting';
-    const handleContestEntryClick = (submission_id: number, answer: string) => {
+    const handleContestEntryClick = (submissionId: number, answer: string) => {
       props.handleEditorValueChange(answer);
     };
 
@@ -365,7 +361,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.NEW_LAYERS,
         body: (
           <SideContentContestVotingContainer
-            assessmentStatus={props.assessmentStatus}
+            canSave={props.canSave}
             handleSave={votingSubmission =>
               props.handleSave(contestVotingQuestion.id, votingSubmission)
             }
