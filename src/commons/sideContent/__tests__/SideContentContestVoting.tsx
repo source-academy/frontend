@@ -1,6 +1,4 @@
 import { mount } from 'enzyme';
-import * as React from 'react';
-import { AssessmentStatuses } from 'src/commons/assessment/AssessmentTypes';
 
 import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
 
@@ -20,7 +18,7 @@ const mockContestEntries = [
 const mockProps = {
   handleContestEntryClick: () => null,
   handleSave: () => null,
-  assessmentStatus: AssessmentStatuses.attempting,
+  canSave: true,
   contestEntries: mockContestEntries
 };
 
@@ -42,7 +40,7 @@ test('SideContentContestVotingContainer component renders correctly for unsubmit
 const mockPropsSubmitted = {
   handleContestEntryClick: () => null,
   handleSave: () => null,
-  assessmentStatus: AssessmentStatuses.attempting,
+  canSave: true,
   contestEntries: [
     {
       submission_id: 1,
