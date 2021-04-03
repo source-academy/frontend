@@ -44,7 +44,6 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
 
   const handleVotingSubmissionChange = (submissionId: number, rank: number): void => {
     // update the votes
-    console.log('changed');
     const updatedSubmission = votingSubmission.map(vote =>
       vote.submission_id === submissionId ? { ...vote, score: rank } : vote
     );
