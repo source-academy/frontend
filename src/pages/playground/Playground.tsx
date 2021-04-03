@@ -446,7 +446,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   const { githubOctokitInstance } = props;
-  // Compute this here to avoid re-rendering the button every keystroke
   const githubButtons = React.useMemo(() => {
     return (
       <ControlBarGitHubButtons
