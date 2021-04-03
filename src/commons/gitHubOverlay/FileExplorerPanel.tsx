@@ -69,7 +69,7 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
         this.props.repoName,
         treeNode.nodeData.filePath
       );
-      //treeNode.childNodes = await this.props.getChildNodes(treeNode.nodeData.filePath);
+
       treeNode.nodeData.childrenRetrieved = true;
     }
 
