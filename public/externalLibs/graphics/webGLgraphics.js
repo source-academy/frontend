@@ -294,10 +294,6 @@ function getReadyWebGLForCanvas(mode) {
       initRuneBuffer(vertices, indices)
       initRune3d()
     }
-
-    if (mode === 'curve') {
-      initCurveAttributes(curShaderProgram)
-    }
   }
 }
 
