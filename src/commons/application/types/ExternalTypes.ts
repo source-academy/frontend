@@ -149,6 +149,7 @@ const machineLearningLibrary = [
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryName.NONE, []],
   [ExternalLibraryName.RUNES, runesLibrary],
+  [ExternalLibraryName.CURVES, []],
   [ExternalLibraryName.SOUNDS, soundsLibrary],
   [ExternalLibraryName.BINARYTREES, binaryTreesLibrary],
   [ExternalLibraryName.PIXNFLIX, videoLibrary],
