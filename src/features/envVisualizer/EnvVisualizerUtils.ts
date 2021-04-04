@@ -75,6 +75,7 @@ export function getTextWidth(
 ): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+  if (!context) return 0;
   context.font = font;
   const longestText = text
     .split('\n')
