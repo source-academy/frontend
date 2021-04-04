@@ -25,19 +25,17 @@ export class Level implements Visible {
     // initialize frames
     const frames: Frame[] = [];
     if (this.parentLevel) {
-      this.parentLevel.frames.forEach(
-        frame =>
-          frame.environment.childEnvs &&
-          frame.environment.childEnvs.forEach(env => {
-            const newFrame = new Frame(
-              env,
-              frame,
-              frames.length > 0 ? frames[frames.length - 1] : null,
-              this
-            );
-            frames.push(newFrame);
-            env.frame = newFrame;
-          })
+      this.parentLevel.frames.forEach(frame =>
+        frame.environment.childEnvs?.forEach(env => {
+          const newFrame = new Frame(
+            env,
+            frame,
+            frames.length > 0 ? frames[frames.length - 1] : null,
+            this
+          );
+          frames.push(newFrame);
+          env.frame = newFrame;
+        })
       );
     } else {
       // empty parent level means this is the first level and hence contains only the global frame

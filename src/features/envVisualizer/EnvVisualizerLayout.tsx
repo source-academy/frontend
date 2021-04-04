@@ -45,7 +45,7 @@ export class Layout {
   static prevLayout: React.ReactNode;
 
   /** processes the runtime context from JS Slang */
-  static setContext(context: Context) {
+  static setContext(context: Context): void {
     // clear/initialize data and value arrays
     Layout.data = [];
     Layout.values = [];
@@ -154,7 +154,7 @@ export class Layout {
 
     // go through new bindings and update functions to be global functions
     // by removing extra props such as functionName
-    for (const [, value] of Object.entries(globalEnv.head)) {
+    for (const value of Object.values(globalEnv.head)) {
       if (isFn(value)) {
         // HACKY?
         delete (value as { functionName?: string }).functionName;
@@ -166,7 +166,7 @@ export class Layout {
   private static removeUnreferencedGlobalFns() {
     const referencedGlobalFns: (() => any)[] = [];
     const findGlobalFnReferences = (env: Env) => {
-      for (const [, data] of Object.entries(env.head)) {
+      for (const data of Object.values(env.head)) {
         if (isGlobalFn(data)) referencedGlobalFns.push(data);
       }
 
