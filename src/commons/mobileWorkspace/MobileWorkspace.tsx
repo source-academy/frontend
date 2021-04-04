@@ -115,7 +115,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      return props.customEditor(editorRef, handleSourcecastShowRepl);
+      return props.customEditor(editorRef, handleShowRepl(-100));
     } else if (props.editorProps) {
       return <Editor {...props.editorProps} ref={editorRef} />;
     } else {
@@ -152,8 +152,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     setDraggableReplPosition(position);
   };
 
-  const handleShowRepl = () => {
-    const offset = -300;
+  const handleShowRepl = (offset: number) => () => {
     document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
     setDraggableReplPosition({ x: 0, y: offset });
   };
@@ -164,16 +163,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   const draggableReplProps = {
-    handleShowRepl: handleShowRepl,
+    handleShowRepl: handleShowRepl(-300),
     handleHideRepl: handleHideRepl,
     disableRepl: setIsDraggableReplDisabled
-  };
-
-  // Handler passed into Sourcecast's customEditor to handle the showing of the draggable repl
-  const handleSourcecastShowRepl = () => {
-    const offset = -100;
-    document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
-    setDraggableReplPosition({ x: 0, y: offset });
   };
 
   const mobileEditorTab: SideContentTab = React.useMemo(

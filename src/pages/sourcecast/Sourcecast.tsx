@@ -6,7 +6,6 @@ import * as React from 'react';
 import ReactAce from 'react-ace/lib/ace';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -16,6 +15,9 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import MobileWorkspace, {
+  MobileWorkspaceProps
+} from '../../commons/mobileWorkspace/MobileWorkspace';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
@@ -27,6 +29,7 @@ import SourceRecorderEditor, {
   SourceRecorderEditorProps
 } from '../../commons/sourceRecorder/SourceRecorderEditor';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
+import Constants from '../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   CodeDelta,
@@ -111,7 +114,7 @@ export type StateProps = {
 };
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
 
   const handleQueryParam = React.useCallback(() => {
@@ -164,7 +167,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   }, [handleQueryParam, props.inputToApply]);
 
   /**
-   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
+   * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
    */
   React.useEffect(() => {
     if (
