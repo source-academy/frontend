@@ -4,6 +4,7 @@ import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 
+import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
 /**
@@ -72,15 +73,16 @@ function cadetAlert(value: any) {
 /**
  * A dummy function to pass into createContext.
  * An actual implementation will have to be added
- * with the list visualiser implementation. See #187
+ * with the list visualizer implementation. See #187
  *
- * @param list the list to be visualised.
+ * @param list the list to be visualized.
  */
 function visualiseList(list: any) {
-  if ((window as any).ListVisualizer) {
-    (window as any).ListVisualizer.draw(list);
+  try {
+    ListVisualizer.draw(list);
     return list;
-  } else {
+  } catch (err) {
+    console.log(err);
     throw new Error('List visualizer is not enabled');
   }
 }
