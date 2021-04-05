@@ -25,7 +25,7 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
   DIRTY: Intent.WARNING
 };
 
-export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtonsProps> = props => {
+export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const state: PersistenceState = props.currentFile
     ? props.isDirty
