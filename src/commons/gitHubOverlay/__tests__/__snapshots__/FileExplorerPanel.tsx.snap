@@ -67,9 +67,9 @@ exports[`Test file list renders correctly 1`] = `
       </div>
     </Blueprint3.Tree>
     <div>
-      <Blueprint3.InputGroup onChange={[Function: bound handleFileNameChange]} placeholder=\\"Enter File Name\\" value=\\"\\">
+      <Blueprint3.InputGroup id=\\"FileNameTextBox\\" onChange={[Function: bound handleFileNameChange]} onClick={[Function: bound handleClickFileNameBox]} placeholder=\\"Enter File Name\\" value=\\"\\">
         <div className=\\"bp3-input-group\\">
-          <input type=\\"text\\" onChange={[Function: bound handleFileNameChange]} placeholder=\\"Enter File Name\\" value=\\"\\" className=\\"bp3-input\\" style={{...}} />
+          <input type=\\"text\\" id=\\"FileNameTextBox\\" onChange={[Function: bound handleFileNameChange]} onClick={[Function: bound handleClickFileNameBox]} placeholder=\\"Enter File Name\\" value=\\"\\" className=\\"bp3-input\\" style={{...}} />
         </div>
       </Blueprint3.InputGroup>
       <Blueprint3.InputGroup onChange={[Function: bound handleCommitMessageChange]} placeholder=\\"Enter Commit Message\\" value=\\"\\">

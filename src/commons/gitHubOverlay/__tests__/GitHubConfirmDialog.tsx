@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
-import ConfirmDialog from '../ConfirmDialog';
+import GitHubConfirmDialog from '../GitHubConfirmDialog';
 
 test('Test Confirm Dialog for Open', () => {
   const getPickerTypeMock = jest.spyOn(GitHubUtils, 'getPickerType');
@@ -17,7 +17,7 @@ test('Test Confirm Dialog for Open', () => {
 
   act(() => {
     render(
-      <ConfirmDialog
+      <GitHubConfirmDialog
         isOpen={true}
         handleGitHubCancelConfirmationDialog={cancelConfirmationMock}
         handleGitHubConfirmOpen={confirmOpenMock}
@@ -60,7 +60,7 @@ test('Test Confirm Creating Save', () => {
 
   act(() => {
     render(
-      <ConfirmDialog
+      <GitHubConfirmDialog
         isOpen={true}
         handleGitHubCancelConfirmationDialog={cancelConfirmationMock}
         handleGitHubConfirmOpen={confirmOpenMock}
@@ -103,7 +103,7 @@ test('Test Confirm Overwriting Save', () => {
 
   act(() => {
     render(
-      <ConfirmDialog
+      <GitHubConfirmDialog
         isOpen={true}
         handleGitHubCancelConfirmationDialog={cancelConfirmationMock}
         handleGitHubConfirmOpen={confirmOpenMock}
@@ -146,7 +146,7 @@ test('Test cancel dialog', () => {
 
   act(() => {
     render(
-      <ConfirmDialog
+      <GitHubConfirmDialog
         isOpen={true}
         handleGitHubCancelConfirmationDialog={cancelConfirmationMock}
         handleGitHubConfirmOpen={confirmOpenMock}
