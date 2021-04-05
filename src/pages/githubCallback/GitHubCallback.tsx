@@ -17,7 +17,6 @@ export function GitHubCallback() {
     const accessCode = GitHubUtils.grabAccessCodeFromURL(currentAddress);
 
     const clientId = GitHubUtils.getClientId();
-    //const backendLink = 'https://api2.sourceacademy.nus.edu.sg/github_oauth';
     const backendLink = Constants.githubOAuthProxyUrl;
 
     if (accessCode === '') {
