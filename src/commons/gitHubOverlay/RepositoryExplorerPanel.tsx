@@ -10,7 +10,7 @@ export const RepositoryExplorerPanel = (props: any) => {
 
   return (
     <div className={Classes.DIALOG_BODY}>
-      <RadioGroup className='RepoPanel' onChange={setRepoName} selectedValue={repoName}>
+      <RadioGroup className="RepoPanel" onChange={setRepoName} selectedValue={repoName}>
         {userRepos.map((repo: any) => (
           <Radio label={repo.name} key={repo.id} value={repo.name} />
         ))}
