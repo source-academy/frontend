@@ -494,6 +494,18 @@ $code-color-error: #ff4444;
   .side-content-tab {
     // Set colour of icons in blueprintjs tabs
     color: #a7b6c2;
+
+    ::-webkit-scrollbar {
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: $cadet-color-4;
+      border-radius: 2px;
+    }
+
     &[aria-selected='true'] {
       .side-content-tooltip {
         background-color: #495a6b;
@@ -593,17 +605,6 @@ $code-color-error: #ff4444;
     pre {
       // for code block in pre
       overflow-x: auto;
-    }
-
-    ::-webkit-scrollbar {
-      height: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: $cadet-color-4;
-      border-radius: 2px;
     }
 
     p {
