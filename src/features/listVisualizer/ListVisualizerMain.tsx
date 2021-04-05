@@ -15,16 +15,27 @@ import { FunctionTreeNode } from "./tree/TreeNode";
 export class ListVisualizerMain {
     clear() {
         // throw new Error('Method not implemented.');
+        // currentListVisualizer = -1;
+        // for (let i = 0; i < layerList.length; i++) {
+        //     layerList[i].hide();
+        // }
+        // layerList = [];
+        this.stages = [];
+        return this.createDrawings([]);
     }
 
+    private stages: JSX.Element[] = [];
+
     public createDrawings(structures: Data[]): JSX.Element[] {
-        const stages: JSX.Element[] = [];
+        // const stages: JSX.Element[] = [];
+
+        this.stages = [];
 
         for (const structure of structures) {
-            stages.push(this.createDrawing(structure));
+            this.stages.push(this.createDrawing(structure));
         }
 
-        return stages;
+        return this.stages;
     }
 
     /**

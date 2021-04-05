@@ -20,6 +20,8 @@ export default class ListVisualizer {
     }
 
     static clear(): void {
-        ListVisualizer.vis.clear();
+        const stages = ListVisualizer.vis.createDrawings([]);
+        ListVisualizer.setVisualization(stages);
+        // ListVisualizer.vis.clear();
     }
 }

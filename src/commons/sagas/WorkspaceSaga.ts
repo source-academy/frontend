@@ -506,6 +506,7 @@ export default function* WorkspaceSaga(): SagaIterator {
         }
       }
       ListVisualizer.clear();
+      // SideContentListVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;

@@ -18,8 +18,14 @@ const listVisualizerKeyMap = {
 };
 
 class SideContentListVisualizer extends React.Component<{}, State> {
+  // static clear() {
+  //   // throw new Error('Method not implemented.');
+  //   this.state = ({ stages: []});
+  // }
+
   constructor(props: any) {
     super(props);
+    // ListVisualizer.clear();
     this.state = { stages: [], currentStep: 0 };
     ListVisualizer.init(stages  => this.setState({ stages, currentStep: 0 }))
   }
@@ -29,6 +35,8 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       PREVIOUS_STEP: this.onPrevButtonClick,
       NEXT_STEP: this.onNextButtonClick
     };
+    
+    // ListVisualizer.clear();
 
     console.log(this.state.stages);
 
@@ -101,6 +109,10 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   private onNextButtonClick = () => {
     this.setState({currentStep: this.state.currentStep + 1});
   };
+
+  // public clear = () => {
+  //   this.setState({ stages: []});
+  // }
 }
 
 export default SideContentListVisualizer;

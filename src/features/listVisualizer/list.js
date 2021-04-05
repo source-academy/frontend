@@ -7,7 +7,7 @@
 // It is distinct from the LISTS library of Source §2, which contains
 // primitive and predeclared functions from Chapter 2 of SICP JS.
 
-'use strict'
+// 'use strict'
 // array test works differently for Rhino and
 // the Firefox environment (especially Web Console)
 export function array_test(x) {
@@ -137,7 +137,7 @@ export function map(f, xs) {
 export function build_list(n, fun) {
   if (typeof n !== 'number' || n < 0 || Math.floor(n) !== n) {
     throw new Error(
-      'build_list(n, fun) expects a positive integer as ' + 'argument n, but encountered ' + n
+      'build_list(n, fun) expects a positive integer as argument n, but encountered ' + n
     )
   }
 
