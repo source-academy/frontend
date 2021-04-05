@@ -6,7 +6,6 @@ import { DataTreeNode } from "./DataTreeNode";
 import { DrawableTreeNode, FunctionTreeNode, TreeNode } from "./TreeNode";
 import { head, isFunction, isPair, tail } from "../ListVisualizerUtils";
 import { Config } from "../Config";
-import React from "react";
 
 /**
  *  A tree object built based on a list or pair.
@@ -58,18 +57,22 @@ export class Tree {
                 // tree already built
                 node.left = visitedStructures.indexOf(headNode);
             } else {
-                node.left = isPair(headNode) ? constructTree(headNode) :
-                    isFunction(headNode) ? constructFunction(headNode) :
-                        constructData(headNode);
+                node.left = isPair(headNode) 
+                                ? constructTree(headNode)  
+                                : isFunction(headNode)   
+                                    ? constructFunction(headNode) 
+                                    : constructData(headNode);
             }
 
             if (visitedStructures.indexOf(tailNode) > -1) {
                 // tree already built
                 node.right = visitedStructures.indexOf(tailNode);
             } else {
-                node.right = isPair(tailNode) ? constructTree(tailNode) :
-                    isFunction(tailNode) ? constructFunction(tailNode) :
-                        constructData(tailNode);
+                node.right = isPair(tailNode) 
+                                ? constructTree(tailNode)  
+                                : isFunction(tailNode)   
+                                    ? constructFunction(tailNode) 
+                                    : constructData(tailNode);
             }
 
             return node;
@@ -138,7 +141,7 @@ export class Tree {
         return <Layer
             offsetX={this.minLeft - 20}
             offsetY={0}>
-            {...this.drawables}
+            {this.drawables}
         </Layer>
     }
 
@@ -154,7 +157,7 @@ export class Tree {
      * @param {number} parentX The x position of the parent. If there is no parent, it is the same as x.
      * @param {number} parentY The y position of the parent. If there is no parent, it is the same as y.
      */
-    drawNode(node, x, y, parentX, parentY) {
+    drawNode(node: TreeNode, x: number, y: number, parentX: number, parentY: number) {
         if (!(node instanceof DrawableTreeNode)) return;
 
         // draws the content
@@ -175,7 +178,7 @@ export class Tree {
                 } else {
                     // if its left child is part of a cycle and it's been drawn, link back to that node instead
                     const drawnNode = this.tree.getNodeById(node.left);
-                    this.backwardLeftEdge(x, y, drawnNode.drawableX, drawnNode.drawableY);
+                    this.backwardLeftEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
                 }
             }
 
@@ -184,7 +187,7 @@ export class Tree {
                     this.drawRight(node.right, x, y);
                 } else {
                     const drawnNode = this.tree.getNodeById(node.right);
-                    this.backwardRightEdge(x, y, drawnNode.drawableX, drawnNode.drawableY);
+                    this.backwardRightEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
                 }
             }
             
@@ -200,7 +203,7 @@ export class Tree {
        *  If so, it checks the position of the children and draws an arrow pointing to the children.
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
-    drawLeft(node, parentX, parentY) {
+    drawLeft(node: TreeNode, parentX: number, parentY: number) {
         let count;
         // checks if it has a right child, how far it extends to the right direction
         if (node.right instanceof DrawableTreeNode) {
@@ -222,7 +225,7 @@ export class Tree {
        *  If so, it checks the position of the children and draws an arrow pointing to the children.
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
-    drawRight(node, parentX, parentY) {
+    drawRight(node: TreeNode, parentX: number, parentY: number) {
         let count;
         if (node.left instanceof DrawableTreeNode) {
             count = 1 + this.shiftScaleCount(node.left);
@@ -237,7 +240,7 @@ export class Tree {
     /**
        * Returns the distance necessary for the shift of each node, calculated recursively.
        */
-    shiftScaleCount(node) {
+    shiftScaleCount(node: TreeNode) {
         let count = 0;
         // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
         if (node.left instanceof DrawableTreeNode) {
@@ -257,7 +260,7 @@ export class Tree {
      *  Then goes to the correct y-value and turns to reach the top of the end box.
      *  It then directly points to the end box. All turnings are 90 degress.
      */
-    backwardLeftEdge(x1, y1, x2, y2) {
+    backwardLeftEdge(x1: number, y1: number, x2: number, y2: number) {
         // coordinates of all the turning points, execpt the first segment in the path
         let path;
         if (x1 > x2 && y1 >= (y2 - Config.BoxHeight - 1)) {
@@ -362,7 +365,7 @@ export class Tree {
     /**
      *  Same as backwardLeftEdge
      */
-    backwardRightEdge(x1, y1, x2, y2) {
+    backwardRightEdge(x1: number, y1: number, x2: number, y2: number) {
         let path;
         if (x1 > x2 && y1 > (y2 - Config.BoxHeight - 1)) {
             path = [

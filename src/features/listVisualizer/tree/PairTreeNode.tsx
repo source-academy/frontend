@@ -1,7 +1,5 @@
-import React from 'react';
-
 import { Group } from 'react-konva';
-import { PairDrawable } from '../drawable/Drawables'
+import { PairDrawable } from '../drawable/Drawable'
 import { DataTreeNode, DrawableTreeNode } from './TreeNode';
 
 /**
