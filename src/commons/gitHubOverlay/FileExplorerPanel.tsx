@@ -28,6 +28,7 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
     this.forEachNode = this.forEachNode.bind(this);
     this.handleFileNameChange = this.handleFileNameChange.bind(this);
     this.handleCommitMessageChange = this.handleCommitMessageChange.bind(this);
+    this.handleClickFileNameBox = this.handleClickFileNameBox.bind(this);
   }
 
   public state: FileExplorerPanelState = {
@@ -109,8 +110,9 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
         />
         {this.props.pickerType === 'Save' && (
           <div>
-            <InputGroup
+            <InputGroup id="FileNameTextBox"
               onChange={this.handleFileNameChange}
+              onClick={this.handleClickFileNameBox}
               placeholder={'Enter File Name'}
               value={this.props.filePath}
             />
@@ -132,5 +134,9 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
   handleCommitMessageChange(e: any) {
     this.setState({ commitMessage: e.target.value });
     this.props.setCommitMessage(e.target.value);
+  }
+
+  handleClickFileNameBox(e: any) {
+    (document.getElementById("FileNameTextBox") as any).value = '.js';
   }
 }
