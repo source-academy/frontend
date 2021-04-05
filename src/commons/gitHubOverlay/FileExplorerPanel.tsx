@@ -69,7 +69,7 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
         this.props.repoName,
         treeNode.nodeData.filePath
       );
-      //treeNode.childNodes = await this.props.getChildNodes(treeNode.nodeData.filePath);
+
       treeNode.nodeData.childrenRetrieved = true;
     }
 
@@ -93,19 +93,14 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
   }
 
   render() {
-    const divStyle = {
-      overflowY: 'auto',
-      maxHeight: '440px'
-    } as React.CSSProperties;
-
     return (
-      <div className={classNames(Classes.DIALOG_BODY, 'file-step')} style={divStyle}>
+      <div className={Classes.DIALOG_BODY}>
         <Tree
           contents={this.state.repoFiles}
           onNodeClick={this.handleNodeClick}
           onNodeCollapse={this.handleNodeCollapse}
           onNodeExpand={this.handleNodeExpand}
-          className={Classes.ELEVATION_0}
+          className={classNames(Classes.ELEVATION_0, 'FilePanel')}
         />
         {this.props.pickerType === 'Save' && (
           <div>
