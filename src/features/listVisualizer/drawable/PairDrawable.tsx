@@ -1,15 +1,15 @@
+import React from 'react';
 import { Group, Line, Rect, Text } from 'react-konva';
 
 import { Config } from '../Config'
 import { displaySpecialContent, isList, isNull, toText } from "../ListVisualizerUtils";
 import { DataTreeNode } from '../tree/DataTreeNode';
-import { NodeDrawable } from "./NodeDrawable";
 import { NullDrawable } from "./NullDrawable";
 
 /**
  *  Represents a pair in a tree. It takes up to two data items.
  */
-export class PairDrawable extends NodeDrawable {
+export class PairDrawable extends React.Component {
     private leftNode: DataTreeNode | null;
     private rightNode: DataTreeNode | null;
 

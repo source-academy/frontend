@@ -1,15 +1,23 @@
+import React from 'react';
 import { Line } from 'react-konva'
 
 import { Config } from '../Config'
-import { NodeDrawable } from './NodeDrawable';
 
 /**
- *  Complements a NodeBox when the tail is an empty box.
+ *  Represents the diagonal line drawn over the tail of a pair
+ *  when the tail is an empty box.
+ * 
+ *  Used in conjunction with PairDrawable.
  */
-export class NullDrawable extends NodeDrawable {
+export class NullDrawable extends React.Component {
     private x: number;
     private y: number;
 
+
+    /**
+     * Constructs a new NullDrawable at the given position.
+     * @param props Props containing the position of the drawable.
+     */
     constructor(props: { x: number, y: number }) {
         super(props);
         this.x = props.x;

@@ -67,7 +67,7 @@ export default class ListVisualizer {
             layer = Tree.fromSourceTree(xs).draw(500, 50);
         } else if (isFunction(xs)) {
             layer = <Layer>
-                {new FunctionTreeNode(0).getDrawable(50, 50, 50, 50)}
+                {new FunctionTreeNode(0).createDrawable(50, 50, 50, 50)}
             </Layer>
         } else {
             layer = <Layer>

@@ -1,12 +1,12 @@
+import React from "react";
 import { Circle, Group } from "react-konva";
 
 import { Config } from "../Config";
-import { NodeDrawable } from "./NodeDrawable";
 
 /**
-*  Creates a Konva.Group used to represent a function object. Similar to NodeBox().
-*/
-export class FunctionDrawable extends NodeDrawable {
+ * Represents a function object drawn using two circles.
+ */
+export class FunctionDrawable extends React.Component {
     render() {
         return <Group>
             {/* Left circle */}

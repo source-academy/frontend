@@ -13,6 +13,7 @@ import { DrawableTreeNode, FunctionTreeNode, TreeNode } from "./TreeNode";
 export class Tree {
     private _rootNode: PairTreeNode;
     private nodes: DrawableTreeNode[];
+
     /**
      * Constructs a tree given a root node and a list of nodes.
      * @param {PairTreeNode} rootNode The root node of the tree.
@@ -23,6 +24,9 @@ export class Tree {
         this.nodes = nodes;
     }
 
+    /**
+     * The root node of the tree.
+     */
     get rootNode(): PairTreeNode {
         return this._rootNode;
     }
@@ -57,22 +61,22 @@ export class Tree {
                 // tree already built
                 node.left = visitedStructures.indexOf(headNode);
             } else {
-                node.left = isPair(headNode) 
-                                ? constructTree(headNode)  
-                                : isFunction(headNode)   
-                                    ? constructFunction(headNode) 
-                                    : constructData(headNode);
+                node.left = isPair(headNode)
+                    ? constructTree(headNode)
+                    : isFunction(headNode)
+                        ? constructFunction(headNode)
+                        : constructData(headNode);
             }
 
             if (visitedStructures.indexOf(tailNode) > -1) {
                 // tree already built
                 node.right = visitedStructures.indexOf(tailNode);
             } else {
-                node.right = isPair(tailNode) 
-                                ? constructTree(tailNode)  
-                                : isFunction(tailNode)   
-                                    ? constructFunction(tailNode) 
-                                    : constructData(tailNode);
+                node.right = isPair(tailNode)
+                    ? constructTree(tailNode)
+                    : isFunction(tailNode)
+                        ? constructFunction(tailNode)
+                        : constructData(tailNode);
             }
 
             return node;
@@ -120,19 +124,19 @@ export class Tree {
 /**
  *  Drawer function of a tree
  */
- class TreeDrawer {
+class TreeDrawer {
     private tree: Tree;
 
     // keeps track the extreme left end of the tree. In units of pixels.
     private minLeft = 500;
-    
+
     private drawables: JSX.Element[];
 
     constructor(tree: Tree) {
         this.tree = tree;
         this.drawables = [];
     }
-    
+
     /**
      *  Draws a tree at x, y, by calling drawNode on the root at x, y.
      */
@@ -162,13 +166,13 @@ export class Tree {
 
         // draws the content
         if (node instanceof FunctionTreeNode) {
-            const drawable = node.getDrawable(x, y, parentX, parentY);
+            const drawable = node.createDrawable(x, y, parentX, parentY);
             this.drawables.push(drawable);
-            
+
             // update left extreme of the tree
             this.minLeft = Math.min(this.minLeft, x);
         } else if (node instanceof PairTreeNode) {
-            const drawable = node.getDrawable(x, y, parentX, parentY);
+            const drawable = node.createDrawable(x, y, parentX, parentY);
             this.drawables.push(drawable);
 
             // if it has a left new child, draw it
@@ -190,21 +194,22 @@ export class Tree {
                     this.backwardRightEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
                 }
             }
-            
+
             // update left extreme of the tree
             this.minLeft = Math.min(this.minLeft, x);
         }
     }
+
     /**
-       *  Draws a node at x, y on a given layer, making necessary left shift depending how far the structure of subtree
-       *  extends to the right.
-       *
-       *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-       *  If so, it checks the position of the children and draws an arrow pointing to the children.
-       *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-       */
+     *  Draws a node to the left of its parent, making necessary left shift depending how far the structure of subtree
+     *  extends to the right.
+     *
+     *  It first draws the individual box, then see if its children have been drawn before (by set_head and set_tail).
+     *  If so, it checks the position of the children and draws an arrow pointing to the children.
+     *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+     */
     drawLeft(node: TreeNode, parentX: number, parentY: number) {
-        let count;
+        let count: number;
         // checks if it has a right child, how far it extends to the right direction
         if (node.right instanceof DrawableTreeNode) {
             count = 1 + this.shiftScaleCount(node.right);
@@ -217,16 +222,17 @@ export class Tree {
 
         this.drawNode(node, x, y, parentX, parentY);
     }
+
     /**
-       *  Draws a node at x, y on a given layer, making necessary right shift depending how far the structure of subtree
-       *  extends to the left.
-       *
-       *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-       *  If so, it checks the position of the children and draws an arrow pointing to the children.
-       *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-       */
+     *  Draws a node to the right of its parent, making necessary right shift depending how far the structure of subtree
+     *  extends to the left.
+     *
+     *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
+     *  If so, it checks the position of the children and draws an arrow pointing to the children.
+     *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+     */
     drawRight(node: TreeNode, parentX: number, parentY: number) {
-        let count;
+        let count: number;
         if (node.left instanceof DrawableTreeNode) {
             count = 1 + this.shiftScaleCount(node.left);
         } else {
@@ -237,6 +243,7 @@ export class Tree {
 
         this.drawNode(node, x, y, parentX, parentY);
     }
+
     /**
        * Returns the distance necessary for the shift of each node, calculated recursively.
        */
@@ -253,7 +260,6 @@ export class Tree {
         return count;
     }
 
-
     /**
      *  Connects a box to a previously known box, the arrow path is more complicated.
      *  After coming out of the starting box, it moves to the left or the right for a short distance,
@@ -261,8 +267,8 @@ export class Tree {
      *  It then directly points to the end box. All turnings are 90 degress.
      */
     backwardLeftEdge(x1: number, y1: number, x2: number, y2: number) {
-        // coordinates of all the turning points, execpt the first segment in the path
-        let path;
+        // coordinates of all the turning points, except the first segment in the path
+        let path: number[];
         if (x1 > x2 && y1 >= (y2 - Config.BoxHeight - 1)) {
             // lower right to upper left
             path = [
@@ -334,7 +340,7 @@ export class Tree {
         const arrow = <Line
             points={arrowPath}
             strokeWidth={Config.StrokeWidth}
-            stroke={'white'}/>;
+            stroke={'white'} />;
 
         // first segment of the path
         const pointerHead = <Line
@@ -345,13 +351,13 @@ export class Tree {
                 y1 + Config.BoxSpacingY * 3 / 4
             ]}
             strokeWidth={Config.StrokeWidth}
-            stroke={'white'}/>;
+            stroke={'white'} />;
 
         // following segments of the path
         const pointer = <Line
             points={path}
             strokeWidth={Config.StrokeWidth}
-            stroke={'white'}/>
+            stroke={'white'} />
 
         this.drawables.push(pointerHead);
         this.drawables.push(pointer);
@@ -366,7 +372,7 @@ export class Tree {
      *  Same as backwardLeftEdge
      */
     backwardRightEdge(x1: number, y1: number, x2: number, y2: number) {
-        let path;
+        let path: number[];
         if (x1 > x2 && y1 > (y2 - Config.BoxHeight - 1)) {
             path = [
                 //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
@@ -433,7 +439,7 @@ export class Tree {
         const arrow = <Line
             points={arrowPath}
             strokeWidth={Config.StrokeWidth}
-            stroke={'white'}/>
+            stroke={'white'} />
 
         const pointerHead = <Line
             points={[
@@ -443,11 +449,12 @@ export class Tree {
                 y1 + Config.BoxSpacingY * 3 / 4
             ]}
             strokeWidth={Config.StrokeWidth}
-            stroke={'white'}/>
+            stroke={'white'} />
         const pointer = <Line
             points={path}
             strokeWidth={Config.StrokeWidth}
-            stroke={'white'}/>
+            stroke={'white'} />
+
         this.drawables.push(pointerHead);
         this.drawables.push(pointer);
         this.drawables.push(arrow);

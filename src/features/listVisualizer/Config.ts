@@ -1,3 +1,6 @@
+/**
+ * Represents the config used to draw the drawings.
+ */
 export const Config = {
     StrokeWidth: 2,
     Stroke: 'white',

@@ -3,20 +3,34 @@ import { Line } from 'react-konva'
 
 import { Config } from '../Config'
 
-export abstract class NodeDrawable extends React.Component {
-    /**
-     *  Connects a NodeDrawable to its parent at x, y by using line segments with arrow head
-     */
-    makeArrowFrom(x: number, y: number): JSX.Element[] {
-        // starting point
+type ArrowConfig = {from: {x: number, y: number}, to: {x: number, y: number}};
+
+/**
+ * Represents an arrow used to connect a parent node and a child node.
+ * 
+ * Used in with FunctionDrawable and PairDrawable.
+ */
+export abstract class ArrowDrawable extends React.Component {
+    private config: ArrowConfig;
+    
+    constructor(props: ArrowConfig) {
+        super(props);
+        this.config = props;
+    }
+
+    render() {
+        const parentXOffset = this.config.from.x - this.config.to.x;
+        const parentYOffset = this.config.from.y - this.config.to.y;
+
+        // Starting point
         const start = { x: Config.BoxWidth / 4, y: -Config.ArrowSpace };
 
-        // end point
-        let end;
-        if (x > 0) {
-            end = { x: x + Config.BoxWidth / 4, y: y + Config.BoxHeight / 2 };
+        // End point
+        let end: {x: number, y: number};
+        if (parentXOffset > 0) {
+            end = { x: parentXOffset + Config.BoxWidth / 4, y: parentYOffset + Config.BoxHeight / 2 };
         } else {
-            end = { x: x + Config.BoxWidth * 3 / 4, y: y + Config.BoxHeight / 2 };
+            end = { x: parentXOffset + Config.BoxWidth * 3 / 4, y: parentYOffset + Config.BoxHeight / 2 };
         }
 
         const pointer = <Line
@@ -27,8 +41,8 @@ export abstract class NodeDrawable extends React.Component {
         const angle = Math.atan((end.y - start.y) / (end.x - start.x));
 
         // left and right part of an arrow head, rotated to the calculated angle
-        let left, right;
-        if (x > 0) {
+        let left: {x: number, y: number}, right: {x: number, y: number};
+        if (parentXOffset > 0) {
             left = {
                 x: start.x + Math.cos(angle + Config.ArrowAngle) * Config.ArrowLength,
                 y: start.y + Math.sin(angle + Config.ArrowAngle) * Config.ArrowLength
