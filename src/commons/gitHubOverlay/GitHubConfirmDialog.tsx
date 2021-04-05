@@ -2,7 +2,7 @@ import { AnchorButton, Button, Classes, Dialog } from '@blueprintjs/core';
 
 import { getGitHubSaveMode, getPickerType } from '../../features/github/GitHubUtils';
 
-const ConfirmDialog = (props: any) => {
+const GitHubConfirmDialog = (props: any) => {
   const {
     isOpen,
     handleGitHubCancelConfirmationDialog,
@@ -66,4 +66,4 @@ const ConfirmDialog = (props: any) => {
   );
 };
 
-export default ConfirmDialog;
+export default GitHubConfirmDialog;

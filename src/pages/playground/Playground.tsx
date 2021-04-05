@@ -33,7 +33,7 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
-import ConfirmDialog from '../../commons/gitHubOverlay/ConfirmDialog';
+import GitHubConfirmDialog from '../../commons/gitHubOverlay/GitHubConfirmDialog';
 import { GitHubOverlay } from '../../commons/gitHubOverlay/GitHubOverlay';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -814,7 +814,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     >
       <Workspace {...workspaceProps} />
       <GitHubOverlay {...props} />
-      <ConfirmDialog
+      <GitHubConfirmDialog
         isOpen={props.isGitHubConfirmationDialogOpen}
         handleGitHubCancelConfirmationDialog={props.handleGitHubCancelConfirmationDialog}
         handleGitHubConfirmOpen={props.handleGitHubConfirmOpen}
