@@ -2,6 +2,7 @@ import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
+import ReactAce from 'react-ace/lib/ace';
 import { useSelector } from 'react-redux';
 
 import { OverallState } from '../../application/ApplicationTypes';
@@ -17,10 +18,11 @@ type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
 
   /**
-   * TODO: Check if onChange prop is optional for other Workspaces.
-   * It is currently optional in the desktop version, but is required in Playground.
+   * The onChange handler is necessary in the mobile workspace to set selectedTab state in the parent.
+   * This is to ensure the SideContentTab panels are set correctly during the transition between
+   * desktop and mobile workspaces.
    */
-  onChange?: (
+  onChange: (
     newTabId: SideContentType,
     prevTabId: SideContentType,
     event: React.MouseEvent<HTMLElement>
@@ -31,10 +33,10 @@ type DispatchProps = {
 
 type StateProps = {
   animate?: boolean;
-  selectedTabId?: SideContentType;
+  selectedTabId: SideContentType;
   defaultSelectedTabId?: SideContentType;
   renderActiveTabPanelOnly?: boolean;
-  mobileTabs: SideContentTab[];
+  tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
 };
 
@@ -46,23 +48,17 @@ type OwnProps = {
   handleShowRepl: () => void;
   handleHideRepl: () => void;
   disableRepl: (newState: boolean) => void;
+  editorRef: React.RefObject<ReactAce>;
 };
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
-  const {
-    mobileTabs,
-    defaultSelectedTabId,
-    selectedTabId,
-    handleActiveTabChange,
-    onChange
-  } = props;
-
-  // TODO: Explore idea of shifting dynamicTabs and debuggerContext up to a common parent component
-  const [dynamicTabs, setDynamicTabs] = React.useState(mobileTabs);
+  const { tabs, defaultSelectedTabId, selectedTabId, handleActiveTabChange, onChange } = props;
+  const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
+  const isIOS = /iPhone|iPod/.test(navigator.platform);
 
   React.useEffect(() => {
     // Set initial sideContentActiveTab for this workspace
-    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : mobileTabs[0].id!);
+    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -74,13 +70,13 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
 
   React.useEffect(() => {
     // Ensures that the 'Run' tab is at the end of the resulting array
-    const copy = [...mobileTabs];
+    const copy = [...tabs];
     const runTab = copy.pop();
 
     const allActiveTabs = copy.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
     allActiveTabs.push(runTab!);
     setDynamicTabs(allActiveTabs);
-  }, [mobileTabs, debuggerContext]);
+  }, [tabs, debuggerContext]);
 
   /**
    * Generates an icon id given a TabId.
@@ -145,7 +141,9 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           content={tab.label}
           onOpening={() => {
             // Handles iOS hover requiring double taps to press the button
-            document.getElementById(generateIconId(tabId))?.click();
+            if (isIOS) {
+              document.getElementById(generateIconId(tabId))?.click();
+            }
           }}
         >
           <div className="side-content-tooltip" id={generateIconId(tabId)}>
@@ -166,7 +164,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     };
 
     return dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
-  }, [dynamicTabs, props.workspaceLocation]);
+  }, [dynamicTabs, props.workspaceLocation, isIOS]);
 
   const changeTabsCallback = React.useCallback(
     (
@@ -189,7 +187,6 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         }
       };
 
-      handleActiveTabChange(newTabId);
       if (onChange === undefined) {
         resetAlert(prevTabId);
       } else {
@@ -197,9 +194,20 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         resetAlert(prevTabId);
       }
 
+      /**
+       * ReactAce's editor value is not updated visually despite state change
+       * when the component is 'hidden'. We have to manually trigger the editor
+       * to update the visible value when switching to the mobile editor tab.
+       */
+      if (newTabId === SideContentType.mobileEditor) {
+        // props.editorRef.current is null when MCQ is rendered instead of the editor
+        props.editorRef.current?.editor.renderer.updateFull();
+      }
+
       // Evaluate program upon pressing the 'Run' tab on mobile
       if (
-        prevTabId === SideContentType.substVisualizer &&
+        (prevTabId === SideContentType.substVisualizer ||
+          prevTabId === SideContentType.autograder) &&
         newTabId === SideContentType.mobileEditorRun
       ) {
         props.handleEditorEval();
@@ -207,6 +215,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         props.handleEditorEval();
         props.handleShowRepl();
       } else {
+        /**
+         * Update the tab change in Redux store. It is nested in these conditionals
+         * to ensure that features such as the autograder work correctly.
+         */
+        handleActiveTabChange(newTabId);
         props.handleHideRepl();
       }
 
@@ -237,7 +250,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           className={classNames(Classes.DARK, 'mobile-side-content')}
         >
           {renderedTabs}
-          <MobileControlBar {...props.mobileControlBarProps} />
+
+          {/* Render the bottom ControlBar 'Cog' button only in the Playground Workspace */}
+          {props.workspaceLocation === 'playground' && (
+            <MobileControlBar {...props.mobileControlBarProps} />
+          )}
         </Tabs>
       </div>
     </>

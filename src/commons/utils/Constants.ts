@@ -17,6 +17,7 @@ const defaultSourceChapter = 4;
 const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
+const mobileBreakpoint = 768;
 const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
@@ -26,6 +27,8 @@ const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
+const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
+const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 
 const authProviders: Map<
   string,
@@ -105,6 +108,7 @@ const Constants = {
   defaultSourceVariant,
   defaultQuestionId,
   maxBrowseIndex,
+  mobileBreakpoint,
   urlShortener,
   urlShortenerSignature,
   moduleBackendUrl,
@@ -114,6 +118,8 @@ const Constants = {
   googleClientId,
   googleApiKey,
   googleAppId,
+  githubClientId,
+  githubOAuthProxyUrl,
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval

@@ -1,4 +1,5 @@
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { ImageAsset } from '../assets/AssetsTypes';
+import { screenSize } from '../commons/CommonConstants';
 import { AssetKey } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { LocationId } from '../location/GameMapTypes';
@@ -10,6 +11,7 @@ import { resizeOverflow } from '../utils/SpriteUtils';
  * Loads the background for a location on navigate and change_background action.
  */
 export default class GameBackgroundManager {
+  private currentBackground?: ImageAsset;
   /**
    * Render the background with the asset attached to the location ID.
    *
@@ -29,16 +31,17 @@ export default class GameBackgroundManager {
    */
   private renderBackgroundImage(assetKey: AssetKey) {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
+    this.currentBackground = GameGlobalAPI.getInstance().getAssetByKey(assetKey);
+    const animationManager = GameGlobalAPI.getInstance().getGameManager().getAnimationManager();
+    let asset: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite | undefined;
 
-    const backgroundAsset = new Phaser.GameObjects.Image(
-      GameGlobalAPI.getInstance().getGameManager(),
-      screenCenter.x,
-      screenCenter.y,
-      assetKey
-    );
-    resizeOverflow(backgroundAsset, screenSize.x, screenSize.y);
+    if (this.currentBackground) {
+      asset = animationManager.createImage(this.currentBackground, assetKey);
+      animationManager.startAnimation(this.currentBackground);
 
-    GameGlobalAPI.getInstance().addToLayer(Layer.Background, backgroundAsset);
-    GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
+      resizeOverflow(asset, screenSize.x, screenSize.y);
+      GameGlobalAPI.getInstance().addToLayer(Layer.Background, asset);
+      GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
+    }
   }
 }

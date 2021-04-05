@@ -1,10 +1,10 @@
 import { GameAction } from '../action/GameActionTypes';
-import { SoundAsset } from '../assets/AssetsTypes';
+import { ImageAsset, SoundAsset } from '../assets/AssetsTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
-import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
+import { AssetKey, ItemId } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
+import { AnyId, GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
@@ -27,8 +27,7 @@ import { mandatory } from '../utils/GameUtils';
  */
 class GameMap {
   private soundAssets: SoundAsset[];
-  private mapAssets: Map<AssetKey, AssetPath>;
-
+  private mapAssets: Map<AssetKey, ImageAsset>;
   private locations: Map<LocationId, GameLocation>;
   private dialogues: Map<ItemId, Dialogue>;
   private objects: Map<ItemId, ObjectProperty>;
@@ -40,7 +39,7 @@ class GameMap {
 
   constructor() {
     this.soundAssets = [];
-    this.mapAssets = new Map<AssetKey, AssetPath>();
+    this.mapAssets = new Map<AssetKey, ImageAsset>();
 
     this.locations = new Map<LocationId, GameLocation>();
     this.dialogues = new Map<ItemId, Dialogue>();
@@ -57,11 +56,11 @@ class GameMap {
     this.soundAssets.push(soundAsset);
   }
 
-  public addMapAsset(assetKey: AssetKey, assetPath: AssetPath) {
-    this.mapAssets.set(assetKey, assetPath);
+  public addMapAsset(assetKey: AssetKey, imageAsset: ImageAsset) {
+    this.mapAssets.set(assetKey, imageAsset);
   }
 
-  public getMapAssets(): Map<AssetKey, AssetPath> {
+  public getMapAssets(): Map<AssetKey, ImageAsset> {
     return this.mapAssets;
   }
 
@@ -140,8 +139,18 @@ class GameMap {
   public getLocationAtId = (locId: LocationId) =>
     mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
 
+  public getAssetByKey = (key: AssetKey) =>
+    mandatory(this.mapAssets.get(key), `Asset ${key} not found!`);
+
   public getLocationIds(): LocationId[] {
     return Array.from(this.locations.keys());
+  }
+
+  public getAssetKeyFromId(id: AnyId): AssetKey {
+    return mandatory(
+      this.objects.get(id)?.assetKey || this.locations.get(id)?.assetKey,
+      `Id ${id} not found!`
+    );
   }
 }
 

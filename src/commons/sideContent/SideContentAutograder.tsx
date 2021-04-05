@@ -28,7 +28,7 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
   const testcaseCards = React.useMemo(
     () =>
       testcases.length > 0 ? (
-        <div>
+        <div className="testcaseCards">
           {testcasesHeader}
           {testcases.map((testcase, index) => (
             <SideContentTestcaseCard

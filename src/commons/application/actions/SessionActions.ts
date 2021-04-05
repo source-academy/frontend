@@ -6,6 +6,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
+import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -15,9 +16,13 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
+  LOGIN_GITHUB,
+  LOGOUT_GITHUB,
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  REMOVE_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -55,6 +60,10 @@ export const login = (providerId: string) => action(LOGIN, providerId);
 
 export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 
+export const loginGitHub = () => action(LOGIN_GITHUB);
+
+export const logoutGitHub = () => action(LOGOUT_GITHUB);
+
 export const setTokens = ({
   accessToken,
   refreshToken
@@ -70,6 +79,11 @@ export const setTokens = ({
 export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
+
+export const setGitHubOctokitInstance = (authToken?: string) =>
+  action(SET_GITHUB_OCTOKIT_INSTANCE, generateOctokitInstance(authToken || ''));
+
+export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {
