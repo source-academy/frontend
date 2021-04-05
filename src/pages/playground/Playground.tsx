@@ -1,5 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -26,6 +27,7 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
 import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -43,11 +45,13 @@ import SideContentRemoteExecution from '../../commons/sideContent/SideContentRem
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
+import Constants from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
+import { GitHubFile } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -95,6 +99,12 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
+  handleGitHubOpenPicker: () => void;
+  handleGitHubSaveFile: () => void;
+  handleGitHubUpdateFile: (file: GitHubFile) => void;
+  handleGitHubInitialise: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -123,6 +133,8 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
+  githubOctokitInstance: Octokit | undefined;
+  githubFile: GitHubFile | undefined;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -158,7 +170,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -422,6 +434,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handlePersistenceLogOut,
     props.handlePersistenceInitialise,
     handlePersistenceUpdateFile
+  ]);
+
+  const { githubOctokitInstance, githubFile, handleGitHubUpdateFile } = props;
+  // Compute this here to avoid re-rendering the button every keystroke
+  const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
+  const githubButtons = React.useMemo(() => {
+    return (
+      <ControlBarGitHubButtons
+        currentFile={githubFile}
+        loggedInAs={githubOctokitInstance}
+        isDirty={githubIsDirty}
+        key="github"
+        onClickOpen={props.handleGitHubOpenPicker}
+        onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
+        onClickSaveAs={props.handleGitHubSaveFile}
+        onClickLogIn={props.handleGitHubLogIn}
+        onClickLogOut={props.handleGitHubLogOut}
+        onPopoverOpening={props.handleGitHubInitialise}
+      />
+    );
+  }, [
+    githubOctokitInstance,
+    githubFile,
+    githubIsDirty,
+    props.handleGitHubSaveFile,
+    props.handleGitHubOpenPicker,
+    props.handleGitHubLogIn,
+    props.handleGitHubLogOut,
+    props.handleGitHubInitialise,
+    handleGitHubUpdateFile
   ]);
 
   const executionTime = React.useMemo(
@@ -711,6 +753,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
+        githubButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
       ]
     },
@@ -744,14 +787,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
           sessionButtons,
-          persistenceButtons
+          persistenceButtons,
+          githubButtons
         ]
       },
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
-      mobileTabs,
+      tabs: mobileTabs,
       workspaceLocation: 'playground',
       handleEditorEval: props.handleEditorEval
     }

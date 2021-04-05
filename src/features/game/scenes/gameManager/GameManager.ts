@@ -1,10 +1,13 @@
 import GameActionManager from '../../action/GameActionManager';
+import GameAnimationManager from '../../animations/GameAnimationManager';
+import { AssetType, ImageAsset } from '../../assets/AssetsTypes';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
 import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
+import { AssetKey } from '../../commons/CommonTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -53,6 +56,7 @@ class GameManager extends Phaser.Scene {
   private popUpManager?: GamePopUpManager;
   private phaseManager?: GamePhaseManager;
   private backgroundManager?: GameBackgroundManager;
+  private animationManager?: GameAnimationManager;
   private inputManager?: GameInputManager;
   private escapeManager?: GameEscapeManager;
   private awardManager?: GameAwardsManager;
@@ -81,6 +85,7 @@ class GameManager extends Phaser.Scene {
     this.actionManager = new GameActionManager();
     this.boundingBoxManager = new GameBBoxManager();
     this.backgroundManager = new GameBackgroundManager();
+    this.animationManager = new GameAnimationManager();
     this.popUpManager = new GamePopUpManager();
     this.escapeManager = new GameEscapeManager(this);
     this.awardManager = new GameAwardsManager(this);
@@ -113,9 +118,28 @@ class GameManager extends Phaser.Scene {
   private preloadLocationsAssets() {
     const gameMap = this.getStateManager().getGameMap();
     GameGlobalAPI.getInstance().loadSounds(gameMap.getSoundAssets());
-    gameMap.getMapAssets().forEach((assetPath, assetKey) => {
-      this.load.image(assetKey, toS3Path(assetPath));
+    gameMap.getMapAssets().forEach((image, assetKey) => {
+      this.loadImage(image, assetKey);
     });
+  }
+
+  /**
+   * Loads each asset type (image, sprite) appropriately
+   *
+   * @param image ImageAsset object to be loaded
+   * @param assetKey asset key of ImageAsset
+   */
+  private loadImage(image: ImageAsset, assetKey: AssetKey) {
+    switch (image.type) {
+      case AssetType.Image:
+        this.load.image(assetKey, toS3Path(image.path));
+        break;
+      case AssetType.Sprite:
+        this.load.spritesheet(assetKey, toS3Path(image.path), image.config);
+        break;
+      default:
+        break;
+    }
   }
 
   //////////////////////
@@ -134,7 +158,7 @@ class GameManager extends Phaser.Scene {
    *
    * Start Action, Notification, Cutscene
    *
-   * Start action is only played whe startAction argument is set to true;
+   * Start action is only played when startAction argument is set to true;
    * commonly only the first time user loads the checkpoint.
    *
    * @param locationId id of the location to render
@@ -321,6 +345,7 @@ class GameManager extends Phaser.Scene {
   public getLayerManager = () => mandatory(this.layerManager);
   public getPhaseManager = () => mandatory(this.phaseManager);
   public getBackgroundManager = () => mandatory(this.backgroundManager);
+  public getAnimationManager = () => mandatory(this.animationManager);
   public getPopupManager = () => mandatory(this.popUpManager);
   public getEscapeManager = () => mandatory(this.escapeManager);
   public getAwardManager = () => mandatory(this.awardManager);

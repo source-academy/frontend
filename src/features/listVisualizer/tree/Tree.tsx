@@ -1,11 +1,11 @@
 import { Layer, Line } from "react-konva";
 
-import { PairTreeNode } from "./PairTreeNode";
-import { Data, Pair } from "../ListVisualizerTypes";
-import { DataTreeNode } from "./DataTreeNode";
-import { DrawableTreeNode, FunctionTreeNode, TreeNode } from "./TreeNode";
-import { head, isFunction, isPair, tail } from "../ListVisualizerUtils";
 import { Config } from "../Config";
+import { Data, Pair } from "../ListVisualizerTypes";
+import { head, isFunction, isPair, tail } from "../ListVisualizerUtils";
+import { DataTreeNode } from "./DataTreeNode";
+import { PairTreeNode } from "./PairTreeNode";
+import { DrawableTreeNode, FunctionTreeNode, TreeNode } from "./TreeNode";
 
 /**
  *  A tree object built based on a list or pair.

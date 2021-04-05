@@ -1,4 +1,4 @@
-import { TreeNode } from "./TreeNode";
+import { TreeNode } from "./BaseTreeNode";
 
 export abstract class DrawableTreeNode extends TreeNode {
     protected readonly id: number;

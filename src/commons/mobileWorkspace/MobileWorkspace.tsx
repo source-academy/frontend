@@ -6,6 +6,7 @@ import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
+import ControlBar from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
@@ -17,19 +18,28 @@ import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/M
 export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
-  // Either editorProps or mcqProps must be provided
-  editorProps?: EditorProps;
-  customEditor?: JSX.Element; // Only used in Sourcecast and Sourcereel - to test in the future
-  hasUnsavedChanges?: boolean; // Not used in Playground - to test in the future in other Workspaces
-  mcqProps?: McqChooserProps; // Not used in Playground - to test in the future in other Workspaces
+  editorProps?: EditorProps; // Either editorProps or mcqProps must be provided
+  /**
+   * The customEditor prop is only used in Sourcecast and Sourcereel thus far.
+   * The component is wrapped in a lambda function in order to pass the editorRef
+   * created in MobileWorkspace.tsx into the customEditor component's Ace Editor child.
+   * This is to allow for the MobileKeyboard component to work with custom editors.
+   * A handler for showing the draggable repl is also passed into the customEditor.
+   */
+  customEditor?: (
+    ref: React.RefObject<ReactAce>,
+    handleShowDraggableRepl: () => void
+  ) => JSX.Element;
+  hasUnsavedChanges?: boolean; // Not used in Playground
+  mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
   mobileSideContentProps: MobileSideContentProps;
 };
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
-  const isIOS = /iPhone|iPod/.test(navigator.platform);
+  const isAndroid = /Android/.test(navigator.platform);
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
-  const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
+  const isMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent);
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
   // For disabling draggable Repl when in stepper tab
@@ -38,13 +48,29 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   // Get rid of the focus border on blueprint components
   FocusStyleManager.onlyShowFocusOnTabs();
 
+  // Handles the panel height when the mobile top controlbar is rendered in the Assessment Workspace
+  React.useEffect(() => {
+    if (props.mobileSideContentProps.workspaceLocation === 'assessment') {
+      document.documentElement.style.setProperty(
+        '--mobile-panel-height',
+        'calc(100% - 100px - 1.1rem)'
+      );
+    }
+
+    return () => {
+      document.documentElement.style.setProperty('--mobile-panel-height', 'calc(100% - 70px)');
+    };
+    // This effect should only trigger once during the initial rendering of the workspace
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /**
    * The following effect prevents the bottom MobileSideContent tabs from floating above the
    * soft keyboard on Android devices. This is due to the viewport height changing when the soft
    * keyboard is up on Android devices. IOS devices are not affected.
    */
   React.useEffect(() => {
-    if (isPortrait && !isIOS) {
+    if (isPortrait && isAndroid) {
       document.documentElement.style.setProperty('overflow', 'auto');
       const metaViewport = document.querySelector('meta[name=viewport]');
       metaViewport!.setAttribute(
@@ -55,7 +81,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
     // Reset above CSS and hides draggable Repl on orientation change
     return () => {
-      if (!isIOS) {
+      if (isAndroid) {
         document.documentElement.style.setProperty('overflow', 'hidden');
         const metaViewport = document.querySelector('meta[name=viewport]');
         metaViewport!.setAttribute(
@@ -65,13 +91,31 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       }
       handleHideRepl();
     };
-  }, [isPortrait, isIOS]);
+  }, [isPortrait, isAndroid]);
 
+  // Handle custom keyboard input into AceEditor (Editor and Repl Components)
   const editorRef = React.useRef<ReactAce>(null);
+  const replRef = React.useRef<ReactAce>(null);
+  const emptyRef = React.useRef<ReactAce>(null);
+  const [keyboardInputRef, setKeyboardInputRef] = React.useState<React.RefObject<ReactAce>>(
+    emptyRef
+  );
+
+  React.useEffect(() => {
+    editorRef.current?.editor.on('focus', () => {
+      setKeyboardInputRef(editorRef);
+    });
+    replRef.current?.editor.on('focus', () => {
+      setKeyboardInputRef(replRef);
+    });
+    const clearRef = () => setKeyboardInputRef(emptyRef);
+    editorRef.current?.editor.on('blur', clearRef);
+    replRef.current?.editor.on('blur', clearRef);
+  }, []);
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      return props.customEditor;
+      return props.customEditor(editorRef, handleShowRepl(-100));
     } else if (props.editorProps) {
       return <Editor {...props.editorProps} ref={editorRef} />;
     } else {
@@ -80,7 +124,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   /**
-   * The following 3 'react-draggable' handlers include the updating of 2 CSS variables
+   * The following 3 'react-draggable' handlers include the updating of CSS variable:
    * '--mobile-repl-height'.
    *
    * 'position: absolute' for the 'react-draggable' component is used in conjunction with the
@@ -97,8 +141,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * component is 'properly closed' and does not continue to display content underneath the
    * MobileSideContentTabs.
    *
-   * To ensure proper scrolling of overflowing Repl outputs inside the dynamically resizing
-   * draggable component, '--mobile-repl-height' is also dynamically updated.
+   * This also ensures proper scrolling of overflowing Repl outputs inside the dynamically resizing
+   * draggable component.
    */
   const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
     document.documentElement.style.setProperty(
@@ -108,19 +152,18 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     setDraggableReplPosition(position);
   };
 
-  const handleShowRepl = () => {
-    const offset = -300;
+  const handleShowRepl = (offset: number) => () => {
     document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
     setDraggableReplPosition({ x: 0, y: offset });
   };
 
   const handleHideRepl = () => {
-    document.documentElement.style.setProperty('--mobile-repl-height', '0px');
     setDraggableReplPosition({ x: 0, y: 0 });
+    document.documentElement.style.setProperty('--mobile-repl-height', '0px');
   };
 
   const draggableReplProps = {
-    handleShowRepl: handleShowRepl,
+    handleShowRepl: handleShowRepl(-300),
     handleHideRepl: handleHideRepl,
     disableRepl: setIsDraggableReplDisabled
   };
@@ -151,25 +194,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const updatedMobileSideContentProps = () => {
     return {
       ...props.mobileSideContentProps,
-      mobileTabs: [mobileEditorTab, ...props.mobileSideContentProps.mobileTabs, mobileRunTab]
+      tabs: [mobileEditorTab, ...props.mobileSideContentProps.tabs, mobileRunTab]
     };
   };
-
-  const replRef = React.useRef<ReactAce>(null);
-  const emptyRef = React.useRef<ReactAce>(null);
-  const [keyboardInputRef, setKeyboardInputRef] = React.useState(emptyRef);
-
-  React.useEffect(() => {
-    editorRef.current!.editor.on('focus', () => {
-      setKeyboardInputRef(editorRef);
-    });
-    replRef.current!.editor.on('focus', () => {
-      setKeyboardInputRef(replRef);
-    });
-    const clearRef = () => setKeyboardInputRef(emptyRef);
-    editorRef.current!.editor.on('blur', clearRef);
-    replRef.current!.editor.on('blur', clearRef);
-  });
 
   return (
     <div className="workspace mobile-workspace">
@@ -187,6 +214,17 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         title="Please turn back to portrait orientation!"
       />
 
+      {/* Render the top ControlBar when it is the Assessment Workspace */}
+      {props.mobileSideContentProps.workspaceLocation === 'assessment' && (
+        <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
+      )}
+
+      <MobileSideContent
+        {...updatedMobileSideContentProps()}
+        {...draggableReplProps}
+        editorRef={editorRef}
+      />
+
       <DraggableRepl
         key={'repl'}
         position={draggableReplPosition}
@@ -195,8 +233,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         replProps={props.replProps}
         ref={replRef}
       />
-
-      <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
 
       <MobileKeyboard editorRef={keyboardInputRef} />
     </div>

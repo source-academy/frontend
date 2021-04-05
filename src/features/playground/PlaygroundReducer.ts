@@ -4,6 +4,7 @@ import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   CHANGE_QUERY_STRING,
+  PLAYGROUND_UPDATE_GITHUB_FILE,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PlaygroundState,
   TOGGLE_USING_SUBST,
@@ -34,6 +35,11 @@ export const PlaygroundReducer: Reducer<PlaygroundState> = (
       return {
         ...state,
         persistenceFile: action.payload
+      };
+    case PLAYGROUND_UPDATE_GITHUB_FILE:
+      return {
+        ...state,
+        githubFile: action.payload
       };
     default:
       return state;

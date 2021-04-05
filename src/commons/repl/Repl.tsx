@@ -57,6 +57,7 @@ const Repl = React.forwardRef<AceEditor, ReplProps>((props, ref) => {
     </div>
   );
 });
+
 export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   switch (props.output.type) {
     case 'code':

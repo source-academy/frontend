@@ -1,8 +1,8 @@
 import { Data } from "../ListVisualizerTypes";
-import { TreeNode } from "./TreeNode";
+import { TreeNode } from "./BaseTreeNode";
 
 export class DataTreeNode extends TreeNode {
-    protected data: Data;
+    public readonly data: Data;
     
     constructor(data: Data) {
         super();

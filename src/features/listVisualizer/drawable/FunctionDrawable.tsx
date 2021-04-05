@@ -1,6 +1,6 @@
 import { Circle, Group } from "react-konva";
-import { Config } from "../Config";
 
+import { Config } from "../Config";
 import { NodeDrawable } from "./NodeDrawable";
 
 /**
