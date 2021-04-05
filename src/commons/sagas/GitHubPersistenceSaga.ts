@@ -56,11 +56,12 @@ function* githubLoginSaga() {
 
 function* githubLogoutSaga() {
   yield put(actions.removeGitHubOctokitInstance());
+  yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
 function* githubDisplayOpenPickerSaga() {
   const octokitInstance = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} }, // getAuthenticated.data.login .data.name .data.email
+    users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
   };
   const AuthUser = yield call(octokitInstance.users.getAuthenticated);
