@@ -110,7 +110,8 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
         />
         {this.props.pickerType === 'Save' && (
           <div>
-            <InputGroup id="FileNameTextBox"
+            <InputGroup
+              id="FileNameTextBox"
               onChange={this.handleFileNameChange}
               onClick={this.handleClickFileNameBox}
               placeholder={'Enter File Name'}
@@ -137,6 +138,6 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
   }
 
   handleClickFileNameBox(e: any) {
-    (document.getElementById("FileNameTextBox") as any).value = '.js';
+    (document.getElementById('FileNameTextBox') as any).value = '.js';
   }
 }
