@@ -92,7 +92,6 @@ export class GitHubOverlay extends React.PureComponent<GitHubOverlayProps, GitHu
     return (
       <div>
         <MultistepDialog
-          className="GitHubPicker"
           finalButtonProps={finalButtonProps}
           isOpen={this.props.isPickerOpen}
           onClose={this.handleClose}

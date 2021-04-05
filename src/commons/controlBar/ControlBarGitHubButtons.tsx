@@ -11,14 +11,12 @@ import controlButton from '../ControlButton';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
-  isDirty?: boolean;
   isPickerOpen?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
   onClickLogIn?: () => any;
   onClickLogOut?: () => any;
-  onPopoverOpening?: () => any;
 };
 
 const stateToIntent: { [state in GitHubState]: Intent } = {
@@ -80,7 +78,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
           </ButtonGroup>
         </div>
       }
-      onOpening={props.onPopoverOpening}
       popoverClassName={Classes.POPOVER_DISMISS}
     >
       {mainButton}
