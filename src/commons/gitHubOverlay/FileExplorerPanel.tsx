@@ -138,6 +138,10 @@ export class FileExplorerPanel extends Component<FileExplorerPanelProps, FileExp
   }
 
   handleClickFileNameBox(e: any) {
-    (document.getElementById('FileNameTextBox') as any).value = '.js';
+    const textbox = document.getElementById('FileNameTextBox') as any;
+    
+    if (!textbox.value) {
+      textbox.value = '.js';
+    }
   }
 }
