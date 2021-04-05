@@ -28,7 +28,7 @@ import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalBut
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
-import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
+import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
@@ -420,7 +420,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
   const persistenceButtons = React.useMemo(() => {
     return (
-      <ControlBarPersistenceButtons
+      <ControlBarGoogleDriveButtons
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
