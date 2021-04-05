@@ -41,7 +41,7 @@ export function GitHubCallback() {
     retrieveAuthTokenUpdatePage(backendLink, messageBody, setMessage);
   }, []);
 
-  return <div>{message}</div>;
+  return <div className="Playground bp3-dark">{message}</div>;
 }
 
 async function retrieveAuthTokenUpdatePage(
