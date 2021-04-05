@@ -5,10 +5,11 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
+import { Step } from '../../features/listVisualizer/ListVisualizerTypes';
 import { Links } from '../utils/Constants';
 
 type State = {
-  stages: React.ReactNode[],
+  steps: Step[],
   currentStep: number,
 };
 
@@ -26,8 +27,19 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     // ListVisualizer.clear();
-    this.state = { stages: [], currentStep: 0 };
-    ListVisualizer.init(stages  => this.setState({ stages, currentStep: 0 }))
+    this.state = { steps: [], currentStep: 0 };
+    ListVisualizer.init(steps => {
+
+      if (!steps) {
+        //  Blink icon
+        const icon = document.getElementById('data_visualiser-icon');
+
+        if (icon) {
+          icon.classList.add('side-content-tab-alert');
+        }
+      }
+      this.setState({ steps, currentStep: 0 });
+    });
   }
   
   public render() {
@@ -36,31 +48,26 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       NEXT_STEP: this.onNextButtonClick
     };
     
-    // ListVisualizer.clear();
+    const step = this.state.steps[this.state.currentStep];
 
-    console.log(this.state.stages);
-
-    
     // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
         <div className={classNames('sa-list-visualizer', Classes.DARK)}>
-          {(this.state.stages.length) > 1 ? (
+          {(this.state.steps.length) > 1 ? (
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Button
                   large={true}
                   outlined={true}
                   icon={IconNames.ARROW_LEFT}
                   onClick={this.onPrevButtonClick}
-                  disabled={this.state.currentStep === 0}
-                >
+                  disabled={this.state.currentStep === 0}>
                   Prev
                 </Button>
                 <h3
                   className="bp3-text-large"
-                  style={{ alignSelf: 'center', display: 'inline', margin: 0 }}
-                >
-                  Call {this.state.currentStep + 1}/{this.state.stages.length}
+                  style={{ alignSelf: 'center', display: 'inline', margin: 0 }}>
+                  Call {this.state.currentStep + 1}/{this.state.steps.length}
                 </h3>
                 <Button
                   large={true}
@@ -68,17 +75,28 @@ class SideContentListVisualizer extends React.Component<{}, State> {
                   icon={IconNames.ARROW_RIGHT}
                   onClick={this.onNextButtonClick}
                   disabled={
-                    this.state.stages.length > 0
-                      ? this.state.currentStep === this.state.stages.length - 1
+                    this.state.steps.length > 0
+                      ? this.state.currentStep === this.state.steps.length - 1
                       : true
-                  }
-                >
+                  }>
                   Next
                 </Button>
               </div>
             ) : null}
           {
-            this.state.stages[this.state.currentStep] ||
+            this.state.steps ?
+            (
+              <div style={{display: 'flex', flexDirection: 'row'}}>
+                  {step?.map((elem, i) =>
+                    <div
+                      key={i}
+                      style={{ flex: 1 }}>
+                      <h3>Structure {i + 1}</h3>
+                      {elem}
+                    </div>
+                  )}
+              </div>
+            ) :
             <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
               The data visualizer visualises data structures.
               <br />
@@ -109,10 +127,6 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   private onNextButtonClick = () => {
     this.setState({currentStep: this.state.currentStep + 1});
   };
-
-  // public clear = () => {
-  //   this.setState({ stages: []});
-  // }
 }
 
 export default SideContentListVisualizer;

@@ -10,7 +10,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
         this._drawable = <Group
             x={x}
             y={y}>
-            {circle}
+            <FunctionDrawable></FunctionDrawable>
             {parentX !== x && circle.makeArrowFrom(parentX - x, parentY - y)}
         </Group>;
 

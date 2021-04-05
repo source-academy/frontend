@@ -80,7 +80,7 @@ function cadetAlert(value: any) {
 function visualizeList(...args: any[]) {
   try {
     // Pass in args[0] since args is in the form; [(Array of drawbables), "playground"]
-    ListVisualizer.draw(args[0]);
+    ListVisualizer.drawData(args[0]);
     return args[0];
   } catch (err) {
     console.log(err);
