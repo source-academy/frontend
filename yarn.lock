@@ -8865,10 +8865,26 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
-js-slang@^0.4.60, js-slang@^0.4.75:
+js-slang@^0.4.60:
   version "0.4.75"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.75.tgz#3f55956ab32e11e6689d23b45191b29d9876c4f1"
   integrity sha512-PdtDYm6sDTE4bXB0v0WC6c3EmSzEEdFnSpEuDwp55xuc6qVqhdXnzq0G1wQArGxYPYvK7Ok7vuxp1MHQ8hWxVw==
+  dependencies:
+    "@types/estree" "0.0.45"
+    acorn "^8.0.3"
+    acorn-loose "^8.0.0"
+    acorn-walk "^8.0.0"
+    astring "^1.4.3"
+    gpu.js "^2.10.4"
+    lodash "^4.17.20"
+    node-getopt "^0.3.2"
+    source-map "^0.7.3"
+    xmlhttprequest-ts "^1.0.1"
+
+js-slang@^0.4.77:
+  version "0.4.77"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.77.tgz#5e7694a7f971c8299a4f86e0072ba0f5e3624c31"
+  integrity sha512-djxTzXnhKo4WTOEXE92aT+LHszFV4/Y4vOh3z1smNl/lxgCCDpBAh+Ul/K3koAlYdbiQCX9cu41GZkEvN6vFbQ==
   dependencies:
     "@types/estree" "0.0.45"
     acorn "^8.0.3"

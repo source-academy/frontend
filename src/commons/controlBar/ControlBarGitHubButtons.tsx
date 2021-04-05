@@ -8,6 +8,7 @@ import { useMediaQuery } from 'react-responsive';
 import { GitHubState } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
@@ -25,7 +26,11 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
 };
 
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  // The 'loggedInAs' is not used directly in this code block
+  // However, keeping it in will ensure that the component re-renders immediately
+  // Or else, the re-render has to be triggered by something else
+
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;

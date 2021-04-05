@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 
 export type ControlBarGoogleDriveButtonsProps = {
   loggedInAs?: string;
@@ -24,8 +25,8 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
   DIRTY: Intent.WARNING
 };
 
-export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtonsProps> = props => {
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const state: PersistenceState = props.currentFile
     ? props.isDirty
       ? 'DIRTY'
