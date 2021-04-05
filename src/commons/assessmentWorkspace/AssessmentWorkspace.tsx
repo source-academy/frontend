@@ -129,7 +129,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const [sessionId, setSessionId] = React.useState('');
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   React.useEffect(() => {
     props.handleEditorValueChange('');
