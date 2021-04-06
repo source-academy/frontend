@@ -11,7 +11,7 @@ export class PairTreeNode extends DrawableTreeNode {
     createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
         const leftNode = this.left instanceof DataTreeNode ? this.left : null;
         const rightNode = this.right instanceof DataTreeNode ? this.right : null;
-        const pairProps = {leftNode: leftNode, rightNode: rightNode}
+        const pairProps = { leftNode: leftNode, rightNode: rightNode }
         const pairDrawable = <PairDrawable {...pairProps}></PairDrawable>;
 
         this._drawable = <Group

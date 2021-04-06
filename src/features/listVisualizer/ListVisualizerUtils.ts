@@ -25,17 +25,6 @@ export function toText(data: any, full: boolean = false): string | undefined {
     }
 }
 
-let nodeLabel = 0;
-
-export function displaySpecialContent(value: string): number {
-    // if (typeof display === 'function') {
-    //     display('*' + nodeLabel + ': ' + value);
-    // } else {
-    console.log('*' + nodeLabel + ': ' + value);
-    // }
-    return nodeLabel++;
-}
-
 /**
  * Find the height of a drawing (in number of "rows" of pairs)
  */

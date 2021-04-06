@@ -81,7 +81,9 @@ function visualizeList(...args: any[]) {
   try {
     // Pass in args[0] since args is in the form; [(Array of drawbables), "playground"]
     ListVisualizer.drawData(args[0]);
-    return args[0];
+
+    // If there is only one arg, just print out the first arg
+    return args[0].length == 1 ? args[0][0] : args[0];
   } catch (err) {
     console.log(err);
     throw new Error('List visualizer is not enabled');

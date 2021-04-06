@@ -2,7 +2,8 @@ import React from 'react';
 import { Group, Line, Rect, Text } from 'react-konva';
 
 import { Config } from '../Config'
-import { displaySpecialContent, isList, isNull, toText } from "../ListVisualizerUtils";
+import ListVisualizer from '../ListVisualizer';
+import { isList, isNull, toText } from "../ListVisualizerUtils";
 import { DataTreeNode } from '../tree/DataTreeNode';
 import { NullDrawable } from "./NullDrawable";
 
@@ -28,7 +29,7 @@ export class PairDrawable extends React.Component {
             if (!isList(nodeValue)) {
                 console.log(nodeValue)
                 const textValue: string | undefined = toText(nodeValue);
-                const textToDisplay = textValue ?? '*' + displaySpecialContent(nodeValue);
+                const textToDisplay = textValue ?? '*' + ListVisualizer.displaySpecialContent(node);
                 return <Text
                     text={textToDisplay}
                     align={'center'}

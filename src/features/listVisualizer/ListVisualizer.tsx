@@ -3,7 +3,7 @@ import { Layer, Stage, Text } from "react-konva";
 import { Data, Step } from './ListVisualizerTypes';
 import { findDataHeight, findDataWidth, isFunction, isPair, toText } from "./ListVisualizerUtils";
 import { Tree } from "./tree/Tree";
-import { FunctionTreeNode } from "./tree/TreeNode";
+import { DataTreeNode, FunctionTreeNode } from "./tree/TreeNode";
 
 type SetSteps = (step: Step[]) => void;
 
@@ -20,6 +20,8 @@ export default class ListVisualizer {
     private static _instance = new ListVisualizer();
 
     private steps: Step[] = [];
+    private nodeLabel = 0;
+    private nodeToLabelMap: Map<DataTreeNode, number> = new Map();
 
     private constructor() { }
 
@@ -36,11 +38,26 @@ export default class ListVisualizer {
     }
 
     public static clear(): void {
-        ListVisualizer._instance.clear();
+        ListVisualizer._instance = new ListVisualizer();
+        ListVisualizer.setSteps(ListVisualizer._instance.steps);
     }
 
-    private clear() {
-        this.steps = [];
+    public static displaySpecialContent(dataNode: DataTreeNode): number {
+        return ListVisualizer._instance.displaySpecialContent(dataNode);
+    }
+
+    private displaySpecialContent(dataNode: DataTreeNode): number {
+        if (this.nodeToLabelMap.has(dataNode)) {
+            return this.nodeToLabelMap.get(dataNode) ?? 0;
+        } else {
+            // if (typeof display === 'function') {
+            //     display('*' + nodeLabel + ': ' + value);
+            // } else {
+            console.log('*' + this.nodeLabel + ': ' + dataNode.data);
+            this.nodeToLabelMap.set(dataNode, this.nodeLabel);
+                // }
+            return this.nodeLabel++;
+        }
     }
 
     private addStep(structures: Data[]) {
@@ -82,6 +99,7 @@ export default class ListVisualizer {
             </Layer>
         }
         const stage = <Stage
+            key={xs}
             width={findDataWidth(xs) * 60 + 60}
             height={findDataHeight(xs) * 60 + 100}>
             {layer}

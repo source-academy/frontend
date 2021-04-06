@@ -39,8 +39,13 @@ export class Tree {
         return this.nodes[id];
     }
 
-    static fromSourceTree(tree: Pair) {
+    static fromSourceTree(tree: Pair): Tree {
+        const visitedStructures: (Function | Pair)[] = []; // detects cycles
+        const treeNodes: DrawableTreeNode[] = [];
+        const rootNode = constructTree(tree);
+
         let nodeCount: number = 0;
+
         /**
          * Returns a node representing the given tree as a pair.
          * Also memoizes the pair object, for the case where the
@@ -107,11 +112,6 @@ export class Tree {
         function constructData(data: Data) {
             return new DataTreeNode(data);
         }
-
-        const visitedStructures: (Function | Pair)[] = []; // detects cycles
-        const treeNodes: DrawableTreeNode[] = [];
-
-        const rootNode = constructTree(tree);
 
         return new Tree(rootNode, treeNodes);
     }
