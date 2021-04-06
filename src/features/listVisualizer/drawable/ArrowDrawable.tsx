@@ -3,7 +3,7 @@ import { Line } from 'react-konva'
 
 import { Config } from '../Config'
 
-type ArrowConfig = {from: {x: number, y: number}, to: {x: number, y: number}};
+type ArrowConfig = { from: { x: number, y: number }, to: { x: number, y: number } };
 
 /**
  * Represents an arrow used to connect a parent node and a child node.
@@ -12,7 +12,7 @@ type ArrowConfig = {from: {x: number, y: number}, to: {x: number, y: number}};
  */
 export abstract class ArrowDrawable extends React.Component {
     private config: ArrowConfig;
-    
+
     constructor(props: ArrowConfig) {
         super(props);
         this.config = props;
@@ -26,7 +26,7 @@ export abstract class ArrowDrawable extends React.Component {
         const start = { x: Config.BoxWidth / 4, y: -Config.ArrowSpace };
 
         // End point
-        let end: {x: number, y: number};
+        let end: { x: number, y: number };
         if (parentXOffset > 0) {
             end = { x: parentXOffset + Config.BoxWidth / 4, y: parentYOffset + Config.BoxHeight / 2 };
         } else {
@@ -41,7 +41,7 @@ export abstract class ArrowDrawable extends React.Component {
         const angle = Math.atan((end.y - start.y) / (end.x - start.x));
 
         // left and right part of an arrow head, rotated to the calculated angle
-        let left: {x: number, y: number}, right: {x: number, y: number};
+        let left: { x: number, y: number }, right: { x: number, y: number };
         if (parentXOffset > 0) {
             left = {
                 x: start.x + Math.cos(angle + Config.ArrowAngle) * Config.ArrowLength,

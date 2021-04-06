@@ -13,7 +13,7 @@ export class PairDrawable extends React.Component {
     private leftNode: DataTreeNode | null;
     private rightNode: DataTreeNode | null;
 
-    constructor(props: {leftNode: DataTreeNode | null, rightNode: DataTreeNode | null}) {
+    constructor(props: { leftNode: DataTreeNode | null, rightNode: DataTreeNode | null }) {
         super(props);
         this.leftNode = props.leftNode;
         this.rightNode = props.rightNode;
@@ -36,13 +36,13 @@ export class PairDrawable extends React.Component {
                     x={isLeftNode ? 0 : Config.VertBarPos * Config.BoxWidth}
                     y={Math.floor((Config.BoxHeight - 1.2 * 12) / 2)}
                     fontStyle={textValue === undefined ? 'italic' : 'normal'}
-                    fill={'white'}/>;
+                    fill={'white'} />;
             } else if (isNull(nodeValue)) {
                 const props = {
                     x: isLeftNode ? -Config.BoxWidth * Config.VertBarPos : 0,
                     y: 0,
                 };
-                return <NullDrawable {...props}/>;
+                return <NullDrawable {...props} />;
             } else {
                 return null;
             }
@@ -55,12 +55,12 @@ export class PairDrawable extends React.Component {
                 height={Config.BoxHeight}
                 strokeWidth={Config.StrokeWidth}
                 stroke={Config.Stroke}
-                fill={'#17181A'}/>
+                fill={'#17181A'} />
             {/* Vertical line in the box */}
             <Line
                 points={[Config.BoxWidth * Config.VertBarPos, 0, Config.BoxWidth * Config.VertBarPos, Config.BoxHeight]}
                 strokeWidth={Config.StrokeWidth}
-                stroke={Config.Stroke}/>
+                stroke={Config.Stroke} />
             {createChildText(this.leftNode, true)}
             {createChildText(this.rightNode, false)}
         </Group>;
