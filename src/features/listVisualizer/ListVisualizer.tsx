@@ -14,7 +14,7 @@ import { DataTreeNode, FunctionTreeNode } from './tree/TreeNode';
  * clear is used by WorkspaceSaga to reset the visualizer after every "Run" button press
  */
 export default class ListVisualizer {
-  private static setSteps: ((step: Step[]) => void) = ([]) => {};
+  private static setSteps: ((step: Step[]) => void) = (a = []) => { return; };
   private static _instance = new ListVisualizer();
 
   private steps: Step[] = [];
