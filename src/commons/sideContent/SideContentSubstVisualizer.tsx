@@ -1,5 +1,5 @@
 /* eslint-disable simple-import-sort/imports */
-import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
+import { Card, Classes, Divider, Pre, Slider, Button, ButtonGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import AceEditor from 'react-ace';
@@ -10,6 +10,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 
 import controlButton from '../ControlButton';
+// import { ArrowFunctionExpression } from 'estree';
 
 const SubstDefaultText = () => {
   return (
@@ -63,7 +64,7 @@ const SubstCodeDisplay = (props: { content: string }) => {
 type SubstVisualizerProps = StateProps;
 
 type StateProps = {
-  content: IStepperPropContents[];
+  content:  IStepperPropContents[];
 };
 
 type State = {
@@ -74,7 +75,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   constructor(props: SubstVisualizerProps) {
     super(props);
     this.state = {
-      value: 1
+    value: 1,
     };
 
     // set source mode as 2
@@ -97,50 +98,64 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
         };
 
     return (
-      <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
-        <div>
-          <div className="sa-substituter bp3-dark">
-            <Slider
-              disabled={!hasRunCode}
-              min={1}
-              max={this.props.content.length}
-              onChange={this.sliderShift}
-              value={this.state.value <= lastStepValue ? this.state.value : 1}
-            />
-            {hasRunCode ? (
-              <AceEditor
-                className="react-ace"
-                mode="source2defaultNONE"
-                theme="source"
-                fontSize={17}
-                highlightActiveLine={false}
-                wrapEnabled={true}
-                height="unset"
-                width="100%"
-                showGutter={false}
-                readOnly={true}
-                maxLines={Infinity}
-                value={this.getText(this.state.value)}
-                markers={this.getDiffMarkers(this.state.value)}
-                setOptions={{
-                  fontFamily: "'Inconsolata', 'Consolas', monospace"
-                }}
+        <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
+          <div>
+            <div className="sa-substituter">
+              <Slider
+                disabled={!hasRunCode}
+                min={1}
+                max={this.props.content.length}
+                onChange={this.sliderShift}
+                value={this.state.value <= lastStepValue ? this.state.value : 1}
               />
-            ) : (
-              <SubstDefaultText />
-            )}
-            {hasRunCode ? (
-              <SubstCodeDisplay
-                content={
-                  this.state.value <= lastStepValue
-                    ? this.props.content[this.state.value - 1].explanation
-                    : this.props.content[0].explanation
-                }
-              />
-            ) : null}
+              <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                <ButtonGroup>
+                  <Button disabled={!hasRunCode
+                          || !this.hasPreviousFunctionCall(this.state.value)}
+                      icon="double-chevron-left"
+                      onClick={this.stepPreviousFunctionCall(this.state.value)} />
+                  <Button disabled={!hasRunCode || this.state.value === 1} icon="chevron-left" onClick={this.stepPrevious} />
+                  <Button disabled={!hasRunCode || this.state.value === lastStepValue} icon="chevron-right" onClick={this.stepNext} />
+                  <Button disabled={!hasRunCode
+                          || !this.hasNextFunctionCall(this.state.value)}
+                      icon="double-chevron-right"
+                      onClick={this.stepNextFunctionCall(this.state.value)} />
+                </ButtonGroup>
+              </div> <br />
+              {hasRunCode ? (
+                <AceEditor
+                  className="react-ace"
+                  mode="source2defaultNONE"
+                  theme="source"
+                  fontSize={17}
+                  highlightActiveLine={false}
+                  wrapEnabled={true}
+                  height="unset"
+                  width="100%"
+                  showGutter={false}
+                  readOnly={true}
+                  maxLines={Infinity}
+                  value={this.getText(this.state.value)}
+                  markers={this.getDiffMarkers(this.state.value)}
+                  setOptions={{
+                    fontFamily: "'Inconsolata', 'Consolas', monospace"
+                  }}
+                />
+              ) : (
+                <SubstDefaultText />
+              )}
+              {hasRunCode ? (
+                <SubstCodeDisplay
+                  content={
+                    this.state.value  <= lastStepValue
+                      ? this.props.content[this.state.value - 1].explanation
+                      : this.props.content[0].explanation
+                  }
+                />
+              ) : null}
+            </div>
           </div>
-        </div>
-      </HotKeys>
+        </HotKeys>
     );
   }
 
@@ -218,6 +233,143 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     // Move to the last step
     this.sliderShift(lastStepValue);
   };
+
+  private stepPrevious = () => {
+    this.sliderShift(this.state.value - 1);
+  };
+
+  private stepNext = () => {
+    this.sliderShift(this.state.value + 1);
+  };
+
+  private stepPreviousFunctionCall = (
+    value: number
+  ) => () => {
+    const previousFunctionCall = this.getPreviousFunctionCall(value);
+    if (previousFunctionCall !== null) {
+      this.sliderShift(previousFunctionCall);
+    } else {
+      this.sliderShift(value);
+    }
+  };
+
+  private stepNextFunctionCall = (
+    value: number,
+  ) => () => {
+    const nextFunctionCall = this.getNextFunctionCall(value);
+    if (nextFunctionCall !== null) {
+      this.sliderShift(nextFunctionCall);
+    } else {
+      this.sliderShift(value);
+    }
+  };
+
+  private hasNextFunctionCall = (value: number) => {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const currentFunction = this.props.content[contIndex].function
+    if (currentFunction === undefined) {
+      return false;
+    } else {
+      for (let i = contIndex + 1; i < this.props.content.length; i++) {
+        const nextFunction = this.props.content[i].function;
+        if (nextFunction === currentFunction) {
+          return true;
+        } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+          // const Arrow1: ArrowFunctionExpression = currentFunction
+          if (nextFunction.type === "ArrowFunctionExpression") {
+            // const Arrow2: ArrowFunctionExpression = nextFunction
+            // if (Arrow1.body === Arrow2.body) {
+            //   return true
+            // }
+            return true;
+          }
+        }
+      }
+      return false
+    }
+  }
+
+  private hasPreviousFunctionCall = (value: number) => {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const currentFunction = this.props.content[contIndex].function;
+    if (currentFunction === undefined) {
+      return false;
+    } else {
+      for (let i = contIndex - 1; i > -1; i--) {
+        const nextFunction = this.props.content[i].function;
+        if (nextFunction === currentFunction) {
+          return true;
+        } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+          // const Arrow1: ArrowFunctionExpression = currentFunction
+          if (nextFunction.type === "ArrowFunctionExpression") {
+            // const Arrow2: ArrowFunctionExpression = nextFunction
+            // if (Arrow1.body === Arrow2.body) {
+            //   return true
+            // }
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+  }
+
+  private getPreviousFunctionCall = (value: number) => {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const currentFunction = this.props.content[contIndex].function;
+    const isArrowFunction = currentFunction !== undefined ? currentFunction.type === "ArrowFunctionExpression" : false
+    if (currentFunction === undefined) {
+      return null;
+    }
+    for (let i = contIndex - 1; i > -1; i--) {
+      const nextFunction = this.props.content[i].function;
+      if (nextFunction === currentFunction) {
+        return i + 1;
+      } else if (isArrowFunction && this.props.content[i].function !== undefined && currentFunction !== undefined) {
+        if (this.props.content[i].function?.loc === currentFunction.loc) {
+          return i + 1;
+        } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+          // const Arrow1: ArrowFunctionExpression = currentFunction
+          if (nextFunction.type === "ArrowFunctionExpression") {
+            // const Arrow2: ArrowFunctionExpression = nextFunction
+            // if (Arrow1.body === Arrow2.body) {
+            //   return i + 1
+            // }
+            return i + 1;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  private getNextFunctionCall = (value: number) => {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const currentFunction = this.props.content[contIndex].function;
+    if (currentFunction === undefined) {
+      return null;
+    }
+    for (let i = contIndex + 1; i < this.props.content.length; i++) {
+      const nextFunction = this.props.content[i].function;
+      if (nextFunction === currentFunction) {
+        return i + 1;
+      } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+        // const Arrow1: ArrowFunctionExpression = currentFunction
+        if (nextFunction.type === "ArrowFunctionExpression") {
+          // const Arrow2: ArrowFunctionExpression = nextFunction
+          // if (Arrow1.body === Arrow2.body) {
+          //   return i + 1
+          // }
+          return i + 1;
+        }
+      }
+    }
+    return null;
+  } 
 }
 
 export default SideContentSubstVisualizer;
