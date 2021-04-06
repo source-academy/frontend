@@ -5,8 +5,6 @@ import { findDataHeight, findDataWidth, isFunction, isPair, toText } from './Lis
 import { Tree } from './tree/Tree';
 import { DataTreeNode, FunctionTreeNode } from './tree/TreeNode';
 
-type SetSteps = (step: Step[]) => void;
-
 /**
  * The list visualizer class.
  * Exposes three function: init, drawData, and clear.
@@ -16,7 +14,7 @@ type SetSteps = (step: Step[]) => void;
  * clear is used by WorkspaceSaga to reset the visualizer after every "Run" button press
  */
 export default class ListVisualizer {
-  private static setSteps: SetSteps;
+  private static setSteps: ((step: Step[]) => void);
   private static _instance = new ListVisualizer();
 
   private steps: Step[] = [];
@@ -25,7 +23,7 @@ export default class ListVisualizer {
 
   private constructor() {}
 
-  public static init(setSteps: SetSteps): void {
+  public static init(setSteps: ((step: Step[]) => void)): void {
     ListVisualizer.setSteps = setSteps;
   }
 
