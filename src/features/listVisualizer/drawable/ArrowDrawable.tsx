@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line } from 'react-konva'
+import { Group, Line } from 'react-konva'
 
 import { Config } from '../Config'
 
@@ -67,9 +67,9 @@ export abstract class ArrowDrawable extends React.Component {
             strokeWidth={Config.StrokeWidth}
             stroke={Config.Stroke} />
 
-        return [
-            pointer,
-            arrow,
-        ]
+        return <Group>
+            {pointer}
+            {arrow}
+        </Group>;
     }
 }
