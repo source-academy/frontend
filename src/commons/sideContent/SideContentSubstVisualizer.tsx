@@ -64,7 +64,7 @@ const SubstCodeDisplay = (props: { content: string }) => {
 type SubstVisualizerProps = StateProps;
 
 type StateProps = {
-  content:  IStepperPropContents[];
+  content: IStepperPropContents[];
 };
 
 type State = {
@@ -75,7 +75,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   constructor(props: SubstVisualizerProps) {
     super(props);
     this.state = {
-    value: 1,
+      value: 1
     };
 
     // set source mode as 2
@@ -98,64 +98,75 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
         };
 
     return (
-        <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
-          <div>
-            <div className="sa-substituter">
-              <Slider
-                disabled={!hasRunCode}
-                min={1}
-                max={this.props.content.length}
-                onChange={this.sliderShift}
-                value={this.state.value <= lastStepValue ? this.state.value : 1}
+      <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
+        <div>
+          <div className="sa-substituter">
+            <Slider
+              disabled={!hasRunCode}
+              min={1}
+              max={this.props.content.length}
+              onChange={this.sliderShift}
+              value={this.state.value <= lastStepValue ? this.state.value : 1}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <ButtonGroup>
+                <Button
+                  disabled={!hasRunCode || !this.hasPreviousFunctionCall(this.state.value)}
+                  icon="double-chevron-left"
+                  onClick={this.stepPreviousFunctionCall(this.state.value)}
+                />
+                <Button
+                  disabled={!hasRunCode || this.state.value === 1}
+                  icon="chevron-left"
+                  onClick={this.stepPrevious}
+                />
+                <Button
+                  disabled={!hasRunCode || this.state.value === lastStepValue}
+                  icon="chevron-right"
+                  onClick={this.stepNext}
+                />
+                <Button
+                  disabled={!hasRunCode || !this.hasNextFunctionCall(this.state.value)}
+                  icon="double-chevron-right"
+                  onClick={this.stepNextFunctionCall(this.state.value)}
+                />
+              </ButtonGroup>
+            </div>{' '}
+            <br />
+            {hasRunCode ? (
+              <AceEditor
+                className="react-ace"
+                mode="source2defaultNONE"
+                theme="source"
+                fontSize={17}
+                highlightActiveLine={false}
+                wrapEnabled={true}
+                height="unset"
+                width="100%"
+                showGutter={false}
+                readOnly={true}
+                maxLines={Infinity}
+                value={this.getText(this.state.value)}
+                markers={this.getDiffMarkers(this.state.value)}
+                setOptions={{
+                  fontFamily: "'Inconsolata', 'Consolas', monospace"
+                }}
               />
-              <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                <ButtonGroup>
-                  <Button disabled={!hasRunCode
-                          || !this.hasPreviousFunctionCall(this.state.value)}
-                      icon="double-chevron-left"
-                      onClick={this.stepPreviousFunctionCall(this.state.value)} />
-                  <Button disabled={!hasRunCode || this.state.value === 1} icon="chevron-left" onClick={this.stepPrevious} />
-                  <Button disabled={!hasRunCode || this.state.value === lastStepValue} icon="chevron-right" onClick={this.stepNext} />
-                  <Button disabled={!hasRunCode
-                          || !this.hasNextFunctionCall(this.state.value)}
-                      icon="double-chevron-right"
-                      onClick={this.stepNextFunctionCall(this.state.value)} />
-                </ButtonGroup>
-              </div> <br />
-              {hasRunCode ? (
-                <AceEditor
-                  className="react-ace"
-                  mode="source2defaultNONE"
-                  theme="source"
-                  fontSize={17}
-                  highlightActiveLine={false}
-                  wrapEnabled={true}
-                  height="unset"
-                  width="100%"
-                  showGutter={false}
-                  readOnly={true}
-                  maxLines={Infinity}
-                  value={this.getText(this.state.value)}
-                  markers={this.getDiffMarkers(this.state.value)}
-                  setOptions={{
-                    fontFamily: "'Inconsolata', 'Consolas', monospace"
-                  }}
-                />
-              ) : (
-                <SubstDefaultText />
-              )}
-              {hasRunCode ? (
-                <SubstCodeDisplay
-                  content={
-                    this.state.value  <= lastStepValue
-                      ? this.props.content[this.state.value - 1].explanation
-                      : this.props.content[0].explanation
-                  }
-                />
-              ) : null}
-            </div>
+            ) : (
+              <SubstDefaultText />
+            )}
+            {hasRunCode ? (
+              <SubstCodeDisplay
+                content={
+                  this.state.value <= lastStepValue
+                    ? this.props.content[this.state.value - 1].explanation
+                    : this.props.content[0].explanation
+                }
+              />
+            ) : null}
           </div>
-        </HotKeys>
+        </div>
+      </HotKeys>
     );
   }
 
@@ -242,9 +253,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     this.sliderShift(this.state.value + 1);
   };
 
-  private stepPreviousFunctionCall = (
-    value: number
-  ) => () => {
+  private stepPreviousFunctionCall = (value: number) => () => {
     const previousFunctionCall = this.getPreviousFunctionCall(value);
     if (previousFunctionCall !== null) {
       this.sliderShift(previousFunctionCall);
@@ -253,9 +262,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     }
   };
 
-  private stepNextFunctionCall = (
-    value: number,
-  ) => () => {
+  private stepNextFunctionCall = (value: number) => () => {
     const nextFunctionCall = this.getNextFunctionCall(value);
     if (nextFunctionCall !== null) {
       this.sliderShift(nextFunctionCall);
@@ -267,7 +274,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   private hasNextFunctionCall = (value: number) => {
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
-    const currentFunction = this.props.content[contIndex].function
+    const currentFunction = this.props.content[contIndex].function;
     if (currentFunction === undefined) {
       return false;
     } else {
@@ -275,9 +282,12 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
         const nextFunction = this.props.content[i].function;
         if (nextFunction === currentFunction) {
           return true;
-        } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+        } else if (
+          currentFunction.type === 'ArrowFunctionExpression' &&
+          nextFunction !== undefined
+        ) {
           // const Arrow1: ArrowFunctionExpression = currentFunction
-          if (nextFunction.type === "ArrowFunctionExpression") {
+          if (nextFunction.type === 'ArrowFunctionExpression') {
             // const Arrow2: ArrowFunctionExpression = nextFunction
             // if (Arrow1.body === Arrow2.body) {
             //   return true
@@ -286,9 +296,9 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
           }
         }
       }
-      return false
+      return false;
     }
-  }
+  };
 
   private hasPreviousFunctionCall = (value: number) => {
     const lastStepValue = this.props.content.length;
@@ -301,9 +311,12 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
         const nextFunction = this.props.content[i].function;
         if (nextFunction === currentFunction) {
           return true;
-        } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+        } else if (
+          currentFunction.type === 'ArrowFunctionExpression' &&
+          nextFunction !== undefined
+        ) {
           // const Arrow1: ArrowFunctionExpression = currentFunction
-          if (nextFunction.type === "ArrowFunctionExpression") {
+          if (nextFunction.type === 'ArrowFunctionExpression') {
             // const Arrow2: ArrowFunctionExpression = nextFunction
             // if (Arrow1.body === Arrow2.body) {
             //   return true
@@ -314,13 +327,14 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       }
       return false;
     }
-  }
+  };
 
   private getPreviousFunctionCall = (value: number) => {
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
     const currentFunction = this.props.content[contIndex].function;
-    const isArrowFunction = currentFunction !== undefined ? currentFunction.type === "ArrowFunctionExpression" : false
+    const isArrowFunction =
+      currentFunction !== undefined ? currentFunction.type === 'ArrowFunctionExpression' : false;
     if (currentFunction === undefined) {
       return null;
     }
@@ -328,12 +342,19 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       const nextFunction = this.props.content[i].function;
       if (nextFunction === currentFunction) {
         return i + 1;
-      } else if (isArrowFunction && this.props.content[i].function !== undefined && currentFunction !== undefined) {
+      } else if (
+        isArrowFunction &&
+        this.props.content[i].function !== undefined &&
+        currentFunction !== undefined
+      ) {
         if (this.props.content[i].function?.loc === currentFunction.loc) {
           return i + 1;
-        } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+        } else if (
+          currentFunction.type === 'ArrowFunctionExpression' &&
+          nextFunction !== undefined
+        ) {
           // const Arrow1: ArrowFunctionExpression = currentFunction
-          if (nextFunction.type === "ArrowFunctionExpression") {
+          if (nextFunction.type === 'ArrowFunctionExpression') {
             // const Arrow2: ArrowFunctionExpression = nextFunction
             // if (Arrow1.body === Arrow2.body) {
             //   return i + 1
@@ -344,7 +365,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       }
     }
     return null;
-  }
+  };
 
   private getNextFunctionCall = (value: number) => {
     const lastStepValue = this.props.content.length;
@@ -357,9 +378,9 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       const nextFunction = this.props.content[i].function;
       if (nextFunction === currentFunction) {
         return i + 1;
-      } else if (currentFunction.type === "ArrowFunctionExpression" && nextFunction !== undefined) {
+      } else if (currentFunction.type === 'ArrowFunctionExpression' && nextFunction !== undefined) {
         // const Arrow1: ArrowFunctionExpression = currentFunction
-        if (nextFunction.type === "ArrowFunctionExpression") {
+        if (nextFunction.type === 'ArrowFunctionExpression') {
           // const Arrow2: ArrowFunctionExpression = nextFunction
           // if (Arrow1.body === Arrow2.body) {
           //   return i + 1
@@ -369,7 +390,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       }
     }
     return null;
-  } 
+  };
 }
 
 export default SideContentSubstVisualizer;
