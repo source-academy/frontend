@@ -83,7 +83,7 @@ function visualizeList(...args: any[]) {
     ListVisualizer.drawData(args[0]);
 
     // If there is only one arg, just print out the first arg in REPL, instead of [first arg]
-    return args[0].length == 1 ? args[0][0] : args[0];
+    return args[0].length === 1 ? args[0][0] : args[0];
   } catch (err) {
     console.log(err);
     throw new Error('List visualizer is not enabled');
@@ -121,7 +121,7 @@ export const externalBuiltIns = {
   rawDisplay,
   prompt: cadetPrompt,
   alert: cadetAlert,
-  visualiseList: visualizeList,
+  visualiseList: visualizeList
 };
 
 /**
