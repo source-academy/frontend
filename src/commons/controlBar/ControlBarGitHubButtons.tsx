@@ -12,7 +12,6 @@ import Constants from '../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
-  isPickerOpen?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
@@ -34,7 +33,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;
-  const shouldDisableSaveButton = store.getState().session.githubRepositoryName === '';
+  const shouldDisableSaveButton = true; // store.getState().session.githubRepositoryName === '';
 
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 

@@ -47,15 +47,9 @@ import {
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
-  githubBeginConfirmationDialog,
-  githubBeginOpenDialog,
-  githubBeginSaveAsDialog,
-  githubBeginSaveDialog,
-  githubCancelConfirmationDialog,
-  githubCloseFileExplorerDialog,
-  githubConfirmCreatingSave,
-  githubConfirmOpen,
-  githubConfirmOverwritingSave
+  githubOpenFile,
+  githubSaveFile,
+  githubSaveFileAs
 } from '../../features/github/GitHubActions';
 import {
   persistenceInitialise,
@@ -96,15 +90,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
-  githubOctokitInstance: state.session.githubOctokitInstance,
-  githubLoginID: state.session.githubLoginID,
-  githubName: state.session.githubName,
-  githubEmail: state.session.githubEmail,
-  githubCommitMessage: state.session.githubCommitMessage,
-  userRepos: state.session.userRepos,
-  pickerType: state.session.pickerType,
-  isGitHubConfirmationDialogOpen: state.session.isGitHubConfirmationDialogOpen,
-  isPickerOpen: state.session.isPickerOpen
+  githubOctokitInstance: state.session.githubOctokitInstance
 });
 
 const workspaceLocation: WorkspaceLocation = 'playground';
@@ -160,15 +146,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
-      handleGitHubBeginOpenDialog: githubBeginOpenDialog,
-      handleGitHubBeginSaveAsDialog: githubBeginSaveAsDialog,
-      handleGitHubBeginSaveDialog: githubBeginSaveDialog,
-      handleGitHubConfirmCreatingSave: githubConfirmCreatingSave,
-      handleGitHubConfirmOpen: githubConfirmOpen,
-      handleGitHubConfirmOverwritingSave: githubConfirmOverwritingSave,
-      handleGitHubBeginConfirmationDialog: githubBeginConfirmationDialog,
-      handleGitHubCancelConfirmationDialog: githubCancelConfirmationDialog,
-      handleGitHubCloseFileExplorerDialog: githubCloseFileExplorerDialog,
+      handleGitHubOpenFile: githubOpenFile,
+      handleGitHubSaveFileAs: githubSaveFileAs,
+      handleGitHubSaveFile: githubSaveFile,
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub
     },

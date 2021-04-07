@@ -10,19 +10,8 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
-  SET_GITHUB_COMMIT_MESSAGE,
-  SET_GITHUB_CONFIRM_DIALOG_STATUS,
-  SET_GITHUB_EMAIL,
-  SET_GITHUB_FILEPATH,
-  SET_GITHUB_LOGIN_ID,
-  SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_REPOSITORY_NAME,
-  SET_GITHUB_SAVE_MODE,
-  SET_GITHUB_USER_REPOS,
   SET_GOOGLE_USER,
-  SET_PICKER_DIALOG_STATUS,
-  SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -40,70 +29,15 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
-    case SET_GITHUB_EMAIL:
-      return {
-        ...state,
-        githubEmail: action.payload
-      };
-    case SET_GITHUB_LOGIN_ID:
-      return {
-        ...state,
-        githubLoginID: action.payload
-      };
-    case SET_GITHUB_NAME:
-      return {
-        ...state,
-        githubName: action.payload
-      };
     case SET_GITHUB_OCTOKIT_INSTANCE:
       return {
         ...state,
         githubOctokitInstance: action.payload
       };
-    case SET_GITHUB_USER_REPOS:
-      return {
-        ...state,
-        userRepos: action.payload
-      };
-    case SET_GITHUB_FILEPATH:
-      return {
-        ...state,
-        githubRepositoryFilepath: action.payload
-      };
-    case SET_GITHUB_REPOSITORY_NAME:
-      return {
-        ...state,
-        githubRepositoryName: action.payload
-      };
-    case SET_GITHUB_COMMIT_MESSAGE:
-      return {
-        ...state,
-        githubCommitMessage: action.payload
-      };
     case SET_GOOGLE_USER:
       return {
         ...state,
         googleUser: action.payload
-      };
-    case SET_GITHUB_CONFIRM_DIALOG_STATUS:
-      return {
-        ...state,
-        isGitHubConfirmationDialogOpen: action.payload
-      };
-    case SET_PICKER_DIALOG_STATUS:
-      return {
-        ...state,
-        isPickerOpen: action.payload
-      };
-    case SET_PICKER_TYPE:
-      return {
-        ...state,
-        pickerType: action.payload
-      };
-    case SET_GITHUB_SAVE_MODE:
-      return {
-        ...state,
-        githubSaveMode: action.payload
       };
     case SET_TOKENS:
       return {

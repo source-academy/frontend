@@ -44,55 +44,10 @@ export function getGitHubOctokitInstance(): any {
 }
 
 /**
- * Returns the username used by the user to login to GitHub.
- *
- * This function allows for mocking Octokit behaviour in tests.
- */
-export function getGitHubLoginID(): string {
-  return store.getState().session.githubLoginID;
-}
-
-/**
- * Returns the actual name associated with a GitHub account.
- *
- * This function allows for mocking Octokit behaviour in tests.
- */
-export function getGitHubName(): string {
-  return store.getState().session.githubName || '';
-}
-
-/**
- * Returns the email address associated with a GitHub account.
- *
- * This function allows for mocking Octokit behaviour in tests.
- */
-export function getGitHubEmail(): string {
-  return store.getState().session.githubEmail || 'no public email provided';
-}
-
-/**
  * Returns the client ID. This function is meant to allow us to mock the client ID.
  *
  * @return {string} The client ID.
  */
 export function getClientId(): string {
   return Constants.githubClientId;
-}
-
-/**
- * Returns the pickerType. Should be 'Open' or 'Save'.
- *
- * @return {string} The pickerType.
- */
-export function getPickerType(): string {
-  return store.getState().session.pickerType || '';
-}
-
-/**
- * Returns the GitHub save mode. Should be 'Create' or 'Overwrite'.
- *
- * @return {string} The save mode.
- */
-export function getGitHubSaveMode(): string {
-  return store.getState().session.githubSaveMode || '';
 }

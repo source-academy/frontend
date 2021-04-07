@@ -302,18 +302,7 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  notifications: [],
-  githubLoginID: '',
-  githubName: '',
-  githubEmail: '',
-  userRepos: [],
-  githubRepositoryFilepath: '',
-  githubSaveMode: '',
-  githubRepositoryName: '',
-  githubCommitMessage: '',
-  pickerType: '',
-  isPickerOpen: false,
-  isGitHubConfirmationDialogOpen: false
+  notifications: []
 };
 
 export const defaultState: OverallState = {

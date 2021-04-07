@@ -193,6 +193,11 @@ const FileExplorerDialog: React.FC<any> = props => {
   }
 
   async function checkIfFileCanBeSaved() {
+    if (filePath === '') {
+      showWarningMessage('No file name given.', 2000);
+      return false;
+    }
+
     if (props.octokit === undefined) {
       showWarningMessage('Please log in and try again', 2000);
       return false;

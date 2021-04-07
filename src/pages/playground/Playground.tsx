@@ -33,8 +33,6 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
-import GitHubConfirmDialog from '../../commons/gitHubOverlay/GitHubConfirmDialog';
-import { GitHubOverlay } from '../../commons/gitHubOverlay/GitHubOverlay';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -100,17 +98,11 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleGitHubBeginOpenDialog: () => void;
-  handleGitHubBeginSaveAsDialog: () => void;
-  handleGitHubBeginSaveDialog: () => void;
-  handleGitHubCloseFileExplorerDialog: () => void;
+  handleGitHubOpenFile: () => void;
+  handleGitHubSaveFileAs: () => void;
+  handleGitHubSaveFile: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
-  handleGitHubBeginConfirmationDialog: () => void;
-  handleGitHubCancelConfirmationDialog: () => void;
-  handleGitHubConfirmOpen: () => void;
-  handleGitHubConfirmCreatingSave: () => void;
-  handleGitHubConfirmOverwritingSave: () => void;
 };
 
 export type StateProps = {
@@ -140,11 +132,6 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
-  githubCommitMessage: string;
-  userRepos: any[];
-  pickerType: string;
-  isGitHubConfirmationDialogOpen: boolean;
-  isPickerOpen: boolean;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -451,21 +438,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return (
       <ControlBarGitHubButtons
         loggedInAs={githubOctokitInstance}
-        isPickerOpen={props.isPickerOpen}
         key="github"
-        onClickOpen={props.handleGitHubBeginOpenDialog}
-        onClickSave={props.handleGitHubBeginSaveDialog}
-        onClickSaveAs={props.handleGitHubBeginSaveAsDialog}
+        onClickOpen={props.handleGitHubOpenFile}
+        onClickSave={props.handleGitHubSaveFile}
+        onClickSaveAs={props.handleGitHubSaveFileAs}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
       />
     );
   }, [
     githubOctokitInstance,
-    props.isPickerOpen,
-    props.handleGitHubBeginOpenDialog,
-    props.handleGitHubBeginSaveAsDialog,
-    props.handleGitHubBeginSaveDialog,
+    props.handleGitHubOpenFile,
+    props.handleGitHubSaveFileAs,
+    props.handleGitHubSaveFile,
     props.handleGitHubLogIn,
     props.handleGitHubLogOut
   ]);
@@ -814,14 +799,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handlers={handlers}
     >
       <Workspace {...workspaceProps} />
-      <GitHubOverlay {...props} />
-      <GitHubConfirmDialog
-        isOpen={props.isGitHubConfirmationDialogOpen}
-        handleGitHubCancelConfirmationDialog={props.handleGitHubCancelConfirmationDialog}
-        handleGitHubConfirmOpen={props.handleGitHubConfirmOpen}
-        handleGitHubConfirmCreatingSave={props.handleGitHubConfirmCreatingSave}
-        handleGitHubConfirmOverwritingSave={props.handleGitHubConfirmOverwritingSave}
-      />
     </HotKeys>
   );
 };

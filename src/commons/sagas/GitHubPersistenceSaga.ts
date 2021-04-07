@@ -2,12 +2,9 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 import {
-  GITHUB_BEGIN_CONFIRMATION_DIALOG,
-  GITHUB_BEGIN_OPEN_DIALOG,
-  GITHUB_BEGIN_SAVE_AS_DIALOG,
-  GITHUB_BEGIN_SAVE_DIALOG,
-  GITHUB_CANCEL_CONFIRMATION_DIALOG,
-  GITHUB_CLOSE_FILE_EXPLORER_DIALOG
+  GITHUB_OPEN_FILE,
+  GITHUB_SAVE_FILE,
+  GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
@@ -22,13 +19,9 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
   yield takeLatest(LOGOUT_GITHUB, githubLogoutSaga);
 
-  yield takeLatest(GITHUB_BEGIN_OPEN_DIALOG, githubDisplayOpenPickerSaga);
-  yield takeLatest(GITHUB_BEGIN_SAVE_AS_DIALOG, githubDisplaySavePickerSaga);
-  yield takeLatest(GITHUB_BEGIN_SAVE_DIALOG, githubQuicksaveSaga);
-  yield takeLatest(GITHUB_CLOSE_FILE_EXPLORER_DIALOG, githubCloseFileExplorerSaga);
-
-  yield takeLatest(GITHUB_BEGIN_CONFIRMATION_DIALOG, githubBeginConfirmationDialogSaga);
-  yield takeLatest(GITHUB_CANCEL_CONFIRMATION_DIALOG, githubCancelConfirmationDialogSaga);
+  yield takeLatest(GITHUB_OPEN_FILE, githubOpenFile);
+  yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
+  yield takeLatest(GITHUB_SAVE_FILE_AS, githubSaveFileAs);
 }
 
 function* githubLoginSaga() {
@@ -55,7 +48,7 @@ function* githubLogoutSaga() {
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
-function* githubDisplayOpenPickerSaga() {
+function* githubOpenFile() {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
@@ -80,7 +73,7 @@ function* githubDisplayOpenPickerSaga() {
   }
 }
 
-function* githubDisplaySavePickerSaga() {
+function* githubSaveFileAs() {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
@@ -133,25 +126,13 @@ function* githubOpenFileToEditor(repoName: string, filePath: string) {
 }
 */
 
-function* githubQuicksaveSaga() {
+function* githubSaveFile() {
   /*
     yield put(actions.setPickerType('Save'));
     yield put(actions.setGitHubSaveMode('Overwrite'));
     yield put(actions.setGitHubCommitMessage('Changes made from SourceAcademy'));
     yield put(actions.setGitHubConfirmationDialogStatus(true));
   */
-}
-
-function* githubCloseFileExplorerSaga() {
-  yield put(actions.setPickerDialogStatus(false));
-}
-
-function* githubBeginConfirmationDialogSaga() {
-  yield put(actions.setGitHubConfirmationDialogStatus(true));
-}
-
-function* githubCancelConfirmationDialogSaga() {
-  yield put(actions.setGitHubConfirmationDialogStatus(false));
 }
 
 export default GitHubPersistenceSaga;

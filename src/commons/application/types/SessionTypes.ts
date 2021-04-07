@@ -72,17 +72,6 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitInstance?: Octokit;
-  readonly githubLoginID: string;
-  readonly githubName: string;
-  readonly githubEmail: string;
-  readonly userRepos: any[];
-  readonly githubRepositoryName: string;
-  readonly githubRepositoryFilepath: string;
-  readonly githubCommitMessage: string;
-  readonly pickerType: string;
-  readonly isPickerOpen: boolean;
-  readonly isGitHubConfirmationDialogOpen: boolean;
-  readonly githubSaveMode: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };
