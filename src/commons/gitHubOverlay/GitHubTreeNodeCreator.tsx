@@ -43,14 +43,17 @@ export class GitHubTreeNodeCreator {
       return childNodes;
     }
 
-    const octokit = GitHubUtils.getGitHubOctokitInstance();
-    const githubLoginID = GitHubUtils.getGitHubLoginID();
+    const octokit = GitHubUtils.getGitHubOctokitInstance() || {
+      users: { getAuthenticated: () => {} }
+    };
 
     if (octokit === undefined) {
       return childNodes;
     }
 
     try {
+      const AuthUser = await octokit.users.getAuthenticated();
+      const githubLoginID = AuthUser.data.login;
       const results = await octokit.repos.getContent({
         owner: githubLoginID,
         repo: repoName,
