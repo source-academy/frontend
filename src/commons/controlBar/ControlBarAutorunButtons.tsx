@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 import { ControlBarRunButton } from './ControlBarRunButton';
 
 type ControlBarAutorunButtonProps = DispatchProps & StateProps;
@@ -27,7 +28,7 @@ type StateProps = {
 };
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   return isMobileBreakpoint ? (
     <>

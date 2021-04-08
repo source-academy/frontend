@@ -86,7 +86,17 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         Parser.validator.assertEntityType(GameEntityType.locations, actionParams[0], actionType);
         break;
-
+      case GameActionType.StartAnimation:
+        actionParamObj.id = actionParams[0];
+        actionParamObj.startFrame = +actionParams[1];
+        actionParamObj.frameRate = +actionParams[2];
+        actionParamObj.assetCategory = actionParams[3];
+        Parser.validator.assertAnimType(actionParams[0], actionType);
+        break;
+      case GameActionType.StopAnimation:
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertAnimType(actionParams[0], actionType);
+        break;
       case GameActionType.ShowDialogue:
         actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.dialogues, actionParams[0], actionType);
