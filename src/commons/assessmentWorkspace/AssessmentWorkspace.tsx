@@ -129,7 +129,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const [sessionId, setSessionId] = React.useState('');
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   React.useEffect(() => {
     props.handleEditorValueChange('');
@@ -179,6 +179,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   React.useEffect(() => {
     checkWorkspaceReset();
   });
+
+  /**
+   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
+   */
+  React.useEffect(() => {
+    if (
+      !isMobileBreakpoint &&
+      (selectedTab === SideContentType.mobileEditor ||
+        selectedTab === SideContentType.mobileEditorRun)
+    ) {
+      setSelectedTab(SideContentType.questionOverview);
+      props.handleActiveTabChange(SideContentType.questionOverview);
+    }
+  }, [isMobileBreakpoint, props, selectedTab]);
 
   /* ==================
      onChange handlers
@@ -320,14 +334,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />,
+        body: (
+          <Markdown
+            className="sidecontent-overview"
+            content={props.assessment!.questions[questionId].content}
+          />
+        ),
         id: SideContentType.questionOverview,
         toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />,
+        body: <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />,
         id: SideContentType.briefing,
         toSpawn: () => true
       },

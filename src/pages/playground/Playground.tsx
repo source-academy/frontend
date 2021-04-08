@@ -45,6 +45,7 @@ import SideContentRemoteExecution from '../../commons/sideContent/SideContentRem
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
+import Constants from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
@@ -169,7 +170,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -786,7 +787,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
           sessionButtons,
-          persistenceButtons
+          persistenceButtons,
+          githubButtons
         ]
       },
       defaultSelectedTabId: selectedTab,

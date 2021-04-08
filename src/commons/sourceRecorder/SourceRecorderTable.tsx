@@ -52,7 +52,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          width: 300,
+          minWidth: 200,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -63,7 +63,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          width: 100,
+          minWidth: 100,
           suppressMovable: true,
           suppressMenu: true,
           hide: !!this.props.handleSetSourcecastData
@@ -71,7 +71,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Uploader',
           field: 'uploader.name',
-          width: 200,
+          minWidth: 150,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -81,7 +81,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Date',
           valueGetter: params => getStandardDate(params.data.inserted_at),
-          maxWidth: 200,
+          minWidth: 150,
           suppressMovable: true,
           suppressMenu: true
         },
@@ -89,7 +89,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           headerName: 'Share',
           field: 'uid',
           cellRendererFramework: SourceRecorderShareCell,
-          width: 100,
+          minWidth: 80,
           suppressMovable: true,
           suppressMenu: true
         },
@@ -100,7 +100,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           cellRendererParams: {
             handleDeleteSourcecastEntry: this.props.handleDeleteSourcecastEntry
           },
-          width: 100,
+          minWidth: 100,
           maxWidth: 100,
           sortable: false,
           suppressMovable: true,

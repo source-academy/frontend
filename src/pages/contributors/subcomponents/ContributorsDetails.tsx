@@ -43,8 +43,6 @@ class ContributorsDetails extends React.Component {
               <br />
               Thomas Tan
               <br />
-              Thomas Tan
-              <br />
               <strong>(Source)</strong>
             </p>
             {dot}
@@ -57,7 +55,11 @@ class ContributorsDetails extends React.Component {
             <p>
               Martin Henz,
               <br />
-              Boyd Anderson
+              Boyd Anderson,
+              <br />
+              Low Kok Lim,
+              <br />
+              Eldric Liew
               <br />
               <strong>(Coordination)</strong>
             </p>
@@ -83,7 +85,7 @@ class ContributorsDetails extends React.Component {
               <strong>Graphic design</strong>
             </p>
             <p>
-              Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei
+              Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei {dot} Sigmund Chianasta
             </p>
           </div>
           <div className="leadership">

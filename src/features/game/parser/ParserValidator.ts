@@ -44,11 +44,19 @@ type AssertionDetail = {
 export default class ParserValidator {
   private gameItemAsserts: Map<GameItemType, AssertionDetail[]>;
   private gameEntityAsserts: Map<GameEntityType, AssertionDetail[]>;
+  private gameAnimAsserts: AssertionDetail[];
+  private gameAnimMaps = [
+    // Game Locations Map
+    Parser.checkpoint.map.getLocations(),
+    // Game Object Prop Map
+    Parser.checkpoint.map[GameItemType.objects]
+  ];
   private allItemIds: Set<string>;
 
   constructor() {
     this.gameItemAsserts = new Map<GameItemType, AssertionDetail[]>();
     this.gameEntityAsserts = new Map<GameEntityType, AssertionDetail[]>();
+    this.gameAnimAsserts = [];
     this.allItemIds = new Set();
   }
 
@@ -76,6 +84,7 @@ export default class ParserValidator {
   public verifyAssertions() {
     this.verifyGameItemAssert();
     this.verifyGameEntityAsserts();
+    this.verifyGameAnimAsserts();
   }
 
   //////////////////////////////////////////////
@@ -207,6 +216,40 @@ export default class ParserValidator {
         });
       }
     );
+  }
+
+  //////////////////////////////////////////////
+  //  Type assertion manager - Game Anim Type //
+  //////////////////////////////////////////////
+
+  /**
+   * This function stores game anim type assertions.
+   *
+   * @param itemId id of item that needs to be checked
+   * @param actionType action type e.g. start_animation
+   */
+  public assertAnimType(itemId: ItemId, actionType: string) {
+    this.gameAnimAsserts.push({ itemId, actionType });
+  }
+
+  /**
+   * This function verifies game entity assertions that have
+   * been stored, by ensuring that the itemIds are declared
+   * in at least one of the animation types.
+   */
+  private verifyGameAnimAsserts() {
+    this.gameAnimAsserts.forEach((assertionDetail: AssertionDetail) => {
+      const { itemId, actionType } = assertionDetail;
+      let idFound = false;
+      this.gameAnimMaps.forEach(map => {
+        if (map.get(itemId)) {
+          idFound = true;
+        }
+      });
+      if (!idFound) {
+        this.actionAssertionError(itemId, 'locationId or itemId', actionType!);
+      }
+    });
   }
 
   private actionAssertionError(itemId: string, attribute: string, actionType: string) {
