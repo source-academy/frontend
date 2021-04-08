@@ -5,9 +5,6 @@ test('Test generate first level of a repo', async () => {
   const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
-  const getGitHubLoginIDMock = jest.spyOn(GitHubUtils, 'getGitHubLoginID');
-  getGitHubLoginIDMock.mockImplementation(getUsernameMock);
-
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
 
   expect(fileNodes.length).toBe(2);
@@ -31,7 +28,6 @@ test('Test generate first level of a repo', async () => {
   }
 
   getGitHubOctokitInstanceMock.mockRestore();
-  getGitHubLoginIDMock.mockRestore();
 
   GitHubTreeNodeCreator.fileIndex = 0;
   GitHubTreeNodeCreator.currentRepoName = '';
@@ -50,9 +46,6 @@ test('Test attempt to generate repo with repoName as empty string', async () => 
 test('Test attempt to create child nodes from two different repositories', async () => {
   const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
-
-  const getGitHubLoginIDMock = jest.spyOn(GitHubUtils, 'getGitHubLoginID');
-  getGitHubLoginIDMock.mockImplementation(getUsernameMock);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
   const secondFileNodes = await GitHubTreeNodeCreator.getChildNodes('another-repository', '');
@@ -79,7 +72,6 @@ test('Test attempt to create child nodes from two different repositories', async
   expect(secondFileNodes.length).toBe(0);
 
   getGitHubOctokitInstanceMock.mockRestore();
-  getGitHubLoginIDMock.mockRestore();
 
   GitHubTreeNodeCreator.fileIndex = 0;
   GitHubTreeNodeCreator.currentRepoName = '';
@@ -89,16 +81,12 @@ test('Test attempt to create repository while octokit not yet set', async () => 
   const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceReturnUndefined);
 
-  const getGitHubLoginIDMock = jest.spyOn(GitHubUtils, 'getGitHubLoginID');
-  getGitHubLoginIDMock.mockImplementation(getUsernameMock);
-
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
 
   expect(fileNodes.length).toBe(0);
   expect(GitHubTreeNodeCreator.fileIndex).toBe(0);
 
   getGitHubOctokitInstanceMock.mockRestore();
-  getGitHubLoginIDMock.mockRestore();
 
   GitHubTreeNodeCreator.fileIndex = 0;
   GitHubTreeNodeCreator.currentRepoName = '';
@@ -110,10 +98,6 @@ function getOctokitInstanceMock() {
 
 function getOctokitInstanceReturnUndefined() {
   return undefined;
-}
-
-function getUsernameMock() {
-  return 'HartinMenz';
 }
 
 class Mocktokit {
