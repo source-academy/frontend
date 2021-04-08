@@ -65,7 +65,7 @@ export type StateProps = {
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);

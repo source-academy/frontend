@@ -5,6 +5,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-workspace {
   position: relative;
+  overflow-y: hidden;
 
   .ControlBar {
     // for assesment workspace top control bar
@@ -207,6 +208,10 @@ $shadow-light: rgba(0, 0, 0, 0.2);
         }
       }
     }
+
+    .SourcecastContainer {
+      white-space: normal;
+    }
   }
 
   .mobile-unselected-panel {
@@ -257,6 +262,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     background-color: $cadet-color-3;
     border-radius: 5px;
     box-shadow: 0 0px 8px $shadow-dark, 0 0 16px $shadow-light;
+    transition: 0.3s cubic-bezier(0.3, 0.9, 0.68, 1);
 
     .handle {
       display: flex;
