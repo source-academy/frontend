@@ -33,7 +33,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;
-  const shouldDisableSaveButton = true; // store.getState().session.githubRepositoryName === '';
+  const shouldDisableSaveButton = store.getState().session.githubSaveInfo.repoName === '' || store.getState().session.githubSaveInfo.filePath === '';
 
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 

@@ -90,7 +90,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
-  githubOctokitInstance: state.session.githubOctokitInstance
+  githubOctokitInstance: state.session.githubOctokitInstance,
+  githubSaveInfo: state.session.githubSaveInfo
 });
 
 const workspaceLocation: WorkspaceLocation = 'playground';

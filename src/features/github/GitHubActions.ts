@@ -1,6 +1,10 @@
 import { action } from 'typesafe-actions';
 
-import { GITHUB_OPEN_FILE, GITHUB_SAVE_FILE, GITHUB_SAVE_FILE_AS } from './GitHubTypes';
+import {
+  GITHUB_OPEN_FILE,
+  GITHUB_SAVE_FILE,
+  GITHUB_SAVE_FILE_AS
+} from './GitHubTypes';
 
 export const githubOpenFile = () => action(GITHUB_OPEN_FILE);
 

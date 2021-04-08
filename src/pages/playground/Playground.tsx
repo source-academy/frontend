@@ -132,6 +132,7 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
+  githubSaveInfo: {repoName: string, filePath: string};
 };
 
 const keyMap = { goGreen: 'h u l k' };

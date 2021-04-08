@@ -73,6 +73,42 @@ function* githubOpenFile() {
   }
 }
 
+function* githubSaveFile() {
+  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
+    users: { getAuthenticated: () => {} },
+    repos: { listForAuthenticatedUser: () => {} }
+  };
+  const AuthUser = octokit.users.getAuthenticated;
+  const githubLoginID = AuthUser.data.login;
+  const repoName = store.getState().session.githubSaveInfo.repoName;
+  const filePath = store.getState().session.githubSaveInfo.filePath;
+  try {
+    const results = yield octokit.repos.getContent({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath
+    });
+    const commitMessage = 'Changes made from Source Academy';
+    const editorContent = store.getState().workspaces.playground.editorValue || '';
+    const editorContentEncoded = Buffer.from(editorContent, 'utf8').toString('base64');
+    const sha = results.data.sha;
+    const githubName = AuthUser.data.name || '';
+    const githubEmail = AuthUser.data.email || '';
+    yield call(octokit.repos.createOrUpdateFileContents({
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath,
+      message: commitMessage,
+      content: editorContentEncoded,
+      sha: sha,
+      committer: {name: githubName, email: githubEmail},
+      author: {name: githubName, email: githubEmail}
+    }));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function* githubSaveFileAs() {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
@@ -96,43 +132,6 @@ function* githubSaveFileAs() {
       onSubmit: resolve
     }));
   }
-}
-
-/*
-function* githubOpenFileToEditor(repoName: string, filePath: string) {
-  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} },
-    repos: { listForAuthenticatedUser: () => {} }
-  };
-
-  if (octokit === undefined) return;
-
-  const AuthUser = yield call(octokit.users.getAuthenticated);
-  const githubLoginID = AuthUser.data.login;
-  const results = yield octokit.repos.getContent({
-    owner: githubLoginID,
-    repo: repoName,
-    path: filePath
-  });
-
-  const content = results.data.content;
-
-  if (content) {
-    const newEditorValue = Buffer.from(content, 'base64').toString();
-    console.log(newEditorValue); // This line below ain't working.
-    yield put(actions.updateEditorValue(newEditorValue, 'playground'));
-    showSuccessMessage('Successfully loaded file!', 1000);
-  }
-}
-*/
-
-function* githubSaveFile() {
-  /*
-    yield put(actions.setPickerType('Save'));
-    yield put(actions.setGitHubSaveMode('Overwrite'));
-    yield put(actions.setGitHubCommitMessage('Changes made from SourceAcademy'));
-    yield put(actions.setGitHubConfirmationDialogStatus(true));
-  */
 }
 
 export default GitHubPersistenceSaga;

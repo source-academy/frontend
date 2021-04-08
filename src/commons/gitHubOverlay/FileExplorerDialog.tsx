@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { put } from 'redux-saga/effects';
 import { store } from 'src/pages/createStore';
 
 import { actions } from '../utils/ActionsHelper';
@@ -105,7 +104,7 @@ const FileExplorerDialog: React.FC<any> = props => {
         if (
           await showSimpleConfirmDialog({
             contents: (
-              <div className={Classes.DIALOG_BODY}>
+              <div>
                 <p>Warning: opening this file will overwrite the text data in the editor.</p>
                 <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
               </div>
@@ -126,7 +125,7 @@ const FileExplorerDialog: React.FC<any> = props => {
           saveType === 'Overwrite' &&
           (await showSimpleConfirmDialog({
             contents: (
-              <div className={Classes.DIALOG_BODY}>
+              <div>
                 <p>Warning: You are saving over an existing file in the repository.</p>
                 <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
               </div>
@@ -141,7 +140,7 @@ const FileExplorerDialog: React.FC<any> = props => {
           saveType === 'Create' &&
           (await showSimpleConfirmDialog({
             contents: (
-              <div className={Classes.DIALOG_BODY}>
+              <div>
                 <p>Warning: You are creating a new file in the repository.</p>
                 <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
               </div>
@@ -247,8 +246,10 @@ const FileExplorerDialog: React.FC<any> = props => {
 
     if (content) {
       const newEditorValue = Buffer.from(content, 'base64').toString();
-      console.log(newEditorValue); // This line below ain't working.
-      await put(actions.updateEditorValue(newEditorValue, 'playground'));
+      store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
+      store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
+      console.log(store.getState().session.githubSaveInfo);
+      console.log(store.getState().session.githubSaveInfo.repoName === '' || store.getState().session.githubSaveInfo.filePath === '');
       showSuccessMessage('Successfully loaded file!', 1000);
     }
   }
@@ -285,7 +286,7 @@ const FileExplorerDialog: React.FC<any> = props => {
         committer: { name: githubName, email: githubEmail },
         author: { name: githubName, email: githubEmail }
       });
-
+      store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
       showSuccessMessage('Successfully saved file!', 1000);
     } catch (err) {
       console.error(err);
@@ -309,7 +310,7 @@ const FileExplorerDialog: React.FC<any> = props => {
         committer: { name: githubName, email: githubEmail },
         author: { name: githubName, email: githubEmail }
       });
-
+      store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
       showSuccessMessage('Successfully created file!', 1000);
     } catch (err) {
       console.error(err);

@@ -302,7 +302,11 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  notifications: []
+  notifications: [],
+  githubSaveInfo: {
+    repoName: '',
+    filePath: ''
+  }
 };
 
 export const defaultState: OverallState = {
