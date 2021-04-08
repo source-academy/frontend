@@ -43,9 +43,7 @@ export class GitHubTreeNodeCreator {
       return childNodes;
     }
 
-    const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-      users: { getAuthenticated: () => {} }
-    };
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
 
     if (octokit === undefined) {
       return childNodes;

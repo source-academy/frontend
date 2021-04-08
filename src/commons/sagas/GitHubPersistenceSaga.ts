@@ -95,14 +95,14 @@ function* githubSaveFile() {
     const githubName = AuthUser.data.name || '';
     const githubEmail = AuthUser.data.email || '';
     yield octokit.repos.createOrUpdateFileContents({
-        owner: githubLoginID,
-        repo: repoName,
-        path: filePath,
-        message: commitMessage,
-        content: editorContentEncoded,
-        sha: sha,
-        committer: { name: githubName, email: githubEmail },
-        author: { name: githubName, email: githubEmail }
+      owner: githubLoginID,
+      repo: repoName,
+      path: filePath,
+      message: commitMessage,
+      content: editorContentEncoded,
+      sha: sha,
+      committer: { name: githubName, email: githubEmail },
+      author: { name: githubName, email: githubEmail }
     });
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
