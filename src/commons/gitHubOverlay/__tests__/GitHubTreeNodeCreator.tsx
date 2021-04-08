@@ -105,6 +105,10 @@ class Mocktokit {
     getContent: this.getContent
   };
 
+  readonly users = {
+    getAuthenticated: this.getAuthenticated
+  };
+
   async getContent(dummyObject: any) {
     const childFileArray = [
       {
@@ -121,6 +125,14 @@ class Mocktokit {
 
     return {
       data: childFileArray
+    };
+  }
+
+  async getAuthenticated() {
+    return {
+      data: {
+        login: 'dummyUserName'
+      }
     };
   }
 }
