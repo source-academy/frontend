@@ -104,19 +104,7 @@ const FileExplorerDialog: React.FC<any> = props => {
   async function handleSubmit() {
     if (props.pickerType === 'Open') {
       if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
-        if (
-          await showSimpleConfirmDialog({
-            contents: (
-              <div>
-                <p>Warning: opening this file will overwrite the text data in the editor.</p>
-                <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-              </div>
-            ),
-            negativeLabel: 'Cancel',
-            positiveIntent: 'primary',
-            positiveLabel: 'Confirm'
-          })
-        ) {
+        if (await checkIfUserAgreesToOverwriteEditorData()) {
           openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
         }
       }
@@ -131,20 +119,7 @@ const FileExplorerDialog: React.FC<any> = props => {
       );
 
       if (canBeSaved) {
-        if (
-          saveType === 'Overwrite' &&
-          (await showSimpleConfirmDialog({
-            contents: (
-              <div>
-                <p>Warning: You are saving over an existing file in the repository.</p>
-                <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-              </div>
-            ),
-            negativeLabel: 'Cancel',
-            positiveIntent: 'primary',
-            positiveLabel: 'Confirm'
-          }))
-        ) {
+        if (saveType === 'Overwrite' && (await checkIfUserAgreesToPerformOverwritingSave())) {
           performOverwritingSave(
             props.octokit,
             githubLoginID,
@@ -154,20 +129,7 @@ const FileExplorerDialog: React.FC<any> = props => {
             githubEmail,
             commitMessage
           );
-        } else if (
-          saveType === 'Create' &&
-          (await showSimpleConfirmDialog({
-            contents: (
-              <div>
-                <p>Warning: You are creating a new file in the repository.</p>
-                <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-              </div>
-            ),
-            negativeLabel: 'Cancel',
-            positiveIntent: 'primary',
-            positiveLabel: 'Confirm'
-          }))
-        ) {
+        } else if (saveType === 'Create' && (await checkIfUserAgreesToPerformCreatingSave())) {
           performCreatingSave(
             props.octokit,
             githubLoginID,
@@ -255,6 +217,48 @@ const FileExplorerDialog: React.FC<any> = props => {
 
   function refreshPage() {
     setRefresh(refresh + 1);
+  }
+
+  async function checkIfUserAgreesToOverwriteEditorData() {
+    return await showSimpleConfirmDialog({
+      contents: (
+        <div>
+          <p>Warning: opening this file will overwrite the text data in the editor.</p>
+          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        </div>
+      ),
+      negativeLabel: 'Cancel',
+      positiveIntent: 'primary',
+      positiveLabel: 'Confirm'
+    });
+  }
+
+  async function checkIfUserAgreesToPerformOverwritingSave() {
+    return await showSimpleConfirmDialog({
+      contents: (
+        <div>
+          <p>Warning: You are saving over an existing file in the repository.</p>
+          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        </div>
+      ),
+      negativeLabel: 'Cancel',
+      positiveIntent: 'primary',
+      positiveLabel: 'Confirm'
+    });
+  }
+
+  async function checkIfUserAgreesToPerformCreatingSave() {
+    return await showSimpleConfirmDialog({
+      contents: (
+        <div>
+          <p>Warning: You are creating a new file in the repository.</p>
+          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        </div>
+      ),
+      negativeLabel: 'Cancel',
+      positiveIntent: 'primary',
+      positiveLabel: 'Confirm'
+    });
   }
 };
 
