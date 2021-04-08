@@ -10,11 +10,15 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { store } from 'src/pages/createStore';
 
-import { actions } from '../utils/ActionsHelper';
+import {
+  checkIfFileCanBeOpened,
+  checkIfFileCanBeSavedAndGetSaveType,
+  openFileInEditor,
+  performCreatingSave,
+  performOverwritingSave
+} from '../../features/github/GitHubUtils';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -28,7 +32,6 @@ const FileExplorerDialog: React.FC<any> = props => {
   let githubLoginID: string;
   let githubName: string;
   let githubEmail: string;
-  let saveType = 'Overwrite';
 
   getUserDetails();
 
@@ -100,7 +103,7 @@ const FileExplorerDialog: React.FC<any> = props => {
 
   async function handleSubmit() {
     if (props.pickerType === 'Open') {
-      if (await checkIfFileCanBeOpened()) {
+      if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
         if (
           await showSimpleConfirmDialog({
             contents: (
@@ -114,13 +117,20 @@ const FileExplorerDialog: React.FC<any> = props => {
             positiveLabel: 'Confirm'
           })
         ) {
-          openFile();
+          openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
         }
       }
     }
 
     if (props.pickerType === 'Save') {
-      if (await checkIfFileCanBeSaved()) {
+      const { canBeSaved, saveType } = await checkIfFileCanBeSavedAndGetSaveType(
+        props.octokit,
+        githubLoginID,
+        props.repoName,
+        filePath
+      );
+
+      if (canBeSaved) {
         if (
           saveType === 'Overwrite' &&
           (await showSimpleConfirmDialog({
@@ -135,7 +145,15 @@ const FileExplorerDialog: React.FC<any> = props => {
             positiveLabel: 'Confirm'
           }))
         ) {
-          overwriteSaveFile();
+          performOverwritingSave(
+            props.octokit,
+            githubLoginID,
+            props.repoName,
+            filePath,
+            githubName,
+            githubEmail,
+            commitMessage
+          );
         } else if (
           saveType === 'Create' &&
           (await showSimpleConfirmDialog({
@@ -150,169 +168,17 @@ const FileExplorerDialog: React.FC<any> = props => {
             positiveLabel: 'Confirm'
           }))
         ) {
-          createSaveFile();
+          performCreatingSave(
+            props.octokit,
+            githubLoginID,
+            props.repoName,
+            filePath,
+            githubName,
+            githubEmail,
+            commitMessage
+          );
         }
       }
-    }
-  }
-
-  async function checkIfFileCanBeOpened() {
-    if (props.octokit === undefined) {
-      showWarningMessage('Please log in and try again', 2000);
-      return false;
-    }
-
-    if (filePath === '') {
-      showWarningMessage('Please select a file!', 2000);
-      return false;
-    }
-
-    let files;
-
-    try {
-      const results = await props.octokit.repos.getContent({
-        owner: githubLoginID,
-        repo: props.repoName,
-        path: filePath
-      });
-
-      files = results.data;
-    } catch (err) {
-      showWarningMessage('Connection denied or file does not exist.', 2000);
-      console.error(err);
-      return false;
-    }
-
-    if (Array.isArray(files)) {
-      showWarningMessage("Can't open folder as a file!", 2000);
-      return false;
-    }
-
-    return true;
-  }
-
-  async function checkIfFileCanBeSaved() {
-    if (filePath === '') {
-      showWarningMessage('No file name given.', 2000);
-      return false;
-    }
-
-    if (props.octokit === undefined) {
-      showWarningMessage('Please log in and try again', 2000);
-      return false;
-    }
-
-    let files;
-
-    try {
-      const results = await props.octokit.repos.getContent({
-        owner: githubLoginID,
-        repo: props.repoName,
-        path: filePath
-      });
-
-      files = results.data;
-      saveType = 'Overwrite';
-    } catch (err) {
-      // 404 status means that the file could not be found.
-      // In this case, the dialog should still continue as the user should be given
-      // the option of creating a new file on their remote repository.
-      if (err.status !== 404) {
-        showWarningMessage('Connection denied or file does not exist.', 2000);
-        console.error(err);
-        return false;
-      }
-      saveType = 'Create';
-    }
-
-    if (Array.isArray(files)) {
-      showWarningMessage("Can't save over a folder!", 2000);
-      return false;
-    }
-
-    return true;
-  }
-
-  async function openFile() {
-    if (props.octokit === undefined) return;
-
-    const results = await props.octokit.repos.getContent({
-      owner: githubLoginID,
-      repo: props.repoName,
-      path: filePath
-    });
-
-    const content = results.data.content;
-
-    if (content) {
-      const newEditorValue = Buffer.from(content, 'base64').toString();
-      store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
-      store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
-      showSuccessMessage('Successfully loaded file!', 1000);
-    }
-  }
-
-  async function overwriteSaveFile() {
-    if (props.octokit === undefined) return;
-
-    const content = store.getState().workspaces.playground.editorValue || '';
-    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-
-    try {
-      const results = await props.octokit.repos.getContent({
-        owner: githubLoginID,
-        repo: props.repoName,
-        path: filePath
-      });
-
-      const files = results.data;
-
-      // Cannot save over folder
-      if (Array.isArray(files)) {
-        return;
-      }
-
-      const sha = files.sha;
-
-      await props.octokit.repos.createOrUpdateFileContents({
-        owner: githubLoginID,
-        repo: props.repoName,
-        path: filePath,
-        message: commitMessage,
-        content: contentEncoded,
-        sha: sha,
-        committer: { name: githubName, email: githubEmail },
-        author: { name: githubName, email: githubEmail }
-      });
-      store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
-      showSuccessMessage('Successfully saved file!', 1000);
-    } catch (err) {
-      console.error(err);
-      showWarningMessage('Something went wrong when trying to save the file.', 1000);
-    }
-  }
-
-  async function createSaveFile() {
-    if (props.octokit === undefined) return;
-
-    const content = store.getState().workspaces.playground.editorValue || '';
-    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-
-    try {
-      await props.octokit.repos.createOrUpdateFileContents({
-        owner: githubLoginID,
-        repo: props.repoName,
-        path: filePath,
-        message: commitMessage,
-        content: contentEncoded,
-        committer: { name: githubName, email: githubEmail },
-        author: { name: githubName, email: githubEmail }
-      });
-      store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
-      showSuccessMessage('Successfully created file!', 1000);
-    } catch (err) {
-      console.error(err);
-      showWarningMessage('Something went wrong when trying to save the file.', 1000);
     }
   }
 
