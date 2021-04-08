@@ -132,7 +132,7 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
-  githubSaveInfo: {repoName: string, filePath: string};
+  githubSaveInfo: { repoName: string; filePath: string };
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -439,6 +439,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return (
       <ControlBarGitHubButtons
         loggedInAs={githubOctokitInstance}
+        githubSaveInfo={props.githubSaveInfo}
         key="github"
         onClickOpen={props.handleGitHubOpenFile}
         onClickSave={props.handleGitHubSaveFile}
@@ -449,6 +450,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [
     githubOctokitInstance,
+    props.githubSaveInfo,
     props.handleGitHubOpenFile,
     props.handleGitHubSaveFileAs,
     props.handleGitHubSaveFile,

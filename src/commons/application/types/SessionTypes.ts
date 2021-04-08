@@ -62,7 +62,7 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitInstance?: Octokit;
-  readonly githubSaveInfo: {repoName: string, filePath: string};
+  readonly githubSaveInfo: { repoName: string; filePath: string };
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };

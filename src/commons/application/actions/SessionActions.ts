@@ -84,8 +84,8 @@ export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 export const setGitHubOctokitInstance = (authToken?: string) =>
   action(SET_GITHUB_OCTOKIT_INSTANCE, generateOctokitInstance(authToken || ''));
 
-  export const setGitHubSaveInfo = (repoName: string, filePath: string) =>
-  action(SET_GITHUB_SAVE_INFO, {repoName, filePath});
+export const setGitHubSaveInfo = (repoName: string, filePath: string) =>
+  action(SET_GITHUB_SAVE_INFO, { repoName, filePath });
 
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
 

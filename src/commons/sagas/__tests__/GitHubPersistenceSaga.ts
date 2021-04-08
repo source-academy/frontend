@@ -1,9 +1,7 @@
 import { expectSaga } from 'redux-saga-test-plan';
 
 import { actions } from '../../../commons/utils/ActionsHelper';
-import {
-  REMOVE_GITHUB_OCTOKIT_INSTANCE
-} from '../../application/types/SessionTypes';
+import { REMOVE_GITHUB_OCTOKIT_INSTANCE } from '../../application/types/SessionTypes';
 
 // mock away the store
 jest.mock('../../../pages/createStore');

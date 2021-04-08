@@ -248,8 +248,6 @@ const FileExplorerDialog: React.FC<any> = props => {
       const newEditorValue = Buffer.from(content, 'base64').toString();
       store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
       store.dispatch(actions.setGitHubSaveInfo(props.repoName, filePath));
-      console.log(store.getState().session.githubSaveInfo);
-      console.log(store.getState().session.githubSaveInfo.repoName === '' || store.getState().session.githubSaveInfo.filePath === '');
       showSuccessMessage('Successfully loaded file!', 1000);
     }
   }

@@ -39,7 +39,7 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         githubSaveInfo: action.payload
-      }
+      };
     case SET_GOOGLE_USER:
       return {
         ...state,

@@ -13,7 +13,7 @@ import FileExplorerDialog from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { showSuccessMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -78,7 +78,7 @@ function* githubSaveFile() {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
   };
-  const AuthUser = octokit.users.getAuthenticated;
+  const AuthUser = yield call(octokit.users.getAuthenticated);
   const githubLoginID = AuthUser.data.login;
   const repoName = store.getState().session.githubSaveInfo.repoName;
   const filePath = store.getState().session.githubSaveInfo.filePath;
@@ -94,18 +94,20 @@ function* githubSaveFile() {
     const sha = results.data.sha;
     const githubName = AuthUser.data.name || '';
     const githubEmail = AuthUser.data.email || '';
-    yield call(octokit.repos.createOrUpdateFileContents({
-      owner: githubLoginID,
-      repo: repoName,
-      path: filePath,
-      message: commitMessage,
-      content: editorContentEncoded,
-      sha: sha,
-      committer: {name: githubName, email: githubEmail},
-      author: {name: githubName, email: githubEmail}
-    }));
+    yield octokit.repos.createOrUpdateFileContents({
+        owner: githubLoginID,
+        repo: repoName,
+        path: filePath,
+        message: commitMessage,
+        content: editorContentEncoded,
+        sha: sha,
+        committer: { name: githubName, email: githubEmail },
+        author: { name: githubName, email: githubEmail }
+    });
+    showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to save the file.', 1000);
   }
 }
 
