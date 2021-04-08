@@ -384,7 +384,7 @@ export const getAssessmentOverviews = async (
  * GET /assessments/{assessmentId}
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
-  let resp = await request(`assessments/${id}`, 'POST', {
+  let resp = await request(`assessments/${id}`, 'GET', {
     ...tokens,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -399,7 +399,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`assessments/${id}`, 'POST', {
+    resp = await request(`admin/assessments/${id}`, 'POST', {
       ...tokens,
       body: {
         password: input
@@ -789,7 +789,7 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
- * POST /assessments/update/{assessmentId}
+ * POST /assessments/{assessmentId}
  */
 export const changeDateAssessment = async (
   id: number,
@@ -797,9 +797,28 @@ export const changeDateAssessment = async (
   openAt: string,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`assessments/update/${id}`, 'POST', {
+  const resp = await request(`admin/assessments/${id}`, 'POST', {
     ...tokens,
     body: { closeAt, openAt },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /admin/assessments/{assessmentId}
+ */
+export const publishAssessment = async (
+  id: number,
+  togglePublishTo: boolean,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`admin/assessments/${id}`, 'POST', {
+    ...tokens,
+    body: { togglePublishTo },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -814,25 +833,6 @@ export const changeDateAssessment = async (
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`assessments/${id}`, 'DELETE', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-};
-
-/**
- * POST /assessments/publish/{assessmentId}
- */
-export const publishAssessment = async (
-  id: number,
-  togglePublishTo: boolean,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`assessments/publish/${id}`, 'POST', {
-    ...tokens,
-    body: { togglePublishTo },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
