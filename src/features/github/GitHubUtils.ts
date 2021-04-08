@@ -34,7 +34,6 @@ export function grabAccessCodeFromURL(currentURLAddress: string): string {
 }
 
 /**
-/**
  * Returns the Octokit instance saved in session state.
  *
  * This function allows for mocking Octokit behaviour in tests.
