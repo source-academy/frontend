@@ -9,6 +9,7 @@ import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils'
 import { Arrow } from '../../Arrow';
 import { Value } from '../Value';
 import { ArrayValue } from './ArrayValue';
+import { FnValue } from './FnValue';
 import { PrimitiveValue } from './PrimitiveValue';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
@@ -56,6 +57,36 @@ export class ArrayUnit implements Visible {
     if (this.isDrawn) return null;
     this.isDrawn = true;
 
+    let arrowPoints: number[] = [];
+    const to: Value = this.value;
+    if (!(this.value instanceof PrimitiveValue)) {
+      arrowPoints = [this.x + Config.DataUnitWidth / 2, this.y + Config.DataUnitHeight / 2];
+
+      if (to instanceof FnValue) {
+        if (this.x < to.x) arrowPoints.push(to.x, to.y);
+        else arrowPoints.push(to.centerX, to.y);
+      } else if (to instanceof ArrayValue) {
+        if (this.y === to.y && Math.abs(this.x - to.x) > Config.DataUnitWidth * 2) {
+          arrowPoints.push(
+            this.x + Config.DataUnitWidth / 2,
+            this.y - Config.DataUnitHeight / 2,
+            to.x + Config.DataUnitWidth / 2,
+            to.y - Config.DataUnitHeight / 2,
+            to.x + Config.DataUnitWidth / 2,
+            to.y
+          );
+        } else if (this.y < to.y) {
+          arrowPoints.push(to.x + Config.DataUnitWidth / 2, to.y);
+        } else if (this.y > to.y) {
+          arrowPoints.push(to.x + Config.DataUnitWidth / 2, to.y + Config.DataUnitHeight);
+        } else {
+          arrowPoints.push(to.x, to.y + Config.DataUnitHeight / 2);
+        }
+      } else {
+        arrowPoints.push(to.x, to.y);
+      }
+    }
+
     return (
       <React.Fragment key={Layout.key++}>
         <Rect
@@ -69,7 +100,7 @@ export class ArrayUnit implements Visible {
           onMouseLeave={this.onMouseLeave}
         />
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new Arrow(this, this.value).draw()}
+        {arrowPoints && new Arrow(arrowPoints).draw()}
       </React.Fragment>
     );
   }

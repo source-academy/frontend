@@ -13,6 +13,7 @@ import { Layout } from '../../../EnvVisualizerLayout';
 import { Env, FnTypes, Hoverable, ReferenceType } from '../../../EnvVisualizerTypes';
 import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
 import { Arrow } from '../../Arrow';
+import { Frame } from '../../Frame';
 import { Binding } from '../Binding';
 import { Value } from '../Value';
 
@@ -101,6 +102,26 @@ export class FnValue extends Value implements Hoverable {
   };
 
   draw(): React.ReactNode {
+    let arrowPoints: number[] = [];
+    if (this.enclosingEnv.frame) {
+      const to: Frame = this.enclosingEnv.frame;
+
+      if (to.y < this.y && this.y < to.y + to.height) {
+        arrowPoints = [
+          this.x + Config.FnRadius * 3,
+          this.y,
+          this.x + Config.FnRadius * 3,
+          this.y - Config.FnRadius * 2,
+          to.x + to.width,
+          this.y - Config.FnRadius * 2
+        ];
+      } else if (to.y < this.y) {
+        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y + to.height];
+      } else {
+        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y];
+      }
+    }
+
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -149,7 +170,7 @@ export class FnValue extends Value implements Hoverable {
             padding={5}
           />
         </KonvaLabel>
-        {this.enclosingEnv.frame && new Arrow(this, this.enclosingEnv.frame).draw()}
+        {arrowPoints && new Arrow(arrowPoints).draw()}
       </React.Fragment>
     );
   }

@@ -103,6 +103,17 @@ export class Frame implements Visible, Hoverable {
   };
 
   draw(): React.ReactNode {
+    let arrowPoints: number[] = [];
+    if (this.parentFrame) {
+      const to: Frame = this.parentFrame;
+      arrowPoints = [
+        this.x + Config.FramePaddingX,
+        this.y,
+        to.x + Config.FramePaddingX,
+        to.y + to.height
+      ];
+    }
+
     return (
       <React.Fragment key={Layout.key++}>
         {this.name.draw()}
@@ -117,7 +128,7 @@ export class Frame implements Visible, Hoverable {
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && new Arrow(this, this.parentFrame).draw()}
+        {arrowPoints && new Arrow(arrowPoints).draw()}
       </React.Fragment>
     );
   }

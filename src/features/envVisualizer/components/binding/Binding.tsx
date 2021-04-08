@@ -64,11 +64,21 @@ export class Binding implements Visible {
   }
 
   draw(): React.ReactNode {
+    let arrowPoints: number[] = [];
+    if (!(this.value instanceof PrimitiveValue)) {
+      const from: Text = this.key,
+        to: Value = this.value;
+
+      arrowPoints = [from.x + from.width, from.y + from.height / 2];
+      if (to instanceof ArrayValue) arrowPoints.push(to.x, to.y + Config.DataUnitHeight / 2);
+      else arrowPoints.push(to.x, to.y);
+    }
+
     return (
       <React.Fragment key={Layout.key++}>
         {this.key.draw()}
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new Arrow(this.key, this.value).draw()}
+        {arrowPoints && new Arrow(arrowPoints).draw()}
       </React.Fragment>
     );
   }

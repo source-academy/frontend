@@ -13,6 +13,7 @@ import { Layout } from '../../../EnvVisualizerLayout';
 import { ReferenceType } from '../../../EnvVisualizerTypes';
 import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
 import { Arrow } from '../../Arrow';
+import { Frame } from '../../Frame';
 import { Binding } from '../Binding';
 import { Value } from '../Value';
 
@@ -88,6 +89,26 @@ export class GlobalFnValue extends Value {
   };
 
   draw(): React.ReactNode {
+    let arrowPoints: number[] = [];
+    if (Layout.globalEnv.frame) {
+      const to: Frame = Layout.globalEnv.frame;
+
+      if (to.y < this.y && this.y < to.y + to.height) {
+        arrowPoints = [
+          this.x + Config.FnRadius * 3,
+          this.y,
+          this.x + Config.FnRadius * 3,
+          this.y - Config.FnRadius * 2,
+          to.x + to.width,
+          this.y - Config.FnRadius * 2
+        ];
+      } else if (to.y < this.y) {
+        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y + to.height];
+      } else {
+        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y];
+      }
+    }
+
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -136,7 +157,7 @@ export class GlobalFnValue extends Value {
             padding={5}
           />
         </KonvaLabel>
-        {Layout.globalEnv.frame && new Arrow(this, Layout.globalEnv.frame).draw()}
+        {arrowPoints && new Arrow(arrowPoints).draw()}
       </React.Fragment>
     );
   }
