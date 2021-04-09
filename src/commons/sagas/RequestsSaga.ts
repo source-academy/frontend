@@ -452,14 +452,14 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 };
 
 /**
- * POST /assessments/question/{questionId}/submit
+ * POST /assessments/question/{questionId}/answer
  */
 export const postAnswer = async (
   id: number,
   answer: string | number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`assessments/question/${id}/submit`, 'POST', {
+  const resp = await request(`assessments/question/${id}/answer`, 'POST', {
     ...tokens,
     body: { answer: `${answer}` },
     noHeaderAccept: true,
@@ -789,36 +789,16 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
- * POST /assessments/{assessmentId}
- */
-export const changeDateAssessment = async (
-  id: number,
-  closeAt: string,
-  openAt: string,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`admin/assessments/${id}`, 'POST', {
-    ...tokens,
-    body: { closeAt, openAt },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-};
-
-/**
  * POST /admin/assessments/{assessmentId}
  */
-export const publishAssessment = async (
+export const updateAssessment = async (
   id: number,
-  togglePublishTo: boolean,
+  body: { openAt?: string; closeAt?: string; isPublished?: boolean },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`admin/assessments/${id}`, 'POST', {
     ...tokens,
-    body: { togglePublishTo },
+    body: body,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -842,7 +822,7 @@ export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Resp
 };
 
 /**
- * POST /assessments
+ * POST /admin/assessments
  */
 export const uploadAssessment = async (
   file: File,
@@ -852,7 +832,7 @@ export const uploadAssessment = async (
   const formData = new FormData();
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
-  const resp = await request(`assessments`, 'POST', {
+  const resp = await request(`admin/assessments`, 'POST', {
     ...tokens,
     body: formData,
     noContentType: true,
