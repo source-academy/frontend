@@ -43,19 +43,20 @@ const FileExplorerDialog: React.FC<any> = props => {
 
   return (
     <Dialog
-      className="FileDialog"
-      isCloseButtonShown={true}
+      className='githubDialog'
       isOpen={true}
       onClose={handleClose}
-      title={'Select a File'}
     >
+      <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
+        <h3>Select a File</h3>
+      </div>
       <div className={Classes.DIALOG_BODY}>
         <Tree
           contents={repoFiles}
           onNodeClick={handleNodeClick}
           onNodeCollapse={handleNodeCollapse}
           onNodeExpand={handleNodeExpand}
-          className={classNames(Classes.ELEVATION_0, 'FileTree')}
+          className={classNames('FileTree', Classes.ELEVATION_0)}
         />
         {props.pickerType === 'Save' && (
           <div>

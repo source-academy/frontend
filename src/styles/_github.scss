@@ -1,4 +1,14 @@
+.githubDialog {
+  background-color: $cadet-color-3;
+}
+
+.githubDialogHeader {
+  background-color: $cadet-color-2;
+  color: $cadet-color-4;
+}
+
 .RepositoryRadioGroup {
+  color: $cadet-color-4;
   min-height: 100px;
   max-height: 320px;
   height: auto;
@@ -7,6 +17,7 @@
 }
 
 .FileTree {
+  color: $cadet-color-4;
   min-height: 100px;
   max-height: 320px;
   height: auto;

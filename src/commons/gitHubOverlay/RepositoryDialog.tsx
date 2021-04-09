@@ -7,6 +7,7 @@ import {
   Radio,
   RadioGroup
 } from '@blueprintjs/core';
+import classNames from 'classnames';
 import React, { useState } from 'react';
 
 import { showWarningMessage } from '../utils/NotificationsHelper';
@@ -16,16 +17,16 @@ const RepositoryDialog: React.FC<any> = props => {
 
   return (
     <Dialog
-      className="RepositoryDialog"
-      isCloseButtonShown={true}
+      className='githubDialog'
       isOpen={true}
       onClose={handleClose}
-      title={'Select a Repository'}
-      usePortal={false}
     >
+      <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
+        <h3>Select a Repository</h3>
+      </div>
       <div className={Classes.DIALOG_BODY}>
         <RadioGroup
-          className="RepositoryRadioGroup"
+          className='RepositoryRadioGroup'
           onChange={handleSelect}
           selectedValue={repoName}
         >
@@ -34,8 +35,8 @@ const RepositoryDialog: React.FC<any> = props => {
           ))}
         </RadioGroup>
       </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+      <div className={classNames(Classes.DIALOG_FOOTER)}>
+        <div className={classNames(Classes.DIALOG_FOOTER_ACTIONS)}>
           <Button onClick={handleClose}>Close</Button>
           <AnchorButton onClick={handleSubmit} intent={Intent.PRIMARY}>
             Select
