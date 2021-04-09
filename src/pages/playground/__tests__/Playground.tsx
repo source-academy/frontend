@@ -33,7 +33,7 @@ const baseProps = {
   persistenceUser: undefined,
   persistenceFile: undefined,
   githubOctokitInstance: undefined,
-  githubSaveInfo: {repoName: '', filePath: ''},
+  githubSaveInfo: { repoName: '', filePath: '' },
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -75,7 +75,7 @@ const baseProps = {
   handleGitHubSaveFileAs: () => {},
   handleGitHubSaveFile: () => {},
   handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {},
+  handleGitHubLogOut: () => {}
 };
 
 const testValueProps: PlaygroundProps = {
