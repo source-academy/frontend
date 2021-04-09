@@ -16,17 +16,13 @@ const RepositoryDialog: React.FC<any> = props => {
   const [repoName, setRepoName] = useState('');
 
   return (
-    <Dialog
-      className='githubDialog'
-      isOpen={true}
-      onClose={handleClose}
-    >
+    <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a Repository</h3>
       </div>
       <div className={Classes.DIALOG_BODY}>
         <RadioGroup
-          className='RepositoryRadioGroup'
+          className="RepositoryRadioGroup"
           onChange={handleSelect}
           selectedValue={repoName}
         >

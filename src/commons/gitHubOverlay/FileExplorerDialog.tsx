@@ -42,11 +42,7 @@ const FileExplorerDialog: React.FC<any> = props => {
   }, [props.repoName]);
 
   return (
-    <Dialog
-      className='githubDialog'
-      isOpen={true}
-      onClose={handleClose}
-    >
+    <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a File</h3>
       </div>
