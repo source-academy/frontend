@@ -50,8 +50,8 @@ export class GitHubTreeNodeCreator {
     }
 
     try {
-      const AuthUser = await octokit.users.getAuthenticated();
-      const githubLoginID = AuthUser.data.login;
+      const authUser = await octokit.users.getAuthenticated();
+      const githubLoginID = authUser.data.login;
       const results = await octokit.repos.getContent({
         owner: githubLoginID,
         repo: repoName,

@@ -84,10 +84,10 @@ const FileExplorerDialog: React.FC<any> = props => {
   );
 
   async function getUserDetails() {
-    const AuthUser = await props.octokit.users.getAuthenticated();
-    githubLoginID = AuthUser.data.login;
-    githubName = AuthUser.data.name || 'Source Academy User';
-    githubEmail = AuthUser.data.email || 'no public email provided';
+    const authUser = await props.octokit.users.getAuthenticated();
+    githubLoginID = authUser.data.login;
+    githubName = authUser.data.name || 'Source Academy User';
+    githubEmail = authUser.data.email || 'no public email provided';
   }
 
   async function setFirstLayerRepoFiles(repoName: string, setRepoFiles: any) {

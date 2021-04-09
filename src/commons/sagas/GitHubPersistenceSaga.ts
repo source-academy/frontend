@@ -13,7 +13,7 @@ import FileExplorerDialog from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -74,41 +74,31 @@ function* githubOpenFile() {
 }
 
 function* githubSaveFile() {
-  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} },
-    repos: { listForAuthenticatedUser: () => {} }
-  };
-  const AuthUser = yield call(octokit.users.getAuthenticated);
-  const githubLoginID = AuthUser.data.login;
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+  const authUser = yield call(octokit.users.getAuthenticated);
+  const githubLoginId = authUser.data.login;
   const repoName = store.getState().session.githubSaveInfo.repoName;
   const filePath = store.getState().session.githubSaveInfo.filePath;
-  try {
-    const results = yield octokit.repos.getContent({
-      owner: githubLoginID,
-      repo: repoName,
-      path: filePath
-    });
-    const commitMessage = 'Changes made from Source Academy';
-    const editorContent = store.getState().workspaces.playground.editorValue || '';
-    const editorContentEncoded = Buffer.from(editorContent, 'utf8').toString('base64');
-    const sha = results.data.sha;
-    const githubName = AuthUser.data.name || '';
-    const githubEmail = AuthUser.data.email || '';
-    yield octokit.repos.createOrUpdateFileContents({
-      owner: githubLoginID,
-      repo: repoName,
-      path: filePath,
-      message: commitMessage,
-      content: editorContentEncoded,
-      sha: sha,
-      committer: { name: githubName, email: githubEmail },
-      author: { name: githubName, email: githubEmail }
-    });
-    showSuccessMessage('Successfully saved file!', 1000);
-  } catch (err) {
-    console.error(err);
-    showWarningMessage('Something went wrong when trying to save the file.', 1000);
-  }
+  const githubEmail = authUser.data.email || 'No public email provided';
+  const githubName = authUser.data.name || 'Source Academy User';
+  const commitMessage = 'Changes made from Source Academy';
+
+  console.log(githubLoginId);
+  console.log(repoName);
+  console.log(filePath);
+  console.log(githubEmail);
+  console.log(githubName);
+  console.log(commitMessage);
+
+  GitHubUtils.performOverwritingSave(
+    octokit,
+    githubLoginId,
+    repoName,
+    filePath,
+    githubEmail,
+    githubName,
+    commitMessage
+  );
 }
 
 function* githubSaveFileAs() {
