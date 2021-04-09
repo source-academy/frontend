@@ -1,5 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { act } from 'react-test-renderer';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import RepositoryDialog from '../RepositoryDialog';
 
