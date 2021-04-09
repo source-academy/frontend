@@ -22,19 +22,9 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_COMMIT_MESSAGE,
-  SET_GITHUB_CONFIRM_DIALOG_STATUS,
-  SET_GITHUB_EMAIL,
-  SET_GITHUB_FILEPATH,
-  SET_GITHUB_LOGIN_ID,
-  SET_GITHUB_NAME,
   SET_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_REPOSITORY_NAME,
-  SET_GITHUB_SAVE_MODE,
-  SET_GITHUB_USER_REPOS,
+  SET_GITHUB_SAVE_INFO,
   SET_GOOGLE_USER,
-  SET_PICKER_DIALOG_STATUS,
-  SET_PICKER_TYPE,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -94,33 +84,10 @@ export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 export const setGitHubOctokitInstance = (authToken?: string) =>
   action(SET_GITHUB_OCTOKIT_INSTANCE, generateOctokitInstance(authToken || ''));
 
+export const setGitHubSaveInfo = (repoName: string, filePath: string) =>
+  action(SET_GITHUB_SAVE_INFO, { repoName, filePath });
+
 export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
-
-export const setGitHubLoginID = (githubLoginID: string) =>
-  action(SET_GITHUB_LOGIN_ID, githubLoginID);
-
-export const setGitHubName = (githubName: string) => action(SET_GITHUB_NAME, githubName);
-
-export const setGitHubEmail = (githubEmail: string) => action(SET_GITHUB_EMAIL, githubEmail);
-
-export const setGitHubUserRepos = (userRepos: any[]) => action(SET_GITHUB_USER_REPOS, userRepos);
-
-export const setGitHubRepositoryName = (repoName: string) =>
-  action(SET_GITHUB_REPOSITORY_NAME, repoName);
-
-export const setGitHubFilepath = (filePath: string) => action(SET_GITHUB_FILEPATH, filePath);
-
-export const setGitHubCommitMessage = (commitMessage: string) =>
-  action(SET_GITHUB_COMMIT_MESSAGE, commitMessage);
-
-export const setPickerType = (pickerType: string) => action(SET_PICKER_TYPE, pickerType);
-
-export const setGitHubSaveMode = (saveMode: string) => action(SET_GITHUB_SAVE_MODE, saveMode);
-
-export const setPickerDialogStatus = (isOpen: boolean) => action(SET_PICKER_DIALOG_STATUS, isOpen);
-
-export const setGitHubConfirmationDialogStatus = (isOpen: boolean) =>
-  action(SET_GITHUB_CONFIRM_DIALOG_STATUS, isOpen);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {
