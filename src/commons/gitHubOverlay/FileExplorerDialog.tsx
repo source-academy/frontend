@@ -14,11 +14,13 @@ import React, { useEffect, useState } from 'react';
 import {
   checkIfFileCanBeOpened,
   checkIfFileCanBeSavedAndGetSaveType,
+  checkIfUserAgreesToOverwriteEditorData,
+  checkIfUserAgreesToPerformCreatingSave,
+  checkIfUserAgreesToPerformOverwritingSave,
   openFileInEditor,
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -82,10 +84,10 @@ const FileExplorerDialog: React.FC<any> = props => {
   );
 
   async function getUserDetails() {
-    const AuthUser = await props.octokit.users.getAuthenticated();
-    githubLoginID = AuthUser.data.login;
-    githubName = AuthUser.data.name || 'Source Academy User';
-    githubEmail = AuthUser.data.email || 'no public email provided';
+    const authUser = await props.octokit.users.getAuthenticated();
+    githubLoginID = authUser.data.login;
+    githubName = authUser.data.name || 'Source Academy User';
+    githubEmail = authUser.data.email || 'no public email provided';
   }
 
   async function setFirstLayerRepoFiles(repoName: string, setRepoFiles: any) {
@@ -129,7 +131,9 @@ const FileExplorerDialog: React.FC<any> = props => {
             githubEmail,
             commitMessage
           );
-        } else if (saveType === 'Create' && (await checkIfUserAgreesToPerformCreatingSave())) {
+        }
+
+        if (saveType === 'Create' && (await checkIfUserAgreesToPerformCreatingSave())) {
           performCreatingSave(
             props.octokit,
             githubLoginID,
@@ -217,48 +221,6 @@ const FileExplorerDialog: React.FC<any> = props => {
 
   function refreshPage() {
     setRefresh(refresh + 1);
-  }
-
-  async function checkIfUserAgreesToOverwriteEditorData() {
-    return await showSimpleConfirmDialog({
-      contents: (
-        <div>
-          <p>Warning: opening this file will overwrite the text data in the editor.</p>
-          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-        </div>
-      ),
-      negativeLabel: 'Cancel',
-      positiveIntent: 'primary',
-      positiveLabel: 'Confirm'
-    });
-  }
-
-  async function checkIfUserAgreesToPerformOverwritingSave() {
-    return await showSimpleConfirmDialog({
-      contents: (
-        <div>
-          <p>Warning: You are saving over an existing file in the repository.</p>
-          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-        </div>
-      ),
-      negativeLabel: 'Cancel',
-      positiveIntent: 'primary',
-      positiveLabel: 'Confirm'
-    });
-  }
-
-  async function checkIfUserAgreesToPerformCreatingSave() {
-    return await showSimpleConfirmDialog({
-      contents: (
-        <div>
-          <p>Warning: You are creating a new file in the repository.</p>
-          <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-        </div>
-      ),
-      negativeLabel: 'Cancel',
-      positiveIntent: 'primary',
-      positiveLabel: 'Confirm'
-    });
   }
 };
 
