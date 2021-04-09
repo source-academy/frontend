@@ -159,7 +159,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 };
 
 /**
- * GET achievements/goals/{studentId}
+ * GET /achievements/goals/{studentId}
  */
 export const getGoals = async (
   tokens: Tokens,
@@ -190,7 +190,7 @@ export const getGoals = async (
 };
 
 /**
- * GET self/goals
+ * GET /self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await request('self/goals', 'GET', {
@@ -541,7 +541,7 @@ export const getGradingOverviews = async (
 };
 
 /**
- * GET admin/grading/{submissionId}
+ * GET /admin/grading/{submissionId}
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
   const resp = await request(`admin/grading/${submissionId}`, 'GET', {
@@ -597,7 +597,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 };
 
 /**
- * POST admin/grading/{submissionId}/{questionId}
+ * POST /admin/grading/{submissionId}/{questionId}
  */
 export const postGrading = async (
   submissionId: number,
@@ -625,7 +625,7 @@ export const postGrading = async (
 };
 
 /**
- * POST admin/grading/{submissionId}/autograde
+ * POST /admin/grading/{submissionId}/autograde
  */
 export const postReautogradeSubmission = async (
   submissionId: number,
@@ -642,7 +642,7 @@ export const postReautogradeSubmission = async (
 };
 
 /**
- * POST admin/grading/{submissionId}/{questionId}/autograde
+ * POST /admin/grading/{submissionId}/{questionId}/autograde
  */
 export const postReautogradeAnswer = async (
   submissionId: number,
@@ -660,7 +660,7 @@ export const postReautogradeAnswer = async (
 };
 
 /**
- * POST admin/grading/{submissionId}/unsubmit
+ * POST /admin/grading/{submissionId}/unsubmit
  */
 export const postUnsubmit = async (
   submissionId: number,
@@ -808,10 +808,10 @@ export const updateAssessment = async (
 };
 
 /**
- * DELETE /assessments/{assessmentId}
+ * DELETE /admin/assessments/{assessmentId}
  */
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`assessments/${id}`, 'DELETE', {
+  const resp = await request(`admin/assessments/${id}`, 'DELETE', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -845,7 +845,7 @@ export const uploadAssessment = async (
 };
 
 /**
- * GET admin/grading/summary
+ * GET /admin/grading/summary
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
   const resp = await request('admin/grading/summary', 'GET', {
@@ -881,7 +881,7 @@ export const getSublanguage = async (): Promise<SourceLanguage | null> => {
 };
 
 /**
- * PUT admin/settings/sublanguage
+ * PUT /admin/settings/sublanguage
  */
 export const postSublanguage = async (
   chapter: number,
