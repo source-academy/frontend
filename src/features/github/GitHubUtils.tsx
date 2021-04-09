@@ -2,6 +2,7 @@ import { Octokit } from '@octokit/rest';
 
 import { actions } from '../../commons/utils/ActionsHelper';
 import Constants from '../../commons/utils/Constants';
+import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { showSuccessMessage, showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { store } from '../../pages/createStore';
 
@@ -142,6 +143,48 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
   }
 
   return { canBeSaved: true, saveType: saveType };
+}
+
+export async function checkIfUserAgreesToOverwriteEditorData() {
+  return await showSimpleConfirmDialog({
+    contents: (
+      <div>
+        <p>Warning: opening this file will overwrite the text data in the editor.</p>
+        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+      </div>
+    ),
+    negativeLabel: 'Cancel',
+    positiveIntent: 'primary',
+    positiveLabel: 'Confirm'
+  });
+}
+
+export async function checkIfUserAgreesToPerformOverwritingSave() {
+  return await showSimpleConfirmDialog({
+    contents: (
+      <div>
+        <p>Warning: You are saving over an existing file in the repository.</p>
+        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+      </div>
+    ),
+    negativeLabel: 'Cancel',
+    positiveIntent: 'primary',
+    positiveLabel: 'Confirm'
+  });
+}
+
+export async function checkIfUserAgreesToPerformCreatingSave() {
+  return await showSimpleConfirmDialog({
+    contents: (
+      <div>
+        <p>Warning: You are creating a new file in the repository.</p>
+        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+      </div>
+    ),
+    negativeLabel: 'Cancel',
+    positiveIntent: 'primary',
+    positiveLabel: 'Confirm'
+  });
 }
 
 export async function openFileInEditor(
