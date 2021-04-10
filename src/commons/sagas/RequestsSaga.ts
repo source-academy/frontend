@@ -382,6 +382,8 @@ export const getAssessmentOverviews = async (
 
 /**
  * GET /assessments/{assessmentId}
+ * Note: if assessment is password-protected, a corresponding unlock request will be sent to
+ * POST /assessments/{assessmentId}/unlock
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
   let resp = await request(`assessments/${id}`, 'GET', {
@@ -399,7 +401,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`admin/assessments/${id}`, 'POST', {
+    resp = await request(`assessments/${id}/unlock`, 'POST', {
       ...tokens,
       body: {
         password: input
