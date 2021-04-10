@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 
 export type ControlBarPersistenceButtonsProps = {
   loggedInAs?: string;
@@ -25,7 +26,7 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 };
 
 export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtonsProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const state: PersistenceState = props.currentFile
     ? props.isDirty
       ? 'DIRTY'
