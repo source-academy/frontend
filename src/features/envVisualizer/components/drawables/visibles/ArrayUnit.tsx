@@ -6,11 +6,11 @@ import { Config } from '../../../EnvVisualizerConfig';
 import { Layout } from '../../../EnvVisualizerLayout';
 import { Data, Visible } from '../../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { Arrow } from '../../Arrow';
-import { Value } from '../Value';
-import { ArrayValue } from './ArrayValue';
-import { FnValue } from './FnValue';
-import { PrimitiveValue } from './PrimitiveValue';
+import { Arrow } from './Arrow';
+import { ArrayValue } from './values/ArrayValue';
+import { FnValue } from './values/FnValue';
+import { PrimitiveValue } from './values/PrimitiveValue';
+import { Value } from './values/Value';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */

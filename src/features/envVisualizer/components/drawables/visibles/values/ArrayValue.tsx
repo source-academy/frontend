@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, ReferenceType } from '../../../EnvVisualizerTypes';
+import { Config } from '../../../../EnvVisualizerConfig';
+import { Layout } from '../../../../EnvVisualizerLayout';
+import { Data, ReferenceType } from '../../../../EnvVisualizerTypes';
+import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
+import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
-import { Value } from '../Value';
-import { ArrayEmptyUnit } from './ArrayEmptyUnit';
-import { ArrayUnit } from './ArrayUnit';
 import { PrimitiveValue } from './PrimitiveValue';
+import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */

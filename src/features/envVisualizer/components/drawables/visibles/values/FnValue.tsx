@@ -8,14 +8,14 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Env, FnTypes, Hoverable, ReferenceType } from '../../../EnvVisualizerTypes';
-import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { Arrow } from '../../Arrow';
-import { Frame } from '../../Frame';
+import { Config } from '../../../../EnvVisualizerConfig';
+import { Layout } from '../../../../EnvVisualizerLayout';
+import { Env, FnTypes, Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
+import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../../EnvVisualizerUtils';
+import { Arrow } from '../Arrow';
 import { Binding } from '../Binding';
-import { Value } from '../Value';
+import { Frame } from '../Frame';
+import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */

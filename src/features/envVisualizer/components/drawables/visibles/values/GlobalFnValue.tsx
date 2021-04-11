@@ -8,14 +8,14 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { ReferenceType } from '../../../EnvVisualizerTypes';
-import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { Arrow } from '../../Arrow';
-import { Frame } from '../../Frame';
+import { Config } from '../../../../EnvVisualizerConfig';
+import { Layout } from '../../../../EnvVisualizerLayout';
+import { ReferenceType } from '../../../../EnvVisualizerTypes';
+import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../../EnvVisualizerUtils';
+import { Arrow } from '../Arrow';
 import { Binding } from '../Binding';
-import { Value } from '../Value';
+import { Frame } from '../Frame';
+import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */

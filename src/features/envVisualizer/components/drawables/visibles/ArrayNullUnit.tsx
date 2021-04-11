@@ -4,7 +4,7 @@ import { Line as KonvaLine } from 'react-konva';
 import { Config } from '../../../EnvVisualizerConfig';
 import { Layout } from '../../../EnvVisualizerLayout';
 import { Data, ReferenceType } from '../../../EnvVisualizerTypes';
-import { Value } from '../Value';
+import { Value } from './values/Value';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Value {

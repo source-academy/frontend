@@ -6,7 +6,7 @@ import { Config } from '../../../EnvVisualizerConfig';
 import { Layout } from '../../../EnvVisualizerLayout';
 import { Data, Visible } from '../../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { ArrayValue } from './ArrayValue';
+import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
 export class ArrayEmptyUnit implements Visible {
