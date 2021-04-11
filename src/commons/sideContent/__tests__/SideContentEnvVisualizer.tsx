@@ -2,7 +2,7 @@ import { mount, shallow } from 'enzyme';
 import { runInContext } from 'js-slang/dist/';
 
 import { mockContext } from '../../mocks/ContextMocks';
-import { visualiseEnv } from '../../utils/JsSlangHelper';
+import { visualizeEnv } from '../../utils/JsSlangHelper';
 import SideContentEnvVisualizer from '../SideContentEnvVisualizer';
 
 /**
@@ -24,6 +24,6 @@ test('EnvVisualizer sets visualization state', async () => {
   const tree = mount(app);
   const context = mockContext();
   await runInContext('const hello="world"; debugger;', context);
-  visualiseEnv({ context });
+  visualizeEnv({ context });
   expect(tree.state('visualization')).not.toBeNull();
 });

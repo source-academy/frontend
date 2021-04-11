@@ -48,7 +48,7 @@ import {
   highlightLine,
   inspectorUpdate,
   makeElevatedContext,
-  visualiseEnv
+  visualizeEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
@@ -558,7 +558,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], workspaceLocation));
     inspectorUpdate(lastDebuggerResult);
-    visualiseEnv(lastDebuggerResult);
+    visualizeEnv(lastDebuggerResult);
   } catch (e) {
     yield put(actions.highlightEditorLine([], workspaceLocation));
     // most likely harmless, we can pretty much ignore this.
