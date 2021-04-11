@@ -91,7 +91,7 @@ function visualizeList(...args: any[]) {
   }
 }
 
-export function visualiseEnv({ context }: { context: Context }) {
+export function visualizeEnv({ context }: { context: Context }) {
   try {
     EnvVisualizer.drawEnv(context);
   } catch (err) {
