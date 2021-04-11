@@ -255,7 +255,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <Stage width={Layout.width} height={Layout.height} container={'stage'}>
+        <Stage width={Layout.width} height={Layout.height}>
           <Layer>
             <Rect
               x={0}

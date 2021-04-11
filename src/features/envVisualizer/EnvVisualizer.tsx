@@ -22,5 +22,9 @@ export default class EnvVisualizer {
 
     Layout.setContext(context);
     this.setVis(Layout.draw());
+
+    // icon to blink
+    const icon = document.getElementById('env_visualiser-icon');
+    icon && icon.classList.add('side-content-tab-alert');
   }
 }
