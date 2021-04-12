@@ -209,10 +209,8 @@ const FileExplorerDialog: React.FC<any> = props => {
   }
 
   function handleClickFileNameBox(e: any) {
-    const textbox = document.getElementById('FileNameTextBox') as any;
-
-    if (!textbox.value) {
-      textbox.value = '.js';
+    if (!filePath) {
+      setFilePath('.js');
     }
   }
 
