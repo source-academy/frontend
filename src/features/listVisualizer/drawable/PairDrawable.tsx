@@ -8,9 +8,9 @@ import { DataTreeNode } from '../tree/DataTreeNode';
 import { NullDrawable } from './NullDrawable';
 
 type PairProps = {
-  leftNode: DataTreeNode | null,
-  rightNode: DataTreeNode | null,
-}
+  leftNode: DataTreeNode | null;
+  rightNode: DataTreeNode | null;
+};
 
 /**
  *  Represents a pair in a tree. It takes up to two data items.

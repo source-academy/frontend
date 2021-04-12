@@ -4,9 +4,9 @@ import { Line } from 'react-konva';
 import { Config } from '../Config';
 
 type NullProps = {
-  x: number,
-  y: number,
-}
+  x: number;
+  y: number;
+};
 
 /**
  *  Represents the diagonal line drawn over the tail of a pair
