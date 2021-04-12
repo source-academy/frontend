@@ -29,10 +29,10 @@ export class GlobalFnValue extends Value implements Hoverable {
   readonly y: number;
   readonly height: number;
   readonly width: number;
-  readonly radius: number = Config.FnRadius;
-  readonly innerRadius: number = Config.FnInnerRadius;
   readonly centerX: number;
   readonly textDescriptionWidth: number;
+  readonly radius: number = Config.FnRadius;
+  readonly innerRadius: number = Config.FnInnerRadius;
 
   readonly paramsText: string;
   readonly bodyText: string;

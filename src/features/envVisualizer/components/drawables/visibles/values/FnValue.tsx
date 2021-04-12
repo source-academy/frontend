@@ -35,8 +35,8 @@ export class FnValue extends Value implements Hoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
   readonly textDescriptionWidth: number;
-
   readonly centerX: number;
+
   readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;

@@ -27,6 +27,9 @@ export class Layout {
   static height: number;
   /** the width of the stage */
   static width: number;
+  /** the unique key assigned to each node */
+  static key: number = 0;
+
   /** the environment tree */
   static environmentTree: _EnvTree;
   /** the global environment */
@@ -36,8 +39,6 @@ export class Layout {
   /** the Value objects in this layout. note that this corresponds to the data array,
    * that is, `value[i]` has underlying data `data[i]` */
   static values = new Map<Data, Value>();
-  /** the unique key assigned to each node */
-  static key: number = 0;
   /** memoized layout */
   static prevLayout: React.ReactNode;
 
