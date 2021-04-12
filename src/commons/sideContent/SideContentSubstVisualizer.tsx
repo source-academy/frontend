@@ -10,7 +10,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 
 import controlButton from '../ControlButton';
-// import { ArrowFunctionExpression } from 'estree';
+import { isEqual } from 'lodash';
 
 const SubstDefaultText = () => {
   return (
@@ -96,6 +96,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
           FIRST_STEP: () => {},
           LAST_STEP: () => {}
         };
+    // console.log(this.props.content);
 
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
@@ -282,16 +283,8 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
         const nextFunction = this.props.content[i].function;
         if (nextFunction === currentFunction) {
           return true;
-        } else if (
-          currentFunction.type === 'ArrowFunctionExpression' &&
-          nextFunction !== undefined
-        ) {
-          // const Arrow1: ArrowFunctionExpression = currentFunction
-          if (nextFunction.type === 'ArrowFunctionExpression') {
-            // const Arrow2: ArrowFunctionExpression = nextFunction
-            // if (Arrow1.body === Arrow2.body) {
-            //   return true
-            // }
+        } else if (nextFunction !== undefined) {
+          if (isEqual(currentFunction, nextFunction)) {
             return true;
           }
         }
@@ -311,16 +304,8 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
         const nextFunction = this.props.content[i].function;
         if (nextFunction === currentFunction) {
           return true;
-        } else if (
-          currentFunction.type === 'ArrowFunctionExpression' &&
-          nextFunction !== undefined
-        ) {
-          // const Arrow1: ArrowFunctionExpression = currentFunction
-          if (nextFunction.type === 'ArrowFunctionExpression') {
-            // const Arrow2: ArrowFunctionExpression = nextFunction
-            // if (Arrow1.body === Arrow2.body) {
-            //   return true
-            // }
+        } else if (nextFunction !== undefined) {
+          if (isEqual(currentFunction, nextFunction)) {
             return true;
           }
         }
@@ -333,8 +318,6 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
     const currentFunction = this.props.content[contIndex].function;
-    const isArrowFunction =
-      currentFunction !== undefined ? currentFunction.type === 'ArrowFunctionExpression' : false;
     if (currentFunction === undefined) {
       return null;
     }
@@ -342,25 +325,9 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       const nextFunction = this.props.content[i].function;
       if (nextFunction === currentFunction) {
         return i + 1;
-      } else if (
-        isArrowFunction &&
-        this.props.content[i].function !== undefined &&
-        currentFunction !== undefined
-      ) {
-        if (this.props.content[i].function?.loc === currentFunction.loc) {
+      } else if (nextFunction !== undefined) {
+        if (isEqual(currentFunction, nextFunction)) {
           return i + 1;
-        } else if (
-          currentFunction.type === 'ArrowFunctionExpression' &&
-          nextFunction !== undefined
-        ) {
-          // const Arrow1: ArrowFunctionExpression = currentFunction
-          if (nextFunction.type === 'ArrowFunctionExpression') {
-            // const Arrow2: ArrowFunctionExpression = nextFunction
-            // if (Arrow1.body === Arrow2.body) {
-            //   return i + 1
-            // }
-            return i + 1;
-          }
         }
       }
     }
@@ -378,13 +345,8 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       const nextFunction = this.props.content[i].function;
       if (nextFunction === currentFunction) {
         return i + 1;
-      } else if (currentFunction.type === 'ArrowFunctionExpression' && nextFunction !== undefined) {
-        // const Arrow1: ArrowFunctionExpression = currentFunction
-        if (nextFunction.type === 'ArrowFunctionExpression') {
-          // const Arrow2: ArrowFunctionExpression = nextFunction
-          // if (Arrow1.body === Arrow2.body) {
-          //   return i + 1
-          // }
+      } else if (nextFunction !== undefined) {
+        if (isEqual(currentFunction, nextFunction)) {
           return i + 1;
         }
       }
