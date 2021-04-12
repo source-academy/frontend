@@ -14,6 +14,7 @@ export class ArrayEmptyUnit implements Visible, Hoverable {
   readonly y: number;
   readonly height: number;
   readonly width: number;
+
   readonly data: Data = [];
 
   constructor(readonly parent: ArrayValue) {

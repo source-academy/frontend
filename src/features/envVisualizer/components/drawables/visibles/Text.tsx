@@ -9,8 +9,8 @@ import { getTextWidth } from '../../../EnvVisualizerUtils';
 
 export interface TextOptions {
   maxWidth: number;
-  fontFamily: string;
   fontSize: number;
+  fontFamily: string;
   fontStyle: string;
   fontVariant: string;
 }
@@ -27,8 +27,10 @@ export const defaultOptions: TextOptions = {
 export class Text implements Visible, Hoverable {
   readonly height: number;
   readonly width: number;
-  readonly options: TextOptions = defaultOptions;
+
   readonly fullStr: string;
+
+  readonly options: TextOptions = defaultOptions;
   private labelRef: RefObject<any> = React.createRef();
 
   constructor(

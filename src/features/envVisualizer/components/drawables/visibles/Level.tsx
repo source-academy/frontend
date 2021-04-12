@@ -12,11 +12,12 @@ export class Level implements Visible {
   readonly y: number;
   readonly height: number;
   readonly width: number;
+
   /** all the frames in this level */
   readonly frames: Frame[] = [];
 
   constructor(
-    /** the parent level of this level (the level above it) */
+    /** the level of this */
     readonly parentLevel: Level | null,
     /** the environment tree nodes contained in this level */
     readonly envTreeNodes: _EnvTreeNode[]

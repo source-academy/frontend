@@ -13,13 +13,14 @@ import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
- *  this unit is part of a parent, either an ArrayValue */
+ *  this unit is part of an ArrayValue */
 export class ArrayUnit implements Visible, Hoverable {
   readonly x: number;
   readonly y: number;
   readonly height: number;
   readonly width: number;
   readonly value: Value;
+
   /** check if this is the first unit in the array */
   readonly isFirstUnit: boolean;
   /** check if this is the last unit in the array */

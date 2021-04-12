@@ -16,7 +16,7 @@ import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
 
-const frameNameMap = new Map([
+const frameNames = new Map([
   ['global', 'Global'],
   ['programEnvironment', 'Program'],
   ['forLoopEnvironment', 'Body of for-loop'],
@@ -35,6 +35,7 @@ export class Frame implements Visible, Hoverable {
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
   readonly totalWidth: number;
+
   /** the bindings this frame contains */
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
@@ -60,7 +61,7 @@ export class Frame implements Visible, Hoverable {
     this.leftSiblingFrame &&
       (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
     this.name = new Text(
-      String(frameNameMap.get(this.environment.name) || this.environment.name),
+      String(frameNames.get(this.environment.name) || this.environment.name),
       this.x,
       this.level.y,
       { maxWidth: this.width }

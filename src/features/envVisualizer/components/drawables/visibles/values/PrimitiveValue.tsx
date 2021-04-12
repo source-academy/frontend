@@ -15,6 +15,7 @@ export class PrimitiveValue extends Value {
   readonly y: number;
   readonly height: number;
   readonly width: number;
+
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;
 

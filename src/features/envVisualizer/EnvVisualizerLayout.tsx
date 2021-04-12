@@ -90,9 +90,7 @@ export class Layout {
     // by removing extra props such as functionName
     for (const value of Object.values(globalEnvNode.environment.head)) {
       if (isFn(value)) {
-        // HACKY: TS doesn't allow us to delete functionName from value
-        // as it breaks the FnTypes contract (that is value, being of type FnTypes,
-        // must have functionName prop) so we cast it
+        // HACKY?
         delete (value as { functionName?: string }).functionName;
       }
     }

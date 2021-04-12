@@ -32,10 +32,12 @@ export class GlobalFnValue extends Value implements Hoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
   readonly centerX: number;
+  readonly textDescriptionWidth: number;
+
   readonly paramsText: string;
   readonly bodyText: string;
   readonly textDescription: string;
-  readonly textDescriptionWidth: number;
+
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(

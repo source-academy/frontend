@@ -97,6 +97,7 @@ export function getTextWidth(
   }
 }
 
+/** get the parameter string of the given function */
 export function getParamsText(data: () => any): string {
   if (isFn(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
@@ -106,6 +107,7 @@ export function getParamsText(data: () => any): string {
   }
 }
 
+/** get the body string of the given function */
 export function getBodyText(data: () => any): string {
   const fnString = data.toString();
   if (isFn(data)) {
@@ -121,6 +123,7 @@ export function getBodyText(data: () => any): string {
   }
 }
 
+/** update the styles of a Konva node and its children on hover, and then redraw the layer */
 export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
@@ -144,6 +147,7 @@ export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
   target.getLayer()?.draw();
 }
 
+/** update the styles of a Konva node and its children on unhover, and then redraw the layer */
 export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'default');
@@ -161,6 +165,7 @@ export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void 
   target.getLayer()?.draw();
 }
 
+/** extract the non-empty tail environment from the given environment */
 export function getNonEmptyEnv(environment: Env): Env {
   if (environment === null) {
     return null;

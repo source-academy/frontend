@@ -13,6 +13,7 @@ export interface Drawable {
   draw: (key: number) => React.ReactNode;
 }
 
+/** this interface defines a Hoverable object */
 export interface Hoverable {
   onMouseEnter: (e: KonvaEventObject<MouseEvent>) => void;
   onMouseLeave: (e: KonvaEventObject<MouseEvent>) => void;

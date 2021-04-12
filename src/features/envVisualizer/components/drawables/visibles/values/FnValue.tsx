@@ -31,17 +31,19 @@ export class FnValue extends Value implements Hoverable {
   readonly y: number;
   readonly height: number;
   readonly width: number;
-  /** the parent/enclosing environment of this fn value */
-  readonly enclosingEnvNode: _EnvTreeNode;
   /** name of this function */
-  readonly fnName: string;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
+  readonly textDescriptionWidth: number;
+
   readonly centerX: number;
+  readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;
   readonly textDescription: string;
-  readonly textDescriptionWidth: number;
+
+  /** the parent/enclosing environment of this fn value */
+  readonly enclosingEnvNode: _EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(

@@ -18,6 +18,7 @@ export class Binding implements Visible {
   readonly y: number;
   readonly width: number;
   readonly height: number;
+
   /** value associated with this binding */
   readonly value: Value;
   /** key of this binding */
