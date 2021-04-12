@@ -29,6 +29,16 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
+    case SET_GITHUB_OCTOKIT_INSTANCE:
+      return {
+        ...state,
+        githubOctokitInstance: action.payload
+      };
+    case SET_GOOGLE_USER:
+      return {
+        ...state,
+        googleUser: action.payload
+      };
     case SET_TOKENS:
       return {
         ...state,
@@ -39,16 +49,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         ...action.payload
-      };
-    case SET_GOOGLE_USER:
-      return {
-        ...state,
-        googleUser: action.payload
-      };
-    case SET_GITHUB_OCTOKIT_INSTANCE:
-      return {
-        ...state,
-        githubOctokitInstance: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;
