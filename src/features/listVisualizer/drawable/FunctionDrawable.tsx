@@ -6,7 +6,7 @@ import { Config } from '../Config';
 /**
  * Represents a function object drawn using two circles.
  */
-export class FunctionDrawable extends React.Component {
+export class FunctionDrawable extends React.PureComponent {
   render() {
     return (
       <Group>
@@ -14,8 +14,8 @@ export class FunctionDrawable extends React.Component {
         <Circle
           radius={15}
           strokeWidth={Config.StrokeWidth}
-          stroke={'white'}
-          x={Config.BoxWidth / 2 - 20}
+          stroke={Config.Stroke}
+          x={Config.BoxWidth / 2 - 20} // 25
           y={Config.BoxHeight / 2}
         />
 
@@ -23,8 +23,8 @@ export class FunctionDrawable extends React.Component {
         <Circle
           radius={15}
           strokeWidth={Config.StrokeWidth}
-          stroke={'white'}
-          x={Config.BoxWidth / 2 + 10}
+          stroke={Config.Stroke}
+          x={Config.BoxWidth / 2 + 10} // 55
           y={Config.BoxHeight / 2}
         />
 
@@ -32,8 +32,8 @@ export class FunctionDrawable extends React.Component {
         <Circle
           radius={4}
           strokeWidth={Config.StrokeWidth}
-          stroke={'white'}
-          fill={'white'}
+          stroke={Config.Fill}
+          fill={Config.Fill}
           x={Config.BoxWidth / 2 - 20}
           y={Config.BoxHeight / 2}
         />
@@ -42,8 +42,8 @@ export class FunctionDrawable extends React.Component {
         <Circle
           radius={4}
           strokeWidth={Config.StrokeWidth}
-          stroke={'white'}
-          fill={'white'}
+          stroke={Config.Stroke}
+          fill={Config.Fill}
           x={Config.BoxWidth / 2 + 10}
           y={Config.BoxHeight / 2}
         />

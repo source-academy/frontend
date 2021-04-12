@@ -5,7 +5,7 @@ import { Data, EmptyList, List, Pair } from './ListVisualizerTypes';
  *  Returns data in text form, fitted into the box.
  *  If not possible to fit data, return undefined. A number will be assigned and logged in the console.
  */
-export function toText(data: any, full: boolean = false): string | undefined {
+export function toText(data: Data, full: boolean = false): string | undefined {
   if (full) {
     return '' + data;
   } else {
@@ -33,7 +33,7 @@ export function findDataHeight(data: Data): number {
   const existing: Data[] = [];
 
   function helper(data: Data): number {
-    if ((!isPair(data) && !isFunction(data)) || isNull(data)) {
+    if ((!isPair(data) && !isFunction(data)) || isEmptyList(data)) {
       return 0;
     } else {
       let leftHeight;
@@ -64,7 +64,7 @@ export function findDataWidth(data: Data): number {
   const existing: Data[] = [];
 
   function helper(data: Data): number {
-    if ((!isPair(data) && !isFunction(data)) || isNull(data)) {
+    if ((!isPair(data) && !isFunction(data)) || isEmptyList(data)) {
       return 0;
     } else {
       let leftWidth: number;
@@ -100,7 +100,7 @@ export function isList(data: Data): data is List {
   return is_list(data);
 }
 
-export function isNull(data: Data): data is EmptyList {
+export function isEmptyList(data: Data): data is EmptyList {
   return data === null;
 }
 

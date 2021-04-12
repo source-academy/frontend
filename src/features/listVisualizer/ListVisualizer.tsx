@@ -89,8 +89,6 @@ export default class ListVisualizer {
           <Text
             text={toText(xs, true)}
             align={'center'}
-            //  x={500}
-            //  y={50}
             fontStyle={'normal'}
             fontSize={20}
             fill={'white'}

@@ -3,31 +3,23 @@ import { Line } from 'react-konva';
 
 import { Config } from '../Config';
 
+type NullProps = {
+  x: number,
+  y: number,
+}
+
 /**
  *  Represents the diagonal line drawn over the tail of a pair
  *  when the tail is an empty box.
  *
  *  Used in conjunction with PairDrawable.
  */
-export class NullDrawable extends React.Component {
-  private x: number;
-  private y: number;
-
-  /**
-   * Constructs a new NullDrawable at the given position.
-   * @param props Props containing the position of the drawable.
-   */
-  constructor(props: { x: number; y: number }) {
-    super(props);
-    this.x = props.x;
-    this.y = props.y;
-  }
-
+export class NullDrawable extends React.PureComponent<NullProps> {
   render() {
     return (
       <Line
-        x={this.x}
-        y={this.y}
+        x={this.props.x}
+        y={this.props.y}
         points={[
           Config.BoxWidth * Config.VertBarPos,
           Config.BoxHeight,

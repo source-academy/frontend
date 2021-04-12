@@ -10,17 +10,10 @@ type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number 
  *
  * Used in with FunctionDrawable and PairDrawable.
  */
-export abstract class ArrowDrawable extends React.Component {
-  private config: ArrowConfig;
-
-  constructor(props: ArrowConfig) {
-    super(props);
-    this.config = props;
-  }
-
+export abstract class ArrowDrawable extends React.PureComponent<ArrowConfig> {
   render() {
-    const parentXOffset = this.config.from.x - this.config.to.x;
-    const parentYOffset = this.config.from.y - this.config.to.y;
+    const parentXOffset = this.props.from.x - this.props.to.x;
+    const parentYOffset = this.props.from.y - this.props.to.y;
 
     // Starting point
     const start = { x: Config.BoxWidth / 4, y: -Config.ArrowSpace };

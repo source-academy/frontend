@@ -16,8 +16,8 @@ export class Tree {
 
   /**
    * Constructs a tree given a root node and a list of nodes.
-   * @param {PairTreeNode} rootNode The root node of the tree.
-   * @param {DrawableTreeNode[]} nodes The memoized nodes of the tree in list form.
+   * @param rootNode The root node of the tree.
+   * @param nodes The memoized nodes of the tree in list form.
    */
   constructor(rootNode: PairTreeNode, nodes: DrawableTreeNode[]) {
     this._rootNode = rootNode;
@@ -33,7 +33,7 @@ export class Tree {
 
   /**
    * Returns the memoized node of the given id.
-   * @param {number} id The id of the node.
+   * @param id The id of the node.
    */
   getNodeById(id: number): DrawableTreeNode {
     return this.nodes[id];
@@ -46,7 +46,7 @@ export class Tree {
      * Returns a node representing the given tree as a pair.
      * Also memoizes the pair object, for the case where the
      * pair appears multiple times in the data structure.
-     * @param {Pair} tree The Source tree to construct a node for.
+     * @param tree The Source tree to construct a node for.
      */
     function constructTree(tree: Pair) {
       const node = new PairTreeNode(nodeCount);
@@ -87,7 +87,7 @@ export class Tree {
      * Returns a node representing the given function.
      * Also memoizes the function object, for the case where the
      * function appears multiple times in the data structure.
-     * @param {Function} func The function to construct a node for.
+     * @param func The function to construct a node for.
      */
     function constructFunction(func: Function) {
       const node = new FunctionTreeNode(nodeCount);
@@ -103,7 +103,7 @@ export class Tree {
     /**
      * Returns a node representing the given data.
      * Anything except functions and pairs are considered data, including empty lists.
-     * @param {Data} data The data to construct a node for.
+     * @param data The data to construct a node for.
      */
     function constructData(data: Data) {
       return new DataTreeNode(data);
@@ -155,11 +155,11 @@ class TreeDrawer {
    *
    *  If a child node has been drawn previously, an arrow is drawn pointing to the children,
    *  instead of drawing the child node again.
-   * @param {TreeNode} node The node to draw.
-   * @param {number} x The x position to draw at.
-   * @param {number} y The y position to draw at.
-   * @param {number} parentX The x position of the parent. If there is no parent, it is the same as x.
-   * @param {number} parentY The y position of the parent. If there is no parent, it is the same as y.
+   * @param node The node to draw.
+   * @param x The x position to draw at.
+   * @param y The y position to draw at.
+   * @param parentX The x position of the parent. If there is no parent, it is the same as x.
+   * @param parentY The y position of the parent. If there is no parent, it is the same as y.
    */
   drawNode(node: TreeNode, x: number, y: number, parentX: number, parentY: number) {
     if (!(node instanceof DrawableTreeNode)) return;

@@ -1,6 +1,4 @@
-import { ArrowDrawable } from './ArrowDrawable';
-import { FunctionDrawable } from './FunctionDrawable';
-import { NullDrawable } from './NullDrawable';
-import { PairDrawable } from './PairDrawable';
-
-export { ArrowDrawable, FunctionDrawable, NullDrawable, PairDrawable };
+export { ArrowDrawable } from './ArrowDrawable';
+export { FunctionDrawable } from './FunctionDrawable';
+export { NullDrawable } from './NullDrawable';
+export { PairDrawable } from './PairDrawable';

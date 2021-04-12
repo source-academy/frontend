@@ -3,23 +3,19 @@ import { Group, Line, Rect, Text } from 'react-konva';
 
 import { Config } from '../Config';
 import ListVisualizer from '../ListVisualizer';
-import { isList, isNull, toText } from '../ListVisualizerUtils';
+import { isEmptyList, isList, toText } from '../ListVisualizerUtils';
 import { DataTreeNode } from '../tree/DataTreeNode';
 import { NullDrawable } from './NullDrawable';
+
+type PairProps = {
+  leftNode: DataTreeNode | null,
+  rightNode: DataTreeNode | null,
+}
 
 /**
  *  Represents a pair in a tree. It takes up to two data items.
  */
-export class PairDrawable extends React.Component {
-  private leftNode: DataTreeNode | null;
-  private rightNode: DataTreeNode | null;
-
-  constructor(props: { leftNode: DataTreeNode | null; rightNode: DataTreeNode | null }) {
-    super(props);
-    this.leftNode = props.leftNode;
-    this.rightNode = props.rightNode;
-  }
-
+export class PairDrawable extends React.PureComponent<PairProps> {
   render() {
     const createChildText = (node: DataTreeNode | null, isLeftNode: boolean) => {
       if (node == null) {
@@ -41,7 +37,7 @@ export class PairDrawable extends React.Component {
             fill={'white'}
           />
         );
-      } else if (isNull(nodeValue)) {
+      } else if (isEmptyList(nodeValue)) {
         const props = {
           x: isLeftNode ? -Config.BoxWidth * Config.VertBarPos : 0,
           y: 0
@@ -73,8 +69,8 @@ export class PairDrawable extends React.Component {
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
         />
-        {createChildText(this.leftNode, true)}
-        {createChildText(this.rightNode, false)}
+        {createChildText(this.props.leftNode, true)}
+        {createChildText(this.props.rightNode, false)}
       </Group>
     );
   }

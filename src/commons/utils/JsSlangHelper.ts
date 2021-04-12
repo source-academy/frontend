@@ -6,6 +6,7 @@ import { difference, keys } from 'lodash';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
+import { Data } from '../../features/listVisualizer/ListVisualizerTypes';
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
 /**
@@ -78,9 +79,9 @@ function cadetAlert(value: any) {
  *
  * @param list the list to be visualized.
  */
-function visualizeList(...args: any[]) {
+function visualizeList(...args: Data[]) {
   try {
-    // Pass in args[0] since args is in the form; [(Array of drawbables), "playground"]
+    // Pass in args[0] since args is in the form; [(Array of drawables), "playground"]
     ListVisualizer.drawData(args[0]);
 
     // If there is only one arg, just print out the first arg in REPL, instead of [first arg]

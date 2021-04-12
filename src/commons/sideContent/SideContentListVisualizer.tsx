@@ -18,15 +18,14 @@ const listVisualizerKeyMap = {
   NEXT_STEP: 'right'
 };
 
+/**
+ * This class is responsible for the visualization of data structures via the
+ * data_data function in Source. It adds a listener to the ListVisualizer singleton
+ * which updates the steps list via setState whenever new steps are added.
+ */
 class SideContentListVisualizer extends React.Component<{}, State> {
-  // static clear() {
-  //   // throw new Error('Method not implemented.');
-  //   this.state = ({ stages: []});
-  // }
-
   constructor(props: any) {
     super(props);
-    // ListVisualizer.clear();
     this.state = { steps: [], currentStep: 0 };
     ListVisualizer.init(steps => {
       if (!steps) {
@@ -46,10 +45,8 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       PREVIOUS_STEP: this.onPrevButtonClick,
       NEXT_STEP: this.onNextButtonClick
     };
+    const step: Step | undefined = this.state.steps[this.state.currentStep];
 
-    const step = this.state.steps[this.state.currentStep];
-
-    // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
         <div className={classNames('sa-list-visualizer', Classes.DARK)}>
@@ -119,11 +116,15 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   }
 
   private onPrevButtonClick = () => {
-    this.setState({ currentStep: this.state.currentStep - 1 });
+    this.setState(state => {
+      return { currentStep: state.currentStep - 1 };
+    });
   };
 
   private onNextButtonClick = () => {
-    this.setState({ currentStep: this.state.currentStep + 1 });
+    this.setState(state => {
+      return { currentStep: state.currentStep + 1 };
+    });
   };
 }
 

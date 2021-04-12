@@ -4,6 +4,7 @@
 export const Config = {
   StrokeWidth: 2,
   Stroke: 'white',
+  Fill: 'white',
   DistanceX: 50,
   DistanceY: 60,
 
