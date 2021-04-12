@@ -22,6 +22,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
+import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
@@ -504,7 +505,7 @@ export default function* WorkspaceSaga(): SagaIterator {
             break;
         }
       }
-      (window as any).ListVisualizer?.clear();
+      ListVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;
