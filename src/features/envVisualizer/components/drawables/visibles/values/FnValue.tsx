@@ -1,3 +1,4 @@
+import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { RefObject } from 'react';
 import {
@@ -10,11 +11,17 @@ import {
 
 import { Config } from '../../../../EnvVisualizerConfig';
 import { Layout } from '../../../../EnvVisualizerLayout';
-import { Env, FnTypes, Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
-import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../../EnvVisualizerUtils';
+import { _EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
+import {
+  getBodyText,
+  getNonEmptyEnv,
+  getParamsText,
+  getTextWidth,
+  setHoveredStyle,
+  setUnhoveredStyle
+} from '../../../../EnvVisualizerUtils';
 import { Arrow } from '../Arrow';
 import { Binding } from '../Binding';
-import { Frame } from '../Frame';
 import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
@@ -24,15 +31,13 @@ export class FnValue extends Value implements Hoverable {
   readonly y: number;
   readonly height: number;
   readonly width: number;
-
   /** the parent/enclosing environment of this fn value */
-  readonly enclosingEnv: Env;
-
+  readonly enclosingEnvNode: _EnvTreeNode;
+  /** name of this function */
+  readonly fnName: string;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
   readonly centerX: number;
-
-  readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;
   readonly textDescription: string;
@@ -70,20 +75,13 @@ export class FnValue extends Value implements Hoverable {
     this.width = this.radius * 4;
     this.height = this.radius * 2;
 
-    this.enclosingEnv = this.data.environment;
+    this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
+      getNonEmptyEnv(this.data.environment) as Environment
+    ) as _EnvTreeNode;
     this.fnName = this.data.functionName;
 
-    const fnString = this.data.toString();
-    const params = this.data.node.params.map((node: any) => node.name).join(',');
-    let body =
-      this.data.node.type === 'FunctionDeclaration' || fnString.substring(0, 8) === 'function'
-        ? fnString.substring(fnString.indexOf('{'))
-        : fnString.substring(fnString.indexOf('=') + 3);
-
-    if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
-
-    this.paramsText = `params: (${params})`;
-    this.bodyText = `body: ${body}`;
+    this.paramsText = `params: (${getParamsText(this.data)})`;
+    this.bodyText = `body: ${getBodyText(this.data)}`;
     this.textDescription = `${this.paramsText}\n${this.bodyText}`;
     this.textDescriptionWidth = Math.max(
       getTextWidth(this.paramsText),
@@ -92,6 +90,7 @@ export class FnValue extends Value implements Hoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
     setHoveredStyle(currentTarget);
   };
@@ -102,26 +101,6 @@ export class FnValue extends Value implements Hoverable {
   };
 
   draw(): React.ReactNode {
-    let arrowPoints: number[] = [];
-    if (this.enclosingEnv.frame) {
-      const to: Frame = this.enclosingEnv.frame;
-
-      if (to.y < this.y && this.y < to.y + to.height) {
-        arrowPoints = [
-          this.x + Config.FnRadius * 3,
-          this.y,
-          this.x + Config.FnRadius * 3,
-          this.y - Config.FnRadius * 2,
-          to.x + to.width,
-          this.y - Config.FnRadius * 2
-        ];
-      } else if (to.y < this.y) {
-        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y + to.height];
-      } else {
-        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y];
-      }
-    }
-
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -170,7 +149,7 @@ export class FnValue extends Value implements Hoverable {
             padding={5}
           />
         </KonvaLabel>
-        {arrowPoints && new Arrow(arrowPoints).draw()}
+        {this.enclosingEnvNode.frame && new Arrow(this, this.enclosingEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

@@ -4,12 +4,12 @@ import { Rect } from 'react-konva';
 
 import { Config } from '../../../EnvVisualizerConfig';
 import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Visible } from '../../../EnvVisualizerTypes';
+import { Data, Hoverable, Visible } from '../../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
 import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
-export class ArrayEmptyUnit implements Visible {
+export class ArrayEmptyUnit implements Visible, Hoverable {
   readonly x: number;
   readonly y: number;
   readonly height: number;

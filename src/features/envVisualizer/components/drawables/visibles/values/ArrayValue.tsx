@@ -79,7 +79,6 @@ export class ArrayValue extends Value {
   draw(): React.ReactNode {
     if (this.isDrawn) return null;
     this.isDrawn = true;
-
     return (
       <React.Fragment key={Layout.key++}>
         {this.units.length > 0

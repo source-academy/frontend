@@ -5,36 +5,120 @@ import { Config } from '../../../EnvVisualizerConfig';
 import { Layout } from '../../../EnvVisualizerLayout';
 import { Hoverable, Visible } from '../../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
+import { ArrayUnit } from './ArrayUnit';
+import { Frame } from './Frame';
+import { ArrayValue } from './values/ArrayValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class Arrow implements Visible, Hoverable {
-  readonly x: number = 0;
-  readonly y: number = 0;
-  readonly height: number = 0;
-  readonly width: number = 0;
+  readonly x: number;
+  readonly y: number;
+  readonly height: number;
+  readonly width: number;
+  readonly points: number[];
+  // readonly dashEnabled: boolean = false;
 
-  constructor(readonly points: number[]) {
-    if (points.length < 2) return;
+  constructor(readonly from: Visible, readonly to: Visible) {
+    this.x = from.x;
+    this.y = from.y;
 
-    this.x = points[0];
-    this.y = points[1];
-
-    let minY = Infinity,
-      maxY = 0,
-      minX = Infinity,
-      maxX = 0;
-    points.forEach((val, idx) => {
-      if (idx % 2) {
-        minY = Math.min(minY, val);
-        maxY = Math.max(maxY, val);
+    if (from instanceof Frame) {
+      if (to instanceof Frame) {
+        this.points = [
+          from.x + Config.FramePaddingX,
+          from.y,
+          from.x + Config.FramePaddingX,
+          from.y - Config.FrameMarginY,
+          to.x + Config.FramePaddingX,
+          from.y - Config.FrameMarginY,
+          to.x + Config.FramePaddingX,
+          to.y + to.height
+        ];
       } else {
-        minX = Math.min(minX, val);
-        maxX = Math.max(maxX, val);
+        this.points = [
+          from.x + Config.FramePaddingX,
+          from.y,
+          to.x + Config.FramePaddingX,
+          to.y + to.height
+        ];
       }
-    });
+    } else if (from instanceof FnValue || from instanceof GlobalFnValue) {
+      if (to.y < from.y && from.y < to.y + to.height) {
+        if (from.x < to.x) {
+          this.points = [
+            from.x + Config.FnRadius * 3,
+            from.y,
+            from.x + Config.FnRadius * 3,
+            from.y - Config.FnRadius * 2,
+            to.x,
+            from.y - Config.FnRadius * 2
+          ];
+        } else {
+          this.points = [
+            from.x + Config.FnRadius * 3,
+            from.y,
+            from.x + Config.FnRadius * 3,
+            from.y - Config.FnRadius * 2,
+            to.x + to.width,
+            from.y - Config.FnRadius * 2
+          ];
+        }
+      } else if (to.y < from.y) {
+        this.points = [from.x + Config.FnRadius * 3, from.y, to.x + to.width / 2, to.y + to.height];
+      } else {
+        this.points = [from.x + Config.FnRadius * 3, from.y, to.x + to.width / 2, to.y];
+      }
+    } else if (from instanceof Text) {
+      this.points = [from.x + from.width, from.y + from.height / 2];
+      if (to instanceof ArrayValue) {
+        this.points.push(to.x, to.y + Config.DataUnitHeight / 2);
+      } else {
+        this.points.push(to.x, to.y);
+      }
+    } else if (from instanceof ArrayUnit) {
+      this.points = [from.x + Config.DataUnitWidth / 2, from.y + Config.DataUnitHeight / 2];
+      if (to instanceof FnValue || to instanceof GlobalFnValue) {
+        if (from.x < to.x) {
+          this.points.push(to.x, to.y);
+        } else {
+          this.points.push(to.centerX, to.y);
+        }
+      } else if (to instanceof ArrayValue) {
+        if (from.y === to.y && Math.abs(from.x - to.x) > Config.DataUnitWidth * 2) {
+          this.points.push(
+            from.x + Config.DataUnitWidth / 2,
+            from.y - Config.DataUnitHeight / 2,
+            to.x + Config.DataUnitWidth / 2,
+            to.y - Config.DataUnitHeight / 2,
+            to.x + Config.DataUnitWidth / 2,
+            to.y
+          );
+        } else if (from.y < to.y) {
+          this.points.push(to.x + Config.DataUnitWidth / 2, to.y);
+        } else if (from.y > to.y) {
+          this.points.push(to.x + Config.DataUnitWidth / 2, to.y + Config.DataUnitHeight);
+        } else {
+          this.points.push(to.x, to.y + Config.DataUnitHeight / 2);
+        }
+      } else {
+        this.points.push(to.x, to.y);
+      }
+    } else {
+      this.points = [from.x, from.y, to.x, to.y];
+    }
 
-    this.height = maxY - minY;
-    this.width = maxX - minX;
+    // if (
+    //   this.points.length === 4 &&
+    //   this.points[0] !== this.points[2] &&
+    //   this.points[1] !== this.points[3]
+    // ) {
+    //   this.dashEnabled = true;
+    // }
+
+    this.width = Math.abs(to.x - from.x);
+    this.height = Math.abs(to.y - from.y);
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -53,6 +137,8 @@ export class Arrow implements Visible, Hoverable {
     return (
       <KonvaArrow
         points={this.points}
+        // dash={[10, 5]}
+        // dashEnabled={this.dashEnabled}
         fill={Config.SA_WHITE.toString()}
         stroke={Config.SA_WHITE.toString()}
         strokeWidth={Number(Config.ArrowStrokeWidth)}

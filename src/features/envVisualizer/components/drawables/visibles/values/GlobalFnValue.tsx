@@ -10,25 +10,28 @@ import {
 
 import { Config } from '../../../../EnvVisualizerConfig';
 import { Layout } from '../../../../EnvVisualizerLayout';
-import { ReferenceType } from '../../../../EnvVisualizerTypes';
-import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../../EnvVisualizerUtils';
+import { Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
+import {
+  getBodyText,
+  getParamsText,
+  getTextWidth,
+  setHoveredStyle,
+  setUnhoveredStyle
+} from '../../../../EnvVisualizerUtils';
 import { Arrow } from '../Arrow';
 import { Binding } from '../Binding';
-import { Frame } from '../Frame';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value {
+export class GlobalFnValue extends Value implements Hoverable {
   readonly x: number;
   readonly y: number;
   readonly height: number;
   readonly width: number;
-
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
   readonly centerX: number;
-
   readonly paramsText: string;
   readonly bodyText: string;
   readonly textDescription: string;
@@ -66,11 +69,8 @@ export class GlobalFnValue extends Value {
     this.width = this.radius * 4;
     this.height = this.radius * 2;
 
-    const fnString = this.data.toString();
-    const params = fnString.substring(fnString.indexOf('('), fnString.indexOf('{')).trim();
-    const body = fnString.substring(fnString.indexOf('{'));
-    this.paramsText = `params: ${params}`;
-    this.bodyText = `body: ${body}`;
+    this.paramsText = `params: (${getParamsText(this.data)})`;
+    this.bodyText = `body: ${getBodyText(this.data)}`;
     this.textDescription = `${this.paramsText}\n${this.bodyText}`;
     this.textDescriptionWidth = Math.max(
       getTextWidth(this.paramsText),
@@ -89,26 +89,6 @@ export class GlobalFnValue extends Value {
   };
 
   draw(): React.ReactNode {
-    let arrowPoints: number[] = [];
-    if (Layout.globalEnv.frame) {
-      const to: Frame = Layout.globalEnv.frame;
-
-      if (to.y < this.y && this.y < to.y + to.height) {
-        arrowPoints = [
-          this.x + Config.FnRadius * 3,
-          this.y,
-          this.x + Config.FnRadius * 3,
-          this.y - Config.FnRadius * 2,
-          to.x + to.width,
-          this.y - Config.FnRadius * 2
-        ];
-      } else if (to.y < this.y) {
-        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y + to.height];
-      } else {
-        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y];
-      }
-    }
-
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -157,7 +137,7 @@ export class GlobalFnValue extends Value {
             padding={5}
           />
         </KonvaLabel>
-        {arrowPoints && new Arrow(arrowPoints).draw()}
+        {Layout.globalEnvNode.frame && new Arrow(this, Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

@@ -7,13 +7,13 @@ import { Layout } from '../../../EnvVisualizerLayout';
 import { Hoverable, Visible } from '../../../EnvVisualizerTypes';
 import { getTextWidth } from '../../../EnvVisualizerUtils';
 
-export type TextOptions = {
+export interface TextOptions {
   maxWidth: number;
   fontFamily: string;
   fontSize: number;
   fontStyle: string;
   fontVariant: string;
-};
+}
 
 export const defaultOptions: TextOptions = {
   maxWidth: Number.MAX_VALUE, // maximum width this text should be
@@ -27,27 +27,27 @@ export const defaultOptions: TextOptions = {
 export class Text implements Visible, Hoverable {
   readonly height: number;
   readonly width: number;
-  readonly options: TextOptions;
+  readonly options: TextOptions = defaultOptions;
   readonly fullStr: string;
   private labelRef: RefObject<any> = React.createRef();
 
   constructor(
+    /** text */
     readonly str: string,
     readonly x: number,
     readonly y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
-    this.options = { ...defaultOptions, ...options };
+    this.options = { ...this.options, ...options };
     const { fontSize, fontStyle, fontFamily, maxWidth } = this.options;
-
     this.height = fontSize;
     this.fullStr = str;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(str) > maxWidth) {
-      let truncatedText = Config.Ellipsis.toString(),
-        i = 0;
+      let truncatedText = Config.Ellipsis.toString();
+      let i = 0;
       while (widthOf(str.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
         truncatedText = str.substr(0, i++) + Config.Ellipsis.toString();
       }
@@ -61,6 +61,7 @@ export class Text implements Visible, Hoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     const container = currentTarget.getStage()?.container();
     container && (container.style.cursor = 'pointer');
+    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
     currentTarget.getLayer()?.draw();
   };
@@ -79,7 +80,6 @@ export class Text implements Visible, Hoverable {
       fontStyle: this.options.fontStyle,
       fill: Config.SA_WHITE.toString()
     };
-
     return (
       <React.Fragment key={Layout.key++}>
         <KonvaLabel

@@ -15,7 +15,11 @@ export function isEmptyObject(object: Object): object is EmptyObject {
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
 export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject } {
-  return isEmptyObject(env.head);
+  if (env === null) {
+    return true;
+  } else {
+    return isEmptyObject(env.head);
+  }
 }
 
 /** checks if `data` is a Javascript array */
@@ -75,9 +79,8 @@ export function getTextWidth(
 ): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-  if (!context) return 0;
   context.font = font;
-  const longestText = text
+  const longestLine = text
     .split('\n')
     .reduce<string>(
       (accText, currValue) =>
@@ -86,11 +89,34 @@ export function getTextWidth(
           : currValue,
       ''
     );
-  const metrics = context.measureText(longestText);
+  const metrics = context.measureText(longestLine);
   return metrics.width;
 }
 
-/** update the styles of a Konva node and its children on hover, and then redraw the layer */
+export function getParamsText(data: () => any): string {
+  if (isFn(data)) {
+    return data.node.params.map((node: any) => node.name).join(',');
+  } else {
+    const fnString = data.toString();
+    return fnString.substring(fnString.indexOf('('), fnString.indexOf('{')).trim();
+  }
+}
+
+export function getBodyText(data: () => any): string {
+  const fnString = data.toString();
+  if (isFn(data)) {
+    let body =
+      data.node.type === 'FunctionDeclaration' || fnString.substring(0, 8) === 'function'
+        ? fnString.substring(fnString.indexOf('{'))
+        : fnString.substring(fnString.indexOf('=') + 3);
+
+    if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
+    return body;
+  } else {
+    return fnString.substring(fnString.indexOf('{'));
+  }
+}
+
 export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
@@ -105,10 +131,15 @@ export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
     });
   });
 
+  // TODO: it is not recommended to use node.zIndex(5), node.moveToTop()
+  // when you are working with the React framework.
+  // see here: https://konvajs.org/docs/react/zIndex.html
+  target.moveToTop();
+  // TODO: likewise, re-implement Layout.tsx to
+  // achieve setHoveredStyle by manipulating the state.
   target.getLayer()?.draw();
 }
 
-/** update the styles of a Konva node and its children on unhover, and then redraw the layer */
 export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'default');
@@ -124,4 +155,14 @@ export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void 
   });
 
   target.getLayer()?.draw();
+}
+
+export function getNonEmptyEnv(environment: Env): Env {
+  if (environment === null) {
+    return null;
+  } else if (isEmptyEnvironment(environment)) {
+    return getNonEmptyEnv(environment.tail);
+  } else {
+    return environment;
+  }
 }
