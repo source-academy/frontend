@@ -77,8 +77,8 @@ function* githubSaveFile() {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   const authUser = yield call(octokit.users.getAuthenticated);
   const githubLoginId = authUser.data.login;
-  const repoName = store.getState().session.githubSaveInfo.repoName;
-  const filePath = store.getState().session.githubSaveInfo.filePath;
+  const repoName = store.getState().playground.githubSaveInfo.repoName;
+  const filePath = store.getState().playground.githubSaveInfo.filePath;
   const githubEmail = authUser.data.email || 'No public email provided';
   const githubName = authUser.data.name || 'Source Academy User';
   const commitMessage = 'Changes made from Source Academy';

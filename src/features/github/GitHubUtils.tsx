@@ -206,7 +206,7 @@ export async function openFileInEditor(
   if (content) {
     const newEditorValue = Buffer.from(content, 'base64').toString();
     store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
-    store.dispatch(actions.setGitHubSaveInfo(repoName, filePath));
+    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath));
     showSuccessMessage('Successfully loaded file!', 1000);
   }
 }
@@ -251,7 +251,7 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.setGitHubSaveInfo(repoName, filePath));
+    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath));
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
     console.error(err);
@@ -283,7 +283,7 @@ export async function performCreatingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.setGitHubSaveInfo(repoName, filePath));
+    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath));
     showSuccessMessage('Successfully created file!', 1000);
   } catch (err) {
     console.error(err);

@@ -11,7 +11,6 @@ import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
   SET_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_SAVE_INFO,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -34,11 +33,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         githubOctokitInstance: action.payload
-      };
-    case SET_GITHUB_SAVE_INFO:
-      return {
-        ...state,
-        githubSaveInfo: action.payload
       };
     case SET_GOOGLE_USER:
       return {
