@@ -21,7 +21,8 @@
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
     "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src",
-    "build-serviceworker": "node ./scripts/build-serviceworker.js"
+    "build-serviceworker": "node ./scripts/build-serviceworker.js",
+    "update-cadet-api": "node ./scripts/update-cadet-api.js"
   },
   "husky": {
     "hooks": {
