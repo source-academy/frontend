@@ -78,19 +78,23 @@ export function getTextWidth(
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`
 ): number {
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-  context.font = font;
-  const longestLine = text
-    .split('\n')
-    .reduce<string>(
-      (accText, currValue) =>
-        context.measureText(accText).width > context.measureText(currValue).width
-          ? accText
-          : currValue,
-      ''
-    );
-  const metrics = context.measureText(longestLine);
-  return metrics.width;
+  const context = canvas.getContext('2d');
+  if (context) {
+    context.font = font;
+    const longestLine = text
+      .split('\n')
+      .reduce<string>(
+        (accText, currValue) =>
+          context.measureText(accText).width > context.measureText(currValue).width
+            ? accText
+            : currValue,
+        ''
+      );
+    const metrics = context.measureText(longestLine);
+    return metrics.width;
+  } else {
+    return 0;
+  }
 }
 
 export function getParamsText(data: () => any): string {
