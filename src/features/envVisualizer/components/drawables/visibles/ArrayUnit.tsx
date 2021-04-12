@@ -26,7 +26,7 @@ export class ArrayUnit implements Visible, Hoverable {
   readonly isLastUnit: boolean;
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
-  /** check if the value is already drawn (to prevent cyclic issues) */
+  /** check if the value is already drawn */
   private isDrawn: boolean = false;
 
   constructor(

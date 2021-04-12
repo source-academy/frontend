@@ -16,7 +16,7 @@ export class ArrayValue extends Value {
   readonly y: number;
   readonly width: number;
   readonly height: number;
-  /** check if the value is already drawn (to prevent cyclic issues) */
+  /** check if the value is already drawn */
   private isDrawn: boolean = false;
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
