@@ -2256,9 +2256,9 @@
   integrity sha512-NxF1yfYOUO92rCx3dwvA2onF30Vdlg7YUkMVXkeptqpzA3tRLplThhFleV/UKWFgh7rpKu1yYRbvNDUtzSopKA==
 
 "@octokit/plugin-paginate-rest@^2.6.2":
-  version "2.13.2"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-2.13.2.tgz#7b8244a0dd7a31135ba2adc58a533213837bfe87"
-  integrity sha512-mjfBcla00UNS4EI/NN7toEbUM45ow3kk4go+LxsXAFLQodsrXcIZbftUhXTqi6ZKd+r6bcqMI+Lv4dshLtFjww==
+  version "2.13.3"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-2.13.3.tgz#f0f1792230805108762d87906fb02d573b9e070a"
+  integrity sha512-46lptzM9lTeSmIBt/sVP/FLSTPGx6DCzAdSX3PfeJ3mTf4h9sGC26WpaQzMEq/Z44cOcmx8VsOhO+uEgE3cjYg==
   dependencies:
     "@octokit/types" "^6.11.0"
 
@@ -2620,6 +2620,13 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.28.1"
+
+"@testing-library/user-event@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-13.1.0.tgz#b5603012d9bc7ae83e5cb127e7d38050a5ecb9cd"
+  integrity sha512-/e9TQxkcs7kCSa/p6xmVxd56G7gQ6l+rPO70b898wXcc2nOu0rkjCcCOiO1hsILYTxhuSXWijDT07+igld2yTg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
 
 "@types/acorn@^4.0.5":
   version "4.0.5"

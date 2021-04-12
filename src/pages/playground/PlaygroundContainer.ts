@@ -47,8 +47,7 @@ import {
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
-  githubInitialise,
-  githubOpenPicker,
+  githubOpenFile,
   githubSaveFile,
   githubSaveFileAs
 } from '../../features/github/GitHubActions';
@@ -92,7 +91,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitInstance: state.session.githubOctokitInstance,
-  githubFile: state.playground.githubFile
+  githubSaveInfo: state.playground.githubSaveInfo
 });
 
 const workspaceLocation: WorkspaceLocation = 'playground';
@@ -148,10 +147,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
-      handleGitHubOpenPicker: githubOpenPicker,
-      handleGitHubSaveFile: githubSaveFileAs,
-      handleGitHubUpdateFile: githubSaveFile,
-      handleGitHubInitialise: githubInitialise,
+      handleGitHubOpenFile: githubOpenFile,
+      handleGitHubSaveFileAs: githubSaveFileAs,
+      handleGitHubSaveFile: githubSaveFile,
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub
     },

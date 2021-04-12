@@ -8,7 +8,7 @@ import { PersistenceFile, PersistenceState } from '../../features/persistence/Pe
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
-export type ControlBarPersistenceButtonsProps = {
+export type ControlBarGoogleDriveButtonsProps = {
   loggedInAs?: string;
   currentFile?: PersistenceFile;
   isDirty?: boolean;
@@ -25,7 +25,7 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
   DIRTY: Intent.WARNING
 };
 
-export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtonsProps> = props => {
+export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const state: PersistenceState = props.currentFile
     ? props.isDirty

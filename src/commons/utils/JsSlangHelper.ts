@@ -5,6 +5,8 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
+import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
+import { Data } from '../../features/listVisualizer/ListVisualizerTypes';
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
 /**
@@ -77,12 +79,15 @@ function cadetAlert(value: any) {
  *
  * @param list the list to be visualized.
  */
-function visualizeList(...xs: any[]) {
-  if ((window as any).ListVisualizer) {
-    // Pass in xs[0] since xs is in the form; [(Array of drawbables), "playground"]
-    (window as any).ListVisualizer.draw(xs[0]);
-    return xs[0];
-  } else {
+function visualizeList(...args: Data[]) {
+  try {
+    // Pass in args[0] since args is in the form; [(Array of drawables), "playground"]
+    ListVisualizer.drawData(args[0]);
+
+    // If there is only one arg, just print out the first arg in REPL, instead of [first arg]
+    return args[0].length === 1 ? args[0][0] : args[0];
+  } catch (err) {
+    console.log(err);
     throw new Error('List visualizer is not enabled');
   }
 }
