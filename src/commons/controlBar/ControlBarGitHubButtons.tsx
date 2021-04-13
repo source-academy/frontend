@@ -5,21 +5,19 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { GitHubFile, GitHubState } from '../../features/github/GitHubTypes';
+import { GitHubState } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
-  currentFile?: GitHubFile;
-  isDirty?: boolean;
+  githubSaveInfo: { repoName: string; filePath: string };
   onClickOpen?: () => any;
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
   onClickLogIn?: () => any;
   onClickLogOut?: () => any;
-  onPopoverOpening?: () => any;
 };
 
 const stateToIntent: { [state in GitHubState]: Intent } = {
@@ -34,7 +32,11 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
 
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+
   const shouldDisableButtons = !isLoggedIn;
+  const shouldDisableSaveButton =
+    props.githubSaveInfo.repoName === '' || props.githubSaveInfo.filePath === '';
+
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
   const mainButton = controlButton('GitHub', IconNames.GIT_BRANCH, null, {
@@ -54,11 +56,11 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     IconNames.FLOPPY_DISK,
     props.onClickSave,
     undefined,
-    shouldDisableButtons
+    shouldDisableButtons || shouldDisableSaveButton
   );
 
   const saveAsButton = controlButton(
-    'Save as',
+    'Save As',
     IconNames.SEND_TO,
     props.onClickSaveAs,
     undefined,
@@ -82,7 +84,6 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
           </ButtonGroup>
         </div>
       }
-      onOpening={props.onPopoverOpening}
       popoverClassName={Classes.POPOVER_DISMISS}
     >
       {mainButton}
