@@ -1,5 +1,6 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
+import { cloneDeep } from 'lodash';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
@@ -48,7 +49,7 @@ export class Layout {
     Layout.values.clear();
     Layout.levels = [];
     Layout.key = 0;
-    Layout.environmentTree = context.runtime.environmentTree as EnvTree;
+    Layout.environmentTree = cloneDeep(context.runtime.environmentTree as EnvTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
 
     // remove program environment and merge bindings into global env
