@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { Config } from '../../EnvVisualizerConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { Data, Visible } from '../../EnvVisualizerTypes';
-import { Arrow } from '../Arrow';
-import { Frame } from '../Frame';
-import { Text } from '../Text';
-import { Value } from './Value';
-import { ArrayValue } from './value/ArrayValue';
-import { FnValue } from './value/FnValue';
-import { GlobalFnValue } from './value/GlobalFnValue';
-import { PrimitiveValue } from './value/PrimitiveValue';
+import { Config } from '../../../EnvVisualizerConfig';
+import { Layout } from '../../../EnvVisualizerLayout';
+import { Data, Visible } from '../../../EnvVisualizerTypes';
+import { Arrow } from './Arrow';
+import { Frame } from './Frame';
+import { Text } from './Text';
+import { ArrayValue } from './values/ArrayValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
+import { PrimitiveValue } from './values/PrimitiveValue';
+import { Value } from './values/Value';
 
 /** a `binding` is a key-value pair in a frame */
 export class Binding implements Visible {
@@ -18,6 +18,7 @@ export class Binding implements Visible {
   readonly y: number;
   readonly width: number;
   readonly height: number;
+
   /** value associated with this binding */
   readonly value: Value;
   /** key of this binding */
@@ -64,21 +65,11 @@ export class Binding implements Visible {
   }
 
   draw(): React.ReactNode {
-    let arrowPoints: number[] = [];
-    if (!(this.value instanceof PrimitiveValue)) {
-      const from: Text = this.key,
-        to: Value = this.value;
-
-      arrowPoints = [from.x + from.width, from.y + from.height / 2];
-      if (to instanceof ArrayValue) arrowPoints.push(to.x, to.y + Config.DataUnitHeight / 2);
-      else arrowPoints.push(to.x, to.y);
-    }
-
     return (
       <React.Fragment key={Layout.key++}>
         {this.key.draw()}
         {this.value.draw()}
-        {arrowPoints && new Arrow(arrowPoints).draw()}
+        {this.value instanceof PrimitiveValue || new Arrow(this.key, this.value).draw()}
       </React.Fragment>
     );
   }

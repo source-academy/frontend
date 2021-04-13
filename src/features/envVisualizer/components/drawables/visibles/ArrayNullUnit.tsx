@@ -1,26 +1,25 @@
 import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
-import { Rect } from 'react-konva';
+import { Line as KonvaLine } from 'react-konva';
+import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 import { Config } from '../../../EnvVisualizerConfig';
 import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Visible } from '../../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { ArrayValue } from './ArrayValue';
+import { Hoverable, ReferenceType, Visible } from '../../../EnvVisualizerTypes';
 
-/** this classes encapsulates an empty array */
-export class ArrayEmptyUnit implements Visible {
+/** this classes encapsulates a null value in Source pairs or arrays */
+export class ArrayNullUnit implements Visible, Hoverable {
   readonly x: number;
   readonly y: number;
   readonly height: number;
   readonly width: number;
-  readonly data: Data = [];
 
-  constructor(readonly parent: ArrayValue) {
-    this.x = this.parent.x;
-    this.y = this.parent.y;
-    this.height = this.parent.height;
-    this.width = this.parent.width;
+  constructor(readonly referencedBy: ReferenceType[]) {
+    const arrayUnit = referencedBy[0];
+    this.x = arrayUnit.x;
+    this.y = arrayUnit.y;
+    this.height = arrayUnit.height;
+    this.width = arrayUnit.width;
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -33,13 +32,11 @@ export class ArrayEmptyUnit implements Visible {
 
   draw(): React.ReactNode {
     return (
-      <Rect
+      <KonvaLine
         key={Layout.key++}
-        x={this.x}
-        y={this.y}
-        width={this.width}
-        height={this.height}
+        points={[this.x, this.y + this.height, this.x + this.width, this.y]}
         stroke={Config.SA_WHITE.toString()}
+        hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       />
