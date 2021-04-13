@@ -1,3 +1,6 @@
+import { Classes, NonIdealState } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import * as QueryString from 'query-string';
 import { useEffect, useState } from 'react';
 
@@ -10,7 +13,9 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  * The auth-token is then broadcasted back to the main browser page.
  */
 export function GitHubCallback() {
-  const [message, setMessage] = useState('Attempting GitHub authentication...');
+  const [displayElement, setDisplayElement] = useState(
+    <div className="Playground bp3-dark">{'Attempting GitHub authentication...'}</div>
+  );
 
   useEffect(() => {
     const currentAddress = window.location.search;
@@ -20,15 +25,15 @@ export function GitHubCallback() {
     const backendLink = Constants.githubOAuthProxyUrl;
 
     if (accessCode === '') {
-      setMessage(
-        'Access code not found in callback URL. Please try again or contact the website administrator.'
+      setDisplayElement(
+        createDeath('We couldn\'t authenticate you with GitHub', 'Access code not found in callback URL. Please try again or contact the website administrator.')
       );
       return;
     }
 
     if (clientId === '') {
-      setMessage(
-        'Client ID not included with deployment. Please try again or contact the website administrator.'
+      setDisplayElement(
+        createDeath('We couldn\'t authenticate you with GitHub', 'Client ID not included with deployment. Please try again or contact the website administrator.')
       );
       return;
     }
@@ -38,16 +43,16 @@ export function GitHubCallback() {
       clientId: clientId
     });
 
-    retrieveAuthTokenUpdatePage(backendLink, messageBody, setMessage);
+    retrieveAuthTokenUpdatePage(backendLink, messageBody, setDisplayElement);
   }, []);
 
-  return <div className="Playground bp3-dark">{message}</div>;
+  return displayElement;
 }
 
 async function retrieveAuthTokenUpdatePage(
   backendLink: string,
   messageBody: string,
-  setMessage: (value: React.SetStateAction<string>) => void
+  setDisplayElement: (value: React.SetStateAction<JSX.Element>) => void
 ) {
   const responseObject = await GitHubUtils.exchangeAccessCodeForAuthTokenContainingObject(
     backendLink,
@@ -64,8 +69,8 @@ async function retrieveAuthTokenUpdatePage(
       throw new Error('Access Token not found in payload');
     }
   } catch (err) {
-    setMessage(
-      'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
+    setDisplayElement(
+      createDeath('We couldn\'t authenticate you with GitHub', 'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.')
     );
     return;
   }
@@ -79,6 +84,18 @@ async function retrieveAuthTokenUpdatePage(
     // This block should not be reached during normal running of code
     // However, BroadcastChannel does not exist in the test environment
   }
+}
+
+function createDeath(title: string, description: string) {
+  return (
+    <div className={classNames('NoPage', Classes.DARK)}>
+      <NonIdealState
+        icon={IconNames.ERROR}
+        title={title}
+        description={description}
+      />
+    </div>
+  );
 }
 
 export default GitHubCallback;
