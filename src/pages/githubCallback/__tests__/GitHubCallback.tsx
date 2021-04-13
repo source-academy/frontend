@@ -114,8 +114,6 @@ test('Successful retrieval of auth token renders correctly', async () => {
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
-  await screen.findByText('Log-in successful! This window will close soon.');
-
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
   exchangeAccessCodeMock.mockRestore();
