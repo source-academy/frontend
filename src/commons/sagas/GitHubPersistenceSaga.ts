@@ -38,10 +38,15 @@ function* githubLoginSaga() {
     showSuccessMessage('Logged in to GitHub', 1000);
   };
 
-  // Creates a window directed towards the GitHub oauth link for this app
-  // After the app has been approved by the user, it will be redirected to our GitHub callback page
-  // We receive the auth token through our broadcast channel
-  yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
+  if (clientId === '') {
+    // Direct to the callback page to show the error messages
+    yield call (window.open, `/callback/github`, windowName, windowSpecs);
+  } else {
+    // Creates a window directed towards the GitHub oauth link for this app
+    // After the app has been approved by the user, it will be redirected to our GitHub callback page
+    // We receive the auth token through our broadcast channel
+    yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
+  }
 }
 
 function* githubLogoutSaga() {
