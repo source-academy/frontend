@@ -411,7 +411,7 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
     const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .provide([[call(postAcknowledgeNotifications, mockTokens, ids), okResp]])
+      .provide([[call(postAcknowledgeNotifications, ids, mockTokens), okResp]])
       .not.call(showWarningMessage)
       .put(updateNotifications(mockNewNotifications))
       .dispatch({

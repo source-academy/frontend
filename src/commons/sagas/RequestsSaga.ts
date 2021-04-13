@@ -715,8 +715,8 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
  * POST /notifications/acknowledge
  */
 export const postAcknowledgeNotifications = async (
-  tokens: Tokens,
-  ids: number[]
+  ids: number[],
+  tokens: Tokens
 ): Promise<Response | null> => {
   const resp: Response | null = await request('notifications/acknowledge', 'POST', {
     ...tokens,

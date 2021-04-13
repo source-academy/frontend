@@ -402,7 +402,7 @@ function* BackendSaga(): SagaIterator {
 
       yield put(actions.updateNotifications(newNotifications));
 
-      const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
+      const resp: Response | null = yield call(postAcknowledgeNotifications, ids, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
