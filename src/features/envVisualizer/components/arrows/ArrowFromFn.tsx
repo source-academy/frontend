@@ -14,7 +14,7 @@ export class ArrowFromFn extends GenericArrow {
         from.y,
         from.x + Config.FnRadius * 3,
         from.y - Config.FnRadius * 2,
-        to.x + from.x < to.x ? 0 : to.width,
+        to.x + from.x < to.x ? 0 : to.x + to.width,
         from.y - Config.FnRadius * 2
       ];
     }
