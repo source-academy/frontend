@@ -67,11 +67,8 @@ async function retrieveAuthTokenUpdatePage(
     setMessage(
       'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
     );
-    console.error(err);
     return;
   }
-
-  setMessage('Log-in successful! This window will close soon.');
 
   try {
     // Send auth token back to the main browser page

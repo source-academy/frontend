@@ -106,6 +106,9 @@ test('Successful retrieval of auth token renders correctly', async () => {
   );
   exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
+  const closeWindowMock = jest.spyOn(window, 'close');
+  closeWindowMock.mockImplementation(() => {});
+
   act(() => {
     render(<GitHubCallback />);
   });
@@ -113,10 +116,12 @@ test('Successful retrieval of auth token renders correctly', async () => {
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
+  expect(closeWindowMock).toBeCalledTimes(1);
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();
   exchangeAccessCodeMock.mockRestore();
+  closeWindowMock.mockRestore();
 });
 
 function returnLegitimateCode() {
