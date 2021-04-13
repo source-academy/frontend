@@ -26,14 +26,20 @@ export function GitHubCallback() {
 
     if (accessCode === '') {
       setDisplayElement(
-        createDeath('We couldn\'t authenticate you with GitHub', 'Access code not found in callback URL. Please try again or contact the website administrator.')
+        createDeath(
+          "We couldn't authenticate you with GitHub",
+          'Access code not found in callback URL. Please try again or contact the website administrator.'
+        )
       );
       return;
     }
 
     if (clientId === '') {
       setDisplayElement(
-        createDeath('We couldn\'t authenticate you with GitHub', 'Client ID not included with deployment. Please try again or contact the website administrator.')
+        createDeath(
+          "We couldn't authenticate you with GitHub",
+          'Client ID not included with deployment. Please try again or contact the website administrator.'
+        )
       );
       return;
     }
@@ -70,7 +76,10 @@ async function retrieveAuthTokenUpdatePage(
     }
   } catch (err) {
     setDisplayElement(
-      createDeath('We couldn\'t authenticate you with GitHub', 'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.')
+      createDeath(
+        "We couldn't authenticate you with GitHub",
+        'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
+      )
     );
     return;
   }
@@ -89,11 +98,7 @@ async function retrieveAuthTokenUpdatePage(
 function createDeath(title: string, description: string) {
   return (
     <div className={classNames('NoPage', Classes.DARK)}>
-      <NonIdealState
-        icon={IconNames.ERROR}
-        title={title}
-        description={description}
-      />
+      <NonIdealState icon={IconNames.ERROR} title={title} description={description} />
     </div>
   );
 }
