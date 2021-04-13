@@ -76,7 +76,7 @@ export class Frame implements Visible, Hoverable {
         Math.max(Config.TextMinWidth, getTextWidth(String(key + Config.VariableColon))) +
         Config.TextPaddingX +
         (isSymbol(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(String(null)))
+          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
           : isPrimitiveData(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
           : 0);

@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isSymbol } from 'lodash';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
@@ -178,7 +178,9 @@ export class Layout {
    *  else, return the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
     // primitives don't have to be memoized
-    if (isPrimitiveData(data)) {
+    if (isSymbol(data)) {
+      return new PrimitiveValue(Config.UnassignedData.toString(), [reference]);
+    } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, [reference]);
     } else {
       // try to find if this value is already created
