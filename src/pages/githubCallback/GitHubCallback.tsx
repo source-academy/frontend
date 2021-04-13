@@ -1,10 +1,12 @@
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as QueryString from 'query-string';
+import * as qs from 'query-string';
 import { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
 
 import Constants from '../../commons/utils/Constants';
+import { parseQuery } from '../../commons/utils/QueryHelper';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 
 /**
@@ -12,59 +14,58 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  * This page will complete the OAuth workflow by sending the access code the back-end to retrieve the auth-token.
  * The auth-token is then broadcasted back to the main browser page.
  */
-export function GitHubCallback() {
-  const [displayElement, setDisplayElement] = useState(
+function GitHubCallback({ location }: RouteComponentProps<{}>) {
+  const accessCode = parseQuery(location.search).code;
+
+  const [state, setState] = useState<'initial' | 'loading' | 'error'>('initial');
+  useEffect(() => {
+    if (state === 'initial' && Constants.githubClientId && accessCode) {
+      setState('loading');
+      retrieveAuthTokenUpdatePage(accessCode, Constants.githubClientId, () => setState('error'));
+    }
+  }, [accessCode, state]);
+
+  if (!Constants.githubClientId) {
+    return (
+      <Failure title="We couldn't authenticate you with GitHub">
+        Client ID not included with deployment. Please try again or contact the website
+        administrator.
+      </Failure>
+    );
+  }
+
+  if (!accessCode) {
+    return (
+      <Failure title="We couldn't authenticate you with GitHub">
+        Access code not found in callback URL. Please try again or contact the website
+        administrator.
+      </Failure>
+    );
+  }
+
+  return state === 'error' ? (
+    <Failure title="We couldn't authenticate you with GitHub">
+      Connection with server was denied, or incorrect payload received. Please try again or contact
+      the website administrator.
+    </Failure>
+  ) : (
     <div className={classNames('NoPage', Classes.DARK)}>
       <NonIdealState description="Logging In..." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
     </div>
   );
-
-  useEffect(() => {
-    const currentAddress = window.location.search;
-    const accessCode = GitHubUtils.grabAccessCodeFromURL(currentAddress);
-
-    const clientId = GitHubUtils.getClientId();
-    const backendLink = Constants.githubOAuthProxyUrl;
-
-    if (accessCode === '') {
-      setDisplayElement(
-        createDeath(
-          "We couldn't authenticate you with GitHub",
-          'Access code not found in callback URL. Please try again or contact the website administrator.'
-        )
-      );
-      return;
-    }
-
-    if (clientId === '') {
-      setDisplayElement(
-        createDeath(
-          "We couldn't authenticate you with GitHub",
-          'Client ID not included with deployment. Please try again or contact the website administrator.'
-        )
-      );
-      return;
-    }
-
-    const messageBody = QueryString.stringify({
-      code: accessCode,
-      clientId: clientId
-    });
-
-    retrieveAuthTokenUpdatePage(backendLink, messageBody, setDisplayElement);
-  }, []);
-
-  return displayElement;
 }
 
 async function retrieveAuthTokenUpdatePage(
-  backendLink: string,
-  messageBody: string,
-  setDisplayElement: (value: React.SetStateAction<JSX.Element>) => void
+  accessCode: string,
+  clientId: string,
+  onError: () => void
 ) {
-  const responseObject = await GitHubUtils.exchangeAccessCodeForAuthTokenContainingObject(
-    backendLink,
-    messageBody
+  const responseObject = await GitHubUtils.exchangeAccessCode(
+    Constants.githubOAuthProxyUrl,
+    qs.stringify({
+      code: accessCode,
+      clientId: clientId
+    })
   );
 
   let response: any;
@@ -77,12 +78,7 @@ async function retrieveAuthTokenUpdatePage(
       throw new Error('Access Token not found in payload');
     }
   } catch (err) {
-    setDisplayElement(
-      createDeath(
-        "We couldn't authenticate you with GitHub",
-        'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
-      )
-    );
+    onError();
     return;
   }
 
@@ -97,10 +93,10 @@ async function retrieveAuthTokenUpdatePage(
   }
 }
 
-function createDeath(title: string, description: string) {
+function Failure({ title, children }: { title: string; children: string }) {
   return (
     <div className={classNames('NoPage', Classes.DARK)}>
-      <NonIdealState icon={IconNames.ERROR} title={title} description={description} />
+      <NonIdealState icon={IconNames.ERROR} title={title} description={children} />
     </div>
   );
 }
