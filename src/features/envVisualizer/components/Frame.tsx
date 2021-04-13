@@ -2,7 +2,7 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
 import {
@@ -111,6 +111,7 @@ export class Frame implements Visible, Hoverable {
       <React.Fragment key={Layout.key++}>
         {this.name.draw()}
         <Rect
+          {...ShapeDefaultProps}
           x={this.x}
           y={this.y}
           width={this.width}

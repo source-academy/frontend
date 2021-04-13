@@ -2,7 +2,7 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React, { RefObject } from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
-import { Config } from '../EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Hoverable, Visible } from '../EnvVisualizerTypes';
 import { getTextWidth } from '../EnvVisualizerUtils';
@@ -90,7 +90,7 @@ export class Text implements Visible, Hoverable {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaText key={Layout.key++} text={this.str} {...props} />
+          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.str} {...props} />
         </KonvaLabel>
         <KonvaLabel
           x={this.x}
@@ -100,8 +100,8 @@ export class Text implements Visible, Hoverable {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaTag fill={'black'} opacity={0.5} />
-          <KonvaText key={Layout.key++} text={this.fullStr} {...props} />
+          <KonvaTag {...ShapeDefaultProps} fill={'black'} opacity={0.5} />
+          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
         </KonvaLabel>
       </React.Fragment>
     );

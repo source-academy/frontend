@@ -8,7 +8,7 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Config } from '../../EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
 import {
@@ -95,6 +95,7 @@ export class GlobalFnValue extends Value implements Hoverable {
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y}
@@ -102,6 +103,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             stroke={Config.SA_WHITE.toString()}
           />
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y}
@@ -109,6 +111,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             fill={Config.SA_WHITE.toString()}
           />
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX + this.radius}
             y={this.y}
@@ -116,6 +119,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             stroke={Config.SA_WHITE.toString()}
           />
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX + this.radius}
             y={this.y}

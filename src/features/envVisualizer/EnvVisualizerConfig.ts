@@ -47,3 +47,7 @@ export enum Config {
 
   GlobalFrameDefaultText = 'pre-declared names'
 }
+
+export const ShapeDefaultProps = {
+  preventDefault: false
+}

@@ -3,7 +3,7 @@ import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { Config } from '../EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Hoverable, ReferenceType, Visible } from '../EnvVisualizerTypes';
 
@@ -33,6 +33,7 @@ export class ArrayNullUnit implements Visible, Hoverable {
   draw(): React.ReactNode {
     return (
       <KonvaLine
+        {...ShapeDefaultProps}
         key={Layout.key++}
         points={[this.x, this.y + this.height, this.x + this.width, this.y]}
         stroke={Config.SA_WHITE.toString()}

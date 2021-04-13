@@ -1,7 +1,7 @@
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode, Visible } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
@@ -48,6 +48,7 @@ export class Level implements Visible {
     return (
       <React.Fragment key={Layout.key++}>
         <Rect
+          {...ShapeDefaultProps}
           x={this.x}
           y={this.y}
           width={this.width}

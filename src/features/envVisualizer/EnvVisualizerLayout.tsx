@@ -11,7 +11,7 @@ import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { Value } from './components/values/Value';
-import { Config } from './EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
   isArray,
@@ -214,6 +214,7 @@ export class Layout {
         <Stage width={Layout.width} height={Layout.height}>
           <Layer>
             <Rect
+              {...ShapeDefaultProps}
               x={0}
               y={0}
               width={Layout.width}
