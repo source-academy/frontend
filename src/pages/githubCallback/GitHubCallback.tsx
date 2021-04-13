@@ -10,7 +10,7 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  * The auth-token is then broadcasted back to the main browser page.
  */
 export function GitHubCallback() {
-  const [message, setMessage] = useState('You have reached the GitHub callback page');
+  const [message, setMessage] = useState('Attempting GitHub authentication...');
 
   useEffect(() => {
     const currentAddress = window.location.search;
@@ -67,6 +67,7 @@ async function retrieveAuthTokenUpdatePage(
     setMessage(
       'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
     );
+    console.error(err);
     return;
   }
 
@@ -81,9 +82,7 @@ async function retrieveAuthTokenUpdatePage(
     // However, BroadcastChannel does not exist in the test environment
   }
 
-  setTimeout(() => {
-    window.close();
-  }, 1000);
+  window.close();
 }
 
 export default GitHubCallback;
