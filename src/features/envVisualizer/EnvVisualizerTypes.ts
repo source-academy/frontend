@@ -42,7 +42,7 @@ export interface Visible extends Drawable {
 }
 
 /** types of primitives in JS Slang  */
-export type PrimitiveTypes = number | string | null | undefined;
+export type PrimitiveTypes = number | string | symbol | null | undefined;
 
 /** types of functions in JS Slang */
 export type FnTypes = {

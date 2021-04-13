@@ -8,6 +8,7 @@ import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
 import {
   getTextWidth,
   isPrimitiveData,
+  isSymbol,
   setHoveredStyle,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
@@ -74,7 +75,11 @@ export class Frame implements Visible, Hoverable {
       const bindingWidth =
         Math.max(Config.TextMinWidth, getTextWidth(String(key + Config.VariableColon))) +
         Config.TextPaddingX +
-        (isPrimitiveData(data) ? Math.max(Config.TextMinWidth, getTextWidth(String(data))) : 0);
+        (isSymbol(data)
+          ? Math.max(Config.TextMinWidth, getTextWidth(String(null)))
+          : isPrimitiveData(data)
+          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
+          : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this.width = maxBindingWidth + Config.FramePaddingX * 2;

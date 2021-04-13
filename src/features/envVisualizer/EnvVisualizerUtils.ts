@@ -58,6 +58,11 @@ export function isNumber(data: Data): data is number {
   return typeof data === 'number';
 }
 
+/** checks if `data` is a symbol */
+export function isSymbol(data: Data): data is symbol {
+  return typeof data === 'symbol';
+}
+
 /** checks if `data` is a primitive, defined as a null | data | number */
 export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data);
