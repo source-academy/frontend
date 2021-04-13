@@ -18,7 +18,7 @@ import {
   setHoveredStyle,
   setUnhoveredStyle
 } from '../../EnvVisualizerUtils';
-import { Arrow } from '../Arrow';
+import { Arrow } from '../arrows/Arrow';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
@@ -139,7 +139,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             padding={5}
           />
         </KonvaLabel>
-        {Layout.globalEnvNode.frame && new Arrow(this, Layout.globalEnvNode.frame).draw()}
+        {Layout.globalEnvNode.frame && Arrow.from(this).to(Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

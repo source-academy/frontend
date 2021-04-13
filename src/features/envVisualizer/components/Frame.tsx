@@ -11,7 +11,7 @@ import {
   setHoveredStyle,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
-import { Arrow } from './Arrow';
+import { Arrow } from './arrows/Arrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -122,7 +122,7 @@ export class Frame implements Visible, Hoverable {
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && new Arrow(this, this.parentFrame).draw()}
+        {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
       </React.Fragment>
     );
   }

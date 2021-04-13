@@ -5,7 +5,7 @@ import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
-import { Arrow } from './Arrow';
+import { Arrow } from './arrows/Arrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
@@ -87,7 +87,7 @@ export class ArrayUnit implements Visible, Hoverable {
           cornerRadius={cornerRadius}
         />
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new Arrow(this, this.value).draw()}
+        {this.value instanceof PrimitiveValue || Arrow.from(this).to(this.value).draw()}
       </React.Fragment>
     );
   }
