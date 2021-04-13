@@ -35,6 +35,7 @@ function* githubLoginSaga() {
 
   broadcastChannel.onmessage = receivedMessage => {
     store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+    showSuccessMessage('Logged in to GitHub', 1000);
   };
 
   // Creates a window directed towards the GitHub oauth link for this app

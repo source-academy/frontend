@@ -67,7 +67,6 @@ async function retrieveAuthTokenUpdatePage(
     setMessage(
       'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
     );
-    console.error(err);
     return;
   }
 
