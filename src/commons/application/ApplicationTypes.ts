@@ -274,6 +274,9 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,
     timeResumed: 0
+  },
+  missionEditor: {
+    ...createDefaultWorkspace('missionEditor')
   }
 };
 

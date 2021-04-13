@@ -109,6 +109,15 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text">Playground</div>
       </NavLink>
 
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/missionEditor"
+      >
+        <Icon icon={IconNames.BRIEFCASE} />
+        <div className="navbar-button-text">Mission Editor</div>
+      </NavLink>
+
       {props.role && (
         <NavLink
           activeClassName={Classes.ACTIVE}

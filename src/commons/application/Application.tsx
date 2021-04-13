@@ -9,6 +9,7 @@ import Disabled from '../../pages/disabled/Disabled';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
+import MissionEditorContainer from '../../pages/missionEditor/MissionEditorContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
@@ -138,6 +139,7 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+            <Route path="/missionEditor/" component={MissionEditorContainer} />
             <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
             <Route
