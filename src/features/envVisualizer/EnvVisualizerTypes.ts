@@ -1,4 +1,7 @@
-import { EnvTree as EnvironmentTree, EnvTreeNode as EnvironmentTreeNode } from 'js-slang/dist/createContext';
+import {
+  EnvTree as EnvironmentTree,
+  EnvTreeNode as EnvironmentTreeNode
+} from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 
@@ -53,7 +56,7 @@ export type FnTypes = {
   functionName: string;
 
   node: any;
-}
+};
 
 /** the types of data in the JS Slang context */
 export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];

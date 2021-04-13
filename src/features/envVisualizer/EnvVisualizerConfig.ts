@@ -50,4 +50,4 @@ export enum Config {
 
 export const ShapeDefaultProps = {
   preventDefault: false
-}
+};
