@@ -1,3 +1,4 @@
+import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { RefObject } from 'react';
 import {
@@ -8,36 +9,46 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { ReferenceType } from '../../../EnvVisualizerTypes';
-import { getTextWidth, setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { Arrow } from '../../Arrow';
-import { Frame } from '../../Frame';
+import { Config } from '../../../../EnvVisualizerConfig';
+import { Layout } from '../../../../EnvVisualizerLayout';
+import { _EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
+import {
+  getBodyText,
+  getNonEmptyEnv,
+  getParamsText,
+  getTextWidth,
+  setHoveredStyle,
+  setUnhoveredStyle
+} from '../../../../EnvVisualizerUtils';
+import { Arrow } from '../Arrow';
 import { Binding } from '../Binding';
-import { Value } from '../Value';
+import { Value } from './Value';
 
-/** this encapsulates a function from the global frame
- * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value {
+/** this class encapsulates a JS Slang function (not from the global frame) that
+ *  contains extra props such as environment and fnName */
+export class FnValue extends Value implements Hoverable {
   readonly x: number;
   readonly y: number;
   readonly height: number;
   readonly width: number;
-
+  /** name of this function */
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
+  readonly textDescriptionWidth: number;
   readonly centerX: number;
 
+  readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;
   readonly textDescription: string;
-  readonly textDescriptionWidth: number;
+
+  /** the parent/enclosing environment of this fn value */
+  readonly enclosingEnvNode: _EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
-    /** underlying function */
-    readonly data: () => any,
+    /** underlying JS Slang function (contains extra props) */
+    readonly data: FnTypes,
     /** what this value is being referenced by */
     readonly referencedBy: ReferenceType[]
   ) {
@@ -66,11 +77,13 @@ export class GlobalFnValue extends Value {
     this.width = this.radius * 4;
     this.height = this.radius * 2;
 
-    const fnString = this.data.toString();
-    const params = fnString.substring(fnString.indexOf('('), fnString.indexOf('{')).trim();
-    const body = fnString.substring(fnString.indexOf('{'));
-    this.paramsText = `params: ${params}`;
-    this.bodyText = `body: ${body}`;
+    this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
+      getNonEmptyEnv(this.data.environment) as Environment
+    ) as _EnvTreeNode;
+    this.fnName = this.data.functionName;
+
+    this.paramsText = `params: (${getParamsText(this.data)})`;
+    this.bodyText = `body: ${getBodyText(this.data)}`;
     this.textDescription = `${this.paramsText}\n${this.bodyText}`;
     this.textDescriptionWidth = Math.max(
       getTextWidth(this.paramsText),
@@ -79,6 +92,7 @@ export class GlobalFnValue extends Value {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
     setHoveredStyle(currentTarget);
   };
@@ -89,26 +103,6 @@ export class GlobalFnValue extends Value {
   };
 
   draw(): React.ReactNode {
-    let arrowPoints: number[] = [];
-    if (Layout.globalEnv.frame) {
-      const to: Frame = Layout.globalEnv.frame;
-
-      if (to.y < this.y && this.y < to.y + to.height) {
-        arrowPoints = [
-          this.x + Config.FnRadius * 3,
-          this.y,
-          this.x + Config.FnRadius * 3,
-          this.y - Config.FnRadius * 2,
-          to.x + to.width,
-          this.y - Config.FnRadius * 2
-        ];
-      } else if (to.y < this.y) {
-        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y + to.height];
-      } else {
-        arrowPoints = [this.x + Config.FnRadius * 3, this.y, to.x + to.width / 2, to.y];
-      }
-    }
-
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -157,7 +151,7 @@ export class GlobalFnValue extends Value {
             padding={5}
           />
         </KonvaLabel>
-        {arrowPoints && new Arrow(arrowPoints).draw()}
+        {this.enclosingEnvNode.frame && new Arrow(this, this.enclosingEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

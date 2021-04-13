@@ -2,17 +2,17 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Env, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Config } from '../../../EnvVisualizerConfig';
+import { Layout } from '../../../EnvVisualizerLayout';
+import { _EnvTreeNode, Env, Hoverable, Visible } from '../../../EnvVisualizerTypes';
 import {
   getTextWidth,
   isPrimitiveData,
   setHoveredStyle,
   setUnhoveredStyle
-} from '../EnvVisualizerUtils';
+} from '../../../EnvVisualizerUtils';
 import { Arrow } from './Arrow';
-import { Binding } from './binding/Binding';
+import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
 
@@ -35,33 +35,37 @@ export class Frame implements Visible, Hoverable {
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
   readonly totalWidth: number;
+
   /** the bindings this frame contains */
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   readonly name: Text;
+  /** the level in which this frame resides */
+  readonly level: Level | undefined;
+  /** environment associated with this frame */
+  readonly environment: Env;
+  /** the parent/enclosing frame of this frame (the frame above it) */
+  readonly parentFrame: Frame | undefined;
 
   constructor(
-    /** environment associated with this frame */
-    readonly environment: Env,
-    /** the parent/enclosing frame of this frame (the frame above it) */
-    readonly parentFrame: Frame | null,
+    /** environment tree node that contains this frame */
+    readonly envTreeNode: _EnvTreeNode,
     /** the frame to the left of this frame, on the same level. used for calculating this frame's position */
-    readonly leftSiblingFrame: Frame | null,
-    /** the level in which this frame resides */
-    readonly level: Level
+    readonly leftSiblingFrame: Frame | null
   ) {
-    // derive the x coordinate from the left sibling frame
+    this.level = envTreeNode.level as Level;
+    this.environment = envTreeNode.environment;
+    this.parentFrame = envTreeNode.parent?.frame;
     this.x = this.level.x;
+    // derive the x coordinate from the left sibling frame
     this.leftSiblingFrame &&
       (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
-
     this.name = new Text(
       String(frameNames.get(this.environment.name) || this.environment.name),
       this.x,
       this.level.y,
       { maxWidth: this.width }
     );
-
     this.y = this.level.y + this.name.height + Config.TextPaddingY / 2;
 
     // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
@@ -103,17 +107,6 @@ export class Frame implements Visible, Hoverable {
   };
 
   draw(): React.ReactNode {
-    let arrowPoints: number[] = [];
-    if (this.parentFrame) {
-      const to: Frame = this.parentFrame;
-      arrowPoints = [
-        this.x + Config.FramePaddingX,
-        this.y,
-        to.x + Config.FramePaddingX,
-        to.y + to.height
-      ];
-    }
-
     return (
       <React.Fragment key={Layout.key++}>
         {this.name.draw()}
@@ -123,12 +116,13 @@ export class Frame implements Visible, Hoverable {
           width={this.width}
           height={this.height}
           stroke={Config.SA_WHITE.toString()}
+          cornerRadius={Number(Config.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {arrowPoints && new Arrow(arrowPoints).draw()}
+        {this.parentFrame && new Arrow(this, this.parentFrame).draw()}
       </React.Fragment>
     );
   }
