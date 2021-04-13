@@ -40,7 +40,7 @@ function* githubLoginSaga() {
 
   if (clientId === '') {
     // Direct to the callback page to show the error messages
-    yield call (window.open, `/callback/github`, windowName, windowSpecs);
+    yield call(window.open, `/callback/github`, windowName, windowSpecs);
   } else {
     // Creates a window directed towards the GitHub oauth link for this app
     // After the app has been approved by the user, it will be redirected to our GitHub callback page

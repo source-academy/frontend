@@ -1,4 +1,4 @@
-import { Classes, NonIdealState } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as QueryString from 'query-string';
@@ -14,7 +14,9 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  */
 export function GitHubCallback() {
   const [displayElement, setDisplayElement] = useState(
-    <div className="Playground bp3-dark">{'Attempting GitHub authentication...'}</div>
+    <div className={classNames('NoPage', Classes.DARK)}>
+      <NonIdealState description="Logging In..." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+    </div>
   );
 
   useEffect(() => {
