@@ -93,7 +93,7 @@ test('Cannot connect to server renders correctly', async () => {
   exchangeAccessCodeMock.mockRestore();
 });
 
-test('Successful retrieval of auth token renders correctly', async () => {
+test('Successful retrieval of calls correctly', async () => {
   const getClientIdMock = jest.spyOn(GitHubUtils, 'getClientId');
   getClientIdMock.mockImplementation(returnLegitimateCode);
 
@@ -116,7 +116,6 @@ test('Successful retrieval of auth token renders correctly', async () => {
   expect(getClientIdMock).toBeCalledTimes(1);
   expect(grabAccessCodeFromURLMock).toBeCalledTimes(1);
   expect(exchangeAccessCodeMock).toBeCalledTimes(1);
-  expect(closeWindowMock).toBeCalledTimes(1);
 
   getClientIdMock.mockRestore();
   grabAccessCodeFromURLMock.mockRestore();

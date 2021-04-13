@@ -74,12 +74,11 @@ async function retrieveAuthTokenUpdatePage(
     // Send auth token back to the main browser page
     const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
     broadcastChannel.postMessage(response.access_token);
+    window.close();
   } catch (err) {
     // This block should not be reached during normal running of code
     // However, BroadcastChannel does not exist in the test environment
   }
-
-  window.close();
 }
 
 export default GitHubCallback;
