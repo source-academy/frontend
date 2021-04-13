@@ -1,4 +1,4 @@
-import { EnvTree, EnvTreeNode } from 'js-slang/dist/createContext';
+import { EnvTree as EnvironmentTree, EnvTreeNode as EnvironmentTreeNode } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 
@@ -62,12 +62,12 @@ export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
 export type Env = Environment | null;
 
 /** modified `EnvTree` */
-export type _EnvTree = EnvTree & { root: _EnvTreeNode };
+export type EnvTree = EnvironmentTree & { root: EnvTreeNode };
 
 /** modified `EnvTreeNode` */
-export type _EnvTreeNode = EnvTreeNode & {
-  parent: _EnvTreeNode;
-  children: _EnvTreeNode[];
+export type EnvTreeNode = EnvironmentTreeNode & {
+  parent: EnvTreeNode;
+  children: EnvTreeNode[];
   level?: Level;
   frame?: Frame;
 };

@@ -4,7 +4,7 @@ import { Rect } from 'react-konva';
 
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { _EnvTreeNode, Env, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
 import {
   getTextWidth,
   isPrimitiveData,
@@ -49,7 +49,7 @@ export class Frame implements Visible, Hoverable {
 
   constructor(
     /** environment tree node that contains this frame */
-    readonly envTreeNode: _EnvTreeNode,
+    readonly envTreeNode: EnvTreeNode,
     /** the frame to the left of this frame, on the same level. used for calculating this frame's position */
     readonly leftSiblingFrame: Frame | null
   ) {

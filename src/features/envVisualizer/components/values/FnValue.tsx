@@ -11,7 +11,7 @@ import {
 
 import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { _EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
+import { EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
 import {
   getBodyText,
   getNonEmptyEnv,
@@ -43,7 +43,7 @@ export class FnValue extends Value implements Hoverable {
   readonly textDescription: string;
 
   /** the parent/enclosing environment of this fn value */
-  readonly enclosingEnvNode: _EnvTreeNode;
+  readonly enclosingEnvNode: EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
@@ -79,7 +79,7 @@ export class FnValue extends Value implements Hoverable {
 
     this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
       getNonEmptyEnv(this.data.environment) as Environment
-    ) as _EnvTreeNode;
+    ) as EnvTreeNode;
     this.fnName = this.data.functionName;
 
     this.paramsText = `params: (${getParamsText(this.data)})`;

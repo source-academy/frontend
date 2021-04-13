@@ -11,7 +11,7 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { Value } from './components/values/Value';
 import { Config } from './EnvVisualizerConfig';
-import { _EnvTree, _EnvTreeNode, Data, ReferenceType } from './EnvVisualizerTypes';
+import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
   isArray,
   isEmptyEnvironment,
@@ -31,9 +31,9 @@ export class Layout {
   static key: number = 0;
 
   /** the environment tree */
-  static environmentTree: _EnvTree;
+  static environmentTree: EnvTree;
   /** the global environment */
-  static globalEnvNode: _EnvTreeNode;
+  static globalEnvNode: EnvTreeNode;
   /** array of levels, which themselves are arrays of frames */
   static levels: Level[];
   /** the Value objects in this layout. note that this corresponds to the data array,
@@ -48,7 +48,7 @@ export class Layout {
     Layout.values.clear();
     Layout.levels = [];
     Layout.key = 0;
-    Layout.environmentTree = context.runtime.environmentTree as _EnvTree;
+    Layout.environmentTree = context.runtime.environmentTree as EnvTree;
     Layout.globalEnvNode = Layout.environmentTree.root;
 
     // remove program environment and merge bindings into global env
@@ -101,7 +101,7 @@ export class Layout {
   private static removeUnreferencedGlobalFns(): void {
     const referencedGlobalFns = new Set<() => any>();
     const visitedData = new Set<Data[]>();
-    const findGlobalFnReferences = (envNode: _EnvTreeNode): void => {
+    const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
       for (const data of Object.values(envNode.environment.head)) {
         if (isGlobalFn(data)) {
           referencedGlobalFns.add(data);
@@ -139,26 +139,26 @@ export class Layout {
 
   /** initializes levels */
   private static initializeLevels(): void {
-    const getNextChildren = (c: _EnvTreeNode): _EnvTreeNode[] => {
+    const getNextChildren = (c: EnvTreeNode): EnvTreeNode[] => {
       if (isEmptyEnvironment(c.environment)) {
-        const nextChildren: _EnvTreeNode[] = [];
+        const nextChildren: EnvTreeNode[] = [];
         c.children.forEach(gc => {
-          nextChildren.push(...getNextChildren(gc as _EnvTreeNode));
+          nextChildren.push(...getNextChildren(gc as EnvTreeNode));
         });
         return nextChildren;
       } else {
         return [c];
       }
     };
-    let frontier: _EnvTreeNode[] = [Layout.globalEnvNode];
+    let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
     let prevLevel: Level | null = null;
     while (frontier.length > 0) {
       const currLevel: Level = new Level(prevLevel, frontier);
       this.levels.push(currLevel);
-      const nextFrontier: _EnvTreeNode[] = [];
+      const nextFrontier: EnvTreeNode[] = [];
       frontier.forEach(e => {
         e.children.forEach(c => {
-          const nextChildren = getNextChildren(c as _EnvTreeNode);
+          const nextChildren = getNextChildren(c as EnvTreeNode);
           nextChildren.forEach(c => (c.parent = e));
           nextFrontier.push(...nextChildren);
         });
