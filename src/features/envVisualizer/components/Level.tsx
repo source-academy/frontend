@@ -1,9 +1,9 @@
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { _EnvTreeNode, Visible } from '../../../EnvVisualizerTypes';
+import { Config } from '..//EnvVisualizerConfig';
+import { Layout } from '..//EnvVisualizerLayout';
+import { _EnvTreeNode, Visible } from '..//EnvVisualizerTypes';
 import { Frame } from './Frame';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */

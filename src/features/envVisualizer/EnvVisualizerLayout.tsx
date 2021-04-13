@@ -4,12 +4,12 @@ import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
 
-import { Level } from './components/drawables/visibles/Level';
-import { ArrayValue } from './components/drawables/visibles/values/ArrayValue';
-import { FnValue } from './components/drawables/visibles/values/FnValue';
-import { GlobalFnValue } from './components/drawables/visibles/values/GlobalFnValue';
-import { PrimitiveValue } from './components/drawables/visibles/values/PrimitiveValue';
-import { Value } from './components/drawables/visibles/values/Value';
+import { Level } from './components/Level';
+import { ArrayValue } from './components/values/ArrayValue';
+import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
+import { PrimitiveValue } from './components/values/PrimitiveValue';
+import { Value } from './components/values/Value';
 import { Config } from './EnvVisualizerConfig';
 import { _EnvTree, _EnvTreeNode, Data, ReferenceType } from './EnvVisualizerTypes';
 import {

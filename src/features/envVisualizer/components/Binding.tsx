@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Visible } from '../../../EnvVisualizerTypes';
+import { Config } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data, Visible } from '../EnvVisualizerTypes';
 import { Arrow } from './Arrow';
 import { Frame } from './Frame';
 import { Text } from './Text';

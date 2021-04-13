@@ -2,10 +2,10 @@ import { EnvTree, EnvTreeNode } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 
-import { ArrayUnit } from './components/drawables/visibles/ArrayUnit';
-import { Binding } from './components/drawables/visibles/Binding';
-import { Frame } from './components/drawables/visibles/Frame';
-import { Level } from './components/drawables/visibles/Level';
+import { ArrayUnit } from './components/ArrayUnit';
+import { Binding } from './components/Binding';
+import { Frame } from './components/Frame';
+import { Level } from './components/Level';
 
 /** this interface defines a drawing function */
 export interface Drawable {

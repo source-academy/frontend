@@ -1,10 +1,10 @@
 import { KonvaEventObject } from 'konva/types/Node';
 import { Arrow as KonvaArrow } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Hoverable, Visible } from '../../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
+import { Config } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Hoverable, Visible } from '../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { ArrayUnit } from './ArrayUnit';
 import { Frame } from './Frame';
 import { Text } from './Text';

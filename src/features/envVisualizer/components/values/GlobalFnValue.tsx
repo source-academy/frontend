@@ -8,16 +8,16 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Config } from '../../../../EnvVisualizerConfig';
-import { Layout } from '../../../../EnvVisualizerLayout';
-import { Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
+import { Config } from '../../EnvVisualizerConfig';
+import { Layout } from '../../EnvVisualizerLayout';
+import { Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
 import {
   getBodyText,
   getParamsText,
   getTextWidth,
   setHoveredStyle,
   setUnhoveredStyle
-} from '../../../../EnvVisualizerUtils';
+} from '../../EnvVisualizerUtils';
 import { Arrow } from '../Arrow';
 import { Binding } from '../Binding';
 import { Value } from './Value';

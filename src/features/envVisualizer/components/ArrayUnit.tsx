@@ -2,12 +2,12 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { RoundedRect } from '../../shapes/RoundedRect';
+import { Config } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './Arrow';
+import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
