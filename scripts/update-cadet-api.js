@@ -13,7 +13,6 @@ const prettierConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.p
 const inputFile = path.resolve(__dirname, "../src/commons/api/swagger.json");
 const outputDir = path.resolve(__dirname, "../src/commons/api");
 const outputFilename = "api.ts";
-const templateDir = path.resolve(__dirname, "../src/commons/api/templates");
 
 generateApi({
   input: inputFile,
@@ -21,7 +20,6 @@ generateApi({
   name: outputFilename,
   prettier: Object.assign(prettierConfig, { parser: "typescript" }),
 
-  templates: templateDir,
   httpClientType: "fetch",
 
   extractRequestParams: false,
