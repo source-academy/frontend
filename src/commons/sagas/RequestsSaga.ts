@@ -1,5 +1,12 @@
 import { call } from 'redux-saga/effects';
 
+import {
+  Achievement,
+  Assessment as AssessmentResponse,
+  Cadet,
+  HttpResponse,
+  SourceVariant
+} from '../../commons/api';
 import { SourceLanguage, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -66,19 +73,23 @@ export const postAuth = async (
   clientId?: string,
   redirectUri?: string
 ): Promise<Tokens | null> => {
-  const resp = await request('auth/login', 'POST', {
-    body: {
+  const resp = await Cadet.auth.create(
+    {
       code,
       provider: providerId,
       ...(clientId ? { client_id: clientId } : {}),
       ...(redirectUri ? { redirect_uri: redirectUri } : {})
     },
-    errorMessage: 'Could not login. Please contact the module administrator.'
-  });
+    {
+      errorMessage: 'Could not login. Please contact the module administrator.',
+      shouldRefresh: false
+    }
+  );
   if (!resp) {
     return null;
   }
-  const tokens = await resp.json();
+
+  const tokens = resp.data;
   return {
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token
@@ -89,15 +100,12 @@ export const postAuth = async (
  * POST /auth/refresh
  */
 const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
-  const resp = await request('auth/refresh', 'POST', {
-    body: { refresh_token: refreshToken }
-  });
+  const resp = await Cadet.auth.refresh({ refresh_token: refreshToken });
   if (!resp) {
     return null;
   }
 
-  const tokens = await resp.json();
-
+  const tokens = resp.data;
   return {
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token
@@ -108,15 +116,9 @@ const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
  * GET /user
  */
 export const getUser = async (tokens: Tokens): Promise<User | null> => {
-  const resp = await request('user', 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
+  const resp = await Cadet.user.index({ ...tokens });
+  // TODO
+  return resp && resp.ok ? (resp.data as User) : null;
 };
 
 /**
@@ -125,25 +127,22 @@ export const getUser = async (tokens: Tokens): Promise<User | null> => {
  * Will be updated after a separate db for student progress is ready
  */
 export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[] | null> => {
-  const resp = await request('achievements', 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.incentives.indexAchievements({ ...tokens });
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
 
-  const achievements = await resp.json();
+  const achievements = resp.data;
 
   return achievements.map(
-    (achievement: any) =>
+    achievement =>
       ({
         uuid: achievement.uuid || '',
         title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
-        deadline: achievement.deadline && new Date(achievement.deadline),
-        release: achievement.release && new Date(achievement.release),
+        deadline: achievement.deadline ? new Date(achievement.deadline) : undefined,
+        release: achievement.release ? new Date(achievement.release) : undefined,
         isTask: achievement.isTask,
         position: achievement.position,
         prerequisiteUuids: achievement.prerequisiteUuids,
@@ -154,11 +153,12 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
           completionText: achievement.view.completionText || '',
           description: achievement.view.description || ''
         }
-      } as AchievementItem)
+      } as AchievementItem) // TODO
   );
 };
 
 /**
+ * TODO: new mapping
  * GET /achievements/goals/{studentId}
  */
 export const getGoals = async (
@@ -193,28 +193,22 @@ export const getGoals = async (
  * GET /self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
-  const resp = await request('self/goals', 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.incentives.indexGoals({ ...tokens });
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
 
-  const achievementGoals = await resp.json();
+  const achievementGoals = resp.data;
 
-  return achievementGoals.map(
-    (goal: any) =>
-      ({
-        uuid: goal.uuid || '',
-        text: goal.text || '',
-        meta: goal.meta as GoalMeta,
-        xp: goal.xp,
-        maxXp: goal.maxXp,
-        completed: goal.completed
-      } as AchievementGoal)
-  );
+  return achievementGoals.map(goal => ({
+    uuid: goal.uuid || '',
+    text: goal.text || '',
+    meta: goal.meta as GoalMeta,
+    xp: goal.xp,
+    maxXp: goal.maxXp,
+    completed: goal.completed
+  }));
 };
 
 /**
@@ -224,15 +218,11 @@ export async function bulkUpdateAchievements(
   achievements: AchievementItem[],
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`admin/achievements`, 'PUT', {
-    accessToken: tokens.accessToken,
-    body: { achievements: achievements },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  // TODO
+  const resp = await Cadet.adminAchievements.bulkUpdate(
+    (achievements as unknown) as Achievement[],
+    { ...tokens }
+  );
   return resp;
   // TODO: confirmation notification
 }
@@ -244,17 +234,10 @@ export async function bulkUpdateGoals(
   goals: GoalDefinition[],
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`admin/goals`, 'PUT', {
-    accessToken: tokens.accessToken,
-    body: {
-      goals: goals.map(goal => backendifyGoalDefinition(goal))
-    },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminGoals.bulkUpdate(
+    goals.map(goal => backendifyGoalDefinition(goal)),
+    { ...tokens }
+  );
   return resp;
   // TODO: confirmation notification
 }
@@ -266,14 +249,9 @@ export const editAchievement = async (
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
-    ...tokens,
-    body: { achievement: achievement },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+  const resp = await Cadet.adminAchievements.update(achievement.uuid, achievement as Achievement, {
+    ...tokens
   });
-
   return resp;
 };
 
@@ -319,14 +297,7 @@ export const updateGoalProgress = async (
  * DELETE /admin/achievements/{achievementUuid}
  */
 export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`admin/achievements/${uuid}`, 'DELETE', {
-    ...tokens,
-    body: { uuid: uuid },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminAchievements.delete(uuid, { ...tokens });
   return resp;
 };
 
@@ -334,14 +305,7 @@ export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<R
  * DELETE /admin/goals/{goalUuid}
  */
 export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`admin/goals/${uuid}`, 'DELETE', {
-    ...tokens,
-    body: { uuid: uuid },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminGoals.delete(uuid, { ...tokens });
   return resp;
 };
 
@@ -351,32 +315,35 @@ export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response
 export const getAssessmentOverviews = async (
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
-  const resp = await request('assessments', 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.assessments.index({ ...tokens });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  const assessmentOverviews = await resp.json();
-  return assessmentOverviews.map((overview: any) => {
-    /**
-     * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-     *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
-     */
-    overview.category = capitalise(overview.type);
-    delete overview.type;
+  const assessmentOverviews = resp.data;
+  return assessmentOverviews.map(overviewOriginal => {
+    const category = capitalise(overviewOriginal.type) as AssessmentCategory;
+    const overview: AssessmentOverview = {
+      ...overviewOriginal,
+      /**
+       * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+       *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+       */
+      // TODO: practical
+      category,
+      gradingStatus: computeGradingStatus(
+        category,
+        overviewOriginal.status,
+        overviewOriginal.gradedCount,
+        overviewOriginal.questionCount
+      ),
+      story: overviewOriginal.story ?? null
+      // TODO: omit the following properties
+      // type: undefined,
+      // gradedCount: undefined,
+      // questionCount: undefined,
+    };
 
-    overview.gradingStatus = computeGradingStatus(
-      overview.category,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
-    delete overview.gradedCount;
-    delete overview.questionCount;
-
-    return overview as AssessmentOverview;
+    return overview;
   });
 };
 
@@ -386,10 +353,8 @@ export const getAssessmentOverviews = async (
  * POST /assessments/{assessmentId}/unlock
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
-  let resp = await request(`assessments/${id}`, 'GET', {
-    ...tokens,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+  let resp: HttpResponse<AssessmentResponse, void> | null = await Cadet.assessments.show(id, {
+    ...tokens
   });
 
   // Attempt to load password-protected assessment
@@ -401,21 +366,15 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`assessments/${id}/unlock`, 'POST', {
-      ...tokens,
-      body: {
-        password: input
-      },
-      shouldAutoLogout: false,
-      shouldRefresh: true
-    });
+    resp = await Cadet.assessments.unlock(id, { password: input }, { ...tokens });
   }
 
   if (!resp || !resp.ok) {
     return null;
   }
 
-  const assessment = (await resp.json()) as Assessment;
+  // TODO
+  const assessment = (resp.data as unknown) as Assessment;
   // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
   //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
@@ -461,13 +420,7 @@ export const postAnswer = async (
   answer: string | number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`assessments/question/${id}/answer`, 'POST', {
-    ...tokens,
-    body: { answer: `${answer}` },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.answer.submit(id, { answer }, tokens);
   return resp;
 };
 
@@ -475,12 +428,8 @@ export const postAnswer = async (
  * POST /assessments/{assessmentId}/submit
  */
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`assessments/${id}/submit`, 'POST', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false, // 400 if some questions unattempted
-    shouldRefresh: true
-  });
+  const resp = await Cadet.assessments.submit(id, tokens);
+  // shouldAutoLogout: false, // 400 if some questions unattempted
 
   return resp;
 };
@@ -492,16 +441,13 @@ export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean
 ): Promise<GradingOverview[] | null> => {
-  const resp = await request(`admin/grading?group=${group}`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.adminGrading.index({ group }, { ...tokens });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  const gradingOverviews = await resp.json();
+  const gradingOverviews = resp.data;
   return gradingOverviews
-    .map((overview: any) => {
+    .map(overview => {
       const gradingOverview: GradingOverview = {
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
@@ -510,7 +456,8 @@ export const getGradingOverviews = async (
         studentName: overview.student.name,
         submissionId: overview.id,
         submissionStatus: overview.status,
-        groupName: overview.student.groupName,
+        // TODO: make type optional?
+        groupName: overview.student.groupName!,
         groupLeaderId: overview.student.groupLeaderId,
         // Grade
         initialGrade: overview.grade,
@@ -546,17 +493,14 @@ export const getGradingOverviews = async (
  * GET /admin/grading/{submissionId}
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
-  const resp = await request(`admin/grading/${submissionId}`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.adminGrading.show(submissionId, { ...tokens });
 
   if (!resp) {
     return null;
   }
 
-  const gradingResult = await resp.json();
-  const grading: Grading = gradingResult.map((gradingQuestion: any) => {
+  const gradingResult = resp.data;
+  const grading: Grading = gradingResult.map(gradingQuestion => {
     const { student, question, grade } = gradingQuestion;
     const result = {
       question: {
@@ -564,7 +508,6 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
         autogradingResults: question.autogradingResults || [],
         choices: question.choices,
         content: question.content,
-        roomId: null,
         id: question.id,
         library: castLibrary(question.library),
         solution: gradingQuestion.solution || question.solution || null,
@@ -580,7 +523,6 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
       grade: {
         grade: grade.grade,
         xp: grade.xp,
-        roomId: grade.roomId || '',
         gradeAdjustment: grade.adjustment,
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
@@ -609,20 +551,18 @@ export const postGrading = async (
   tokens: Tokens,
   comments?: string
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/${questionId}`, 'POST', {
-    ...tokens,
-    body: {
+  const resp = await Cadet.adminGrading.update(
+    submissionId,
+    questionId,
+    {
       grading: {
         adjustment: gradeAdjustment,
         xpAdjustment,
         comments
       }
     },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+    { ...tokens }
+  );
   return resp;
 };
 
@@ -633,13 +573,7 @@ export const postReautogradeSubmission = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/autograde`, 'POST', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminGrading.autogradeSubmission(submissionId, { ...tokens });
   return resp;
 };
 
@@ -651,13 +585,7 @@ export const postReautogradeAnswer = async (
   questionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/${questionId}/autograde`, 'POST', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminGrading.autogradeAnswer(submissionId, questionId, { ...tokens });
   return resp;
 };
 
@@ -668,13 +596,7 @@ export const postUnsubmit = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/unsubmit`, 'POST', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminGrading.unsubmit(submissionId, { ...tokens });
   return resp;
 };
 
@@ -682,10 +604,7 @@ export const postUnsubmit = async (
  * GET /notifications
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
-  const resp: Response | null = await request('notifications', 'GET', {
-    ...tokens,
-    shouldAutoLogout: false
-  });
+  const resp = await Cadet.notifications.index({ ...tokens });
 
   let notifications: Notification[] = [];
 
@@ -693,19 +612,21 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
     return notifications;
   }
 
-  const result = await resp.json();
+  const result = resp.data;
 
-  notifications = result.map((notification: any) => {
+  notifications = result.map(notification => {
     return {
       id: notification.id,
+      // TODO: avoid casting
       type: notification.type,
       assessment_id: notification.assessment_id || undefined,
       assessment_type: notification.assessment
-        ? capitalise(notification.assessment.type)
+        ? // TODO: avoid casting
+          (capitalise(notification.assessment.type) as AssessmentCategory)
         : undefined,
       assessment_title: notification.assessment ? notification.assessment.title : undefined,
       submission_id: notification.submission_id || undefined
-    } as Notification;
+    };
   });
 
   return notifications;
@@ -718,29 +639,19 @@ export const postAcknowledgeNotifications = async (
   ids: number[],
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp: Response | null = await request('notifications/acknowledge', 'POST', {
-    ...tokens,
-    body: { notificationIds: ids },
-    shouldAutoLogout: false
-  });
-
+  const resp = await Cadet.notifications.acknowledge({ notificationIds: ids }, { ...tokens });
   return resp;
 };
+
+// TODO: all sourcecasts are untyped?
 
 /**
  * GET /sourcecast
  */
 export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
-  const resp = await request('sourcecast', 'GET', {
-    ...tokens,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
+  const resp = await Cadet.sourcecast.index({ ...tokens });
+  // TODO
+  return resp && resp.ok ? ((resp.data as unknown) as SourcecastData[]) : null;
 };
 
 /**
@@ -754,22 +665,18 @@ export const postSourcecast = async (
   playbackData: PlaybackData,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const formData = new FormData();
   const filename = Date.now().toString() + '.wav';
-  formData.append('sourcecast[title]', title);
-  formData.append('sourcecast[description]', description);
-  formData.append('sourcecast[uid]', uid);
-  formData.append('sourcecast[audio]', audio, filename);
-  formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
-  const resp = await request(`sourcecast`, 'POST', {
-    ...tokens,
-    body: formData,
-    noContentType: true,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const audioFile = new File([audio], filename);
 
+  const sourcecast = {
+    title,
+    description,
+    uid,
+    audio: audioFile,
+    playbackData: JSON.stringify(playbackData)
+  };
+
+  const resp = await Cadet.sourcecast.create(sourcecast, { ...tokens });
   return resp;
 };
 
@@ -780,13 +687,7 @@ export const deleteSourcecastEntry = async (
   id: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`sourcecast/${id}`, 'DELETE', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.sourcecast.delete(id, { ...tokens });
   return resp;
 };
 
@@ -798,14 +699,7 @@ export const updateAssessment = async (
   body: { openAt?: string; closeAt?: string; isPublished?: boolean },
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/assessments/${id}`, 'POST', {
-    ...tokens,
-    body: body,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminAssessments.update(id, body, tokens);
   return resp;
 };
 
@@ -813,13 +707,7 @@ export const updateAssessment = async (
  * DELETE /admin/assessments/{assessmentId}
  */
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`admin/assessments/${id}`, 'DELETE', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  const resp = await Cadet.adminAssessments.delete(id, { ...tokens });
   return resp;
 };
 
@@ -831,18 +719,12 @@ export const uploadAssessment = async (
   tokens: Tokens,
   forceUpdate: boolean
 ): Promise<Response | null> => {
-  const formData = new FormData();
-  formData.append('assessment[file]', file);
-  formData.append('forceUpdate', String(forceUpdate));
-  const resp = await request(`admin/assessments`, 'POST', {
-    ...tokens,
-    body: formData,
-    noContentType: true,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  // TODO: check assessment
+  // formData.append('assessment[file]', file);
+  const resp = await Cadet.adminAssessments.create(
+    { assessment: file, forceUpdate },
+    { ...tokens }
+  );
   return resp;
 };
 
@@ -850,31 +732,20 @@ export const uploadAssessment = async (
  * GET /admin/grading/summary
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
-  const resp = await request('admin/grading/summary', 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
+  const resp = await Cadet.adminGrading.gradingSummary({ ...tokens });
+  return resp && resp.ok ? resp.data : null;
 };
 
 /**
  * GET /settings/sublanguage
  */
 export const getSublanguage = async (): Promise<SourceLanguage | null> => {
-  const resp = await request('settings/sublanguage', 'GET', {
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.settings.index();
   if (!resp || !resp.ok) {
     return null;
   }
 
-  const sublang = (await resp.json()).sublanguage;
+  const sublang = resp.data;
 
   return {
     ...sublang,
@@ -890,28 +761,20 @@ export const postSublanguage = async (
   variant: string,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/settings/sublanguage`, 'PUT', {
-    ...tokens,
-    body: { chapter, variant },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
+  // TODO: variant
+  const resp = await Cadet.adminSettings.update(
+    { chapter, variant: variant as SourceVariant },
+    { ...tokens }
+  );
   return resp;
 };
 
 /**
  * GET /devices
  */
-export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
-  const resp = await request('devices', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true
-  });
-
-  return resp && resp.ok ? resp.json() : null;
+export async function fetchDevices(tokens: Tokens): Promise<Device[] | null> {
+  const resp = await Cadet.devices.index({ ...tokens });
+  return resp && resp.ok ? resp.data : null;
 }
 
 /**
@@ -921,14 +784,8 @@ export async function getDeviceWSEndpoint(
   device: Device,
   tokens: Tokens
 ): Promise<WebSocketEndpointInformation | null> {
-  const resp = await request(`devices/${device.id}/ws_endpoint`, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
-    shouldAutoLogout: false
-  });
-
-  return resp && resp.ok ? resp.json() : null;
+  const resp = await Cadet.devices.getWsEndpoint(device.id, { ...tokens });
+  return resp && resp.ok ? resp.data : null;
 }
 
 /**
@@ -936,24 +793,18 @@ export async function getDeviceWSEndpoint(
  */
 export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens): Promise<Device> {
   tokens = fillTokens(tokens);
-  const resp = await request('devices', 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
-    shouldAutoLogout: false,
-    body: device
-  });
+  const resp = await Cadet.devices.register(device, { ...tokens });
 
   if (!resp) {
     throw new Error('Unknown error occurred.');
   }
 
   if (!resp.ok) {
-    const message = await resp.text();
+    const message = resp.text();
     throw new Error(`Failed to register: ${message}`);
   }
 
-  return resp.json();
+  return resp.data;
 }
 
 /**
@@ -964,13 +815,7 @@ export async function editDevice(
   tokens?: Tokens
 ): Promise<boolean> {
   tokens = fillTokens(tokens);
-  const resp = await request(`devices/${device.id}`, 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
-    shouldAutoLogout: false,
-    body: { title: device.title }
-  });
+  const resp = await Cadet.devices.edit(device.id, device, { ...tokens });
 
   if (!resp) {
     throw new Error('Unknown error occurred.');
@@ -989,11 +834,7 @@ export async function editDevice(
  */
 export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens): Promise<boolean> {
   tokens = fillTokens(tokens);
-  const resp = await request(`devices/${device.id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true
-  });
+  const resp = await Cadet.devices.deregister(device.id, { ...tokens });
 
   if (!resp) {
     throw new Error('Unknown error occurred.');
@@ -1121,7 +962,7 @@ const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
 
 const computeGradingStatus = (
   category: AssessmentCategory,
-  submissionStatus: any,
+  submissionStatus: string,
   numGraded: number,
   numQuestions: number
 ): GradingStatus =>
