@@ -1,12 +1,15 @@
-.MissionEditor {
+.Mission {
   height: 100%;
   display: flex;
   background-color: $cadet-color-1;
   flex-direction: column;
   flex: 1 1 100%;
 
-  .Multi-line {
-    white-space: 'pre-line';
-    overflow-wrap: 'break-word';
+  .workspace {
+    .ControlBar {
+      .ControlBar_editingWorkspace {
+        width: 0;
+      }
+    }
   }
 }

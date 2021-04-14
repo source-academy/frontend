@@ -1,4 +1,5 @@
 import { Context } from 'js-slang';
+import { MissionEditorWorkspaceState } from 'src/features/missionEditor/MissionEditorTypes';
 
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
@@ -66,8 +67,6 @@ type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
-
-export type MissionEditorWorkspaceState = WorkspaceState;
 
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
