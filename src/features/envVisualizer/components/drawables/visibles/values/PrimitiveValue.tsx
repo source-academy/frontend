@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { PrimitiveTypes, ReferenceType } from '../../../EnvVisualizerTypes';
-import { getTextWidth, isNull } from '../../../EnvVisualizerUtils';
-import { Text } from '../../Text';
+import { Config } from '../../../../EnvVisualizerConfig';
+import { Layout } from '../../../../EnvVisualizerLayout';
+import { PrimitiveTypes, ReferenceType } from '../../../../EnvVisualizerTypes';
+import { getTextWidth, isNull } from '../../../../EnvVisualizerUtils';
+import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
-import { Value } from '../Value';
-import { ArrayNullUnit } from './ArrayNullUnit';
+import { Text } from '../Text';
+import { Value } from './Value';
 
 /** this classes encapsulates a primitive value in Source: number, string or null */
 export class PrimitiveValue extends Value {
@@ -15,10 +15,12 @@ export class PrimitiveValue extends Value {
   readonly y: number;
   readonly height: number;
   readonly width: number;
+
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;
 
   constructor(
+    /** data */
     readonly data: PrimitiveTypes,
     /** what this value is being referenced by */
     readonly referencedBy: ReferenceType[]

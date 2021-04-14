@@ -4,14 +4,14 @@ import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
 
-import { Value } from './components/binding/Value';
-import { ArrayValue } from './components/binding/value/ArrayValue';
-import { FnValue } from './components/binding/value/FnValue';
-import { GlobalFnValue } from './components/binding/value/GlobalFnValue';
-import { PrimitiveValue } from './components/binding/value/PrimitiveValue';
-import { Level } from './components/Level';
+import { Level } from './components/drawables/visibles/Level';
+import { ArrayValue } from './components/drawables/visibles/values/ArrayValue';
+import { FnValue } from './components/drawables/visibles/values/FnValue';
+import { GlobalFnValue } from './components/drawables/visibles/values/GlobalFnValue';
+import { PrimitiveValue } from './components/drawables/visibles/values/PrimitiveValue';
+import { Value } from './components/drawables/visibles/values/Value';
 import { Config } from './EnvVisualizerConfig';
-import { Data, Env, ReferenceType } from './EnvVisualizerTypes';
+import { _EnvTree, _EnvTreeNode, Data, ReferenceType } from './EnvVisualizerTypes';
 import {
   isArray,
   isEmptyEnvironment,
@@ -27,39 +27,30 @@ export class Layout {
   static height: number;
   /** the width of the stage */
   static width: number;
+  /** the unique key assigned to each node */
+  static key: number = 0;
+
+  /** the environment tree */
+  static environmentTree: _EnvTree;
   /** the global environment */
-  static globalEnv: Env;
-  /** the environment in which the user places the breakpoint */
-  static breakpointEnv: Env;
+  static globalEnvNode: _EnvTreeNode;
   /** array of levels, which themselves are arrays of frames */
   static levels: Level[];
   /** the Value objects in this layout. note that this corresponds to the data array,
    * that is, `value[i]` has underlying data `data[i]` */
-  static values: Value[];
-  /** the data in this layout (primitives, arrays, functions, etc). note that this corresponds
-   * to the value array, that is, `data[i]` has corresponding Value object `value[i]` */
-  static data: Data[];
-  /** the unique key assigned to each node */
-  static key: number = 0;
+  static values = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
 
   /** processes the runtime context from JS Slang */
   static setContext(context: Context): void {
     // clear/initialize data and value arrays
-    Layout.data = [];
-    Layout.values = [];
+    Layout.values.clear();
     Layout.levels = [];
     Layout.key = 0;
+    Layout.environmentTree = context.runtime.environmentTree as _EnvTree;
+    Layout.globalEnvNode = Layout.environmentTree.root;
 
-    const envs = context.runtime.environments;
-    Layout.globalEnv = envs[envs.length - 1];
-    Layout.breakpointEnv = envs[0];
-
-    // we doubly link the envs so that we can process them 'top-down'
-    Layout.doublyLinkEnv();
-    // remove references to empty environments
-    Layout.removeEmptyEnvRefs();
     // remove program environment and merge bindings into global env
     Layout.removeProgramEnv();
     // remove global functions that are not referenced in the program
@@ -80,81 +71,25 @@ export class Layout {
     );
   }
 
-  /** to each environment, add an array of references to child environments,
-   *  making them doubly linked */
-  private static doublyLinkEnv() {
-    const visitedEnvs: Env[] = [];
-    const visitedValues: Data[] = [];
-
-    // recursively process environments while keep tracking of the previous env
-    const processEnv = (curr: Env | null, prev: Env | null) => {
-      if (!curr) return;
-
-      // add prev env to child env list of curr env
-      if (prev) {
-        if (curr.childEnvs) {
-          curr.childEnvs.includes(prev) || curr.childEnvs.push(prev);
-        } else {
-          curr.childEnvs = [prev];
-        }
-      }
-
-      // check if we have already processed this env
-      if (visitedEnvs.includes(curr)) return;
-      visitedEnvs.push(curr);
-
-      // recursively process values in frame
-      Object.values(curr.head).forEach(processValue);
-      function processValue(data: Data) {
-        // mark as visited to account for cyclic structures
-        if (visitedValues.includes(data)) return;
-        visitedValues.push(data);
-
-        if (isFn(data)) {
-          processEnv(data.environment, null);
-        } else if (isArray(data)) {
-          data.forEach(processValue);
-        }
-      }
-
-      processEnv(curr.tail, curr);
-    };
-
-    processEnv(Layout.breakpointEnv, null);
-  }
-
-  /** remove references to empty environments */
-  private static removeEmptyEnvRefs() {
-    const extractNonEmptyEnvs = (env: Env): Env[] => {
-      const nonEmptyEnvs: Env[] = [];
-      // recursively extract non empty envs of children
-      if (env.childEnvs) env.childEnvs.forEach(e => nonEmptyEnvs.push(...extractNonEmptyEnvs(e)));
-      // update child envs list, including only non empty ones
-      env.childEnvs = nonEmptyEnvs;
-      // if we are empty, don't return ourselves
-      return isEmptyEnvironment(env) ? nonEmptyEnvs : [env];
-    };
-
-    // start extracting from global env
-    extractNonEmptyEnvs(Layout.globalEnv);
-  }
-
   /** remove program environment containing predefined functions */
   private static removeProgramEnv() {
-    if (!Layout.globalEnv.childEnvs) return;
+    if (!Layout.globalEnvNode.children) return;
 
-    const programEnv = Layout.globalEnv.childEnvs[0];
-    const globalEnv = Layout.globalEnv;
+    const programEnvNode = Layout.globalEnvNode.children[0];
+    const globalEnvNode = Layout.globalEnvNode;
 
-    // merge programEnv bindings into globalEnv
-    globalEnv.head = { ...programEnv.head, ...globalEnv.head };
+    // merge programEnvNode bindings into globalEnvNode
+    globalEnvNode.environment.head = {
+      ...programEnvNode.environment.head,
+      ...globalEnvNode.environment.head
+    };
 
-    // update globalEnv childEnvs
-    if (programEnv.childEnvs) globalEnv.childEnvs = programEnv.childEnvs;
+    // update globalEnvNode children
+    if (programEnvNode.children) globalEnvNode.resetChildren(programEnvNode.children);
 
     // go through new bindings and update functions to be global functions
     // by removing extra props such as functionName
-    for (const value of Object.values(globalEnv.head)) {
+    for (const value of Object.values(globalEnvNode.environment.head)) {
       if (isFn(value)) {
         // HACKY?
         delete (value as { functionName?: string }).functionName;
@@ -163,58 +98,79 @@ export class Layout {
   }
 
   /** remove any global functions not referenced elsewhere in the program */
-  private static removeUnreferencedGlobalFns() {
-    const referencedGlobalFns: (() => any)[] = [];
-    const findGlobalFnReferences = (env: Env) => {
-      for (const data of Object.values(env.head)) {
-        if (isGlobalFn(data)) referencedGlobalFns.push(data);
+  private static removeUnreferencedGlobalFns(): void {
+    const referencedGlobalFns = new Set<() => any>();
+    const visitedData = new Set<Data[]>();
+    const findGlobalFnReferences = (envNode: _EnvTreeNode): void => {
+      for (const data of Object.values(envNode.environment.head)) {
+        if (isGlobalFn(data)) {
+          referencedGlobalFns.add(data);
+        } else if (isArray(data)) {
+          findGlobalFnReferencesInData(data);
+        }
       }
-
-      if (env.childEnvs) env.childEnvs.forEach(findGlobalFnReferences);
+      if (envNode.children) envNode.children.forEach(findGlobalFnReferences);
     };
 
-    if (Layout.globalEnv.childEnvs) {
-      Layout.globalEnv.childEnvs.forEach(findGlobalFnReferences);
+    const findGlobalFnReferencesInData = (data: Data[]): void => {
+      data.forEach(d => {
+        if (isGlobalFn(d)) {
+          referencedGlobalFns.add(d);
+        } else if (isArray(d) && !visitedData.has(d)) {
+          visitedData.add(d);
+          findGlobalFnReferencesInData(d);
+        }
+      });
+    };
+
+    if (Layout.globalEnvNode.children) {
+      Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
     }
 
     const newFrame: Frame = {};
-    for (const [key, data] of Object.entries(Layout.globalEnv.head)) {
-      if (referencedGlobalFns.includes(data)) {
+    for (const [key, data] of Object.entries(Layout.globalEnvNode.environment.head)) {
+      if (referencedGlobalFns.has(data)) {
         newFrame[key] = data;
       }
     }
 
-    Layout.globalEnv.head = { [Config.GlobalFrameDefaultText]: '...', ...newFrame };
+    Layout.globalEnvNode.environment.head = { [Config.GlobalFrameDefaultText]: '...', ...newFrame };
   }
 
   /** initializes levels */
-  private static initializeLevels() {
-    /** checks if the any of the frames in a level contains a child */
-    const containsChildEnv = (level: Level): boolean =>
-      level.frames.reduce<boolean>(
-        (A, { environment: e }) => A || (!!e.childEnvs && e.childEnvs.length > 0),
-        false
-      );
-
-    /** get the child levels if any */
-    const getNextLevels = (prevLevel: Level): Level[] => {
-      const accLevels: Level[] = [];
-      if (containsChildEnv(prevLevel)) {
-        const currLevel = new Level(prevLevel);
-        accLevels.push(currLevel, ...getNextLevels(currLevel));
+  private static initializeLevels(): void {
+    const getNextChildren = (c: _EnvTreeNode): _EnvTreeNode[] => {
+      if (isEmptyEnvironment(c.environment)) {
+        const nextChildren: _EnvTreeNode[] = [];
+        c.children.forEach(gc => {
+          nextChildren.push(...getNextChildren(gc as _EnvTreeNode));
+        });
+        return nextChildren;
+      } else {
+        return [c];
       }
-
-      return accLevels;
     };
-
-    const globalLevel = new Level(null);
-    Layout.levels.push(globalLevel, ...getNextLevels(globalLevel));
+    let frontier: _EnvTreeNode[] = [Layout.globalEnvNode];
+    let prevLevel: Level | null = null;
+    while (frontier.length > 0) {
+      const currLevel: Level = new Level(prevLevel, frontier);
+      this.levels.push(currLevel);
+      const nextFrontier: _EnvTreeNode[] = [];
+      frontier.forEach(e => {
+        e.children.forEach(c => {
+          const nextChildren = getNextChildren(c as _EnvTreeNode);
+          nextChildren.forEach(c => (c.parent = e));
+          nextFrontier.push(...nextChildren);
+        });
+      });
+      prevLevel = currLevel;
+      frontier = nextFrontier;
+    }
   }
 
   /** memoize `Value` (used to detect cyclic references in non-primitive `Value`) */
-  static memoizeValue(value: Value) {
-    Layout.data.push(value.data);
-    Layout.values.push(value);
+  static memoizeValue(value: Value): void {
+    Layout.values.set(value.data, value);
   }
 
   /** create an instance of the corresponding `Value` if it doesn't already exists,
@@ -225,9 +181,8 @@ export class Layout {
       return new PrimitiveValue(data, [reference]);
     } else {
       // try to find if this value is already created
-      const idx = Layout.data.findIndex(d => d === data);
-      if (idx !== -1) {
-        const existingValue = Layout.values[idx];
+      const existingValue = Layout.values.get(data);
+      if (existingValue) {
         existingValue.addReference(reference);
         return existingValue;
       }
@@ -270,7 +225,6 @@ export class Layout {
           </Layer>
         </Stage>
       );
-
       Layout.prevLayout = layout;
       return layout;
     }

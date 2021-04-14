@@ -13,6 +13,7 @@ export enum Config {
   FramePaddingY = 30,
   FrameMarginX = 30,
   FrameMarginY = 10,
+  FrameCornerRadius = 3,
 
   FnRadius = 15,
   FnInnerRadius = 3,
@@ -20,6 +21,8 @@ export enum Config {
   DataMinWidth = 20,
   DataUnitWidth = 40,
   DataUnitHeight = 40,
+  DataCornerRadius = 3,
+  DataHitStrokeWidth = 5,
 
   TextPaddingX = 10,
   TextPaddingY = 30,

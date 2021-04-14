@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, ReferenceType } from '../../../EnvVisualizerTypes';
+import { Config } from '../../../../EnvVisualizerConfig';
+import { Layout } from '../../../../EnvVisualizerLayout';
+import { Data, ReferenceType } from '../../../../EnvVisualizerTypes';
+import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
+import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
-import { Value } from '../Value';
-import { ArrayEmptyUnit } from './ArrayEmptyUnit';
-import { ArrayUnit } from './ArrayUnit';
 import { PrimitiveValue } from './PrimitiveValue';
+import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
@@ -16,8 +16,10 @@ export class ArrayValue extends Value {
   readonly y: number;
   readonly width: number;
   readonly height: number;
-  /** check if the value is already drawn (to prevent cyclic issues) */
+
+  /** check if the value is already drawn */
   private isDrawn: boolean = false;
+
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
 
@@ -79,7 +81,6 @@ export class ArrayValue extends Value {
   draw(): React.ReactNode {
     if (this.isDrawn) return null;
     this.isDrawn = true;
-
     return (
       <React.Fragment key={Layout.key++}>
         {this.units.length > 0
