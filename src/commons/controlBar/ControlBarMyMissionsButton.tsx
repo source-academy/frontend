@@ -5,7 +5,9 @@ import * as React from 'react';
 
 import controlButton from '../ControlButton';
 
-type ControlBarMyMissionsButtonProps = {};
+type ControlBarMyMissionsButtonProps = {
+  key: string
+};
 
 export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProps> = props => {
   return (
@@ -15,4 +17,6 @@ export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProp
   );
 };
 
-function handleOnClick() {}
+function handleOnClick() {
+  console.log('I simply live with the pain');
+}
