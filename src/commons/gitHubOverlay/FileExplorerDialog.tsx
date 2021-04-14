@@ -209,7 +209,7 @@ const FileExplorerDialog: React.FC<any> = props => {
   }
 
   function handleClickFileNameBox(e: any) {
-    if (!filePath) {
+    if (filePath === '') {
       setFilePath('.js');
     }
   }

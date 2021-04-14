@@ -12,6 +12,7 @@ import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
+import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showSuccessMessage } from '../utils/NotificationsHelper';
 
@@ -25,8 +26,7 @@ export function* GitHubPersistenceSaga(): SagaIterator {
 }
 
 function* githubLoginSaga() {
-  const clientId = GitHubUtils.getClientId();
-  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo`;
+  const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${Constants.githubClientId}&scope=repo`;
   const windowName = 'Connect With OAuth';
   const windowSpecs = 'height=600,width=400';
 
@@ -35,12 +35,18 @@ function* githubLoginSaga() {
 
   broadcastChannel.onmessage = receivedMessage => {
     store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+    showSuccessMessage('Logged in to GitHub', 1000);
   };
 
-  // Creates a window directed towards the GitHub oauth link for this app
-  // After the app has been approved by the user, it will be redirected to our GitHub callback page
-  // We receive the auth token through our broadcast channel
-  yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
+  if (!Constants.githubClientId) {
+    // Direct to the callback page to show the error messages
+    yield call(window.open, `/callback/github`, windowName, windowSpecs);
+  } else {
+    // Creates a window directed towards the GitHub oauth link for this app
+    // After the app has been approved by the user, it will be redirected to our GitHub callback page
+    // We receive the auth token through our broadcast channel
+    yield call(window.open, githubOauthLoginLink, windowName, windowSpecs);
+  }
 }
 
 function* githubLogoutSaga() {

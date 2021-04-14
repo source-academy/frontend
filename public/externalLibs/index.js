@@ -40,9 +40,6 @@ function loadAllLibs() {
     '/externalLibs/graphics/webGLgraphics.js',
     '/externalLibs/graphics/webGLcurve.js',
     '/externalLibs/graphics/webGLrune.js',
-    // list visualizer
-    '/externalLibs/visualizer/konva.js',
-    '/externalLibs/visualizer/visualizer.js',
     // binary tree library
     '/externalLibs/tree.js',
     // support for Practical Assessments (presently none)

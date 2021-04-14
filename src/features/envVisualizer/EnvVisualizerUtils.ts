@@ -15,7 +15,11 @@ export function isEmptyObject(object: Object): object is EmptyObject {
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
 export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject } {
-  return isEmptyObject(env.head);
+  if (env === null) {
+    return true;
+  } else {
+    return isEmptyObject(env.head);
+  }
 }
 
 /** checks if `data` is a Javascript array */
@@ -74,20 +78,49 @@ export function getTextWidth(
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`
 ): number {
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-  if (!context) return 0;
-  context.font = font;
-  const longestText = text
-    .split('\n')
-    .reduce<string>(
-      (accText, currValue) =>
-        context.measureText(accText).width > context.measureText(currValue).width
-          ? accText
-          : currValue,
-      ''
-    );
-  const metrics = context.measureText(longestText);
-  return metrics.width;
+  const context = canvas.getContext('2d');
+  if (context) {
+    context.font = font;
+    const longestLine = text
+      .split('\n')
+      .reduce<string>(
+        (accText, currValue) =>
+          context.measureText(accText).width > context.measureText(currValue).width
+            ? accText
+            : currValue,
+        ''
+      );
+    const metrics = context.measureText(longestLine);
+    return metrics.width;
+  } else {
+    return 0;
+  }
+}
+
+/** get the parameter string of the given function */
+export function getParamsText(data: () => any): string {
+  if (isFn(data)) {
+    return data.node.params.map((node: any) => node.name).join(',');
+  } else {
+    const fnString = data.toString();
+    return fnString.substring(fnString.indexOf('('), fnString.indexOf('{')).trim();
+  }
+}
+
+/** get the body string of the given function */
+export function getBodyText(data: () => any): string {
+  const fnString = data.toString();
+  if (isFn(data)) {
+    let body =
+      data.node.type === 'FunctionDeclaration' || fnString.substring(0, 8) === 'function'
+        ? fnString.substring(fnString.indexOf('{'))
+        : fnString.substring(fnString.indexOf('=') + 3);
+
+    if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
+    return body;
+  } else {
+    return fnString.substring(fnString.indexOf('{'));
+  }
 }
 
 /** update the styles of a Konva node and its children on hover, and then redraw the layer */
@@ -105,6 +138,12 @@ export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
     });
   });
 
+  // TODO: it is not recommended to use node.zIndex(5), node.moveToTop()
+  // when you are working with the React framework.
+  // see here: https://konvajs.org/docs/react/zIndex.html
+  target.moveToTop();
+  // TODO: likewise, re-implement Layout.tsx to
+  // achieve setHoveredStyle by manipulating the state.
   target.getLayer()?.draw();
 }
 
@@ -124,4 +163,15 @@ export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void 
   });
 
   target.getLayer()?.draw();
+}
+
+/** extract the non-empty tail environment from the given environment */
+export function getNonEmptyEnv(environment: Env): Env {
+  if (environment === null) {
+    return null;
+  } else if (isEmptyEnvironment(environment)) {
+    return getNonEmptyEnv(environment.tail);
+  } else {
+    return environment;
+  }
 }

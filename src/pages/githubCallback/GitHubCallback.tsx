@@ -1,7 +1,12 @@
-import * as QueryString from 'query-string';
+import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
+import * as qs from 'query-string';
 import { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
 
 import Constants from '../../commons/utils/Constants';
+import { parseQuery } from '../../commons/utils/QueryHelper';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 
 /**
@@ -9,49 +14,58 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  * This page will complete the OAuth workflow by sending the access code the back-end to retrieve the auth-token.
  * The auth-token is then broadcasted back to the main browser page.
  */
-export function GitHubCallback() {
-  const [message, setMessage] = useState('You have reached the GitHub callback page');
+function GitHubCallback({ location }: RouteComponentProps<{}>) {
+  const accessCode = parseQuery(location.search).code;
 
+  const [state, setState] = useState<'initial' | 'loading' | 'error'>('initial');
   useEffect(() => {
-    const currentAddress = window.location.search;
-    const accessCode = GitHubUtils.grabAccessCodeFromURL(currentAddress);
-
-    const clientId = GitHubUtils.getClientId();
-    const backendLink = Constants.githubOAuthProxyUrl;
-
-    if (accessCode === '') {
-      setMessage(
-        'Access code not found in callback URL. Please try again or contact the website administrator.'
-      );
-      return;
+    if (state === 'initial' && Constants.githubClientId && accessCode) {
+      setState('loading');
+      retrieveAuthTokenUpdatePage(accessCode, Constants.githubClientId, () => setState('error'));
     }
+  }, [accessCode, state]);
 
-    if (clientId === '') {
-      setMessage(
-        'Client ID not included with deployment. Please try again or contact the website administrator.'
-      );
-      return;
-    }
+  if (!Constants.githubClientId) {
+    return (
+      <Failure title="We couldn't authenticate you with GitHub">
+        Client ID not included with deployment. Please try again or contact the website
+        administrator.
+      </Failure>
+    );
+  }
 
-    const messageBody = QueryString.stringify({
-      code: accessCode,
-      clientId: clientId
-    });
+  if (!accessCode) {
+    return (
+      <Failure title="We couldn't authenticate you with GitHub">
+        Access code not found in callback URL. Please try again or contact the website
+        administrator.
+      </Failure>
+    );
+  }
 
-    retrieveAuthTokenUpdatePage(backendLink, messageBody, setMessage);
-  }, []);
-
-  return <div className="Playground bp3-dark">{message}</div>;
+  return state === 'error' ? (
+    <Failure title="We couldn't authenticate you with GitHub">
+      Connection with server was denied, or incorrect payload received. Please try again or contact
+      the website administrator.
+    </Failure>
+  ) : (
+    <div className={classNames('NoPage', Classes.DARK)}>
+      <NonIdealState description="Logging In..." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+    </div>
+  );
 }
 
 async function retrieveAuthTokenUpdatePage(
-  backendLink: string,
-  messageBody: string,
-  setMessage: (value: React.SetStateAction<string>) => void
+  accessCode: string,
+  clientId: string,
+  onError: () => void
 ) {
-  const responseObject = await GitHubUtils.exchangeAccessCodeForAuthTokenContainingObject(
-    backendLink,
-    messageBody
+  const responseObject = await GitHubUtils.exchangeAccessCode(
+    Constants.githubOAuthProxyUrl,
+    qs.stringify({
+      code: accessCode,
+      clientId: clientId
+    })
   );
 
   let response: any;
@@ -64,26 +78,27 @@ async function retrieveAuthTokenUpdatePage(
       throw new Error('Access Token not found in payload');
     }
   } catch (err) {
-    setMessage(
-      'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
-    );
+    onError();
     return;
   }
-
-  setMessage('Log-in successful! This window will close soon.');
 
   try {
     // Send auth token back to the main browser page
     const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
     broadcastChannel.postMessage(response.access_token);
+    window.close();
   } catch (err) {
     // This block should not be reached during normal running of code
     // However, BroadcastChannel does not exist in the test environment
   }
+}
 
-  setTimeout(() => {
-    window.close();
-  }, 1000);
+function Failure({ title, children }: { title: string; children: string }) {
+  return (
+    <div className={classNames('NoPage', Classes.DARK)}>
+      <NonIdealState icon={IconNames.ERROR} title={title} description={children} />
+    </div>
+  );
 }
 
 export default GitHubCallback;

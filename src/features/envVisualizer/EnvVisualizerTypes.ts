@@ -1,9 +1,11 @@
+import { EnvTree, EnvTreeNode } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 
-import { Binding } from './components/binding/Binding';
-import { ArrayUnit } from './components/binding/value/ArrayUnit';
-import { Frame } from './components/Frame';
+import { ArrayUnit } from './components/drawables/visibles/ArrayUnit';
+import { Binding } from './components/drawables/visibles/Binding';
+import { Frame } from './components/drawables/visibles/Frame';
+import { Level } from './components/drawables/visibles/Level';
 
 /** this interface defines a drawing function */
 export interface Drawable {
@@ -40,7 +42,7 @@ export interface Visible extends Drawable {
 export type PrimitiveTypes = number | string | null | undefined;
 
 /** types of functions in JS Slang */
-export type FnTypes = {
+export interface FnTypes {
   /** the function itself */
   (): any;
 
@@ -51,13 +53,24 @@ export type FnTypes = {
   functionName: string;
 
   node: any;
-};
+}
 
 /** the types of data in the JS Slang context */
 export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
 
 /** modified Environment type to store children and associated frame */
-export type Env = Environment & { childEnvs?: Env[]; frame?: Frame };
+export type Env = Environment | null;
+
+/** modified `EnvTree` */
+export type _EnvTree = EnvTree & { root: _EnvTreeNode };
+
+/** modified `EnvTreeNode` */
+export type _EnvTreeNode = EnvTreeNode & {
+  parent: _EnvTreeNode;
+  children: _EnvTreeNode[];
+  level?: Level;
+  frame?: Frame;
+};
 
 /** empty object type  */
 export type EmptyObject = {
