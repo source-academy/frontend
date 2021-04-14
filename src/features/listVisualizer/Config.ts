@@ -8,9 +8,8 @@ export const Config = {
   DistanceX: 50,
   DistanceY: 60,
 
-  BoxWidth: 90,
+  BoxWidth: 45,
   BoxHeight: 30,
-  VertBarPos: 0.5,
   BoxSpacingX: 50,
   BoxSpacingY: 60,
 

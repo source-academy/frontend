@@ -1,17 +1,15 @@
-import { Layer, Line } from 'react-konva';
+import { Layer, Line, Text } from 'react-konva';
 
 import { Config } from '../Config';
 import { Data, Pair } from '../ListVisualizerTypes';
-import { head, isFunction, isPair, tail } from '../ListVisualizerUtils';
-import { DataTreeNode } from './DataTreeNode';
-import { PairTreeNode } from './PairTreeNode';
-import { DrawableTreeNode, FunctionTreeNode, TreeNode } from './TreeNode';
+import { isArray, isFunction, toText } from '../ListVisualizerUtils';
+import { ArrayTreeNode, DataTreeNode, DrawableTreeNode, FunctionTreeNode, TreeNode } from './TreeNode';
 
 /**
  *  A tree object built based on a list or pair.
  */
 export class Tree {
-  private _rootNode: PairTreeNode;
+  private _rootNode: TreeNode;
   private nodes: DrawableTreeNode[];
 
   /**
@@ -19,7 +17,7 @@ export class Tree {
    * @param rootNode The root node of the tree.
    * @param nodes The memoized nodes of the tree in list form.
    */
-  constructor(rootNode: PairTreeNode, nodes: DrawableTreeNode[]) {
+  constructor(rootNode: TreeNode, nodes: DrawableTreeNode[]) {
     this._rootNode = rootNode;
     this.nodes = nodes;
   }
@@ -27,7 +25,7 @@ export class Tree {
   /**
    * The root node of the tree.
    */
-  get rootNode(): PairTreeNode {
+  get rootNode(): TreeNode {
     return this._rootNode;
   }
 
@@ -39,8 +37,17 @@ export class Tree {
     return this.nodes[id];
   }
 
-  static fromSourceTree(tree: Pair): Tree {
+  static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
+
+    function constructNode(structure: Data) {
+      return visitedStructures.get(structure) ??
+        isArray(structure)
+          ? constructTree(structure)
+          : isFunction(structure)
+          ? constructFunction(structure)
+          : constructData(structure);
+    }
 
     /**
      * Returns a node representing the given tree as a pair.
@@ -48,37 +55,14 @@ export class Tree {
      * pair appears multiple times in the data structure.
      * @param tree The Source tree to construct a node for.
      */
-    function constructTree(tree: Pair) {
-      const node = new PairTreeNode(nodeCount);
+    function constructTree(tree: Array<Data>) {
+      const node = new ArrayTreeNode(nodeCount);
 
       visitedStructures[nodeCount] = tree;
       treeNodes[nodeCount] = node;
       nodeCount++;
 
-      const headNode = head(tree);
-      const tailNode = tail(tree);
-
-      if (visitedStructures.indexOf(headNode) > -1) {
-        // tree already built
-        node.left = visitedStructures.indexOf(headNode);
-      } else {
-        node.left = isPair(headNode)
-          ? constructTree(headNode)
-          : isFunction(headNode)
-          ? constructFunction(headNode)
-          : constructData(headNode);
-      }
-
-      if (visitedStructures.indexOf(tailNode) > -1) {
-        // tree already built
-        node.right = visitedStructures.indexOf(tailNode);
-      } else {
-        node.right = isPair(tailNode)
-          ? constructTree(tailNode)
-          : isFunction(tailNode)
-          ? constructFunction(tailNode)
-          : constructData(tailNode);
-      }
+      node.children = tree.map(constructNode);
 
       return node;
     }
@@ -109,15 +93,15 @@ export class Tree {
       return new DataTreeNode(data);
     }
 
-    const visitedStructures: (Function | Pair)[] = []; // detects cycles
+    const visitedStructures: Map<Function | Pair, number> = new Map(); // detects cycles
     const treeNodes: DrawableTreeNode[] = [];
-    const rootNode = constructTree(tree);
+    const rootNode = constructNode(tree);
 
     return new Tree(rootNode, treeNodes);
   }
 
-  draw(x: number, y: number): JSX.Element {
-    return new TreeDrawer(this).draw(x, y);
+  draw(): TreeDrawer {
+    return new TreeDrawer(this);
   }
 }
 
@@ -131,22 +115,41 @@ class TreeDrawer {
   private minLeft = 500;
 
   private drawables: JSX.Element[];
+  private nodeWidths: Map<TreeNode, number>;
+  public width: number = 0;
+  public height: number = 0;
 
   constructor(tree: Tree) {
     this.tree = tree;
     this.drawables = [];
+    this.nodeWidths = new Map();
   }
 
   /**
    *  Draws a tree at x, y, by calling drawNode on the root at x, y.
    */
   draw(x: number, y: number): JSX.Element {
-    this.drawNode(this.tree.rootNode, x, y, x, y);
-    return (
-      <Layer offsetX={this.minLeft - 20} offsetY={0}>
-        {this.drawables}
+    const layer = (this.tree.rootNode instanceof DataTreeNode) ?
+      <Layer>
+        <Text
+          text={toText(this.tree.rootNode.data, true)}
+          align={'center'}
+          fontStyle={'normal'}
+          fontSize={20}
+          fill={'white'}
+        />
       </Layer>
-    );
+    : (() => {
+      this.drawNode(this.tree.rootNode, x, y, x, y);
+      return (
+        <Layer width={this.getNodeWidth(this.tree.rootNode)} offsetY={0}>
+          {this.drawables}
+        </Layer>
+      );
+    })();
+    this.width = this.getNodeWidth(this.tree.rootNode);
+    this.height = this.getNodeHeight(this.tree.rootNode);
+    return layer;
   }
 
   /**
@@ -171,29 +174,33 @@ class TreeDrawer {
 
       // update left extreme of the tree
       this.minLeft = Math.min(this.minLeft, x);
-    } else if (node instanceof PairTreeNode) {
+    } else if (node instanceof ArrayTreeNode) {
       const drawable = node.createDrawable(x, y, parentX, parentY);
       this.drawables.push(drawable);
 
-      // if it has a left new child, draw it
-      if (node.left != null) {
-        if (node.left instanceof TreeNode) {
-          this.drawLeft(node.left, x, y);
+      // if it has children, draw them
+      // const width = this.getNodeWidth(node);
+      let leftX = x;
+      node.children?.forEach((childNode, index) => {
+        if (childNode instanceof TreeNode) {
+          this.drawNode(childNode, leftX, y + Config.DistanceY, x + Config.BoxWidth * index, y);
+          const childNodeWidth = this.getNodeWidth(childNode);
+          leftX += childNodeWidth ? (childNodeWidth + Config.DistanceX) : 0;
         } else {
           // if its left child is part of a cycle and it's been drawn, link back to that node instead
-          const drawnNode = this.tree.getNodeById(node.left);
-          this.backwardLeftEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
+          const drawnNode = this.tree.getNodeById(childNode);
+          this.backwardLeftEdge(x + Config.BoxWidth * index, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
         }
-      }
+      });
 
-      if (node.right != null) {
-        if (node.right instanceof TreeNode) {
-          this.drawRight(node.right, x, y);
-        } else {
-          const drawnNode = this.tree.getNodeById(node.right);
-          this.backwardRightEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
-        }
-      }
+      // if (node.right != null) {
+      //   if (node.right instanceof TreeNode) {
+      //     this.drawRight(node.right, x, y);
+      //   } else {
+      //     const drawnNode = this.tree.getNodeById(node.right);
+      //     this.backwardRightEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
+      //   }
+      // }
 
       // update left extreme of the tree
       this.minLeft = Math.min(this.minLeft, x);
@@ -201,63 +208,57 @@ class TreeDrawer {
   }
 
   /**
-   *  Draws a node to the left of its parent, making necessary left shift depending how far the structure of subtree
-   *  extends to the right.
-   *
-   *  It first draws the individual box, then see if its children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+   * Returns the width taken up by the node in pixels.
+   * @param node The node to calculate the width of.
    */
-  drawLeft(node: TreeNode, parentX: number, parentY: number) {
-    let count: number;
-    // checks if it has a right child, how far it extends to the right direction
-    if (node.right instanceof DrawableTreeNode) {
-      count = 1 + this.shiftScaleCount(node.right);
+  getNodeWidth(node: TreeNode | number): number {
+    if (!(node instanceof TreeNode)) {
+      return 0;
+    } else if (node instanceof DataTreeNode) {
+      return 0;
+    } else if (node instanceof FunctionTreeNode) {
+      return Config.BoxWidth;
+    } else if (node instanceof ArrayTreeNode) {
+      if (this.nodeWidths.has(node)) {
+        return this.nodeWidths.get(node) ?? 0;
+      } else if (node.children != null) {
+        const childrenWidths = node.children
+        .map(node => this.getNodeWidth(node))
+        .filter(x => x > 0);
+        const childrenWidth = childrenWidths.length > 0
+          ? childrenWidths.reduce((x, y) => x + y + Config.DistanceX)
+          : 0;
+        const nodeWidth = Math.max(node.children.length * Config.BoxWidth + 2 * Config.StrokeWidth, childrenWidth);
+        this.nodeWidths.set(node, nodeWidth);
+        return nodeWidth;
+      } else {
+        return 0;
+      }
     } else {
-      count = 0;
+      return 0;
     }
-    // shifts left accordingly
-    const x = parentX - Config.DistanceX - count * Config.DistanceX;
-    const y = parentY + Config.DistanceY;
-
-    this.drawNode(node, x, y, parentX, parentY);
   }
 
   /**
-   *  Draws a node to the right of its parent, making necessary right shift depending how far the structure of subtree
-   *  extends to the left.
-   *
-   *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+   * Returns the height taken up by the node in pixels.
+   * @param node The node to calculate the width of.
    */
-  drawRight(node: TreeNode, parentX: number, parentY: number) {
-    let count: number;
-    if (node.left instanceof DrawableTreeNode) {
-      count = 1 + this.shiftScaleCount(node.left);
-    } else {
-      count = 0;
+  getNodeHeight(node: TreeNode): number {
+    function helper(node: TreeNode): number {
+      if (node instanceof DataTreeNode) {
+        return 0;
+      } else if (node.children) {
+        return node.children
+          .map(child => child instanceof TreeNode ? helper(child) : 0)
+          .filter(height => height > 0)
+          .reduce((x, y) => Math.max(x, y) + Config.DistanceY, 0)
+          + Config.BoxHeight;
+      } else {
+        return 0;
+      }
     }
-    const x = parentX + Config.DistanceX + count * Config.DistanceX;
-    const y = parentY + Config.DistanceY;
 
-    this.drawNode(node, x, y, parentX, parentY);
-  }
-
-  /**
-   * Returns the distance necessary for the shift of each node, calculated recursively.
-   */
-  shiftScaleCount(node: TreeNode) {
-    let count = 0;
-    // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
-    if (node.left instanceof DrawableTreeNode) {
-      count = count + 1 + this.shiftScaleCount(node.left);
-    }
-    // if there is something on the right, it needs to be shifted to the left for 1 + how far that left child shifts
-    if (node.right instanceof DrawableTreeNode) {
-      count = count + 1 + this.shiftScaleCount(node.right);
-    }
-    return count;
+    return helper(node);
   }
 
   /**

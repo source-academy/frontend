@@ -1,23 +1,20 @@
 import { Group } from 'react-konva';
 
-import { ArrowDrawable, PairDrawable } from '../drawable/Drawable';
-import { DataTreeNode } from './DataTreeNode';
+import { ArrayDrawable, ArrowDrawable } from '../drawable/Drawable';
 import { DrawableTreeNode } from './DrawableTreeNode';
 
 /**
- * Represents a node corresponding to a Source pair.
+ * Represents a node corresponding to a Source pair or array.
  */
-export class PairTreeNode extends DrawableTreeNode {
+export class ArrayTreeNode extends DrawableTreeNode {
   createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
-    const leftNode = this.left instanceof DataTreeNode ? this.left : null;
-    const rightNode = this.right instanceof DataTreeNode ? this.right : null;
-    const pairProps = { leftNode: leftNode, rightNode: rightNode };
-    const pairDrawable = <PairDrawable {...pairProps}></PairDrawable>;
+    const arrayProps = { nodes: this.children ?? [] };
+    const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
 
     this._drawable = (
       <Group x={x} y={y}>
-        {pairDrawable}
-        {parentX !== x && (
+        {arrayDrawable}
+        {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
               from: {

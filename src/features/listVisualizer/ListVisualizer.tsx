@@ -1,9 +1,8 @@
-import { Layer, Stage, Text } from 'react-konva';
+import { Stage } from 'react-konva';
 
 import { Data, Step } from './ListVisualizerTypes';
-import { findDataHeight, findDataWidth, isFunction, isPair, toText } from './ListVisualizerUtils';
 import { Tree } from './tree/Tree';
-import { DataTreeNode, FunctionTreeNode } from './tree/TreeNode';
+import { DataTreeNode } from './tree/TreeNode';
 
 /**
  * The list visualizer class.
@@ -69,35 +68,10 @@ export default class ListVisualizer {
    *  Then shift it to the left end.
    */
   private createDrawing(xs: Data): JSX.Element {
-    /**
-     * Create konva stage according to calculated width and height of drawing.
-     * Theoretically, as each box is 90px wide and successive boxes overlap by half,
-     * the width of the drawing should be roughly (width * 45), with a similar calculation
-     * for height.
-     * In practice, likely due to browser auto-scaling, for large drawings this results in
-     * some of the drawing being cut off. Hence the width and height formulas used are approximations.
-     */
-    let layer: JSX.Element;
-
-    if (isPair(xs)) {
-      layer = Tree.fromSourceTree(xs).draw(500, 50);
-    } else if (isFunction(xs)) {
-      layer = <Layer>{new FunctionTreeNode(0).createDrawable(50, 50, 50, 50)}</Layer>;
-    } else {
-      layer = (
-        <Layer>
-          <Text
-            text={toText(xs, true)}
-            align={'center'}
-            fontStyle={'normal'}
-            fontSize={20}
-            fill={'white'}
-          />
-        </Layer>
-      );
-    }
+    const treeDrawer = Tree.fromSourceStructure(xs).draw();
+    const layer = treeDrawer.draw(0, 0);
     const stage = (
-      <Stage key={xs} width={findDataWidth(xs) * 60 + 60} height={findDataHeight(xs) * 60 + 100}>
+      <Stage key={xs} width={treeDrawer.width + 600} height={treeDrawer.height}>
         {layer}
       </Stage>
     );
