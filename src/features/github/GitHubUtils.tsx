@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/rest';
 
 import { actions } from '../../commons/utils/ActionsHelper';
-import Constants from '../../commons/utils/Constants';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { showSuccessMessage, showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { store } from '../../pages/createStore';
@@ -13,7 +12,7 @@ import { store } from '../../pages/createStore';
  * @param {string} messageBody The message body. Must be URL-encoded
  * @return {Promise<Response>} A promise for a HTML response with an 'auth_token' field
  */
-export async function exchangeAccessCodeForAuthTokenContainingObject(
+export async function exchangeAccessCode(
   backendLink: string,
   messageBody: string
 ): Promise<Response> {
@@ -27,33 +26,12 @@ export async function exchangeAccessCodeForAuthTokenContainingObject(
 }
 
 /**
- * Grabs the value of the field 'code' of the URL address passed as an argument
- *
- * @param {string} currentURLAddress The current address of the current browser window
- * @return {string} The access code
- */
-export function grabAccessCodeFromURL(currentURLAddress: string): string {
-  const urlParams = new URLSearchParams(currentURLAddress);
-  const accessCode = urlParams.get('code') || '';
-  return accessCode;
-}
-
-/**
  * Returns the Octokit instance saved in session state.
  *
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubOctokitInstance(): any {
   return store.getState().session.githubOctokitInstance;
-}
-
-/**
- * Returns the client ID. This function is meant to allow us to mock the client ID.
- *
- * @return {string} The client ID.
- */
-export function getClientId(): string {
-  return Constants.githubClientId;
 }
 
 export async function checkIfFileCanBeOpened(
