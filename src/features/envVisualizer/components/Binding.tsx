@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Visible } from '../../../EnvVisualizerTypes';
-import { Arrow } from './Arrow';
+import { Config } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data, Visible } from '../EnvVisualizerTypes';
+import { Arrow } from './arrows/Arrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
@@ -69,7 +69,7 @@ export class Binding implements Visible {
       <React.Fragment key={Layout.key++}>
         {this.key.draw()}
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new Arrow(this.key, this.value).draw()}
+        {this.value instanceof PrimitiveValue || Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
     );
   }

@@ -1,3 +1,4 @@
+import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { RefObject } from 'react';
 import {
@@ -8,41 +9,46 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Config } from '../../../../EnvVisualizerConfig';
-import { Layout } from '../../../../EnvVisualizerLayout';
-import { Hoverable, ReferenceType } from '../../../../EnvVisualizerTypes';
+import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
+import { Layout } from '../../EnvVisualizerLayout';
+import { EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
 import {
   getBodyText,
+  getNonEmptyEnv,
   getParamsText,
   getTextWidth,
   setHoveredStyle,
   setUnhoveredStyle
-} from '../../../../EnvVisualizerUtils';
-import { Arrow } from '../Arrow';
+} from '../../EnvVisualizerUtils';
+import { Arrow } from '../arrows/Arrow';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
-/** this encapsulates a function from the global frame
- * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value implements Hoverable {
+/** this class encapsulates a JS Slang function (not from the global frame) that
+ *  contains extra props such as environment and fnName */
+export class FnValue extends Value implements Hoverable {
   readonly x: number;
   readonly y: number;
   readonly height: number;
   readonly width: number;
-  readonly centerX: number;
-  readonly textDescriptionWidth: number;
+  /** name of this function */
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
+  readonly textDescriptionWidth: number;
+  readonly centerX: number;
 
+  readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;
   readonly textDescription: string;
 
+  /** the parent/enclosing environment of this fn value */
+  readonly enclosingEnvNode: EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
-    /** underlying function */
-    readonly data: () => any,
+    /** underlying JS Slang function (contains extra props) */
+    readonly data: FnTypes,
     /** what this value is being referenced by */
     readonly referencedBy: ReferenceType[]
   ) {
@@ -71,6 +77,11 @@ export class GlobalFnValue extends Value implements Hoverable {
     this.width = this.radius * 4;
     this.height = this.radius * 2;
 
+    this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
+      getNonEmptyEnv(this.data.environment) as Environment
+    ) as EnvTreeNode;
+    this.fnName = this.data.functionName;
+
     this.paramsText = `params: (${getParamsText(this.data)})`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.textDescription = `${this.paramsText}\n${this.bodyText}`;
@@ -81,6 +92,7 @@ export class GlobalFnValue extends Value implements Hoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
     setHoveredStyle(currentTarget);
   };
@@ -95,6 +107,7 @@ export class GlobalFnValue extends Value implements Hoverable {
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y}
@@ -102,6 +115,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             stroke={Config.SA_WHITE.toString()}
           />
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y}
@@ -109,6 +123,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             fill={Config.SA_WHITE.toString()}
           />
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX + this.radius}
             y={this.y}
@@ -116,6 +131,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             stroke={Config.SA_WHITE.toString()}
           />
           <Circle
+            {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX + this.radius}
             y={this.y}
@@ -139,7 +155,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             padding={5}
           />
         </KonvaLabel>
-        {Layout.globalEnvNode.frame && new Arrow(this, Layout.globalEnvNode.frame).draw()}
+        {this.enclosingEnvNode.frame && Arrow.from(this).to(this.enclosingEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

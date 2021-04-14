@@ -2,16 +2,17 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { _EnvTreeNode, Env, Hoverable, Visible } from '../../../EnvVisualizerTypes';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
 import {
   getTextWidth,
   isPrimitiveData,
+  isSymbol,
   setHoveredStyle,
   setUnhoveredStyle
-} from '../../../EnvVisualizerUtils';
-import { Arrow } from './Arrow';
+} from '../EnvVisualizerUtils';
+import { Arrow } from './arrows/Arrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -49,7 +50,7 @@ export class Frame implements Visible, Hoverable {
 
   constructor(
     /** environment tree node that contains this frame */
-    readonly envTreeNode: _EnvTreeNode,
+    readonly envTreeNode: EnvTreeNode,
     /** the frame to the left of this frame, on the same level. used for calculating this frame's position */
     readonly leftSiblingFrame: Frame | null
   ) {
@@ -74,7 +75,11 @@ export class Frame implements Visible, Hoverable {
       const bindingWidth =
         Math.max(Config.TextMinWidth, getTextWidth(String(key + Config.VariableColon))) +
         Config.TextPaddingX +
-        (isPrimitiveData(data) ? Math.max(Config.TextMinWidth, getTextWidth(String(data))) : 0);
+        (isSymbol(data)
+          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
+          : isPrimitiveData(data)
+          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
+          : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this.width = maxBindingWidth + Config.FramePaddingX * 2;
@@ -111,6 +116,7 @@ export class Frame implements Visible, Hoverable {
       <React.Fragment key={Layout.key++}>
         {this.name.draw()}
         <Rect
+          {...ShapeDefaultProps}
           x={this.x}
           y={this.y}
           width={this.width}
@@ -122,7 +128,7 @@ export class Frame implements Visible, Hoverable {
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && new Arrow(this, this.parentFrame).draw()}
+        {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
       </React.Fragment>
     );
   }

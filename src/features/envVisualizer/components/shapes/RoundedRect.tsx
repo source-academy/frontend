@@ -2,6 +2,8 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
 import { Shape } from 'react-konva';
 
+import { ShapeDefaultProps } from '../../EnvVisualizerConfig';
+
 interface Props {
   x: number;
   y: number;
@@ -34,6 +36,7 @@ export const RoundedRect: React.FC<Props> = ({ x, y, width, height, cornerRadius
         // (!) Konva specific method, it is very important
         context.fillStrokeShape(shape);
       }}
+      {...ShapeDefaultProps}
       {...props}
     />
   );

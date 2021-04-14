@@ -1,4 +1,4 @@
-import { Data, ReferenceType, Visible } from '../../../../EnvVisualizerTypes';
+import { Data, ReferenceType, Visible } from '../../EnvVisualizerTypes';
 
 /** the value of a `Binding` or an `ArrayUnit` */
 export abstract class Value implements Visible {

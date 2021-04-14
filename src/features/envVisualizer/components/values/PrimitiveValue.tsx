@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Config } from '../../../../EnvVisualizerConfig';
-import { Layout } from '../../../../EnvVisualizerLayout';
-import { PrimitiveTypes, ReferenceType } from '../../../../EnvVisualizerTypes';
-import { getTextWidth, isNull } from '../../../../EnvVisualizerUtils';
+import { Config } from '../../EnvVisualizerConfig';
+import { Layout } from '../../EnvVisualizerLayout';
+import { PrimitiveTypes, ReferenceType } from '../../EnvVisualizerTypes';
+import { getTextWidth, isNull } from '../../EnvVisualizerUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
 import { Text } from '../Text';

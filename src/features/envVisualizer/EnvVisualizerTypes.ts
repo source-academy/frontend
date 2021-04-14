@@ -1,11 +1,14 @@
-import { EnvTree, EnvTreeNode } from 'js-slang/dist/createContext';
+import {
+  EnvTree as EnvironmentTree,
+  EnvTreeNode as EnvironmentTreeNode
+} from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/types/Node';
 
-import { ArrayUnit } from './components/drawables/visibles/ArrayUnit';
-import { Binding } from './components/drawables/visibles/Binding';
-import { Frame } from './components/drawables/visibles/Frame';
-import { Level } from './components/drawables/visibles/Level';
+import { ArrayUnit } from './components/ArrayUnit';
+import { Binding } from './components/Binding';
+import { Frame } from './components/Frame';
+import { Level } from './components/Level';
 
 /** this interface defines a drawing function */
 export interface Drawable {
@@ -39,10 +42,10 @@ export interface Visible extends Drawable {
 }
 
 /** types of primitives in JS Slang  */
-export type PrimitiveTypes = number | string | null | undefined;
+export type PrimitiveTypes = number | string | symbol | null | undefined;
 
 /** types of functions in JS Slang */
-export interface FnTypes {
+export type FnTypes = {
   /** the function itself */
   (): any;
 
@@ -53,7 +56,7 @@ export interface FnTypes {
   functionName: string;
 
   node: any;
-}
+};
 
 /** the types of data in the JS Slang context */
 export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
@@ -62,12 +65,12 @@ export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
 export type Env = Environment | null;
 
 /** modified `EnvTree` */
-export type _EnvTree = EnvTree & { root: _EnvTreeNode };
+export type EnvTree = EnvironmentTree & { root: EnvTreeNode };
 
 /** modified `EnvTreeNode` */
-export type _EnvTreeNode = EnvTreeNode & {
-  parent: _EnvTreeNode;
-  children: _EnvTreeNode[];
+export type EnvTreeNode = EnvironmentTreeNode & {
+  parent: EnvTreeNode;
+  children: EnvTreeNode[];
   level?: Level;
   frame?: Frame;
 };
