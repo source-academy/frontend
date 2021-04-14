@@ -44,9 +44,7 @@ export const ControlBarGitHubLoginButtons: React.FC<ControlBarGitHubLoginButtonP
       autoFocus={false}
       content={
         <div>
-          <ButtonGroup large={!isMobileBreakpoint}>
-            {loginButton}
-          </ButtonGroup>
+          <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>
         </div>
       }
       popoverClassName={Classes.POPOVER_DISMISS}

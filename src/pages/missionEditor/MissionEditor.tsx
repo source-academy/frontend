@@ -1,45 +1,53 @@
-import { Classes } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
-import { Octokit } from "@octokit/rest";
-import classNames from "classnames";
-import { isStepperOutput } from "js-slang/dist/stepper/stepper";
-import { Variant } from "js-slang/dist/types";
-import { isEqual } from "lodash";
-import { decompressFromEncodedURIComponent } from "lz-string";
-import React from "react";
-import { useSelector } from "react-redux";
-import { useMediaQuery } from "react-responsive";
-import { RouteComponentProps } from "react-router";
-import { InterpreterOutput, OverallState, sourceLanguages } from "src/commons/application/ApplicationTypes";
-import { externalLibraries, ExternalLibraryName } from "src/commons/application/types/ExternalTypes";
-import { ControlBarAutorunButtons } from "src/commons/controlBar/ControlBarAutorunButtons";
-import { ControlBarChapterSelect } from "src/commons/controlBar/ControlBarChapterSelect";
-import { ControlBarClearButton } from "src/commons/controlBar/ControlBarClearButton";
-import { ControlBarEvalButton } from "src/commons/controlBar/ControlBarEvalButton";
-import { ControlBarExecutionTime } from "src/commons/controlBar/ControlBarExecutionTime";
-import { ControlBarExternalLibrarySelect } from "src/commons/controlBar/ControlBarExternalLibrarySelect";
-import { ControlBarGitHubLoginButtons } from "src/commons/controlBar/ControlBarGitHubLoginButton";
-import { ControlBarSessionButtons } from "src/commons/controlBar/ControlBarSessionButton";
-import { ControlBarShareButton } from "src/commons/controlBar/ControlBarShareButton";
-import { ControlBarStepLimit } from "src/commons/controlBar/ControlBarStepLimit";
-import { HighlightedLines, Position } from "src/commons/editor/EditorTypes";
-import Markdown from "src/commons/Markdown";
-import MobileWorkspace, { MobileWorkspaceProps } from "src/commons/mobileWorkspace/MobileWorkspace";
-import SideContentEnvVisualizer from "src/commons/sideContent/SideContentEnvVisualizer";
-import SideContentFaceapiDisplay from "src/commons/sideContent/SideContentFaceapiDisplay";
-import SideContentInspector from "src/commons/sideContent/SideContentInspector";
-import SideContentListVisualizer from "src/commons/sideContent/SideContentListVisualizer";
-import SideContentRemoteExecution from "src/commons/sideContent/SideContentRemoteExecution";
-import SideContentSubstVisualizer from "src/commons/sideContent/SideContentSubstVisualizer";
-import { SideContentTab, SideContentType } from "src/commons/sideContent/SideContentTypes";
-import SideContentVideoDisplay from "src/commons/sideContent/SideContentVideoDisplay";
-import Constants from "src/commons/utils/Constants";
-import { generateSourceIntroduction } from "src/commons/utils/IntroductionHelper";
-import { stringParamToInt } from "src/commons/utils/ParamParseHelper";
-import { parseQuery } from "src/commons/utils/QueryHelper";
-import Workspace, { WorkspaceProps } from "src/commons/workspace/Workspace";
-import { initSession, log } from "src/features/eventLogging";
-import { CodeDelta, Input, SelectionRange } from "src/features/sourceRecorder/SourceRecorderTypes";
+import { Classes } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { Octokit } from '@octokit/rest';
+import classNames from 'classnames';
+import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
+import { Variant } from 'js-slang/dist/types';
+import { isEqual } from 'lodash';
+import { decompressFromEncodedURIComponent } from 'lz-string';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
+import { RouteComponentProps } from 'react-router';
+import {
+  InterpreterOutput,
+  OverallState,
+  sourceLanguages
+} from 'src/commons/application/ApplicationTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from 'src/commons/application/types/ExternalTypes';
+import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
+import { ControlBarExternalLibrarySelect } from 'src/commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarGitHubLoginButtons } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
+import { ControlBarMyMissionsButton } from 'src/commons/controlBar/ControlBarMyMissionsButton';
+import { ControlBarSessionButtons } from 'src/commons/controlBar/ControlBarSessionButton';
+import { ControlBarShareButton } from 'src/commons/controlBar/ControlBarShareButton';
+import { ControlBarStepLimit } from 'src/commons/controlBar/ControlBarStepLimit';
+import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
+import Markdown from 'src/commons/Markdown';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
+import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
+import SideContentFaceapiDisplay from 'src/commons/sideContent/SideContentFaceapiDisplay';
+import SideContentInspector from 'src/commons/sideContent/SideContentInspector';
+import SideContentListVisualizer from 'src/commons/sideContent/SideContentListVisualizer';
+import SideContentRemoteExecution from 'src/commons/sideContent/SideContentRemoteExecution';
+import SideContentSubstVisualizer from 'src/commons/sideContent/SideContentSubstVisualizer';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
+import Constants from 'src/commons/utils/Constants';
+import { generateSourceIntroduction } from 'src/commons/utils/IntroductionHelper';
+import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
+import { parseQuery } from 'src/commons/utils/QueryHelper';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
+import { initSession, log } from 'src/features/eventLogging';
+import { CodeDelta, Input, SelectionRange } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -374,11 +382,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         onClickLogOut={props.handleGitHubLogOut}
       />
     );
-  }, [
-    githubOctokitInstance,
-    props.handleGitHubLogIn,
-    props.handleGitHubLogOut
-  ]);
+  }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
   const executionTime = React.useMemo(
     () => (
@@ -463,6 +467,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       props.shortURL
     ]
   );
+
+  const myMissionsButton = React.useMemo(() => <ControlBarMyMissionsButton />, []);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -667,6 +673,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         githubButtons,
+        myMissionsButton,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
       ]
     },
@@ -700,7 +707,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
           sessionButtons,
-          githubButtons
+          githubButtons,
+          myMissionsButton
         ]
       },
       defaultSelectedTabId: selectedTab,
@@ -722,7 +730,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       )}
     </div>
   );
-}
+};
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
