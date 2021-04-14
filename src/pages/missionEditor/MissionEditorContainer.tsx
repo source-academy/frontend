@@ -2,7 +2,12 @@ import { Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-import { generateLzString, shortenURL, toggleUsingSubst, updateShortURL } from 'src/features/playground/PlaygroundActions';
+import {
+  generateLzString,
+  shortenURL,
+  toggleUsingSubst,
+  updateShortURL
+} from 'src/features/playground/PlaygroundActions';
 
 import {
   beginDebuggerPause,
@@ -10,10 +15,7 @@ import {
   debuggerReset,
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
-import {
-  loginGitHub,
-  logoutGitHub,
-} from '../../commons/application/actions/SessionActions';
+import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -131,6 +133,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const MissionEditorContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(MissionEditor));
+const MissionEditorContainer = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(MissionEditor)
+);
 
 export default MissionEditorContainer;
