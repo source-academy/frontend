@@ -21,16 +21,8 @@ export class ArrowFromText extends GenericArrow {
       } else {
         steps.push((x, y) => [x + Config.TextMargin, y]);
         steps.push((x, y) => [x, y - from.height / 2 - Config.TextMargin]);
-        steps.push((x, y) => [
-          to.x +
-            (to instanceof ArrayValue ? Config.DataUnitWidth : to.width) +
-            Config.ArrowHeadSize,
-          y
-        ]);
-        steps.push((x, y) => [
-          x,
-          to.y + (to instanceof ArrayValue ? Config.DataUnitHeight / 2 : 0)
-        ]);
+        steps.push((x, y) => [to.x + to.width + Config.ArrowHeadSize, y]);
+        steps.push((x, y) => [x, to.y]);
         steps.push((x, y) => [x - Config.ArrowHeadSize, y]);
       }
     } else {

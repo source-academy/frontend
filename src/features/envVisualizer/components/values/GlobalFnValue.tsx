@@ -30,13 +30,13 @@ export class GlobalFnValue extends Value implements Hoverable {
   readonly height: number;
   readonly width: number;
   readonly centerX: number;
-  readonly textDescriptionWidth: number;
+  readonly tooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
 
   readonly paramsText: string;
   readonly bodyText: string;
-  readonly textDescription: string;
+  readonly tooltip: string;
 
   readonly labelRef: RefObject<any> = React.createRef();
 
@@ -73,11 +73,8 @@ export class GlobalFnValue extends Value implements Hoverable {
 
     this.paramsText = `params: (${getParamsText(this.data)})`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
-    this.textDescription = `${this.paramsText}\n${this.bodyText}`;
-    this.textDescriptionWidth = Math.max(
-      getTextWidth(this.paramsText),
-      getTextWidth(this.bodyText)
-    );
+    this.tooltip = `${this.paramsText}\n${this.bodyText}`;
+    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -133,9 +130,9 @@ export class GlobalFnValue extends Value implements Hoverable {
           visible={false}
           ref={this.labelRef}
         >
-          <KonvaTag fill={'black'} opacity={0.3} />
+          <KonvaTag fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
           <KonvaText
-            text={this.textDescription}
+            text={this.tooltip}
             fontFamily={Config.FontFamily.toString()}
             fontSize={Number(Config.FontSize)}
             fontStyle={Config.FontStyle.toString()}
