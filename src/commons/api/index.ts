@@ -2,9 +2,9 @@ import { store } from '../../pages/createStore';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { Api, FullRequestParams } from "./api";
+import { Api, FullRequestParams } from './api';
 
-declare module "./api" {
+declare module './api' {
   interface FullRequestParams {
     accessToken?: string;
     refreshToken?: string;
@@ -14,7 +14,7 @@ declare module "./api" {
   }
 }
 
-export * from "./api";
+export * from './api';
 
 /**
  * A custom `fetch` function which will attemp to refresh tokens if the initial
@@ -23,9 +23,12 @@ export * from "./api";
  * If fetch throws an error, or final response has status code < 200 or > 299,
  * this function will cause the user to logout.
  */
-export const customFetch = async (url: string, opts: FullRequestParams): Promise<Response | null> => {
+export const customFetch = async (
+  url: string,
+  opts: FullRequestParams
+): Promise<Response | null> => {
   if (opts.accessToken) {
-    opts.headers!["Authorization"] = `Bearer ${opts.accessToken}`;
+    opts.headers!['Authorization'] = `Bearer ${opts.accessToken}`;
   }
 
   const shouldRefresh = opts.shouldRefresh ?? true;
@@ -41,11 +44,16 @@ export const customFetch = async (url: string, opts: FullRequestParams): Promise
     if (shouldRefresh && resp && resp.status === 401) {
       const newTokens = await Cadet.auth.refresh({ refresh_token: opts.refreshToken! });
       const tokens = newTokens.data!;
-      store.dispatch(actions.setTokens({ accessToken: tokens.access_token!, refreshToken: tokens.refresh_token! }));
+      store.dispatch(
+        actions.setTokens({
+          accessToken: tokens.access_token!,
+          refreshToken: tokens.refresh_token!
+        })
+      );
       const newOpts = {
         ...opts,
         accessToken: tokens.access_token,
-        shouldRefresh: false,
+        shouldRefresh: false
       };
       return customFetch(url, newOpts);
     }
@@ -75,5 +83,5 @@ export const Cadet = new Api({
   baseUrl: Constants.backendUrl + '/v2',
   // Type-casting as `fetch` here, since we know how this function will be called.
   // TODO: `customFetch` can return `Promise<Response | null>`
-  customFetch: customFetch as unknown as typeof fetch
+  customFetch: (customFetch as unknown) as typeof fetch
 });

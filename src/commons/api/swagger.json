@@ -1,0 +1,3361 @@
+{
+  "basePath": "/v2",
+  "definitions": {
+    "AssessmentType": {
+      "description": "Assessment type",
+      "enum": [
+        "mission",
+        "sidequest",
+        "path",
+        "contest",
+        "practical"
+      ],
+      "type": "string"
+    },
+    "AssessmentInfo": {
+      "properties": {
+        "id": {
+          "description": "assessment id",
+          "type": "integer"
+        },
+        "maxGrade": {
+          "description": "The max grade for this assessment",
+          "type": "integer"
+        },
+        "maxXp": {
+          "description": "The max xp for this assessment",
+          "type": "integer"
+        },
+        "questionCount": {
+          "description": "number of questions in this assessment",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Mission title",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/AssessmentType",
+          "description": "Either mission/sidequest/path/contest"
+        }
+      },
+      "required": [
+        "questionCount",
+        "maxXp",
+        "maxGrade",
+        "title",
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "AssessmentsList": {
+      "description": "A list of all assessments",
+      "items": {
+        "$ref": "#/definitions/AssessmentOverview"
+      },
+      "type": "array"
+    },
+    "GoalWithProgress": {
+      "description": "Goals, including user's progress",
+      "properties": {
+        "completed": {
+          "description": "Whether the goal has been completed by the user",
+          "type": "boolean"
+        },
+        "maxXp": {
+          "description": "Total EXP for this goal",
+          "type": "integer"
+        },
+        "meta": {
+          "description": "Goal satisfication information",
+          "type": "object"
+        },
+        "text": {
+          "description": "Text to show when goal is completed",
+          "type": "string"
+        },
+        "type": {
+          "description": "Goal type",
+          "type": "string"
+        },
+        "uuid": {
+          "description": "Goal UUID",
+          "format": "uuid",
+          "type": "string"
+        },
+        "xp": {
+          "description": "EXP currently attained by the user for this goal",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "maxXp",
+        "xp",
+        "completed"
+      ],
+      "type": "object"
+    },
+    "AutogradingResult": {
+      "properties": {
+        "actual": {
+          "type": "string"
+        },
+        "expected": {
+          "type": "string"
+        },
+        "resultType": {
+          "$ref": "#/definitions/AutogradingResultType",
+          "description": "One of pass/fail/error"
+        }
+      },
+      "type": "object"
+    },
+    "AssessmentOverview": {
+      "properties": {
+        "closeAt": {
+          "description": "The closing date",
+          "format": "date-time",
+          "type": "string"
+        },
+        "coverImage": {
+          "description": "The URL to the cover picture",
+          "type": "string"
+        },
+        "grade": {
+          "description": "The grade earned for this assessment",
+          "type": "integer"
+        },
+        "gradedCount": {
+          "description": "The number of answers in the submission which have been graded",
+          "type": "integer"
+        },
+        "id": {
+          "description": "The assessment ID",
+          "type": "integer"
+        },
+        "isPublished": {
+          "description": "Is the assessment published?",
+          "type": "boolean"
+        },
+        "maxGrade": {
+          "description": "The maximum grade for this assessment",
+          "type": "integer"
+        },
+        "maxXp": {
+          "description": "The maximum XP for this assessment",
+          "type": "integer"
+        },
+        "number": {
+          "description": "The string identifying the relative position of this assessment",
+          "type": "string"
+        },
+        "openAt": {
+          "description": "The opening date",
+          "format": "date-time",
+          "type": "string"
+        },
+        "private": {
+          "description": "Is this an private assessment?",
+          "type": "boolean"
+        },
+        "questionCount": {
+          "description": "The number of questions in this assessment",
+          "type": "integer"
+        },
+        "reading": {
+          "description": "The reading for this assessment",
+          "type": "string"
+        },
+        "shortSummary": {
+          "description": "Short summary",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/AssessmentStatus",
+          "description": "One of 'not_attempted/attempting/attempted/submitted' indicating whether the assessment has been attempted by the current user"
+        },
+        "story": {
+          "description": "The story that should be shown for this assessment",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the assessment",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/AssessmentType",
+          "description": "The assessment type"
+        },
+        "xp": {
+          "description": "The XP earned for this assessment",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "gradedCount",
+        "questionCount",
+        "isPublished",
+        "private",
+        "coverImage",
+        "grade",
+        "xp",
+        "maxXp",
+        "maxGrade",
+        "status",
+        "closeAt",
+        "openAt",
+        "number",
+        "shortSummary",
+        "type",
+        "title",
+        "id"
+      ],
+      "type": "object"
+    },
+    "RegisterDevicePayload": {
+      "properties": {
+        "secret": {
+          "description": "Device unique secret",
+          "type": "string"
+        },
+        "title": {
+          "description": "User-given device title",
+          "type": "string"
+        },
+        "type": {
+          "description": "User type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "secret",
+        "title",
+        "type"
+      ],
+      "type": "object"
+    },
+    "SourceVariant": {
+      "enum": [
+        "default",
+        "concurrent",
+        "gpu",
+        "lazy",
+        "non-det",
+        "wasm"
+      ],
+      "type": "string"
+    },
+    "StudentInfo": {
+      "properties": {
+        "groupLeaderId": {
+          "description": "user id of group leader",
+          "type": "integer"
+        },
+        "groupName": {
+          "description": "name of student's group",
+          "type": "string"
+        },
+        "id": {
+          "description": "student id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "student name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "id"
+      ],
+      "type": "object"
+    },
+    "Asset": {
+      "description": "A path to an asset",
+      "example": "assets/hello.png",
+      "title": "Asset",
+      "type": "object"
+    },
+    "Assessment": {
+      "properties": {
+        "id": {
+          "description": "The assessment ID",
+          "type": "integer"
+        },
+        "longSummary": {
+          "description": "Long summary",
+          "type": "string"
+        },
+        "missionPDF": {
+          "description": "The URL to the assessment pdf",
+          "type": "string"
+        },
+        "number": {
+          "description": "The string identifying the relative position of this assessment",
+          "type": "string"
+        },
+        "questions": {
+          "$ref": "#/definitions/Questions",
+          "description": "The list of questions for this assessment"
+        },
+        "reading": {
+          "description": "The reading for this assessment",
+          "type": "string"
+        },
+        "story": {
+          "description": "The story that should be shown for this assessment",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the assessment",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/AssessmentType",
+          "description": "The assessment type"
+        }
+      },
+      "required": [
+        "longSummary",
+        "number",
+        "type",
+        "title",
+        "id"
+      ],
+      "type": "object"
+    },
+    "Grade": {
+      "properties": {
+        "adjustment": {
+          "description": "Grade adjustment given",
+          "type": "integer"
+        },
+        "comments": {
+          "description": "Comments given by grader",
+          "type": "string"
+        },
+        "grade": {
+          "description": "Grade awarded by autograder",
+          "type": "integer"
+        },
+        "gradedAt": {
+          "description": "Last graded at",
+          "format": "date-time",
+          "type": "string"
+        },
+        "grader": {
+          "$ref": "#/definitions/GraderInfo"
+        },
+        "xp": {
+          "description": "XP awarded by autograder",
+          "type": "integer"
+        },
+        "xpAdjustment": {
+          "description": "XP adjustment given",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "xpAdjustment"
+      ],
+      "type": "object"
+    },
+    "Tokens": {
+      "properties": {
+        "access_token": {
+          "description": "Access token with TTL of 1 hour",
+          "type": "string"
+        },
+        "refresh_token": {
+          "description": "Refresh token with TTL of 1 week",
+          "type": "string"
+        }
+      },
+      "required": [
+        "refresh_token",
+        "access_token"
+      ],
+      "title": "Tokens",
+      "type": "object"
+    },
+    "NotificationType": {
+      "enum": [
+        "new",
+        "deadline",
+        "autograded",
+        "graded",
+        "submitted",
+        "unsubmitted",
+        "new_message"
+      ],
+      "type": "string"
+    },
+    "Question": {
+      "properties": {
+        "answer": {
+          "description": "Previous answer for this question (string/int) depending on question type",
+          "type": "string_or_integer"
+        },
+        "autogradingResults": {
+          "items": {
+            "$ref": "#/definitions/AutogradingResult"
+          },
+          "type": "array"
+        },
+        "autogradingStatus": {
+          "$ref": "#/definitions/AutogradingStatus",
+          "description": "The status of the autograder"
+        },
+        "choices": {
+          "description": "MCQ choices if question type is mcq",
+          "items": {
+            "$ref": "#/definitions/MCQChoice"
+          },
+          "type": "array"
+        },
+        "comments": {
+          "description": "String of comments given to a student's answer",
+          "type": "string"
+        },
+        "content": {
+          "description": "The question content",
+          "type": "string"
+        },
+        "grade": {
+          "description": "Final grade given to this question. Only provided for students.",
+          "type": "integer"
+        },
+        "gradedAt": {
+          "description": "Last graded at",
+          "format": "date-time",
+          "type": "string"
+        },
+        "grader": {
+          "$ref": "#/definitions/GraderInfo"
+        },
+        "id": {
+          "description": "The question ID",
+          "type": "integer"
+        },
+        "library": {
+          "$ref": "#/definitions/Library",
+          "description": "The library used for this question"
+        },
+        "maxGrade": {
+          "description": "The max grade for this question",
+          "type": "integer"
+        },
+        "maxXp": {
+          "description": "The max xp for this question",
+          "type": "integer"
+        },
+        "postpend": {
+          "description": "Postpend program for programming questions",
+          "type": "string"
+        },
+        "prepend": {
+          "description": "Prepend program for programming questions",
+          "type": "string"
+        },
+        "solution": {
+          "description": "Solution to a mcq question if it belongs to path assessment",
+          "type": "integer"
+        },
+        "solutionTemplate": {
+          "description": "Solution template for programming questions",
+          "type": "string"
+        },
+        "testcases": {
+          "description": "Testcase programs for programming questions",
+          "items": {
+            "$ref": "#/definitions/Testcase"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "The question type (mcq/programming)",
+          "type": "string"
+        },
+        "xp": {
+          "description": "Final XP given to this question. Only provided for students.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "maxXp",
+        "maxGrade",
+        "answer",
+        "content",
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "Goal": {
+      "description": "Goals, including user's progress",
+      "properties": {
+        "maxXp": {
+          "description": "Total EXP for this goal",
+          "type": "integer"
+        },
+        "meta": {
+          "description": "Goal satisfication information",
+          "type": "object"
+        },
+        "text": {
+          "description": "Text to show when goal is completed",
+          "type": "string"
+        },
+        "type": {
+          "description": "Goal type",
+          "type": "string"
+        },
+        "uuid": {
+          "description": "Goal UUID",
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserStory": {
+      "properties": {
+        "playStory": {
+          "description": "Whether story should be played (false indicates story field should only be used to fetch assets, display open world view)",
+          "type": "boolean"
+        },
+        "story": {
+          "description": "Name of story to be displayed to current user. May only be null before start of semester when no assessments are open",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AssetURL": {
+      "description": "A URL to an uploaded asset",
+      "example": "https://bucket-name.s3.amazonaws.com/assets/hello.png",
+      "title": "Asset URL",
+      "type": "string"
+    },
+    "Testcase": {
+      "properties": {
+        "answer": {
+          "type": "string"
+        },
+        "program": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer"
+        },
+        "type": {
+          "$ref": "#/definitions/TestcaseType",
+          "description": "One of public/hidden/private"
+        }
+      },
+      "type": "object"
+    },
+    "GraderInfo": {
+      "properties": {
+        "id": {
+          "description": "grader id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "grader name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "id"
+      ],
+      "type": "object"
+    },
+    "WebSocketEndpoint": {
+      "properties": {
+        "clientNamePrefix": {
+          "description": "Client name prefix to use",
+          "type": "string"
+        },
+        "endpoint": {
+          "description": "Endpoint URL",
+          "type": "string"
+        },
+        "thingName": {
+          "description": "Device name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "thingName",
+        "clientNamePrefix",
+        "endpoint"
+      ],
+      "type": "object"
+    },
+    "AutogradingResultType": {
+      "enum": [
+        "pass",
+        "fail",
+        "error"
+      ],
+      "type": "string"
+    },
+    "EditDevicePayload": {
+      "properties": {
+        "title": {
+          "description": "User-given device title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "type": "object"
+    },
+    "Assets": {
+      "description": "An array of asset paths",
+      "items": {
+        "$ref": "#/definitions/Asset"
+      },
+      "title": "Assets",
+      "type": "array"
+    },
+    "AdminSublanguage": {
+      "example": {
+        "chapter": 2,
+        "variant": "lazy"
+      },
+      "properties": {
+        "chapter": {
+          "description": "Chapter number from 1 to 4",
+          "maximum": 4,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "variant": {
+          "$ref": "#/definitions/SourceVariant",
+          "description": "Variant name"
+        }
+      },
+      "required": [
+        "variant",
+        "chapter"
+      ],
+      "title": "AdminSublanguage",
+      "type": "object"
+    },
+    "TestcaseType": {
+      "enum": [
+        "public",
+        "hidden",
+        "private"
+      ],
+      "type": "string"
+    },
+    "AdminUpdateAssessmentPayload": {
+      "properties": {
+        "closeAt": {
+          "description": "Open date",
+          "type": "string"
+        },
+        "isPublished": {
+          "description": "Whether the assessment is published",
+          "type": "boolean"
+        },
+        "openAt": {
+          "description": "Close date",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserGameStates": {
+      "type": "object"
+    },
+    "RefreshToken": {
+      "properties": {
+        "refresh_token": {
+          "description": "Refresh token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "refresh_token"
+      ],
+      "title": "Refresh Token",
+      "type": "object"
+    },
+    "GradingInfo": {
+      "description": "A list of questions with submitted answers, solution and previous grading info if available",
+      "items": {
+        "properties": {
+          "grade": {
+            "$ref": "#/definitions/Grade",
+            "description": "Grading information"
+          },
+          "maxGrade": {
+            "description": "the max grade that can be given to this question",
+            "type": "integer"
+          },
+          "maxXp": {
+            "description": "the max xp that can be given to this question",
+            "type": "integer"
+          },
+          "question": {
+            "$ref": "#/definitions/Question",
+            "description": "Question"
+          },
+          "solution": {
+            "description": "the marking scheme and model solution to this question. Only available for programming questions",
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/definitions/StudentInfo",
+            "description": "Student"
+          }
+        },
+        "required": [
+          "maxXp",
+          "maxGrade",
+          "solution",
+          "student",
+          "grade",
+          "question"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "Questions": {
+      "description": "A list of questions",
+      "items": {
+        "$ref": "#/definitions/Question"
+      },
+      "type": "array"
+    },
+    "Story": {
+      "properties": {
+        "closeAt": {
+          "description": "The closing date",
+          "format": "date-time",
+          "type": "string"
+        },
+        "filenames": {
+          "description": "Filenames of txt files",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "imageUrl": {
+          "description": "Path to image shown in Chapter Select Screen",
+          "type": "string"
+        },
+        "isPublished": {
+          "description": "Whether or not is published",
+          "type": "boolean"
+        },
+        "openAt": {
+          "description": "The opening date",
+          "format": "date-time",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title shown in Chapter Select Screen",
+          "type": "string"
+        }
+      },
+      "required": [
+        "closeAt",
+        "openAt",
+        "title",
+        "filenames"
+      ],
+      "type": "object"
+    },
+    "Sublanguage": {
+      "example": {
+        "chapter": 1,
+        "variant": "default"
+      },
+      "properties": {
+        "chapter": {
+          "description": "Chapter number from 1 to 4",
+          "maximum": 4,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "variant": {
+          "$ref": "#/definitions/SourceVariant",
+          "description": "Variant name"
+        }
+      },
+      "required": [
+        "variant",
+        "chapter"
+      ],
+      "title": "Sublanguage",
+      "type": "object"
+    },
+    "NotificationIds": {
+      "properties": {
+        "notificationIds": {
+          "description": "the notification ids",
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Device": {
+      "properties": {
+        "id": {
+          "description": "Device ID (unique to user)",
+          "type": "integer"
+        },
+        "secret": {
+          "description": "Device unique secret",
+          "type": "string"
+        },
+        "title": {
+          "description": "User-given device title",
+          "type": "string"
+        },
+        "type": {
+          "description": "User type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "secret",
+        "title",
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "AutogradingStatus": {
+      "enum": [
+        "none",
+        "processing",
+        "success",
+        "failed"
+      ],
+      "type": "string"
+    },
+    "Notification": {
+      "description": "Information about a single notification",
+      "properties": {
+        "assessment": {
+          "$ref": "#/definitions/AssessmentInfo",
+          "description": "the assessment the notification references"
+        },
+        "assessment_id": {
+          "description": "the assessment id the notification references",
+          "type": "integer"
+        },
+        "id": {
+          "description": "the notification id",
+          "type": "integer"
+        },
+        "question_id": {
+          "description": "the question id the notification references",
+          "type": "integer"
+        },
+        "read": {
+          "description": "the read status of the notification",
+          "type": "boolean"
+        },
+        "submission_id": {
+          "description": "the submission id the notification references",
+          "type": "integer"
+        },
+        "type": {
+          "$ref": "#/definitions/NotificationType",
+          "description": "the type of the notification"
+        }
+      },
+      "required": [
+        "submission_id",
+        "read",
+        "type",
+        "id"
+      ],
+      "title": "Notification",
+      "type": "object"
+    },
+    "AssessmentStatus": {
+      "enum": [
+        "not_attempted",
+        "attempting",
+        "attempted",
+        "submitted"
+      ],
+      "type": "string"
+    },
+    "Grading": {
+      "properties": {
+        "grading": {
+          "properties": {
+            "adjustment": {
+              "description": "Grade adjustment given",
+              "type": "integer"
+            },
+            "comments": {
+              "description": "Comments given by grader",
+              "type": "string"
+            },
+            "xpAdjustment": {
+              "description": "XP adjustment given",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "AchievementView": {
+      "description": "Achievement view properties",
+      "properties": {
+        "completionText": {
+          "description": "Text to show when achievement is completed",
+          "type": "string"
+        },
+        "coverImage": {
+          "description": "URL of the image for the view",
+          "type": "string"
+        },
+        "description": {
+          "description": "Achievement description",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Sourcecast": {
+      "properties": {
+        "audio": {
+          "description": "audio file",
+          "type": "file"
+        },
+        "description": {
+          "description": "description",
+          "type": "string"
+        },
+        "playbackData": {
+          "description": "playback data",
+          "type": "string"
+        },
+        "title": {
+          "description": "title",
+          "type": "string"
+        },
+        "uid": {
+          "description": "uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "audio",
+        "playbackData",
+        "title"
+      ],
+      "type": "object"
+    },
+    "Submissions": {
+      "items": {
+        "$ref": "#/definitions/Submission"
+      },
+      "type": "array"
+    },
+    "ExternalLibrary": {
+      "properties": {
+        "name": {
+          "description": "Name of the external library",
+          "type": "string"
+        },
+        "symbols": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Submission": {
+      "properties": {
+        "adjustment": {
+          "description": "Grade adjustment given",
+          "type": "integer"
+        },
+        "assessment": {
+          "$ref": "#/definitions/AssessmentInfo",
+          "description": "Assessment for which the submission is for"
+        },
+        "grade": {
+          "description": "Grade given",
+          "type": "integer"
+        },
+        "gradedCount": {
+          "description": "Number of questions in this submission that have been graded",
+          "type": "integer"
+        },
+        "id": {
+          "description": "Submission id",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/definitions/AssessmentStatus",
+          "description": "One of 'not_attempted/attempting/attempted/submitted' indicating whether the assessment has been attempted by the current user"
+        },
+        "student": {
+          "$ref": "#/definitions/StudentInfo",
+          "description": "Student who created the submission"
+        },
+        "unsubmittedAt": {
+          "description": "Last unsubmitted at",
+          "format": "date-time",
+          "type": "string"
+        },
+        "unsubmittedBy": {
+          "$ref": "#/definitions/GraderInfo"
+        },
+        "xp": {
+          "description": "XP earned",
+          "type": "integer"
+        },
+        "xpAdjustment": {
+          "description": "XP adjustment given",
+          "type": "integer"
+        },
+        "xpBonus": {
+          "description": "Bonus XP for a given submission",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "student",
+        "assessment",
+        "gradedCount",
+        "status",
+        "adjustment",
+        "xpAdjustment",
+        "xpBonus",
+        "xp",
+        "grade",
+        "id"
+      ],
+      "type": "object"
+    },
+    "UnlockAssessmentPayload": {
+      "properties": {
+        "password": {
+          "description": "Password",
+          "type": "string"
+        }
+      },
+      "required": [
+        "password"
+      ],
+      "type": "object"
+    },
+    "AdminUserInfo": {
+      "description": "Basic information about the user",
+      "properties": {
+        "group": {
+          "description": "Group the user belongs to. May be null if the user does not belong to any group",
+          "type": "string"
+        },
+        "name": {
+          "description": "Full name of the user",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role of the user. Can be 'student', 'staff', or 'admin'",
+          "type": "string"
+        },
+        "userId": {
+          "description": "User's ID",
+          "type": "integer"
+        }
+      },
+      "title": "User",
+      "type": "object"
+    },
+    "MCQChoice": {
+      "properties": {
+        "content": {
+          "description": "The choice content",
+          "type": "string"
+        },
+        "hint": {
+          "description": "The hint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hint",
+        "content"
+      ],
+      "type": "object"
+    },
+    "UserInfo": {
+      "description": "Basic information about the user",
+      "properties": {
+        "game_states": {
+          "$ref": "#/definitions/UserGameStates",
+          "description": "States for user's game, including users' game progress, settings and collectibles.\n"
+        },
+        "grade": {
+          "description": "Amount of grade. Only provided for 'Student'. Value will be 0 for non-students.",
+          "type": "integer"
+        },
+        "group": {
+          "description": "Group the user belongs to. May be null if the user does not belong to any group.",
+          "type": "string"
+        },
+        "maxGrade": {
+          "description": "Total maximum grade achievable based on submitted assessments. Only provided for 'Student'",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Full name of the user",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role of the user. Can be 'Student', 'Staff', or 'Admin'",
+          "type": "string"
+        },
+        "story": {
+          "$ref": "#/definitions/UserStory",
+          "description": "Story to displayed to current user. "
+        },
+        "userId": {
+          "description": "User's ID",
+          "type": "integer"
+        },
+        "xp": {
+          "description": "Amount of xp. Only provided for 'Student'. Value will be 0 for non-students.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "group",
+        "role",
+        "name",
+        "userId"
+      ],
+      "title": "User",
+      "type": "object"
+    },
+    "Answer": {
+      "properties": {
+        "answer": {
+          "description": "answer of appropriate type depending on question type",
+          "type": "string_or_integer"
+        }
+      },
+      "required": [
+        "answer"
+      ],
+      "type": "object"
+    },
+    "Library": {
+      "properties": {
+        "chapter": {
+          "type": "integer"
+        },
+        "external": {
+          "$ref": "#/definitions/ExternalLibrary",
+          "description": "The external library for this question"
+        },
+        "globals": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Achievement": {
+      "description": "An achievement",
+      "properties": {
+        "ability": {
+          "description": "Achievement ability i.e. category",
+          "type": "string"
+        },
+        "cardBackground": {
+          "description": "URL of the achievement's background image",
+          "type": "string"
+        },
+        "deadline": {
+          "description": "Close date, in ISO 8601 format",
+          "type": "string"
+        },
+        "goalUuids": {
+          "description": "Goal UUIDs",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "isTask": {
+          "description": "Whether the achievement is a task",
+          "type": "boolean"
+        },
+        "position": {
+          "description": "Position of the achievement in the list",
+          "type": "integer"
+        },
+        "prerequisiteUuids": {
+          "description": "Prerequisite achievement UUIDs",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "release": {
+          "description": "Open date, in ISO 8601 format",
+          "type": "string"
+        },
+        "title": {
+          "description": "Achievement title",
+          "type": "string"
+        },
+        "uuid": {
+          "description": "Achievement UUID",
+          "format": "uuid",
+          "type": "string"
+        },
+        "view": {
+          "$ref": "#/definitions/AchievementView",
+          "description": "View properties"
+        }
+      },
+      "required": [
+        "view",
+        "position",
+        "isTask",
+        "ability",
+        "title"
+      ],
+      "type": "object"
+    },
+    "GradingSummary": {
+      "description": "Summary of grading items for current user as the grader",
+      "properties": {
+        "groupName": {
+          "description": "Name of group this grader is in",
+          "type": "string"
+        },
+        "leaderName": {
+          "description": "Name of group leader",
+          "type": "string"
+        },
+        "submittedMissions": {
+          "description": "Number of submitted missions",
+          "type": "integer"
+        },
+        "submittedSidequests": {
+          "description": "Number of submitted sidequests",
+          "type": "integer"
+        },
+        "ungradedMissions": {
+          "description": "Number of ungraded missions",
+          "type": "integer"
+        },
+        "ungradedSidequests": {
+          "description": "Number of ungraded sidequests",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ungradedSidequests",
+        "ungradedMissions",
+        "submittedSidequests",
+        "submittedMissions",
+        "leaderName",
+        "groupName"
+      ],
+      "type": "object"
+    }
+  },
+  "info": {
+    "title": "cadet",
+    "version": "2.0"
+  },
+  "paths": {
+    "/self/goals": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.IncentivesController.index_goals",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/GoalWithProgress"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Gets goals, including user's progress",
+        "tags": [
+          "Incentives"
+        ]
+      }
+    },
+    "/assessments/{assessmentId}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AssessmentsController.show",
+        "parameters": [
+          {
+            "description": "Assessment ID",
+            "in": "path",
+            "name": "assessmentId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Assessment"
+            }
+          },
+          "400": {
+            "description": "Missing parameter(s) or invalid assessmentId"
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get information about one particular assessment",
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/assessments/question/{questionId}/answer": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "For MCQ, answer contains choice_id. For programming question, this is a string containing the student's code.",
+        "operationId": "CadetWeb.AnswerController.submit",
+        "parameters": [
+          {
+            "description": "question id",
+            "in": "path",
+            "name": "questionId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "answer",
+            "in": "body",
+            "name": "answer",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "403": {
+            "description": "User not permitted to answer questions or assessment not open"
+          },
+          "404": {
+            "description": "Question not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Submit an answer to a question",
+        "tags": [
+          "Answer"
+        ]
+      }
+    },
+    "/admin/grading/{submissionId}/{questionId}": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.update",
+        "parameters": [
+          {
+            "description": "submission id",
+            "in": "path",
+            "name": "submissionId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "question id",
+            "in": "path",
+            "name": "questionId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "adjustments for a question",
+            "in": "body",
+            "name": "grading",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Grading"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid or missing parameter(s) or submission and/or question not found"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Update marks given to the answer of a particular question in a submission",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/devices/{secret}/client_id": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.get_client_id",
+        "parameters": [
+          {
+            "description": "Device secret",
+            "in": "path",
+            "name": "secret",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "summary": "Returns the device's MQTT client ID",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/settings/sublanguage": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.SettingsController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Sublanguage"
+            }
+          }
+        },
+        "summary": "Retrieves the default Source sublanguage of the Playground",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/devices/{secret}/mqtt_endpoint": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.get_mqtt_endpoint",
+        "parameters": [
+          {
+            "description": "Device secret",
+            "in": "path",
+            "name": "secret",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "summary": "Returns the MQTT endpoint the device should connect to",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get a set of access and refresh tokens, using the authentication code from the OAuth2 provider. When accessing resources, pass the access token in the Authorization HTTP header using the Bearer schema: `Authorization: Bearer <token>`.",
+        "operationId": "CadetWeb.AuthController.create",
+        "parameters": [
+          {
+            "description": "OAuth2 code",
+            "in": "query",
+            "name": "code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "OAuth2 provider ID",
+            "in": "query",
+            "name": "provider",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "OAuth2 client ID",
+            "in": "query",
+            "name": "client_id",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "OAuth2 redirect URI",
+            "in": "query",
+            "name": "redirect_uri",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tokens"
+            }
+          },
+          "400": {
+            "description": "Missing or invalid parameters or credentials, or upstream error"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Obtain access and refresh tokens to authenticate user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/achievements": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.IncentivesController.index_achievements",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Achievement"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Gets achievements",
+        "tags": [
+          "Incentives"
+        ]
+      }
+    },
+    "/devices/{id}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.deregister",
+        "parameters": [
+          {
+            "description": "Device ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Unregisters the given device",
+        "tags": [
+          "Devices"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.edit",
+        "parameters": [
+          {
+            "description": "Device ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Device details",
+            "in": "body",
+            "name": "device",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditDevicePayload"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Missing or invalid parameters"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Edits the given device",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/user": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.UserController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserInfo"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get the name, role and group of a user",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/devices/{secret}/key": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.get_key",
+        "parameters": [
+          {
+            "description": "Device secret",
+            "in": "path",
+            "name": "secret",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "summary": "Returns the device's PEM-encoded client key",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/user/game_states": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.UserController.update_game_states",
+        "parameters": [
+          {
+            "description": "new game states",
+            "in": "body",
+            "name": "gameStates",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserGameStates"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Update user's game states",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/assessments/{assessmentId}/unlock": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AssessmentsController.unlock",
+        "parameters": [
+          {
+            "description": "Assessment ID",
+            "in": "path",
+            "name": "assessmentId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Password to unlock assessment",
+            "in": "body",
+            "name": "password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UnlockAssessmentPayload"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Assessment"
+            }
+          },
+          "400": {
+            "description": "Missing parameter(s) or invalid assessmentId"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Password incorrect"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Unlocks a password-protected assessment and returns its information",
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AuthController.refresh",
+        "parameters": [
+          {
+            "description": "Refresh token obtained from /auth/login",
+            "in": "body",
+            "name": "refresh_token",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshToken"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tokens"
+            }
+          },
+          "400": {
+            "description": "Missing parameter(s)"
+          },
+          "401": {
+            "description": "Invalid refresh token"
+          }
+        },
+        "summary": "Obtain a new access token using a refresh token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/stories": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.StoriesController.index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Story"
+              },
+              "type": "array"
+            }
+          },
+          "403": {
+            "description": "User not allowed to manage stories"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get a list of all stories",
+        "tags": [
+          "Stories"
+        ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.StoriesController.create",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Story"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "403": {
+            "description": "User not allowed to manage stories"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Creates a new story",
+        "tags": [
+          "Stories"
+        ]
+      }
+    },
+    "/admin/goals/{uuid}": {
+      "delete": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGoalsController.delete",
+        "parameters": [
+          {
+            "description": "Goal UUID",
+            "format": "uuid",
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Goal not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Deletes a goal",
+        "tags": [
+          "AdminGoals"
+        ]
+      },
+      "put": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGoalsController.update",
+        "parameters": [
+          {
+            "description": "Goal UUID",
+            "format": "uuid",
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The goal to insert, or properties to update",
+            "in": "body",
+            "name": "goal",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Goal"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Inserts or updates a goal",
+        "tags": [
+          "AdminGoals"
+        ]
+      }
+    },
+    "/admin/grading/{submissionId}/{questionId}/autograde": {
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.autograde_answer",
+        "parameters": [
+          {
+            "description": "submission id",
+            "in": "path",
+            "name": "submissionId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "question id",
+            "in": "path",
+            "name": "questionId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid parameters or submission not submitted"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Answer not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Force re-autograding of a question in a submission",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/devices/{id}/ws_endpoint": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.get_ws_endpoint",
+        "parameters": [
+          {
+            "description": "Device ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/WebSocketEndpoint"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Generates a WebSocket endpoint URL for the given device",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/notifications": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.NotificationsController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Notification"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get the unread notifications belonging to a user",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/admin/assessments/{assessmentId}": {
+      "delete": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAssessmentsController.delete",
+        "parameters": [
+          {
+            "description": "Assessment ID",
+            "in": "path",
+            "name": "assessmentId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Deletes an assessment",
+        "tags": [
+          "AdminAssessments"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AdminAssessmentsController.update",
+        "parameters": [
+          {
+            "description": "Assessment ID",
+            "in": "path",
+            "name": "assessmentId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Updated assessment details",
+            "in": "body",
+            "name": "assessment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminUpdateAssessmentPayload"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Assessment is already opened"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Updates an assessment",
+        "tags": [
+          "AdminAssessments"
+        ]
+      }
+    },
+    "/admin/settings/sublanguage": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AdminSettingsController.update",
+        "parameters": [
+          {
+            "description": "sublanguage object",
+            "in": "body",
+            "name": "sublanguage",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminSublanguage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Missing or invalid parameter(s)"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Updates the default Source sublanguage of the Playground",
+        "tags": [
+          "AdminSettings"
+        ]
+      }
+    },
+    "/admin/grading": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.index",
+        "parameters": [
+          {
+            "description": "Show only students in the grader's group when true",
+            "in": "query",
+            "name": "group",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Submissions"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get a list of all submissions with current user as the grader",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/admin/achievements/{uuid}": {
+      "delete": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAchievementsController.delete",
+        "parameters": [
+          {
+            "description": "Achievement UUID",
+            "format": "uuid",
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Achievement not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Deletes an achievement",
+        "tags": [
+          "AdminAchievements"
+        ]
+      },
+      "put": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAchievementsController.update",
+        "parameters": [
+          {
+            "description": "Achievement UUID; takes precendence over UUID in payload",
+            "format": "uuid",
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The achievement to insert, or properties to update",
+            "in": "body",
+            "name": "achievement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Achievement"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Inserts or updates an achievement",
+        "tags": [
+          "AdminAchievements"
+        ]
+      }
+    },
+    "/admin/assessments": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AdminAssessmentsController.create",
+        "parameters": [
+          {
+            "description": "Assessment to create or update",
+            "in": "formData",
+            "name": "assessment",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Force update",
+            "in": "formData",
+            "name": "forceUpdate",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "XML parse error"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Creates a new assessment or updates an existing assessment",
+        "tags": [
+          "AdminAssessments"
+        ]
+      }
+    },
+    "/devices/{secret}/cert": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.get_cert",
+        "parameters": [
+          {
+            "description": "Device secret",
+            "in": "path",
+            "name": "secret",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Device not found"
+          }
+        },
+        "summary": "Returns the device's PEM-encoded client certificate",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.AuthController.logout",
+        "parameters": [
+          {
+            "description": "Refresh token to be invalidated",
+            "in": "body",
+            "name": "tokens",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshToken"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Missing parameter(s)"
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        },
+        "summary": "Logout and invalidate the tokens",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/devices": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Device"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Returns the devices registered by the user",
+        "tags": [
+          "Devices"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.DevicesController.register",
+        "parameters": [
+          {
+            "description": "Device details",
+            "in": "body",
+            "name": "device",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterDevicePayload"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          },
+          "400": {
+            "description": "Conflicting device type or missing or invalid parameters"
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Registers a new device",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/admin/grading/{submissionId}": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.show",
+        "parameters": [
+          {
+            "description": "submission id",
+            "in": "path",
+            "name": "submissionId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GradingInfo"
+            }
+          },
+          "400": {
+            "description": "Invalid or missing parameter(s) or submission and/or question not found"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get information about a specific submission to be graded",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/admin/users": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AdminUserController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AdminUserInfo"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Returns a list of users",
+        "tags": [
+          "AdminUser"
+        ]
+      }
+    },
+    "/admin/grading/{submissionId}/autograde": {
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.autograde_submission",
+        "parameters": [
+          {
+            "description": "submission id",
+            "in": "path",
+            "name": "submissionId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Invalid parameters or submission not submitted"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Submission not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Force re-autograding of an entire submission",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/sourcecast/{id}": {
+      "delete": {
+        "description": "Deletes sourcecast by id",
+        "operationId": "CadetWeb.SourcecastController.delete",
+        "parameters": [
+          {
+            "description": "sourcecast id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid or missing parameter(s)"
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Delete sourcecast",
+        "tags": [
+          "Sourcecast"
+        ]
+      }
+    },
+    "/notifications/acknowledge": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "CadetWeb.NotificationsController.acknowledge",
+        "parameters": [
+          {
+            "description": "notification ids",
+            "in": "body",
+            "name": "notificationIds",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NotificationIds"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "404": {
+            "description": "Notification does not exist or does not belong to\n    user"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Acknowledge notification(s)",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/assessments": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AssessmentsController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AssessmentsList"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get a list of all assessments",
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/assessments/{assessmentId}/submit": {
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.AssessmentsController.submit",
+        "parameters": [
+          {
+            "description": "Assessment ID",
+            "in": "path",
+            "name": "assessmentId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters or incomplete submission (submission with unanswered questions)"
+          },
+          "403": {
+            "description": "User not permitted to answer questions or assessment not open"
+          },
+          "404": {
+            "description": "Submission not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Finalise submission for an assessment",
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/admin/achievements": {
+      "put": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAchievementsController.bulk_update",
+        "parameters": [
+          {
+            "description": "The achievements to insert or sets of properties to update",
+            "in": "body",
+            "name": "achievement",
+            "required": true,
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Achievement"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Inserts or updates achievements",
+        "tags": [
+          "AdminAchievements"
+        ]
+      }
+    },
+    "/admin/assets/{foldername}": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAssetsController.index",
+        "parameters": [
+          {
+            "description": "Folder name",
+            "in": "path",
+            "name": "foldername",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Assets"
+            }
+          },
+          "400": {
+            "description": "Invalid folder name"
+          },
+          "403": {
+            "description": "User is not allowed to manage assets"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get a list of all assets in a folder",
+        "tags": [
+          "AdminAssets"
+        ]
+      }
+    },
+    "/stories/{storyid}": {
+      "delete": {
+        "description": "",
+        "operationId": "CadetWeb.StoriesController.delete",
+        "parameters": [
+          {
+            "description": "Story Id",
+            "in": "path",
+            "name": "storyid",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "User not allowed to manage stories"
+          },
+          "404": {
+            "description": "Story not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Delete a story from database by id",
+        "tags": [
+          "Stories"
+        ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.StoriesController.update",
+        "parameters": [
+          {
+            "description": "Story Id",
+            "in": "path",
+            "name": "storyid",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Story"
+            }
+          },
+          "403": {
+            "description": "User not allowed to manage stories"
+          },
+          "404": {
+            "description": "Story not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Update details regarding a story",
+        "tags": [
+          "Stories"
+        ]
+      }
+    },
+    "/admin/grading/{submissionId}/unsubmit": {
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.unsubmit",
+        "parameters": [
+          {
+            "description": "submission id",
+            "in": "path",
+            "name": "submissionId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Submission not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Unsubmit submission. Can only be done by the Avenger of a student",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/admin/assets/{foldername}/{filename}": {
+      "delete": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAssetsController.delete",
+        "parameters": [
+          {
+            "description": "Folder name",
+            "in": "path",
+            "name": "foldername",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "File path in folder, which may contain subfolders",
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid folder name, file name or file type"
+          },
+          "403": {
+            "description": "User is not allowed to manage assets"
+          },
+          "404": {
+            "description": "File not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Delete a file from an asset folder",
+        "tags": [
+          "AdminAssets"
+        ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "CadetWeb.AdminAssetsController.upload",
+        "parameters": [
+          {
+            "description": "Folder name",
+            "in": "path",
+            "name": "foldername",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "File path in folder, which may contain subfolders",
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AssetURL"
+            }
+          },
+          "400": {
+            "description": "Invalid folder name, file name or file type"
+          },
+          "403": {
+            "description": "User is not allowed to manage assets"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Upload a file to an asset folder",
+        "tags": [
+          "AdminAssets"
+        ]
+      }
+    },
+    "/admin/grading/summary": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGradingController.grading_summary",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/GradingSummary"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Invalid or missing parameter(s) or submission and/or question not found"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Receives a summary of grading items done by this grader",
+        "tags": [
+          "AdminGrading"
+        ]
+      }
+    },
+    "/sourcecast": {
+      "get": {
+        "description": "Lists all sourcecasts",
+        "operationId": "CadetWeb.SourcecastController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid or missing parameter(s)"
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Show all sourcecasts",
+        "tags": [
+          "Sourcecast"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "description": "Uploads sourcecast",
+        "operationId": "CadetWeb.SourcecastController.create",
+        "parameters": [
+          {
+            "description": "sourcecast object",
+            "in": "body",
+            "name": "sourcecast",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Sourcecast"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid or missing parameter(s)"
+          },
+          "401": {
+            "description": "Unauthorised"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Upload sourcecast",
+        "tags": [
+          "Sourcecast"
+        ]
+      }
+    },
+    "/admin/goals": {
+      "get": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGoalsController.index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Goal"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Gets goals",
+        "tags": [
+          "AdminGoals"
+        ]
+      },
+      "put": {
+        "description": "",
+        "operationId": "CadetWeb.AdminGoalsController.bulk_update",
+        "parameters": [
+          {
+            "description": "The goals to insert or sets of properties to update",
+            "in": "body",
+            "name": "goals",
+            "required": true,
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Goal"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorised"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Inserts or updates goals",
+        "tags": [
+          "AdminGoals"
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "JWT": {
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0"
+}
