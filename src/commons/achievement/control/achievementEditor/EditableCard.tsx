@@ -1,4 +1,4 @@
-import { EditableText } from '@blueprintjs/core';
+import { EditableText, NumericInput } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useMemo, useReducer } from 'react';
 
@@ -120,6 +120,14 @@ const reducer = (state: State, action: Action) => {
         },
         isDirty: true
       };
+    case ActionType.CHANGE_XP:
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          xp: action.payload
+        },
+        isDirty: true
+      };
     default:
       return state;
   }
@@ -134,7 +142,7 @@ function EditableCard(props: EditableCardProps) {
 
   const [state, dispatch] = useReducer(reducer, achievementClone, init);
   const { editableAchievement, isDirty } = state;
-  const { ability, cardBackground, deadline, release, title, view } = editableAchievement;
+  const { ability, cardBackground, deadline, release, title, view, xp } = editableAchievement;
 
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
@@ -162,8 +170,22 @@ function EditableCard(props: EditableCardProps) {
   const changeDeadline = (deadline?: Date) =>
     dispatch({ type: ActionType.CHANGE_DEADLINE, payload: deadline });
 
-  const changeGoalUuids = (goalUuids: string[]) =>
+  const changeGoalUuids = (goalUuids: string[]) => {
     dispatch({ type: ActionType.CHANGE_GOAL_UUIDS, payload: goalUuids });
+    // add the current achievement into the goals chosen
+    goalUuids.forEach(goalUuid => {
+        const goal = inferencer.getGoal(goalUuid);
+        // iterate through the achievements, if the uuid is ot found, add it in
+        const len = goal.achievementUuids.length;
+        for (let i = 0; i < len; i++) {
+          if (goal.achievementUuids[i] === uuid) {
+            return;
+          }
+        }
+        goal.achievementUuids[len] = uuid;
+      }
+    );
+  };
 
   const changePosition = (position: number) =>
     dispatch({ type: ActionType.CHANGE_POSITION, payload: position });
@@ -179,6 +201,8 @@ function EditableCard(props: EditableCardProps) {
 
   const changeView = (view: AchievementView) =>
     dispatch({ type: ActionType.CHANGE_VIEW, payload: view });
+
+  const changeXp = (xp: number) => dispatch({ type: ActionType.CHANGE_XP, payload: xp });
 
   return (
     <li
@@ -199,6 +223,15 @@ function EditableCard(props: EditableCardProps) {
         <h3 className="title">
           <EditableText onChange={changeTitle} placeholder="Enter your title here" value={title} />
         </h3>
+        <div className="xp">
+          <NumericInput
+            value={xp}
+            min={0}
+            allowNumericCharactersOnly={true}
+            placeholder="XP"
+            onValueChange={changeXp}
+          />
+        </div>
         <div className="details">
           <EditableAbility ability={ability} changeAbility={changeAbility} />
           <EditableDate changeDate={changeRelease} date={release} type="Release" />

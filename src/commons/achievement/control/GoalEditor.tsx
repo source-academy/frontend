@@ -52,7 +52,7 @@ function GoalEditor(props: GoalEditorProps) {
       <div className="command">
         <GoalAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
       </div>
-      <ul className="goal-container">{generateEditableGoals(inferencer.getAllGoalUuids())}</ul>
+      <ul className="goal-container">{generateEditableGoals(inferencer.getAllGoalUuids().reverse())}</ul>
     </div>
   );
 }

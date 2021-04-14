@@ -3,11 +3,13 @@ import { v4 } from 'uuid';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
 import {
+  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   AchievementStatus,
   defaultGoalProgress,
-  GoalDefinition
+  GoalDefinition,
+  GoalType
 } from '../../../features/achievement/AchievementTypes';
 import { isExpired } from './DateHelper';
 
@@ -17,7 +19,6 @@ import { isExpired } from './DateHelper';
  * @param {AchievementItem} achievement the achievement item
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
  * @param {number} xp attained XP of the achievement
- * @param {number} maxXp maximum attainable XP of the achievement
  * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
  * @param {Set<string>} children a set of immediate prerequisites uuid
@@ -27,7 +28,6 @@ class AchievementNode {
   public achievement: AchievementItem;
   public displayDeadline?: Date;
   public xp: number;
-  public maxXp: number;
   public progressFrac: number;
   public status: AchievementStatus;
   public children: Set<string>;
@@ -39,7 +39,6 @@ class AchievementNode {
     this.achievement = achievement;
     this.displayDeadline = deadline;
     this.xp = 0;
-    this.maxXp = 0;
     this.progressFrac = 0;
     this.status = AchievementStatus.ACTIVE;
     this.children = new Set(prerequisiteUuids);
@@ -68,10 +67,54 @@ class AchievementInferencer {
   }
 
   /**
+   * Invalid Goal for the getters to return if the goal does not exist in the goalList
+   */
+  private invalidGoal: AchievementGoal = {
+    uuid: 'invalid',
+    text: 'invalid',
+    achievementUuids: [],
+    meta: {type: GoalType.MANUAL, targetCount: 0},
+    count: 0,
+    targetCount: 0,
+    completed: false
+  }
+
+  /**
+   * Invalid Achievement for the getters to return if the goal does not exist in the goalList
+   */
+  private invalidAchievement: AchievementItem = {
+    uuid: 'invalid',
+    title: 'invalid',
+    ability: AchievementAbility.EXPLORATION,
+    xp: 0,
+    deadline: undefined,
+    release: undefined,
+    isTask: false,
+    position: 0,
+    prerequisiteUuids: [],
+    goalUuids: [],
+    cardBackground: 'invalid',
+    view: {coverImage: 'invalid', description: 'invalid', completionText: 'invalid'}
+  }
+
+  /**
    * Returns an array of AchievementItem
    */
   public getAllAchievements() {
     return [...this.nodeList.values()].map(node => node.achievement);
+  }
+
+  /**
+   * Returns an array of AchievementItem that have been released
+   */
+  public getAllReleasedAchievements() {
+    return [...this.nodeList.values()]
+      .filter(node => node.status !== AchievementStatus.UNRELEASED)
+      .map(node => node.achievement);
+  }
+
+  public getAllCompletedAchievements() {
+    return [...this.nodeList.values()].filter(node => node.status === AchievementStatus.COMPLETED).map(node => node.achievement);
   }
 
   /**
@@ -104,11 +147,13 @@ class AchievementInferencer {
 
   /**
    * Returns the AchievementItem
+   * Returns an invalid achievement item if the achievement is not in the map
    *
    * @param uuid Achievement Uuid
    */
   public getAchievement(uuid: string) {
-    return this.nodeList.get(uuid)!.achievement;
+    const node = this.nodeList.get(uuid);
+    return node ? node.achievement : this.invalidAchievement;
   }
 
   /**
@@ -120,11 +165,12 @@ class AchievementInferencer {
 
   /**
    * Returns the AchievementGoal
+   * Returns an invalid goal if the goal is not in the map
    *
    * @param uuid Goal Uuid
    */
   public getGoal(uuid: string) {
-    return this.goalList.get(uuid)!;
+    return this.goalList.get(uuid) || this.invalidGoal;
   }
 
   /**
@@ -133,7 +179,7 @@ class AchievementInferencer {
    * @param uuid Goal Uuid
    */
   public getGoalDefinition(uuid: string) {
-    return this.goalList.get(uuid)! as GoalDefinition;
+    return this.getGoal(uuid) as GoalDefinition;
   }
 
   /**
@@ -142,7 +188,7 @@ class AchievementInferencer {
    * @param uuid Achievement Uuid
    */
   public getAchievementPositionByUuid(uuid: string) {
-    return this.nodeList.get(uuid)!.achievement.position;
+    return this.getAchievement(uuid).position;
   }
 
   /**
@@ -168,6 +214,33 @@ class AchievementInferencer {
   }
 
   /**
+   * Returns an array of achievements that use the goal
+   * 
+   * @param goalUuid UUID of the goal in question
+   */
+  public getAchievementsByGoal(goalUuid: string) {
+    return this.getGoal(goalUuid).achievementUuids;
+  }
+
+  /**
+   * Returns true if the goal is invalid
+   * 
+   * @param goal An AchievementGoal
+   */
+  public isInvalidGoal(goal: AchievementGoal) {
+    return goal === this.invalidGoal;
+  }
+
+  /**
+   * Returns true if the achievement is invalid
+   * 
+   * @param achievement An AchievementItem
+   */
+  public isInvalidAchievement (achievement: AchievementItem) {
+    return achievement === this.invalidAchievement;
+  }
+
+  /**
    * Inserts a new AchievementItem into the Inferencer,
    * then returns the newly assigned achievementUuid
    *
@@ -190,6 +263,24 @@ class AchievementInferencer {
   }
 
   /**
+   * Inserts a new AchievementItem into the Inferencer,
+   * then returns the newly assigned achievementUuid.
+   * Used for inserting assessment achievements on the fly.
+   *
+   * @param achievement the AchievementItem
+   */
+  public insertFakeAchievement(achievement: AchievementItem) {
+    // and insert it into nodeList
+    this.nodeList.set(achievement.uuid, new AchievementNode(achievement));
+
+    // finally, process the nodeList
+    this.processNodes();
+    this.normalizePositions(achievement.uuid, achievement.position);
+
+    return achievement.uuid;
+  }
+
+  /**
    * Inserts a new GoalDefinition into the Inferencer,
    * then returns the newly assigned goalUuid
    *
@@ -208,6 +299,29 @@ class AchievementInferencer {
     this.processGoals();
 
     return newUuid;
+  }
+
+    /**
+   * Inserts a new GoalDefinition into the Inferencer,
+   * then returns the newly assigned goalUuid
+   * Used for inserting assessment goals on the fly
+   *
+   * @param definition the GoalDefinition
+   * @param complete whether the goal should be marked as completed or not
+   */
+  public insertFakeGoalDefinition(definition: GoalDefinition, complete: boolean) {
+    // then assign the new unique uuid by overwriting the goal item supplied by param
+    // and insert it into goalList
+    if (complete) {
+      this.goalList.set(definition.uuid, { ...definition, count: 1, targetCount: 1, completed: true});
+    } else {
+      this.goalList.set(definition.uuid, { ...definition, count: 0, targetCount: 1, completed: false});
+    }
+
+    // finally, process the goalList
+    this.processGoals();
+
+    return definition.uuid
   }
 
   /**
@@ -255,9 +369,14 @@ class AchievementInferencer {
       return new AchievementNode(node.achievement);
     };
 
-    // first, remove achievement from node list
+    // first, remove the references to this achievement from the goals
+    this.getAchievement(targetUuid).goalUuids.forEach(goalUuid => {
+      const goal = this.getGoal(goalUuid);
+      goal.achievementUuids = goal.achievementUuids.filter(uuid => uuid !== targetUuid);
+    });
+    // then, remove achievement from node list
     this.nodeList.delete(targetUuid);
-    // then, remove reference of the target in other achievement's prerequisite
+    // finally, remove reference of the target in other achievement's prerequisite
     this.nodeList.forEach((node, uuid) => {
       if (hasTarget(node)) {
         this.nodeList.set(uuid, sanitizeNode(node));
@@ -302,22 +421,53 @@ class AchievementInferencer {
   }
 
   /**
-   * Returns an array of achievementUuid that isTask
+   * Returns an array of achievementUuid that isTask or is completed
    */
   public listTaskUuids() {
     return this.getAllAchievements()
-      .filter(achievement => achievement.isTask)
+      .filter(achievement => achievement.isTask || this.isCompleted(achievement))
       .map(task => task.uuid);
   }
 
+
   /**
-   * Returns an array of achievementId that isTask sorted by position
+   * Returns an array of achievementId that isTask or is completed sorted by position
    */
-  public listSortedTaskUuids() {
+   public listSortedTaskUuids() {
     return this.getAllAchievements()
-      .filter(achievement => achievement.isTask)
+      .filter(achievement => achievement.isTask || this.isCompleted(achievement))
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .map(sortedTask => sortedTask.uuid);
+  }
+
+  /**
+   * Returns an array of achievementId that isTask or is completed sorted by position
+   */
+  public listSortedReleasedTaskUuids() {
+    return this.getAllReleasedAchievements()
+      .filter(achievement => achievement.isTask || this.isCompleted(achievement))
+      .sort((taskA, taskB) => taskA.position - taskB.position)
+      .map(sortedTask => sortedTask.uuid);
+  }
+
+  /**
+   * Returns whether an achievement is completed or not.
+   *
+   * NOTE: It might be better (more efficient) to simply have a completed proporty on each achievement.
+   */
+  private isCompleted(achievement: AchievementItem) {
+    const goalLength = achievement.goalUuids.length;
+    // an achievement with no goals should not be considered complete
+    if (goalLength === 0) {
+      return false;
+    }
+    // if any of the goals are not complete, return false
+    for (let i = 0; i < goalLength; i++) {
+      if (!this.getGoal(achievement.goalUuids[i]).completed) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -360,7 +510,7 @@ class AchievementInferencer {
    * @param text goalUuid
    */
   public getTextByUuid(uuid: string) {
-    return this.goalList.get(uuid)?.text;
+    return this.getGoal(uuid).text;
   }
 
   /**
@@ -378,7 +528,7 @@ class AchievementInferencer {
    * @param text achievementUuid
    */
   public getTitleByUuid(uuid: string) {
-    return this.nodeList.get(uuid)?.achievement.title;
+    return this.getAchievement(uuid).title;
   }
 
   /**
@@ -387,26 +537,14 @@ class AchievementInferencer {
    * @param uuid Achievement Uuid
    */
   public getAchievementXp(uuid: string) {
-    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.xp : 0;
+    return this.getAchievement(uuid).xp;
   }
 
   /**
-   * Returns the maximum attainable XP from the achievement
-   *
-   * @param uuid Achievement Uuid
-   */
-  public getAchievementMaxXp(uuid: string) {
-    return this.nodeList.has(uuid) ? this.nodeList.get(uuid)!.maxXp : 0;
-  }
-
-  /**
-   * Returns total XP earned from all goals
-   *
-   * Note: Goals that do not belong to any achievement is also added into the total XP
-   * calculation
+   * Returns total XP earned from all achievements
    */
   public getTotalXp() {
-    return this.getAllGoals().reduce((totalXp, goal) => totalXp + goal.xp, 0);
+    return this.getAllCompletedAchievements().reduce((totalXp, achievement) => totalXp + achievement.xp, 0);
   }
 
   /**
@@ -501,7 +639,7 @@ class AchievementInferencer {
 
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
-      this.generateXpAndMaxXp(node);
+      this.generateXp(node);
       this.generateProgressFrac(node);
       this.generateStatus(node);
     });
@@ -602,14 +740,17 @@ class AchievementInferencer {
   }
 
   /**
-   * Calculates the achievement attained XP and maximum attainable XP
+   * Calculates the achievement attained XP
    *
    * @param node the AchievementNode
    */
-  private generateXpAndMaxXp(node: AchievementNode) {
+  private generateXp(node: AchievementNode) {
     const { goalUuids } = node.achievement;
-    node.xp = goalUuids.reduce((xp, goalUuid) => xp + this.getGoal(goalUuid).xp, 0);
-    node.maxXp = goalUuids.reduce((maxXp, goalUuid) => maxXp + this.getGoal(goalUuid).maxXp, 0);
+    const allGoalsCompleted = goalUuids.reduce(
+      (completion, goalUuid) => completion && this.getGoal(goalUuid).completed,
+      true
+    );
+    node.xp = allGoalsCompleted ? node.achievement.xp : 0;
   }
 
   /**
@@ -619,9 +760,13 @@ class AchievementInferencer {
    */
   private generateProgressFrac(node: AchievementNode) {
     const { goalUuids } = node.achievement;
-    const xp = goalUuids.reduce((xp, goalUuid) => xp + this.getGoal(goalUuid).xp, 0);
-
-    node.progressFrac = node.maxXp === 0 ? 0 : Math.min(xp / node.maxXp, 1);
+    if (goalUuids.length === 0) {
+      node.progressFrac = 0;
+    } else {
+      const num = goalUuids.reduce((count, goalUuid) => count + this.getGoal(goalUuid).count, 0);
+      const denom = goalUuids.reduce((count, goalUuid) => count + this.getGoal(goalUuid).targetCount, 0);
+      node.progressFrac = Math.min(denom === 0 ? 0 : num / denom, 1);
+    }
   }
 
   /**
@@ -642,13 +787,16 @@ class AchievementInferencer {
         .map(goalUuid => this.getGoal(goalUuid).completed)
         .reduce((result, goalCompleted) => result && goalCompleted, true);
 
+    const isReleased = node.achievement.release === undefined || isExpired(node.achievement.release);
     const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
     node.status = achievementCompleted
       ? AchievementStatus.COMPLETED
-      : hasUnexpiredDeadline
-      ? AchievementStatus.ACTIVE
-      : AchievementStatus.EXPIRED;
+      : isReleased
+        ? hasUnexpiredDeadline
+          ? AchievementStatus.ACTIVE
+          : AchievementStatus.EXPIRED
+        : AchievementStatus.UNRELEASED;
   }
 
   /**

@@ -1,11 +1,17 @@
 import { Button, MenuItem, NumericInput } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementGoal, GoalProgress } from 'src/features/achievement/AchievementTypes';
+import {
+  AchievementGoal,
+  AchievementUser,
+  GoalProgress
+} from 'src/features/achievement/AchievementTypes';
 
 type AchievementManualEditorProps = {
   studio: string;
+  users: AchievementUser[];
+  getUsers: () => void;
   updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
 };
 
@@ -15,7 +21,13 @@ const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
 );
 
 function AchievementManualEditor(props: AchievementManualEditorProps) {
-  const { studio, updateGoalProgress } = props;
+  const { studio, getUsers, updateGoalProgress } = props;
+  const users = studio === 'Staff' 
+    ? props.users.sort((user1, user2) => user1.name.localeCompare(user2.name))
+    // Not sure how studio is represented as a string
+    : props.users.filter(user => user.group === studio).sort((user1, user2) => user1.name.localeCompare(user2.name));
+
+  useEffect(() => getUsers(), [getUsers]);
 
   const inferencer = useContext(AchievementContext);
   const manualAchievements: AchievementGoal[] = inferencer
@@ -23,18 +35,23 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
     .filter(goals => goals.meta.type === 'Manual');
 
   const [goal, changeGoal] = useState(manualAchievements[0]);
-  const [userId, changeUserId] = useState(0);
-  const [xp, changeXp] = useState(goal ? goal.xp : 0);
+  const [selectedUser, changeSelectedUser] = useState(users[0]);
+  const [count, changeCount] = useState(0);
+
+  const UserSelect = Select.ofType<AchievementUser>();
+  const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
+    <MenuItem key={user.userId} onClick={handleClick} text={user.name} />
+  );
 
   const updateGoal = () => {
     if (goal) {
       const progress: GoalProgress = {
         uuid: goal.uuid,
-        xp: xp,
-        maxXp: goal.maxXp,
-        completed: xp >= goal.maxXp
+        count: count,
+        targetCount: goal.targetCount,
+        completed: count >= goal.targetCount
       };
-      updateGoalProgress(userId, progress);
+      updateGoalProgress(selectedUser.userId, progress);
     }
   };
 
@@ -51,13 +68,14 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
     return (
       <div className="achievement-manual-editor">
         <h3>User ID: </h3>
-        <NumericInput
-          value={userId}
-          min={0}
-          allowNumericCharactersOnly={true}
-          placeholder="User ID"
-          onValueChange={changeUserId}
-        />
+        <UserSelect
+          filterable={false}
+          items={users}
+          itemRenderer={userRenderer}
+          onItemSelect={changeSelectedUser}
+        >
+          <Button outlined={true} text={selectedUser ? selectedUser.name : 'No User Selected'} color='White' />
+        </UserSelect>
 
         <h3>Goal: </h3>
         <GoalSelect
@@ -69,14 +87,14 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
           <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
         </GoalSelect>
 
-        <h3>XP: </h3>
+        <h3>Count: </h3>
         <NumericInput
-          value={xp}
+          value={count}
           min={0}
-          max={goal ? goal.maxXp : 0}
+          max={goal ? goal.targetCount : 0}
           allowNumericCharactersOnly={true}
-          placeholder="XP"
-          onValueChange={changeXp}
+          placeholder="Count"
+          onValueChange={changeCount}
         />
 
         <h3> </h3>

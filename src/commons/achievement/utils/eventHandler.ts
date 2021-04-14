@@ -12,6 +12,7 @@ import {
   GoalType
 } from '../../../features/achievement/AchievementTypes';
 import { store } from '../../../pages/createStore';
+import { showSuccessMessage } from '../../utils/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
 
 function eventConditionSatisfied(meta: EventMeta): boolean {
@@ -68,42 +69,53 @@ const goalIncludesEvent = (goal: AchievementGoal, eventName: EventType) => {
 };
 
 export function processEvent(eventName: EventType, increment: number = 1) {
+  // by default, userId should be the current state's one
+  const userId = store.getState().session.userId;
+  // just in case userId is still not defined
+  if (!userId) {
+    return;
+  }
+
   let goals = inferencer.getAllGoals();
 
-  // if the state has goals, enter the function body
+  // if the inferencer has goals, enter the function body
   if (goals[0]) {
     goals = goals.filter(goal => goalIncludesEvent(goal, eventName));
 
     const computeCompleted = (goal: AchievementGoal): boolean => {
       // all goals that are input as arguments are eventGoals
       const meta = goal.meta as EventMeta;
-      if (!goal.completed && goal.xp + increment >= meta.targetCount) {
-        // replace with a nice notification in the future
-        alert('Completed acheivement: ' + goal.text);
+
+      // if the goal just became completed
+      if (!goal.completed && goal.count + increment >= meta.targetCount) {
+        goal.completed = true;
+        const parentAchievements = inferencer.getAchievementsByGoal(goal.uuid);
+        parentAchievements.forEach(uuid => {
+          const completed = inferencer
+            .getAchievement(uuid)
+            .goalUuids.map(goalUuid => inferencer.getGoal(goalUuid).completed)
+            .reduce((completion, goalCompletion) => completion && goalCompletion, true);
+          if (completed) {
+            showSuccessMessage('Completed acheivement: ' + inferencer.getAchievement(uuid).title);
+          }
+        });
         return true;
       } else {
         return goal.completed;
       }
     };
 
-    const userId = store.getState().session.userId;
-    // not sure what to do in this case...
-    if (!userId) {
-      return;
-    }
-
-    // future changes: xp should be count!
     goals.forEach(goal => {
       if (eventConditionSatisfied(goal.meta as EventMeta)) {
         // edit the version that is on the state
-        goal.completed = computeCompleted(goal);
-        goal.xp = goal.xp + increment;
+        computeCompleted(goal);
+        goal.count = goal.count + increment;
 
         // send the update request to the backend
         const progress: GoalProgress = {
           uuid: goal.uuid,
-          xp: goal.xp, // user gets all of this xp, even if its not complete
-          maxXp: goal.maxXp, // when complete, the user gets the xp
+          count: goal.count, // user gets all of this xp, even if its not complete
+          targetCount: goal.targetCount, // when complete, the user gets the xp
           // check for completion using counter that gets incremented
           completed: goal.completed
         };
@@ -121,7 +133,7 @@ export function processEvent(eventName: EventType, increment: number = 1) {
       );
       processEvent(eventName, increment);
     };
-
+  
     if (!store.getState().achievement.goals[0]) {
       // ensure that the next function call has updated XP values
       store.dispatch(getOwnGoals());

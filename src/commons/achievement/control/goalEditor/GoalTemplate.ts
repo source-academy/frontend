@@ -13,27 +13,26 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
     case GoalType.ASSESSMENT:
       return {
         type: GoalType.ASSESSMENT,
-        assessmentNumber: '',
+        assessmentNumber: 0,
         requiredCompletionFrac: 0
       };
     case GoalType.BINARY:
       return {
         type: GoalType.BINARY,
         condition: false,
-        maxXp: 0
+        targetCount: 1
       };
     case GoalType.MANUAL:
       return {
         type: GoalType.MANUAL,
-        maxXp: 0
+        targetCount: 1
       };
     case GoalType.EVENT:
       return {
         type: GoalType.EVENT,
         eventNames: [EventType.NONE],
-        targetCount: 0,
-        condition: { type: EventConditions.NONE, leftBound: NaN, rightBound: NaN },
-        maxXp: 0
+        targetCount: 1,
+        condition: { type: EventConditions.NONE, leftBound: NaN, rightBound: NaN }
       };
   }
 };
@@ -41,13 +40,14 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
 export const goalDefinitionTemplate: GoalDefinition = {
   uuid: '',
   text: 'Goal Text Here',
+  achievementUuids: [],
   meta: metaTemplate(GoalType.MANUAL)
 };
 
 const goalProgressTemplate: GoalProgress = {
   uuid: '',
-  xp: 0,
-  maxXp: 0,
+  count: 0,
+  targetCount: 1,
   completed: false
 };
 

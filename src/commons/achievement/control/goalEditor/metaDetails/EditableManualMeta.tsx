@@ -9,19 +9,20 @@ type EditableManualMetaProps = {
 
 function EditableManualMeta(props: EditableManualMetaProps) {
   const { changeMeta, manualMeta } = props;
-  const { maxXp } = manualMeta;
+  const { targetCount } = manualMeta;
 
-  const changeMaxXp = (maxXp: number) => changeMeta({ ...manualMeta, maxXp: maxXp });
+  const changeTargetCount = (targetCount: number) =>
+    changeMeta({ ...manualMeta, targetCount: targetCount });
 
   return (
-    <Tooltip content="Max XP">
+    <Tooltip content="Target Count">
       <NumericInput
         allowNumericCharactersOnly={true}
         leftIcon={IconNames.BANK_ACCOUNT}
         min={0}
-        onValueChange={changeMaxXp}
-        placeholder="Enter max XP here"
-        value={maxXp}
+        onValueChange={changeTargetCount}
+        placeholder="Enter target count here"
+        value={targetCount}
       />
     </Tooltip>
   );

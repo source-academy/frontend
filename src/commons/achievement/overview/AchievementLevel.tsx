@@ -15,7 +15,7 @@ function AchievementLevel(props: AchievementLevelProps) {
   const displayMilestone = () => setShowMilestone(true);
   const hideMilestone = () => setShowMilestone(false);
 
-  const level = Math.floor(studentXp / xpPerLevel);
+  const level = Math.floor(studentXp / xpPerLevel) + 1;
   const progress = studentXp % xpPerLevel;
   const progressFrac = progress / xpPerLevel;
 
@@ -23,7 +23,7 @@ function AchievementLevel(props: AchievementLevelProps) {
     <div className="level" onMouseEnter={displayMilestone} onMouseLeave={hideMilestone}>
       <div className="level-badge">
         <span className="level-icon" />
-        <p>{level}</p>
+        <p>{`Level ${level}`}</p>
       </div>
       <span className="level-progress">
         <ProgressBar
@@ -36,7 +36,7 @@ function AchievementLevel(props: AchievementLevelProps) {
           {progress} / {xpPerLevel} XP
         </p>
       </span>
-      {showMilestone && <AchievementMilestone />}
+      {showMilestone && <AchievementMilestone studentXp={studentXp}/>}
     </div>
   );
 }

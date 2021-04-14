@@ -25,9 +25,7 @@ const conditionRenderer: ItemRenderer<EventConditions> = (condition, { handleCli
 
 function EditableEventMeta(props: EditableEventMetaProps) {
   const { changeMeta, eventMeta } = props;
-  const { eventNames, targetCount, maxXp, condition } = eventMeta;
-
-  const changeMaxXp = (maxXp: number) => changeMeta({ ...eventMeta, maxXp: maxXp });
+  const { eventNames, targetCount, condition } = eventMeta;
 
   const changeTargetCount = (targetCount: number) =>
     changeMeta({ ...eventMeta, targetCount: targetCount });
@@ -51,7 +49,7 @@ function EditableEventMeta(props: EditableEventMetaProps) {
 
   const generateEventNames = () => {
     return eventNames.map((eventName, index) => (
-      <Tooltip content={'Change event type ' + index}>
+      <Tooltip content={'Change event type ' + index} key={index}>
         <EventSelect
           filterable={false}
           items={Object.values(EventType)}
@@ -74,16 +72,6 @@ function EditableEventMeta(props: EditableEventMetaProps) {
       {generateEventNames()}
       <Tooltip content="Add Event">
         <Button outlined={true} text={'Add Event'} onClick={addEvent} />
-      </Tooltip>
-      <Tooltip content="Max XP">
-        <NumericInput
-          allowNumericCharactersOnly={true}
-          leftIcon={IconNames.BANK_ACCOUNT}
-          min={0}
-          onValueChange={changeMaxXp}
-          placeholder="Enter max XP here"
-          value={maxXp}
-        />
       </Tooltip>
       <Tooltip content="Target Count">
         <NumericInput

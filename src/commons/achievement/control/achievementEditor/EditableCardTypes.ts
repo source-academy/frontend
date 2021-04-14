@@ -14,6 +14,7 @@ export enum EditableCardActionType {
   CHANGE_RELEASE = 'CHANGE_RELEASE',
   CHANGE_TITLE = 'CHANGE_TITLE',
   CHANGE_VIEW = 'CHANGE_VIEW',
+  CHANGE_XP = 'CHANGE_XP',
   DELETE_ACHIEVEMENT = 'DELETE_ACHIEVEMENT',
   DISCARD_CHANGES = 'DISCARD_CHANGES',
   SAVE_CHANGES = 'SAVE_CHANGES'
@@ -55,6 +56,10 @@ export type EditableCardAction =
   | {
       type: EditableCardActionType.CHANGE_VIEW;
       payload: AchievementView;
+    }
+  | {
+      type: EditableCardActionType.CHANGE_XP;
+      payload: number;
     }
   | {
       type: EditableCardActionType.DELETE_ACHIEVEMENT;

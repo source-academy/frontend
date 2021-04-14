@@ -15,6 +15,7 @@ import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem,
+  AchievementUser,
   GoalDefinition,
   GoalMeta,
   GoalProgress
@@ -142,6 +143,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
         uuid: achievement.uuid || '',
         title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
+        xp: achievement.xp,
         deadline: achievement.deadline && new Date(achievement.deadline),
         release: achievement.release && new Date(achievement.release),
         isTask: achievement.isTask,
@@ -181,9 +183,10 @@ export const getGoals = async (
       ({
         uuid: goal.uuid || '',
         text: goal.text || '',
+        achievementUuids: goal.achievementUuids,
         meta: goal.meta as GoalMeta,
-        xp: goal.xp,
-        maxXp: goal.maxXp,
+        count: goal.count,
+        targetCount: goal.targetCount,
         completed: goal.completed
       } as AchievementGoal)
   );
@@ -209,11 +212,37 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
       ({
         uuid: goal.uuid || '',
         text: goal.text || '',
+        achievementUuids: goal.achievementUuids,
         meta: goal.meta as GoalMeta,
-        xp: goal.xp,
-        maxXp: goal.maxXp,
+        count: goal.count,
+        targetCount: goal.targetCount,
         completed: goal.completed
       } as AchievementGoal)
+  );
+};
+
+/**
+ * GET /admin/users
+ */
+ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
+  const resp = await request('admin/users', 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const users = await resp.json();
+
+  return users.map(
+    (user: any) =>
+      ({
+        name: user.name,
+        userId: user.userId,
+        group: user.group
+      } as AchievementUser)
   );
 };
 

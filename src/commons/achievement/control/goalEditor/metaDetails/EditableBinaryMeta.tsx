@@ -44,7 +44,7 @@ const conditionSplitter = (condition: BooleanExpression): string[] => {
 
 function EditableBinaryMeta(props: EditableBinaryMetaProps) {
   const { binaryMeta, changeMeta } = props;
-  const { condition, maxXp } = binaryMeta;
+  const { condition, targetCount } = binaryMeta;
 
   const joiners: string[] = [];
   const conditions: string[] = [];
@@ -72,7 +72,8 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
     changeMeta({ ...binaryMeta, condition: condition });
   };
 
-  const changeMaxXp = (maxXp: number) => changeMeta({ ...binaryMeta, maxXp: maxXp });
+  const changeTargetCount = (targetCount: number) =>
+    changeMeta({ ...binaryMeta, targetCount: targetCount });
 
   // Adds the and/or, adds the condition to be edited
   const addCondition = () => {
@@ -148,14 +149,14 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
 
   return (
     <>
-      <Tooltip content="Max XP">
+      <Tooltip content="Target Count">
         <NumericInput
           allowNumericCharactersOnly={true}
           leftIcon={IconNames.BANK_ACCOUNT}
           min={0}
-          onValueChange={changeMaxXp}
-          placeholder="Enter max XP here"
-          value={maxXp}
+          onValueChange={changeTargetCount}
+          placeholder="Enter target count here"
+          value={targetCount}
         />
       </Tooltip>
       {generateConditions()}

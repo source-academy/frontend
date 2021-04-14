@@ -93,7 +93,7 @@ function EditableGoal(props: EditableGoalProps) {
   const changeText = (text: string) => dispatch({ type: ActionType.CHANGE_TEXT, payload: text });
 
   return (
-    <li className="editable-goal">
+    <li className="editable-goal" id={uuid}>
       <div className="action-button">
         {isDirty ? (
           <ItemSaver discardChanges={discardChanges} saveChanges={saveChanges} />

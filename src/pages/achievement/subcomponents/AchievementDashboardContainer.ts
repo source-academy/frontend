@@ -2,12 +2,14 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
+import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements, mockGoals } from '../../../commons/mocks/AchievementMocks';
 import Constants from '../../../commons/utils/Constants';
 import {
   getAchievements,
   getOwnGoals,
+  getUsers,
   updateGoalProgress
 } from '../../../features/achievement/AchievementActions';
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
@@ -18,14 +20,18 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     ? new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
     : new AchievementInferencer(mockAchievements, mockGoals),
   name: state.session.name,
-  role: state.session.role
+  role: state.session.role,
+  assessmentOverviews: state.session.assessmentOverviews,
+  users: state.achievement.users
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
+      fetchAssessmentOverviews,
       getAchievements,
       getOwnGoals,
+      getUsers,
       updateGoalProgress
     },
     dispatch

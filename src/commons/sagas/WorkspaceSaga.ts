@@ -22,8 +22,10 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
+import { EventType } from '../../features/achievement/AchievementTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
+import { processEvent } from '../achievement/utils/eventHandler';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -115,6 +117,9 @@ export default function* WorkspaceSaga(): SagaIterator {
       },
       globals
     };
+
+    // achievement: runCode
+    processEvent(EventType.RUNCODE);
 
     if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
       yield put(actions.remoteExecRun(editorCode));

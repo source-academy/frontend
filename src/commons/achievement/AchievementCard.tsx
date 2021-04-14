@@ -24,7 +24,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const { ability, cardBackground, title } = inferencer.getAchievement(uuid);
   const displayDeadline = inferencer.getDisplayDeadline(uuid);
-  const displayXp = inferencer.getAchievementMaxXp(uuid);
+  const displayXp = inferencer.getAchievementXp(uuid);
   const progressFrac = inferencer.getProgressFrac(uuid);
   const status = inferencer.getStatus(uuid);
 

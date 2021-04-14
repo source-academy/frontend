@@ -1,6 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -9,12 +10,14 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
-import { AchievementContext } from '../../../features/achievement/AchievementConstants';
-import { FilterStatus, GoalProgress } from '../../../features/achievement/AchievementTypes';
+import { AchievementContext, cardBackgroundUrl, coverImageUrl } from '../../../features/achievement/AchievementConstants';
+import { AchievementAbility, AchievementUser, FilterStatus, GoalProgress, GoalType } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
+  fetchAssessmentOverviews: () => void;
   getAchievements: () => void;
   getOwnGoals: () => void;
+  getUsers: () => void;
   updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
 };
 
@@ -23,6 +26,8 @@ export type StateProps = {
   inferencer: AchievementInferencer;
   name?: string;
   role?: Role;
+  assessmentOverviews?: AssessmentOverview[];
+  users: AchievementUser[];
 };
 
 /**
@@ -47,7 +52,8 @@ export const generateAchievementTasks = (
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { group, getAchievements, getOwnGoals, updateGoalProgress, inferencer, name, role } = props;
+  const { getAchievements, getOwnGoals, getUsers, updateGoalProgress, fetchAssessmentOverviews,
+      group, inferencer, name, role, assessmentOverviews, users } = props;
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
@@ -58,6 +64,64 @@ function Dashboard(props: DispatchProps & StateProps) {
       getAchievements();
     }
   }, [getAchievements, getOwnGoals]);
+
+  if (name && role && !assessmentOverviews) {
+    // If assessment overviews are not loaded, fetch them
+    fetchAssessmentOverviews();
+  }
+
+  // one goal for submit, one goal for graded
+  assessmentOverviews?.forEach(assessmentOverview => {
+    const idString = assessmentOverview.id.toString();
+    if (!inferencer.hasAchievement(idString)) {
+      // Goal for assessment submission
+      inferencer.insertFakeGoalDefinition(
+        { uuid: idString + '0',
+          text: `Submitted ${assessmentOverview.category.toLowerCase()}`,
+          achievementUuids: [idString],
+          meta: { 
+            type: GoalType.ASSESSMENT, 
+            assessmentNumber: assessmentOverview.id, 
+            requiredCompletionFrac: 0
+          }
+        }, assessmentOverview.status === 'submitted'
+      )
+      // Goal for assessment grading
+      inferencer.insertFakeGoalDefinition(
+        { uuid: idString + '1',
+          text: `Graded ${assessmentOverview.category.toLowerCase()}`,
+          achievementUuids: [idString],
+          meta: { 
+            type: GoalType.ASSESSMENT, 
+            assessmentNumber: assessmentOverview.id, 
+            requiredCompletionFrac: 0
+          }
+        }, assessmentOverview.gradingStatus === 'graded'
+      )
+      // Would like a goal for early submission, but that seems to be hard to get from the overview
+      inferencer.insertFakeAchievement(
+        { uuid: idString,
+          title: assessmentOverview.title,
+          ability: assessmentOverview.category === 'Mission' || assessmentOverview.category === 'Path'
+            ? AchievementAbility.CORE
+            : AchievementAbility.EFFORT,
+          xp: assessmentOverview.gradingStatus === 'graded' ? assessmentOverview.xp : assessmentOverview.maxXp, 
+          deadline: new Date(assessmentOverview.closeAt),
+          release: new Date(assessmentOverview.openAt),
+          isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
+          position: -1, // always appears on top
+          prerequisiteUuids: [], 
+          goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
+          cardBackground: `${cardBackgroundUrl}/default.png`,
+          view: {
+            coverImage: `${coverImageUrl}/default.png`,
+            description: assessmentOverview.shortSummary,
+            completionText: `Grade: ${assessmentOverview.grade} / ${assessmentOverview.maxGrade}`
+          }
+        }
+      )
+    }
+  });
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
@@ -76,6 +140,8 @@ function Dashboard(props: DispatchProps & StateProps) {
         {role !== Role.Student && (
           <AchievementManualEditor
             studio={group || 'Staff'}
+            users={users}
+            getUsers={getUsers}
             updateGoalProgress={updateGoalProgress}
           />
         )}
@@ -100,7 +166,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           </div>
 
           <ul className="task-container">
-            {generateAchievementTasks(inferencer.listSortedTaskUuids(), filterStatus, focusState)}
+            {generateAchievementTasks(inferencer.listSortedReleasedTaskUuids(), filterStatus, focusState)}
           </ul>
 
           <div className="view-container">

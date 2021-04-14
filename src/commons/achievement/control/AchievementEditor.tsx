@@ -56,6 +56,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         {generateEditableCards(
           inferencer
             .getAllAchievementUuids()
+            .reverse()
             .sort(
               (a, b) =>
                 inferencer.getAchievementPositionByUuid(a) -
