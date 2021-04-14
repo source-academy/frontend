@@ -468,7 +468,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     ]
   );
 
-  const myMissionsButton = React.useMemo(() => <ControlBarMyMissionsButton key="my_missions"/>, []);
+  const myMissionsButton = React.useMemo(
+    () => <ControlBarMyMissionsButton key="my_missions" />,
+    []
+  );
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({

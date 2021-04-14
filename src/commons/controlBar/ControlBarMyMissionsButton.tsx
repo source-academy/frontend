@@ -6,7 +6,7 @@ import * as React from 'react';
 import controlButton from '../ControlButton';
 
 type ControlBarMyMissionsButtonProps = {
-  key: string
+  key: string;
 };
 
 export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProps> = props => {
