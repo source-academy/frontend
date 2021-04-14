@@ -61,7 +61,7 @@ export type FnTypes = {
 /** the types of data in the JS Slang context */
 export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
 
-/** modified Environment type to store children and associated frame */
+/** modified `Environment` to store children and associated frame */
 export type Env = Environment | null;
 
 /** modified `EnvTree` */

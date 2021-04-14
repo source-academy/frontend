@@ -145,7 +145,7 @@ export class FnValue extends Value implements Hoverable {
           visible={false}
           ref={this.labelRef}
         >
-          <KonvaTag fill={'black'} opacity={0.25} />
+          <KonvaTag fill={'black'} opacity={0.3} />
           <KonvaText
             text={this.textDescription}
             fontFamily={Config.FontFamily.toString()}

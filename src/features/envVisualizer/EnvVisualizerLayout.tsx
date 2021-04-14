@@ -178,7 +178,6 @@ export class Layout {
   /** create an instance of the corresponding `Value` if it doesn't already exists,
    *  else, return the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
-    // primitives don't have to be memoized
     if (isUnassigned(data)) {
       return new PrimitiveValue(Config.UnassignedData.toString(), [reference]);
     } else if (isPrimitiveData(data)) {
