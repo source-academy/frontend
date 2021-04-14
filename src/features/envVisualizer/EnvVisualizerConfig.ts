@@ -26,6 +26,7 @@ export enum Config {
 
   TextPaddingX = 10,
   TextPaddingY = 30,
+  TextMargin = 5,
   TextMinWidth = 30,
   FontFamily = 'monospace, monospace',
   FontSize = 15,
@@ -34,6 +35,7 @@ export enum Config {
 
   HoveredColor = '#32CD32',
 
+  ArrowHeadSize = 15,
   ArrowStrokeWidth = 1,
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
