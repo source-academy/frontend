@@ -34,20 +34,19 @@ export const customFetch = async (
   const shouldRefresh = opts.shouldRefresh ?? true;
   const shouldAutoLogout = opts.shouldAutoLogout ?? true;
 
+  const resp = await fetch(url, opts as RequestInit);
   try {
-    const resp = await fetch(url, opts as RequestInit);
-
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause
 
     // Refresh the user's tokens if a response status of 401 was obtained.
-    if (shouldRefresh && resp && resp.status === 401) {
+    if (shouldRefresh && resp.status === 401) {
       const newTokens = await Cadet.auth.refresh({ refresh_token: opts.refreshToken! });
       const tokens = newTokens.data!;
       store.dispatch(
         actions.setTokens({
-          accessToken: tokens.access_token!,
-          refreshToken: tokens.refresh_token!
+          accessToken: tokens.access_token,
+          refreshToken: tokens.refresh_token
         })
       );
       const newOpts = {
@@ -58,14 +57,14 @@ export const customFetch = async (
       return customFetch(url, newOpts);
     }
 
-    if (resp && !resp.ok && !shouldAutoLogout) {
+    if (!resp.ok && !shouldAutoLogout) {
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
       // and ask student to manually logout, so that they have a chance to save
       // their answers
       return resp;
     }
 
-    if (!resp || !resp.ok) {
+    if (!resp.ok) {
       throw new Error('API call failed or got non-OK response');
     }
 
@@ -75,7 +74,7 @@ export const customFetch = async (
     store.dispatch(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
 
-    return null;
+    return resp;
   }
 };
 

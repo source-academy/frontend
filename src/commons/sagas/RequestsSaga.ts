@@ -85,7 +85,7 @@ export const postAuth = async (
       shouldRefresh: false
     }
   );
-  if (!resp) {
+  if (!resp.ok) {
     return null;
   }
 
@@ -101,7 +101,7 @@ export const postAuth = async (
  */
 const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
   const resp = await Cadet.auth.refresh({ refresh_token: refreshToken });
-  if (!resp) {
+  if (!resp.ok) {
     return null;
   }
 
@@ -118,7 +118,7 @@ const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
 export const getUser = async (tokens: Tokens): Promise<User | null> => {
   const resp = await Cadet.user.index({ ...tokens });
   // TODO
-  return resp && resp.ok ? (resp.data as User) : null;
+  return resp.ok ? (resp.data as User) : null;
 };
 
 /**
@@ -129,7 +129,7 @@ export const getUser = async (tokens: Tokens): Promise<User | null> => {
 export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[] | null> => {
   const resp = await Cadet.incentives.indexAchievements({ ...tokens });
 
-  if (!resp || !resp.ok) {
+  if (!resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
 
@@ -195,7 +195,7 @@ export const getGoals = async (
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await Cadet.incentives.indexGoals({ ...tokens });
 
-  if (!resp || !resp.ok) {
+  if (!resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
 
@@ -316,7 +316,7 @@ export const getAssessmentOverviews = async (
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
   const resp = await Cadet.assessments.index({ ...tokens });
-  if (!resp || !resp.ok) {
+  if (!resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
   const assessmentOverviews = resp.data;
@@ -369,7 +369,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
     resp = await Cadet.assessments.unlock(id, { password: input }, { ...tokens });
   }
 
-  if (!resp || !resp.ok) {
+  if (!resp.ok) {
     return null;
   }
 
@@ -420,7 +420,7 @@ export const postAnswer = async (
   answer: string | number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await Cadet.answer.submit(id, { answer }, tokens);
+  const resp = await Cadet.answer.submit(id, { answer }, { ...tokens });
   return resp;
 };
 
@@ -428,9 +428,7 @@ export const postAnswer = async (
  * POST /assessments/{assessmentId}/submit
  */
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await Cadet.assessments.submit(id, tokens);
-  // shouldAutoLogout: false, // 400 if some questions unattempted
-
+  const resp = await Cadet.assessments.submit(id, { ...tokens });
   return resp;
 };
 
@@ -442,7 +440,7 @@ export const getGradingOverviews = async (
   group: boolean
 ): Promise<GradingOverview[] | null> => {
   const resp = await Cadet.adminGrading.index({ group }, { ...tokens });
-  if (!resp) {
+  if (!resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
   const gradingOverviews = resp.data;
@@ -495,7 +493,7 @@ export const getGradingOverviews = async (
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
   const resp = await Cadet.adminGrading.show(submissionId, { ...tokens });
 
-  if (!resp) {
+  if (!resp.ok) {
     return null;
   }
 
@@ -608,7 +606,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
 
   let notifications: Notification[] = [];
 
-  if (!resp || !resp.ok) {
+  if (!resp.ok) {
     return notifications;
   }
 
@@ -651,7 +649,7 @@ export const postAcknowledgeNotifications = async (
 export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
   const resp = await Cadet.sourcecast.index({ ...tokens });
   // TODO
-  return resp && resp.ok ? ((resp.data as unknown) as SourcecastData[]) : null;
+  return resp.ok ? ((resp.data as unknown) as SourcecastData[]) : null;
 };
 
 /**
@@ -733,7 +731,7 @@ export const uploadAssessment = async (
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
   const resp = await Cadet.adminGrading.gradingSummary({ ...tokens });
-  return resp && resp.ok ? resp.data : null;
+  return resp.ok ? resp.data : null;
 };
 
 /**
@@ -741,7 +739,7 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
  */
 export const getSublanguage = async (): Promise<SourceLanguage | null> => {
   const resp = await Cadet.settings.index();
-  if (!resp || !resp.ok) {
+  if (!resp.ok) {
     return null;
   }
 
@@ -774,7 +772,7 @@ export const postSublanguage = async (
  */
 export async function fetchDevices(tokens: Tokens): Promise<Device[] | null> {
   const resp = await Cadet.devices.index({ ...tokens });
-  return resp && resp.ok ? resp.data : null;
+  return resp.ok ? resp.data : null;
 }
 
 /**
@@ -785,7 +783,7 @@ export async function getDeviceWSEndpoint(
   tokens: Tokens
 ): Promise<WebSocketEndpointInformation | null> {
   const resp = await Cadet.devices.getWsEndpoint(device.id, { ...tokens });
-  return resp && resp.ok ? resp.data : null;
+  return resp.ok ? resp.data : null;
 }
 
 /**
@@ -795,12 +793,8 @@ export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens
   tokens = fillTokens(tokens);
   const resp = await Cadet.devices.register(device, { ...tokens });
 
-  if (!resp) {
-    throw new Error('Unknown error occurred.');
-  }
-
   if (!resp.ok) {
-    const message = resp.text();
+    const message = await resp.text();
     throw new Error(`Failed to register: ${message}`);
   }
 
@@ -817,10 +811,6 @@ export async function editDevice(
   tokens = fillTokens(tokens);
   const resp = await Cadet.devices.edit(device.id, device, { ...tokens });
 
-  if (!resp) {
-    throw new Error('Unknown error occurred.');
-  }
-
   if (!resp.ok) {
     const message = await resp.text();
     throw new Error(`Failed to edit: ${message}`);
@@ -835,10 +825,6 @@ export async function editDevice(
 export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens): Promise<boolean> {
   tokens = fillTokens(tokens);
   const resp = await Cadet.devices.deregister(device.id, { ...tokens });
-
-  if (!resp) {
-    throw new Error('Unknown error occurred.');
-  }
 
   if (!resp.ok) {
     const message = await resp.text();
