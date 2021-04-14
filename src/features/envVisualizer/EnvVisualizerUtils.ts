@@ -59,7 +59,7 @@ export function isNumber(data: Data): data is number {
 }
 
 /** checks if `data` is a symbol */
-export function isSymbol(data: Data): data is symbol {
+export function isUnassigned(data: Data): data is symbol {
   return typeof data === 'symbol';
 }
 
