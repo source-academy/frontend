@@ -23,7 +23,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
         const textToDisplay = textValue ?? '*' + ListVisualizer.displaySpecialContent(node);
         return (
           <Text
-            key={nodeValue + index}
+            key={"" + nodeValue + index}
             text={textToDisplay}
             align={'center'}
             width={Config.BoxWidth}

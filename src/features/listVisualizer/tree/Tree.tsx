@@ -1,6 +1,7 @@
-import { Layer, Line, Text } from 'react-konva';
+import { Layer, Text } from 'react-konva';
 
 import { Config } from '../Config';
+import { BackwardArrowDrawable } from '../drawable/BackwardArrowDrawable';
 import { Data, Pair } from '../ListVisualizerTypes';
 import { isArray, isFunction, toText } from '../ListVisualizerUtils';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
@@ -122,9 +123,6 @@ export class Tree {
 class TreeDrawer {
   private tree: Tree;
 
-  // keeps track the extreme left end of the tree. In units of pixels.
-  private minLeft = 500;
-
   private drawables: JSX.Element[];
   private nodeWidths: Map<TreeNode, number>;
   public width: number = 0;
@@ -180,14 +178,20 @@ class TreeDrawer {
    */
   drawNode(node: TreeNode, x: number, y: number, parentX: number, parentY: number) {
     if (node instanceof AlreadyParsedTreeNode) {
-      // if its left child is part of a cycle and it's been drawn, link back to that node instead
+      // if its child is part of a cycle and it's been drawn, link back to that node instead
       const drawnNode = node.actualNode;
-      this.backwardLeftEdge(
-        parentX,
-        parentY,
-        drawnNode.drawableX ?? 0,
-        drawnNode.drawableY ?? 0
-      );
+      const backwardArrowProps = {
+        from: {
+          x: parentX + Config.BoxWidth / 2,
+          y: parentY + Config.BoxHeight / 2,
+        },
+        to: {
+          x: drawnNode.drawableX ?? 0,
+          y: drawnNode.drawableY ?? 0,
+        },
+      };
+
+      this.drawables.push(<BackwardArrowDrawable {...backwardArrowProps}></BackwardArrowDrawable>);
     }
 
 
@@ -197,9 +201,6 @@ class TreeDrawer {
     if (node instanceof FunctionTreeNode) {
       const drawable = node.createDrawable(x, y, parentX, parentY);
       this.drawables.push(drawable);
-
-      // update left extreme of the tree
-      this.minLeft = Math.min(this.minLeft, x);
     } else if (node instanceof ArrayTreeNode) {
       const drawable = node.createDrawable(x, y, parentX, parentY);
       this.drawables.push(drawable);
@@ -208,28 +209,11 @@ class TreeDrawer {
       // const width = this.getNodeWidth(node);
       let leftX = x;
       node.children?.forEach((childNode, index) => {
-        if (childNode instanceof AlreadyParsedTreeNode) {
-          this.drawNode(childNode, leftX, y, x + Config.BoxWidth * index, y);
-          const childNodeWidth = this.getNodeWidth(childNode);
-          leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
-        } else if (childNode instanceof TreeNode) {
-          this.drawNode(childNode, leftX, y + Config.DistanceY, x + Config.BoxWidth * index, y);
-          const childNodeWidth = this.getNodeWidth(childNode);
-          leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
-        }
+        const childY = (childNode instanceof AlreadyParsedTreeNode) ? y : y + Config.DistanceY;
+        this.drawNode(childNode, leftX, childY, x + Config.BoxWidth * index, y);
+        const childNodeWidth = this.getNodeWidth(childNode);
+        leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
       });
-
-      // if (node.right != null) {
-      //   if (node.right instanceof TreeNode) {
-      //     this.drawRight(node.right, x, y);
-      //   } else {
-      //     const drawnNode = this.tree.getNodeById(node.right);
-      //     this.backwardRightEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
-      //   }
-      // }
-
-      // update left extreme of the tree
-      this.minLeft = Math.min(this.minLeft, x);
     }
   }
 
@@ -276,9 +260,10 @@ class TreeDrawer {
       } else if (node.children) {
         return (
           node.children
-            .map(child => (child instanceof TreeNode ? helper(child) : 0))
+            .map(child => (child instanceof ArrayTreeNode ? helper(child) : 0))
+            .map(height => height ? height + Config.DistanceY : 0)
             .filter(height => height > 0)
-            .reduce((x, y) => Math.max(x, y) + Config.DistanceY, 0) + Config.BoxHeight
+            .reduce((x, y) => Math.max(x, y), 0) + Config.BoxHeight
         );
       } else {
         return 0;
@@ -286,213 +271,5 @@ class TreeDrawer {
     }
 
     return helper(node);
-  }
-
-  /**
-   *  Connects a box to a previously known box, the arrow path is more complicated.
-   *  After coming out of the starting box, it moves to the left or the right for a short distance,
-   *  Then goes to the correct y-value and turns to reach the top of the end box.
-   *  It then directly points to the end box. All turnings are 90 degress.
-   */
-  backwardLeftEdge(x1: number, y1: number, x2: number, y2: number) {
-    // Coordinates of all the turning points, except the first segment in the path
-    let path: number[];
-
-    // 3 segments: Line out of origin box; Path to end; Arrow Head
-
-    // Segment 1 : Line out of origin box
-    const startSeg1X = x1 + Config.BoxWidth / 2;
-    const startSeg1Y = y1 + Config.BoxHeight / 2;
-    const endSeg1X = x1 + Config.BoxWidth / 2;
-    const endSeg1Y = y1 + (Config.BoxSpacingY * 5) / 8;
-
-    const startPath = [
-          startSeg1X,
-          startSeg1Y,
-          endSeg1X,
-          endSeg1Y
-    ];
-
-    // Segment 2 : Path to end (Path starts at Segment 1 end)
-    if (x1 > x2 && y1 >= y2 - Config.BoxHeight - 1) {
-      // lower right to upper left
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        endSeg1X,
-        endSeg1Y,
-        x2 - Config.BoxSpacingX / 2,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 - Config.BoxSpacingX / 2,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 <= x2 && y1 >= y2 - Config.BoxHeight - 1) {
-      // lower left to upper right
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        endSeg1X,
-        endSeg1Y,
-        x1 - Config.BoxSpacingX / 2,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 - Config.BoxSpacingX / 2,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 > x2) {
-      // upper right to lower left
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        endSeg1X,
-        endSeg1Y,
-        x1 + Config.BoxWidth / 2,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else {
-      // upper left to lower right
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        endSeg1X,
-        endSeg1Y,
-        x1 + Config.BoxWidth / 2,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    }
-
-    // Segment 3 : Arrow head
-    const endX = path[path.length - 2];
-    const endY = path[path.length - 1];
-    const diff: (f : (x : number) => number) => number = 
-                 f => f(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength;
-    const arrowPath = [
-      endX - diff(Math.cos),
-      endY - diff(Math.sin),
-      endX,
-      endY,
-      endX + diff(Math.cos),
-      endY - diff(Math.sin)
-    ];
-
-    const pointerHead = <Line key={"Head" + x1 + ", " + y1 + "to" + x2 + ", " + y2}
-                            points={startPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    const pathToEnd = <Line key={"Pointer" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
-                          points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    const arrowHead = <Line key={"Arrow" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
-                        points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;    
-
-    this.drawables.push(pointerHead);
-    this.drawables.push(pathToEnd);
-    this.drawables.push(arrowHead);
-    // since arrow path is complicated, move to bottom in case it covers some other box
-
-    // TODO: Fix this
-    // pointer.moveToBottom();
-  }
-
-  /**
-   *  Same as backwardLeftEdge
-   */
-  backwardRightEdge(x1: number, y1: number, x2: number, y2: number) {
-    let path: number[];
-    if (x1 > x2 && y1 > y2 - Config.BoxHeight - 1) {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 <= x2 && y1 > y2 - Config.BoxHeight - 1) {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 > x2) {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8 + 7,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8 + 7,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    }
-    const endX = path[path.length - 2];
-    const endY = path[path.length - 1];
-    const arrowPath = [
-      endX - Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endX,
-      endY,
-      endX + Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength
-    ];
-    const arrow = <Line points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    const pointerHead = (
-      <Line
-        points={[
-          x1 + (Config.BoxWidth * 3) / 4,
-          y1 + Config.BoxHeight / 2,
-          x1 + (Config.BoxWidth * 3) / 4,
-          y1 + (Config.BoxSpacingY * 3) / 4
-        ]}
-        strokeWidth={Config.StrokeWidth}
-        stroke={'white'}
-      />
-    );
-    const pointer = <Line points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    this.drawables.push(pointerHead);
-    this.drawables.push(pointer);
-    this.drawables.push(arrow);
-
-    // TODO: Fix this
-    // pointer.moveToBottom();
   }
 }

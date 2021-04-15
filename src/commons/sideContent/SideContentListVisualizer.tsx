@@ -82,14 +82,14 @@ class SideContentListVisualizer extends React.Component<{}, State> {
               </Button>
             </div>
           ) : null}
-          {this.state.steps ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {step?.map((elem, i) => (
-                <div key={i} style={{ flex: 1 }}>
-                  {step.length > 1 && <h3>Structure {i + 1}</h3>}
-                  {elem}
-                </div>
-              ))}
+          {this.state.steps.length > 0   ? (
+            <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto' }}>
+                {step?.map((elem, i) => (
+                  <div key={i} style={{ flex: 'flex-basis', padding: 10}}>
+                    {step.length > 1 && <h3>Structure {i + 1}</h3>}
+                    {elem}
+                  </div>
+                ))}
             </div>
           ) : (
             <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>

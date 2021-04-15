@@ -13,7 +13,7 @@ import { DataTreeNode } from './tree/TreeNode';
  * clear is used by WorkspaceSaga to reset the visualizer after every "Run" button press
  */
 export default class ListVisualizer {
-  private static empty(step: Step[]) {}
+  private static empty(step: Step[]) { }
   private static setSteps: (step: Step[]) => void = ListVisualizer.empty;
   private static _instance = new ListVisualizer();
 
@@ -21,7 +21,7 @@ export default class ListVisualizer {
   private nodeLabel = 0;
   private nodeToLabelMap: Map<DataTreeNode, number> = new Map();
 
-  private constructor() {}
+  private constructor() { }
 
   public static init(setSteps: (step: Step[]) => void): void {
     ListVisualizer.setSteps = setSteps;
@@ -65,12 +65,9 @@ export default class ListVisualizer {
    */
   private createDrawing(xs: Data): JSX.Element {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
-    const layer = treeDrawer.draw(50, 50);
-    const stage = (
-      <Stage key={xs} width={treeDrawer.width + 600} height={treeDrawer.height + 300}>
-        {layer}
-      </Stage>
-    );
-    return stage;
+    const layer = treeDrawer.draw(0, 0);
+    return <Stage key={xs} width={treeDrawer.width} height={treeDrawer.height}>
+      {layer}
+    </Stage>
   }
 }

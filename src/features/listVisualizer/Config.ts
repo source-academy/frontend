@@ -17,9 +17,10 @@ export const Config = {
 
   ArrowSpace: 5,
   ArrowSpaceH: 13, // horizontal
+  ArrowPointerSize: 5,
+  ArrowMarginTop: 20,
+  ArrowMarginBottom: 10,
+  ArrowMarginHorizontal: 20,
   ArrowLength: 8,
   ArrowAngle: 0.5236, //25 - 0.4363,//20 - 0.3491,// 30 - 0.5236
-
-  Padding: 5,
-  CanvasWidth: 1000
 };
