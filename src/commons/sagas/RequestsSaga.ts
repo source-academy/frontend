@@ -146,8 +146,10 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
         title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
         xp: achievement.xp,
-        deadline: achievement.release === achievement.deadline ? undefined : new Date(achievement.deadline),
-        release: achievement.release === achievement.deadline ? undefined : new Date(achievement.release),
+        deadline:
+          achievement.release === achievement.deadline ? undefined : new Date(achievement.deadline),
+        release:
+          achievement.release === achievement.deadline ? undefined : new Date(achievement.release),
         isTask: achievement.isTask,
         position: achievement.position,
         prerequisiteUuids: achievement.prerequisiteUuids,
@@ -226,7 +228,7 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 /**
  * GET /admin/users
  */
- export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
+export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
   const resp = await request('admin/users', 'GET', {
     ...tokens,
     shouldRefresh: true

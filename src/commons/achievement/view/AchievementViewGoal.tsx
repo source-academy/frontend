@@ -23,9 +23,7 @@ const mapGoalToJSX = (goal: AchievementGoal) => {
         </p>
       </div>
       <div className="goal-progress">
-        <p>
-          {text}
-        </p>
+        <p>{text}</p>
         <ProgressBar
           animate={false}
           className="progress"

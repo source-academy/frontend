@@ -133,7 +133,7 @@ export function processEvent(eventName: EventType, increment: number = 1) {
       );
       processEvent(eventName, increment);
     };
-  
+
     if (!store.getState().achievement.goals[0]) {
       // ensure that the next function call has updated XP values
       store.dispatch(getOwnGoals());

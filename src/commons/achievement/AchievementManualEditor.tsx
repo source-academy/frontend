@@ -22,10 +22,13 @@ const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
 
 function AchievementManualEditor(props: AchievementManualEditorProps) {
   const { studio, getUsers, updateGoalProgress } = props;
-  const users = studio === 'Staff' 
-    ? props.users.sort((user1, user2) => user1.name.localeCompare(user2.name))
-    // Not sure how studio is represented as a string
-    : props.users.filter(user => user.group === studio).sort((user1, user2) => user1.name.localeCompare(user2.name));
+  const users =
+    studio === 'Staff'
+      ? props.users.sort((user1, user2) => user1.name.localeCompare(user2.name))
+      : // Not sure how studio is represented as a string
+        props.users
+          .filter(user => user.group === studio)
+          .sort((user1, user2) => user1.name.localeCompare(user2.name));
 
   useEffect(() => getUsers(), [getUsers]);
 
@@ -74,7 +77,11 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
           itemRenderer={userRenderer}
           onItemSelect={changeSelectedUser}
         >
-          <Button outlined={true} text={selectedUser ? selectedUser.name : 'No User Selected'} color='White' />
+          <Button
+            outlined={true}
+            text={selectedUser ? selectedUser.name : 'No User Selected'}
+            color="White"
+          />
         </UserSelect>
 
         <h3>Goal: </h3>

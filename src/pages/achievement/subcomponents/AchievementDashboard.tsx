@@ -10,8 +10,18 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
-import { AchievementContext, cardBackgroundUrl, coverImageUrl } from '../../../features/achievement/AchievementConstants';
-import { AchievementAbility, AchievementUser, FilterStatus, GoalProgress, GoalType } from '../../../features/achievement/AchievementTypes';
+import {
+  AchievementContext,
+  cardBackgroundUrl,
+  coverImageUrl
+} from '../../../features/achievement/AchievementConstants';
+import {
+  AchievementAbility,
+  AchievementUser,
+  FilterStatus,
+  GoalProgress,
+  GoalType
+} from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   fetchAssessmentOverviews: () => void;
@@ -52,8 +62,19 @@ export const generateAchievementTasks = (
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { getAchievements, getOwnGoals, getUsers, updateGoalProgress, fetchAssessmentOverviews,
-      group, inferencer, name, role, assessmentOverviews, users } = props;
+  const {
+    getAchievements,
+    getOwnGoals,
+    getUsers,
+    updateGoalProgress,
+    fetchAssessmentOverviews,
+    group,
+    inferencer,
+    name,
+    role,
+    assessmentOverviews,
+    users
+  } = props;
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
@@ -80,50 +101,58 @@ function Dashboard(props: DispatchProps & StateProps) {
     if (!inferencer.hasAchievement(idString)) {
       // Goal for assessment submission
       inferencer.insertFakeGoalDefinition(
-        { uuid: idString + '0',
+        {
+          uuid: idString + '0',
           text: `Submitted ${assessmentOverview.category.toLowerCase()}`,
           achievementUuids: [idString],
-          meta: { 
-            type: GoalType.ASSESSMENT, 
-            assessmentNumber: assessmentOverview.id, 
+          meta: {
+            type: GoalType.ASSESSMENT,
+            assessmentNumber: assessmentOverview.id,
             requiredCompletionFrac: 0
           }
-        }, assessmentOverview.status === 'submitted'
-      )
+        },
+        assessmentOverview.status === 'submitted'
+      );
       // Goal for assessment grading
       inferencer.insertFakeGoalDefinition(
-        { uuid: idString + '1',
+        {
+          uuid: idString + '1',
           text: `Graded ${assessmentOverview.category.toLowerCase()}`,
           achievementUuids: [idString],
-          meta: { 
-            type: GoalType.ASSESSMENT, 
-            assessmentNumber: assessmentOverview.id, 
+          meta: {
+            type: GoalType.ASSESSMENT,
+            assessmentNumber: assessmentOverview.id,
             requiredCompletionFrac: 0
           }
-        }, assessmentOverview.gradingStatus === 'graded'
-      )
+        },
+        assessmentOverview.gradingStatus === 'graded'
+      );
       // Would like a goal for early submission, but that seems to be hard to get from the overview
-      inferencer.insertFakeAchievement(
-        { uuid: idString,
-          title: assessmentOverview.title,
-          ability: assessmentOverview.category === 'Mission' || assessmentOverview.category === 'Path'
+      inferencer.insertFakeAchievement({
+        uuid: idString,
+        title: assessmentOverview.title,
+        ability:
+          assessmentOverview.category === 'Mission' || assessmentOverview.category === 'Path'
             ? AchievementAbility.CORE
             : AchievementAbility.EFFORT,
-          xp: assessmentOverview.gradingStatus === 'graded' ? assessmentOverview.xp : assessmentOverview.maxXp, 
-          deadline: new Date(assessmentOverview.closeAt),
-          release: new Date(assessmentOverview.openAt),
-          isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
-          position: -1, // always appears on top
-          prerequisiteUuids: [], 
-          goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
-          cardBackground: `${cardBackgroundUrl}/default.png`,
-          view: {
-            coverImage: `${coverImageUrl}/default.png`,
-            description: assessmentOverview.shortSummary,
-            completionText: `Grade: ${assessmentOverview.grade} / ${assessmentOverview.maxGrade}`
-          }
+        xp:
+          assessmentOverview.gradingStatus === 'graded'
+            ? assessmentOverview.xp
+            : assessmentOverview.maxXp,
+        deadline: new Date(assessmentOverview.closeAt),
+        release: new Date(assessmentOverview.openAt),
+        isTask:
+          assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
+        position: -1, // always appears on top
+        prerequisiteUuids: [],
+        goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
+        cardBackground: `${cardBackgroundUrl}/default.png`,
+        view: {
+          coverImage: `${coverImageUrl}/default.png`,
+          description: assessmentOverview.shortSummary,
+          completionText: `Grade: ${assessmentOverview.grade} / ${assessmentOverview.maxGrade}`
         }
-      )
+      });
     }
   });
 
@@ -170,7 +199,11 @@ function Dashboard(props: DispatchProps & StateProps) {
           </div>
 
           <ul className="task-container">
-            {generateAchievementTasks(inferencer.listSortedReleasedTaskUuids(), filterStatus, focusState)}
+            {generateAchievementTasks(
+              inferencer.listSortedReleasedTaskUuids(),
+              filterStatus,
+              focusState
+            )}
           </ul>
 
           <div className="view-container">

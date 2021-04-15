@@ -36,7 +36,7 @@ function AchievementLevel(props: AchievementLevelProps) {
           {progress} / {xpPerLevel} XP
         </p>
       </span>
-      {showMilestone && <AchievementMilestone studentXp={studentXp}/>}
+      {showMilestone && <AchievementMilestone studentXp={studentXp} />}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export const AchievementReducer: Reducer<AchievementState> = (
       return {
         ...state,
         users: action.payload
-      }
+      };
     default:
       return state;
   }

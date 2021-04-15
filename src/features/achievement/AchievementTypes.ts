@@ -173,7 +173,7 @@ export type AchievementUser = {
   name: string;
   userId: number;
   group: string;
-}
+};
 
 export type AchievementState = {
   achievements: AchievementItem[];
