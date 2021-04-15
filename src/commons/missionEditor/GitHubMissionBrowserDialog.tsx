@@ -93,7 +93,7 @@ async function convertRepoToBrowsableMission(missionRepo: any) {
 function convertMetadataStringToBrowsableMission(metadata: string) {
   const browsableMission = new BrowsableMission();
 
-  const lines = metadata.replace(/\r/g, "").split(/\n/);
+  const lines = metadata.replace(/\r/g, '').split(/\n/);
   lines.forEach(line => {
     if (line.startsWith('title')) {
       browsableMission.title = line.substr(6);
@@ -114,7 +114,11 @@ function convertMetadataStringToBrowsableMission(metadata: string) {
   return browsableMission;
 }
 
-function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean, onSubmit: any) {
+function convertMissionToCard(
+  missionRepo: BrowsableMission,
+  isMobileBreakpoint: boolean,
+  onSubmit: any
+) {
   const ratio = isMobileBreakpoint ? 5 : 3;
 
   return (
@@ -153,7 +157,6 @@ function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint:
             </Button>
           </div>
         </div>
-
       </div>
     </Card>
   );
