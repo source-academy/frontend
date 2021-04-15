@@ -295,14 +295,31 @@ class TreeDrawer {
    *  It then directly points to the end box. All turnings are 90 degress.
    */
   backwardLeftEdge(x1: number, y1: number, x2: number, y2: number) {
-    // coordinates of all the turning points, except the first segment in the path
+    // Coordinates of all the turning points, except the first segment in the path
     let path: number[];
+
+    // 3 segments: Line out of origin box; Path to end; Arrow Head
+
+    // Segment 1 : Line out of origin box
+    const startSeg1X = x1 + Config.BoxWidth / 2;
+    const startSeg1Y = y1 + Config.BoxHeight / 2;
+    const endSeg1X = x1 + Config.BoxWidth / 2;
+    const endSeg1Y = y1 + (Config.BoxSpacingY * 5) / 8;
+
+    const startPath = [
+          startSeg1X,
+          startSeg1Y,
+          endSeg1X,
+          endSeg1Y
+    ];
+
+    // Segment 2 : Path to end (Path starts at Segment 1 end)
     if (x1 > x2 && y1 >= y2 - Config.BoxHeight - 1) {
       // lower right to upper left
       path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 2,
-        y1 + (Config.BoxSpacingY * 3) / 4,
+        endSeg1X,
+        endSeg1Y,
         x2 - Config.BoxSpacingX / 2,
         y1 + (Config.BoxSpacingY * 3) / 4,
         x2 - Config.BoxSpacingX / 2,
@@ -316,80 +333,71 @@ class TreeDrawer {
       // lower left to upper right
       path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
+        endSeg1X,
+        endSeg1Y,
+        x1 - Config.BoxSpacingX / 2,
         y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 - Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 - Config.BoxSpacingX / 4,
+        x1 - Config.BoxSpacingX / 2,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
         y2 - Config.ArrowSpace
       ];
     } else if (x1 > x2) {
       // upper right to lower left
       path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth / 4,
+        endSeg1X,
+        endSeg1Y,
+        x1 + Config.BoxWidth / 2,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 + Config.ArrowSpaceH,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 + Config.ArrowSpaceH,
         y2 - Config.ArrowSpace
       ];
     } else {
       // upper left to lower right
       path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth / 4,
+        endSeg1X,
+        endSeg1Y,
+        x1 + Config.BoxWidth / 2,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
         y2 - Config.ArrowSpace
       ];
     }
+
+    // Segment 3 : Arrow head
     const endX = path[path.length - 2];
     const endY = path[path.length - 1];
+    const diff: (f : (x : number) => number) => number = 
+                 f => f(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength;
     const arrowPath = [
-      endX - Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
+      endX - diff(Math.cos),
+      endY - diff(Math.sin),
       endX,
       endY,
-      endX + Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength
+      endX + diff(Math.cos),
+      endY - diff(Math.sin)
     ];
-    // pointy arrow
-    const arrow = <Line key={"Arrow" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
-                        points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
 
-    // first segment of the path
-    const pointerHead = (
-      <Line
-        key={"Head" + x1 + ", " + y1 + "to" + x2 + ", " + y2}
-        points={[
-          x1 + Config.BoxWidth / 2,
-          y1 + Config.BoxHeight / 2,
-          x1 + Config.BoxWidth / 2,
-          y1 + (Config.BoxSpacingY * 3) / 4
-        ]}
-        strokeWidth={Config.StrokeWidth}
-        stroke={'white'}
-      />
-    );
+    const pointerHead = <Line key={"Head" + x1 + ", " + y1 + "to" + x2 + ", " + y2}
+                            points={startPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
 
-    // following segments of the path
-    const pointer = <Line key={"Pointer" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
+    const pathToEnd = <Line key={"Pointer" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
                           points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
 
+    const arrowHead = <Line key={"Arrow" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
+                        points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;    
+
     this.drawables.push(pointerHead);
-    this.drawables.push(pointer);
-    this.drawables.push(arrow);
+    this.drawables.push(pathToEnd);
+    this.drawables.push(arrowHead);
     // since arrow path is complicated, move to bottom in case it covers some other box
 
     // TODO: Fix this
