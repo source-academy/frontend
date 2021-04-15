@@ -240,7 +240,7 @@ describe('Achievement Setter', () => {
           false
         )
     ).toBeFalsy();
-    expect(inferencer.getTitleByUuid('2')).toBeUndefined();
+    expect(inferencer.getTitleByUuid('2')).toBe('invalid');
     expect(inferencer.getUuidByTitle(title)).toBeUndefined();
   });
 
@@ -274,7 +274,7 @@ describe('Achievement Setter', () => {
           false
         )
     ).toBeFalsy();
-    expect(inferencer.getTextByUuid('2')).toBeUndefined();
+    expect(inferencer.getTextByUuid('2')).toBe('invalid');
     expect(inferencer.getUuidByText(text)).toBeUndefined();
   });
 });
@@ -297,13 +297,13 @@ describe('Achievement Inferencer Getter', () => {
   });
 
   test('List task IDs', () => {
-    const taskUuids = ['0', '13', '16', '21', '4', '8'];
+    const taskUuids = ['0', '1', '13', '16', '21', '4', '5', '8'];
 
     expect(inferencer.listTaskUuids().sort()).toEqual(taskUuids);
   });
 
   test('List sorted task IDs', () => {
-    const sortedTaskUuids = ['0', '8', '21', '4', '16', '13'];
+    const sortedTaskUuids = ['1', '5', '0', '8', '21', '4', '16', '13'];
 
     expect(inferencer.listSortedTaskUuids()).toEqual(sortedTaskUuids);
   });
@@ -368,7 +368,7 @@ describe('Achievement ID to Title', () => {
   const inferencer = new AchievementInferencer([testAchievement1], []);
 
   test('Non-existing achievement ID', () => {
-    expect(inferencer.getTitleByUuid('1')).toBeUndefined();
+    expect(inferencer.getTitleByUuid('1')).toBe('invalid');
   });
 
   test('Existing achievement ID', () => {
@@ -392,7 +392,7 @@ describe('Goal ID to Text', () => {
   const inferencer = new AchievementInferencer([], [testGoal1]);
 
   test('Non-existing goal ID', () => {
-    expect(inferencer.getTextByUuid('1')).toBeUndefined();
+    expect(inferencer.getTextByUuid('1')).toBe('invalid');
   });
 
   test('Existing goal ID', () => {
