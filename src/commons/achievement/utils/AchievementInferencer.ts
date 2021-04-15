@@ -11,7 +11,7 @@ import {
   GoalDefinition,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
-import { isExpired } from './DateHelper';
+import { isExpired, isReleased } from './DateHelper';
 
 /**
  * An AchievementNode item encapsulates all important information of an achievement item
@@ -248,11 +248,16 @@ class AchievementInferencer {
    */
   public insertAchievement(achievement: AchievementItem) {
     // first, generate a new unique uuid
-    const newUuid = v4();
+    let newUuid = v4();
+    // a small overhead to truly guarantee uniqueness
+    while (this.nodeList.has(newUuid)) {
+      newUuid = v4();
+    }
 
     // then assign the new unique uuid by overwriting the achievement item supplied by param
     // and insert it into nodeList
     achievement.uuid = newUuid;
+
     this.nodeList.set(newUuid, new AchievementNode(achievement));
 
     // finally, process the nodeList
@@ -288,7 +293,11 @@ class AchievementInferencer {
    */
   public insertGoalDefinition(definition: GoalDefinition) {
     // first, generate a new unique uuid by finding the max uuid
-    const newUuid = v4();
+    let newUuid = v4();
+    // a small overhead to truly guarantee uniqueness
+    while (this.goalList.has(newUuid)) {
+      newUuid = v4();
+    }
 
     // then assign the new unique uuid by overwriting the goal item supplied by param
     // and insert it into goalList
@@ -787,12 +796,12 @@ class AchievementInferencer {
         .map(goalUuid => this.getGoal(goalUuid).completed)
         .reduce((result, goalCompleted) => result && goalCompleted, true);
 
-    const isReleased = node.achievement.release === undefined || isExpired(node.achievement.release);
+    const hasReleased = isReleased(node.achievement.release);
     const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
     node.status = achievementCompleted
       ? AchievementStatus.COMPLETED
-      : isReleased
+      : hasReleased
         ? hasUnexpiredDeadline
           ? AchievementStatus.ACTIVE
           : AchievementStatus.EXPIRED

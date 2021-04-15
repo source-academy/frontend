@@ -51,8 +51,8 @@ function eventConditionSatisfied(meta: EventMeta): boolean {
 }
 
 let inferencer: AchievementInferencer = new AchievementInferencer(
-  store.getState().achievement.achievements,
-  store.getState().achievement.goals
+  store ? store.getState().achievement.achievements : [],
+  store ? store.getState().achievement.goals : []
 );
 
 const goalIncludesEvent = (goal: AchievementGoal, eventName: EventType) => {

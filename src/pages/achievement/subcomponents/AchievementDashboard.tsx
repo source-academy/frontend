@@ -72,6 +72,10 @@ function Dashboard(props: DispatchProps & StateProps) {
 
   // one goal for submit, one goal for graded
   assessmentOverviews?.forEach(assessmentOverview => {
+    // No goals for contests and practical assessments that don't give XP
+    if (assessmentOverview.category === 'Contest' || assessmentOverview.category === 'Practical') {
+      return;
+    }
     const idString = assessmentOverview.id.toString();
     if (!inferencer.hasAchievement(idString)) {
       // Goal for assessment submission

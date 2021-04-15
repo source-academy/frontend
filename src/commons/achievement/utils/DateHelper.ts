@@ -2,6 +2,8 @@ const now = new Date();
 
 export const isExpired = (deadline?: Date) => deadline !== undefined && deadline <= now;
 
+export const isReleased = (release?: Date) => release === undefined || release <= now;
+
 export const timeFromExpired = (deadline?: Date) =>
   deadline === undefined ? 0 : deadline.getTime() - now.getTime();
 

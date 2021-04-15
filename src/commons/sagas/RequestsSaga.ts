@@ -137,6 +137,8 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 
   const achievements = await resp.json();
 
+  // NOTE: currently, the backend automatically sets the time release/deadline to be the current time if not specified
+  // The current workaround prevents us from setting goals with the same release and deadline
   return achievements.map(
     (achievement: any) =>
       ({
@@ -144,8 +146,8 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
         title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
         xp: achievement.xp,
-        deadline: achievement.deadline && new Date(achievement.deadline),
-        release: achievement.release && new Date(achievement.release),
+        deadline: achievement.release === achievement.deadline ? undefined : new Date(achievement.deadline),
+        release: achievement.release === achievement.deadline ? undefined : new Date(achievement.release),
         isTask: achievement.isTask,
         position: achievement.position,
         prerequisiteUuids: achievement.prerequisiteUuids,

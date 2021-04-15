@@ -16,7 +16,7 @@ const testAchievement: AchievementItem = {
   uuid: '0',
   title: 'Test Achievement',
   ability: AchievementAbility.CORE,
-  xp: 0,
+  xp: 100,
   isTask: false,
   prerequisiteUuids: [],
   goalUuids: [],
@@ -37,11 +37,24 @@ const testGoal: AchievementGoal = {
   achievementUuids: [],
   meta: {
     type: GoalType.MANUAL,
-    targetCount: 0
+    targetCount: 1
   },
   count: 0,
-  targetCount: 0,
+  targetCount: 1,
   completed: false
+};
+
+const testGoalComplete: AchievementGoal = {
+  uuid: '0',
+  text: 'Test Goal',
+  achievementUuids: [],
+  meta: {
+    type: GoalType.MANUAL,
+    targetCount: 1
+  },
+  count: 1,
+  targetCount: 1,
+  completed: true
 };
 
 describe('Achievement Inferencer Constructor', () => {
@@ -88,8 +101,8 @@ describe('Achievement Inferencer Constructor', () => {
     );
 
     test('Overwrites items of same IDs', () => {
-      expect(inferencer.getAllAchievements()).toEqual([testAchievement1, testAchievement2]);
-      expect(inferencer.getAllGoals()).toEqual([testGoal1, testGoal3]);
+      expect(inferencer.getAllAchievements()).toEqual([testAchievement1, testAchievement3]);
+      expect(inferencer.getAllGoals()).toEqual([testGoal2, testGoal3]);
     });
 
     test('References the correct achievements and goals', () => {
@@ -269,23 +282,22 @@ describe('Achievement Setter', () => {
 describe('Achievement Inferencer Getter', () => {
   // sorting based tests do not work with uuid implementation
 
-  /*
   const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
 
   test('Get all achievement IDs', () => {
-    const achievementUuids = ['0', '1', '2', '3', '4', '5', '6', '8', '9', '13', '16', '21'];
+    const achievementUuids = ['0', '1', '13', '16', '2', '21', '3', '4', '5', '6', '8', '9'];
 
     expect(inferencer.getAllAchievementUuids().sort()).toEqual(achievementUuids);
   });
 
   test('Get all goal IDs', () => {
-    const goalUuids = ['0', '1', '2', '3', '4', '5', '8', '11', '14', '16', '18'];
+    const goalUuids = ['0', '1', '11', '14', '16', '18', '2', '3', '4', '5', '8'];
 
     expect(inferencer.getAllGoalUuids().sort()).toEqual(goalUuids);
   });
 
   test('List task IDs', () => {
-    const taskUuids = ['0', '4', '8', '13', '16', '21'];
+    const taskUuids = ['0', '13', '16', '21', '4', '8'];
 
     expect(inferencer.listTaskUuids().sort()).toEqual(taskUuids);
   });
@@ -295,7 +307,6 @@ describe('Achievement Inferencer Getter', () => {
 
     expect(inferencer.listSortedTaskUuids()).toEqual(sortedTaskUuids);
   });
-  */
 
   test('List goals', () => {
     const testAchievement1: AchievementItem = {
@@ -465,47 +476,42 @@ describe('Achievement Prerequisite System', () => {
   });
 });
 
-/* To be restored when XP system is fixed
 describe('Achievement XP System', () => {
   const testAchievement1: AchievementItem = {
     ...testAchievement,
     uuid: '1',
-    goalUuids: ['1', '2']
+    goalUuids: ['1', '3']
   };
   const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2', goalUuids: [] };
+  const testAchievement3: AchievementItem = { ...testAchievement, uuid: '3', goalUuids: ['3'] };
 
-  const testGoal1: AchievementGoal = { ...testGoal, uuid: '1', xp: 100, maxXp: 100 };
-  const testGoal2: AchievementGoal = { ...testGoal, uuid: '2', xp: 20, maxXp: 100 };
-  const testGoal3: AchievementGoal = { ...testGoal, uuid: '3', xp: 3, maxXp: 100 };
+  const testGoal1: AchievementGoal = { ...testGoal, uuid: '1' };
+  const testGoal2: AchievementGoal = { ...testGoal, uuid: '2' };
+  const testGoal3: AchievementGoal = { ...testGoalComplete, uuid: '3' };
 
   const inferencer = new AchievementInferencer(
-    [testAchievement1, testAchievement2],
+    [testAchievement1, testAchievement2, testAchievement3],
     [testGoal1, testGoal2, testGoal3]
   );
 
   test('XP earned from an achievement', () => {
-    expect(inferencer.getAchievementXp('1')).toBe(120);
-    expect(inferencer.getAchievementXp('2')).toBe(0);
+    expect(inferencer.getAchievementXp('1')).toBe(100);
+    expect(inferencer.getAchievementXp('2')).toBe(100);
+    expect(inferencer.getAchievementXp('3')).toBe(100);
     expect(inferencer.getAchievementXp('101')).toBe(0);
   });
 
-  test('Max XP earned from an achievement', () => {
-    expect(inferencer.getAchievementMaxXp('1')).toBe(200);
-    expect(inferencer.getAchievementMaxXp('2')).toBe(0);
-    expect(inferencer.getAchievementMaxXp('101')).toBe(0);
-  });
-
-  test('Total XP earned from all goals', () => {
-    expect(inferencer.getTotalXp()).toBe(123);
+  test('Total XP earned from all achievements', () => {
+    expect(inferencer.getTotalXp()).toBe(100);
   });
 
   test('Progress frac from an achievement', () => {
-    expect(inferencer.getProgressFrac('1')).toBeCloseTo(120 / 200);
+    expect(inferencer.getProgressFrac('1')).toBe(1 / 2);
     expect(inferencer.getProgressFrac('2')).toBe(0);
+    expect(inferencer.getProgressFrac('3')).toBe(1);
     expect(inferencer.getProgressFrac('101')).toBe(0);
   });
 });
-*/
 
 describe('Achievement Display Deadline', () => {
   const expiredDeadline = new Date(1920, 1, 1);
@@ -646,6 +652,27 @@ describe('Achievement Status', () => {
     expect(inferencer.getStatus('101')).toBe(AchievementStatus.ACTIVE);
 
     expect(inferencer.getStatus('2')).toBe(AchievementStatus.EXPIRED);
+  });
+
+  test('Unreleased status', () => {
+    const expiredDeadline = new Date(1920, 1, 1);
+    const unexpiredDeadline = new Date(2220, 1, 1);
+
+    const unreleased: AchievementItem = { ...partiallyCompleted, release: unexpiredDeadline };
+    const released: AchievementItem = { ...notCompleted, release: expiredDeadline };
+    const precompleted: AchievementItem = { ...fullyCompleted, release: unexpiredDeadline };
+
+    const inferencer = new AchievementInferencer(
+      [unreleased, released, precompleted],
+      [testGoal1, testGoal2, testGoal3]
+    );
+
+    expect(inferencer.getStatus('1')).not.toBe(AchievementStatus.UNRELEASED);
+    expect(inferencer.getStatus('2')).toBe(AchievementStatus.UNRELEASED);
+    expect(inferencer.getStatus('3')).not.toBe(AchievementStatus.UNRELEASED);
+
+    expect(inferencer.getStatus('1')).toBe(AchievementStatus.COMPLETED);
+    expect(inferencer.getStatus('3')).toBe(AchievementStatus.ACTIVE);
   });
 });
 
