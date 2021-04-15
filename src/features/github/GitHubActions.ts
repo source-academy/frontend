@@ -1,17 +1,9 @@
 import { action } from 'typesafe-actions';
 
-import {
-  GITHUB_INITIALISE,
-  GITHUB_OPEN_PICKER,
-  GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS,
-  GitHubFile
-} from './GitHubTypes';
+import { GITHUB_OPEN_FILE, GITHUB_SAVE_FILE, GITHUB_SAVE_FILE_AS } from './GitHubTypes';
 
-export const githubOpenPicker = () => action(GITHUB_OPEN_PICKER);
+export const githubOpenFile = () => action(GITHUB_OPEN_FILE);
 
-export const githubSaveFile = (file: GitHubFile) => action(GITHUB_SAVE_FILE, file);
+export const githubSaveFile = () => action(GITHUB_SAVE_FILE);
 
 export const githubSaveFileAs = () => action(GITHUB_SAVE_FILE_AS);
-
-export const githubInitialise = () => action(GITHUB_INITIALISE);

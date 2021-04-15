@@ -28,7 +28,7 @@ import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalBut
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
-import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
+import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
@@ -51,7 +51,6 @@ import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
-import { GitHubFile } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -99,10 +98,9 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleGitHubOpenPicker: () => void;
+  handleGitHubOpenFile: () => void;
+  handleGitHubSaveFileAs: () => void;
   handleGitHubSaveFile: () => void;
-  handleGitHubUpdateFile: (file: GitHubFile) => void;
-  handleGitHubInitialise: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
 };
@@ -134,7 +132,7 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitInstance: Octokit | undefined;
-  githubFile: GitHubFile | undefined;
+  githubSaveInfo: { repoName: string; filePath: string };
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -411,7 +409,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
   const persistenceButtons = React.useMemo(() => {
     return (
-      <ControlBarPersistenceButtons
+      <ControlBarGoogleDriveButtons
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
@@ -436,34 +434,28 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { githubOctokitInstance, githubFile, handleGitHubUpdateFile } = props;
-  // Compute this here to avoid re-rendering the button every keystroke
-  const githubIsDirty = githubFile && (!githubFile.lastSaved || githubFile.lastSaved < lastEdit);
+  const { githubOctokitInstance } = props;
   const githubButtons = React.useMemo(() => {
     return (
       <ControlBarGitHubButtons
-        currentFile={githubFile}
         loggedInAs={githubOctokitInstance}
-        isDirty={githubIsDirty}
+        githubSaveInfo={props.githubSaveInfo}
         key="github"
-        onClickOpen={props.handleGitHubOpenPicker}
-        onClickSave={githubFile ? () => handleGitHubUpdateFile(githubFile) : undefined}
-        onClickSaveAs={props.handleGitHubSaveFile}
+        onClickOpen={props.handleGitHubOpenFile}
+        onClickSave={props.handleGitHubSaveFile}
+        onClickSaveAs={props.handleGitHubSaveFileAs}
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
-        onPopoverOpening={props.handleGitHubInitialise}
       />
     );
   }, [
     githubOctokitInstance,
-    githubFile,
-    githubIsDirty,
+    props.githubSaveInfo,
+    props.handleGitHubOpenFile,
+    props.handleGitHubSaveFileAs,
     props.handleGitHubSaveFile,
-    props.handleGitHubOpenPicker,
     props.handleGitHubLogIn,
-    props.handleGitHubLogOut,
-    props.handleGitHubInitialise,
-    handleGitHubUpdateFile
+    props.handleGitHubLogOut
   ]);
 
   const executionTime = React.useMemo(
