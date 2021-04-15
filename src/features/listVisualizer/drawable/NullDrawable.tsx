@@ -20,12 +20,7 @@ export class NullDrawable extends React.PureComponent<NullProps> {
       <Line
         x={this.props.x}
         y={this.props.y}
-        points={[
-          0,
-          Config.BoxHeight,
-          Config.BoxWidth,
-          0,
-        ]}
+        points={[0, Config.BoxHeight, Config.BoxWidth, 0]}
         strokeWidth={Config.StrokeWidth - 1}
         stroke={Config.Stroke}
       />

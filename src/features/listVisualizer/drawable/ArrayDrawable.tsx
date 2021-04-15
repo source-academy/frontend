@@ -8,7 +8,7 @@ import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './NullDrawable';
 
 type ArrayProps = {
-  nodes: (TreeNode | number)[],
+  nodes: (TreeNode | number)[];
 };
 
 /**
@@ -37,7 +37,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
         const props = {
           x: index * Config.BoxWidth,
           // x: isLeftNode ? -Config.BoxWidth * Config.VertBarPos : 0,
-          y: 0,
+          y: 0
         };
         return <NullDrawable {...props} />;
       } else {
@@ -57,20 +57,18 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
         />
         {/* Vertical lines in the box */}
         {Array.from(Array(this.props.nodes.length - 1), (e, i) => {
-          return <Line
-            key={'line' + i}
-            points={[
-              Config.BoxWidth * (i + 1),
-              0,
-              Config.BoxWidth * (i + 1),
-              Config.BoxHeight
-            ]}
-            strokeWidth={Config.StrokeWidth}
-            stroke={Config.Stroke}
-          />
+          return (
+            <Line
+              key={'line' + i}
+              points={[Config.BoxWidth * (i + 1), 0, Config.BoxWidth * (i + 1), Config.BoxHeight]}
+              strokeWidth={Config.StrokeWidth}
+              stroke={Config.Stroke}
+            />
+          );
         })}
-        {this.props.nodes.map((child, index) => child instanceof DataTreeNode &&
-            createChildText(child, index))}
+        {this.props.nodes.map(
+          (child, index) => child instanceof DataTreeNode && createChildText(child, index)
+        )}
       </Group>
     );
   }

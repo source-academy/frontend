@@ -3,13 +3,20 @@ import { Layer, Line, Text } from 'react-konva';
 import { Config } from '../Config';
 import { Data, Pair } from '../ListVisualizerTypes';
 import { isArray, isFunction, toText } from '../ListVisualizerUtils';
-import { ArrayTreeNode, DataTreeNode, DrawableTreeNode, FunctionTreeNode, TreeNode } from './TreeNode';
+import {
+  ArrayTreeNode,
+  DataTreeNode,
+  DrawableTreeNode,
+  FunctionTreeNode,
+  TreeNode
+} from './TreeNode';
 
 /**
  *  A tree object built based on a list or pair.
  */
 export class Tree {
   private _rootNode: TreeNode;
+  // private _actual;
   private nodes: DrawableTreeNode[];
 
   /**
@@ -20,6 +27,7 @@ export class Tree {
   constructor(rootNode: TreeNode, nodes: DrawableTreeNode[]) {
     this._rootNode = rootNode;
     this.nodes = nodes;
+    // this._actual = rootNode?.children[0];
   }
 
   /**
@@ -40,23 +48,22 @@ export class Tree {
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
 
-    function constructNode(structure: Data) {   
-      // if (visitedStructures.indexOf(structure) > -1) {
-      //   // tree already built
-      //   return visitedStructures.indexOf(structure);
-      // } else {
-      //   return isArray(structure)
-      //     ? constructTree(structure)
-      //     : isFunction(structure)
-      //     ? constructFunction(structure)
-      //     : constructData(structure);
-      // }
-      return visitedStructures.get(structure) ??
-        isArray(structure)
+    function constructNode(structure: Data) {
+      console.log(structure, visitedStructures.get(structure));
+      if (visitedStructures.get(structure) !== undefined) {
+        return visitedStructures.get(structure)!;
+      }
+      return isArray(structure)
           ? constructTree(structure)
           : isFunction(structure)
           ? constructFunction(structure)
           : constructData(structure);
+      // return visitedStructures.get(structure) ??
+      //   isArray(structure)
+      //     ? constructTree(structure)
+      //     : isFunction(structure)
+      //     ? constructFunction(structure)
+      //     : constructData(structure);
     }
 
     /**
@@ -68,7 +75,7 @@ export class Tree {
     function constructTree(tree: Array<Data>) {
       const node = new ArrayTreeNode(nodeCount);
 
-      visitedStructures[nodeCount] = tree;
+      visitedStructures.set(tree, nodeCount);
       treeNodes[nodeCount] = node;
       nodeCount++;
 
@@ -87,7 +94,7 @@ export class Tree {
       const node = new FunctionTreeNode(nodeCount);
 
       // memoise current function
-      visitedStructures[nodeCount] = func;
+      visitedStructures.set(func, nodeCount);
       treeNodes[nodeCount] = node;
       nodeCount++;
 
@@ -103,11 +110,13 @@ export class Tree {
       return new DataTreeNode(data);
     }
 
-    const visitedStructures: Map<Function | Pair, number> = new Map(); // detects cycles
+    const visitedStructures: Map<Function | Pair | Array<Data>, number> = new Map(); // detects cycles
     const treeNodes: DrawableTreeNode[] = [];
     const rootNode = constructNode(tree);
+    const superNode = new ArrayTreeNode(0);
+    superNode.children = [rootNode];
 
-    return new Tree(rootNode, treeNodes);
+    return new Tree(superNode, treeNodes);
   }
 
   draw(): TreeDrawer {
@@ -139,24 +148,27 @@ class TreeDrawer {
    *  Draws a tree at x, y, by calling drawNode on the root at x, y.
    */
   draw(x: number, y: number): JSX.Element {
-    const layer = (this.tree.rootNode instanceof DataTreeNode) ?
-      <Layer>
-        <Text
-          text={toText(this.tree.rootNode.data, true)}
-          align={'center'}
-          fontStyle={'normal'}
-          fontSize={20}
-          fill={'white'}
-        />
-      </Layer>
-    : (() => {
-      this.drawNode(this.tree.rootNode, x, y, x, y);
-      return (
-        <Layer width={this.getNodeWidth(this.tree.rootNode)} offsetY={0}>
-          {this.drawables}
+    const layer =
+     this.tree.rootNode instanceof DataTreeNode ? (
+        <Layer>
+          <Text
+            text={toText(this.tree.rootNode.data, true)}
+            align={'center'}
+            fontStyle={'normal'}
+            fontSize={20}
+            fill={'white'}
+          />
         </Layer>
+      ) : (
+        (() => {
+          this.drawNode(this.tree.rootNode, x, y, x, y);
+          return (
+            <Layer width={this.getNodeWidth(this.tree.rootNode)} offsetY={0}>
+              {this.drawables}
+            </Layer>
+          );
+        })()
       );
-    })();
     this.width = this.getNodeWidth(this.tree.rootNode);
     this.height = this.getNodeHeight(this.tree.rootNode);
     return layer;
@@ -195,11 +207,16 @@ class TreeDrawer {
         if (childNode instanceof TreeNode) {
           this.drawNode(childNode, leftX, y + Config.DistanceY, x + Config.BoxWidth * index, y);
           const childNodeWidth = this.getNodeWidth(childNode);
-          leftX += childNodeWidth ? (childNodeWidth + Config.DistanceX) : 0;
+          leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
         } else {
           // if its left child is part of a cycle and it's been drawn, link back to that node instead
           const drawnNode = this.tree.getNodeById(childNode);
-          this.backwardLeftEdge(x + Config.BoxWidth * index, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
+          this.backwardLeftEdge(
+            x + Config.BoxWidth * index,
+            y,
+            drawnNode.drawableX ?? 0,
+            drawnNode.drawableY ?? 0
+          );
         }
       });
 
@@ -233,12 +250,14 @@ class TreeDrawer {
         return this.nodeWidths.get(node) ?? 0;
       } else if (node.children != null) {
         const childrenWidths = node.children
-        .map(node => this.getNodeWidth(node))
-        .filter(x => x > 0);
-        const childrenWidth = childrenWidths.length > 0
-          ? childrenWidths.reduce((x, y) => x + y + Config.DistanceX)
-          : 0;
-        const nodeWidth = Math.max(node.children.length * Config.BoxWidth + 2 * Config.StrokeWidth, childrenWidth);
+          .map(node => this.getNodeWidth(node))
+          .filter(x => x > 0);
+        const childrenWidth =
+          childrenWidths.length > 0 ? childrenWidths.reduce((x, y) => x + y + Config.DistanceX) : 0;
+        const nodeWidth = Math.max(
+          node.children.length * Config.BoxWidth + 2 * Config.StrokeWidth,
+          childrenWidth
+        );
         this.nodeWidths.set(node, nodeWidth);
         return nodeWidth;
       } else {
@@ -258,11 +277,12 @@ class TreeDrawer {
       if (node instanceof DataTreeNode) {
         return 0;
       } else if (node.children) {
-        return node.children
-          .map(child => child instanceof TreeNode ? helper(child) : 0)
-          .filter(height => height > 0)
-          .reduce((x, y) => Math.max(x, y) + Config.DistanceY, 0)
-          + Config.BoxHeight;
+        return (
+          node.children
+            .map(child => (child instanceof TreeNode ? helper(child) : 0))
+            .filter(height => height > 0)
+            .reduce((x, y) => Math.max(x, y) + Config.DistanceY, 0) + Config.BoxHeight
+        );
       } else {
         return 0;
       }

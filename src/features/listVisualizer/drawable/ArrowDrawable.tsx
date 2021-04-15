@@ -21,7 +21,7 @@ export abstract class ArrowDrawable extends React.PureComponent<ArrowConfig> {
       start = { x: parentXOffset + Config.BoxWidth / 2, y: parentYOffset + Config.BoxHeight / 2 };
     } else {
       start = {
-        x: parentXOffset + 3 * Config.BoxHeight / 4,
+        x: parentXOffset + (3 * Config.BoxHeight) / 4,
         y: parentYOffset + Config.BoxHeight / 2
       };
     }
