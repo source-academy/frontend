@@ -1,28 +1,41 @@
-import { Button, Card, Classes, Dialog, Elevation, Intent } from '@blueprintjs/core';
+import { Button, Card, Classes, Dialog, Elevation, H4, Intent, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import Markdown from '../Markdown';
-import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
-import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 
-const GitHubMissionBrowserDialog: React.FC<any> = props => {
+export type GitHubMissionBrowserDialogProps = {
+  missionRepos: any[];
+  onSubmit: (response: void) => void;
+};
+
+export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const allRepos = [];
-  const foundMissions = allRepos.filter(checkIfRepositoryIsMission);
+
+  const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+
+  useEffect(() => {
+    convertMissionReposToBrowsableMissions(props.missionRepos, setBrowsableMissions);
+  }, [props.missionRepos]);
 
   return (
-    <Dialog className="missionBrowserDialog" isOpen={true}>
+    <Dialog className="missionBrowser" isOpen={true}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a Mission</h3>
       </div>
 
       <div className={Classes.DIALOG_BODY}>
-        {foundMissions.map(missionRepo => convertMissionToCard(missionRepo, isMobileBreakpoint))}
+        <div className="missionBrowserContent">
+          {browsableMissions.map(missionRepo =>
+            convertMissionToCard(missionRepo, isMobileBreakpoint, props.onSubmit)
+          )}
+        </div>
       </div>
 
       <div className={classNames(Classes.DIALOG_FOOTER)}>
@@ -35,54 +48,113 @@ const GitHubMissionBrowserDialog: React.FC<any> = props => {
     </Dialog>
   );
 
-  function handleClose() {}
+  function handleClose() {
+    props.onSubmit();
+  }
 };
 
-function checkIfRepositoryIsMission(repo: any) {
-  return true;
+class BrowsableMission {
+  title: string = '';
+  coverImage: string = '';
+  webSummary: string = '';
 }
 
-function convertMissionToCard(missionRepo: any, isMobileBreakpoint: boolean) {
+async function convertMissionReposToBrowsableMissions(
+  missionRepos: any[],
+  setBrowsableMissions: any
+) {
+  const browsableMissions: BrowsableMission[] = [];
+
+  for (let i = 0; i < missionRepos.length; i++) {
+    browsableMissions.push(await convertRepoToBrowsableMission(missionRepos[i]));
+  }
+
+  setBrowsableMissions(browsableMissions);
+}
+
+async function convertRepoToBrowsableMission(missionRepo: any) {
+  const octokit = getGitHubOctokitInstance() as Octokit;
+  const authUser = await octokit.users.getAuthenticated();
+  const loginId = authUser.data.login;
+
+  const results = await octokit.repos.getContent({
+    owner: loginId,
+    repo: missionRepo.name,
+    path: '/METADATA'
+  });
+
+  const content = (results.data as any).content;
+  const metadataFileString = Buffer.from(content, 'base64').toString();
+
+  const browsableMission = convertMetadataStringToBrowsableMission(metadataFileString);
+  return browsableMission;
+}
+
+function convertMetadataStringToBrowsableMission(metadata: string) {
+  const browsableMission = new BrowsableMission();
+
+  const lines = metadata.replace(/\r/g, "").split(/\n/);
+  lines.forEach(line => {
+    if (line.startsWith('title')) {
+      browsableMission.title = line.substr(6);
+      return;
+    }
+
+    if (line.startsWith('coverimage')) {
+      browsableMission.coverImage = line.substr(11);
+      return;
+    }
+
+    if (line.startsWith('websummary')) {
+      browsableMission.webSummary = line.substr(11);
+      return;
+    }
+  });
+
+  return browsableMission;
+}
+
+function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean, onSubmit: any) {
   const ratio = isMobileBreakpoint ? 5 : 3;
 
   return (
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className={`col-xs-${String(ratio)} listing-picture`}>
-        <NotificationBadge
-          className="badge"
-          notificationFilter={filterNotificationsByAssessment(missionRepo.id)}
-          large={true}
-        />
         <img
           alt="Assessment"
-          className={`cover-image-${missionRepo.status}`}
+          className={`cover-image-${missionRepo.title}`}
           src={missionRepo.coverImage ? missionRepo.coverImage : defaultCoverImage}
         />
       </div>
 
-      <div className="listing-description">
-        <Markdown content={missionRepo.shortSummary} />
-      </div>
-
-      <div className="listing-footer">
-        <div className="listing-button">
-          <Button
-            icon={IconNames.PLAY}
-            minimal={true}
-            // intentional: each listing renders its own version of onClick
-            // tslint:disable-next-line:jsx-no-lambda
-            onClick={() => {
-              console.log('PAIN PEKO');
-            }}
-          >
-            <span className="custom-hidden-xxxs">Open</span>
-          </Button>
+      <div className={`col-xs-${String(12 - ratio)} listing-text`}>
+        <div className="listing-header">
+          <Text ellipsize={true}>
+            <H4 className="listing-title">{missionRepo.title}</H4>
+          </Text>
         </div>
+
+        <div className="listing-description">
+          <Markdown content={missionRepo.webSummary} />
+        </div>
+
+        <div className="listing-footer">
+          <div className="listing-button">
+            <Button
+              icon={IconNames.PLAY}
+              minimal={true}
+              // intentional: each listing renders its own version of onClick
+              // tslint:disable-next-line:jsx-no-lambda
+              onClick={() => {
+                onSubmit();
+              }}
+            >
+              <span className="custom-hidden-xxxs">Open</span>
+            </Button>
+          </div>
+        </div>
+
       </div>
     </Card>
   );
-
-  //return <div>pain</div>;
 }
-
-export default GitHubMissionBrowserDialog;
