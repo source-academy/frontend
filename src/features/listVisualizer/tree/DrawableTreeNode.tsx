@@ -6,15 +6,9 @@ import { TreeNode } from './BaseTreeNode';
  * Concrete implementations: FunctionTreeNode, PairTreeNode
  */
 export abstract class DrawableTreeNode extends TreeNode {
-  protected readonly id: number;
   protected _drawable?: JSX.Element;
   public drawableX?: number;
   public drawableY?: number;
-
-  constructor(id: number) {
-    super();
-    this.id = id;
-  }
 
   get drawable() {
     return this._drawable;

@@ -3,6 +3,7 @@ import { Layer, Line, Text } from 'react-konva';
 import { Config } from '../Config';
 import { Data, Pair } from '../ListVisualizerTypes';
 import { isArray, isFunction, toText } from '../ListVisualizerUtils';
+import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import {
   ArrayTreeNode,
   DataTreeNode,
@@ -48,22 +49,17 @@ export class Tree {
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
 
-    function constructNode(structure: Data) {
+    function constructNode(structure: Data) : TreeNode {
       console.log(structure, visitedStructures.get(structure));
-      if (visitedStructures.get(structure) !== undefined) {
-        return visitedStructures.get(structure)!;
+      const alreadyDrawnNode = visitedStructures.get(structure);
+      if (alreadyDrawnNode !== undefined) {
+        return new AlreadyParsedTreeNode(alreadyDrawnNode);
       }
       return isArray(structure)
           ? constructTree(structure)
           : isFunction(structure)
           ? constructFunction(structure)
           : constructData(structure);
-      // return visitedStructures.get(structure) ??
-      //   isArray(structure)
-      //     ? constructTree(structure)
-      //     : isFunction(structure)
-      //     ? constructFunction(structure)
-      //     : constructData(structure);
     }
 
     /**
@@ -73,13 +69,11 @@ export class Tree {
      * @param tree The Source tree to construct a node for.
      */
     function constructTree(tree: Array<Data>) {
-      const node = new ArrayTreeNode(nodeCount);
+      const node = new ArrayTreeNode(tree.map(constructNode));
 
-      visitedStructures.set(tree, nodeCount);
+      visitedStructures.set(tree, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
-
-      node.children = tree.map(constructNode);
 
       return node;
     }
@@ -91,10 +85,10 @@ export class Tree {
      * @param func The function to construct a node for.
      */
     function constructFunction(func: Function) {
-      const node = new FunctionTreeNode(nodeCount);
+      const node = new FunctionTreeNode();
 
       // memoise current function
-      visitedStructures.set(func, nodeCount);
+      visitedStructures.set(func, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
 
@@ -110,13 +104,11 @@ export class Tree {
       return new DataTreeNode(data);
     }
 
-    const visitedStructures: Map<Function | Pair | Array<Data>, number> = new Map(); // detects cycles
+    const visitedStructures: Map<Function | Pair | Array<Data>, DrawableTreeNode> = new Map(); // detects cycles
     const treeNodes: DrawableTreeNode[] = [];
     const rootNode = constructNode(tree);
-    const superNode = new ArrayTreeNode(0);
-    superNode.children = [rootNode];
 
-    return new Tree(superNode, treeNodes);
+    return new Tree(rootNode, treeNodes);
   }
 
   draw(): TreeDrawer {
@@ -187,6 +179,18 @@ class TreeDrawer {
    * @param parentY The y position of the parent. If there is no parent, it is the same as y.
    */
   drawNode(node: TreeNode, x: number, y: number, parentX: number, parentY: number) {
+    if (node instanceof AlreadyParsedTreeNode) {
+      // if its left child is part of a cycle and it's been drawn, link back to that node instead
+      const drawnNode = node.actualNode;
+      this.backwardLeftEdge(
+        parentX,
+        parentY,
+        drawnNode.drawableX ?? 0,
+        drawnNode.drawableY ?? 0
+      );
+    }
+
+
     if (!(node instanceof DrawableTreeNode)) return;
 
     // draws the content
@@ -204,19 +208,14 @@ class TreeDrawer {
       // const width = this.getNodeWidth(node);
       let leftX = x;
       node.children?.forEach((childNode, index) => {
-        if (childNode instanceof TreeNode) {
+        if (childNode instanceof AlreadyParsedTreeNode) {
+          this.drawNode(childNode, leftX, y, x + Config.BoxWidth * index, y);
+          const childNodeWidth = this.getNodeWidth(childNode);
+          leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
+        } else if (childNode instanceof TreeNode) {
           this.drawNode(childNode, leftX, y + Config.DistanceY, x + Config.BoxWidth * index, y);
           const childNodeWidth = this.getNodeWidth(childNode);
           leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
-        } else {
-          // if its left child is part of a cycle and it's been drawn, link back to that node instead
-          const drawnNode = this.tree.getNodeById(childNode);
-          this.backwardLeftEdge(
-            x + Config.BoxWidth * index,
-            y,
-            drawnNode.drawableX ?? 0,
-            drawnNode.drawableY ?? 0
-          );
         }
       });
 
@@ -238,10 +237,8 @@ class TreeDrawer {
    * Returns the width taken up by the node in pixels.
    * @param node The node to calculate the width of.
    */
-  getNodeWidth(node: TreeNode | number): number {
-    if (!(node instanceof TreeNode)) {
-      return 0;
-    } else if (node instanceof DataTreeNode) {
+  getNodeWidth(node: TreeNode): number {
+    if (node instanceof DataTreeNode || node instanceof AlreadyParsedTreeNode) {
       return 0;
     } else if (node instanceof FunctionTreeNode) {
       return Config.BoxWidth;
@@ -274,7 +271,7 @@ class TreeDrawer {
    */
   getNodeHeight(node: TreeNode): number {
     function helper(node: TreeNode): number {
-      if (node instanceof DataTreeNode) {
+      if (node instanceof DataTreeNode || node instanceof AlreadyParsedTreeNode) {
         return 0;
       } else if (node.children) {
         return (
@@ -304,15 +301,15 @@ class TreeDrawer {
       // lower right to upper left
       path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
+        x1 + Config.BoxWidth / 2,
         y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 - Config.BoxSpacingX / 4,
+        x2 - Config.BoxSpacingX / 2,
         y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 - Config.BoxSpacingX / 4,
+        x2 - Config.BoxSpacingX / 2,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
         y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
+        x2 + Config.BoxWidth / 2 - Config.ArrowSpaceH,
         y2 - Config.ArrowSpace
       ];
     } else if (x1 <= x2 && y1 >= y2 - Config.BoxHeight - 1) {
@@ -374,9 +371,9 @@ class TreeDrawer {
     const pointerHead = (
       <Line
         points={[
-          x1 + Config.BoxWidth / 4,
+          x1 + Config.BoxWidth / 2,
           y1 + Config.BoxHeight / 2,
-          x1 + Config.BoxWidth / 4,
+          x1 + Config.BoxWidth / 2,
           y1 + (Config.BoxSpacingY * 3) / 4
         ]}
         strokeWidth={Config.StrokeWidth}

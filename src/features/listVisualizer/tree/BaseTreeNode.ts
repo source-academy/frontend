@@ -1,7 +1,7 @@
 export class TreeNode {
-  public children: (TreeNode | number)[] | null;
+  public children: TreeNode[] | null;
 
-  constructor() {
-    this.children = null;
+  constructor(children: TreeNode[] | null = null) {
+    this.children = children;
   }
 }

@@ -8,7 +8,7 @@ import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './NullDrawable';
 
 type ArrayProps = {
-  nodes: (TreeNode | number)[];
+  nodes: TreeNode[];
 };
 
 /**
@@ -36,7 +36,6 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
       } else if (isEmptyList(nodeValue)) {
         const props = {
           x: index * Config.BoxWidth,
-          // x: isLeftNode ? -Config.BoxWidth * Config.VertBarPos : 0,
           y: 0
         };
         return <NullDrawable {...props} />;
