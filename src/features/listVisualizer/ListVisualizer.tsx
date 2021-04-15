@@ -69,9 +69,9 @@ export default class ListVisualizer {
    */
   private createDrawing(xs: Data): JSX.Element {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
-    const layer = treeDrawer.draw(0, 0);
+    const layer = treeDrawer.draw(50, 50);
     const stage = (
-      <Stage key={xs} width={treeDrawer.width + 600} height={treeDrawer.height}>
+      <Stage key={xs} width={treeDrawer.width + 600} height={treeDrawer.height + 300}>
         {layer}
       </Stage>
     );

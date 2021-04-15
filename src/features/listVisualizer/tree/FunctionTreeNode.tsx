@@ -11,7 +11,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
     this._drawable = (
       <Group x={x} y={y}>
         <FunctionDrawable></FunctionDrawable>
-        {parentX !== x && (
+        {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
               from: {

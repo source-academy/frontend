@@ -40,7 +40,17 @@ export class Tree {
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
 
-    function constructNode(structure: Data) {
+    function constructNode(structure: Data) {   
+      // if (visitedStructures.indexOf(structure) > -1) {
+      //   // tree already built
+      //   return visitedStructures.indexOf(structure);
+      // } else {
+      //   return isArray(structure)
+      //     ? constructTree(structure)
+      //     : isFunction(structure)
+      //     ? constructFunction(structure)
+      //     : constructData(structure);
+      // }
       return visitedStructures.get(structure) ??
         isArray(structure)
           ? constructTree(structure)

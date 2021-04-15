@@ -12,7 +12,7 @@ type ArrayProps = {
 };
 
 /**
- *  Represents a pair in a tree. It takes up to two data items.
+ *  Represents an array in a tree.
  */
 export class ArrayDrawable extends React.PureComponent<ArrayProps> {
   render() {

@@ -28,7 +28,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
     super(props);
     this.state = { steps: [], currentStep: 0 };
     ListVisualizer.init(steps => {
-      if (!steps) {
+      if (steps) {
         //  Blink icon
         const icon = document.getElementById('data_visualiser-icon');
 
