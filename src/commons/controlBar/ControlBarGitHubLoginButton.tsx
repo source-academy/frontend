@@ -21,7 +21,7 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
   LOGGED_IN: Intent.NONE
 };
 
-export const ControlBarGitHubLoginButtons: React.FC<ControlBarGitHubLoginButtonProps> = props => {
+export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonProps> = props => {
   // The 'loggedInAs' is not used directly in this code block
   // However, keeping it in will ensure that the component re-renders immediately
   // Or else, the re-render has to be triggered by something else
@@ -31,7 +31,7 @@ export const ControlBarGitHubLoginButtons: React.FC<ControlBarGitHubLoginButtonP
 
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
-  const mainButton = controlButton('GitHub', IconNames.GIT_BRANCH, null, {
+  const mainButton = controlButton('GitHub Login', IconNames.GIT_BRANCH, null, {
     intent: stateToIntent[state]
   });
 
