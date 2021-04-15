@@ -5,7 +5,6 @@ import {
 } from '../../../features/achievement/AchievementActions';
 import {
   AchievementGoal,
-  EventConditions,
   EventMeta,
   EventType,
   GoalProgress,
@@ -14,40 +13,17 @@ import {
 import { store } from '../../../pages/createStore';
 import { showSuccessMessage } from '../../utils/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
+import { isExpired, isReleased, isWithinTimeRange } from './DateHelper';
 
-function eventConditionSatisfied(meta: EventMeta): boolean {
-  // short circuit for those that have no condition to fulfil
-  if (meta.condition.type === EventConditions.NONE) {
-    return true;
-  } else {
-    const leftBound = meta.condition.leftBound;
-    const rightBound = meta.condition.rightBound;
-    const currentDate = new Date();
-    switch (meta.condition.type) {
-      case EventConditions.TIME:
-        const currentTime = currentDate.getHours() * 100 + currentDate.getMinutes();
-
-        // happens when, for example, leftBound = 2300, rightBound = 0100
-        if (leftBound >= rightBound) {
-          return currentTime <= rightBound || currentTime >= leftBound;
-        } else {
-          return currentTime <= rightBound && currentTime >= leftBound;
-        }
-      case EventConditions.DATETIME:
-        // YYYYMMDDHHMM - terrible implementation tbh
-        const currentDatetime =
-          currentDate.getFullYear() * 100000000 +
-          (currentDate.getMonth() + 1) * 1000000 +
-          currentDate.getDate() * 10000 +
-          currentDate.getHours() * 100 +
-          currentDate.getMinutes();
-
-        return currentDatetime <= rightBound && currentDatetime >= leftBound;
-      default:
-        // shouldn't ever reach here, only in cases of invalid condition
-        return false;
-    }
+function eventShouldCount(meta: EventMeta): boolean {
+  // goal is not released, or has expired
+  if (isExpired(meta.deadline) || !isReleased(meta.release)) {
+    return false;
   }
+  if (isWithinTimeRange(meta.observeFrom, meta.observeTo)) {
+    return true;
+  }
+  return false;
 }
 
 let inferencer: AchievementInferencer = new AchievementInferencer(
@@ -106,7 +82,7 @@ export function processEvent(eventName: EventType, increment: number = 1) {
     };
 
     goals.forEach(goal => {
-      if (eventConditionSatisfied(goal.meta as EventMeta)) {
+      if (eventShouldCount(goal.meta as EventMeta)) {
         // edit the version that is on the state
         computeCompleted(goal);
         goal.count = goal.count + increment;

@@ -1,6 +1,5 @@
 import {
   AchievementGoal,
-  EventConditions,
   EventType,
   GoalDefinition,
   GoalMeta,
@@ -32,7 +31,10 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
         type: GoalType.EVENT,
         eventNames: [EventType.NONE],
         targetCount: 1,
-        condition: { type: EventConditions.NONE, leftBound: NaN, rightBound: NaN }
+        release: undefined,
+        deadline: undefined,
+        observeFrom: undefined,
+        observeTo: undefined
       };
   }
 };

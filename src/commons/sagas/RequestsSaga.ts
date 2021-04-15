@@ -12,12 +12,10 @@ import {
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   AchievementUser,
   GoalDefinition,
-  GoalMeta,
   GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -28,7 +26,11 @@ import {
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
-import { backendifyGoalDefinition } from '../achievement/utils/AchievementBackender';
+import {
+  backendifyGoalDefinition,
+  frontendifyAchievementGoal,
+  frontendifyAchievementItem
+} from '../achievement/utils/AchievementBackender';
 import { Tokens, User } from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -137,27 +139,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 
   const achievements = await resp.json();
 
-  return achievements.map(
-    (achievement: any) =>
-      ({
-        uuid: achievement.uuid || '',
-        title: achievement.title || '',
-        ability: achievement.ability as AchievementAbility,
-        xp: achievement.xp,
-        deadline: achievement.deadline === null ? undefined : new Date(achievement.deadline),
-        release: achievement.release === null ? undefined : new Date(achievement.release),
-        isTask: achievement.isTask,
-        position: achievement.position,
-        prerequisiteUuids: achievement.prerequisiteUuids,
-        goalUuids: achievement.goalUuids,
-        cardBackground: achievement.cardBackground || '',
-        view: {
-          coverImage: achievement.view.coverImage || '',
-          completionText: achievement.view.completionText || '',
-          description: achievement.view.description || ''
-        }
-      } as AchievementItem)
-  );
+  return achievements.map((achievement: any) => frontendifyAchievementItem(achievement));
 };
 
 /**
@@ -178,18 +160,7 @@ export const getGoals = async (
 
   const achievementGoals = await resp.json();
 
-  return achievementGoals.map(
-    (goal: any) =>
-      ({
-        uuid: goal.uuid || '',
-        text: goal.text || '',
-        achievementUuids: goal.achievementUuids,
-        meta: goal.meta as GoalMeta,
-        count: goal.count,
-        targetCount: goal.targetCount,
-        completed: goal.completed
-      } as AchievementGoal)
-  );
+  return achievementGoals.map((goal: any) => frontendifyAchievementGoal(goal));
 };
 
 /**
@@ -207,18 +178,7 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 
   const achievementGoals = await resp.json();
 
-  return achievementGoals.map(
-    (goal: any) =>
-      ({
-        uuid: goal.uuid || '',
-        text: goal.text || '',
-        achievementUuids: goal.achievementUuids,
-        meta: goal.meta as GoalMeta,
-        count: goal.count,
-        targetCount: goal.targetCount,
-        completed: goal.completed
-      } as AchievementGoal)
-  );
+  return achievementGoals.map((goal: any) => frontendifyAchievementGoal(goal));
 };
 
 /**
