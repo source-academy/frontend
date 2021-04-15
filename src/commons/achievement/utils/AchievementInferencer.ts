@@ -805,18 +805,18 @@ class AchievementInferencer {
    * @param node the AchievementNode
    */
   private generateStatus(node: AchievementNode) {
-    const { goalUuids } = node.achievement;
+    let prereqsCompleted = true;
+    // iterate through all prerequisites. If any are not complete, then prereqs not complete.
+    node.descendant.forEach(uuid => {
+      prereqsCompleted = prereqsCompleted && this.isCompleted(this.getAchievement(uuid));
+    });
 
-    const achievementCompleted =
-      goalUuids.length !== 0 &&
-      goalUuids
-        .map(goalUuid => this.getGoal(goalUuid).completed)
-        .reduce((result, goalCompleted) => result && goalCompleted, true);
+    const achievementCompleted = this.isCompleted(node.achievement);
 
     const hasReleased = isReleased(node.achievement.release);
     const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
-    node.status = achievementCompleted
+    node.status = achievementCompleted && prereqsCompleted
       ? AchievementStatus.COMPLETED
       : hasReleased
       ? hasUnexpiredDeadline
