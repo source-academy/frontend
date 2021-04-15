@@ -25,6 +25,8 @@ import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
+import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
+
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
@@ -294,6 +296,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     );
   }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
+  const myMissionsButton = React.useMemo(() => {
+    return <ControlBarMyMissionsButton key="my_missions" />;
+  }, []);
+
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
@@ -375,7 +381,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, chapterSelect, githubButtons]
+      editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton]
     },
     editorProps: editorProps,
     editorHeight: props.editorHeight,
@@ -401,7 +407,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     replProps: replProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, githubButtons]
+        editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton]
       },
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
