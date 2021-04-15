@@ -12,7 +12,7 @@ export class ArrayTreeNode extends DrawableTreeNode {
     const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
 
     this._drawable = (
-      <Group x={x} y={y}>
+      <Group key={x + ", " + y} x={x} y={y}>
         {arrayDrawable}
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable

@@ -9,7 +9,7 @@ import { DrawableTreeNode } from './DrawableTreeNode';
 export class FunctionTreeNode extends DrawableTreeNode {
   createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
     this._drawable = (
-      <Group x={x} y={y}>
+      <Group key={x + ", " + y} x={x} y={y}>
         <FunctionDrawable></FunctionDrawable>
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable

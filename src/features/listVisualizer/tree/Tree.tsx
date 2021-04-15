@@ -17,7 +17,6 @@ import {
  */
 export class Tree {
   private _rootNode: TreeNode;
-  // private _actual;
   private nodes: DrawableTreeNode[];
 
   /**
@@ -28,7 +27,6 @@ export class Tree {
   constructor(rootNode: TreeNode, nodes: DrawableTreeNode[]) {
     this._rootNode = rootNode;
     this.nodes = nodes;
-    // this._actual = rootNode?.children[0];
   }
 
   /**
@@ -50,7 +48,6 @@ export class Tree {
     let nodeCount = 0;
 
     function constructNode(structure: Data) : TreeNode {
-      console.log(structure, visitedStructures.get(structure));
       const alreadyDrawnNode = visitedStructures.get(structure);
       if (alreadyDrawnNode !== undefined) {
         return new AlreadyParsedTreeNode(alreadyDrawnNode);
@@ -145,7 +142,7 @@ class TreeDrawer {
   draw(x: number, y: number): JSX.Element {
     const layer =
      this.tree.rootNode instanceof DataTreeNode ? (
-        <Layer>
+        <Layer key={x + ", " + y}>
           <Text
             text={toText(this.tree.rootNode.data, true)}
             align={'center'}
@@ -158,7 +155,7 @@ class TreeDrawer {
         (() => {
           this.drawNode(this.tree.rootNode, x, y, x, y);
           return (
-            <Layer width={this.getNodeWidth(this.tree.rootNode)} offsetY={0}>
+            <Layer key={x + ", " + y} width={this.getNodeWidth(this.tree.rootNode)} offsetY={0}>
               {this.drawables}
             </Layer>
           );
@@ -368,11 +365,13 @@ class TreeDrawer {
       endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength
     ];
     // pointy arrow
-    const arrow = <Line points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
+    const arrow = <Line key={"Arrow" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
+                        points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
 
     // first segment of the path
     const pointerHead = (
       <Line
+        key={"Head" + x1 + ", " + y1 + "to" + x2 + ", " + y2}
         points={[
           x1 + Config.BoxWidth / 2,
           y1 + Config.BoxHeight / 2,
@@ -385,7 +384,8 @@ class TreeDrawer {
     );
 
     // following segments of the path
-    const pointer = <Line points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
+    const pointer = <Line key={"Pointer" + x1 + ", " + y1 + "to" + x2 + ", " + y2} 
+                          points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
 
     this.drawables.push(pointerHead);
     this.drawables.push(pointer);

@@ -38,7 +38,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
           x: index * Config.BoxWidth,
           y: 0
         };
-        return <NullDrawable {...props} />;
+        return <NullDrawable key = {index} {...props} />;
       } else {
         return null;
       }
@@ -65,9 +65,9 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
             />
           );
         })}
-        {this.props.nodes.map(
-          (child, index) => child instanceof DataTreeNode && createChildText(child, index)
-        )}
+        {this.props.nodes.map((child, index) => (
+          child instanceof DataTreeNode && createChildText(child, index)
+        ))}
       </Group>
     );
   }

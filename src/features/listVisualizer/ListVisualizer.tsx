@@ -48,12 +48,8 @@ export default class ListVisualizer {
     if (this.nodeToLabelMap.has(dataNode)) {
       return this.nodeToLabelMap.get(dataNode) ?? 0;
     } else {
-      // if (typeof display === 'function') {
-      //     display('*' + nodeLabel + ': ' + value);
-      // } else {
       console.log('*' + this.nodeLabel + ': ' + dataNode.data);
       this.nodeToLabelMap.set(dataNode, this.nodeLabel);
-      // }
       return this.nodeLabel++;
     }
   }
