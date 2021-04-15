@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Constants from 'src/commons/utils/Constants';
+import { Cadet } from 'src/commons/api';
 
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createEmptySaveState } from './GameSaveHelper';
@@ -11,22 +11,14 @@ import { FullSaveState } from './GameSaveTypes';
  * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
  */
 export async function saveData(fullSaveState: FullSaveState) {
-  if (SourceAcademyGame.getInstance().getAccountInfo().role !== 'student') {
+  const { role, accessToken, refreshToken } = SourceAcademyGame.getInstance().getAccountInfo();
+  if (role !== 'student') {
     return;
   }
 
-  // TODO: use Cadet
-  const options = {
-    method: 'PUT',
-    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken),
-    body: JSON.stringify({
-      gameStates: fullSaveState
-    })
-  };
+  const resp = await Cadet.user.updateGameStates(fullSaveState, { accessToken, refreshToken });
 
-  const resp = await fetch(`${Constants.backendUrl}/v2/user/game_states`, options);
-
-  if (resp && resp.ok) {
+  if (resp.ok) {
     return resp;
   }
   return;
@@ -36,27 +28,11 @@ export async function saveData(fullSaveState: FullSaveState) {
  * This function fetches data from the backend.
  */
 export async function loadData(): Promise<FullSaveState> {
-  const options = {
-    method: 'GET',
-    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
-  };
+  const { accessToken, refreshToken } = SourceAcademyGame.getInstance().getAccountInfo();
 
-  const resp = await fetch(`${Constants.backendUrl}/v2/user/`, options);
-  const message = await resp.text();
+  const resp = await Cadet.user.index({ accessToken, refreshToken });
+  const gameStates = resp.data.game_states;
 
-  const json = JSON.parse(message).gameStates;
-  return _.isEmpty(json) ? createEmptySaveState() : json;
-}
-
-/**
- * Format a header object.
- *
- * @param accessToken access token to be used
- */
-function createHeaders(accessToken: string): Headers {
-  const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Authorization', `Bearer ${accessToken}`);
-  headers.append('Content-Type', 'application/json');
-  return headers;
+  // TODO: add FullSaveState to backend Swagger API?
+  return _.isEmpty(gameStates) ? createEmptySaveState() : (gameStates as FullSaveState);
 }
