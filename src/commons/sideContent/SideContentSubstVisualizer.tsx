@@ -10,7 +10,6 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 
 import controlButton from '../ControlButton';
-import { isEqual } from 'lodash';
 
 const SubstDefaultText = () => {
   return (
@@ -272,6 +271,23 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     }
   };
 
+  private hasPreviousFunctionCall = (value: number) => {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const currentFunction = this.props.content[contIndex].function;
+    if (currentFunction === undefined) {
+      return false;
+    } else {
+      for (let i = contIndex - 1; i > -1; i--) {
+        const previousFunction = this.props.content[i].function;
+        if (previousFunction !== undefined && currentFunction === previousFunction) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+
   private hasNextFunctionCall = (value: number) => {
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
@@ -281,33 +297,8 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     } else {
       for (let i = contIndex + 1; i < this.props.content.length; i++) {
         const nextFunction = this.props.content[i].function;
-        if (nextFunction === currentFunction) {
+        if (nextFunction !== undefined && currentFunction === nextFunction) {
           return true;
-        } else if (nextFunction !== undefined) {
-          if (isEqual(currentFunction, nextFunction)) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-  };
-
-  private hasPreviousFunctionCall = (value: number) => {
-    const lastStepValue = this.props.content.length;
-    const contIndex = value <= lastStepValue ? value - 1 : 0;
-    const currentFunction = this.props.content[contIndex].function;
-    if (currentFunction === undefined) {
-      return false;
-    } else {
-      for (let i = contIndex - 1; i > -1; i--) {
-        const nextFunction = this.props.content[i].function;
-        if (nextFunction === currentFunction) {
-          return true;
-        } else if (nextFunction !== undefined) {
-          if (isEqual(currentFunction, nextFunction)) {
-            return true;
-          }
         }
       }
       return false;
@@ -322,13 +313,9 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
       return null;
     }
     for (let i = contIndex - 1; i > -1; i--) {
-      const nextFunction = this.props.content[i].function;
-      if (nextFunction === currentFunction) {
+      const previousFunction = this.props.content[i].function;
+      if (previousFunction !== undefined && currentFunction === previousFunction) {
         return i + 1;
-      } else if (nextFunction !== undefined) {
-        if (isEqual(currentFunction, nextFunction)) {
-          return i + 1;
-        }
       }
     }
     return null;
@@ -343,12 +330,8 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     }
     for (let i = contIndex + 1; i < this.props.content.length; i++) {
       const nextFunction = this.props.content[i].function;
-      if (nextFunction === currentFunction) {
+      if (nextFunction !== undefined && currentFunction === nextFunction) {
         return i + 1;
-      } else if (nextFunction !== undefined) {
-        if (isEqual(currentFunction, nextFunction)) {
-          return i + 1;
-        }
       }
     }
     return null;
