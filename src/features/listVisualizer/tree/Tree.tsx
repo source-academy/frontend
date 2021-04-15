@@ -69,11 +69,14 @@ export class Tree {
      * @param tree The Source tree to construct a node for.
      */
     function constructTree(tree: Array<Data>) {
-      const node = new ArrayTreeNode(tree.map(constructNode));
+      const node = new ArrayTreeNode();
 
       visitedStructures.set(tree, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
+
+      // Done like that instead of in constructor to prevent infinite recursion
+      node.children = tree.map(constructNode);
 
       return node;
     }
