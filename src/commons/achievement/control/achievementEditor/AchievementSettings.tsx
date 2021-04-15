@@ -1,5 +1,6 @@
-import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
+import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
@@ -30,9 +31,9 @@ function AchievementSettings(props: AchievementSettingsProps) {
 
   return (
     <>
-      <Tooltip content="More Settings">
+      <Tooltip2 content="More Settings">
         <Button icon={IconNames.WRENCH} onClick={toggleOpen} />
-      </Tooltip>
+      </Tooltip2>
 
       <Dialog title="More Settings" icon={IconNames.WRENCH} isOpen={isOpen} onClose={toggleOpen}>
         <div style={{ padding: '0 0.5em' }}>

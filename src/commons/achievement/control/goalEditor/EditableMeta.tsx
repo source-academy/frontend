@@ -1,4 +1,5 @@
-import { Button, MenuItem, Tooltip } from '@blueprintjs/core';
+import { Button, MenuItem } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 import {
@@ -51,7 +52,7 @@ function EditableMeta(props: EditableMetaProps) {
 
   return (
     <>
-      <Tooltip content="Change Goal Type">
+      <Tooltip2 content="Change Goal Type">
         <TypeSelect
           filterable={false}
           itemRenderer={typeRenderer}
@@ -60,7 +61,7 @@ function EditableMeta(props: EditableMetaProps) {
         >
           <Button minimal={true} outlined={true} text={type} />
         </TypeSelect>
-      </Tooltip>
+      </Tooltip2>
       {editableMetaDetails(type)}
     </>
   );

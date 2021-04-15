@@ -1,5 +1,6 @@
-import { NumericInput, Tooltip } from '@blueprintjs/core';
+import { NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableManualMetaProps = {
@@ -15,7 +16,7 @@ function EditableManualMeta(props: EditableManualMetaProps) {
     changeMeta({ ...manualMeta, targetCount: targetCount });
 
   return (
-    <Tooltip content="Target Count">
+    <Tooltip2 content="Target Count">
       <NumericInput
         allowNumericCharactersOnly={true}
         leftIcon={IconNames.BANK_ACCOUNT}
@@ -24,7 +25,7 @@ function EditableManualMeta(props: EditableManualMetaProps) {
         placeholder="Enter target count here"
         value={targetCount}
       />
-    </Tooltip>
+    </Tooltip2>
   );
 }
 

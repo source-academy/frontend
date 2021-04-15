@@ -1,5 +1,6 @@
-import { Button, Dialog, Tooltip } from '@blueprintjs/core';
+import { Button, Dialog } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
 import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
 
@@ -19,9 +20,9 @@ function EditableDate(props: EditableDateProps) {
 
   return (
     <>
-      <Tooltip content={hoverText}>
+      <Tooltip2 content={hoverText}>
         <Button minimal={true} onClick={toggleOpen} outlined={true}>{`${type}`}</Button>
-      </Tooltip>
+      </Tooltip2>
       <Dialog
         isCloseButtonShown={false}
         isOpen={isOpen}

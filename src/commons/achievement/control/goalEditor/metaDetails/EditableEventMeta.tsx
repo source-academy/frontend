@@ -1,5 +1,6 @@
-import { Button, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
+import { Button, MenuItem, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import {
   EventConditions,
@@ -49,7 +50,7 @@ function EditableEventMeta(props: EditableEventMetaProps) {
 
   const generateEventNames = () => {
     return eventNames.map((eventName, index) => (
-      <Tooltip content={'Change event type ' + index} key={index}>
+      <Tooltip2 content={'Change event type ' + index} key={index}>
         <EventSelect
           filterable={false}
           items={Object.values(EventType)}
@@ -58,7 +59,7 @@ function EditableEventMeta(props: EditableEventMetaProps) {
         >
           <Button outlined={true} text={eventName} />
         </EventSelect>
-      </Tooltip>
+      </Tooltip2>
     ));
   };
 
@@ -70,10 +71,10 @@ function EditableEventMeta(props: EditableEventMetaProps) {
   return (
     <>
       {generateEventNames()}
-      <Tooltip content="Add Event">
+      <Tooltip2 content="Add Event">
         <Button outlined={true} text={'Add Event'} onClick={addEvent} />
-      </Tooltip>
-      <Tooltip content="Target Count">
+      </Tooltip2>
+      <Tooltip2 content="Target Count">
         <NumericInput
           allowNumericCharactersOnly={true}
           leftIcon={IconNames.LOCATE}
@@ -82,8 +83,8 @@ function EditableEventMeta(props: EditableEventMetaProps) {
           placeholder="Enter target count here"
           value={targetCount}
         />
-      </Tooltip>
-      <Tooltip content="Change event condition">
+      </Tooltip2>
+      <Tooltip2 content="Change event condition">
         <ConditionSelect
           filterable={false}
           items={Object.values(EventConditions)}
@@ -92,10 +93,10 @@ function EditableEventMeta(props: EditableEventMetaProps) {
         >
           <Button outlined={true} text={condition.type} />
         </ConditionSelect>
-      </Tooltip>
+      </Tooltip2>
       {condition.type !== EventConditions.NONE && (
         <>
-          <Tooltip content="Left Bound">
+          <Tooltip2 content="Left Bound">
             <NumericInput
               allowNumericCharactersOnly={true}
               leftIcon={IconNames.GREATER_THAN_OR_EQUAL_TO}
@@ -104,8 +105,8 @@ function EditableEventMeta(props: EditableEventMetaProps) {
               placeholder="Left Bound"
               value={condition.leftBound}
             />
-          </Tooltip>
-          <Tooltip content="Right Bound">
+          </Tooltip2>
+          <Tooltip2 content="Right Bound">
             <NumericInput
               allowNumericCharactersOnly={true}
               leftIcon={IconNames.LESS_THAN_OR_EQUAL_TO}
@@ -114,7 +115,7 @@ function EditableEventMeta(props: EditableEventMetaProps) {
               placeholder="Right Bound"
               value={condition.rightBound}
             />
-          </Tooltip>
+          </Tooltip2>
         </>
       )}
     </>

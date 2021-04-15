@@ -1,5 +1,6 @@
-import { Button, EditableText, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
+import { Button, EditableText, MenuItem, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionTypes';
@@ -112,26 +113,26 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
           idx % 2 === 0 ? (
             // the text to change the condition
             <>
-              <Tooltip content="Condition">
+              <Tooltip2 content="Condition">
                 <EditableText
                   onChange={value => changeConditionArray(value, idx / 2)}
                   multiline={true}
                   placeholder="Enter condition here"
                   value={op}
                 />
-              </Tooltip>
+              </Tooltip2>
               {
                 // should only be deleteable if not the only condition
                 conditions.length > 1 && (
-                  <Tooltip content="Delete Condition">
+                  <Tooltip2 content="Delete Condition">
                     <Button intent="danger" icon="trash" onClick={() => deleteCondition(idx)} />
-                  </Tooltip>
+                  </Tooltip2>
                 )
               }
             </>
           ) : (
             // the button to choose the joiner to use
-            <Tooltip content="And/Or">
+            <Tooltip2 content="And/Or">
               <JoinerSelect
                 filterable={false}
                 itemRenderer={joinerRenderer}
@@ -140,7 +141,7 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
               >
                 <Button minimal={true} outlined={true} text={op} />
               </JoinerSelect>
-            </Tooltip>
+            </Tooltip2>
           )
         }
       </div>
@@ -149,7 +150,7 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
 
   return (
     <>
-      <Tooltip content="Target Count">
+      <Tooltip2 content="Target Count">
         <NumericInput
           allowNumericCharactersOnly={true}
           leftIcon={IconNames.BANK_ACCOUNT}
@@ -158,7 +159,7 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
           placeholder="Enter target count here"
           value={targetCount}
         />
-      </Tooltip>
+      </Tooltip2>
       {generateConditions()}
       <br />
       <Button minimal={true} outlined={true} text="Add Condition" onClick={addCondition} />

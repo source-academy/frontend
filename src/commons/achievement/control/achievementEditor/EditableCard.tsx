@@ -1,4 +1,6 @@
 import { EditableText, NumericInput } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useMemo, useReducer } from 'react';
 
@@ -223,13 +225,16 @@ function EditableCard(props: EditableCardProps) {
           <EditableText onChange={changeTitle} placeholder="Enter your title here" value={title} />
         </h3>
         <div className="xp">
-          <NumericInput
-            value={xp}
-            min={0}
-            allowNumericCharactersOnly={true}
-            placeholder="XP"
-            onValueChange={changeXp}
-          />
+          <Tooltip2 content="XP">
+            <NumericInput
+              value={xp}
+              min={0}
+              allowNumericCharactersOnly={true}
+              leftIcon={IconNames.TRENDING_UP}
+              placeholder="XP"
+              onValueChange={changeXp}
+            />
+          </Tooltip2>
         </div>
         <div className="details">
           <EditableAbility ability={ability} changeAbility={changeAbility} />
