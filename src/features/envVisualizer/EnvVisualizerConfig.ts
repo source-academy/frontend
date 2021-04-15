@@ -17,6 +17,7 @@ export enum Config {
 
   FnRadius = 15,
   FnInnerRadius = 3,
+  FnTooltipOpacity = 0.3,
 
   DataMinWidth = 20,
   DataUnitWidth = 40,
@@ -26,6 +27,7 @@ export enum Config {
 
   TextPaddingX = 10,
   TextPaddingY = 30,
+  TextMargin = 5,
   TextMinWidth = 30,
   FontFamily = 'monospace, monospace',
   FontSize = 15,
@@ -34,6 +36,7 @@ export enum Config {
 
   HoveredColor = '#32CD32',
 
+  ArrowHeadSize = 15,
   ArrowStrokeWidth = 1,
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
@@ -41,11 +44,11 @@ export enum Config {
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',
 
-  UnassignedData = '*unassigned*',
   ConstantColon = ':= ',
   VariableColon = ': ',
   Ellipsis = '…',
 
+  UnassignedData = '*unassigned*',
   GlobalFrameDefaultText = 'pre-declared names'
 }
 

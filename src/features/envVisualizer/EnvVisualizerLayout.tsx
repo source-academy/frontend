@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
-import { cloneDeep, isSymbol } from 'lodash';
+import { cloneDeep } from 'lodash';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
@@ -19,7 +19,8 @@ import {
   isFn,
   isFunction,
   isGlobalFn,
-  isPrimitiveData
+  isPrimitiveData,
+  isUnassigned
 } from './EnvVisualizerUtils';
 
 /** this class encapsulates the logic for calculating the layout */
@@ -177,8 +178,7 @@ export class Layout {
   /** create an instance of the corresponding `Value` if it doesn't already exists,
    *  else, return the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
-    // primitives don't have to be memoized
-    if (isSymbol(data)) {
+    if (isUnassigned(data)) {
       return new PrimitiveValue(Config.UnassignedData.toString(), [reference]);
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, [reference]);

@@ -59,7 +59,7 @@ export class Binding implements Visible {
       this.value.width -
       this.x +
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-        ? this.value.textDescriptionWidth
+        ? this.value.tooltipWidth
         : 0);
     this.height = Math.max(this.key.height, this.value.height);
   }
