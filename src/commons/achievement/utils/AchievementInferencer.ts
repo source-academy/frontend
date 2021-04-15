@@ -816,13 +816,14 @@ class AchievementInferencer {
     const hasReleased = isReleased(node.achievement.release);
     const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
-    node.status = achievementCompleted && prereqsCompleted
-      ? AchievementStatus.COMPLETED
-      : hasReleased
-      ? hasUnexpiredDeadline
-        ? AchievementStatus.ACTIVE
-        : AchievementStatus.EXPIRED
-      : AchievementStatus.UNRELEASED;
+    node.status =
+      achievementCompleted && prereqsCompleted
+        ? AchievementStatus.COMPLETED
+        : hasReleased
+        ? hasUnexpiredDeadline
+          ? AchievementStatus.ACTIVE
+          : AchievementStatus.EXPIRED
+        : AchievementStatus.UNRELEASED;
   }
 
   /**
