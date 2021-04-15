@@ -155,7 +155,7 @@ class TreeDrawer {
         (() => {
           this.drawNode(this.tree.rootNode, x, y, x, y);
           return (
-            <Layer key={x + ", " + y} width={this.getNodeWidth(this.tree.rootNode)} offsetY={0}>
+            <Layer key={x + ", " + y} offsetY={0}>
               {this.drawables}
             </Layer>
           );

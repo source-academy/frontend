@@ -93,11 +93,13 @@ class SideContentListVisualizer extends React.Component<{}, State> {
             </div>
           ) : (
             <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-              The data visualizer visualises data structures.
+              The data visualizer helps you to visualize data structures.
+              {this.state.steps}
               <br />
               <br />
-              It is activated by calling the function <code>draw_data(the_data)</code>, where{' '}
-              <code>the_data</code> would be the data structure that you want to visualise.
+              It is activated by calling the function <code>draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)</code>, where{' '}
+              <code>x<sub>k</sub></code> would be the <code>k<sup>th</sup></code> data structure that you want to visualize and{' '}
+              <code>n</code> is the number of structures.
               <br />
               <br />
               The data visualizer uses box-and-pointer diagrams, as introduced in{' '}
