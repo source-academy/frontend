@@ -1,4 +1,4 @@
-import { Button, Classes } from '@blueprintjs/core';
+import { Button, Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
@@ -51,20 +51,18 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
         <div className={classNames('sa-list-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
               <Button
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_LEFT}
                 onClick={this.onPrevButtonClick}
-                disabled={this.state.currentStep === 0}
-              >
+                disabled={this.state.currentStep === 0}>
                 Prev
               </Button>
               <h3
                 className="bp3-text-large"
-                style={{ alignSelf: 'center', display: 'inline', margin: 0 }}
-              >
+                style={{ alignSelf: 'center', display: 'inline', margin: 0 }}>
                 Call {this.state.currentStep + 1}/{this.state.steps.length}
               </h3>
               <Button
@@ -73,21 +71,20 @@ class SideContentListVisualizer extends React.Component<{}, State> {
                 icon={IconNames.ARROW_RIGHT}
                 onClick={this.onNextButtonClick}
                 disabled={
-                  this.state.steps.length > 0
-                    ? this.state.currentStep === this.state.steps.length - 1
-                    : true
-                }
-              >
+                  !this.state.steps || (this.state.currentStep === this.state.steps.length - 1)
+                }>
                 Next
               </Button>
             </div>
           ) : null}
-          {this.state.steps.length > 0   ? (
-            <div style={{ display: 'flex', flexDirection: 'row'}}>
+          {this.state.steps.length > 0 ? (
+            <div style={{display: 'flex', flexDirection: 'row', overflowX: 'scroll'}}>
                 {step?.map((elem, i) => (
-                  <div key={i} style={{ flex: 'flex-basis', padding: 10}}>
-                    {step.length > 1 && <h3 style={{marginTop: 0}}>Structure {i + 1}</h3>}
-                    {elem}
+                  <div key={i} style={{flex: 'flex-basis', margin: '0 auto'}}>
+                    <Card style={{background: '#1a2530', padding: 10}} >
+                      {step.length > 1 && <h5 className='bp3-heading bp3-monospace-text' style={{ marginTop: 0, marginBottom: 20 }}>Structure {i + 1}</h5>}
+                      {elem}
+                    </Card>
                   </div>
                 ))}
             </div>
