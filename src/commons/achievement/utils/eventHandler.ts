@@ -46,7 +46,7 @@ function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
   }
 }
 
-export function processEvent(eventNames: EventType[], increment: number = 1) {
+export function processEvent(eventNames: EventType[], increment: number = 1, retry: boolean = false) {
   // by default, userId should be the current state's one
   const userId = store.getState().session.userId;
   // just in case userId is still not defined
@@ -57,7 +57,8 @@ export function processEvent(eventNames: EventType[], increment: number = 1) {
   let goals = inferencer.getAllGoals();
 
   // if the inferencer has goals, enter the function body
-  if (goals[0]) {
+  // if this is the retry, also enter the function body to prevent infinite loops
+  if (goals[0] || retry) {
     goals = goals.filter(goal => goalIncludesEvents(goal, eventNames));
 
     const computeCompleted = (goal: AchievementGoal): boolean => {
@@ -110,7 +111,7 @@ export function processEvent(eventNames: EventType[], increment: number = 1) {
         store.getState().achievement.achievements,
         store.getState().achievement.goals
       );
-      processEvent(eventNames, increment);
+      processEvent(eventNames, increment, true);
     };
 
     if (!store.getState().achievement.goals[0]) {
