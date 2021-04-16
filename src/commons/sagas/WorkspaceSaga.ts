@@ -22,6 +22,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
+import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
@@ -48,7 +49,7 @@ import {
   highlightLine,
   inspectorUpdate,
   makeElevatedContext,
-  visualiseEnv
+  visualizeEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
@@ -504,7 +505,7 @@ export default function* WorkspaceSaga(): SagaIterator {
             break;
         }
       }
-      (window as any).ListVisualizer?.clear();
+      ListVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;
@@ -558,7 +559,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], workspaceLocation));
     inspectorUpdate(lastDebuggerResult);
-    visualiseEnv(lastDebuggerResult);
+    visualizeEnv(lastDebuggerResult);
   } catch (e) {
     yield put(actions.highlightEditorLine([], workspaceLocation));
     // most likely harmless, we can pretty much ignore this.
