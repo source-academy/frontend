@@ -13,16 +13,15 @@ export const Config = {
   
   DistanceX: 45 / 2, // Half of box width
   DistanceY: 60,
-  CircleRadius: 12,
+  CircleRadiusLarge: 15,
+  CircleRadiusSmall: 4,
 
-  ArrowSpace: 5,
-  ArrowSpaceH: 13, // horizontal
+  ArrowSpaceHorizontal: 13, // The horizontal spacing the backward arrow head is from the end point
+  ArrowSpaceVertical: 5, // The vertical spacing the backward arrow head is from the target box; to prevent overlapping with the target box
   ArrowPointerSize: 5,
   ArrowMarginTop: 15,
   ArrowMarginBottom: 15,
   ArrowMarginHorizontal: 15,
-  ArrowLength: 8,
-  ArrowAngle: 0.5236, //25 - 0.4363,//20 - 0.3491,// 30 - 0.5236
 
   MaxTextLength: 20,
 };

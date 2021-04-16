@@ -3,7 +3,7 @@ import { TreeNode } from './BaseTreeNode';
 /**
  * Represents a node whose drawable should be cached.
  *
- * Concrete implementations: FunctionTreeNode, PairTreeNode
+ * Concrete implementations: ArrayTreeNode, FunctionTreeNode
  */
 export abstract class DrawableTreeNode extends TreeNode {
   protected _drawable?: JSX.Element;

@@ -23,8 +23,8 @@ export class ArrayTreeNode extends DrawableTreeNode {
                 y: parentY + Config.BoxHeight / 2,
               },
               to: {
-                x: x + Config.ArrowSpaceH,
-                y: y - Config.ArrowSpace,
+                x: x + Config.ArrowSpaceHorizontal,
+                y: y - Config.ArrowSpaceVertical,
               }
             }}
           ></ArrowDrawable>

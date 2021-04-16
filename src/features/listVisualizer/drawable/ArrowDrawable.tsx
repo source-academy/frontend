@@ -8,7 +8,7 @@ type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number 
 /**
  * Represents an arrow used to connect a parent node and a child node.
  *
- * Used with FunctionDrawable and PairDrawable.
+ * Used with ArrayDrawable and FunctionDrawable.
  */
 export class ArrowDrawable extends React.PureComponent<ArrowConfig> {
   render() {

@@ -195,8 +195,8 @@ class TreeDrawer {
           y: parentY + Config.BoxHeight / 2,
         },
         to: {
-          x: drawnNode.drawableX! + Config.ArrowSpaceH,
-          y: drawnNode.drawableY! - Config.ArrowSpace,
+          x: drawnNode.drawableX! + Config.ArrowSpaceHorizontal,
+          y: drawnNode.drawableY! - Config.ArrowSpaceVertical,
         },
       };
 
@@ -246,7 +246,7 @@ class TreeDrawer {
     if (node instanceof DataTreeNode || node instanceof AlreadyParsedTreeNode) {
       return 0;
     } else if (node instanceof FunctionTreeNode) {
-      return Config.BoxWidth;
+      return Config.CircleRadiusLarge * 4 + 2 * Config.StrokeWidth;
     } else if (node instanceof ArrayTreeNode) {
       if (this.nodeWidths.has(node)) {
         return this.nodeWidths.get(node) ?? 0;
@@ -277,6 +277,8 @@ class TreeDrawer {
   getNodeHeight(node: TreeNode): number {
     if (node instanceof DataTreeNode) {
       return 0;
+    } else if (node instanceof FunctionTreeNode) {
+      return Config.BoxHeight;
     } else if (node instanceof AlreadyParsedTreeNode) {
       return Config.ArrowMarginBottom;
     } else if (node instanceof ArrayTreeNode) {
@@ -284,7 +286,7 @@ class TreeDrawer {
       return (node.children ?? [])
           .map(child => {
             const childHeight = this.getNodeHeight(child);
-            return childHeight + (child instanceof ArrayTreeNode ? Config.DistanceY / 2 : 0);
+            return childHeight + (child instanceof DrawableTreeNode ? Config.DistanceY / 2 : 0);
           })
           .filter(height => height > 0)
           .reduce((x, y) => Math.max(x, y), 0)

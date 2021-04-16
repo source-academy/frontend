@@ -1,5 +1,6 @@
 import { Group } from 'react-konva';
 
+import { Config } from '../Config';
 import { ArrowDrawable, FunctionDrawable } from '../drawable/Drawable';
 import { DrawableTreeNode } from './DrawableTreeNode';
 
@@ -9,18 +10,18 @@ import { DrawableTreeNode } from './DrawableTreeNode';
 export class FunctionTreeNode extends DrawableTreeNode {
   createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
     this._drawable = (
-      <Group key={x + ", " + y} x={x} y={y}>
-        <FunctionDrawable></FunctionDrawable>
+      <Group key={x + ", " + y}>
+        <FunctionDrawable {...{x, y}}></FunctionDrawable>
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
               from: {
-                x: parentX,
-                y: parentY
+                x: parentX + Config.BoxWidth / 2,
+                y: parentY + Config.BoxHeight / 2,
               },
               to: {
-                x,
-                y
+                x: x + Config.ArrowSpaceHorizontal,
+                y: y - Config.ArrowSpaceVertical,
               }
             }}
           ></ArrowDrawable>
