@@ -26,10 +26,7 @@ function eventShouldCount(meta: EventMeta): boolean {
   return false;
 }
 
-let inferencer: AchievementInferencer = new AchievementInferencer(
-  store ? store.getState().achievement.achievements : [],
-  store ? store.getState().achievement.goals : []
-);
+let inferencer: AchievementInferencer = new AchievementInferencer([], []);
 
 function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
   if (goal.meta.type === GoalType.EVENT) {

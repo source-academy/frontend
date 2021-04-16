@@ -3,8 +3,6 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { EventType } from '../../../features/achievement/AchievementTypes';
-import { processEvent } from '../../achievement/utils/eventHandler';
 import { OverallState } from '../../application/ApplicationTypes';
 import { ControlBarProps } from '../../controlBar/ControlBar';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
@@ -197,10 +195,8 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         newTabId === SideContentType.mobileEditorRun
       ) {
         props.handleEditorEval();
-        processEvent([EventType.RUN_CODE]);
       } else if (newTabId === SideContentType.mobileEditorRun) {
         props.handleEditorEval();
-        processEvent([EventType.RUN_CODE]);
         props.handleShowRepl();
       } else {
         props.handleHideRepl();

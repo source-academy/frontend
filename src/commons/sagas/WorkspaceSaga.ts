@@ -118,6 +118,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       globals
     };
 
+    processEvent([EventType.RUN_CODE]);
+
     if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
       yield put(actions.remoteExecRun(editorCode));
     } else {
@@ -299,6 +301,7 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
+    processEvent([EventType.RUN_CODE, EventType.RUN_TESTCASE]);
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
