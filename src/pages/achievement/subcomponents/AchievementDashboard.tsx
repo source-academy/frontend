@@ -110,6 +110,8 @@ function Dashboard(props: DispatchProps & StateProps) {
   const completedCount = inferencer.getAllCompletedAchievements().length;
   const xp = inferencer.getTotalXp();
   const goals = inferencer.getAllGoals();
+
+  // Computes goal progress for achievement and xp goals
   let changed = false;
   goals.forEach(goal => {
     if (!id) {
@@ -157,7 +159,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
-        {role !== Role.Student && (
+        {(role && role !== Role.Student) && (
           <AchievementManualEditor
             studio={group || 'Staff'}
             users={users}
