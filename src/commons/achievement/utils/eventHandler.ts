@@ -44,7 +44,7 @@ function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
   } else {
     return false;
   }
-};
+}
 
 export function processEvent(eventNames: EventType[], increment: number = 1) {
   // by default, userId should be the current state's one
