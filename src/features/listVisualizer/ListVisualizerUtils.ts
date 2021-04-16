@@ -1,3 +1,4 @@
+import { Config } from './Config';
 import { is_list, is_pair } from './list';
 import { Data, EmptyList, List, Pair } from './ListVisualizerTypes';
 
@@ -13,14 +14,11 @@ export function toText(data: Data, full: boolean = false): string | undefined {
     if (type === 'function' || type === 'object') {
       return undefined;
     } else if (type === 'string') {
-      const str = '' + data;
-      if (str.length > 5) {
-        return undefined;
-      } else {
-        return '"' + str + '"';
-      }
+      const dataString = data + '';
+      const str = dataString.substring(0, Config.MaxTextLength);
+      return `"${str}${dataString.length > Config.MaxTextLength ? '...' : ''}"`
     } else {
-      return '' + data;
+      return `${data}`;
     }
   }
 }

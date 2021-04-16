@@ -31,10 +31,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       if (steps) {
         //  Blink icon
         const icon = document.getElementById('data_visualiser-icon');
-
-        if (icon) {
-          icon.classList.add('side-content-tab-alert');
-        }
+        icon?.classList.add('side-content-tab-alert');
       }
       this.setState({ steps, currentStep: 0 });
     });
@@ -51,21 +48,34 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
         <div className={classNames('sa-list-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+            <div style={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}>
               <Button
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                }}
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_LEFT}
                 onClick={this.onPrevButtonClick}
                 disabled={this.state.currentStep === 0}>
-                Prev
+                Previous
               </Button>
               <h3
-                className="bp3-text-large"
-                style={{ alignSelf: 'center', display: 'inline', margin: 0 }}>
+                className="bp3-text-large">
                 Call {this.state.currentStep + 1}/{this.state.steps.length}
               </h3>
               <Button
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                }}
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
@@ -78,11 +88,20 @@ class SideContentListVisualizer extends React.Component<{}, State> {
             </div>
           ) : null}
           {this.state.steps.length > 0 ? (
-            <div style={{display: 'flex', flexDirection: 'row', overflowX: 'scroll'}}>
+            <div 
+              key={step.length} // To ensure the style refreshes if the step length changes
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                overflowX: 'scroll',
+                justifyContent: step.length === 1 ? 'center' : 'auto', // To center single element, but prevent scrolling issues with multiple
+              }}>
                 {step?.map((elem, i) => (
-                  <div key={i} style={{flex: 'flex-basis', margin: '0 auto'}}>
+                  <div
+                    key={i}
+                    style={{margin: step.length > 1 ? 0 : '0 auto'}}> {/* To center element when there is only one */}
                     <Card style={{background: '#1a2530', padding: 10}} >
-                      {step.length > 1 && <h5 className='bp3-heading bp3-monospace-text' style={{ marginTop: 0, marginBottom: 20 }}>Structure {i + 1}</h5>}
+                      {step.length > 1 && <h5 className='bp3-heading bp3-monospace-text' style={{ marginTop: 0, marginBottom: 20, whiteSpace: 'nowrap' }}>Structure {i + 1}</h5>}
                       {elem}
                     </Card>
                   </div>

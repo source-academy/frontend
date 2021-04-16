@@ -8,7 +8,9 @@ import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './NullDrawable';
 
 type ArrayProps = {
-  nodes: TreeNode[];
+  nodes: TreeNode[],
+  x: number,
+  y: number,
 };
 
 /**
@@ -45,7 +47,9 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
     };
 
     return (
-      <Group>
+      <Group
+        x={this.props.x}
+        y={this.props.y}>
         {/* Outer rectangle */}
         <Rect
           width={Config.BoxWidth * this.props.nodes.length}

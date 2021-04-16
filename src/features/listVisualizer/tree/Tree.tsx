@@ -1,6 +1,8 @@
+import Konva from 'konva';
 import { Layer, Text } from 'react-konva';
 
 import { Config } from '../Config';
+import { ArrowDrawable } from '../drawable/ArrowDrawable';
 import { BackwardArrowDrawable } from '../drawable/BackwardArrowDrawable';
 import { Data, Pair } from '../ListVisualizerTypes';
 import { isArray, isFunction, toText } from '../ListVisualizerUtils';
@@ -142,30 +144,33 @@ class TreeDrawer {
    *  Draws a tree at x, y, by calling drawNode on the root at x, y.
    */
   draw(x: number, y: number): JSX.Element {
-    const layer =
-     this.tree.rootNode instanceof DataTreeNode ? (
-        <Layer key={x + ", " + y}>
-          <Text
-            text={toText(this.tree.rootNode.data, true)}
-            align={'center'}
-            fontStyle={'normal'}
-            fontSize={20}
-            fill={'white'}
-          />
+    if (this.tree.rootNode instanceof DataTreeNode) {
+      const text = toText(this.tree.rootNode.data);
+      const textConfig = {
+        text: text,
+        align: 'center',
+        fontStyle: 'normal',
+        fontSize: 20,
+        fill: Config.Stroke,
+      };
+      const konvaText = new Konva.Text(textConfig);
+      this.width = konvaText.width();
+      this.height = konvaText.height();
+      return <Layer>
+        <Text
+          {...textConfig}
+        />
+      </Layer>;
+    } else {
+      this.drawNode(this.tree.rootNode, x, y, x, y);
+      this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
+      this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
+      return (
+        <Layer key={x + ", " + y} offsetX={this.minX} offsetY={this.minY}>
+          {this.drawables}
         </Layer>
-      ) : (
-        (() => {
-          this.drawNode(this.tree.rootNode, x, y, x, y);
-          return (
-            <Layer key={x + ", " + y} offsetX={this.minX} offsetY={this.minY}>
-              {this.drawables}
-            </Layer>
-          );
-        })()
       );
-    this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
-    this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
-    return layer;
+    }
   }
 
   /**
@@ -184,21 +189,30 @@ class TreeDrawer {
     if (node instanceof AlreadyParsedTreeNode) {
       // if its child is part of a cycle and it's been drawn, link back to that node instead
       const drawnNode = node.actualNode;
-      const backwardArrowProps = {
+      const arrowProps = {
         from: {
           x: parentX + Config.BoxWidth / 2,
           y: parentY + Config.BoxHeight / 2,
         },
         to: {
-          x: drawnNode.drawableX!,
-          y: drawnNode.drawableY!,
+          x: drawnNode.drawableX! + Config.ArrowSpaceH,
+          y: drawnNode.drawableY! - Config.ArrowSpace,
         },
       };
 
-      this.minX = Math.min(this.minX, drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2);
-      this.minY = Math.min(this.minY, drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2)
+      const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
 
-      this.drawables.push(<BackwardArrowDrawable {...backwardArrowProps}></BackwardArrowDrawable>);
+      let arrow: JSX.Element;
+
+      if (isBackwardArrow) {
+        // Update the minX and minY, in case overflow to the top or left happens
+        this.minX = Math.min(this.minX, drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2);
+        this.minY = Math.min(this.minY, drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2);
+        arrow = <BackwardArrowDrawable {...arrowProps}></BackwardArrowDrawable>;
+      } else {
+        arrow = <ArrowDrawable {...arrowProps}/>;
+      }
+      this.drawables.push(arrow);
     }
 
 
