@@ -87,6 +87,7 @@ class AchievementInferencer {
     title: 'invalid',
     ability: AchievementAbility.EXPLORATION,
     xp: 0,
+    variableXp: false,
     deadline: undefined,
     release: undefined,
     isTask: false,
@@ -557,7 +558,12 @@ class AchievementInferencer {
    * @param uuid Achievement Uuid
    */
   public getAchievementXp(uuid: string) {
-    return this.getAchievement(uuid).xp;
+    const achievement = this.getAchievement(uuid);
+    if (achievement.variableXp) {
+      return this.listGoals(achievement.uuid).reduce((xp, goal) => xp + goal.count, 0);
+    } else {
+      return achievement.xp;
+    }
   }
 
   /**
@@ -565,7 +571,7 @@ class AchievementInferencer {
    */
   public getTotalXp() {
     return this.getAllCompletedAchievements().reduce(
-      (totalXp, achievement) => totalXp + achievement.xp,
+      (totalXp, achievement) => totalXp + this.getAchievementXp(achievement.uuid),
       0
     );
   }
@@ -768,12 +774,16 @@ class AchievementInferencer {
    * @param node the AchievementNode
    */
   private generateXp(node: AchievementNode) {
-    const { goalUuids } = node.achievement;
+    const { goalUuids, variableXp } = node.achievement;
     const allGoalsCompleted = goalUuids.reduce(
       (completion, goalUuid) => completion && this.getGoal(goalUuid).completed,
       true
     );
-    node.xp = allGoalsCompleted ? node.achievement.xp : 0;
+    node.xp = allGoalsCompleted
+      ? variableXp
+        ? goalUuids.reduce((xp, goalUuid) => xp + this.getGoal(goalUuid).count, 0)
+        : node.achievement.xp
+      : 0;
   }
 
   /**

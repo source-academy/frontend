@@ -57,6 +57,7 @@ export type AchievementItem = {
   title: string;
   ability: AchievementAbility;
   xp: number;
+  variableXp: boolean;
   deadline?: Date;
   release?: Date;
   isTask: boolean;

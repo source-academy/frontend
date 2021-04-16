@@ -13,6 +13,7 @@ export enum EditableCardActionType {
   CHANGE_PREREQUISITE_UUIDS = 'CHANGE_PREREQUISITE_UUIDS',
   CHANGE_RELEASE = 'CHANGE_RELEASE',
   CHANGE_TITLE = 'CHANGE_TITLE',
+  CHANGE_VARIABLE_XP = 'CHANGE_VARIABLE_XP',
   CHANGE_VIEW = 'CHANGE_VIEW',
   CHANGE_XP = 'CHANGE_XP',
   DELETE_ACHIEVEMENT = 'DELETE_ACHIEVEMENT',
@@ -52,6 +53,9 @@ export type EditableCardAction =
   | {
       type: EditableCardActionType.CHANGE_TITLE;
       payload: string;
+    }
+  | {
+      type: EditableCardActionType.CHANGE_VARIABLE_XP;
     }
   | {
       type: EditableCardActionType.CHANGE_VIEW;

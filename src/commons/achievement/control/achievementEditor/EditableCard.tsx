@@ -130,6 +130,14 @@ const reducer = (state: State, action: Action) => {
         },
         isDirty: true
       };
+    case ActionType.CHANGE_VARIABLE_XP:
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          variableXp: !state.editableAchievement.variableXp
+        },
+        isDirty: true
+      };
     default:
       return state;
   }
@@ -205,6 +213,8 @@ function EditableCard(props: EditableCardProps) {
 
   const changeXp = (xp: number) => dispatch({ type: ActionType.CHANGE_XP, payload: xp });
 
+  const changeVariableXp = () => dispatch({ type: ActionType.CHANGE_VARIABLE_XP });
+
   return (
     <li
       className="editable-card"
@@ -250,6 +260,7 @@ function EditableCard(props: EditableCardProps) {
           changeGoalUuids={changeGoalUuids}
           changePosition={changePosition}
           changePrerequisiteUuids={changePrerequisiteUuids}
+          changeVariableXp={changeVariableXp}
           editableAchievement={editableAchievement}
         />
       </div>

@@ -13,6 +13,7 @@ type AchievementSettingsProps = {
   changeGoalUuids: (goalUuids: string[]) => void;
   changePosition: (position: number) => void;
   changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
+  changeVariableXp: () => void;
   editableAchievement: AchievementItem;
 };
 
@@ -22,9 +23,17 @@ function AchievementSettings(props: AchievementSettingsProps) {
     changeGoalUuids,
     changePosition,
     changePrerequisiteUuids,
+    changeVariableXp,
     editableAchievement
   } = props;
-  const { uuid, cardBackground, goalUuids, position, prerequisiteUuids } = editableAchievement;
+  const {
+    uuid,
+    cardBackground,
+    goalUuids,
+    position,
+    prerequisiteUuids,
+    variableXp
+  } = editableAchievement;
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
@@ -55,6 +64,9 @@ function AchievementSettings(props: AchievementSettingsProps) {
           />
           <h3>Goals</h3>
           <EditableGoalUuids changeGoalUuids={changeGoalUuids} goalUuids={goalUuids} />
+          <Tooltip2 content="The rewarded XP will be equal to the sum of 'count' of goals">
+            <Button text={'Variable XP?'} active={variableXp} onClick={changeVariableXp} />
+          </Tooltip2>
         </div>
       </Dialog>
     </>

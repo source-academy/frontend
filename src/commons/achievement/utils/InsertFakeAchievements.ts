@@ -5,13 +5,17 @@ import {
 import { AchievementAbility, GoalType } from '../../../features/achievement/AchievementTypes';
 import { AssessmentOverview } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
+import { isExpired, isReleased } from './DateHelper';
 
 function insertFakeAchievements(
   assessmentOverview: AssessmentOverview,
   inferencer: AchievementInferencer
 ) {
-  // No goals for contests and practical assessments that don't give XP
-  if (assessmentOverview.category === 'Contest' || assessmentOverview.category === 'Practical') {
+  // Reduce clutter for achievements that cannot be earned at that point
+  if (
+    !isReleased(new Date(assessmentOverview.openAt)) ||
+    (isExpired(new Date(assessmentOverview.closeAt)) && assessmentOverview.status !== 'submitted')
+  ) {
     return;
   }
   const idString = assessmentOverview.id.toString();
@@ -56,6 +60,7 @@ function insertFakeAchievements(
         assessmentOverview.gradingStatus === 'graded'
           ? assessmentOverview.xp
           : assessmentOverview.maxXp,
+      variableXp: false,
       deadline: new Date(assessmentOverview.closeAt),
       release: new Date(assessmentOverview.openAt),
       isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,

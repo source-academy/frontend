@@ -98,7 +98,6 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
         <NumericInput
           value={count}
           min={0}
-          max={goal ? goal.targetCount : 0}
           allowNumericCharactersOnly={true}
           placeholder="Count"
           onValueChange={changeCount}

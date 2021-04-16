@@ -17,6 +17,7 @@ const testAchievement: AchievementItem = {
   title: 'Test Achievement',
   ability: AchievementAbility.CORE,
   xp: 100,
+  variableXp: false,
   isTask: false,
   prerequisiteUuids: [],
   goalUuids: [],

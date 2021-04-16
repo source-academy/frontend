@@ -41,6 +41,7 @@ export const frontendifyAchievementItem = (achievement: any) =>
     title: achievement.title || '',
     ability: achievement.ability as AchievementAbility,
     xp: achievement.xp,
+    variableXp: achievement.variableXp,
     deadline: achievement.deadline === null ? undefined : new Date(achievement.deadline),
     release: achievement.release === null ? undefined : new Date(achievement.release),
     isTask: achievement.isTask,
