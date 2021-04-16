@@ -46,7 +46,11 @@ function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
   }
 }
 
-export function processEvent(eventNames: EventType[], increment: number = 1, retry: boolean = false) {
+export function processEvent(
+  eventNames: EventType[],
+  increment: number = 1,
+  retry: boolean = false
+) {
   // by default, userId should be the current state's one
   const userId = store.getState().session.userId;
   // just in case userId is still not defined
