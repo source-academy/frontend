@@ -106,18 +106,28 @@ export const defaultGoalProgress = {
 };
 
 export enum GoalType {
-  ASSESSMENT = 'Assessment (unsupported)',
-  BINARY = 'Binary (unsupported)',
   MANUAL = 'Manual',
-  EVENT = 'Event'
+  EVENT = 'Event',
+  XP = 'XP',
+  ACHIEVEMENTS = 'Achievements',
+  ASSESSMENT = 'Assessment (unsupported)',
+  BINARY = 'Binary (unsupported)'
 }
 
 export enum EventType {
   NONE = 'None', // This is just for the purposes of a default value
-  RUNCODE = 'Run Code'
+  RUN_CODE = 'Run Code',
+  ERROR = 'Error',
+  INFINITE_LOOP = 'Infinite Loop'
 }
 
-export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta | EventMeta;
+export type GoalMeta =
+  | AssessmentMeta
+  | BinaryMeta
+  | ManualMeta
+  | EventMeta
+  | XpMeta
+  | AchievementsMeta;
 
 export type AssessmentMeta = {
   type: GoalType.ASSESSMENT;
@@ -144,6 +154,16 @@ export type EventMeta = {
   deadline?: Date;
   observeFrom?: Date;
   observeTo?: Date;
+};
+
+export type XpMeta = {
+  type: GoalType.XP;
+  targetCount: number;
+};
+
+export type AchievementsMeta = {
+  type: GoalType.ACHIEVEMENTS;
+  targetCount: number;
 };
 
 /**

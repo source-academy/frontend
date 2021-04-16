@@ -22,8 +22,10 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
+import { EventType } from '../../features/achievement/AchievementTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
+import { processEvent } from '../achievement/utils/eventHandler';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -731,21 +733,25 @@ export function* evalCode(
     const parsed = parse(code, context);
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
-
+    // for achievement event tracking
+    const events = context.errors[0] ? [EventType.ERROR] : [];
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === 'default') {
       const infiniteLoopData = getInfiniteLoopData(context, code);
       if (infiniteLoopData) {
+        events.push(EventType.INFINITE_LOOP);
         const [error, code] = infiniteLoopData;
         yield call(reportInfiniteLoopError, error, code);
       }
     }
 
     if (typeErrors && typeErrors.length > 0) {
+      events.push(EventType.ERROR);
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
       );
     }
+    processEvent(events);
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
@@ -765,6 +771,9 @@ export function* evalCode(
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+    if (context.errors[0]) {
+      processEvent([EventType.ERROR]);
+    }
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
 

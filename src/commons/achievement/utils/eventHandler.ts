@@ -31,11 +31,13 @@ let inferencer: AchievementInferencer = new AchievementInferencer(
   store ? store.getState().achievement.goals : []
 );
 
-const goalIncludesEvent = (goal: AchievementGoal, eventName: EventType) => {
+function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
   if (goal.meta.type === GoalType.EVENT) {
     for (let i = 0; i < goal.meta.eventNames.length; i++) {
-      if (goal.meta.eventNames[i] === eventName) {
-        return true;
+      for (let j = 0; j < eventNames.length; j++) {
+        if (goal.meta.eventNames[i] === eventNames[j]) {
+          return true;
+        }
       }
     }
     return false;
@@ -44,7 +46,7 @@ const goalIncludesEvent = (goal: AchievementGoal, eventName: EventType) => {
   }
 };
 
-export function processEvent(eventName: EventType, increment: number = 1) {
+export function processEvent(eventNames: EventType[], increment: number = 1) {
   // by default, userId should be the current state's one
   const userId = store.getState().session.userId;
   // just in case userId is still not defined
@@ -56,7 +58,7 @@ export function processEvent(eventName: EventType, increment: number = 1) {
 
   // if the inferencer has goals, enter the function body
   if (goals[0]) {
-    goals = goals.filter(goal => goalIncludesEvent(goal, eventName));
+    goals = goals.filter(goal => goalIncludesEvents(goal, eventNames));
 
     const computeCompleted = (goal: AchievementGoal): boolean => {
       // all goals that are input as arguments are eventGoals
@@ -67,12 +69,13 @@ export function processEvent(eventName: EventType, increment: number = 1) {
         goal.completed = true;
         const parentAchievements = inferencer.getAchievementsByGoal(goal.uuid);
         parentAchievements.forEach(uuid => {
-          const completed = inferencer
-            .getAchievement(uuid)
-            .goalUuids.map(goalUuid => inferencer.getGoal(goalUuid).completed)
-            .reduce((completion, goalCompletion) => completion && goalCompletion, true);
-          if (completed) {
-            showSuccessMessage('Completed acheivement: ' + inferencer.getAchievement(uuid).title);
+          const achievement = inferencer.getAchievement(uuid);
+          // something went wrong
+          if (inferencer.isInvalidAchievement(achievement)) {
+            return;
+          }
+          if (inferencer.isCompleted(achievement)) {
+            showSuccessMessage('Completed acheivement: ' + achievement.title);
           }
         });
         return true;
@@ -107,7 +110,7 @@ export function processEvent(eventName: EventType, increment: number = 1) {
         store.getState().achievement.achievements,
         store.getState().achievement.goals
       );
-      processEvent(eventName, increment);
+      processEvent(eventNames, increment);
     };
 
     if (!store.getState().achievement.goals[0]) {

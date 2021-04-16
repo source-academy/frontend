@@ -475,7 +475,7 @@ class AchievementInferencer {
    *
    * NOTE: It might be better (more efficient) to simply have a completed proporty on each achievement.
    */
-  private isCompleted(achievement: AchievementItem) {
+  public isCompleted(achievement: AchievementItem) {
     const goalLength = achievement.goalUuids.length;
     // an achievement with no goals should not be considered complete
     if (goalLength === 0) {

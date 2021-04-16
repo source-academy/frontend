@@ -21,7 +21,7 @@ export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
     <Tooltip2 content="...or press shift-enter in the editor" placement={Position.TOP}>
       {controlButton('Run', IconNames.PLAY, () => {
         props.handleEditorEval();
-        processEvent(EventType.RUNCODE);
+        processEvent([EventType.RUN_CODE]);
       })}
     </Tooltip2>
   );

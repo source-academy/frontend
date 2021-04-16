@@ -197,10 +197,10 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         newTabId === SideContentType.mobileEditorRun
       ) {
         props.handleEditorEval();
-        processEvent(EventType.RUNCODE);
+        processEvent([EventType.RUN_CODE]);
       } else if (newTabId === SideContentType.mobileEditorRun) {
         props.handleEditorEval();
-        processEvent(EventType.RUNCODE);
+        processEvent([EventType.RUN_CODE]);
         props.handleShowRepl();
       } else {
         props.handleHideRepl();

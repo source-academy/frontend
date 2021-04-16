@@ -3,19 +3,23 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 import {
+  AchievementsMeta,
   AssessmentMeta,
   BinaryMeta,
   EventMeta,
   GoalMeta,
   GoalType,
-  ManualMeta
+  ManualMeta,
+  XpMeta
 } from 'src/features/achievement/AchievementTypes';
 
 import { metaTemplate } from './GoalTemplate';
+import EditableAchievementsMeta from './metaDetails/EditableAchievementsMeta';
 import EditableAssessmentMeta from './metaDetails/EditableAssessmentMeta';
 import EditableBinaryMeta from './metaDetails/EditableBinaryMeta';
 import EditableEventMeta from './metaDetails/EditableEventMeta';
 import EditableManualMeta from './metaDetails/EditableManualMeta';
+import EditableXpMeta from './metaDetails/EditableXpMeta';
 
 type EditableMetaProps = {
   changeMeta: (meta: GoalMeta) => void;
@@ -45,6 +49,15 @@ function EditableMeta(props: EditableMetaProps) {
         return <EditableManualMeta changeMeta={changeMeta} manualMeta={meta as ManualMeta} />;
       case GoalType.EVENT:
         return <EditableEventMeta eventMeta={meta as EventMeta} changeMeta={changeMeta} />;
+      case GoalType.XP:
+        return <EditableXpMeta xpMeta={meta as XpMeta} changeMeta={changeMeta} />;
+      case GoalType.ACHIEVEMENTS:
+        return (
+          <EditableAchievementsMeta
+            achievementsMeta={meta as AchievementsMeta}
+            changeMeta={changeMeta}
+          />
+        );
       default:
         return null;
     }

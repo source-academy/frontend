@@ -25,8 +25,12 @@ function EditableEventMeta(props: EditableEventMetaProps) {
     changeMeta({ ...eventMeta, targetCount: targetCount });
 
   const changeEventName = (eventName: EventType, index: number) => {
-    eventNames[index] = eventName;
-    changeMeta({ ...eventMeta, eventNames: eventNames });
+    if (eventName === EventType.NONE) {
+      changeMeta({ ...eventMeta, eventNames: eventNames.filter((_, idx) => idx !== index) });
+    } else {
+      eventNames[index] = eventName;
+      changeMeta({ ...eventMeta, eventNames: eventNames });
+    }
   };
 
   const changeRelease = (release?: Date) => {
@@ -64,7 +68,7 @@ function EditableEventMeta(props: EditableEventMetaProps) {
   };
 
   const addEvent = () => {
-    eventNames[eventNames.length] = EventType.NONE;
+    eventNames[eventNames.length] = EventType.RUN_CODE;
     changeMeta({ ...eventMeta, eventNames: eventNames });
   };
 

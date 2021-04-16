@@ -70,7 +70,7 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
   } else {
     return (
       <div className="achievement-manual-editor">
-        <h3>User ID: </h3>
+        <h3>User: </h3>
         <UserSelect
           filterable={false}
           items={users}

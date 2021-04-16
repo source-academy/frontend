@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 
@@ -9,14 +9,11 @@ import AchievementOverview from '../../../commons/achievement/AchievementOvervie
 import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
+import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
 import Constants from '../../../commons/utils/Constants';
+import { showSuccessMessage } from '../../../commons/utils/NotificationsHelper';
+import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import {
-  AchievementContext,
-  cardBackgroundUrl,
-  coverImageUrl
-} from '../../../features/achievement/AchievementConstants';
-import {
-  AchievementAbility,
   AchievementUser,
   FilterStatus,
   GoalProgress,
@@ -34,6 +31,7 @@ export type DispatchProps = {
 export type StateProps = {
   group: string | null;
   inferencer: AchievementInferencer;
+  id?: number;
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
@@ -68,6 +66,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     getUsers,
     updateGoalProgress,
     fetchAssessmentOverviews,
+    id,
     group,
     inferencer,
     name,
@@ -86,75 +85,17 @@ function Dashboard(props: DispatchProps & StateProps) {
     }
   }, [getAchievements, getOwnGoals]);
 
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+
   if (name && role && !assessmentOverviews) {
     // If assessment overviews are not loaded, fetch them
     fetchAssessmentOverviews();
   }
 
   // one goal for submit, one goal for graded
-  assessmentOverviews?.forEach(assessmentOverview => {
-    // No goals for contests and practical assessments that don't give XP
-    if (assessmentOverview.category === 'Contest' || assessmentOverview.category === 'Practical') {
-      return;
-    }
-    const idString = assessmentOverview.id.toString();
-    if (!inferencer.hasAchievement(idString)) {
-      // Goal for assessment submission
-      inferencer.insertFakeGoalDefinition(
-        {
-          uuid: idString + '0',
-          text: `Submitted ${assessmentOverview.category.toLowerCase()}`,
-          achievementUuids: [idString],
-          meta: {
-            type: GoalType.ASSESSMENT,
-            assessmentNumber: assessmentOverview.id,
-            requiredCompletionFrac: 0
-          }
-        },
-        assessmentOverview.status === 'submitted'
-      );
-      // Goal for assessment grading
-      inferencer.insertFakeGoalDefinition(
-        {
-          uuid: idString + '1',
-          text: `Graded ${assessmentOverview.category.toLowerCase()}`,
-          achievementUuids: [idString],
-          meta: {
-            type: GoalType.ASSESSMENT,
-            assessmentNumber: assessmentOverview.id,
-            requiredCompletionFrac: 0
-          }
-        },
-        assessmentOverview.gradingStatus === 'graded'
-      );
-      // Would like a goal for early submission, but that seems to be hard to get from the overview
-      inferencer.insertFakeAchievement({
-        uuid: idString,
-        title: assessmentOverview.title,
-        ability:
-          assessmentOverview.category === 'Mission' || assessmentOverview.category === 'Path'
-            ? AchievementAbility.CORE
-            : AchievementAbility.EFFORT,
-        xp:
-          assessmentOverview.gradingStatus === 'graded'
-            ? assessmentOverview.xp
-            : assessmentOverview.maxXp,
-        deadline: new Date(assessmentOverview.closeAt),
-        release: new Date(assessmentOverview.openAt),
-        isTask:
-          assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
-        position: -1, // always appears on top
-        prerequisiteUuids: [],
-        goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
-        cardBackground: `${cardBackgroundUrl}/default.png`,
-        view: {
-          coverImage: `${coverImageUrl}/default.png`,
-          description: assessmentOverview.shortSummary,
-          completionText: `Grade: ${assessmentOverview.grade} / ${assessmentOverview.maxGrade}`
-        }
-      });
-    }
-  });
+  assessmentOverviews?.forEach(assessmentOverview =>
+    insertFakeAchievements(assessmentOverview, inferencer)
+  );
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
@@ -165,6 +106,52 @@ function Dashboard(props: DispatchProps & StateProps) {
    */
   const focusState = useState<string>('');
   const [focusUuid] = focusState;
+
+  const completedCount = inferencer.getAllCompletedAchievements().length;
+  const xp = inferencer.getTotalXp();
+  const goals = inferencer.getAllGoals();
+  let changed = false;
+  goals.forEach(goal => {
+    if (!id) {
+      return;
+    }
+    let update = false;
+    if (goal.meta.type === GoalType.ACHIEVEMENTS) {
+      update = goal.count !== completedCount;
+      goal.count = completedCount;
+    }
+    if (goal.meta.type === GoalType.XP) {
+      update = goal.count !== xp;
+      goal.count = xp;
+    }
+    if (!goal.completed && goal.count >= goal.targetCount) {
+      goal.completed = true;
+      const parentAchievements = inferencer.getAchievementsByGoal(goal.uuid);
+      parentAchievements.forEach(uuid => {
+        const achievement = inferencer.getAchievement(uuid);
+        console.log(achievement);
+        if (inferencer.isInvalidAchievement(achievement)) {
+          return;
+        }
+        if (inferencer.isCompleted(achievement)) {
+          showSuccessMessage('Completed acheivement: ' + achievement.title);
+        }
+      });
+    }
+    changed = changed || update;
+    if (update) {
+      const progress: GoalProgress = {
+        uuid: goal.uuid,
+        count: goal.count,
+        targetCount: goal.targetCount,
+        completed: goal.completed
+      };
+      updateGoalProgress(id, progress);
+    }
+  });
+  if (changed) {
+    setTimeout(forceUpdate, 1000);
+  }
 
   return (
     <AchievementContext.Provider value={inferencer}>

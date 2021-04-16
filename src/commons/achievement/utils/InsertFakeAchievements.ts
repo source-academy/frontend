@@ -1,0 +1,75 @@
+import {
+  cardBackgroundUrl,
+  coverImageUrl
+} from '../../../features/achievement/AchievementConstants';
+import { AchievementAbility, GoalType } from '../../../features/achievement/AchievementTypes';
+import { AssessmentOverview } from '../../assessment/AssessmentTypes';
+import AchievementInferencer from './AchievementInferencer';
+
+function insertFakeAchievements(
+  assessmentOverview: AssessmentOverview,
+  inferencer: AchievementInferencer
+) {
+  // No goals for contests and practical assessments that don't give XP
+  if (assessmentOverview.category === 'Contest' || assessmentOverview.category === 'Practical') {
+    return;
+  }
+  const idString = assessmentOverview.id.toString();
+  if (!inferencer.hasAchievement(idString)) {
+    // Goal for assessment submission
+    inferencer.insertFakeGoalDefinition(
+      {
+        uuid: idString + '0',
+        text: `Submitted ${assessmentOverview.category.toLowerCase()}`,
+        achievementUuids: [idString],
+        meta: {
+          type: GoalType.ASSESSMENT,
+          assessmentNumber: assessmentOverview.id,
+          requiredCompletionFrac: 0
+        }
+      },
+      assessmentOverview.status === 'submitted'
+    );
+    // Goal for assessment grading
+    inferencer.insertFakeGoalDefinition(
+      {
+        uuid: idString + '1',
+        text: `Graded ${assessmentOverview.category.toLowerCase()}`,
+        achievementUuids: [idString],
+        meta: {
+          type: GoalType.ASSESSMENT,
+          assessmentNumber: assessmentOverview.id,
+          requiredCompletionFrac: 0
+        }
+      },
+      assessmentOverview.gradingStatus === 'graded'
+    );
+    // Would like a goal for early submission, but that seems to be hard to get from the overview
+    inferencer.insertFakeAchievement({
+      uuid: idString,
+      title: assessmentOverview.title,
+      ability:
+        assessmentOverview.category === 'Mission' || assessmentOverview.category === 'Path'
+          ? AchievementAbility.CORE
+          : AchievementAbility.EFFORT,
+      xp:
+        assessmentOverview.gradingStatus === 'graded'
+          ? assessmentOverview.xp
+          : assessmentOverview.maxXp,
+      deadline: new Date(assessmentOverview.closeAt),
+      release: new Date(assessmentOverview.openAt),
+      isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
+      position: -1, // always appears on top
+      prerequisiteUuids: [],
+      goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
+      cardBackground: `${cardBackgroundUrl}/default.png`,
+      view: {
+        coverImage: `${coverImageUrl}/default.png`,
+        description: assessmentOverview.shortSummary,
+        completionText: `Grade: ${assessmentOverview.grade} / ${assessmentOverview.maxGrade}`
+      }
+    });
+  }
+}
+
+export default insertFakeAchievements;

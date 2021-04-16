@@ -29,12 +29,22 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
     case GoalType.EVENT:
       return {
         type: GoalType.EVENT,
-        eventNames: [EventType.NONE],
+        eventNames: [EventType.RUN_CODE],
         targetCount: 1,
         release: undefined,
         deadline: undefined,
         observeFrom: undefined,
         observeTo: undefined
+      };
+    case GoalType.XP:
+      return {
+        type: GoalType.XP,
+        targetCount: 100
+      };
+    case GoalType.ACHIEVEMENTS:
+      return {
+        type: GoalType.ACHIEVEMENTS,
+        targetCount: 1
       };
   }
 };
