@@ -159,7 +159,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
-        {(role && role !== Role.Student) && (
+        {role && role !== Role.Student && (
           <AchievementManualEditor
             studio={group || 'Staff'}
             users={users}
