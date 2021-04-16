@@ -48,64 +48,75 @@ class SideContentListVisualizer extends React.Component<{}, State> {
       <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
         <div className={classNames('sa-list-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
-            <div style={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 10,
-            }}>
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 10
+              }}
+            >
               <Button
                 style={{
                   position: 'absolute',
-                  left: 0,
+                  left: 0
                 }}
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_LEFT}
                 onClick={this.onPrevButtonClick}
-                disabled={this.state.currentStep === 0}>
+                disabled={this.state.currentStep === 0}
+              >
                 Previous
               </Button>
-              <h3
-                className="bp3-text-large">
+              <h3 className="bp3-text-large">
                 Call {this.state.currentStep + 1}/{this.state.steps.length}
               </h3>
               <Button
                 style={{
                   position: 'absolute',
-                  right: 0,
+                  right: 0
                 }}
                 large={true}
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
                 onClick={this.onNextButtonClick}
                 disabled={
-                  !this.state.steps || (this.state.currentStep === this.state.steps.length - 1)
-                }>
+                  !this.state.steps || this.state.currentStep === this.state.steps.length - 1
+                }
+              >
                 Next
               </Button>
             </div>
           ) : null}
           {this.state.steps.length > 0 ? (
-            <div 
+            <div
               key={step.length} // To ensure the style refreshes if the step length changes
               style={{
                 display: 'flex',
                 flexDirection: 'row',
                 overflowX: 'scroll',
-                justifyContent: step.length === 1 ? 'center' : 'auto', // To center single element, but prevent scrolling issues with multiple
-              }}>
-                {step?.map((elem, i) => (
-                  <div
-                    key={i}
-                    style={{margin: step.length > 1 ? 0 : '0 auto'}}> {/* To center element when there is only one */}
-                    <Card style={{background: '#1a2530', padding: 10}} >
-                      {step.length > 1 && <h5 className='bp3-heading bp3-monospace-text' style={{ marginTop: 0, marginBottom: 20, whiteSpace: 'nowrap' }}>Structure {i + 1}</h5>}
-                      {elem}
-                    </Card>
-                  </div>
-                ))}
+                justifyContent: step.length === 1 ? 'center' : 'auto' // To center single element, but prevent scrolling issues with multiple
+              }}
+            >
+              {step?.map((elem, i) => (
+                <div key={i} style={{ margin: step.length > 1 ? 0 : '0 auto' }}>
+                  {' '}
+                  {/* To center element when there is only one */}
+                  <Card style={{ background: '#1a2530', padding: 10 }}>
+                    {step.length > 1 && (
+                      <h5
+                        className="bp3-heading bp3-monospace-text"
+                        style={{ marginTop: 0, marginBottom: 20, whiteSpace: 'nowrap' }}
+                      >
+                        Structure {i + 1}
+                      </h5>
+                    )}
+                    {elem}
+                  </Card>
+                </div>
+              ))}
             </div>
           ) : (
             <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
@@ -113,9 +124,20 @@ class SideContentListVisualizer extends React.Component<{}, State> {
               {this.state.steps}
               <br />
               <br />
-              It is activated by calling the function <code>draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)</code>, where{' '}
-              <code>x<sub>k</sub></code> would be the <code>k<sup>th</sup></code> data structure that you want to visualize and{' '}
-              <code>n</code> is the number of structures.
+              It is activated by calling the function{' '}
+              <code>
+                draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
+              </code>
+              , where{' '}
+              <code>
+                x<sub>k</sub>
+              </code>{' '}
+              would be the{' '}
+              <code>
+                k<sup>th</sup>
+              </code>{' '}
+              data structure that you want to visualize and <code>n</code> is the number of
+              structures.
               <br />
               <br />
               The data visualizer uses box-and-pointer diagrams, as introduced in{' '}

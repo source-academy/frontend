@@ -8,9 +8,9 @@ import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './NullDrawable';
 
 type ArrayProps = {
-  nodes: TreeNode[],
-  x: number,
-  y: number,
+  nodes: TreeNode[];
+  x: number;
+  y: number;
 };
 
 /**
@@ -25,7 +25,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
         const textToDisplay = textValue ?? '*' + ListVisualizer.displaySpecialContent(node);
         return (
           <Text
-            key={"" + nodeValue + index}
+            key={'' + nodeValue + index}
             text={textToDisplay}
             align={'center'}
             width={Config.BoxWidth}
@@ -40,16 +40,14 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
           x: index * Config.BoxWidth,
           y: 0
         };
-        return <NullDrawable key = {index} {...props} />;
+        return <NullDrawable key={index} {...props} />;
       } else {
         return null;
       }
     };
 
     return (
-      <Group
-        x={this.props.x}
-        y={this.props.y}>
+      <Group x={this.props.x} y={this.props.y}>
         {/* Outer rectangle */}
         <Rect
           width={Config.BoxWidth * this.props.nodes.length}
@@ -69,9 +67,9 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
             />
           );
         })}
-        {this.props.nodes.map((child, index) => (
-          child instanceof DataTreeNode && createChildText(child, index)
-        ))}
+        {this.props.nodes.map(
+          (child, index) => child instanceof DataTreeNode && createChildText(child, index)
+        )}
       </Group>
     );
   }

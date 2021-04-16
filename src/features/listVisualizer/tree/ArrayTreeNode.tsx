@@ -13,18 +13,18 @@ export class ArrayTreeNode extends DrawableTreeNode {
     const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
 
     this._drawable = (
-      <Group key={x + ", " + y}>
+      <Group key={x + ', ' + y}>
         {arrayDrawable}
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
               from: {
                 x: parentX + Config.BoxWidth / 2,
-                y: parentY + Config.BoxHeight / 2,
+                y: parentY + Config.BoxHeight / 2
               },
               to: {
                 x: x + Config.ArrowSpaceHorizontal,
-                y: y - Config.ArrowSpaceVertical,
+                y: y - Config.ArrowSpaceVertical
               }
             }}
           ></ArrowDrawable>

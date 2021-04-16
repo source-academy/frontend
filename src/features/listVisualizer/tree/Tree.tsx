@@ -50,16 +50,16 @@ export class Tree {
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
 
-    function constructNode(structure: Data) : TreeNode {
+    function constructNode(structure: Data): TreeNode {
       const alreadyDrawnNode = visitedStructures.get(structure);
       if (alreadyDrawnNode !== undefined) {
         return new AlreadyParsedTreeNode(alreadyDrawnNode);
       }
       return isArray(structure)
-          ? constructTree(structure)
-          : isFunction(structure)
-          ? constructFunction(structure)
-          : constructData(structure);
+        ? constructTree(structure)
+        : isFunction(structure)
+        ? constructFunction(structure)
+        : constructData(structure);
     }
 
     /**
@@ -151,22 +151,22 @@ class TreeDrawer {
         align: 'center',
         fontStyle: 'normal',
         fontSize: 20,
-        fill: Config.Stroke,
+        fill: Config.Stroke
       };
       const konvaText = new Konva.Text(textConfig);
       this.width = konvaText.width();
       this.height = konvaText.height();
-      return <Layer>
-        <Text
-          {...textConfig}
-        />
-      </Layer>;
+      return (
+        <Layer>
+          <Text {...textConfig} />
+        </Layer>
+      );
     } else {
       this.drawNode(this.tree.rootNode, x, y, x, y);
       this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
       this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
       return (
-        <Layer key={x + ", " + y} offsetX={this.minX} offsetY={this.minY}>
+        <Layer key={x + ', ' + y} offsetX={this.minX} offsetY={this.minY}>
           {this.drawables}
         </Layer>
       );
@@ -192,12 +192,12 @@ class TreeDrawer {
       const arrowProps = {
         from: {
           x: parentX + Config.BoxWidth / 2,
-          y: parentY + Config.BoxHeight / 2,
+          y: parentY + Config.BoxHeight / 2
         },
         to: {
           x: drawnNode.drawableX! + Config.ArrowSpaceHorizontal,
-          y: drawnNode.drawableY! - Config.ArrowSpaceVertical,
-        },
+          y: drawnNode.drawableY! - Config.ArrowSpaceVertical
+        }
       };
 
       const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
@@ -206,15 +206,20 @@ class TreeDrawer {
 
       if (isBackwardArrow) {
         // Update the minX and minY, in case overflow to the top or left happens
-        this.minX = Math.min(this.minX, drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2);
-        this.minY = Math.min(this.minY, drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2);
+        this.minX = Math.min(
+          this.minX,
+          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2
+        );
+        this.minY = Math.min(
+          this.minY,
+          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
+        );
         arrow = <BackwardArrowDrawable {...arrowProps}></BackwardArrowDrawable>;
       } else {
-        arrow = <ArrowDrawable {...arrowProps}/>;
+        arrow = <ArrowDrawable {...arrowProps} />;
       }
       this.drawables.push(arrow);
     }
-
 
     if (!(node instanceof DrawableTreeNode)) return;
 
@@ -230,7 +235,7 @@ class TreeDrawer {
       // const width = this.getNodeWidth(node);
       let leftX = x;
       node.children?.forEach((childNode, index) => {
-        const childY = (childNode instanceof AlreadyParsedTreeNode) ? y : y + Config.DistanceY;
+        const childY = childNode instanceof AlreadyParsedTreeNode ? y : y + Config.DistanceY;
         this.drawNode(childNode, leftX, childY, x + Config.BoxWidth * index, y);
         const childNodeWidth = this.getNodeWidth(childNode);
         leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
@@ -283,14 +288,15 @@ class TreeDrawer {
       return Config.ArrowMarginBottom;
     } else if (node instanceof ArrayTreeNode) {
       // Height of array node is BoxHeight + StrokeWidth / 2 + max(childrenHeights)
-      return (node.children ?? [])
+      return (
+        (node.children ?? [])
           .map(child => {
             const childHeight = this.getNodeHeight(child);
             return childHeight + (child instanceof DrawableTreeNode ? Config.DistanceY / 2 : 0);
           })
           .filter(height => height > 0)
-          .reduce((x, y) => Math.max(x, y), 0)
-          + Config.BoxHeight;
+          .reduce((x, y) => Math.max(x, y), 0) + Config.BoxHeight
+      );
     } else {
       return 0;
     }

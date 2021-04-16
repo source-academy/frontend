@@ -1,7 +1,7 @@
-import React, { PureComponent } from "react";
-import { Arrow } from "react-konva";
+import React, { PureComponent } from 'react';
+import { Arrow } from 'react-konva';
 
-import { Config } from "../Config";
+import { Config } from '../Config';
 
 type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number } };
 
@@ -22,8 +22,7 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
    *  ▲     │
    *  └─────┘
    */
-   render() {
-
+  render() {
     // The starting coordinate is the centre of the starting box
     // The ending coordinate is along the top edge of the ending box, and Config.ArrowSpaceHorizontal pixels from the left edge
     const bottomY = this.props.from.y + Config.BoxHeight / 2 + Config.ArrowMarginBottom;
@@ -46,16 +45,18 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
       this.props.to.x,
       topY,
       this.props.to.x,
-      this.props.to.y,
+      this.props.to.y
     ];
-    return <Arrow
-      key={this.props + ""}
-      points={path}
-      stroke={Config.Stroke}
-      fill={Config.Fill}
-      strokeWidth={Config.StrokeWidth}
-      pointerLength={Config.ArrowPointerSize}
-      pointerWidth={Config.ArrowPointerSize}>
-    </Arrow>
+    return (
+      <Arrow
+        key={this.props + ''}
+        points={path}
+        stroke={Config.Stroke}
+        fill={Config.Fill}
+        strokeWidth={Config.StrokeWidth}
+        pointerLength={Config.ArrowPointerSize}
+        pointerWidth={Config.ArrowPointerSize}
+      ></Arrow>
+    );
   }
 }

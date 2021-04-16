@@ -4,9 +4,9 @@ import { Circle, Group } from 'react-konva';
 import { Config } from '../Config';
 
 type FunctionProps = {
-  x: number,
-  y: number,
-}
+  x: number;
+  y: number;
+};
 
 /**
  * Represents a function object drawn using two circles.
@@ -14,8 +14,7 @@ type FunctionProps = {
 export class FunctionDrawable extends React.PureComponent<FunctionProps> {
   render() {
     return (
-      <Group
-        {...this.props}>
+      <Group {...this.props}>
         {/* Left circle */}
         <Circle
           radius={Config.CircleRadiusLarge}

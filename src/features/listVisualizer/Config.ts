@@ -5,12 +5,12 @@ export const Config = {
   StrokeWidth: 2,
   Stroke: 'white',
   Fill: 'white',
-  
+
   BoxWidth: 45,
   BoxHeight: 30,
   BoxSpacingX: 50,
   BoxSpacingY: 60,
-  
+
   DistanceX: 45 / 2, // Half of box width
   DistanceY: 60,
   CircleRadiusLarge: 15,
@@ -23,5 +23,5 @@ export const Config = {
   ArrowMarginBottom: 15,
   ArrowMarginHorizontal: 15,
 
-  MaxTextLength: 20,
+  MaxTextLength: 20
 };

@@ -12,19 +12,16 @@ type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number 
  */
 export class ArrowDrawable extends React.PureComponent<ArrowConfig> {
   render() {
-    return <Arrow
-        key={this.props + ""}
-        points={[
-          this.props.from.x,
-          this.props.from.y,
-          this.props.to.x,
-          this.props.to.y,
-        ]}
+    return (
+      <Arrow
+        key={this.props + ''}
+        points={[this.props.from.x, this.props.from.y, this.props.to.x, this.props.to.y]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
         fill={Config.Fill}
         stroke={Config.Stroke}
-        strokeWidth={Config.StrokeWidth}>
-      </Arrow>;
+        strokeWidth={Config.StrokeWidth}
+      ></Arrow>
+    );
   }
 }

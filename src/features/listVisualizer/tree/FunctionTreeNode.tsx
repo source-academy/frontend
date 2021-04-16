@@ -10,18 +10,18 @@ import { DrawableTreeNode } from './DrawableTreeNode';
 export class FunctionTreeNode extends DrawableTreeNode {
   createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
     this._drawable = (
-      <Group key={x + ", " + y}>
-        <FunctionDrawable {...{x, y}}></FunctionDrawable>
+      <Group key={x + ', ' + y}>
+        <FunctionDrawable {...{ x, y }}></FunctionDrawable>
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
               from: {
                 x: parentX + Config.BoxWidth / 2,
-                y: parentY + Config.BoxHeight / 2,
+                y: parentY + Config.BoxHeight / 2
               },
               to: {
                 x: x + Config.ArrowSpaceHorizontal,
-                y: y - Config.ArrowSpaceVertical,
+                y: y - Config.ArrowSpaceVertical
               }
             }}
           ></ArrowDrawable>
