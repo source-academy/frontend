@@ -61,7 +61,7 @@ export type FnTypes = {
 /** the types of data in the JS Slang context */
 export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
 
-/** modified Environment type to store children and associated frame */
+/** modified `Environment` to store children and associated frame */
 export type Env = Environment | null;
 
 /** modified `EnvTree` */
@@ -82,3 +82,6 @@ export type EmptyObject = {
 
 /** types that a reference can be: either from a binding in a frame or from an array  */
 export type ReferenceType = Binding | ArrayUnit;
+
+/** type of an array of steps (as defined by a function), for the arrow classes */
+export type StepsArray = Array<(x: number, y: number) => [number, number]>;
