@@ -1,5 +1,6 @@
 import { Stage } from 'react-konva';
 
+import { Config } from './Config';
 import { Data, Step } from './ListVisualizerTypes';
 import { Tree } from './tree/Tree';
 import { DataTreeNode } from './tree/TreeNode';
@@ -65,8 +66,16 @@ export default class ListVisualizer {
    */
   private createDrawing(xs: Data): JSX.Element {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
-    const layer = treeDrawer.draw(0, 0);
-    return <Stage key={xs} width={treeDrawer.width} height={treeDrawer.height}>
+
+    // To account for overflow to the left side due to a backward arrow
+    // const leftMargin = Config.ArrowMarginHorizontal + Config.StrokeWidth;
+    const leftMargin = Config.StrokeWidth / 2;
+
+    // To account for overflow to the top due to a backward arrow
+    const topMargin = Config.StrokeWidth / 2;
+
+    const layer = treeDrawer.draw(leftMargin, topMargin);
+    return <Stage key={xs} width={treeDrawer.width + leftMargin} height={treeDrawer.height + topMargin}>
       {layer}
     </Stage>
   }

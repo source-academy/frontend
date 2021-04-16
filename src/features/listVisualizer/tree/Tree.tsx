@@ -128,6 +128,10 @@ class TreeDrawer {
   public width: number = 0;
   public height: number = 0;
 
+  // Used to account for backward arrow
+  private minX = 0;
+  private minY = 0;
+
   constructor(tree: Tree) {
     this.tree = tree;
     this.drawables = [];
@@ -153,14 +157,14 @@ class TreeDrawer {
         (() => {
           this.drawNode(this.tree.rootNode, x, y, x, y);
           return (
-            <Layer key={x + ", " + y} offsetY={0}>
+            <Layer key={x + ", " + y} offsetX={this.minX} offsetY={this.minY}>
               {this.drawables}
             </Layer>
           );
         })()
       );
-    this.width = this.getNodeWidth(this.tree.rootNode);
-    this.height = this.getNodeHeight(this.tree.rootNode);
+    this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
+    this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
     return layer;
   }
 
@@ -186,10 +190,13 @@ class TreeDrawer {
           y: parentY + Config.BoxHeight / 2,
         },
         to: {
-          x: drawnNode.drawableX ?? 0,
-          y: drawnNode.drawableY ?? 0,
+          x: drawnNode.drawableX!,
+          y: drawnNode.drawableY!,
         },
       };
+
+      this.minX = Math.min(this.minX, drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2);
+      this.minY = Math.min(this.minY, drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2)
 
       this.drawables.push(<BackwardArrowDrawable {...backwardArrowProps}></BackwardArrowDrawable>);
     }
@@ -236,7 +243,7 @@ class TreeDrawer {
         const childrenWidth =
           childrenWidths.length > 0 ? childrenWidths.reduce((x, y) => x + y + Config.DistanceX) : 0;
         const nodeWidth = Math.max(
-          node.children.length * Config.BoxWidth + 2 * Config.StrokeWidth,
+          node.children.length * Config.BoxWidth + Config.StrokeWidth,
           childrenWidth
         );
         this.nodeWidths.set(node, nodeWidth);
@@ -254,22 +261,22 @@ class TreeDrawer {
    * @param node The node to calculate the width of.
    */
   getNodeHeight(node: TreeNode): number {
-    function helper(node: TreeNode): number {
-      if (node instanceof DataTreeNode || node instanceof AlreadyParsedTreeNode) {
-        return 0;
-      } else if (node.children) {
-        return (
-          node.children
-            .map(child => (child instanceof ArrayTreeNode ? helper(child) : 0))
-            .map(height => height ? height + Config.DistanceY : 0)
-            .filter(height => height > 0)
-            .reduce((x, y) => Math.max(x, y), 0) + Config.BoxHeight
-        );
-      } else {
-        return 0;
-      }
+    if (node instanceof DataTreeNode) {
+      return 0;
+    } else if (node instanceof AlreadyParsedTreeNode) {
+      return Config.ArrowMarginBottom;
+    } else if (node instanceof ArrayTreeNode) {
+      // Height of array node is BoxHeight + StrokeWidth / 2 + max(childrenHeights)
+      return (node.children ?? [])
+          .map(child => {
+            const childHeight = this.getNodeHeight(child);
+            return childHeight + (child instanceof ArrayTreeNode ? Config.DistanceY / 2 : 0);
+          })
+          .filter(height => height > 0)
+          .reduce((x, y) => Math.max(x, y), 0)
+          + Config.BoxHeight;
+    } else {
+      return 0;
     }
-
-    return helper(node);
   }
 }

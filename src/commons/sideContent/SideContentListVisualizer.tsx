@@ -83,10 +83,10 @@ class SideContentListVisualizer extends React.Component<{}, State> {
             </div>
           ) : null}
           {this.state.steps.length > 0   ? (
-            <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'row'}}>
                 {step?.map((elem, i) => (
                   <div key={i} style={{ flex: 'flex-basis', padding: 10}}>
-                    {step.length > 1 && <h3>Structure {i + 1}</h3>}
+                    {step.length > 1 && <h3 style={{marginTop: 0}}>Structure {i + 1}</h3>}
                     {elem}
                   </div>
                 ))}
