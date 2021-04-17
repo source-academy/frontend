@@ -2,8 +2,8 @@ import React from 'react';
 import { Group, Line, Rect, Text } from 'react-konva';
 
 import { Config } from '../Config';
-import ListVisualizer from '../ListVisualizer';
-import { isEmptyList, isList, toText } from '../ListVisualizerUtils';
+import DataVisualizer from '../dataVisualizer';
+import { isEmptyList, isList, toText } from '../dataVisualizerUtils';
 import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './NullDrawable';
 
@@ -22,7 +22,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
       const nodeValue = node.data;
       if (!isList(nodeValue)) {
         const textValue: string | undefined = toText(nodeValue);
-        const textToDisplay = textValue ?? '*' + ListVisualizer.displaySpecialContent(node);
+        const textToDisplay = textValue ?? '*' + DataVisualizer.displaySpecialContent(node);
         return (
           <Text
             key={'' + nodeValue + index}

@@ -1,4 +1,4 @@
-import { Data } from '../ListVisualizerTypes';
+import { Data } from '../dataVisualizerTypes';
 import { TreeNode } from './BaseTreeNode';
 
 /**

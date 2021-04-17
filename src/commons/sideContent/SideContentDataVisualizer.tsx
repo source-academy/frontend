@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
-import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
-import { Step } from '../../features/listVisualizer/ListVisualizerTypes';
+import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
+import { Step } from '../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../utils/Constants';
 
 type State = {
@@ -13,21 +13,21 @@ type State = {
   currentStep: number;
 };
 
-const listVisualizerKeyMap = {
+const dataVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
   NEXT_STEP: 'right'
 };
 
 /**
  * This class is responsible for the visualization of data structures via the
- * data_data function in Source. It adds a listener to the ListVisualizer singleton
+ * data_data function in Source. It adds a listener to the DataVisualizer singleton
  * which updates the steps list via setState whenever new steps are added.
  */
-class SideContentListVisualizer extends React.Component<{}, State> {
+class SideContentDataVisualizer extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = { steps: [], currentStep: 0 };
-    ListVisualizer.init(steps => {
+    DataVisualizer.init(steps => {
       if (steps) {
         //  Blink icon
         const icon = document.getElementById('data_visualiser-icon');
@@ -38,15 +38,15 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   }
 
   public render() {
-    const listVisualizerHandlers = {
+    const dataVisualizerHandlers = {
       PREVIOUS_STEP: this.onPrevButtonClick,
       NEXT_STEP: this.onNextButtonClick
     };
     const step: Step | undefined = this.state.steps[this.state.currentStep];
 
     return (
-      <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
-        <div className={classNames('sa-list-visualizer', Classes.DARK)}>
+      <HotKeys keyMap={dataVisualizerKeyMap} handlers={dataVisualizerHandlers}>
+        <div className={classNames('sa-data-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
             <div
               style={{
@@ -168,4 +168,4 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   };
 }
 
-export default SideContentListVisualizer;
+export default SideContentDataVisualizer;

@@ -18,9 +18,9 @@ import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
-import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -252,7 +252,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       id: SideContentType.introduction,
       toSpawn: () => true
     },
-    listVisualizerTab,
+    dataVisualizerTab,
     inspectorTab,
     envVisualizerTab
   ];
@@ -375,10 +375,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
 
-const listVisualizerTab: SideContentTab = {
+const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <SideContentListVisualizer />,
+  body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualiser,
   toSpawn: () => true
 };

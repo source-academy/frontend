@@ -37,10 +37,10 @@ import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
-import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -580,7 +580,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
     if (props.sourceChapter >= 2 && !usingRemoteExecution) {
       // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(listVisualizerTab);
+      tabs.push(dataVisualizerTab);
     }
     if (
       props.sourceChapter >= 3 &&
@@ -806,10 +806,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 };
 
-const listVisualizerTab: SideContentTab = {
+const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <SideContentListVisualizer />,
+  body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualiser,
   toSpawn: () => true
 };
