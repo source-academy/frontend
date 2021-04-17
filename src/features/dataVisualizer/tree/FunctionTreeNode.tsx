@@ -21,7 +21,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
               },
               to: {
                 x,
-                y,
+                y
               }
             }}
           ></ArrowDrawable>

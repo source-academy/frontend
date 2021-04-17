@@ -45,7 +45,7 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
       this.props.to.x + Config.ArrowPointerOffsetHorizontal,
       topY,
       this.props.to.x + Config.ArrowPointerOffsetHorizontal,
-      this.props.to.y + Config.ArrowPointerOffsetVertical,
+      this.props.to.y + Config.ArrowPointerOffsetVertical
     ];
     return (
       <Arrow
