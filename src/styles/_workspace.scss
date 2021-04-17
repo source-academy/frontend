@@ -10,6 +10,12 @@ $code-color-error: #ff4444;
   flex: 1 1 auto;
   flex-direction: column;
 
+  // Hides scrollbar in mobile workspace
+  @media screen and (max-width: 768px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .row {
     margin-right: 0px;
     margin-left: 0px;
@@ -33,8 +39,15 @@ $code-color-error: #ff4444;
     margin-top: 0.5rem;
     margin-bottom: 0.6rem;
 
-    .ControlBar_editingWorkspace {
-      width: 10%;
+    @media screen and (max-width: 768px) {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    @media screen and (min-width: 769px) {
+      .ControlBar_editingWorkspace {
+        width: 10%;
+      }
     }
   }
 
@@ -481,6 +494,18 @@ $code-color-error: #ff4444;
   .side-content-tab {
     // Set colour of icons in blueprintjs tabs
     color: #a7b6c2;
+
+    ::-webkit-scrollbar {
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: $cadet-color-4;
+      border-radius: 2px;
+    }
+
     &[aria-selected='true'] {
       .side-content-tooltip {
         background-color: #495a6b;
@@ -570,6 +595,23 @@ $code-color-error: #ff4444;
             }
           }
         }
+      }
+    }
+  }
+
+  .sidecontent-overview {
+    // fix overflow for assessment sidecontent
+
+    pre {
+      // for code block in pre
+      overflow-x: auto;
+    }
+
+    p {
+      // for image in p
+      img {
+        max-width: 100%;
+        object-fit: contain;
       }
     }
   }

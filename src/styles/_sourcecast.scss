@@ -4,52 +4,64 @@
   background-color: $cadet-color-1;
   flex-direction: column;
   flex: 1 1 100%;
-}
 
-.Bar {
-  width: 95%;
-  margin: 0 auto;
-}
+  .SourcecastControlBar {
+    width: 95%;
+    margin: 0 auto;
 
-.PlayerControl {
-  align-items: center;
-  float: left;
-  justify-content: flex-start;
-  margin: 0 auto;
-  width: 5%;
-}
+    .PlayerControl {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
 
-.Slider {
-  align-items: center;
-  float: right;
-  justify-self: flex-end;
-  margin: 0 auto;
-  width: 92%;
-}
+      .PlayerControlButton {
+        .#{$ns}-button {
+          top: -11px;
 
-.SourcecastTable {
-  /* To show the table borders that get cut out by a Card  */
-  padding: 1px;
+          .#{$ns}-icon {
+            @media only screen and (max-width: 768px) {
+              margin: 0;
+            }
+          }
+          .#{$ns}-button-text {
+            @media only screen and (max-width: 768px) {
+              display: none;
+            }
+          }
+        }
+      }
 
-  .ag-header-cell-label {
-    float: none !important;
-    width: auto !important;
-    justify-content: center;
-    text-align: center;
+      .Slider {
+        margin: 0 auto;
+        width: calc(95% - 65px);
+      }
+    }
   }
 
-  .ag-header-cell-menu-button {
-    position: absolute;
-    float: none;
+  .SourcecastTable {
+    /* To show the table borders that get cut out by a Card  */
+    padding: 1px;
+
+    .ag-header-cell-label {
+      float: none !important;
+      width: auto !important;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .ag-header-cell-menu-button {
+      position: absolute;
+      float: none;
+    }
+
+    :focus {
+      /* Disable rendering blue border when a sub-component in grid is in focus */
+      outline: none;
+    }
   }
 
-  :focus {
-    /* Disable rendering blue border when a sub-component in grid is in focus */
-    outline: none;
+  .Multi-line {
+    white-space: 'pre-line';
+    overflow-wrap: 'break-word';
   }
-}
-
-.Multi-line {
-  white-space: 'pre-line';
-  overflow-wrap: 'break-word';
 }

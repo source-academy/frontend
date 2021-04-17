@@ -180,7 +180,8 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultPlayground: PlaygroundState = {
-  usingSubst: false
+  usingSubst: false,
+  githubSaveInfo: { repoName: '', filePath: '' }
 };
 
 export const defaultEditorValue = '// Type your program in here!';

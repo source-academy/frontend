@@ -1,3 +1,4 @@
+import { AssetType } from '../assets/AssetsTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, ItemId } from '../commons/CommonTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
@@ -77,10 +78,11 @@ export default class CharacterParser {
     expressions.set(defaultExpression, this.characterAssetKey(id, defaultExpression));
 
     // Add asset keys to expression map
-    Parser.checkpoint.map.addMapAsset(
-      this.characterAssetKey(id, defaultExpression),
-      this.characterAssetPath(id, defaultExpression)
-    );
+    Parser.checkpoint.map.addMapAsset(this.characterAssetKey(id, defaultExpression), {
+      type: AssetType.Image,
+      path: this.characterAssetPath(id, defaultExpression),
+      key: id
+    });
 
     // Add character to map
     Parser.checkpoint.map.setItemInMap(GameItemType.characters, id, character);

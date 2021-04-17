@@ -17,7 +17,7 @@ class ContentDisplay extends React.Component<ContentDisplayProps, {}> {
       <div className="ContentDisplay row center-xs">
         <div
           className={`${
-            this.props.fullWidth ? 'col-xs-12' : 'col-xs-10'
+            this.props.fullWidth ? 'col-md-12' : 'col-md-10 col-xs-11'
           } contentdisplay-content-parent`}
         >
           <Card className="contentdisplay-content" elevation={Elevation.THREE}>

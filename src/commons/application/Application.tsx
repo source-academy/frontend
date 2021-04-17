@@ -6,6 +6,7 @@ import Achievement from 'src/pages/achievement/AchievementContainer';
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
+import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
@@ -28,96 +29,129 @@ export type StateProps = {
   name?: string;
 };
 
-interface ApplicationState {
-  disabled: string | boolean;
-}
+const Application: React.FC<ApplicationProps> = props => {
+  const intervalId = React.useRef<number | undefined>(undefined);
+  const [isDisabled, setIsDisabled] = React.useState(computeDisabledState());
+  const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
+  const browserDimensions = React.useRef({ height: 0, width: 0 });
 
-class Application extends React.Component<ApplicationProps, ApplicationState> {
-  private intervalId: number | undefined;
-
-  public constructor(props: ApplicationProps) {
-    super(props);
-    this.state = { disabled: computeDisabledState() };
-  }
-
-  public componentDidMount() {
+  React.useEffect(() => {
     if (Constants.disablePeriods.length > 0) {
-      this.intervalId = window.setInterval(() => {
+      intervalId.current = window.setInterval(() => {
         const disabled = computeDisabledState();
-        if (this.state.disabled !== disabled) {
-          this.setState({ disabled });
+        if (isDisabled !== disabled) {
+          setIsDisabled(disabled);
         }
       }, 5000);
     }
-  }
 
-  public componentWillUnmount() {
-    if (this.intervalId) {
-      window.clearInterval(this.intervalId);
+    return () => {
+      if (intervalId.current) {
+        window.clearInterval(intervalId.current);
+      }
+    };
+  }, [isDisabled]);
+
+  /**
+   * The following effect prevents the mobile browser interface from hiding on scroll by setting the
+   * application height to the window's innerHeight, even after orientation changes. This ensures that
+   * the app UI does not break due to the hiding of the browser interface when the user is not on the PWA.
+   *
+   * Note: When the soft keyboard is up on Android devices, the viewport height decreases and triggers
+   * the 'resize' event. The conditional in orientationChangeHandler checks specifically for this, and
+   * does not update the application height when the Android keyboard triggers the resize event. IOS
+   * devices are not affected.
+   */
+  React.useEffect(() => {
+    const orientationChangeHandler = () => {
+      if (
+        !(
+          window.innerHeight < browserDimensions.current.height &&
+          window.innerWidth === browserDimensions.current.width
+        )
+      ) {
+        // If it is not an Android soft keyboard triggering the resize event, update the application height.
+        document.documentElement.style.setProperty(
+          '--application-height',
+          window.innerHeight + 'px'
+        );
+      }
+      browserDimensions.current = { height: window.innerHeight, width: window.innerWidth };
+    };
+
+    if (!isPWA && isMobile) {
+      orientationChangeHandler();
+      window.addEventListener('resize', orientationChangeHandler);
     }
-  }
 
-  public render() {
-    const loginPath = <Route path="/login" render={toLogin(this.props)} key="login" />;
-    const fullPaths = Constants.playgroundOnly
-      ? null
-      : [
-          <Route path="/academy" render={toAcademy(this.props)} key={0} />,
-          <Route
-            path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-            render={toIncubator}
-            key={1}
-          />,
-          <Route path="/achievement" render={toAchievement(this.props)} key={2} />,
-          loginPath
-        ];
-    const disabled = !['staff', 'admin'].includes(this.props.role!) && this.state.disabled;
+    return () => {
+      if (!isPWA && isMobile) {
+        window.removeEventListener('resize', orientationChangeHandler);
+      }
+    };
+  }, [isPWA, isMobile]);
 
-    return (
-      <div className="Application">
-        <NavigationBar
-          handleLogOut={this.props.handleLogOut}
-          role={this.props.role}
-          name={this.props.name}
-          title={this.props.title}
-        />
-        <div className="Application__main">
-          {disabled && (
-            <Switch>
-              {!Constants.playgroundOnly && loginPath}
-              {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
-              {!this.props.role && !Constants.playgroundOnly
-                ? [
-                    <Route path="/academy" render={redirectToLogin} key={0} />,
-                    <Route exact={true} path="/" render={redirectToLogin} key={1} />
-                  ]
-                : []}
-              <Route render={this.renderDisabled.bind(this)} />
-            </Switch>
-          )}
-          {!disabled && (
-            <Switch>
-              <Route path="/playground" component={Playground} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-              {fullPaths}
-              <Route
-                exact={true}
-                path="/"
-                render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
-              />
-              <Route component={NotFound} />
-            </Switch>
-          )}
-        </div>
-      </div>
-    );
-  }
+  const loginPath = <Route path="/login" render={toLogin(props)} key="login" />;
+  const fullPaths = Constants.playgroundOnly
+    ? null
+    : [
+        <Route path="/academy" render={toAcademy(props)} key={0} />,
+        <Route
+          path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+          render={toIncubator}
+          key={1}
+        />,
+        <Route path="/achievement" render={toAchievement(props)} key={2} />,
+        loginPath
+      ];
+  const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
-  private renderDisabled = () => (
-    <Disabled reason={typeof this.state.disabled === 'string' ? this.state.disabled : undefined} />
+  const renderDisabled = () => (
+    <Disabled reason={typeof isDisabled === 'string' ? isDisabled : undefined} />
   );
-}
+
+  return (
+    <div className="Application">
+      <NavigationBar
+        handleLogOut={props.handleLogOut}
+        role={props.role}
+        name={props.name}
+        title={props.title}
+      />
+      <div className="Application__main">
+        {disabled && (
+          <Switch>
+            {!Constants.playgroundOnly && loginPath}
+            {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
+            {!props.role && !Constants.playgroundOnly
+              ? [
+                  <Route path="/academy" render={redirectToLogin} key={0} />,
+                  <Route exact={true} path="/" render={redirectToLogin} key={1} />
+                ]
+              : []}
+            <Route render={renderDisabled} />
+          </Switch>
+        )}
+        {!disabled && (
+          <Switch>
+            <Route path="/playground" component={Playground} />
+            <Route path="/contributors" component={Contributors} />
+            <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+            <Route path="/callback/github" component={GitHubCallback} />
+            {fullPaths}
+            <Route
+              exact={true}
+              path="/"
+              render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
+            />
+            <Route component={NotFound} />
+          </Switch>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;

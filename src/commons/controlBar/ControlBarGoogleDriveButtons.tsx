@@ -2,11 +2,13 @@ import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 
-export type ControlBarPersistenceButtonsProps = {
+export type ControlBarGoogleDriveButtonsProps = {
   loggedInAs?: string;
   currentFile?: PersistenceFile;
   isDirty?: boolean;
@@ -23,7 +25,8 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
   DIRTY: Intent.WARNING
 };
 
-export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtonsProps> = props => {
+export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const state: PersistenceState = props.currentFile
     ? props.isDirty
       ? 'DIRTY'
@@ -58,7 +61,7 @@ export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtons
       autoFocus={false}
       content={
         <div>
-          <ButtonGroup large={true}>
+          <ButtonGroup large={!isMobileBreakpoint}>
             {openButton}
             {saveButton}
             {saveAsButton}

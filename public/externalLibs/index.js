@@ -36,14 +36,10 @@ function loadAllLibs() {
     '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
-    '/externalLibs/graphics/webGLhi_graph.js',
     '/externalLibs/graphics/webGLhi_graph_ce.js',
     '/externalLibs/graphics/webGLgraphics.js',
     '/externalLibs/graphics/webGLcurve.js',
     '/externalLibs/graphics/webGLrune.js',
-    // list visualizer
-    '/externalLibs/visualizer/konva.js',
-    '/externalLibs/visualizer/visualizer.js',
     // binary tree library
     '/externalLibs/tree.js',
     // support for Practical Assessments (presently none)
@@ -51,9 +47,6 @@ function loadAllLibs() {
     '/externalLibs/video/video_lib.js',
     // inspector
     '/externalLibs/inspector/inspector.js',
-    // env visualizer
-    '/externalLibs/env_visualizer/ConcreteJs.js',
-    '/externalLibs/env_visualizer/visualizer.js'
   ]
 
   for (var i = 0; i < files.length; i++) {

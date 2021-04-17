@@ -100,25 +100,18 @@ const curvesLibrary = [
   'connect_rigidly',
   'connect_ends',
   'put_in_standard_position',
-  'translate',
-  'scale',
+  'translate_curve',
+  'scale_proportional',
   /** Contest functions */
-  'rotate_pi_over_2',
-  'scale_x_y',
-  'gosperize',
-  'gosper_curve',
-  'show_connected_gosper',
+  'scale_curve',
   'repeated',
-  'param_gosper',
-  'param_gosperize',
   'rotate_around_origin',
   'arc', // used in GOSPERIZE
   'invert', // used in DRAGONIZE
   'alternative_unit_circle', // undocumented
   'full_view_proportional', // undocumented
   'squeeze_full_view', // undocumented
-  'squeeze_rectangular_portion', // undocumented
-  'picture_mse'
+  'squeeze_rectangular_portion' // undocumented
 ];
 
 const soundsLibrary = [
