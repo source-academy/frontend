@@ -16,8 +16,8 @@ export const Config = {
   CircleRadiusLarge: 15,
   CircleRadiusSmall: 4,
 
-  ArrowSpaceHorizontal: 13, // The horizontal spacing the backward arrow head is from the end point
-  ArrowSpaceVertical: 5, // The vertical spacing the backward arrow head is from the target box; to prevent overlapping with the target box
+  ArrowPointerOffsetHorizontal: 13, // Pixels to offset the arrow head by
+  ArrowPointerOffsetVertical: -5, // Pixels to offset the arrow head by
   ArrowPointerSize: 5,
   ArrowMarginTop: 15,
   ArrowMarginBottom: 15,

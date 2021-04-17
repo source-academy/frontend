@@ -193,11 +193,11 @@ class TreeDrawer {
       const arrowProps = {
         from: {
           x: parentX + Config.BoxWidth / 2,
-          y: parentY + Config.BoxHeight / 2
+          y: parentY + Config.BoxHeight / 2,
         },
         to: {
-          x: drawnNode.drawableX! + Config.ArrowSpaceHorizontal,
-          y: drawnNode.drawableY! - Config.ArrowSpaceVertical
+          x: drawnNode.drawableX!,
+          y: drawnNode.drawableY!,
         }
       };
 
@@ -209,11 +209,11 @@ class TreeDrawer {
         // Update the minX and minY, in case overflow to the top or left happens
         this.minX = Math.min(
           this.minX,
-          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2
+          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2,
         );
         this.minY = Math.min(
           this.minY,
-          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
+          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2,
         );
         arrow = <BackwardArrowDrawable {...arrowProps}></BackwardArrowDrawable>;
       } else {

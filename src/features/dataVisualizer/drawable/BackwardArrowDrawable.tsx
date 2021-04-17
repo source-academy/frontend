@@ -28,7 +28,7 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
     const bottomY = this.props.from.y + Config.BoxHeight / 2 + Config.ArrowMarginBottom;
 
     // The x coordinate of the left most part of the backward arrow
-    const leftX = this.props.to.x - Config.ArrowSpaceHorizontal - Config.ArrowMarginHorizontal;
+    const leftX = this.props.to.x - Config.ArrowMarginHorizontal;
 
     // The y coordinate of the top most part of the backward arrow
     const topY = this.props.to.y - Config.ArrowMarginTop;
@@ -42,20 +42,20 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
       bottomY,
       leftX,
       topY,
-      this.props.to.x,
+      this.props.to.x + Config.ArrowPointerOffsetHorizontal,
       topY,
-      this.props.to.x,
-      this.props.to.y
+      this.props.to.x + Config.ArrowPointerOffsetHorizontal,
+      this.props.to.y + Config.ArrowPointerOffsetVertical,
     ];
     return (
       <Arrow
         key={this.props + ''}
         points={path}
-        stroke={Config.Stroke}
-        fill={Config.Fill}
-        strokeWidth={Config.StrokeWidth}
         pointerLength={Config.ArrowPointerSize}
         pointerWidth={Config.ArrowPointerSize}
+        fill={Config.Fill}
+        stroke={Config.Stroke}
+        strokeWidth={Config.StrokeWidth}
       ></Arrow>
     );
   }
