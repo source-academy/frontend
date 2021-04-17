@@ -1,9 +1,7 @@
 export class TreeNode {
-  public left: TreeNode | number | null;
-  public right: TreeNode | number | null;
+  public children: TreeNode[] | null;
 
   constructor() {
-    this.left = null;
-    this.right = null;
+    this.children = null;
   }
 }
