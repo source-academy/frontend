@@ -130,7 +130,6 @@ export type BaseQuestion = {
   library: Library;
   maxGrade: number;
   maxXp: number;
-  roomId: string | null;
   type: QuestionType;
   xp: number;
 };
@@ -225,7 +224,6 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   return {
     autogradingResults: [],
     answer: '// [Marking Scheme]\n// 1 mark for correct answer',
-    roomId: '19422043',
     content: 'Enter content here',
     id: 0,
     library: emptyLibrary(),
@@ -255,7 +253,6 @@ export const testcaseTemplate = (): Testcase => {
 export const mcqTemplate = (): IMCQQuestion => {
   return {
     answer: 3,
-    roomId: null,
     content: 'This is a mock MCQ question',
     choices: [
       {
