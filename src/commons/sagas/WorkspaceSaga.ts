@@ -26,7 +26,7 @@ import { EventType } from '../../features/achievement/AchievementTypes';
 import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { processEvent } from '../achievement/utils/eventHandler';
+import { processEvent } from '../achievement/utils/EventHandler';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -739,7 +739,7 @@ export function* evalCode(
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
     // for achievement event tracking
-    const events = context.errors[0] ? [EventType.ERROR] : [];
+    const events = context.errors.length > 0 ? [EventType.ERROR] : [];
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === 'default') {
       const infiniteLoopData = getInfiniteLoopData(context, code);
@@ -776,7 +776,7 @@ export function* evalCode(
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
-    if (context.errors[0]) {
+    if (context.errors.length > 0) {
       processEvent([EventType.ERROR]);
     }
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));

@@ -8,6 +8,8 @@ type GoalEditorProps = {
   requestPublish: () => void;
 };
 
+let editableGoals: JSX.Element[] = [];
+
 function GoalEditor(props: GoalEditorProps) {
   const { requestPublish } = props;
 
@@ -23,37 +25,49 @@ function GoalEditor(props: GoalEditorProps) {
    * is being added to the system and the admin is not allowed to add two goals
    * at one go. The newUuid holds the newly created goal uuid until the new goal
    * is added into the inferencer.
-   *
-   * NOTE: was previously NaN by default, not sure how this should change for uuid
    */
   const [newUuid, setNewUuid] = useState<string>('');
   const allowNewUuid = newUuid === '';
-  const releaseUuid = (uuid: string) => (uuid === newUuid ? setNewUuid('') : undefined);
+  const releaseUuid = () => setNewUuid('');
+  
+  const removeCard = (uuid: string) => {
+    let idx = 0;
+    while (editableGoals[idx].key !== uuid && idx < editableGoals.length) {
+      idx++;
+    }
+    editableGoals.splice(idx, 1);
+  }
 
-  /**
-   * Generates <EditableGoal /> components
-   *
-   * @param goalUuids an array of goalUuid
-   */
-  const generateEditableGoals = (goalUuids: string[]) =>
-    goalUuids.map(uuid => (
-      <EditableGoal
-        key={uuid}
-        uuid={uuid}
-        releaseUuid={releaseUuid}
-        requestPublish={requestPublish}
-      />
-    ));
+  const generateEditableGoal = (goalUuid: string, isNewGoal: boolean) => (
+    <EditableGoal
+      key={goalUuid}
+      uuid={goalUuid}
+      isNewGoal={isNewGoal}
+      releaseUuid={releaseUuid}
+      requestPublish={requestPublish}
+      removeCard={removeCard}
+    />
+  );
 
-  // NOTE: editable cards used to be sorted by id in descending order
-  // However, UUID removes the guarantee of order preserving IDs
+  // load preexisting goals from the inferencer
+  if (editableGoals.length === 0) {
+    editableGoals = inferencer.getAllGoalUuids().map(uuid => generateEditableGoal(uuid, false));
+  }
+
+  const addNewGoal = (uuid: string) => {
+    setNewUuid(uuid);
+    // keep the new goal on top by swapping it with the first element
+    editableGoals[editableGoals.length] = editableGoals[0];
+    editableGoals[0] = generateEditableGoal(uuid, true);
+  }
+
   return (
     <div className="goal-editor">
       <div className="command">
-        <GoalAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
+        <GoalAdder allowNewUuid={allowNewUuid} setNewUuid={addNewGoal} />
       </div>
       <ul className="goal-container">
-        {generateEditableGoals(inferencer.getAllGoalUuids().reverse())}
+        {editableGoals}
       </ul>
     </div>
   );

@@ -2,7 +2,7 @@ import { EditableText, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { cloneDeep } from 'lodash';
-import React, { useContext, useMemo, useReducer } from 'react';
+import React, { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {
@@ -24,7 +24,9 @@ import EditableView from './EditableView';
 
 type EditableCardProps = {
   uuid: string;
-  releaseUuid: (uuid: string) => void;
+  isNewAchievement: boolean
+  releaseUuid: () => void;
+  removeCard: (uuid: string) => void;
   requestPublish: () => void;
 };
 
@@ -144,20 +146,24 @@ const reducer = (state: State, action: Action) => {
 };
 
 function EditableCard(props: EditableCardProps) {
-  const { uuid, releaseUuid, requestPublish } = props;
+  const { uuid, isNewAchievement, releaseUuid, removeCard, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
   const achievement = inferencer.getAchievement(uuid);
   const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
 
   const [state, dispatch] = useReducer(reducer, achievementClone, init);
+  const [isNew, setIsNew] = useState<boolean>(isNewAchievement);
   const { editableAchievement, isDirty } = state;
   const { ability, cardBackground, deadline, release, title, view, xp } = editableAchievement;
 
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyAchievement(editableAchievement);
-    releaseUuid(uuid);
+    if (isNew) {
+      releaseUuid();
+      setIsNew(false);
+    }
     requestPublish();
   };
 
@@ -167,7 +173,11 @@ function EditableCard(props: EditableCardProps) {
   const deleteAchievement = () => {
     dispatch({ type: ActionType.DELETE_ACHIEVEMENT });
     inferencer.removeAchievement(uuid);
-    releaseUuid(uuid);
+    if (isNew) {
+      releaseUuid();
+      setIsNew(false);
+    }
+    removeCard(uuid);
     requestPublish();
   };
 
@@ -185,7 +195,7 @@ function EditableCard(props: EditableCardProps) {
     // add the current achievement into the goals chosen
     goalUuids.forEach(goalUuid => {
       const goal = inferencer.getGoal(goalUuid);
-      // iterate through the achievements, if the uuid is ot found, add it in
+      // iterate through the achievements, if the uuid is not found, add it in
       const len = goal.achievementUuids.length;
       for (let i = 0; i < len; i++) {
         if (goal.achievementUuids[i] === uuid) {

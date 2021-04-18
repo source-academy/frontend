@@ -391,7 +391,7 @@ export const getAssessmentOverviews = async (
  * GET /assessments/{assessmentId}
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
-  let resp = await request(`assessments/${id}`, 'POST', {
+  let resp = await request(`assessments/${id}`, 'GET', {
     ...tokens,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -406,7 +406,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`assessments/${id}`, 'POST', {
+    resp = await request(`assessments/${id}`, 'GET', {
       ...tokens,
       body: {
         password: input
@@ -459,14 +459,14 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 };
 
 /**
- * POST /assessments/question/{questionId}/submit
+ * POST /assessments/question/{questionId}/answer
  */
 export const postAnswer = async (
   id: number,
   answer: string | number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`assessments/question/${id}/submit`, 'POST', {
+  const resp = await request(`assessments/question/${id}/answer`, 'POST', {
     ...tokens,
     body: { answer: `${answer}` },
     noHeaderAccept: true,

@@ -1,6 +1,6 @@
 import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React, { useContext, useMemo, useReducer } from 'react';
+import React, { useContext, useMemo, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
@@ -15,7 +15,9 @@ import EditableMeta from './EditableMeta';
 
 type EditableGoalProps = {
   uuid: string;
-  releaseUuid: (uuid: string) => void;
+  isNewGoal: boolean;
+  releaseUuid: () => void;
+  removeCard: (uuid: string) => void;
   requestPublish: () => void;
 };
 
@@ -62,20 +64,24 @@ const reducer = (state: State, action: Action) => {
 };
 
 function EditableGoal(props: EditableGoalProps) {
-  const { uuid, releaseUuid, requestPublish } = props;
+  const { uuid, isNewGoal, releaseUuid, removeCard, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
   const goal = inferencer.getGoalDefinition(uuid);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
 
   const [state, dispatch] = useReducer(reducer, goalClone, init);
+  const [isNew, setIsNew] = useState<boolean>(isNewGoal);
   const { editableGoal, isDirty } = state;
   const { meta, text } = editableGoal;
 
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyGoalDefinition(editableGoal);
-    releaseUuid(uuid);
+    if (isNew) {
+      releaseUuid();
+      setIsNew(false);
+    }
     requestPublish();
   };
 
@@ -84,7 +90,11 @@ function EditableGoal(props: EditableGoalProps) {
   const deleteGoal = () => {
     dispatch({ type: ActionType.DELETE_GOAL });
     inferencer.removeGoalDefinition(uuid);
-    releaseUuid(uuid);
+    if (isNew) {
+      releaseUuid();
+      setIsNew(false);
+    }
+    removeCard(uuid);
     requestPublish();
   };
 
