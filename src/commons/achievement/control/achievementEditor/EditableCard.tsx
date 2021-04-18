@@ -130,11 +130,11 @@ const reducer = (state: State, action: Action) => {
         },
         isDirty: true
       };
-    case ActionType.CHANGE_VARIABLE_XP:
+    case ActionType.CHANGE_IS_VARIABLE_XP:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          variableXp: !state.editableAchievement.variableXp
+          isVariableXp: !state.editableAchievement.isVariableXp
         },
         isDirty: true
       };
@@ -213,7 +213,7 @@ function EditableCard(props: EditableCardProps) {
 
   const changeXp = (xp: number) => dispatch({ type: ActionType.CHANGE_XP, payload: xp });
 
-  const changeVariableXp = () => dispatch({ type: ActionType.CHANGE_VARIABLE_XP });
+  const changeIsVariableXp = () => dispatch({ type: ActionType.CHANGE_IS_VARIABLE_XP });
 
   return (
     <li
@@ -260,7 +260,7 @@ function EditableCard(props: EditableCardProps) {
           changeGoalUuids={changeGoalUuids}
           changePosition={changePosition}
           changePrerequisiteUuids={changePrerequisiteUuids}
-          changeVariableXp={changeVariableXp}
+          changeIsVariableXp={changeIsVariableXp}
           editableAchievement={editableAchievement}
         />
       </div>

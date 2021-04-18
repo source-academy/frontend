@@ -19,7 +19,7 @@ export const achievementTemplate: AchievementItem = {
   title: 'Achievement Title Here',
   ability: AchievementAbility.CORE,
   xp: 0,
-  variableXp: false,
+  isVariableXp: false,
   isTask: false,
   position: 0,
   prerequisiteUuids: [],

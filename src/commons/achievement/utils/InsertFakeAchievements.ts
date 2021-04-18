@@ -60,7 +60,7 @@ function insertFakeAchievements(
         assessmentOverview.gradingStatus === 'graded'
           ? assessmentOverview.xp
           : assessmentOverview.maxXp,
-      variableXp: false,
+      isVariableXp: false,
       deadline: new Date(assessmentOverview.closeAt),
       release: new Date(assessmentOverview.openAt),
       isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,

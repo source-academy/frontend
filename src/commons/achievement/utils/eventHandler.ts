@@ -1,7 +1,7 @@
 import {
   getAchievements,
   getOwnGoals,
-  updateGoalProgress
+  updateOwnGoalProgress
 } from '../../../features/achievement/AchievementActions';
 import {
   AchievementGoal,
@@ -102,7 +102,7 @@ export function processEvent(
         };
 
         // update goal progress in the backend
-        userId && store.dispatch(updateGoalProgress(userId, progress));
+        userId && store.dispatch(updateOwnGoalProgress(progress));
       }
     });
     // if goals are not in state, load the goals from the backend and try again

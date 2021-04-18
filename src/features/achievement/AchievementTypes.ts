@@ -14,6 +14,7 @@ export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const SAVE_GOALS = 'SAVE_GOALS';
 export const SAVE_USERS = 'SAVE_USERS';
 export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
+export const UPDATE_OWN_GOAL_PROGRESS = 'UPDATE_OWN_GOAL_PROGRESS';
 
 export enum AchievementAbility {
   CORE = 'Core',
@@ -57,7 +58,7 @@ export type AchievementItem = {
   title: string;
   ability: AchievementAbility;
   xp: number;
-  variableXp: boolean;
+  isVariableXp: boolean;
   deadline?: Date;
   release?: Date;
   isTask: boolean;

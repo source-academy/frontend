@@ -19,7 +19,8 @@ import {
   SAVE_ACHIEVEMENTS,
   SAVE_GOALS,
   SAVE_USERS,
-  UPDATE_GOAL_PROGRESS
+  UPDATE_GOAL_PROGRESS,
+  UPDATE_OWN_GOAL_PROGRESS
 } from './AchievementTypes';
 
 export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
@@ -44,6 +45,12 @@ export const removeAchievement = (uuid: string) => action(REMOVE_ACHIEVEMENT, uu
 
 export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
 
+export const updateOwnGoalProgress = (progress: GoalProgress) =>
+  action(UPDATE_OWN_GOAL_PROGRESS, progress);
+
+export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentId, progress });
+
 /*
   Note: This updates the frontend Achievement Redux store.
   Please refer to AchievementReducer to find out more. 
@@ -62,6 +69,3 @@ export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals)
   Please refer to AchievementReducer to find out more. 
 */
 export const saveUsers = (users: AchievementUser[]) => action(SAVE_USERS, users);
-
-export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
-  action(UPDATE_GOAL_PROGRESS, { studentId, progress });

@@ -69,7 +69,7 @@ export const postAuth = async (
   clientId?: string,
   redirectUri?: string
 ): Promise<Tokens | null> => {
-  const resp = await request('auth', 'POST', {
+  const resp = await request('auth/login', 'POST', {
     body: {
       code,
       provider: providerId,
@@ -286,14 +286,32 @@ export const editGoal = async (
 };
 
 /**
- * POST /achievements/goals/{goalUuid}/{studentId}
+ * POST /self/goals/{goalUuid}/progress
+ */
+ export const updateOwnGoalProgress = async (
+  progress: GoalProgress,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`self/goals/${progress.uuid}/progress`, 'POST', {
+    ...tokens,
+    body: { progress: progress },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /admin/users/{studentId}/goals/{goalUuid}/progress
  */
 export const updateGoalProgress = async (
   studentId: number,
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
+  const resp = await request(`admin/users/${studentId}/goals/${progress.uuid}/progress`, 'POST', {
     ...tokens,
     body: { progress: progress },
     noHeaderAccept: true,
@@ -669,7 +687,7 @@ export const postUnsubmit = async (
  * GET /notification
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
-  const resp: Response | null = await request('notification', 'GET', {
+  const resp: Response | null = await request('notifications', 'GET', {
     ...tokens,
     shouldAutoLogout: false
   });
@@ -705,7 +723,7 @@ export const postAcknowledgeNotifications = async (
   tokens: Tokens,
   ids: number[]
 ): Promise<Response | null> => {
-  const resp: Response | null = await request('notification/acknowledge', 'POST', {
+  const resp: Response | null = await request('notifications/acknowledge', 'POST', {
     ...tokens,
     body: { notificationIds: ids },
     shouldAutoLogout: false
@@ -1065,7 +1083,7 @@ export const request = async (
   }
 
   try {
-    const resp = await fetch(`${Constants.backendUrl}/v1/${path}`, fetchOpts);
+    const resp = await fetch(`${Constants.backendUrl}/v2/${path}`, fetchOpts);
 
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause

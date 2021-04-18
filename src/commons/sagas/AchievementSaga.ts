@@ -12,7 +12,8 @@ import {
   GET_USERS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
-  UPDATE_GOAL_PROGRESS
+  UPDATE_GOAL_PROGRESS,
+  UPDATE_OWN_GOAL_PROGRESS
 } from '../../features/achievement/AchievementTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -27,7 +28,8 @@ import {
   getOwnGoals,
   removeAchievement,
   removeGoal,
-  updateGoalProgress
+  updateGoalProgress,
+  updateOwnGoalProgress
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
@@ -184,6 +186,24 @@ export default function* AchievementSaga(): SagaIterator {
       return;
     }
   });
+
+  yield takeEvery(
+    UPDATE_OWN_GOAL_PROGRESS,
+    function* (action: ReturnType<typeof actions.updateOwnGoalProgress>) {
+      const tokens = yield select((state: OverallState) => ({
+        accessToken: state.session.accessToken,
+        refreshToken: state.session.refreshToken
+      }));
+
+      const progress = action.payload;
+
+      const resp = yield call(updateOwnGoalProgress, progress, tokens);
+
+      if (!resp) {
+        return;
+      }
+    }
+  );
 
   yield takeEvery(
     UPDATE_GOAL_PROGRESS,
