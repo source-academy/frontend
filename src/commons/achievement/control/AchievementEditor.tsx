@@ -36,7 +36,7 @@ function AchievementEditor(props: AchievementEditorProps) {
       idx++;
     }
     editableCards.splice(idx, 1);
-  }
+  };
 
   const generateEditableCard = (achievementUuid: string, isNewAchievement: boolean) => (
     <EditableCard
@@ -51,24 +51,24 @@ function AchievementEditor(props: AchievementEditorProps) {
 
   // load preexisting achievements from the inferencer
   if (editableCards.length === 0) {
-    editableCards = inferencer.listSortedAchievementUuids().map(uuid => generateEditableCard(uuid, false));
+    editableCards = inferencer
+      .listSortedAchievementUuids()
+      .map(uuid => generateEditableCard(uuid, false));
   }
 
   const addNewAchievement = (uuid: string) => {
-    setNewUuid(uuid)
+    setNewUuid(uuid);
     // keep the new achievement on top by swapping it with the first achievement
     editableCards[editableCards.length] = editableCards[0];
     editableCards[0] = generateEditableCard(uuid, true);
-  }
+  };
 
   return (
     <div className="achievement-editor">
       <div className="command">
         <AchievementAdder allowNewUuid={allowNewUuid} setNewUuid={addNewAchievement} />
       </div>
-      <ul className="achievement-container">
-        {editableCards}
-      </ul>
+      <ul className="achievement-container">{editableCards}</ul>
     </div>
   );
 }

@@ -24,7 +24,7 @@ import EditableView from './EditableView';
 
 type EditableCardProps = {
   uuid: string;
-  isNewAchievement: boolean
+  isNewAchievement: boolean;
   releaseUuid: () => void;
   removeCard: (uuid: string) => void;
   requestPublish: () => void;

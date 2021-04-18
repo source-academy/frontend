@@ -29,14 +29,14 @@ function GoalEditor(props: GoalEditorProps) {
   const [newUuid, setNewUuid] = useState<string>('');
   const allowNewUuid = newUuid === '';
   const releaseUuid = () => setNewUuid('');
-  
+
   const removeCard = (uuid: string) => {
     let idx = 0;
     while (editableGoals[idx].key !== uuid && idx < editableGoals.length) {
       idx++;
     }
     editableGoals.splice(idx, 1);
-  }
+  };
 
   const generateEditableGoal = (goalUuid: string, isNewGoal: boolean) => (
     <EditableGoal
@@ -59,16 +59,14 @@ function GoalEditor(props: GoalEditorProps) {
     // keep the new goal on top by swapping it with the first element
     editableGoals[editableGoals.length] = editableGoals[0];
     editableGoals[0] = generateEditableGoal(uuid, true);
-  }
+  };
 
   return (
     <div className="goal-editor">
       <div className="command">
         <GoalAdder allowNewUuid={allowNewUuid} setNewUuid={addNewGoal} />
       </div>
-      <ul className="goal-container">
-        {editableGoals}
-      </ul>
+      <ul className="goal-container">{editableGoals}</ul>
     </div>
   );
 }

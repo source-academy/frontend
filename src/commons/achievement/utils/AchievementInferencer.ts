@@ -224,11 +224,11 @@ class AchievementInferencer {
   public getAchievementsByGoal(goalUuid: string) {
     return this.getGoal(goalUuid).achievementUuids;
   }
-  
+
   public listSortedAchievementUuids() {
     return this.getAllAchievements()
       .sort((a, b) => a.position - b.position)
-      .map((achievement => achievement.uuid));
+      .map(achievement => achievement.uuid);
   }
 
   /**

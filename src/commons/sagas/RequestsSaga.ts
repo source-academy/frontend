@@ -288,7 +288,7 @@ export const editGoal = async (
 /**
  * POST /self/goals/{goalUuid}/progress
  */
- export const updateOwnGoalProgress = async (
+export const updateOwnGoalProgress = async (
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
