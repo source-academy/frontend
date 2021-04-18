@@ -32,6 +32,8 @@ const baseProps = {
   usingSubst: false,
   persistenceUser: undefined,
   persistenceFile: undefined,
+  githubOctokitInstance: undefined,
+  githubSaveInfo: { repoName: '', filePath: '' },
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -68,7 +70,12 @@ const baseProps = {
   handlePersistenceSaveFile: () => {},
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
-  handlePersistenceLogOut: () => {}
+  handlePersistenceLogOut: () => {},
+  handleGitHubOpenFile: () => {},
+  handleGitHubSaveFileAs: () => {},
+  handleGitHubSaveFile: () => {},
+  handleGitHubLogIn: () => {},
+  handleGitHubLogOut: () => {}
 };
 
 const testValueProps: PlaygroundProps = {

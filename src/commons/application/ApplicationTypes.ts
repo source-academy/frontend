@@ -180,7 +180,8 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultPlayground: PlaygroundState = {
-  usingSubst: false
+  usingSubst: false,
+  githubSaveInfo: { repoName: '', filePath: '' }
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -228,8 +229,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext
 });
-
-export const defaultRoomId = null;
 
 export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {

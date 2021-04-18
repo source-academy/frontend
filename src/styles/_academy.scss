@@ -102,6 +102,49 @@
 .Assessment {
   color: $cadet-color-3;
 
+  @media only screen and (max-width: 768px) {
+    // for mobile display
+    .ContentDisplay {
+      .contentdisplay-content.#{$ns}-card {
+        padding: 10px;
+      }
+
+      .listing {
+        height: 160px;
+      }
+
+      .listing-picture {
+        height: 100%;
+        padding: 0;
+      }
+
+      .listing-text {
+        padding: 0 0 0 0.5rem;
+
+        .#{$ns}-heading {
+          margin: 0;
+        }
+        .listing-header {
+          margin-bottom: 0;
+        }
+
+        .listing-description {
+          max-height: 52px;
+          overflow-y: auto;
+          font-size: 12px;
+          margin: 0.5rem 0;
+          .#{$ns}-running-text {
+            font-size: 12px;
+          }
+        }
+
+        .listing-footer {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
   .contentdisplay-content.#{$ns}-card {
     padding: 10px 20px 10px 20px;
 
@@ -135,6 +178,7 @@
       height: 100%;
       width: 100%;
       object-fit: cover;
+      border-radius: 3px 0 0 3px;
     }
 
     img.cover-image-submitted {

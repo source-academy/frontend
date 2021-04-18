@@ -4,6 +4,7 @@ import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,
+  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   SHORTEN_URL,
   TOGGLE_USING_SUBST,
@@ -22,3 +23,6 @@ export const changeQueryString = (queryString: string) => action(CHANGE_QUERY_ST
 
 export const playgroundUpdatePersistenceFile = (file?: PersistenceFile) =>
   action(PLAYGROUND_UPDATE_PERSISTENCE_FILE, file);
+
+export const playgroundUpdateGitHubSaveInfo = (repoName: string, filePath: string) =>
+  action(PLAYGROUND_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath });

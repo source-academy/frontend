@@ -29,30 +29,24 @@ type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-class ReplInput extends React.PureComponent<ReplInputProps, {}> {
-  private replInputBottom?: HTMLDivElement;
-  private execBrowseHistoryDown: () => void;
-  private execBrowseHistoryUp: () => void;
-  private execEvaluate: () => void;
+export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref) => {
+  const replInputBottom = document.getElementById('replInputButtom');
+  const execBrowseHistoryDown: () => void = props.handleBrowseHistoryDown;
+  const execBrowseHistoryUp: () => void = props.handleBrowseHistoryUp;
+  const execEvaluate = () => {
+    if (!replInputBottom) {
+      return;
+    } else {
+      replInputBottom.scrollIntoView();
+      props.handleReplEval();
+    }
+  };
 
-  constructor(props: ReplInputProps) {
-    super(props);
-    this.execBrowseHistoryDown = props.handleBrowseHistoryDown;
-    this.execBrowseHistoryUp = props.handleBrowseHistoryUp;
-    this.execEvaluate = () => {
-      if (!this.replInputBottom) {
-        return;
-      }
-      this.replInputBottom.scrollIntoView();
-      this.props.handleReplEval();
-    };
-  }
-
-  public componentDidUpdate() {
-    if (!this.replInputBottom) {
+  React.useEffect(() => {
+    if (!replInputBottom) {
       return;
     }
-    if (this.replInputBottom.clientWidth >= window.innerWidth - 50) {
+    if (replInputBottom.clientWidth >= window.innerWidth - 50) {
       /* There is a bug where
        *   if the workspace has been resized via re-resizable such that the
        *   has disappeared off the screen, width 63
@@ -63,73 +57,66 @@ class ReplInput extends React.PureComponent<ReplInputProps, {}> {
        * Fix: the if condition is true when the Repl has dissapeared off-screen.
        *   (-15 to account for the scrollbar */
     } else {
-      this.replInputBottom.scrollIntoView();
+      replInputBottom.scrollIntoView();
     }
-  }
+  });
 
-  public render() {
-    // see the comment above this same call in Editor.tsx
-    selectMode(this.props.sourceChapter, this.props.sourceVariant, this.props.externalLibrary);
+  // see the comment above this same call in Editor.tsx
+  selectMode(props.sourceChapter, props.sourceVariant, props.externalLibrary);
 
-    const replButtons = () => this.props.replButtons;
+  const replButtons = () => props.replButtons;
 
-    return (
-      <>
-        <AceEditor
-          className="repl-react-ace react-ace"
-          mode={getModeString(
-            this.props.sourceChapter,
-            this.props.sourceVariant,
-            this.props.externalLibrary
-          )}
-          theme="source"
-          height="1px"
-          width="100%"
-          value={this.props.replValue}
-          onChange={this.props.handleReplValueChange}
-          commands={[
-            {
-              name: 'browseHistoryDown',
-              bindKey: {
-                win: 'Down',
-                mac: 'Down'
-              },
-              exec: this.execBrowseHistoryDown
+  return (
+    <>
+      <AceEditor
+        className="repl-react-ace react-ace"
+        mode={getModeString(props.sourceChapter, props.sourceVariant, props.externalLibrary)}
+        theme="source"
+        height="1px"
+        width="100%"
+        value={props.replValue}
+        onChange={props.handleReplValueChange}
+        commands={[
+          {
+            name: 'browseHistoryDown',
+            bindKey: {
+              win: 'Down',
+              mac: 'Down'
             },
-            {
-              name: 'browseHistoryUp',
-              bindKey: {
-                win: 'Up',
-                mac: 'Up'
-              },
-              exec: this.execBrowseHistoryUp
+            exec: execBrowseHistoryDown
+          },
+          {
+            name: 'browseHistoryUp',
+            bindKey: {
+              win: 'Up',
+              mac: 'Up'
             },
-            {
-              name: 'evaluate',
-              bindKey: {
-                win: 'Shift-Enter',
-                mac: 'Shift-Enter'
-              },
-              exec: this.execEvaluate
-            }
-          ]}
-          minLines={1}
-          maxLines={20}
-          fontSize={17}
-          highlightActiveLine={false}
-          showGutter={false}
-          showPrintMargin={false}
-          setOptions={{
-            fontFamily: "'Inconsolata', 'Consolas', monospace"
-          }}
-        />
-        <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
-        <MediaQuery minWidth={769}>
-          <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />
-        </MediaQuery>
-      </>
-    );
-  }
-}
-
-export default ReplInput;
+            exec: execBrowseHistoryUp
+          },
+          {
+            name: 'evaluate',
+            bindKey: {
+              win: 'Shift-Enter',
+              mac: 'Shift-Enter'
+            },
+            exec: execEvaluate
+          }
+        ]}
+        minLines={1}
+        maxLines={20}
+        fontSize={17}
+        highlightActiveLine={false}
+        showGutter={false}
+        showPrintMargin={false}
+        setOptions={{
+          fontFamily: "'Inconsolata', 'Consolas', monospace"
+        }}
+        ref={ref}
+      />
+      <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
+      <MediaQuery minWidth={769}>
+        <div className="replInputBottom" id="replInputBottom" />
+      </MediaQuery>
+    </>
+  );
+});

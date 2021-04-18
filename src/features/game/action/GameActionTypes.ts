@@ -11,6 +11,8 @@ export enum GameActionType {
   RemoveItem = 'RemoveItem',
   ShowDialogue = 'ShowDialogue',
   ChangeBackground = 'ChangeBackground',
+  StartAnimation = 'StartAnimation',
+  StopAnimation = 'StopAnimation',
   RemoveLocationMode = 'RemoveLocationMode',
   AddLocationMode = 'AddLocationMode',
   AddPopup = 'AddPopup',
