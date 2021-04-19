@@ -22,7 +22,7 @@ function eventShouldCount(meta: EventMeta): boolean {
   }
   return false;
 }
-
+a
 export function incrementCount(goalUuid: string, inferencer: AchievementInferencer) {
   const progress: GoalProgress = { ...inferencer.getGoalProgress(goalUuid) };
   progress.count = progress.count + 1;
