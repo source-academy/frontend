@@ -2,12 +2,14 @@ import React from 'react';
 
 import Markdown from '../Markdown';
 
-const SideContentMissionTask: React.FC = props => {
+export type SideContentMarkdownEditorProps = {
+  content: string
+};
+
+export const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps> = props => {
   return (
     <div>
-      <Markdown content={'SAMPLE TEXT'} openLinksInNewWindow={true} />
+      <Markdown content={props.content} openLinksInNewWindow={true} />
     </div>
   );
 };
-
-export default SideContentMissionTask;

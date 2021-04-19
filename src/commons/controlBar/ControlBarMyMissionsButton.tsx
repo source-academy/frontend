@@ -17,9 +17,12 @@ import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type ControlBarMyMissionsButtonProps = {
   key: string;
+  setBriefingContent: (newBriefingContent: string) => void;
 };
 
 export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProps> = props => {
+  const handleOnClick = handleOnClickGenerator(props.setBriefingContent);
+
   return (
     <Tooltip2 content="Look at this photograph" placement={Position.TOP}>
       {controlButton('My Missions', IconNames.BADGE, handleOnClick)}
@@ -27,35 +30,39 @@ export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProp
   );
 };
 
-async function handleOnClick() {
-  const octokit = getGitHubOctokitInstance() as Octokit;
+function handleOnClickGenerator(setBriefingContent: (newBriefingContent: string) => void) {
+  return async () => {
+    const octokit = getGitHubOctokitInstance() as Octokit;
 
-  if (octokit === undefined) {
-    showWarningMessage('Please sign in with GitHub!', 2000);
-    return;
-  }
+    if (octokit === undefined) {
+      showWarningMessage('Please sign in with GitHub!', 2000);
+      return;
+    }
 
-  const results = await octokit.repos.listForAuthenticatedUser();
-  const userRepos = results.data;
-  const onlyMissionRepos = userRepos.filter(repo => repo.name.startsWith('SA-'));
+    const results = await octokit.repos.listForAuthenticatedUser();
+    const userRepos = results.data;
+    const onlyMissionRepos = userRepos.filter(repo => repo.name.startsWith('SA-'));
 
-  const chosenRepoName = await promisifyDialog<GitHubMissionBrowserDialogProps, string>(
-    GitHubMissionBrowserDialog,
-    resolve => ({
-      missionRepos: onlyMissionRepos,
-      onSubmit: repoName => resolve(repoName)
-    })
-  );
+    const chosenRepoName = await promisifyDialog<GitHubMissionBrowserDialogProps, string>(
+      GitHubMissionBrowserDialog,
+      resolve => ({
+        missionRepos: onlyMissionRepos,
+        onSubmit: repoName => resolve(repoName)
+      })
+    );
 
-  if (chosenRepoName === '') {
-    return;
-  }
+    if (chosenRepoName === '') {
+      return;
+    }
 
-  const authUser = await octokit.users.getAuthenticated();
-  const loginId = authUser.data.login;
+    const authUser = await octokit.users.getAuthenticated();
+    const loginId = authUser.data.login;
 
-  const missionData = await getMissionData(loginId, chosenRepoName, octokit);
-  console.log(missionData);
+    const missionData = await getMissionData(loginId, chosenRepoName, octokit);
+    console.log(missionData);
+
+    setBriefingContent(missionData.missionBriefing);
+  };
 }
 
 async function getMissionData(loginId: string, repoName: string, octokit: Octokit) {

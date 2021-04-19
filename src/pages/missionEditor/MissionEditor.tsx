@@ -16,7 +16,7 @@ import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButto
 import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
-import SideContentMarkdownEditor from 'src/commons/sideContent/SideContentMarkdownEditor';
+import { SideContentMarkdownEditor } from 'src/commons/sideContent/SideContentMarkdownEditor';
 import SideContentMissionEditor from 'src/commons/sideContent/SideContentMissionEditor';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
@@ -293,8 +293,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     );
   }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
+  const [briefingContent, setBriefingContent] = React.useState('');
+
   const myMissionsButton = React.useMemo(() => {
-    return <ControlBarMyMissionsButton key="my_missions" />;
+    return <ControlBarMyMissionsButton key="my_missions" setBriefingContent={setBriefingContent} />;
   }, []);
 
   const tabs = React.useMemo(() => {
@@ -303,7 +305,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Task',
       iconName: IconNames.NINJA,
-      body: <SideContentMarkdownEditor />,
+      body: <SideContentMarkdownEditor content={'SAMPLE TEXT'}/>,
       id: SideContentType.missionTask,
       toSpawn: () => true
     });
@@ -311,7 +313,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Briefing',
       iconName: IconNames.BRIEFCASE,
-      body: <SideContentMarkdownEditor />,
+      body: <SideContentMarkdownEditor content={briefingContent}/>,
       id: SideContentType.missionBriefing,
       toSpawn: () => true
     });
@@ -325,7 +327,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     });
 
     return tabs;
-  }, [props]);
+  }, [props, briefingContent]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];
