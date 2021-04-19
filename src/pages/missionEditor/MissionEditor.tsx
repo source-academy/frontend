@@ -305,7 +305,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Task',
       iconName: IconNames.NINJA,
-      body: <SideContentMarkdownEditor content={'SAMPLE TEXT'}/>,
+      body: <SideContentMarkdownEditor content={'SAMPLE TEXT'} />,
       id: SideContentType.missionTask,
       toSpawn: () => true
     });
@@ -313,7 +313,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Briefing',
       iconName: IconNames.BRIEFCASE,
-      body: <SideContentMarkdownEditor content={briefingContent}/>,
+      body: <SideContentMarkdownEditor content={briefingContent} />,
       id: SideContentType.missionBriefing,
       toSpawn: () => true
     });
