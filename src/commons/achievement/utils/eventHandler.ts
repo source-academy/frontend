@@ -1,10 +1,7 @@
-import {
-  getAchievements,
-  getOwnGoals,
-  updateOwnGoalProgress
-} from '../../../features/achievement/AchievementActions';
+import { handleEvent } from '../../../features/achievement/AchievementActions';
 import {
   AchievementGoal,
+  AchievementItem,
   EventMeta,
   EventType,
   GoalProgress,
@@ -26,10 +23,34 @@ function eventShouldCount(meta: EventMeta): boolean {
   return false;
 }
 
-let inferencer: AchievementInferencer = new AchievementInferencer([], []);
+export function incrementCount(goalUuid: string, inferencer: AchievementInferencer) {
+  const progress: GoalProgress = { ...inferencer.getGoalProgress(goalUuid) };
+  progress.count = progress.count + 1;
+  const wasCompleted = progress.completed;
+  progress.completed = progress.count >= progress.targetCount;
 
-function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
-  if (goal.meta.type === GoalType.EVENT) {
+  const incompleteAchievements: string[] = [];
+  if (!wasCompleted && progress.completed) {
+    const achievements: string[] = inferencer.getAchievementsByGoal(goalUuid);
+    for (const achievement of achievements) {
+      if (!inferencer.isCompleted(inferencer.getAchievement(achievement))) {
+        incompleteAchievements.push(achievement);
+      }
+    }
+  }
+
+  inferencer.modifyGoalProgress(progress);
+
+  for (const achievementUuid of incompleteAchievements) {
+    const achievement: AchievementItem = inferencer.getAchievement(achievementUuid);
+    if (inferencer.isCompleted(achievement)) {
+      showSuccessMessage('Completed acheivement: ' + achievement.title);
+    }
+  }
+}
+
+export function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
+  if (goal.meta.type === GoalType.EVENT && eventShouldCount(goal.meta)) {
     for (let i = 0; i < goal.meta.eventNames.length; i++) {
       for (let j = 0; j < eventNames.length; j++) {
         if (goal.meta.eventNames[i] === eventNames[j]) {
@@ -37,97 +58,26 @@ function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[]) {
         }
       }
     }
-    return false;
-  } else {
-    return false;
   }
+  return false;
 }
 
-export function processEvent(
-  eventNames: EventType[],
-  increment: number = 1,
-  retry: boolean = false
-) {
-  // by default, userId should be the current state's one
-  const userId = store.getState().session.userId;
-  // just in case userId is still not defined
-  if (!userId) {
-    return;
-  }
+let timeoutSet: boolean = false;
+let loggedEvents: EventType[][] = [];
 
-  let goals = inferencer.getAllGoals();
+function resetLoggedEvents() {
+  loggedEvents = [];
+  timeoutSet = false;
+}
 
-  // if the inferencer has goals, enter the function body
-  // if this is the retry, also enter the function body to prevent infinite loops
-  if (goals[0] || retry) {
-    goals = goals.filter(goal => goalIncludesEvents(goal, eventNames));
+export function processEvent(eventNames: EventType[]) {
+  loggedEvents.push(eventNames);
 
-    const computeCompleted = (goal: AchievementGoal): boolean => {
-      // all goals that are input as arguments are eventGoals
-      const meta = goal.meta as EventMeta;
-
-      // if the goal just became completed
-      if (!goal.completed && goal.count + increment >= meta.targetCount) {
-        goal.completed = true;
-        const parentAchievements = inferencer.getAchievementsByGoal(goal.uuid);
-        parentAchievements.forEach(uuid => {
-          const achievement = inferencer.getAchievement(uuid);
-          // something went wrong
-          if (inferencer.isInvalidAchievement(achievement)) {
-            return;
-          }
-          if (inferencer.isCompleted(achievement)) {
-            showSuccessMessage('Completed acheivement: ' + achievement.title);
-          }
-        });
-        return true;
-      } else {
-        return goal.completed;
-      }
-    };
-
-    goals.forEach(goal => {
-      if (eventShouldCount(goal.meta as EventMeta)) {
-        // edit the version that is on the state
-        computeCompleted(goal);
-        goal.count = goal.count + increment;
-
-        // send the update request to the backend
-        const progress: GoalProgress = {
-          uuid: goal.uuid,
-          count: goal.count, // user gets all of this xp, even if its not complete
-          targetCount: goal.targetCount, // when complete, the user gets the xp
-          // check for completion using counter that gets incremented
-          completed: goal.completed
-        };
-
-        // update goal progress in the backend
-        userId && store.dispatch(updateOwnGoalProgress(progress));
-      }
-    });
-    // if goals are not in state, load the goals from the backend and try again
-  } else {
-    const retry = () => {
-      inferencer = new AchievementInferencer(
-        store.getState().achievement.achievements,
-        store.getState().achievement.goals
-      );
-      processEvent(eventNames, increment, true);
-    };
-
-    if (!store.getState().achievement.goals[0]) {
-      // ensure that the next function call has updated XP values
-      store.dispatch(getOwnGoals());
-      store.dispatch(getAchievements());
-
-      // naively wait for 1 second for the state to be updated
-      // want: wait exactly until the store does get updated, how?
-
-      // wait till the getOwnGoals completes and the goals are in the state, then try again
-      setTimeout(retry, 1000); // arbitrary number of time to wait for the state to get the goals
-    } else {
-      // state already has the goals and achievements
-      retry();
-    }
+  if (!timeoutSet) {
+    timeoutSet = true;
+    setTimeout(() => {
+      store.dispatch(handleEvent(loggedEvents));
+      resetLoggedEvents();
+    }, 5000);
   }
 }

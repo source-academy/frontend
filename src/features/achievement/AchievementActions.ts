@@ -8,12 +8,14 @@ import {
   BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
+  EventType,
   GET_ACHIEVEMENTS,
   GET_GOALS,
   GET_OWN_GOALS,
   GET_USERS,
   GoalDefinition,
   GoalProgress,
+  HANDLE_EVENT,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
   SAVE_ACHIEVEMENTS,
@@ -47,6 +49,8 @@ export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
 
 export const updateOwnGoalProgress = (progress: GoalProgress) =>
   action(UPDATE_OWN_GOAL_PROGRESS, progress);
+
+export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
 
 export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
   action(UPDATE_GOAL_PROGRESS, { studentId, progress });

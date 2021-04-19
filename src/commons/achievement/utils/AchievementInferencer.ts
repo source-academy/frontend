@@ -9,6 +9,7 @@ import {
   AchievementStatus,
   defaultGoalProgress,
   GoalDefinition,
+  GoalProgress,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
 import { isExpired, isReleased } from './DateHelper';
@@ -183,6 +184,10 @@ class AchievementInferencer {
    */
   public getGoalDefinition(uuid: string) {
     return this.getGoal(uuid) as GoalDefinition;
+  }
+
+  public getGoalProgress(uuid: string) {
+    return this.getGoal(uuid) as GoalProgress;
   }
 
   /**
@@ -378,6 +383,24 @@ class AchievementInferencer {
     // then, process the nodeList and goalList
     this.processNodes();
     this.processGoals();
+  }
+
+  public modifyGoalProgress(progress: GoalProgress) {
+    const goal = this.getGoal(progress.uuid);
+    if (this.isInvalidGoal(goal)) {
+      return;
+    }
+    this.goalList.set(progress.uuid, { ...goal, ...progress });
+
+    const achievementUuids = goal.achievementUuids;
+    for (const uuid in achievementUuids) {
+      const node = this.nodeList.get(uuid);
+      if (node) {
+        this.generateXp(node);
+        this.generateProgressFrac(node);
+        this.generateStatus(node);
+      }
+    }
   }
 
   /**
@@ -686,6 +709,7 @@ class AchievementInferencer {
     this.goalList.forEach(goal => {
       const { text, uuid } = goal;
       this.textToUuid.set(text, uuid);
+      goal.achievementUuids = uniq(goal.achievementUuids);
     });
   }
 

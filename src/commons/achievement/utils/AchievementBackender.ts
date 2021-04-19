@@ -12,8 +12,7 @@ export const backendifyGoalDefinition = (goal: GoalDefinition) => ({
   meta: goal.meta,
   text: goal.text,
   type: goal.meta.type,
-  uuid: goal.uuid,
-  achievementUuids: goal.achievementUuids
+  uuid: goal.uuid
 });
 
 export const frontendifyAchievementGoal = (goal: any) =>

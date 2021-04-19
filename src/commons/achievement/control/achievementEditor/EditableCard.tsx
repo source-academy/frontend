@@ -192,18 +192,6 @@ function EditableCard(props: EditableCardProps) {
 
   const changeGoalUuids = (goalUuids: string[]) => {
     dispatch({ type: ActionType.CHANGE_GOAL_UUIDS, payload: goalUuids });
-    // add the current achievement into the goals chosen
-    goalUuids.forEach(goalUuid => {
-      const goal = inferencer.getGoal(goalUuid);
-      // iterate through the achievements, if the uuid is not found, add it in
-      const len = goal.achievementUuids.length;
-      for (let i = 0; i < len; i++) {
-        if (goal.achievementUuids[i] === uuid) {
-          return;
-        }
-      }
-      goal.achievementUuids[len] = uuid;
-    });
   };
 
   const changePosition = (position: number) =>
