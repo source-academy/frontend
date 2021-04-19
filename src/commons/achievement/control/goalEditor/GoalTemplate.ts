@@ -36,16 +36,6 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
         observeFrom: undefined,
         observeTo: undefined
       };
-    case GoalType.XP:
-      return {
-        type: GoalType.XP,
-        targetCount: 100
-      };
-    case GoalType.ACHIEVEMENTS:
-      return {
-        type: GoalType.ACHIEVEMENTS,
-        targetCount: 1
-      };
   }
 };
 

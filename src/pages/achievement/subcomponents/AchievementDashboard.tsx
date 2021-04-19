@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 
@@ -11,13 +11,11 @@ import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
 import Constants from '../../../commons/utils/Constants';
-import { showSuccessMessage } from '../../../commons/utils/NotificationsHelper';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import {
   AchievementUser,
   FilterStatus,
-  GoalProgress,
-  GoalType
+  GoalProgress
 } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
@@ -66,7 +64,6 @@ function Dashboard(props: DispatchProps & StateProps) {
     getUsers,
     updateGoalProgress,
     fetchAssessmentOverviews,
-    id,
     group,
     inferencer,
     name,
@@ -84,8 +81,6 @@ function Dashboard(props: DispatchProps & StateProps) {
       getAchievements();
     }
   }, [getAchievements, getOwnGoals]);
-
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   if (name && role && !assessmentOverviews) {
     // If assessment overviews are not loaded, fetch them
@@ -106,54 +101,6 @@ function Dashboard(props: DispatchProps & StateProps) {
    */
   const focusState = useState<string>('');
   const [focusUuid] = focusState;
-
-  const completedCount = inferencer.getAllCompletedAchievements().length;
-  const xp = inferencer.getTotalXp();
-  const goals = inferencer.getAllGoals();
-
-  // Computes goal progress for achievement and xp goals
-  let changed = false;
-  goals.forEach(goal => {
-    if (!id) {
-      return;
-    }
-    let update = false;
-    if (goal.meta.type === GoalType.ACHIEVEMENTS) {
-      update = goal.count !== completedCount;
-      goal.count = completedCount;
-    }
-    if (goal.meta.type === GoalType.XP) {
-      update = goal.count !== xp;
-      goal.count = xp;
-    }
-    if (!goal.completed && goal.count >= goal.targetCount) {
-      goal.completed = true;
-      const parentAchievements = inferencer.getAchievementsByGoal(goal.uuid);
-      parentAchievements.forEach(uuid => {
-        const achievement = inferencer.getAchievement(uuid);
-        console.log(achievement);
-        if (inferencer.isInvalidAchievement(achievement)) {
-          return;
-        }
-        if (inferencer.isCompleted(achievement)) {
-          showSuccessMessage('Completed acheivement: ' + achievement.title);
-        }
-      });
-    }
-    changed = changed || update;
-    if (update) {
-      const progress: GoalProgress = {
-        uuid: goal.uuid,
-        count: goal.count,
-        targetCount: goal.targetCount,
-        completed: goal.completed
-      };
-      updateGoalProgress(id, progress);
-    }
-  });
-  if (changed) {
-    setTimeout(forceUpdate, 1000);
-  }
 
   return (
     <AchievementContext.Provider value={inferencer}>

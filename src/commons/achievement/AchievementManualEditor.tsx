@@ -24,9 +24,8 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
   const { studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
-      ? props.users.sort((user1, user2) => user1.name.localeCompare(user2.name))
-      : // Not sure how studio is represented as a string
-        props.users
+      ? [...props.users].sort((user1, user2) => user1.name.localeCompare(user2.name))
+      : props.users
           .filter(user => user.group === studio)
           .sort((user1, user2) => user1.name.localeCompare(user2.name));
 

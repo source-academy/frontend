@@ -19,7 +19,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   inferencer: Constants.useAchievementBackend
     ? new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
     : new AchievementInferencer(mockAchievements, mockGoals),
-  id: state.session.userId,
   name: state.session.name,
   role: state.session.role,
   assessmentOverviews: state.session.assessmentOverviews,

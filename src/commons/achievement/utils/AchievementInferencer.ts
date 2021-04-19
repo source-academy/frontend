@@ -420,14 +420,9 @@ class AchievementInferencer {
       return new AchievementNode(node.achievement);
     };
 
-    // first, remove the references to this achievement from the goals
-    this.getAchievement(targetUuid).goalUuids.forEach(goalUuid => {
-      const goal = this.getGoal(goalUuid);
-      goal.achievementUuids = goal.achievementUuids.filter(uuid => uuid !== targetUuid);
-    });
-    // then, remove achievement from node list
+    // first, remove achievement from node list
     this.nodeList.delete(targetUuid);
-    // finally, remove reference of the target in other achievement's prerequisite
+    // then, remove reference of the target in other achievement's prerequisite
     this.nodeList.forEach((node, uuid) => {
       if (hasTarget(node)) {
         this.nodeList.set(uuid, sanitizeNode(node));
@@ -721,7 +716,7 @@ class AchievementInferencer {
   private constructNodeList(achievements: AchievementItem[]) {
     const nodeList = new Map<string, AchievementNode>();
     achievements.forEach(achievement =>
-      nodeList.set(achievement.uuid, new AchievementNode(achievement))
+      nodeList.set(achievement.uuid, new AchievementNode({ ...achievement }))
     );
     return nodeList;
   }
@@ -733,7 +728,7 @@ class AchievementInferencer {
    */
   private constructGoalList(goals: AchievementGoal[]) {
     const goalList = new Map<string, AchievementGoal>();
-    goals.forEach(goal => goalList.set(goal.uuid, goal));
+    goals.forEach(goal => goalList.set(goal.uuid, { ...goal }));
     return goalList;
   }
 
