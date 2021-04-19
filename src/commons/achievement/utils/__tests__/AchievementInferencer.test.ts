@@ -88,9 +88,21 @@ describe('Achievement Inferencer Constructor', () => {
   });
 
   describe('Overlapping IDs', () => {
-    const testAchievement1: AchievementItem = { ...testAchievement, uuid: '1', title: 'testAchievement1' };
-    const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2', title: 'testAchievement2' };
-    const testAchievement3: AchievementItem = { ...testAchievement, uuid: '2', title: 'testAchievement3' };
+    const testAchievement1: AchievementItem = {
+      ...testAchievement,
+      uuid: '1',
+      title: 'testAchievement1'
+    };
+    const testAchievement2: AchievementItem = {
+      ...testAchievement,
+      uuid: '2',
+      title: 'testAchievement2'
+    };
+    const testAchievement3: AchievementItem = {
+      ...testAchievement,
+      uuid: '2',
+      title: 'testAchievement3'
+    };
 
     const testGoal1: AchievementGoal = { ...testGoal, uuid: '1', text: 'testGoal1' };
     const testGoal2: AchievementGoal = { ...testGoal, uuid: '1', text: 'testGoal2' };
