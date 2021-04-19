@@ -1,4 +1,4 @@
-import { uniq, cloneDeep } from 'lodash';
+import { cloneDeep, uniq } from 'lodash';
 import { v4 } from 'uuid';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
