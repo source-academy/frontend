@@ -31,7 +31,7 @@ export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonPr
 
   const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
 
-  const mainButton = controlButton('GitHub Login', IconNames.GIT_BRANCH, null, {
+  const mainButton = controlButton('GitHub ' + (isLoggedIn ? 'Logout' : 'Login'), IconNames.GIT_BRANCH, null, {
     intent: stateToIntent[state]
   });
 

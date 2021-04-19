@@ -33,6 +33,9 @@ export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -40,24 +43,22 @@ export type DispatchProps = {
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFetchSublanguage: () => void;
-  handleGenerateLz: () => void;
-  handleShortenURL: (s: string) => void;
-  handleUpdateShortURL: (s: string) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
+  handleFetchSublanguage: () => void;
+  handleGenerateLz: () => void;
+  handleShortenURL: (s: string) => void;
+  handleUpdateShortURL: (s: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -129,10 +130,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
   React.useEffect(() => {
-    // Only fetch default Playground sublanguage when not loaded via a share link
-    if (!propsRef.current.location.hash) {
-      propsRef.current.handleFetchSublanguage();
-    }
+    propsRef.current.handleFetchSublanguage();
   }, []);
 
   const hash = props.location.hash;
@@ -302,12 +300,32 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
-    tabs.push(missionTaskTab);
-    tabs.push(missionBriefingTab);
-    tabs.push(missionEditorTab);
+    tabs.push({
+      label: 'Task',
+      iconName: IconNames.NINJA,
+      body: <SideContentMarkdownEditor />,
+      id: SideContentType.missionTask,
+      toSpawn: () => true
+    });
+
+    tabs.push({
+      label: 'Briefing',
+      iconName: IconNames.BRIEFCASE,
+      body: <SideContentMarkdownEditor />,
+      id: SideContentType.missionBriefing,
+      toSpawn: () => true
+    });
+
+    tabs.push({
+      label: 'Editor',
+      iconName: IconNames.AIRPLANE,
+      body: <SideContentMissionEditor {...props} />,
+      id: SideContentType.missionEditor,
+      toSpawn: () => true
+    });
 
     return tabs;
-  }, []);
+  }, [props]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];
@@ -427,30 +445,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       )}
     </div>
   );
-};
-
-const missionTaskTab: SideContentTab = {
-  label: 'Task',
-  iconName: IconNames.NINJA,
-  body: <SideContentMarkdownEditor />,
-  id: SideContentType.missionTask,
-  toSpawn: () => true
-};
-
-const missionBriefingTab: SideContentTab = {
-  label: 'Briefing',
-  iconName: IconNames.BRIEFCASE,
-  body: <SideContentMarkdownEditor />,
-  id: SideContentType.missionBriefing,
-  toSpawn: () => true
-};
-
-const missionEditorTab: SideContentTab = {
-  label: 'Editor',
-  iconName: IconNames.AIRPLANE,
-  body: <SideContentMissionEditor />,
-  id: SideContentType.missionEditor,
-  toSpawn: () => true
 };
 
 export default MissionEditor;
