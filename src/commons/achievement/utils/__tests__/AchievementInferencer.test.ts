@@ -88,13 +88,13 @@ describe('Achievement Inferencer Constructor', () => {
   });
 
   describe('Overlapping IDs', () => {
-    const testAchievement1: AchievementItem = { ...testAchievement, uuid: '1' };
-    const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2' };
-    const testAchievement3: AchievementItem = { ...testAchievement, uuid: '2' };
+    const testAchievement1: AchievementItem = { ...testAchievement, uuid: '1', title: 'testAchievement1' };
+    const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2', title: 'testAchievement2' };
+    const testAchievement3: AchievementItem = { ...testAchievement, uuid: '2', title: 'testAchievement3' };
 
-    const testGoal1: AchievementGoal = { ...testGoal, uuid: '1' };
-    const testGoal2: AchievementGoal = { ...testGoal, uuid: '1' };
-    const testGoal3: AchievementGoal = { ...testGoal, uuid: '2' };
+    const testGoal1: AchievementGoal = { ...testGoal, uuid: '1', text: 'testGoal1' };
+    const testGoal2: AchievementGoal = { ...testGoal, uuid: '1', text: 'testGoal2' };
+    const testGoal3: AchievementGoal = { ...testGoal, uuid: '2', text: 'testGoal3' };
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2, testAchievement3],
@@ -107,15 +107,15 @@ describe('Achievement Inferencer Constructor', () => {
     });
 
     test('References the correct achievements and goals', () => {
-      expect(inferencer.getAchievement('1')).toBe(testAchievement1);
-      expect(inferencer.getAchievement('2')).not.toBe(testAchievement2);
-      expect(inferencer.getAchievement('2')).toBe(testAchievement3);
-      expect(inferencer.getGoal('1')).not.toBe(testGoal1);
-      expect(inferencer.getGoal('1')).toBe(testGoal2);
-      expect(inferencer.getGoal('2')).toBe(testGoal3);
-      expect(inferencer.getGoalDefinition('1')).not.toBe(testGoal1);
-      expect(inferencer.getGoalDefinition('1')).toBe(testGoal2);
-      expect(inferencer.getGoalDefinition('2')).toBe(testGoal3);
+      expect(inferencer.getAchievement('1')).toEqual(testAchievement1);
+      expect(inferencer.getAchievement('2')).not.toEqual(testAchievement2);
+      expect(inferencer.getAchievement('2')).toEqual(testAchievement3);
+      expect(inferencer.getGoal('1')).not.toEqual(testGoal1);
+      expect(inferencer.getGoal('1')).toEqual(testGoal2);
+      expect(inferencer.getGoal('2')).toEqual(testGoal3);
+      expect(inferencer.getGoalDefinition('1')).not.toEqual(testGoal1);
+      expect(inferencer.getGoalDefinition('1')).toEqual(testGoal2);
+      expect(inferencer.getGoalDefinition('2')).toEqual(testGoal3);
     });
   });
 });
@@ -146,8 +146,8 @@ describe('Achievement Setter', () => {
 
     // After insertion
     expect(inferencer.getAllAchievements().length).toBe(mockAchievements.length + 1);
-    expect(inferencer.getAchievement('1')).toBe(mockAchievements[1]);
-    expect(inferencer.getAchievement(newUuid)).toBe(testAchievement1);
+    expect(inferencer.getAchievement('1')).toEqual(mockAchievements[1]);
+    expect(inferencer.getAchievement(newUuid)).toEqual(testAchievement1);
     expect(inferencer.getTitleByUuid(newUuid)).toBe('Test Achievement 1');
     expect(inferencer.getUuidByTitle('Test Achievement 1')).toBe(newUuid);
     expect(inferencer.getAchievement(newUuid).prerequisiteUuids).toEqual(['2', '3', '4']);
@@ -163,7 +163,7 @@ describe('Achievement Setter', () => {
 
     // After insertion
     expect(inferencer.getAllGoals().length).toBe(mockGoals.length + 1);
-    expect(inferencer.getGoalDefinition('1')).toBe(mockGoals[1]);
+    expect(inferencer.getGoalDefinition('1')).toEqual(mockGoals[1]);
     expect(inferencer.getGoalDefinition(newUuid)).toEqual(testGoal1);
     expect(inferencer.getTextByUuid(newUuid)).toBe('Test Goal 1');
     expect(inferencer.getUuidByText('Test Goal 1')).toBe(newUuid);
@@ -178,14 +178,14 @@ describe('Achievement Setter', () => {
     };
 
     // Before modification
-    expect(inferencer.getAchievement(newUuid)).toBe(testAchievement1);
+    expect(inferencer.getAchievement(newUuid)).toEqual(testAchievement1);
     expect(inferencer.getTitleByUuid(newUuid)).toBe('Test Achievement 1');
     expect(inferencer.getUuidByTitle('Test Achievement 1')).toBe(newUuid);
 
     inferencer.modifyAchievement(testAchievement2);
 
     // After modification
-    expect(inferencer.getAchievement(newUuid)).toBe(testAchievement2);
+    expect(inferencer.getAchievement(newUuid)).toEqual(testAchievement2);
     expect(inferencer.getTitleByUuid(newUuid)).toBe('Test Achievement 2');
     expect(inferencer.getUuidByTitle('Test Achievement 2')).toBe(newUuid);
   });
@@ -326,8 +326,8 @@ describe('Achievement Inferencer Getter', () => {
     );
 
     expect(inferencer.listGoals('1').length).toBe(2);
-    expect(inferencer.listGoals('1')[0]).toBe(testGoal2);
-    expect(inferencer.listGoals('1')[1]).toBe(testGoal1);
+    expect(inferencer.listGoals('1')[0]).toEqual(testGoal2);
+    expect(inferencer.listGoals('1')[1]).toEqual(testGoal1);
     expect(inferencer.listGoals('2')).toEqual([]);
   });
 
@@ -352,8 +352,8 @@ describe('Achievement Inferencer Getter', () => {
     );
 
     expect(inferencer.listPrerequisiteGoals('1').length).toBe(2);
-    expect(inferencer.listPrerequisiteGoals('1')[0]).toBe(testGoal2);
-    expect(inferencer.listPrerequisiteGoals('1')[1]).toBe(testGoal1);
+    expect(inferencer.listPrerequisiteGoals('1')[0]).toEqual(testGoal2);
+    expect(inferencer.listPrerequisiteGoals('1')[1]).toEqual(testGoal1);
   });
 });
 
