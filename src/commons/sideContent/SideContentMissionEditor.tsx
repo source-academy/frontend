@@ -1,53 +1,44 @@
-import { Button, InputGroup, Label, Menu, MenuItem } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { InputGroup, Label } from '@blueprintjs/core';
+import { Variant } from 'js-slang/dist/types';
 import React from 'react';
 
-const SideContentMissionEditor: React.FC = props => {
+import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
+
+export type SideContentMissionEditorProps = {
+  sourceChapter: number;
+  sourceVariant: Variant;
+};
+
+export const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props => {
   return (
     <div>
-      <Label>
-        Mission Title
-        <InputGroup></InputGroup>
-      </Label>
-
-      <Label>
-        Cover Image Link
-        <InputGroup></InputGroup>
-      </Label>
-
-      <Label>
-        Mission Summary
-        <InputGroup></InputGroup>
-      </Label>
-
-      <Label>
-        Mission Number
-        <InputGroup></InputGroup>
-      </Label>
-
-      <Label>
-        Source Version
-        <InputGroup
-          rightElement={
-            <Popover2
-              content={
-                <Menu>
-                  <MenuItem text="Sauce 1" />
-                  <MenuItem text="Sauce 2" />
-                </Menu>
-              }
-              placement={'bottom-end'}
-            >
-              <Button minimal={true} rightIcon="caret-down" />
-            </Popover2>
-          }
-        ></InputGroup>
-      </Label>
-
-      <Label>
-        Reading
-        <InputGroup></InputGroup>
-      </Label>
+      <div className="MissionEditorRow">
+        <div className="MissionEditorColumn">
+          <div className="MissionEditorLeftColumn">
+            <Label>Mission Title</Label>
+            <Label>Cover Image Link</Label>
+            <Label>Mission Summary</Label>
+            <Label>Mission Number</Label>
+            <Label>Source Version</Label>
+            <Label>Reading</Label>
+          </div>
+        </div>
+        <div className="MissionEditorColumn">
+          <div className="MissionEditorRightColumn">
+            <InputGroup></InputGroup>
+            <InputGroup></InputGroup>
+            <InputGroup></InputGroup>
+            <InputGroup></InputGroup>
+            <ControlBarChapterSelect
+              sourceChapter={props.sourceChapter}
+              sourceVariant={props.sourceVariant}
+              key="chapter"
+              disabled={true}
+            />
+            <InputGroup></InputGroup>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
