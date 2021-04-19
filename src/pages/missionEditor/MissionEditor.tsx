@@ -16,9 +16,8 @@ import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButto
 import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
-import SideContentMissionBriefing from 'src/commons/sideContent/SideContentMissionBriefing';
+import SideContentMarkdownEditor from 'src/commons/sideContent/SideContentMarkdownEditor';
 import SideContentMissionEditor from 'src/commons/sideContent/SideContentMissionEditor';
-import SideContentMissionTask from 'src/commons/sideContent/SideContentMissionTask';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
@@ -432,8 +431,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
 const missionTaskTab: SideContentTab = {
   label: 'Task',
-  iconName: IconNames.STAR,
-  body: <SideContentMissionTask />,
+  iconName: IconNames.NINJA,
+  body: <SideContentMarkdownEditor />,
   id: SideContentType.missionTask,
   toSpawn: () => true
 };
@@ -441,7 +440,7 @@ const missionTaskTab: SideContentTab = {
 const missionBriefingTab: SideContentTab = {
   label: 'Briefing',
   iconName: IconNames.BRIEFCASE,
-  body: <SideContentMissionBriefing />,
+  body: <SideContentMarkdownEditor />,
   id: SideContentType.missionBriefing,
   toSpawn: () => true
 };
