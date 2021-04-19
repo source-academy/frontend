@@ -1,4 +1,4 @@
-import { uniq } from 'lodash';
+import { uniq, cloneDeep } from 'lodash';
 import { v4 } from 'uuid';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
@@ -716,7 +716,7 @@ class AchievementInferencer {
   private constructNodeList(achievements: AchievementItem[]) {
     const nodeList = new Map<string, AchievementNode>();
     achievements.forEach(achievement =>
-      nodeList.set(achievement.uuid, new AchievementNode({ ...achievement }))
+      nodeList.set(achievement.uuid, new AchievementNode(cloneDeep(achievement)))
     );
     return nodeList;
   }
@@ -728,7 +728,7 @@ class AchievementInferencer {
    */
   private constructGoalList(goals: AchievementGoal[]) {
     const goalList = new Map<string, AchievementGoal>();
-    goals.forEach(goal => goalList.set(goal.uuid, { ...goal }));
+    goals.forEach(goal => goalList.set(goal.uuid, cloneDeep(goal)));
     return goalList;
   }
 
