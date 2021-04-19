@@ -12,7 +12,7 @@ import Constants from '../utils/Constants';
 
 export type GitHubMissionBrowserDialogProps = {
   missionRepos: any[];
-  onSubmit: (response: void) => void;
+  onSubmit: (response: string) => void;
 };
 
 export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProps> = props => {
@@ -49,7 +49,7 @@ export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProp
   );
 
   function handleClose() {
-    props.onSubmit();
+    props.onSubmit('');
   }
 };
 
@@ -57,6 +57,7 @@ class BrowsableMission {
   title: string = '';
   coverImage: string = '';
   webSummary: string = '';
+  repositoryName: string = '';
 }
 
 async function convertMissionReposToBrowsableMissions(
@@ -86,12 +87,14 @@ async function convertRepoToBrowsableMission(missionRepo: any) {
   const content = (results.data as any).content;
   const metadataFileString = Buffer.from(content, 'base64').toString();
 
-  const browsableMission = convertMetadataStringToBrowsableMission(metadataFileString);
+  const browsableMission = createBrowsableMission(missionRepo.name, metadataFileString);
   return browsableMission;
 }
 
-function convertMetadataStringToBrowsableMission(metadata: string) {
+function createBrowsableMission(repositoryName: string, metadata: string) {
   const browsableMission = new BrowsableMission();
+
+  browsableMission.repositoryName = repositoryName;
 
   const lines = metadata.replace(/\r/g, '').split(/\n/);
   lines.forEach(line => {
@@ -150,7 +153,7 @@ function convertMissionToCard(
               // intentional: each listing renders its own version of onClick
               // tslint:disable-next-line:jsx-no-lambda
               onClick={() => {
-                onSubmit();
+                onSubmit(missionRepo.repositoryName);
               }}
             >
               <span className="custom-hidden-xxxs">Open</span>
