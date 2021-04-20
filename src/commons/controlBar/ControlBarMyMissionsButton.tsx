@@ -56,7 +56,7 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
     }
 
     const missionData = await getMissionData(chosenRepoName, octokit);
-    
+
     props.loadMission(missionData);
   };
 }

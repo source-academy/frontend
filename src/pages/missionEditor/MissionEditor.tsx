@@ -114,17 +114,22 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
-  const [loadedMission, setLoadedMission] = React.useState(new MissionData('SAMPLE TEXT', new MissionMetadata(), []));
+  const [loadedMission, setLoadedMission] = React.useState(
+    new MissionData('SAMPLE TEXT', new MissionMetadata(), [])
+  );
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
   const [briefingContent, setBriefingContent] = React.useState('');
 
-  const loadMission = useCallback((missionData: MissionData) => {
-    setLoadedMission(missionData);
-    selectSourceChapter(missionData.missionMetadata.sourceVersion);
-    setBriefingContent(missionData.missionBriefing);
+  const loadMission = useCallback(
+    (missionData: MissionData) => {
+      setLoadedMission(missionData);
+      selectSourceChapter(missionData.missionMetadata.sourceVersion);
+      setBriefingContent(missionData.missionBriefing);
 
-    console.log(loadedMission);
-  }, [loadedMission]);
+      console.log(loadedMission);
+    },
+    [loadedMission]
+  );
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
