@@ -17,10 +17,11 @@ import { showWarningMessage } from '../utils/NotificationsHelper';
 type ControlBarMyMissionsButtonProps = {
   key: string;
   setBriefingContent: (newBriefingContent: string) => void;
+  setSourceChapter: (newSourceChapter: number) => void;
 };
 
 export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProps> = props => {
-  const handleOnClick = createOnClickHandler(props.setBriefingContent);
+  const handleOnClick = createOnClickHandler(props);
 
   return (
     <Tooltip2 content="Look at this photograph" placement={Position.TOP}>
@@ -29,7 +30,7 @@ export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProp
   );
 };
 
-function createOnClickHandler(setBriefingContent: (newBriefingContent: string) => void) {
+function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
   return async () => {
     const octokit = getGitHubOctokitInstance() as Octokit;
 
@@ -57,6 +58,7 @@ function createOnClickHandler(setBriefingContent: (newBriefingContent: string) =
     const missionData = await getMissionData(chosenRepoName, octokit);
     console.log(missionData);
 
-    setBriefingContent(missionData.missionBriefing);
+    props.setBriefingContent(missionData.missionBriefing);
+    props.setSourceChapter(missionData.missionMetadata.sourceVersion);
   };
 }

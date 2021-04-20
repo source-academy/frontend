@@ -95,6 +95,7 @@ function createBrowsableMission(repositoryName: string, metadata: string) {
   const retVal = parseMetadataProperties<BrowsableMission>(
     browsableMission,
     propertiesToExtract,
+    [],
     metadata
   );
 

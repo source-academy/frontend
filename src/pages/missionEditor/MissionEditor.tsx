@@ -245,17 +245,19 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     [hasBreakpoints, selectedTab]
   );
 
+  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+
   const chapterSelect = React.useMemo(
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
-        sourceChapter={props.sourceChapter}
+        sourceChapter={selectedSourceChapter}
         sourceVariant={props.sourceVariant}
         disabled={true}
         key="chapter"
       />
     ),
-    [chapterSelectHandler, props.sourceChapter, props.sourceVariant]
+    [chapterSelectHandler, selectedSourceChapter, props.sourceVariant]
   );
 
   const clearButton = React.useMemo(
@@ -296,7 +298,13 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const [briefingContent, setBriefingContent] = React.useState('');
 
   const myMissionsButton = React.useMemo(() => {
-    return <ControlBarMyMissionsButton key="my_missions" setBriefingContent={setBriefingContent} />;
+    return (
+      <ControlBarMyMissionsButton
+        key="my_missions"
+        setBriefingContent={setBriefingContent}
+        setSourceChapter={selectSourceChapter}
+      />
+    );
   }, []);
 
   const tabs = React.useMemo(() => {

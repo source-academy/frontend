@@ -80,11 +80,13 @@ export async function getContentAsString(
 
 function convertMetadataStringToMissionMetadata(metadataString: string) {
   const missionMetadata = new MissionMetadata();
-  const propertiesToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
+  const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
+  const numPropsToExtract = ['sourceVersion'];
 
   const retVal = parseMetadataProperties<MissionMetadata>(
     missionMetadata,
-    propertiesToExtract,
+    stringPropsToExtract,
+    numPropsToExtract,
     metadataString
   );
 
@@ -93,17 +95,26 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
 
 export function parseMetadataProperties<R>(
   propertyContainer: R,
-  propertiesToExtract: string[],
+  stringProps: string[],
+  numProps: string[],
   metadataString: string
 ) {
   const lines = metadataString.replace(/\r/g, '').split(/\n/);
 
   lines.forEach(line => {
-    for (let i = 0; i < propertiesToExtract.length; i++) {
-      const propName = propertiesToExtract[i];
+    for (let i = 0; i < stringProps.length; i++) {
+      const propName = stringProps[i];
 
       if (line.startsWith(propName)) {
         propertyContainer[propName] = line.substr(propName.length + 1);
+        return;
+      }
+    }
+
+    for (let i = 0; i < numProps.length; i++) {
+      const propName = numProps[i];
+      if (line.startsWith(propName)) {
+        propertyContainer[propName] = parseInt(line.substr(propName.length + 1), 10);
         return;
       }
     }
