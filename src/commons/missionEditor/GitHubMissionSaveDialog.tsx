@@ -1,5 +1,6 @@
-import { AnchorButton, Button, Classes, Dialog, Intent } from '@blueprintjs/core';
+import { AnchorButton, Button, Classes, Dialog, InputGroup, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
+import React, { useState } from 'react';
 
 export type GitHubMissionSaveDialogResolution = {
   confirmSave: boolean;
@@ -13,10 +14,26 @@ export type GitHubMissionSaveDialogProps = {
 };
 
 export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = props => {
+  const [commitMessage, setCommitMessage] = useState('');
+
   return (
     <Dialog className="missionBrowser" isOpen={true}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
-        <h3>MAKE SAV TO CHNAGE???!??</h3>
+        <h3>Please confirm your save</h3>
+      </div>
+
+      <div className={classNames('githubDialogHeader', Classes.DIALOG_BODY)}>
+        <h4>You are about to make changes to the following files:</h4>
+        <ul>
+          {props.changedFiles.map(filepath => (
+            <li>{filepath}</li>
+          ))}
+        </ul>
+        <InputGroup
+          onChange={handleCommitMessageChange}
+          placeholder={'Enter Commit Message'}
+          value={commitMessage}
+        />
       </div>
 
       <div className={classNames(Classes.DIALOG_FOOTER)}>
@@ -42,5 +59,9 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
       confirmSave: true,
       commitMessage: ''
     });
+  }
+
+  function handleCommitMessageChange(event: any) {
+    setCommitMessage(event.target.value);
   }
 };
