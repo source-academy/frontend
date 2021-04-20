@@ -126,6 +126,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
 
+  const getTemplateCode = useCallback((questionNumber: number) => {
+    return taskList[questionNumber - 1].starterCode;
+  }, [taskList]);
+
   const loadMission = useCallback((missionData: MissionData) => {
     setLoadedMission(missionData);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
@@ -133,21 +137,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     setTaskList(missionData.tasksData);
     setCurrentTaskNumber(1);
     console.log(loadedMission);
-  }, [loadedMission]);
-
-  /*
-  // You can use these functions or write your own lol. Also delet this comment kthx
-  const advanceCurrentTaskNumber = useCallback(
-    () => {
-      setCurrentTaskNumber(currentTaskNumber + 1);
-    }, [currentTaskNumber, setCurrentTaskNumber]
-  );
-
-  const reducedCurrentTaskNumber = useCallback(
-    () => {
-      setCurrentTaskNumber(currentTaskNumber - 1);
-    }, [currentTaskNumber, setCurrentTaskNumber]
-  */
+    props.handleEditorValueChange(missionData.tasksData[0].starterCode);
+  }, [loadedMission, props]);
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -445,13 +436,21 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     replButtons: [replDisabled ? null : evalButton, clearButton]
   };
 
-  const onClickPrevious = () => {
-    setCurrentTaskNumber(currentTaskNumber - 1);
-  };
+  const onClickPrevious = useCallback(
+    () => {
+      const newTaskNumber = currentTaskNumber - 1;
+      setCurrentTaskNumber(newTaskNumber);
+      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
+    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
+  );
 
-  const onClickNext = () => {
-    setCurrentTaskNumber(currentTaskNumber + 1);
-  };
+  const onClickNext = useCallback(
+    () => {
+      const newTaskNumber = currentTaskNumber + 1;
+      setCurrentTaskNumber(newTaskNumber);
+      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
+    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
+  );
 
   const prevTaskButton = (
     <ControlBarPreviousTaskButton
