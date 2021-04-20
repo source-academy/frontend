@@ -110,7 +110,7 @@ function convertMissionToCard(
   const ratio = isMobileBreakpoint ? 5 : 3;
 
   return (
-    <Card className="row listing" elevation={Elevation.ONE}>
+    <Card key={missionRepo.repositoryName} className="row listing" elevation={Elevation.ONE}>
       <div className={`col-xs-${String(ratio)} listing-picture`}>
         <img
           alt="Assessment"
