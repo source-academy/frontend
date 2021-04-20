@@ -4,7 +4,7 @@ import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 import { InterpreterOutput, sourceLanguages } from 'src/commons/application/ApplicationTypes';
@@ -16,9 +16,7 @@ import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButto
 import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
-import SideContentMissionBriefing from 'src/commons/sideContent/SideContentMissionBriefing';
-import SideContentMissionEditor from 'src/commons/sideContent/SideContentMissionEditor';
-import SideContentMissionTask from 'src/commons/sideContent/SideContentMissionTask';
+import { SideContentMarkdownEditor } from 'src/commons/sideContent/SideContentMarkdownEditor';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
@@ -26,6 +24,8 @@ import { parseQuery } from 'src/commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
+import MissionData from '../../commons/missionEditor/MissionData';
+import MissionMetadata from '../../commons/missionEditor/MissionMetadata';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -110,6 +110,26 @@ function handleHash(hash: string, props: MissionEditorProps) {
 const MissionEditor: React.FC<MissionEditorProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.missionTask);
+
+  /**
+   * Handles re-rendering the webpage + tracking states relating to the loaded mission
+   */
+  const [loadedMission, setLoadedMission] = React.useState(
+    new MissionData('SAMPLE TEXT', new MissionMetadata(), [])
+  );
+  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [briefingContent, setBriefingContent] = React.useState('');
+
+  const loadMission = useCallback(
+    (missionData: MissionData) => {
+      setLoadedMission(missionData);
+      selectSourceChapter(missionData.missionMetadata.sourceVersion);
+      setBriefingContent(missionData.missionBriefing);
+
+      console.log(loadedMission);
+    },
+    [loadedMission]
+  );
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -251,12 +271,13 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
-        sourceChapter={props.sourceChapter}
+        sourceChapter={selectedSourceChapter}
         sourceVariant={props.sourceVariant}
+        disabled={true}
         key="chapter"
       />
     ),
-    [chapterSelectHandler, props.sourceChapter, props.sourceVariant]
+    [chapterSelectHandler, selectedSourceChapter, props.sourceVariant]
   );
 
   const clearButton = React.useMemo(
@@ -295,16 +316,16 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
   const myMissionsButton = React.useMemo(() => {
-    return <ControlBarMyMissionsButton key="my_missions" />;
-  }, []);
+    return <ControlBarMyMissionsButton key="my_missions" loadMission={loadMission} />;
+  }, [loadMission]);
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
     tabs.push({
       label: 'Task',
-      iconName: IconNames.STAR,
-      body: <SideContentMissionTask />,
+      iconName: IconNames.NINJA,
+      body: <SideContentMarkdownEditor content={'SAMPLE TEXT'} />,
       id: SideContentType.missionTask,
       toSpawn: () => true
     });
@@ -312,11 +333,14 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Briefing',
       iconName: IconNames.BRIEFCASE,
-      body: <SideContentMissionBriefing />,
+      body: <SideContentMarkdownEditor content={briefingContent} />,
       id: SideContentType.missionBriefing,
       toSpawn: () => true
     });
 
+    // Remove this for Phase 2-1.
+    // It will be added once we get into Phase 2-2.
+    /*
     tabs.push({
       label: 'Editor',
       iconName: IconNames.AIRPLANE,
@@ -324,9 +348,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       id: SideContentType.missionEditor,
       toSpawn: () => true
     });
+    */
 
     return tabs;
-  }, [props]);
+  }, [briefingContent]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];

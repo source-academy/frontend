@@ -9,10 +9,11 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
+import { getContentAsString, parseMetadataProperties } from './GitHubMissionDataUtils';
 
 export type GitHubMissionBrowserDialogProps = {
   missionRepos: any[];
-  onSubmit: (response: void) => void;
+  onSubmit: (response: string) => void;
 };
 
 export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProps> = props => {
@@ -49,7 +50,7 @@ export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProp
   );
 
   function handleClose() {
-    props.onSubmit();
+    props.onSubmit('');
   }
 };
 
@@ -57,6 +58,7 @@ class BrowsableMission {
   title: string = '';
   coverImage: string = '';
   webSummary: string = '';
+  repositoryName: string = '';
 }
 
 async function convertMissionReposToBrowsableMissions(
@@ -77,41 +79,27 @@ async function convertRepoToBrowsableMission(missionRepo: any) {
   const authUser = await octokit.users.getAuthenticated();
   const loginId = authUser.data.login;
 
-  const results = await octokit.repos.getContent({
-    owner: loginId,
-    repo: missionRepo.name,
-    path: '/METADATA'
-  });
+  const metadata = await getContentAsString(loginId, missionRepo.name, '/METADATA', octokit);
+  const browsableMission = createBrowsableMission(missionRepo.name, metadata);
 
-  const content = (results.data as any).content;
-  const metadataFileString = Buffer.from(content, 'base64').toString();
-
-  const browsableMission = convertMetadataStringToBrowsableMission(metadataFileString);
   return browsableMission;
 }
 
-function convertMetadataStringToBrowsableMission(metadata: string) {
+function createBrowsableMission(repositoryName: string, metadata: string) {
   const browsableMission = new BrowsableMission();
 
-  const lines = metadata.replace(/\r/g, '').split(/\n/);
-  lines.forEach(line => {
-    if (line.startsWith('title')) {
-      browsableMission.title = line.substr(6);
-      return;
-    }
+  browsableMission.repositoryName = repositoryName;
 
-    if (line.startsWith('coverimage')) {
-      browsableMission.coverImage = line.substr(11);
-      return;
-    }
+  const propertiesToExtract = ['coverImage', 'title', 'webSummary'];
 
-    if (line.startsWith('websummary')) {
-      browsableMission.webSummary = line.substr(11);
-      return;
-    }
-  });
+  const retVal = parseMetadataProperties<BrowsableMission>(
+    browsableMission,
+    propertiesToExtract,
+    [],
+    metadata
+  );
 
-  return browsableMission;
+  return retVal;
 }
 
 function convertMissionToCard(
@@ -150,7 +138,7 @@ function convertMissionToCard(
               // intentional: each listing renders its own version of onClick
               // tslint:disable-next-line:jsx-no-lambda
               onClick={() => {
-                onSubmit();
+                onSubmit(missionRepo.repositoryName);
               }}
             >
               <span className="custom-hidden-xxxs">Open</span>
