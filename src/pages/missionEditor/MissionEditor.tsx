@@ -4,7 +4,7 @@ import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 import { InterpreterOutput, sourceLanguages } from 'src/commons/application/ApplicationTypes';
@@ -24,6 +24,8 @@ import { parseQuery } from 'src/commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
+import MissionData from '../../commons/missionEditor/MissionData';
+import MissionMetadata from '../../commons/missionEditor/MissionMetadata';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -108,6 +110,21 @@ function handleHash(hash: string, props: MissionEditorProps) {
 const MissionEditor: React.FC<MissionEditorProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.missionTask);
+
+  /**
+   * Handles re-rendering the webpage + tracking states relating to the loaded mission
+   */
+  const [loadedMission, setLoadedMission] = React.useState(new MissionData('SAMPLE TEXT', new MissionMetadata(), []));
+  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [briefingContent, setBriefingContent] = React.useState('');
+
+  const loadMission = useCallback((missionData: MissionData) => {
+    setLoadedMission(missionData);
+    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+    setBriefingContent(missionData.missionBriefing);
+
+    console.log(loadedMission);
+  }, [loadedMission]);
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -245,8 +262,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     [hasBreakpoints, selectedTab]
   );
 
-  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
-
   const chapterSelect = React.useMemo(
     () => (
       <ControlBarChapterSelect
@@ -295,17 +310,9 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     );
   }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
-  const [briefingContent, setBriefingContent] = React.useState('');
-
   const myMissionsButton = React.useMemo(() => {
-    return (
-      <ControlBarMyMissionsButton
-        key="my_missions"
-        setBriefingContent={setBriefingContent}
-        setSourceChapter={selectSourceChapter}
-      />
-    );
-  }, []);
+    return <ControlBarMyMissionsButton key="my_missions" loadMission={loadMission} />;
+  }, [loadMission]);
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];

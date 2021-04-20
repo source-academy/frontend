@@ -14,6 +14,7 @@ export async function getMissionData(repoName: string, octokit: Octokit) {
 
   const metadataString = await getContentAsString(loginId, repoName, '/METADATA', octokit);
   const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
+  missionMetadata.repoName = repoName;
 
   const tasksData = await getTasksData(loginId, repoName, octokit);
 

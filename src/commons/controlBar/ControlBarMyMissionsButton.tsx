@@ -11,13 +11,13 @@ import {
   GitHubMissionBrowserDialogProps
 } from '../missionEditor/GitHubMissionBrowserDialog';
 import { getMissionData } from '../missionEditor/GitHubMissionDataUtils';
+import MissionData from '../missionEditor/MissionData';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type ControlBarMyMissionsButtonProps = {
   key: string;
-  setBriefingContent: (newBriefingContent: string) => void;
-  setSourceChapter: (newSourceChapter: number) => void;
+  loadMission: (missionData: MissionData) => void;
 };
 
 export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProps> = props => {
@@ -56,9 +56,7 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
     }
 
     const missionData = await getMissionData(chosenRepoName, octokit);
-    console.log(missionData);
-
-    props.setBriefingContent(missionData.missionBriefing);
-    props.setSourceChapter(missionData.missionMetadata.sourceVersion);
+    
+    props.loadMission(missionData);
   };
 }
