@@ -15,5 +15,11 @@ type StateProps = {
 };
 
 export function ControlBarNextTaskButton(props: ControlBarNextTaskButtonProps) {
-  return controlButton('Next', IconNames.ARROW_RIGHT, props.onClickNext, { iconOnRight: true }, props.currentTask >= props.numOfTasks ? true : false);
+  return controlButton(
+    'Next',
+    IconNames.ARROW_RIGHT,
+    props.onClickNext,
+    { iconOnRight: true },
+    props.currentTask >= props.numOfTasks ? true : false
+  );
 }

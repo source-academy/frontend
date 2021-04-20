@@ -202,7 +202,12 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   ),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: workspaceLocation === 'playground' || 'sourcecast' ? defaultEditorValue : '' || 'missionEditor' ? defaultEditorValue : '',
+  editorValue:
+    workspaceLocation === 'playground' || 'sourcecast'
+      ? defaultEditorValue
+      : '' || 'missionEditor'
+      ? defaultEditorValue
+      : '',
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],

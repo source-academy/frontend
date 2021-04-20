@@ -24,17 +24,24 @@ export async function getMissionData(repoName: string, octokit: Octokit) {
 async function getTasksData(loginId: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
-  for (let i = 1; i <= maximumTasksPerMission; i++) {
-    const questionFolderName = '/Q' + i;
+  const results = await octokit.repos.getContent({
+    owner: loginId,
+    repo: repoName,
+    path: ''
+  });
 
-    // Check if the question exists
-    try {
-      await octokit.repos.getContent({
-        owner: loginId,
-        repo: repoName,
-        path: questionFolderName
-      });
-    } catch (err) {
+  const files = results.data;
+
+  if (!Array.isArray(files)) {
+    return questions;
+  }
+
+  for (let i = 1; i <= maximumTasksPerMission; i++) {
+    const questionFolderName = 'Q' + i;
+
+    // We make the assumption that there are no gaps in question numbering
+    // If the question does not exist, we may break
+    if (files.find(file => file.name === questionFolderName) === undefined) {
       break;
     }
 
