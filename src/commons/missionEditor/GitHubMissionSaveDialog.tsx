@@ -57,7 +57,7 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
   function handleConfirm() {
     props.resolveDialog({
       confirmSave: true,
-      commitMessage: ''
+      commitMessage: commitMessage
     });
   }
 
