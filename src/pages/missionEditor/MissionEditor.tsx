@@ -251,6 +251,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={props.sourceChapter}
         sourceVariant={props.sourceVariant}
+        disabled={true}
         key="chapter"
       />
     ),
