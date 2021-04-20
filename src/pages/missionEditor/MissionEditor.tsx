@@ -30,7 +30,13 @@ import { parseQuery } from 'src/commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
+import {
+  GitHubMissionSaveDialog,
+  GitHubMissionSaveDialogProps,
+  GitHubMissionSaveDialogResolution
+} from '../../commons/missionEditor/GitHubMissionSaveDialog';
 import MissionData from '../../commons/missionEditor/MissionData';
+import { promisifyDialog } from '../../commons/utils/DialogHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
@@ -141,7 +147,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     [taskList]
   );
 
-  const onClickSave = useCallback(() => {
+  const onClickSave = useCallback(async () => {
     if (repoName === '') {
       showWarningMessage("You can't save without a mission open!", 2000);
       return;
@@ -154,23 +160,80 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       return;
     }
 
-    console.log(cachedTaskList);
-    console.log(taskList);
-  }, [cachedTaskList, taskList, repoName]);
+    const changedTasks: number[] = [];
+    const changedFiles: string[] = [];
+
+    for (let i = 0; i < taskList.length; i++) {
+      if (taskList[i].starterCode !== cachedTaskList[i].starterCode) {
+        const taskNumber = i + 1;
+        changedTasks.push(taskNumber);
+        changedFiles.push('Q' + taskNumber + '/StarterCode.js');
+      }
+    }
+
+    const dialogResults = await promisifyDialog<
+      GitHubMissionSaveDialogProps,
+      GitHubMissionSaveDialogResolution
+    >(GitHubMissionSaveDialog, resolve => ({
+      repoName: repoName,
+      changedFiles: changedFiles,
+      resolveDialog: dialogResults => resolve(dialogResults)
+    }));
+
+    if (!dialogResults.confirmSave) {
+      return;
+    }
+
+    const authUser = await octokit.users.getAuthenticated();
+    const loginId = authUser.data.login;
+    const githubName = authUser.data.name || 'No name provided';
+    const githubEmail = authUser.data.email || 'No email provided';
+    const commitMessage = dialogResults.commitMessage || 'Changes made from SourceAcademy';
+
+    for (let i = 0; i < changedTasks.length; i++) {
+      const changedTask = changedTasks[i];
+      const changedFile = changedFiles[i];
+
+      const results = await octokit.repos.getContent({
+        owner: loginId,
+        repo: repoName,
+        path: changedFile
+      });
+
+      const files = results.data;
+
+      if (Array.isArray(files)) {
+        return;
+      }
+
+      const sha = files.sha;
+
+      const contentEncoded = Buffer.from(getTemplateCode(changedTask), 'utf8').toString('base64');
+
+      octokit.repos.createOrUpdateFileContents({
+        owner: loginId,
+        repo: repoName,
+        path: changedFile,
+        message: commitMessage,
+        content: contentEncoded,
+        sha: sha,
+        committer: { name: githubName, email: githubEmail },
+        author: { name: githubName, email: githubEmail }
+      });
+    }
+  }, [cachedTaskList, taskList, repoName, getTemplateCode]);
 
   const onClickPrevious = useCallback(() => {
-    editTemplateCode(currentTaskNumber, props.editorValue);
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
     props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode, editTemplateCode]);
+  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]);
 
   const onClickNext = useCallback(() => {
-    editTemplateCode(currentTaskNumber, props.editorValue);
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
     props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode, editTemplateCode]);
+  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]);
 
   const loadMission = useCallback(
     (missionData: MissionData) => {
@@ -241,9 +304,13 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
-  const onEditorValueChange = React.useCallback(val => {
-    propsRef.current.handleEditorValueChange(val);
-  }, []);
+  const onEditorValueChange = React.useCallback(
+    val => {
+      propsRef.current.handleEditorValueChange(val);
+      editTemplateCode(currentTaskNumber, val);
+    },
+    [currentTaskNumber, editTemplateCode]
+  );
 
   const onChangeTabs = React.useCallback(
     (
