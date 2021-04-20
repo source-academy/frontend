@@ -5,13 +5,12 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
-import MissionData from '../../features/missionEditor/MissionData';
-import TaskData from '../../features/missionEditor/TaskData';
 import controlButton from '../ControlButton';
 import {
   GitHubMissionBrowserDialog,
   GitHubMissionBrowserDialogProps
 } from '../missionEditor/GitHubMissionBrowserDialog';
+import { getMissionData } from '../missionEditor/GitHubMissionDataUtils';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
@@ -21,7 +20,7 @@ type ControlBarMyMissionsButtonProps = {
 };
 
 export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProps> = props => {
-  const handleOnClick = handleOnClickGenerator(props.setBriefingContent);
+  const handleOnClick = createOnClickHandler(props.setBriefingContent);
 
   return (
     <Tooltip2 content="Look at this photograph" placement={Position.TOP}>
@@ -30,7 +29,7 @@ export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProp
   );
 };
 
-function handleOnClickGenerator(setBriefingContent: (newBriefingContent: string) => void) {
+function createOnClickHandler(setBriefingContent: (newBriefingContent: string) => void) {
   return async () => {
     const octokit = getGitHubOctokitInstance() as Octokit;
 
@@ -55,90 +54,9 @@ function handleOnClickGenerator(setBriefingContent: (newBriefingContent: string)
       return;
     }
 
-    const authUser = await octokit.users.getAuthenticated();
-    const loginId = authUser.data.login;
-
-    const missionData = await getMissionData(loginId, chosenRepoName, octokit);
+    const missionData = await getMissionData(chosenRepoName, octokit);
     console.log(missionData);
 
     setBriefingContent(missionData.missionBriefing);
   };
-}
-
-async function getMissionData(loginId: string, repoName: string, octokit: Octokit) {
-  const briefingString = await getMissionBriefing(loginId, repoName, octokit);
-  const metadataString = await getMissionMetadata(loginId, repoName, octokit);
-  const tasksData = await getTasksData(loginId, repoName, octokit);
-
-  return new MissionData(briefingString, metadataString, tasksData);
-}
-
-async function getMissionBriefing(loginId: string, repoName: string, octokit: Octokit) {
-  const briefing = await octokit.repos.getContent({
-    owner: loginId,
-    repo: repoName,
-    path: '/README.md'
-  });
-
-  const briefingString = Buffer.from((briefing.data as any).content, 'base64').toString();
-  return briefingString;
-}
-
-async function getMissionMetadata(loginId: string, repoName: string, octokit: Octokit) {
-  const metadata = await octokit.repos.getContent({
-    owner: loginId,
-    repo: repoName,
-    path: '/METADATA'
-  });
-
-  const metadataString = Buffer.from((metadata.data as any).content, 'base64').toString();
-  return metadataString;
-}
-
-async function getTasksData(loginId: string, repoName: string, octokit: Octokit) {
-  const questions: TaskData[] = [];
-
-  for (let i = 1; i <= 20; i++) {
-    const questionFolderName = '/Q' + i;
-
-    // Check if the question exists
-    try {
-      await octokit.repos.getContent({
-        owner: loginId,
-        repo: repoName,
-        path: questionFolderName
-      });
-    } catch (err) {
-      break;
-    }
-
-    // If the question exists, get the data
-    try {
-      const taskDescription = await octokit.repos.getContent({
-        owner: loginId,
-        repo: repoName,
-        path: questionFolderName + '/Problem.md'
-      });
-
-      const starterCode = await octokit.repos.getContent({
-        owner: loginId,
-        repo: repoName,
-        path: questionFolderName + '/StarterCode.js'
-      });
-
-      const taskDescriptionString = Buffer.from(
-        (taskDescription.data as any).content,
-        'base64'
-      ).toString();
-      const starterCodeString = Buffer.from((starterCode.data as any).content, 'base64').toString();
-
-      const taskData = new TaskData(taskDescriptionString, starterCodeString);
-
-      questions.push(taskData);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  return questions;
 }

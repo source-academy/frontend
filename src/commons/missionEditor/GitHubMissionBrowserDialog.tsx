@@ -9,6 +9,7 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
+import { getContentAsString, parseMetadataProperties } from './GitHubMissionDataUtils';
 
 export type GitHubMissionBrowserDialogProps = {
   missionRepos: any[];
@@ -78,16 +79,9 @@ async function convertRepoToBrowsableMission(missionRepo: any) {
   const authUser = await octokit.users.getAuthenticated();
   const loginId = authUser.data.login;
 
-  const results = await octokit.repos.getContent({
-    owner: loginId,
-    repo: missionRepo.name,
-    path: '/METADATA'
-  });
+  const metadata = await getContentAsString(loginId, missionRepo.name, '/METADATA', octokit);
+  const browsableMission = createBrowsableMission(missionRepo.name, metadata);
 
-  const content = (results.data as any).content;
-  const metadataFileString = Buffer.from(content, 'base64').toString();
-
-  const browsableMission = createBrowsableMission(missionRepo.name, metadataFileString);
   return browsableMission;
 }
 
@@ -96,25 +90,15 @@ function createBrowsableMission(repositoryName: string, metadata: string) {
 
   browsableMission.repositoryName = repositoryName;
 
-  const lines = metadata.replace(/\r/g, '').split(/\n/);
-  lines.forEach(line => {
-    if (line.startsWith('title')) {
-      browsableMission.title = line.substr(6);
-      return;
-    }
+  const propertiesToExtract = ['coverImage', 'title', 'webSummary'];
 
-    if (line.startsWith('coverimage')) {
-      browsableMission.coverImage = line.substr(11);
-      return;
-    }
+  const retVal = parseMetadataProperties<BrowsableMission>(
+    browsableMission,
+    propertiesToExtract,
+    metadata
+  );
 
-    if (line.startsWith('websummary')) {
-      browsableMission.webSummary = line.substr(11);
-      return;
-    }
-  });
-
-  return browsableMission;
+  return retVal;
 }
 
 function convertMissionToCard(
