@@ -122,14 +122,12 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const [briefingContent, setBriefingContent] = React.useState('');
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(1);
 
-  const loadMission = useCallback(
-    (missionData: MissionData) => {
-      setLoadedMission(missionData);
-      selectSourceChapter(missionData.missionMetadata.sourceVersion);
-      setBriefingContent(missionData.missionBriefing);
-      setCurrentTaskNumber(1);
-    }, []
-  );
+  const loadMission = useCallback((missionData: MissionData) => {
+    setLoadedMission(missionData);
+    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+    setBriefingContent(missionData.missionBriefing);
+    setCurrentTaskNumber(1);
+  }, []);
 
   /*
   // You can use these functions or write your own lol. Also delet this comment kthx
