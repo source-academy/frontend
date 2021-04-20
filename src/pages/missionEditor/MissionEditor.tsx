@@ -30,7 +30,6 @@ import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
 import MissionData from '../../commons/missionEditor/MissionData';
-import MissionMetadata from '../../commons/missionEditor/MissionMetadata';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -118,9 +117,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
-  const [loadedMission, setLoadedMission] = React.useState(
-    new MissionData('SAMPLE TEXT', new MissionMetadata(), [])
-  );
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
   const [briefingContent, setBriefingContent] = React.useState('');
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
@@ -130,15 +126,29 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     return taskList[questionNumber - 1].starterCode;
   }, [taskList]);
 
+  const onClickPrevious = useCallback(
+    () => {
+      const newTaskNumber = currentTaskNumber - 1;
+      setCurrentTaskNumber(newTaskNumber);
+      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
+    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
+  );
+
+  const onClickNext = useCallback(
+    () => {
+      const newTaskNumber = currentTaskNumber + 1;
+      setCurrentTaskNumber(newTaskNumber);
+      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
+    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
+  );
+
   const loadMission = useCallback((missionData: MissionData) => {
-    setLoadedMission(missionData);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
     setTaskList(missionData.tasksData);
     setCurrentTaskNumber(1);
-    console.log(loadedMission);
     props.handleEditorValueChange(missionData.tasksData[0].starterCode);
-  }, [loadedMission, props]);
+  }, [props]);
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -435,22 +445,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     usingSubst: props.usingSubst,
     replButtons: [replDisabled ? null : evalButton, clearButton]
   };
-
-  const onClickPrevious = useCallback(
-    () => {
-      const newTaskNumber = currentTaskNumber - 1;
-      setCurrentTaskNumber(newTaskNumber);
-      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
-  );
-
-  const onClickNext = useCallback(
-    () => {
-      const newTaskNumber = currentTaskNumber + 1;
-      setCurrentTaskNumber(newTaskNumber);
-      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
-  );
 
   const prevTaskButton = (
     <ControlBarPreviousTaskButton
