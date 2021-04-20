@@ -16,6 +16,7 @@ import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButto
 import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
 import { ControlBarNextTaskButton } from 'src/commons/controlBar/ControlBarNextTaskButton';
 import { ControlBarPreviousTaskButton } from 'src/commons/controlBar/ControlBarPreviousTaskButton';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { ControlBarTaskViewButton } from 'src/commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 import TaskData from 'src/commons/missionEditor/TaskData';
@@ -30,6 +31,8 @@ import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
 import MissionData from '../../commons/missionEditor/MissionData';
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -118,37 +121,73 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [repoName, setRepoName] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState('');
+  const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
 
-  const getTemplateCode = useCallback((questionNumber: number) => {
-    return taskList[questionNumber - 1].starterCode;
-  }, [taskList]);
-
-  const onClickPrevious = useCallback(
-    () => {
-      const newTaskNumber = currentTaskNumber - 1;
-      setCurrentTaskNumber(newTaskNumber);
-      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
+  const getTemplateCode = useCallback(
+    (questionNumber: number) => {
+      return taskList[questionNumber - 1].starterCode;
+    },
+    [taskList]
   );
 
-  const onClickNext = useCallback(
-    () => {
-      const newTaskNumber = currentTaskNumber + 1;
-      setCurrentTaskNumber(newTaskNumber);
-      props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-    }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]
+  const editTemplateCode = useCallback(
+    (questionNumber: number, newValue: string) => {
+      taskList[questionNumber - 1].starterCode = newValue;
+    },
+    [taskList]
   );
 
-  const loadMission = useCallback((missionData: MissionData) => {
-    selectSourceChapter(missionData.missionMetadata.sourceVersion);
-    setBriefingContent(missionData.missionBriefing);
-    setTaskList(missionData.tasksData);
-    setCurrentTaskNumber(1);
-    props.handleEditorValueChange(missionData.tasksData[0].starterCode);
-  }, [props]);
+  const onClickSave = useCallback(() => {
+    if (repoName === '') {
+      showWarningMessage("You can't save without a mission open!", 2000);
+      return;
+    }
+
+    const octokit = getGitHubOctokitInstance() as Octokit;
+
+    if (octokit === undefined) {
+      showWarningMessage('Please sign in with GitHub!', 2000);
+      return;
+    }
+
+    console.log(cachedTaskList);
+    console.log(taskList);
+  }, [cachedTaskList, taskList, repoName]);
+
+  const onClickPrevious = useCallback(() => {
+    editTemplateCode(currentTaskNumber, props.editorValue);
+    const newTaskNumber = currentTaskNumber - 1;
+    setCurrentTaskNumber(newTaskNumber);
+    props.handleEditorValueChange(getTemplateCode(newTaskNumber));
+  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode, editTemplateCode]);
+
+  const onClickNext = useCallback(() => {
+    editTemplateCode(currentTaskNumber, props.editorValue);
+    const newTaskNumber = currentTaskNumber + 1;
+    setCurrentTaskNumber(newTaskNumber);
+    props.handleEditorValueChange(getTemplateCode(newTaskNumber));
+  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode, editTemplateCode]);
+
+  const loadMission = useCallback(
+    (missionData: MissionData) => {
+      selectSourceChapter(missionData.missionMetadata.sourceVersion);
+      setRepoName(missionData.missionMetadata.repoName);
+      setBriefingContent(missionData.missionBriefing);
+      setTaskList(missionData.tasksData);
+      setCachedTaskList(
+        missionData.tasksData.map(
+          taskData => new TaskData(taskData.taskDescription, taskData.starterCode)
+        )
+      );
+      setCurrentTaskNumber(1);
+      props.handleEditorValueChange(missionData.tasksData[0].starterCode);
+    },
+    [props]
+  );
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -334,6 +373,12 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     );
   }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
+  const saveButton = React.useMemo(() => {
+    return (
+      <ControlButtonSaveButton key="save" onClickSave={onClickSave} hasUnsavedChanges={false} />
+    );
+  }, [onClickSave]);
+
   const myMissionsButton = React.useMemo(() => {
     return <ControlBarMyMissionsButton key="my_missions" loadMission={loadMission} />;
   }, [loadMission]);
@@ -344,12 +389,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Task',
       iconName: IconNames.NINJA,
-      body: (
-        <SideContentTaskEditor
-          currentTaskNumber={currentTaskNumber}
-          tasks={taskList}
-        />
-      ),
+      body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
       id: SideContentType.missionTask,
       toSpawn: () => true
     });
@@ -450,12 +490,16 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     <ControlBarPreviousTaskButton
       key={'prev_button'}
       onClickPrevious={onClickPrevious}
-      currentTask = {currentTaskNumber}
+      currentTask={currentTaskNumber}
     />
   );
 
   const taskView = (
-    <ControlBarTaskViewButton key={'task_view'} currentask={currentTaskNumber} numOfTasks={taskList.length} />
+    <ControlBarTaskViewButton
+      key={'task_view'}
+      currentask={currentTaskNumber}
+      numOfTasks={taskList.length}
+    />
   );
 
   const nextTaskButton = (
@@ -469,7 +513,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton],
+      editorButtons: [autorunButtons, saveButton, chapterSelect, githubButtons, myMissionsButton],
       flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,

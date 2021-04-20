@@ -14,5 +14,11 @@ type StateProps = {
 };
 
 export function ControlBarPreviousTaskButton(props: ControlBarPreviousTaskButtonProps) {
-  return controlButton('Previous', IconNames.ARROW_LEFT, props.onClickPrevious, { iconOnRight: false }, props.currentTask <= 1 ? true : false);
+  return controlButton(
+    'Previous',
+    IconNames.ARROW_LEFT,
+    props.onClickPrevious,
+    { iconOnRight: false },
+    props.currentTask <= 1 ? true : false
+  );
 }
