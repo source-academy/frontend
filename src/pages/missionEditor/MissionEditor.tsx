@@ -17,7 +17,6 @@ import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGi
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 import { SideContentMarkdownEditor } from 'src/commons/sideContent/SideContentMarkdownEditor';
-import SideContentMissionEditor from 'src/commons/sideContent/SideContentMissionEditor';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
@@ -318,6 +317,9 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       toSpawn: () => true
     });
 
+    // Remove this for Phase 2-1.
+    // It will be added once we get into Phase 2-2.
+    /*
     tabs.push({
       label: 'Editor',
       iconName: IconNames.AIRPLANE,
@@ -325,9 +327,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       id: SideContentType.missionEditor,
       toSpawn: () => true
     });
+    */
 
     return tabs;
-  }, [props, briefingContent]);
+  }, [briefingContent]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];
