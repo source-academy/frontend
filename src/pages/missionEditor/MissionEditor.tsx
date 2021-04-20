@@ -221,6 +221,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         author: { name: githubName, email: githubEmail }
       });
     }
+
+    setCachedTaskList(
+      taskList.map(taskData => new TaskData(taskData.taskDescription, taskData.starterCode))
+    );
   }, [cachedTaskList, taskList, repoName, getTemplateCode]);
 
   const onClickPrevious = useCallback(() => {
