@@ -9,6 +9,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  key: string;
   currentTask: number;
 };
 

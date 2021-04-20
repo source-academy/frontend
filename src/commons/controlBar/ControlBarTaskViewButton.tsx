@@ -3,6 +3,7 @@ import controlButton from '../ControlButton';
 type ControlBarTaskViewButtonProps = StateProps;
 
 type StateProps = {
+  key: string,
   currentask: number,
   numOfTasks: number,
 };

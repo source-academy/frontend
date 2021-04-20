@@ -454,17 +454,19 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const prevTaskButton = (
     <ControlBarPreviousTaskButton
+      key={'prev_button'}
       onClickPrevious={onClickPrevious}
       currentTask = {currentTaskNumber}
     />
   );
 
   const taskView = (
-    <ControlBarTaskViewButton currentask={currentTaskNumber} numOfTasks={taskList.length} />
+    <ControlBarTaskViewButton key={'task_view'} currentask={currentTaskNumber} numOfTasks={taskList.length} />
   );
 
   const nextTaskButton = (
     <ControlBarNextTaskButton
+      key={'next_button'}
       onClickNext={onClickNext}
       currentTask={currentTaskNumber}
       numOfTasks={taskList.length}
