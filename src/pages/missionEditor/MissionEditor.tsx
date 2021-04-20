@@ -14,7 +14,11 @@ import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapte
 import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
 import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
+import { ControlBarNextTaskButton } from 'src/commons/controlBar/ControlBarNextTaskButton';
+import { ControlBarPreviousTaskButton } from 'src/commons/controlBar/ControlBarPreviousTaskButton';
+import { ControlBarTaskViewButton } from 'src/commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
+import TaskData from 'src/commons/missionEditor/TaskData';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 import { SideContentMarkdownEditor } from 'src/commons/sideContent/SideContentMarkdownEditor';
 import { SideContentTaskEditor } from 'src/commons/sideContent/SideContentTaskEditor';
@@ -86,7 +90,6 @@ export type StateProps = {
   externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
   githubOctokitInstance: Octokit | undefined;
-  githubSaveInfo: { repoName: string; filePath: string };
 };
 
 function handleHash(hash: string, props: MissionEditorProps) {
@@ -120,14 +123,17 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   );
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
   const [briefingContent, setBriefingContent] = React.useState('');
-  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(1);
+  const [taskList, setTaskList] = React.useState<TaskData[]>([]);
+  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
 
   const loadMission = useCallback((missionData: MissionData) => {
     setLoadedMission(missionData);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
+    setTaskList(missionData.tasksData);
     setCurrentTaskNumber(1);
-  }, []);
+    console.log(loadedMission);
+  }, [loadedMission]);
 
   /*
   // You can use these functions or write your own lol. Also delet this comment kthx
@@ -141,7 +147,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     () => {
       setCurrentTaskNumber(currentTaskNumber - 1);
     }, [currentTaskNumber, setCurrentTaskNumber]
-  );
   */
 
   /**
@@ -341,7 +346,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       body: (
         <SideContentTaskEditor
           currentTaskNumber={currentTaskNumber}
-          tasks={loadedMission.tasksData}
+          tasks={taskList}
         />
       ),
       id: SideContentType.missionTask,
@@ -369,7 +374,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     */
 
     return tabs;
-  }, [briefingContent, currentTaskNumber, loadedMission]);
+  }, [taskList, currentTaskNumber, briefingContent]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];
@@ -440,9 +445,37 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     replButtons: [replDisabled ? null : evalButton, clearButton]
   };
 
+  const onClickPrevious = () => {
+    setCurrentTaskNumber(currentTaskNumber - 1);
+  };
+
+  const onClickNext = () => {
+    setCurrentTaskNumber(currentTaskNumber + 1);
+  };
+
+  const prevTaskButton = (
+    <ControlBarPreviousTaskButton
+      onClickPrevious={onClickPrevious}
+      currentTask = {currentTaskNumber}
+    />
+  );
+
+  const taskView = (
+    <ControlBarTaskViewButton currentask={currentTaskNumber} numOfTasks={taskList.length} />
+  );
+
+  const nextTaskButton = (
+    <ControlBarNextTaskButton
+      onClickNext={onClickNext}
+      currentTask={currentTaskNumber}
+      numOfTasks={taskList.length}
+    />
+  );
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton]
+      editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton],
+      flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,
     editorHeight: props.editorHeight,
@@ -468,7 +501,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     replProps: replProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton]
+        editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton],
+        flowButtons: [prevTaskButton, taskView, nextTaskButton]
       },
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,

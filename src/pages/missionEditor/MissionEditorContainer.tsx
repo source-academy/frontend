@@ -1,4 +1,3 @@
-import { Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -51,82 +50,73 @@ import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import MissionEditor, { DispatchProps, StateProps } from './MissionEditor';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  editorSessionId: state.workspaces.playground.editorSessionId,
-  editorWidth: state.workspaces.playground.editorWidth,
-  editorValue: state.workspaces.playground.editorValue!,
-  execTime: state.workspaces.playground.execTime,
-  stepLimit: state.workspaces.playground.stepLimit,
-  isEditorAutorun: state.workspaces.playground.isEditorAutorun,
-  breakpoints: state.workspaces.playground.breakpoints,
-  highlightedLines: state.workspaces.playground.highlightedLines,
-  isRunning: state.workspaces.playground.isRunning,
-  isDebugging: state.workspaces.playground.isDebugging,
-  enableDebugging: state.workspaces.playground.enableDebugging,
-  newCursorPosition: state.workspaces.playground.newCursorPosition,
-  output: state.workspaces.playground.output,
-  queryString: state.playground.queryString,
-  shortURL: state.playground.shortURL,
-  replValue: state.workspaces.playground.replValue,
-  sideContentHeight: state.workspaces.playground.sideContentHeight,
-  sourceChapter: state.workspaces.playground.context.chapter,
-  sourceVariant: state.workspaces.playground.context.variant,
-  sharedbConnected: state.workspaces.playground.sharedbConnected,
-  externalLibraryName: state.workspaces.playground.externalLibrary,
+  editorSessionId: state.workspaces.missionEditor.editorSessionId,
+  editorWidth: state.workspaces.missionEditor.editorWidth,
+  editorValue: state.workspaces.missionEditor.editorValue!,
+  execTime: state.workspaces.missionEditor.execTime,
+  stepLimit: state.workspaces.missionEditor.stepLimit,
+  isEditorAutorun: state.workspaces.missionEditor.isEditorAutorun,
+  breakpoints: state.workspaces.missionEditor.breakpoints,
+  highlightedLines: state.workspaces.missionEditor.highlightedLines,
+  isRunning: state.workspaces.missionEditor.isRunning,
+  isDebugging: state.workspaces.missionEditor.isDebugging,
+  enableDebugging: state.workspaces.missionEditor.enableDebugging,
+  newCursorPosition: state.workspaces.missionEditor.newCursorPosition,
+  output: state.workspaces.missionEditor.output,
+  replValue: state.workspaces.missionEditor.replValue,
+  sideContentHeight: state.workspaces.missionEditor.sideContentHeight,
+  sourceChapter: state.workspaces.missionEditor.context.chapter,
+  sourceVariant: state.workspaces.missionEditor.context.variant,
+  sharedbConnected: state.workspaces.missionEditor.sharedbConnected,
+  externalLibraryName: state.workspaces.missionEditor.externalLibrary,
   usingSubst: state.playground.usingSubst,
-  persistenceUser: state.session.googleUser,
-  persistenceFile: state.playground.persistenceFile,
-  githubOctokitInstance: state.session.githubOctokitInstance,
-  githubSaveInfo: state.playground.githubSaveInfo
+  githubOctokitInstance: state.session.githubOctokitInstance
 });
 
-const workspaceLocation: WorkspaceLocation = 'playground';
+const location: WorkspaceLocation = 'missionEditor';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
-      handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChangeExecTime: (execTime: number) =>
-        changeExecTime(execTime.toString(), workspaceLocation),
-      handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, workspaceLocation),
-      handleChapterSelect: (chapter: number, variant: Variant) =>
-        chapterSelect(chapter, variant, workspaceLocation),
+      handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
+      handleBrowseHistoryDown: () => browseReplHistoryDown(location),
+      handleBrowseHistoryUp: () => browseReplHistoryUp(location),
+      handleChangeExecTime: (execTime: number) => changeExecTime(execTime.toString(), location),
+      handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, location),
+      handleChapterSelect: (chapter: number) => chapterSelect(chapter, 'default', location),
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        navigateToDeclaration(workspaceLocation, cursorPosition),
+        navigateToDeclaration(location, cursorPosition),
       handleFetchSublanguage: fetchSublanguage,
-      handleEditorEval: () => evalEditor(workspaceLocation),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
+      handleEditorEval: () => evalEditor(location),
+      handleEditorValueChange: (val: string) => updateEditorValue(val, location),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),
       handleEditorWidthChange: (widthChange: number) =>
-        changeEditorWidth(widthChange.toString(), workspaceLocation),
+        changeEditorWidth(widthChange.toString(), location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, workspaceLocation),
+        setEditorBreakpoint(breakpoints, location),
       handleGenerateLz: generateLzString,
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
-      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
+      handleInterruptEval: () => beginInterruptExecution(location),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
-      handleReplEval: () => evalRepl(workspaceLocation),
-      handleReplOutputClear: () => clearReplOutput(workspaceLocation),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+        externalLibrarySelect(externalLibraryName, location, initialise),
+      handleReplEval: () => evalRepl(location),
+      handleReplOutputClear: () => clearReplOutput(location),
+      handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSetEditorSessionId: (editorSessionId: string) =>
-        setEditorSessionId(workspaceLocation, editorSessionId),
-      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleSetSharedbConnected: (connected: boolean) =>
-        setSharedbConnected(workspaceLocation, connected),
+        setEditorSessionId(location, editorSessionId),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, location),
+      handleSetSharedbConnected: (connected: boolean) => setSharedbConnected(location, connected),
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, workspaceLocation),
-      handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
+        changeSideContentHeight(heightChange, location),
+      handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
-      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
-      handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handleDebuggerPause: () => beginDebuggerPause(location),
+      handleDebuggerResume: () => debuggerResume(location),
+      handleDebuggerReset: () => debuggerReset(location),
       handleFetchChapter: fetchSublanguage,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback),
+        promptAutocomplete(location, row, col, callback),
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub
     },
