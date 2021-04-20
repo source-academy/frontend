@@ -17,6 +17,7 @@ import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGi
 import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 import { SideContentMarkdownEditor } from 'src/commons/sideContent/SideContentMarkdownEditor';
+import { SideContentTaskEditor } from 'src/commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
@@ -119,17 +120,29 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   );
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
   const [briefingContent, setBriefingContent] = React.useState('');
+  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(1);
 
-  const loadMission = useCallback(
-    (missionData: MissionData) => {
-      setLoadedMission(missionData);
-      selectSourceChapter(missionData.missionMetadata.sourceVersion);
-      setBriefingContent(missionData.missionBriefing);
+  const loadMission = useCallback((missionData: MissionData) => {
+    setLoadedMission(missionData);
+    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+    setBriefingContent(missionData.missionBriefing);
+    setCurrentTaskNumber(1);
+  }, []);
 
-      console.log(loadedMission);
-    },
-    [loadedMission]
+  /*
+  // You can use these functions or write your own lol. Also delet this comment kthx
+  const advanceCurrentTaskNumber = useCallback(
+    () => {
+      setCurrentTaskNumber(currentTaskNumber + 1);
+    }, [currentTaskNumber, setCurrentTaskNumber]
   );
+
+  const reducedCurrentTaskNumber = useCallback(
+    () => {
+      setCurrentTaskNumber(currentTaskNumber - 1);
+    }, [currentTaskNumber, setCurrentTaskNumber]
+  );
+  */
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -325,7 +338,12 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     tabs.push({
       label: 'Task',
       iconName: IconNames.NINJA,
-      body: <SideContentMarkdownEditor content={'SAMPLE TEXT'} />,
+      body: (
+        <SideContentTaskEditor
+          currentTaskNumber={currentTaskNumber}
+          tasks={loadedMission.tasksData}
+        />
+      ),
       id: SideContentType.missionTask,
       toSpawn: () => true
     });
@@ -351,7 +369,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     */
 
     return tabs;
-  }, [briefingContent]);
+  }, [briefingContent, currentTaskNumber, loadedMission]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];
