@@ -128,10 +128,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       selectSourceChapter(missionData.missionMetadata.sourceVersion);
       setBriefingContent(missionData.missionBriefing);
       setCurrentTaskNumber(1);
-
-      console.log(loadedMission);
-    },
-    [loadedMission]
+    }, []
   );
 
   /*
