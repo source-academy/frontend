@@ -21,6 +21,7 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import { store } from '../../pages/createStore';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -83,8 +84,8 @@ const FileExplorerDialog: React.FC<any> = props => {
   async function getUserDetails() {
     const authUser = await props.octokit.users.getAuthenticated();
     githubLoginID = authUser.data.login;
-    githubName = authUser.data.name || 'Source Academy User';
-    githubEmail = authUser.data.email || 'no public email provided';
+    githubName = authUser.data.name;
+    githubEmail = authUser.data.email;
   }
 
   async function setFirstLayerRepoFiles(repoName: string, setRepoFiles: any) {
@@ -117,6 +118,8 @@ const FileExplorerDialog: React.FC<any> = props => {
         filePath
       );
 
+      const content = store.getState().workspaces.playground.editorValue;
+
       if (canBeSaved) {
         if (saveType === 'Overwrite' && (await checkIfUserAgreesToPerformOverwritingSave())) {
           performOverwritingSave(
@@ -126,7 +129,8 @@ const FileExplorerDialog: React.FC<any> = props => {
             filePath,
             githubName,
             githubEmail,
-            commitMessage
+            commitMessage,
+            content
           );
         }
 
@@ -138,7 +142,8 @@ const FileExplorerDialog: React.FC<any> = props => {
             filePath,
             githubName,
             githubEmail,
-            commitMessage
+            commitMessage,
+            content
           );
         }
       }

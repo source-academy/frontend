@@ -38,7 +38,10 @@ import {
 import MissionData from '../../commons/missionEditor/MissionData';
 import { promisifyDialog } from '../../commons/utils/DialogHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import {
+  getGitHubOctokitInstance,
+  performOverwritingSave
+} from '../../features/github/GitHubUtils';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -186,40 +189,24 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
     const authUser = await octokit.users.getAuthenticated();
     const loginId = authUser.data.login;
-    const githubName = authUser.data.name || 'No name provided';
-    const githubEmail = authUser.data.email || 'No email provided';
-    const commitMessage = dialogResults.commitMessage || 'Changes made from SourceAcademy';
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+    const commitMessage = dialogResults.commitMessage;
 
     for (let i = 0; i < changedTasks.length; i++) {
       const changedTask = changedTasks[i];
       const changedFile = changedFiles[i];
 
-      const results = await octokit.repos.getContent({
-        owner: loginId,
-        repo: repoName,
-        path: changedFile
-      });
-
-      const files = results.data;
-
-      if (Array.isArray(files)) {
-        return;
-      }
-
-      const sha = files.sha;
-
-      const contentEncoded = Buffer.from(getTemplateCode(changedTask), 'utf8').toString('base64');
-
-      octokit.repos.createOrUpdateFileContents({
-        owner: loginId,
-        repo: repoName,
-        path: changedFile,
-        message: commitMessage,
-        content: contentEncoded,
-        sha: sha,
-        committer: { name: githubName, email: githubEmail },
-        author: { name: githubName, email: githubEmail }
-      });
+      performOverwritingSave(
+        octokit,
+        loginId,
+        repoName,
+        changedFile,
+        githubName,
+        githubEmail,
+        commitMessage,
+        getTemplateCode(changedTask)
+      );
     }
 
     setCachedTaskList(

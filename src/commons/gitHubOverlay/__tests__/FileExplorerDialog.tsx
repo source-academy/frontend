@@ -221,7 +221,8 @@ test('Performing creating save leads to appropriate function being called', asyn
       filePath: string,
       githubName: string,
       githubEmail: string,
-      commitMessage: string
+      commitMessage: string,
+      content: string
     ) => {}
   );
 
@@ -277,7 +278,8 @@ test('Performing ovewriting save leads to appropriate function being called', as
       filePath: string,
       githubName: string,
       githubEmail: string,
-      commitMessage: string
+      commitMessage: string,
+      content: string
     ) => {}
   );
 
