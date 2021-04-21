@@ -194,13 +194,18 @@ export async function performOverwritingSave(
   githubLoginID: string,
   repoName: string,
   filePath: string,
-  githubName: string,
-  githubEmail: string,
-  commitMessage: string
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string,
+  content: string | null
 ) {
   if (octokit === undefined) return;
 
-  const content = store.getState().workspaces.playground.editorValue || '';
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+  content = content || '';
+
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
 
   try {
@@ -242,13 +247,18 @@ export async function performCreatingSave(
   githubLoginID: string,
   repoName: string,
   filePath: string,
-  githubName: string,
-  githubEmail: string,
-  commitMessage: string
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string,
+  content: string | null
 ) {
   if (octokit === undefined) return;
 
-  const content = store.getState().workspaces.playground.editorValue || '';
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+  content = content || '';
+
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
 
   try {

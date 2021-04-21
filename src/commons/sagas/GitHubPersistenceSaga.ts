@@ -85,9 +85,10 @@ function* githubSaveFile() {
   const githubLoginId = authUser.data.login;
   const repoName = store.getState().playground.githubSaveInfo.repoName;
   const filePath = store.getState().playground.githubSaveInfo.filePath;
-  const githubEmail = authUser.data.email || 'No public email provided';
-  const githubName = authUser.data.name || 'Source Academy User';
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
+  const content = store.getState().workspaces.playground.editorValue;
 
   console.log(githubLoginId);
   console.log(repoName);
@@ -103,7 +104,8 @@ function* githubSaveFile() {
     filePath,
     githubEmail,
     githubName,
-    commitMessage
+    commitMessage,
+    content
   );
 }
 

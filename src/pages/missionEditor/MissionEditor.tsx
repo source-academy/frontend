@@ -7,38 +7,43 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { InterpreterOutput, sourceLanguages } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
-import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
-import { ControlBarNextTaskButton } from 'src/commons/controlBar/ControlBarNextTaskButton';
-import { ControlBarPreviousTaskButton } from 'src/commons/controlBar/ControlBarPreviousTaskButton';
-import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
-import { ControlBarTaskViewButton } from 'src/commons/controlBar/ControlBarTaskViewButton';
-import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
-import TaskData from 'src/commons/missionEditor/TaskData';
-import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
-import { SideContentMarkdownEditor } from 'src/commons/sideContent/SideContentMarkdownEditor';
-import { SideContentTaskEditor } from 'src/commons/sideContent/SideContentTaskEditor';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import Constants from 'src/commons/utils/Constants';
-import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
-import { parseQuery } from 'src/commons/utils/QueryHelper';
-import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 
+import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
+import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
+import { ControlBarNextTaskButton } from '../../commons/controlBar/ControlBarNextTaskButton';
+import { ControlBarPreviousTaskButton } from '../../commons/controlBar/ControlBarPreviousTaskButton';
+import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
+import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
+import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import {
   GitHubMissionSaveDialog,
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
 } from '../../commons/missionEditor/GitHubMissionSaveDialog';
 import MissionData from '../../commons/missionEditor/MissionData';
+import TaskData from '../../commons/missionEditor/TaskData';
+import MobileWorkspace, {
+  MobileWorkspaceProps
+} from '../../commons/mobileWorkspace/MobileWorkspace';
+import { SideContentMarkdownEditor } from '../../commons/sideContent/SideContentMarkdownEditor';
+import { SideContentTaskEditor } from '../../commons/sideContent/SideContentTaskEditor';
+import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
+import Constants from '../../commons/utils/Constants';
 import { promisifyDialog } from '../../commons/utils/DialogHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
+import { parseQuery } from '../../commons/utils/QueryHelper';
+import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import {
+  getGitHubOctokitInstance,
+  performOverwritingSave
+} from '../../features/github/GitHubUtils';
 
 export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -186,40 +191,24 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
     const authUser = await octokit.users.getAuthenticated();
     const loginId = authUser.data.login;
-    const githubName = authUser.data.name || 'No name provided';
-    const githubEmail = authUser.data.email || 'No email provided';
-    const commitMessage = dialogResults.commitMessage || 'Changes made from SourceAcademy';
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+    const commitMessage = dialogResults.commitMessage;
 
     for (let i = 0; i < changedTasks.length; i++) {
       const changedTask = changedTasks[i];
       const changedFile = changedFiles[i];
 
-      const results = await octokit.repos.getContent({
-        owner: loginId,
-        repo: repoName,
-        path: changedFile
-      });
-
-      const files = results.data;
-
-      if (Array.isArray(files)) {
-        return;
-      }
-
-      const sha = files.sha;
-
-      const contentEncoded = Buffer.from(getTemplateCode(changedTask), 'utf8').toString('base64');
-
-      octokit.repos.createOrUpdateFileContents({
-        owner: loginId,
-        repo: repoName,
-        path: changedFile,
-        message: commitMessage,
-        content: contentEncoded,
-        sha: sha,
-        committer: { name: githubName, email: githubEmail },
-        author: { name: githubName, email: githubEmail }
-      });
+      performOverwritingSave(
+        octokit,
+        loginId,
+        repoName,
+        changedFile,
+        githubName,
+        githubEmail,
+        commitMessage,
+        getTemplateCode(changedTask)
+      );
     }
 
     setCachedTaskList(

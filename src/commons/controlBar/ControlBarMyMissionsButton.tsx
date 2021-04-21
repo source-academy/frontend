@@ -12,7 +12,7 @@ import {
 } from '../missionEditor/GitHubMissionBrowserDialog';
 import { getMissionData } from '../missionEditor/GitHubMissionDataUtils';
 import MissionData from '../missionEditor/MissionData';
-import { promisifyDialog } from '../utils/DialogHelper';
+import { promisifyDialog, showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type ControlBarMyMissionsButtonProps = {
@@ -55,8 +55,21 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
       return;
     }
 
-    const missionData = await getMissionData(chosenRepoName, octokit);
+    const confirmOpen: boolean = await showSimpleConfirmDialog({
+      title: 'Opening New Mission',
+      contents: (
+        <div>
+          <p>Opening a new mission will overwrite the current contents of your workspace.</p>
+          <p>Please make sure that you have saved all changes before proceeding!</p>
+        </div>
+      ),
+      positiveLabel: 'Proceed',
+      negativeLabel: 'Cancel'
+    });
 
-    props.loadMission(missionData);
+    if (confirmOpen) {
+      const missionData = await getMissionData(chosenRepoName, octokit);
+      props.loadMission(missionData);
+    }
   };
 }
