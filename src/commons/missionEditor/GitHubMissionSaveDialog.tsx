@@ -21,19 +21,20 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Please confirm your save</h3>
       </div>
-
-      <div className={classNames('githubDialogHeader', Classes.DIALOG_BODY)}>
-        <h4>You are about to make changes to the following files:</h4>
-        <ul>
-          {props.changedFiles.map(filepath => (
-            <li key={filepath}>{filepath}</li>
-          ))}
-        </ul>
-        <InputGroup
-          onChange={handleCommitMessageChange}
-          placeholder={'Enter Commit Message'}
-          value={commitMessage}
-        />
+      <div className={classNames('githubDialogBody', Classes.DIALOG_BODY)}>
+        <div>
+          <h4>You are about to make changes to the following files:</h4>
+            {props.changedFiles.map(filepath => (
+              <li key={filepath}>{filepath}</li>
+            ))}
+        </div>
+        <div>
+          <InputGroup
+            onChange={handleCommitMessageChange}
+            placeholder={'Enter Commit Message'}
+            value={commitMessage}
+          />
+        </div>
       </div>
 
       <div className={classNames(Classes.DIALOG_FOOTER)}>
