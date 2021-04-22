@@ -1,13 +1,12 @@
 import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
-import { Rect } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
-import { RoundedRect } from '../../shapes/RoundedRect';
-import { Arrow } from './Arrow';
+import { Config } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
+import { Arrow } from './arrows/Arrow';
+import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
@@ -56,75 +55,39 @@ export class ArrayUnit implements Visible, Hoverable {
     setUnhoveredStyle(currentTarget);
   };
 
-  renderUnit = (): React.ReactNode => {
-    if (this.isFirstUnit) {
-      return (
-        <RoundedRect
-          key={Layout.key++}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
-          cornerRadius={{
-            upperLeft: Number(Config.DataCornerRadius),
-            lowerLeft: Number(Config.DataCornerRadius),
-            upperRight: 0,
-            lowerRight: 0
-          }}
-          stroke={Config.SA_WHITE.toString()}
-          hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
-          fillEnabled={false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        />
-      );
-    } else if (this.isLastUnit) {
-      return (
-        <RoundedRect
-          key={Layout.key++}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
-          cornerRadius={{
-            upperLeft: 0,
-            lowerLeft: 0,
-            upperRight: Number(Config.DataCornerRadius),
-            lowerRight: Number(Config.DataCornerRadius)
-          }}
-          stroke={Config.SA_WHITE.toString()}
-          hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
-          fillEnabled={false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        />
-      );
-    } else {
-      return (
-        <Rect
-          key={Layout.key++}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
-          stroke={Config.SA_WHITE.toString()}
-          hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
-          fillEnabled={false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        />
-      );
-    }
-  };
-
   draw(): React.ReactNode {
     if (this.isDrawn) return null;
     this.isDrawn = true;
+
+    const cornerRadius = {
+      upperLeft: 0,
+      lowerLeft: 0,
+      upperRight: 0,
+      lowerRight: 0
+    };
+
+    if (this.isFirstUnit)
+      cornerRadius.upperLeft = cornerRadius.lowerLeft = Number(Config.DataCornerRadius);
+    if (this.isLastUnit)
+      cornerRadius.upperRight = cornerRadius.lowerRight = Number(Config.DataCornerRadius);
+
     return (
       <React.Fragment key={Layout.key++}>
-        {this.renderUnit()}
+        <RoundedRect
+          key={Layout.key++}
+          x={this.x}
+          y={this.y}
+          width={this.width}
+          height={this.height}
+          stroke={Config.SA_WHITE.toString()}
+          hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
+          fillEnabled={false}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          cornerRadius={cornerRadius}
+        />
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new Arrow(this, this.value).draw()}
+        {this.value instanceof PrimitiveValue || Arrow.from(this).to(this.value).draw()}
       </React.Fragment>
     );
   }

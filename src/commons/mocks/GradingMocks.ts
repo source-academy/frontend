@@ -123,7 +123,6 @@ Hello and welcome to this assessment! This is the *0th question*.
       prepend: '// THIS IS A PREPEND',
       postpend: '// THIS IS A POSTPEND',
       testcases: mockTestcases,
-      roomId: null,
       id: 0,
       library: mockRuneLibrary,
       solutionTemplate: '0th question mock solution template',
@@ -190,7 +189,6 @@ function remainder(n, d) {
       xpAdjustment: 0,
       grade: 0,
       xp: 0,
-      roomId: '19422040',
       comments: `Good job. You are awarded the full marks!
 
 ----
@@ -233,7 +231,6 @@ _italics_
       postpend: '',
       testcases: [],
       answer: "This student's answer to the 1st question",
-      roomId: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockRuneLibrary,
@@ -280,7 +277,6 @@ _italics_
       xpAdjustment: 0,
       grade: 100,
       xp: 100,
-      roomId: '19422040',
       comments: `You open the Report Card, not knowing what to expect...
 
 ## WOW!
@@ -329,7 +325,6 @@ New message from **Avenger**!
       postpend: '',
       testcases: [],
       answer: 3,
-      roomId: null,
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
@@ -393,8 +388,7 @@ New message from **Avenger**!
       gradeAdjustment: 0,
       xpAdjustment: 0,
       grade: 50,
-      xp: 50,
-      roomId: '19422030'
+      xp: 50
     },
     student: {
       name: 'Al Gorithm',

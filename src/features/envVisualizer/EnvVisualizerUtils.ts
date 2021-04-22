@@ -15,11 +15,7 @@ export function isEmptyObject(object: Object): object is EmptyObject {
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
 export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject } {
-  if (env === null) {
-    return true;
-  } else {
-    return isEmptyObject(env.head);
-  }
+  return env === null || isEmptyObject(env.head);
 }
 
 /** checks if `data` is a Javascript array */
@@ -62,6 +58,11 @@ export function isNumber(data: Data): data is number {
   return typeof data === 'number';
 }
 
+/** checks if `data` is a symbol */
+export function isUnassigned(data: Data): data is symbol {
+  return typeof data === 'symbol';
+}
+
 /** checks if `data` is a primitive, defined as a null | data | number */
 export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data);
@@ -79,22 +80,19 @@ export function getTextWidth(
 ): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  if (context) {
-    context.font = font;
-    const longestLine = text
-      .split('\n')
-      .reduce<string>(
-        (accText, currValue) =>
-          context.measureText(accText).width > context.measureText(currValue).width
-            ? accText
-            : currValue,
-        ''
-      );
-    const metrics = context.measureText(longestLine);
-    return metrics.width;
-  } else {
-    return 0;
-  }
+  if (!context) return 0;
+  context.font = font;
+  const longestLine = text
+    .split('\n')
+    .reduce<string>(
+      (accText, currValue) =>
+        context.measureText(accText).width > context.measureText(currValue).width
+          ? accText
+          : currValue,
+      ''
+    );
+  const metrics = context.measureText(longestLine);
+  return metrics.width;
 }
 
 /** get the parameter string of the given function */

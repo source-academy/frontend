@@ -1,9 +1,9 @@
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { _EnvTreeNode, Visible } from '../../../EnvVisualizerTypes';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { EnvTreeNode, Visible } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */
@@ -20,7 +20,7 @@ export class Level implements Visible {
     /** the level of this */
     readonly parentLevel: Level | null,
     /** the environment tree nodes contained in this level */
-    readonly envTreeNodes: _EnvTreeNode[]
+    readonly envTreeNodes: EnvTreeNode[]
   ) {
     this.x = Config.CanvasPaddingX;
     this.y = Config.CanvasPaddingY;
@@ -48,6 +48,7 @@ export class Level implements Visible {
     return (
       <React.Fragment key={Layout.key++}>
         <Rect
+          {...ShapeDefaultProps}
           x={this.x}
           y={this.y}
           width={this.width}

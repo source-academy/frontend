@@ -2,10 +2,10 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React from 'react';
 import { Rect } from 'react-konva';
 
-import { Config } from '../../../EnvVisualizerConfig';
-import { Layout } from '../../../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../../EnvVisualizerUtils';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
@@ -35,6 +35,7 @@ export class ArrayEmptyUnit implements Visible, Hoverable {
   draw(): React.ReactNode {
     return (
       <Rect
+        {...ShapeDefaultProps}
         key={Layout.key++}
         x={this.x}
         y={this.y}
