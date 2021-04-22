@@ -27,6 +27,7 @@ import {
   GitHubMissionSaveDialogResolution
 } from '../../commons/missionEditor/GitHubMissionSaveDialog';
 import MissionData from '../../commons/missionEditor/MissionData';
+import MissionRepoData from '../../commons/missionEditor/MissionRepoData';
 import TaskData from '../../commons/missionEditor/TaskData';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -132,11 +133,11 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
-  const [repoName, setRepoName] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState('');
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
+  const [missionRepoData, setMissionRepoData] = React.useState(new MissionRepoData('', ''));
 
   const getTemplateCode = useCallback(
     (questionNumber: number) => {
@@ -153,7 +154,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   );
 
   const onClickSave = useCallback(async () => {
-    if (repoName === '') {
+    if (missionRepoData.repoName === '') {
       showWarningMessage("You can't save without a mission open!", 2000);
       return;
     }
@@ -180,7 +181,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       GitHubMissionSaveDialogProps,
       GitHubMissionSaveDialogResolution
     >(GitHubMissionSaveDialog, resolve => ({
-      repoName: repoName,
+      repoName: missionRepoData.repoName,
       changedFiles: changedFiles,
       resolveDialog: dialogResults => resolve(dialogResults)
     }));
@@ -190,7 +191,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     }
 
     const authUser = await octokit.users.getAuthenticated();
-    const loginId = authUser.data.login;
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
@@ -201,8 +201,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
       performOverwritingSave(
         octokit,
-        loginId,
-        repoName,
+        missionRepoData.repoOwner,
+        missionRepoData.repoName,
         changedFile,
         githubName,
         githubEmail,
@@ -214,7 +214,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     setCachedTaskList(
       taskList.map(taskData => new TaskData(taskData.taskDescription, taskData.starterCode))
     );
-  }, [cachedTaskList, taskList, repoName, getTemplateCode]);
+  }, [cachedTaskList, taskList, missionRepoData, getTemplateCode]);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
@@ -231,7 +231,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const loadMission = useCallback(
     (missionData: MissionData) => {
       selectSourceChapter(missionData.missionMetadata.sourceVersion);
-      setRepoName(missionData.missionMetadata.repoName);
+      setMissionRepoData(missionData.missionRepoData);
       setBriefingContent(missionData.missionBriefing);
       setTaskList(missionData.tasksData);
       setCachedTaskList(

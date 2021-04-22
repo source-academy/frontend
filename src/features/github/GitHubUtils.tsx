@@ -36,7 +36,7 @@ export function getGitHubOctokitInstance(): any {
 
 export async function checkIfFileCanBeOpened(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string
 ) {
@@ -54,7 +54,7 @@ export async function checkIfFileCanBeOpened(
 
   try {
     const results = await octokit.repos.getContent({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath
     });
@@ -76,7 +76,7 @@ export async function checkIfFileCanBeOpened(
 
 export async function checkIfFileCanBeSavedAndGetSaveType(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string
 ) {
@@ -96,7 +96,7 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
 
   try {
     const results = await octokit.repos.getContent({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath
     });
@@ -167,14 +167,14 @@ export async function checkIfUserAgreesToPerformCreatingSave() {
 
 export async function openFileInEditor(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string
 ) {
   if (octokit === undefined) return;
 
   const results = await octokit.repos.getContent({
-    owner: githubLoginID,
+    owner: repoOwner,
     repo: repoName,
     path: filePath
   });
@@ -191,7 +191,7 @@ export async function openFileInEditor(
 
 export async function performOverwritingSave(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string,
   githubName: string | null,
@@ -210,7 +210,7 @@ export async function performOverwritingSave(
 
   try {
     const results = await octokit.repos.getContent({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath
     });
@@ -225,7 +225,7 @@ export async function performOverwritingSave(
     const sha = files.sha;
 
     await octokit.repos.createOrUpdateFileContents({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath,
       message: commitMessage,
@@ -244,7 +244,7 @@ export async function performOverwritingSave(
 
 export async function performCreatingSave(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string,
   githubName: string | null,
@@ -263,7 +263,7 @@ export async function performCreatingSave(
 
   try {
     await octokit.repos.createOrUpdateFileContents({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath,
       message: commitMessage,
