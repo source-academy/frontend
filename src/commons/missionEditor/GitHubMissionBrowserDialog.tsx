@@ -111,14 +111,11 @@ function convertMissionToCard(
   resolveDialog: (response: MissionRepoData) => void
 ) {
   const ratio = isMobileBreakpoint ? 5 : 3;
-  const ownerSlashName = missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName
+  const ownerSlashName =
+    missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName;
 
   return (
-    <Card
-      key={ownerSlashName}
-      className="row listing"
-      elevation={Elevation.ONE}
-    >
+    <Card key={ownerSlashName} className="row listing" elevation={Elevation.ONE}>
       <div className={`col-xs-${String(ratio)} listing-picture`}>
         <img
           alt="Assessment"
