@@ -219,10 +219,10 @@ test('Performing creating save leads to appropriate function being called', asyn
       loginID: string,
       repoName: string,
       filePath: string,
-      githubName: string,
-      githubEmail: string,
+      githubName: string | null,
+      githubEmail: string | null,
       commitMessage: string,
-      content: string
+      content: string | null
     ) => {}
   );
 
@@ -276,10 +276,10 @@ test('Performing ovewriting save leads to appropriate function being called', as
       loginID: string,
       repoName: string,
       filePath: string,
-      githubName: string,
-      githubEmail: string,
+      githubName: string | null,
+      githubEmail: string | null,
       commitMessage: string,
-      content: string
+      content: string | null
     ) => {}
   );
 
