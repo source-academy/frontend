@@ -177,7 +177,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         changedFiles.push('Q' + taskNumber + '/StarterCode.js');
       }
     }
-    
+
     const dialogResults = await promisifyDialog<
       GitHubMissionSaveDialogProps,
       GitHubMissionSaveDialogResolution
@@ -222,7 +222,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       title: 'Reset to template code',
       contents: 'Are you sure you want to reset the template?',
       positiveLabel: 'Confirm',
-      negativeLabel: 'Cancel',
+      negativeLabel: 'Cancel'
     });
     if (confirmReset) {
       const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
@@ -455,9 +455,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   }, [onClickSave]);
 
   const resetButton = React.useMemo(() => {
-    return (
-      <ControlBarResetButton key="reset" onClick={onClickReset} />
-    );
+    return <ControlBarResetButton key="reset" onClick={onClickReset} />;
   }, [onClickReset]);
 
   const myMissionsButton = React.useMemo(() => {
@@ -594,7 +592,14 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, saveButton, resetButton, chapterSelect, githubButtons, myMissionsButton],
+      editorButtons: [
+        autorunButtons,
+        saveButton,
+        resetButton,
+        chapterSelect,
+        githubButtons,
+        myMissionsButton
+      ],
       flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,
