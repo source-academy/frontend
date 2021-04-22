@@ -182,6 +182,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       GitHubMissionSaveDialogProps,
       GitHubMissionSaveDialogResolution
     >(GitHubMissionSaveDialog, resolve => ({
+      octokit,
       repoName: missionRepoData.repoName,
       changedFiles: changedFiles,
       resolveDialog: dialogResults => resolve(dialogResults)

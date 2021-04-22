@@ -6,10 +6,7 @@ import * as React from 'react';
 
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import controlButton from '../ControlButton';
-import {
-  GitHubMissionBrowserDialog,
-  GitHubMissionBrowserDialogProps
-} from '../missionEditor/GitHubMissionBrowserDialog';
+import { GitHubMissionBrowserDialog } from '../missionEditor/GitHubMissionBrowserDialog';
 import { getMissionData } from '../missionEditor/GitHubMissionDataUtils';
 import MissionData from '../missionEditor/MissionData';
 import MissionRepoData from '../missionEditor/MissionRepoData';
@@ -42,11 +39,12 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
 
     const allMissionRepos = await getMissionRepoData(octokit.repos.listForAuthenticatedUser);
 
-    const chosenRepo = await promisifyDialog<GitHubMissionBrowserDialogProps, MissionRepoData>(
+    const chosenRepo = await promisifyDialog<any, MissionRepoData>(
       GitHubMissionBrowserDialog,
       resolve => ({
+        octokit,
         missionRepos: allMissionRepos,
-        resolveDialog: missionRepo => resolve(missionRepo)
+        resolveDialog: (missionRepo: MissionRepoData) => resolve(missionRepo)
       })
     );
 
