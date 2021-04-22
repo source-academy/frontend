@@ -7,7 +7,6 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
 
 import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -19,6 +18,7 @@ import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBar
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
 import { ControlBarNextTaskButton } from '../../commons/controlBar/ControlBarNextTaskButton';
 import { ControlBarPreviousTaskButton } from '../../commons/controlBar/ControlBarPreviousTaskButton';
+import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
 import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
