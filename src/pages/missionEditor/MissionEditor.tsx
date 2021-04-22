@@ -7,7 +7,6 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
 
 import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -19,6 +18,7 @@ import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBar
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
 import { ControlBarNextTaskButton } from '../../commons/controlBar/ControlBarNextTaskButton';
 import { ControlBarPreviousTaskButton } from '../../commons/controlBar/ControlBarPreviousTaskButton';
+import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
 import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
@@ -28,6 +28,7 @@ import {
   GitHubMissionSaveDialogResolution
 } from '../../commons/missionEditor/GitHubMissionSaveDialog';
 import MissionData from '../../commons/missionEditor/MissionData';
+import MissionRepoData from '../../commons/missionEditor/MissionRepoData';
 import TaskData from '../../commons/missionEditor/TaskData';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -133,11 +134,11 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
-  const [repoName, setRepoName] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState('');
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
+  const [missionRepoData, setMissionRepoData] = React.useState(new MissionRepoData('', ''));
 
   const getTemplateCode = useCallback(
     (questionNumber: number) => {
@@ -154,7 +155,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   );
 
   const onClickSave = useCallback(async () => {
-    if (repoName === '') {
+    if (missionRepoData.repoName === '') {
       showWarningMessage("You can't save without a mission open!", 2000);
       return;
     }
@@ -176,12 +177,12 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         changedFiles.push('Q' + taskNumber + '/StarterCode.js');
       }
     }
-    
+
     const dialogResults = await promisifyDialog<
       GitHubMissionSaveDialogProps,
       GitHubMissionSaveDialogResolution
     >(GitHubMissionSaveDialog, resolve => ({
-      repoName: repoName,
+      repoName: missionRepoData.repoName,
       changedFiles: changedFiles,
       resolveDialog: dialogResults => resolve(dialogResults)
     }));
@@ -191,7 +192,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     }
 
     const authUser = await octokit.users.getAuthenticated();
-    const loginId = authUser.data.login;
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
@@ -202,8 +202,8 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
       performOverwritingSave(
         octokit,
-        loginId,
-        repoName,
+        missionRepoData.repoOwner,
+        missionRepoData.repoName,
         changedFile,
         githubName,
         githubEmail,
@@ -215,14 +215,14 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     setCachedTaskList(
       taskList.map(taskData => new TaskData(taskData.taskDescription, taskData.starterCode))
     );
-  }, [cachedTaskList, taskList, repoName, getTemplateCode]);
+  }, [cachedTaskList, taskList, missionRepoData, getTemplateCode]);
 
   const onClickReset = useCallback(async () => {
     const confirmReset = await showSimpleConfirmDialog({
       title: 'Reset to template code',
       contents: 'Are you sure you want to reset the template?',
       positiveLabel: 'Confirm',
-      negativeLabel: 'Cancel',
+      negativeLabel: 'Cancel'
     });
     if (confirmReset) {
       const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
@@ -246,7 +246,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const loadMission = useCallback(
     (missionData: MissionData) => {
       selectSourceChapter(missionData.missionMetadata.sourceVersion);
-      setRepoName(missionData.missionMetadata.repoName);
+      setMissionRepoData(missionData.missionRepoData);
       setBriefingContent(missionData.missionBriefing);
       setTaskList(missionData.tasksData);
       setCachedTaskList(
@@ -455,9 +455,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   }, [onClickSave]);
 
   const resetButton = React.useMemo(() => {
-    return (
-      <ControlBarResetButton key="reset" onClick={onClickReset} />
-    );
+    return <ControlBarResetButton key="reset" onClick={onClickReset} />;
   }, [onClickReset]);
 
   const myMissionsButton = React.useMemo(() => {
@@ -594,7 +592,14 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, saveButton, resetButton, chapterSelect, githubButtons, myMissionsButton],
+      editorButtons: [
+        autorunButtons,
+        saveButton,
+        resetButton,
+        chapterSelect,
+        githubButtons,
+        myMissionsButton
+      ],
       flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,

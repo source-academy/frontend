@@ -12,6 +12,7 @@ import {
 } from '../missionEditor/GitHubMissionBrowserDialog';
 import { getMissionData } from '../missionEditor/GitHubMissionDataUtils';
 import MissionData from '../missionEditor/MissionData';
+import MissionRepoData from '../missionEditor/MissionRepoData';
 import { promisifyDialog, showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
@@ -39,19 +40,17 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
       return;
     }
 
-    const results = await octokit.repos.listForAuthenticatedUser();
-    const userRepos = results.data;
-    const onlyMissionRepos = userRepos.filter(repo => repo.name.startsWith('SA-'));
+    const allMissionRepos = await getMissionRepoData(octokit.repos.listForAuthenticatedUser);
 
-    const chosenRepoName = await promisifyDialog<GitHubMissionBrowserDialogProps, string>(
+    const chosenRepo = await promisifyDialog<GitHubMissionBrowserDialogProps, MissionRepoData>(
       GitHubMissionBrowserDialog,
       resolve => ({
-        missionRepos: onlyMissionRepos,
-        onSubmit: repoName => resolve(repoName)
+        missionRepos: allMissionRepos,
+        resolveDialog: missionRepo => resolve(missionRepo)
       })
     );
 
-    if (chosenRepoName === '') {
+    if (chosenRepo.repoName === '') {
       return;
     }
 
@@ -68,8 +67,15 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
     });
 
     if (confirmOpen) {
-      const missionData = await getMissionData(chosenRepoName, octokit);
+      const missionData = await getMissionData(chosenRepo, octokit);
       props.loadMission(missionData);
     }
   };
+}
+
+async function getMissionRepoData(getRepos: any) {
+  const repos = (await getRepos({ per_page: 100 })).data;
+  return repos
+    .filter((repo: any) => repo.name.startsWith('SA-'))
+    .map((repo: any) => new MissionRepoData(repo.owner.login, repo.name)) as MissionRepoData[];
 }

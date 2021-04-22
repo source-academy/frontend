@@ -2,30 +2,41 @@ import { Octokit } from '@octokit/rest';
 
 import MissionData from './MissionData';
 import MissionMetadata from './MissionMetadata';
+import MissionRepoData from './MissionRepoData';
 import TaskData from './TaskData';
 
 const maximumTasksPerMission = 20;
 
-export async function getMissionData(repoName: string, octokit: Octokit) {
-  const authUser = await octokit.users.getAuthenticated();
-  const loginId = authUser.data.login;
+export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
+  const briefingString = await getContentAsString(
+    missionRepoData.repoOwner,
+    missionRepoData.repoName,
+    '/README.md',
+    octokit
+  );
 
-  const briefingString = await getContentAsString(loginId, repoName, '/README.md', octokit);
-
-  const metadataString = await getContentAsString(loginId, repoName, '/METADATA', octokit);
+  const metadataString = await getContentAsString(
+    missionRepoData.repoOwner,
+    missionRepoData.repoName,
+    '/METADATA',
+    octokit
+  );
   const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
-  missionMetadata.repoName = repoName;
 
-  const tasksData = await getTasksData(loginId, repoName, octokit);
+  const tasksData = await getTasksData(
+    missionRepoData.repoOwner,
+    missionRepoData.repoName,
+    octokit
+  );
 
-  return new MissionData(briefingString, missionMetadata, tasksData);
+  return new MissionData(missionRepoData, briefingString, missionMetadata, tasksData);
 }
 
-async function getTasksData(loginId: string, repoName: string, octokit: Octokit) {
+async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
   const results = await octokit.repos.getContent({
-    owner: loginId,
+    owner: repoOwner,
     repo: repoName,
     path: ''
   });
@@ -48,13 +59,13 @@ async function getTasksData(loginId: string, repoName: string, octokit: Octokit)
     // If the question exists, get the data
     try {
       const taskDescription = await getContentAsString(
-        loginId,
+        repoOwner,
         repoName,
         questionFolderName + '/Problem.md',
         octokit
       );
       const starterCode = await getContentAsString(
-        loginId,
+        repoOwner,
         repoName,
         questionFolderName + '/StarterCode.js',
         octokit
@@ -72,13 +83,13 @@ async function getTasksData(loginId: string, repoName: string, octokit: Octokit)
 }
 
 export async function getContentAsString(
-  loginId: string,
+  repoOwner: string,
   repoName: string,
   filepath: string,
   octokit: Octokit
 ) {
   const fileInfo = await octokit.repos.getContent({
-    owner: loginId,
+    owner: repoOwner,
     repo: repoName,
     path: filepath
   });

@@ -24,9 +24,9 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
       <div className={classNames('githubDialogBody', Classes.DIALOG_BODY)}>
         <div>
           <h4>You are about to make changes to the following files:</h4>
-            {props.changedFiles.map(filepath => (
-              <li key={filepath}>{filepath}</li>
-            ))}
+          {props.changedFiles.map(filepath => (
+            <li key={filepath}>{filepath}</li>
+          ))}
         </div>
         <div>
           <InputGroup

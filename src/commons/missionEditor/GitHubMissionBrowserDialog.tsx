@@ -10,10 +10,11 @@ import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getContentAsString, parseMetadataProperties } from './GitHubMissionDataUtils';
+import MissionRepoData from './MissionRepoData';
 
 export type GitHubMissionBrowserDialogProps = {
-  missionRepos: any[];
-  onSubmit: (response: string) => void;
+  missionRepos: MissionRepoData[];
+  resolveDialog: (response: MissionRepoData) => void;
 };
 
 export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProps> = props => {
@@ -34,7 +35,7 @@ export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProp
       <div className={Classes.DIALOG_BODY}>
         <div className="missionBrowserContent">
           {browsableMissions.map(missionRepo =>
-            convertMissionToCard(missionRepo, isMobileBreakpoint, props.onSubmit)
+            convertMissionToCard(missionRepo, isMobileBreakpoint, props.resolveDialog)
           )}
         </div>
       </div>
@@ -50,7 +51,7 @@ export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProp
   );
 
   function handleClose() {
-    props.onSubmit('');
+    props.resolveDialog(new MissionRepoData('', ''));
   }
 };
 
@@ -58,11 +59,11 @@ class BrowsableMission {
   title: string = '';
   coverImage: string = '';
   webSummary: string = '';
-  repositoryName: string = '';
+  missionRepoData: MissionRepoData = new MissionRepoData('', '');
 }
 
 async function convertMissionReposToBrowsableMissions(
-  missionRepos: any[],
+  missionRepos: MissionRepoData[],
   setBrowsableMissions: any
 ) {
   const browsableMissions: BrowsableMission[] = [];
@@ -74,21 +75,23 @@ async function convertMissionReposToBrowsableMissions(
   setBrowsableMissions(browsableMissions);
 }
 
-async function convertRepoToBrowsableMission(missionRepo: any) {
+async function convertRepoToBrowsableMission(missionRepo: MissionRepoData) {
   const octokit = getGitHubOctokitInstance() as Octokit;
-  const authUser = await octokit.users.getAuthenticated();
-  const loginId = authUser.data.login;
-
-  const metadata = await getContentAsString(loginId, missionRepo.name, '/METADATA', octokit);
-  const browsableMission = createBrowsableMission(missionRepo.name, metadata);
+  const metadata = await getContentAsString(
+    missionRepo.repoOwner,
+    missionRepo.repoName,
+    '/METADATA',
+    octokit
+  );
+  const browsableMission = createBrowsableMission(missionRepo, metadata);
 
   return browsableMission;
 }
 
-function createBrowsableMission(repositoryName: string, metadata: string) {
+function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
   const browsableMission = new BrowsableMission();
 
-  browsableMission.repositoryName = repositoryName;
+  browsableMission.missionRepoData = missionRepo;
 
   const propertiesToExtract = ['coverImage', 'title', 'webSummary'];
 
@@ -105,12 +108,16 @@ function createBrowsableMission(repositoryName: string, metadata: string) {
 function convertMissionToCard(
   missionRepo: BrowsableMission,
   isMobileBreakpoint: boolean,
-  onSubmit: any
+  resolveDialog: (response: MissionRepoData) => void
 ) {
   const ratio = isMobileBreakpoint ? 5 : 3;
 
   return (
-    <Card key={missionRepo.repositoryName} className="row listing" elevation={Elevation.ONE}>
+    <Card
+      key={missionRepo.missionRepoData.repoOwner + missionRepo.missionRepoData.repoName}
+      className="row listing"
+      elevation={Elevation.ONE}
+    >
       <div className={`col-xs-${String(ratio)} listing-picture`}>
         <img
           alt="Assessment"
@@ -138,7 +145,7 @@ function convertMissionToCard(
               // intentional: each listing renders its own version of onClick
               // tslint:disable-next-line:jsx-no-lambda
               onClick={() => {
-                onSubmit(missionRepo.repositoryName);
+                resolveDialog(missionRepo.missionRepoData);
               }}
             >
               <span className="custom-hidden-xxxs">Open</span>
