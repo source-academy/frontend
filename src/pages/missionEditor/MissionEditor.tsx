@@ -7,6 +7,7 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
 
 import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -36,7 +37,7 @@ import { SideContentMarkdownEditor } from '../../commons/sideContent/SideContent
 import { SideContentTaskEditor } from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
-import { promisifyDialog } from '../../commons/utils/DialogHelper';
+import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
@@ -176,7 +177,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
         changedFiles.push('Q' + taskNumber + '/StarterCode.js');
       }
     }
-
+    
     const dialogResults = await promisifyDialog<
       GitHubMissionSaveDialogProps,
       GitHubMissionSaveDialogResolution
@@ -215,6 +216,20 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       taskList.map(taskData => new TaskData(taskData.taskDescription, taskData.starterCode))
     );
   }, [cachedTaskList, taskList, missionRepoData, getTemplateCode]);
+
+  const onClickReset = useCallback(async () => {
+    const confirmReset = await showSimpleConfirmDialog({
+      title: 'Reset to template code',
+      contents: 'Are you sure you want to reset the template?',
+      positiveLabel: 'Confirm',
+      negativeLabel: 'Cancel',
+    });
+    if (confirmReset) {
+      const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
+      props.handleEditorValueChange(originalCode);
+      editTemplateCode(currentTaskNumber, originalCode);
+    }
+  }, [cachedTaskList, currentTaskNumber, editTemplateCode, props]);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
@@ -439,6 +454,12 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     );
   }, [onClickSave]);
 
+  const resetButton = React.useMemo(() => {
+    return (
+      <ControlBarResetButton key="reset" onClick={onClickReset} />
+    );
+  }, [onClickReset]);
+
   const myMissionsButton = React.useMemo(() => {
     return <ControlBarMyMissionsButton key="my_missions" loadMission={loadMission} />;
   }, [loadMission]);
@@ -573,7 +594,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, saveButton, chapterSelect, githubButtons, myMissionsButton],
+      editorButtons: [autorunButtons, saveButton, resetButton, chapterSelect, githubButtons, myMissionsButton],
       flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,

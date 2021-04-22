@@ -7,6 +7,23 @@
   color: $cadet-color-4;
 }
 
+.githubDialogBody {
+  padding-left: 5px;
+
+  h4 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+  }
+  
+  li {
+    padding-left: 5px;
+    margin-bottom: 5px;
+  }
+
+  background-color: $cadet-color-3;
+  color: $cadet-color-4;
+}
+
 .RepositoryRadioGroup {
   color: $cadet-color-4;
   min-height: 100px;
