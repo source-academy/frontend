@@ -1,4 +1,4 @@
-import { Button, Card, Classes, Dialog, Elevation, H4, Intent, Text } from '@blueprintjs/core';
+import { Button, Card, Classes, Dialog, Elevation, H4, H6, Intent, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
@@ -111,13 +111,11 @@ function convertMissionToCard(
   resolveDialog: (response: MissionRepoData) => void
 ) {
   const ratio = isMobileBreakpoint ? 5 : 3;
+  const ownerSlashName =
+    missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName;
 
   return (
-    <Card
-      key={missionRepo.missionRepoData.repoOwner + missionRepo.missionRepoData.repoName}
-      className="row listing"
-      elevation={Elevation.ONE}
-    >
+    <Card key={ownerSlashName} className="row listing" elevation={Elevation.ONE}>
       <div className={`col-xs-${String(ratio)} listing-picture`}>
         <img
           alt="Assessment"
@@ -130,6 +128,7 @@ function convertMissionToCard(
         <div className="listing-header">
           <Text ellipsize={true}>
             <H4 className="listing-title">{missionRepo.title}</H4>
+            <H6>{ownerSlashName}</H6>
           </Text>
         </div>
 
