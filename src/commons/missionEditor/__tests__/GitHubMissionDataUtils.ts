@@ -23,7 +23,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
     'number=M3\n' +
     'title=Dummy Mission\n' +
     'reading=Textbook Pages 1 to 234763\n' +
-    'webSummary=no\n' + 
+    'webSummary=no\n' +
     'sourceVersion=3';
 
   const retVal = GitHubMissionDataUtils.parseMetadataProperties<MissionMetadata>(
