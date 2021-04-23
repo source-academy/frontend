@@ -23,7 +23,8 @@ test('parseMetadataProperties correctly discovers properties', () => {
     'number=M3\n' +
     'title=Dummy Mission\n' +
     'reading=Textbook Pages 1 to 234763\n' +
-    'webSummary=no';
+    'webSummary=no\n' + 
+    'sourceVersion=3';
 
   const retVal = GitHubMissionDataUtils.parseMetadataProperties<MissionMetadata>(
     missionMetadata,
@@ -38,6 +39,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
   expect(retVal.title).toBe('Dummy Mission');
   expect(retVal.reading).toBe('Textbook Pages 1 to 234763');
   expect(retVal.webSummary).toBe('no');
+  expect(retVal.sourceVersion).toBe(3);
 });
 
 test('getMissionData works properly', async () => {
@@ -57,6 +59,7 @@ test('getMissionData works properly', async () => {
   expect(missionData.missionMetadata.title).toBe('Dummy Mission');
   expect(missionData.missionMetadata.reading).toBe('Textbook Pages 1 to 234763');
   expect(missionData.missionMetadata.webSummary).toBe('no');
+  expect(missionData.missionMetadata.sourceVersion).toBe(3);
 
   expect(missionData.tasksData.length).toBe(2);
   expect(missionData.tasksData[0].taskDescription).toBe('Task A');
@@ -112,7 +115,8 @@ class MocktokitHelper {
         'number=M3\n' +
         'title=Dummy Mission\n' +
         'reading=Textbook Pages 1 to 234763\n' +
-        'webSummary=no',
+        'webSummary=no\n' +
+        'sourceVersion=3',
       'utf-8'
     ).toString('base64')
   };
