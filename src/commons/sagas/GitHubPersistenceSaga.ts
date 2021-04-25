@@ -90,13 +90,6 @@ function* githubSaveFile() {
   const commitMessage = 'Changes made from Source Academy';
   const content = store.getState().workspaces.playground.editorValue;
 
-  console.log(githubLoginId);
-  console.log(repoName);
-  console.log(filePath);
-  console.log(githubEmail);
-  console.log(githubName);
-  console.log(commitMessage);
-
   GitHubUtils.performOverwritingSave(
     octokit,
     githubLoginId,

@@ -7,7 +7,7 @@ import TaskData from './TaskData';
 
 const maximumTasksPerMission = 20;
 
-export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
+export async function getMissionData(missionRepoData: MissionRepoData, octokit: any) {
   const briefingString = await getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
@@ -21,6 +21,7 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
     '/METADATA',
     octokit
   );
+
   const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
 
   const tasksData = await getTasksData(
@@ -32,7 +33,7 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
   return new MissionData(missionRepoData, briefingString, missionMetadata, tasksData);
 }
 
-async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
+export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
   const results = await octokit.repos.getContent({
@@ -86,7 +87,7 @@ export async function getContentAsString(
   repoOwner: string,
   repoName: string,
   filepath: string,
-  octokit: Octokit
+  octokit: any
 ) {
   const fileInfo = await octokit.repos.getContent({
     owner: repoOwner,

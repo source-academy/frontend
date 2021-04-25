@@ -6,25 +6,19 @@ import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getContentAsString, parseMetadataProperties } from './GitHubMissionDataUtils';
 import MissionRepoData from './MissionRepoData';
 
-export type GitHubMissionBrowserDialogProps = {
-  missionRepos: MissionRepoData[];
-  resolveDialog: (response: MissionRepoData) => void;
-};
-
-export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProps> = props => {
+export const GitHubMissionBrowserDialog: React.FC<any> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
 
   useEffect(() => {
-    convertMissionReposToBrowsableMissions(props.missionRepos, setBrowsableMissions);
-  }, [props.missionRepos]);
+    convertMissionReposToBrowsableMissions(props.missionRepos, props.octokit, setBrowsableMissions);
+  }, [props.missionRepos, props.octokit]);
 
   return (
     <Dialog className="missionBrowser" isOpen={true}>
@@ -55,28 +49,21 @@ export const GitHubMissionBrowserDialog: React.FC<GitHubMissionBrowserDialogProp
   }
 };
 
-class BrowsableMission {
-  title: string = '';
-  coverImage: string = '';
-  webSummary: string = '';
-  missionRepoData: MissionRepoData = new MissionRepoData('', '');
-}
-
 async function convertMissionReposToBrowsableMissions(
   missionRepos: MissionRepoData[],
+  octokit: Octokit,
   setBrowsableMissions: any
 ) {
   const browsableMissions: BrowsableMission[] = [];
 
   for (let i = 0; i < missionRepos.length; i++) {
-    browsableMissions.push(await convertRepoToBrowsableMission(missionRepos[i]));
+    browsableMissions.push(await convertRepoToBrowsableMission(missionRepos[i], octokit));
   }
 
   setBrowsableMissions(browsableMissions);
 }
 
-async function convertRepoToBrowsableMission(missionRepo: MissionRepoData) {
-  const octokit = getGitHubOctokitInstance() as Octokit;
+async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {
   const metadata = await getContentAsString(
     missionRepo.repoOwner,
     missionRepo.repoName,
@@ -86,6 +73,13 @@ async function convertRepoToBrowsableMission(missionRepo: MissionRepoData) {
   const browsableMission = createBrowsableMission(missionRepo, metadata);
 
   return browsableMission;
+}
+
+class BrowsableMission {
+  title: string = '';
+  coverImage: string = '';
+  webSummary: string = '';
+  missionRepoData: MissionRepoData = new MissionRepoData('', '');
 }
 
 function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
