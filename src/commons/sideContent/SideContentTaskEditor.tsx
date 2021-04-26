@@ -14,7 +14,7 @@ export const SideContentTaskEditor: React.FC<SideContentTaskEditorProps> = props
     taskIndex < 0 || taskIndex >= props.tasks.length || props.tasks.length === 0;
 
   const taskBriefing = useDefaultDescription
-    ? 'DEFAULT DANCE'
+    ? 'Welcome to Mission Mode! This is where the Task Briefing for each question will appear!'
     : props.tasks[props.currentTaskNumber - 1].taskDescription;
 
   return (

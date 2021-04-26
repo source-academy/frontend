@@ -134,7 +134,9 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
-  const [briefingContent, setBriefingContent] = React.useState('');
+  const [briefingContent, setBriefingContent] = React.useState(
+    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear!'
+  );
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
