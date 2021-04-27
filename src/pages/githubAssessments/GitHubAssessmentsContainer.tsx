@@ -47,33 +47,33 @@ import {
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import MissionEditor, { DispatchProps, StateProps } from './MissionEditor';
+import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessments';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  editorSessionId: state.workspaces.missionEditor.editorSessionId,
-  editorWidth: state.workspaces.missionEditor.editorWidth,
-  editorValue: state.workspaces.missionEditor.editorValue!,
-  execTime: state.workspaces.missionEditor.execTime,
-  stepLimit: state.workspaces.missionEditor.stepLimit,
-  isEditorAutorun: state.workspaces.missionEditor.isEditorAutorun,
-  breakpoints: state.workspaces.missionEditor.breakpoints,
-  highlightedLines: state.workspaces.missionEditor.highlightedLines,
-  isRunning: state.workspaces.missionEditor.isRunning,
-  isDebugging: state.workspaces.missionEditor.isDebugging,
-  enableDebugging: state.workspaces.missionEditor.enableDebugging,
-  newCursorPosition: state.workspaces.missionEditor.newCursorPosition,
-  output: state.workspaces.missionEditor.output,
-  replValue: state.workspaces.missionEditor.replValue,
-  sideContentHeight: state.workspaces.missionEditor.sideContentHeight,
-  sourceChapter: state.workspaces.missionEditor.context.chapter,
-  sourceVariant: state.workspaces.missionEditor.context.variant,
-  sharedbConnected: state.workspaces.missionEditor.sharedbConnected,
-  externalLibraryName: state.workspaces.missionEditor.externalLibrary,
+  editorSessionId: state.workspaces.githubAssessments.editorSessionId,
+  editorWidth: state.workspaces.githubAssessments.editorWidth,
+  editorValue: state.workspaces.githubAssessments.editorValue!,
+  execTime: state.workspaces.githubAssessments.execTime,
+  stepLimit: state.workspaces.githubAssessments.stepLimit,
+  isEditorAutorun: state.workspaces.githubAssessments.isEditorAutorun,
+  breakpoints: state.workspaces.githubAssessments.breakpoints,
+  highlightedLines: state.workspaces.githubAssessments.highlightedLines,
+  isRunning: state.workspaces.githubAssessments.isRunning,
+  isDebugging: state.workspaces.githubAssessments.isDebugging,
+  enableDebugging: state.workspaces.githubAssessments.enableDebugging,
+  newCursorPosition: state.workspaces.githubAssessments.newCursorPosition,
+  output: state.workspaces.githubAssessments.output,
+  replValue: state.workspaces.githubAssessments.replValue,
+  sideContentHeight: state.workspaces.githubAssessments.sideContentHeight,
+  sourceChapter: state.workspaces.githubAssessments.context.chapter,
+  sourceVariant: state.workspaces.githubAssessments.context.variant,
+  sharedbConnected: state.workspaces.githubAssessments.sharedbConnected,
+  externalLibraryName: state.workspaces.githubAssessments.externalLibrary,
   usingSubst: state.playground.usingSubst,
   githubOctokitInstance: state.session.githubOctokitInstance
 });
 
-const location: WorkspaceLocation = 'missionEditor';
+const location: WorkspaceLocation = 'githubAssessments';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
@@ -123,8 +123,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const MissionEditorContainer = withRouter(
+const GitHubAssessmentsContainer = withRouter(
   connect(mapStateToProps, mapDispatchToProps)(MissionEditor)
 );
 
-export default MissionEditorContainer;
+export default GitHubAssessmentsContainer;

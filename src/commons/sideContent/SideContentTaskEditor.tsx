@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TaskData from '../missionEditor/TaskData';
+import TaskData from '../githubAssessments/TaskData';
 import { SideContentMarkdownEditor } from './SideContentMarkdownEditor';
 
 export type SideContentTaskEditorProps = {

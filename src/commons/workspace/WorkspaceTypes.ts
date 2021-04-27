@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { MissionEditorWorkspaceState } from 'src/features/missionEditor/MissionEditorTypes';
+import { GitHubAssessmentsWorkspaceState } from 'src/features/githubAssessments/GitHubAssessmentsTypes';
 
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
@@ -74,7 +74,7 @@ export type WorkspaceManagerState = {
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
-  readonly missionEditor: MissionEditorWorkspaceState;
+  readonly githubAssessments: GitHubAssessmentsWorkspaceState;
 };
 
 export type WorkspaceState = {

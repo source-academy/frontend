@@ -12,27 +12,32 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Route, Switch } from 'react-router-dom';
 
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
+import GitHubAssessmentsNavigationBar from './subcomponents/GitHubAssessmentsNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleLogOut: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 type StateProps = {
   role?: Role;
   title: string;
   name?: string;
+  githubOctokitInstance: Octokit | undefined;
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
@@ -112,10 +117,10 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/missionEditor"
+        to="/githubassessments"
       >
         <Icon icon={IconNames.BRIEFCASE} />
-        <div className="navbar-button-text">Mission Editor</div>
+        <div className="navbar-button-text">GitHub Assessments</div>
       </NavLink>
 
       {props.role && (
@@ -178,9 +183,16 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         {commonNavbarRight}
       </Navbar>
 
-      {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
-        <AcademyNavigationBar role={props.role} />
-      )}
+      <Switch>
+        <Route path="/githubassessments">
+          <GitHubAssessmentsNavigationBar {...props} />
+        </Route>
+        <Route>
+          {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
+            <AcademyNavigationBar role={props.role} />
+          )}
+        </Route>
+      </Switch>
     </>
   );
 };
