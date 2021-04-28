@@ -24,7 +24,7 @@ export enum SideContentType {
   inspector = 'inspector',
   missionTask = 'missionTask',
   missionBriefing = 'missionBriefing',
-  githubAssessments = 'githubAssessments',
+  missionEditor = 'missionEditor',
   module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',

@@ -205,7 +205,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   editorValue:
     workspaceLocation === 'playground' || 'sourcecast'
       ? defaultEditorValue
-      : '' || 'githubAssessments'
+      : '' || 'missionEditor'
       ? defaultEditorValue
       : '',
   editorPostpend: '',
@@ -278,8 +278,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     timeElapsedBeforePause: 0,
     timeResumed: 0
   },
-  githubAssessments: {
-    ...createDefaultWorkspace('githubAssessments')
+  missionEditor: {
+    ...createDefaultWorkspace('missionEditor')
   }
 };
 

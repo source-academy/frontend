@@ -14,6 +14,7 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
 import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
 import { ControlBarNextTaskButton } from '../../commons/controlBar/ControlBarNextTaskButton';
 import { ControlBarPreviousTaskButton } from '../../commons/controlBar/ControlBarPreviousTaskButton';
@@ -25,10 +26,10 @@ import {
   GitHubMissionSaveDialog,
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
-} from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import MissionData from '../../commons/githubAssessments/MissionData';
-import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
-import TaskData from '../../commons/githubAssessments/TaskData';
+} from '../../commons/missionEditor/GitHubMissionSaveDialog';
+import MissionData from '../../commons/missionEditor/MissionData';
+import MissionRepoData from '../../commons/missionEditor/MissionRepoData';
+import TaskData from '../../commons/missionEditor/TaskData';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -125,7 +126,7 @@ function handleHash(hash: string, props: MissionEditorProps) {
   }
 }
 
-const GitHubAssessments: React.FC<MissionEditorProps> = props => {
+const MissionEditor: React.FC<MissionEditorProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.missionTask);
 
@@ -438,6 +439,18 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
     [props.handleReplEval, props.isRunning, selectedTab]
   );
 
+  const { githubOctokitInstance } = props;
+  const githubButtons = React.useMemo(() => {
+    return (
+      <ControlBarGitHubLoginButton
+        loggedInAs={githubOctokitInstance}
+        key="github"
+        onClickLogIn={props.handleGitHubLogIn}
+        onClickLogOut={props.handleGitHubLogOut}
+      />
+    );
+  }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
+
   const saveButton = React.useMemo(() => {
     return (
       <ControlButtonSaveButton key="save" onClickSave={onClickSave} hasUnsavedChanges={false} />
@@ -478,7 +491,7 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
       label: 'Editor',
       iconName: IconNames.AIRPLANE,
       body: <SideContentMissionEditor {...props} />,
-      id: SideContentType.githubAssessments,
+      id: SideContentType.missionEditor,
       toSpawn: () => true
     });
     */
@@ -582,7 +595,14 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, saveButton, resetButton, chapterSelect, myMissionsButton],
+      editorButtons: [
+        autorunButtons,
+        saveButton,
+        resetButton,
+        chapterSelect,
+        githubButtons,
+        myMissionsButton
+      ],
       flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,
@@ -599,7 +619,7 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
-      workspaceLocation: 'githubAssessments'
+      workspaceLocation: 'missionEditor'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -609,7 +629,7 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
     replProps: replProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, myMissionsButton],
+        editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton],
         flowButtons: [prevTaskButton, taskView, nextTaskButton]
       },
       defaultSelectedTabId: selectedTab,
@@ -617,7 +637,7 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
-      workspaceLocation: 'githubAssessments',
+      workspaceLocation: 'missionEditor',
       handleEditorEval: props.handleEditorEval
     }
   };
@@ -633,4 +653,4 @@ const GitHubAssessments: React.FC<MissionEditorProps> = props => {
   );
 };
 
-export default GitHubAssessments;
+export default MissionEditor;
