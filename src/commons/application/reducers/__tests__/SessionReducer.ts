@@ -295,7 +295,6 @@ const gradingTest1: Grading = [
       id: 234
     },
     grade: {
-      roomId: '19422030',
       grade: 10,
       gradeAdjustment: 0,
       xp: 100,
@@ -313,7 +312,6 @@ const gradingTest2: Grading = [
       id: 345
     },
     grade: {
-      roomId: '19422030',
       grade: 30,
       gradeAdjustment: 10,
       xp: 500,

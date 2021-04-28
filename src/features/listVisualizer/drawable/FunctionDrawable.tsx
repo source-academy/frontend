@@ -3,49 +3,54 @@ import { Circle, Group } from 'react-konva';
 
 import { Config } from '../Config';
 
+type FunctionProps = {
+  x: number;
+  y: number;
+};
+
 /**
  * Represents a function object drawn using two circles.
  */
-export class FunctionDrawable extends React.PureComponent {
+export class FunctionDrawable extends React.PureComponent<FunctionProps> {
   render() {
     return (
-      <Group>
+      <Group {...this.props}>
         {/* Left circle */}
         <Circle
-          radius={15}
+          radius={Config.CircleRadiusLarge}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
-          x={Config.BoxWidth / 2 - 20} // 25
-          y={Config.BoxHeight / 2}
+          x={Config.CircleRadiusLarge}
+          y={Config.CircleRadiusLarge}
         />
 
         {/* Right circle */}
         <Circle
-          radius={15}
+          radius={Config.CircleRadiusLarge}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
-          x={Config.BoxWidth / 2 + 10} // 55
-          y={Config.BoxHeight / 2}
+          x={Config.CircleRadiusLarge * 3 + Config.StrokeWidth}
+          y={Config.CircleRadiusLarge}
         />
 
         {/* Left dot */}
         <Circle
-          radius={4}
+          radius={Config.CircleRadiusSmall}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Fill}
           fill={Config.Fill}
-          x={Config.BoxWidth / 2 - 20}
-          y={Config.BoxHeight / 2}
+          x={Config.CircleRadiusLarge}
+          y={Config.CircleRadiusLarge}
         />
 
         {/* Right dot */}
         <Circle
-          radius={4}
+          radius={Config.CircleRadiusSmall}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
           fill={Config.Fill}
-          x={Config.BoxWidth / 2 + 10}
-          y={Config.BoxHeight / 2}
+          x={Config.CircleRadiusLarge * 3 + Config.StrokeWidth}
+          y={Config.CircleRadiusLarge}
         />
       </Group>
     );

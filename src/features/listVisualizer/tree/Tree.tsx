@@ -1,17 +1,25 @@
-import { Layer, Line } from 'react-konva';
+import Konva from 'konva';
+import { Layer, Text } from 'react-konva';
 
 import { Config } from '../Config';
+import { ArrowDrawable } from '../drawable/ArrowDrawable';
+import { BackwardArrowDrawable } from '../drawable/BackwardArrowDrawable';
 import { Data, Pair } from '../ListVisualizerTypes';
-import { head, isFunction, isPair, tail } from '../ListVisualizerUtils';
-import { DataTreeNode } from './DataTreeNode';
-import { PairTreeNode } from './PairTreeNode';
-import { DrawableTreeNode, FunctionTreeNode, TreeNode } from './TreeNode';
+import { isArray, isFunction, toText } from '../ListVisualizerUtils';
+import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
+import {
+  ArrayTreeNode,
+  DataTreeNode,
+  DrawableTreeNode,
+  FunctionTreeNode,
+  TreeNode
+} from './TreeNode';
 
 /**
  *  A tree object built based on a list or pair.
  */
 export class Tree {
-  private _rootNode: PairTreeNode;
+  private _rootNode: TreeNode;
   private nodes: DrawableTreeNode[];
 
   /**
@@ -19,7 +27,7 @@ export class Tree {
    * @param rootNode The root node of the tree.
    * @param nodes The memoized nodes of the tree in list form.
    */
-  constructor(rootNode: PairTreeNode, nodes: DrawableTreeNode[]) {
+  constructor(rootNode: TreeNode, nodes: DrawableTreeNode[]) {
     this._rootNode = rootNode;
     this.nodes = nodes;
   }
@@ -27,7 +35,7 @@ export class Tree {
   /**
    * The root node of the tree.
    */
-  get rootNode(): PairTreeNode {
+  get rootNode(): TreeNode {
     return this._rootNode;
   }
 
@@ -39,8 +47,20 @@ export class Tree {
     return this.nodes[id];
   }
 
-  static fromSourceTree(tree: Pair): Tree {
+  static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
+
+    function constructNode(structure: Data): TreeNode {
+      const alreadyDrawnNode = visitedStructures.get(structure);
+      if (alreadyDrawnNode !== undefined) {
+        return new AlreadyParsedTreeNode(alreadyDrawnNode);
+      }
+      return isArray(structure)
+        ? constructTree(structure)
+        : isFunction(structure)
+        ? constructFunction(structure)
+        : constructData(structure);
+    }
 
     /**
      * Returns a node representing the given tree as a pair.
@@ -48,37 +68,15 @@ export class Tree {
      * pair appears multiple times in the data structure.
      * @param tree The Source tree to construct a node for.
      */
-    function constructTree(tree: Pair) {
-      const node = new PairTreeNode(nodeCount);
+    function constructTree(tree: Array<Data>) {
+      const node = new ArrayTreeNode();
 
-      visitedStructures[nodeCount] = tree;
+      visitedStructures.set(tree, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
 
-      const headNode = head(tree);
-      const tailNode = tail(tree);
-
-      if (visitedStructures.indexOf(headNode) > -1) {
-        // tree already built
-        node.left = visitedStructures.indexOf(headNode);
-      } else {
-        node.left = isPair(headNode)
-          ? constructTree(headNode)
-          : isFunction(headNode)
-          ? constructFunction(headNode)
-          : constructData(headNode);
-      }
-
-      if (visitedStructures.indexOf(tailNode) > -1) {
-        // tree already built
-        node.right = visitedStructures.indexOf(tailNode);
-      } else {
-        node.right = isPair(tailNode)
-          ? constructTree(tailNode)
-          : isFunction(tailNode)
-          ? constructFunction(tailNode)
-          : constructData(tailNode);
-      }
+      // Done like that instead of in constructor to prevent infinite recursion
+      node.children = tree.map(constructNode);
 
       return node;
     }
@@ -90,10 +88,10 @@ export class Tree {
      * @param func The function to construct a node for.
      */
     function constructFunction(func: Function) {
-      const node = new FunctionTreeNode(nodeCount);
+      const node = new FunctionTreeNode();
 
       // memoise current function
-      visitedStructures[nodeCount] = func;
+      visitedStructures.set(func, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
 
@@ -109,15 +107,15 @@ export class Tree {
       return new DataTreeNode(data);
     }
 
-    const visitedStructures: (Function | Pair)[] = []; // detects cycles
+    const visitedStructures: Map<Function | Pair | Array<Data>, DrawableTreeNode> = new Map(); // detects cycles
     const treeNodes: DrawableTreeNode[] = [];
-    const rootNode = constructTree(tree);
+    const rootNode = constructNode(tree);
 
     return new Tree(rootNode, treeNodes);
   }
 
-  draw(x: number, y: number): JSX.Element {
-    return new TreeDrawer(this).draw(x, y);
+  draw(): TreeDrawer {
+    return new TreeDrawer(this);
   }
 }
 
@@ -127,26 +125,52 @@ export class Tree {
 class TreeDrawer {
   private tree: Tree;
 
-  // keeps track the extreme left end of the tree. In units of pixels.
-  private minLeft = 500;
-
   private drawables: JSX.Element[];
+  private nodeWidths: Map<TreeNode, number>;
+  public width: number = 0;
+  public height: number = 0;
+
+  // Used to account for backward arrow
+  private minX = 0;
+  private minY = 0;
 
   constructor(tree: Tree) {
     this.tree = tree;
     this.drawables = [];
+    this.nodeWidths = new Map();
   }
 
   /**
    *  Draws a tree at x, y, by calling drawNode on the root at x, y.
    */
   draw(x: number, y: number): JSX.Element {
-    this.drawNode(this.tree.rootNode, x, y, x, y);
-    return (
-      <Layer offsetX={this.minLeft - 20} offsetY={0}>
-        {this.drawables}
-      </Layer>
-    );
+    if (this.tree.rootNode instanceof DataTreeNode) {
+      const text = toText(this.tree.rootNode.data);
+      const textConfig = {
+        text: text,
+        align: 'center',
+        fontStyle: 'normal',
+        fontSize: 20,
+        fill: Config.Stroke
+      };
+      const konvaText = new Konva.Text(textConfig);
+      this.width = konvaText.width();
+      this.height = konvaText.height();
+      return (
+        <Layer>
+          <Text {...textConfig} />
+        </Layer>
+      );
+    } else {
+      this.drawNode(this.tree.rootNode, x, y, x, y);
+      this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
+      this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
+      return (
+        <Layer key={x + ', ' + y} offsetX={this.minX} offsetY={this.minY}>
+          {this.drawables}
+        </Layer>
+      );
+    }
   }
 
   /**
@@ -162,298 +186,119 @@ class TreeDrawer {
    * @param parentY The y position of the parent. If there is no parent, it is the same as y.
    */
   drawNode(node: TreeNode, x: number, y: number, parentX: number, parentY: number) {
+    if (node instanceof AlreadyParsedTreeNode) {
+      // if its child is part of a cycle and it's been drawn, link back to that node instead
+      const drawnNode = node.actualNode;
+      const arrowProps = {
+        from: {
+          x: parentX + Config.BoxWidth / 2,
+          y: parentY + Config.BoxHeight / 2
+        },
+        to: {
+          x: drawnNode.drawableX! + Config.ArrowSpaceHorizontal,
+          y: drawnNode.drawableY! - Config.ArrowSpaceVertical
+        }
+      };
+
+      const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
+
+      let arrow: JSX.Element;
+
+      if (isBackwardArrow) {
+        // Update the minX and minY, in case overflow to the top or left happens
+        this.minX = Math.min(
+          this.minX,
+          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2
+        );
+        this.minY = Math.min(
+          this.minY,
+          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
+        );
+        arrow = <BackwardArrowDrawable {...arrowProps}></BackwardArrowDrawable>;
+      } else {
+        arrow = <ArrowDrawable {...arrowProps} />;
+      }
+      this.drawables.push(arrow);
+    }
+
     if (!(node instanceof DrawableTreeNode)) return;
 
     // draws the content
     if (node instanceof FunctionTreeNode) {
       const drawable = node.createDrawable(x, y, parentX, parentY);
       this.drawables.push(drawable);
-
-      // update left extreme of the tree
-      this.minLeft = Math.min(this.minLeft, x);
-    } else if (node instanceof PairTreeNode) {
+    } else if (node instanceof ArrayTreeNode) {
       const drawable = node.createDrawable(x, y, parentX, parentY);
       this.drawables.push(drawable);
 
-      // if it has a left new child, draw it
-      if (node.left != null) {
-        if (node.left instanceof TreeNode) {
-          this.drawLeft(node.left, x, y);
-        } else {
-          // if its left child is part of a cycle and it's been drawn, link back to that node instead
-          const drawnNode = this.tree.getNodeById(node.left);
-          this.backwardLeftEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
-        }
+      // if it has children, draw them
+      // const width = this.getNodeWidth(node);
+      let leftX = x;
+      node.children?.forEach((childNode, index) => {
+        const childY = childNode instanceof AlreadyParsedTreeNode ? y : y + Config.DistanceY;
+        this.drawNode(childNode, leftX, childY, x + Config.BoxWidth * index, y);
+        const childNodeWidth = this.getNodeWidth(childNode);
+        leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
+      });
+    }
+  }
+
+  /**
+   * Returns the width taken up by the node in pixels.
+   * @param node The node to calculate the width of.
+   */
+  getNodeWidth(node: TreeNode): number {
+    if (node instanceof DataTreeNode || node instanceof AlreadyParsedTreeNode) {
+      return 0;
+    } else if (node instanceof FunctionTreeNode) {
+      return Config.CircleRadiusLarge * 4 + 2 * Config.StrokeWidth;
+    } else if (node instanceof ArrayTreeNode) {
+      if (this.nodeWidths.has(node)) {
+        return this.nodeWidths.get(node) ?? 0;
+      } else if (node.children != null) {
+        const childrenWidths = node.children
+          .map(node => this.getNodeWidth(node))
+          .filter(x => x > 0);
+        const childrenWidth =
+          childrenWidths.length > 0 ? childrenWidths.reduce((x, y) => x + y + Config.DistanceX) : 0;
+        const nodeWidth = Math.max(
+          node.children.length * Config.BoxWidth + Config.StrokeWidth,
+          childrenWidth
+        );
+        this.nodeWidths.set(node, nodeWidth);
+        return nodeWidth;
+      } else {
+        return 0;
       }
-
-      if (node.right != null) {
-        if (node.right instanceof TreeNode) {
-          this.drawRight(node.right, x, y);
-        } else {
-          const drawnNode = this.tree.getNodeById(node.right);
-          this.backwardRightEdge(x, y, drawnNode.drawableX ?? 0, drawnNode.drawableY ?? 0);
-        }
-      }
-
-      // update left extreme of the tree
-      this.minLeft = Math.min(this.minLeft, x);
-    }
-  }
-
-  /**
-   *  Draws a node to the left of its parent, making necessary left shift depending how far the structure of subtree
-   *  extends to the right.
-   *
-   *  It first draws the individual box, then see if its children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-   */
-  drawLeft(node: TreeNode, parentX: number, parentY: number) {
-    let count: number;
-    // checks if it has a right child, how far it extends to the right direction
-    if (node.right instanceof DrawableTreeNode) {
-      count = 1 + this.shiftScaleCount(node.right);
     } else {
-      count = 0;
+      return 0;
     }
-    // shifts left accordingly
-    const x = parentX - Config.DistanceX - count * Config.DistanceX;
-    const y = parentY + Config.DistanceY;
-
-    this.drawNode(node, x, y, parentX, parentY);
   }
 
   /**
-   *  Draws a node to the right of its parent, making necessary right shift depending how far the structure of subtree
-   *  extends to the left.
-   *
-   *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+   * Returns the height taken up by the node in pixels.
+   * @param node The node to calculate the width of.
    */
-  drawRight(node: TreeNode, parentX: number, parentY: number) {
-    let count: number;
-    if (node.left instanceof DrawableTreeNode) {
-      count = 1 + this.shiftScaleCount(node.left);
+  getNodeHeight(node: TreeNode): number {
+    if (node instanceof DataTreeNode) {
+      return 0;
+    } else if (node instanceof FunctionTreeNode) {
+      return Config.BoxHeight;
+    } else if (node instanceof AlreadyParsedTreeNode) {
+      return Config.ArrowMarginBottom;
+    } else if (node instanceof ArrayTreeNode) {
+      // Height of array node is BoxHeight + StrokeWidth / 2 + max(childrenHeights)
+      return (
+        (node.children ?? [])
+          .map(child => {
+            const childHeight = this.getNodeHeight(child);
+            return childHeight + (child instanceof DrawableTreeNode ? Config.DistanceY / 2 : 0);
+          })
+          .filter(height => height > 0)
+          .reduce((x, y) => Math.max(x, y), 0) + Config.BoxHeight
+      );
     } else {
-      count = 0;
+      return 0;
     }
-    const x = parentX + Config.DistanceX + count * Config.DistanceX;
-    const y = parentY + Config.DistanceY;
-
-    this.drawNode(node, x, y, parentX, parentY);
-  }
-
-  /**
-   * Returns the distance necessary for the shift of each node, calculated recursively.
-   */
-  shiftScaleCount(node: TreeNode) {
-    let count = 0;
-    // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
-    if (node.left instanceof DrawableTreeNode) {
-      count = count + 1 + this.shiftScaleCount(node.left);
-    }
-    // if there is something on the right, it needs to be shifted to the left for 1 + how far that left child shifts
-    if (node.right instanceof DrawableTreeNode) {
-      count = count + 1 + this.shiftScaleCount(node.right);
-    }
-    return count;
-  }
-
-  /**
-   *  Connects a box to a previously known box, the arrow path is more complicated.
-   *  After coming out of the starting box, it moves to the left or the right for a short distance,
-   *  Then goes to the correct y-value and turns to reach the top of the end box.
-   *  It then directly points to the end box. All turnings are 90 degress.
-   */
-  backwardLeftEdge(x1: number, y1: number, x2: number, y2: number) {
-    // coordinates of all the turning points, except the first segment in the path
-    let path: number[];
-    if (x1 > x2 && y1 >= y2 - Config.BoxHeight - 1) {
-      // lower right to upper left
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 - Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 - Config.BoxSpacingX / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 <= x2 && y1 >= y2 - Config.BoxHeight - 1) {
-      // lower left to upper right
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 - Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 - Config.BoxSpacingX / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 > x2) {
-      // upper right to lower left
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else {
-      // upper left to lower right
-      path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + Config.BoxWidth / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    }
-    const endX = path[path.length - 2];
-    const endY = path[path.length - 1];
-    const arrowPath = [
-      endX - Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endX,
-      endY,
-      endX + Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength
-    ];
-    // pointy arrow
-    const arrow = <Line points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    // first segment of the path
-    const pointerHead = (
-      <Line
-        points={[
-          x1 + Config.BoxWidth / 4,
-          y1 + Config.BoxHeight / 2,
-          x1 + Config.BoxWidth / 4,
-          y1 + (Config.BoxSpacingY * 3) / 4
-        ]}
-        strokeWidth={Config.StrokeWidth}
-        stroke={'white'}
-      />
-    );
-
-    // following segments of the path
-    const pointer = <Line points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    this.drawables.push(pointerHead);
-    this.drawables.push(pointer);
-    this.drawables.push(arrow);
-    // since arrow path is complicated, move to bottom in case it covers some other box
-
-    // TODO: Fix this
-    // pointer.moveToBottom();
-  }
-
-  /**
-   *  Same as backwardLeftEdge
-   */
-  backwardRightEdge(x1: number, y1: number, x2: number, y2: number) {
-    let path: number[];
-    if (x1 > x2 && y1 > y2 - Config.BoxHeight - 1) {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 <= x2 && y1 > y2 - Config.BoxHeight - 1) {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x2 + Config.BoxWidth + Config.BoxSpacingX / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else if (x1 > x2) {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8 + 7,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8 + 7,
-        x2 + Config.BoxWidth / 4 + Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    } else {
-      path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y1 + (Config.BoxSpacingY * 3) / 4,
-        x1 + (Config.BoxWidth * 3) / 4,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - (Config.BoxSpacingY * 3) / 8,
-        x2 + Config.BoxWidth / 4 - Config.ArrowSpaceH,
-        y2 - Config.ArrowSpace
-      ];
-    }
-    const endX = path[path.length - 2];
-    const endY = path[path.length - 1];
-    const arrowPath = [
-      endX - Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endX,
-      endY,
-      endX + Math.cos(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength,
-      endY - Math.sin(Math.PI / 2 - Config.ArrowAngle) * Config.ArrowLength
-    ];
-    const arrow = <Line points={arrowPath} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    const pointerHead = (
-      <Line
-        points={[
-          x1 + (Config.BoxWidth * 3) / 4,
-          y1 + Config.BoxHeight / 2,
-          x1 + (Config.BoxWidth * 3) / 4,
-          y1 + (Config.BoxSpacingY * 3) / 4
-        ]}
-        strokeWidth={Config.StrokeWidth}
-        stroke={'white'}
-      />
-    );
-    const pointer = <Line points={path} strokeWidth={Config.StrokeWidth} stroke={'white'} />;
-
-    this.drawables.push(pointerHead);
-    this.drawables.push(pointer);
-    this.drawables.push(arrow);
-
-    // TODO: Fix this
-    // pointer.moveToBottom();
   }
 }
