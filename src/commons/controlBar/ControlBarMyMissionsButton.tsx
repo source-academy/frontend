@@ -6,10 +6,10 @@ import * as React from 'react';
 
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import controlButton from '../ControlButton';
-import { GitHubMissionBrowserDialog } from '../missionEditor/GitHubMissionBrowserDialog';
-import { getMissionData } from '../missionEditor/GitHubMissionDataUtils';
-import MissionData from '../missionEditor/MissionData';
-import MissionRepoData from '../missionEditor/MissionRepoData';
+import { GitHubMissionBrowserDialog } from '../githubAssessments/GitHubMissionBrowserDialog';
+import { getMissionData } from '../githubAssessments/GitHubMissionDataUtils';
+import MissionData from '../githubAssessments/MissionData';
+import MissionRepoData from '../githubAssessments/MissionRepoData';
 import { promisifyDialog, showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
@@ -23,7 +23,7 @@ export const ControlBarMyMissionsButton: React.FC<ControlBarMyMissionsButtonProp
 
   return (
     <Tooltip2 content="Look at this photograph" placement={Position.TOP}>
-      {controlButton('My Missions', IconNames.BADGE, handleOnClick)}
+      {controlButton('Missions', IconNames.BADGE, handleOnClick)}
     </Tooltip2>
   );
 };
@@ -73,7 +73,10 @@ function createOnClickHandler(props: ControlBarMyMissionsButtonProps) {
 
 async function getMissionRepoData(getRepos: any) {
   const repos = (await getRepos({ per_page: 100 })).data;
+
   return repos
     .filter((repo: any) => repo.name.startsWith('SA-'))
-    .map((repo: any) => new MissionRepoData(repo.owner.login, repo.name)) as MissionRepoData[];
+    .map(
+      (repo: any) => new MissionRepoData(repo.owner.login, repo.name, repo.created_at)
+    ) as MissionRepoData[];
 }

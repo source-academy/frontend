@@ -16,6 +16,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
   const missionMetadata = new MissionMetadata();
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
+  const datePropsToExtract = ['dueDate'];
 
   const metadataString =
     'coverImage=www.somelink.com\n' +
@@ -23,6 +24,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
     'number=M3\n' +
     'title=Dummy Mission\n' +
     'reading=Textbook Pages 1 to 234763\n' +
+    'dueDate=December 17, 1995 03:24:00\n' +
     'webSummary=no\n' +
     'sourceVersion=3';
 
@@ -30,6 +32,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
     missionMetadata,
     stringPropsToExtract,
     numPropsToExtract,
+    datePropsToExtract,
     metadataString
   );
 
@@ -40,11 +43,12 @@ test('parseMetadataProperties correctly discovers properties', () => {
   expect(retVal.reading).toBe('Textbook Pages 1 to 234763');
   expect(retVal.webSummary).toBe('no');
   expect(retVal.sourceVersion).toBe(3);
+  expect(retVal.dueDate).toStrictEqual(new Date('December 17, 1995 03:24:00'));
 });
 
 test('getMissionData works properly', async () => {
   const missionData = await GitHubMissionDataUtils.getMissionData(
-    new MissionRepoData('Pain', 'Peko'),
+    new MissionRepoData('Pain', 'Peko', 'Peko'),
     new MocktokitB()
   );
 
@@ -123,19 +127,23 @@ class MocktokitHelper {
 
   static third = [{ name: 'Q1' }, { name: 'Q2' }];
 
-  static fourth = {
+  static fourth = [];
+
+  static fifth = {
     content: Buffer.from('Task A', 'utf8').toString('base64')
   };
 
-  static fifth = {
+  static sixth = {
     content: Buffer.from('Code A', 'utf8').toString('base64')
   };
 
-  static sixth = {
+  static seventh = [];
+
+  static eighth = {
     content: Buffer.from('Task B', 'utf8').toString('base64')
   };
 
-  static seventh = {
+  static ninth = {
     content: Buffer.from('Code B', 'utf8').toString('base64')
   };
 
@@ -146,6 +154,8 @@ class MocktokitHelper {
     MocktokitHelper.fourth,
     MocktokitHelper.fifth,
     MocktokitHelper.sixth,
-    MocktokitHelper.seventh
+    MocktokitHelper.seventh,
+    MocktokitHelper.eighth,
+    MocktokitHelper.ninth
   ];
 }

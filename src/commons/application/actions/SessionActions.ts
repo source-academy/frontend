@@ -1,3 +1,4 @@
+import MissionRepoData from 'src/commons/githubAssessments/MissionRepoData';
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
@@ -22,6 +23,7 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GOOGLE_USER,
   SET_TOKENS,
@@ -79,6 +81,9 @@ export const setTokens = ({
 export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
+
+export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
+  action(SET_GITHUB_ASSESSMENT, missionRepoData);
 
 export const setGitHubOctokitInstance = (authToken?: string) =>
   action(SET_GITHUB_OCTOKIT_INSTANCE, generateOctokitInstance(authToken || ''));

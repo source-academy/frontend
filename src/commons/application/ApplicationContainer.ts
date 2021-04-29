@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { logOut } from './actions/CommonsActions';
+import { loginGitHub, logoutGitHub } from './actions/SessionActions';
 import Application, { DispatchProps, StateProps } from './Application';
 import { OverallState } from './ApplicationTypes';
 
@@ -16,11 +17,15 @@ import { OverallState } from './ApplicationTypes';
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   title: state.application.title,
   role: state.session.role,
-  name: state.session.name
+  name: state.session.name,
+  githubOctokitInstance: state.session.githubOctokitInstance
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators({ handleLogOut: logOut }, dispatch);
+  bindActionCreators(
+    { handleLogOut: logOut, handleGitHubLogIn: loginGitHub, handleGitHubLogOut: logoutGitHub },
+    dispatch
+  );
 
 const ApplicationContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Application));
 

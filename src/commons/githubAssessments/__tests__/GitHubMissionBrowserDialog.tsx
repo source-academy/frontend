@@ -8,7 +8,11 @@ test('Selecting close causes resolveDialog to return empty string for owner and 
 
   const emptyMissionRepos: MissionRepoData[] = [];
 
-  let returnedResponse = new MissionRepoData('not-empty-owner', 'not-empty-repoName');
+  let returnedResponse = new MissionRepoData(
+    'not-empty-owner',
+    'not-empty-repoName',
+    'not-empty-creation-date'
+  );
   function resolveDialog(response: MissionRepoData) {
     returnedResponse = response;
   }
@@ -26,16 +30,25 @@ test('Selecting close causes resolveDialog to return empty string for owner and 
   await screen.findByText('Select a Mission');
 
   fireEvent.click(screen.getByText('Close'));
-  expect(returnedResponse).toStrictEqual(new MissionRepoData('', ''));
+  expect(returnedResponse.repoName).toBe('');
+  expect(returnedResponse.repoOwner).toBe('');
 });
 
 test('Selecting open on a mission card causes resolveDialog to return owner and repoName', async () => {
   const octokit = new Mocktokit();
 
-  const mockMissionRepoData = new MissionRepoData('ownerName', 'repoName');
+  const mockMissionRepoData = new MissionRepoData(
+    'ownerName',
+    'repoName',
+    'December 17, 1995 03:24:00'
+  );
   const mockMissionRepos: MissionRepoData[] = [mockMissionRepoData];
 
-  let returnedResponse = new MissionRepoData('notownerName', 'notrepoName');
+  let returnedResponse = new MissionRepoData(
+    'notownerName',
+    'notrepoName',
+    'December 18, 1995 03:24:00'
+  );
   function resolveDialog(response: MissionRepoData) {
     returnedResponse = response;
   }
@@ -52,7 +65,9 @@ test('Selecting open on a mission card causes resolveDialog to return owner and 
 
   await screen.findByText('Open');
   fireEvent.click(screen.getByText('Open'));
-  expect(returnedResponse).toStrictEqual(new MissionRepoData('ownerName', 'repoName'));
+  expect(returnedResponse).toStrictEqual(
+    new MissionRepoData('ownerName', 'repoName', 'December 17, 1995 03:24:00')
+  );
 });
 
 class Mocktokit {

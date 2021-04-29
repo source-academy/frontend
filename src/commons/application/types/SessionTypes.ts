@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import MissionRepoData from 'src/commons/githubAssessments/MissionRepoData';
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
@@ -19,6 +20,7 @@ export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
+export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_INSTANCE = 'SET_GITHUB_OCTOKIT_INSTANCE';
 export const SUBMIT_ANSWER = 'SUBMIT_ANSWER';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
@@ -60,6 +62,7 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
+  readonly githubAssessment?: MissionRepoData;
   readonly githubOctokitInstance?: Octokit;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;

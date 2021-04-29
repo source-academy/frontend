@@ -4,9 +4,10 @@ import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { getMissionData } from 'src/commons/githubAssessments/GitHubMissionDataUtils';
 
 import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -14,8 +15,6 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
-import { ControlBarMyMissionsButton } from '../../commons/controlBar/ControlBarMyMissionsButton';
 import { ControlBarNextTaskButton } from '../../commons/controlBar/ControlBarNextTaskButton';
 import { ControlBarPreviousTaskButton } from '../../commons/controlBar/ControlBarPreviousTaskButton';
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
@@ -26,10 +25,10 @@ import {
   GitHubMissionSaveDialog,
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
-} from '../../commons/missionEditor/GitHubMissionSaveDialog';
-import MissionData from '../../commons/missionEditor/MissionData';
-import MissionRepoData from '../../commons/missionEditor/MissionRepoData';
-import TaskData from '../../commons/missionEditor/TaskData';
+} from '../../commons/githubAssessments/GitHubMissionSaveDialog';
+import MissionData from '../../commons/githubAssessments/MissionData';
+import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
+import TaskData from '../../commons/githubAssessments/TaskData';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -43,11 +42,13 @@ import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
-  getGitHubOctokitInstance,
+  checkIfFileCanBeSavedAndGetSaveType,
+  performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import { store } from '../createStore';
 
-export type MissionEditorProps = DispatchProps & StateProps & RouteComponentProps<{}>;
+export type GitHubAssessmentsProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -104,10 +105,9 @@ export type StateProps = {
   stepLimit: number;
   externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
-  githubOctokitInstance: Octokit | undefined;
 };
 
-function handleHash(hash: string, props: MissionEditorProps) {
+function handleHash(hash: string, props: GitHubAssessmentsProps) {
   const qs = parseQuery(hash);
 
   const programLz = qs.lz ?? qs.prgrm;
@@ -126,7 +126,7 @@ function handleHash(hash: string, props: MissionEditorProps) {
   }
 }
 
-const MissionEditor: React.FC<MissionEditorProps> = props => {
+const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.missionTask);
 
@@ -140,29 +140,54 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
-  const [missionRepoData, setMissionRepoData] = React.useState(new MissionRepoData('', ''));
 
-  const getTemplateCode = useCallback(
+  const handleEditorValueChange = props.handleEditorValueChange;
+
+  const missionRepoData = props.location.state as MissionRepoData;
+  const octokit = store.getState().session.githubOctokitInstance as Octokit;
+
+  const loadMission = useCallback(async () => {
+    if (octokit === undefined) return;
+    const missionData: MissionData = await getMissionData(missionRepoData, octokit);
+    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+    setBriefingContent(missionData.missionBriefing);
+    setTaskList(missionData.tasksData);
+    setCachedTaskList(
+      missionData.tasksData.map(
+        taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
+      )
+    );
+    setCurrentTaskNumber(1);
+    handleEditorValueChange(missionData.tasksData[0].savedCode);
+  }, [missionRepoData, octokit, handleEditorValueChange]);
+
+  useEffect(() => {
+    loadMission();
+  }, [loadMission]);
+
+  const getEditedCode = useCallback(
     (questionNumber: number) => {
-      return taskList[questionNumber - 1].starterCode;
+      return taskList[questionNumber - 1].savedCode;
     },
     [taskList]
   );
 
-  const editTemplateCode = useCallback(
+  const editCode = useCallback(
     (questionNumber: number, newValue: string) => {
-      taskList[questionNumber - 1].starterCode = newValue;
+      if (questionNumber > taskList.length) {
+        return;
+      }
+
+      taskList[questionNumber - 1].savedCode = newValue;
     },
     [taskList]
   );
 
   const onClickSave = useCallback(async () => {
-    if (missionRepoData.repoName === '') {
+    if (missionRepoData === undefined) {
       showWarningMessage("You can't save without a mission open!", 2000);
       return;
     }
-
-    const octokit = getGitHubOctokitInstance() as Octokit;
 
     if (octokit === undefined) {
       showWarningMessage('Please sign in with GitHub!', 2000);
@@ -173,10 +198,10 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     const changedFiles: string[] = [];
 
     for (let i = 0; i < taskList.length; i++) {
-      if (taskList[i].starterCode !== cachedTaskList[i].starterCode) {
+      if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
         const taskNumber = i + 1;
         changedTasks.push(taskNumber);
-        changedFiles.push('Q' + taskNumber + '/StarterCode.js');
+        changedFiles.push('Q' + taskNumber + '/SavedCode.js');
       }
     }
 
@@ -203,22 +228,46 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       const changedTask = changedTasks[i];
       const changedFile = changedFiles[i];
 
-      performOverwritingSave(
+      const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
         octokit,
         missionRepoData.repoOwner,
         missionRepoData.repoName,
-        changedFile,
-        githubName,
-        githubEmail,
-        commitMessage,
-        getTemplateCode(changedTask)
+        changedFile
       );
+
+      if (saveType === 'Overwrite') {
+        await performOverwritingSave(
+          octokit,
+          missionRepoData.repoOwner,
+          missionRepoData.repoName,
+          changedFile,
+          githubName,
+          githubEmail,
+          commitMessage,
+          getEditedCode(changedTask)
+        );
+      }
+
+      if (saveType === 'Create') {
+        await performCreatingSave(
+          octokit,
+          missionRepoData.repoOwner,
+          missionRepoData.repoName,
+          changedFile,
+          githubName,
+          githubEmail,
+          commitMessage,
+          getEditedCode(changedTask)
+        );
+      }
     }
 
     setCachedTaskList(
-      taskList.map(taskData => new TaskData(taskData.taskDescription, taskData.starterCode))
+      taskList.map(
+        taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
+      )
     );
-  }, [cachedTaskList, taskList, missionRepoData, getTemplateCode]);
+  }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
   const onClickReset = useCallback(async () => {
     const confirmReset = await showSimpleConfirmDialog({
@@ -229,39 +278,22 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     });
     if (confirmReset) {
       const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
-      props.handleEditorValueChange(originalCode);
-      editTemplateCode(currentTaskNumber, originalCode);
+      handleEditorValueChange(originalCode);
+      editCode(currentTaskNumber, originalCode);
     }
-  }, [cachedTaskList, currentTaskNumber, editTemplateCode, props]);
+  }, [cachedTaskList, currentTaskNumber, editCode, handleEditorValueChange]);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
-    props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]);
+    handleEditorValueChange(getEditedCode(newTaskNumber));
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    props.handleEditorValueChange(getTemplateCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, props, getTemplateCode]);
-
-  const loadMission = useCallback(
-    (missionData: MissionData) => {
-      selectSourceChapter(missionData.missionMetadata.sourceVersion);
-      setMissionRepoData(missionData.missionRepoData);
-      setBriefingContent(missionData.missionBriefing);
-      setTaskList(missionData.tasksData);
-      setCachedTaskList(
-        missionData.tasksData.map(
-          taskData => new TaskData(taskData.taskDescription, taskData.starterCode)
-        )
-      );
-      setCurrentTaskNumber(1);
-      props.handleEditorValueChange(missionData.tasksData[0].starterCode);
-    },
-    [props]
-  );
+    handleEditorValueChange(getEditedCode(newTaskNumber));
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
 
   /**
    * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
@@ -318,9 +350,9 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const onEditorValueChange = React.useCallback(
     val => {
       propsRef.current.handleEditorValueChange(val);
-      editTemplateCode(currentTaskNumber, val);
+      editCode(currentTaskNumber, val);
     },
-    [currentTaskNumber, editTemplateCode]
+    [currentTaskNumber, editCode]
   );
 
   const onChangeTabs = React.useCallback(
@@ -439,18 +471,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     [props.handleReplEval, props.isRunning, selectedTab]
   );
 
-  const { githubOctokitInstance } = props;
-  const githubButtons = React.useMemo(() => {
-    return (
-      <ControlBarGitHubLoginButton
-        loggedInAs={githubOctokitInstance}
-        key="github"
-        onClickLogIn={props.handleGitHubLogIn}
-        onClickLogOut={props.handleGitHubLogOut}
-      />
-    );
-  }, [githubOctokitInstance, props.handleGitHubLogIn, props.handleGitHubLogOut]);
-
   const saveButton = React.useMemo(() => {
     return (
       <ControlButtonSaveButton key="save" onClickSave={onClickSave} hasUnsavedChanges={false} />
@@ -460,10 +480,6 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   const resetButton = React.useMemo(() => {
     return <ControlBarResetButton key="reset" onClick={onClickReset} />;
   }, [onClickReset]);
-
-  const myMissionsButton = React.useMemo(() => {
-    return <ControlBarMyMissionsButton key="my_missions" loadMission={loadMission} />;
-  }, [loadMission]);
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
@@ -491,7 +507,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       label: 'Editor',
       iconName: IconNames.AIRPLANE,
       body: <SideContentMissionEditor {...props} />,
-      id: SideContentType.missionEditor,
+      id: SideContentType.githubAssessments,
       toSpawn: () => true
     });
     */
@@ -595,14 +611,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [
-        autorunButtons,
-        saveButton,
-        resetButton,
-        chapterSelect,
-        githubButtons,
-        myMissionsButton
-      ],
+      editorButtons: [autorunButtons, saveButton, resetButton, chapterSelect],
       flowButtons: [prevTaskButton, taskView, nextTaskButton]
     },
     editorProps: editorProps,
@@ -619,7 +628,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
-      workspaceLocation: 'missionEditor'
+      workspaceLocation: 'githubAssessments'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -629,7 +638,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
     replProps: replProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, githubButtons, myMissionsButton],
+        editorButtons: [autorunButtons, chapterSelect],
         flowButtons: [prevTaskButton, taskView, nextTaskButton]
       },
       defaultSelectedTabId: selectedTab,
@@ -637,7 +646,7 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
-      workspaceLocation: 'missionEditor',
+      workspaceLocation: 'githubAssessments',
       handleEditorEval: props.handleEditorEval
     }
   };
@@ -653,4 +662,4 @@ const MissionEditor: React.FC<MissionEditorProps> = props => {
   );
 };
 
-export default MissionEditor;
+export default GitHubAssessments;

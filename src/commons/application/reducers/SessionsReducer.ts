@@ -10,6 +10,7 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_INSTANCE,
   SessionState,
+  SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_INSTANCE,
   SET_GOOGLE_USER,
   SET_TOKENS,
@@ -29,6 +30,11 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
+    case SET_GITHUB_ASSESSMENT:
+      return {
+        ...state,
+        githubAssessment: action.payload
+      };
     case SET_GITHUB_OCTOKIT_INSTANCE:
       return {
         ...state,

@@ -22,10 +22,10 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
           Playground
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/missionEditor\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments/missions\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
-          Mission Editor
+          GitHub Assessments
         </div>
       </NavLink>
     </Blueprint3.NavbarGroup>
@@ -45,6 +45,12 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
+  <Switch>
+    <Route path=\\"/githubassessments\\">
+      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} title=\\"Source Academy\\" />
+    </Route>
+    <Route />
+  </Switch>
 </Fragment>"
 `;
 
@@ -70,10 +76,10 @@ exports[`NavigationBar renders correctly with student role 1`] = `
           Playground
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/missionEditor\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments/missions\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
-          Mission Editor
+          GitHub Assessments
         </div>
       </NavLink>
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievement\\">
@@ -103,6 +109,13 @@ exports[`NavigationBar renders correctly with student role 1`] = `
       <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
-  <AcademyNavigationBar role=\\"student\\" />
+  <Switch>
+    <Route path=\\"/githubassessments\\">
+      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} title=\\"Source Academy\\" role=\\"student\\" />
+    </Route>
+    <Route>
+      <AcademyNavigationBar role=\\"student\\" />
+    </Route>
+  </Switch>
 </Fragment>"
 `;
