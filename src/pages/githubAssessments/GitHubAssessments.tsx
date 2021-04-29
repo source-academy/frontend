@@ -135,7 +135,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
   const [briefingContent, setBriefingContent] = React.useState(
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear!'
+    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
   );
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
