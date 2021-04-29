@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
@@ -23,7 +23,11 @@ type StateProps = {
 const SideContentContestVotingContainer: React.FunctionComponent<SideContentContestVotingContainerProps> = props => {
   const { canSave, contestEntries, handleSave, handleContestEntryClick } = props;
   const [isValid, setIsValid] = useState<boolean>(true);
-  const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>(contestEntries);
+  const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
+
+  useEffect(() => {
+    setVotingSubmission(contestEntries);
+  }, [contestEntries]);
 
   /**
    * Validates input value and clamps the value within the min-max range [1, number of entries].
@@ -54,6 +58,7 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
     const noNull = submissionHasNoNull(updatedSubmission);
     if (noDuplicates && noNull && isSubmissionValid(updatedSubmission)) {
       handleSave(updatedSubmission);
+
       setIsValid(true);
     } else if (noDuplicates && noNull) {
       showWarningMessage(
@@ -65,12 +70,6 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
       setIsValid(false);
     }
   };
-
-  // if (!validateScore(rank)) {
-  //   showWarningMessage(
-  //     `Vote rankings invalid. Please input rankings between 1 - ${contestEntries.length}.`
-  // );
-  // setIsValid(false);
 
   return (
     <SideContentContestVoting

@@ -850,8 +850,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         score: 2
       }
     ],
-    library: mockRuneLibrary,
-    roomId: null
+    library: mockRuneLibrary
   }
 ];
 
