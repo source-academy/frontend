@@ -4,9 +4,6 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import Markdown from 'src/commons/Markdown';
-import { history } from 'src/commons/utils/HistoryHelper';
-import { getGitHubOctokitInstance } from 'src/features/github/GitHubUtils';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -15,7 +12,10 @@ import {
   parseMetadataProperties
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
+import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
+import { history } from '../../commons/utils/HistoryHelper';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
 export const GitHubMissions: React.FC<any> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
@@ -167,10 +167,10 @@ function convertMissionToCard(
           </div>
 
           <div className="listing-footer">
-            {<Text className="listing-due-date">
+            <Text className="listing-due-date">
               <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-              {hasDueDate ? 'Due: ' + dueDate : "No due date"}
-            </Text>}
+              {hasDueDate ? 'Due: ' + dueDate : 'No due date'}
+            </Text>
             <div className="listing-button">
               <Button icon={IconNames.PLAY} minimal={true} onClick={loadIntoEditor}>
                 <span className="custom-hidden-xxxs">{buttonText}</span>
