@@ -2,7 +2,7 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[undefined]} handleGitHubLogOut={[undefined]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
@@ -24,7 +24,7 @@ exports[`Application renders correctly 1`] = `
 
 exports[`Application shows disabled when in disabled period 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[undefined]} handleGitHubLogOut={[undefined]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
