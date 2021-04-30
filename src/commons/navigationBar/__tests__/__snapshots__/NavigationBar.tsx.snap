@@ -47,7 +47,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
   </Blueprint3.Navbar>
   <Switch>
     <Route path=\\"/githubassessments\\">
-      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handeGitHubLogIn={[Function: handeGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} title=\\"Source Academy\\" />
+      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} title=\\"Source Academy\\" />
     </Route>
     <Route />
   </Switch>
@@ -111,7 +111,7 @@ exports[`NavigationBar renders correctly with student role 1`] = `
   </Blueprint3.Navbar>
   <Switch>
     <Route path=\\"/githubassessments\\">
-      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handeGitHubLogIn={[Function: handeGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} title=\\"Source Academy\\" role=\\"student\\" />
+      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} title=\\"Source Academy\\" role=\\"student\\" />
     </Route>
     <Route>
       <AcademyNavigationBar role=\\"student\\" />
