@@ -2,7 +2,7 @@ import { Button, Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
-import { HotKeys } from 'react-hotkeys';
+import { configure, GlobalHotKeys } from 'react-hotkeys';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { Step } from '../../features/dataVisualizer/dataVisualizerTypes';
@@ -38,14 +38,29 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
   }
 
   public render() {
+    const firstStep: () => boolean = () => this.state.currentStep === 0;
+    const finalStep: () => boolean = () =>
+      !this.state.steps || this.state.currentStep === this.state.steps.length - 1;
+
     const dataVisualizerHandlers = {
       PREVIOUS_STEP: this.onPrevButtonClick,
       NEXT_STEP: this.onNextButtonClick
     };
+
+    configure({
+      ignoreEventsCondition: event => {
+        return (
+          (event.key === 'ArrowLeft' && firstStep()) || (event.key === 'ArrowRight' && finalStep())
+        );
+      },
+      ignoreRepeatedEventsWhenKeyHeldDown: false,
+      stopEventPropagationAfterIgnoring: false
+    });
+
     const step: Step | undefined = this.state.steps[this.state.currentStep];
 
     return (
-      <HotKeys keyMap={dataVisualizerKeyMap} handlers={dataVisualizerHandlers}>
+      <GlobalHotKeys keyMap={dataVisualizerKeyMap} handlers={dataVisualizerHandlers}>
         <div className={classNames('sa-data-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
             <div
@@ -66,7 +81,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
                 outlined={true}
                 icon={IconNames.ARROW_LEFT}
                 onClick={this.onPrevButtonClick}
-                disabled={this.state.currentStep === 0}
+                disabled={firstStep()}
               >
                 Previous
               </Button>
@@ -82,9 +97,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
                 onClick={this.onNextButtonClick}
-                disabled={
-                  !this.state.steps || this.state.currentStep === this.state.steps.length - 1
-                }
+                disabled={finalStep()}
               >
                 Next
               </Button>
@@ -151,7 +164,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
             </p>
           )}
         </div>
-      </HotKeys>
+      </GlobalHotKeys>
     );
   }
 

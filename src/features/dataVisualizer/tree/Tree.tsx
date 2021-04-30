@@ -215,9 +215,11 @@ class TreeDrawer {
           this.minY,
           drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
         );
-        arrow = <BackwardArrowDrawable {...arrowProps}></BackwardArrowDrawable>;
+        arrow = (
+          <BackwardArrowDrawable key={'Arrow (back)' + parentX + x + parentY + y} {...arrowProps} />
+        );
       } else {
-        arrow = <ArrowDrawable {...arrowProps} />;
+        arrow = <ArrowDrawable key={'Arrow' + parentX + x + parentY + y} {...arrowProps} />;
       }
       this.drawables.push(arrow);
     }

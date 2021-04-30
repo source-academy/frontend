@@ -49,7 +49,6 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
     ];
     return (
       <Arrow
-        key={this.props + ''}
         points={path}
         pointerLength={Config.ArrowPointerSize}
         pointerWidth={Config.ArrowPointerSize}
