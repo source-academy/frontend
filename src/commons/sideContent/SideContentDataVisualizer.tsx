@@ -28,9 +28,9 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
     super(props);
     this.state = { steps: [], currentStep: 0 };
     DataVisualizer.init(steps => {
-      if (steps) {
+      if (this.state.steps.length > 0) {
         //  Blink icon
-        const icon = document.getElementById('data_visualiser-icon');
+        const icon = document.getElementById('data_visualizer-icon');
         icon?.classList.add('side-content-tab-alert');
       }
       this.setState({ steps, currentStep: 0 });

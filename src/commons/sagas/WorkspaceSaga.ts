@@ -612,7 +612,7 @@ export function* evalCode(
     inspectorUpdate(undefined); // effectively resets the interface
   }
 
-  // Logic for execution of substitution model visualiser
+  // Logic for execution of substitution model visualizer
   const substIsActive: boolean = yield select(
     (state: OverallState) => (state.playground as PlaygroundState).usingSubst
   );

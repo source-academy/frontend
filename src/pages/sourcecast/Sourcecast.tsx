@@ -379,7 +379,7 @@ const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualiser,
+  id: SideContentType.dataVisualizer,
   toSpawn: () => true
 };
 
