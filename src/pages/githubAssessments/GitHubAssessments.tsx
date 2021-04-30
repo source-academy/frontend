@@ -7,7 +7,6 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { getMissionData } from 'src/commons/githubAssessments/GitHubMissionDataUtils';
 
 import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -21,6 +20,7 @@ import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetB
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
 import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
   GitHubMissionSaveDialog,
   GitHubMissionSaveDialogProps,
