@@ -1,4 +1,4 @@
-import { Button, Card, Elevation, H4, H6, NonIdealState, Text } from '@blueprintjs/core';
+import { Button, Card, Elevation, H4, H6, Icon, NonIdealState, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
@@ -105,6 +105,7 @@ class BrowsableMission {
   coverImage: string = '';
   webSummary: string = '';
   missionRepoData: MissionRepoData = new MissionRepoData('', '', '');
+  dueDate: Date = new Date(8640000000000000);
 }
 
 function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
@@ -134,6 +135,11 @@ function convertMissionToCard(
   const ratio = isMobileBreakpoint ? 5 : 3;
   const ownerSlashName =
     missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName;
+  const dueDate = missionRepo.dueDate.toDateString();
+
+  const hasDueDate = new Date(8640000000000000) > missionRepo.dueDate;
+  const isOverdue = new Date() > missionRepo.dueDate;
+  const buttonText = isOverdue ? 'Review Answers' : 'Open';
 
   const data = missionRepo.missionRepoData;
 
@@ -161,9 +167,13 @@ function convertMissionToCard(
           </div>
 
           <div className="listing-footer">
+            {<Text className="listing-due-date">
+              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+              {hasDueDate ? 'Due: ' + dueDate : "No due date"}
+            </Text>}
             <div className="listing-button">
               <Button icon={IconNames.PLAY} minimal={true} onClick={loadIntoEditor}>
-                <span className="custom-hidden-xxxs">Open</span>
+                <span className="custom-hidden-xxxs">{buttonText}</span>
               </Button>
             </div>
           </div>
