@@ -1,17 +1,20 @@
 import { Group } from 'react-konva';
 
 import { Config } from '../Config';
-import { ArrowDrawable, FunctionDrawable } from '../drawable/Drawable';
+import { ArrayDrawable, ArrowDrawable } from '../drawable/Drawable';
 import { DrawableTreeNode } from './DrawableTreeNode';
 
 /**
- * Represents a node corresponding to a Source (and Javascript) function.
+ * Represents a node corresponding to a Source pair or array.
  */
-export class FunctionTreeNode extends DrawableTreeNode {
+export class ArrayTreeNode extends DrawableTreeNode {
   createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
+    const arrayProps = { nodes: this.children ?? [], x, y };
+    const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
+
     this._drawable = (
       <Group key={x + ', ' + y}>
-        <FunctionDrawable {...{ x, y }}></FunctionDrawable>
+        {arrayDrawable}
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
@@ -28,10 +31,8 @@ export class FunctionTreeNode extends DrawableTreeNode {
         )}
       </Group>
     );
-
     this.drawableX = x;
     this.drawableY = y;
-
     return this._drawable;
   }
 }

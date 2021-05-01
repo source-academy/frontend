@@ -5,22 +5,23 @@ export const Config = {
   StrokeWidth: 2,
   Stroke: 'white',
   Fill: 'white',
-  DistanceX: 50,
-  DistanceY: 60,
 
-  BoxWidth: 90,
+  BoxWidth: 45,
   BoxHeight: 30,
-  VertBarPos: 0.5,
   BoxSpacingX: 50,
   BoxSpacingY: 60,
 
-  CircleRadius: 12,
+  DistanceX: 45 / 2, // Half of box width
+  DistanceY: 60,
+  CircleRadiusLarge: 15,
+  CircleRadiusSmall: 4,
 
-  ArrowSpace: 5,
-  ArrowSpaceH: 13, // horizontal
-  ArrowLength: 8,
-  ArrowAngle: 0.5236, //25 - 0.4363,//20 - 0.3491,// 30 - 0.5236
+  ArrowSpaceHorizontal: 13, // The horizontal spacing the backward arrow head is from the end point
+  ArrowSpaceVertical: 5, // The vertical spacing the backward arrow head is from the target box; to prevent overlapping with the target box
+  ArrowPointerSize: 5,
+  ArrowMarginTop: 15,
+  ArrowMarginBottom: 15,
+  ArrowMarginHorizontal: 15,
 
-  Padding: 5,
-  CanvasWidth: 1000
+  MaxTextLength: 20
 };

@@ -229,8 +229,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext
 });
 
-export const defaultRoomId = null;
-
 export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
     ...createDefaultWorkspace('assessment'),

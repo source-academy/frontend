@@ -12,7 +12,7 @@ type NullProps = {
  *  Represents the diagonal line drawn over the tail of a pair
  *  when the tail is an empty box.
  *
- *  Used in conjunction with PairDrawable.
+ *  Used in conjunction with ArrayDrawable.
  */
 export class NullDrawable extends React.PureComponent<NullProps> {
   render() {
@@ -20,20 +20,7 @@ export class NullDrawable extends React.PureComponent<NullProps> {
       <Line
         x={this.props.x}
         y={this.props.y}
-        points={[
-          Config.BoxWidth * Config.VertBarPos,
-          Config.BoxHeight,
-          Config.BoxWidth * Config.VertBarPos,
-          0,
-          Config.BoxWidth,
-          0,
-          Config.BoxWidth * Config.VertBarPos,
-          Config.BoxHeight,
-          Config.BoxWidth,
-          Config.BoxHeight,
-          Config.BoxWidth,
-          0
-        ]}
+        points={[0, Config.BoxHeight, Config.BoxWidth, 0]}
         strokeWidth={Config.StrokeWidth - 1}
         stroke={Config.Stroke}
       />
