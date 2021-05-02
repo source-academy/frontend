@@ -564,7 +564,6 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
         autogradingResults: question.autogradingResults || [],
         choices: question.choices,
         content: question.content,
-        roomId: null,
         id: question.id,
         library: castLibrary(question.library),
         solution: gradingQuestion.solution || question.solution || null,
@@ -580,7 +579,6 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
       grade: {
         grade: grade.grade,
         xp: grade.xp,
-        roomId: grade.roomId || '',
         gradeAdjustment: grade.adjustment,
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
