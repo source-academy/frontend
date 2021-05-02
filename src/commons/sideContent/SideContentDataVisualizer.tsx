@@ -109,8 +109,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                overflowX: 'auto',
-                justifyContent: step.length === 1 ? 'center' : 'auto' // To center single element, but prevent scrolling issues with multiple
+                overflowX: 'auto'
               }}
             >
               {step?.map((elem, i) => (

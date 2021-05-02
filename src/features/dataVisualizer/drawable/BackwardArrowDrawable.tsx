@@ -55,6 +55,7 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
         fill={Config.Fill}
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
+        preventDefault={false}
       ></Arrow>
     );
   }

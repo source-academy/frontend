@@ -33,6 +33,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
             y={Math.floor((Config.BoxHeight - 1.2 * 12) / 2)}
             fontStyle={textValue === undefined ? 'italic' : 'normal'}
             fill={'white'}
+            preventDefault={false}
           />
         );
       } else if (isEmptyList(nodeValue)) {
@@ -55,6 +56,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
           fill={'#17181A'}
+          preventDefault={false}
         />
         {/* Vertical lines in the box */}
         {Array.from(Array(this.props.nodes.length - 1), (e, i) => {
@@ -64,6 +66,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
               points={[Config.BoxWidth * (i + 1), 0, Config.BoxWidth * (i + 1), Config.BoxHeight]}
               strokeWidth={Config.StrokeWidth}
               stroke={Config.Stroke}
+              preventDefault={false}
             />
           );
         })}

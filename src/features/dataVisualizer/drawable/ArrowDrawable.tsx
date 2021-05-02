@@ -26,6 +26,7 @@ export class ArrowDrawable extends React.PureComponent<ArrowConfig> {
         fill={Config.Fill}
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
+        preventDefault={false}
       ></Arrow>
     );
   }
