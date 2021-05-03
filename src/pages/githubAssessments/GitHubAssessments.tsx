@@ -33,6 +33,7 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideContentMarkdownEditor } from '../../commons/sideContent/SideContentMarkdownEditor';
+import { SideContentMissionEditor } from '../../commons/sideContent/SideContentMissionEditor';
 import { SideContentTaskEditor } from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
@@ -141,7 +142,6 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
-  console.log(isTeacherMode); // DELET THIS LATER!!! Printing to avoid unused data error
 
   const handleEditorValueChange = props.handleEditorValueChange;
 
@@ -508,17 +508,15 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       toSpawn: () => true
     });
 
-    // Remove this for Phase 2-1.
-    // It will be added once we get into Phase 2-2.
-    /*
-    tabs.push({
-      label: 'Editor',
-      iconName: IconNames.AIRPLANE,
-      body: <SideContentMissionEditor {...props} />,
-      id: SideContentType.githubAssessments,
-      toSpawn: () => true
-    });
-    */
+    if (isTeacherMode) {
+      tabs.push({
+        label: 'Editor',
+        iconName: IconNames.AIRPLANE,
+        body: <SideContentMissionEditor {...props} />,
+        id: SideContentType.githubAssessments,
+        toSpawn: () => true
+      });
+    }
 
     return tabs;
   }, [taskList, currentTaskNumber, briefingContent]);
