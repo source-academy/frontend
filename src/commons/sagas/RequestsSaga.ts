@@ -61,7 +61,7 @@ type RequestOptions = {
 };
 
 /**
- * POST /auth
+ * POST /auth/login
  */
 export const postAuth = async (
   code: string,
@@ -143,7 +143,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 };
 
 /**
- * GET achievements/goals/{studentId}
+ * GET /achievements/goals/{studentId}
  */
 export const getGoals = async (
   tokens: Tokens,
@@ -164,7 +164,7 @@ export const getGoals = async (
 };
 
 /**
- * GET self/goals
+ * GET /self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await request('self/goals', 'GET', {
@@ -249,7 +249,7 @@ export async function bulkUpdateGoals(
 }
 
 /**
- * POST /achievements/:achievement_uuid
+ * POST /achievements/{achievement_uuid}
  */
 export const editAchievement = async (
   achievement: AchievementItem,
@@ -389,6 +389,8 @@ export const getAssessmentOverviews = async (
 
 /**
  * GET /assessments/{assessmentId}
+ * Note: if assessment is password-protected, a corresponding unlock request will be sent to
+ * POST /assessments/{assessmentId}/unlock
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
   let resp = await request(`assessments/${id}`, 'GET', {
@@ -406,7 +408,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`assessments/${id}`, 'GET', {
+    resp = await request(`assessments/${id}/unlock`, 'POST', {
       ...tokens,
       body: {
         password: input
@@ -491,13 +493,13 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 };
 
 /*
- * GET /grading
+ * GET /admin/grading
  */
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean
 ): Promise<GradingOverview[] | null> => {
-  const resp = await request(`grading?group=${group}`, 'GET', {
+  const resp = await request(`admin/grading?group=${group}`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -548,10 +550,10 @@ export const getGradingOverviews = async (
 };
 
 /**
- * GET /grading/{submissionId}
+ * GET /admin/grading/{submissionId}
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
-  const resp = await request(`grading/${submissionId}`, 'GET', {
+  const resp = await request(`admin/grading/${submissionId}`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -602,7 +604,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 };
 
 /**
- * POST /grading/{submissionId}/{questionId}
+ * POST /admin/grading/{submissionId}/{questionId}
  */
 export const postGrading = async (
   submissionId: number,
@@ -612,7 +614,7 @@ export const postGrading = async (
   tokens: Tokens,
   comments?: string
 ): Promise<Response | null> => {
-  const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
+  const resp = await request(`admin/grading/${submissionId}/${questionId}`, 'POST', {
     ...tokens,
     body: {
       grading: {
@@ -630,13 +632,13 @@ export const postGrading = async (
 };
 
 /**
- * POST /grading/{submissionId}/autograde
+ * POST /admin/grading/{submissionId}/autograde
  */
 export const postReautogradeSubmission = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`grading/${submissionId}/autograde`, 'POST', {
+  const resp = await request(`admin/grading/${submissionId}/autograde`, 'POST', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -647,14 +649,14 @@ export const postReautogradeSubmission = async (
 };
 
 /**
- * POST /grading/{submissionId}/{questionId}/autograde
+ * POST /admin/grading/{submissionId}/{questionId}/autograde
  */
 export const postReautogradeAnswer = async (
   submissionId: number,
   questionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`grading/${submissionId}/${questionId}/autograde`, 'POST', {
+  const resp = await request(`admin/grading/${submissionId}/${questionId}/autograde`, 'POST', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -665,13 +667,13 @@ export const postReautogradeAnswer = async (
 };
 
 /**
- * POST /grading/{submissionId}/unsubmit
+ * POST /admin/grading/{submissionId}/unsubmit
  */
 export const postUnsubmit = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`grading/${submissionId}/unsubmit`, 'POST', {
+  const resp = await request(`admin/grading/${submissionId}/unsubmit`, 'POST', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -682,7 +684,7 @@ export const postUnsubmit = async (
 };
 
 /**
- * GET /notification
+ * GET /notifications
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
   const resp: Response | null = await request('notifications', 'GET', {
@@ -715,7 +717,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
 };
 
 /**
- * POST /notification/acknowledge
+ * POST /notifications/acknowledge
  */
 export const postAcknowledgeNotifications = async (
   tokens: Tokens,
@@ -725,23 +727,6 @@ export const postAcknowledgeNotifications = async (
     ...tokens,
     body: { notificationIds: ids },
     shouldAutoLogout: false
-  });
-
-  return resp;
-};
-
-/**
- * DELETE /sourcecast/{sourcecastId}
- */
-export const deleteSourcecastEntry = async (
-  id: number,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`sourcecast/${id}`, 'DELETE', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
   });
 
   return resp;
@@ -794,17 +779,14 @@ export const postSourcecast = async (
 };
 
 /**
- * POST /assessments/update/{assessmentId}
+ * DELETE /sourcecast/{sourcecastId}
  */
-export const changeDateAssessment = async (
+export const deleteSourcecastEntry = async (
   id: number,
-  closeAt: string,
-  openAt: string,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`assessments/update/${id}`, 'POST', {
+  const resp = await request(`sourcecast/${id}`, 'DELETE', {
     ...tokens,
-    body: { closeAt, openAt },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -814,10 +796,29 @@ export const changeDateAssessment = async (
 };
 
 /**
- * DELETE /assessments/{assessmentId}
+ * POST /admin/assessments/{assessmentId}
+ */
+export const updateAssessment = async (
+  id: number,
+  body: { openAt?: string; closeAt?: string; isPublished?: boolean },
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`admin/assessments/${id}`, 'POST', {
+    ...tokens,
+    body: body,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * DELETE /admin/assessments/{assessmentId}
  */
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`assessments/${id}`, 'DELETE', {
+  const resp = await request(`admin/assessments/${id}`, 'DELETE', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -828,26 +829,7 @@ export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Resp
 };
 
 /**
- * POST /assessments/publish/{assessmentId}
- */
-export const publishAssessment = async (
-  id: number,
-  togglePublishTo: boolean,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`assessments/publish/${id}`, 'POST', {
-    ...tokens,
-    body: { togglePublishTo },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-};
-
-/**
- * POST /assessments
+ * POST /admin/assessments
  */
 export const uploadAssessment = async (
   file: File,
@@ -857,7 +839,7 @@ export const uploadAssessment = async (
   const formData = new FormData();
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
-  const resp = await request(`assessments`, 'POST', {
+  const resp = await request(`admin/assessments`, 'POST', {
     ...tokens,
     body: formData,
     noContentType: true,
@@ -870,10 +852,10 @@ export const uploadAssessment = async (
 };
 
 /**
- * GET /grading/summary
+ * GET /admin/grading/summary
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
-  const resp = await request('grading/summary', 'GET', {
+  const resp = await request('admin/grading/summary', 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -906,14 +888,14 @@ export const getSublanguage = async (): Promise<SourceLanguage | null> => {
 };
 
 /**
- * PUT /settings/sublanguage
+ * PUT /admin/settings/sublanguage
  */
 export const postSublanguage = async (
   chapter: number,
   variant: string,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`settings/sublanguage`, 'PUT', {
+  const resp = await request(`admin/settings/sublanguage`, 'PUT', {
     ...tokens,
     body: { chapter, variant },
     noHeaderAccept: true,

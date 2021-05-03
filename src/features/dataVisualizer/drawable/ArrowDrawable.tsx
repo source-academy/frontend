@@ -15,12 +15,18 @@ export class ArrowDrawable extends React.PureComponent<ArrowConfig> {
     return (
       <Arrow
         key={this.props + ''}
-        points={[this.props.from.x, this.props.from.y, this.props.to.x, this.props.to.y]}
+        points={[
+          this.props.from.x,
+          this.props.from.y,
+          this.props.to.x + Config.ArrowPointerOffsetHorizontal,
+          this.props.to.y + Config.ArrowPointerOffsetVertical
+        ]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
         fill={Config.Fill}
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
+        preventDefault={false}
       ></Arrow>
     );
   }

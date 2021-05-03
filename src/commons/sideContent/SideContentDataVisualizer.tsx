@@ -2,10 +2,10 @@ import { Button, Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
-import { HotKeys } from 'react-hotkeys';
+import { configure, GlobalHotKeys } from 'react-hotkeys';
 
-import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
-import { Step } from '../../features/listVisualizer/ListVisualizerTypes';
+import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
+import { Step } from '../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../utils/Constants';
 
 type State = {
@@ -13,24 +13,24 @@ type State = {
   currentStep: number;
 };
 
-const listVisualizerKeyMap = {
+const dataVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
   NEXT_STEP: 'right'
 };
 
 /**
  * This class is responsible for the visualization of data structures via the
- * data_data function in Source. It adds a listener to the ListVisualizer singleton
+ * data_data function in Source. It adds a listener to the DataVisualizer singleton
  * which updates the steps list via setState whenever new steps are added.
  */
-class SideContentListVisualizer extends React.Component<{}, State> {
+class SideContentDataVisualizer extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = { steps: [], currentStep: 0 };
-    ListVisualizer.init(steps => {
-      if (steps) {
+    DataVisualizer.init(steps => {
+      if (this.state.steps.length > 0) {
         //  Blink icon
-        const icon = document.getElementById('data_visualiser-icon');
+        const icon = document.getElementById('data_visualizer-icon');
         icon?.classList.add('side-content-tab-alert');
       }
       this.setState({ steps, currentStep: 0 });
@@ -38,15 +38,30 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   }
 
   public render() {
-    const listVisualizerHandlers = {
+    const firstStep: () => boolean = () => this.state.currentStep === 0;
+    const finalStep: () => boolean = () =>
+      !this.state.steps || this.state.currentStep === this.state.steps.length - 1;
+
+    const dataVisualizerHandlers = {
       PREVIOUS_STEP: this.onPrevButtonClick,
       NEXT_STEP: this.onNextButtonClick
     };
+
+    configure({
+      ignoreEventsCondition: event => {
+        return (
+          (event.key === 'ArrowLeft' && firstStep()) || (event.key === 'ArrowRight' && finalStep())
+        );
+      },
+      ignoreRepeatedEventsWhenKeyHeldDown: false,
+      stopEventPropagationAfterIgnoring: false
+    });
+
     const step: Step | undefined = this.state.steps[this.state.currentStep];
 
     return (
-      <HotKeys keyMap={listVisualizerKeyMap} handlers={listVisualizerHandlers}>
-        <div className={classNames('sa-list-visualizer', Classes.DARK)}>
+      <GlobalHotKeys keyMap={dataVisualizerKeyMap} handlers={dataVisualizerHandlers}>
+        <div className={classNames('sa-data-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
             <div
               style={{
@@ -66,7 +81,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
                 outlined={true}
                 icon={IconNames.ARROW_LEFT}
                 onClick={this.onPrevButtonClick}
-                disabled={this.state.currentStep === 0}
+                disabled={firstStep()}
               >
                 Previous
               </Button>
@@ -82,9 +97,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
                 outlined={true}
                 icon={IconNames.ARROW_RIGHT}
                 onClick={this.onNextButtonClick}
-                disabled={
-                  !this.state.steps || this.state.currentStep === this.state.steps.length - 1
-                }
+                disabled={finalStep()}
               >
                 Next
               </Button>
@@ -96,8 +109,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                overflowX: 'scroll',
-                justifyContent: step.length === 1 ? 'center' : 'auto' // To center single element, but prevent scrolling issues with multiple
+                overflowX: 'auto'
               }}
             >
               {step?.map((elem, i) => (
@@ -151,7 +163,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
             </p>
           )}
         </div>
-      </HotKeys>
+      </GlobalHotKeys>
     );
   }
 
@@ -168,4 +180,4 @@ class SideContentListVisualizer extends React.Component<{}, State> {
   };
 }
 
-export default SideContentListVisualizer;
+export default SideContentDataVisualizer;
