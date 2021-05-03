@@ -140,6 +140,8 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
+  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
+  console.log(isTeacherMode); // DELET THIS LATER!!! Printing to avoid unused data error
 
   const handleEditorValueChange = props.handleEditorValueChange;
 
@@ -159,6 +161,12 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     );
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
+
+    let userInTeacherMode = false;
+    (await octokit.orgs.listForAuthenticatedUser()).data.forEach(org => {
+      userInTeacherMode = org.login === missionRepoData.repoOwner;
+    });
+    setIsTeacherMode(userInTeacherMode);
   }, [missionRepoData, octokit, handleEditorValueChange]);
 
   useEffect(() => {
