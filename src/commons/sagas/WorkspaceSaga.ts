@@ -22,7 +22,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
-import ListVisualizer from '../../features/listVisualizer/ListVisualizer';
+import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
@@ -505,7 +505,7 @@ export default function* WorkspaceSaga(): SagaIterator {
             break;
         }
       }
-      ListVisualizer.clear();
+      DataVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;
@@ -612,7 +612,7 @@ export function* evalCode(
     inspectorUpdate(undefined); // effectively resets the interface
   }
 
-  // Logic for execution of substitution model visualiser
+  // Logic for execution of substitution model visualizer
   const substIsActive: boolean = yield select(
     (state: OverallState) => (state.playground as PlaygroundState).usingSubst
   );

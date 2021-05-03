@@ -2,10 +2,10 @@ import Konva from 'konva';
 import { Layer, Text } from 'react-konva';
 
 import { Config } from '../Config';
+import { Data, Pair } from '../dataVisualizerTypes';
+import { isArray, isFunction, toText } from '../dataVisualizerUtils';
 import { ArrowDrawable } from '../drawable/ArrowDrawable';
 import { BackwardArrowDrawable } from '../drawable/BackwardArrowDrawable';
-import { Data, Pair } from '../ListVisualizerTypes';
-import { isArray, isFunction, toText } from '../ListVisualizerUtils';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import {
   ArrayTreeNode,
@@ -16,7 +16,8 @@ import {
 } from './TreeNode';
 
 /**
- *  A tree object built based on a list or pair.
+ *  A tree object built based on the given Data, Function or Array of
+ *  data/functions/arrays.
  */
 export class Tree {
   private _rootNode: TreeNode;
@@ -195,8 +196,8 @@ class TreeDrawer {
           y: parentY + Config.BoxHeight / 2
         },
         to: {
-          x: drawnNode.drawableX! + Config.ArrowSpaceHorizontal,
-          y: drawnNode.drawableY! - Config.ArrowSpaceVertical
+          x: drawnNode.drawableX!,
+          y: drawnNode.drawableY!
         }
       };
 
@@ -214,9 +215,11 @@ class TreeDrawer {
           this.minY,
           drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
         );
-        arrow = <BackwardArrowDrawable {...arrowProps}></BackwardArrowDrawable>;
+        arrow = (
+          <BackwardArrowDrawable key={'Arrow (back)' + parentX + x + parentY + y} {...arrowProps} />
+        );
       } else {
-        arrow = <ArrowDrawable {...arrowProps} />;
+        arrow = <ArrowDrawable key={'Arrow' + parentX + x + parentY + y} {...arrowProps} />;
       }
       this.drawables.push(arrow);
     }
