@@ -22,7 +22,7 @@ const sendRequest = (route: string) => async (
       ...requestDetails
     };
 
-    return fetch(Constants.backendUrl + `/v1/${route}/` + requestPath, config);
+    return fetch(Constants.backendUrl + `/v2/${route}/` + requestPath, config);
   } finally {
   }
 };
