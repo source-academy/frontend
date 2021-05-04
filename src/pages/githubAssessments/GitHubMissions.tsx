@@ -1,9 +1,26 @@
-import { Button, Card, Elevation, H4, H6, Icon, NonIdealState, Text } from '@blueprintjs/core';
+import {
+  Button,
+  Card,
+  Divider,
+  Elevation,
+  H4,
+  H6,
+  Icon,
+  NonIdealState,
+  Text
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import {
+  GitHubMissionCreateDialog,
+  GitHubMissionCreateDialogProps,
+  GitHubMissionCreateDialogResolution
+} from 'src/commons/githubAssessments/GitHubMissionCreateDialog';
+import { promisifyDialog } from 'src/commons/utils/DialogHelper';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -33,19 +50,50 @@ export const GitHubMissions: React.FC<any> = props => {
     convertMissionReposToBrowsableMissions(octokit, missionRepos);
   }, [octokit, missionRepos]);
 
-  let display: JSX.Element;
+  const openMissionCreator = async () => {
+    if (octokit === undefined) showWarningMessage('Please log in and try again', 2000);
+    else
+      await promisifyDialog<GitHubMissionCreateDialogProps, GitHubMissionCreateDialogResolution>(
+        GitHubMissionCreateDialog,
+        resolve => ({
+          octokit,
+          resolveDialog: dialogResults => resolve(dialogResults)
+        })
+      );
+  };
+
+  const controls = (
+    <div className="GridControls ground-control-controls">
+      <Button icon={IconNames.CLOUD_UPLOAD} onClick={openMissionCreator}>
+        <span className="hidden-xs">Create a new mission</span>
+      </Button>
+      <Button icon={IconNames.REFRESH} onClick={getGitHubOctokitInstance}>
+        <span className="hidden-xs">Refresh missions</span>
+      </Button>
+    </div>
+  );
+
+  let missions: JSX.Element;
   if (octokit === undefined) {
-    display = (
+    missions = (
       <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
     );
   } else if (missionRepos.length === 0) {
-    display = <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
+    missions = <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
   } else {
     const cards = browsableMissions.map(element =>
       convertMissionToCard(element, octokit, isMobileBreakpoint)
     );
-    display = <>{cards}</>;
+    missions = <>{cards}</>;
   }
+
+  const display = (
+    <div className="GroundControl">
+      {controls}
+      <Divider />
+      {missions}
+    </div>
+  );
 
   // Finally, render the ContentDisplay.
   return (

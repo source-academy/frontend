@@ -170,9 +170,14 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     handleEditorValueChange(missionData.tasksData[0].savedCode);
 
     let userInTeacherMode = false;
-    (await octokit.orgs.listForAuthenticatedUser()).data.forEach(org => {
+    const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
+    for (let i = 0; i < userOrganisations.length; i++) {
+      const org = userOrganisations[i];
       userInTeacherMode = org.login === missionRepoData.repoOwner;
-    });
+      if (userInTeacherMode) {
+        break;
+      }
+    }
     setIsTeacherMode(userInTeacherMode);
   }, [missionRepoData, octokit, handleEditorValueChange]);
 
