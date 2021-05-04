@@ -38,7 +38,8 @@ export const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps>
   return (
     <div ref={node}>
       {editorModeOn ? (
-        <textarea onChange={onEditorChange}>{props.content}</textarea>
+        <textarea onChange={onEditorChange} defaultValue={props.content} />
+        //<textarea onChange={onEditorChange} defaultValue=''>{props.content}</textarea>
       ) : (
         <Markdown content={props.content} openLinksInNewWindow={true} />
       )}
