@@ -176,7 +176,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       userInTeacherMode = org.login === missionRepoData.repoOwner;
       if (userInTeacherMode) {
         break;
-      } 
+      }
     }
     setIsTeacherMode(userInTeacherMode);
   }, [missionRepoData, octokit, handleEditorValueChange]);
@@ -203,6 +203,50 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     [taskList]
   );
 
+  const conductSave = useCallback(
+    async (
+      changedFile: string,
+      newFileContent: string,
+      githubName: string | null,
+      githubEmail: string | null,
+      commitMessage: string
+    ) => {
+      const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
+        octokit,
+        missionRepoData.repoOwner,
+        missionRepoData.repoName,
+        changedFile
+      );
+
+      if (saveType === 'Overwrite') {
+        await performOverwritingSave(
+          octokit,
+          missionRepoData.repoOwner,
+          missionRepoData.repoName,
+          changedFile,
+          githubName,
+          githubEmail,
+          commitMessage,
+          newFileContent
+        );
+      }
+
+      if (saveType === 'Create') {
+        await performCreatingSave(
+          octokit,
+          missionRepoData.repoOwner,
+          missionRepoData.repoName,
+          changedFile,
+          githubName,
+          githubEmail,
+          commitMessage,
+          newFileContent
+        );
+      }
+    },
+    [missionRepoData.repoOwner, missionRepoData.repoName, octokit]
+  );
+
   const onClickSave = useCallback(async () => {
     if (missionRepoData === undefined) {
       showWarningMessage("You can't save without a mission open!", 2000);
@@ -214,16 +258,21 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       return;
     }
 
-    const changedTasks: number[] = [];
-    const changedFiles: string[] = [];
+    const filenameToContentMap = {};
 
     for (let i = 0; i < taskList.length; i++) {
+      const taskNumber = i + 1;
+
       if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-        const taskNumber = i + 1;
-        changedTasks.push(taskNumber);
-        changedFiles.push('Q' + taskNumber + '/SavedCode.js');
+        filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = getEditedCode(taskNumber);
+      }
+
+      if (taskDescriptionList[i] !== cachedTaskList[i].taskDescription) {
+        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskDescriptionList[i];
       }
     }
+
+    const changedFiles = Object.keys(filenameToContentMap).sort();
 
     const dialogResults = await promisifyDialog<
       GitHubMissionSaveDialogProps,
@@ -244,42 +293,10 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
 
-    for (let i = 0; i < changedTasks.length; i++) {
-      const changedTask = changedTasks[i];
-      const changedFile = changedFiles[i];
-
-      const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
-        octokit,
-        missionRepoData.repoOwner,
-        missionRepoData.repoName,
-        changedFile
-      );
-
-      if (saveType === 'Overwrite') {
-        await performOverwritingSave(
-          octokit,
-          missionRepoData.repoOwner,
-          missionRepoData.repoName,
-          changedFile,
-          githubName,
-          githubEmail,
-          commitMessage,
-          getEditedCode(changedTask)
-        );
-      }
-
-      if (saveType === 'Create') {
-        await performCreatingSave(
-          octokit,
-          missionRepoData.repoOwner,
-          missionRepoData.repoName,
-          changedFile,
-          githubName,
-          githubEmail,
-          commitMessage,
-          getEditedCode(changedTask)
-        );
-      }
+    for (let i = 0; i < changedFiles.length; i++) {
+      const filename = changedFiles[i];
+      const newFileContent = filenameToContentMap[filename];
+      await conductSave(filename, newFileContent, githubName, githubEmail, commitMessage);
     }
 
     setCachedTaskList(
@@ -287,7 +304,15 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
         taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
       )
     );
-  }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
+  }, [
+    cachedTaskList,
+    conductSave,
+    getEditedCode,
+    missionRepoData,
+    octokit,
+    taskDescriptionList,
+    taskList
+  ]);
 
   const onClickReset = useCallback(async () => {
     const confirmReset = await showSimpleConfirmDialog({
