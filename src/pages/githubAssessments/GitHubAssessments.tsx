@@ -138,6 +138,9 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
   );
+  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(
+    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
+  );
 
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
@@ -156,6 +159,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
+    setCachedBriefingContent(missionData.missionBriefing);
 
     setTaskList(missionData.tasksData);
     setCachedTaskList(
@@ -260,6 +264,10 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
 
     const filenameToContentMap = {};
 
+    if (briefingContent !== cachedBriefingContent) {
+      filenameToContentMap['README.md'] = briefingContent;
+    }
+
     for (let i = 0; i < taskList.length; i++) {
       const taskNumber = i + 1;
 
@@ -304,12 +312,17 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
         taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
       )
     );
+
+    setCachedBriefingContent(briefingContent);
   }, [
+    briefingContent,
+    cachedBriefingContent,
     cachedTaskList,
     conductSave,
     getEditedCode,
     missionRepoData,
     octokit,
+    setCachedBriefingContent,
     taskDescriptionList,
     taskList
   ]);
