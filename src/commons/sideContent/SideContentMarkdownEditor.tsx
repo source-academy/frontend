@@ -3,17 +3,23 @@ import React, { useEffect } from 'react';
 import Markdown from '../Markdown';
 
 export type SideContentMarkdownEditorProps = {
+  allowEdits: boolean;
   content: string;
   setContent: (content: string) => void;
 };
 
 export const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps> = props => {
   const [editorModeOn, setEditorModeOn] = React.useState(false);
+  const allowEdits = props.allowEdits;
 
   const node = React.useRef() as any;
 
   useEffect(() => {
     function handleClick(event: any) {
+      if (!allowEdits) {
+        return;
+      }
+
       if (node.current && !node.current.contains(event.target)) {
         setEditorModeOn(false);
       }
@@ -27,7 +33,7 @@ export const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps>
     return () => {
       document.removeEventListener('mousedown', handleClick);
     };
-  }, []);
+  }, [allowEdits]);
 
   return (
     <div ref={node}>

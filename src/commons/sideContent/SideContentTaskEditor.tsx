@@ -3,6 +3,7 @@ import React from 'react';
 import { SideContentMarkdownEditor } from './SideContentMarkdownEditor';
 
 export type SideContentTaskEditorProps = {
+  allowEdits: boolean;
   currentTaskNumber: number;
   taskDescriptions: any[];
   setTaskDescriptions: (newList: any[]) => void;
@@ -22,7 +23,6 @@ export const SideContentTaskEditor: React.FC<SideContentTaskEditorProps> = props
 
   const taskBriefingSetter = React.useCallback(
     (newDescription: string) => {
-
       if (indexOutOfRange) {
         return;
       }
@@ -36,7 +36,11 @@ export const SideContentTaskEditor: React.FC<SideContentTaskEditorProps> = props
 
   return (
     <div>
-      <SideContentMarkdownEditor content={taskBriefing} setContent={taskBriefingSetter} />
+      <SideContentMarkdownEditor
+        allowEdits={props.allowEdits}
+        content={taskBriefing}
+        setContent={taskBriefingSetter}
+      />
     </div>
   );
 };

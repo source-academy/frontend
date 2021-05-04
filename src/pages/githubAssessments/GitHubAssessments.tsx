@@ -507,6 +507,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       iconName: IconNames.NINJA,
       body: (
         <SideContentTaskEditor
+          allowEdits={isTeacherMode}
           currentTaskNumber={currentTaskNumber}
           taskDescriptions={taskDescriptionList}
           setTaskDescriptions={setTaskDescriptionList}
@@ -519,7 +520,13 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     tabs.push({
       label: 'Briefing',
       iconName: IconNames.BRIEFCASE,
-      body: <SideContentMarkdownEditor content={briefingContent} setContent={setBriefingContent} />,
+      body: (
+        <SideContentMarkdownEditor
+          allowEdits={isTeacherMode}
+          content={briefingContent}
+          setContent={setBriefingContent}
+        />
+      ),
       id: SideContentType.missionBriefing,
       toSpawn: () => true
     });
