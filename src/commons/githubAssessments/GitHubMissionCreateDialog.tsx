@@ -158,8 +158,6 @@ export const GitHubMissionCreateDialog: React.FC<GitHubMissionCreateDialogProps>
   async function PopulateRepository() {
     const userName = (await props.octokit.users.getAuthenticated()).data.login;
     const metadata = compileMetadata();
-    console.log(userName);
-    console.log(metadata);
     await props.octokit.repos.createOrUpdateFileContents({
       owner: userName,
       repo: repoName,
