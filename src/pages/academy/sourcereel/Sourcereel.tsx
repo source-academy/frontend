@@ -12,9 +12,9 @@ import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarCle
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
+import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
-import SideContentListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -338,7 +338,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
             id: SideContentType.introduction,
             toSpawn: () => true
           },
-          listVisualizerTab,
+          dataVisualizerTab,
           inspectorTab,
           envVisualizerTab
         ],
@@ -392,11 +392,11 @@ class Sourcereel extends React.Component<SourcereelProps> {
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
 
-const listVisualizerTab: SideContentTab = {
+const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <SideContentListVisualizer />,
-  id: SideContentType.dataVisualiser,
+  body: <SideContentDataVisualizer />,
+  id: SideContentType.dataVisualizer,
   toSpawn: () => true
 };
 

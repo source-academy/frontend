@@ -2,8 +2,8 @@ import React from 'react';
 import { Group, Line, Rect, Text } from 'react-konva';
 
 import { Config } from '../Config';
-import ListVisualizer from '../ListVisualizer';
-import { isEmptyList, isList, toText } from '../ListVisualizerUtils';
+import DataVisualizer from '../dataVisualizer';
+import { isEmptyList, isList, toText } from '../dataVisualizerUtils';
 import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './NullDrawable';
 
@@ -22,7 +22,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
       const nodeValue = node.data;
       if (!isList(nodeValue)) {
         const textValue: string | undefined = toText(nodeValue);
-        const textToDisplay = textValue ?? '*' + ListVisualizer.displaySpecialContent(node);
+        const textToDisplay = textValue ?? '*' + DataVisualizer.displaySpecialContent(node);
         return (
           <Text
             key={'' + nodeValue + index}
@@ -33,6 +33,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
             y={Math.floor((Config.BoxHeight - 1.2 * 12) / 2)}
             fontStyle={textValue === undefined ? 'italic' : 'normal'}
             fill={'white'}
+            preventDefault={false}
           />
         );
       } else if (isEmptyList(nodeValue)) {
@@ -55,6 +56,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
           fill={'#17181A'}
+          preventDefault={false}
         />
         {/* Vertical lines in the box */}
         {Array.from(Array(this.props.nodes.length - 1), (e, i) => {
@@ -64,6 +66,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
               points={[Config.BoxWidth * (i + 1), 0, Config.BoxWidth * (i + 1), Config.BoxHeight]}
               strokeWidth={Config.StrokeWidth}
               stroke={Config.Stroke}
+              preventDefault={false}
             />
           );
         })}

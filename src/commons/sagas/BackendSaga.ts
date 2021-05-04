@@ -59,7 +59,6 @@ import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/Au
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
-  changeDateAssessment,
   deleteAssessment,
   deleteSourcecastEntry,
   getAssessment,
@@ -82,7 +81,7 @@ import {
   postSourcecast,
   postSublanguage,
   postUnsubmit,
-  publishAssessment,
+  updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
@@ -530,7 +529,7 @@ function* BackendSaga(): SagaIterator {
       const closeAt = action.payload.closeAt;
       const openAt = action.payload.openAt;
 
-      const resp: Response | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
+      const resp: Response | null = yield updateAssessment(id, { openAt, closeAt }, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -563,7 +562,11 @@ function* BackendSaga(): SagaIterator {
       const id = action.payload.id;
       const togglePublishTo = action.payload.togglePublishTo;
 
-      const resp: Response | null = yield publishAssessment(id, togglePublishTo, tokens);
+      const resp: Response | null = yield updateAssessment(
+        id,
+        { isPublished: togglePublishTo },
+        tokens
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
