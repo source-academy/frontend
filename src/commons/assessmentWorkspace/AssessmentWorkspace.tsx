@@ -334,8 +334,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     questionId: number
   ) => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
-    // first question of contest voting assessment is voting.
-    const isContestVoting = props.assessment!.questions[0]?.type === 'voting';
+    const isContestVoting = props.assessment!.questions[questionId]?.type === 'voting';
     const handleContestEntryClick = (submissionId: number, answer: string) => {
       props.handleEditorValueChange(answer);
     };
