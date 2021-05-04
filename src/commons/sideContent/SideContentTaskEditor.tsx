@@ -1,25 +1,42 @@
 import React from 'react';
 
-import TaskData from '../githubAssessments/TaskData';
 import { SideContentMarkdownEditor } from './SideContentMarkdownEditor';
 
 export type SideContentTaskEditorProps = {
   currentTaskNumber: number;
-  tasks: TaskData[];
+  taskDescriptions: any[];
+  setTaskDescriptions: (newList: any[]) => void;
 };
 
 export const SideContentTaskEditor: React.FC<SideContentTaskEditorProps> = props => {
   const taskIndex = props.currentTaskNumber - 1;
-  const useDefaultDescription =
-    taskIndex < 0 || taskIndex >= props.tasks.length || props.tasks.length === 0;
+  const taskDescriptions = props.taskDescriptions;
+  const setTaskDescriptions = props.setTaskDescriptions;
 
-  const taskBriefing = useDefaultDescription
+  const indexOutOfRange =
+    taskIndex < 0 || taskIndex >= taskDescriptions.length || taskDescriptions.length === 0;
+
+  const taskBriefing = indexOutOfRange
     ? 'Welcome to Mission Mode! This is where the Task Briefing for each question will appear!'
-    : props.tasks[props.currentTaskNumber - 1].taskDescription;
+    : taskDescriptions[taskIndex];
+
+  const taskBriefingSetter = React.useCallback(
+    (newDescription: string) => {
+
+      if (indexOutOfRange) {
+        return;
+      }
+
+      const newTaskDescriptions = taskDescriptions.map(desc => desc);
+      newTaskDescriptions[taskIndex] = newDescription;
+      setTaskDescriptions(newTaskDescriptions);
+    },
+    [setTaskDescriptions, taskDescriptions, taskIndex, indexOutOfRange]
+  );
 
   return (
     <div>
-      <SideContentMarkdownEditor content={taskBriefing} />
+      <SideContentMarkdownEditor content={taskBriefing} setContent={taskBriefingSetter} />
     </div>
   );
 };

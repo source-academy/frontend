@@ -138,8 +138,11 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
   );
+
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
+  const [taskDescriptionList, setTaskDescriptionList] = React.useState<string[]>([]);
+
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
 
@@ -153,12 +156,16 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
+
     setTaskList(missionData.tasksData);
     setCachedTaskList(
       missionData.tasksData.map(
         taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
       )
     );
+
+    setTaskDescriptionList(missionData.tasksData.map(taskData => taskData.taskDescription));
+
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
 
@@ -489,13 +496,22 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     return <ControlBarResetButton key="reset" onClick={onClickReset} />;
   }, [onClickReset]);
 
+  const sourceVariant = props.sourceVariant;
+  const sourceChapter = props.sourceChapter;
+
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
     tabs.push({
       label: 'Task',
       iconName: IconNames.NINJA,
-      body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
+      body: (
+        <SideContentTaskEditor
+          currentTaskNumber={currentTaskNumber}
+          taskDescriptions={taskDescriptionList}
+          setTaskDescriptions={setTaskDescriptionList}
+        />
+      ),
       id: SideContentType.missionTask,
       toSpawn: () => true
     });
@@ -503,7 +519,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     tabs.push({
       label: 'Briefing',
       iconName: IconNames.BRIEFCASE,
-      body: <SideContentMarkdownEditor content={briefingContent} />,
+      body: <SideContentMarkdownEditor content={briefingContent} setContent={setBriefingContent} />,
       id: SideContentType.missionBriefing,
       toSpawn: () => true
     });
@@ -512,14 +528,23 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       tabs.push({
         label: 'Editor',
         iconName: IconNames.AIRPLANE,
-        body: <SideContentMissionEditor {...props} />,
+        body: (
+          <SideContentMissionEditor sourceChapter={sourceChapter} sourceVariant={sourceVariant} />
+        ),
         id: SideContentType.githubAssessments,
         toSpawn: () => true
       });
     }
 
     return tabs;
-  }, [taskList, currentTaskNumber, briefingContent]);
+  }, [
+    currentTaskNumber,
+    briefingContent,
+    isTeacherMode,
+    sourceVariant,
+    sourceChapter,
+    taskDescriptionList
+  ]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs];
