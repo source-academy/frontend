@@ -48,7 +48,7 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
         <Pre className="contestentry-rank">
           <NumericInput
             disabled={!canSave}
-            value={contestEntry.score}
+            value={contestEntry.rank}
             onValueChange={(rank: number) =>
               handleVotingSubmissionChange(contestEntry.submission_id, rank)
             }

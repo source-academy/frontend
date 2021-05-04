@@ -123,6 +123,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
    * XOR `props.mcq` are defined.
    */
   const createWorkspaceInput = (props: WorkspaceProps) => {
+    // TODO: trace missing MCQ bug
     if (props.customEditor) {
       return props.customEditor;
     } else if (props.editorProps) {

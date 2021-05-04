@@ -55,7 +55,7 @@ import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/Mob
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
-// import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
+import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
@@ -373,22 +373,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       }
     ];
 
-    // if (props.canSave) {
-    //   contestVotingTabs.push(
-    //     // WIP: will not be spawned till backend supports it
-    //     {
-    //       label: 'Contest Leaderboard',
-    //       iconName: IconNames.CROWN,
-    //       body: (
-    //         <SideContentContestLeaderboard
-    //           handleContestEntryClick={handleContestEntryClick}
-    //           orderedContestEntries={dummyEntries}
-    //         />
-    //       ),
-    //       toSpawn: () => false
-    //     }
-    //   );
-    // }
+    if (props.canSave) {
+      contestVotingTabs.push({
+        label: 'Contest Leaderboard',
+        iconName: IconNames.CROWN,
+        body: (
+          <SideContentContestLeaderboard
+            handleContestEntryClick={handleContestEntryClick}
+            orderedContestEntries={contestVotingQuestion?.contestLeaderboard ?? []}
+          />
+        ),
+        toSpawn: () => false
+      });
+    }
 
     const defaultTabs: SideContentTab[] = [
       {

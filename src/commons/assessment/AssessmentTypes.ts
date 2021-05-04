@@ -118,6 +118,7 @@ export interface IMCQQuestion extends BaseQuestion {
 export interface IContestVotingQuestion extends BaseQuestion {
   answer: ContestEntry[];
   contestEntries: ContestEntry[];
+  contestLeaderboard: ContestEntry[];
   type: 'voting';
 }
 
@@ -167,7 +168,8 @@ export type Testcase = {
 export type ContestEntry = {
   submission_id: number;
   answer: ContestEntestCodeAnswer; //contest entry program to be input into editor
-  score?: number;
+  rank?: number;
+  student_name?: string;
 };
 
 export type ContestEntestCodeAnswer = {

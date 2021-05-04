@@ -6,12 +6,12 @@ const mockContestEntries = [
   {
     submission_id: 1,
     answer: { code: "display('hello world')" },
-    score: 1
+    rank: 1
   },
   {
     submission_id: 2,
     answer: { code: 'function test() { return 1; }' },
-    score: 2
+    rank: 2
   }
 ];
 
@@ -40,14 +40,14 @@ const mockPropsSubmitted = {
     {
       submission_id: 1,
       answer: { code: "display('hello world')" },
-      score: 1
+      rank: 1
     },
     {
       submission_id: 2,
       answer: { code: 'function test() { return 1; }' },
-      score: 2
+      rank: 2
     },
-    { submission_id: 3, answer: { code: '' } }
+    { submission_id: 3, answer: { code: '' }, rank: 3 }
   ]
 };
 

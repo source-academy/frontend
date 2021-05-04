@@ -36,24 +36,24 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
    */
   const isSubmissionValid = (votingSubmission: ContestEntry[]) => {
     return votingSubmission.reduce((isValid, vote) => {
-      return isValid && vote.score! >= 1 && vote.score! <= contestEntries.length;
+      return isValid && vote.rank! >= 1 && vote.rank! <= contestEntries.length;
     }, true);
   };
 
   const submissionHasNoNull = (votingSubmission: ContestEntry[]) => {
     return votingSubmission.reduce((hasNull, vote) => {
-      return hasNull && vote.score !== undefined && vote.score !== null;
+      return hasNull && vote.rank !== undefined && vote.rank !== null;
     }, true);
   };
 
   const handleVotingSubmissionChange = (submissionId: number, rank: number): void => {
     // update the votes
     const updatedSubmission = votingSubmission.map(vote =>
-      vote.submission_id === submissionId ? { ...vote, score: rank } : vote
+      vote.submission_id === submissionId ? { ...vote, rank: rank } : vote
     );
     setVotingSubmission(updatedSubmission);
     const noDuplicates =
-      new Set(updatedSubmission.map(vote => vote.score)).size === updatedSubmission.length;
+      new Set(updatedSubmission.map(vote => vote.rank)).size === updatedSubmission.length;
     // validate that scores are unique
     const noNull = submissionHasNoNull(updatedSubmission);
     if (noDuplicates && noNull && isSubmissionValid(updatedSubmission)) {

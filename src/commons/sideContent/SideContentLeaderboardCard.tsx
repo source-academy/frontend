@@ -27,7 +27,7 @@ const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboard
           handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
         }
       >
-        <Pre className="contestentry-entryid">{contestEntry.submission_id}</Pre>
+        <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
         <Pre className="contestentry-rank">{rank}</Pre>
       </Card>
     </div>
