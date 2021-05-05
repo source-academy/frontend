@@ -153,9 +153,14 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     setBriefingContent(missionData.missionBriefing);
     setTaskList(missionData.tasksData);
     setCachedTaskList(
-      missionData.tasksData.map(
-        taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
-      )
+      missionData.tasksData.map(taskData => {
+        const taskDataCopy: TaskData = {
+          taskDescription: taskData.taskDescription,
+          starterCode: taskData.starterCode,
+          savedCode: taskData.savedCode
+        };
+        return taskDataCopy;
+      })
     );
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
@@ -263,9 +268,14 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     }
 
     setCachedTaskList(
-      taskList.map(
-        taskData => new TaskData(taskData.taskDescription, taskData.starterCode, taskData.savedCode)
-      )
+      taskList.map(taskData => {
+        const taskDataCopy: TaskData = {
+          taskDescription: taskData.taskDescription,
+          starterCode: taskData.starterCode,
+          savedCode: taskData.savedCode
+        };
+        return taskDataCopy;
+      })
     );
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
