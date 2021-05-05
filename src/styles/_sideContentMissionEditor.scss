@@ -1,4 +1,4 @@
-.Mission {
+.SideContentMissionEditor {
   height: 100%;
   display: flex;
   background-color: $cadet-color-1;
@@ -13,23 +13,17 @@
     }
   }
 
-  .MissionEditorRow {
+  .SideContentMissionEditorRow {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
   }
 
-  .MissionEditorColumn {
+  .SideContentMissionEditorColumn {
     display: flex;
     flex-direction: column;
     flex-basis: 100%;
     flex: 1;
-
-    .MissionEditorLeftColumn {
-    }
-
-    .MissionEditorRightColumn {
-    }
   }
 }
