@@ -21,7 +21,6 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { store } from '../../pages/createStore';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -118,8 +117,6 @@ const FileExplorerDialog: React.FC<any> = props => {
         filePath
       );
 
-      const content = store.getState().workspaces.playground.editorValue;
-
       if (canBeSaved) {
         if (saveType === 'Overwrite' && (await checkIfUserAgreesToPerformOverwritingSave())) {
           performOverwritingSave(
@@ -130,7 +127,7 @@ const FileExplorerDialog: React.FC<any> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            content
+            props.editorContent
           );
         }
 
@@ -143,7 +140,7 @@ const FileExplorerDialog: React.FC<any> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            content
+            props.editorContent
           );
         }
       }

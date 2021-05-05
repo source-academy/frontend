@@ -68,12 +68,15 @@ function* githubOpenFile() {
     onSubmit: resolve
   }));
 
+  const editorContent = '';
+
   if (repoName !== '') {
     const pickerType = 'Open';
     yield call(promisifyDialog, FileExplorerDialog, resolve => ({
       octokit,
       repoName,
       pickerType,
+      editorContent,
       onSubmit: resolve
     }));
   }
@@ -116,12 +119,15 @@ function* githubSaveFileAs() {
     onSubmit: resolve
   }));
 
+  const editorContent = store.getState().workspaces.playground.editorValue;
+
   if (repoName !== '') {
     const pickerType = 'Save';
     yield call(promisifyDialog, FileExplorerDialog, resolve => ({
       octokit,
       repoName,
       pickerType,
+      editorContent,
       onSubmit: resolve
     }));
   }
