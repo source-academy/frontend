@@ -1,6 +1,6 @@
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
 import { MissionMetadata } from '../MissionMetadata';
-import { MissionRepoData } from '../MissionRepoData';
+import MissionRepoData from '../MissionRepoData';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
   const content = await GitHubMissionDataUtils.getContentAsString(
@@ -56,8 +56,13 @@ test('parseMetadataProperties correctly discovers properties', () => {
 });
 
 test('getMissionData works properly', async () => {
+  const missionRepoData: MissionRepoData = {
+    repoOwner: 'Pain',
+    repoName: 'Peko',
+    dateOfCreation: new Date('December 17, 1995 03:24:00')
+  };
   const missionData = await GitHubMissionDataUtils.getMissionData(
-    {repoOwner: 'Pain', repoName: 'Peko', dateOfCreation: new Date('December 17, 1995 03:24:00')},
+    missionRepoData,
     new MocktokitB()
   );
 
