@@ -104,7 +104,7 @@ const Application: React.FC<ApplicationProps> = props => {
         />,
         loginPath
       ];
-  if (!Constants.playgroundOnly && !Constants.disableGameAndAchievements) {
+  if (!Constants.playgroundOnly && Constants.enableAchievements) {
     fullPaths?.push(<Route path="/achievement" render={toAchievement(props)} key={2} />);
   }
   const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;

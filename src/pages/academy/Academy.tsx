@@ -55,7 +55,7 @@ class Academy extends React.Component<AcademyProps> {
             )}/${assessmentRegExp}`}
             render={this.assessmentRenderFactory(AssessmentCategories.Contest)}
           />
-          {!Constants.disableGameAndAchievements && <Route path="/academy/game" component={Game} />}
+          {Constants.enableGame && <Route path="/academy/game" component={Game} />}
           <Route
             path={`/academy/${assessmentCategoryLink(
               AssessmentCategories.Mission
@@ -104,7 +104,7 @@ class Academy extends React.Component<AcademyProps> {
     if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
       return () => <Redirect to={lastAcademy!} />;
     } else {
-      return Constants.disableGameAndAchievements ? this.redirectToMissions : this.redirectToGame;
+      return Constants.enableGame ? this.redirectToGame : this.redirectToMissions;
     }
   };
 
