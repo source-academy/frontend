@@ -154,6 +154,20 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       <div>Playground</div>
     </NavLink>
 
+    <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link_mobile',
+        Classes.BUTTON,
+        Classes.MINIMAL,
+        Classes.LARGE
+      )}
+      to="/githubassessments/missions"
+      onClick={props.onClose}
+    >
+      <Icon icon={IconNames.BRIEFCASE} />
+      <div className="navbar-button-text">GitHub Assessments</div>
+    </NavLink>
+
     {props.role && (
       <NavLink
         activeClassName={Classes.ACTIVE}
