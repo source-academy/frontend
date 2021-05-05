@@ -1,4 +1,14 @@
-import { Button, Card, Elevation, H4, H6, Icon, NonIdealState, Text } from '@blueprintjs/core';
+import {
+  Button,
+  Card,
+  Elevation,
+  H4,
+  H6,
+  Icon,
+  NonIdealState,
+  Spinner,
+  Text
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
@@ -21,26 +31,26 @@ const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+  const [display, setDisplay] = useState<JSX.Element>(<></>);
 
   const octokit = getGitHubOctokitInstance();
 
   useEffect(() => {
-    retrieveBrowsableMissions(octokit, setBrowsableMissions);
-  }, [octokit]);
+    retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+  }, [octokit, setBrowsableMissions, setDisplay]);
 
-  let display: JSX.Element;
-  if (octokit === undefined) {
-    display = (
-      <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-    );
-  } else if (browsableMissions.length === 0) {
-    display = <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
-  } else {
-    const cards = browsableMissions.map(element =>
-      convertMissionToCard(element, octokit, isMobileBreakpoint)
-    );
-    display = <>{cards}</>;
-  }
+  useEffect(() => {
+    if (octokit === undefined) {
+      setDisplay(
+        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+      );
+    } else if (browsableMissions.length > 0) {
+      const cards = browsableMissions.map(element =>
+        convertMissionToCard(element, octokit, isMobileBreakpoint)
+      );
+      setDisplay(<>{cards}</>);
+    }
+  }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
 
   // Finally, render the ContentDisplay.
   return (
@@ -54,9 +64,17 @@ const GitHubMissionListing: React.FC<any> = () => {
 
 async function retrieveBrowsableMissions(
   octokit: Octokit,
-  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void
+  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
+  setDisplay: (display: JSX.Element) => void
 ) {
   if (octokit === undefined) return;
+
+  setDisplay(
+    <NonIdealState
+      description="Loading Missions."
+      icon={<Spinner size={Spinner.SIZE_LARGE} />}
+    />
+  );
 
   const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
   const correctlyNamedRepos = allRepos.filter((repo: any) => repo.name.startsWith('sa-'));
@@ -74,6 +92,7 @@ async function retrieveBrowsableMissions(
     ).data;
 
     if (!Array.isArray(files)) {
+      setDisplay(<NonIdealState title="There are no assessments." icon={IconNames.FLAME} />);
       return;
     }
 
