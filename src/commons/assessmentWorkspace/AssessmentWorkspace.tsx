@@ -737,7 +737,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       : props.questionId;
   const question: Question = props.assessment.questions[questionId];
   const editorProps =
-    question.type === QuestionTypes.programming || QuestionTypes.voting
+    question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorSessionId: '',
           editorValue: props.editorValue!,
