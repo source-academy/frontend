@@ -128,7 +128,7 @@ export async function getContentAsString(
       repo: repoName,
       path: filepath
     });
-  
+
     contentString = Buffer.from((fileInfo.data as any).content, 'base64').toString();
   } catch (err) {
     console.error(err);
