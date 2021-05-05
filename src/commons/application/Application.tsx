@@ -7,7 +7,7 @@ import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
 import GitHubAssessmentsContainer from '../../pages/githubAssessments/GitHubAssessmentsContainer';
-import { GitHubMissions } from '../../pages/githubAssessments/GitHubMissions';
+import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
@@ -145,7 +145,7 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
             <Route path="/githubassessments/editor" component={GitHubAssessmentsContainer} />
-            <Route path="/githubassessments/missions" component={GitHubMissions} />
+            <Route path="/githubassessments/missions" component={GitHubMissionListing} />
             <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
             <Route
