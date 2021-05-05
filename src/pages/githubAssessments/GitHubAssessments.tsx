@@ -16,9 +16,9 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
-import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -595,10 +595,9 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   };
 
   const taskView = (
-    <ControlBarTaskViewButton
+    <ControlBarQuestionViewButton
+      questionProgress={[currentTaskNumber, taskList.length]}
       key={'task_view'}
-      currentask={currentTaskNumber}
-      numOfTasks={taskList.length}
     />
   );
 
