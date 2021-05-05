@@ -103,7 +103,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
           )
         : starterCode;
 
-      const taskData = new TaskData(taskDescription, starterCode, savedCode);
+      const taskData = { taskDescription, starterCode, savedCode };
 
       questions.push(taskData);
     } catch (err) {
