@@ -63,9 +63,14 @@ export const GitHubMissions: React.FC<any> = () => {
     setMissionRepos(
       repos
         .filter((repo: any) => repo.name.startsWith('SA-'))
-        .map(
-          (repo: any) => new MissionRepoData(repo.owner.login, repo.name, repo.created_at)
-        ) as MissionRepoData[]
+        .map((repo: any) => {
+          const missionRepoData: MissionRepoData = {
+            repoOwner: repo.owner.login,
+            repoName: repo.name,
+            dateOfCreation: new Date(repo.created_at)
+          };
+          return missionRepoData;
+        }) as MissionRepoData[]
     );
   }
 
@@ -100,16 +105,26 @@ async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octok
   return browsableMission;
 }
 
-class BrowsableMission {
-  title: string = '';
-  coverImage: string = '';
-  webSummary: string = '';
-  missionRepoData: MissionRepoData = new MissionRepoData('', '', '');
-  dueDate: Date = new Date(8640000000000000);
-}
+type BrowsableMission = {
+  title: string;
+  coverImage: string;
+  webSummary: string;
+  missionRepoData: MissionRepoData;
+  dueDate: Date;
+};
 
 function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
-  const browsableMission = new BrowsableMission();
+  const browsableMission: BrowsableMission = {
+    title: '',
+    coverImage: '',
+    webSummary: '',
+    missionRepoData: {
+      repoOwner: '',
+      repoName: '',
+      dateOfCreation: new Date(8640000000000000)
+    },
+    dueDate: new Date(8640000000000000)
+  };
 
   browsableMission.missionRepoData = missionRepo;
 
