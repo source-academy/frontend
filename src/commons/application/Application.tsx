@@ -1,9 +1,9 @@
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
+import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
 import GitHubAssessmentsContainer from '../../pages/githubAssessments/GitHubAssessmentsContainer';
