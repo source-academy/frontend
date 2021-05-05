@@ -62,7 +62,7 @@ const GitHubMissionListing: React.FC<any> = () => {
     const repos = results.data;
     setMissionRepos(
       repos
-        .filter((repo: any) => repo.name.startsWith('SA-'))
+        .filter((repo: any) => repo.name.startsWith('sa-'))
         .map((repo: any) => {
           const missionRepoData: MissionRepoData = {
             repoOwner: repo.owner.login,
