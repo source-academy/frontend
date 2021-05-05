@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 
-import { MissionData } from './MissionData';
-import { MissionMetadata } from './MissionMetadata';
+import MissionData from './MissionData';
+import MissionMetadata from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
 import TaskData from './TaskData';
 
@@ -120,13 +120,21 @@ export async function getContentAsString(
   filepath: string,
   octokit: any
 ) {
-  const fileInfo = await octokit.repos.getContent({
-    owner: repoOwner,
-    repo: repoName,
-    path: filepath
-  });
+  let contentString = '';
 
-  return Buffer.from((fileInfo.data as any).content, 'base64').toString();
+  try {
+    const fileInfo = await octokit.repos.getContent({
+      owner: repoOwner,
+      repo: repoName,
+      path: filepath
+    });
+  
+    contentString = Buffer.from((fileInfo.data as any).content, 'base64').toString();
+  } catch (err) {
+    console.error(err);
+  }
+
+  return contentString;
 }
 
 function convertMetadataStringToMissionMetadata(metadataString: string) {
