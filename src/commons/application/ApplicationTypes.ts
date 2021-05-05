@@ -202,12 +202,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   ),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue:
-    workspaceLocation === 'playground' || 'sourcecast'
-      ? defaultEditorValue
-      : '' || 'githubAssessments'
-      ? defaultEditorValue
-      : '',
+  editorValue: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+    ? defaultEditorValue
+    : '',
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],

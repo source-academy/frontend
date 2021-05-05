@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 
-import MissionData from './MissionData';
-import MissionMetadata from './MissionMetadata';
+import { MissionData } from './MissionData';
+import { MissionMetadata } from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
 import TaskData from './TaskData';
 
@@ -30,14 +30,14 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
     octokit
   );
 
-  const retVal: MissionData = {
+  const newMissionData: MissionData = {
     missionRepoData: missionRepoData,
     missionBriefing: briefingString,
     missionMetadata: missionMetadata,
     tasksData: tasksData
   };
 
-  return retVal;
+  return newMissionData;
 }
 
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
@@ -103,11 +103,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
           )
         : starterCode;
 
-      const taskData: TaskData = {
-        taskDescription: taskDescription,
-        starterCode: starterCode,
-        savedCode: savedCode
-      };
+      const taskData = { taskDescription, starterCode, savedCode };
 
       questions.push(taskData);
     } catch (err) {

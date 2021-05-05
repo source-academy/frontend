@@ -17,7 +17,7 @@ import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
-export const GitHubMissions: React.FC<any> = props => {
+export const GitHubMissions: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [missionRepos, setMissionRepos] = useState<MissionRepoData[]>([]);

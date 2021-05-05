@@ -26,7 +26,7 @@ import {
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import MissionData from '../../commons/githubAssessments/MissionData';
+import { MissionData } from '../../commons/githubAssessments/MissionData';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
 import MobileWorkspace, {

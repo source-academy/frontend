@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
-import { GitHubAssessmentsWorkspaceState } from 'src/features/githubAssessments/GitHubAssessmentsTypes';
 
+import { GitHubAssessmentsWorkspaceState } from '../../features/githubAssessments/GitHubAssessmentsTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
