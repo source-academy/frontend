@@ -30,7 +30,14 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
     octokit
   );
 
-  return new MissionData(missionRepoData, briefingString, missionMetadata, tasksData);
+  const retVal: MissionData = {
+    missionRepoData: missionRepoData,
+    missionBriefing: briefingString,
+    missionMetadata: missionMetadata,
+    tasksData: tasksData
+  };
+
+  return retVal;
 }
 
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
