@@ -14,8 +14,8 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextTaskButton } from '../../commons/controlBar/ControlBarNextTaskButton';
-import { ControlBarPreviousTaskButton } from '../../commons/controlBar/ControlBarPreviousTaskButton';
+import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
 import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
@@ -594,14 +594,6 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
     replButtons: [replDisabled ? null : evalButton, clearButton]
   };
 
-  const prevTaskButton = (
-    <ControlBarPreviousTaskButton
-      key={'prev_button'}
-      onClickPrevious={onClickPrevious}
-      currentTask={currentTaskNumber}
-    />
-  );
-
   const taskView = (
     <ControlBarTaskViewButton
       key={'task_view'}
@@ -611,11 +603,18 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   );
 
   const nextTaskButton = (
-    <ControlBarNextTaskButton
-      key={'next_button'}
+    <ControlBarNextButton
       onClickNext={onClickNext}
-      currentTask={currentTaskNumber}
-      numOfTasks={taskList.length}
+      questionProgress={[currentTaskNumber, taskList.length]}
+      key={'next_question'}
+    />
+  );
+
+  const prevTaskButton = (
+    <ControlBarPreviousButton
+      onClick={onClickPrevious}
+      questionProgress={[currentTaskNumber, taskList.length]}
+      key={'previous_question'}
     />
   );
 
