@@ -1,11 +1,13 @@
-export default class MissionMetadata {
-  coverImage: string = '';
-  kind: string = '';
-  number: string = '';
-  title: string = '';
-  sourceVersion: number = 1;
-  dueDate: Date = new Date(8640000000000000);
+type MissionMetadata = {
+  coverImage: string;
+  kind: string;
+  number: string;
+  title: string;
+  sourceVersion: number;
+  dueDate: Date;
 
-  reading: string = '';
-  webSummary: string = '';
+  reading: string;
+  webSummary: string;
 }
+
+export default MissionMetadata;
