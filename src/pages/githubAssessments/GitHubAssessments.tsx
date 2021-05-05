@@ -128,7 +128,7 @@ function handleHash(hash: string, props: GitHubAssessmentsProps) {
 
 const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.missionTask);
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
@@ -314,7 +314,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       (selectedTab === SideContentType.mobileEditor ||
         selectedTab === SideContentType.mobileEditorRun)
     ) {
-      setSelectedTab(SideContentType.missionTask);
+      setSelectedTab(SideContentType.questionOverview);
       props.handleActiveTabChange(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
@@ -498,7 +498,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       label: 'Task',
       iconName: IconNames.NINJA,
       body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
-      id: SideContentType.missionTask,
+      id: SideContentType.questionOverview,
       toSpawn: () => true
     });
 
@@ -506,7 +506,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
       label: 'Briefing',
       iconName: IconNames.BRIEFCASE,
       body: <SideContentMarkdownEditor content={briefingContent} />,
-      id: SideContentType.missionBriefing,
+      id: SideContentType.briefing,
       toSpawn: () => true
     });
 
