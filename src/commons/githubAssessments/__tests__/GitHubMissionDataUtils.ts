@@ -1,5 +1,5 @@
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
-import { MissionMetadata } from '../MissionMetadata';
+import MissionMetadata from '../MissionMetadata';
 import MissionRepoData from '../MissionRepoData';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
