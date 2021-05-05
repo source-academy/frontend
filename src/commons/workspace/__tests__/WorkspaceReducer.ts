@@ -62,7 +62,7 @@ const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
-const githubAssessmentsWorkspace: WorkspaceLocation = 'githubAssessments';
+const githubAssessmentWorkspace: WorkspaceLocation = 'githubAssessment';
 
 function generateActions(type: string, payload: any = {}): any[] {
   return [
@@ -105,7 +105,7 @@ function generateActions(type: string, payload: any = {}): any[] {
       type,
       payload: {
         ...payload,
-        workspaceLocation: githubAssessmentsWorkspace
+        workspaceLocation: githubAssessmentWorkspace
       }
     }
   ];
@@ -133,8 +133,8 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
       ...defaultWorkspaceManager.sourcereel,
       ...payload
     },
-    githubAssessments: {
-      ...defaultWorkspaceManager.githubAssessments,
+    githubAssessment: {
+      ...defaultWorkspaceManager.githubAssessment,
       ...payload
     }
   };
