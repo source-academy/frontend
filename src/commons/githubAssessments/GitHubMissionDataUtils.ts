@@ -130,15 +130,15 @@ export async function getContentAsString(
 }
 
 function convertMetadataStringToMissionMetadata(metadataString: string) {
-  const missionMetadata : MissionMetadata = {
-    coverImage: "",
-    kind: "",
-    number: "",
-    title: "",
+  const missionMetadata: MissionMetadata = {
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
     sourceVersion: 1,
-    dueDate: new Date(8640000000000000),  
-    reading: "",
-    webSummary: ""
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
   };
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
