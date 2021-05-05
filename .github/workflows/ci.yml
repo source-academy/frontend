@@ -37,6 +37,9 @@ jobs:
         yarn run eslint
         yarn run build
         yarn run test-coveralls
+      env:
+        REACT_APP_ENABLE_GAME: "TRUE"
+        REACT_APP_ENABLE_ACHIEVEMENTS: "TRUE"
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
