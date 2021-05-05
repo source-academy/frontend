@@ -1,6 +1,5 @@
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
 import MissionMetadata from '../MissionMetadata';
-import MissionRepoData from '../MissionRepoData';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
   const content = await GitHubMissionDataUtils.getContentAsString(
@@ -13,7 +12,16 @@ test('getContentAsString correctly gets content and translates from Base64 to ut
 });
 
 test('parseMetadataProperties correctly discovers properties', () => {
-  const missionMetadata = new MissionMetadata();
+  const missionMetadata: MissionMetadata = {
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
+    sourceVersion: 1,
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
+  };
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];
@@ -48,7 +56,11 @@ test('parseMetadataProperties correctly discovers properties', () => {
 
 test('getMissionData works properly', async () => {
   const missionData = await GitHubMissionDataUtils.getMissionData(
-    new MissionRepoData('Pain', 'Peko', 'Peko'),
+    {
+      repoOwner: 'Pain',
+      repoName: 'Peko',
+      dateOfCreation: new Date(8640000000000000)
+    },
     new MocktokitB()
   );
 

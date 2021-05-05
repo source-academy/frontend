@@ -30,7 +30,14 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
     octokit
   );
 
-  return new MissionData(missionRepoData, briefingString, missionMetadata, tasksData);
+  const retVal: MissionData = {
+    missionRepoData: missionRepoData,
+    missionBriefing: briefingString,
+    missionMetadata: missionMetadata,
+    tasksData: tasksData
+  };
+
+  return retVal;
 }
 
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
@@ -96,7 +103,11 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
           )
         : starterCode;
 
-      const taskData = new TaskData(taskDescription, starterCode, savedCode);
+      const taskData: TaskData = {
+        taskDescription: taskDescription,
+        starterCode: starterCode,
+        savedCode: savedCode
+      };
 
       questions.push(taskData);
     } catch (err) {
@@ -123,7 +134,16 @@ export async function getContentAsString(
 }
 
 function convertMetadataStringToMissionMetadata(metadataString: string) {
-  const missionMetadata = new MissionMetadata();
+  const missionMetadata: MissionMetadata = {
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
+    sourceVersion: 1,
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
+  };
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];
