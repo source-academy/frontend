@@ -30,7 +30,12 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
     octokit
   );
 
-  const newMissionData: MissionData = {missionRepoData: missionRepoData, missionBriefing: briefingString, missionMetadata: missionMetadata, tasksData: tasksData}
+  const newMissionData: MissionData = {
+    missionRepoData: missionRepoData,
+    missionBriefing: briefingString,
+    missionMetadata: missionMetadata,
+    tasksData: tasksData
+  };
 
   return newMissionData;
 }
@@ -125,7 +130,16 @@ export async function getContentAsString(
 }
 
 function convertMetadataStringToMissionMetadata(metadataString: string) {
-  const missionMetadata: MissionMetadata = {coverImage: '', kind: '', number: '', title: '', sourceVersion: 1, dueDate: new Date(8640000000000000), reading: '', webSummary: ''};
+  const missionMetadata: MissionMetadata = {
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
+    sourceVersion: 1,
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
+  };
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];

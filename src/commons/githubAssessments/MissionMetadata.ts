@@ -8,4 +8,4 @@ export type MissionMetadata = {
 
   reading: string;
   webSummary: string;
-}
+};

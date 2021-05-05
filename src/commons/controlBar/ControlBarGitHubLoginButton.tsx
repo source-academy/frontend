@@ -26,7 +26,5 @@ export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonPr
     ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
     : controlButton('Log In', IconNames.GIT_BRANCH, props.onClickLogIn);
 
-  return (
-    <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>
-  );
+  return <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>;
 };

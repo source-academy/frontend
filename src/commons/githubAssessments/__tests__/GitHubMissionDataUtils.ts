@@ -1,5 +1,5 @@
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
-import MissionMetadata from '../MissionMetadata';
+import { MissionMetadata } from '../MissionMetadata';
 import MissionRepoData from '../MissionRepoData';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
@@ -13,7 +13,16 @@ test('getContentAsString correctly gets content and translates from Base64 to ut
 });
 
 test('parseMetadataProperties correctly discovers properties', () => {
-  const missionMetadata = new MissionMetadata();
+  const missionMetadata = {
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
+    sourceVersion: 1,
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
+  };
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];

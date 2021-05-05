@@ -7,4 +7,4 @@ export type MissionData = {
   missionBriefing: string;
   missionMetadata: MissionMetadata;
   tasksData: TaskData[];
-}
+};

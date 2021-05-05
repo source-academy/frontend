@@ -155,8 +155,9 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     </NavLink>
 
     <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link_mobile',
+      activeClassName={Classes.ACTIVE}
+      className={classNames(
+        'NavigationBar__link_mobile',
         Classes.BUTTON,
         Classes.MINIMAL,
         Classes.LARGE
