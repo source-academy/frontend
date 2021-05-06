@@ -118,6 +118,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
 
   const handleEditorValueChange = props.handleEditorValueChange;
+  const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
 
   const missionRepoData = props.location.state as MissionRepoData;
   const octokit = store.getState().session.githubOctokitInstance as Octokit;
@@ -302,8 +303,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     val => {
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
+
+      for (let i = 0; i < taskList.length; i++) {
+        if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
+          setHasUnsavedChanges(true);
+          return;
+        }
+      }
+
+      setHasUnsavedChanges(false);
     },
-    [currentTaskNumber, editCode, handleEditorValueChange]
+    [currentTaskNumber, editCode, handleEditorValueChange, taskList, cachedTaskList]
   );
 
   const onChangeTabs = (
@@ -380,7 +390,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
 
     const saveButton = (
-      <ControlButtonSaveButton hasUnsavedChanges={false} key="save" onClickSave={onClickSave} />
+      <ControlButtonSaveButton
+        hasUnsavedChanges={hasUnsavedChanges}
+        key="save"
+        onClickSave={onClickSave}
+      />
     );
 
     const handleChapterSelect = () => {};
