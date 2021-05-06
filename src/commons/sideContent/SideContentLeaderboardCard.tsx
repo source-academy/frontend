@@ -18,7 +18,6 @@ type StateProps = {
 const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboardCardProps> = props => {
   const { handleContestEntryClick, contestEntry, rank } = props;
 
-  // TODO: fix the CSS
   return (
     <div className={classNames('LeaderboardCard')}>
       <Card

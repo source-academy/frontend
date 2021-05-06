@@ -370,11 +370,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           />
         ),
         toSpawn: () => true
-      }
-    ];
-
-    if (props.canSave) {
-      contestVotingTabs.push({
+      },
+      {
         label: 'Contest Leaderboard',
         iconName: IconNames.CROWN,
         body: (
@@ -384,8 +381,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           />
         ),
         toSpawn: () => false
-      });
-    }
+      }
+    ];
 
     const defaultTabs: SideContentTab[] = [
       {
