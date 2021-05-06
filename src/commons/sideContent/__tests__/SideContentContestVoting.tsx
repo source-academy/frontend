@@ -1,3 +1,4 @@
+import { NumericInput } from '@blueprintjs/core';
 import { mount } from 'enzyme';
 
 import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
@@ -42,6 +43,19 @@ test('SideContentContestVotingContainer component renders correct number of entr
   expect(contestVotingContainerRender.find('SideContentContestEntryCard')).toHaveLength(
     mockContestEntries.length
   );
+});
+
+test('SideContentVotingContainer disabled once canSave == false', () => {
+  const mockProps = {
+    handleContestEntryClick: () => {},
+    handleSave: () => {},
+    canSave: false,
+    contestEntries: mockContestEntries
+  };
+
+  const contestVotingComponentRender = mount(<SideContentContestVotingContainer {...mockProps} />);
+  const contestVotingCards = contestVotingComponentRender.find(NumericInput);
+  contestVotingCards.map(card => expect(card.prop('disabled')).toBe(true));
 });
 
 // testing the ranking validation logic

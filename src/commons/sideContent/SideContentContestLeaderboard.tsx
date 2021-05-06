@@ -27,14 +27,23 @@ const columnHeader = (colClass: string, colTitle: string) => (
 );
 
 const contestEntryHeader = (
-  <div className="contestentries-header">
+  <div className="leaderboard-header">
     {columnHeader('header-entryid', 'Student Name')}
     {columnHeader('header-entryrank', 'Rank')}
+    {columnHeader('header-score', 'Score')}
   </div>
 );
 
 const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
 
+/**
+ * Renders the contest leaderboard entries as a SideContentTab for Contest Voting questions.
+ * Note that the prop is named 'orderedContestEntries' as the responsibility to sort
+ * in desc score order is left to the backend.
+ *
+ * @param props {orderedContestEntries: an ordered list by desc score of leaderboard entries to display,
+ *  handleContestEntryClick: displays contest entry answer in assessment workspace editor}
+ */
 const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestLeaderboardProps> = props => {
   const { orderedContestEntries, handleContestEntryClick } = props;
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);

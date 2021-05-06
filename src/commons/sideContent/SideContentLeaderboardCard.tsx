@@ -18,8 +18,9 @@ type StateProps = {
 const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboardCardProps> = props => {
   const { handleContestEntryClick, contestEntry, rank } = props;
 
+  // TODO: fix the CSS
   return (
-    <div className={classNames('ContestEntryCard')}>
+    <div className={classNames('LeaderboardCard')}>
       <Card
         className={Classes.INTERACTIVE}
         elevation={Elevation.ONE}
@@ -29,6 +30,7 @@ const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboard
       >
         <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
         <Pre className="contestentry-rank">{rank}</Pre>
+        <Pre className="contestentry-score">{contestEntry.score}</Pre>
       </Card>
     </div>
   );

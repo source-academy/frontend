@@ -169,6 +169,7 @@ export type ContestEntry = {
   submission_id: number;
   answer: ContestEntestCodeAnswer; //contest entry program to be input into editor
   rank?: number;
+  score?: number;
   student_name?: string;
 };
 

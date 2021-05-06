@@ -874,7 +874,8 @@ $code-color-error: #ff4444;
 
     .testcases-header,
     .results-header,
-    .contestentries-header {
+    .contestentries-header,
+    .leaderboard-header {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -933,6 +934,20 @@ $code-color-error: #ff4444;
       }
     }
 
+    .leaderboard-header {
+      .header-entryid {
+        width: 40%;
+      }
+
+      .header-entryrank {
+        width: 20%;
+      }
+
+      .header-score {
+        width: 40%;
+      }
+    }
+
     pre {
       color: $code-color-code;
     }
@@ -946,7 +961,8 @@ $code-color-error: #ff4444;
 
   .AutograderCard,
   .ResultCard,
-  .ContestEntryCard {
+  .ContestEntryCard,
+  .LeaderboardCard {
     /* Wrapper container (Blueprint Card) for each testcase and autograder result */
     /* Wrapper container for each Contest Entry Voting cards */
     .#{$ns}-card {
@@ -1010,6 +1026,26 @@ $code-color-error: #ff4444;
 
       .contestentry-rank {
         width: 45%;
+        text-align: center;
+      }
+    }
+  }
+
+  .LeaderboardCard {
+    /* Nested Blueprint Card component for Contest Entry Card */
+    .#{$ns}-card {
+      .contestentry-entryid {
+        width: 40%;
+        text-align: center;
+      }
+
+      .contestentry-rank {
+        width: 20%;
+        text-align: center;
+      }
+
+      .contestentry-score {
+        width: 40%;
         text-align: center;
       }
     }
