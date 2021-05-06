@@ -30,13 +30,12 @@ import {
 import MissionData from '../../commons/githubAssessments/MissionData';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
+import Markdown from '../../commons/Markdown';
 import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
-import { SideContentMarkdownEditor } from '../../commons/sideContent/SideContentMarkdownEditor';
-import { SideContentTaskEditor } from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
@@ -106,9 +105,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
   );
+  const [taskDescription, setTaskDescription] = React.useState(
+    'This is the description for the current task!'
+  );
+
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
@@ -123,6 +127,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
+    setTaskDescription(missionData.tasksData[0].taskDescription);
     setTaskList(missionData.tasksData);
     setCachedTaskList(
       missionData.tasksData.map(taskData => {
@@ -268,14 +273,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
+    setTaskDescription(taskList[newTaskNumber].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
+    setTaskDescription(taskList[newTaskNumber].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -321,14 +328,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       {
         label: 'Task',
         iconName: IconNames.NINJA,
-        body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
+        body: <Markdown content={taskDescription} />,
         id: SideContentType.questionOverview,
         toSpawn: () => true
       },
       {
         label: 'Briefing',
         iconName: IconNames.BRIEFCASE,
-        body: <SideContentMarkdownEditor content={briefingContent} />,
+        body: <Markdown content={briefingContent} />,
         id: SideContentType.briefing,
         toSpawn: () => true
       }
