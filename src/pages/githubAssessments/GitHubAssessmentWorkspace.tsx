@@ -484,7 +484,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   return (
-    <div className={classNames('Mission', Classes.DARK)}>
+    <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
       {isMobileBreakpoint ? (
         <MobileWorkspace {...mobileWorkspaceProps} />
       ) : (
