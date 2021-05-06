@@ -1,4 +1,4 @@
-import { Classes } from '@blueprintjs/core';
+import { Button, ButtonGroup, Card, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
@@ -20,6 +20,7 @@ import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBa
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
+import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -38,7 +39,7 @@ import MobileWorkspace, {
 import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
-import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
+import { promisifyDialog } from '../../commons/utils/DialogHelper';
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -105,6 +106,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     history.push('/githubassessments/missions');
   }
 
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
@@ -112,7 +115,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
-
+  const [summary, setSummary] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
   );
@@ -132,6 +135,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const loadMission = useCallback(async () => {
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
+    setSummary(missionData.missionBriefing);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
     setTaskDescription(missionData.tasksData[0].taskDescription);
@@ -154,6 +158,64 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     loadMission();
   }, [loadMission]);
 
+  /**
+   * After mounting show the briefing.
+   */
+  React.useEffect(() => {
+    if (summary !== '') setShowOverlay(true);
+  }, [summary]);
+
+  const overlay = (
+    <Dialog className="assessment-briefing" isOpen={showOverlay}>
+      <Card>
+        <Markdown content={summary} />
+        <Button
+          className="assessment-briefing-button"
+          onClick={() => setShowOverlay(false)}
+          text="Continue"
+        />
+      </Card>
+    </Dialog>
+  );
+
+  const closeOverlay = () => setShowResetTemplateOverlay(false);
+  const resetToTemplate = () => {
+    const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
+    handleEditorValueChange(originalCode);
+    editCode(currentTaskNumber, originalCode);
+  };
+  const resetTemplateOverlay = (
+    <Dialog
+      className="assessment-reset"
+      icon={IconNames.ERROR}
+      isCloseButtonShown={true}
+      isOpen={showResetTemplateOverlay}
+      onClose={closeOverlay}
+      title="Confirmation: Reset editor?"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <Markdown content="Are you sure you want to reset the template?" />
+        <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <ButtonGroup>
+          {controlButton('Cancel', null, closeOverlay, {
+            minimal: false
+          })}
+          {controlButton(
+            'Confirm',
+            null,
+            () => {
+              closeOverlay();
+              resetToTemplate();
+            },
+            { minimal: false, intent: Intent.DANGER }
+          )}
+        </ButtonGroup>
+      </div>
+    </Dialog>
+  );
+
   const getEditedCode = useCallback(
     (questionNumber: number) => {
       return taskList[questionNumber - 1].savedCode;
@@ -166,8 +228,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (questionNumber > taskList.length) {
         return;
       }
-
-      taskList[questionNumber - 1].savedCode = newValue;
+      const editedTaskList = taskList;
+      editedTaskList[questionNumber - 1].savedCode = newValue;
+      setTaskList(editedTaskList);
     },
     [taskList]
   );
@@ -263,31 +326,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
-  const onClickReset = useCallback(async () => {
-    const confirmReset = await showSimpleConfirmDialog({
-      title: 'Reset to template code',
-      contents: 'Are you sure you want to reset the template?',
-      positiveLabel: 'Confirm',
-      negativeLabel: 'Cancel'
-    });
-    if (confirmReset) {
-      const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
-      handleEditorValueChange(originalCode);
-      editCode(currentTaskNumber, originalCode);
-    }
-  }, [cachedTaskList, currentTaskNumber, editCode, handleEditorValueChange]);
+  const onClickReset = useCallback(() => {
+    setShowResetTemplateOverlay(true);
+  }, []);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
+    setTaskDescription(taskList[newTaskNumber].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
+    setTaskDescription(taskList[newTaskNumber].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
@@ -511,7 +564,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   return (
-    <div className={classNames('Mission', Classes.DARK)}>
+    <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+      {overlay}
+      {resetTemplateOverlay}
       {isMobileBreakpoint ? (
         <MobileWorkspace {...mobileWorkspaceProps} />
       ) : (

@@ -46,7 +46,7 @@ const GitHubMissionListing: React.FC<any> = () => {
       );
     } else if (browsableMissions.length > 0) {
       const cards = browsableMissions.map(element =>
-        convertMissionToCard(element, octokit, isMobileBreakpoint)
+        convertMissionToCard(element, isMobileBreakpoint)
       );
       setDisplay(<>{cards}</>);
     }
@@ -165,11 +165,7 @@ function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) 
   return retVal;
 }
 
-function convertMissionToCard(
-  missionRepo: BrowsableMission,
-  octokit: Octokit,
-  isMobileBreakpoint: boolean
-) {
+function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean) {
   const ratio = isMobileBreakpoint ? 5 : 3;
   const ownerSlashName =
     missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName;
