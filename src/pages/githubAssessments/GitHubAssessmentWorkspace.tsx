@@ -3,14 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
-import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 
-import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
+import { Library } from '../../commons/assessment/AssessmentTypes';
+import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
@@ -18,6 +18,7 @@ import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextBut
 import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
@@ -29,18 +30,19 @@ import {
 import MissionData from '../../commons/githubAssessments/MissionData';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
+import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentMarkdownEditor } from '../../commons/sideContent/SideContentMarkdownEditor';
 import { SideContentTaskEditor } from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
-import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   performCreatingSave,
@@ -48,85 +50,55 @@ import {
 } from '../../features/github/GitHubUtils';
 import { store } from '../createStore';
 
-export type GitHubAssessmentsProps = DispatchProps & StateProps & RouteComponentProps<{}>;
+export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
-  handleFetchSublanguage: () => void;
-  handleGenerateLz: () => void;
-  handleShortenURL: (s: string) => void;
-  handleUpdateShortURL: (s: string) => void;
-  handleSendReplInputToOutput: (code: string) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleUsingSubst: (usingSubst: boolean) => void;
-  handleToggleEditorAutorun: () => void;
-  handleFetchChapter: () => void;
 };
 
 export type StateProps = {
-  editorValue: string;
+  editorPrepend: string;
+  editorValue: string | null;
+  editorPostpend: string;
   editorHeight?: number;
   editorWidth: string;
-  execTime: number;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
-  isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
   newCursorPosition?: Position;
   output: InterpreterOutput[];
-  queryString?: string;
-  shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
   sourceChapter: number;
-  sourceVariant: Variant;
-  stepLimit: number;
-  externalLibraryName: ExternalLibraryName;
-  usingSubst: boolean;
 };
 
-function handleHash(hash: string, props: GitHubAssessmentsProps) {
-  const qs = parseQuery(hash);
-
-  const programLz = qs.lz ?? qs.prgrm;
-  const program = programLz && decompressFromEncodedURIComponent(programLz);
-  if (program) {
-    props.handleEditorValueChange(program);
-  }
-
-  const chapter = stringParamToInt(qs.chap) || undefined;
-  const variant: Variant =
-    sourceLanguages.find(
-      language => language.chapter === chapter && language.variant === qs.variant
-    )?.variant ?? 'default';
-  if (chapter) {
-    props.handleChapterSelect(chapter, variant);
-  }
-}
-
-const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
+const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
@@ -306,7 +278,7 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
 
   /**
-   * Handles toggling of relevant SideContentTabs when exiting the mobile breakpoint
+   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   React.useEffect(() => {
     if (
@@ -315,58 +287,117 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.questionOverview);
-      props.handleActiveTabChange(SideContentType.introduction);
-    }
-  }, [isMobileBreakpoint, props, selectedTab]);
-
-  const propsRef = React.useRef(props);
-  propsRef.current = props;
-
-  const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
-
-  React.useEffect(() => {
-    propsRef.current.handleFetchSublanguage();
-  }, []);
-
-  const hash = props.location.hash;
-  React.useEffect(() => {
-    if (!hash) {
-      return;
-    }
-    handleHash(hash, propsRef.current);
-  }, [hash]);
-
-  /**
-   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
-   */
-  React.useEffect(() => {
-    if (
-      isMobileBreakpoint &&
-      (selectedTab === SideContentType.introduction ||
-        selectedTab === SideContentType.remoteExecution)
-    ) {
-      props.handleActiveTabChange(SideContentType.mobileEditor);
-      setSelectedTab(SideContentType.mobileEditor);
-    } else if (
-      !isMobileBreakpoint &&
-      (selectedTab === SideContentType.mobileEditor ||
-        selectedTab === SideContentType.mobileEditorRun)
-    ) {
-      setSelectedTab(SideContentType.introduction);
-      props.handleActiveTabChange(SideContentType.introduction);
+      props.handleActiveTabChange(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
   const onEditorValueChange = React.useCallback(
     val => {
-      propsRef.current.handleEditorValueChange(val);
+      handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
     },
-    [currentTaskNumber, editCode]
+    [currentTaskNumber, editCode, handleEditorValueChange]
   );
 
-  const onChangeTabs = React.useCallback(
-    (
+  const onChangeTabs = (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    if (newTabId === prevTabId) {
+      return;
+    }
+    setSelectedTab(newTabId);
+  };
+
+  const handleEval = () => {
+    props.handleEditorEval();
+  };
+
+  const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
+    props: GitHubAssessmentWorkspaceProps
+  ) => {
+    const tabs: SideContentTab[] = [
+      {
+        label: 'Task',
+        iconName: IconNames.NINJA,
+        body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
+        id: SideContentType.questionOverview,
+        toSpawn: () => true
+      },
+      {
+        label: 'Briefing',
+        iconName: IconNames.BRIEFCASE,
+        body: <SideContentMarkdownEditor content={briefingContent} />,
+        id: SideContentType.briefing,
+        toSpawn: () => true
+      }
+    ];
+
+    return {
+      handleActiveTabChange: props.handleActiveTabChange,
+      defaultSelectedTabId: selectedTab,
+      selectedTabId: selectedTab,
+      tabs,
+      onChange: onChangeTabs,
+      workspaceLocation: 'githubAssessment'
+    };
+  };
+
+  const controlBarProps: () => ControlBarProps = () => {
+    const nextButton = (
+      <ControlBarNextButton
+        onClickNext={onClickNext}
+        questionProgress={[currentTaskNumber, taskList.length]}
+        key={'next_question'}
+      />
+    );
+
+    const previousButton = (
+      <ControlBarPreviousButton
+        onClick={onClickPrevious}
+        questionProgress={[currentTaskNumber, taskList.length]}
+        key={'previous_question'}
+      />
+    );
+
+    const questionView = (
+      <ControlBarQuestionViewButton
+        key={'task_view'}
+        questionProgress={[currentTaskNumber, taskList.length]}
+      />
+    );
+
+    const resetButton = <ControlBarResetButton key="reset" onClick={onClickReset} />;
+
+    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+
+    const saveButton = (
+      <ControlButtonSaveButton hasUnsavedChanges={false} key="save" onClickSave={onClickSave} />
+    );
+
+    const handleChapterSelect = () => {};
+
+    const chapterSelect = (
+      <ControlBarChapterSelect
+        handleChapterSelect={handleChapterSelect}
+        sourceChapter={selectedSourceChapter}
+        sourceVariant={Constants.defaultSourceVariant as Variant}
+        disabled={true}
+        key="chapter"
+      />
+    );
+
+    return {
+      editorButtons: !isMobileBreakpoint
+        ? [runButton, saveButton, resetButton, chapterSelect]
+        : [saveButton, resetButton],
+      flowButtons: [previousButton, questionView, nextButton]
+    };
+  };
+
+  const mobileSideContentProps: () => MobileSideContentProps = () => {
+    const onChangeTabs = (
       newTabId: SideContentType,
       prevTabId: SideContentType,
       event: React.MouseEvent<HTMLElement>
@@ -375,288 +406,81 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
         return;
       }
 
-      const { handleUsingSubst, handleReplOutputClear, sourceChapter } = propsRef.current;
-
-      /**
-       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-       */
+      // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
       if (
-        !(
-          prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun
-        )
+        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
       ) {
-        if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
-          handleUsingSubst(true);
-        }
-
-        if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-          handleReplOutputClear();
-          handleUsingSubst(false);
-        }
-
         setSelectedTab(newTabId);
       }
-    },
-    [hasBreakpoints]
-  );
+    };
+    return {
+      mobileControlBarProps: {
+        ...controlBarProps()
+      },
+      ...sideContentProps(props),
+      onChange: onChangeTabs,
+      selectedTabId: selectedTab,
+      handleEditorEval: handleEval
+    };
+  };
 
-  const autorunButtons = React.useMemo(
-    () => (
-      <ControlBarAutorunButtons
-        handleDebuggerPause={props.handleDebuggerPause}
-        handleDebuggerReset={props.handleDebuggerReset}
-        handleDebuggerResume={props.handleDebuggerResume}
-        handleEditorEval={props.handleEditorEval}
-        handleInterruptEval={props.handleInterruptEval}
-        handleToggleEditorAutorun={props.handleToggleEditorAutorun}
-        isDebugging={props.isDebugging}
-        isEditorAutorun={props.isEditorAutorun}
-        isRunning={props.isRunning}
-        key="autorun"
-      />
-    ),
-    [
-      props.handleDebuggerPause,
-      props.handleDebuggerReset,
-      props.handleDebuggerResume,
-      props.handleEditorEval,
-      props.handleInterruptEval,
-      props.handleToggleEditorAutorun,
-      props.isDebugging,
-      props.isEditorAutorun,
-      props.isRunning
-    ]
-  );
-
-  const chapterSelectHandler = React.useCallback(
-    ({ chapter, variant }: { chapter: number; variant: Variant }, e: any) => {
-      const { handleUsingSubst, handleReplOutputClear, handleChapterSelect } = propsRef.current;
-      if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
-        handleUsingSubst(true);
-      }
-      if (chapter > 2) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
-
-      handleChapterSelect(chapter, variant);
-    },
-    [hasBreakpoints, selectedTab]
-  );
-
-  const chapterSelect = React.useMemo(
-    () => (
-      <ControlBarChapterSelect
-        handleChapterSelect={chapterSelectHandler}
-        sourceChapter={selectedSourceChapter}
-        sourceVariant={props.sourceVariant}
-        disabled={true}
-        key="chapter"
-      />
-    ),
-    [chapterSelectHandler, selectedSourceChapter, props.sourceVariant]
-  );
-
-  const clearButton = React.useMemo(
-    () =>
-      selectedTab === SideContentType.substVisualizer ? null : (
-        <ControlBarClearButton
-          handleReplOutputClear={props.handleReplOutputClear}
-          key="clear_repl"
-        />
-      ),
-    [props.handleReplOutputClear, selectedTab]
-  );
-
-  const evalButton = React.useMemo(
-    () =>
-      selectedTab === SideContentType.substVisualizer ? null : (
-        <ControlBarEvalButton
-          handleReplEval={props.handleReplEval}
-          isRunning={props.isRunning}
-          key="eval_repl"
-        />
-      ),
-    [props.handleReplEval, props.isRunning, selectedTab]
-  );
-
-  const saveButton = React.useMemo(() => {
-    return (
-      <ControlButtonSaveButton key="save" onClickSave={onClickSave} hasUnsavedChanges={false} />
+  const replButtons = () => {
+    const clearButton = (
+      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
     );
-  }, [onClickSave]);
 
-  const resetButton = React.useMemo(() => {
-    return <ControlBarResetButton key="reset" onClick={onClickReset} />;
-  }, [onClickReset]);
+    const evalButton = (
+      <ControlBarEvalButton
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
+        key="eval_repl"
+      />
+    );
 
-  const tabs = React.useMemo(() => {
-    const tabs: SideContentTab[] = [];
-
-    tabs.push({
-      label: 'Task',
-      iconName: IconNames.NINJA,
-      body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
-      id: SideContentType.questionOverview,
-      toSpawn: () => true
-    });
-
-    tabs.push({
-      label: 'Briefing',
-      iconName: IconNames.BRIEFCASE,
-      body: <SideContentMarkdownEditor content={briefingContent} />,
-      id: SideContentType.briefing,
-      toSpawn: () => true
-    });
-
-    // Remove this for Phase 2-1.
-    // It will be added once we get into Phase 2-2.
-    /*
-    tabs.push({
-      label: 'Editor',
-      iconName: IconNames.AIRPLANE,
-      body: <SideContentMissionEditor {...props} />,
-      id: SideContentType.githubAssessments,
-      toSpawn: () => true
-    });
-    */
-
-    return tabs;
-  }, [taskList, currentTaskNumber, briefingContent]);
-
-  // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs];
-  mobileTabs.shift();
-  mobileTabs.pop();
-
-  const handleEditorUpdateBreakpoints = React.useCallback(
-    (breakpoints: string[]) => {
-      // get rid of holes in array
-      const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
-      if (numberOfBreakpoints > 0) {
-        setHasBreakpoints(true);
-        if (propsRef.current.sourceChapter <= 2) {
-          /**
-           * There are breakpoints set on Source Chapter 2, so we set the
-           * Redux state for the editor to evaluate to the substituter
-           */
-
-          propsRef.current.handleUsingSubst(true);
-        }
-      }
-      if (numberOfBreakpoints === 0) {
-        setHasBreakpoints(false);
-
-        if (selectedTab !== SideContentType.substVisualizer) {
-          propsRef.current.handleReplOutputClear();
-          propsRef.current.handleUsingSubst(false);
-        }
-      }
-      propsRef.current.handleEditorUpdateBreakpoints(breakpoints);
-    },
-    [selectedTab]
-  );
-
-  const replDisabled = props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm';
+    return [evalButton, clearButton];
+  };
 
   const editorProps = {
-    sourceChapter: props.sourceChapter,
-    externalLibraryName: props.externalLibraryName,
-    sourceVariant: props.sourceVariant,
-    editorValue: props.editorValue,
     editorSessionId: '',
+    editorValue: props.editorValue!,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
     handleEditorValueChange: onEditorValueChange,
-    handleSendReplInputToOutput: props.handleSendReplInputToOutput,
-    handlePromptAutocomplete: props.handlePromptAutocomplete,
-    isEditorAutorun: props.isEditorAutorun,
     breakpoints: props.breakpoints,
     highlightedLines: props.highlightedLines,
     newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
+    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
+    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    isEditorAutorun: false
   };
-
   const replProps = {
-    sourceChapter: props.sourceChapter,
-    sourceVariant: props.sourceVariant,
-    externalLibrary: props.externalLibraryName,
-    output: props.output,
-    replValue: props.replValue,
     handleBrowseHistoryDown: props.handleBrowseHistoryDown,
     handleBrowseHistoryUp: props.handleBrowseHistoryUp,
     handleReplEval: props.handleReplEval,
     handleReplValueChange: props.handleReplValueChange,
-    hidden: selectedTab === SideContentType.substVisualizer,
-    inputHidden: replDisabled,
-    usingSubst: props.usingSubst,
-    replButtons: [replDisabled ? null : evalButton, clearButton]
+    output: props.output,
+    replValue: props.replValue,
+    sourceChapter: selectedSourceChapter || 4,
+    sourceVariant: 'default' as Variant,
+    externalLibrary: ExternalLibraryName.NONE,
+    replButtons: replButtons()
   };
-
-  const taskView = (
-    <ControlBarQuestionViewButton
-      questionProgress={[currentTaskNumber, taskList.length]}
-      key={'task_view'}
-    />
-  );
-
-  const nextTaskButton = (
-    <ControlBarNextButton
-      onClickNext={onClickNext}
-      questionProgress={[currentTaskNumber, taskList.length]}
-      key={'next_question'}
-    />
-  );
-
-  const prevTaskButton = (
-    <ControlBarPreviousButton
-      onClick={onClickPrevious}
-      questionProgress={[currentTaskNumber, taskList.length]}
-      key={'previous_question'}
-    />
-  );
-
   const workspaceProps: WorkspaceProps = {
-    controlBarProps: {
-      editorButtons: [autorunButtons, saveButton, resetButton, chapterSelect],
-      flowButtons: [prevTaskButton, taskView, nextTaskButton]
-    },
+    controlBarProps: controlBarProps(),
     editorProps: editorProps,
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
-    replProps: replProps,
     sideContentHeight: props.sideContentHeight,
-    sideContentProps: {
-      defaultSelectedTabId: selectedTab,
-      selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
-      onChange: onChangeTabs,
-      tabs,
-      workspaceLocation: 'githubAssessments'
-    },
-    sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
+    sideContentProps: sideContentProps(props),
+    replProps: replProps
   };
-
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorProps: editorProps,
     replProps: replProps,
-    mobileSideContentProps: {
-      mobileControlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect],
-        flowButtons: [prevTaskButton, taskView, nextTaskButton]
-      },
-      defaultSelectedTabId: selectedTab,
-      selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
-      onChange: onChangeTabs,
-      tabs: mobileTabs,
-      workspaceLocation: 'githubAssessments',
-      handleEditorEval: props.handleEditorEval
-    }
+    mobileSideContentProps: mobileSideContentProps()
   };
 
   return (
@@ -670,4 +494,4 @@ const GitHubAssessments: React.FC<GitHubAssessmentsProps> = props => {
   );
 };
 
-export default GitHubAssessments;
+export default GitHubAssessmentWorkspace;
