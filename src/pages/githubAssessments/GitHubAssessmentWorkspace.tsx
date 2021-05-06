@@ -40,6 +40,7 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog } from '../../commons/utils/DialogHelper';
+import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
@@ -99,6 +100,12 @@ export type StateProps = {
 };
 
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+  const octokit = store.getState().session.githubOctokitInstance as Octokit;
+
+  if (octokit === undefined) {
+    history.push('/githubassessments/missions');
+  }
+
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
@@ -124,7 +131,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
 
   const missionRepoData = props.location.state as MissionRepoData;
-  const octokit = store.getState().session.githubOctokitInstance as Octokit;
 
   const loadMission = useCallback(async () => {
     if (octokit === undefined) return;
@@ -327,14 +333,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber].taskDescription);
+    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber].taskDescription);
+    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
