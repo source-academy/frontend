@@ -30,7 +30,14 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
     octokit
   );
 
-  return new MissionData(missionRepoData, briefingString, missionMetadata, tasksData);
+  const newMissionData: MissionData = {
+    missionRepoData: missionRepoData,
+    missionBriefing: briefingString,
+    missionMetadata: missionMetadata,
+    tasksData: tasksData
+  };
+
+  return newMissionData;
 }
 
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
@@ -96,7 +103,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
           )
         : starterCode;
 
-      const taskData = new TaskData(taskDescription, starterCode, savedCode);
+      const taskData = { taskDescription, starterCode, savedCode };
 
       questions.push(taskData);
     } catch (err) {
@@ -113,17 +120,34 @@ export async function getContentAsString(
   filepath: string,
   octokit: any
 ) {
-  const fileInfo = await octokit.repos.getContent({
-    owner: repoOwner,
-    repo: repoName,
-    path: filepath
-  });
+  let contentString = '';
 
-  return Buffer.from((fileInfo.data as any).content, 'base64').toString();
+  try {
+    const fileInfo = await octokit.repos.getContent({
+      owner: repoOwner,
+      repo: repoName,
+      path: filepath
+    });
+
+    contentString = Buffer.from((fileInfo.data as any).content, 'base64').toString();
+  } catch (err) {
+    console.error(err);
+  }
+
+  return contentString;
 }
 
 function convertMetadataStringToMissionMetadata(metadataString: string) {
-  const missionMetadata = new MissionMetadata();
+  const missionMetadata: MissionMetadata = {
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
+    sourceVersion: 1,
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
+  };
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];

@@ -1,12 +1,12 @@
 import {
   Button,
   Card,
-  Divider,
   Elevation,
   H4,
   H6,
   Icon,
   NonIdealState,
+  Spinner,
   Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -14,13 +14,6 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import {
-  GitHubMissionCreateDialog,
-  GitHubMissionCreateDialogProps,
-  GitHubMissionCreateDialogResolution
-} from 'src/commons/githubAssessments/GitHubMissionCreateDialog';
-import { promisifyDialog } from 'src/commons/utils/DialogHelper';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -34,66 +27,30 @@ import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
-export const GitHubMissions: React.FC<any> = props => {
+const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
-  const [missionRepos, setMissionRepos] = useState<MissionRepoData[]>([]);
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+  const [display, setDisplay] = useState<JSX.Element>(<></>);
 
   const octokit = getGitHubOctokitInstance();
 
   useEffect(() => {
-    getMissionRepoData(octokit);
-  }, [octokit]);
+    retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+  }, [octokit, setBrowsableMissions, setDisplay]);
 
   useEffect(() => {
-    convertMissionReposToBrowsableMissions(octokit, missionRepos);
-  }, [octokit, missionRepos]);
-
-  const openMissionCreator = async () => {
-    if (octokit === undefined) showWarningMessage('Please log in and try again', 2000);
-    else
-      await promisifyDialog<GitHubMissionCreateDialogProps, GitHubMissionCreateDialogResolution>(
-        GitHubMissionCreateDialog,
-        resolve => ({
-          octokit,
-          resolveDialog: dialogResults => resolve(dialogResults)
-        })
+    if (octokit === undefined) {
+      setDisplay(
+        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
       );
-  };
-
-  const controls = (
-    <div className="GridControls ground-control-controls">
-      <Button icon={IconNames.CLOUD_UPLOAD} onClick={openMissionCreator}>
-        <span className="hidden-xs">Create a new mission</span>
-      </Button>
-      <Button icon={IconNames.REFRESH} onClick={getGitHubOctokitInstance}>
-        <span className="hidden-xs">Refresh missions</span>
-      </Button>
-    </div>
-  );
-
-  let missions: JSX.Element;
-  if (octokit === undefined) {
-    missions = (
-      <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-    );
-  } else if (missionRepos.length === 0) {
-    missions = <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
-  } else {
-    const cards = browsableMissions.map(element =>
-      convertMissionToCard(element, octokit, isMobileBreakpoint)
-    );
-    missions = <>{cards}</>;
-  }
-
-  const display = (
-    <div className="GroundControl">
-      {controls}
-      <Divider />
-      {missions}
-    </div>
-  );
+    } else if (browsableMissions.length > 0) {
+      const cards = browsableMissions.map(element =>
+        convertMissionToCard(element, octokit, isMobileBreakpoint)
+      );
+      setDisplay(<>{cards}</>);
+    }
+  }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
 
   // Finally, render the ContentDisplay.
   return (
@@ -103,38 +60,61 @@ export const GitHubMissions: React.FC<any> = props => {
       </div>
     </div>
   );
+};
 
-  async function getMissionRepoData(octokit: Octokit) {
-    if (octokit === undefined) return;
-    const results = await octokit.repos.listForAuthenticatedUser({ per_page: 100 });
-    const repos = results.data;
-    setMissionRepos(
-      repos
-        .filter((repo: any) => repo.name.startsWith('SA-'))
-        .map(
-          (repo: any) => new MissionRepoData(repo.owner.login, repo.name, repo.created_at)
-        ) as MissionRepoData[]
-    );
-  }
+async function retrieveBrowsableMissions(
+  octokit: Octokit,
+  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
+  setDisplay: (display: JSX.Element) => void
+) {
+  if (octokit === undefined) return;
 
-  async function convertMissionReposToBrowsableMissions(
-    octokit: Octokit,
-    missionRepos: MissionRepoData[]
-  ) {
-    if (octokit === undefined) return;
-    const browsableMissions: BrowsableMission[] = [];
+  setDisplay(
+    <NonIdealState description="Loading Missions." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+  );
 
-    for (let i = 0; i < missionRepos.length; i++) {
-      browsableMissions.push(await convertRepoToBrowsableMission(missionRepos[i], octokit));
+  const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
+  const correctlyNamedRepos = allRepos.filter((repo: any) => repo.name.startsWith('sa-'));
+  const foundMissionRepos: MissionRepoData[] = [];
+
+  for (let i = 0; i < correctlyNamedRepos.length; i++) {
+    const repo = correctlyNamedRepos[i] as any;
+
+    const files = (
+      await octokit.repos.getContent({
+        owner: repo.owner.login,
+        repo: repo.name,
+        path: ''
+      })
+    ).data;
+
+    if (!Array.isArray(files)) {
+      setDisplay(<NonIdealState title="There are no assessments." icon={IconNames.FLAME} />);
+      return;
     }
 
-    browsableMissions.sort((a, b) => {
-      return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
-    });
-
-    setBrowsableMissions(browsableMissions);
+    if (files.find(file => file.name === 'METADATA') !== undefined) {
+      const missionRepoData: MissionRepoData = {
+        repoOwner: repo.owner.login,
+        repoName: repo.name,
+        dateOfCreation: new Date(repo.created_at)
+      };
+      foundMissionRepos.push(missionRepoData);
+    }
   }
-};
+
+  const browsableMissions: BrowsableMission[] = [];
+
+  for (let i = 0; i < foundMissionRepos.length; i++) {
+    browsableMissions.push(await convertRepoToBrowsableMission(foundMissionRepos[i], octokit));
+  }
+
+  browsableMissions.sort((a, b) => {
+    return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+  });
+
+  setBrowsableMissions(browsableMissions);
+}
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {
   const metadata = await getContentAsString(
@@ -148,16 +128,26 @@ async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octok
   return browsableMission;
 }
 
-class BrowsableMission {
-  title: string = '';
-  coverImage: string = '';
-  webSummary: string = '';
-  missionRepoData: MissionRepoData = new MissionRepoData('', '', '');
-  dueDate: Date = new Date(8640000000000000);
-}
+type BrowsableMission = {
+  title: string;
+  coverImage: string;
+  webSummary: string;
+  missionRepoData: MissionRepoData;
+  dueDate: Date;
+};
 
 function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
-  const browsableMission = new BrowsableMission();
+  const browsableMission: BrowsableMission = {
+    title: '',
+    coverImage: '',
+    webSummary: '',
+    missionRepoData: {
+      repoOwner: '',
+      repoName: '',
+      dateOfCreation: new Date(8640000000000000)
+    },
+    dueDate: new Date(8640000000000000)
+  };
 
   browsableMission.missionRepoData = missionRepo;
 
@@ -234,3 +224,5 @@ function convertMissionToCard(
     history.push(`/githubassessments/editor`, data);
   }
 }
+
+export default GitHubMissionListing;

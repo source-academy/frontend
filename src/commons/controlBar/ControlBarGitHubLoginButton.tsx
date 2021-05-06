@@ -1,11 +1,9 @@
-import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
+import { ButtonGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { GitHubState } from '../../features/github/GitHubTypes';
 import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
@@ -16,11 +14,6 @@ export type ControlBarGitHubLoginButtonProps = {
   onClickLogOut?: () => any;
 };
 
-const stateToIntent: { [state in GitHubState]: Intent } = {
-  LOGGED_OUT: Intent.NONE,
-  LOGGED_IN: Intent.NONE
-};
-
 export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonProps> = props => {
   // The 'loggedInAs' is not used directly in this code block
   // However, keeping it in will ensure that the component re-renders immediately
@@ -29,32 +22,9 @@ export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonPr
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
 
-  const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
-
-  const mainButton = controlButton(
-    'GitHub ' + (isLoggedIn ? 'Logout' : 'Login'),
-    IconNames.GIT_BRANCH,
-    null,
-    {
-      intent: stateToIntent[state]
-    }
-  );
-
   const loginButton = isLoggedIn
-    ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
-    : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
+    ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
+    : controlButton('Log In', IconNames.GIT_BRANCH, props.onClickLogIn);
 
-  return (
-    <Popover2
-      autoFocus={false}
-      content={
-        <div>
-          <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>
-        </div>
-      }
-      popoverClassName={Classes.POPOVER_DISMISS}
-    >
-      {mainButton}
-    </Popover2>
-  );
+  return <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>;
 };

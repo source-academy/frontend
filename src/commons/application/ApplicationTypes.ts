@@ -202,12 +202,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   ),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue:
-    workspaceLocation === 'playground' || 'sourcecast'
-      ? defaultEditorValue
-      : '' || 'githubAssessments'
-      ? defaultEditorValue
-      : '',
+  editorValue: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+    ? defaultEditorValue
+    : '',
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],
@@ -278,8 +275,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     timeElapsedBeforePause: 0,
     timeResumed: 0
   },
-  githubAssessments: {
-    ...createDefaultWorkspace('githubAssessments')
+  githubAssessment: {
+    ...createDefaultWorkspace('githubAssessment')
   }
 };
 

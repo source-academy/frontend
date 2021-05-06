@@ -23,6 +23,7 @@ test('Selecting close causes onSubmit to be called with empty string', async () 
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
@@ -49,6 +50,7 @@ test('Opening folder for first time causes child files to be loaded', async () =
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
@@ -78,6 +80,7 @@ test('Closing folder hides child files', async () => {
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
@@ -119,6 +122,7 @@ test('Opening folder for second time does not cause child files to be loaded', a
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
@@ -183,6 +187,7 @@ test('Opening folder in editor leads to appropriate function being called', asyn
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
@@ -238,6 +243,7 @@ test('Performing creating save leads to appropriate function being called', asyn
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
@@ -295,6 +301,7 @@ test('Performing ovewriting save leads to appropriate function being called', as
         onSubmit={onSubmit}
         pickerType={pickerType}
         repoName={repoName}
+        editorContent={''}
       />
     );
   });
