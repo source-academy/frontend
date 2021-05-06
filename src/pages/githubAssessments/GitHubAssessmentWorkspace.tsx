@@ -221,8 +221,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (questionNumber > taskList.length) {
         return;
       }
-
-      taskList[questionNumber - 1].savedCode = newValue;
+      const editedTaskList = taskList;
+      editedTaskList[questionNumber - 1].savedCode = newValue;
+      setTaskList(editedTaskList);
     },
     [taskList]
   );
@@ -325,14 +326,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
+    setTaskDescription(taskList[newTaskNumber].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
+    setTaskDescription(taskList[newTaskNumber].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
