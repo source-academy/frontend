@@ -61,11 +61,9 @@ test('SideContentContestLeaderboard orders entry in the same order as orderedCon
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
   const SideContentContestLeaderboardRender = mount(contestVotingContainer);
 
-  expect(SideContentContestLeaderboardRender.find(Card).at(0).find(Pre).at(2).text()).toBe(
-    '100.00'
-  );
+  expect(SideContentContestLeaderboardRender.find(Card).at(0).find(Pre).at(2).text()).toBe('100');
 
-  expect(SideContentContestLeaderboardRender.find(Card).at(1).find(Pre).at(2).text()).toBe('90.00');
+  expect(SideContentContestLeaderboardRender.find(Card).at(1).find(Pre).at(2).text()).toBe('90');
 
-  expect(SideContentContestLeaderboardRender.find(Card).at(2).find(Pre).at(2).text()).toBe('80.00');
+  expect(SideContentContestLeaderboardRender.find(Card).at(2).find(Pre).at(2).text()).toBe('80');
 });
