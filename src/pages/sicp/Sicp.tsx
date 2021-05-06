@@ -1,15 +1,21 @@
 import * as React from 'react';
+import { SicpChapter } from 'src/features/sicp/SicpTypes';
 
 import SicpDisplay from './subcomponents/SicpDisplay';
 
-type SicpProps = DispatchProps & StateProps & OwnProps;
-type DispatchProps = {};
-type StateProps = {};
-type OwnProps = {};
+export type SicpProps = DispatchProps & StateProps & OwnProps;
+export type DispatchProps = {
+  handleChangeChapter: (chapter: SicpChapter) => void;
+};
+export type StateProps = {
+  chapter: SicpChapter;
+};
+export type OwnProps = {};
 
 const Sicp: React.FC<SicpProps> = props => {
+  const { chapter } = props;
 
-  const content = "text";
+  const content = "testcontent" + chapter;
 
   return (
     <SicpDisplay content={content} />

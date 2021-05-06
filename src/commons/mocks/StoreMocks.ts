@@ -8,6 +8,7 @@ import {
   defaultDashboard,
   defaultPlayground,
   defaultSession,
+  defaultSicp,
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
@@ -21,7 +22,8 @@ export function mockInitialStore(): Store<OverallState> {
     dashboard: defaultDashboard,
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
-    session: defaultSession
+    session: defaultSession,
+    sicp: defaultSicp
   };
   return createStore(state);
 }
