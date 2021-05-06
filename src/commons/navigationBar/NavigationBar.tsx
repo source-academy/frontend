@@ -109,7 +109,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text">Playground</div>
       </NavLink>
 
-      {props.role && (
+      {props.role && Constants.enableAchievements && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
