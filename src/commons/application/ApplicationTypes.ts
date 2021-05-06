@@ -275,8 +275,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     timeElapsedBeforePause: 0,
     timeResumed: 0
   },
-  githubAssessments: {
-    ...createDefaultWorkspace('githubAssessments')
+  githubAssessment: {
+    ...createDefaultWorkspace('githubAssessment')
   }
 };
 

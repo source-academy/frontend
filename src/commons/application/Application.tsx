@@ -6,7 +6,7 @@ import Academy from '../../pages/academy/AcademyContainer';
 import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
-import GitHubAssessmentsContainer from '../../pages/githubAssessments/GitHubAssessmentsContainer';
+import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
 import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
@@ -144,7 +144,10 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            <Route path="/githubassessments/editor" component={GitHubAssessmentsContainer} />
+            <Route
+              path="/githubassessments/editor"
+              component={GitHubAssessmentWorkspaceContainer}
+            />
             <Route path="/githubassessments/missions" component={GitHubMissionListing} />
             <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
