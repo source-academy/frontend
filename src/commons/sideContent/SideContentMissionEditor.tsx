@@ -12,31 +12,27 @@ export type SideContentMissionEditorProps = {
 export const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props => {
   return (
     <div>
-      <div className="MissionEditorRow">
-        <div className="MissionEditorColumn">
-          <div className="MissionEditorLeftColumn">
-            <Label>Mission Title</Label>
-            <Label>Cover Image Link</Label>
-            <Label>Mission Summary</Label>
-            <Label>Mission Number</Label>
-            <Label>Source Version</Label>
-            <Label>Reading</Label>
-          </div>
+      <div className="SideContentMissionEditorRow">
+        <div className="SideContentMissionEditorColumn">
+          <Label>Mission Title</Label>
+          <Label>Cover Image Link</Label>
+          <Label>Mission Summary</Label>
+          <Label>Mission Number</Label>
+          <Label>Source Version</Label>
+          <Label>Reading</Label>
         </div>
-        <div className="MissionEditorColumn">
-          <div className="MissionEditorRightColumn">
-            <InputGroup></InputGroup>
-            <InputGroup></InputGroup>
-            <InputGroup></InputGroup>
-            <InputGroup></InputGroup>
-            <ControlBarChapterSelect
-              sourceChapter={props.sourceChapter}
-              sourceVariant={props.sourceVariant}
-              key="chapter"
-              disabled={true}
-            />
-            <InputGroup></InputGroup>
-          </div>
+        <div className="SideContentMissionEditorColumn">
+          <InputGroup></InputGroup>
+          <InputGroup></InputGroup>
+          <InputGroup></InputGroup>
+          <InputGroup></InputGroup>
+          <ControlBarChapterSelect
+            sourceChapter={props.sourceChapter}
+            sourceVariant={props.sourceVariant}
+            key="chapter"
+            disabled={true}
+          />
+          <InputGroup></InputGroup>
         </div>
       </div>
     </div>

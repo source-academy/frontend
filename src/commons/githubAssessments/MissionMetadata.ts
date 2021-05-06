@@ -1,4 +1,4 @@
-export type MissionMetadata = {
+type MissionMetadata = {
   coverImage: string;
   kind: string;
   number: string;
@@ -9,3 +9,5 @@ export type MissionMetadata = {
   reading: string;
   webSummary: string;
 };
+
+export default MissionMetadata;

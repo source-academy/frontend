@@ -22,8 +22,6 @@ export enum SideContentType {
   grading = 'grading',
   introduction = 'introduction',
   inspector = 'inspector',
-  missionTask = 'missionTask',
-  missionBriefing = 'missionBriefing',
   githubAssessments = 'githubAssessments',
   module = 'module',
   questionOverview = 'question_overview',

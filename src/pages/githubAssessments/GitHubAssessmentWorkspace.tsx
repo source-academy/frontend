@@ -16,10 +16,10 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
-import { ControlBarTaskViewButton } from '../../commons/controlBar/ControlBarTaskViewButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -27,7 +27,7 @@ import {
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import { MissionData } from '../../commons/githubAssessments/MissionData';
+import MissionData from '../../commons/githubAssessments/MissionData';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
 import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
@@ -100,7 +100,7 @@ export type StateProps = {
 
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.missionTask);
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
@@ -286,8 +286,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       (selectedTab === SideContentType.mobileEditor ||
         selectedTab === SideContentType.mobileEditorRun)
     ) {
-      setSelectedTab(SideContentType.missionTask);
-      props.handleActiveTabChange(SideContentType.missionTask);
+      setSelectedTab(SideContentType.questionOverview);
+      props.handleActiveTabChange(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
@@ -322,14 +322,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         label: 'Task',
         iconName: IconNames.NINJA,
         body: <SideContentTaskEditor currentTaskNumber={currentTaskNumber} tasks={taskList} />,
-        id: SideContentType.missionTask,
+        id: SideContentType.questionOverview,
         toSpawn: () => true
       },
       {
         label: 'Briefing',
         iconName: IconNames.BRIEFCASE,
         body: <SideContentMarkdownEditor content={briefingContent} />,
-        id: SideContentType.missionBriefing,
+        id: SideContentType.briefing,
         toSpawn: () => true
       }
     ];
@@ -362,10 +362,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
 
     const questionView = (
-      <ControlBarTaskViewButton
+      <ControlBarQuestionViewButton
         key={'task_view'}
-        currentask={currentTaskNumber}
-        numOfTasks={taskList.length}
+        questionProgress={[currentTaskNumber, taskList.length]}
       />
     );
 

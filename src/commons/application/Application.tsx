@@ -1,13 +1,13 @@
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
+import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
 import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
-import { GitHubMissions } from '../../pages/githubAssessments/GitHubMissions';
+import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
@@ -148,7 +148,7 @@ const Application: React.FC<ApplicationProps> = props => {
               path="/githubassessments/editor"
               component={GitHubAssessmentWorkspaceContainer}
             />
-            <Route path="/githubassessments/missions" component={GitHubMissions} />
+            <Route path="/githubassessments/missions" component={GitHubMissionListing} />
             <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
             <Route
