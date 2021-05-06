@@ -29,6 +29,7 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
+const showGitHubAssessments = isTrue(process.env.REACT_APP_SHOW_GITHUB_ASSESSMENTS);
 
 const authProviders: Map<
   string,
@@ -122,7 +123,8 @@ const Constants = {
   githubOAuthProxyUrl,
   sharedbBackendUrl,
   disablePeriods,
-  cadetLoggerInterval
+  cadetLoggerInterval,
+  showGitHubAssessments
 };
 
 export default Constants;
