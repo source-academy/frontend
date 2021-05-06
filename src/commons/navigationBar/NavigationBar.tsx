@@ -112,14 +112,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text">Playground</div>
       </NavLink>
 
-      <NavLink
+      {Constants.showGitHubAssessments && (<NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/githubassessments/missions"
       >
         <Icon icon={IconNames.BRIEFCASE} />
         <div className="navbar-button-text">GitHub Assessments</div>
-      </NavLink>
+      </NavLink>)}
 
       {props.role && (
         <NavLink
