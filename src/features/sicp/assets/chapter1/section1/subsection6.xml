@@ -1,0 +1,1203 @@
+<SUBSECTION>
+  <NAME>
+    Conditional Expressions and Predicates
+  </NAME>
+  <LABEL NAME="sec:conditionals"/>
+
+  <TEXT>
+    The expressive power of the class of
+    <SPLITINLINE>
+      <SCHEME>
+	procedures
+      </SCHEME>
+      <JAVASCRIPT>
+	functions
+      </JAVASCRIPT>
+    </SPLITINLINE>
+    that we can define at this point is very limited, because we have no way to
+    make tests and to perform different operations depending on the result of a
+    test.
+    <SPLIT>
+      <SCHEME>
+        For instance, we cannot define a procedure that computes the 
+        <INDEX>absolute value</INDEX>
+        absolute
+        value of a number by testing whether the number is positive, negative,
+        or zero and taking different actions in the different cases according
+        to the rule
+        <LATEX>
+          \[
+          |x| = \left\{ \begin{array}{rl}
+          x   &amp; \mbox{if $x&gt;0$} \\
+          0   &amp; \mbox{if $x=0$} \\
+          -x  &amp; \mbox{if $x&lt;0$}
+          \end{array}
+          \right.
+          \]
+        </LATEX>
+        This construct is called a
+        <INDEX>case analysis<SUBINDEX>general</SUBINDEX></INDEX>
+	<EM>case analysis</EM>, and
+        there is a special form in Lisp for notating such a case
+        analysis.  It is called 
+        <INDEX><DECLARATION>cond</DECLARATION></INDEX> 
+        <INDEX><DECLARATION>special forms (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</DECLARATION><SUBINDEX><ORDER>cond</ORDER><SCHEMEINLINE>cond</SCHEMEINLINE></SUBINDEX></INDEX>
+        <INDEX>conditional expression<SUBINDEX><ORDER>cond</ORDER><SCHEMEINLINE>cond</SCHEMEINLINE></SUBINDEX></INDEX>
+        <SCHEMEINLINE>cond</SCHEMEINLINE> (which stands for
+        <QUOTE>conditional</QUOTE>), and it is used as follows:
+        <SNIPPET>
+          <INDEX><DECLARATION>abs</DECLARATION></INDEX> 
+          <NAME>abs_definition</NAME>
+          <EXAMPLE>abs_example</EXAMPLE>
+          <SCHEME>
+(define (abs x)
+  (cond ((> x 0) x)
+        ((= x 0) 0)
+        ((&lt; x 0) (- x))))
+          </SCHEME>
+        </SNIPPET>
+        <SNIPPET EVAL="no">
+          <NAME>abs_example</NAME>
+          <SCHEME>
+(abs (- 5))
+          </SCHEME>
+        </SNIPPET>
+        The general form of a conditional expression is
+        <SNIPPET EVAL="no" LATEX="yes">
+          <SCHEME>
+(cond (^$\langle p_1 \rangle $^ ^$\langle e_1 \rangle$^)
+      (^$\langle p_2 \rangle $^ ^$\langle e_2 \rangle$^)
+      ^$\vdots$^
+      (^$\langle p_n \rangle $^ ^$\langle e_n \rangle$^))
+          </SCHEME>
+        </SNIPPET>
+        consisting of the symbol <SCHEMEINLINE>cond</SCHEMEINLINE> followed by
+        <INDEX>parentheses<SUBINDEX><ORDER>delimiting cond</ORDER>delimiting <SCHEMEINLINE>cond</SCHEMEINLINE> clauses</SUBINDEX></INDEX>
+        parenthesized pairs of expressions
+	<SCHEMEINLINE>(</SCHEMEINLINE><LATEXINLINE>$\langle p\ e \rangle$</LATEXINLINE><SCHEMEINLINE>)</SCHEMEINLINE>
+        called 
+        <INDEX>clause, of a <SCHEMEINLINE>cond</SCHEMEINLINE></INDEX>
+        <INDEX><DECLARATION>cond</DECLARATION><SUBINDEX>clause</SUBINDEX></INDEX>
+        <EM>clauses</EM>. The first expression in each pair is a 
+        <INDEX>predicate<SUBINDEX><ORDER>cond</ORDER>of <SCHEMEINLINE>cond</SCHEMEINLINE> clause</SUBINDEX></INDEX>
+	<INDEX>conditional expression<SUBINDEX>predicate, consequent, alternative of</SUBINDEX></INDEX>
+        <EM>predicate</EM><EMDASH/>that is, an expression whose value is
+	interpreted as either true or false.<FOOTNOTE>
+        <QUOTE>Interpreted as either
+        <INDEX>true</INDEX>
+	<INDEX>false</INDEX>
+        <INDEX><DECLARATION>\#t</DECLARATION></INDEX>
+	<INDEX><DECLARATION>true</DECLARATION></INDEX>
+        <INDEX><DECLARATION>\#f</DECLARATION></INDEX>
+	<INDEX><DECLARATION>false</DECLARATION></INDEX> 
+	true or false</QUOTE>
+        means this: In Scheme, there are two distinguished values that are
+        denoted by the constants 
+        <SCHEMEINLINE>#t</SCHEMEINLINE> and <SCHEMEINLINE>#f</SCHEMEINLINE>.  
+        When the interpreter checks a predicate<APOS/>s value, it interprets 
+        <SCHEMEINLINE>#f</SCHEMEINLINE> as false.  Any other value
+        is treated as true.  (Thus, providing <SCHEMEINLINE>#t</SCHEMEINLINE>
+	is logically unnecessary, but it is convenient.)  In this book we will
+	use names <SCHEMEINLINE>true</SCHEMEINLINE> and
+	<SCHEMEINLINE>false</SCHEMEINLINE>, 
+        which are associated with the values <SCHEMEINLINE>#t</SCHEMEINLINE> and 
+        <SCHEMEINLINE>#f</SCHEMEINLINE> respectively.</FOOTNOTE>
+      </SCHEME>
+      <JAVASCRIPT>
+	<COMMENT>
+	  We start with conditional expressions here, because they fit nicer
+	  into the substitution model. Note that all functions in sections
+	  1.1.1 to 1.1.7 have a single return statement as their body, which
+	  enforces the emphasis on conditional expressions. Conditional
+	  statements are introduced in 1.3.2.
+	</COMMENT>
+        For instance, we cannot declare a function that computes the 
+        <INDEX>absolute value</INDEX>
+        absolute value of a number by testing whether the number is nonnegative
+	and taking different actions in each case according to the rule
+        <LATEX>
+          \[
+          |x| = \left\{ \begin{array}{rl}
+          x   &amp; \mbox{if $x \geq 0$} \\
+          -x  &amp; \mbox{otherwise}
+          \end{array}
+          \right.
+          \]
+        </LATEX>
+	<COMMENT>
+	  We simplify the example so that we can get away with a single
+	  conditional expression.
+	</COMMENT>
+        This construct is a
+	<INDEX>case analysis</INDEX>
+	<EM>case analysis</EM> and can be expressed
+	in JavaScript using a <EM>conditional expression</EM> as follows:
+        <SNIPPET>
+	  <INDEX><DECLARATION>abs</DECLARATION></INDEX>
+          <NAME>abs_definition</NAME>
+          <EXAMPLE>abs_example</EXAMPLE>
+          <JAVASCRIPT>
+function abs(x) {
+    return x &gt;= 0 ? x : - x;
+}
+          </JAVASCRIPT>
+        </SNIPPET>
+        <SNIPPET HIDE="yes">
+          <NAME>abs_example</NAME>
+	  <REQUIRES>abs_definition</REQUIRES>
+	  <EXPECTED>5</EXPECTED>
+          <JAVASCRIPT>
+abs(-5);
+          </JAVASCRIPT>
+        </SNIPPET>
+        The general form of a conditional expression is
+        <SNIPPET EVAL="no" LATEX="yes">
+          <JAVASCRIPT>
+<META>predicate</META> ? <META>consequent-expression</META> : <META>alternative-expression</META>
+          </JAVASCRIPT>
+        </SNIPPET>
+        Conditional
+	<INDEX>conditional expression</INDEX>
+	<INDEX>syntactic forms<SUBINDEX>conditional expression</SUBINDEX></INDEX>
+	<INDEX><JAVASCRIPTINLINE>?</JAVASCRIPTINLINE><SPACE/><JAVASCRIPTINLINE>:</JAVASCRIPTINLINE><ORDER>?:</ORDER></INDEX>
+	<INDEX>predicate<SUBINDEX><ORDER>conditional</ORDER>of conditional expression</SUBINDEX></INDEX>
+	<INDEX><ORDER>true</ORDER><USE>true</USE> (keyword)</INDEX>
+	<INDEX><ORDER>false</ORDER><USE>false</USE> (keyword)</INDEX>
+	<INDEX>keywords<SUBINDEX><ORDER>true</ORDER><USE>true</USE></SUBINDEX></INDEX>
+	<INDEX>keywords<SUBINDEX><ORDER>false</ORDER><USE>false</USE></SUBINDEX></INDEX>
+	<INDEX>expression<SUBINDEX>primitive boolean</SUBINDEX></INDEX>
+	<INDEX>boolean values (true, false)</INDEX>
+	expressions begin with a
+        <META>predicate</META><EMDASH/>that is, 
+        an expression whose value is either
+	<EM>true</EM> or <EM>false</EM>, two distinguished
+	<EM>boolean</EM> values in JavaScript.
+	The primitive boolean expressions
+	<JAVASCRIPTINLINE>true</JAVASCRIPTINLINE> and
+	<JAVASCRIPTINLINE>false</JAVASCRIPTINLINE> trivially evaluate
+	to the boolean values true and false, respectively.
+	The <META>predicate</META> 
+        is followed by a question mark, the 
+        <META>consequent-expression</META>, 
+        a colon, and finally the
+        <META>alternative-expression</META>.
+      </JAVASCRIPT>
+    </SPLIT>
+  </TEXT>
+  <SPLIT>
+    <SCHEME>
+      <TEXT>
+        Conditional expressions are
+        <INDEX><DECLARATION>cond</DECLARATION><SUBINDEX>evaluation of</SUBINDEX></INDEX>
+        <INDEX>evaluation<SUBINDEX><ORDER>of cond</ORDER>of <SCHEMEINLINE>cond</SCHEMEINLINE></SUBINDEX></INDEX>
+	evaluated as follows.  The predicate
+        <LATEXINLINE>$\langle p_1 \rangle$</LATEXINLINE> is evaluated first.
+	If its value is false, then
+        <LATEXINLINE>$\langle p_2 \rangle$</LATEXINLINE> is evaluated.  
+        If <LATEXINLINE>$\langle p_2 \rangle$</LATEXINLINE><APOS/>s 
+        value is also false, then
+        <LATEXINLINE>$\langle p_3 \rangle$</LATEXINLINE> is evaluated.  
+        This process continues until a predicate is
+        found whose value is true, in which case the interpreter returns the
+        value of the corresponding 
+        <INDEX>consequent<SUBINDEX><ORDER>cond</ORDER>of <SCHEMEINLINE>cond</SCHEMEINLINE> clause</SUBINDEX></INDEX>
+        <EM>consequent expression</EM>
+	<LATEXINLINE>$\langle e \rangle$</LATEXINLINE> of the
+        clause as the value of the conditional expression.  If none of the
+        <LATEXINLINE>$\langle p \rangle$</LATEXINLINE><APOS/>s
+	is found to be true, the value of the <SCHEMEINLINE>cond</SCHEMEINLINE>
+	is undefined.
+      </TEXT>
+    </SCHEME>
+    <JAVASCRIPT>
+      <TEXT>
+        To
+	<INDEX>conditional expression<SUBINDEX>evaluation of</SUBINDEX></INDEX>
+	evaluate a conditional expression,
+	the interpreter starts by evaluating the 
+        <META>predicate</META> 
+        of the expression. If the
+	<META>predicate</META> 
+        evaluates to true, the interpreter evaluates the
+        <INDEX>consequent<SUBINDEX><ORDER>conditional expression</ORDER>of conditional expression</SUBINDEX></INDEX>
+        <META>consequent-expression</META> and returns its value as the value of the conditional.
+        If the <META>predicate</META>
+	evaluates to false, it evaluates the
+        <INDEX>alternative<SUBINDEX><ORDER>conditional expression</ORDER>of conditional expression</SUBINDEX></INDEX>
+        <META>alternative-expression</META> and returns its value as the value of the
+	conditional.<FOOTNOTE>
+        In JavaScript,
+	<INDEX>conditional expression<SUBINDEX>non-boolean value as predicate</SUBINDEX></INDEX>
+	other values of the predicate in conditionals
+	are automatically converted to true or false
+        according to
+	<INDEX>conversion rules</INDEX>
+	<EM>conversion rules</EM>, but we choose not to make
+	use of these conversion rules in this book.</FOOTNOTE>
+      </TEXT>
+    </JAVASCRIPT>
+  </SPLIT>
+  <SPLIT>
+    <SCHEME>
+      <TEXT>
+        The word
+        <INDEX>predicate</INDEX>
+	<EM>predicate</EM> is used for procedures that return true
+        or false, as well as for expressions that evaluate to true or false.
+        The absolute-value procedure <SCHEMEINLINE>abs</SCHEMEINLINE> makes use of the 
+        <INDEX><USE>&gt;</USE> (primitive numeric comparison predicate)</INDEX>   
+        <INDEX><USE>&lt;</USE> (primitive numeric comparison predicate)</INDEX>   
+        <INDEX><USE>=</USE> (primitive numeric equality predicate)</INDEX>   
+        <INDEX><USE>primitive procedures (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</USE><SUBINDEX><ORDER>&gt;</ORDER><SCHEMEINLINE>&gt;</SCHEMEINLINE></SUBINDEX></INDEX>
+        <INDEX><USE>primitive procedures (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</USE><SUBINDEX><ORDER>&lt;</ORDER><SCHEMEINLINE>&lt;</SCHEMEINLINE></SUBINDEX></INDEX>
+        <INDEX><USE>primitive procedures (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</USE><SUBINDEX><ORDER>=</ORDER><SCHEMEINLINE>=</SCHEMEINLINE></SUBINDEX></INDEX>
+        <INDEX>number(s)<SUBINDEX>comparison of</SUBINDEX></INDEX>
+        <INDEX>number(s)<SUBINDEX>equality of</SUBINDEX></INDEX>
+        <INDEX>equality<SUBINDEX><ORDER>numbers</ORDER>of numbers</SUBINDEX></INDEX>
+        primitive predicates <SCHEMEINLINE>&gt;</SCHEMEINLINE>, 
+        <SCHEMEINLINE>&lt;</SCHEMEINLINE>, and 
+        <SCHEMEINLINE>=</SCHEMEINLINE>.<FOOTNOTE>
+	<SCHEMEINLINE>Abs</SCHEMEINLINE> also uses
+        <INDEX><USE>-</USE> (primitive subtraction procedure)<SUBINDEX>as negation</SUBINDEX></INDEX>
+        <INDEX><USE>primitive procedures (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</USE><SUBINDEX><ORDER>-</ORDER><SCHEMEINLINE>-</SCHEMEINLINE></SUBINDEX></INDEX>
+        the <QUOTE>minus</QUOTE> operator <SCHEMEINLINE>-</SCHEMEINLINE>, 
+        which, when used with a single
+        operand, as in <SCHEMEINLINE>(- x)</SCHEMEINLINE>, 
+        indicates negation.</FOOTNOTE> These take two numbers as arguments and
+	test whether the first number is, respectively, greater than, less than,
+	or equal to the second number, returning true or false accordingly.
+      </TEXT>
+    </SCHEME>
+    <JAVASCRIPT>
+      <TEXT>
+        The word
+        <INDEX>predicate</INDEX>
+	<EM>predicate</EM> is used for operators and functions that
+	return true or false, as well as for expressions that
+	evaluate to true or false. The absolute-value function
+	<JAVASCRIPTINLINE>abs</JAVASCRIPTINLINE> makes use of the
+	<INDEX><USE>&gt;=</USE> (numeric comparison operator)</INDEX>
+	<INDEX><OPERATOR/><SUBINDEX><USE>&gt;=</USE> (numeric comparison)</SUBINDEX><FRAGILE/></INDEX>
+        <INDEX>number(s)<SUBINDEX>comparison of</SUBINDEX></INDEX>
+        <INDEX>number(s)<SUBINDEX>equality of</SUBINDEX></INDEX>
+        primitive predicate <JAVASCRIPTINLINE>&gt;=</JAVASCRIPTINLINE>,
+	an operator that takes two numbers as arguments and tests whether the
+	first number is greater than or equal to the second number, returning
+	true or false accordingly.
+      </TEXT>
+    </JAVASCRIPT>
+  </SPLIT>
+  <SPLIT>
+    <SCHEME>
+      <TEXT>
+        Another way to write the absolute-value procedure is
+        <SNIPPET>
+          <INDEX><DECLARATION>abs</DECLARATION></INDEX> 
+          <EXAMPLE>abs_example</EXAMPLE>
+          <SCHEME>
+(define (abs x)
+  (cond ((&lt; x 0) (- x))
+    (else x)))
+          </SCHEME>
+        </SNIPPET>
+        which could be expressed in English as 
+        <QUOTE>If <LATEXINLINE>$x$</LATEXINLINE> is less than zero
+        return <LATEXINLINE>$- x$</LATEXINLINE>; otherwise return 
+        <LATEXINLINE>$x$</LATEXINLINE>.</QUOTE>  
+        <INDEX><DECLARATION>else</DECLARATION> (special symbol in <SCHEMEINLINE>cond</SCHEMEINLINE>)</INDEX>
+        <SCHEMEINLINE>Else</SCHEMEINLINE> is a special symbol that can be used
+	in place of the <LATEXINLINE>$\langle p \rangle$</LATEXINLINE> in the
+	final clause of a <SCHEMEINLINE>cond</SCHEMEINLINE>.  
+        This causes the <SCHEMEINLINE>cond</SCHEMEINLINE> to return as its value 
+        the value of the corresponding
+	<LATEXINLINE>$\langle e \rangle$</LATEXINLINE> 
+        whenever all previous clauses have been bypassed. In fact, any
+	expression that always evaluates to a true value could be used as the
+	<LATEXINLINE>$\langle p \rangle$</LATEXINLINE> here.
+      </TEXT>
+    </SCHEME>
+    <JAVASCRIPT>
+    </JAVASCRIPT>
+  </SPLIT>
+  <SPLIT>
+    <SCHEME>
+      <TEXT>
+        Here is yet another way to write the absolute-value procedure:
+        <SNIPPET>
+          <INDEX><DECLARATION>abs</DECLARATION></INDEX> 
+          <EXAMPLE>abs_example</EXAMPLE>
+          <SCHEME>
+(define (abs x)
+  (if (&lt; x 0)
+    (- x)
+    x))
+          </SCHEME>
+        </SNIPPET>
+        <INDEX>conditional expression<SUBINDEX><ORDER>if</ORDER><SCHEMEINLINE>if</SCHEMEINLINE></SUBINDEX></INDEX>
+        This uses the
+        <INDEX><DECLARATION>if</DECLARATION></INDEX>
+        <INDEX><DECLARATION>special forms (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</DECLARATION><SUBINDEX><ORDER>if</ORDER><SCHEMEINLINE>if</SCHEMEINLINE></SUBINDEX></INDEX>
+	special form <SCHEMEINLINE>if</SCHEMEINLINE>, a restricted 
+        type of conditional that can be used when there are precisely 
+        <INDEX>case analysis<SUBINDEX><ORDER>two</ORDER>with two cases (<SCHEMEINLINE>if</SCHEMEINLINE>)</SUBINDEX></INDEX>
+        two cases in the case
+        analysis.  The general form of an <SCHEMEINLINE>if</SCHEMEINLINE>
+	expression is
+        <SNIPPET EVAL="no"  LATEX="yes">
+          <SCHEME>
+(if ^$\langle \textit{predicate} \rangle$^ ^$\langle \textit{consequent}\rangle$^ ^$\langle \textit{alternative}\rangle$^)
+          </SCHEME>
+        </SNIPPET>
+        To
+        <INDEX><DECLARATION>if</DECLARATION><SUBINDEX>evaluation of</SUBINDEX></INDEX>
+        <INDEX>evaluation<SUBINDEX><ORDER>of if</ORDER>of <SCHEMEINLINE>if</SCHEMEINLINE></SUBINDEX></INDEX>
+        <INDEX><DECLARATION>if</DECLARATION><SUBINDEX>predicate, consequent, and alternative of</SUBINDEX></INDEX>
+	evaluate an <SCHEMEINLINE>if</SCHEMEINLINE> expression, 
+        the interpreter starts by evaluating the 
+        <INDEX>predicate<SUBINDEX><ORDER>if</ORDER>of <SCHEMEINLINE>if</SCHEMEINLINE></SUBINDEX></INDEX>
+        <LATEXINLINE>$\langle \textit{predicate}\rangle$</LATEXINLINE> 
+        part of the expression.  
+        If the <LATEXINLINE>$\langle \textit{predicate}\rangle$</LATEXINLINE> 
+        evaluates to a true value, the interpreter then evaluates the 
+        <INDEX>consequent<SUBINDEX><ORDER>if</ORDER>of <SCHEMEINLINE>if</SCHEMEINLINE></SUBINDEX></INDEX>
+        <LATEXINLINE>$\langle \textit{consequent}\rangle$</LATEXINLINE> 
+        and returns its value.  Otherwise it evaluates the 
+        <INDEX>alternative of <SCHEMEINLINE>if</SCHEMEINLINE></INDEX>
+        <LATEXINLINE>$\langle \textit{alternative}\rangle$</LATEXINLINE> 
+        and returns its value.<FOOTNOTE>A minor 
+        difference
+        <INDEX><DECLARATION>if</DECLARATION><SUBINDEX><ORDER>cond</ORDER><SCHEMEINLINE>cond</SCHEMEINLINE> vs.</SUBINDEX></INDEX>
+        <INDEX><DECLARATION>cond</DECLARATION><SUBINDEX><ORDER>if</ORDER><SCHEMEINLINE>if</SCHEMEINLINE> vs.</SUBINDEX></INDEX>
+        <INDEX>sequence of expressions<SUBINDEX>in consequent of <SCHEMEINLINE>cond</SCHEMEINLINE></SUBINDEX></INDEX>
+	between <SCHEMEINLINE>if</SCHEMEINLINE> and 
+        <SCHEMEINLINE>cond</SCHEMEINLINE> is that the
+        <LATEXINLINE>$\langle e \rangle$</LATEXINLINE> 
+        part of each <SCHEMEINLINE>cond</SCHEMEINLINE> 
+        clause may be a sequence of expressions.
+        If the corresponding <LATEXINLINE>$\langle p \rangle$</LATEXINLINE> 
+        is found to be true, 
+        the expressions 
+        <LATEXINLINE>$\langle e \rangle$</LATEXINLINE> 
+        are evaluated in sequence and the value of the final
+        expression in the sequence is returned as the value of the 
+        <SCHEMEINLINE>cond</SCHEMEINLINE>.
+        In an <SCHEMEINLINE>if</SCHEMEINLINE> expression, however, 
+        the <LATEXINLINE>$\langle \textit{consequent}\rangle$</LATEXINLINE> and
+        <LATEXINLINE>$\langle \textit{alternative}\rangle$</LATEXINLINE> must
+	be single expressions.<LABEL NAME="foot:cond-consequent"/></FOOTNOTE>
+      </TEXT>
+    </SCHEME>
+    <JAVASCRIPT>
+      If we prefer to handle the zero case separately, we can specify the function
+      that computes the absolute value of a number by writing
+        <LATEX>
+          \[
+          |x| = \left\{ \begin{array}{rl}
+          x   &amp; \mbox{if $x &gt; 0$} \\
+          0   &amp; \mbox{if $x = 0$} \\
+          -x  &amp; \mbox{otherwise}
+          \end{array}
+          \right.
+          \]
+        </LATEX>
+	In JavaScript, we express a case analysis with multiple cases by nesting
+	conditional expressions as alternative expressions inside other conditional expressions:
+        <SNIPPET>
+          <INDEX><DECLARATION>abs</DECLARATION></INDEX>
+          <EXAMPLE>abs_example</EXAMPLE>
+          <JAVASCRIPT>
+function abs(x) {
+    return x &gt; 0
+           ? x
+           : x === 0
+           ? 0
+           : - x;
+}
+	  </JAVASCRIPT>
+        </SNIPPET>
+	There is no need for parentheses around the alternative expression
+	<JAVASCRIPTINLINE>x === 0 ? 0 : - x</JAVASCRIPTINLINE>, because
+	the conditional-expression syntactic form
+	<INDEX>conditional expression<SUBINDEX><ORDER>alternative</ORDER>as alternative of conditional expression</SUBINDEX></INDEX>
+	<INDEX>associativity<SUBINDEX><ORDER>conditional expression</ORDER>of conditional expression</SUBINDEX></INDEX>
+	<INDEX>conditional expression<SUBINDEX>right-associativity of</SUBINDEX></INDEX>
+	<INDEX>right-associative</INDEX>
+	is right-associative.
+	The interpreter ignores spaces and line breaks, here inserted for readability
+	to align the
+	<JAVASCRIPTINLINE>?</JAVASCRIPTINLINE><APOS/>s
+	and <JAVASCRIPTINLINE>:</JAVASCRIPTINLINE><APOS/>s under the first predicate
+	of the case analysis.
+	The general form of a
+	<INDEX>case analysis<SUBINDEX>general</SUBINDEX></INDEX>
+	case analysis is
+	<SNIPPET LATEX="yes" EVAL="no">
+	  <JAVASCRIPT>
+<META>p</META>$_1$
+? <META>e</META>$_1$
+: <META>p</META>$_2$
+? <META>e</META>$_2$
+$\vdots$
+: <META>p</META>$_n$
+? <META>e</META>$_n$
+: <META>final-alternative-expression</META>
+	  </JAVASCRIPT>
+	</SNIPPET>
+	We call a predicate <LATEXINLINE>$p_i$</LATEXINLINE>
+	together with its consequent expression
+	<LATEXINLINE>$e_i$</LATEXINLINE>
+	a
+	<INDEX>clause</INDEX>
+	<INDEX>predicate<SUBINDEX><ORDER>clause</ORDER>of clause</SUBINDEX></INDEX>
+	<EM>clause</EM>. A case analysis
+	can be seen as a sequence of clauses, followed by a final
+	alternative expression.
+	<INDEX>case analysis<SUBINDEX><ORDER>sequence</ORDER>as sequence of clauses</SUBINDEX></INDEX>
+	According to the evaluation of conditional expressions,
+	a case analysis is evaluated by first evaluating
+	the predicate <META>p</META><LATEXINLINE>$_1$</LATEXINLINE>.
+	If its value is false, then <META>p</META><LATEXINLINE>$_2$</LATEXINLINE>
+	is evaluated.
+	If <META>p</META><LATEXINLINE>$_2$</LATEXINLINE><APOS/>s
+	value is also false, then <META>p</META><LATEXINLINE>$_3$</LATEXINLINE>
+	is evaluated. This process continues until a predicate is
+        found whose value is true, in which case the interpreter returns the
+        value of the corresponding
+	<INDEX>consequent<SUBINDEX><ORDER>clause</ORDER>of clause</SUBINDEX></INDEX>
+	consequent expression
+	<META>e</META>
+	of the clause
+	as the value of the case analysis.
+	If none of the
+	<META>p</META><APOS/>s
+	is found to be true, the value of the case analysis
+	is the value of the final alternative expression.
+    </JAVASCRIPT>
+  </SPLIT>
+  <SPLIT>
+    <SCHEME>
+      <TEXT>
+        In addition to primitive predicates such as
+	<SCHEMEINLINE>&lt;</SCHEMEINLINE>,
+	<SCHEMEINLINE>=</SCHEMEINLINE>, and <SCHEMEINLINE>&gt;</SCHEMEINLINE>,
+	there are logical composition operations, which enable us to construct
+	compound predicates.  The three most frequently used are these:
+        <UL>
+          <LI>
+            <INDEX><DECLARATION>and</DECLARATION></INDEX> 
+            <INDEX><DECLARATION>special forms (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</DECLARATION><SUBINDEX><ORDER>and</ORDER><SCHEMEINLINE>and</SCHEMEINLINE></SUBINDEX></INDEX>
+            <INDEX><DECLARATION>and</DECLARATION><SUBINDEX>evaluation of</SUBINDEX></INDEX>
+            <INDEX>evaluation<SUBINDEX><ORDER>of and</ORDER>of <SCHEMEINLINE>and</SCHEMEINLINE></SUBINDEX></INDEX>
+	    <SCHEMEINLINE>(and</SCHEMEINLINE>
+	    <LATEXINLINE>$\langle e_1\rangle \ldots \langle e_n \rangle$
+	    </LATEXINLINE>
+	    <SCHEMEINLINE>)</SCHEMEINLINE><BR/>
+            The interpreter evaluates the expressions
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE> one at a time, 
+            in left-to-right order.  If any
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE> evaluates to false, 
+            the value of the <SCHEMEINLINE>and</SCHEMEINLINE> expression is
+	    false, and the rest of the
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE><APOS/>s 
+            are not evaluated. If all
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE><APOS/>s
+	    evaluate to true values, the value of the
+	    <SCHEMEINLINE>and</SCHEMEINLINE>
+            expression is the value of the last one.
+          </LI>
+          <LI>
+            <INDEX><DECLARATION>or</DECLARATION></INDEX> 
+            <INDEX><DECLARATION>special forms (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</DECLARATION><SUBINDEX><ORDER>or</ORDER><SCHEMEINLINE>or</SCHEMEINLINE></SUBINDEX></INDEX>
+            <INDEX><DECLARATION>or</DECLARATION><SUBINDEX>evaluation of</SUBINDEX></INDEX>
+            <INDEX>evaluation<SUBINDEX><ORDER>of or</ORDER>of <SCHEMEINLINE>or</SCHEMEINLINE></SUBINDEX></INDEX>
+            <SCHEMEINLINE>(or</SCHEMEINLINE> <LATEXINLINE>$\langle e_1 \rangle\ldots \langle e_n \rangle$</LATEXINLINE><SCHEMEINLINE>)</SCHEMEINLINE><BR/>
+            The interpreter evaluates the expressions 
+            <LATEXINLINE>$\langle e \rangle$</LATEXINLINE> one at a time, in
+	    left-to-right order.  If any
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE>
+	    evaluates to a true value, that value is returned as the value of the
+	    <SCHEMEINLINE>or</SCHEMEINLINE> expression, and the rest of the
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE><APOS/>s are not
+	    evaluated. If all
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE><APOS/>s
+	    evaluate to false, the value of the
+	    <SCHEMEINLINE>or</SCHEMEINLINE> expression is false.
+          </LI>
+          <LI>
+            <INDEX><DECLARATION>not</DECLARATION></INDEX> 
+            <INDEX><DECLARATION>primitive procedures (those marked <EM>ns</EM> are not in the IEEE Scheme standard)</DECLARATION><SUBINDEX><ORDER>not</ORDER><SCHEMEINLINE>not</SCHEMEINLINE></SUBINDEX></INDEX>
+            <SCHEMEINLINE>(not</SCHEMEINLINE>
+	    <LATEXINLINE>$\langle e \rangle$</LATEXINLINE><SCHEMEINLINE>)
+	    </SCHEMEINLINE><BR/>
+            The value of a <SCHEMEINLINE>not</SCHEMEINLINE> expression is true
+            when the expression <LATEXINLINE>$\langle e \rangle$</LATEXINLINE> 
+            evaluates to false, and false otherwise.
+          </LI>
+        </UL>
+        <INDEX><DECLARATION>and</DECLARATION><SUBINDEX>why a special form</SUBINDEX></INDEX>
+        <INDEX><DECLARATION>or</DECLARATION><SUBINDEX>why a special form</SUBINDEX></INDEX>
+        Notice that <SCHEMEINLINE>and</SCHEMEINLINE> and
+	<SCHEMEINLINE>or</SCHEMEINLINE> are special forms, not procedures,
+        because the subexpressions are not necessarily all evaluated.
+        <SCHEMEINLINE>Not</SCHEMEINLINE> is an ordinary procedure.
+      </TEXT>
+    </SCHEME>
+    <JAVASCRIPT>
+      <TEXT>
+        In addition to primitive predicates such as
+	<INDEX><USE>&gt;</USE> (numeric comparison operator)<FRAGILE/></INDEX>
+        <INDEX><ORDER>&gt;=0</ORDER><JAVASCRIPTINLINE>&lt;</JAVASCRIPTINLINE> (numeric comparison operator)</INDEX> 
+	<INDEX><ORDER>&gt;=1</ORDER><JAVASCRIPTINLINE>&lt;=</JAVASCRIPTINLINE> (numeric comparison operator)<FRAGILE/></INDEX>
+	<INDEX><USE>===</USE><SUBINDEX><ORDER>numeric</ORDER>as numeric equality operator</SUBINDEX><FRAGILE/></INDEX>
+	<INDEX><USE>"!==</USE><ORDER>;4</ORDER><SUBINDEX>as numeric comparison operator<ORDER>numeric</ORDER></SUBINDEX><FRAGILE/></INDEX>
+	<INDEX><OPERATOR/><SUBINDEX><USE>&gt;</USE> (numeric comparison)</SUBINDEX><FRAGILE/></INDEX>
+	<INDEX><OPERATOR/><SUBINDEX><USE>&lt;</USE> (numeric comparison)</SUBINDEX><FRAGILE/></INDEX>
+	<INDEX><OPERATOR/><SUBINDEX><USE>&lt;=</USE> (numeric comparison)</SUBINDEX><FRAGILE/></INDEX>
+	<INDEX><OPERATOR/><SUBINDEX><USE>===</USE> (for numeric comparison)</SUBINDEX><FRAGILE/></INDEX>
+	<INDEX><OPERATOR/><SUBINDEX><USE>"!==</USE> (for numeric comparison)<ORDER>;4</ORDER></SUBINDEX><FRAGILE/></INDEX>
+        <INDEX>equality<SUBINDEX><ORDER>numbers</ORDER>of numbers</SUBINDEX></INDEX>
+        <JAVASCRIPTINLINE>&gt;=</JAVASCRIPTINLINE>, 
+        <JAVASCRIPTINLINE>&gt;</JAVASCRIPTINLINE>, 
+        <JAVASCRIPTINLINE>&lt;</JAVASCRIPTINLINE>, 
+        <JAVASCRIPTINLINE>&lt;=</JAVASCRIPTINLINE>, 
+        <JAVASCRIPTINLINE>===</JAVASCRIPTINLINE>, and
+        <JAVASCRIPTINLINE>!==</JAVASCRIPTINLINE> that are applied to
+	numbers,<FOOTNOTE>For now, we restrict these operators to number
+	arguments. In sections<SPACE/><REF NAME="sec:strings"/>
+	and<SPACE/><REF NAME="sec:mutable-list-structure"/>, we shall
+	generalize the predicate
+	<JAVASCRIPTINLINE>===</JAVASCRIPTINLINE>.</FOOTNOTE>
+	there are logical composition operations, which enable us to construct
+	compound predicates. The three most frequently used are these:
+        <UL>
+          <LI>
+	    <META>expression</META><LATEXINLINE>$_1$</LATEXINLINE> <JAVASCRIPTINLINE>&amp;&amp;</JAVASCRIPTINLINE>
+	    <META>expression</META><LATEXINLINE>$_2$</LATEXINLINE><BR/>
+	    This operation expresses
+	    <INDEX><USE>&amp;&amp;</USE> (logical conjunction)<ORDER>;1</ORDER><FRAGILE/></INDEX>
+	    <INDEX><USE>&amp;&amp;</USE> (logical conjunction)<SUBINDEX>evaluation of</SUBINDEX><ORDER>;1</ORDER><FRAGILE/></INDEX>
+	    <INDEX>syntactic forms<SUBINDEX>logical conjunction</SUBINDEX><FRAGILE/></INDEX>
+            <INDEX>evaluation<SUBINDEX>of <JAVASCRIPTINLINE>&amp;&amp;</JAVASCRIPTINLINE><ORDER>;1</ORDER></SUBINDEX><FRAGILE/></INDEX>
+	    <INDEX>conjunction (logical)</INDEX>
+	    <EM>logical conjunction</EM>, meaning roughly 
+	    the same as the English word <QUOTE>and.</QUOTE>
+	    This syntactic form is syntactic sugar<FOOTNOTE>
+            Syntactic forms that are simply convenient
+            alternative surface structures for things that can be written in more
+            uniform ways are sometimes called <EM>syntactic sugar</EM>, to use a
+            phrase coined by 
+            <INDEX>Landin, Peter</INDEX>
+            <INDEX>syntactic sugar</INDEX>
+	    Peter Landin.	    
+	    </FOOTNOTE> for
+	    <META>expression</META><LATEXINLINE>$_1$</LATEXINLINE> <JAVASCRIPTINLINE>?</JAVASCRIPTINLINE>
+	    <META>expression</META><LATEXINLINE>$_2$</LATEXINLINE> <JAVASCRIPTINLINE>:</JAVASCRIPTINLINE>
+	    <JAVASCRIPTINLINE>false</JAVASCRIPTINLINE>.
+          </LI>
+          <LI>
+            <META>expression</META><LATEXINLINE>$_1$</LATEXINLINE>
+            <JAVASCRIPTINLINE>||</JAVASCRIPTINLINE>
+            <META>expression</META><LATEXINLINE>$_2$</LATEXINLINE><BR/>
+	    This operation expresses
+	    <INDEX>{\tt "|"|} (logical disjunction)<ORDER>;2</ORDER><FRAGILE/></INDEX>
+	    <INDEX>{\tt "|"|} (logical disjunction)<ORDER>;2</ORDER><SUBINDEX>evaluation of</SUBINDEX><FRAGILE/></INDEX>
+	    <INDEX>syntactic forms<SUBINDEX>logical disjunction</SUBINDEX><FRAGILE/></INDEX>
+            <INDEX>evaluation<SUBINDEX>of {\tt "|"|}<ORDER>;2</ORDER></SUBINDEX><FRAGILE/></INDEX>
+	    <INDEX>disjunction (logical)</INDEX>
+	    <EM>logical disjunction</EM>, meaning roughly
+	    the same as the English word <QUOTE>or.</QUOTE>
+	    This syntactic form is syntactic sugar for
+	    <META>expression</META><LATEXINLINE>$_1$</LATEXINLINE> <JAVASCRIPTINLINE>?</JAVASCRIPTINLINE>
+	    <JAVASCRIPTINLINE>true</JAVASCRIPTINLINE> <JAVASCRIPTINLINE>:</JAVASCRIPTINLINE>
+	    <META>expression</META><LATEXINLINE>$_2$</LATEXINLINE>.
+
+          </LI>
+          <LI>
+            <JAVASCRIPTINLINE>!</JAVASCRIPTINLINE>
+	    <META>expression</META><BR/>
+	    This operation expresses
+	    <INDEX><USE>"!</USE> (logical negation operator)<ORDER>;3</ORDER></INDEX>
+	    <INDEX><OPERATOR/><SUBINDEX><USE>"!</USE> (logical negation)</SUBINDEX><FRAGILE/></INDEX>
+	    <INDEX>negation<SUBINDEX>logical (<JAVASCRIPTINLINE>"!</JAVASCRIPTINLINE>)</SUBINDEX></INDEX>
+	    <EM>logical negation</EM>, meaning
+	    roughly the same as the English word <QUOTE>not.</QUOTE>
+            The value of the expression is true when
+	    <META>expression</META>
+	    evaluates to false, and false otherwise.
+          </LI>
+        </UL>
+        Notice that <JAVASCRIPTINLINE>&amp;&amp;</JAVASCRIPTINLINE> and 
+        <JAVASCRIPTINLINE>||</JAVASCRIPTINLINE> are syntactic forms,
+	not operators;
+	<INDEX><USE>&amp;&amp;</USE> (logical conjunction)<ORDER>;1</ORDER><SUBINDEX>why a syntactic form</SUBINDEX><FRAGILE/></INDEX>
+	<INDEX>{\tt "|"|} (logical disjunction)<ORDER>;2</ORDER><SUBINDEX>why a syntactic form</SUBINDEX><FRAGILE/></INDEX>
+	their right-hand
+        expression is not always evaluated. The operator
+        <JAVASCRIPTINLINE>!</JAVASCRIPTINLINE>, on the other hand, 
+        follows the evaluation rule of section
+	<REF NAME="sec:evaluating-combinations"/>.
+        It is a <EM>unary</EM> operator, which means that it takes only
+	one argument, whereas the arithmetic operators and primitive predicates
+	discussed so far
+	are <EM>binary</EM>, taking two arguments. The operator
+        <JAVASCRIPTINLINE>!</JAVASCRIPTINLINE> precedes its argument;
+	we call it a
+        <INDEX><USE>-</USE><SUBINDEX>as numeric negation operator</SUBINDEX></INDEX>
+        <INDEX><OPERATOR/><SUBINDEX><USE>-</USE> (numeric negation operator)</SUBINDEX></INDEX>
+	<INDEX>negation<SUBINDEX>numeric (<JAVASCRIPTINLINE>-</JAVASCRIPTINLINE>)</SUBINDEX></INDEX>
+	<INDEX>binary operator</INDEX>
+	<INDEX>unary operator</INDEX>
+	<INDEX>prefix operator</INDEX>
+	<EM>prefix operator</EM>. Another prefix operator is
+	the numeric negation operator, an example of
+	which is the expression <JAVASCRIPTINLINE>- x</JAVASCRIPTINLINE>
+	in the <JAVASCRIPTINLINE>abs</JAVASCRIPTINLINE> functions above.
+      </TEXT>
+    </JAVASCRIPT>
+  </SPLIT>
+
+  <SPLIT>
+    <SCHEME>
+      <TEXT>
+        As an example of how these are used, the condition that a 
+        number <LATEXINLINE>$x$</LATEXINLINE> be in the range
+	<LATEXINLINE>$5 &lt; x &lt; 10$</LATEXINLINE> may be expressed as
+        <SNIPPET EVAL="no">
+          <SCHEME>
+(and (> x 5) (&lt; x 10))
+          </SCHEME>
+        </SNIPPET>
+      </TEXT>
+    </SCHEME>
+    <JAVASCRIPT>
+      <TEXT>
+        As an example of how these predicates are used, the condition that a 
+        number <LATEXINLINE>$x$</LATEXINLINE> be in the range
+	<LATEXINLINE>$5 &lt; x &lt; 10$</LATEXINLINE> may be expressed as
+        <SNIPPET EVAL="no">
+          <JAVASCRIPT>
+x &gt; 5 &amp;&amp; x &lt; 10 
+          </JAVASCRIPT>
+        </SNIPPET>
+        The syntactic form
+	<JAVASCRIPTINLINE>&amp;&amp;</JAVASCRIPTINLINE>
+        has lower precedence than the comparison operators
+        <JAVASCRIPTINLINE>&gt;</JAVASCRIPTINLINE>
+	and<SPACE/><JAVASCRIPTINLINE>&lt;</JAVASCRIPTINLINE>, and 
+	the conditional-expression syntactic form
+	<LATEXINLINE>$\cdots$</LATEXINLINE><JAVASCRIPTINLINE>?</JAVASCRIPTINLINE><LATEXINLINE>$\cdots$</LATEXINLINE><JAVASCRIPTINLINE>:</JAVASCRIPTINLINE><LATEXINLINE>$\cdots$</LATEXINLINE>
+	has lower precedence than any other operator we have encountered so far,
+	a property we used in
+	the <JAVASCRIPTINLINE>abs</JAVASCRIPTINLINE> functions above.
+      </TEXT>
+    </JAVASCRIPT>
+  </SPLIT>
+  <TEXT>
+    As another example, we can
+    <SPLITINLINE>
+      <SCHEME>
+	define
+      </SCHEME>
+      <JAVASCRIPT>
+	declare
+      </JAVASCRIPT>
+    </SPLITINLINE>
+    a predicate to test whether one number is 
+    <SPLITINLINE>
+      <SCHEME>
+	<INDEX><USE>&gt;=</USE></INDEX> 
+      </SCHEME>
+    </SPLITINLINE>
+    greater than or equal to another as    
+    <SNIPPET>
+      <EXAMPLE>geq_example</EXAMPLE>
+      <SCHEME>
+(define (&gt;= x y)
+  (or (&gt; x y) (= x y)))
+      </SCHEME>
+      <JAVASCRIPT>
+function greater_or_equal(x, y) {
+    return x &gt; y || x === y;
+}
+      </JAVASCRIPT>
+    </SNIPPET>
+    or alternatively as
+    <SPLITINLINE>
+      <SCHEME>
+	<INDEX><USE>&gt;=</USE></INDEX> 
+      </SCHEME>
+    </SPLITINLINE>
+    <SNIPPET>
+      <EXAMPLE>geq_example</EXAMPLE>
+      <SCHEME>
+(define (&gt;= x y)
+  (not (&lt; x y)))
+      </SCHEME>
+      <JAVASCRIPT>
+function greater_or_equal(x, y) {
+    return ! (x &lt; y);
+}
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET HIDE="yes">
+      <NAME>geq_example</NAME>
+      <SCHEME>
+(&gt;= 7 4)
+      </SCHEME>
+      <JAVASCRIPT>
+greater_or_equal(7, 4);
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SPLIT>
+      <SCHEME>
+      </SCHEME>
+      <JAVASCRIPT>
+        The function <JAVASCRIPTINLINE>greater_or_equal</JAVASCRIPTINLINE>
+	when applied to two numbers, behaves the same as the operator
+	<JAVASCRIPTINLINE>&gt;=</JAVASCRIPTINLINE>. Unary operators
+	have higher precedence than binary operators, which makes the
+	parentheses in this example necessary.
+      </JAVASCRIPT>
+    </SPLIT>
+  </TEXT>
+
+  <EXERCISE>
+    Below is a sequence of
+    <SPLITINLINE>
+      <SCHEME>
+	expressions.
+      </SCHEME>
+      <JAVASCRIPT>
+	statements.
+      </JAVASCRIPT>
+    </SPLITINLINE>
+    What is the result printed by the interpreter in response to each
+    <SPLITINLINE>
+      <SCHEME>
+        expression?
+      </SCHEME>
+      <JAVASCRIPT>
+	statement?
+      </JAVASCRIPT>
+    </SPLITINLINE>
+    Assume that the sequence is to be evaluated in the order
+    in which it is presented.
+    <SNIPPET>
+      <NAME>ten</NAME>
+      <EXPECTED>10</EXPECTED>
+      <SCHEME>
+10
+      </SCHEME>
+      <JAVASCRIPT>
+10;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>five_plus_three_plus_four</NAME>
+      <EXPECTED>12</EXPECTED>
+      <SCHEME>
+(+ 5 3 4)
+      </SCHEME>
+      <JAVASCRIPT>
+5 + 3 + 4;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>nine_minus_one</NAME>
+      <EXPECTED>8</EXPECTED>
+      <SCHEME>
+(- 9 1)
+      </SCHEME>
+      <JAVASCRIPT>
+9 - 1;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>six_over_two</NAME>
+      <EXPECTED>3</EXPECTED>
+      <SCHEME>
+(/ 6 2)
+      </SCHEME>
+      <JAVASCRIPT>
+6 / 2;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>two_times_four_etc</NAME>
+      <EXPECTED>6</EXPECTED>
+      <SCHEME>
+(+ (* 2 4) (- 4 6))
+      </SCHEME>
+      <JAVASCRIPT>
+2 * 4 + (4 - 6);
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>definea</NAME>
+      <EXPECTED>undefined</EXPECTED>
+      <SCHEME>
+(define a 3)
+      </SCHEME>
+      <JAVASCRIPT>
+const a = 3;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>defineb</NAME>
+      <REQUIRES>definea</REQUIRES>
+      <EXPECTED>undefined</EXPECTED>
+      <SCHEME>
+(define b (+ a 1))
+      </SCHEME>
+      <JAVASCRIPT>
+const b = a + 1;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>a_plus_b_etc</NAME>
+      <REQUIRES>defineb</REQUIRES>
+      <EXPECTED>19</EXPECTED>
+      <SCHEME>
+(+ a b (* a b))
+      </SCHEME>
+      <JAVASCRIPT>
+a + b + a * b;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>a_equal_b</NAME>
+      <REQUIRES>defineb</REQUIRES>
+      <EXPECTED>false</EXPECTED>
+      <SCHEME>
+(= a b)
+      </SCHEME>
+      <JAVASCRIPT>
+a === b;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>b_gt_a_etc</NAME>
+      <REQUIRES>defineb</REQUIRES>
+      <EXPECTED>4</EXPECTED>
+      <SCHEME>
+(if (and (> b a) (&lt; b (* a b)))
+  b
+  a)
+      </SCHEME>
+      <JAVASCRIPT>
+b &gt; a &amp;&amp; b &lt; a * b ? b : a;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>a_equal_four_etc</NAME>
+      <REQUIRES>defineb</REQUIRES>
+      <EXPECTED>16</EXPECTED>
+      <SCHEME>
+(cond ((= a 4) 6)
+      ((= b 4) (+ 6 7 a))
+      (else 25))
+      </SCHEME>
+      <JAVASCRIPT>
+a === 4
+? 6
+: b === 4
+? 6 + 7 + a
+: 25;
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>two_plus_etc</NAME>
+      <REQUIRES>defineb</REQUIRES>
+      <EXPECTED>6</EXPECTED>
+      <SCHEME>
+(+ 2 (if (> b a) b a))
+      </SCHEME>
+      <JAVASCRIPT>
+2 + (b &gt; a ? b : a);
+      </JAVASCRIPT>
+    </SNIPPET>
+    <SNIPPET>
+      <NAME>a_greater_b_etc</NAME>
+      <REQUIRES>defineb</REQUIRES>
+      <EXPECTED>16</EXPECTED>
+      <SCHEME>
+(* (cond ((> a b) a)
+         ((&lt; a b) b)
+         (else -1))
+   (+ a 1))
+      </SCHEME>
+      <JAVASCRIPT>
+(a &gt; b
+ ? a
+ : a &lt; b
+ ? b
+ : -1)
+*
+(a + 1);
+      </JAVASCRIPT>
+    </SNIPPET>
+	The parentheses around the conditional expressions in the last two statements
+	are necessary because the
+	<INDEX>conditional expression<SUBINDEX><ORDER>operand</ORDER>as operand of operator combination</SUBINDEX><FRAGILE/></INDEX>
+	conditional-expression syntactic form has lower
+	<INDEX>precedence<SUBINDEX><ORDER>conditional expression</ORDER>of conditional expression</SUBINDEX></INDEX>
+	<INDEX>conditional expression<SUBINDEX>precedence of</SUBINDEX></INDEX>
+	precedence than the arithmetic operators
+	<JAVASCRIPTINLINE>+</JAVASCRIPTINLINE> and
+	<JAVASCRIPTINLINE>*</JAVASCRIPTINLINE>.
+  </EXERCISE>
+
+  <EXERCISE>
+    Translate the following expression into 
+    <SPLITINLINE>
+      <SCHEME>
+        prefix form
+      </SCHEME>
+      <JAVASCRIPT>
+        JavaScript
+      </JAVASCRIPT>
+    </SPLITINLINE>
+    <LATEX>
+      \[
+      \frac{5+4+\left(2-\left(3-(6+\frac{4}{5})\right)\right)}{3 (6-2) (2-7)}
+      \]
+    </LATEX>
+    <SOLUTION>   
+      <SNIPPET>
+	<JAVASCRIPT>
+(5 + 4 + (2 - (3 - (6 + 4 / 5)))) 
+/
+(3 * (6 - 2) * (2 - 7));
+	</JAVASCRIPT>
+      </SNIPPET>
+    </SOLUTION>
+  </EXERCISE>
+  <EXERCISE>
+    <SPLITINLINE>
+      <SCHEME>
+        Define a procedure
+      </SCHEME>
+      <JAVASCRIPT>
+	Declare a function
+      </JAVASCRIPT>
+    </SPLITINLINE>
+    that takes three numbers as arguments and returns
+    the sum of the squares of the two larger numbers.
+    <SOLUTION>
+      <SNIPPET>
+        <EXAMPLE>larger_two_square_example</EXAMPLE>
+        <REQUIRES>square_definition</REQUIRES>
+        <JAVASCRIPT>
+function f(x, y, z) {
+   return square(x) + square(y) + square(z) -
+          // subtract the square of the smallest
+          square(x &gt; y ? (y &gt; z ? z : y) : (x &gt; z ? z : x));
+}
+        </JAVASCRIPT>
+        <SCHEME>
+(define (f x y z)
+   (let ((smallest (if (&gt; x y) (if (&gt; y z) z y) (if (&gt; x z) z x))))
+      (- (+ (square x) (square y) (square z)) (square smallest))))
+        </SCHEME>
+      </SNIPPET>
+    </SOLUTION>
+    <SNIPPET HIDE="yes">
+      <NAME>larger_two_square_example</NAME>
+      <SCHEME>
+(f 4 7 2)
+      </SCHEME>
+      <JAVASCRIPT>
+f(4, 7, 2);
+      </JAVASCRIPT>
+    </SNIPPET>
+  </EXERCISE>
+
+  <EXERCISE>
+    <LABEL NAME="ex:a-plus-abs-b"/>
+    <SPLIT>
+      <SCHEME>
+	Observe that our model of evaluation allows for
+	<INDEX>combination<SUBINDEX>compound expression as operator of</SUBINDEX></INDEX>
+	<INDEX>compound expression<SUBINDEX><ORDER>operator</ORDER>as operator of combination</SUBINDEX></INDEX>
+	<INDEX>operator of a combination<SUBINDEX>compound expression as</SUBINDEX></INDEX>
+	combinations whose
+	operators are compound expressions.  Use this observation to describe
+	the behavior of the following procedure:
+	<SNIPPET>
+          <SCHEME>
+(define (a-plus-abs-b a b)
+  ((if (> b 0) + -) a b))
+          </SCHEME>
+	</SNIPPET>
+      </SCHEME>
+      <JAVASCRIPT>
+	Observe that our model of evaluation allows for
+	<INDEX>function application<SUBINDEX>compound expression as function expression of</SUBINDEX></INDEX>
+	<INDEX>compound expression<SUBINDEX><ORDER>function expression</ORDER>as function expression of application</SUBINDEX></INDEX>
+	<INDEX>function expression<SUBINDEX>compound expression as</SUBINDEX></INDEX>
+	applications
+	whose function expressions are compound expressions. Use this observation
+	to describe the behavior of the following function:
+	<SNIPPET>
+          <EXAMPLE>plusminusexample</EXAMPLE>
+          <JAVASCRIPT>
+function plus(a, b) { return a + b; }
+function minus(a, b) { return a - b; }
+function a_plus_abs_b(a, b) {
+    return (b >= 0 ? plus : minus)(a, b);
+}
+          </JAVASCRIPT>
+	</SNIPPET>
+	<SNIPPET HIDE="yes">
+          <NAME>plusminusexample</NAME>
+          <JAVASCRIPT>
+a_plus_abs_b(5, -4);
+          </JAVASCRIPT>
+	</SNIPPET>
+	<COMMENT>
+	  Note that in conditional expressions in JavaScript, we cannot directly
+	  use the operators <JAVASCRIPTINLINE>+</JAVASCRIPTINLINE> and
+	  <JAVASCRIPTINLINE>-</JAVASCRIPTINLINE> as in Scheme, and instead we
+	  must use the names <JAVASCRIPTINLINE>plus</JAVASCRIPTINLINE> and
+	  <JAVASCRIPTINLINE>minus</JAVASCRIPTINLINE> because in infix notation,
+	  only operator symbols are allowed in the middle, not compound
+	  expressions.
+	</COMMENT>
+	<SOLUTION>
+	  According to section <REF NAME="sec:substitution-model"/>, evaluation
+	  of an application proceeds as follows:
+	  <OL>
+	    <LI>Evaluate the subexpressions of the application.
+	    </LI>
+            <LI>Evaluate the return expression of the result of
+	    the function expression with each
+	    parameter replaced by the corresponding result of the respective
+	    argument expression.
+            </LI>
+	  </OL>
+	  Thus the evaluation of the application 
+	  <JAVASCRIPTINLINE>a_plus_abs_b(5, -4)</JAVASCRIPTINLINE>
+	  (1) evaluates <JAVASCRIPTINLINE>a_plus_abs_b</JAVASCRIPTINLINE>,
+	  resulting in the function given above, and the arguments are
+	  already values. So we need to evaluate (2) the return expression
+	  of the function, with the parameters replaced by the arguments, thus:
+	  <JAVASCRIPTINLINE>(-4 >= 0 ? plus : minus)(5, -4)</JAVASCRIPTINLINE>.
+	  With the same rules, we need to (1) evaluate the function expression,
+	  which in this case is the conditional expression
+	  <JAVASCRIPTINLINE>-4 >= 0 ? plus : minus</JAVASCRIPTINLINE>. Since
+	  the predicate evaluates to false, the function expression
+	  evaluates to <JAVASCRIPTINLINE>minus</JAVASCRIPTINLINE>. The arguments,
+	  again (1) are already values. Thus we end up evaluating (2) the body of
+	  <JAVASCRIPTINLINE>minus</JAVASCRIPTINLINE> with the parameters
+	  <JAVASCRIPTINLINE>a</JAVASCRIPTINLINE> and
+	  <JAVASCRIPTINLINE>b</JAVASCRIPTINLINE> replaced by 5 and -4,
+	  respectively, resulting in
+	  <JAVASCRIPTINLINE>5 - (-4)</JAVASCRIPTINLINE>, which will finally
+	  evaluate to 9.
+	</SOLUTION>
+      </JAVASCRIPT>
+    </SPLIT>
+  </EXERCISE>
+
+  <EXERCISE>
+    <LABEL NAME="ex:normal-order-vs-appl-order-test"/>
+    Ben Bitdiddle has invented a test to determine whether the interpreter
+    he is faced with is using
+    <INDEX>normal-order evaluation<SUBINDEX>applicative order vs.</SUBINDEX></INDEX>
+    <INDEX>applicative-order evaluation<SUBINDEX>normal order vs.</SUBINDEX></INDEX>
+    applicative-order evaluation or normal-order
+    evaluation. He 
+    <SPLITINLINE>
+      <SCHEME>
+	defines the following two procedures
+      </SCHEME>
+      <JAVASCRIPT>
+	declares the following two functions
+      </JAVASCRIPT>
+      </SPLITINLINE>:
+      <SNIPPET>
+	<NAME>ptest</NAME>
+	<SCHEME>
+(define (p) (p))
+
+(define (test x y)
+  (if (= x 0)
+    0
+    y))
+	</SCHEME>
+	<JAVASCRIPT>
+function p() { return p(); }
+
+function test(x, y) {
+    return x === 0 ? 0 : y;
+}
+	</JAVASCRIPT>
+      </SNIPPET>
+      Then he evaluates the 
+      <SPLITINLINE>
+	<SCHEME>expression</SCHEME>
+	<JAVASCRIPT>statement</JAVASCRIPT>
+      </SPLITINLINE>
+      <SNIPPET>
+	<REQUIRES>ptest</REQUIRES>
+	<SCHEME>
+(test 0 (p))
+	</SCHEME>
+	<JAVASCRIPT>
+test(0, p());
+	</JAVASCRIPT>
+      </SNIPPET>
+      What behavior will Ben observe with an interpreter that uses
+      applicative-order evaluation?  What behavior will he observe with an
+      interpreter that uses normal-order evaluation?  Explain your answer.
+      <INDEX>normal-order evaluation<SUBINDEX><ORDER>conditional</ORDER>of conditional expressions</SUBINDEX></INDEX>
+      <INDEX>conditional expression<SUBINDEX>normal-order evaluation of</SUBINDEX></INDEX>
+      (Assume that the evaluation rule for 
+      <SPLITINLINE>
+	<SCHEME>
+          the special form <SCHEMEINLINE>if</SCHEMEINLINE> 
+	</SCHEME>
+	<JAVASCRIPT>
+          conditional expressions
+	</JAVASCRIPT>
+      </SPLITINLINE>
+      is the same whether the interpreter is using normal or applicative order:
+      The predicate expression is evaluated first, and the result determines
+      whether to evaluate the consequent or the alternative expression.)
+      <SOLUTION>		
+	<SPLIT>
+	  <JAVASCRIPT>
+	    In applicative-order evaluation of
+	    <JAVASCRIPTINLINE>test(0, p())</JAVASCRIPTINLINE>,
+	    we need to evaluate the argument expressions before we can evaluate
+	    the return expression of the function
+	    <JAVASCRIPTINLINE>test</JAVASCRIPTINLINE>.
+	    The evaluation of the argument expression
+	    <JAVASCRIPTINLINE>p()</JAVASCRIPTINLINE>
+	    will not terminate, however: It will keep evaluating application
+	    expressions of the form 
+	    <JAVASCRIPTINLINE>p()</JAVASCRIPTINLINE>, and thus the evaluation of
+            <JAVASCRIPTINLINE>test(0, p())</JAVASCRIPTINLINE> will not produce a
+	    legitimate value. In normal-order evaluation, on the other hand,
+	    the function application
+	    <JAVASCRIPTINLINE>test(0, p())</JAVASCRIPTINLINE>
+	    would immediately evaluate the return expression of the function
+	    <JAVASCRIPTINLINE>test</JAVASCRIPTINLINE>,
+	    <JAVASCRIPTINLINE>x === 0 ? 0 : y</JAVASCRIPTINLINE>
+	    after replacing the parameter
+	    <JAVASCRIPTINLINE>x</JAVASCRIPTINLINE> with
+	    <JAVASCRIPTINLINE>0</JAVASCRIPTINLINE> and
+	    <JAVASCRIPTINLINE>y</JAVASCRIPTINLINE> with
+	    <JAVASCRIPTINLINE>p()</JAVASCRIPTINLINE>.
+	    The result of the replacing would be
+	    <JAVASCRIPTINLINE>0 === 0 ? 0 : p()</JAVASCRIPTINLINE>.
+	    The evaluation of the predicate
+	    <JAVASCRIPTINLINE>0 === 0</JAVASCRIPTINLINE>
+	    results in true and thus the conditional
+	    expression evaluates to 0, without any need to
+	    evaluate <JAVASCRIPTINLINE>p()</JAVASCRIPTINLINE>.
+	  </JAVASCRIPT>
+	</SPLIT>
+      </SOLUTION>
+  </EXERCISE>
+</SUBSECTION>

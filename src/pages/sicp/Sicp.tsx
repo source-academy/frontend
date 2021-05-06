@@ -8,8 +8,11 @@ type StateProps = {};
 type OwnProps = {};
 
 const Sicp: React.FC<SicpProps> = props => {
+
+  const content = "text";
+
   return (
-    <SicpDisplay />
+    <SicpDisplay content={content} />
   );
 };
 
