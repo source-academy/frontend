@@ -841,15 +841,14 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     contestEntries: [
       {
         submission_id: 1,
-        answer: { code: "display('hello world')" },
-        rank: 1
+        answer: { code: "display('hello world')" }
       },
       {
         submission_id: 2,
-        answer: { code: 'function test() { return 1; }' },
-        rank: 2
+        answer: { code: 'function test() { return 1; }' }
       }
     ],
+    // TODO: validate that the contest entries are displayed in order.
     contestLeaderboard: [],
     library: mockRuneLibrary
   }

@@ -5,61 +5,71 @@ import SideContentContestVotingContainer from '../SideContentContestVotingContai
 const mockContestEntries = [
   {
     submission_id: 1,
-    answer: { code: "display('hello world')" },
-    rank: 1
+    answer: { code: "display('hello world')" }
   },
   {
     submission_id: 2,
-    answer: { code: 'function test() { return 1; }' },
-    rank: 2
+    answer: { code: 'function test() { return 1; }' }
   }
 ];
 
 const mockProps = {
-  handleContestEntryClick: () => null,
-  handleSave: () => null,
+  handleContestEntryClick: () => {},
+  handleSave: () => {},
   canSave: true,
   contestEntries: mockContestEntries
 };
 
-// Basic snapshot testing
-test('SideContentContestVotingContainer component renders correctly for unsubmit status.', () => {
-  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
-  const tree = mount(contestVotingContainer);
-  expect(tree.debug()).toMatchSnapshot();
-  expect(tree.find('SideContentContestEntryCard')).toHaveLength(mockContestEntries.length);
+// Basic snapshot testing to catch unexpected changes
+test('SideContentContestVotingContainer matches snapshot', () => {
+  const contestVotingComponentRender = mount(<SideContentContestVotingContainer {...mockProps} />);
 
-  tree.unmount();
+  expect(contestVotingComponentRender.debug()).toMatchSnapshot();
 });
 
-const mockPropsSubmitted = {
-  handleContestEntryClick: () => null,
-  handleSave: () => null,
-  canSave: true,
-  contestEntries: [
-    {
-      submission_id: 1,
-      answer: { code: "display('hello world')" },
-      rank: 1
-    },
-    {
-      submission_id: 2,
-      answer: { code: 'function test() { return 1; }' },
-      rank: 2
-    },
-    { submission_id: 3, answer: { code: '' }, rank: 3 }
-  ]
-};
+test('SideContentContestVotingContainer component renders correct number of entries.', () => {
+  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
+  const contestVotingContainerRender = mount(contestVotingContainer);
 
-test('SideContentVotingContainer component renders correctly for submitted status.', () => {
-  const contestVotingContainerSubmitted = (
-    <SideContentContestVotingContainer {...mockPropsSubmitted} />
-  );
-  const tree = mount(contestVotingContainerSubmitted);
-  expect(tree.debug()).toMatchSnapshot();
-  expect(tree.find('SideContentContestEntryCard')).toHaveLength(
-    mockPropsSubmitted.contestEntries.length
+  expect(contestVotingContainerRender.find('SideContentContestEntryCard')).toHaveLength(
+    mockContestEntries.length
   );
 
-  tree.unmount();
+  contestVotingContainerRender.setProps({
+    contestEntries: [...mockContestEntries, { submission_id: 3, answer: { code: '' } }]
+  });
+
+  expect(contestVotingContainerRender.find('SideContentContestEntryCard')).toHaveLength(
+    mockContestEntries.length
+  );
+});
+
+// testing the ranking validation logic
+test('SideContentVotingContainer only updates when ranks assigned to entries are unique and within rank limit.', () => {
+  const mockedHandleContestEntryClick = jest.fn();
+  const mockedHandleSave = jest.fn();
+
+  const mockProps = {
+    handleContestEntryClick: mockedHandleContestEntryClick,
+    handleSave: mockedHandleSave,
+    canSave: true,
+    contestEntries: mockContestEntries
+  };
+
+  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
+  const contestVotingContainerRender = mount(contestVotingContainer);
+
+  const contestVotingCard = contestVotingContainerRender.find('input');
+
+  // simulate change to duplicate
+  contestVotingCard.map(card => card.simulate('change', { target: { value: 1 } }));
+  expect(mockedHandleSave).toHaveBeenCalledTimes(0);
+
+  // simulate change to exceed rank limit (ie. if 2 entries can only rank [1, 2])
+  contestVotingCard.map(card => card.simulate('change', { target: { value: 3 } }));
+  expect(mockedHandleSave).toHaveBeenCalledTimes(0);
+
+  // simulate appropriate ranking for entries
+  contestVotingCard.map((card, index) => card.simulate('change', { target: { value: index + 1 } }));
+  expect(mockedHandleSave).toHaveBeenCalledTimes(1);
 });
