@@ -169,7 +169,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
       editorProps:
-        question.type === QuestionTypes.programming
+        question.type === QuestionTypes.programming || QuestionTypes.voting
           ? {
               editorSessionId: '',
               editorValue: this.props.editorValue!,
