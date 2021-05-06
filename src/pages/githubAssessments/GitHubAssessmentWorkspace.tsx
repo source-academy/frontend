@@ -39,6 +39,7 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
+import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
@@ -98,6 +99,12 @@ export type StateProps = {
 };
 
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+  const octokit = store.getState().session.githubOctokitInstance as Octokit;
+
+  if (octokit === undefined) {
+    history.push('/githubassessments/missions');
+  }
+
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
@@ -121,7 +128,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
 
   const missionRepoData = props.location.state as MissionRepoData;
-  const octokit = store.getState().session.githubOctokitInstance as Octokit;
 
   const loadMission = useCallback(async () => {
     if (octokit === undefined) return;
