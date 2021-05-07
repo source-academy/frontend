@@ -4,7 +4,7 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { store } from '../../pages/createStore';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
@@ -21,7 +21,7 @@ export type ControlBarGitHubLoginButtonProps = {
  */
 export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+  const isLoggedIn = getGitHubOctokitInstance() !== undefined;
 
   const loginButton = isLoggedIn
     ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)

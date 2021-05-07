@@ -17,8 +17,7 @@ import { OverallState } from './ApplicationTypes';
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   title: state.application.title,
   role: state.session.role,
-  name: state.session.name,
-  githubOctokitInstance: state.session.githubOctokitInstance
+  name: state.session.name
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

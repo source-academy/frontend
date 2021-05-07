@@ -9,7 +9,6 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import React, { useCallback, useEffect } from 'react';
@@ -55,10 +54,10 @@ import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
+  getGitHubOctokitInstance,
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { store } from '../createStore';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -109,7 +108,7 @@ export type StateProps = {
 };
 
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
-  const octokit = store.getState().session.githubOctokitInstance as Octokit;
+  const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
     history.push('/githubassessments/missions');

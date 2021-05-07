@@ -40,6 +40,12 @@ const GitHubMissionListing: React.FC<any> = () => {
   const octokit = getGitHubOctokitInstance();
 
   useEffect(() => {
+    if (octokit === undefined) {
+      setDisplay(
+        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+      );
+      return;
+    }
     retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
   }, [octokit, setBrowsableMissions, setDisplay]);
 
