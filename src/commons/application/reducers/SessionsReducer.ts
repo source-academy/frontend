@@ -112,7 +112,7 @@ export const SessionsReducer: Reducer<SessionState> = (
     case REMOVE_GITHUB_OCTOKIT_OBJECT:
       return {
         ...state,
-        githubOctokitInstance: { octokit: undefined }
+        githubOctokitObject: { octokit: undefined }
       };
     default:
       return state;

@@ -13,6 +13,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -37,16 +38,16 @@ const GitHubMissionListing: React.FC<any> = () => {
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
   const [display, setDisplay] = useState<JSX.Element>(<></>);
 
-  const octokit = getGitHubOctokitInstance();
+  const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
   useEffect(() => {
     if (octokit === undefined) {
       setDisplay(
         <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
       );
-      return;
+    } else {
+      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
     }
-    retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
   }, [octokit, setBrowsableMissions, setDisplay]);
 
   useEffect(() => {

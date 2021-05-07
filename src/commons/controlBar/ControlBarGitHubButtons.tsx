@@ -3,10 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { GitHubState } from '../../features/github/GitHubTypes';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
@@ -33,7 +33,8 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
  */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const isLoggedIn = getGitHubOctokitInstance() !== undefined;
+  const isLoggedIn =
+    useSelector((store: any) => store.session.githubOctokitObject).octokit !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;
   const shouldDisableSaveButton =
