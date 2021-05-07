@@ -13,6 +13,11 @@ export type GitHubMissionSaveDialogProps = {
   resolveDialog: (arg: GitHubMissionSaveDialogResolution) => void;
 };
 
+/**
+ * A dialog that prompts the user to confirm their save. Displays the files that will change, as well as the prompt for the user to enter a commit message.
+ *
+ * @param props Component properties
+ */
 export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = props => {
   const [commitMessage, setCommitMessage] = useState('');
 

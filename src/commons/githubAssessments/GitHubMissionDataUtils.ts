@@ -7,6 +7,12 @@ import TaskData from './TaskData';
 
 const maximumTasksPerMission = 20;
 
+/**
+ * Retrieves mission information - such as the briefings, questions, metadata etc. from a GitHub Repository.
+ *
+ * @param missionRepoData Repository information where the mission is stored
+ * @param octokit The Octokit instance for the authenticated user
+ */
 export async function getMissionData(missionRepoData: MissionRepoData, octokit: any) {
   const briefingString = await getContentAsString(
     missionRepoData.repoOwner,
@@ -40,6 +46,13 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
   return newMissionData;
 }
 
+/**
+ * Retrieves information regarding each task in the Mission from the GitHub repository.
+ *
+ * @param repoOwner The owner of the mission repository
+ * @param repoName The name of the mission repository
+ * @param octokit The Octokit instance for the authenticated user
+ */
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
@@ -114,6 +127,14 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
   return questions;
 }
 
+/**
+ * Retrieves content from a single file on GitHub and returns it in string form.
+ *
+ * @param repoOwner The owner of the mission repository
+ * @param repoName The name of the mission repository
+ * @param filepath The path to the file to be retrieved
+ * @param octokit The Octokit instance for the authenticated user
+ */
 export async function getContentAsString(
   repoOwner: string,
   repoName: string,
@@ -137,6 +158,11 @@ export async function getContentAsString(
   return contentString;
 }
 
+/**
+ * Converts the contents of the '.metadata' file into a MissionMetadata object.
+ *
+ * @param metadataString The file contents of the '.metadata' file of a mission repository
+ */
 function convertMetadataStringToMissionMetadata(metadataString: string) {
   const missionMetadata: MissionMetadata = {
     coverImage: '',
@@ -163,6 +189,15 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
   return retVal;
 }
 
+/**
+ * Converts the contents of a '.metadata' file into an object of type R.
+ *
+ * @param propertyContainer The object of which properties will be set
+ * @param stringProps An array containing the names of properties with string values
+ * @param numProps An array containing the names of properties with numerical values
+ * @param dateProps An array containing the names of properties with date values
+ * @param metadataString The content of the '.metadata' file to be parsed
+ */
 export function parseMetadataProperties<R>(
   propertyContainer: R,
   stringProps: string[],
