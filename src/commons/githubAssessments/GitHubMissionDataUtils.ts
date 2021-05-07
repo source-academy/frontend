@@ -11,14 +11,14 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
   const briefingString = await getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
-    '/README.md',
+    'README.md',
     octokit
   );
 
   const metadataString = await getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
-    '/METADATA',
+    '.metadata',
     octokit
   );
 

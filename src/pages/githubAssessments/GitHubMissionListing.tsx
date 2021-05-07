@@ -93,7 +93,7 @@ async function retrieveBrowsableMissions(
       return;
     }
 
-    if (files.find(file => file.name === 'METADATA') !== undefined) {
+    if (files.find(file => file.name === '.metadata') !== undefined) {
       const missionRepoData: MissionRepoData = {
         repoOwner: repo.owner.login,
         repoName: repo.name,
@@ -120,7 +120,7 @@ async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octok
   const metadata = await getContentAsString(
     missionRepo.repoOwner,
     missionRepo.repoName,
-    '/METADATA',
+    '.metadata',
     octokit
   );
   const browsableMission = createBrowsableMission(missionRepo, metadata);
