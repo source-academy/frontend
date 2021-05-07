@@ -1,10 +1,24 @@
-import { shallow } from 'enzyme';
+import { Card } from '@blueprintjs/core';
+import { mount, shallow } from 'enzyme';
+import { Provider } from 'react-redux';
+import SideContentLeaderboardCard from 'src/commons/sideContent/SideContentLeaderboardCard';
 
 import { ContestEntry, Library } from '../../assessment/AssessmentTypes';
+import { EditorProps } from '../../editor/Editor';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
+import { mockInitialStore } from '../../mocks/StoreMocks';
+import SideContentContestEntryCard from '../../sideContent/SideContentContestEntryCard';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
+
+const MockEditor = (props: EditorProps) => <div id="mock-editor">{props.editorValue}</div>;
+// mock editor for testing update
+jest.mock('../../editor/Editor', () => (props: EditorProps) => (
+  <MockEditor {...props}></MockEditor>
+));
+
+const mockedHandleEditorValueChange = jest.fn();
 
 const defaultProps: AssessmentWorkspaceProps = {
   assessmentId: 0,
@@ -26,7 +40,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleClearContext: (library: Library, shouldInitLibrary: boolean) => {},
   handleDeclarationNavigate: (cursorPosition: Position) => {},
   handleEditorEval: () => {},
-  handleEditorValueChange: (val: string) => {},
+  handleEditorValueChange: mockedHandleEditorValueChange,
   handleEditorHeightChange: (height: number) => {},
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
@@ -83,11 +97,12 @@ const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   questionId: 2
 };
 
+// set questionId to index 0 since contest voting only has 1 question
 const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[6],
   assessmentId: 7,
-  questionId: 1
+  questionId: 0
 };
 
 test('AssessmentWorkspace page "loading" content renders correctly', () => {
@@ -156,4 +171,44 @@ test('AssessmentWorkspace renders Grading tab correctly if the question has been
   expect(tree.debug()).toMatchSnapshot();
   // Uncomment when fixed
   // expect(tree.find('.grading-icon').hostNodes()).toHaveLength(1);
+});
+
+test('Clicking the contest entry updates the editor for contest voting.', () => {
+  const app = (
+    <Provider store={mockInitialStore()}>
+      <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
+
+  mockedHandleEditorValueChange.mockClear();
+  tree.find(SideContentContestEntryCard).find(Card).at(0).simulate('click');
+  expect(mockedHandleEditorValueChange).toBeCalledTimes(1);
+  expect(mockedHandleEditorValueChange.mock.calls[0][0]).toBe("display('voting test')");
+
+  tree.find(SideContentContestEntryCard).find(Card).at(1).simulate('click');
+  expect(mockedHandleEditorValueChange).toBeCalledTimes(2);
+  expect(mockedHandleEditorValueChange.mock.calls[1][0]).toBe(
+    'function voting_test() { return true; }'
+  );
+});
+
+test('Clicking the contest entry updates the editor for contest leaderboard.', () => {
+  const app = (
+    <Provider store={mockInitialStore()}>
+      <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
+
+  mockedHandleEditorValueChange.mockClear();
+  tree.find(SideContentLeaderboardCard).find(Card).at(0).simulate('click');
+  expect(mockedHandleEditorValueChange).toBeCalledTimes(1);
+  expect(mockedHandleEditorValueChange.mock.calls[0][0]).toBe("display('leaderboard test')");
+
+  tree.find(SideContentLeaderboardCard).find(Card).at(1).simulate('click');
+  expect(mockedHandleEditorValueChange).toBeCalledTimes(2);
+  expect(mockedHandleEditorValueChange.mock.calls[1][0]).toBe(
+    'function leaderboard_test() { return true; }'
+  );
 });

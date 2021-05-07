@@ -841,15 +841,26 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     contestEntries: [
       {
         submission_id: 1,
-        answer: { code: "display('hello world')" }
+        answer: { code: "display('voting test')" }
       },
       {
         submission_id: 2,
-        answer: { code: 'function test() { return 1; }' }
+        answer: { code: 'function voting_test() { return true; }' }
       }
     ],
     // TODO: validate that the contest entries are displayed in order.
-    contestLeaderboard: [],
+    contestLeaderboard: [
+      {
+        submission_id: 1,
+        student_name: 'student_1',
+        answer: { code: "display('leaderboard test')" }
+      },
+      {
+        submission_id: 2,
+        student_name: 'student_2',
+        answer: { code: 'function leaderboard_test() { return true; }' }
+      }
+    ],
     library: mockRuneLibrary
   }
 ];
