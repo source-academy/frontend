@@ -23,6 +23,7 @@ export class NullDrawable extends React.PureComponent<NullProps> {
         points={[0, Config.BoxHeight, Config.BoxWidth, 0]}
         strokeWidth={Config.StrokeWidth - 1}
         stroke={Config.Stroke}
+        preventDefault={false}
       />
     );
   }
