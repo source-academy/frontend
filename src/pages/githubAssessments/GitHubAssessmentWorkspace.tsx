@@ -1,4 +1,13 @@
-import { Button, ButtonGroup, Card, Classes, Dialog, Intent } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Classes,
+  Dialog,
+  Intent,
+  NonIdealState,
+  Spinner
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
@@ -130,6 +139,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const handleEditorValueChange = props.handleEditorValueChange;
   const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
 
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const missionRepoData = props.location.state as MissionRepoData;
 
   const loadMission = useCallback(async () => {
@@ -152,6 +163,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
+    setIsLoading(false);
   }, [missionRepoData, octokit, handleEditorValueChange]);
 
   useEffect(() => {
@@ -563,17 +575,28 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     mobileSideContentProps: mobileSideContentProps()
   };
 
-  return (
-    <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
-      {overlay}
-      {resetTemplateOverlay}
-      {isMobileBreakpoint ? (
-        <MobileWorkspace {...mobileWorkspaceProps} />
-      ) : (
-        <Workspace {...workspaceProps} />
-      )}
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+        <NonIdealState
+          description="Loading Missions"
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+        {overlay}
+        {resetTemplateOverlay}
+        {isMobileBreakpoint ? (
+          <MobileWorkspace {...mobileWorkspaceProps} />
+        ) : (
+          <Workspace {...workspaceProps} />
+        )}
+      </div>
+    );
+  }
 };
 
 export default GitHubAssessmentWorkspace;

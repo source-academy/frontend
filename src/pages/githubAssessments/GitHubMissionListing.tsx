@@ -70,7 +70,7 @@ async function retrieveBrowsableMissions(
   if (octokit === undefined) return;
 
   setDisplay(
-    <NonIdealState description="Loading Missions." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+    <NonIdealState description="Loading Missions" icon={<Spinner size={Spinner.SIZE_LARGE} />} />
   );
 
   const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
