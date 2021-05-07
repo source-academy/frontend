@@ -16,8 +16,8 @@ export type ControlBarGitHubLoginButtonProps = {
 
 /**
  * GitHub buttons to be used for the GitHub-hosted mission interface.
- * 
- * @param props Component properties 
+ *
+ * @param props Component properties
  */
 export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });

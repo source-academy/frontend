@@ -28,7 +28,7 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
 /**
  * GitHub buttons to be used specifically in the Playground.
  * Creates a dropdown upon click.
- * 
+ *
  * @param props Component properties
  */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
