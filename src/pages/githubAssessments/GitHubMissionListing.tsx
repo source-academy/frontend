@@ -27,6 +27,10 @@ import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
+/**
+ * A page that lists the missions available to the authenticated user.
+ * This page should only be reachable if using a GitHub-hosted deployment.
+ */
 const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
@@ -52,7 +56,6 @@ const GitHubMissionListing: React.FC<any> = () => {
     }
   }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
 
-  // Finally, render the ContentDisplay.
   return (
     <div className="Academy">
       <div className="Assessment">
@@ -62,6 +65,13 @@ const GitHubMissionListing: React.FC<any> = () => {
   );
 };
 
+/**
+ * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
+ *
+ * @param octokit The Octokit instance for the authenticated user
+ * @param setBrowsableMissions The React setter function for an array of BrowsableMissions
+ * @param setDisplay The React setter function for the page's display
+ */
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
@@ -136,6 +146,12 @@ type BrowsableMission = {
   dueDate: Date;
 };
 
+/**
+ * Maps from a MissionRepoData to a BrowsableMission.
+ *
+ * @param missionRepo Repository information for a mission repository
+ * @param metadata The contents of the '.metadata' file for the same mission repository
+ */
 function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
   const browsableMission: BrowsableMission = {
     title: '',
@@ -165,6 +181,12 @@ function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) 
   return retVal;
 }
 
+/**
+ * Maps from a BrowsableMission object to a JSX card that can be displayed on the Mission Listing.
+ *
+ * @param missionRepo The BrowsableMission representation of a single mission repository
+ * @param isMobileBreakpoint Whether we are using mobile breakpoint
+ */
 function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean) {
   const ratio = isMobileBreakpoint ? 5 : 3;
   const ownerSlashName =
@@ -176,6 +198,8 @@ function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint:
   const buttonText = isOverdue ? 'Review Answers' : 'Open';
 
   const data = missionRepo.missionRepoData;
+
+  const loadIntoEditor = () => history.push(`/githubassessments/editor`, data);
 
   return (
     <div key={ownerSlashName}>
@@ -215,10 +239,6 @@ function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint:
       </Card>
     </div>
   );
-
-  function loadIntoEditor() {
-    history.push(`/githubassessments/editor`, data);
-  }
 }
 
 export default GitHubMissionListing;
