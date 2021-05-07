@@ -112,7 +112,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text">Playground</div>
       </NavLink>
 
-
       {Constants.showGitHubAssessments && (
         <NavLink
           activeClassName={Classes.ACTIVE}
