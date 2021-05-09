@@ -115,6 +115,12 @@ export type StateProps = {
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+
+  /**
+   * The default selected tab for the Sourcecast workspace is the introduction tab,
+   * which contains the ag-grid table of available Sourcecasts. This is intentional
+   * to avoid an ag-grid console warning. For more info, see issue #1152 in cadet-frontend.
+   */
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
 
   const handleQueryParam = React.useCallback(() => {
