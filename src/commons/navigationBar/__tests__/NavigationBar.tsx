@@ -20,8 +20,8 @@ test('NavigationBar renders correctly with student role', () => {
     handleLogOut: () => {},
     handleGitHubLogIn: () => {},
     handleGitHubLogOut: () => {},
-    title: 'Source Academy',
-    role: Role.Student
+    role: Role.Student,
+    title: 'Source Academy'
   };
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();

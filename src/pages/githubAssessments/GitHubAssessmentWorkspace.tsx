@@ -1,6 +1,14 @@
-import { Classes } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Classes,
+  Dialog,
+  Intent,
+  NonIdealState,
+  Spinner
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import React, { useCallback, useEffect } from 'react';
@@ -20,6 +28,7 @@ import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBa
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
+import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -30,25 +39,25 @@ import {
 import MissionData from '../../commons/githubAssessments/MissionData';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
+import Markdown from '../../commons/Markdown';
 import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
-import { SideContentMarkdownEditor } from '../../commons/sideContent/SideContentMarkdownEditor';
-import { SideContentTaskEditor } from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
-import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
+import { promisifyDialog } from '../../commons/utils/DialogHelper';
+import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
+  getGitHubOctokitInstance,
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { store } from '../createStore';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -99,6 +108,14 @@ export type StateProps = {
 };
 
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+  const octokit = getGitHubOctokitInstance();
+
+  if (octokit === undefined) {
+    history.push('/githubassessments/missions');
+  }
+
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
@@ -106,32 +123,32 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
   const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [summary, setSummary] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
   );
-  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
+  const [taskDescription, setTaskDescription] = React.useState(
+    'This is the description for the current task!'
   );
 
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
-  const [taskDescriptionList, setTaskDescriptionList] = React.useState<string[]>([]);
-
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
-  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
 
   const handleEditorValueChange = props.handleEditorValueChange;
+  const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
+
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const missionRepoData = props.location.state as MissionRepoData;
-  const octokit = store.getState().session.githubOctokitInstance as Octokit;
 
   const loadMission = useCallback(async () => {
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
+    setSummary(missionData.missionBriefing);
     selectSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
-    setCachedBriefingContent(missionData.missionBriefing);
-
+    setTaskDescription(missionData.tasksData[0].taskDescription);
     setTaskList(missionData.tasksData);
     setCachedTaskList(
       missionData.tasksData.map(taskData => {
@@ -143,27 +160,72 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         return taskDataCopy;
       })
     );
-
-    setTaskDescriptionList(missionData.tasksData.map(taskData => taskData.taskDescription));
-
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
-
-    let userInTeacherMode = false;
-    const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
-    for (let i = 0; i < userOrganisations.length; i++) {
-      const org = userOrganisations[i];
-      userInTeacherMode = org.login === missionRepoData.repoOwner;
-      if (userInTeacherMode) {
-        break;
-      }
-    }
-    setIsTeacherMode(userInTeacherMode);
+    setIsLoading(false);
   }, [missionRepoData, octokit, handleEditorValueChange]);
 
   useEffect(() => {
     loadMission();
   }, [loadMission]);
+
+  /**
+   * After mounting show the briefing.
+   */
+  React.useEffect(() => {
+    if (summary !== '') setShowOverlay(true);
+  }, [summary]);
+
+  const overlay = (
+    <Dialog className="assessment-briefing" isOpen={showOverlay}>
+      <Card>
+        <Markdown content={summary} />
+        <Button
+          className="assessment-briefing-button"
+          onClick={() => setShowOverlay(false)}
+          text="Continue"
+        />
+      </Card>
+    </Dialog>
+  );
+
+  const closeOverlay = () => setShowResetTemplateOverlay(false);
+  const resetToTemplate = () => {
+    const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
+    handleEditorValueChange(originalCode);
+    editCode(currentTaskNumber, originalCode);
+  };
+  const resetTemplateOverlay = (
+    <Dialog
+      className="assessment-reset"
+      icon={IconNames.ERROR}
+      isCloseButtonShown={true}
+      isOpen={showResetTemplateOverlay}
+      onClose={closeOverlay}
+      title="Confirmation: Reset editor?"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <Markdown content="Are you sure you want to reset the template?" />
+        <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <ButtonGroup>
+          {controlButton('Cancel', null, closeOverlay, {
+            minimal: false
+          })}
+          {controlButton(
+            'Confirm',
+            null,
+            () => {
+              closeOverlay();
+              resetToTemplate();
+            },
+            { minimal: false, intent: Intent.DANGER }
+          )}
+        </ButtonGroup>
+      </div>
+    </Dialog>
+  );
 
   const getEditedCode = useCallback(
     (questionNumber: number) => {
@@ -177,54 +239,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (questionNumber > taskList.length) {
         return;
       }
-
-      taskList[questionNumber - 1].savedCode = newValue;
+      const editedTaskList = taskList;
+      editedTaskList[questionNumber - 1].savedCode = newValue;
+      setTaskList(editedTaskList);
     },
     [taskList]
-  );
-
-  const conductSave = useCallback(
-    async (
-      changedFile: string,
-      newFileContent: string,
-      githubName: string | null,
-      githubEmail: string | null,
-      commitMessage: string
-    ) => {
-      const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
-        octokit,
-        missionRepoData.repoOwner,
-        missionRepoData.repoName,
-        changedFile
-      );
-
-      if (saveType === 'Overwrite') {
-        await performOverwritingSave(
-          octokit,
-          missionRepoData.repoOwner,
-          missionRepoData.repoName,
-          changedFile,
-          githubName,
-          githubEmail,
-          commitMessage,
-          newFileContent
-        );
-      }
-
-      if (saveType === 'Create') {
-        await performCreatingSave(
-          octokit,
-          missionRepoData.repoOwner,
-          missionRepoData.repoName,
-          changedFile,
-          githubName,
-          githubEmail,
-          commitMessage,
-          newFileContent
-        );
-      }
-    },
-    [missionRepoData.repoOwner, missionRepoData.repoName, octokit]
   );
 
   const onClickSave = useCallback(async () => {
@@ -238,25 +257,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const filenameToContentMap = {};
-
-    if (briefingContent !== cachedBriefingContent) {
-      filenameToContentMap['README.md'] = briefingContent;
-    }
+    const changedTasks: number[] = [];
+    const changedFiles: string[] = [];
 
     for (let i = 0; i < taskList.length; i++) {
-      const taskNumber = i + 1;
-
       if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-        filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = getEditedCode(taskNumber);
-      }
-
-      if (taskDescriptionList[i] !== cachedTaskList[i].taskDescription) {
-        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskDescriptionList[i];
+        const taskNumber = i + 1;
+        changedTasks.push(taskNumber);
+        changedFiles.push('Q' + taskNumber + '/SavedCode.js');
       }
     }
-
-    const changedFiles = Object.keys(filenameToContentMap).sort();
 
     const dialogResults = await promisifyDialog<
       GitHubMissionSaveDialogProps,
@@ -277,10 +287,42 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
 
-    for (let i = 0; i < changedFiles.length; i++) {
-      const filename = changedFiles[i];
-      const newFileContent = filenameToContentMap[filename];
-      await conductSave(filename, newFileContent, githubName, githubEmail, commitMessage);
+    for (let i = 0; i < changedTasks.length; i++) {
+      const changedTask = changedTasks[i];
+      const changedFile = changedFiles[i];
+
+      const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
+        octokit,
+        missionRepoData.repoOwner,
+        missionRepoData.repoName,
+        changedFile
+      );
+
+      if (saveType === 'Overwrite') {
+        await performOverwritingSave(
+          octokit,
+          missionRepoData.repoOwner,
+          missionRepoData.repoName,
+          changedFile,
+          githubName,
+          githubEmail,
+          commitMessage,
+          getEditedCode(changedTask)
+        );
+      }
+
+      if (saveType === 'Create') {
+        await performCreatingSave(
+          octokit,
+          missionRepoData.repoOwner,
+          missionRepoData.repoName,
+          changedFile,
+          githubName,
+          githubEmail,
+          commitMessage,
+          getEditedCode(changedTask)
+        );
+      }
     }
 
     setCachedTaskList(
@@ -293,46 +335,25 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         return taskDataCopy;
       })
     );
+  }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
-    setCachedBriefingContent(briefingContent);
-  }, [
-    briefingContent,
-    cachedBriefingContent,
-    cachedTaskList,
-    conductSave,
-    getEditedCode,
-    missionRepoData,
-    octokit,
-    setCachedBriefingContent,
-    taskDescriptionList,
-    taskList
-  ]);
-
-  const onClickReset = useCallback(async () => {
-    const confirmReset = await showSimpleConfirmDialog({
-      title: 'Reset to template code',
-      contents: 'Are you sure you want to reset the template?',
-      positiveLabel: 'Confirm',
-      negativeLabel: 'Cancel'
-    });
-    if (confirmReset) {
-      const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
-      handleEditorValueChange(originalCode);
-      editCode(currentTaskNumber, originalCode);
-    }
-  }, [cachedTaskList, currentTaskNumber, editCode, handleEditorValueChange]);
+  const onClickReset = useCallback(() => {
+    setShowResetTemplateOverlay(true);
+  }, []);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
+    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
+    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -352,8 +373,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     val => {
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
+
+      for (let i = 0; i < taskList.length; i++) {
+        if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
+          setHasUnsavedChanges(true);
+          return;
+        }
+      }
+
+      setHasUnsavedChanges(false);
     },
-    [currentTaskNumber, editCode, handleEditorValueChange]
+    [currentTaskNumber, editCode, handleEditorValueChange, taskList, cachedTaskList]
   );
 
   const onChangeTabs = (
@@ -378,27 +408,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       {
         label: 'Task',
         iconName: IconNames.NINJA,
-        body: (
-          <SideContentTaskEditor
-            allowEdits={isTeacherMode}
-            currentTaskNumber={currentTaskNumber}
-            taskDescriptions={taskDescriptionList}
-            setTaskDescriptions={setTaskDescriptionList}
-          />
-        ),
+        body: <Markdown content={taskDescription} />,
         id: SideContentType.questionOverview,
         toSpawn: () => true
       },
       {
         label: 'Briefing',
         iconName: IconNames.BRIEFCASE,
-        body: (
-          <SideContentMarkdownEditor
-            allowEdits={isTeacherMode}
-            content={briefingContent}
-            setContent={setBriefingContent}
-          />
-        ),
+        body: <Markdown content={briefingContent} />,
         id: SideContentType.briefing,
         toSpawn: () => true
       }
@@ -443,7 +460,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
 
     const saveButton = (
-      <ControlButtonSaveButton hasUnsavedChanges={false} key="save" onClickSave={onClickSave} />
+      <ControlButtonSaveButton
+        hasUnsavedChanges={hasUnsavedChanges}
+        key="save"
+        onClickSave={onClickSave}
+      />
     );
 
     const handleChapterSelect = () => {};
@@ -553,15 +574,28 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     mobileSideContentProps: mobileSideContentProps()
   };
 
-  return (
-    <div className={classNames('Mission', Classes.DARK)}>
-      {isMobileBreakpoint ? (
-        <MobileWorkspace {...mobileWorkspaceProps} />
-      ) : (
-        <Workspace {...workspaceProps} />
-      )}
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+        <NonIdealState
+          description="Loading Missions"
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+        {overlay}
+        {resetTemplateOverlay}
+        {isMobileBreakpoint ? (
+          <MobileWorkspace {...mobileWorkspaceProps} />
+        ) : (
+          <Workspace {...workspaceProps} />
+        )}
+      </div>
+    );
+  }
 };
 
 export default GitHubAssessmentWorkspace;

@@ -30,23 +30,26 @@ type OwnProps = {
 };
 
 export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref) => {
-  const replInputBottom = document.getElementById('replInputButtom');
+  const replInputBottom = React.useRef<HTMLDivElement>(null);
+
   const execBrowseHistoryDown: () => void = props.handleBrowseHistoryDown;
   const execBrowseHistoryUp: () => void = props.handleBrowseHistoryUp;
   const execEvaluate = () => {
-    if (!replInputBottom) {
-      return;
-    } else {
-      replInputBottom.scrollIntoView();
-      props.handleReplEval();
+    props.handleReplEval();
+    if (replInputBottom.current) {
+      /**
+       * Ensures the REPL AceEditor input is always in view even after multiple REPL eval calls.
+       * This feature is disabled in the mobile workspace as it interferes with the UX of the DraggableRepl.
+       */
+      replInputBottom.current.scrollIntoView();
     }
   };
 
   React.useEffect(() => {
-    if (!replInputBottom) {
+    if (!replInputBottom.current) {
       return;
     }
-    if (replInputBottom.clientWidth >= window.innerWidth - 50) {
+    if (replInputBottom.current.clientWidth >= window.innerWidth - 50) {
       /* There is a bug where
        *   if the workspace has been resized via re-resizable such that the
        *   has disappeared off the screen, width 63
@@ -57,7 +60,7 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
        * Fix: the if condition is true when the Repl has dissapeared off-screen.
        *   (-15 to account for the scrollbar */
     } else {
-      replInputBottom.scrollIntoView();
+      replInputBottom.current.scrollIntoView();
     }
   });
 
@@ -115,7 +118,7 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
       />
       <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
       <MediaQuery minWidth={769}>
-        <div className="replInputBottom" id="replInputBottom" />
+        <div ref={replInputBottom} />
       </MediaQuery>
     </>
   );

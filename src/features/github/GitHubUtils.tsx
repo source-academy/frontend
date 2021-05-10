@@ -31,7 +31,7 @@ export async function exchangeAccessCode(
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubOctokitInstance(): any {
-  return store.getState().session.githubOctokitInstance;
+  return store.getState().session.githubOctokitObject.octokit;
 }
 
 export async function checkIfFileCanBeOpened(
@@ -74,6 +74,16 @@ export async function checkIfFileCanBeOpened(
   return true;
 }
 
+/**
+ * Returns an object containing 2 properties: 'canBeSaved' and 'saveType'.
+ * 'canBeSaved' is a boolean that represents whether we should proceed with the save.
+ * If the file can be saved, then 'saveType' is either 'Create' or 'Overwrite'.
+ *
+ * @param octokit The Octokit instance for the authenticated user
+ * @param repoOwner The owner of the repository where the file is to be saved
+ * @param repoName The name of the repository
+ * @param filePath The filepath where the file will be saved to
+ */
 export async function checkIfFileCanBeSavedAndGetSaveType(
   octokit: Octokit,
   repoOwner: string,

@@ -284,6 +284,7 @@ export const defaultSession: SessionState = {
   accessToken: undefined,
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
+  githubOctokitObject: { octokit: undefined },
   grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),

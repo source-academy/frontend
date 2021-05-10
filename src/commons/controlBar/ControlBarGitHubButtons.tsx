@@ -3,10 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { GitHubState } from '../../features/github/GitHubTypes';
-import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
@@ -25,13 +25,16 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
   LOGGED_IN: Intent.NONE
 };
 
+/**
+ * GitHub buttons to be used specifically in the Playground.
+ * Creates a dropdown upon click.
+ *
+ * @param props Component properties
+ */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  // The 'loggedInAs' is not used directly in this code block
-  // However, keeping it in will ensure that the component re-renders immediately
-  // Or else, the re-render has to be triggered by something else
-
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+  const isLoggedIn =
+    useSelector((store: any) => store.session.githubOctokitObject).octokit !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;
   const shouldDisableSaveButton =

@@ -13,6 +13,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -27,16 +28,26 @@ import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
+/**
+ * A page that lists the missions available to the authenticated user.
+ * This page should only be reachable if using a GitHub-hosted deployment.
+ */
 const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
   const [display, setDisplay] = useState<JSX.Element>(<></>);
 
-  const octokit = getGitHubOctokitInstance();
+  const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
   useEffect(() => {
-    retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+    if (octokit === undefined) {
+      setDisplay(
+        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+      );
+    } else {
+      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+    }
   }, [octokit, setBrowsableMissions, setDisplay]);
 
   useEffect(() => {
@@ -46,13 +57,12 @@ const GitHubMissionListing: React.FC<any> = () => {
       );
     } else if (browsableMissions.length > 0) {
       const cards = browsableMissions.map(element =>
-        convertMissionToCard(element, octokit, isMobileBreakpoint)
+        convertMissionToCard(element, isMobileBreakpoint)
       );
       setDisplay(<>{cards}</>);
     }
   }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
 
-  // Finally, render the ContentDisplay.
   return (
     <div className="Academy">
       <div className="Assessment">
@@ -62,6 +72,13 @@ const GitHubMissionListing: React.FC<any> = () => {
   );
 };
 
+/**
+ * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
+ *
+ * @param octokit The Octokit instance for the authenticated user
+ * @param setBrowsableMissions The React setter function for an array of BrowsableMissions
+ * @param setDisplay The React setter function for the page's display
+ */
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
@@ -70,7 +87,7 @@ async function retrieveBrowsableMissions(
   if (octokit === undefined) return;
 
   setDisplay(
-    <NonIdealState description="Loading Missions." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+    <NonIdealState description="Loading Missions" icon={<Spinner size={Spinner.SIZE_LARGE} />} />
   );
 
   const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
@@ -93,7 +110,7 @@ async function retrieveBrowsableMissions(
       return;
     }
 
-    if (files.find(file => file.name === 'METADATA') !== undefined) {
+    if (files.find(file => file.name === '.metadata') !== undefined) {
       const missionRepoData: MissionRepoData = {
         repoOwner: repo.owner.login,
         repoName: repo.name,
@@ -120,7 +137,7 @@ async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octok
   const metadata = await getContentAsString(
     missionRepo.repoOwner,
     missionRepo.repoName,
-    '/METADATA',
+    '.metadata',
     octokit
   );
   const browsableMission = createBrowsableMission(missionRepo, metadata);
@@ -136,6 +153,12 @@ type BrowsableMission = {
   dueDate: Date;
 };
 
+/**
+ * Maps from a MissionRepoData to a BrowsableMission.
+ *
+ * @param missionRepo Repository information for a mission repository
+ * @param metadata The contents of the '.metadata' file for the same mission repository
+ */
 function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) {
   const browsableMission: BrowsableMission = {
     title: '',
@@ -165,11 +188,13 @@ function createBrowsableMission(missionRepo: MissionRepoData, metadata: string) 
   return retVal;
 }
 
-function convertMissionToCard(
-  missionRepo: BrowsableMission,
-  octokit: Octokit,
-  isMobileBreakpoint: boolean
-) {
+/**
+ * Maps from a BrowsableMission object to a JSX card that can be displayed on the Mission Listing.
+ *
+ * @param missionRepo The BrowsableMission representation of a single mission repository
+ * @param isMobileBreakpoint Whether we are using mobile breakpoint
+ */
+function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean) {
   const ratio = isMobileBreakpoint ? 5 : 3;
   const ownerSlashName =
     missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName;
@@ -180,6 +205,8 @@ function convertMissionToCard(
   const buttonText = isOverdue ? 'Review Answers' : 'Open';
 
   const data = missionRepo.missionRepoData;
+
+  const loadIntoEditor = () => history.push(`/githubassessments/editor`, data);
 
   return (
     <div key={ownerSlashName}>
@@ -219,10 +246,6 @@ function convertMissionToCard(
       </Card>
     </div>
   );
-
-  function loadIntoEditor() {
-    history.push(`/githubassessments/editor`, data);
-  }
 }
 
 export default GitHubMissionListing;

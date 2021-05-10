@@ -7,6 +7,7 @@ import {
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog from '../gitHubOverlay/FileExplorerDialog';
@@ -34,7 +35,7 @@ function* githubLoginSaga() {
   const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
 
   broadcastChannel.onmessage = receivedMessage => {
-    store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+    store.dispatch(actions.setGitHubOctokitObject(receivedMessage.data));
     showSuccessMessage('Logged in to GitHub', 1000);
   };
 
@@ -50,7 +51,7 @@ function* githubLoginSaga() {
 }
 
 function* githubLogoutSaga() {
-  yield put(actions.removeGitHubOctokitInstance());
+  yield put(actions.removeGitHubOctokitObject());
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
@@ -83,7 +84,8 @@ function* githubOpenFile() {
 }
 
 function* githubSaveFile() {
-  const octokit = GitHubUtils.getGitHubOctokitInstance();
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
   const authUser = yield call(octokit.users.getAuthenticated);
   const githubLoginId = authUser.data.login;
   const repoName = store.getState().playground.githubSaveInfo.repoName;

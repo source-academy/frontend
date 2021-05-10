@@ -20,8 +20,7 @@
     "test": "craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
-    "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src",
-    "build-serviceworker": "node ./scripts/build-serviceworker.js"
+    "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src"
   },
   "husky": {
     "hooks": {

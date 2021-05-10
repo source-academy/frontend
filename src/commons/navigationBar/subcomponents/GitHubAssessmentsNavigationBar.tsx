@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { store } from '../../../pages/createStore';
+import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { ControlBarGitHubLoginButton } from '../../controlBar/ControlBarGitHubLoginButton';
 
 type OwnProps = {
@@ -12,6 +12,11 @@ type OwnProps = {
   handleGitHubLogOut: any;
 };
 
+/**
+ * The white navbar for the website. Should only be displayed when using GitHub-hosted missions.
+ *
+ * @param props Component properties
+ */
 const GitHubAssessmentsNavigationBar: React.FunctionComponent<OwnProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
@@ -27,7 +32,7 @@ const GitHubAssessmentsNavigationBar: React.FunctionComponent<OwnProps> = props 
 
     <NavbarGroup align={Alignment.RIGHT}>
       <ControlBarGitHubLoginButton
-        loggedInAs={store.getState().session.githubOctokitInstance}
+        loggedInAs={getGitHubOctokitInstance()}
         key="github"
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
