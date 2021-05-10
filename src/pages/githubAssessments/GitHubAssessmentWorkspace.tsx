@@ -482,24 +482,22 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ),
         id: SideContentType.briefing,
         toSpawn: () => true
-      },
+      }
     ];
 
     if (isTeacherMode) {
-      tabs.push(
-        {
-          label: 'Mission Metadata',
-          iconName: IconNames.AIRPLANE,
-          body: (
-            <SideContentMissionEditor
-              sourceChapter={selectedSourceChapter}
-              sourceVariant={Constants.defaultSourceVariant as Variant}
-            />
-          ),
-          id: SideContentType.missionMetadata,
-          toSpawn: () => true
-        }
-      );
+      tabs.push({
+        label: 'Mission Metadata',
+        iconName: IconNames.AIRPLANE,
+        body: (
+          <SideContentMissionEditor
+            sourceChapter={selectedSourceChapter}
+            sourceVariant={Constants.defaultSourceVariant as Variant}
+          />
+        ),
+        id: SideContentType.missionMetadata,
+        toSpawn: () => true
+      });
     }
 
     return {
