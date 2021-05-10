@@ -37,6 +37,7 @@ import {
   GitHubMissionSaveDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionSaveDialog';
 import MissionData from '../../commons/githubAssessments/MissionData';
+import MissionMetadata from '../../commons/githubAssessments/MissionMetadata';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
 import Markdown from '../../commons/Markdown';
@@ -125,7 +126,19 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
-  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [missionMetadata, setMissionMetadata] = React.useState({
+    coverImage: '',
+    kind: '',
+    number: '',
+    title: '',
+    sourceVersion: 1,
+    dueDate: new Date(8640000000000000),
+    reading: '',
+    webSummary: ''
+  } as MissionMetadata);
+  const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
+    Object.assign({}, missionMetadata)
+  );
   const [summary, setSummary] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
@@ -151,9 +164,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     setSummary(missionData.missionBriefing);
-    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+
+    setMissionMetadata(missionData.missionMetadata);
+    setCachedMissionMetadata(Object.assign({}, missionData.missionMetadata));
+
     setBriefingContent(missionData.missionBriefing);
     setCachedBriefingContent(missionData.missionBriefing);
+
     setTaskList(missionData.tasksData);
     setCachedTaskList(
       missionData.tasksData.map(taskData => {
@@ -322,6 +339,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const filenameToContentMap = {};
 
+    if (missionMetadata !== cachedMissionMetadata) {
+      filenameToContentMap['.metadata'] = '';
+    }
+
     if (briefingContent !== cachedBriefingContent) {
       filenameToContentMap['README.md'] = briefingContent;
     }
@@ -380,14 +401,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   }, [
     briefingContent,
     cachedBriefingContent,
+    taskList,
     cachedTaskList,
+    missionMetadata,
+    cachedMissionMetadata,
     conductSave,
     getEditedCode,
     missionRepoData,
     octokit,
     setCachedBriefingContent,
-    taskDescriptionList,
-    taskList
+    taskDescriptionList
   ]);
 
   const onClickReset = useCallback(() => {
@@ -491,8 +514,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentMissionEditor
-            sourceChapter={selectedSourceChapter}
-            sourceVariant={Constants.defaultSourceVariant as Variant}
+            missionMetadata={missionMetadata}
+            setMissionMetadata={setMissionMetadata}
           />
         ),
         id: SideContentType.missionMetadata,
@@ -551,7 +574,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
-        sourceChapter={selectedSourceChapter}
+        sourceChapter={missionMetadata.sourceVersion}
         sourceVariant={Constants.defaultSourceVariant as Variant}
         disabled={true}
         key="chapter"
@@ -630,7 +653,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleReplValueChange: props.handleReplValueChange,
     output: props.output,
     replValue: props.replValue,
-    sourceChapter: selectedSourceChapter || 4,
+    sourceChapter: missionMetadata.sourceVersion || 4,
     sourceVariant: 'default' as Variant,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()
