@@ -118,15 +118,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     history.push('/githubassessments/missions');
   }
 
-  const [showOverlay, setShowOverlay] = React.useState(false);
-  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-
-  /**
-   * Handles re-rendering the webpage + tracking states relating to the loaded mission
-   */
-  const [missionMetadata, setMissionMetadata] = React.useState({
+  const defaultMissionMetadata = {
     coverImage: '',
     kind: '',
     number: '',
@@ -135,17 +127,33 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     dueDate: new Date(8640000000000000),
     reading: '',
     webSummary: ''
-  } as MissionMetadata);
+  } as MissionMetadata;
+
+  const defaultMissionBriefing =
+    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
+
+  /*
+  const defaultTaskDescription
+    = 'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
+  */
+
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
+
+  /**
+   * Handles re-rendering the webpage + tracking states relating to the loaded mission
+   */
+  const [missionMetadata, setMissionMetadata] = React.useState(
+    Object.assign({}, defaultMissionMetadata)
+  );
   const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
-    Object.assign({}, missionMetadata)
+    Object.assign({}, defaultMissionMetadata)
   );
   const [summary, setSummary] = React.useState('');
-  const [briefingContent, setBriefingContent] = React.useState(
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
-  );
-  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
-  );
+  const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
+  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
 
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
@@ -172,18 +180,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedBriefingContent(missionData.missionBriefing);
 
     setTaskList(missionData.tasksData);
+    setTaskDescriptionList(missionData.tasksData.map(taskData => taskData.taskDescription));
     setCachedTaskList(
-      missionData.tasksData.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
+      missionData.tasksData.map(taskData => Object.assign({}, taskData) as TaskData)
     );
 
-    setTaskDescriptionList(missionData.tasksData.map(taskData => taskData.taskDescription));
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
 
@@ -534,6 +535,30 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const controlBarProps: () => ControlBarProps = () => {
+    // Editor Buttons
+    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+
+    const saveButton = (
+      <ControlButtonSaveButton
+        hasUnsavedChanges={hasUnsavedChanges}
+        key="save"
+        onClickSave={onClickSave}
+      />
+    );
+
+    const resetButton = <ControlBarResetButton key="reset" onClick={onClickReset} />;
+
+    const chapterSelect = (
+      <ControlBarChapterSelect
+        handleChapterSelect={() => {}}
+        sourceChapter={missionMetadata.sourceVersion}
+        sourceVariant={Constants.defaultSourceVariant as Variant}
+        disabled={true}
+        key="chapter"
+      />
+    );
+
+    // Flow Buttons
     const nextButton = (
       <ControlBarNextButton
         onClickNext={onClickNext}
@@ -557,29 +582,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       />
     );
 
-    const resetButton = <ControlBarResetButton key="reset" onClick={onClickReset} />;
+    //const addTaskButton;
 
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
-
-    const saveButton = (
-      <ControlButtonSaveButton
-        hasUnsavedChanges={hasUnsavedChanges}
-        key="save"
-        onClickSave={onClickSave}
-      />
-    );
-
-    const handleChapterSelect = () => {};
-
-    const chapterSelect = (
-      <ControlBarChapterSelect
-        handleChapterSelect={handleChapterSelect}
-        sourceChapter={missionMetadata.sourceVersion}
-        sourceVariant={Constants.defaultSourceVariant as Variant}
-        disabled={true}
-        key="chapter"
-      />
-    );
+    //const deleteTaskButton;
 
     return {
       editorButtons: !isMobileBreakpoint
