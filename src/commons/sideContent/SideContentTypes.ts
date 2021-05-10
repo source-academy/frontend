@@ -26,6 +26,7 @@ export enum SideContentType {
   module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
+  missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',
   sourcereel = 'sourcereel',
