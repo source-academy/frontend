@@ -12250,6 +12250,11 @@ react-transition-group@^2.9.0:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
+react-xml-parser@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/react-xml-parser/-/react-xml-parser-1.1.8.tgz#e0fd3a5aa3c6e50197eed72a05fe110a5df64307"
+  integrity sha512-yX9k9LNCRzzNnFWoyo9cWEjtor6n6VD0Uh7z1ww5rIP6h5vdhJKEmowsm9RumEJMRdr7akcT4mMBScpsz573qQ==
+
 react@^17.0.1:
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.1.tgz#6e0600416bd57574e3f86d92edba3d9008726127"
