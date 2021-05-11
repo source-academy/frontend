@@ -340,92 +340,88 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     const contestVotingQuestion = props.assessment?.questions[questionId] as IContestVotingQuestion;
-    const contestVotingTabs: SideContentTab[] = [
-      {
-        label: `Task ${questionId + 1}`,
-        iconName: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />,
-        id: SideContentType.questionOverview,
-        toSpawn: () => true
-      },
-      {
-        label: `Contest Voting Briefing`,
-        iconName: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />,
-        id: SideContentType.briefing,
-        toSpawn: () => true
-      },
-      {
-        label: 'Contest Voting',
-        iconName: IconNames.NEW_LAYERS,
-        body: (
-          <SideContentContestVotingContainer
-            canSave={props.canSave}
-            handleSave={votingSubmission =>
-              props.handleSave(contestVotingQuestion.id, votingSubmission)
-            }
-            handleContestEntryClick={handleContestEntryClick}
-            contestEntries={contestVotingQuestion?.contestEntries ?? []}
-          />
-        ),
-        toSpawn: () => true
-      },
-      {
-        label: 'Contest Leaderboard',
-        iconName: IconNames.CROWN,
-        body: (
-          <SideContentContestLeaderboard
-            handleContestEntryClick={handleContestEntryClick}
-            orderedContestEntries={contestVotingQuestion?.contestLeaderboard ?? []}
-          />
-        ),
-        toSpawn: () => false
-      }
-    ];
 
-    const defaultTabs: SideContentTab[] = [
-      {
-        label: `Task ${questionId + 1}`,
-        iconName: IconNames.NINJA,
-        body: (
-          <Markdown
-            className="sidecontent-overview"
-            content={props.assessment!.questions[questionId].content}
-          />
-        ),
-        id: SideContentType.questionOverview,
-        toSpawn: () => true
-      },
-      {
-        label: `${props.assessment!.category} Briefing`,
-        iconName: IconNames.BRIEFCASE,
-        body: <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />,
-        id: SideContentType.briefing,
-        toSpawn: () => true
-      },
-      {
-        label: `${props.assessment!.category} Autograder`,
-        iconName: IconNames.AIRPLANE,
-        body: (
-          <SideContentAutograder
-            testcases={props.editorTestcases}
-            autogradingResults={
-              isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
-            }
-            handleTestcaseEval={props.handleTestcaseEval}
-          />
-        ),
-        id: SideContentType.autograder,
-        toSpawn: () => true
-      }
-    ];
-
-    let tabs: SideContentTab[] = defaultTabs;
-
-    // only render contest voting tabs when assessment is a ContestVoting type
-    if (isContestVoting) {
-      tabs = contestVotingTabs;
-    }
+    const tabs: SideContentTab[] = isContestVoting
+      ? [
+          {
+            label: `Task ${questionId + 1}`,
+            iconName: IconNames.NINJA,
+            body: <Markdown content={props.assessment!.questions[questionId].content} />,
+            id: SideContentType.questionOverview,
+            toSpawn: () => true
+          },
+          {
+            label: `Contest Voting Briefing`,
+            iconName: IconNames.BRIEFCASE,
+            body: <Markdown content={props.assessment!.longSummary} />,
+            id: SideContentType.briefing,
+            toSpawn: () => true
+          },
+          {
+            label: 'Contest Voting',
+            iconName: IconNames.NEW_LAYERS,
+            body: (
+              <SideContentContestVotingContainer
+                canSave={props.canSave}
+                handleSave={votingSubmission =>
+                  props.handleSave(contestVotingQuestion.id, votingSubmission)
+                }
+                handleContestEntryClick={handleContestEntryClick}
+                contestEntries={contestVotingQuestion?.contestEntries ?? []}
+              />
+            ),
+            toSpawn: () => true
+          },
+          {
+            label: 'Contest Leaderboard',
+            iconName: IconNames.CROWN,
+            body: (
+              <SideContentContestLeaderboard
+                handleContestEntryClick={handleContestEntryClick}
+                orderedContestEntries={contestVotingQuestion?.contestLeaderboard ?? []}
+              />
+            ),
+            toSpawn: () => false
+          }
+        ]
+      : [
+          {
+            label: `Task ${questionId + 1}`,
+            iconName: IconNames.NINJA,
+            body: (
+              <Markdown
+                className="sidecontent-overview"
+                content={props.assessment!.questions[questionId].content}
+              />
+            ),
+            id: SideContentType.questionOverview,
+            toSpawn: () => true
+          },
+          {
+            label: `${props.assessment!.category} Briefing`,
+            iconName: IconNames.BRIEFCASE,
+            body: (
+              <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
+            ),
+            id: SideContentType.briefing,
+            toSpawn: () => true
+          },
+          {
+            label: `${props.assessment!.category} Autograder`,
+            iconName: IconNames.AIRPLANE,
+            body: (
+              <SideContentAutograder
+                testcases={props.editorTestcases}
+                autogradingResults={
+                  isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
+                }
+                handleTestcaseEval={props.handleTestcaseEval}
+              />
+            ),
+            id: SideContentType.autograder,
+            toSpawn: () => true
+          }
+        ];
 
     if (isGraded) {
       tabs.push({
