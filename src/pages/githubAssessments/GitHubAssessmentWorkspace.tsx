@@ -62,6 +62,7 @@ import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
   performCreatingSave,
+  performFolderDeletion,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
 
@@ -327,6 +328,26 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [missionRepoData.repoOwner, missionRepoData.repoName, octokit]
   );
 
+  const conductDelete = useCallback(
+    async (
+      fileName: string,
+      githubName: string | null,
+      githubEmail: string | null,
+      commitMessage: string
+    ) => {
+      await performFolderDeletion(
+        octokit,
+        missionRepoData.repoOwner,
+        missionRepoData.repoName,
+        fileName,
+        githubName,
+        githubEmail,
+        commitMessage
+      );
+    },
+    [octokit, missionRepoData.repoOwner, missionRepoData.repoName]
+  );
+
   const onClickSave = useCallback(async () => {
     if (missionRepoData === undefined) {
       showWarningMessage("You can't save without a mission open!", 2000);
@@ -339,6 +360,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
 
     const filenameToContentMap = {};
+    const foldersToDelete: string[] = [];
 
     if (missionMetadata !== cachedMissionMetadata) {
       filenameToContentMap['.metadata'] = '';
@@ -348,16 +370,30 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       filenameToContentMap['README.md'] = briefingContent;
     }
 
-    for (let i = 0; i < taskList.length; i++) {
-      const taskNumber = i + 1;
+    let j = 0;
+    while (j < taskList.length) {
+      const taskNumber = j + 1;
 
-      if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-        filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = getEditedCode(taskNumber);
+      if (taskNumber >= cachedTaskList.length) {
+        filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[j].starterCode;
+        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
+      } else {
+        if (taskList[j].savedCode !== cachedTaskList[j].savedCode) {
+          filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = taskList[j].savedCode;
+        }
+
+        if (taskList[j].taskDescription !== cachedTaskList[j].taskDescription) {
+          filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
+        }
       }
 
-      if (taskList[i].taskDescription !== cachedTaskList[i].taskDescription) {
-        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[i].taskDescription;
-      }
+      j++;
+    }
+
+    while (j < cachedTaskList.length) {
+      const taskNumber = j + 1;
+      foldersToDelete.push('Q' + taskNumber);
+      j++;
     }
 
     const changedFiles = Object.keys(filenameToContentMap).sort();
@@ -368,7 +404,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     >(GitHubMissionSaveDialog, resolve => ({
       octokit,
       repoName: missionRepoData.repoName,
-      changedFiles: changedFiles,
+      filesToChangeOrCreate: changedFiles,
+      filesToDelete: foldersToDelete,
       resolveDialog: dialogResults => resolve(dialogResults)
     }));
 
@@ -381,24 +418,19 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
 
+    for (let i = 0; i < foldersToDelete.length; i++) {
+      await conductDelete(foldersToDelete[i], githubName, githubEmail, commitMessage);
+    }
+
     for (let i = 0; i < changedFiles.length; i++) {
       const filename = changedFiles[i];
       const newFileContent = filenameToContentMap[filename];
       await conductSave(filename, newFileContent, githubName, githubEmail, commitMessage);
     }
 
-    setCachedTaskList(
-      taskList.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
-    );
-
+    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData) as TaskData));
     setCachedBriefingContent(briefingContent);
+    setCachedMissionMetadata(missionMetadata);
   }, [
     briefingContent,
     cachedBriefingContent,
@@ -407,6 +439,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     missionMetadata,
     cachedMissionMetadata,
     conductSave,
+    conductDelete,
     getEditedCode,
     missionRepoData,
     octokit,
@@ -443,10 +476,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
-  const computeAndSetHasUnsavedChanges = (
-    newTaskList: TaskData[],
-    cachedTaskList: TaskData[]
-  ) => {
+  const computeAndSetHasUnsavedChanges = (newTaskList: TaskData[], cachedTaskList: TaskData[]) => {
     if (newTaskList.length !== cachedTaskList.length) {
       setHasUnsavedChanges(true);
       return;
