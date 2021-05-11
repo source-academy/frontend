@@ -542,26 +542,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const addNewQuestion = () => {
-    const newTaskList = [];
-    const newTaskDescriptions = [];
+    const newTaskList = taskList
+      .slice(0, currentTaskNumber)
+      .concat([
+        {
+          taskDescription: defaultTaskDescription,
+          starterCode: defaultStarterCode,
+          savedCode: defaultStarterCode
+        } as TaskData
+      ])
+      .concat(taskList.slice(currentTaskNumber, taskList.length));
 
-    for (let i = 0; i < currentTaskNumber; i++) {
-      newTaskList.push(taskList[i]);
-      newTaskDescriptions.push(taskDescriptionList[i]);
-    }
-
-    newTaskList.push({
-      taskDescription: defaultTaskDescription,
-      starterCode: defaultStarterCode,
-      savedCode: defaultStarterCode
-    } as TaskData);
-
-    newTaskDescriptions.push(defaultTaskDescription);
-
-    for (let i = currentTaskNumber; i < taskList.length; i++) {
-      newTaskList.push(taskList[i]);
-      newTaskDescriptions.push(taskDescriptionList[i]);
-    }
+    const newTaskDescriptions = taskDescriptionList
+      .slice(0, currentTaskNumber)
+      .concat([defaultTaskDescription])
+      .concat(taskDescriptionList.slice(currentTaskNumber, taskDescriptionList.length));
 
     setTaskList(newTaskList);
     setTaskDescriptionList(newTaskDescriptions);
