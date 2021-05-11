@@ -32,16 +32,14 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
           {props.filesToChangeOrCreate !== undefined && props.filesToChangeOrCreate.length > 0 && (
             <h4>You are about to create or edit the following files:</h4>
           )}
-          {props.filesToChangeOrCreate.map(filepath => (
-            <li key={filepath}>{filepath}</li>
-          ))}
+          {props.filesToChangeOrCreate !== undefined &&
+            props.filesToChangeOrCreate.map(filepath => <li key={filepath}>{filepath}</li>)}
 
           {props.filesToDelete !== undefined && props.filesToDelete.length > 0 && (
             <h4>You are about to delete the following files:</h4>
           )}
-          {props.filesToDelete.map(filepath => (
-            <li key={filepath}>{filepath}</li>
-          ))}
+          {props.filesToDelete !== undefined &&
+            props.filesToDelete.map(filepath => <li key={filepath}>{filepath}</li>)}
         </div>
         <div>
           <InputGroup
