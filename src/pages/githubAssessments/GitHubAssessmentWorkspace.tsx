@@ -153,19 +153,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
     Object.assign({}, defaultMissionMetadata)
   );
-  const [summary, setSummary] = React.useState('');
+  
   const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
   const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
-
+  
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
-  const [taskDescriptionList, setTaskDescriptionList] = React.useState<string[]>([]);
-  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
-  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
 
+  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
+  const [summary, setSummary] = React.useState('');
+  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const handleEditorValueChange = props.handleEditorValueChange;
   const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
-
   const [isLoading, setIsLoading] = React.useState(true);
 
   const missionRepoData = props.location.state as MissionRepoData;
@@ -182,7 +181,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedBriefingContent(missionData.missionBriefing);
 
     setTaskList(missionData.tasksData);
-    setTaskDescriptionList(missionData.tasksData.map(taskData => taskData.taskDescription));
     setCachedTaskList(
       missionData.tasksData.map(taskData => Object.assign({}, taskData) as TaskData)
     );
@@ -357,8 +355,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = getEditedCode(taskNumber);
       }
 
-      if (taskDescriptionList[i] !== cachedTaskList[i].taskDescription) {
-        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskDescriptionList[i];
+      if (taskList[i].taskDescription !== cachedTaskList[i].taskDescription ) {
+        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[i].taskDescription;
       }
     }
 
@@ -412,8 +410,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     getEditedCode,
     missionRepoData,
     octokit,
-    setCachedBriefingContent,
-    taskDescriptionList
+    setCachedBriefingContent
   ]);
 
   const onClickReset = useCallback(() => {
@@ -483,6 +480,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     props.handleEditorEval();
   };
 
+  const setTaskDescriptions = useCallback((newTaskDescriptions: string[]) => {
+    const newTaskList: TaskData[] = [];
+    
+    for (let i = 0; i < taskList.length; i++) {
+      const nextElement = Object.assign({}, taskList[i]) as TaskData;
+      nextElement.taskDescription = newTaskDescriptions[i];
+      newTaskList.push(nextElement);
+    }
+
+    setTaskList(newTaskList);
+  }, [taskList]); 
+
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
     props: GitHubAssessmentWorkspaceProps
   ) => {
@@ -494,8 +503,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           <SideContentTaskEditor
             allowEdits={isTeacherMode}
             currentTaskNumber={currentTaskNumber}
-            taskDescriptions={taskDescriptionList}
-            setTaskDescriptions={setTaskDescriptionList}
+            taskDescriptions={taskList.map(taskData => taskData.taskDescription)}
+            setTaskDescriptions={setTaskDescriptions}
           />
         ),
         id: SideContentType.questionOverview,
@@ -552,14 +561,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         } as TaskData
       ])
       .concat(taskList.slice(currentTaskNumber, taskList.length));
-
-    const newTaskDescriptions = taskDescriptionList
-      .slice(0, currentTaskNumber)
-      .concat([defaultTaskDescription])
-      .concat(taskDescriptionList.slice(currentTaskNumber, taskDescriptionList.length));
-
     setTaskList(newTaskList);
-    setTaskDescriptionList(newTaskDescriptions);
 
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
@@ -572,12 +574,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const newTaskList = taskList
       .slice(0, deleteAtIndex)
       .concat(taskList.slice(currentTaskNumber, taskList.length));
-    const newTaskDescriptions = taskDescriptionList
-      .slice(0, deleteAtIndex)
-      .concat(taskDescriptionList.slice(currentTaskNumber, taskDescriptionList.length));
-
     setTaskList(newTaskList);
-    setTaskDescriptionList(newTaskDescriptions);
 
     const newTaskNumber = currentTaskNumber === 1 ? currentTaskNumber : currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
