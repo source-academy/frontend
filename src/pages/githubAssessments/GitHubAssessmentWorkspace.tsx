@@ -454,7 +454,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     cachedMissionMetadata,
     conductSave,
     conductDelete,
-    getEditedCode,
     missionRepoData,
     octokit,
     setCachedBriefingContent
@@ -490,21 +489,24 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
-  const computeAndSetHasUnsavedChanges = (newTaskList: TaskData[], cachedTaskList: TaskData[]) => {
-    if (newTaskList.length !== cachedTaskList.length) {
-      setHasUnsavedChanges(true);
-      return;
-    }
-
-    for (let i = 0; i < newTaskList.length; i++) {
-      if (!objectsAreShallowlyEqual<TaskData>(newTaskList[i], cachedTaskList[i])) {
+  const computeAndSetHasUnsavedChanges = useCallback(
+    (newTaskList: TaskData[], cachedTaskList: TaskData[]) => {
+      if (newTaskList.length !== cachedTaskList.length) {
         setHasUnsavedChanges(true);
         return;
       }
-    }
 
-    setHasUnsavedChanges(false);
-  };
+      for (let i = 0; i < newTaskList.length; i++) {
+        if (!objectsAreShallowlyEqual<TaskData>(newTaskList[i], cachedTaskList[i])) {
+          setHasUnsavedChanges(true);
+          return;
+        }
+      }
+
+      setHasUnsavedChanges(false);
+    },
+    []
+  );
 
   const onEditorValueChange = React.useCallback(
     val => {
@@ -512,7 +514,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       editCode(currentTaskNumber, val);
       computeAndSetHasUnsavedChanges(taskList, cachedTaskList);
     },
-    [currentTaskNumber, editCode, handleEditorValueChange, taskList, cachedTaskList]
+    [
+      currentTaskNumber,
+      editCode,
+      handleEditorValueChange,
+      taskList,
+      cachedTaskList,
+      computeAndSetHasUnsavedChanges
+    ]
   );
 
   const onChangeTabs = (
@@ -543,7 +552,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setTaskList(newTaskList);
       computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
     },
-    [taskList, cachedTaskList]
+    [taskList, cachedTaskList, computeAndSetHasUnsavedChanges]
   );
 
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
