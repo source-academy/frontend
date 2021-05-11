@@ -157,18 +157,22 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
     Object.assign({}, defaultMissionMetadata)
   );
+  const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = React.useState(false);
 
   const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
   const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
+  const [hasUnsavedChangesToBriefing, setHasUnsavedChangesToBriefing] = React.useState(false);
 
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
+  const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = React.useState(false);
 
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
   const [summary, setSummary] = React.useState('');
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const handleEditorValueChange = props.handleEditorValueChange;
-  const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
+  //const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
+
   const [isLoading, setIsLoading] = React.useState(true);
 
   const missionRepoData = props.location.state as MissionRepoData;
@@ -191,6 +195,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
+
+    setHasUnsavedChangesToTasks(false);
+    setHasUnsavedChangesToBriefing(false);
+    setHasUnsavedChangesToMetadata(false);
 
     let userInTeacherMode = false;
     const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
@@ -376,7 +384,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const filenameToContentMap = {};
     const foldersToDelete: string[] = [];
 
-    if (objectsAreShallowlyEqual<MissionMetadata>(missionMetadata, cachedMissionMetadata)) {
+    if (!objectsAreShallowlyEqual<MissionMetadata>(missionMetadata, cachedMissionMetadata)) {
       filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
     }
 
@@ -489,21 +497,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
-  const computeAndSetHasUnsavedChanges = useCallback(
+  const computeAndSetHasUnsavedChangesToTasks = useCallback(
     (newTaskList: TaskData[], cachedTaskList: TaskData[]) => {
       if (newTaskList.length !== cachedTaskList.length) {
-        setHasUnsavedChanges(true);
+        setHasUnsavedChangesToTasks(true);
         return;
       }
 
       for (let i = 0; i < newTaskList.length; i++) {
         if (!objectsAreShallowlyEqual<TaskData>(newTaskList[i], cachedTaskList[i])) {
-          setHasUnsavedChanges(true);
+          setHasUnsavedChangesToTasks(true);
           return;
         }
       }
 
-      setHasUnsavedChanges(false);
+      setHasUnsavedChangesToTasks(false);
     },
     []
   );
@@ -512,7 +520,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     val => {
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
-      computeAndSetHasUnsavedChanges(taskList, cachedTaskList);
+      computeAndSetHasUnsavedChangesToTasks(taskList, cachedTaskList);
     },
     [
       currentTaskNumber,
@@ -520,7 +528,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       handleEditorValueChange,
       taskList,
       cachedTaskList,
-      computeAndSetHasUnsavedChanges
+      computeAndSetHasUnsavedChangesToTasks
     ]
   );
 
@@ -550,9 +558,27 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
 
       setTaskList(newTaskList);
-      computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
+      computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
     },
-    [taskList, cachedTaskList, computeAndSetHasUnsavedChanges]
+    [taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
+  );
+
+  const setBriefingContentWrapper = useCallback(
+    (newBriefingContent: string) => {
+      setBriefingContent(newBriefingContent);
+      setHasUnsavedChangesToBriefing(newBriefingContent !== cachedBriefingContent);
+    },
+    [cachedBriefingContent]
+  );
+
+  const setMissionMetadataWrapper = useCallback(
+    (newMissionMetadata: MissionMetadata) => {
+      setMissionMetadata(newMissionMetadata);
+      setHasUnsavedChangesToMetadata(
+        !objectsAreShallowlyEqual<MissionMetadata>(newMissionMetadata, cachedMissionMetadata)
+      );
+    },
+    [cachedMissionMetadata]
   );
 
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
@@ -580,7 +606,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           <SideContentMarkdownEditor
             allowEdits={isTeacherMode}
             content={briefingContent}
-            setContent={setBriefingContent}
+            setContent={setBriefingContentWrapper}
           />
         ),
         id: SideContentType.briefing,
@@ -595,7 +621,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         body: (
           <SideContentMissionEditor
             missionMetadata={missionMetadata}
-            setMissionMetadata={setMissionMetadata}
+            setMissionMetadata={setMissionMetadataWrapper}
           />
         ),
         id: SideContentType.missionMetadata,
@@ -630,7 +656,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCurrentTaskNumber(newTaskNumber);
     handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
 
-    computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
+    computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
   };
 
   const deleteCurrentQuestion = () => {
@@ -645,7 +671,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCurrentTaskNumber(newTaskNumber);
     handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
 
-    computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
+    computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
   };
 
   const controlBarProps: () => ControlBarProps = () => {
@@ -653,7 +679,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const saveButton = (
       <ControlButtonSaveButton
-        hasUnsavedChanges={hasUnsavedChanges}
+        hasUnsavedChanges={
+          hasUnsavedChangesToTasks || hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing
+        }
         key="save"
         onClickSave={onClickSave}
       />
