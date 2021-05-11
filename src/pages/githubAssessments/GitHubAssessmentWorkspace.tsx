@@ -153,10 +153,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
     Object.assign({}, defaultMissionMetadata)
   );
-  
+
   const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
   const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
-  
+
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
 
@@ -355,7 +355,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = getEditedCode(taskNumber);
       }
 
-      if (taskList[i].taskDescription !== cachedTaskList[i].taskDescription ) {
+      if (taskList[i].taskDescription !== cachedTaskList[i].taskDescription) {
         filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[i].taskDescription;
       }
     }
@@ -480,17 +480,20 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     props.handleEditorEval();
   };
 
-  const setTaskDescriptions = useCallback((newTaskDescriptions: string[]) => {
-    const newTaskList: TaskData[] = [];
-    
-    for (let i = 0; i < taskList.length; i++) {
-      const nextElement = Object.assign({}, taskList[i]) as TaskData;
-      nextElement.taskDescription = newTaskDescriptions[i];
-      newTaskList.push(nextElement);
-    }
+  const setTaskDescriptions = useCallback(
+    (newTaskDescriptions: string[]) => {
+      const newTaskList: TaskData[] = [];
 
-    setTaskList(newTaskList);
-  }, [taskList]); 
+      for (let i = 0; i < taskList.length; i++) {
+        const nextElement = Object.assign({}, taskList[i]) as TaskData;
+        nextElement.taskDescription = newTaskDescriptions[i];
+        newTaskList.push(nextElement);
+      }
+
+      setTaskList(newTaskList);
+    },
+    [taskList]
+  );
 
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
     props: GitHubAssessmentWorkspaceProps
