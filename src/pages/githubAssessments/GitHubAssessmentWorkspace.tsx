@@ -443,24 +443,34 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
+  const computeAndSetHasUnsavedChanges = (
+    newTaskList: TaskData[],
+    cachedTaskList: TaskData[]
+  ) => {
+    if (newTaskList.length !== cachedTaskList.length) {
+      setHasUnsavedChanges(true);
+      return;
+    }
+
+    for (let i = 0; i < newTaskList.length; i++) {
+      if (
+        newTaskList[i].taskDescription !== cachedTaskList[i].taskDescription ||
+        newTaskList[i].savedCode !== cachedTaskList[i].savedCode ||
+        newTaskList[i].starterCode !== cachedTaskList[i].starterCode
+      ) {
+        setHasUnsavedChanges(true);
+        return;
+      }
+    }
+
+    setHasUnsavedChanges(false);
+  };
+
   const onEditorValueChange = React.useCallback(
     val => {
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
-
-      if (taskList.length !== cachedTaskList.length) {
-        setHasUnsavedChanges(true);
-        return;
-      }
-
-      for (let i = 0; i < taskList.length; i++) {
-        if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-          setHasUnsavedChanges(true);
-          return;
-        }
-      }
-
-      setHasUnsavedChanges(false);
+      computeAndSetHasUnsavedChanges(taskList, cachedTaskList);
     },
     [currentTaskNumber, editCode, handleEditorValueChange, taskList, cachedTaskList]
   );
@@ -491,8 +501,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
 
       setTaskList(newTaskList);
+      computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
     },
-    [taskList]
+    [taskList, cachedTaskList]
   );
 
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
@@ -569,6 +580,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
     handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
+
+    computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
   };
 
   const deleteCurrentQuestion = () => {
@@ -582,6 +595,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const newTaskNumber = currentTaskNumber === 1 ? currentTaskNumber : currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
     handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
+
+    computeAndSetHasUnsavedChanges(newTaskList, cachedTaskList);
   };
 
   const controlBarProps: () => ControlBarProps = () => {
