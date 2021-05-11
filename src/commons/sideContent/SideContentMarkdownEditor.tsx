@@ -1,3 +1,4 @@
+import { TextArea } from '@blueprintjs/core';
 import React, { useEffect } from 'react';
 
 import Markdown from '../Markdown';
@@ -38,7 +39,12 @@ const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps> = prop
   return (
     <div ref={node}>
       {editorModeOn ? (
-        <textarea onChange={onEditorChange} defaultValue={props.content} />
+        <TextArea
+          onChange={onEditorChange}
+          fill={true}
+          growVertically={true}
+          defaultValue={props.content}
+        />
       ) : (
         <Markdown content={props.content} openLinksInNewWindow={true} />
       )}
