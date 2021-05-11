@@ -635,9 +635,19 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : [saveButton, resetButton];
 
     if (isTeacherMode) {
-      const addTaskButton = <ControlBarTaskAddButton addNewQuestion={addNewQuestion} />;
+      const addTaskButton = (
+        <ControlBarTaskAddButton
+          addNewQuestion={addNewQuestion}
+          numberOfTasks={taskList.length}
+          key={'add_task'}
+        />
+      );
       const deleteTaskButton = (
-        <ControlBarTaskDeleteButton deleteCurrentQuestion={deleteCurrentQuestion} />
+        <ControlBarTaskDeleteButton
+          deleteCurrentQuestion={deleteCurrentQuestion}
+          numberOfTasks={taskList.length}
+          key={'delete_task'}
+        />
       );
       editorButtons.push(addTaskButton);
       editorButtons.push(deleteTaskButton);

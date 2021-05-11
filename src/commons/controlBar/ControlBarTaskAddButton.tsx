@@ -4,6 +4,8 @@ import controlButton from '../ControlButton';
 
 export type ControlBarTaskAddButtonProps = {
   addNewQuestion: () => void;
+  numberOfTasks: number;
+  key: string;
 };
 
 export const ControlBarTaskAddButton: React.FC<ControlBarTaskAddButtonProps> = props => {
