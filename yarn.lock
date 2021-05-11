@@ -2778,10 +2778,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/google.picker@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@types/google.picker/-/google.picker-0.0.34.tgz#e1d4c22f200f4e22885854174fe48197c52c2f6a"
-  integrity sha512-boAuaICKHnPlkuRYCFhCKSLGTKqk3zs37YiK0u1T2EBfLhsuomFwAFbBxwl0E8yAGWR1V1FsJIlCDAExfC1NJA==
+"@types/google.picker@^0.0.36":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@types/google.picker/-/google.picker-0.0.36.tgz#56ef738bcc1ca476581439b185e8c7d4ca045914"
+  integrity sha512-z4w2Y37QQbfs5v+Q1bZY32NIhTQ/082gggbY6erusfGbiIpvT8fepHWpXHz/a9bHCIWzY+vnFAmq5Ro6eB14ag==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.4"
