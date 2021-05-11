@@ -18,7 +18,8 @@ test('Selecting close causes resolveDialog to be called with false confirmSave a
     render(
       <GitHubMissionSaveDialog
         repoName={repoName}
-        changedFiles={changedFiles}
+        filesToChangeOrCreate={changedFiles}
+        filesToDelete={[]}
         resolveDialog={resolveDialog}
       />
     );
@@ -42,7 +43,8 @@ test('Selecting save causes resolveDialog to be called with true confirmSave and
     render(
       <GitHubMissionSaveDialog
         repoName={repoName}
-        changedFiles={changedFiles}
+        filesToChangeOrCreate={changedFiles}
+        filesToDelete={[]}
         resolveDialog={resolveDialog}
       />
     );
@@ -66,7 +68,8 @@ test('Selecting Confirm causes resolveDialog to be called with confirmSave = tru
     render(
       <GitHubMissionSaveDialog
         repoName={repoName}
-        changedFiles={changedFiles}
+        filesToChangeOrCreate={changedFiles}
+        filesToDelete={[]}
         resolveDialog={resolveDialog}
       />
     );
