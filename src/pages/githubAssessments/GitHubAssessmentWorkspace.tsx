@@ -29,6 +29,7 @@ import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetB
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
 import { ControlBarTaskAddButton } from '../../commons/controlBar/ControlBarTaskAddButton';
+import { ControlBarTaskDeleteButton } from '../../commons/controlBar/ControlBarTaskDeleteButton';
 import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
@@ -229,7 +230,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const closeOverlay = () => setShowResetTemplateOverlay(false);
   const resetToTemplate = () => {
-    const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
+    const originalCode = taskList[currentTaskNumber - 1].starterCode;
     handleEditorValueChange(originalCode);
     editCode(currentTaskNumber, originalCode);
   };
@@ -450,7 +451,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
 
-      if (taskList.length != cachedTaskList.length) {
+      if (taskList.length !== cachedTaskList.length) {
         setHasUnsavedChanges(true);
         return;
       }
@@ -567,7 +568,25 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    handleEditorValueChange(defaultStarterCode);
+    handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
+  };
+
+  const deleteCurrentQuestion = () => {
+    const deleteAtIndex = currentTaskNumber - 1;
+
+    const newTaskList = taskList
+      .slice(0, deleteAtIndex)
+      .concat(taskList.slice(currentTaskNumber, taskList.length));
+    const newTaskDescriptions = taskDescriptionList
+      .slice(0, deleteAtIndex)
+      .concat(taskDescriptionList.slice(currentTaskNumber, taskDescriptionList.length));
+
+    setTaskList(newTaskList);
+    setTaskDescriptionList(newTaskDescriptions);
+
+    const newTaskNumber = currentTaskNumber === 1 ? currentTaskNumber : currentTaskNumber - 1;
+    setCurrentTaskNumber(newTaskNumber);
+    handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
   };
 
   const controlBarProps: () => ControlBarProps = () => {
@@ -622,7 +641,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     if (isTeacherMode) {
       const addTaskButton = <ControlBarTaskAddButton addNewQuestion={addNewQuestion} />;
+      const deleteTaskButton = (
+        <ControlBarTaskDeleteButton deleteCurrentQuestion={deleteCurrentQuestion} />
+      );
       editorButtons.push(addTaskButton);
+      editorButtons.push(deleteTaskButton);
     }
 
     const flowButtons = [previousButton, questionView, nextButton];
