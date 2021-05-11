@@ -450,6 +450,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
 
+      if (taskList.length != cachedTaskList.length) {
+        setHasUnsavedChanges(true);
+        return;
+      }
+
       for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
           setHasUnsavedChanges(true);
