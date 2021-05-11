@@ -5,7 +5,7 @@ import MissionMetadata from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
 import TaskData from './TaskData';
 
-const maximumTasksPerMission = 20;
+export const maximumTasksPerMission = 20;
 
 /**
  * Retrieves mission information - such as the briefings, questions, metadata etc. from a GitHub Repository.

@@ -1,6 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 
 import controlButton from '../ControlButton';
+import { maximumTasksPerMission } from '../githubAssessments/GitHubMissionDataUtils';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 
 export type ControlBarTaskAddButtonProps = {
   addNewQuestion: () => void;
@@ -9,5 +11,16 @@ export type ControlBarTaskAddButtonProps = {
 };
 
 export const ControlBarTaskAddButton: React.FC<ControlBarTaskAddButtonProps> = props => {
-  return controlButton('Add Task', IconNames.ADD, props.addNewQuestion);
+  function onClickAdd() {
+    if (props.numberOfTasks === maximumTasksPerMission) {
+      showWarningMessage(
+        'Cannot have more than ' + maximumTasksPerMission + ' Tasks in a Mission!'
+      );
+      return;
+    }
+
+    props.addNewQuestion();
+  }
+
+  return controlButton('Add Task', IconNames.ADD, onClickAdd);
 };
