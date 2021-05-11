@@ -62,7 +62,7 @@
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.1",
     "react-draggable": "^4.4.3",
-    "react-dropzone": "^11.2.4",
+    "react-dropzone": "^11.3.2",
     "react-hotkeys": "^2.0.0",
     "react-konva": "^17.0.2-0",
     "react-mde": "^11.0.6",
