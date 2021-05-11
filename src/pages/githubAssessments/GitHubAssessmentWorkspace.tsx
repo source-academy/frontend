@@ -32,7 +32,10 @@ import { ControlBarTaskAddButton } from '../../commons/controlBar/ControlBarTask
 import { ControlBarTaskDeleteButton } from '../../commons/controlBar/ControlBarTaskDeleteButton';
 import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
-import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
+import {
+  convertMissionMetadataToMetadataString,
+  getMissionData
+} from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
   GitHubMissionSaveDialog,
   GitHubMissionSaveDialogProps,
@@ -348,6 +351,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [octokit, missionRepoData.repoOwner, missionRepoData.repoName]
   );
 
+  function objectsAreShallowlyEqual<T>(first: T, second: T) {
+    const keys = Object.keys(first);
+    for (let i = 0; i < keys.length; i++) {
+      if (first[keys[i]] !== second[keys[i]]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   const onClickSave = useCallback(async () => {
     if (missionRepoData === undefined) {
       showWarningMessage("You can't save without a mission open!", 2000);
@@ -362,8 +376,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const filenameToContentMap = {};
     const foldersToDelete: string[] = [];
 
-    if (missionMetadata !== cachedMissionMetadata) {
-      filenameToContentMap['.metadata'] = '';
+    if (objectsAreShallowlyEqual<MissionMetadata>(missionMetadata, cachedMissionMetadata)) {
+      filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
     }
 
     if (briefingContent !== cachedBriefingContent) {
@@ -483,11 +497,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
 
     for (let i = 0; i < newTaskList.length; i++) {
-      if (
-        newTaskList[i].taskDescription !== cachedTaskList[i].taskDescription ||
-        newTaskList[i].savedCode !== cachedTaskList[i].savedCode ||
-        newTaskList[i].starterCode !== cachedTaskList[i].starterCode
-      ) {
+      if (!objectsAreShallowlyEqual<TaskData>(newTaskList[i], cachedTaskList[i])) {
         setHasUnsavedChanges(true);
         return;
       }

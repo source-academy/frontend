@@ -189,6 +189,20 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
   return retVal;
 }
 
+export function convertMissionMetadataToMetadataString(missionMetadata: MissionMetadata) {
+  const properties: string[] = [
+    'coverImage',
+    'kind',
+    'number',
+    'title',
+    'sourceVersion',
+    'reading',
+    'webSummary'
+  ];
+  const propertyValuePairs = properties.map(property => property + '=' + missionMetadata[property]);
+  return propertyValuePairs.join('\n');
+}
+
 /**
  * Converts the contents of a '.metadata' file into an object of type R.
  *
