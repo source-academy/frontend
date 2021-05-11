@@ -28,6 +28,7 @@ import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBa
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
+import { ControlBarTaskAddButton } from '../../commons/controlBar/ControlBarTaskAddButton';
 import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
@@ -132,10 +133,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const defaultMissionBriefing =
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
 
-  /*
-  const defaultTaskDescription
-    = 'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
-  */
+  const defaultTaskDescription =
+    'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
+
+  const defaultStarterCode = '// Your code here!\n';
 
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
@@ -534,8 +535,37 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     };
   };
 
+  const addNewQuestion = () => {
+    const newTaskList = [];
+    const newTaskDescriptions = [];
+
+    for (let i = 0; i < currentTaskNumber; i++) {
+      newTaskList.push(taskList[i]);
+      newTaskDescriptions.push(taskDescriptionList[i]);
+    }
+
+    newTaskList.push({
+      taskDescription: defaultTaskDescription,
+      starterCode: defaultStarterCode,
+      savedCode: defaultStarterCode
+    } as TaskData);
+
+    newTaskDescriptions.push(defaultTaskDescription);
+
+    for (let i = currentTaskNumber; i < taskList.length; i++) {
+      newTaskList.push(taskList[i]);
+      newTaskDescriptions.push(taskDescriptionList[i]);
+    }
+
+    setTaskList(newTaskList);
+    setTaskDescriptionList(newTaskDescriptions);
+
+    const newTaskNumber = currentTaskNumber + 1;
+    setCurrentTaskNumber(newTaskNumber);
+    handleEditorValueChange(defaultStarterCode);
+  };
+
   const controlBarProps: () => ControlBarProps = () => {
-    // Editor Buttons
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
 
     const saveButton = (
@@ -558,7 +588,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       />
     );
 
-    // Flow Buttons
     const nextButton = (
       <ControlBarNextButton
         onClickNext={onClickNext}
@@ -582,15 +611,20 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       />
     );
 
-    //const addTaskButton;
+    const editorButtons = !isMobileBreakpoint
+      ? [runButton, saveButton, resetButton, chapterSelect]
+      : [saveButton, resetButton];
 
-    //const deleteTaskButton;
+    if (isTeacherMode) {
+      const addTaskButton = <ControlBarTaskAddButton addNewQuestion={addNewQuestion} />;
+      editorButtons.push(addTaskButton);
+    }
+
+    const flowButtons = [previousButton, questionView, nextButton];
 
     return {
-      editorButtons: !isMobileBreakpoint
-        ? [runButton, saveButton, resetButton, chapterSelect]
-        : [saveButton, resetButton],
-      flowButtons: [previousButton, questionView, nextButton]
+      editorButtons: editorButtons,
+      flowButtons: flowButtons
     };
   };
 
