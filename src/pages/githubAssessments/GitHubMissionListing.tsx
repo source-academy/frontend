@@ -58,7 +58,7 @@ const GitHubMissionListing: React.FC<any> = () => {
       return;
     }
 
-    if (browsableMissions.length == 0) {
+    if (browsableMissions.length === 0) {
       setDisplay(
         <div>
           <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
