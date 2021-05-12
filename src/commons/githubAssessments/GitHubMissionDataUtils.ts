@@ -191,13 +191,14 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
 
 export function convertMissionMetadataToMetadataString(missionMetadata: MissionMetadata) {
   const properties: string[] = [
+    'title',
     'coverImage',
+    'webSummary',
+    'dueDate',
     'kind',
     'number',
-    'title',
     'sourceVersion',
     'reading',
-    'webSummary'
   ];
   const propertyValuePairs = properties.map(property => property + '=' + missionMetadata[property]);
   return propertyValuePairs.join('\n');
