@@ -70,21 +70,6 @@ const GitHubMissionListing: React.FC<any> = () => {
           <>{cards}</>
         </div>
       );
-      return;
-    }
-
-    if (browsableMissions.length === 0) {
-      setDisplay(
-        <div>
-          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
-            Create a New Mission!
-          </Button>
-          <NonIdealState
-            description="No mission repositories found for user."
-            icon={IconNames.FLAME}
-          />
-        </div>
-      );
     }
   }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
 
