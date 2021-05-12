@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { SicpChapter } from 'src/features/sicp/SicpTypes';
 
 import SicpDisplay from './subcomponents/SicpDisplay';
 
 export type SicpProps = DispatchProps & StateProps & OwnProps;
 export type DispatchProps = {
-  handleChangeChapter: (chapter: SicpChapter) => void;
+  handleChangeChapter: (chapter: integer) => void;
 };
 export type StateProps = {
-  chapter: SicpChapter;
+  chapter: integer;
 };
 export type OwnProps = {};
 

@@ -1,5 +1,4 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
-import { SicpChapter, SicpState } from 'src/features/sicp/SicpTypes';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
@@ -26,7 +25,6 @@ export type OverallState = {
   readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
-  readonly sicp: SicpState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
 };
@@ -277,10 +275,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   }
 };
 
-export const defaultSicp: SicpState = {
-  chapter: SicpChapter.ONE
-}
-
 export const defaultSession: SessionState = {
   accessToken: undefined,
   assessments: new Map<number, Assessment>(),
@@ -316,7 +310,6 @@ export const defaultState: OverallState = {
   application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
-  sicp: defaultSicp,
   session: defaultSession,
   workspaces: defaultWorkspaceManager
 };

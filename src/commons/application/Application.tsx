@@ -11,7 +11,7 @@ import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
-import SicpContainer from '../../pages/sicp/SicpContainer';
+import Sicp from '../../pages/sicp/Sicp';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
@@ -140,7 +140,7 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
             <Route path="/callback/github" component={GitHubCallback} />
-            <Route path="/sicp" component={SicpContainer} />
+            <Route path="/sicp" component={Sicp} />
             {fullPaths}
             <Route
               exact={true}

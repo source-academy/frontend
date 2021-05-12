@@ -6,7 +6,6 @@ import { AcademyReducer as academy } from '../../../features/academy/AcademyRedu
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
 import { DashboardReducer as dashboard } from '../../../features/dashboard/DashboardReducer';
 import { PlaygroundReducer as playground } from '../../../features/playground/PlaygroundReducer';
-import { SicpReducer as sicp } from '../../../features/sicp/SicpReducer';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
 import { ApplicationReducer as application } from '../ApplicationReducer';
 import { SessionsReducer as session } from './SessionsReducer';
@@ -20,7 +19,6 @@ const createRootReducer = (history: History) =>
     dashboard,
     playground,
     session,
-    sicp,
     workspaces
   });
 
