@@ -30,7 +30,7 @@ export async function exchangeAccessCode(
  *
  * This function allows for mocking Octokit behaviour in tests.
  */
-export function getGitHubOctokitInstance(): Octokit | undefined {
+export function getGitHubOctokitInstance(): any {
   const octokitObject = store.getState().session.githubOctokitObject;
   if (octokitObject === undefined) {
     return undefined;
