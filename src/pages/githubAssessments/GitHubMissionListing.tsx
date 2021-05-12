@@ -36,6 +36,7 @@ const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+  const [missionsRetrieved, setMissionsRetrieved] = useState(false);
   const [display, setDisplay] = useState<JSX.Element>(<></>);
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
@@ -46,7 +47,7 @@ const GitHubMissionListing: React.FC<any> = () => {
         <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
       );
     } else {
-      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+      retrieveBrowsableMissions(octokit, setBrowsableMissions, setMissionsRetrieved, setDisplay);
     }
   }, [octokit, setBrowsableMissions, setDisplay]);
 
@@ -55,6 +56,10 @@ const GitHubMissionListing: React.FC<any> = () => {
       setDisplay(
         <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
       );
+      return;
+    }
+
+    if (!missionsRetrieved) {
       return;
     }
 
@@ -70,8 +75,23 @@ const GitHubMissionListing: React.FC<any> = () => {
           <>{cards}</>
         </div>
       );
+      return;
     }
-  }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
+
+    if (browsableMissions.length === 0) {
+      setDisplay(
+        <div>
+          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+            Create a New Mission!
+          </Button>
+          <NonIdealState
+            description="No mission repositories found for user."
+            icon={IconNames.FLAME}
+          />
+        </div>
+      );
+    }
+  }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay, missionsRetrieved]);
 
   return (
     <div className="Academy">
@@ -92,6 +112,7 @@ const GitHubMissionListing: React.FC<any> = () => {
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
+  setMissionsRetrieved: (missionsRetrieved: boolean) => void,
   setDisplay: (display: JSX.Element) => void
 ) {
   if (octokit === undefined) return;
@@ -141,6 +162,7 @@ async function retrieveBrowsableMissions(
   });
 
   setBrowsableMissions(browsableMissions);
+  setMissionsRetrieved(true);
 }
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {
