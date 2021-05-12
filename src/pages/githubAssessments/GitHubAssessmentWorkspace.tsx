@@ -11,7 +11,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 
@@ -32,6 +32,11 @@ import { ControlBarTaskAddButton } from '../../commons/controlBar/ControlBarTask
 import { ControlBarTaskDeleteButton } from '../../commons/controlBar/ControlBarTaskDeleteButton';
 import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import {
+  GitHubMissionCreateDialog,
+  GitHubMissionCreateDialogProps,
+  GitHubMissionCreateDialogResolution
+} from '../../commons/githubAssessments/GitHubMissionCreateDialog';
 import {
   convertMissionMetadataToMetadataString,
   getMissionData
@@ -124,16 +129,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     history.push('/githubassessments/missions');
   }
 
-  const defaultMissionMetadata = {
-    coverImage: '',
-    kind: '',
-    number: '',
-    title: '',
-    sourceVersion: 1,
-    dueDate: new Date(8640000000000000),
-    reading: '',
-    webSummary: ''
-  } as MissionMetadata;
+  const defaultMissionMetadata = useMemo<MissionMetadata>(() => {
+    return {
+      coverImage: '',
+      kind: '',
+      number: '',
+      title: '',
+      sourceVersion: 1,
+      dueDate: new Date(8640000000000000),
+      reading: '',
+      webSummary: ''
+    } as MissionMetadata;
+  }, []);
 
   const defaultMissionBriefing =
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
@@ -175,7 +182,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const handleEditorValueChange = props.handleEditorValueChange;
   const missionRepoData = props.location.state as MissionRepoData;
 
-  const loadMission = useCallback(async () => {
+  const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     setSummary(missionData.missionBriefing);
@@ -211,6 +218,42 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsLoading(false);
   }, [missionRepoData, octokit, handleEditorValueChange]);
+
+  const setUpWithoutMissionRepoData = useCallback(() => {
+    setSummary(defaultMissionBriefing);
+
+    setMissionMetadata(defaultMissionMetadata);
+    setCachedMissionMetadata(defaultMissionMetadata);
+
+    setBriefingContent(defaultMissionBriefing);
+    setCachedBriefingContent(defaultMissionBriefing);
+
+    const defaultTask = {
+      taskDescription: defaultTaskDescription,
+      starterCode: defaultStarterCode,
+      savedCode: defaultStarterCode
+    } as TaskData;
+    setTaskList([defaultTask]);
+    setCachedTaskList([defaultTask]);
+
+    setCurrentTaskNumber(1);
+    handleEditorValueChange(defaultStarterCode);
+
+    setHasUnsavedChangesToTasks(false);
+    setHasUnsavedChangesToBriefing(false);
+    setHasUnsavedChangesToMetadata(false);
+
+    setIsTeacherMode(true);
+    setIsLoading(false);
+  }, [defaultMissionMetadata, handleEditorValueChange]);
+
+  const loadMission = useCallback(async () => {
+    if (missionRepoData === undefined) {
+      setUpWithoutMissionRepoData();
+    } else {
+      setUpWithMissionRepoData();
+    }
+  }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
 
   useEffect(() => {
     loadMission();
@@ -334,7 +377,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         );
       }
     },
-    [missionRepoData.repoOwner, missionRepoData.repoName, octokit]
+    [missionRepoData, octokit]
   );
 
   const conductDelete = useCallback(
@@ -354,7 +397,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         commitMessage
       );
     },
-    [octokit, missionRepoData.repoOwner, missionRepoData.repoName]
+    [missionRepoData, octokit]
   );
 
   function objectsAreShallowlyEqual<T>(first: T, second: T) {
@@ -368,12 +411,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     return true;
   }
 
-  const onClickSave = useCallback(async () => {
-    if (missionRepoData === undefined) {
-      showWarningMessage("You can't save without a mission open!", 2000);
-      return;
-    }
-
+  const saveWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) {
       showWarningMessage('Please sign in with GitHub!', 2000);
       return;
@@ -422,7 +460,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       GitHubMissionSaveDialogProps,
       GitHubMissionSaveDialogResolution
     >(GitHubMissionSaveDialog, resolve => ({
-      octokit,
       repoName: missionRepoData.repoName,
       filesToChangeOrCreate: changedFiles,
       filesToDelete: foldersToDelete,
@@ -460,10 +497,77 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     cachedMissionMetadata,
     conductSave,
     conductDelete,
-    missionRepoData,
     octokit,
-    setCachedBriefingContent
+    missionRepoData
   ]);
+
+  const saveWithoutMissionRepoData = useCallback(async () => {
+    if (octokit === undefined) {
+      showWarningMessage('Please sign in with GitHub!', 2000);
+      return;
+    }
+
+    const filenameToContentMap = {};
+    filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
+    filenameToContentMap['README.md'] = briefingContent;
+
+    for (let i = 0; i < taskList.length; i++) {
+      const taskNumber = i + 1;
+      filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[i].starterCode;
+      filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[i].taskDescription;
+    }
+
+    const changedFiles = Object.keys(filenameToContentMap).sort();
+    const authUser = await octokit.users.getAuthenticated();
+
+    const dialogResults = await promisifyDialog<
+      GitHubMissionCreateDialogProps,
+      GitHubMissionCreateDialogResolution
+    >(GitHubMissionCreateDialog, resolve => ({
+      filesToCreate: changedFiles,
+      userLogin: authUser.data.login,
+      resolveDialog: dialogResults => resolve(dialogResults)
+    }));
+
+    if (!dialogResults.confirmSave) {
+      return;
+    }
+
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+
+    await octokit.repos.createForAuthenticatedUser({
+      name: dialogResults.repoName
+    });
+
+    for (let i = 0; i < changedFiles.length; i++) {
+      const fileToCreate = changedFiles[i];
+      const fileContent = filenameToContentMap[fileToCreate];
+
+      await performCreatingSave(
+        octokit,
+        authUser.data.login,
+        dialogResults.repoName,
+        fileToCreate,
+        githubName,
+        githubEmail,
+        'Repository created from Source Academy',
+        fileContent
+      );
+    }
+
+    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData) as TaskData));
+    setCachedBriefingContent(briefingContent);
+    setCachedMissionMetadata(missionMetadata);
+  }, [briefingContent, missionMetadata, octokit, taskList]);
+
+  const onClickSave = useCallback(() => {
+    if (missionRepoData !== undefined) {
+      saveWithMissionRepoData();
+    } else {
+      saveWithoutMissionRepoData();
+    }
+  }, [missionRepoData, saveWithMissionRepoData, saveWithoutMissionRepoData]);
 
   const onClickReset = useCallback(() => {
     setShowResetTemplateOverlay(true);

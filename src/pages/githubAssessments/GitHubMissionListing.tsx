@@ -59,7 +59,14 @@ const GitHubMissionListing: React.FC<any> = () => {
       const cards = browsableMissions.map(element =>
         convertMissionToCard(element, isMobileBreakpoint)
       );
-      setDisplay(<>{cards}</>);
+      setDisplay(
+        <div>
+          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+            Create a New Mission!
+          </Button>
+          <>{cards}</>
+        </div>
+      );
     }
   }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
 
