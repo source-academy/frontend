@@ -14,18 +14,13 @@ export type StateProps = {
 export type OwnProps = {};
 
 const Sicp: React.FC<SicpProps> = props => {
-  const { chapter } = props;
+  // const { chapter } = props;
 
   const [data, setData] = useState([]);
+  // const [text, setText] = useState("");
 
   const getData = () => {
-    console.log("effect called");
-    fetch('/sicp/test.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
-    })
+    fetch('https://raw.githubusercontent.com/samuelfangjw/test-repo/main/test.json')
       .then(response => {
           console.log(response);
           return response.json();
@@ -40,11 +35,13 @@ const Sicp: React.FC<SicpProps> = props => {
 
   //TODO check for null json files, get correct type
   let text = "";
-  data.forEach(x => text = text + x["text"]);
-  const content = text + "test" + chapter;
+  text += data["body"];
+  // data.forEach(x => text = text + x["body"]);
+  // const content = text + "test" + chapter;
 
+  
   return (
-    <SicpDisplay content={content} />
+    <SicpDisplay content={text} />
   );
 };
 
