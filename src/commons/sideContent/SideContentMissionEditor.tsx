@@ -15,7 +15,7 @@ export type SideContentMissionEditorProps = {
 
 const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props => {
   const datePicker =
-    props.missionMetadata.dueDate.getFullYear() > (new Date()).getFullYear() ? (
+    props.missionMetadata.dueDate.getFullYear() > new Date().getFullYear() ? (
       <DatePicker onChange={handleDateChange} />
     ) : (
       <DatePicker onChange={handleDateChange} defaultValue={props.missionMetadata.dueDate} />
