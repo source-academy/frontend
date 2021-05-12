@@ -58,20 +58,6 @@ const GitHubMissionListing: React.FC<any> = () => {
       return;
     }
 
-    if (browsableMissions.length === 0) {
-      setDisplay(
-        <div>
-          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
-            Create a New Mission!
-          </Button>
-          <NonIdealState
-            description="No mission repositories found for user."
-            icon={IconNames.FLAME}
-          />
-        </div>
-      );
-    }
-
     if (browsableMissions.length > 0) {
       const cards = browsableMissions.map(element =>
         convertMissionToCard(element, isMobileBreakpoint)
@@ -82,6 +68,21 @@ const GitHubMissionListing: React.FC<any> = () => {
             Create a New Mission!
           </Button>
           <>{cards}</>
+        </div>
+      );
+      return;
+    }
+
+    if (browsableMissions.length === 0) {
+      setDisplay(
+        <div>
+          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+            Create a New Mission!
+          </Button>
+          <NonIdealState
+            description="No mission repositories found for user."
+            icon={IconNames.FLAME}
+          />
         </div>
       );
     }
