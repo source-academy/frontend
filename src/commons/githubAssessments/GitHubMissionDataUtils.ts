@@ -198,7 +198,7 @@ export function convertMissionMetadataToMetadataString(missionMetadata: MissionM
     'kind',
     'number',
     'sourceVersion',
-    'reading',
+    'reading'
   ];
   const propertyValuePairs = properties.map(property => property + '=' + missionMetadata[property]);
   return propertyValuePairs.join('\n');
