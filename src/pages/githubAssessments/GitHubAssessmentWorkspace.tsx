@@ -170,11 +170,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
   const [summary, setSummary] = React.useState('');
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
-  const handleEditorValueChange = props.handleEditorValueChange;
-  //const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
-
   const [isLoading, setIsLoading] = React.useState(true);
 
+  const handleEditorValueChange = props.handleEditorValueChange;
   const missionRepoData = props.location.state as MissionRepoData;
 
   const loadMission = useCallback(async () => {
