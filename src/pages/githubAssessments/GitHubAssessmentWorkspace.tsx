@@ -207,9 +207,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     let userInTeacherMode = false;
     const userLogin = (await octokit.users.getAuthenticated()).data.login;
-    if (userLogin === missionRepoData.repoOwner) {  // User is direct owner of repo
+    if (userLogin === missionRepoData.repoOwner) {
+      // User is direct owner of repo
       userInTeacherMode = true;
-    } else { 
+    } else {
       const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
       for (let i = 0; i < userOrganisations.length; i++) {
         const org = userOrganisations[i];
