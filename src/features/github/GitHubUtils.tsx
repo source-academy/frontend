@@ -30,8 +30,13 @@ export async function exchangeAccessCode(
  *
  * This function allows for mocking Octokit behaviour in tests.
  */
-export function getGitHubOctokitInstance(): any {
-  return store.getState().session.githubOctokitObject.octokit;
+export function getGitHubOctokitInstance(): Octokit | undefined {
+  const octokitObject = store.getState().session.githubOctokitObject;
+  if (octokitObject === undefined) {
+    return undefined;
+  } else {
+    return octokitObject.octokit;
+  }
 }
 
 export async function checkIfFileCanBeOpened(

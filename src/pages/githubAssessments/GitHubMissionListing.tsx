@@ -1,12 +1,14 @@
 import {
   Button,
   Card,
+  Divider,
   Elevation,
   H4,
   H6,
   Icon,
   NonIdealState,
   Spinner,
+  TagInput,
   Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -40,6 +42,8 @@ const GitHubMissionListing: React.FC<any> = () => {
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
+  const [values, setValues] = useState<React.ReactNode[]>([]);
+
   useEffect(() => {
     if (octokit === undefined) {
       setDisplay(
@@ -51,17 +55,65 @@ const GitHubMissionListing: React.FC<any> = () => {
   }, [octokit, setBrowsableMissions, setDisplay]);
 
   useEffect(() => {
-    if (octokit === undefined) {
+    if (browsableMissions.length > 0) {
+      const filteredMissions: BrowsableMission[] = [];
+      browsableMissions.forEach(mission => {
+        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
+          filteredMissions.push(mission);
+        }
+      });
+
+      function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
+        let match = false;
+        tags.forEach(tag => {
+          if (tag !== null && tag !== undefined) {
+            if (mission.title.includes(tag.toString())) {
+              match = true;
+            } else if (mission.webSummary.includes(tag.toString())) {
+              match = true;
+            } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
+              match = true;
+            }
+          }
+        });
+        return match;
+      }
+
+      const handleClear = () => {
+        handleChange([]);
+      };
+
+      const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
+
+      const handleChange = (values: React.ReactNode[]) => {
+        setValues(values);
+      };
+
+      const tagFilter = (
+        <TagInput
+          leftIcon={IconNames.FILTER}
+          onChange={handleChange}
+          placeholder="Separate tags with commas..."
+          rightElement={clearButton}
+          tagProps={{ minimal: true }}
+          values={values}
+        />
+      );
+
+      const cards =
+        values.length === 0
+          ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
+          : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
+
       setDisplay(
-        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+        <>
+          {tagFilter}
+          <Divider />
+          {cards}
+        </>
       );
-    } else if (browsableMissions.length > 0) {
-      const cards = browsableMissions.map(element =>
-        convertMissionToCard(element, isMobileBreakpoint)
-      );
-      setDisplay(<>{cards}</>);
     }
-  }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay]);
+  }, [browsableMissions, isMobileBreakpoint, setDisplay, values]);
 
   return (
     <div className="Academy">
