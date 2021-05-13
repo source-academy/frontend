@@ -27,7 +27,7 @@ const sendRequest = (route: string) => async (
   }
 };
 
-export const sendAssetRequest = sendRequest('assets');
+export const sendAssetRequest = sendRequest('admin/assets');
 export const sendStoryRequest = sendRequest('stories');
 
 export function createHeaders(accessToken: string): Headers {
