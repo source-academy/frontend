@@ -1,11 +1,11 @@
 import { Classes, Dialog, Intent } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
+import * as moment from 'moment';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import controlButton from '../../../../commons/ControlButton';
-import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
 export type EditCellProps = DispatchProps & StateProps;
@@ -19,18 +19,20 @@ type StateProps = {
   forOpenDate: boolean;
 };
 
+const dateDisplayFormat = 'YYYY-MM-DD HH:mm:ss ZZ';
+
 const EditCell: React.FunctionComponent<EditCellProps> = props => {
   const minDate = new Date(2010, 0, 0);
   const maxDate = new Date(2030, 11, 31);
 
   const { data, forOpenDate } = props;
-  const currentDateString = React.useMemo(
-    () => (forOpenDate ? data.openAt : data.closeAt),
-    [data.closeAt, data.openAt, forOpenDate]
-  );
+  const currentDateString = forOpenDate ? data.openAt : data.closeAt;
+  const currentDate = moment(currentDateString, moment.ISO_8601, true);
+
+  console.log(data);
 
   const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
-  const [newDate, setNewDate] = React.useState<Date | null>(new Date(currentDateString));
+  const [newDate, setNewDate] = React.useState<moment.Moment | null>(currentDate);
 
   const handleOpenDialog = React.useCallback(() => setDialogState(true), []);
   const handleCloseDialog = React.useCallback(() => setDialogState(false), []);
@@ -41,7 +43,7 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
     if (!newDate) {
       // Reset date to current date if no date is selected (null date) in the date input
       showWarningMessage('No date and time selected!', 2000);
-      setNewDate(new Date(currentDateString));
+      setNewDate(currentDate);
     } else {
       const { id, openAt, closeAt } = data;
       handleAssessmentChangeDate(
@@ -51,24 +53,23 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
       );
       handleCloseDialog();
     }
-  }, [
-    data,
-    forOpenDate,
-    newDate,
-    currentDateString,
-    handleAssessmentChangeDate,
-    handleCloseDialog
-  ]);
+  }, [newDate, currentDate, data, handleAssessmentChangeDate, forOpenDate, handleCloseDialog]);
 
-  const handleParseDate = (str: string) => new Date(str);
-  const handleFormatDate = (date: Date) => date.toLocaleString();
+  const handleParseDate = (str: string) => {
+    const date = moment(str, dateDisplayFormat, true);
+    return date.isValid() ? date.toDate() : false;
+  };
+  const handleFormatDate = (date: Date) => moment(date).format(dateDisplayFormat);
 
-  const handleDateChange = React.useCallback((selectedDate: Date) => setNewDate(selectedDate), []);
+  const handleDateChange = React.useCallback(
+    (selectedDate: Date) => setNewDate(moment(selectedDate)),
+    []
+  );
   const handleDateError = React.useCallback(() => {
     // Reset date to current date if user enters an invalid date string
     showWarningMessage('Failed to parse date string! Defaulting to current date.', 2000);
-    setNewDate(new Date(currentDateString));
-  }, [currentDateString]);
+    setNewDate(currentDate);
+  }, [currentDate]);
 
   const dateInput = (
     <DateInput
@@ -76,8 +77,8 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
       onChange={handleDateChange}
       onError={handleDateError}
       parseDate={handleParseDate}
-      placeholder={'MM/DD/YYYY, HH:mm:ss (AM/PM) or select a date'}
-      value={newDate}
+      placeholder={`${dateDisplayFormat} or select a date`}
+      value={newDate?.toDate()}
       timePrecision={'second'}
       fill={true}
       minDate={minDate}
@@ -88,7 +89,7 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
 
   return (
     <>
-      <span className="date-cell-text">{getPrettyDate(currentDateString)}</span>
+      <span className="date-cell-text">{currentDate.format(dateDisplayFormat)}</span>
       {controlButton('', IconNames.EDIT, handleOpenDialog)}
       <Dialog
         icon={IconNames.INFO_SIGN}
