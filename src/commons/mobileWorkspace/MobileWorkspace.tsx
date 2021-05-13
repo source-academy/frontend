@@ -96,9 +96,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const editorRef = React.useRef<ReactAce>(null);
   const replRef = React.useRef<ReactAce>(null);
   const emptyRef = React.useRef<ReactAce>(null);
-  const [keyboardInputRef, setKeyboardInputRef] = React.useState<React.RefObject<ReactAce>>(
-    emptyRef
-  );
+  const [keyboardInputRef, setKeyboardInputRef] =
+    React.useState<React.RefObject<ReactAce>>(emptyRef);
 
   React.useEffect(() => {
     editorRef.current?.editor.on('focus', () => {

@@ -24,11 +24,10 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
   const maxDate = new Date(2030, 11, 31);
 
   const { data, forOpenDate } = props;
-  const currentDateString = React.useMemo(() => (forOpenDate ? data.openAt : data.closeAt), [
-    data.closeAt,
-    data.openAt,
-    forOpenDate
-  ]);
+  const currentDateString = React.useMemo(
+    () => (forOpenDate ? data.openAt : data.closeAt),
+    [data.closeAt, data.openAt, forOpenDate]
+  );
 
   const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
   const [newDate, setNewDate] = React.useState<Date | null>(new Date(currentDateString));

@@ -274,9 +274,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
     const isOverviewUpcoming = (overview: AssessmentOverview) =>
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
 
-    const upcomingCards = sortAssessments(
-      assessmentOverviews.filter(isOverviewUpcoming)
-    ).map((overview, index) => makeOverviewCard(overview, index, !isStudent, false));
+    const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
+      (overview, index) => makeOverviewCard(overview, index, !isStudent, false)
+    );
 
     /** Opened assessments, that are released and can be attempted. */
     const isOverviewOpened = (overview: AssessmentOverview) =>
