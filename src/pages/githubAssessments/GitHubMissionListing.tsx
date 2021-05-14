@@ -103,7 +103,7 @@ const GitHubMissionListing: React.FC<any> = () => {
         <TagInput
           leftIcon={IconNames.FILTER}
           onChange={handleChange}
-          placeholder="Separate tags with commas..."
+          placeholder="Filter by classroom name!"
           rightElement={clearButton}
           tagProps={{ minimal: true }}
           values={values}
