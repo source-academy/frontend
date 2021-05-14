@@ -86,6 +86,34 @@ test('getMissionData works properly', async () => {
   expect(missionData.tasksData[1].starterCode).toBe('Code B');
 });
 
+test('convertMissionMetadataToMetadataString works as expected', () => {
+  const missionMetadata = {
+    title: 'Dummy Mission',
+    coverImage: 'www.somelink.com',
+    webSummary: 'no',
+    dueDate: new Date('Sun Dec 17 1995 03:24:00 GMT+0800 (Singapore Standard Time)'),
+    kind: 'Mission',
+    number: 'M3',
+    sourceVersion: 3,
+    reading: 'Textbook Pages 1 to 234763'
+  } as MissionMetadata;
+
+  const metadataString = GitHubMissionDataUtils.convertMissionMetadataToMetadataString(
+    missionMetadata
+  );
+
+  expect(metadataString).toBe(
+    'title=Dummy Mission\n' +
+      'coverImage=www.somelink.com\n' +
+      'webSummary=no\n' +
+      'dueDate=Sun Dec 17 1995 03:24:00 GMT+0800 (Singapore Standard Time)\n' +
+      'kind=Mission\n' +
+      'number=M3\n' +
+      'sourceVersion=3\n' +
+      'reading=Textbook Pages 1 to 234763'
+  );
+});
+
 class MocktokitA {
   readonly repos = {
     getContent: this.getContent

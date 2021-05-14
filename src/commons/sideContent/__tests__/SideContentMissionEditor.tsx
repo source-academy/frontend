@@ -1,8 +1,8 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SideContentMissionEditor from '../SideContentMissionEditor';
 import MissionMetadata from '../../githubAssessments/MissionMetadata';
+import SideContentMissionEditor from '../SideContentMissionEditor';
 
 test('typing into SideContentMissionEditor text boxes triggers setter function', () => {
   const missionMetadata = {
@@ -12,9 +12,9 @@ test('typing into SideContentMissionEditor text boxes triggers setter function',
     title: 'dummyTitle',
     sourceVersion: 1,
     dueDate: new Date(),
-  
+
     reading: 'dummyReading',
-    webSummary: 'dummySummary',
+    webSummary: 'dummySummary'
   } as MissionMetadata;
 
   let outsideValue = Object.assign({}, missionMetadata);
@@ -45,7 +45,7 @@ test('typing into SideContentMissionEditor text boxes triggers setter function',
   const numberText = screen.getByDisplayValue('dummyNumber');
   userEvent.clear(numberText);
   userEvent.type(numberText, 'realNumber');
-  expect(outsideValue.number).toBe('realNumber')
+  expect(outsideValue.number).toBe('realNumber');
 
   const titleText = screen.getByDisplayValue('dummyTitle');
   userEvent.clear(titleText);
