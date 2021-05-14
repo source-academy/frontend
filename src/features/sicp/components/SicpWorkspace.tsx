@@ -7,6 +7,7 @@ import { Variant } from 'js-slang/dist/types';
 // import { constant, isEqual } from 'lodash';
 // import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
+import Repl from 'src/commons/repl/Repl';
 
 // import { HotKeys } from 'react-hotkeys';
 // import { useSelector } from 'react-redux';
@@ -564,12 +565,25 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   //   [props.sourceChapter, props.sourceVariant]
   // );
 
-  const playgroundIntroductionTab: SideContentTab = React.useMemo(
+  const replTabProps = {
+    output: [],
+    replValue: '',
+    sourceChapter: 1,
+    sourceVariant: Constants.defaultSourceVariant as Variant,
+    externalLibrary: ExternalLibraryName.NONE,
+    handleBrowseHistoryDown: () => {},
+    handleBrowseHistoryUp: () => {},
+    handleReplEval: () => {},
+    handleReplValueChange: (newCode: string) => {},
+    replButtons: [],
+  };
+
+  const replTab: SideContentTab = React.useMemo(
     () => ({
-      label: 'Introduction',
+      label: 'REPL',
       iconName: IconNames.HOME,
       body: (
-        <span>Snippet</span>
+        <Repl {...replTabProps}/>
       ),
       id: SideContentType.introduction,
       toSpawn: () => true
@@ -578,7 +592,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   );
 
   const tabs = React.useMemo(() => {
-    const tabs: SideContentTab[] = [playgroundIntroductionTab];
+    const tabs: SideContentTab[] = [replTab];
 
     // Conditional logic for tab rendering
     // if (
@@ -627,7 +641,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
 
     return tabs;
   }, [
-    playgroundIntroductionTab,
+    replTab,
     // props.externalLibraryName,
     // props.handleSendReplInputToOutput,
     // props.output,
@@ -740,7 +754,8 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     handleBrowseHistoryUp: () => {},
     handleReplEval: () => {},
     handleReplValueChange: (newCode: string) => {},
-    replButtons: []
+    replButtons: [],
+    hidden: true
   };
 
   const controlBarProps = {
@@ -770,14 +785,14 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     controlBarProps: controlBarProps,
     // customEditor?: JSX.Element,
     editorProps: editorProps,
-    // editorHeight?: string | number;
-    editorWidth: '100',
+    editorHeight: '500',
+    editorWidth: '700',
     // hasUnsavedChanges?: boolean,
     // mcqProps?: McqChooserProps;
     replProps: replProps,
     // sideContentHeight?: number;
-    sideContentProps: sideContentProps
-    // sideContentIsResizeable?: boolean;
+    sideContentProps: sideContentProps,
+    sideContentIsResizeable: false
   };
 
   // const mobileWorkspaceProps: MobileWorkspaceProps = {
