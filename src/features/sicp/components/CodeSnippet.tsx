@@ -19,10 +19,14 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     setOpen(!open);
   };
 
+  const WorkspaceProps = {
+    handleCloseEditor: onClick
+  }
+
   return (
     <div>
       {open ? (
-        <SicpWorkspace />
+        <SicpWorkspace {...WorkspaceProps}/>
       ) : (
         <>
           <Card className="sicp-code-snippet" onClick={onClick}>

@@ -7,6 +7,7 @@ import { Variant } from 'js-slang/dist/types';
 // import { constant, isEqual } from 'lodash';
 // import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
+import controlButton from 'src/commons/ControlButton';
 import Repl from 'src/commons/repl/Repl';
 
 // import { HotKeys } from 'react-hotkeys';
@@ -45,10 +46,7 @@ import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes'
 // import SideContentListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
 // import SideContentRemoteExecution from '../../../commons/sideContent/SideContentRemoteExecution';
 // import SideContentSubstVisualizer from '../../../commons/sideContent/SideContentSubstVisualizer';
-import {
-  SideContentTab,
-  SideContentType
-} from '../../../commons/sideContent/SideContentTypes';
+import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 // import SideContentVideoDisplay from '../../../commons/sideContent/SideContentVideoDisplay';
 import Constants from '../../../commons/utils/Constants';
 // import { generateSourceIntroduction } from '../../../commons/utils/IntroductionHelper';
@@ -65,7 +63,7 @@ import { PersistenceFile } from '../../../features/persistence/PersistenceTypes'
 
 // export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
-export type PlaygroundProps = StateProps;
+export type PlaygroundProps = OwnProps;
 
 export type DispatchProps = {
   // handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -141,6 +139,10 @@ export type StateProps = {
   githubOctokitInstance?: Octokit | undefined;
   githubSaveInfo?: { repoName: string; filePath: string };
 };
+
+type OwnProps = {
+  handleCloseEditor: () => void;
+}
 
 // const keyMap = { goGreen: 'h u l k' };
 
@@ -318,6 +320,9 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   //   },
   //   [sessionId]
   // );
+
+  const closeButton =
+    controlButton("", IconNames.CROSS, props.handleCloseEditor);
 
   // const autorunButtons = React.useMemo(
   //   () => (
@@ -565,31 +570,28 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   //   [props.sourceChapter, props.sourceVariant]
   // );
 
-  const replTabProps = {
-    output: [],
-    replValue: '',
-    sourceChapter: 1,
-    sourceVariant: Constants.defaultSourceVariant as Variant,
-    externalLibrary: ExternalLibraryName.NONE,
-    handleBrowseHistoryDown: () => {},
-    handleBrowseHistoryUp: () => {},
-    handleReplEval: () => {},
-    handleReplValueChange: (newCode: string) => {},
-    replButtons: [],
-  };
+  const replTab: SideContentTab = React.useMemo(() => {
+    const replTabProps = {
+      output: [],
+      replValue: '',
+      sourceChapter: 1,
+      sourceVariant: Constants.defaultSourceVariant as Variant,
+      externalLibrary: ExternalLibraryName.NONE,
+      handleBrowseHistoryDown: () => {},
+      handleBrowseHistoryUp: () => {},
+      handleReplEval: () => {},
+      handleReplValueChange: (newCode: string) => {},
+      replButtons: []
+    };
 
-  const replTab: SideContentTab = React.useMemo(
-    () => ({
+    return {
       label: 'REPL',
       iconName: IconNames.HOME,
-      body: (
-        <Repl {...replTabProps}/>
-      ),
+      body: <Repl {...replTabProps} />,
       id: SideContentType.introduction,
       toSpawn: () => true
-    }),
-    []
-  );
+    };
+  }, []);
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [replTab];
@@ -599,13 +601,13 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     //   props.externalLibraryName === ExternalLibraryName.PIXNFLIX ||
     //   props.externalLibraryName === ExternalLibraryName.ALL
     // ) {
-      // Enable video tab only when 'PIX&FLIX' is selected
-      // tabs.push({
-      //   label: 'Video Display',
-      //   iconName: IconNames.MOBILE_VIDEO,
-      //   body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-      //   toSpawn: () => true
-      // });
+    // Enable video tab only when 'PIX&FLIX' is selected
+    // tabs.push({
+    //   label: 'Video Display',
+    //   iconName: IconNames.MOBILE_VIDEO,
+    //   body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+    //   toSpawn: () => true
+    // });
     // }
     // if (props.externalLibraryName === ExternalLibraryName.MACHINELEARNING) {
     //   // Enable Face API Display only when 'MACHINELEARNING' is selected
@@ -641,7 +643,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
 
     return tabs;
   }, [
-    replTab,
+    replTab
     // props.externalLibraryName,
     // props.handleSendReplInputToOutput,
     // props.output,
@@ -744,7 +746,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };
 
-  const replProps = {
+  const dummyReplProps = {
     output: [],
     replValue: '',
     sourceChapter: 1,
@@ -759,7 +761,19 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   };
 
   const controlBarProps = {
-    editorButtons: []
+    editorButtons: [
+      // autorunButtons,
+      // shareButton,
+      // chapterSelect,
+      // props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
+      // sessionButtons,
+      // persistenceButtons,
+      // githubButtons,
+      // usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
+    ],
+    editingWorkspaceButtons: [
+      closeButton
+    ]
   };
 
   const sideContentProps = {
@@ -785,11 +799,11 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     controlBarProps: controlBarProps,
     // customEditor?: JSX.Element,
     editorProps: editorProps,
-    editorHeight: '500',
+    // editorHeight: 1000,
     editorWidth: '700',
     // hasUnsavedChanges?: boolean,
     // mcqProps?: McqChooserProps;
-    replProps: replProps,
+    replProps: dummyReplProps,
     // sideContentHeight?: number;
     sideContentProps: sideContentProps,
     sideContentIsResizeable: false
