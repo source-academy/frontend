@@ -3,23 +3,20 @@ import { useEffect, useState } from 'react';
 
 import SicpDisplay from './subcomponents/SicpDisplay';
 
-export type SicpProps = DispatchProps & StateProps & OwnProps;
-export type DispatchProps = {
-  handleChangeChapter: (chapter: integer) => void;
-};
-export type StateProps = {
+export type SicpProps = OwnProps;
+export type OwnProps = {
   chapter: integer;
 };
-export type OwnProps = {};
 
 const Sicp: React.FC<SicpProps> = props => {
   // const { chapter } = props;
 
   const [data, setData] = useState([]);
   // const [text, setText] = useState("");
+  const dataUrl = '/temp/1.1.1.json';
 
   const getData = () => {
-    fetch('https://raw.githubusercontent.com/samuelfangjw/test-repo/main/test.json')
+    fetch(dataUrl)
       .then(response => {
           console.log(response);
           return response.json();
@@ -33,14 +30,12 @@ const Sicp: React.FC<SicpProps> = props => {
   useEffect(() => getData(), []);
 
   //TODO check for null json files, get correct type
-  let text = "";
-  text += data["body"];
   // data.forEach(x => text = text + x["body"]);
   // const content = text + "test" + chapter;
 
   
   return (
-    <SicpDisplay content={text} />
+    <SicpDisplay content={data} />
   );
 };
 
