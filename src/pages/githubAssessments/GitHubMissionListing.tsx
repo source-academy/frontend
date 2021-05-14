@@ -1,18 +1,20 @@
 import {
   Button,
   Card,
+  Divider,
   Elevation,
   H4,
   H6,
   Icon,
   NonIdealState,
   Spinner,
+  TagInput,
   Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
@@ -41,57 +43,108 @@ const GitHubMissionListing: React.FC<any> = () => {
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
+  const [values, setValues] = useState<React.ReactNode[]>([]);
+
+  const signInToGitHubDisplay = useMemo(
+    () => <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />,
+    []
+  );
+  const noMissionReposFoundDisplay = useMemo(
+    () => (
+      <NonIdealState description="No mission repositories found for user." icon={IconNames.FLAME} />
+    ),
+    []
+  );
+  const createMissionButton = useMemo(
+    () => (
+      <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+        Create a New Mission!
+      </Button>
+    ),
+    []
+  );
+
   useEffect(() => {
     if (octokit === undefined) {
-      setDisplay(
-        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-      );
+      setDisplay(signInToGitHubDisplay);
     } else {
       retrieveBrowsableMissions(octokit, setBrowsableMissions, setMissionsRetrieved, setDisplay);
     }
-  }, [octokit, setBrowsableMissions, setDisplay]);
+  }, [octokit, setBrowsableMissions, setDisplay, signInToGitHubDisplay]);
 
   useEffect(() => {
+    // If octokit not defined, ask user to log-in
     if (octokit === undefined) {
-      setDisplay(
-        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-      );
+      setDisplay(signInToGitHubDisplay);
       return;
     }
 
+    // If missions have not been retrieved, wait for them to be retrieved
     if (!missionsRetrieved) {
       return;
     }
 
     if (browsableMissions.length > 0) {
-      const cards = browsableMissions.map(element =>
-        convertMissionToCard(element, isMobileBreakpoint)
+      const filteredMissions = browsableMissions.filter(
+        mission => !filteredMissions.includes(mission) && matchTag(mission, values)
+      ) as BrowsableMission[];
+
+      const handleChange = (values: React.ReactNode[]) => {
+        setValues(values);
+      };
+
+      const handleClear = () => {
+        handleChange([]);
+      };
+
+      const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
+
+      const tagFilter = (
+        <TagInput
+          leftIcon={IconNames.FILTER}
+          onChange={handleChange}
+          placeholder="Separate tags with commas..."
+          rightElement={clearButton}
+          tagProps={{ minimal: true }}
+          values={values}
+        />
       );
+
+      const cards =
+        values.length === 0
+          ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
+          : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
+
       setDisplay(
-        <div>
-          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
-            Create a New Mission!
-          </Button>
-          <>{cards}</>
-        </div>
+        <>
+          {tagFilter}
+          <Divider />
+          {createMissionButton}
+          {cards}
+        </>
       );
       return;
     }
 
     if (browsableMissions.length === 0) {
       setDisplay(
-        <div>
-          <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
-            Create a New Mission!
-          </Button>
-          <NonIdealState
-            description="No mission repositories found for user."
-            icon={IconNames.FLAME}
-          />
-        </div>
+        <>
+          {createMissionButton}
+          {noMissionReposFoundDisplay}
+        </>
       );
     }
-  }, [browsableMissions, isMobileBreakpoint, octokit, setDisplay, missionsRetrieved]);
+  }, [
+    browsableMissions,
+    isMobileBreakpoint,
+    octokit,
+    setDisplay,
+    missionsRetrieved,
+    values,
+    createMissionButton,
+    noMissionReposFoundDisplay,
+    signInToGitHubDisplay
+  ]);
 
   return (
     <div className="Academy">
@@ -101,6 +154,22 @@ const GitHubMissionListing: React.FC<any> = () => {
     </div>
   );
 };
+
+function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
+  let match = false;
+  tags.forEach(tag => {
+    if (tag !== null && tag !== undefined) {
+      if (mission.title.includes(tag.toString())) {
+        match = true;
+      } else if (mission.webSummary.includes(tag.toString())) {
+        match = true;
+      } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
+        match = true;
+      }
+    }
+  });
+  return match;
+}
 
 /**
  * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
