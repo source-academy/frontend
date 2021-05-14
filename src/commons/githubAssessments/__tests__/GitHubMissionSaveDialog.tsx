@@ -9,6 +9,7 @@ import {
 test('Selecting close causes resolveDialog to be called with false confirmSave and empty string commitMessage', async () => {
   const repoName = 'dummy value';
   const changedFiles: string[] = [];
+  const filesToDelete: string[] = [];
   let outsideValue = { confirmSave: true, commitMessage: 'a-commit-message' };
   function resolveDialog(insideValue: GitHubMissionSaveDialogResolution) {
     outsideValue = insideValue;
@@ -19,7 +20,7 @@ test('Selecting close causes resolveDialog to be called with false confirmSave a
       <GitHubMissionSaveDialog
         repoName={repoName}
         filesToChangeOrCreate={changedFiles}
-        filesToDelete={[]}
+        filesToDelete={filesToDelete}
         resolveDialog={resolveDialog}
       />
     );
@@ -34,6 +35,7 @@ test('Selecting close causes resolveDialog to be called with false confirmSave a
 test('Selecting save causes resolveDialog to be called with true confirmSave and empty string commitMessage', async () => {
   const repoName = 'dummy value';
   const changedFiles: string[] = [];
+  const filesToDelete: string[] = [];
   let outsideValue = { confirmSave: false, commitMessage: 'not-a-commit-message' };
   function resolveDialog(insideValue: GitHubMissionSaveDialogResolution) {
     outsideValue = insideValue;
@@ -44,7 +46,7 @@ test('Selecting save causes resolveDialog to be called with true confirmSave and
       <GitHubMissionSaveDialog
         repoName={repoName}
         filesToChangeOrCreate={changedFiles}
-        filesToDelete={[]}
+        filesToDelete={filesToDelete}
         resolveDialog={resolveDialog}
       />
     );
@@ -59,6 +61,7 @@ test('Selecting save causes resolveDialog to be called with true confirmSave and
 test('Selecting Confirm causes resolveDialog to be called with confirmSave = true and commitMessage = InputGroup value', async () => {
   const repoName = 'dummy value';
   const changedFiles: string[] = ['Q1/StarterCode.js'];
+  const filesToDelete: string[] = ['Q2'];
   let outsideValue = { confirmSave: false, commitMessage: 'not-a-commit-message' };
   function resolveDialog(insideValue: GitHubMissionSaveDialogResolution) {
     outsideValue = insideValue;
@@ -69,13 +72,14 @@ test('Selecting Confirm causes resolveDialog to be called with confirmSave = tru
       <GitHubMissionSaveDialog
         repoName={repoName}
         filesToChangeOrCreate={changedFiles}
-        filesToDelete={[]}
+        filesToDelete={filesToDelete}
         resolveDialog={resolveDialog}
       />
     );
   });
 
   await waitFor(() => expect(screen.getAllByText('Q1/StarterCode.js').length).toBe(1));
+  await waitFor(() => expect(screen.getAllByText('Q2').length).toBe(1));
   await screen.findByText('Please confirm your save');
   userEvent.type(screen.getByPlaceholderText('Enter Commit Message'), 'message');
   fireEvent.click(screen.getByText('Confirm'));
