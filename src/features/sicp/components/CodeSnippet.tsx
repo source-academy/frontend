@@ -2,6 +2,8 @@ import { Card } from '@blueprintjs/core';
 import * as React from 'react';
 import { useState } from 'react';
 
+import SicpWorkspace from './SicpWorkspace';
+
 type CodeSnippetProps = OwnProps;
 type OwnProps = {
   body: string;
@@ -18,12 +20,14 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   };
 
   return (
-    <div onClick={onClick}>
+    <div>
       {open ? (
-        <div>open</div>
+        <SicpWorkspace />
       ) : (
         <>
-          <Card className="sicp-code-snippet">{body}</Card>
+          <Card className="sicp-code-snippet" onClick={onClick}>
+            {body}
+          </Card>
           {output ? <Card className="sicp-code-result">{output}</Card> : <></>}
         </>
       )}
