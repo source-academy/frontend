@@ -20,7 +20,9 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   };
 
   const WorkspaceProps = {
-    handleCloseEditor: onClick
+    editorValue: body,
+
+    handleCloseEditor: onClick,
   }
 
   return (

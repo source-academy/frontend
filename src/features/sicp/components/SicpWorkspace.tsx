@@ -112,7 +112,7 @@ export type DispatchProps = {
 
 export type StateProps = {
   editorSessionId?: string;
-  editorValue?: string;
+  // editorValue?: string;
   editorHeight?: number;
   editorWidth?: string;
   execTime?: number;
@@ -141,6 +141,8 @@ export type StateProps = {
 };
 
 type OwnProps = {
+  editorValue: string;
+
   handleCloseEditor: () => void;
 }
 
@@ -736,7 +738,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   const editorProps = {
     breakpoints: [],
     editorSessionId: '',
-    editorValue: '',
+    editorValue: props.editorValue,
     highlightedLines: [],
     isEditorAutorun: false,
     handleDeclarationNavigate: (cursorPosition: Position) => {},
