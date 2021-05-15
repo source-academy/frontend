@@ -42,7 +42,7 @@ export function* persistenceSaga(): SagaIterator {
     yield call([gapi.auth2.getAuthInstance(), 'signOut']);
   });
 
-  yield takeLatest(PERSISTENCE_OPEN_PICKER, function* () {
+  yield takeLatest(PERSISTENCE_OPEN_PICKER, function* (): any {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);
@@ -107,7 +107,7 @@ export function* persistenceSaga(): SagaIterator {
     }
   });
 
-  yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* () {
+  yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* (): any {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);

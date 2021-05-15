@@ -1098,7 +1098,7 @@ export const request = async (
  *
  * @param {(Response|null)} resp Result of the failed HTTP request
  */
-export function* handleResponseError(resp: Response | null) {
+export function* handleResponseError(resp: Response | null): any {
   // Default: check if the response is null
   if (!resp) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");

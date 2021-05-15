@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
 
 import Editor, { EditorProps } from '../Editor';
 import { Position } from '../EditorTypes';

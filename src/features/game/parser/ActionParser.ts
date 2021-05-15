@@ -37,10 +37,9 @@ export default class ActionParser {
 
     const gameAction = this.parseActionContent(actionString);
     if (conditionalsString) {
-      gameAction.actionConditions = StringUtils.splitByChar(
-        conditionalsString,
-        'AND'
-      ).map(condition => ConditionParser.parse(condition));
+      gameAction.actionConditions = StringUtils.splitByChar(conditionalsString, 'AND').map(
+        condition => ConditionParser.parse(condition)
+      );
     }
 
     Parser.checkpoint.map.setItemInMap(GameItemType.actions, gameAction.interactionId, gameAction);

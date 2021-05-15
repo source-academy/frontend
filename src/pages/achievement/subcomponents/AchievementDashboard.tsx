@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementOverview from '../../../commons/achievement/AchievementOverview';
