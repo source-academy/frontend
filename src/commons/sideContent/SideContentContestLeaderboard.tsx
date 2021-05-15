@@ -52,14 +52,18 @@ const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestL
     () => (
       <div>
         {contestEntryHeader}
-        {orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
-          <SideContentLeaderboardCard
-            key={contestEntry.submission_id}
-            handleContestEntryClick={handleContestEntryClick}
-            contestEntry={contestEntry}
-            rank={index + 1}
-          />
-        ))}
+        {orderedContestEntries.length > 0 ? (
+          orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
+            <SideContentLeaderboardCard
+              key={contestEntry.submission_id}
+              handleContestEntryClick={handleContestEntryClick}
+              contestEntry={contestEntry}
+              rank={index + 1}
+            />
+          ))
+        ) : (
+          <div className="noResults">There are no eligible contest leaderboard entries found.</div>
+        )}
       </div>
     ),
     [handleContestEntryClick, orderedContestEntries]

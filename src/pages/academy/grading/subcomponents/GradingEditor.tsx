@@ -305,35 +305,33 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * returning the relevant saving function (for the 'Save Draft'
    * and 'Submit and Continue' buttons)
    */
-  private validateGradesBeforeSave =
-    (handleSaving: GradingSaveFunction): (() => void) =>
-    () => {
-      const gradeAdjustmentInput =
-        stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined;
-      const grade = this.props.initialGrade + (gradeAdjustmentInput || 0);
-      const xpAdjustmentInput =
-        stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined;
-      const xp = this.props.initialXp + (xpAdjustmentInput || 0);
-      if (grade < 0 || grade > this.props.maxGrade) {
-        showWarningMessage(
-          `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maxGrade.toString()}.`
-        );
-        return;
-      } else if (xp < 0 || xp > this.props.maxXp) {
-        showWarningMessage(
-          `XP ${xp.toString()} is out of bounds. Maximum xp is ${this.props.maxXp.toString()}.`
-        );
-        return;
-      } else {
-        handleSaving(
-          this.props.submissionId,
-          this.props.questionId,
-          gradeAdjustmentInput,
-          xpAdjustmentInput,
-          this.state.editorValue!
-        );
-      }
-    };
+  private validateGradesBeforeSave = (handleSaving: GradingSaveFunction): (() => void) => () => {
+    const gradeAdjustmentInput =
+      stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined;
+    const grade = this.props.initialGrade + (gradeAdjustmentInput || 0);
+    const xpAdjustmentInput =
+      stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined;
+    const xp = this.props.initialXp + (xpAdjustmentInput || 0);
+    if (grade < 0 || grade > this.props.maxGrade) {
+      showWarningMessage(
+        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maxGrade.toString()}.`
+      );
+      return;
+    } else if (xp < 0 || xp > this.props.maxXp) {
+      showWarningMessage(
+        `XP ${xp.toString()} is out of bounds. Maximum xp is ${this.props.maxXp.toString()}.`
+      );
+      return;
+    } else {
+      handleSaving(
+        this.props.submissionId,
+        this.props.questionId,
+        gradeAdjustmentInput,
+        xpAdjustmentInput,
+        this.state.editorValue!
+      );
+    }
+  };
 
   /**
    * Sets the state currentlySaving to true to disable

@@ -183,42 +183,38 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
     });
   };
 
-  private focusEditor =
-    (path: Array<string | number>) =>
-    (e: any): void => {
-      if (!this.state.templateFocused) {
-        this.setState({
-          templateValue: getValueFromPath(path, this.props.assessment),
-          templateFocused: true
-        });
+  private focusEditor = (path: Array<string | number>) => (e: any): void => {
+    if (!this.state.templateFocused) {
+      this.setState({
+        templateValue: getValueFromPath(path, this.props.assessment),
+        templateFocused: true
+      });
+    }
+  };
+
+  private unFocusEditor = (path: Array<string | number>) => (e: any): void => {
+    if (this.state.templateFocused) {
+      const value = getValueFromPath(path, this.props.assessment);
+      if (value !== this.state.templateValue) {
+        const assessmentVal = this.props.assessment;
+        assignToPath(path, this.state.templateValue, assessmentVal);
+        this.props.updateAssessment(assessmentVal);
       }
-    };
 
-  private unFocusEditor =
-    (path: Array<string | number>) =>
-    (e: any): void => {
-      if (this.state.templateFocused) {
-        const value = getValueFromPath(path, this.props.assessment);
-        if (value !== this.state.templateValue) {
-          const assessmentVal = this.props.assessment;
-          assignToPath(path, this.state.templateValue, assessmentVal);
-          this.props.updateAssessment(assessmentVal);
-        }
-
-        if (this.state.activeEditor.id === 'prepend') {
-          const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPrepend });
-        } else if (this.state.activeEditor.id === 'postpend') {
-          const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPostpend });
-        }
-
-        this.setState({
-          templateValue: '',
-          templateFocused: false
-        });
+      if (this.state.activeEditor.id === 'prepend') {
+        const editorPrepend = this.state.templateValue;
+        this.props.handleUpdateWorkspace({ editorPrepend });
+      } else if (this.state.activeEditor.id === 'postpend') {
+        const editorPostpend = this.state.templateValue;
+        this.props.handleUpdateWorkspace({ editorPostpend });
       }
-    };
+
+      this.setState({
+        templateValue: '',
+        templateFocused: false
+      });
+    }
+  };
 
   private handleCopyFromEditor = (path: Array<string | number>) => (): void => {
     const assessment = this.props.assessment;

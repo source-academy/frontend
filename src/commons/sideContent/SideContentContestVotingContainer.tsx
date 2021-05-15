@@ -41,8 +41,8 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
   };
 
   const submissionHasNoNull = (votingSubmission: ContestEntry[]) => {
-    return votingSubmission.reduce((hasNull, vote) => {
-      return hasNull && vote.rank !== undefined && vote.rank !== null;
+    return votingSubmission.reduce((noNull, vote) => {
+      return noNull && vote.rank !== undefined && vote.rank !== null;
     }, true);
   };
 
@@ -67,6 +67,9 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
       setIsValid(false);
     } else if (!noDuplicates && noNull) {
       showWarningMessage('Vote scores are not unique. Please input unique rankings.');
+      setIsValid(false);
+    } else {
+      showWarningMessage('Something went wrong. Please try again.');
       setIsValid(false);
     }
   };

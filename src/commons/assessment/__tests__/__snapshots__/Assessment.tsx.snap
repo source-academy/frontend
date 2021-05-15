@@ -80,7 +80,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     </Blueprint3.Button>
                     <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp3-collapse\\" style={{...}}>
-                        <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false}>
+                        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
                           <div>
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
@@ -193,7 +193,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     </Blueprint3.Button>
                     <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp3-collapse\\" style={{...}}>
-                        <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false}>
+                        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
                           <div>
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
@@ -328,13 +328,13 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
                                             <Blueprint3.Tooltip2 className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
+                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                                                 <Manager>
                                                   <Reference>
-                                                    <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
+                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
                                                             <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                               <desc>
                                                                 lock
@@ -344,9 +344,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                           </span>
                                                         </Blueprint3.Icon>
                                                       </span>
-                                                    </Blueprint3.ResizeSensor2>
+                                                    </Blueprint3.ResizeSensor>
                                                   </Reference>
-                                                  <Popper innerRef={[Function (anonymous)]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                                                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
                                                     <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
                                                   </Popper>
                                                 </Manager>
@@ -833,7 +833,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     </Blueprint3.Button>
                     <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp3-collapse\\" style={{...}}>
-                        <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                       </div>
                     </Blueprint3.Collapse>
                   </div>
@@ -931,7 +931,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     </Blueprint3.Button>
                     <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp3-collapse\\" style={{...}}>
-                        <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false}>
+                        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
                           <div>
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
@@ -1074,7 +1074,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     </Blueprint3.Button>
                     <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp3-collapse\\" style={{...}}>
-                        <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false}>
+                        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
                           <div>
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
@@ -1209,13 +1209,13 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
                                             <Blueprint3.Tooltip2 className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
+                                              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                                                 <Manager>
                                                   <Reference>
-                                                    <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                                                      <span className=\\"listing-title-tooltip bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
+                                                          <span icon=\\"lock\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
                                                             <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                               <desc>
                                                                 lock
@@ -1225,9 +1225,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                           </span>
                                                         </Blueprint3.Icon>
                                                       </span>
-                                                    </Blueprint3.ResizeSensor2>
+                                                    </Blueprint3.ResizeSensor>
                                                   </Reference>
-                                                  <Popper innerRef={[Function (anonymous)]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                                                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
                                                     <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
                                                   </Popper>
                                                 </Manager>
@@ -1714,7 +1714,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     </Blueprint3.Button>
                     <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp3-collapse\\" style={{...}}>
-                        <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                       </div>
                     </Blueprint3.Collapse>
                   </div>

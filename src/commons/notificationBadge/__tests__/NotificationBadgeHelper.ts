@@ -113,8 +113,9 @@ describe('filterNotificationsByType, ', () => {
   });
 
   test('Grading works properly', () => {
-    const newNotifications =
-      NotificationHelpers.filterNotificationsByType('Grading')(notifications);
+    const newNotifications = NotificationHelpers.filterNotificationsByType('Grading')(
+      notifications
+    );
 
     expect(newNotifications.length).toEqual(2);
     expect(newNotifications[0]).toEqual(notificationSubmissionMission);

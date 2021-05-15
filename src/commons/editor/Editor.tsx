@@ -112,35 +112,35 @@ const getMarkers = (
   }));
 };
 
-const makeHandleGutterClick =
-  (handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']) =>
-  (e: AceMouseEvent) => {
-    const target = e.domEvent.target! as HTMLDivElement;
-    if (
-      target.className.indexOf('ace_gutter-cell') === -1 ||
-      !e.editor.isFocused() ||
-      e.clientX > 35 + target.getBoundingClientRect().left
-    ) {
-      return;
-    }
+const makeHandleGutterClick = (
+  handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']
+) => (e: AceMouseEvent) => {
+  const target = e.domEvent.target! as HTMLDivElement;
+  if (
+    target.className.indexOf('ace_gutter-cell') === -1 ||
+    !e.editor.isFocused() ||
+    e.clientX > 35 + target.getBoundingClientRect().left
+  ) {
+    return;
+  }
 
-    // Breakpoint related.
-    const row = e.getDocumentPosition().row;
-    const content = e.editor.session.getLine(row);
-    const breakpoints = e.editor.session.getBreakpoints();
-    if (
-      breakpoints[row] === undefined &&
-      content.length !== 0 &&
-      !content.includes('//') &&
-      !content.includes('debugger;')
-    ) {
-      e.editor.session.setBreakpoint(row, undefined!);
-    } else {
-      e.editor.session.clearBreakpoint(row);
-    }
-    e.stop();
-    handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
-  };
+  // Breakpoint related.
+  const row = e.getDocumentPosition().row;
+  const content = e.editor.session.getLine(row);
+  const breakpoints = e.editor.session.getBreakpoints();
+  if (
+    breakpoints[row] === undefined &&
+    content.length !== 0 &&
+    !content.includes('//') &&
+    !content.includes('debugger;')
+  ) {
+    e.editor.session.setBreakpoint(row, undefined!);
+  } else {
+    e.editor.session.clearBreakpoint(row);
+  }
+  e.stop();
+  handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
+};
 
 // Note: This is untestable/unused because JS-hint has been removed.
 const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {

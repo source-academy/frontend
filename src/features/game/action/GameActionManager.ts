@@ -44,8 +44,13 @@ export default class GameActionManager {
    * @param actionId id of the action
    */
   public async processGameAction(actionId: ItemId) {
-    const { actionType, actionParams, actionConditions, isRepeatable, interactionId } =
-      GameGlobalAPI.getInstance().getActionById(actionId);
+    const {
+      actionType,
+      actionParams,
+      actionConditions,
+      isRepeatable,
+      interactionId
+    } = GameGlobalAPI.getInstance().getActionById(actionId);
 
     if (await this.checkCanPlayAction(isRepeatable, interactionId, actionConditions)) {
       await GameActionExecuter.executeGameAction(actionType, actionParams);

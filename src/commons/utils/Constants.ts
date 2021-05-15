@@ -32,8 +32,10 @@ const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 
-const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
-  new Map();
+const authProviders: Map<
+  string,
+  { name: string; endpoint: string; isDefault: boolean }
+> = new Map();
 
 for (let i = 1; ; ++i) {
   const id = process.env[`REACT_APP_OAUTH2_PROVIDER${i}`];

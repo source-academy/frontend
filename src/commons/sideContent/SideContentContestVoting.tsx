@@ -59,18 +59,22 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     () => (
       <div>
         {contestEntryHeader}
-        {contestEntries.map((contestEntry: ContestEntry, index) => (
-          <SideContentContestEntryCard
-            isValid={isValid}
-            canSave={canSave}
-            entryNumber={index + 1}
-            key={contestEntry.submission_id}
-            handleContestEntryClick={handleContestEntryClick}
-            handleVotingSubmissionChange={handleVotingSubmissionChange}
-            contestEntry={contestEntry}
-            maxRank={contestEntries.length}
-          />
-        ))}
+        {contestEntries.length > 0 ? (
+          contestEntries.map((contestEntry: ContestEntry, index) => (
+            <SideContentContestEntryCard
+              isValid={isValid}
+              canSave={canSave}
+              entryNumber={index + 1}
+              key={contestEntry.submission_id}
+              handleContestEntryClick={handleContestEntryClick}
+              handleVotingSubmissionChange={handleVotingSubmissionChange}
+              contestEntry={contestEntry}
+              maxRank={contestEntries.length}
+            />
+          ))
+        ) : (
+          <div className="noResults">There are no eligible entries for voting found.</div>
+        )}
       </div>
     ),
     // determines when to re-render

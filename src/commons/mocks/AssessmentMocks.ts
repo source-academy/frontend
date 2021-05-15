@@ -848,7 +848,6 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         answer: { code: 'function voting_test() { return true; }' }
       }
     ],
-    // TODO: validate that the contest entries are displayed in order.
     contestLeaderboard: [
       {
         submission_id: 1,

@@ -39,7 +39,6 @@ import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './Asse
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
-    userId: state.session.userId,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
     editorPrepend: state.workspaces.assessment.editorPrepend,

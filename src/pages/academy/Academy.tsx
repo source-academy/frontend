@@ -89,9 +89,9 @@ class Academy extends React.Component<AcademyProps> {
     );
   }
 
-  private assessmentRenderFactory =
-    (cat: AssessmentCategory) => (routerProps: RouteComponentProps<any>) =>
-      <AssessmentContainer assessmentCategory={cat} />;
+  private assessmentRenderFactory = (cat: AssessmentCategory) => (
+    routerProps: RouteComponentProps<any>
+  ) => <AssessmentContainer assessmentCategory={cat} />;
 
   /**
    * 1. If user is in /academy.*, redirect to game

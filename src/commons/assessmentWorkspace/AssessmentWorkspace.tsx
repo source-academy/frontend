@@ -335,11 +335,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   ) => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const isContestVoting = props.assessment!.questions[questionId]?.type === 'voting';
-    const handleContestEntryClick = (submissionId: number, answer: string) => {
+    const handleContestEntryClick = (_submissionId: number, answer: string) => {
       props.handleEditorValueChange(answer);
     };
-
-    const contestVotingQuestion = props.assessment?.questions[questionId] as IContestVotingQuestion;
 
     const tabs: SideContentTab[] = isContestVoting
       ? [
@@ -364,10 +362,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               <SideContentContestVotingContainer
                 canSave={props.canSave}
                 handleSave={votingSubmission =>
-                  props.handleSave(contestVotingQuestion.id, votingSubmission)
+                  props.handleSave(
+                    (props.assessment?.questions[questionId] as IContestVotingQuestion).id,
+                    votingSubmission
+                  )
                 }
                 handleContestEntryClick={handleContestEntryClick}
-                contestEntries={contestVotingQuestion?.contestEntries ?? []}
+                contestEntries={
+                  (props.assessment?.questions[questionId] as IContestVotingQuestion)
+                    ?.contestEntries ?? []
+                }
               />
             ),
             id: SideContentType.contestVoting,
@@ -379,7 +383,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             body: (
               <SideContentContestLeaderboard
                 handleContestEntryClick={handleContestEntryClick}
-                orderedContestEntries={contestVotingQuestion?.contestLeaderboard ?? []}
+                orderedContestEntries={
+                  (props.assessment?.questions[questionId] as IContestVotingQuestion)
+                    ?.contestLeaderboard ?? []
+                }
               />
             ),
             id: SideContentType.contestLeaderboard,
