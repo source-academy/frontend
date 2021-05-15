@@ -21,13 +21,13 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
               Contest Voting
             </span>
             <Blueprint3.Tooltip2 content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} placement=\\"auto\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
+              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
                 <Manager>
                   <Reference>
-                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
-                      <span className=\\"bp3-popover2-target\\" tabIndex={0} onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                        <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={-1}>
-                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={-1} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                    <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
+                      <span className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                        <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                             <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                               <desc>
                                 help
@@ -37,9 +37,9 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                           </span>
                         </Blueprint3.Icon>
                       </span>
-                    </Blueprint3.ResizeSensor>
+                    </Blueprint3.ResizeSensor2>
                   </Reference>
-                  <Popper innerRef={[Function: popover]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                  <Popper innerRef={[Function (anonymous)]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
                     <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
                   </Popper>
                 </Manager>
@@ -51,7 +51,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
       </Blueprint3.Button>
       <Blueprint3.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
         <div className=\\"bp3-collapse\\" style={{...}}>
-          <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false}>
             <div>
               <div className=\\"contestentries-header\\">
                 <div className=\\"header-entryid\\">
