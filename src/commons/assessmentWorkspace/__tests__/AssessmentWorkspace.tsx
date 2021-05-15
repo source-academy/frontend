@@ -1,17 +1,11 @@
-import { Card } from '@blueprintjs/core';
-import { mount, shallow } from 'enzyme';
-import { Provider } from 'react-redux';
-import SideContentLeaderboardCard from 'src/commons/sideContent/SideContentLeaderboardCard';
+import { shallow } from 'enzyme';
 
 import { ContestEntry, Library } from '../../assessment/AssessmentTypes';
 import { EditorProps } from '../../editor/Editor';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
-import { mockInitialStore } from '../../mocks/StoreMocks';
-import SideContentContestEntryCard from '../../sideContent/SideContentContestEntryCard';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
-
 const MockEditor = (props: EditorProps) => <div id="mock-editor">{props.editorValue}</div>;
 // mock editor for testing update
 jest.mock('../../editor/Editor', () => (props: EditorProps) => (
@@ -171,44 +165,4 @@ test('AssessmentWorkspace renders Grading tab correctly if the question has been
   expect(tree.debug()).toMatchSnapshot();
   // Uncomment when fixed
   // expect(tree.find('.grading-icon').hostNodes()).toHaveLength(1);
-});
-
-test('Clicking the contest entry updates the editor for contest voting.', () => {
-  const app = (
-    <Provider store={mockInitialStore()}>
-      <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-
-  mockedHandleEditorValueChange.mockClear();
-  tree.find(SideContentContestEntryCard).find(Card).at(0).simulate('click');
-  expect(mockedHandleEditorValueChange).toBeCalledTimes(1);
-  expect(mockedHandleEditorValueChange.mock.calls[0][0]).toBe("display('voting test')");
-
-  tree.find(SideContentContestEntryCard).find(Card).at(1).simulate('click');
-  expect(mockedHandleEditorValueChange).toBeCalledTimes(2);
-  expect(mockedHandleEditorValueChange.mock.calls[1][0]).toBe(
-    'function voting_test() { return true; }'
-  );
-});
-
-test('Clicking the contest entry updates the editor for contest leaderboard.', () => {
-  const app = (
-    <Provider store={mockInitialStore()}>
-      <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-
-  mockedHandleEditorValueChange.mockClear();
-  tree.find(SideContentLeaderboardCard).find(Card).at(0).simulate('click');
-  expect(mockedHandleEditorValueChange).toBeCalledTimes(1);
-  expect(mockedHandleEditorValueChange.mock.calls[0][0]).toBe("display('leaderboard test')");
-
-  tree.find(SideContentLeaderboardCard).find(Card).at(1).simulate('click');
-  expect(mockedHandleEditorValueChange).toBeCalledTimes(2);
-  expect(mockedHandleEditorValueChange.mock.calls[1][0]).toBe(
-    'function leaderboard_test() { return true; }'
-  );
 });

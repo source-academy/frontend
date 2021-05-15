@@ -2,6 +2,7 @@ import { Card, Pre } from '@blueprintjs/core';
 import { mount } from 'enzyme';
 
 import SideContentContestLeaderboard from '../SideContentContestLeaderboard';
+import SideContentLeaderboardCard from '../SideContentLeaderboardCard';
 
 const mockLeaderboardEntries = [
   {
@@ -66,4 +67,27 @@ test('SideContentContestLeaderboard orders entry in the same order as orderedCon
   expect(SideContentContestLeaderboardRender.find(Card).at(1).find(Pre).at(2).text()).toBe('90');
 
   expect(SideContentContestLeaderboardRender.find(Card).at(2).find(Pre).at(2).text()).toBe('80');
+});
+
+test('Clicking the contest entry updates the editor for contest leaderboard.', () => {
+  const mockedHandleContestEntryClick = jest.fn();
+
+  const mockProps = {
+    handleContestEntryClick: mockedHandleContestEntryClick,
+    orderedContestEntries: mockLeaderboardEntries
+  };
+
+  const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
+  const contestVotingContainerRender = mount(contestVotingContainer);
+
+  mockedHandleContestEntryClick.mockClear();
+  contestVotingContainerRender.find(SideContentLeaderboardCard).find(Card).at(0).simulate('click');
+  expect(mockedHandleContestEntryClick).toBeCalledTimes(1);
+  expect(mockedHandleContestEntryClick.mock.calls[0][0]).toBe(1);
+  expect(mockedHandleContestEntryClick.mock.calls[0][1]).toBe("display('hello world')");
+
+  contestVotingContainerRender.find(SideContentLeaderboardCard).find(Card).at(1).simulate('click');
+  expect(mockedHandleContestEntryClick).toBeCalledTimes(2);
+  expect(mockedHandleContestEntryClick.mock.calls[1][0]).toBe(2);
+  expect(mockedHandleContestEntryClick.mock.calls[1][1]).toBe('function test() { return 1; }');
 });

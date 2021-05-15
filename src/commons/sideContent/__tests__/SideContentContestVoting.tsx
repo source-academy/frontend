@@ -1,6 +1,8 @@
 import { NumericInput } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import { mount } from 'enzyme';
 
+import SideContentContestEntryCard from '../SideContentContestEntryCard';
 import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
 
 const mockContestEntries = [
@@ -91,4 +93,29 @@ test('SideContentVotingContainer only updates when ranks assigned to entries are
   expect(mockedHandleSave).toHaveBeenCalledTimes(1);
 
   consoleWarnSpy.mockRestore();
+});
+
+test('Clicking the contest entry updates the editor for contest voting.', () => {
+  const mockedHandleContestEntryClick = jest.fn();
+
+  const mockProps = {
+    handleContestEntryClick: mockedHandleContestEntryClick,
+    handleSave: () => {},
+    canSave: true,
+    contestEntries: mockContestEntries
+  };
+
+  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
+  const contestVotingContainerRender = mount(contestVotingContainer);
+
+  mockedHandleContestEntryClick.mockClear();
+  contestVotingContainerRender.find(SideContentContestEntryCard).find(Card).at(0).simulate('click');
+  expect(mockedHandleContestEntryClick).toBeCalledTimes(1);
+  expect(mockedHandleContestEntryClick.mock.calls[0][0]).toBe(1);
+  expect(mockedHandleContestEntryClick.mock.calls[0][1]).toBe("display('hello world')");
+
+  contestVotingContainerRender.find(SideContentContestEntryCard).find(Card).at(1).simulate('click');
+  expect(mockedHandleContestEntryClick).toBeCalledTimes(2);
+  expect(mockedHandleContestEntryClick.mock.calls[1][0]).toBe(2);
+  expect(mockedHandleContestEntryClick.mock.calls[1][1]).toBe('function test() { return 1; }');
 });
