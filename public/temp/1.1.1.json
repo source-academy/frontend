@@ -1,1 +1,849 @@
-[{"child":[{"tag":"SUBSECTION","body":"1.1.1  Expressions"},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\n  "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n    One easy way to get started at programming is to examine some typical\n    interactions with an interpreter for the\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"JavaScript language."}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    Imagine that you are sitting at a\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"computer."}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    You type \n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"a "}]},{"child":[]},{"child":[{"tag":"#text","body":","}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    and the interpreter responds by displaying the\n    result of its "}]},{"child":[]},{"child":[{"tag":"#text","body":" that\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\tstatement.\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[{"child":[{"tag":"#text","body":"\n\t  The mouse click on JavaScript statements in this edition is \n\t  programmed in such a way that a JavaScript interpreter is\n\t  displayed, which can "}]},{"child":[]},{"child":[{"tag":"#text","body":" the\n\t  statement and display the resulting value.\n\t  By the way, the program that makes the mouse click\n\t  on a JavaScript statement display the interpreter is itself\n\t  written in JavaScript; it is called the "}]},{"child":[]},{"child":[{"tag":"#text","body":" for\n\t  the mouse click. Such scripts were a central objective in\n\t  the original design of JavaScript.\n\t"}]}]},{"child":[{"tag":"#text","body":"\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"\n        One kind of statement you might type is an \n        expression statement, which consists of an\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":" followed by a semicolon.\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\tOne kind of primitive expression is a number.\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    (More precisely, the expression that you type consists of the numerals that\n    represent the number in base 10.)\n    "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      If you ask our script to evaluate the expression statement\n      "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwFgBwBsA3EA","body":"486;\n"}]},{"child":[{"tag":"#text","body":"\n      by clicking it, it will respond by creating a separate\n      browser tab where the statement is shown, with the option\n      to evaluate the statement by pressing a "}]},{"child":[]},{"child":[{"tag":"#text","body":" button.\n      Click on the primitive expression statement, and see what happens!\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"child":[{"tag":"#text","body":"\n    "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n        Expressions representing numbers may be combined with\n\toperators\n        (such as\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"+"}]},{"child":[{"tag":"#text","body":" or \n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"*"}]},{"child":[{"tag":"#text","body":") to form a\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        compound expression that represents the\n        application of a corresponding primitive\n        function to those numbers.  For example,\n\t"}]},{"child":[{"child":[{"tag":"#text","body":"\n\t  evaluate\n          any of the following expression statements\n\t  by clicking on it:\n\t"}]}]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCygzAOygDUoeALAJwDcQA","body":"137 + 349;\n","output":"\n486"}]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCygDAaALSgDMpALANxA","body":"1000 - 334;\n","output":"\n666"}]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwVlAFSgCcxA3EA","body":"5 * 99;\n","output":"\n495"}]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCygDKGACwDcQA","body":"10 / 4;\n","output":"\n2.5"}]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwJjQOygDUqADANxA","body":"2.7 + 10;\n","output":"\n12.7"}]},{"child":[{"tag":"#text","body":"\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"child":[{"tag":"#text","body":"\n    "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n        Expressions such as these, which contain other expressions\n        as components, are called "}]},{"child":[]},{"child":[{"tag":"#text","body":".\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        Combinations that are formed by an \n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":" symbol in the middle, and\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":" expressions to the left and right of it, \n        are called \n        "}]},{"child":[]},{"child":[{"tag":"#text","body":".\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        The value of an operator combination is\n        obtained by applying the function specified by the operator to the\n        arguments that are the values of the operands.\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"child":[{"tag":"#text","body":"\n    "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n        The convention of placing the operator between the operands is\n        known as \n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":". It follows the mathematical notation that the\n\treader is most likely familiar with from school and everyday life.  \n        As in mathematics, operator combinations can be "}]},{"child":[]},{"child":[{"tag":"#text","body":", that\n\tis, they can have operands that\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\tthemselves are operator combinations:\n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwCgMygBUoArAJSgDUouKADKALSgBs5A3EA","body":"(3 * 5) + (10 - 6);\n","output":"\n19"}]},{"child":[{"tag":"#text","body":"\n        As usual,\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\tparentheses are used to group operator combinations in order\n\tto avoid ambiguities. JavaScript also follows the usual conventions\n\twhen parentheses are omitted; multiplication and division bind more\n\tstrongly than addition and subtraction. For example,\n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwZlAFSgCsoA1KgAyhgBMA3EA","body":"3 * 5 + 10 / 2;\n"}]},{"child":[{"tag":"#text","body":"\n        stands for \n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwCgMygBUoArAJSgDUouKADKGAEzkDcQA","body":"(3 * 5) + (10 / 2);\n"}]},{"child":[{"tag":"#text","body":"\n        We say that "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"*"}]},{"child":[{"tag":"#text","body":" and\n\t"}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"/"}]},{"child":[{"tag":"#text","body":" have\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":"\t\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\tthan "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"+"}]},{"child":[{"tag":"#text","body":" and\n\t"}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"-"}]},{"child":[{"tag":"#text","body":". Sequences of additions and\n\tsubtractions are read from left to right, as are sequences of\n\tmultiplications and divisions. Thus,\n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCy0BaUAVlDACZQAqUAFlAGpQBmAbiA","body":"1 - 5 / 2 * 4 + 3;\n"}]},{"child":[{"tag":"#text","body":"\n        stands for \n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwChaALSi64CsoYATAJSgBUoALDXQNSgDMA3EA","body":"(1 - ((5 / 2) * 4)) + 3;\n"}]},{"child":[{"tag":"#text","body":"\n        We say that the operators\n        "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"+"}]},{"child":[{"tag":"#text","body":",\n        "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"-"}]},{"child":[{"tag":"#text","body":",\n        "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"*"}]},{"child":[{"tag":"#text","body":" and\n        "}]},{"child":[{"tag":"JAVASCRIPTINLINE","body":"/"}]},{"child":[{"tag":"#text","body":" are \n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n        "}]},{"child":[]},{"child":[{"tag":"#text","body":".\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"child":[{"tag":"#text","body":"\n    "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n        There is no limit (in principle) to the depth of such nesting and to the\n\toverall complexity of the expressions that the JavaScript interpreter\n\tcan evaluate. It is we humans who might get confused by still relatively\n        simple expressions such as\n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwZlAFSgBMhoAFPgLSgCsoA1KACwCUjJA7KGAGxkoADAG4gA","body":"3 * 2 * (3 - 5 + 4) + 27 / 6 * 10;\n"}]},{"child":[{"tag":"#text","body":"\n        which the interpreter would readily evaluate to be 57.  We can help\n        ourselves by writing such an expression in the form\n        "}]},{"child":[{"tag":"SNIPPET","url":"http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwZlAFSgBMhoAFPgLSgCsoA1KACwCUoWTWxA7KGADYyKAAwBuIA","body":"3 * 2 * (3 - 5 + 4) \n+ \n27 / 6 * 10;\n"}]},{"child":[{"tag":"#text","body":"\n        to visually separate the major components of the expression.\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n  "}]},{"child":[{"tag":"TEXT"},{"child":[{"tag":"#text","body":"\n    Even with complex expressions, the interpreter always operates in the\n    same basic cycle: It reads\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"a statement typed by the user,"}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    evaluates the\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"statement,"}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    and prints the result. This mode of operation is often expressed by saying\n    that the interpreter runs in a\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":".\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n    Observe in particular that it is not necessary to explicitly instruct the\n    interpreter to print the value of the\n    "}]},{"child":[{"child":[{"tag":"#text","body":"\n      "}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]},{"child":[{"child":[{"tag":"#text","body":"\n\tstatement."}]},{"child":[]},{"child":[{"tag":"#text","body":"\n      "}]}]},{"child":[{"tag":"#text","body":"\n    "}]}]},{"child":[{"tag":"#text","body":"\n  "}]}]},{"child":[{"tag":"#text","body":"\n"}]},{"child":[{"tag":"DISPLAYFOOTNOTE","body":"<hr>\n"},{"child":[{"tag":"#text","body":"JavaScript obeys the convention that every\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\t"}]},{"child":[]},{"child":[{"tag":"#text","body":"\n\tstatement has a value. (See exercise"}]},{"child":[{"tag":"SPACE","body":" "}]},{"child":["<REF NAME=\"ex:value_producing\">","<a class=\"superscript\" id=\"1.1.1-ex-link-4.9\" href=\"./4.1.2.html#ex_4.9\">4.9</a></REF>"]},{"child":[{"tag":"#text","body":".)\n\tThis convention, together with the old\n\treputation of JavaScript programmers to not care about efficiency, leads\n\tus to paraphrase a quip on Lisp programmers by Alan Perlis (who was himself\n\tparaphrasing Oscar Wilde): "}]},{"child":[]}]}]}]
+[
+  {
+    "child": [
+      { "tag": "SUBSECTION", "body": "1.1.1  Expressions" },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      { "child": [] },
+      { "child": [{ "tag": "#text", "body": "\n\n  " }] },
+      {
+        "child": [
+          { "tag": "TEXT" },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    One easy way to get started at programming is to examine some typical\n    interactions with an interpreter for the\n    "
+              }
+            ]
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  {
+                    "child": [
+                      { "tag": "#text", "body": "JavaScript language." }
+                    ]
+                  }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    Imagine that you are sitting at a\n    "
+              }
+            ]
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "child": [{ "tag": "#text", "body": "computer." }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n    You type \n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "child": [{ "tag": "#text", "body": "a " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "," }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    and the interpreter responds by displaying the\n    result of its "
+              }
+            ]
+          },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": " that\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      { "tag": "#text", "body": "\n\tstatement.\n      " }
+                    ]
+                  }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "tag": "TEXT" },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  {
+                    "child": [
+                      {
+                        "child": [
+                          {
+                            "tag": "#text",
+                            "body": "\n\t  The mouse click on JavaScript statements in this edition is \n\t  programmed in such a way that a JavaScript interpreter is\n\t  displayed, which can "
+                          }
+                        ]
+                      },
+                      { "child": [] },
+                      {
+                        "child": [
+                          {
+                            "tag": "#text",
+                            "body": " the\n\t  statement and display the resulting value.\n\t  By the way, the program that makes the mouse click\n\t  on a JavaScript statement display the interpreter is itself\n\t  written in JavaScript; it is called the "
+                          }
+                        ]
+                      },
+                      { "child": [] },
+                      {
+                        "child": [
+                          {
+                            "tag": "#text",
+                            "body": " for\n\t  the mouse click. Such scripts were a central objective in\n\t  the original design of JavaScript.\n\t"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "tag": "TEXT" },
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        One kind of statement you might type is an \n        expression statement, which consists of an\n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": " followed by a semicolon.\n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n\tOne kind of primitive expression is a number.\n      "
+                      }
+                    ]
+                  }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    (More precisely, the expression that you type consists of the numerals that\n    represent the number in base 10.)\n    "
+              }
+            ]
+          },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              {
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n      If you ask our script to evaluate the expression statement\n      "
+                  }
+                ]
+              },
+              {
+                "child": [
+                  {
+                    "tag": "SNIPPET",
+                    "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwFgBwBsA3EA",
+                    "body": "486;\n"
+                  }
+                ]
+              },
+              {
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n      by clicking it, it will respond by creating a separate\n      browser tab where the statement is shown, with the option\n      to evaluate the statement by pressing a "
+                  }
+                ]
+              },
+              { "child": [] },
+              {
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": " button.\n      Click on the primitive expression statement, and see what happens!\n    "
+                  }
+                ]
+              }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "tag": "TEXT" },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        Expressions representing numbers may be combined with\n\toperators\n        (such as\n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "+" }] },
+                  { "child": [{ "tag": "#text", "body": " or \n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "*" }] },
+                  {
+                    "child": [
+                      { "tag": "#text", "body": ") to form a\n        " }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        compound expression that represents the\n        application of a corresponding primitive\n        function to those numbers.  For example,\n\t"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "child": [
+                          {
+                            "tag": "#text",
+                            "body": "\n\t  evaluate\n          any of the following expression statements\n\t  by clicking on it:\n\t"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCygzAOygDUoeALAJwDcQA",
+                        "body": "137 + 349;\n",
+                        "output": "\n486"
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCygDAaALSgDMpALANxA",
+                        "body": "1000 - 334;\n",
+                        "output": "\n666"
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwVlAFSgCcxA3EA",
+                        "body": "5 * 99;\n",
+                        "output": "\n495"
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCygDKGACwDcQA",
+                        "body": "10 / 4;\n",
+                        "output": "\n2.5"
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwJjQOygDUqADANxA",
+                        "body": "2.7 + 10;\n",
+                        "output": "\n12.7"
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "tag": "TEXT" },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        Expressions such as these, which contain other expressions\n        as components, are called "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": ".\n        " }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        Combinations that are formed by an \n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": " symbol in the middle, and\n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": " expressions to the left and right of it, \n        are called \n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": ".\n\t" }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        The value of an operator combination is\n        obtained by applying the function specified by the operator to the\n        arguments that are the values of the operands.\n      "
+                      }
+                    ]
+                  }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "tag": "TEXT" },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        The convention of placing the operator between the operands is\n        known as \n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": ". It follows the mathematical notation that the\n\treader is most likely familiar with from school and everyday life.  \n        As in mathematics, operator combinations can be "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": ", that\n\tis, they can have operands that\n        "
+                      }
+                    ]
+                  },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n\tthemselves are operator combinations:\n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwCgMygBUoArAJSgDUouKADKALSgBs5A3EA",
+                        "body": "(3 * 5) + (10 - 6);\n",
+                        "output": "\n19"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      { "tag": "#text", "body": "\n        As usual,\n\t" }
+                    ]
+                  },
+                  { "child": [] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n\tparentheses are used to group operator combinations in order\n\tto avoid ambiguities. JavaScript also follows the usual conventions\n\twhen parentheses are omitted; multiplication and division bind more\n\tstrongly than addition and subtraction. For example,\n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwZlAFSgCsoA1KgAyhgBMA3EA",
+                        "body": "3 * 5 + 10 / 2;\n"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        stands for \n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwCgMygBUoArAJSgDUouKADKGAEzkDcQA",
+                        "body": "(3 * 5) + (10 / 2);\n"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      { "tag": "#text", "body": "\n        We say that " }
+                    ]
+                  },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "*" }] },
+                  { "child": [{ "tag": "#text", "body": " and\n\t" }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "/" }] },
+                  { "child": [{ "tag": "#text", "body": " have\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\t\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\tthan " }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "+" }] },
+                  { "child": [{ "tag": "#text", "body": " and\n\t" }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "-" }] },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": ". Sequences of additions and\n\tsubtractions are read from left to right, as are sequences of\n\tmultiplications and divisions. Thus,\n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCy0BaUAVlDACZQAqUAFlAGpQBmAbiA",
+                        "body": "1 - 5 / 2 * 4 + 3;\n"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        stands for \n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwChaALSi64CsoYATAJSgBUoALDXQNSgDMA3EA",
+                        "body": "(1 - ((5 / 2) * 4)) + 3;\n"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        We say that the operators\n        "
+                      }
+                    ]
+                  },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "+" }] },
+                  { "child": [{ "tag": "#text", "body": ",\n        " }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "-" }] },
+                  { "child": [{ "tag": "#text", "body": ",\n        " }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "*" }] },
+                  { "child": [{ "tag": "#text", "body": " and\n        " }] },
+                  { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "/" }] },
+                  { "child": [{ "tag": "#text", "body": " are \n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n        " }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": ".\n      " }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n    " }] },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "tag": "TEXT" },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        There is no limit (in principle) to the depth of such nesting and to the\n\toverall complexity of the expressions that the JavaScript interpreter\n\tcan evaluate. It is we humans who might get confused by still relatively\n        simple expressions such as\n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwZlAFSgBMhoAFPgLSgCsoA1KACwCUjJA7KGAGxkoADAG4gA",
+                        "body": "3 * 2 * (3 - 5 + 4) + 27 / 6 * 10;\n"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        which the interpreter would readily evaluate to be 57.  We can help\n        ourselves by writing such an expression in the form\n        "
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "SNIPPET",
+                        "url": "http://source-academy.github.io/playground#chap=1&prgrm=PTAEGUEkGEAVQFLlARgHTpQKCwZlAFSgBMhoAFPgLSgCsoA1KACwCUoWTWxA7KGADYyKAAwBuIA",
+                        "body": "3 * 2 * (3 - 5 + 4) \n+ \n27 / 6 * 10;\n"
+                      }
+                    ]
+                  },
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "\n        to visually separate the major components of the expression.\n      "
+                      }
+                    ]
+                  }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n  " }] },
+      {
+        "child": [
+          { "tag": "TEXT" },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    Even with complex expressions, the interpreter always operates in the\n    same basic cycle: It reads\n    "
+              }
+            ]
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  {
+                    "child": [
+                      {
+                        "tag": "#text",
+                        "body": "a statement typed by the user,"
+                      }
+                    ]
+                  }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          {
+            "child": [{ "tag": "#text", "body": "\n    evaluates the\n    " }]
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "child": [{ "tag": "#text", "body": "statement," }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    and prints the result. This mode of operation is often expressed by saying\n    that the interpreter runs in a\n    "
+              }
+            ]
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n\t" }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": ".\n      " }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n    Observe in particular that it is not necessary to explicitly instruct the\n    interpreter to print the value of the\n    "
+              }
+            ]
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              { "child": [] },
+              { "child": [{ "tag": "#text", "body": "\n      " }] },
+              {
+                "child": [
+                  { "child": [{ "tag": "#text", "body": "\n\tstatement." }] },
+                  { "child": [] },
+                  { "child": [{ "tag": "#text", "body": "\n      " }] }
+                ]
+              },
+              { "child": [{ "tag": "#text", "body": "\n    " }] }
+            ]
+          },
+          { "child": [{ "tag": "#text", "body": "\n  " }] }
+        ]
+      },
+      { "child": [{ "tag": "#text", "body": "\n" }] },
+      {
+        "child": [
+          { "tag": "DISPLAYFOOTNOTE", "body": "<hr>\n" },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "JavaScript obeys the convention that every\n\t"
+              }
+            ]
+          },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n\t" }] },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n\t" }] },
+          { "child": [] },
+          { "child": [{ "tag": "#text", "body": "\n\t" }] },
+          { "child": [] },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n\tstatement has a value. (See exercise"
+              }
+            ]
+          },
+          { "child": [{ "tag": "SPACE", "body": " " }] },
+          {
+            "child": [
+              {
+                "tag": "REF",
+                "body": "<REF NAME=\"ex:value_producing\"><a class=\"superscript\" id=\"1.1.1-ex-link-4.9\" href=\"./4.1.2.html#ex_4.9\">4.9</a></REF>"
+              }
+            ]
+          },
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": ".)\n\tThis convention, together with the old\n\treputation of JavaScript programmers to not care about efficiency, leads\n\tus to paraphrase a quip on Lisp programmers by Alan Perlis (who was himself\n\tparaphrasing Oscar Wilde): "
+              }
+            ]
+          },
+          { "child": [] }
+        ]
+      }
+    ]
+  }
+]

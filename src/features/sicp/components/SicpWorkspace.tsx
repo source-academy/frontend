@@ -7,6 +7,7 @@ import { Variant } from 'js-slang/dist/types';
 // import { constant, isEqual } from 'lodash';
 // import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
+import { useState } from 'react';
 import controlButton from 'src/commons/ControlButton';
 import Repl from 'src/commons/repl/Repl';
 
@@ -24,7 +25,7 @@ import {
   // externalLibraries,
   ExternalLibraryName
 } from '../../../commons/application/types/ExternalTypes';
-// import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
 // import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
 // import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
 // import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
@@ -179,6 +180,32 @@ type OwnProps = {
 // }
 
 const SicpWorkspace: React.FC<PlaygroundProps> = props => {
+
+  const [isDebugging, setIsDebugging] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  // const [isEditorAutorun, setIsEditorAutorun] = useState(false);
+
+  const handleDebuggerPause = () => {
+    //TODO
+    setIsRunning(false);
+    setIsDebugging(false)};
+  const handleDebuggerReset = () => {
+    setIsRunning(false);
+    setIsDebugging(false);}
+  const handleDebuggerResume = () => {
+    setIsRunning(true);
+    setIsDebugging(false);
+  }
+  const handleEditorEval = () => {
+    setIsRunning(true);
+    setIsDebugging(false);
+  }
+  const handleInterruptEval = () => {
+    //TODO
+  }
+  const handleToggleEditorAutorun = () => {
+    //TODO
+  }
   // const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   // const propsRef = React.useRef(props);
   // propsRef.current = props;
@@ -326,36 +353,25 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   const closeButton =
     controlButton("", IconNames.CROSS, props.handleCloseEditor);
 
-  // const autorunButtons = React.useMemo(
-  //   () => (
-  //     <ControlBarAutorunButtons
-  //       handleDebuggerPause={props.handleDebuggerPause}
-  //       handleDebuggerReset={props.handleDebuggerReset}
-  //       handleDebuggerResume={props.handleDebuggerResume}
-  //       handleEditorEval={props.handleEditorEval}
-  //       handleInterruptEval={props.handleInterruptEval}
-  //       handleToggleEditorAutorun={props.handleToggleEditorAutorun}
-  //       isDebugging={props.isDebugging}
-  //       isEditorAutorun={props.isEditorAutorun}
-  //       isRunning={props.isRunning}
-  //       key="autorun"
-  //       autorunDisabled={usingRemoteExecution}
-  //       pauseDisabled={usingRemoteExecution}
-  //     />
-  //   ),
-  //   [
-  //     props.handleDebuggerPause,
-  //     props.handleDebuggerReset,
-  //     props.handleDebuggerResume,
-  //     props.handleEditorEval,
-  //     props.handleInterruptEval,
-  //     props.handleToggleEditorAutorun,
-  //     props.isDebugging,
-  //     props.isEditorAutorun,
-  //     props.isRunning,
-  //     usingRemoteExecution
-  //   ]
-  // );
+  const autorunButtons = React.useMemo(
+    () => (
+      <ControlBarAutorunButtons
+        handleDebuggerPause={handleDebuggerPause}
+        handleDebuggerReset={handleDebuggerReset}
+        handleDebuggerResume={handleDebuggerResume}
+        handleEditorEval={handleEditorEval}
+        handleInterruptEval={handleInterruptEval}
+        handleToggleEditorAutorun={handleToggleEditorAutorun}
+        isDebugging={isDebugging}
+        // isEditorAutorun={props.isEditorAutorun}
+        isRunning={isRunning}
+        key="autorun"
+        // autorunDisabled={usingRemoteExecution}
+        // pauseDisabled={usingRemoteExecution}
+      />
+    ),
+    [isDebugging, isRunning]
+  );
 
   // const chapterSelectHandler = React.useCallback(
   //   ({ chapter, variant }: { chapter: number; variant: Variant }, e: any) => {
@@ -764,7 +780,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
 
   const controlBarProps = {
     editorButtons: [
-      // autorunButtons,
+      autorunButtons,
       // shareButton,
       // chapterSelect,
       // props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
