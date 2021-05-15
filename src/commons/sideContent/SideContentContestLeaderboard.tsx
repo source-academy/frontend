@@ -44,49 +44,52 @@ const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
  * @param props {orderedContestEntries: an ordered list by desc score of leaderboard entries to display,
  *  handleContestEntryClick: displays contest entry answer in assessment workspace editor}
  */
-const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestLeaderboardProps> = props => {
-  const { orderedContestEntries, handleContestEntryClick } = props;
-  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);
+const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestLeaderboardProps> =
+  props => {
+    const { orderedContestEntries, handleContestEntryClick } = props;
+    const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);
 
-  const contestEntryCards = useMemo(
-    () => (
-      <div>
-        {contestEntryHeader}
-        {orderedContestEntries.length > 0 ? (
-          orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
-            <SideContentLeaderboardCard
-              key={contestEntry.submission_id}
-              handleContestEntryClick={handleContestEntryClick}
-              contestEntry={contestEntry}
-              rank={index + 1}
-            />
-          ))
-        ) : (
-          <div className="noResults">There are no eligible contest leaderboard entries found.</div>
-        )}
+    const contestEntryCards = useMemo(
+      () => (
+        <div>
+          {contestEntryHeader}
+          {orderedContestEntries.length > 0 ? (
+            orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
+              <SideContentLeaderboardCard
+                key={contestEntry.submission_id}
+                handleContestEntryClick={handleContestEntryClick}
+                contestEntry={contestEntry}
+                rank={index + 1}
+              />
+            ))
+          ) : (
+            <div className="noResults">
+              There are no eligible contest leaderboard entries found.
+            </div>
+          )}
+        </div>
+      ),
+      [handleContestEntryClick, orderedContestEntries]
+    );
+
+    return (
+      <div className="ContestLeaderboard">
+        <Button
+          className="collapse-button"
+          icon={showLeaderboard ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+          minimal={true}
+          onClick={() => setShowLeaderboard(!showLeaderboard)}
+        >
+          <span>Contest Leaderboard</span>
+          <Tooltip2 content={contestLeaderboardTooltipContent}>
+            <Icon icon={IconNames.HELP} />
+          </Tooltip2>
+        </Button>
+        <Collapse isOpen={showLeaderboard} keepChildrenMounted>
+          {contestEntryCards}
+        </Collapse>
       </div>
-    ),
-    [handleContestEntryClick, orderedContestEntries]
-  );
-
-  return (
-    <div className="ContestLeaderboard">
-      <Button
-        className="collapse-button"
-        icon={showLeaderboard ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-        minimal={true}
-        onClick={() => setShowLeaderboard(!showLeaderboard)}
-      >
-        <span>Contest Leaderboard</span>
-        <Tooltip2 content={contestLeaderboardTooltipContent}>
-          <Icon icon={IconNames.HELP} />
-        </Tooltip2>
-      </Button>
-      <Collapse isOpen={showLeaderboard} keepChildrenMounted>
-        {contestEntryCards}
-      </Collapse>
-    </div>
-  );
-};
+    );
+  };
 
 export default SideContentContestLeaderboard;

@@ -24,45 +24,46 @@ type StateProps = {
  * @param props functions for handling input and contest entry details tied to contest entry card.
  * @returns card which provides numeric input to vote for contest entry.
  */
-const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEntryCardProps> = props => {
-  const {
-    canSave,
-    isValid,
-    handleContestEntryClick,
-    handleVotingSubmissionChange,
-    contestEntry,
-    entryNumber,
-    maxRank
-  } = props;
+const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEntryCardProps> =
+  props => {
+    const {
+      canSave,
+      isValid,
+      handleContestEntryClick,
+      handleVotingSubmissionChange,
+      contestEntry,
+      entryNumber,
+      maxRank
+    } = props;
 
-  return (
-    <div className={classNames('ContestEntryCard', { wrong: !isValid })}>
-      <Card
-        className={Classes.INTERACTIVE}
-        elevation={Elevation.ONE}
-        onClick={() =>
-          handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
-        }
-      >
-        <Pre className="contestentry-entryid">{entryNumber}</Pre>
-        <Pre className="contestentry-rank">
-          <NumericInput
-            disabled={!canSave}
-            value={contestEntry.rank}
-            onValueChange={(rank: number) =>
-              handleVotingSubmissionChange(contestEntry.submission_id, rank)
-            }
-            placeholder={`Enter rank for entry ${entryNumber}`}
-            min={1}
-            max={maxRank}
-            allowNumericCharactersOnly
-            fill
-            minorStepSize={null} // limits input to integers
-          />
-        </Pre>
-      </Card>
-    </div>
-  );
-};
+    return (
+      <div className={classNames('ContestEntryCard', { wrong: !isValid })}>
+        <Card
+          className={Classes.INTERACTIVE}
+          elevation={Elevation.ONE}
+          onClick={() =>
+            handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
+          }
+        >
+          <Pre className="contestentry-entryid">{entryNumber}</Pre>
+          <Pre className="contestentry-rank">
+            <NumericInput
+              disabled={!canSave}
+              value={contestEntry.rank}
+              onValueChange={(rank: number) =>
+                handleVotingSubmissionChange(contestEntry.submission_id, rank)
+              }
+              placeholder={`Enter rank for entry ${entryNumber}`}
+              min={1}
+              max={maxRank}
+              allowNumericCharactersOnly
+              fill
+              minorStepSize={null} // limits input to integers
+            />
+          </Pre>
+        </Card>
+      </div>
+    );
+  };
 
 export default SideContentContestEntryCard;

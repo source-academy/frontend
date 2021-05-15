@@ -15,24 +15,25 @@ type StateProps = {
   rank: number;
 };
 
-const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboardCardProps> = props => {
-  const { handleContestEntryClick, contestEntry, rank } = props;
+const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboardCardProps> =
+  props => {
+    const { handleContestEntryClick, contestEntry, rank } = props;
 
-  return (
-    <div className={classNames('LeaderboardCard')}>
-      <Card
-        className={Classes.INTERACTIVE}
-        elevation={Elevation.ONE}
-        onClick={() =>
-          handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
-        }
-      >
-        <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
-        <Pre className="contestentry-rank">{rank}</Pre>
-        <Pre className="contestentry-score">{contestEntry.score}</Pre>
-      </Card>
-    </div>
-  );
-};
+    return (
+      <div className={classNames('LeaderboardCard')}>
+        <Card
+          className={Classes.INTERACTIVE}
+          elevation={Elevation.ONE}
+          onClick={() =>
+            handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
+          }
+        >
+          <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
+          <Pre className="contestentry-rank">{rank}</Pre>
+          <Pre className="contestentry-score">{contestEntry.score}</Pre>
+        </Card>
+      </div>
+    );
+  };
 
 export default SideContentLeaderboardCard;
