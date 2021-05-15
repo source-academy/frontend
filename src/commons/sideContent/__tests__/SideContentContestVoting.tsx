@@ -79,6 +79,9 @@ test('SideContentVotingContainer only updates when ranks assigned to entries are
   contestVotingCard.map(card => card.simulate('change', { target: { value: 1 } }));
   expect(mockedHandleSave).toHaveBeenCalledTimes(0);
 
+  // to avoid warning messages from blueprint.js due to testing invalid input during tests
+  const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
   // simulate change to exceed rank limit (ie. if 2 entries can only rank [1, 2])
   contestVotingCard.map(card => card.simulate('change', { target: { value: 3 } }));
   expect(mockedHandleSave).toHaveBeenCalledTimes(0);
@@ -86,4 +89,6 @@ test('SideContentVotingContainer only updates when ranks assigned to entries are
   // simulate appropriate ranking for entries
   contestVotingCard.map((card, index) => card.simulate('change', { target: { value: index + 1 } }));
   expect(mockedHandleSave).toHaveBeenCalledTimes(1);
+
+  consoleWarnSpy.mockRestore();
 });
