@@ -370,6 +370,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 contestEntries={contestVotingQuestion?.contestEntries ?? []}
               />
             ),
+            id: SideContentType.contestVoting,
             toSpawn: () => true
           },
           {
@@ -381,6 +382,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 orderedContestEntries={contestVotingQuestion?.contestLeaderboard ?? []}
               />
             ),
+            id: SideContentType.contestLeaderboard,
             toSpawn: () => false
           }
         ]
