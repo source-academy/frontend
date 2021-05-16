@@ -25,7 +25,6 @@ const processText = {
 };
 
 export const parseJson = (jsonObj: Array<JsonType>, _handleClick: () => void): JSX.Element => {
-  console.log(jsonObj);
   handleClick = _handleClick;
   
   if (!jsonObj) return <></>;
