@@ -1,6 +1,4 @@
-import CodeSnippet from "../components/CodeSnippet";
-
-let handleClick = () => {};
+import CodeSnippet from '../components/CodeSnippet';
 
 type JsonType = {
   child: Array<JsonType>;
@@ -11,22 +9,25 @@ type JsonType = {
 
 const processText = {
   '#text': (obj: JsonType) => {
-    return <p style={{display: "inline"}}>{obj['body']}</p>;
+    return <p style={{ display: 'inline' }}>{obj['body']}</p>;
   },
-  'TEXT': (obj: JsonType) => {
-    return <><br/><br/></>;
+  TEXT: (obj: JsonType) => {
+    return (
+      <>
+        <br />
+        <br />
+      </>
+    );
   },
-  'SUBSECTION': (obj: JsonType) => {
-    return <h1>{obj['body']}</h1>
+  SUBSECTION: (obj: JsonType) => {
+    return <h1>{obj['body']}</h1>;
   },
-  'SNIPPET': (obj: JsonType) => {
-    return <CodeSnippet body={obj['body']} output={obj['output']}/>
+  SNIPPET: (obj: JsonType) => {
+    return <CodeSnippet body={obj['body']} output={obj['output']} />;
   }
 };
 
-export const parseJson = (jsonObj: Array<JsonType>, _handleClick: () => void): JSX.Element => {
-  handleClick = _handleClick;
-  
+export const parseJson = (jsonObj: Array<JsonType>): JSX.Element => {
   if (!jsonObj) return <></>;
 
   return <>{jsonObj.map((item: JsonType) => parseObj(item))}</>;
@@ -40,6 +41,6 @@ const parseObj = (obj: JsonType) => {
       return <>{obj['body']}</>;
     }
   } else {
-    return <>{parseJson(obj['child'], handleClick)}</>;
+    return <>{parseJson(obj['child'])}</>;
   }
 };
