@@ -7,6 +7,8 @@ export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
+  contestVoting = 'contest_voting',
+  contestLeaderboard = 'contest_leaderboard',
   dataVisualizer = 'data_visualizer',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',
