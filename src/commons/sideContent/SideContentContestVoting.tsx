@@ -37,7 +37,7 @@ const contestEntryHeader = (
 );
 
 const contestEntryTooltipContent = (numOfEntries: number) => (
-  <span>Rank your favourite contest entries from 1 to {numOfEntries}!</span>
+  <span>Rank your favourite contest entries from 1 (best) to {numOfEntries} (worst)!</span>
 );
 
 /**

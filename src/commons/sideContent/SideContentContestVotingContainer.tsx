@@ -70,7 +70,6 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
         showWarningMessage('Vote scores are not unique. Please input unique rankings.');
         setIsValid(false);
       } else {
-        showWarningMessage('Something went wrong. Please try again.');
         setIsValid(false);
       }
     };
