@@ -83,7 +83,7 @@ function* githubOpenFile(): any {
   }
 }
 
-function* githubSaveFile(): any{
+function* githubSaveFile(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
   const authUser = yield call(octokit.users.getAuthenticated);
