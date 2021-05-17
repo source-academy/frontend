@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions'; // EDITED
 
 import MissionRepoData from '../../../commons/githubAssessments/MissionRepoData';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { Assessment, AssessmentOverview, ContestEntry } from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -90,7 +90,7 @@ export const setGitHubOctokitObject = (authToken?: string) =>
 
 export const removeGitHubOctokitObject = () => action(REMOVE_GITHUB_OCTOKIT_OBJECT);
 
-export const submitAnswer = (id: number, answer: string | number) =>
+export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {
     id,
     answer

@@ -6,6 +6,7 @@ import {
   Assessment,
   AssessmentCategory,
   AssessmentOverview,
+  ContestEntry,
   GradingStatus,
   IProgrammingQuestion,
   QuestionType,
@@ -416,10 +417,11 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
   }
 
   const assessment = (await resp.json()) as Assessment;
-  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest' | 'contestvoting'
+  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest' | 'ContestVoting'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
   delete (assessment as any).type;
+
   assessment.questions = assessment.questions.map(q => {
     if (q.type === QuestionTypes.programming) {
       const question = q as IProgrammingQuestion;
@@ -449,7 +451,6 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 
     return q;
   });
-
   return assessment;
 };
 
@@ -458,12 +459,12 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
  */
 export const postAnswer = async (
   id: number,
-  answer: string | number,
+  answer: string | number | ContestEntry[],
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/question/${id}/answer`, 'POST', {
     ...tokens,
-    body: { answer: `${answer}` },
+    body: typeof answer == 'object' ? { answer: answer } : { answer: `${answer}` },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -1097,7 +1098,7 @@ export const request = async (
  *
  * @param {(Response|null)} resp Result of the failed HTTP request
  */
-export function* handleResponseError(resp: Response | null) {
+export function* handleResponseError(resp: Response | null): any {
   // Default: check if the response is null
   if (!resp) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");

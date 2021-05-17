@@ -42,18 +42,12 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
     }
   }, []);
 
-  const {
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragActive,
-    isDragAccept,
-    isDragReject
-  } = useDropzone({
-    multiple: false,
-    onDropAccepted: handleDropAccepted,
-    onDropRejected: handleDropRejected
-  });
+  const { getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject } =
+    useDropzone({
+      multiple: false,
+      onDropAccepted: handleDropAccepted,
+      onDropRejected: handleDropRejected
+    });
 
   const classList = React.useMemo(() => {
     return classNames(
