@@ -17,7 +17,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Library } from '../../commons/assessment/AssessmentTypes';
+import { AutogradingResult, Library } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -106,6 +106,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  autogradingResults: AutogradingResult[];
   editorPrepend: string;
   editorValue: string | null;
   editorPostpend: string;
@@ -695,6 +696,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
     props: GitHubAssessmentWorkspaceProps
   ) => {
+    const isGraded = true;
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -729,7 +731,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         body: (
           <SideContentAutograder
             testcases={[]}
-            autogradingResults={[]}
+            autogradingResults={isGraded ? props.autogradingResults : []}
             handleTestcaseEval={props.handleTestcaseEval}
           />
         ),
