@@ -14,7 +14,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
@@ -38,46 +38,60 @@ const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+  const [missionsRetrieved, setMissionsRetrieved] = useState(false);
   const [display, setDisplay] = useState<JSX.Element>(<></>);
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
   const [values, setValues] = useState<React.ReactNode[]>([]);
 
+  const signInToGitHubDisplay = useMemo(
+    () => <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />,
+    []
+  );
+  const noMissionReposFoundDisplay = useMemo(
+    () => (
+      <NonIdealState description="No mission repositories found for user." icon={IconNames.FLAME} />
+    ),
+    []
+  );
+  const createMissionButton = useMemo(
+    () => (
+      <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+        Create a New Mission!
+      </Button>
+    ),
+    []
+  );
+
   useEffect(() => {
     if (octokit === undefined) {
-      setDisplay(
-        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-      );
+      setDisplay(signInToGitHubDisplay);
     } else {
-      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+      retrieveBrowsableMissions(octokit, setBrowsableMissions, setMissionsRetrieved, setDisplay);
     }
-  }, [octokit, setBrowsableMissions, setDisplay]);
+  }, [octokit, setBrowsableMissions, setDisplay, signInToGitHubDisplay]);
 
   useEffect(() => {
-    if (browsableMissions.length > 0) {
-      const filteredMissions: BrowsableMission[] = [];
-      browsableMissions.forEach(mission => {
-        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
-          filteredMissions.push(mission);
-        }
-      });
+    // If octokit not defined, ask user to log-in
+    if (octokit === undefined) {
+      setDisplay(signInToGitHubDisplay);
+      return;
+    }
 
-      function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
-        let match = false;
-        tags.forEach(tag => {
-          if (tag !== null && tag !== undefined) {
-            if (mission.title.includes(tag.toString())) {
-              match = true;
-            } else if (mission.webSummary.includes(tag.toString())) {
-              match = true;
-            } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
-              match = true;
-            }
-          }
-        });
-        return match;
-      }
+    // If missions have not been retrieved, wait for them to be retrieved
+    if (!missionsRetrieved) {
+      return;
+    }
+
+    if (browsableMissions.length > 0) {
+      const filteredMissions = browsableMissions.filter(
+        mission => !filteredMissions.includes(mission) && matchTag(mission, values)
+      ) as BrowsableMission[];
+
+      const handleChange = (values: React.ReactNode[]) => {
+        setValues(values);
+      };
 
       const handleClear = () => {
         handleChange([]);
@@ -85,15 +99,11 @@ const GitHubMissionListing: React.FC<any> = () => {
 
       const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
 
-      const handleChange = (values: React.ReactNode[]) => {
-        setValues(values);
-      };
-
       const tagFilter = (
         <TagInput
           leftIcon={IconNames.FILTER}
           onChange={handleChange}
-          placeholder="Separate tags with commas..."
+          placeholder="Filter by classroom name!"
           rightElement={clearButton}
           tagProps={{ minimal: true }}
           values={values}
@@ -109,11 +119,32 @@ const GitHubMissionListing: React.FC<any> = () => {
         <>
           {tagFilter}
           <Divider />
+          {createMissionButton}
           {cards}
         </>
       );
+      return;
     }
-  }, [browsableMissions, isMobileBreakpoint, setDisplay, values]);
+
+    if (browsableMissions.length === 0) {
+      setDisplay(
+        <>
+          {createMissionButton}
+          {noMissionReposFoundDisplay}
+        </>
+      );
+    }
+  }, [
+    browsableMissions,
+    isMobileBreakpoint,
+    octokit,
+    setDisplay,
+    missionsRetrieved,
+    values,
+    createMissionButton,
+    noMissionReposFoundDisplay,
+    signInToGitHubDisplay
+  ]);
 
   return (
     <div className="Academy">
@@ -123,6 +154,22 @@ const GitHubMissionListing: React.FC<any> = () => {
     </div>
   );
 };
+
+function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
+  let match = false;
+  tags.forEach(tag => {
+    if (tag !== null && tag !== undefined) {
+      if (mission.title.includes(tag.toString())) {
+        match = true;
+      } else if (mission.webSummary.includes(tag.toString())) {
+        match = true;
+      } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
+        match = true;
+      }
+    }
+  });
+  return match;
+}
 
 /**
  * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
@@ -134,6 +181,7 @@ const GitHubMissionListing: React.FC<any> = () => {
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
+  setMissionsRetrieved: (missionsRetrieved: boolean) => void,
   setDisplay: (display: JSX.Element) => void
 ) {
   if (octokit === undefined) return;
@@ -183,6 +231,7 @@ async function retrieveBrowsableMissions(
   });
 
   setBrowsableMissions(browsableMissions);
+  setMissionsRetrieved(true);
 }
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {

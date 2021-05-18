@@ -11,7 +11,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 
@@ -28,15 +28,26 @@ import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBa
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
+import { ControlBarTaskAddButton } from '../../commons/controlBar/ControlBarTaskAddButton';
+import { ControlBarTaskDeleteButton } from '../../commons/controlBar/ControlBarTaskDeleteButton';
 import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
-import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
+import {
+  GitHubMissionCreateDialog,
+  GitHubMissionCreateDialogProps,
+  GitHubMissionCreateDialogResolution
+} from '../../commons/githubAssessments/GitHubMissionCreateDialog';
+import {
+  convertMissionMetadataToMetadataString,
+  getMissionData
+} from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
   GitHubMissionSaveDialog,
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionSaveDialog';
 import MissionData from '../../commons/githubAssessments/MissionData';
+import MissionMetadata from '../../commons/githubAssessments/MissionMetadata';
 import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
 import TaskData from '../../commons/githubAssessments/TaskData';
 import Markdown from '../../commons/Markdown';
@@ -45,6 +56,9 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
+import SideContentMarkdownEditor from '../../commons/sideContent/SideContentMarkdownEditor';
+import SideContentMissionEditor from '../../commons/sideContent/SideContentMissionEditor';
+import SideContentTaskEditor from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog } from '../../commons/utils/DialogHelper';
@@ -56,6 +70,7 @@ import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
   performCreatingSave,
+  performFolderDeletion,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
 
@@ -114,6 +129,27 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     history.push('/githubassessments/missions');
   }
 
+  const defaultMissionMetadata = useMemo<MissionMetadata>(() => {
+    return {
+      coverImage: '',
+      kind: '',
+      number: '',
+      title: '',
+      sourceVersion: 1,
+      dueDate: new Date(8640000000000000),
+      reading: '',
+      webSummary: ''
+    } as MissionMetadata;
+  }, []);
+
+  const defaultMissionBriefing =
+    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
+
+  const defaultTaskDescription =
+    'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
+
+  const defaultStarterCode = '// Your code here!\n';
+
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
@@ -122,48 +158,110 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
-  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
-  const [summary, setSummary] = React.useState('');
-  const [briefingContent, setBriefingContent] = React.useState(
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
+  const [missionMetadata, setMissionMetadata] = React.useState(
+    Object.assign({}, defaultMissionMetadata)
   );
-  const [taskDescription, setTaskDescription] = React.useState(
-    'This is the description for the current task!'
+  const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
+    Object.assign({}, defaultMissionMetadata)
   );
+  const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = React.useState(false);
+
+  const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
+  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
+  const [hasUnsavedChangesToBriefing, setHasUnsavedChangesToBriefing] = React.useState(false);
 
   const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
+  const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = React.useState(false);
+
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
-
-  const handleEditorValueChange = props.handleEditorValueChange;
-  const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
-
+  const [summary, setSummary] = React.useState('');
+  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  const handleEditorValueChange = props.handleEditorValueChange;
   const missionRepoData = props.location.state as MissionRepoData;
 
-  const loadMission = useCallback(async () => {
+  const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     setSummary(missionData.missionBriefing);
-    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+
+    setMissionMetadata(missionData.missionMetadata);
+    setCachedMissionMetadata(Object.assign({}, missionData.missionMetadata));
+
     setBriefingContent(missionData.missionBriefing);
-    setTaskDescription(missionData.tasksData[0].taskDescription);
+    setCachedBriefingContent(missionData.missionBriefing);
+
     setTaskList(missionData.tasksData);
     setCachedTaskList(
-      missionData.tasksData.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
+      missionData.tasksData.map(taskData => Object.assign({}, taskData) as TaskData)
     );
+
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
+
+    setHasUnsavedChangesToTasks(false);
+    setHasUnsavedChangesToBriefing(false);
+    setHasUnsavedChangesToMetadata(false);
+
+    let userInTeacherMode = false;
+    const userLogin = (await octokit.users.getAuthenticated()).data.login;
+    if (userLogin === missionRepoData.repoOwner) {
+      // User is direct owner of repo
+      userInTeacherMode = true;
+    } else {
+      const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
+      for (let i = 0; i < userOrganisations.length; i++) {
+        const org = userOrganisations[i];
+
+        // User has admin access to an organization owning the repo
+        userInTeacherMode = org.login === missionRepoData.repoOwner;
+        if (userInTeacherMode) {
+          break;
+        }
+      }
+    }
+    setIsTeacherMode(userInTeacherMode);
+
     setIsLoading(false);
   }, [missionRepoData, octokit, handleEditorValueChange]);
+
+  const setUpWithoutMissionRepoData = useCallback(() => {
+    setSummary(defaultMissionBriefing);
+
+    setMissionMetadata(defaultMissionMetadata);
+    setCachedMissionMetadata(defaultMissionMetadata);
+
+    setBriefingContent(defaultMissionBriefing);
+    setCachedBriefingContent(defaultMissionBriefing);
+
+    const defaultTask = {
+      taskDescription: defaultTaskDescription,
+      starterCode: defaultStarterCode,
+      savedCode: defaultStarterCode
+    } as TaskData;
+    setTaskList([defaultTask]);
+    setCachedTaskList([defaultTask]);
+
+    setCurrentTaskNumber(1);
+    handleEditorValueChange(defaultStarterCode);
+
+    setHasUnsavedChangesToTasks(false);
+    setHasUnsavedChangesToBriefing(false);
+    setHasUnsavedChangesToMetadata(false);
+
+    setIsTeacherMode(true);
+    setIsLoading(false);
+  }, [defaultMissionMetadata, handleEditorValueChange]);
+
+  const loadMission = useCallback(async () => {
+    if (missionRepoData === undefined) {
+      setUpWithoutMissionRepoData();
+    } else {
+      setUpWithMissionRepoData();
+    }
+  }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
 
   useEffect(() => {
     loadMission();
@@ -191,7 +289,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const closeOverlay = () => setShowResetTemplateOverlay(false);
   const resetToTemplate = () => {
-    const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
+    const originalCode = taskList[currentTaskNumber - 1].starterCode;
     handleEditorValueChange(originalCode);
     editCode(currentTaskNumber, originalCode);
   };
@@ -246,51 +344,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [taskList]
   );
 
-  const onClickSave = useCallback(async () => {
-    if (missionRepoData === undefined) {
-      showWarningMessage("You can't save without a mission open!", 2000);
-      return;
-    }
-
-    if (octokit === undefined) {
-      showWarningMessage('Please sign in with GitHub!', 2000);
-      return;
-    }
-
-    const changedTasks: number[] = [];
-    const changedFiles: string[] = [];
-
-    for (let i = 0; i < taskList.length; i++) {
-      if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-        const taskNumber = i + 1;
-        changedTasks.push(taskNumber);
-        changedFiles.push('Q' + taskNumber + '/SavedCode.js');
-      }
-    }
-
-    const dialogResults = await promisifyDialog<
-      GitHubMissionSaveDialogProps,
-      GitHubMissionSaveDialogResolution
-    >(GitHubMissionSaveDialog, resolve => ({
-      octokit,
-      repoName: missionRepoData.repoName,
-      changedFiles: changedFiles,
-      resolveDialog: dialogResults => resolve(dialogResults)
-    }));
-
-    if (!dialogResults.confirmSave) {
-      return;
-    }
-
-    const authUser = await octokit.users.getAuthenticated();
-    const githubName = authUser.data.name;
-    const githubEmail = authUser.data.email;
-    const commitMessage = dialogResults.commitMessage;
-
-    for (let i = 0; i < changedTasks.length; i++) {
-      const changedTask = changedTasks[i];
-      const changedFile = changedFiles[i];
-
+  const conductSave = useCallback(
+    async (
+      changedFile: string,
+      newFileContent: string,
+      githubName: string | null,
+      githubEmail: string | null,
+      commitMessage: string
+    ) => {
       const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
         octokit,
         missionRepoData.repoOwner,
@@ -307,7 +368,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           githubName,
           githubEmail,
           commitMessage,
-          getEditedCode(changedTask)
+          newFileContent
         );
       }
 
@@ -320,22 +381,201 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           githubName,
           githubEmail,
           commitMessage,
-          getEditedCode(changedTask)
+          newFileContent
         );
+      }
+    },
+    [missionRepoData, octokit]
+  );
+
+  const conductDelete = useCallback(
+    async (
+      fileName: string,
+      githubName: string | null,
+      githubEmail: string | null,
+      commitMessage: string
+    ) => {
+      await performFolderDeletion(
+        octokit,
+        missionRepoData.repoOwner,
+        missionRepoData.repoName,
+        fileName,
+        githubName,
+        githubEmail,
+        commitMessage
+      );
+    },
+    [missionRepoData, octokit]
+  );
+
+  function objectsAreShallowlyEqual<T>(first: T, second: T) {
+    const keys = Object.keys(first);
+    for (let i = 0; i < keys.length; i++) {
+      if (first[keys[i]] !== second[keys[i]]) {
+        return false;
       }
     }
 
-    setCachedTaskList(
-      taskList.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
-    );
-  }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
+    return true;
+  }
+
+  const saveWithMissionRepoData = useCallback(async () => {
+    if (octokit === undefined) {
+      showWarningMessage('Please sign in with GitHub!', 2000);
+      return;
+    }
+
+    const filenameToContentMap = {};
+    const foldersToDelete: string[] = [];
+
+    if (!objectsAreShallowlyEqual<MissionMetadata>(missionMetadata, cachedMissionMetadata)) {
+      filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
+    }
+
+    if (briefingContent !== cachedBriefingContent) {
+      filenameToContentMap['README.md'] = briefingContent;
+    }
+
+    let j = 0;
+    while (j < taskList.length) {
+      const taskNumber = j + 1;
+
+      if (taskNumber >= cachedTaskList.length) {
+        filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[j].starterCode;
+        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
+      } else {
+        if (taskList[j].savedCode !== cachedTaskList[j].savedCode) {
+          filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = taskList[j].savedCode;
+        }
+
+        if (taskList[j].taskDescription !== cachedTaskList[j].taskDescription) {
+          filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
+        }
+      }
+
+      j++;
+    }
+
+    while (j < cachedTaskList.length) {
+      const taskNumber = j + 1;
+      foldersToDelete.push('Q' + taskNumber);
+      j++;
+    }
+
+    const changedFiles = Object.keys(filenameToContentMap).sort();
+
+    const dialogResults = await promisifyDialog<
+      GitHubMissionSaveDialogProps,
+      GitHubMissionSaveDialogResolution
+    >(GitHubMissionSaveDialog, resolve => ({
+      repoName: missionRepoData.repoName,
+      filesToChangeOrCreate: changedFiles,
+      filesToDelete: foldersToDelete,
+      resolveDialog: dialogResults => resolve(dialogResults)
+    }));
+
+    if (!dialogResults.confirmSave) {
+      return;
+    }
+
+    const authUser = await octokit.users.getAuthenticated();
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+    const commitMessage = dialogResults.commitMessage;
+
+    for (let i = 0; i < foldersToDelete.length; i++) {
+      await conductDelete(foldersToDelete[i], githubName, githubEmail, commitMessage);
+    }
+
+    for (let i = 0; i < changedFiles.length; i++) {
+      const filename = changedFiles[i];
+      const newFileContent = filenameToContentMap[filename];
+      await conductSave(filename, newFileContent, githubName, githubEmail, commitMessage);
+    }
+
+    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData) as TaskData));
+    setCachedBriefingContent(briefingContent);
+    setCachedMissionMetadata(missionMetadata);
+  }, [
+    briefingContent,
+    cachedBriefingContent,
+    taskList,
+    cachedTaskList,
+    missionMetadata,
+    cachedMissionMetadata,
+    conductSave,
+    conductDelete,
+    octokit,
+    missionRepoData
+  ]);
+
+  const saveWithoutMissionRepoData = useCallback(async () => {
+    if (octokit === undefined) {
+      showWarningMessage('Please sign in with GitHub!', 2000);
+      return;
+    }
+
+    const filenameToContentMap = {};
+    filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
+    filenameToContentMap['README.md'] = briefingContent;
+
+    for (let i = 0; i < taskList.length; i++) {
+      const taskNumber = i + 1;
+      filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[i].starterCode;
+      filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[i].taskDescription;
+    }
+
+    const changedFiles = Object.keys(filenameToContentMap).sort();
+    const authUser = await octokit.users.getAuthenticated();
+
+    const dialogResults = await promisifyDialog<
+      GitHubMissionCreateDialogProps,
+      GitHubMissionCreateDialogResolution
+    >(GitHubMissionCreateDialog, resolve => ({
+      filesToCreate: changedFiles,
+      userLogin: authUser.data.login,
+      resolveDialog: dialogResults => resolve(dialogResults)
+    }));
+
+    if (!dialogResults.confirmSave) {
+      return;
+    }
+
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+
+    await octokit.repos.createForAuthenticatedUser({
+      name: dialogResults.repoName
+    });
+
+    for (let i = 0; i < changedFiles.length; i++) {
+      const fileToCreate = changedFiles[i];
+      const fileContent = filenameToContentMap[fileToCreate];
+
+      await performCreatingSave(
+        octokit,
+        authUser.data.login,
+        dialogResults.repoName,
+        fileToCreate,
+        githubName,
+        githubEmail,
+        'Repository created from Source Academy',
+        fileContent
+      );
+    }
+
+    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData) as TaskData));
+    setCachedBriefingContent(briefingContent);
+    setCachedMissionMetadata(missionMetadata);
+  }, [briefingContent, missionMetadata, octokit, taskList]);
+
+  const onClickSave = useCallback(() => {
+    if (missionRepoData !== undefined) {
+      saveWithMissionRepoData();
+    } else {
+      saveWithoutMissionRepoData();
+    }
+  }, [missionRepoData, saveWithMissionRepoData, saveWithoutMissionRepoData]);
 
   const onClickReset = useCallback(() => {
     setShowResetTemplateOverlay(true);
@@ -344,16 +584,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
     handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
+  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -369,21 +607,39 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
-  const onEditorValueChange = React.useCallback(
-    val => {
-      handleEditorValueChange(val);
-      editCode(currentTaskNumber, val);
+  const computeAndSetHasUnsavedChangesToTasks = useCallback(
+    (newTaskList: TaskData[], cachedTaskList: TaskData[]) => {
+      if (newTaskList.length !== cachedTaskList.length) {
+        setHasUnsavedChangesToTasks(true);
+        return;
+      }
 
-      for (let i = 0; i < taskList.length; i++) {
-        if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-          setHasUnsavedChanges(true);
+      for (let i = 0; i < newTaskList.length; i++) {
+        if (!objectsAreShallowlyEqual<TaskData>(newTaskList[i], cachedTaskList[i])) {
+          setHasUnsavedChangesToTasks(true);
           return;
         }
       }
 
-      setHasUnsavedChanges(false);
+      setHasUnsavedChangesToTasks(false);
     },
-    [currentTaskNumber, editCode, handleEditorValueChange, taskList, cachedTaskList]
+    []
+  );
+
+  const onEditorValueChange = React.useCallback(
+    val => {
+      handleEditorValueChange(val);
+      editCode(currentTaskNumber, val);
+      computeAndSetHasUnsavedChangesToTasks(taskList, cachedTaskList);
+    },
+    [
+      currentTaskNumber,
+      editCode,
+      handleEditorValueChange,
+      taskList,
+      cachedTaskList,
+      computeAndSetHasUnsavedChangesToTasks
+    ]
   );
 
   const onChangeTabs = (
@@ -401,6 +657,40 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     props.handleEditorEval();
   };
 
+  const setTaskDescriptions = useCallback(
+    (newTaskDescriptions: string[]) => {
+      const newTaskList: TaskData[] = [];
+
+      for (let i = 0; i < taskList.length; i++) {
+        const nextElement = Object.assign({}, taskList[i]) as TaskData;
+        nextElement.taskDescription = newTaskDescriptions[i];
+        newTaskList.push(nextElement);
+      }
+
+      setTaskList(newTaskList);
+      computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
+    },
+    [taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
+  );
+
+  const setBriefingContentWrapper = useCallback(
+    (newBriefingContent: string) => {
+      setBriefingContent(newBriefingContent);
+      setHasUnsavedChangesToBriefing(newBriefingContent !== cachedBriefingContent);
+    },
+    [cachedBriefingContent]
+  );
+
+  const setMissionMetadataWrapper = useCallback(
+    (newMissionMetadata: MissionMetadata) => {
+      setMissionMetadata(newMissionMetadata);
+      setHasUnsavedChangesToMetadata(
+        !objectsAreShallowlyEqual<MissionMetadata>(newMissionMetadata, cachedMissionMetadata)
+      );
+    },
+    [cachedMissionMetadata]
+  );
+
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
     props: GitHubAssessmentWorkspaceProps
   ) => {
@@ -408,18 +698,46 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       {
         label: 'Task',
         iconName: IconNames.NINJA,
-        body: <Markdown content={taskDescription} />,
+        body: (
+          <SideContentTaskEditor
+            allowEdits={isTeacherMode}
+            currentTaskNumber={currentTaskNumber}
+            taskDescriptions={taskList.map(taskData => taskData.taskDescription)}
+            setTaskDescriptions={setTaskDescriptions}
+          />
+        ),
         id: SideContentType.questionOverview,
         toSpawn: () => true
       },
       {
         label: 'Briefing',
         iconName: IconNames.BRIEFCASE,
-        body: <Markdown content={briefingContent} />,
+        body: (
+          <SideContentMarkdownEditor
+            allowEdits={isTeacherMode}
+            content={briefingContent}
+            setContent={setBriefingContentWrapper}
+          />
+        ),
         id: SideContentType.briefing,
         toSpawn: () => true
       }
     ];
+
+    if (isTeacherMode) {
+      tabs.push({
+        label: 'Mission Metadata',
+        iconName: IconNames.AIRPLANE,
+        body: (
+          <SideContentMissionEditor
+            missionMetadata={missionMetadata}
+            setMissionMetadata={setMissionMetadataWrapper}
+          />
+        ),
+        id: SideContentType.missionMetadata,
+        toSpawn: () => true
+      });
+    }
 
     return {
       handleActiveTabChange: props.handleActiveTabChange,
@@ -431,7 +749,66 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     };
   };
 
+  const addNewQuestion = () => {
+    const newTaskList = taskList
+      .slice(0, currentTaskNumber)
+      .concat([
+        {
+          taskDescription: defaultTaskDescription,
+          starterCode: defaultStarterCode,
+          savedCode: defaultStarterCode
+        } as TaskData
+      ])
+      .concat(taskList.slice(currentTaskNumber, taskList.length));
+    setTaskList(newTaskList);
+
+    const newTaskNumber = currentTaskNumber + 1;
+    setCurrentTaskNumber(newTaskNumber);
+    handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
+
+    computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
+  };
+
+  const deleteCurrentQuestion = () => {
+    const deleteAtIndex = currentTaskNumber - 1;
+
+    const newTaskList = taskList
+      .slice(0, deleteAtIndex)
+      .concat(taskList.slice(currentTaskNumber, taskList.length));
+    setTaskList(newTaskList);
+
+    const newTaskNumber = currentTaskNumber === 1 ? currentTaskNumber : currentTaskNumber - 1;
+    setCurrentTaskNumber(newTaskNumber);
+    handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
+
+    computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
+  };
+
   const controlBarProps: () => ControlBarProps = () => {
+    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+
+    const saveButton = (
+      <ControlButtonSaveButton
+        hasUnsavedChanges={
+          hasUnsavedChangesToTasks || hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing
+        }
+        key="save"
+        onClickSave={onClickSave}
+      />
+    );
+
+    const resetButton = <ControlBarResetButton key="reset" onClick={onClickReset} />;
+
+    const chapterSelect = (
+      <ControlBarChapterSelect
+        handleChapterSelect={() => {}}
+        sourceChapter={missionMetadata.sourceVersion}
+        sourceVariant={Constants.defaultSourceVariant as Variant}
+        disabled={true}
+        key="chapter"
+      />
+    );
+
     const nextButton = (
       <ControlBarNextButton
         onClickNext={onClickNext}
@@ -455,35 +832,34 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       />
     );
 
-    const resetButton = <ControlBarResetButton key="reset" onClick={onClickReset} />;
+    const editorButtons = !isMobileBreakpoint
+      ? [runButton, saveButton, resetButton, chapterSelect]
+      : [saveButton, resetButton];
 
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+    if (isTeacherMode) {
+      const addTaskButton = (
+        <ControlBarTaskAddButton
+          addNewQuestion={addNewQuestion}
+          numberOfTasks={taskList.length}
+          key={'add_task'}
+        />
+      );
+      const deleteTaskButton = (
+        <ControlBarTaskDeleteButton
+          deleteCurrentQuestion={deleteCurrentQuestion}
+          numberOfTasks={taskList.length}
+          key={'delete_task'}
+        />
+      );
+      editorButtons.push(addTaskButton);
+      editorButtons.push(deleteTaskButton);
+    }
 
-    const saveButton = (
-      <ControlButtonSaveButton
-        hasUnsavedChanges={hasUnsavedChanges}
-        key="save"
-        onClickSave={onClickSave}
-      />
-    );
-
-    const handleChapterSelect = () => {};
-
-    const chapterSelect = (
-      <ControlBarChapterSelect
-        handleChapterSelect={handleChapterSelect}
-        sourceChapter={selectedSourceChapter}
-        sourceVariant={Constants.defaultSourceVariant as Variant}
-        disabled={true}
-        key="chapter"
-      />
-    );
+    const flowButtons = [previousButton, questionView, nextButton];
 
     return {
-      editorButtons: !isMobileBreakpoint
-        ? [runButton, saveButton, resetButton, chapterSelect]
-        : [saveButton, resetButton],
-      flowButtons: [previousButton, questionView, nextButton]
+      editorButtons: editorButtons,
+      flowButtons: flowButtons
     };
   };
 
@@ -551,7 +927,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleReplValueChange: props.handleReplValueChange,
     output: props.output,
     replValue: props.replValue,
-    sourceChapter: selectedSourceChapter || 4,
+    sourceChapter: missionMetadata.sourceVersion || 4,
     sourceVariant: 'default' as Variant,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()

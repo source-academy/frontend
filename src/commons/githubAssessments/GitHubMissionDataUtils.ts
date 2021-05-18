@@ -5,7 +5,7 @@ import MissionMetadata from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
 import TaskData from './TaskData';
 
-const maximumTasksPerMission = 20;
+export const maximumTasksPerMission = 20;
 
 /**
  * Retrieves mission information - such as the briefings, questions, metadata etc. from a GitHub Repository.
@@ -187,6 +187,21 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
   );
 
   return retVal;
+}
+
+export function convertMissionMetadataToMetadataString(missionMetadata: MissionMetadata) {
+  const properties: string[] = [
+    'title',
+    'coverImage',
+    'webSummary',
+    'dueDate',
+    'kind',
+    'number',
+    'sourceVersion',
+    'reading'
+  ];
+  const propertyValuePairs = properties.map(property => property + '=' + missionMetadata[property]);
+  return propertyValuePairs.join('\n');
 }
 
 /**

@@ -293,3 +293,51 @@ export async function performCreatingSave(
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
   }
 }
+
+export async function performFolderDeletion(
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  filePath: string,
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string
+) {
+  if (octokit === undefined) return;
+
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+
+  try {
+    const results = await octokit.repos.getContent({
+      owner: repoOwner,
+      repo: repoName,
+      path: filePath
+    });
+
+    const files = results.data;
+
+    // This function must apply deletion to an entire folder
+    if (!Array.isArray(files)) {
+      return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      await octokit.repos.deleteFile({
+        owner: repoOwner,
+        repo: repoName,
+        path: file.path,
+        message: commitMessage,
+        sha: file.sha
+      });
+    }
+
+    showSuccessMessage('Successfully deleted file!', 1000);
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to delete the file.', 1000);
+  }
+}
