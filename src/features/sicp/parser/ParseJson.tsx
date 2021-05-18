@@ -7,30 +7,29 @@ type JsonType = {
   output: string;
 };
 
+let parentCount = 1;
+
 const processText = {
   '#text': (obj: JsonType) => {
-    return <p style={{ display: 'inline' }}>{obj['body']}</p>;
+    return <p key={String(obj)} style={{ display: 'inline' }}>{obj['body']}</p>;
   },
   TEXT: (obj: JsonType) => {
     return (
-      <>
-        <br />
-        <br />
-      </>
+        <br key={String(obj)}/>
     );
   },
   SUBSECTION: (obj: JsonType) => {
-    return <h1>{obj['body']}</h1>;
+    return <h1 key={String(obj)}>{obj['body']}</h1>;
   },
   SNIPPET: (obj: JsonType) => {
-    return <CodeSnippet body={obj['body']} output={obj['output']} />;
+    return <CodeSnippet key={String(obj)} body={obj['body']} output={obj['output']} />;
   }
 };
 
 export const parseJson = (jsonObj: Array<JsonType>): JSX.Element => {
   if (!jsonObj) return <></>;
 
-  return <>{jsonObj.map((item: JsonType) => parseObj(item))}</>;
+  return <span key="root">{jsonObj.map((item: JsonType) => parseObj(item))}</span>;
 };
 
 const parseObj = (obj: JsonType) => {
@@ -38,9 +37,10 @@ const parseObj = (obj: JsonType) => {
     if (processText[obj['tag']]) {
       return processText[obj['tag']](obj);
     } else {
-      return <>{obj['body']}</>;
+      return <span key={String(obj)}>{obj['body']}</span>;
     }
   } else {
-    return <>{parseJson(obj['child'])}</>;
+    parentCount++;
+    return <span key={parentCount}>{parseJson(obj['child'])}</span>;
   }
 };

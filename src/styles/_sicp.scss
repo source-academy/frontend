@@ -1,3 +1,24 @@
+.Sicp {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: black;
+
+    > .ControlBar  {
+        position: fixed;
+        height: 40px;
+        width: 100%;
+        background-color: $cadet-color-1;
+        color: white;
+    }
+
+    > .ContentDisplay {
+        text-align: left;
+        margin-top: 35px;
+    }
+}
+
 .sicp-display-card {
     width: 100%;
     height: fit-content;
@@ -5,5 +26,4 @@
 
 .sicp-code-snippet {
     background-color: beige;
-    // border-radius: 0;
 }
