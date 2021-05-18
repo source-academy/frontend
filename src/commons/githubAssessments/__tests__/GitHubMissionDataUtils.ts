@@ -98,9 +98,8 @@ test('convertMissionMetadataToMetadataString works as expected', () => {
     reading: 'Textbook Pages 1 to 234763'
   } as MissionMetadata;
 
-  const metadataString = GitHubMissionDataUtils.convertMissionMetadataToMetadataString(
-    missionMetadata
-  );
+  const metadataString =
+    GitHubMissionDataUtils.convertMissionMetadataToMetadataString(missionMetadata);
 
   expect(metadataString).toBe(
     'title=Dummy Mission\n' +
