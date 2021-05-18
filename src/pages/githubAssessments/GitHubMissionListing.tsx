@@ -85,9 +85,13 @@ const GitHubMissionListing: React.FC<any> = () => {
     }
 
     if (browsableMissions.length > 0) {
-      const filteredMissions = browsableMissions.filter(
-        mission => !filteredMissions.includes(mission) && matchTag(mission, values)
-      ) as BrowsableMission[];
+      const filteredMissions: BrowsableMission[] = [];
+
+      browsableMissions.forEach(mission => {
+        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
+          filteredMissions.push(mission);
+        }
+      });
 
       const handleChange = (values: React.ReactNode[]) => {
         setValues(values);
