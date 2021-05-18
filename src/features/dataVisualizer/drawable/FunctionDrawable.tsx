@@ -22,6 +22,7 @@ export class FunctionDrawable extends React.PureComponent<FunctionProps> {
           stroke={Config.Stroke}
           x={Config.CircleRadiusLarge}
           y={Config.CircleRadiusLarge}
+          preventDefault={false}
         />
 
         {/* Right circle */}
@@ -31,6 +32,7 @@ export class FunctionDrawable extends React.PureComponent<FunctionProps> {
           stroke={Config.Stroke}
           x={Config.CircleRadiusLarge * 3 + Config.StrokeWidth}
           y={Config.CircleRadiusLarge}
+          preventDefault={false}
         />
 
         {/* Left dot */}
@@ -41,6 +43,7 @@ export class FunctionDrawable extends React.PureComponent<FunctionProps> {
           fill={Config.Fill}
           x={Config.CircleRadiusLarge}
           y={Config.CircleRadiusLarge}
+          preventDefault={false}
         />
 
         {/* Right dot */}
@@ -51,6 +54,7 @@ export class FunctionDrawable extends React.PureComponent<FunctionProps> {
           fill={Config.Fill}
           x={Config.CircleRadiusLarge * 3 + Config.StrokeWidth}
           y={Config.CircleRadiusLarge}
+          preventDefault={false}
         />
       </Group>
     );

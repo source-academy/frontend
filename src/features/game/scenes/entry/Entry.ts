@@ -19,17 +19,18 @@ class Entry extends Phaser.Scene {
     super('Entry');
   }
 
-  public preload() {
+  public async preload() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     this.preloadAssets();
     addLoadingScreen(this);
-  }
 
-  public async create() {
     await SourceAcademyGame.getInstance().loadGameChapters();
     await SourceAcademyGame.getInstance().loadRoomCode();
     await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
     await SourceAcademyGame.getInstance().getUserStateManager().loadUserState();
+  }
+
+  public async create() {
     await this.preloadAwards();
     await this.preloadRoomPreviewBackgrounds();
 

@@ -18,6 +18,10 @@ import { RoomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewCons
  */
 export async function getRoomPreviewCode(): Promise<string> {
   const roomAssessmentId = await getRoomAssessmentId();
+  if (!roomAssessmentId) {
+    // Get default room code.
+    return getStudentRoomCode(null);
+  }
   const mission = await getAssessment(
     roomAssessmentId,
     SourceAcademyGame.getInstance().getAccountInfo()
@@ -38,7 +42,7 @@ async function getRoomAssessmentId() {
   const roomAssessment = (assessments || []).find(
     assessment => assessment.number === RoomConstants.assessmentNumber
   );
-  return roomAssessment ? roomAssessment.id : 0;
+  return roomAssessment ? roomAssessment.id : null;
 }
 
 /**

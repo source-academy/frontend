@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
-"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} style={{...}} vertical={false}>
+"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"music\\" />
     <div>
@@ -18,7 +18,7 @@ exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 `;
 
 exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
-"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} style={{...}} vertical={false}>
+"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
   <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"flame\\" />
     <div>

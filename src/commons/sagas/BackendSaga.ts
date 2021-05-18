@@ -59,7 +59,6 @@ import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/Au
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
-  changeDateAssessment,
   deleteAssessment,
   deleteSourcecastEntry,
   getAssessment,
@@ -82,7 +81,7 @@ import {
   postSourcecast,
   postSublanguage,
   postUnsubmit,
-  publishAssessment,
+  updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
@@ -95,7 +94,7 @@ function selectTokens() {
 }
 
 function* BackendSaga(): SagaIterator {
-  yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
+  yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>): any {
     const { code, providerId: payloadProviderId } = action.payload;
 
     const providerId = payloadProviderId || (getDefaultProvider() || [null])[0];
@@ -148,7 +147,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
+  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>): any {
     const tokens: Tokens = yield selectTokens();
     const questionId = action.payload.id;
     const answer = action.payload.answer;
@@ -184,7 +183,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     SUBMIT_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.submitAssessment>) {
+    function* (action: ReturnType<typeof actions.submitAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const assessmentId = action.payload;
 
@@ -243,7 +242,7 @@ function* BackendSaga(): SagaIterator {
    */
   yield takeEvery(
     UNSUBMIT_SUBMISSION,
-    function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
+    function* (action: ReturnType<typeof actions.unsubmitSubmission>): any {
       const tokens: Tokens = yield selectTokens();
       const { submissionId } = action.payload;
 
@@ -271,7 +270,7 @@ function* BackendSaga(): SagaIterator {
     action:
       | ReturnType<typeof actions.submitGrading>
       | ReturnType<typeof actions.submitGradingAndContinue>
-  ) {
+  ): any {
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
@@ -378,7 +377,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     ACKNOWLEDGE_NOTIFICATIONS,
-    function* (action: ReturnType<typeof actions.acknowledgeNotifications>) {
+    function* (action: ReturnType<typeof actions.acknowledgeNotifications>): any {
       const tokens: Tokens = yield selectTokens();
       const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
       const notifications: Notification[] = yield select(
@@ -411,7 +410,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     DELETE_SOURCECAST_ENTRY,
-    function* (action: ReturnType<typeof actions.deleteSourcecastEntry>) {
+    function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
       const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
@@ -448,7 +447,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     SAVE_SOURCECAST_DATA,
-    function* (action: ReturnType<typeof actions.saveSourcecastData>) {
+    function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
       const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
@@ -476,7 +475,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     FETCH_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.fetchSublanguage>) {
+    function* (action: ReturnType<typeof actions.fetchSublanguage>): any {
       const sublang: SourceLanguage | null = yield call(getSublanguage);
       if (!sublang) {
         return yield call(
@@ -491,7 +490,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     CHANGE_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.changeSublanguage>) {
+    function* (action: ReturnType<typeof actions.changeSublanguage>): any {
       const tokens: Tokens = yield selectTokens();
       const { sublang } = action.payload;
 
@@ -524,13 +523,13 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     CHANGE_DATE_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.changeDateAssessment>) {
+    function* (action: ReturnType<typeof actions.changeDateAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
       const closeAt = action.payload.closeAt;
       const openAt = action.payload.openAt;
 
-      const resp: Response | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
+      const resp: Response | null = yield updateAssessment(id, { openAt, closeAt }, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -542,7 +541,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     DELETE_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.deleteAssessment>) {
+    function* (action: ReturnType<typeof actions.deleteAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
 
@@ -558,12 +557,16 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     PUBLISH_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.publishAssessment>) {
+    function* (action: ReturnType<typeof actions.publishAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
       const togglePublishTo = action.payload.togglePublishTo;
 
-      const resp: Response | null = yield publishAssessment(id, togglePublishTo, tokens);
+      const resp: Response | null = yield updateAssessment(
+        id,
+        { isPublished: togglePublishTo },
+        tokens
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -580,7 +583,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     UPLOAD_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.uploadAssessment>) {
+    function* (action: ReturnType<typeof actions.uploadAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const file = action.payload.file;
       const forceUpdate = action.payload.forceUpdate;
@@ -602,7 +605,7 @@ function* BackendSaga(): SagaIterator {
   );
 }
 
-function* handleReautogradeResponse(resp: Response | null) {
+function* handleReautogradeResponse(resp: Response | null): any {
   if (resp && resp.ok) {
     return yield call(showSuccessMessage, 'Autograde job queued successfully.');
   }

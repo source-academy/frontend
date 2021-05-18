@@ -1,5 +1,4 @@
 import { mount } from 'enzyme';
-import * as React from 'react';
 
 import Markdown from '../Markdown';
 import { generateSourceIntroduction } from '../utils/IntroductionHelper';

@@ -1,22 +1,22 @@
 import { Stage } from 'react-konva';
 
 import { Config } from './Config';
-import { Data, Step } from './ListVisualizerTypes';
+import { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
 import { DataTreeNode } from './tree/TreeNode';
 
 /**
- * The list visualizer class.
+ * The data visualizer class.
  * Exposes three function: init, drawData, and clear.
  *
- * init is used by SideContentListVisualizer as a hook.
+ * init is used by SideContentDataVisualizer as a hook.
  * drawData is the draw_data function in source.
  * clear is used by WorkspaceSaga to reset the visualizer after every "Run" button press
  */
-export default class ListVisualizer {
+export default class DataVisualizer {
   private static empty(step: Step[]) {}
-  private static setSteps: (step: Step[]) => void = ListVisualizer.empty;
-  private static _instance = new ListVisualizer();
+  private static setSteps: (step: Step[]) => void = DataVisualizer.empty;
+  private static _instance = new DataVisualizer();
 
   private steps: Step[] = [];
   private nodeLabel = 0;
@@ -25,24 +25,24 @@ export default class ListVisualizer {
   private constructor() {}
 
   public static init(setSteps: (step: Step[]) => void): void {
-    ListVisualizer.setSteps = setSteps;
+    DataVisualizer.setSteps = setSteps;
   }
 
   public static drawData(structures: Data[]): void {
-    if (!ListVisualizer.setSteps) {
-      throw new Error('List visualizer not initialized');
+    if (!DataVisualizer.setSteps) {
+      throw new Error('Data visualizer not initialized');
     }
-    ListVisualizer._instance.addStep(structures);
-    ListVisualizer.setSteps(ListVisualizer._instance.steps);
+    DataVisualizer._instance.addStep(structures);
+    DataVisualizer.setSteps(DataVisualizer._instance.steps);
   }
 
   public static clear(): void {
-    ListVisualizer._instance = new ListVisualizer();
-    ListVisualizer.setSteps(ListVisualizer._instance.steps);
+    DataVisualizer._instance = new DataVisualizer();
+    DataVisualizer.setSteps(DataVisualizer._instance.steps);
   }
 
   public static displaySpecialContent(dataNode: DataTreeNode): number {
-    return ListVisualizer._instance.displaySpecialContent(dataNode);
+    return DataVisualizer._instance.displaySpecialContent(dataNode);
   }
 
   private displaySpecialContent(dataNode: DataTreeNode): number {
@@ -61,7 +61,7 @@ export default class ListVisualizer {
   }
 
   /**
-   *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
+   *  For student use. Draws a structure by converting it into a tree object, attempts to draw on the canvas,
    *  Then shift it to the left end.
    */
   private createDrawing(xs: Data): JSX.Element {

@@ -1,6 +1,6 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AchievementContext, handleGlow } from 'src/features/achievement/AchievementConstants';
 
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';

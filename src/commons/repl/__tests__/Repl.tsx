@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 import {

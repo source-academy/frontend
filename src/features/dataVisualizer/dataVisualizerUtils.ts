@@ -1,6 +1,6 @@
 import { Config } from './Config';
+import { Data, EmptyList, List, Pair } from './dataVisualizerTypes';
 import { is_list, is_pair } from './list';
-import { Data, EmptyList, List, Pair } from './ListVisualizerTypes';
 
 /**
  *  Returns data in text form, fitted into the box.

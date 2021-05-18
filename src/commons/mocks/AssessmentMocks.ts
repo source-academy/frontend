@@ -5,6 +5,7 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses,
+  IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
@@ -827,6 +828,42 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }
 ];
 
+const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
+  {
+    id: 0,
+    type: 'voting',
+    content: 'Sample Contest Voting Question',
+    grade: 0,
+    maxGrade: 0,
+    xp: 0,
+    maxXp: 0,
+    answer: [],
+    contestEntries: [
+      {
+        submission_id: 1,
+        answer: { code: "display('voting test')" }
+      },
+      {
+        submission_id: 2,
+        answer: { code: 'function voting_test() { return true; }' }
+      }
+    ],
+    contestLeaderboard: [
+      {
+        submission_id: 1,
+        student_name: 'student_1',
+        answer: { code: "display('leaderboard test')" }
+      },
+      {
+        submission_id: 2,
+        student_name: 'student_2',
+        answer: { code: 'function leaderboard_test() { return true; }' }
+      }
+    ],
+    library: mockRuneLibrary
+  }
+];
+
 /*
  * A few Assessments to try out in workspaces.
  */
@@ -904,5 +941,14 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
     title: 'A sample guided path'
+  },
+  // mock assessment used for testing contest voting assessments
+  {
+    category: AssessmentCategories.Practical,
+    id: 7,
+    title: 'A sample contest voting assessment',
+    longSummary: 'Vote for your favourite contest entries here!',
+    missionPDF: 'www.google.com',
+    questions: mockContestEntryQuestion
   }
 ];

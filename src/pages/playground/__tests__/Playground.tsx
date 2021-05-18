@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
-import * as React from 'react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
