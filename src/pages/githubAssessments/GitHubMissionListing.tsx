@@ -64,15 +64,14 @@ const GitHubMissionListing: React.FC<any> = () => {
       });
 
       function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
-        let match = false;
+        let match = true;
         tags.forEach(tag => {
           if (tag !== null && tag !== undefined) {
-            if (mission.title.includes(tag.toString())) {
-              match = true;
-            } else if (mission.webSummary.includes(tag.toString())) {
-              match = true;
-            } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
-              match = true;
+            const title = mission.title.toLowerCase();
+            const repoOwner = mission.missionRepoData.repoOwner.toLowerCase();
+            const repoName = mission.missionRepoData.repoName.toLowerCase();
+            if (!(title + repoOwner + repoName).includes(tag.toString().toLowerCase())) {
+              match = false;
             }
           }
         });
