@@ -1,29 +1,61 @@
 .Sicp {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: black;
+
+  > .ControlBar {
+    position: fixed;
+    padding: 5px;
     width: 100%;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: black;
+    background-color: $cadet-color-1;
+    color: white;
+    z-index: 1000;
+  }
 
-    > .ControlBar  {
-        position: fixed;
-        height: 40px;
-        width: 100%;
-        background-color: $cadet-color-1;
-        color: white;
-    }
-
-    > .ContentDisplay {
-        text-align: left;
-        margin-top: 35px;
-    }
+  > .ContentDisplay {
+    text-align: left;
+    margin-top: 35px;
+  }
+}
+.sicp-toc {
+  overflow-y: scroll;
 }
 
-.sicp-display-card {
-    width: 100%;
-    height: fit-content;
-}
-
+// Styles for textbook content
 .sicp-code-snippet {
-    background-color: beige;
+  margin: 10px 0px;
+
+  > .code-body {
+    background-color: $cadet-color-2;
+    padding: 10px;
+    border-radius: 5px;
+
+    > .react-ace {
+      background-color: transparent;
+      padding: 5px 10px;
+
+      .ace_cursor {
+        display: none;
+        color: transparent;
+      }
+
+      .ace_content {
+      }
+    }
+  }
+
+  > .code-body {
+  }
+
+  .code-result > code {
+    white-space: pre;
+    display: block;
+    margin-top: -1.00em;
+  }
+}
+
+.sicp-footnote {
+  font-size: 0.8rem;
 }

@@ -7,10 +7,11 @@ import { parseQuery } from 'src/commons/utils/QueryHelper';
 import SicpControlBar from 'src/features/sicp/components/SicpControlBar';
 import SicpToc from 'src/features/sicp/components/SicpToc';
 
-import SicpDisplay from './subcomponents/SicpDisplay';
+import SicpDisplay from '../../features/sicp/components/SicpDisplay';
+import testData from '../../features/sicp/data/test.json'
 
-export type SicpProps = OwnProps & RouteComponentProps<{}>;
-export type OwnProps = {};
+type SicpProps = OwnProps & RouteComponentProps<{}>;
+type OwnProps = {};
 
 const parseHash = (hash: string) => {
   if (hash) {
@@ -18,11 +19,11 @@ const parseHash = (hash: string) => {
     return qs.section;
   }
 
-  return '1';
+  return 'index';
 };
 
 const Sicp: React.FC<SicpProps> = props => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [isTocOpen, setIsTocOpen] = useState(false);
 
   const baseUrl = '/sicp/json/';
@@ -30,6 +31,11 @@ const Sicp: React.FC<SicpProps> = props => {
 
   const getData = useCallback((hash: string) => {
     const section = parseHash(hash);
+    if (section === 'index') {
+      setData(testData as any[]);
+      return;
+    }
+
     fetch(baseUrl + section + extension)
       .then(response => {
         if (!response.ok) {

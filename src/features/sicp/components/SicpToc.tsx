@@ -30,11 +30,12 @@ const SicpToc: React.FC<TocProps> = props => {
   };
 
   const handleNodeClicked = React.useCallback((node: ITreeNode) => {
+    props.handleCloseToc();
     setHash(String(node.nodeData));
-  }, []);
+  }, [props]);
 
   return (
-    <>
+    <div className="sicp-toc">
       {hash !== '' ? <Redirect to={'/sicp#section=' + hash} /> : <></>}
       <Tree
         contents={sidebarContent}
@@ -42,7 +43,7 @@ const SicpToc: React.FC<TocProps> = props => {
         onNodeCollapse={handleNodeCollapse}
         onNodeExpand={handleNodeExpand}
       />
-    </>
+    </div>
   );
 };
 
