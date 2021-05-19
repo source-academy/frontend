@@ -275,17 +275,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setIsLoading(false);
   }, [defaultMissionMetadata, handleEditorValueChange]);
 
-  const loadMission = useCallback(async () => {
+  useEffect(() => {
     if (missionRepoData === undefined) {
       setUpWithoutMissionRepoData();
     } else {
       setUpWithMissionRepoData();
     }
   }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
-
-  useEffect(() => {
-    loadMission();
-  }, [loadMission]);
 
   /**
    * After mounting show the briefing.
@@ -344,15 +340,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       </div>
     </Dialog>
   );
-
-  /*
-  const getEditedCode = useCallback(
-    (questionNumber: number) => {
-      return taskList[questionNumber - 1].savedCode;
-    },
-    [taskList]
-  );
-  */
 
   const editCode = useCallback(
     (questionNumber: number, newValue: string) => {
