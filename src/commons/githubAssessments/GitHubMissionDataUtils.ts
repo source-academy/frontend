@@ -88,14 +88,14 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
     }
 
     const taskData = {
-      taskDescription: "",
-      starterCode: "",
-      savedCode: "",
-      testPrepend: "",
+      taskDescription: '',
+      starterCode: '',
+      savedCode: '',
+      testPrepend: '',
       testCases: []
     };
 
-    const identity = (content: any) => content; 
+    const identity = (content: any) => content;
 
     const folderContentsAsArray = folderContents.data as any[];
 
@@ -104,11 +104,11 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
     // 2) found: always initialised to false, whether the above file exists
     // 3) processing: any additional processing to be performed on the raw text data
     const properties = {
-      'taskDescription': { fileName: 'Problem.md', found: false, processing: identity },
-      'starterCode': { fileName: 'StarterCode.js', found: false, processing: identity },
-      'savedCode': { fileName: 'SavedCode.js', found: false, processing: identity },
-      'testPrepend': { fileName: 'TestPrepend.js', found: false, processing: identity },
-      'testCases': {fileName: 'TestCases.json', found: false, processing: JSON.parse }
+      taskDescription: { fileName: 'Problem.md', found: false, processing: identity },
+      starterCode: { fileName: 'StarterCode.js', found: false, processing: identity },
+      savedCode: { fileName: 'SavedCode.js', found: false, processing: identity },
+      testPrepend: { fileName: 'TestPrepend.js', found: false, processing: identity },
+      testCases: { fileName: 'TestCases.json', found: false, processing: JSON.parse }
     };
 
     const propKeys = Object.keys(properties);
@@ -130,18 +130,20 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       for (let i = 0; i < propKeys.length; i++) {
         const key = propKeys[i];
         const value = properties[key];
-  
+
         if (value.found) {
-          taskData[key] = value.processing(await getContentAsString(
-            repoOwner,
-            repoName,
-            questionFolderName + '/' + value.fileName,
-            octokit
-          ));
+          taskData[key] = value.processing(
+            await getContentAsString(
+              repoOwner,
+              repoName,
+              questionFolderName + '/' + value.fileName,
+              octokit
+            )
+          );
         }
       }
 
-      if (taskData.savedCode === "") {
+      if (taskData.savedCode === '') {
         taskData.savedCode = taskData.starterCode;
       }
 
