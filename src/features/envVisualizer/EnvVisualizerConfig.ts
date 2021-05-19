@@ -48,7 +48,7 @@ export enum Config {
   VariableColon = ': ',
   Ellipsis = '…',
 
-  UnassignedData = '*unassigned*',
+  UnassignedData = '',
   GlobalFrameDefaultText = 'pre-declared names'
 }
 
