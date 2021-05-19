@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 
+import { Testcase } from '../assessment/AssessmentTypes';
 import MissionData from './MissionData';
 import MissionMetadata from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
@@ -88,9 +89,39 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       return questions;
     }
 
-    const hasSavedCode = (folderContents.data as any[]).find(
-      (file: any) => file.name === 'SavedCode.js'
-    );
+    const folderContentsAsArray = folderContents.data as any[];
+    let hasSavedCode = false;
+    let hasTestPrepend = false;
+    let hasTestcases = false;
+
+    for (let i = 0; i < folderContentsAsArray.length; i++) {
+      const fileName = folderContentsAsArray[i].name;
+
+      if (!hasSavedCode) {
+        if (fileName === 'SavedCode.js') {
+          hasSavedCode = true;
+          continue;
+        }
+      }
+
+      if (!hasTestcases) {
+        if (fileName === 'TestCases.json') {
+          hasTestcases = true;
+          continue;
+        }
+      }
+
+      if (!hasTestPrepend) {
+        if (fileName === 'TestPrepend.js') {
+          hasTestPrepend = true;
+          continue;
+        }
+      }
+
+      if (hasSavedCode && hasTestcases && hasTestPrepend) {
+        break;
+      }
+    }
 
     // If the question exists, get the data
     try {
@@ -116,7 +147,27 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
           )
         : starterCode;
 
-      const taskData = { taskDescription, starterCode, savedCode };
+      const testPrepend = hasTestPrepend
+        ? await getContentAsString(
+            repoOwner,
+            repoName,
+            questionFolderName + '/TestPrepend.js',
+            octokit
+          )
+        : '';
+
+      const testCases = hasTestcases
+        ? (JSON.parse(
+            await getContentAsString(
+              repoOwner,
+              repoName,
+              questionFolderName + '/TestCases.json',
+              octokit
+            )
+          ) as Testcase[])
+        : [];
+
+      const taskData = { taskDescription, starterCode, savedCode, testPrepend, testCases };
 
       questions.push(taskData);
     } catch (err) {

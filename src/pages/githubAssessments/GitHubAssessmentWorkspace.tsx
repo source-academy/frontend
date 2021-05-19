@@ -17,7 +17,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { AutogradingResult, Library } from '../../commons/assessment/AssessmentTypes';
+import { AutogradingResult, Library, Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -109,6 +109,7 @@ export type StateProps = {
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
   editorValue: string | null;
+  editorTestcases: Testcase[];
   editorPostpend: string;
   editorHeight?: number;
   editorWidth: string;
@@ -182,7 +183,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [isLoading, setIsLoading] = React.useState(true);
 
   const handleEditorValueChange = props.handleEditorValueChange;
+  const handleResetWorkspace = props.handleResetWorkspace;
   const missionRepoData = props.location.state as MissionRepoData;
+  const autogradingResults: AutogradingResult[] = props.autogradingResults;
+  const editorTestcases = props.editorTestcases;
 
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
@@ -201,7 +205,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
 
     setCurrentTaskNumber(1);
-    handleEditorValueChange(missionData.tasksData[0].savedCode);
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
@@ -227,7 +230,22 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setIsTeacherMode(userInTeacherMode);
 
     setIsLoading(false);
-  }, [missionRepoData, octokit, handleEditorValueChange]);
+
+    console.log(missionData.tasksData);
+
+    const editorValue = missionData.tasksData[0].savedCode;
+    const editorPrepend = missionData.tasksData[0].testPrepend;
+    const editorPostpend = "";
+    const editorTestcases = missionData.tasksData[0].testCases;
+
+    handleResetWorkspace({
+      autogradingResults,
+      editorValue,
+      editorPrepend,
+      editorPostpend,
+      editorTestcases
+    });
+  }, [missionRepoData, octokit, handleResetWorkspace, autogradingResults]);
 
   const setUpWithoutMissionRepoData = useCallback(() => {
     setSummary(defaultMissionBriefing);
@@ -327,12 +345,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     </Dialog>
   );
 
+  /*
   const getEditedCode = useCallback(
     (questionNumber: number) => {
       return taskList[questionNumber - 1].savedCode;
     },
     [taskList]
   );
+  */
 
   const editCode = useCallback(
     (questionNumber: number, newValue: string) => {
@@ -586,14 +606,38 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
     setCurrentTaskNumber(newTaskNumber);
-    handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
+
+    const editorValue = taskList[newTaskNumber - 1].savedCode;
+    const editorPrepend = taskList[newTaskNumber - 1].testPrepend;
+    const editorPostpend = "";
+    const editorTestcases = taskList[newTaskNumber - 1].testCases;
+
+    handleResetWorkspace({
+      autogradingResults,
+      editorValue,
+      editorPrepend,
+      editorPostpend,
+      editorTestcases
+    });
+  }, [autogradingResults, currentTaskNumber, setCurrentTaskNumber, handleResetWorkspace, taskList]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
     setCurrentTaskNumber(newTaskNumber);
-    handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange]);
+
+    const editorValue = taskList[newTaskNumber - 1].savedCode;
+    const editorPrepend = taskList[newTaskNumber - 1].testPrepend;
+    const editorPostpend = "";
+    const editorTestcases = taskList[newTaskNumber - 1].testCases;
+
+    handleResetWorkspace({
+      autogradingResults,
+      editorValue,
+      editorPrepend,
+      editorPostpend,
+      editorTestcases
+    });
+  }, [autogradingResults, currentTaskNumber, setCurrentTaskNumber, handleResetWorkspace, taskList]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -696,7 +740,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
     props: GitHubAssessmentWorkspaceProps
   ) => {
-    const isGraded = true;
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -730,8 +773,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentAutograder
-            testcases={[]}
-            autogradingResults={isGraded ? props.autogradingResults : []}
+            testcases={editorTestcases}
+            autogradingResults={autogradingResults ? autogradingResults : []}
             handleTestcaseEval={props.handleTestcaseEval}
           />
         ),
