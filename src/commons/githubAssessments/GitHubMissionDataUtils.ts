@@ -1,6 +1,5 @@
 import { Octokit } from '@octokit/rest';
 
-import { Testcase } from '../assessment/AssessmentTypes';
 import MissionData from './MissionData';
 import MissionMetadata from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
@@ -78,7 +77,6 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       break;
     }
 
-    // Find out if there is already SavedCode for the question
     const folderContents = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
@@ -89,85 +87,63 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       return questions;
     }
 
-    const folderContentsAsArray = folderContents.data as any[];
-    let hasSavedCode = false;
-    let hasTestPrepend = false;
-    let hasTestcases = false;
+    const taskData = {
+      taskDescription: "",
+      starterCode: "",
+      savedCode: "",
+      testPrepend: "",
+      testCases: []
+    };
 
+    const identity = (content: any) => content; 
+
+    const folderContentsAsArray = folderContents.data as any[];
+
+    // Map from each property to an object storing the following information:
+    // 1) fileName: the name of the file with the data corresponding to file data
+    // 2) found: always initialised to false, whether the above file exists
+    // 3) processing: any additional processing to be performed on the raw text data
+    const properties = {
+      'taskDescription': { fileName: 'Problem.md', found: false, processing: identity },
+      'starterCode': { fileName: 'StarterCode.js', found: false, processing: identity },
+      'savedCode': { fileName: 'SavedCode.js', found: false, processing: identity },
+      'testPrepend': { fileName: 'TestPrepend.js', found: false, processing: identity },
+      'testCases': {fileName: 'TestCases.json', found: false, processing: JSON.parse }
+    };
+
+    const propKeys = Object.keys(properties);
+
+    // Figure out if the files exist
     for (let i = 0; i < folderContentsAsArray.length; i++) {
       const fileName = folderContentsAsArray[i].name;
 
-      if (!hasSavedCode) {
-        if (fileName === 'SavedCode.js') {
-          hasSavedCode = true;
-          continue;
+      for (let j = 0; j < propKeys.length; j++) {
+        const key = propKeys[j];
+        if (fileName === properties[key].fileName) {
+          properties[key].found = true;
+          break;
         }
-      }
-
-      if (!hasTestcases) {
-        if (fileName === 'TestCases.json') {
-          hasTestcases = true;
-          continue;
-        }
-      }
-
-      if (!hasTestPrepend) {
-        if (fileName === 'TestPrepend.js') {
-          hasTestPrepend = true;
-          continue;
-        }
-      }
-
-      if (hasSavedCode && hasTestcases && hasTestPrepend) {
-        break;
       }
     }
 
-    // If the question exists, get the data
     try {
-      const taskDescription = await getContentAsString(
-        repoOwner,
-        repoName,
-        questionFolderName + '/Problem.md',
-        octokit
-      );
-      const starterCode = await getContentAsString(
-        repoOwner,
-        repoName,
-        questionFolderName + '/StarterCode.js',
-        octokit
-      );
-
-      const savedCode = hasSavedCode
-        ? await getContentAsString(
+      for (let i = 0; i < propKeys.length; i++) {
+        const key = propKeys[i];
+        const value = properties[key];
+  
+        if (value.found) {
+          taskData[key] = value.processing(await getContentAsString(
             repoOwner,
             repoName,
-            questionFolderName + '/SavedCode.js',
+            questionFolderName + '/' + value.fileName,
             octokit
-          )
-        : starterCode;
+          ));
+        }
+      }
 
-      const testPrepend = hasTestPrepend
-        ? await getContentAsString(
-            repoOwner,
-            repoName,
-            questionFolderName + '/TestPrepend.js',
-            octokit
-          )
-        : '';
-
-      const testCases = hasTestcases
-        ? (JSON.parse(
-            await getContentAsString(
-              repoOwner,
-              repoName,
-              questionFolderName + '/TestCases.json',
-              octokit
-            )
-          ) as Testcase[])
-        : [];
-
-      const taskData = { taskDescription, starterCode, savedCode, testPrepend, testCases };
+      if (taskData.savedCode === "") {
+        taskData.savedCode = taskData.starterCode;
+      }
 
       questions.push(taskData);
     } catch (err) {
