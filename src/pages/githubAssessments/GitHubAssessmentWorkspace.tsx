@@ -231,19 +231,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsLoading(false);
 
-    console.log(missionData.tasksData);
-
-    const editorValue = missionData.tasksData[0].savedCode;
-    const editorPrepend = missionData.tasksData[0].testPrepend;
-    const editorPostpend = '';
-    const editorTestcases = missionData.tasksData[0].testCases;
-
     handleResetWorkspace({
-      autogradingResults,
-      editorValue,
-      editorPrepend,
-      editorPostpend,
-      editorTestcases
+      autogradingResults: autogradingResults,
+      editorValue: missionData.tasksData[0].savedCode,
+      editorPrepend: missionData.tasksData[0].testPrepend,
+      editorPostpend: '',
+      editorTestcases: missionData.tasksData[0].testCases
     });
   }, [missionRepoData, octokit, handleResetWorkspace, autogradingResults]);
 
@@ -259,13 +252,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const defaultTask = {
       taskDescription: defaultTaskDescription,
       starterCode: defaultStarterCode,
-      savedCode: defaultStarterCode
+      savedCode: defaultStarterCode,
+      testPrepend: '',
+      testCases: []
     } as TaskData;
     setTaskList([defaultTask]);
     setCachedTaskList([defaultTask]);
 
     setCurrentTaskNumber(1);
-    handleEditorValueChange(defaultStarterCode);
+    handleResetWorkspace({
+      autogradingResults: autogradingResults,
+      editorValue: defaultStarterCode,
+      editorPrepend: '',
+      editorPostpend: '',
+      editorTestcases: []
+    });
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
@@ -273,7 +274,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsTeacherMode(true);
     setIsLoading(false);
-  }, [defaultMissionMetadata, handleEditorValueChange]);
+  }, [autogradingResults, defaultMissionMetadata, handleResetWorkspace]);
 
   useEffect(() => {
     if (missionRepoData === undefined) {
@@ -590,41 +591,30 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setShowResetTemplateOverlay(true);
   }, []);
 
+  const changeStateDueToChangedTask = useCallback(
+    (newTaskNumber: number) => {
+      setCurrentTaskNumber(newTaskNumber);
+
+      handleResetWorkspace({
+        autogradingResults: autogradingResults,
+        editorValue: taskList[newTaskNumber - 1].savedCode,
+        editorPrepend: taskList[newTaskNumber - 1].testPrepend,
+        editorPostpend: '',
+        editorTestcases: taskList[newTaskNumber - 1].testCases
+      });
+    },
+    [autogradingResults, setCurrentTaskNumber, handleResetWorkspace, taskList]
+  );
+
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
-    setCurrentTaskNumber(newTaskNumber);
-
-    const editorValue = taskList[newTaskNumber - 1].savedCode;
-    const editorPrepend = taskList[newTaskNumber - 1].testPrepend;
-    const editorPostpend = '';
-    const editorTestcases = taskList[newTaskNumber - 1].testCases;
-
-    handleResetWorkspace({
-      autogradingResults,
-      editorValue,
-      editorPrepend,
-      editorPostpend,
-      editorTestcases
-    });
-  }, [autogradingResults, currentTaskNumber, setCurrentTaskNumber, handleResetWorkspace, taskList]);
+    changeStateDueToChangedTask(newTaskNumber);
+  }, [currentTaskNumber, changeStateDueToChangedTask]);
 
   const onClickNext = useCallback(() => {
     const newTaskNumber = currentTaskNumber + 1;
-    setCurrentTaskNumber(newTaskNumber);
-
-    const editorValue = taskList[newTaskNumber - 1].savedCode;
-    const editorPrepend = taskList[newTaskNumber - 1].testPrepend;
-    const editorPostpend = '';
-    const editorTestcases = taskList[newTaskNumber - 1].testCases;
-
-    handleResetWorkspace({
-      autogradingResults,
-      editorValue,
-      editorPrepend,
-      editorPostpend,
-      editorTestcases
-    });
-  }, [autogradingResults, currentTaskNumber, setCurrentTaskNumber, handleResetWorkspace, taskList]);
+    changeStateDueToChangedTask(newTaskNumber);
+  }, [currentTaskNumber, changeStateDueToChangedTask]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -802,7 +792,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         {
           taskDescription: defaultTaskDescription,
           starterCode: defaultStarterCode,
-          savedCode: defaultStarterCode
+          savedCode: defaultStarterCode,
+          testPrepend: '',
+          testCases: []
         } as TaskData
       ])
       .concat(taskList.slice(currentTaskNumber, taskList.length));
