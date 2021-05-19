@@ -55,37 +55,6 @@ test('parseMetadataProperties correctly discovers properties', () => {
   expect(retVal.dueDate).toStrictEqual(new Date('December 17, 1995 03:24:00'));
 });
 
-test('getMissionData works properly', async () => {
-  const missionRepoData: MissionRepoData = {
-    repoOwner: 'Pain',
-    repoName: 'Peko',
-    dateOfCreation: new Date('December 17, 1995 03:24:00')
-  };
-  const missionData = await GitHubMissionDataUtils.getMissionData(
-    missionRepoData,
-    new MocktokitB()
-  );
-
-  expect(missionData.missionRepoData.repoOwner).toBe('Pain');
-  expect(missionData.missionRepoData.repoName).toBe('Peko');
-
-  expect(missionData.missionBriefing).toBe('Briefing Content');
-
-  expect(missionData.missionMetadata.coverImage).toBe('www.somelink.com');
-  expect(missionData.missionMetadata.kind).toBe('Mission');
-  expect(missionData.missionMetadata.number).toBe('M3');
-  expect(missionData.missionMetadata.title).toBe('Dummy Mission');
-  expect(missionData.missionMetadata.reading).toBe('Textbook Pages 1 to 234763');
-  expect(missionData.missionMetadata.webSummary).toBe('no');
-  expect(missionData.missionMetadata.sourceVersion).toBe(3);
-
-  expect(missionData.tasksData.length).toBe(2);
-  expect(missionData.tasksData[0].taskDescription).toBe('Task A');
-  expect(missionData.tasksData[0].starterCode).toBe('Code A');
-  expect(missionData.tasksData[1].taskDescription).toBe('Task B');
-  expect(missionData.tasksData[1].starterCode).toBe('Code B');
-});
-
 test('convertMissionMetadataToMetadataString works as expected', () => {
   const missionMetadata = {
     title: 'Dummy Mission',
@@ -129,7 +98,56 @@ class MocktokitA {
   }
 }
 
-// Try to create Jest mocks failed; the mock functions were not called
+test('getMissionData works properly', async () => {
+  const missionRepoData: MissionRepoData = {
+    repoOwner: 'Pain',
+    repoName: 'Peko',
+    dateOfCreation: new Date('December 17, 1995 03:24:00')
+  };
+  const missionData = await GitHubMissionDataUtils.getMissionData(
+    missionRepoData,
+    new MocktokitB()
+  );
+
+  expect(missionData.missionRepoData).toEqual({
+    repoOwner: 'Pain',
+    repoName: 'Peko',
+    dateOfCreation: new Date('December 17, 1995 03:24:00')
+  });
+
+  expect(missionData.missionBriefing).toBe('Briefing Content');
+
+  expect(missionData.missionMetadata.coverImage).toBe('www.somelink.com');
+  expect(missionData.missionMetadata.kind).toBe('Mission');
+  expect(missionData.missionMetadata.number).toBe('M3');
+  expect(missionData.missionMetadata.title).toBe('Dummy Mission');
+  expect(missionData.missionMetadata.reading).toBe('Textbook Pages 1 to 234763');
+  expect(missionData.missionMetadata.webSummary).toBe('no');
+  expect(missionData.missionMetadata.sourceVersion).toBe(3);
+
+  expect(missionData.tasksData.length).toBe(2);
+  expect(missionData.tasksData[0]).toEqual({
+    taskDescription: 'Task A',
+    starterCode: 'Code A',
+    savedCode: 'Code A',
+    testPrepend: '',
+    testCases: []
+  });
+  expect(missionData.tasksData[1]).toEqual({
+    taskDescription: 'Task B',
+    starterCode: 'Code B',
+    savedCode: 'Code C',
+    testPrepend: 'Code D',
+    testCases: [
+      {
+        answer: '[[1, [2, [3, null]]], [4, [5, null]]]',
+        program: 'sort_pair_of_lists(pair(list(2, 1, 3), list(5, 4)));'
+      }
+    ]
+  });
+});
+
+// Trying to create Jest mocks failed; the mock functions were not called
 // Had to rely on dependency injection for testing
 class MocktokitB {
   async getContent(dummyObject: any) {
@@ -149,10 +167,12 @@ class MocktokitB {
 class MocktokitHelper {
   static index: number = 0;
 
+  // get briefing string
   static first = {
     content: Buffer.from('Briefing Content', 'utf8').toString('base64')
   };
 
+  // get metadata string
   static second = {
     content: Buffer.from(
       'coverImage=www.somelink.com\n' +
@@ -166,26 +186,60 @@ class MocktokitHelper {
     ).toString('base64')
   };
 
+  // get root folder contents
   static third = [{ name: 'Q1' }, { name: 'Q2' }];
 
-  static fourth = [];
+  // Q1 folder contents
+  static fourth = [{ name: 'Problem.md' }, { name: 'StarterCode.js' }];
 
+  // Q1/Problem.md
   static fifth = {
     content: Buffer.from('Task A', 'utf8').toString('base64')
   };
 
+  // Q1/StarterCode.js
   static sixth = {
     content: Buffer.from('Code A', 'utf8').toString('base64')
   };
 
-  static seventh = [];
+  // Q2 folder contents
+  static seventh = [
+    { name: 'Problem.md' },
+    { name: 'StarterCode.js' },
+    { name: 'SavedCode.js' },
+    { name: 'TestPrepend.js' },
+    { name: 'TestCases.json' }
+  ];
 
+  // Q2/Problem.md
   static eighth = {
     content: Buffer.from('Task B', 'utf8').toString('base64')
   };
 
+  // Q2/StarterCode.js
   static ninth = {
     content: Buffer.from('Code B', 'utf8').toString('base64')
+  };
+
+  // Q2/SavedCode.js
+  static tenth = {
+    content: Buffer.from('Code C', 'utf8').toString('base64')
+  };
+
+  // Q2/TestPrepend.js
+  static eleventh = {
+    content: Buffer.from('Code D', 'utf8').toString('base64')
+  };
+
+  // Q2/TestCases.json
+  static twelfth = {
+    content: Buffer.from(
+      `[{
+        "answer": "[[1, [2, [3, null]]], [4, [5, null]]]",
+        "program": "sort_pair_of_lists(pair(list(2, 1, 3), list(5, 4)));"
+      }]`,
+      'utf8'
+    ).toString('base64')
   };
 
   static values = [
@@ -197,6 +251,9 @@ class MocktokitHelper {
     MocktokitHelper.sixth,
     MocktokitHelper.seventh,
     MocktokitHelper.eighth,
-    MocktokitHelper.ninth
+    MocktokitHelper.ninth,
+    MocktokitHelper.tenth,
+    MocktokitHelper.eleventh,
+    MocktokitHelper.twelfth
   ];
 }
