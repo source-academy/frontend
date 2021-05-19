@@ -235,7 +235,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const editorValue = missionData.tasksData[0].savedCode;
     const editorPrepend = missionData.tasksData[0].testPrepend;
-    const editorPostpend = "";
+    const editorPostpend = '';
     const editorTestcases = missionData.tasksData[0].testCases;
 
     handleResetWorkspace({
@@ -609,7 +609,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const editorValue = taskList[newTaskNumber - 1].savedCode;
     const editorPrepend = taskList[newTaskNumber - 1].testPrepend;
-    const editorPostpend = "";
+    const editorPostpend = '';
     const editorTestcases = taskList[newTaskNumber - 1].testCases;
 
     handleResetWorkspace({
@@ -627,7 +627,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const editorValue = taskList[newTaskNumber - 1].savedCode;
     const editorPrepend = taskList[newTaskNumber - 1].testPrepend;
-    const editorPostpend = "";
+    const editorPostpend = '';
     const editorTestcases = taskList[newTaskNumber - 1].testCases;
 
     handleResetWorkspace({
