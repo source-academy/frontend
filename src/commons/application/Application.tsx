@@ -146,11 +146,15 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            <Route path="/githubassessments/missions" component={GitHubMissionListing} />
-            <Route
-              path="/githubassessments/editor"
-              component={GitHubAssessmentWorkspaceContainer}
-            />
+            {Constants.showGitHubAssessments && (
+              <Route path="/githubassessments/missions" component={GitHubMissionListing} />
+            )}
+            {Constants.showGitHubAssessments && (
+              <Route
+                path="/githubassessments/editor"
+                component={GitHubAssessmentWorkspaceContainer}
+              />
+            )}
             <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
             <Route
