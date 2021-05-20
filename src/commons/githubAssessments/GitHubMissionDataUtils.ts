@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import MissionData from './MissionData';
 import MissionMetadata from './MissionMetadata';
 import MissionRepoData from './MissionRepoData';
@@ -120,6 +121,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
 
       questions.push(taskData);
     } catch (err) {
+      showWarningMessage('Error occurred while trying to retrieve file content', 1000);
       console.error(err);
     }
   }
@@ -152,6 +154,7 @@ export async function getContentAsString(
 
     contentString = Buffer.from((fileInfo.data as any).content, 'base64').toString();
   } catch (err) {
+    showWarningMessage('Error occurred while trying to retrieve file content', 1000);
     console.error(err);
   }
 
