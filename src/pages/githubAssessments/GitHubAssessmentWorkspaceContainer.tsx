@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 
-import { beginInterruptExecution } from '../../commons/application/actions/InterpreterActions';
 import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { Position } from '../../commons/editor/EditorTypes';
@@ -76,7 +75,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeEditorWidth(widthChange.toString(), workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),

@@ -76,7 +76,6 @@ export type DispatchProps = {
   handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
