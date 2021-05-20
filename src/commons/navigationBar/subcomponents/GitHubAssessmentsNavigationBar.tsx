@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { ControlBarGitHubLoginButton } from '../../controlBar/ControlBarGitHubLoginButton';
 
 type OwnProps = {
@@ -32,7 +31,6 @@ const GitHubAssessmentsNavigationBar: React.FunctionComponent<OwnProps> = props 
 
     <NavbarGroup align={Alignment.RIGHT}>
       <ControlBarGitHubLoginButton
-        loggedInAs={getGitHubOctokitInstance()}
         key="github"
         onClickLogIn={props.handleGitHubLogIn}
         onClickLogOut={props.handleGitHubLogOut}
