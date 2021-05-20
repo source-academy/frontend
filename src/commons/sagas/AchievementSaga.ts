@@ -149,7 +149,7 @@ export default function* AchievementSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(GET_USERS, function* (action: ReturnType<typeof actions.getUsers>) {
+  yield takeEvery(GET_USERS, function* (action: ReturnType<typeof actions.getUsers>): any {
     const tokens = yield select((state: OverallState) => ({
       accessToke: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -197,7 +197,7 @@ export default function* AchievementSaga(): SagaIterator {
 
   yield takeEvery(
     UPDATE_OWN_GOAL_PROGRESS,
-    function* (action: ReturnType<typeof actions.updateOwnGoalProgress>) {
+    function* (action: ReturnType<typeof actions.updateOwnGoalProgress>): any {
       const tokens = yield select((state: OverallState) => ({
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken
@@ -231,7 +231,7 @@ export default function* AchievementSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(HANDLE_EVENT, function* (action: ReturnType<typeof actions.handleEvent>) {
+  yield takeEvery(HANDLE_EVENT, function* (action: ReturnType<typeof actions.handleEvent>): any {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
