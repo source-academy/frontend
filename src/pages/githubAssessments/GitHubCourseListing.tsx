@@ -118,6 +118,11 @@ const GitHubCourseListing: React.FC = () => {
   );
 };
 
+type Mission = {
+  name: string;
+  link: string;
+};
+
 /**
  * Represents information about a GitHub repository containing a SourceAcademy Course.
  */
@@ -125,7 +130,7 @@ type BrowsableCourse = {
   name: string;
   description: string;
   facilitators: string[];
-  missions: string[];
+  missions: Mission[];
   courseRepoData: MissionRepoData;
 };
 
@@ -205,8 +210,14 @@ async function retrieveCourses(
  */
 function convertCourseToCard(course: BrowsableCourse, isMobileBreakpoint: boolean) {
   const ratio = isMobileBreakpoint ? 5 : 3;
-  const facilitators = "Facilitators: " + course.facilitators.join(', ');
+  const facilitators = 'Facilitators: ' + course.facilitators.join(', ');
   const dateOfCreation = course.courseRepoData.dateOfCreation.toDateString();
+
+  let content = 'Missions: \n';
+  course.missions.forEach(mission => {
+    const line = mission.name.link(mission.link);
+    content += '- ' + line + '\n';
+  });
 
   const viewCourse = () => {
     showSuccessMessage('wew');
@@ -231,7 +242,7 @@ function convertCourseToCard(course: BrowsableCourse, isMobileBreakpoint: boolea
           </div>
 
           <div className="listing-description">
-            <Markdown content={"Missions: " + course.missions.join(', ')} />
+            <Markdown content={content} />
           </div>
 
           <div className="listing-footer">
