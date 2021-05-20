@@ -213,7 +213,6 @@ export function parseMetadataProperties<R>(
   lines.forEach(line => {
     for (let i = 0; i < stringProps.length; i++) {
       const propName = stringProps[i];
-
       if (line.startsWith(propName)) {
         propertyContainer[propName] = line.substr(propName.length + 1);
         return;
@@ -228,9 +227,8 @@ export function parseMetadataProperties<R>(
       }
     }
 
-    for (let i = 0; i < numProps.length; i++) {
+    for (let i = 0; i < dateProps.length; i++) {
       const propName = dateProps[i];
-
       if (line.startsWith(propName)) {
         propertyContainer[propName] = new Date(line.substr(propName.length + 1));
         return;
