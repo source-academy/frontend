@@ -19,7 +19,6 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
   public render() {
     return (
       <div className={classNames('sa-env-visualizer', Classes.DARK)}>
-        <div id="stage"></div>
         {this.state.visualization || (
           <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
             The environmental visualizer generates the environmental model diagram based on

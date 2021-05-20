@@ -38,8 +38,7 @@ export class Layout {
   static globalEnvNode: EnvTreeNode;
   /** array of levels, which themselves are arrays of frames */
   static levels: Level[];
-  /** the Value objects in this layout. note that this corresponds to the data array,
-   * that is, `value[i]` has underlying data `data[i]` */
+  /** memoized values */
   static values = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
@@ -170,7 +169,7 @@ export class Layout {
     }
   }
 
-  /** memoize `Value` (used to detect cyclic references in non-primitive `Value`) */
+  /** memoize `Value` (used to detect circular references in non-primitive `Value`) */
   static memoizeValue(value: Value): void {
     Layout.values.set(value.data, value);
   }
@@ -213,21 +212,23 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <Stage width={Layout.width} height={Layout.height}>
-          <Layer>
-            <Rect
-              {...ShapeDefaultProps}
-              x={0}
-              y={0}
-              width={Layout.width}
-              height={Layout.height}
-              fill={Config.SA_BLUE.toString()}
-              key={Layout.key++}
-              listening={false}
-            />
-            {Layout.levels.map(level => level.draw())}
-          </Layer>
-        </Stage>
+        <div style={{ width: 0 }}>
+          <Stage width={Layout.width} height={Layout.height}>
+            <Layer>
+              <Rect
+                {...ShapeDefaultProps}
+                x={0}
+                y={0}
+                width={Layout.width}
+                height={Layout.height}
+                fill={Config.SA_BLUE.toString()}
+                key={Layout.key++}
+                listening={false}
+              />
+              {Layout.levels.map(level => level.draw())}
+            </Layer>
+          </Stage>
+        </div>
       );
       Layout.prevLayout = layout;
       return layout;
