@@ -26,14 +26,8 @@ function AchievementSettings(props: AchievementSettingsProps) {
     changeIsVariableXp,
     editableAchievement
   } = props;
-  const {
-    uuid,
-    cardBackground,
-    goalUuids,
-    position,
-    prerequisiteUuids,
-    isVariableXp
-  } = editableAchievement;
+  const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
+    editableAchievement;
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
