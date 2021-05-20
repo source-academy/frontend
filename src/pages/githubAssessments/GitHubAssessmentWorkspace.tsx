@@ -241,8 +241,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (questionNumber > taskList.length) {
         return;
       }
-      const editedTaskList = taskList;
-      editedTaskList[questionNumber - 1].savedCode = newValue;
+      const editedTaskList = [...taskList];
+      editedTaskList[questionNumber - 1] = {
+        ...editedTaskList[questionNumber - 1],
+        savedCode: newValue
+      };
       setTaskList(editedTaskList);
     },
     [taskList]
