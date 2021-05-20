@@ -8,6 +8,7 @@ import {
   ITreeNode,
   Tree
 } from '@blueprintjs/core';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
@@ -24,18 +25,20 @@ import {
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
-const FileExplorerDialog: React.FC<any> = props => {
+export type FileExplorerDialogProps = {
+  repoName: string;
+  pickerType: string;
+  octokit: Octokit;
+  editorContent: string;
+  onSubmit: (submitContent: string) => void;
+};
+
+const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   const [refresh, setRefresh] = useState(0);
 
   const [repoFiles, setRepoFiles] = useState([] as ITreeNode<GitHubFileNodeData>[]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
-
-  let githubLoginID: string;
-  let githubName: string;
-  let githubEmail: string;
-
-  getUserDetails();
 
   useEffect(() => {
     setFirstLayerRepoFiles(props.repoName, setRepoFiles); // this is an async call
@@ -80,13 +83,6 @@ const FileExplorerDialog: React.FC<any> = props => {
     </Dialog>
   );
 
-  async function getUserDetails() {
-    const authUser = await props.octokit.users.getAuthenticated();
-    githubLoginID = authUser.data.login;
-    githubName = authUser.data.name;
-    githubEmail = authUser.data.email;
-  }
-
   async function setFirstLayerRepoFiles(repoName: string, setRepoFiles: any) {
     try {
       const initialRepoFiles = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes(repoName);
@@ -101,6 +97,11 @@ const FileExplorerDialog: React.FC<any> = props => {
   }
 
   async function handleSubmit() {
+    const authUser = await props.octokit.users.getAuthenticated();
+    const githubLoginID = authUser.data.login;
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+
     if (props.pickerType === 'Open') {
       if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
         if (await checkIfUserAgreesToOverwriteEditorData()) {
