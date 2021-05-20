@@ -470,22 +470,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const mobileSideContentProps: () => MobileSideContentProps = () => {
-    const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ) => {
-      if (newTabId === prevTabId) {
-        return;
-      }
-
-      // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
-      if (
-        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
-      ) {
-        setSelectedTab(newTabId);
-      }
-    };
     return {
       mobileControlBarProps: {
         ...controlBarProps()
