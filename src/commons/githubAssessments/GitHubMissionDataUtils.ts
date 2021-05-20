@@ -1,10 +1,7 @@
 import { Octokit } from '@octokit/rest';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import MissionData from './MissionData';
-import MissionMetadata from './MissionMetadata';
-import MissionRepoData from './MissionRepoData';
-import TaskData from './TaskData';
+import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 const maximumTasksPerMission = 20;
 

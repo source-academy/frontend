@@ -24,7 +24,7 @@ import {
   getContentAsString,
   parseMetadataProperties
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
-import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
+import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';

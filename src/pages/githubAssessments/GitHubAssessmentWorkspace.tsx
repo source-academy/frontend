@@ -36,9 +36,11 @@ import {
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import MissionData from '../../commons/githubAssessments/MissionData';
-import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
-import TaskData from '../../commons/githubAssessments/TaskData';
+import {
+  MissionData,
+  MissionRepoData,
+  TaskData
+} from '../../commons/githubAssessments/GitHubMissionTypes';
 import Markdown from '../../commons/Markdown';
 import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, {
