@@ -6,7 +6,8 @@ import {
   Dialog,
   Intent,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -573,10 +574,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   if (isLoading) {
     return (
       <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
-        <NonIdealState
-          description="Loading Missions"
-          icon={<Spinner size={Spinner.SIZE_LARGE} />}
-        />
+        <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
       </div>
     );
   } else {

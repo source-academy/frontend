@@ -8,6 +8,7 @@ import {
   Icon,
   NonIdealState,
   Spinner,
+  SpinnerSize,
   TagInput,
   Text
 } from '@blueprintjs/core';
@@ -139,7 +140,7 @@ async function retrieveBrowsableMissions(
   if (octokit === undefined) return;
 
   setDisplay(
-    <NonIdealState description="Loading Missions" icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+    <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
   );
 
   const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
