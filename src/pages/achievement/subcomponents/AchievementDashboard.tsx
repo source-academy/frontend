@@ -75,8 +75,8 @@ function Dashboard(props: DispatchProps & StateProps) {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-      getOwnGoals();
-      getAchievements();
+    getOwnGoals();
+    getAchievements();
   }, [getAchievements, getOwnGoals]);
 
   if (name && role && !assessmentOverviews) {

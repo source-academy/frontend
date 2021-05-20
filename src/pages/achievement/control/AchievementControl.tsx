@@ -36,8 +36,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-      getAchievements();
-      getOwnGoals();
+    getAchievements();
+    getOwnGoals();
   }, [getAchievements, getOwnGoals]);
 
   /**
