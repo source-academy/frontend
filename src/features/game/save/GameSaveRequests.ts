@@ -23,7 +23,7 @@ export async function saveData(fullSaveState: FullSaveState) {
     })
   };
 
-  const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states`, options);
+  const resp = await fetch(`${Constants.backendUrl}/v2/user/game_states`, options);
 
   if (resp && resp.ok) {
     return resp;
@@ -40,7 +40,7 @@ export async function loadData(): Promise<FullSaveState> {
     headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
   };
 
-  const resp = await fetch(`${Constants.backendUrl}/v1/user/`, options);
+  const resp = await fetch(`${Constants.backendUrl}/v2/user/`, options);
   const message = await resp.text();
 
   const json = JSON.parse(message).gameStates;

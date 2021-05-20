@@ -5,6 +5,7 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses,
+  IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
@@ -267,7 +268,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   What's your favourite dinner food?
   \`\`\`
   `,
-    roomId: null,
     id: 0,
     library: mockSoundLibrary,
     prepend: `const pizza = "pizza";
@@ -313,7 +313,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   function volumeOfSphere(x) {
       return 4 / 3 * cube(x) * pi;
   }`,
-    roomId: '19422043',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mockRuneLibrary,
@@ -350,7 +349,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   },
   {
     answer: 3,
-    roomId: '19422046',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
     choices: [
@@ -382,7 +380,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   },
   {
     answer: 3,
-    roomId: null,
     content:
       'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
     choices: [
@@ -415,7 +412,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   {
     autogradingResults: [],
     answer: null,
-    roomId: '19422032',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 4,
     library: mockToneMatrixLibrary,
@@ -440,7 +436,6 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
           return fibonacci(n-1) + fibonacci(n-2);
       }
   }`,
-    roomId: '19422032',
     content: 'You can see autograding results!!!',
     id: 0,
     library: mockCurveLibrary,
@@ -533,7 +528,6 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     answer: `function recurse(rune, n) {
       return n <= 1 ? rune : make_cross(recurse(rune, n - 1));
   }`,
-    roomId: '19422033',
     content: 'This is a runes question - there are no testcases nor autograding results.',
     id: 1,
     library: mockRuneLibrary,
@@ -594,7 +588,6 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
 export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     answer: null,
-    roomId: null,
     content: 'As a recap: which of the following is not a valid logic gate?',
     choices: [
       {
@@ -626,7 +619,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     autogradingResults: [],
     answer: null,
-    roomId: null,
     content: `An AND gate is a digital logic gate that implements logical conjunction on its inputs. It returns a single output that is HIGH (active) iff all the inputs to the AND gate are HIGH (active).
   
   In this question, let us model an AND gate as a function, and treat HIGH (active) inputs as the boolean value \`true\` and LOW (inactive) inputs as the boolean value \`false\`.
@@ -705,7 +697,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     autogradingResults: [],
     answer: null,
-    roomId: null,
     content: `The XOR (exclusive-OR) gate is a digital logic gate that accepts two inputs and returns a single output that is HIGH (active) iff one of the inputs are HIGH (active), but not both.
   
   In this question, let us model the XOR gate as a function. Implement the function \`XOR(x, y)\` which takes two boolean inputs \`x\` and \`y\` and which returns the output of the XOR gate as a boolean.
@@ -766,7 +757,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     autogradingResults: [],
     answer: null,
-    roomId: null,
     content: `The NOR logic gate is special in that it is an _universal logic gate_, that is to say, they can be composed to form any other logic gate.
   
   Implement the AND logic gate **using ONLY the NOR logic gate**, as the \`NOR_AND(x, y)\` function that takes in two booleans as input.
@@ -835,6 +825,42 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     grade: 0,
     maxGrade: 0,
     maxXp: 0
+  }
+];
+
+const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
+  {
+    id: 0,
+    type: 'voting',
+    content: 'Sample Contest Voting Question',
+    grade: 0,
+    maxGrade: 0,
+    xp: 0,
+    maxXp: 0,
+    answer: [],
+    contestEntries: [
+      {
+        submission_id: 1,
+        answer: { code: "display('voting test')" }
+      },
+      {
+        submission_id: 2,
+        answer: { code: 'function voting_test() { return true; }' }
+      }
+    ],
+    contestLeaderboard: [
+      {
+        submission_id: 1,
+        student_name: 'student_1',
+        answer: { code: "display('leaderboard test')" }
+      },
+      {
+        submission_id: 2,
+        student_name: 'student_2',
+        answer: { code: 'function leaderboard_test() { return true; }' }
+      }
+    ],
+    library: mockRuneLibrary
   }
 ];
 
@@ -915,5 +941,14 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
     title: 'A sample guided path'
+  },
+  // mock assessment used for testing contest voting assessments
+  {
+    category: AssessmentCategories.Practical,
+    id: 7,
+    title: 'A sample contest voting assessment',
+    longSummary: 'Vote for your favourite contest entries here!',
+    missionPDF: 'www.google.com',
+    questions: mockContestEntryQuestion
   }
 ];

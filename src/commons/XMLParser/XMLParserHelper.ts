@@ -155,7 +155,6 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
     const question: BaseQuestion = {
       answer: null,
-      roomId: null,
       content: problem.TEXT[0],
       id: curId,
       library: makeLibrary(problem.DEPLOYMENT),
@@ -329,7 +328,7 @@ export const assessmentToXml = (
     task.GRADERDEPLOYMENT = exportLibrary(assessment.graderDeployment!);
   }
 
-  assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
+  assessment.questions.forEach((question: Question) => {
     const problem = {
       $: {
         type: question.type,

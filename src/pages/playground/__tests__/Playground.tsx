@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
-import * as React from 'react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
@@ -8,7 +7,6 @@ import { ExternalLibraryName } from '../../../commons/application/types/External
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
-import { GitHubFile } from '../../../features/github/GitHubTypes';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {
@@ -34,7 +32,7 @@ const baseProps = {
   persistenceUser: undefined,
   persistenceFile: undefined,
   githubOctokitInstance: undefined,
-  githubFile: undefined,
+  githubSaveInfo: { repoName: '', filePath: '' },
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -72,10 +70,9 @@ const baseProps = {
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
   handlePersistenceLogOut: () => {},
-  handleGitHubOpenPicker: () => {},
+  handleGitHubOpenFile: () => {},
+  handleGitHubSaveFileAs: () => {},
   handleGitHubSaveFile: () => {},
-  handleGitHubUpdateFile: (file: GitHubFile) => {},
-  handleGitHubInitialise: () => {},
   handleGitHubLogIn: () => {},
   handleGitHubLogOut: () => {}
 };

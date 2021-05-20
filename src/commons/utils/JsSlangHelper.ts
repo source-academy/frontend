@@ -3,7 +3,10 @@ import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist
 import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
+import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
+import { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
 /**
@@ -72,24 +75,27 @@ function cadetAlert(value: any) {
 /**
  * A dummy function to pass into createContext.
  * An actual implementation will have to be added
- * with the list visualizer implementation. See #187
+ * with the data visualizer implementation. See #187
  *
- * @param list the list to be visualized.
+ * @param args the data to be visualized.
  */
-function visualizeList(...xs: any[]) {
-  if ((window as any).ListVisualizer) {
-    // Pass in xs[0] since xs is in the form; [(Array of drawbables), "playground"]
-    (window as any).ListVisualizer.draw(xs[0]);
-    return xs[0];
-  } else {
-    throw new Error('List visualizer is not enabled');
+function visualizeData(...args: Data[]) {
+  try {
+    // Pass in args[0] since args is in the form; [(Array of drawables), "playground"]
+    DataVisualizer.drawData(args[0]);
+
+    // If there is only one arg, just print out the first arg in REPL, instead of [first arg]
+    return args[0].length === 1 ? args[0][0] : args[0];
+  } catch (err) {
+    console.log(err);
+    throw new Error('Data visualizer is not enabled');
   }
 }
 
-export function visualiseEnv({ context }: { context: Context }) {
-  if ((window as any).EnvVisualizer) {
-    (window as any).EnvVisualizer.draw_env(context);
-  } else {
+export function visualizeEnv({ context }: { context: Context }) {
+  try {
+    EnvVisualizer.drawEnv(context);
+  } catch (err) {
     throw new Error('Env visualizer is not enabled');
   }
 }
@@ -117,7 +123,7 @@ export const externalBuiltIns = {
   rawDisplay,
   prompt: cadetPrompt,
   alert: cadetAlert,
-  visualiseList: visualizeList
+  visualiseList: visualizeData
 };
 
 /**
@@ -165,7 +171,7 @@ export function makeElevatedContext(context: Context) {
   // while reflection should work on parent.
 
   const proxyGlobalEnv = new Proxy(context.runtime.environments[0], {
-    get(target, prop: string | number, receiver) {
+    get(target, prop: string | symbol, receiver) {
       if (prop === 'head') {
         return fakeFrame;
       }

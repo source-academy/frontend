@@ -192,8 +192,9 @@ export default class ParserValidator {
             case GameEntityType.bgms:
               const numberOfBgm = Parser.checkpoint.map
                 .getSoundAssets()
-                .filter(sound => sound.soundType === GameSoundType.BGM && sound.key === itemId)
-                .length;
+                .filter(
+                  sound => sound.soundType === GameSoundType.BGM && sound.key === itemId
+                ).length;
               if (numberOfBgm === 0) {
                 throw new Error(`Cannot find bgm key "${itemId}"`);
               } else if (numberOfBgm > 1) {
@@ -204,8 +205,9 @@ export default class ParserValidator {
             case GameEntityType.sfxs:
               const numberOfSfx = Parser.checkpoint.map
                 .getSoundAssets()
-                .filter(sound => sound.soundType === GameSoundType.SFX && sound.key === itemId)
-                .length;
+                .filter(
+                  sound => sound.soundType === GameSoundType.SFX && sound.key === itemId
+                ).length;
               if (numberOfSfx === 0) {
                 throw new Error(`Cannot find sfx key "${itemId}"`);
               } else if (numberOfSfx > 1) {

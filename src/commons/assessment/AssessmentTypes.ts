@@ -47,7 +47,8 @@ export type TestcaseType = keyof typeof TestcaseTypes;
 
 export enum QuestionTypes {
   programming = 'programming',
-  mcq = 'mcq'
+  mcq = 'mcq',
+  voting = 'voting'
 }
 export type QuestionType = keyof typeof QuestionTypes;
 
@@ -114,8 +115,15 @@ export interface IMCQQuestion extends BaseQuestion {
   type: 'mcq';
 }
 
+export interface IContestVotingQuestion extends BaseQuestion {
+  answer: ContestEntry[];
+  contestEntries: ContestEntry[];
+  contestLeaderboard: ContestEntry[];
+  type: 'voting';
+}
+
 export type BaseQuestion = {
-  answer: string | number | null;
+  answer: string | number | ContestEntry[] | null;
   comments?: string;
   content: string;
   editorValue?: string | null;
@@ -130,12 +138,11 @@ export type BaseQuestion = {
   library: Library;
   maxGrade: number;
   maxXp: number;
-  roomId: string | null;
   type: QuestionType;
   xp: number;
 };
 
-export type Question = IProgrammingQuestion | IMCQQuestion;
+export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
 export type Library = {
   chapter: number;
@@ -156,6 +163,18 @@ export type Testcase = {
   result?: any; // the result from the execution of the testcase
   score: number;
   type: TestcaseType;
+};
+
+export type ContestEntry = {
+  submission_id: number;
+  answer: ContestEntryCodeAnswer; //contest entry program to be input into editor
+  rank?: number;
+  score?: number;
+  student_name?: string;
+};
+
+export type ContestEntryCodeAnswer = {
+  code: string;
 };
 
 export type MCQChoice = {
@@ -225,7 +244,6 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   return {
     autogradingResults: [],
     answer: '// [Marking Scheme]\n// 1 mark for correct answer',
-    roomId: '19422043',
     content: 'Enter content here',
     id: 0,
     library: emptyLibrary(),
@@ -255,7 +273,6 @@ export const testcaseTemplate = (): Testcase => {
 export const mcqTemplate = (): IMCQQuestion => {
   return {
     answer: 3,
-    roomId: null,
     content: 'This is a mock MCQ question',
     choices: [
       {

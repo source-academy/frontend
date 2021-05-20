@@ -8,7 +8,7 @@ The Source Academy (<https://source-academy.github.io/>) is an immersive online 
 
 ## Features
 - Playground to write and test programs
-- Built-in Debugger and Visualiser to interact with your programs
+- Built-in Debugger and Visualizer to interact with your programs
 - Missions/Quests/Contests to solve challenging problems while learning about programming fundamentals
 - Sessions for collaborative programming
 - Grading System to test your programs and marking
@@ -82,6 +82,8 @@ The frontend can be configured to disable itself (based on user's system time) d
 #### Other configuration
 
 1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).
+1. `REACT_APP_ENABLE_GAME`: Whether to enable the game. Off by default.
+1. `REACT_APP_ENABLE_ACHIEVEMENTS`: Whether to enable the incentives/achievements system. Off by default.
 
 ## Development
 

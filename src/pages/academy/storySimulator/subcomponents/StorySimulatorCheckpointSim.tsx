@@ -1,5 +1,4 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';

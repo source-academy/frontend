@@ -1,7 +1,7 @@
 import { parse } from 'acorn';
 import { FunctionExpression, Node } from 'estree';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
-import createContext from 'js-slang/dist/createContext';
+import createContext, { EnvTree } from 'js-slang/dist/createContext';
 import Closure from 'js-slang/dist/interpreter/closure';
 import { Context, Environment } from 'js-slang/dist/types';
 import { TypeError } from 'js-slang/dist/utils/rttc';
@@ -20,6 +20,7 @@ export function mockRuntimeContext(): Context {
     break: false,
     debuggerOn: true,
     isRunning: true,
+    environmentTree: new EnvTree(),
     environments: [],
     nodes: [
       {

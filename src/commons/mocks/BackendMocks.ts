@@ -66,7 +66,7 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(
     FETCH_GRADING_OVERVIEWS,
-    function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
+    function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
       const filterToGroup = action.payload;
       const gradingOverviews = yield call(() =>
@@ -78,7 +78,7 @@ export function* mockBackendSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
+  yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>): any {
     const submissionId = action.payload;
     const accessToken = yield select((state: OverallState) => state.session.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
@@ -87,7 +87,7 @@ export function* mockBackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
+  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>): any {
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     // Now, update the answer for the question in the assessment in the store
@@ -151,7 +151,6 @@ export function* mockBackendSaga(): SagaIterator {
         gradingQuestion.grade = {
           gradeAdjustment,
           xpAdjustment,
-          roomId: gradingQuestion.grade.roomId,
           grade: gradingQuestion.grade.grade,
           xp: gradingQuestion.grade.xp,
           comments
@@ -165,7 +164,7 @@ export function* mockBackendSaga(): SagaIterator {
 
   const sendGradeAndContinue = function* (
     action: ReturnType<typeof actions.submitGradingAndContinue>
-  ) {
+  ): any {
     const { submissionId } = action.payload;
     yield* sendGrade(action);
 

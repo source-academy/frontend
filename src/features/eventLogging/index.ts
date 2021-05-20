@@ -59,33 +59,31 @@ export type LoggedRecord = LogRecord & { id: number };
 const VERSION = 1;
 const DB_NAME = 'evtlogs';
 const STORE_NAME = 'logs';
-const getDB = memoize(
-  (): Promise<IDBDatabase> => {
-    return new Promise((resolve, reject) => {
-      // Make a request
-      const request = indexedDB.open(DB_NAME, VERSION);
-      // hook the onsuccess
-      request.onsuccess = evt => {
-        resolve(request.result);
-      };
+const getDB = memoize((): Promise<IDBDatabase> => {
+  return new Promise((resolve, reject) => {
+    // Make a request
+    const request = indexedDB.open(DB_NAME, VERSION);
+    // hook the onsuccess
+    request.onsuccess = evt => {
+      resolve(request.result);
+    };
 
-      request.onerror = evt => {
-        console.error('Failed to get db', evt);
-        reject(request.error);
-      };
+    request.onerror = evt => {
+      console.error('Failed to get db', evt);
+      reject(request.error);
+    };
 
-      // Set it up if necessary (on upgrade)
-      request.onupgradeneeded = evt => {
-        // Create the database here
-        const db: IDBDatabase = (evt?.target as any).result; // Bug with the types...
-        db.createObjectStore(STORE_NAME, {
-          keyPath: 'id', // Entry id, only used to figure out the last transfered value
-          autoIncrement: true
-        });
-      };
-    });
-  }
-);
+    // Set it up if necessary (on upgrade)
+    request.onupgradeneeded = evt => {
+      // Create the database here
+      const db: IDBDatabase = (evt?.target as any).result; // Bug with the types...
+      db.createObjectStore(STORE_NAME, {
+        keyPath: 'id', // Entry id, only used to figure out the last transfered value
+        autoIncrement: true
+      });
+    };
+  });
+});
 
 function saveRecord(record: LogRecord) {
   return new Promise((resolve, reject) => {
