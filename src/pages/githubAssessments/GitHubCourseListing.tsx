@@ -61,12 +61,13 @@ const GitHubCourseListing: React.FC = () => {
       });
 
       function matchTag(course: BrowsableCourse, tags: React.ReactNode[]) {
-        let match = false;
+        let match = true;
         tags.forEach(tag => {
           if (tag !== null && tag !== undefined) {
-            const courseName = course.name.toLowerCase();
-            if (courseName.includes(tag.toString().toLowerCase())) {
-              match = true;
+            const name = course.name.toLowerCase();
+            const description = course.description.toLowerCase();
+            if (!(name + description).includes(tag.toString().toLowerCase())) {
+              match = false;
             }
           }
         });
