@@ -36,10 +36,10 @@ export type FileExplorerDialogProps = {
 const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   const [refresh, setRefresh] = useState(0);
 
-  const [repoFiles, setRepoFiles] = useState([] as ITreeNode<GitHubFileNodeData>[]);
+  const [repoFiles, setRepoFiles] = useState<ITreeNode<GitHubFileNodeData>[]>([]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
-
+  
   useEffect(() => {
     setFirstLayerRepoFiles(props.repoName, setRepoFiles); // this is an async call
   }, [props.repoName]);
