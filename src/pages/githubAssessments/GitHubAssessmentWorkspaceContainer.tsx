@@ -4,10 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 
 import {
-  beginDebuggerPause,
   beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
 import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
@@ -93,9 +90,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
-      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
-      handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handleGitHubLogIn: loginGitHub,
