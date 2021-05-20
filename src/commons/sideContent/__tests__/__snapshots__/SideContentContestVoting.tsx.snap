@@ -1,0 +1,215 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SideContentContestVotingContainer matches snapshot 1`] = `
+"<SideContentContestVotingContainer handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
+  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}}>
+    <div className=\\"ContestEntryVoting\\">
+      <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
+        <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: onClick]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+          <Blueprint3.Icon icon=\\"caret-down\\">
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                <desc>
+                  caret-down
+                </desc>
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+              </svg>
+            </span>
+          </Blueprint3.Icon>
+          <span className=\\"bp3-button-text\\">
+            <span>
+              Contest Voting
+            </span>
+            <Blueprint3.Tooltip2 content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+              <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" usePortal={true}>
+                <Manager>
+                  <Reference>
+                    <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
+                      <span className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                        <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                            <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                              <desc>
+                                help
+                              </desc>
+                              <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
+                            </svg>
+                          </span>
+                        </Blueprint3.Icon>
+                      </span>
+                    </Blueprint3.ResizeSensor2>
+                  </Reference>
+                  <Popper innerRef={[Function (anonymous)]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
+                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                  </Popper>
+                </Manager>
+              </Blueprint3.Popover2>
+            </Blueprint3.Tooltip2>
+          </span>
+          <Blueprint3.Icon icon={[undefined]} />
+        </button>
+      </Blueprint3.Button>
+      <Blueprint3.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
+        <div className=\\"bp3-collapse\\" style={{...}}>
+          <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false}>
+            <div>
+              <div className=\\"contestentries-header\\">
+                <div className=\\"header-entryid\\">
+                  Entry Id
+                  <Blueprint3.Icon icon=\\"caret-down\\">
+                    <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                        <desc>
+                          caret-down
+                        </desc>
+                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                      </svg>
+                    </span>
+                  </Blueprint3.Icon>
+                </div>
+                <div className=\\"header-entryrank\\">
+                  Rank
+                  <Blueprint3.Icon icon=\\"caret-down\\">
+                    <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                        <desc>
+                          caret-down
+                        </desc>
+                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                      </svg>
+                    </span>
+                  </Blueprint3.Icon>
+                </div>
+              </div>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+                <div className=\\"ContestEntryCard\\">
+                  <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
+                    <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
+                      <Component className=\\"contestentry-entryid\\">
+                        <pre className=\\"bp3-code-block contestentry-entryid\\">
+                          1
+                        </pre>
+                      </Component>
+                      <Component className=\\"contestentry-rank\\">
+                        <pre className=\\"bp3-code-block contestentry-rank\\">
+                          <Blueprint3.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter rank for entry 1\\" min={1} max={2} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
+                            <Blueprint3.ControlGroup className=\\"bp3-numeric-input\\" fill={true}>
+                              <div className=\\"bp3-control-group bp3-fill bp3-numeric-input\\">
+                                <Blueprint3.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 1\\" min={1} max={2} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
+                                  <div className=\\"bp3-input-group\\">
+                                    <input type=\\"text\\" autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 1\\" min={1} max={2} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} />
+                                  </div>
+                                </Blueprint3.InputGroup>
+                                <Blueprint3.ButtonGroup className=\\"bp3-fixed\\" vertical={true}>
+                                  <div className=\\"bp3-button-group bp3-vertical bp3-fixed\\">
+                                    <Blueprint3.Button disabled={false} icon=\\"chevron-up\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
+                                      <button type=\\"button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp3-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint3.Icon icon=\\"chevron-up\\">
+                                          <span icon=\\"chevron-up\\" className=\\"bp3-icon bp3-icon-chevron-up\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"chevron-up\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                              <desc>
+                                                chevron-up
+                                              </desc>
+                                              <path d=\\"M12.71 9.29l-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 001.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint3.Icon>
+                                        <Blueprint3.Icon icon={[undefined]} />
+                                      </button>
+                                    </Blueprint3.Button>
+                                    <Blueprint3.Button disabled={false} icon=\\"chevron-down\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
+                                      <button type=\\"button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp3-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint3.Icon icon=\\"chevron-down\\">
+                                          <span icon=\\"chevron-down\\" className=\\"bp3-icon bp3-icon-chevron-down\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"chevron-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                              <desc>
+                                                chevron-down
+                                              </desc>
+                                              <path d=\\"M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint3.Icon>
+                                        <Blueprint3.Icon icon={[undefined]} />
+                                      </button>
+                                    </Blueprint3.Button>
+                                  </div>
+                                </Blueprint3.ButtonGroup>
+                              </div>
+                            </Blueprint3.ControlGroup>
+                          </Blueprint3.NumericInput>
+                        </pre>
+                      </Component>
+                    </div>
+                  </Blueprint3.Card>
+                </div>
+              </SideContentContestEntryCard>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+                <div className=\\"ContestEntryCard\\">
+                  <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
+                    <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
+                      <Component className=\\"contestentry-entryid\\">
+                        <pre className=\\"bp3-code-block contestentry-entryid\\">
+                          2
+                        </pre>
+                      </Component>
+                      <Component className=\\"contestentry-rank\\">
+                        <pre className=\\"bp3-code-block contestentry-rank\\">
+                          <Blueprint3.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter rank for entry 2\\" min={1} max={2} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
+                            <Blueprint3.ControlGroup className=\\"bp3-numeric-input\\" fill={true}>
+                              <div className=\\"bp3-control-group bp3-fill bp3-numeric-input\\">
+                                <Blueprint3.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 2\\" min={1} max={2} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
+                                  <div className=\\"bp3-input-group\\">
+                                    <input type=\\"text\\" autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 2\\" min={1} max={2} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} />
+                                  </div>
+                                </Blueprint3.InputGroup>
+                                <Blueprint3.ButtonGroup className=\\"bp3-fixed\\" vertical={true}>
+                                  <div className=\\"bp3-button-group bp3-vertical bp3-fixed\\">
+                                    <Blueprint3.Button disabled={false} icon=\\"chevron-up\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
+                                      <button type=\\"button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp3-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint3.Icon icon=\\"chevron-up\\">
+                                          <span icon=\\"chevron-up\\" className=\\"bp3-icon bp3-icon-chevron-up\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"chevron-up\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                              <desc>
+                                                chevron-up
+                                              </desc>
+                                              <path d=\\"M12.71 9.29l-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 001.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint3.Icon>
+                                        <Blueprint3.Icon icon={[undefined]} />
+                                      </button>
+                                    </Blueprint3.Button>
+                                    <Blueprint3.Button disabled={false} icon=\\"chevron-down\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
+                                      <button type=\\"button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp3-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint3.Icon icon=\\"chevron-down\\">
+                                          <span icon=\\"chevron-down\\" className=\\"bp3-icon bp3-icon-chevron-down\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"chevron-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                              <desc>
+                                                chevron-down
+                                              </desc>
+                                              <path d=\\"M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint3.Icon>
+                                        <Blueprint3.Icon icon={[undefined]} />
+                                      </button>
+                                    </Blueprint3.Button>
+                                  </div>
+                                </Blueprint3.ButtonGroup>
+                              </div>
+                            </Blueprint3.ControlGroup>
+                          </Blueprint3.NumericInput>
+                        </pre>
+                      </Component>
+                    </div>
+                  </Blueprint3.Card>
+                </div>
+              </SideContentContestEntryCard>
+            </div>
+          </div>
+        </div>
+      </Blueprint3.Collapse>
+    </div>
+  </SideContentContestVoting>
+</SideContentContestVotingContainer>"
+`;

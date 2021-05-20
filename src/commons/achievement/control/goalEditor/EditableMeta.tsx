@@ -1,7 +1,6 @@
 import { Button, MenuItem } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React from 'react';
 import {
   AssessmentMeta,
   BinaryMeta,

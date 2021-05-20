@@ -23,6 +23,8 @@ const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const sharedbBackendUrl = process.env.REACT_APP_SHAREDB_BACKEND_URL || '';
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
+const enableGame = isTest || isTrue(process.env.REACT_APP_ENABLE_GAME);
+const enableAchievements = isTest || isTrue(process.env.REACT_APP_ENABLE_ACHIEVEMENTS);
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -114,6 +116,8 @@ const Constants = {
   moduleBackendUrl,
   authProviders,
   playgroundOnly,
+  enableGame,
+  enableAchievements,
   sentryDsn,
   googleClientId,
   googleApiKey,

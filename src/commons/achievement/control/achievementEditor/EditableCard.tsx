@@ -2,7 +2,7 @@ import { EditableText, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { cloneDeep } from 'lodash';
-import React, { useContext, useMemo, useReducer, useState } from 'react';
+import { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {

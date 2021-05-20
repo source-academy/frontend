@@ -54,7 +54,7 @@ function* githubLogoutSaga() {
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
-function* githubOpenFile() {
+function* githubOpenFile(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
@@ -79,7 +79,7 @@ function* githubOpenFile() {
   }
 }
 
-function* githubSaveFile() {
+function* githubSaveFile(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   const authUser = yield call(octokit.users.getAuthenticated);
   const githubLoginId = authUser.data.login;
@@ -107,7 +107,7 @@ function* githubSaveFile() {
   );
 }
 
-function* githubSaveFileAs() {
+function* githubSaveFileAs(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }

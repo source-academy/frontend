@@ -292,6 +292,12 @@ class Sourcereel extends React.Component<SourcereelProps> {
       sideContentProps: {
         handleActiveTabChange: activeTabChangeHandler,
         selectedTabId: this.props.sideContentActiveTab,
+        /**
+         * NOTE: An ag-grid console warning is shown here on load as the 'Sourcecast Table' tab
+         * is not the default tab, and the ag-grid table inside it has not been rendered.
+         * This is a known issue with ag-grid, and is okay since only staff and admins have
+         * access to Sourcereel. For more info, see issue #1152 in cadet-frontend.
+         */
         tabs: [
           {
             label: 'Recording Panel',
@@ -412,7 +418,7 @@ const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 

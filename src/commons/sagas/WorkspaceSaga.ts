@@ -168,7 +168,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(
     PROMPT_AUTOCOMPLETE,
-    function* (action: ReturnType<typeof actions.promptAutocomplete>) {
+    function* (action: ReturnType<typeof actions.promptAutocomplete>): any {
       const workspaceLocation = action.payload.workspaceLocation;
 
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
@@ -233,7 +233,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(
     TOGGLE_EDITOR_AUTORUN,
-    function* (action: ReturnType<typeof actions.toggleEditorAutorun>) {
+    function* (action: ReturnType<typeof actions.toggleEditorAutorun>): any {
       const workspaceLocation = action.payload.workspaceLocation;
       const isEditorAutorun = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun

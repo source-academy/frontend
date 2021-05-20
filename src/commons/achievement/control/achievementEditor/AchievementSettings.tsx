@@ -1,7 +1,7 @@
 import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalUuids from './achievementSettings/EditableGoalUuids';

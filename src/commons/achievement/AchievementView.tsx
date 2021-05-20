@@ -1,6 +1,6 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import {
   AchievementContext,

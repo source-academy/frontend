@@ -1,5 +1,5 @@
 import { Collapse } from '@blueprintjs/core';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import {
   AchievementContext,

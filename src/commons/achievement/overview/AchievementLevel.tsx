@@ -1,5 +1,5 @@
 import { ProgressBar } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { xpPerLevel } from '../../../features/achievement/AchievementConstants';
 import AchievementMilestone from './AchievementMilestone';
