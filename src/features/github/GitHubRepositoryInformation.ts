@@ -1,9 +1,3 @@
-export const GITHUB_OPEN_FILE = 'GITHUB_OPEN_FILE';
-export const GITHUB_SAVE_FILE = 'GITHUB_SAVE_FILE';
-export const GITHUB_SAVE_FILE_AS = 'GITHUB_SAVE_FILE_AS';
-
-export type GitHubState = 'LOGGED_IN' | 'LOGGED_OUT';
-
 /**
  * See: https://docs.github.com/en/rest/reference/repos
  */
@@ -20,10 +14,10 @@ export type GitHubRepositoryInformation = {
   compare_url: string;
   contents_url: string;
   contributors_url: string;
-  created_at: string | null;
+  created_at: string;
   default_branch: string;
   deployments_url: string;
-  description: string | null;
+  description: string;
   disabled: boolean;
   downloads_url: string;
   events_url: string;
@@ -41,7 +35,7 @@ export type GitHubRepositoryInformation = {
   has_pages: boolean;
   has_projects: boolean;
   has_wiki: boolean;
-  homepage: string | null;
+  homepage: string;
   hooks_url: string;
   html_url: string;
   id: number;
@@ -50,19 +44,19 @@ export type GitHubRepositoryInformation = {
   issues_url: string;
   keys_url: string;
   labels_url: string;
-  language: string | null;
+  language: string;
   languages_url: string;
   license: {
     key: string;
     name: string;
-    url: string | null;
-    spdx_id: string | null;
+    url: string;
+    spdx_id: string;
     node_id: string;
     html_url?: string;
-  } | null;
+  };
   merges_url: string;
   milestones_url: string;
-  mirror_url: string | null;
+  mirror_url: string;
   name: string;
   node_id: string;
   notifications_url: string;
@@ -74,7 +68,7 @@ export type GitHubRepositoryInformation = {
     followers_url: string;
     following_url: string;
     gists_url: string;
-    gravatar_id: string | null;
+    gravatar_id: string;
     html_url: string;
     id: number;
     login: string;
@@ -87,7 +81,7 @@ export type GitHubRepositoryInformation = {
     subscriptions_url: string;
     type: string;
     url: string;
-  } | null;
+  };
 
   permissions?: {
     admin: boolean;
@@ -97,7 +91,7 @@ export type GitHubRepositoryInformation = {
 
   private: boolean;
   pulls_url: string;
-  pushed_at: string | null;
+  pushed_at: string;
   releases_url: string;
   size: number;
   ssh_url: string;
@@ -110,7 +104,7 @@ export type GitHubRepositoryInformation = {
   tags_url: string;
   teams_url: string;
   trees_url: string;
-  updated_at: string | null;
+  updated_at: string;
   url: string;
   watchers: number;
   watchers_count: number;

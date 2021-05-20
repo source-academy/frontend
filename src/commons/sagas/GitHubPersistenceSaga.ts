@@ -4,7 +4,8 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   GITHUB_OPEN_FILE,
   GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS
+  GITHUB_SAVE_FILE_AS,
+  GitHubRepositoryInformation
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
@@ -62,7 +63,7 @@ function* githubOpenFile(): any {
   };
 
   const results = yield call(octokit.repos.listForAuthenticatedUser);
-  const userRepos = results.data;
+  const userRepos: GitHubRepositoryInformation[] = results.data;
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
@@ -119,7 +120,7 @@ function* githubSaveFileAs(): any {
   };
 
   const results = yield call(octokit.repos.listForAuthenticatedUser);
-  const userRepos = results.data;
+  const userRepos: GitHubRepositoryInformation[] = results.data;
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({

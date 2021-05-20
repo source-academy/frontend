@@ -29,6 +29,7 @@ import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTy
 import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
+import { GitHubRepositoryInformation } from '../../features/github/GitHubTypes';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
 /**
@@ -143,16 +144,19 @@ async function retrieveBrowsableMissions(
     <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
   );
 
-  const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
-  const correctlyNamedRepos = allRepos.filter((repo: any) => repo.name.startsWith('sa-'));
+  const allRepos: GitHubRepositoryInformation[] = (
+    await octokit.repos.listForAuthenticatedUser({ per_page: 100 })
+  ).data;
+  const correctlyNamedRepos = allRepos.filter((repo: GitHubRepositoryInformation) =>
+    repo.name.startsWith('sa-')
+  );
   const foundMissionRepos: MissionRepoData[] = [];
 
   for (let i = 0; i < correctlyNamedRepos.length; i++) {
-    const repo = correctlyNamedRepos[i] as any;
-
+    const repo = correctlyNamedRepos[i];
     const files = (
       await octokit.repos.getContent({
-        owner: repo.owner.login,
+        owner: repo.owner ? repo.owner.login : '',
         repo: repo.name,
         path: ''
       })
@@ -165,9 +169,9 @@ async function retrieveBrowsableMissions(
 
     if (files.find(file => file.name === '.metadata') !== undefined) {
       const missionRepoData: MissionRepoData = {
-        repoOwner: repo.owner.login,
+        repoOwner: repo.owner ? repo.owner.login : '',
         repoName: repo.name,
-        dateOfCreation: new Date(repo.created_at)
+        dateOfCreation: new Date(repo.created_at || '')
       };
       foundMissionRepos.push(missionRepoData);
     }
