@@ -144,31 +144,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setBriefingContent(missionData.missionBriefing);
     setTaskDescription(missionData.tasksData[0].taskDescription);
     setTaskList(missionData.tasksData);
-    setCachedTaskList(
-      missionData.tasksData.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
-    );
+    setCachedTaskList(missionData.tasksData.map(taskData => Object.assign({}, taskData)));
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
     setIsLoading(false);
+    if (missionData.missionBriefing !== '') setShowOverlay(true);
   }, [missionRepoData, octokit, handleEditorValueChange]);
 
   useEffect(() => {
     loadMission();
   }, [loadMission]);
-
-  /**
-   * After mounting show the briefing.
-   */
-  React.useEffect(() => {
-    if (summary !== '') setShowOverlay(true);
-  }, [summary]);
 
   const overlay = (
     <Dialog className="assessment-briefing" isOpen={showOverlay}>
@@ -322,7 +307,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     }
 
-    setCachedTaskList(taskList);
+    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
   const onClickReset = useCallback(() => {
