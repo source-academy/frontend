@@ -336,7 +336,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickReset = useCallback(() => {
     setShowResetTemplateOverlay(true);
-  }, []);
+
+    for (let i = 0; i < taskList.length; i++) {
+      if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
+        setHasUnsavedChanges(true);
+        return;
+      }
+    }
+
+    setHasUnsavedChanges(false);
+  }, [taskList, cachedTaskList]);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
