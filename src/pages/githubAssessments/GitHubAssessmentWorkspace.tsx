@@ -116,7 +116,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
-  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [sourceChapter, setSourceChapter] = React.useState(props.sourceChapter);
   const [summary, setSummary] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
@@ -140,7 +140,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     setSummary(missionData.missionBriefing);
-    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+    setSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
     setTaskDescription(missionData.tasksData[0].taskDescription);
     setTaskList(missionData.tasksData);
@@ -469,7 +469,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
-        sourceChapter={selectedSourceChapter}
+        sourceChapter={sourceChapter}
         sourceVariant={Constants.defaultSourceVariant as Variant}
         disabled={true}
         key="chapter"
@@ -548,7 +548,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleReplValueChange: props.handleReplValueChange,
     output: props.output,
     replValue: props.replValue,
-    sourceChapter: selectedSourceChapter || 4,
+    sourceChapter: sourceChapter || 4,
     sourceVariant: 'default' as Variant,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()
