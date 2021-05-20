@@ -10,7 +10,6 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
-import Constants from '../../../commons/utils/Constants';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import {
   AchievementUser,
@@ -76,10 +75,8 @@ function Dashboard(props: DispatchProps & StateProps) {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    if (Constants.useAchievementBackend) {
       getOwnGoals();
       getAchievements();
-    }
   }, [getAchievements, getOwnGoals]);
 
   if (name && role && !assessmentOverviews) {

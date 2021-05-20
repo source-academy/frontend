@@ -12,6 +12,9 @@ import { showSuccessMessage } from '../../utils/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased, isWithinTimeRange } from './DateHelper';
 
+// How long the system should wait before sending a request to the backend
+const updateInterval = 3000;
+
 function eventShouldCount(meta: EventMeta): boolean {
   // goal is not released, or has expired
   if (isExpired(meta.deadline) || !isReleased(meta.release)) {
@@ -78,6 +81,6 @@ export function processEvent(eventNames: EventType[]) {
     setTimeout(() => {
       store.dispatch(handleEvent(loggedEvents));
       resetLoggedEvents();
-    }, 5000);
+    }, updateInterval);
   }
 }

@@ -5,7 +5,6 @@ import AchievementEditor from '../../../commons/achievement/control/AchievementE
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import Constants from '../../../commons/utils/Constants';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
@@ -37,10 +36,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    if (Constants.useAchievementBackend) {
       getAchievements();
       getOwnGoals();
-    }
   }, [getAchievements, getOwnGoals]);
 
   /**
