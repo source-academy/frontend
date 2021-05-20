@@ -3,9 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 
-import {
-  beginInterruptExecution,
-} from '../../commons/application/actions/InterpreterActions';
+import { beginInterruptExecution } from '../../commons/application/actions/InterpreterActions';
 import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { Position } from '../../commons/editor/EditorTypes';
