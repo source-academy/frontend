@@ -1,70 +1,25 @@
-// import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
-// import classNames from 'classnames';
-// import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
-// import { constant, isEqual } from 'lodash';
-// import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { useState } from 'react';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import controlButton from 'src/commons/ControlButton';
 import Repl from 'src/commons/repl/Repl';
 
-// import { HotKeys } from 'react-hotkeys';
-// import { useSelector } from 'react-redux';
-// import { useMediaQuery } from 'react-responsive';
-// import { RouteComponentProps } from 'react-router';
 import {
   InterpreterOutput
-  // OverallState,
-  // sourceLanguages,
-  // variantLanguages
 } from '../../../commons/application/ApplicationTypes';
 import {
-  // externalLibraries,
   ExternalLibraryName
 } from '../../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
-// import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
-// import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
-// import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
-// import { ControlBarExecutionTime } from '../../../commons/controlBar/ControlBarExecutionTime';
-// import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
-// import { ControlBarGitHubButtons } from '../../../commons/controlBar/ControlBarGitHubButtons';
-// import { ControlBarGoogleDriveButtons } from '../../../commons/controlBar/ControlBarGoogleDriveButtons';
-// import { ControlBarSessionButtons } from '../../../commons/controlBar/ControlBarSessionButton';
-// import { ControlBarShareButton } from '../../../commons/controlBar/ControlBarShareButton';
-// import { ControlBarStepLimit } from '../../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
-// import Markdown from '../../../commons/Markdown';
-// import MobileWorkspace, {
-//   MobileWorkspaceProps
-// } from '../../../commons/mobileWorkspace/MobileWorkspace';
-// import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
-// import SideContentFaceapiDisplay from '../../../commons/sideContent/SideContentFaceapiDisplay';
-// import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
-// import SideContentListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
-// import SideContentRemoteExecution from '../../../commons/sideContent/SideContentRemoteExecution';
-// import SideContentSubstVisualizer from '../../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
-// import SideContentVideoDisplay from '../../../commons/sideContent/SideContentVideoDisplay';
 import Constants from '../../../commons/utils/Constants';
-// import { generateSourceIntroduction } from '../../../commons/utils/IntroductionHelper';
-// import { stringParamToInt } from '../../../commons/utils/ParamParseHelper';
-// import { parseQuery } from '../../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
-// import { initSession, log } from '../../../features/eventLogging';
 import { PersistenceFile } from '../../../features/persistence/PersistenceTypes';
-// import {
-//   CodeDelta,
-//   Input,
-//   SelectionRange
-// } from '../../../features/sourceRecorder/SourceRecorderTypes';
 
-// export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
-
-export type PlaygroundProps = OwnProps;
+export type SicpWorkspaceProps = OwnProps;
 
 export type DispatchProps = {
   // handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -145,9 +100,7 @@ type OwnProps = {
   editorValue: string;
 
   handleCloseEditor: () => void;
-}
-
-// const keyMap = { goGreen: 'h u l k' };
+};
 
 // function handleHash(hash: string, props: PlaygroundProps) {
 //   const qs = parseQuery(hash);
@@ -179,33 +132,52 @@ type OwnProps = {
 //   }
 // }
 
-const SicpWorkspace: React.FC<PlaygroundProps> = props => {
-
-  const [isDebugging, setIsDebugging] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
+const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
+  // Autorun Button
+  // const [isDebugging, setIsDebugging] = useState(false);
+  // const [isRunning, setIsRunning] = useState(false);
   // const [isEditorAutorun, setIsEditorAutorun] = useState(false);
 
-  const handleDebuggerPause = () => {
-    //TODO
-    setIsRunning(false);
-    setIsDebugging(false)};
-  const handleDebuggerReset = () => {
-    setIsRunning(false);
-    setIsDebugging(false);}
-  const handleDebuggerResume = () => {
-    setIsRunning(true);
-    setIsDebugging(false);
-  }
+  // const handleDebuggerPause = () => {
+    // TODO
+    // setIsRunning(false);
+    // setIsDebugging(false);
+  // };
+  // const handleDebuggerReset = () => {
+    // setIsRunning(false);
+    // setIsDebugging(false);
+  // };
+  // const handleDebuggerResume = () => {
+    // setIsRunning(true);
+    // setIsDebugging(false);
+//   };
   const handleEditorEval = () => {
-    setIsRunning(true);
-    setIsDebugging(false);
-  }
-  const handleInterruptEval = () => {
-    //TODO
-  }
-  const handleToggleEditorAutorun = () => {
-    //TODO
-  }
+    // setIsRunning(true);
+    // setIsDebugging(false);
+  };
+  // const handleInterruptEval = () => {
+  //   //TODO
+  // };
+  // const handleToggleEditorAutorun = () => {
+  //   //TODO
+  // };
+
+  // REPL
+  const [replValue, setReplValue] = useState("");
+
+  const handleBrowseHistoryDown = () => {};
+  const handleBrowseHistoryUp = () => {};
+  const handleReplEval = () => {
+    // const code = replValue;
+    // const execTime = 1000;
+    //beginInterruptExecution
+    //clearReplInput
+    //SentReplInputToOutput
+  };
+  const handleReplValueChange = (newCode: string) => {
+    setReplValue(newCode);
+  };
+
   // const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   // const propsRef = React.useRef(props);
   // propsRef.current = props;
@@ -350,27 +322,29 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   //   [sessionId]
   // );
 
-  const closeButton =
-    controlButton("", IconNames.CROSS, props.handleCloseEditor);
+  const closeButton = controlButton('', IconNames.CROSS, props.handleCloseEditor);
 
   const autorunButtons = React.useMemo(
     () => (
-      <ControlBarAutorunButtons
-        handleDebuggerPause={handleDebuggerPause}
-        handleDebuggerReset={handleDebuggerReset}
-        handleDebuggerResume={handleDebuggerResume}
+      <ControlBarRunButton
         handleEditorEval={handleEditorEval}
-        handleInterruptEval={handleInterruptEval}
-        handleToggleEditorAutorun={handleToggleEditorAutorun}
-        isDebugging={isDebugging}
-        // isEditorAutorun={props.isEditorAutorun}
-        isRunning={isRunning}
-        key="autorun"
-        // autorunDisabled={usingRemoteExecution}
-        // pauseDisabled={usingRemoteExecution}
+        key="run"
       />
+
+      // <ControlBarAutorunButtons
+      //   handleDebuggerPause={handleDebuggerPause}
+      //   handleDebuggerReset={handleDebuggerReset}
+      //   handleDebuggerResume={handleDebuggerResume}
+      //   handleEditorEval={handleEditorEval}
+      //   handleInterruptEval={handleInterruptEval}
+      //   handleToggleEditorAutorun={handleToggleEditorAutorun}
+      //   isDebugging={isDebugging}
+      //   // isEditorAutorun={props.isEditorAutorun}
+      //   isRunning={isRunning}
+      //   key="autorun"
+      // />
     ),
-    [isDebugging, isRunning]
+    []
   );
 
   // const chapterSelectHandler = React.useCallback(
@@ -462,30 +436,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   //   props.handlePersistenceLogOut,
   //   props.handlePersistenceInitialise,
   //   handlePersistenceUpdateFile
-  // ]);
-
-  // const { githubOctokitInstance } = props;
-  // const githubButtons = React.useMemo(() => {
-  //   return (
-  //     <ControlBarGitHubButtons
-  //       loggedInAs={githubOctokitInstance}
-  //       githubSaveInfo={props.githubSaveInfo}
-  //       key="github"
-  //       onClickOpen={props.handleGitHubOpenFile}
-  //       onClickSave={props.handleGitHubSaveFile}
-  //       onClickSaveAs={props.handleGitHubSaveFileAs}
-  //       onClickLogIn={props.handleGitHubLogIn}
-  //       onClickLogOut={props.handleGitHubLogOut}
-  //     />
-  //   );
-  // }, [
-  //   githubOctokitInstance,
-  //   props.githubSaveInfo,
-  //   props.handleGitHubOpenFile,
-  //   props.handleGitHubSaveFileAs,
-  //   props.handleGitHubSaveFile,
-  //   props.handleGitHubLogIn,
-  //   props.handleGitHubLogOut
   // ]);
 
   // const executionTime = React.useMemo(
@@ -591,14 +541,14 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   const replTab: SideContentTab = React.useMemo(() => {
     const replTabProps = {
       output: [],
-      replValue: '',
+      replValue: replValue,
       sourceChapter: 1,
       sourceVariant: Constants.defaultSourceVariant as Variant,
       externalLibrary: ExternalLibraryName.NONE,
-      handleBrowseHistoryDown: () => {},
-      handleBrowseHistoryUp: () => {},
-      handleReplEval: () => {},
-      handleReplValueChange: (newCode: string) => {},
+      handleBrowseHistoryDown: handleBrowseHistoryDown,
+      handleBrowseHistoryUp: handleBrowseHistoryUp,
+      handleReplEval: handleReplEval,
+      handleReplValueChange: handleReplValueChange,
       replButtons: []
     };
 
@@ -609,7 +559,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
       id: SideContentType.introduction,
       toSpawn: () => true
     };
-  }, []);
+  }, [replValue]);
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [replTab];
@@ -780,7 +730,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
 
   const controlBarProps = {
     editorButtons: [
-      autorunButtons,
+      autorunButtons
       // shareButton,
       // chapterSelect,
       // props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
@@ -789,9 +739,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
       // githubButtons,
       // usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
     ],
-    editingWorkspaceButtons: [
-      closeButton
-    ]
+    editingWorkspaceButtons: [closeButton]
   };
 
   const sideContentProps = {
@@ -818,7 +766,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     // customEditor?: JSX.Element,
     editorProps: editorProps,
     // editorHeight: 1000,
-    editorWidth: '700',
+    editorWidth: '50%',
     // hasUnsavedChanges?: boolean,
     // mcqProps?: McqChooserProps;
     replProps: dummyReplProps,
@@ -827,44 +775,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
     sideContentIsResizeable: false
   };
 
-  // const mobileWorkspaceProps: MobileWorkspaceProps = {
-  //   editorProps: editorProps,
-  //   replProps: replProps,
-  //   mobileSideContentProps: {
-  //     mobileControlBarProps: {
-  //       editorButtons: [
-  //         autorunButtons,
-  //         chapterSelect,
-  //         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
-  //         shareButton,
-  //         sessionButtons,
-  //         persistenceButtons,
-  //         githubButtons
-  //       ]
-  //     },
-  //     defaultSelectedTabId: selectedTab,
-  //     selectedTabId: selectedTab,
-  //     handleActiveTabChange: props.handleActiveTabChange,
-  //     onChange: onChangeTabs,
-  //     tabs: mobileTabs,
-  //     workspaceLocation: 'playground',
-  //     handleEditorEval: props.handleEditorEval
-  //   }
-  // };
-
   return <Workspace {...workspaceProps} />;
-
-  // isMobileBreakpoint ? (
-  // <MobileWorkspace {...mobileWorkspaceProps} />
-  // ) : (
-  // <HotKeys
-  //   className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
-  //   keyMap={keyMap}
-  //   handlers={handlers}
-  // >
-  // <Workspace {...workspaceProps} />
-  // </HotKeys>
-  // );
 };
 
 // const listVisualizerTab: SideContentTab = {
@@ -895,14 +806,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
 //   iconName: IconNames.GLOBE,
 //   body: <SideContentEnvVisualizer />,
 //   id: SideContentType.envVisualiser,
-//   toSpawn: () => true
-// };
-
-// const remoteExecutionTab: SideContentTab = {
-//   label: 'Remote Execution',
-//   iconName: IconNames.SATELLITE,
-//   body: <SideContentRemoteExecution workspace="playground" />,
-//   id: SideContentType.remoteExecution,
 //   toSpawn: () => true
 // };
 

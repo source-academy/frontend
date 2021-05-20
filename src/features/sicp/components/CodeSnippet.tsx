@@ -49,7 +49,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
               showPrintMargin={false}
               readOnly={true}
               maxLines={Infinity}
-              value={body.replace(/\n$/, '')}
+              value={body.replace(/\n$/, '') + ' '}
               setOptions={{
                 fontFamily: "'Inconsolata', 'Consolas', monospace"
               }}

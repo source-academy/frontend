@@ -9,7 +9,7 @@ import toc from '../data/toc.json';
 type TocProps = OwnProps;
 
 type OwnProps = {
-  handleCloseToc: () => void;
+  handleCloseToc?: () => void;
   location: 'sidebar' | 'index';
 };
 
@@ -30,7 +30,9 @@ const SicpToc: React.FC<TocProps> = props => {
   };
 
   const handleNodeClicked = React.useCallback((node: ITreeNode) => {
-    props.handleCloseToc();
+    if (props.handleCloseToc) {
+      props.handleCloseToc();
+    }
     setHash(String(node.nodeData));
   }, [props]);
 

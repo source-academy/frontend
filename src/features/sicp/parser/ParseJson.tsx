@@ -5,6 +5,11 @@ type JsonType = {
   tag: string;
   body: string;
   output: string;
+  class: string;
+  images: Array<JsonType>;
+  src: string;
+  captionHref: string;
+  captionName: string;
 };
 
 let key = 0;
@@ -28,10 +33,19 @@ const processText = {
   TEXT: (obj: JsonType) => {
     return (
       <>
-        <div>{parseJson(obj['child'])}</div>
+        <div className="sicp-text">{parseJson(obj['child'])}</div>
         <br />
       </>
     );
+  },
+  FIGURE: (obj: JsonType) => {
+    return obj['images'].map(x => parseImage(x));
+  },
+  CHAPTER: (obj: JsonType) => {
+    return processText['SUBSECTION'](obj);
+  },
+  SECTION: (obj: JsonType) => {
+    return processText['SUBSECTION'](obj);
   },
   SUBSECTION: (obj: JsonType) => {
     return (
@@ -46,10 +60,19 @@ const processText = {
   }
 };
 
-export const parseJson = (obj: Array<JsonType>): JSX.Element => {
+const parseImage = (obj: JsonType) => {
+  return (
+    <div className={"sicp-figure"}>
+      {obj['src'] ? <img src={'/sicp/' + obj['src']} alt={'Figure'} /> : <></>}
+      {obj['captionName'] ? <h5>{obj['captionName']}</h5> : <></>}
+    </div>
+  );
+};
+
+export const parseJson = (obj: Array<JsonType>) => {
   if (!obj) return <></>;
 
-  return <span key="root">{obj.map((item: JsonType) => parseObj(item))}</span>;
+  return <>{obj.map((item: JsonType) => parseObj(item))}</>;
 };
 
 const parseObj = (obj: JsonType) => {

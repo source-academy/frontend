@@ -24,6 +24,7 @@ const parseHash = (hash: string) => {
 
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = useState<any[]>([]);
+  const [isJson, setIsJson] = useState(false);
   const [isTocOpen, setIsTocOpen] = useState(false);
 
   const baseUrl = '/sicp/json/';
@@ -32,6 +33,13 @@ const Sicp: React.FC<SicpProps> = props => {
   const getData = useCallback((hash: string) => {
     const section = parseHash(hash);
     if (section === 'index') {
+      setIsJson(false);
+      return;
+    }
+
+    setIsJson(true);
+
+    if (section === 'test') {
       setData(testData as any[]);
       return;
     }
@@ -66,7 +74,7 @@ const Sicp: React.FC<SicpProps> = props => {
     hasBackdrop: true,
     isOpen: isTocOpen,
     position: Position.LEFT,
-    size: '360px',
+    size: '500px',
     usePortal: false
   };
 
@@ -76,7 +84,7 @@ const Sicp: React.FC<SicpProps> = props => {
         <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
       </Drawer>
       <SicpControlBar {...controlBarProps} />
-      <SicpDisplay content={data} />
+      <SicpDisplay content={data} isJson={isJson}/>
     </div>
   );
 };

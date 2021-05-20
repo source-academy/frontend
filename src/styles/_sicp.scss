@@ -1,9 +1,12 @@
+$sicp-text-color: #333333;
+
 .Sicp {
   width: 100%;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 400;
+  text-align: justify;
   line-height: 1.5;
-  color: black;
+  color: $sicp-text-color;
 
   > .ControlBar {
     position: fixed;
@@ -11,7 +14,7 @@
     width: 100%;
     background-color: $cadet-color-1;
     color: white;
-    z-index: 1000;
+    z-index: 10;
   }
 
   > .ContentDisplay {
@@ -19,13 +22,18 @@
     margin-top: 35px;
   }
 }
+
 .sicp-toc {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 // Styles for textbook content
 .sicp-code-snippet {
   margin: 10px 0px;
+
+  > .workspace {
+    color: white;
+  }
 
   > .code-body {
     background-color: $cadet-color-2;
@@ -40,13 +48,7 @@
         display: none;
         color: transparent;
       }
-
-      .ace_content {
-      }
     }
-  }
-
-  > .code-body {
   }
 
   .code-result > code {
@@ -58,4 +60,13 @@
 
 .sicp-footnote {
   font-size: 0.8rem;
+}
+
+.sicp-figure {
+  margin: auto;
+  text-align: center;
+}
+
+.sicp-text {
+  text-align: justify;
 }
