@@ -28,6 +28,14 @@ const GitHubAssessmentsNavigationBar: React.FunctionComponent<OwnProps> = props 
         <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs hidden-sm">Missions</div>
       </NavLink>
+      <NavLink
+        to={`/githubassessments/courses`}
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      >
+        <Icon icon={IconNames.FLAME} />
+        <div className="navbar-button-text hidden-xs hidden-sm">Courses</div>
+      </NavLink>
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>
