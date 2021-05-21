@@ -9,7 +9,6 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/sourcecast/:sourcecastId?\\" component={[Function: C] { displayName: 'withRouter(Connect(Sourcecast))', WrappedComponent: [Function: Sourcecast], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/githubassessments/missions\\" component={[Function: GitHubMissionListing]} />
-      <Route path=\\"/githubassessments/courses\\" component={[Function: GitHubCourseListing]} />
       <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />

@@ -6,12 +6,16 @@ import {
   H4,
   H6,
   Icon,
+  InputGroup,
+  Menu,
+  MenuItem,
   NonIdealState,
   Spinner,
-  TagInput,
+  SpinnerSize,
   Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -37,12 +41,13 @@ import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
+  const [orgList, setOrgList] = useState<string[]>([]);
+  const [selectedOrg, setSelectedOrg] = useState('');
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+
   const [display, setDisplay] = useState<JSX.Element>(<></>);
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
-
-  const [values, setValues] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
     if (octokit === undefined) {
@@ -50,69 +55,67 @@ const GitHubMissionListing: React.FC<any> = () => {
         <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
       );
     } else {
-      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+      setDisplay(
+        <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
+      );
+      retrieveOrganizationList(octokit, setOrgList);
+      retrieveBrowsableMissions(octokit, selectedOrg, setBrowsableMissions);
     }
-  }, [octokit, setBrowsableMissions, setDisplay]);
+  }, [octokit, selectedOrg]);
 
   useEffect(() => {
-    if (browsableMissions.length > 0) {
-      const filteredMissions: BrowsableMission[] = [];
-      browsableMissions.forEach(mission => {
-        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
-          filteredMissions.push(mission);
-        }
-      });
+    const handleClick = (e: any) => {
+      handleChange(e);
+    };
 
-      function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
-        let match = true;
-        tags.forEach(tag => {
-          if (tag !== null && tag !== undefined) {
-            const title = mission.title.toLowerCase();
-            const repoOwner = mission.missionRepoData.repoOwner.toLowerCase();
-            const repoName = mission.missionRepoData.repoName.toLowerCase();
-            if (!(title + repoOwner + repoName).includes(tag.toString().toLowerCase())) {
-              match = false;
+    const handleChange = (e: any) => {
+      setSelectedOrg(e.target.innerText);
+    };
+
+    const orgSelect = (
+      <InputGroup
+        disabled={true}
+        leftElement={
+          <Popover2
+            content={
+              <Menu>
+                {orgList.map((organization: string) => (
+                  <MenuItem key={organization} onClick={handleClick} text={organization} />
+                ))}
+              </Menu>
             }
-          }
-        });
-        return match;
-      }
+            placement={'bottom-end'}
+          >
+            <Button minimal={true} rightIcon="caret-down" />
+          </Popover2>
+        }
+        onChange={handleChange}
+        value={selectedOrg}
+      />
+    );
 
-      const handleClear = () => {
-        handleChange([]);
-      };
-
-      const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
-
-      const handleChange = (values: React.ReactNode[]) => {
-        setValues(values);
-      };
-
-      const tagFilter = (
-        <TagInput
-          leftIcon={IconNames.FILTER}
-          onChange={handleChange}
-          placeholder="Separate tags with commas..."
-          rightElement={clearButton}
-          tagProps={{ minimal: true }}
-          values={values}
-        />
+    if (browsableMissions.length === 0) {
+      setDisplay(
+        <>
+          {orgSelect}
+          <Divider />
+          <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />
+        </>
       );
-
-      const cards =
-        values.length === 0
-          ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
-          : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
+    } else {
+      const cards = browsableMissions.map(mission =>
+        convertMissionToCard(mission, isMobileBreakpoint)
+      );
 
       setDisplay(
         <>
-          {tagFilter}
+          {orgSelect}
           <Divider />
           {cards}
         </>
       );
     }
-  }, [browsableMissions, isMobileBreakpoint, setDisplay, values]);
+  }, [browsableMissions, isMobileBreakpoint, orgList, selectedOrg]);
 
   return (
     <div className="Academy">
@@ -124,29 +127,46 @@ const GitHubMissionListing: React.FC<any> = () => {
 };
 
 /**
- * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
+ * Retrieves list of organizations for the authenticated user.
  *
  * @param octokit The Octokit instance for the authenticated user
+ * @param setOrgList The React setter function for an array of organization names
+ * @param setSelectedOrg The React setter function for the filter organization
+ */
+async function retrieveOrganizationList(octokit: Octokit, setOrgList: (orgs: string[]) => void) {
+  const orgList: string[] = [];
+  const results = (await octokit.orgs.listForAuthenticatedUser({ per_page: 100 })).data;
+  results.forEach(result => {
+    orgList.push(result.login);
+  });
+  setOrgList(orgList);
+}
+
+/**
+ * Retrieves BrowsableMissions information from a list of the user's repositories and sets them in the page's state.
+ *
+ * @param octokit The Octokit instance for the authenticated user
+ * @param selectedOrg The organization selected in the filter
  * @param setBrowsableMissions The React setter function for an array of BrowsableMissions
- * @param setDisplay The React setter function for the page's display
  */
 async function retrieveBrowsableMissions(
   octokit: Octokit,
-  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
-  setDisplay: (display: JSX.Element) => void
+  selectedOrg: string,
+  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void
 ) {
-  if (octokit === undefined) return;
-
-  setDisplay(
-    <NonIdealState description="Loading Missions" icon={<Spinner size={Spinner.SIZE_LARGE} />} />
-  );
-
   const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
-  const correctlyNamedRepos = allRepos.filter((repo: any) => repo.name.startsWith('sa-'));
+
+  let orgRepos = allRepos;
+  if (selectedOrg !== '') {
+    orgRepos = allRepos.filter((repo: any) => repo.owner.login === selectedOrg);
+  }
+
+  const missionRepos = orgRepos.filter((repo: any) => repo.name.startsWith('sa-'));
+
   const foundMissionRepos: MissionRepoData[] = [];
 
-  for (let i = 0; i < correctlyNamedRepos.length; i++) {
-    const repo = correctlyNamedRepos[i] as any;
+  for (let i = 0; i < missionRepos.length; i++) {
+    const repo = missionRepos[i] as any;
 
     const files = (
       await octokit.repos.getContent({
@@ -156,18 +176,15 @@ async function retrieveBrowsableMissions(
       })
     ).data;
 
-    if (!Array.isArray(files)) {
-      setDisplay(<NonIdealState title="There are no assessments." icon={IconNames.FLAME} />);
-      return;
-    }
-
-    if (files.find(file => file.name === '.metadata') !== undefined) {
-      const missionRepoData: MissionRepoData = {
-        repoOwner: repo.owner.login,
-        repoName: repo.name,
-        dateOfCreation: new Date(repo.created_at)
-      };
-      foundMissionRepos.push(missionRepoData);
+    if (Array.isArray(files)) {
+      if (files.find(file => file.name === '.metadata')) {
+        const missionRepoData: MissionRepoData = {
+          repoOwner: repo.owner.login,
+          repoName: repo.name,
+          dateOfCreation: new Date(repo.created_at)
+        };
+        foundMissionRepos.push(missionRepoData);
+      }
     }
   }
 
@@ -177,12 +194,73 @@ async function retrieveBrowsableMissions(
     browsableMissions.push(await convertRepoToBrowsableMission(foundMissionRepos[i], octokit));
   }
 
+  const courseRepo = orgRepos.find(repo => repo.name.includes('course-info')) as any;
+
+  const userLogin = (await octokit.users.getAuthenticated()).data.login;
+
+  const files = (
+    await octokit.repos.getContent({
+      owner: courseRepo.owner.login,
+      repo: courseRepo.name,
+      path: ''
+    })
+  ).data;
+
+  if (Array.isArray(files) && files.find(file => file.name === '.CourseInformation.json')) {
+    const result = await octokit.repos.getContent({
+      owner: courseRepo.owner.login,
+      repo: courseRepo.name,
+      path: '.CourseInformation.json'
+    });
+
+    const courseInformation = JSON.parse(
+      Buffer.from((result.data as any).content, 'base64').toString()
+    );
+
+    courseInformation.Missions.forEach(
+      (mission: { Title: string; Prefix: string; Link: string }) => {
+        const prefixLogin = mission.Prefix + '-' + userLogin;
+
+        let foundMatch = false;
+        for (let j = 0; j < missionRepos.length; ++j) {
+          if (missionRepos[j].name.includes(prefixLogin)) {
+            foundMatch = true;
+            break;
+          }
+        }
+        if (!foundMatch) {
+          browsableMissions.push({
+            title: mission.Title,
+            coverImage: '',
+            webSummary: '',
+            missionRepoData: {
+              repoOwner: courseRepo.owner.login,
+              repoName: mission.Prefix + '-' + userLogin,
+              dateOfCreation: new Date()
+            },
+            dueDate: new Date(8640000000000000),
+            link: mission.Link
+          });
+        }
+      }
+    );
+  }
+
   browsableMissions.sort((a, b) => {
     return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
   });
 
   setBrowsableMissions(browsableMissions);
 }
+
+type BrowsableMission = {
+  title: string;
+  coverImage: string;
+  webSummary: string;
+  missionRepoData: MissionRepoData;
+  dueDate: Date;
+  link?: string;
+};
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {
   const metadata = await getContentAsString(
@@ -195,14 +273,6 @@ async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octok
 
   return browsableMission;
 }
-
-type BrowsableMission = {
-  title: string;
-  coverImage: string;
-  webSummary: string;
-  missionRepoData: MissionRepoData;
-  dueDate: Date;
-};
 
 /**
  * Maps from a MissionRepoData to a BrowsableMission.
@@ -253,11 +323,25 @@ function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint:
 
   const hasDueDate = new Date(8640000000000000) > missionRepo.dueDate;
   const isOverdue = new Date() > missionRepo.dueDate;
-  const buttonText = isOverdue ? 'Review Answers' : 'Open';
+
+  let buttonText = 'Open';
+  if (missionRepo.link) {
+    buttonText = 'Accept';
+  } else {
+    if (isOverdue) {
+      buttonText = 'Review Answers';
+    }
+  }
 
   const data = missionRepo.missionRepoData;
 
-  const loadIntoEditor = () => history.push(`/githubassessments/editor`, data);
+  const handleClick = () => {
+    if (missionRepo.link) {
+      window.open(missionRepo.link);
+    } else {
+      history.push(`/githubassessments/editor`, data);
+    }
+  };
 
   return (
     <div key={ownerSlashName}>
@@ -288,7 +372,7 @@ function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint:
               {hasDueDate ? 'Due: ' + dueDate : 'No due date'}
             </Text>
             <div className="listing-button">
-              <Button icon={IconNames.PLAY} minimal={true} onClick={loadIntoEditor}>
+              <Button icon={IconNames.PLAY} minimal={true} onClick={handleClick}>
                 <span className="custom-hidden-xxxs">{buttonText}</span>
               </Button>
             </div>

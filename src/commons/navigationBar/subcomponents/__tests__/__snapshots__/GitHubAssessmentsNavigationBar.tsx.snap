@@ -9,12 +9,6 @@ exports[`Navbar renders correctly 1`] = `
         Missions
       </div>
     </NavLink>
-    <NavLink to=\\"/githubassessments/courses\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"flame\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Courses
-      </div>
-    </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
     <ControlBarGitHubLoginButton loggedInAs={[undefined]} onClickLogIn={[Function: handleGitHubLogIn]} onClickLogOut={[Function: handleGitHubLogOut]} />
