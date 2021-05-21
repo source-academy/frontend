@@ -8,7 +8,11 @@ import {
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
-import { GitHubRepositoryInformation } from '../../features/github/OctokitTypes';
+import {
+  GetAuthenticatedReponse,
+  GitHubRepositoryInformation,
+  ListForAuthenticatedUserResponse
+} from '../../features/github/OctokitTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
@@ -62,7 +66,9 @@ function* githubOpenFile(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  const results = yield call(octokit.repos.listForAuthenticatedUser);
+  const results: ListForAuthenticatedUserResponse = yield call(
+    octokit.repos.listForAuthenticatedUser
+  );
   const userRepos: GitHubRepositoryInformation[] = results.data;
 
   const getRepoName = async () =>
@@ -92,7 +98,7 @@ function* githubOpenFile(): any {
 function* githubSaveFile(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
-  const authUser = yield call(octokit.users.getAuthenticated);
+  const authUser: GetAuthenticatedReponse = yield call(octokit.users.getAuthenticated);
   const githubLoginId = authUser.data.login;
   const repoName = store.getState().playground.githubSaveInfo.repoName;
   const filePath = store.getState().playground.githubSaveInfo.filePath;
@@ -119,7 +125,9 @@ function* githubSaveFileAs(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  const results = yield call(octokit.repos.listForAuthenticatedUser);
+  const results: ListForAuthenticatedUserResponse = yield call(
+    octokit.repos.listForAuthenticatedUser
+  );
   const userRepos: GitHubRepositoryInformation[] = results.data;
 
   const getRepoName = async () =>

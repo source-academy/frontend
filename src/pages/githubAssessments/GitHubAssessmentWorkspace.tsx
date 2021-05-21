@@ -59,6 +59,7 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -264,7 +265,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const authUser = await octokit.users.getAuthenticated();
+    const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;

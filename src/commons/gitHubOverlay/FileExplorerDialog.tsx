@@ -22,6 +22,7 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -97,7 +98,8 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   }
 
   async function handleSubmit() {
-    const authUser = await props.octokit.users.getAuthenticated();
+    const authUser: GetAuthenticatedReponse = await props.octokit.users.getAuthenticated();
+    console.log(authUser);
     const githubLoginID = authUser.data.login;
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;

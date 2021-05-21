@@ -2,6 +2,7 @@ import { ITreeNode } from '@blueprintjs/core';
 
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { GetContentResponse } from '../../features/github/OctokitTypes';
+import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
 /**
@@ -51,7 +52,7 @@ export class GitHubTreeNodeCreator {
     }
 
     try {
-      const authUser = await octokit.users.getAuthenticated();
+      const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
       const githubLoginID = authUser.data.login;
       const results: GetContentResponse = await octokit.repos.getContent({
         owner: githubLoginID,
