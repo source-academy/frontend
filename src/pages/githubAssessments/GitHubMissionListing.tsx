@@ -48,7 +48,15 @@ const GitHubMissionListing: React.FC<any> = () => {
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
-  const [values, setValues] = useState<React.ReactNode[]>([]);
+  const [filterTags, setFilterTags] = useState<React.ReactNode[]>([]);
+
+  const handleChange = React.useCallback((values: React.ReactNode[]) => {
+    setFilterTags(values);
+  }, []);
+
+  const handleClear = React.useCallback(() => {
+    handleChange([]);
+  }, [handleChange]);
 
   useEffect(() => {
     if (octokit === undefined) {
@@ -61,65 +69,43 @@ const GitHubMissionListing: React.FC<any> = () => {
   }, [octokit, setBrowsableMissions, setDisplay]);
 
   useEffect(() => {
-    if (browsableMissions.length > 0) {
-      const filteredMissions: BrowsableMission[] = [];
-      browsableMissions.forEach(mission => {
-        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
-          filteredMissions.push(mission);
-        }
-      });
-
-      function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
-        let match = false;
-        tags.forEach(tag => {
-          if (tag !== null && tag !== undefined) {
-            if (mission.title.includes(tag.toString())) {
-              match = true;
-            } else if (mission.webSummary.includes(tag.toString())) {
-              match = true;
-            } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
-              match = true;
-            }
-          }
-        });
-        return match;
-      }
-
-      const handleClear = () => {
-        handleChange([]);
-      };
-
-      const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
-
-      const handleChange = (values: React.ReactNode[]) => {
-        setValues(values);
-      };
-
-      const tagFilter = (
-        <TagInput
-          leftIcon={IconNames.FILTER}
-          onChange={handleChange}
-          placeholder="Separate tags with commas..."
-          rightElement={clearButton}
-          tagProps={{ minimal: true }}
-          values={values}
-        />
-      );
-
-      const cards =
-        values.length === 0
-          ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
-          : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
-
-      setDisplay(
-        <>
-          {tagFilter}
-          <Divider />
-          {cards}
-        </>
-      );
+    if (browsableMissions.length === 0) {
+      return;
     }
-  }, [browsableMissions, isMobileBreakpoint, setDisplay, values]);
+
+    const filteredMissions: BrowsableMission[] = [];
+    browsableMissions.forEach(mission => {
+      if (!filteredMissions.includes(mission) && matchTag(mission, filterTags)) {
+        filteredMissions.push(mission);
+      }
+    });
+
+    const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
+
+    const tagFilter = (
+      <TagInput
+        leftIcon={IconNames.FILTER}
+        onChange={handleChange}
+        placeholder="Separate tags with commas..."
+        rightElement={clearButton}
+        tagProps={{ minimal: true }}
+        values={filterTags}
+      />
+    );
+
+    const cards =
+      filterTags.length === 0
+        ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
+        : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
+
+    setDisplay(
+      <>
+        {tagFilter}
+        <Divider />
+        {cards}
+      </>
+    );
+  }, [browsableMissions, isMobileBreakpoint, setDisplay, filterTags, handleClear, handleChange]);
 
   return (
     <div className="Academy">
@@ -129,6 +115,22 @@ const GitHubMissionListing: React.FC<any> = () => {
     </div>
   );
 };
+
+function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
+  let match = false;
+  tags.forEach(tag => {
+    if (tag !== null && tag !== undefined) {
+      if (mission.title.includes(tag.toString())) {
+        match = true;
+      } else if (mission.webSummary.includes(tag.toString())) {
+        match = true;
+      } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
+        match = true;
+      }
+    }
+  });
+  return match;
+}
 
 /**
  * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
