@@ -99,7 +99,6 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
 
   async function handleSubmit() {
     const authUser: GetAuthenticatedReponse = await props.octokit.users.getAuthenticated();
-    console.log(authUser);
     const githubLoginID = authUser.data.login;
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
