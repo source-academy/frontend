@@ -42,16 +42,14 @@ import {
  */
 const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-
-  const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
-  const [display, setDisplay] = useState<JSX.Element>(<></>);
-
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
+  const [display, setDisplay] = useState<JSX.Element>(<></>);
+  const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
   const [filterTagNodes, setFilterTagNodes] = useState<React.ReactNode[]>([]);
   const [filterTagStrings, setFilterTagStrings] = useState<string[]>([]);
 
-  const handleChange = React.useCallback((values: React.ReactNode[]) => {
+  const handleTagChange = React.useCallback((values: React.ReactNode[]) => {
     setFilterTagNodes(values);
 
     const newFilterTagStrings: string[] = [];
@@ -64,7 +62,7 @@ const GitHubMissionListing: React.FC<any> = () => {
     setFilterTagStrings(newFilterTagStrings);
   }, []);
 
-  const handleClear = React.useCallback(() => handleChange([]), [handleChange]);
+  const handleTagClear = React.useCallback(() => handleTagChange([]), [handleTagChange]);
 
   // Used to retrieve browsable missions
   useEffect(() => {
@@ -80,15 +78,18 @@ const GitHubMissionListing: React.FC<any> = () => {
   // After browsable missions retrieved, display mission listing
   useEffect(() => {
     if (browsableMissions.length === 0) {
+      setDisplay(
+        <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
+      );
       return;
     }
 
     // Create tag filter
-    const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
+    const clearButton = <Button icon={'cross'} minimal={true} onClick={handleTagClear} />;
     const tagFilter = (
       <TagInput
         leftIcon={IconNames.FILTER}
-        onChange={handleChange}
+        onChange={handleTagChange}
         placeholder="Separate tags with commas..."
         rightElement={clearButton}
         tagProps={{ minimal: true }}
@@ -114,8 +115,8 @@ const GitHubMissionListing: React.FC<any> = () => {
     browsableMissions,
     filterTagNodes,
     filterTagStrings,
-    handleChange,
-    handleClear,
+    handleTagChange,
+    handleTagClear,
     isMobileBreakpoint,
     setDisplay
   ]);
