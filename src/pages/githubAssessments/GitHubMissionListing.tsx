@@ -30,7 +30,11 @@ import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
-import { GetContentData, GitHubRepositoryInformation } from '../../features/github/OctokitTypes';
+import {
+  GetContentData,
+  GetContentResponse,
+  GitHubRepositoryInformation
+} from '../../features/github/OctokitTypes';
 
 /**
  * A page that lists the missions available to the authenticated user.
@@ -154,22 +158,32 @@ async function retrieveBrowsableMissions(
 
   for (let i = 0; i < correctlyNamedRepos.length; i++) {
     const repo = correctlyNamedRepos[i];
-    const files: GetContentData = (
-      await octokit.repos.getContent({
-        owner: repo.owner ? repo.owner.login : '',
-        repo: repo.name,
-        path: ''
-      })
-    ).data;
+    const login = (repo.owner as any).login;
+
+    const getContentResponse: GetContentResponse = await octokit.repos.getContent({
+      owner: login,
+      repo: repo.name,
+      path: ''
+    });
+    const files: GetContentData = getContentResponse.data;
 
     if (!Array.isArray(files)) {
       setDisplay(<NonIdealState title="There are no assessments." icon={IconNames.FLAME} />);
       return;
     }
 
-    if (files.find(file => file.name === '.metadata') !== undefined) {
+    let repositoryContainsMetadataFile = false;
+    for (let j = 0; j < files.length; j++) {
+      const file = files[j];
+      if (file.name === '.metadata') {
+        repositoryContainsMetadataFile = true;
+        break;
+      }
+    }
+
+    if (repositoryContainsMetadataFile) {
       const missionRepoData: MissionRepoData = {
-        repoOwner: repo.owner ? repo.owner.login : '',
+        repoOwner: login,
         repoName: repo.name,
         dateOfCreation: new Date(repo.created_at || '')
       };
