@@ -14,10 +14,10 @@ export type GitHubRepositoryInformation = {
   compare_url: string;
   contents_url: string;
   contributors_url: string;
-  created_at: string;
+  created_at: string | null;
   default_branch: string;
   deployments_url: string;
-  description: string;
+  description: string | null;
   disabled: boolean;
   downloads_url: string;
   events_url: string;
@@ -35,7 +35,7 @@ export type GitHubRepositoryInformation = {
   has_pages: boolean;
   has_projects: boolean;
   has_wiki: boolean;
-  homepage: string;
+  homepage: string | null;
   hooks_url: string;
   html_url: string;
   id: number;
@@ -44,19 +44,19 @@ export type GitHubRepositoryInformation = {
   issues_url: string;
   keys_url: string;
   labels_url: string;
-  language: string;
+  language: string | null;
   languages_url: string;
   license: {
     key: string;
     name: string;
-    url: string;
-    spdx_id: string;
+    url: string | null;
+    spdx_id: string | null;
     node_id: string;
     html_url?: string;
-  };
+  } | null;
   merges_url: string;
   milestones_url: string;
-  mirror_url: string;
+  mirror_url: string | null;
   name: string;
   node_id: string;
   notifications_url: string;
@@ -68,7 +68,7 @@ export type GitHubRepositoryInformation = {
     followers_url: string;
     following_url: string;
     gists_url: string;
-    gravatar_id: string;
+    gravatar_id: string | null;
     html_url: string;
     id: number;
     login: string;
@@ -81,7 +81,7 @@ export type GitHubRepositoryInformation = {
     subscriptions_url: string;
     type: string;
     url: string;
-  };
+  } | null;
 
   permissions?: {
     admin: boolean;
@@ -91,7 +91,7 @@ export type GitHubRepositoryInformation = {
 
   private: boolean;
   pulls_url: string;
-  pushed_at: string;
+  pushed_at: string | null;
   releases_url: string;
   size: number;
   ssh_url: string;
@@ -104,8 +104,87 @@ export type GitHubRepositoryInformation = {
   tags_url: string;
   teams_url: string;
   trees_url: string;
-  updated_at: string;
+  updated_at: string | null;
   url: string;
   watchers: number;
   watchers_count: number;
+};
+
+export type GetContentResponse = {
+  data: GetContentData;
+};
+
+export type GetContentData = GitHubFile | GitHubSubDirectory[] | GitHubSymlink | GitHubSubModule;
+
+export type GitHubFile = {
+  type: string;
+  encoding: string;
+  size: number;
+  name: string;
+  path: string;
+  content: string;
+  sha: string;
+  url: string;
+  git_url: string | null;
+  html_url: string | null;
+  download_url: string | null;
+  _links: {
+    self: string | null;
+    git: string | null;
+    html: string | null;
+  };
+};
+
+export type GitHubSubDirectory = {
+  type: string;
+  size: number;
+  name: string;
+  path: string;
+  content?: string | null;
+  sha: string;
+  url: string;
+  git_url: string | null;
+  html_url: string | null;
+  download_url: string | null;
+  _links: {
+    self: string | null;
+    git: string | null;
+    html: string | null;
+  };
+};
+
+export type GitHubSymlink = {
+  type: string;
+  target: string;
+  size: number;
+  name: string;
+  path: string;
+  sha: string;
+  url: string;
+  git_url: string | null;
+  html_url: string | null;
+  download_url: string | null;
+  _links: {
+    self: string | null;
+    git: string | null;
+    html: string | null;
+  };
+};
+
+export type GitHubSubModule = {
+  type: string;
+  submodule_git_url: string;
+  size: number;
+  name: string;
+  path: string;
+  sha: string;
+  url: string;
+  git_url: string | null;
+  html_url: string | null;
+  download_url: string | null;
+  _links: {
+    self: string | null;
+    git: string | null;
+    html: string | null;
+  };
 };

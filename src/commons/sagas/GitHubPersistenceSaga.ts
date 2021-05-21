@@ -4,11 +4,11 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   GITHUB_OPEN_FILE,
   GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS,
-  GitHubRepositoryInformation
+  GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import { GitHubRepositoryInformation } from '../../features/github/OctokitTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';

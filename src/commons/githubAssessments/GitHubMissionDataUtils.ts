@@ -1,6 +1,7 @@
 import { Octokit } from '@octokit/rest';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { GetContentResponse } from '../../features/github/OctokitTypes';
 import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 const maximumTasksPerMission = 20;
@@ -54,7 +55,11 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
-  const results = await octokit.repos.getContent({
+  if (octokit === undefined) {
+    return questions;
+  }
+
+  const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: ''
@@ -76,7 +81,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
     }
 
     // Find out if there is already SavedCode for the question
-    const folderContents = await octokit.repos.getContent({
+    const folderContents: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: questionFolderName
@@ -142,8 +147,12 @@ export async function getContentAsString(
 ) {
   let contentString = '';
 
+  if (octokit === undefined) {
+    return contentString;
+  }
+
   try {
-    const fileInfo = await octokit.repos.getContent({
+    const fileInfo: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filepath

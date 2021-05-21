@@ -29,8 +29,8 @@ import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTy
 import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
-import { GitHubRepositoryInformation } from '../../features/github/GitHubTypes';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import { GetContentData, GitHubRepositoryInformation } from '../../features/github/OctokitTypes';
 
 /**
  * A page that lists the missions available to the authenticated user.
@@ -154,7 +154,7 @@ async function retrieveBrowsableMissions(
 
   for (let i = 0; i < correctlyNamedRepos.length; i++) {
     const repo = correctlyNamedRepos[i];
-    const files = (
+    const files: GetContentData = (
       await octokit.repos.getContent({
         owner: repo.owner ? repo.owner.login : '',
         repo: repo.name,
