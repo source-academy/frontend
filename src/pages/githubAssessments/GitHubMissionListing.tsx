@@ -58,6 +58,7 @@ const GitHubMissionListing: React.FC<any> = () => {
     handleChange([]);
   }, [handleChange]);
 
+  // Used to retrieve browsable missions
   useEffect(() => {
     if (octokit === undefined) {
       setDisplay(
@@ -68,20 +69,14 @@ const GitHubMissionListing: React.FC<any> = () => {
     }
   }, [octokit, setBrowsableMissions, setDisplay]);
 
+  // After browsable missions retrieved, display mission listing
   useEffect(() => {
     if (browsableMissions.length === 0) {
       return;
     }
 
-    const filteredMissions: BrowsableMission[] = [];
-    browsableMissions.forEach(mission => {
-      if (!filteredMissions.includes(mission) && matchTag(mission, filterTags)) {
-        filteredMissions.push(mission);
-      }
-    });
-
+    // Create tag filter
     const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
-
     const tagFilter = (
       <TagInput
         leftIcon={IconNames.FILTER}
@@ -93,10 +88,12 @@ const GitHubMissionListing: React.FC<any> = () => {
       />
     );
 
-    const cards =
+    // Create cards
+    const missionListing =
       filterTags.length === 0
-        ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
-        : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
+        ? browsableMissions
+        : browsableMissions.filter(mission => matchTag(mission, filterTags));
+    const cards = missionListing.map(element => convertMissionToCard(element, isMobileBreakpoint));
 
     setDisplay(
       <>
@@ -118,17 +115,26 @@ const GitHubMissionListing: React.FC<any> = () => {
 
 function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
   let match = false;
-  tags.forEach(tag => {
-    if (tag !== null && tag !== undefined) {
-      if (mission.title.includes(tag.toString())) {
-        match = true;
-      } else if (mission.webSummary.includes(tag.toString())) {
-        match = true;
-      } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
-        match = true;
-      }
+
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i];
+
+    if (tag) {
+      const titleIncludesTag = mission.title.toLowerCase().includes(tag.toString().toLowerCase());
+      const summaryIncludesTag = mission.webSummary
+        .toLowerCase()
+        .includes(tag.toString().toLowerCase());
+      const ownerLoginIncludesTag = mission.missionRepoData.repoOwner
+        .toLowerCase()
+        .includes(tag.toString().toLowerCase());
+      match = titleIncludesTag || summaryIncludesTag || ownerLoginIncludesTag;
     }
-  });
+
+    if (match) {
+      break;
+    }
+  }
+
   return match;
 }
 
