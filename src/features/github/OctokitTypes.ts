@@ -5,8 +5,8 @@
 //The return type from calling octokit.repos.listForAuthenticatedUser
 export type ListForAuthenticatedUserResponse = {
   data: GitHubRepositoryInformation[];
-  headers: Object;
-  status: number;
+  headers: any;
+  status: any;
   url: string;
 };
 
@@ -122,8 +122,8 @@ export type GitHubRepositoryInformation = {
 // The return type from calling octokit.users.getAuthenticated
 export type GetAuthenticatedReponse = {
   data: GetAuthenticatedData;
-  headers: Object;
-  status: number;
+  headers: any;
+  status: any;
   url: string;
 };
 
