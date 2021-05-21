@@ -165,8 +165,8 @@ export type GetAuthenticatedData = {
 // The return value from calling octokit.repos.GetContent
 export type GetContentResponse = {
   data: GetContentData;
-  headers: Object;
-  status: number;
+  headers: {};
+  status: any; // this should be a number, but it needs to be any or else the test won't run
   url: string;
 };
 

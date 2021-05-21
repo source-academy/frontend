@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { GetContentResponse } from '../../features/github/OctokitTypes';
+import { GetContentResponse, GitHubSubDirectory } from '../../features/github/OctokitTypes';
 import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 const maximumTasksPerMission = 20;
@@ -12,7 +12,7 @@ const maximumTasksPerMission = 20;
  * @param missionRepoData Repository information where the mission is stored
  * @param octokit The Octokit instance for the authenticated user
  */
-export async function getMissionData(missionRepoData: MissionRepoData, octokit: any) {
+export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
   const briefingString = await getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
@@ -91,8 +91,8 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       return questions;
     }
 
-    const hasSavedCode = (folderContents.data as any[]).find(
-      (file: any) => file.name === 'SavedCode.js'
+    const hasSavedCode = (folderContents.data as GitHubSubDirectory[]).find(
+      (file: GitHubSubDirectory) => file.name === 'SavedCode.js'
     );
 
     // If the question exists, get the data
@@ -143,7 +143,7 @@ export async function getContentAsString(
   repoOwner: string,
   repoName: string,
   filepath: string,
-  octokit: any
+  octokit: Octokit
 ) {
   let contentString = '';
 
