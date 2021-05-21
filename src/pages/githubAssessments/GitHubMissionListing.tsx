@@ -48,15 +48,23 @@ const GitHubMissionListing: React.FC<any> = () => {
 
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
-  const [filterTags, setFilterTags] = useState<React.ReactNode[]>([]);
+  const [filterTagNodes, setFilterTagNodes] = useState<React.ReactNode[]>([]);
+  const [filterTagStrings, setFilterTagStrings] = useState<string[]>([]);
 
   const handleChange = React.useCallback((values: React.ReactNode[]) => {
-    setFilterTags(values);
+    setFilterTagNodes(values);
+
+    const newFilterTagStrings: string[] = [];
+    for (let i = 0; i < values.length; i++) {
+      const value = values[i];
+      if (value) {
+        newFilterTagStrings.push(value.toString().toLowerCase());
+      }
+    }
+    setFilterTagStrings(newFilterTagStrings);
   }, []);
 
-  const handleClear = React.useCallback(() => {
-    handleChange([]);
-  }, [handleChange]);
+  const handleClear = React.useCallback(() => handleChange([]), [handleChange]);
 
   // Used to retrieve browsable missions
   useEffect(() => {
@@ -84,15 +92,15 @@ const GitHubMissionListing: React.FC<any> = () => {
         placeholder="Separate tags with commas..."
         rightElement={clearButton}
         tagProps={{ minimal: true }}
-        values={filterTags}
+        values={filterTagNodes}
       />
     );
 
     // Create cards
     const missionListing =
-      filterTags.length === 0
+      filterTagNodes.length === 0
         ? browsableMissions
-        : browsableMissions.filter(mission => matchTag(mission, filterTags));
+        : browsableMissions.filter(mission => missionMatchesTags(mission, filterTagStrings));
     const cards = missionListing.map(element => convertMissionToCard(element, isMobileBreakpoint));
 
     setDisplay(
@@ -102,7 +110,15 @@ const GitHubMissionListing: React.FC<any> = () => {
         {cards}
       </>
     );
-  }, [browsableMissions, isMobileBreakpoint, setDisplay, filterTags, handleClear, handleChange]);
+  }, [
+    browsableMissions,
+    filterTagNodes,
+    filterTagStrings,
+    handleChange,
+    handleClear,
+    isMobileBreakpoint,
+    setDisplay
+  ]);
 
   return (
     <div className="Academy">
@@ -113,20 +129,16 @@ const GitHubMissionListing: React.FC<any> = () => {
   );
 };
 
-function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
+function missionMatchesTags(mission: BrowsableMission, tags: string[]) {
   let match = false;
 
   for (let i = 0; i < tags.length; i++) {
     const tag = tags[i];
 
     if (tag) {
-      const titleIncludesTag = mission.title.toLowerCase().includes(tag.toString().toLowerCase());
-      const summaryIncludesTag = mission.webSummary
-        .toLowerCase()
-        .includes(tag.toString().toLowerCase());
-      const ownerLoginIncludesTag = mission.missionRepoData.repoOwner
-        .toLowerCase()
-        .includes(tag.toString().toLowerCase());
+      const titleIncludesTag = mission.title.toLowerCase().includes(tag);
+      const summaryIncludesTag = mission.webSummary.toLowerCase().includes(tag);
+      const ownerLoginIncludesTag = mission.missionRepoData.repoOwner.toLowerCase().includes(tag);
       match = titleIncludesTag || summaryIncludesTag || ownerLoginIncludesTag;
     }
 
