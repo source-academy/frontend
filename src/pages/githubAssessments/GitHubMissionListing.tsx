@@ -191,17 +191,15 @@ async function retrieveBrowsableMissions(
     }
   }
 
-  const browsableMissions: BrowsableMission[] = [];
-
-  for (let i = 0; i < foundMissionRepos.length; i++) {
-    browsableMissions.push(await convertRepoToBrowsableMission(foundMissionRepos[i], octokit));
-  }
-
-  browsableMissions.sort((a, b) => {
-    return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+  const missionPromises = foundMissionRepos.map(missionRepoData =>
+    convertRepoToBrowsableMission(missionRepoData, octokit)
+  );
+  Promise.all(missionPromises).then((browsableMissions: BrowsableMission[]) => {
+    browsableMissions.sort((a, b) => {
+      return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+    });
+    setBrowsableMissions(browsableMissions);
   });
-
-  setBrowsableMissions(browsableMissions);
 }
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {
