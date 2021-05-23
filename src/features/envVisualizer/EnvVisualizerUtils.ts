@@ -76,7 +76,7 @@ export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data);
 }
 
-/** checks if `data` is a primitive, defined as a null | data | number */
+/** checks if `reference` is the main reference of the `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
   return value.referencedBy[0] === reference;
 }
