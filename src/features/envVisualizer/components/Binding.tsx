@@ -3,6 +3,7 @@ import React from 'react';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
+import { isMainReference } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
@@ -54,22 +55,22 @@ export class Binding implements Visible {
     this.key = new Text(this.keyString, this.x, this.y + keyYOffset);
 
     // derive the width from the right bound of the value
-    this.width =
-      this.value.x +
-      this.value.width -
-      this.x +
-      (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-        ? this.value.tooltipWidth
-        : 0);
+    this.width = isMainReference(this.value, this)
+      ? this.value.x +
+        this.value.width -
+        this.x +
+        (this.value instanceof FnValue || this.value instanceof GlobalFnValue
+          ? this.value.tooltipWidth
+          : 0)
+      : this.key.width;
     this.height = Math.max(this.key.height, this.value.height);
   }
 
   draw(): React.ReactNode {
-    console.log(this.value.referencedBy[0] === this);
     return (
       <React.Fragment key={Layout.key++}>
         {this.key.draw()}
-        {this.value.referencedBy[0] === this ? this.value.draw() : null}
+        {isMainReference(this.value, this) ? this.value.draw() : null}
         {this.value instanceof PrimitiveValue || Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
     );
