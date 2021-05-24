@@ -181,7 +181,7 @@ function generateGitHubSubDirectory(name: string) {
     html_url: null,
     download_url: null,
     _links: {
-      self: null,
+      self: '',
       git: null,
       html: null
     }
@@ -206,7 +206,7 @@ function generateGetContentResponse() {
       html_url: null,
       download_url: null,
       _links: {
-        self: null,
+        self: '',
         git: null,
         html: null
       }

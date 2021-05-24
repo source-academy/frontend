@@ -360,7 +360,7 @@ function generateGetContentResponse() {
       html_url: null,
       download_url: null,
       _links: {
-        self: null,
+        self: '',
         git: null,
         html: null
       }
@@ -380,7 +380,7 @@ function generateGitHubSubDirectory(name: string, type: string, path: string) {
     html_url: null,
     download_url: null,
     _links: {
-      self: null,
+      self: '',
       git: null,
       html: null
     }
