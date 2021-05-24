@@ -35,14 +35,12 @@ export type FileExplorerDialogProps = {
 };
 
 const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
-  const [refresh, setRefresh] = useState(0);
-
   const [repoFiles, setRepoFiles] = useState<ITreeNode<GitHubFileNodeData>[]>([]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
 
   useEffect(() => {
-    setFirstLayerRepoFiles(props.repoName, setRepoFiles); // this is an async call
+    setFirstLayerRepoFiles(props.repoName, setRepoFiles);
   }, [props.repoName]);
 
   return (
@@ -149,59 +147,112 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     }
   }
 
-  function handleNodeClick(
+  async function handleNodeClick(
     treeNode: ITreeNode<GitHubFileNodeData>,
     _nodePath: number[],
     e: React.MouseEvent<HTMLElement>
   ) {
     const originallySelected = treeNode.isSelected;
 
-    if (!e.shiftKey) {
-      forEachNode(repoFiles, n => (n.isSelected = false));
-    }
+    const allNodesCallback = !e.shiftKey
+      ? (node: ITreeNode<GitHubFileNodeData>) => (node.isSelected = false)
+      : (node: ITreeNode<GitHubFileNodeData>) => {};
 
-    treeNode.isSelected = originallySelected == null ? true : !originallySelected;
-    const newFilePath = treeNode.nodeData !== undefined ? treeNode.nodeData.filePath : '';
-    if (treeNode.isSelected) {
+    const specificNodeCallback = (node: ITreeNode<GitHubFileNodeData>) => {
+      // if originally selected is null, set to true
+      // else, toggle the selection
+      node.isSelected = originallySelected === null ? true : !originallySelected;
+      const newFilePath =
+        node.nodeData !== undefined && node.isSelected ? node.nodeData.filePath : '';
       setFilePath(newFilePath);
-    } else {
-      setFilePath('');
+    };
+
+    const newRepoFiles = await cloneWithCallbacks(
+      repoFiles,
+      treeNode,
+      allNodesCallback,
+      specificNodeCallback
+    );
+
+    if (newRepoFiles !== null) {
+      setRepoFiles(newRepoFiles);
     }
-    refreshPage();
   }
 
-  function handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
-    treeNode.isExpanded = false;
-    refreshPage();
+  async function handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
+    const newRepoFiles = await cloneWithCallbacks(
+      repoFiles,
+      treeNode,
+      (node: ITreeNode<GitHubFileNodeData>) => {},
+      (node: ITreeNode<GitHubFileNodeData>) => (node.isExpanded = false)
+    );
+
+    if (newRepoFiles !== null) {
+      setRepoFiles(newRepoFiles);
+    }
   }
 
   async function handleNodeExpand(treeNode: ITreeNode<GitHubFileNodeData>) {
-    treeNode.isExpanded = true;
+    const newRepoFiles = await cloneWithCallbacks(
+      repoFiles,
+      treeNode,
+      (node: ITreeNode<GitHubFileNodeData>) => {},
+      async (node: ITreeNode<GitHubFileNodeData>) => {
+        node.isExpanded = true;
 
-    if (treeNode.nodeData !== undefined && !treeNode.nodeData.childrenRetrieved) {
-      treeNode.childNodes = await GitHubTreeNodeCreator.getChildNodes(
-        props.repoName,
-        treeNode.nodeData.filePath
-      );
-      treeNode.nodeData.childrenRetrieved = true;
+        if (node.nodeData !== undefined && !node.nodeData.childrenRetrieved) {
+          node.childNodes = await GitHubTreeNodeCreator.getChildNodes(
+            props.repoName,
+            node.nodeData.filePath
+          );
+          node.nodeData.childrenRetrieved = true;
+        }
+      }
+    );
+
+    if (newRepoFiles !== null) {
+      setRepoFiles(newRepoFiles);
     }
-    refreshPage();
   }
 
-  function forEachNode(
+  async function cloneWithCallbacks(
     treeNodes: ITreeNode<GitHubFileNodeData>[],
-    callback: (node: ITreeNode<GitHubFileNodeData>) => void
+    treeNodeToEdit: ITreeNode<GitHubFileNodeData>,
+    allNodesCallback: (node: ITreeNode<GitHubFileNodeData>) => void,
+    specificNodeCallback: (node: ITreeNode<GitHubFileNodeData>) => void
   ) {
-    if (treeNodes == null) {
-      return;
+    if (treeNodes === null) {
+      return null;
     }
 
-    for (const node of treeNodes) {
-      callback(node);
-      if (node.childNodes !== undefined) {
-        forEachNode(node.childNodes, callback);
+    const newTreeNodes = [];
+
+    for (let i = 0; i < treeNodes.length; i++) {
+      const node = treeNodes[i];
+      const clonedNode = Object.assign({}, node);
+      await allNodesCallback(clonedNode);
+
+      if (treeNodeToEdit === node) {
+        await specificNodeCallback(clonedNode);
       }
+
+      if (clonedNode.childNodes !== undefined) {
+        const newChildNodes = await cloneWithCallbacks(
+          clonedNode.childNodes,
+          treeNodeToEdit,
+          allNodesCallback,
+          specificNodeCallback
+        );
+
+        if (newChildNodes !== null) {
+          clonedNode.childNodes = newChildNodes;
+        }
+      }
+
+      newTreeNodes.push(clonedNode);
     }
+
+    return newTreeNodes;
   }
 
   function handleFileNameChange(e: any) {
@@ -216,10 +267,6 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     if (filePath === '') {
       setFilePath('.js');
     }
-  }
-
-  function refreshPage() {
-    setRefresh(refresh + 1);
   }
 };
 
