@@ -1,5 +1,4 @@
 import { Classes } from '@blueprintjs/core';
-import classNames from 'classnames';
 import * as React from 'react';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
@@ -18,8 +17,7 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
 
   public render() {
     return (
-      <div className={classNames('sa-env-visualizer', Classes.DARK)}>
-        <div id="stage"></div>
+      <div className={Classes.DARK}>
         {this.state.visualization || (
           <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
             The environmental visualizer generates the environmental model diagram based on

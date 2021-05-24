@@ -1,4 +1,5 @@
-import { Button, MenuItem, Tooltip } from '@blueprintjs/core';
+import { Button, MenuItem } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
@@ -17,7 +18,7 @@ function EditableAbility(props: EditableAbilityProps) {
   );
 
   return (
-    <Tooltip content="Change Ability">
+    <Tooltip2 content="Change Ability">
       <AbilitySelect
         filterable={false}
         itemRenderer={abilityRenderer}
@@ -26,7 +27,7 @@ function EditableAbility(props: EditableAbilityProps) {
       >
         <Button minimal={true} outlined={true} text={ability} />
       </AbilitySelect>
-    </Tooltip>
+    </Tooltip2>
   );
 }
 

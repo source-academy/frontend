@@ -834,7 +834,7 @@ const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 
