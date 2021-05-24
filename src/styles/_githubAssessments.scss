@@ -3,6 +3,14 @@
   min-width: 600px;
 }
 
+.missionLoading {
+  height: 100%;
+  display: flex;
+  background-color: $cadet-color-1;
+  flex-direction: column;
+  flex: 1 1 100%;
+}
+
 // This is mostly a copy of 'Assessment' style in _academy.scss
 // Scrollbar is added to fit better within the dialog
 .missionBrowserContent {

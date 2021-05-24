@@ -543,13 +543,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   if (isLoading) {
     return (
-      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+      <div className={classNames('missionLoading', Classes.DARK)}>
         <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
       </div>
     );
   } else {
     return (
-      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         {overlay}
         {resetTemplateOverlay}
         {isMobileBreakpoint ? (
