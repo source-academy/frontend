@@ -185,7 +185,7 @@ export type GitHubFile = {
   html_url: string | null;
   download_url: string | null;
   _links: {
-    self: string | null;
+    self: string;
     git: string | null;
     html: string | null;
   };
@@ -203,7 +203,7 @@ export type GitHubSubDirectory = {
   html_url: string | null;
   download_url: string | null;
   _links: {
-    self: string | null;
+    self: string;
     git: string | null;
     html: string | null;
   };
@@ -221,7 +221,7 @@ export type GitHubSymlink = {
   html_url: string | null;
   download_url: string | null;
   _links: {
-    self: string | null;
+    self: string;
     git: string | null;
     html: string | null;
   };
@@ -239,7 +239,7 @@ export type GitHubSubModule = {
   html_url: string | null;
   download_url: string | null;
   _links: {
-    self: string | null;
+    self: string;
     git: string | null;
     html: string | null;
   };
