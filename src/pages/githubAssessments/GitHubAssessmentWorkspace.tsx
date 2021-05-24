@@ -6,7 +6,8 @@ import {
   Dialog,
   Intent,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -17,7 +18,6 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Library } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -36,9 +36,11 @@ import {
   GitHubMissionSaveDialogProps,
   GitHubMissionSaveDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import MissionData from '../../commons/githubAssessments/MissionData';
-import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
-import TaskData from '../../commons/githubAssessments/TaskData';
+import {
+  MissionData,
+  MissionRepoData,
+  TaskData
+} from '../../commons/githubAssessments/GitHubMissionTypes';
 import Markdown from '../../commons/Markdown';
 import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, {
@@ -51,13 +53,13 @@ import { promisifyDialog } from '../../commons/utils/DialogHelper';
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -66,24 +68,17 @@ export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
-  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
@@ -122,7 +117,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Handles re-rendering the webpage + tracking states relating to the loaded mission
    */
-  const [selectedSourceChapter, selectSourceChapter] = React.useState(props.sourceChapter);
+  const [sourceChapter, setSourceChapter] = React.useState(props.sourceChapter);
   const [summary, setSummary] = React.useState('');
   const [briefingContent, setBriefingContent] = React.useState(
     'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.'
@@ -146,35 +141,20 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     setSummary(missionData.missionBriefing);
-    selectSourceChapter(missionData.missionMetadata.sourceVersion);
+    setSourceChapter(missionData.missionMetadata.sourceVersion);
     setBriefingContent(missionData.missionBriefing);
     setTaskDescription(missionData.tasksData[0].taskDescription);
     setTaskList(missionData.tasksData);
-    setCachedTaskList(
-      missionData.tasksData.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
-    );
+    setCachedTaskList(missionData.tasksData.map(taskData => Object.assign({}, taskData)));
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
     setIsLoading(false);
+    if (missionData.missionBriefing !== '') setShowOverlay(true);
   }, [missionRepoData, octokit, handleEditorValueChange]);
 
   useEffect(() => {
     loadMission();
   }, [loadMission]);
-
-  /**
-   * After mounting show the briefing.
-   */
-  React.useEffect(() => {
-    if (summary !== '') setShowOverlay(true);
-  }, [summary]);
 
   const overlay = (
     <Dialog className="assessment-briefing" isOpen={showOverlay}>
@@ -239,8 +219,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (questionNumber > taskList.length) {
         return;
       }
-      const editedTaskList = taskList;
-      editedTaskList[questionNumber - 1].savedCode = newValue;
+      const editedTaskList = [...taskList];
+      editedTaskList[questionNumber - 1] = {
+        ...editedTaskList[questionNumber - 1],
+        savedCode: newValue
+      };
       setTaskList(editedTaskList);
     },
     [taskList]
@@ -282,7 +265,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const authUser = await octokit.users.getAuthenticated();
+    const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
@@ -325,21 +308,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     }
 
-    setCachedTaskList(
-      taskList.map(taskData => {
-        const taskDataCopy: TaskData = {
-          taskDescription: taskData.taskDescription,
-          starterCode: taskData.starterCode,
-          savedCode: taskData.savedCode
-        };
-        return taskDataCopy;
-      })
-    );
+    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
   const onClickReset = useCallback(() => {
     setShowResetTemplateOverlay(true);
-  }, []);
+
+    for (let i = 0; i < taskList.length; i++) {
+      if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
+        setHasUnsavedChanges(true);
+        return;
+      }
+    }
+
+    setHasUnsavedChanges(false);
+  }, [taskList, cachedTaskList]);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
@@ -472,7 +455,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
-        sourceChapter={selectedSourceChapter}
+        sourceChapter={sourceChapter}
         sourceVariant={Constants.defaultSourceVariant as Variant}
         disabled={true}
         key="chapter"
@@ -488,22 +471,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const mobileSideContentProps: () => MobileSideContentProps = () => {
-    const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ) => {
-      if (newTabId === prevTabId) {
-        return;
-      }
-
-      // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
-      if (
-        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
-      ) {
-        setSelectedTab(newTabId);
-      }
-    };
     return {
       mobileControlBarProps: {
         ...controlBarProps()
@@ -551,7 +518,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleReplValueChange: props.handleReplValueChange,
     output: props.output,
     replValue: props.replValue,
-    sourceChapter: selectedSourceChapter || 4,
+    sourceChapter: sourceChapter || 4,
     sourceVariant: 'default' as Variant,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()
@@ -576,16 +543,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   if (isLoading) {
     return (
-      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
-        <NonIdealState
-          description="Loading Missions"
-          icon={<Spinner size={Spinner.SIZE_LARGE} />}
-        />
+      <div className={classNames('missionLoading', Classes.DARK)}>
+        <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
       </div>
     );
   } else {
     return (
-      <div className={classNames('SideContentMissionEditor', Classes.DARK)}>
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         {overlay}
         {resetTemplateOverlay}
         {isMobileBreakpoint ? (

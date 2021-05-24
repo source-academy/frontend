@@ -24,7 +24,6 @@ export enum SideContentType {
   grading = 'grading',
   introduction = 'introduction',
   inspector = 'inspector',
-  githubAssessments = 'githubAssessments',
   module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',

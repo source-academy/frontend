@@ -8,6 +8,7 @@ import {
   Icon,
   NonIdealState,
   Spinner,
+  SpinnerSize,
   TagInput,
   Text
 } from '@blueprintjs/core';
@@ -25,11 +26,16 @@ import {
   getContentAsString,
   parseMetadataProperties
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
-import MissionRepoData from '../../commons/githubAssessments/MissionRepoData';
+import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import {
+  GetContentData,
+  GetContentResponse,
+  GitHubRepositoryInformation
+} from '../../features/github/OctokitTypes';
 
 type DispatchProps = {
   handleGitHubLogIn: () => void;
@@ -42,14 +48,29 @@ type DispatchProps = {
  */
 const GitHubMissionListing: React.FC<DispatchProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-
-  const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
-  const [display, setDisplay] = useState<JSX.Element>(<></>);
-
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
-  const [values, setValues] = useState<React.ReactNode[]>([]);
+  const [display, setDisplay] = useState<JSX.Element>(<></>);
+  const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
+  const [filterTagNodes, setFilterTagNodes] = useState<React.ReactNode[]>([]);
+  const [filterTagStrings, setFilterTagStrings] = useState<string[]>([]);
 
+  const handleTagChange = React.useCallback((values: React.ReactNode[]) => {
+    setFilterTagNodes(values);
+
+    const newFilterTagStrings: string[] = [];
+    for (let i = 0; i < values.length; i++) {
+      const value = values[i];
+      if (value) {
+        newFilterTagStrings.push(value.toString().toLowerCase());
+      }
+    }
+    setFilterTagStrings(newFilterTagStrings);
+  }, []);
+
+  const handleTagClear = React.useCallback(() => handleTagChange([]), [handleTagChange]);
+
+  // Used to retrieve browsable missions
   useEffect(() => {
     if (octokit === undefined) {
       setDisplay(
@@ -77,66 +98,51 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     props.handleGitHubLogOut
   ]);
 
+  // After browsable missions retrieved, display mission listing
   useEffect(() => {
-    if (browsableMissions.length > 0) {
-      const filteredMissions: BrowsableMission[] = [];
-      browsableMissions.forEach(mission => {
-        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
-          filteredMissions.push(mission);
-        }
-      });
-
-      function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
-        let match = false;
-        tags.forEach(tag => {
-          if (tag !== null && tag !== undefined) {
-            if (mission.title.includes(tag.toString())) {
-              match = true;
-            } else if (mission.webSummary.includes(tag.toString())) {
-              match = true;
-            } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
-              match = true;
-            }
-          }
-        });
-        return match;
-      }
-
-      const handleClear = () => {
-        handleChange([]);
-      };
-
-      const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
-
-      const handleChange = (values: React.ReactNode[]) => {
-        setValues(values);
-      };
-
-      const tagFilter = (
-        <TagInput
-          leftIcon={IconNames.FILTER}
-          onChange={handleChange}
-          placeholder="Separate tags with commas..."
-          rightElement={clearButton}
-          tagProps={{ minimal: true }}
-          values={values}
-        />
-      );
-
-      const cards =
-        values.length === 0
-          ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
-          : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
-
+    if (browsableMissions.length === 0) {
       setDisplay(
-        <>
-          {tagFilter}
-          <Divider />
-          {cards}
-        </>
+        <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
       );
+      return;
     }
-  }, [browsableMissions, isMobileBreakpoint, setDisplay, values]);
+
+    // Create tag filter
+    const clearButton = <Button icon={'cross'} minimal={true} onClick={handleTagClear} />;
+    const tagFilter = (
+      <TagInput
+        leftIcon={IconNames.FILTER}
+        onChange={handleTagChange}
+        placeholder="Separate tags with commas..."
+        rightElement={clearButton}
+        tagProps={{ minimal: true }}
+        values={filterTagNodes}
+      />
+    );
+
+    // Create cards
+    const missionListing =
+      filterTagNodes.length === 0
+        ? browsableMissions
+        : browsableMissions.filter(mission => missionMatchesTags(mission, filterTagStrings));
+    const cards = missionListing.map(element => convertMissionToCard(element, isMobileBreakpoint));
+
+    setDisplay(
+      <>
+        {tagFilter}
+        <Divider />
+        {cards}
+      </>
+    );
+  }, [
+    browsableMissions,
+    filterTagNodes,
+    filterTagStrings,
+    handleTagChange,
+    handleTagClear,
+    isMobileBreakpoint,
+    setDisplay
+  ]);
 
   return (
     <div className="Academy">
@@ -146,6 +152,27 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     </div>
   );
 };
+
+function missionMatchesTags(mission: BrowsableMission, tags: string[]) {
+  let match = false;
+
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i];
+
+    if (tag) {
+      const titleIncludesTag = mission.title.toLowerCase().includes(tag);
+      const summaryIncludesTag = mission.webSummary.toLowerCase().includes(tag);
+      const ownerLoginIncludesTag = mission.missionRepoData.repoOwner.toLowerCase().includes(tag);
+      match = titleIncludesTag || summaryIncludesTag || ownerLoginIncludesTag;
+    }
+
+    if (match) {
+      break;
+    }
+  }
+
+  return match;
+}
 
 /**
  * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
@@ -162,50 +189,61 @@ async function retrieveBrowsableMissions(
   if (octokit === undefined) return;
 
   setDisplay(
-    <NonIdealState description="Loading Missions" icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+    <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
   );
 
-  const allRepos = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
-  const correctlyNamedRepos = allRepos.filter((repo: any) => repo.name.startsWith('sa-'));
+  const allRepos: GitHubRepositoryInformation[] = (
+    await octokit.repos.listForAuthenticatedUser({ per_page: 100 })
+  ).data;
+  const correctlyNamedRepos = allRepos.filter((repo: GitHubRepositoryInformation) =>
+    repo.name.startsWith('sa-')
+  );
   const foundMissionRepos: MissionRepoData[] = [];
 
   for (let i = 0; i < correctlyNamedRepos.length; i++) {
-    const repo = correctlyNamedRepos[i] as any;
+    const repo = correctlyNamedRepos[i];
+    const login = (repo.owner as any).login;
 
-    const files = (
-      await octokit.repos.getContent({
-        owner: repo.owner.login,
-        repo: repo.name,
-        path: ''
-      })
-    ).data;
+    const getContentResponse: GetContentResponse = await octokit.repos.getContent({
+      owner: login,
+      repo: repo.name,
+      path: ''
+    });
+    const files: GetContentData = getContentResponse.data;
 
     if (!Array.isArray(files)) {
       setDisplay(<NonIdealState title="There are no assessments." icon={IconNames.FLAME} />);
       return;
     }
 
-    if (files.find(file => file.name === '.metadata') !== undefined) {
+    let repositoryContainsMetadataFile = false;
+    for (let j = 0; j < files.length; j++) {
+      const file = files[j];
+      if (file.name === '.metadata') {
+        repositoryContainsMetadataFile = true;
+        break;
+      }
+    }
+
+    if (repositoryContainsMetadataFile) {
       const missionRepoData: MissionRepoData = {
-        repoOwner: repo.owner.login,
+        repoOwner: login,
         repoName: repo.name,
-        dateOfCreation: new Date(repo.created_at)
+        dateOfCreation: new Date(repo.created_at || '')
       };
       foundMissionRepos.push(missionRepoData);
     }
   }
 
-  const browsableMissions: BrowsableMission[] = [];
-
-  for (let i = 0; i < foundMissionRepos.length; i++) {
-    browsableMissions.push(await convertRepoToBrowsableMission(foundMissionRepos[i], octokit));
-  }
-
-  browsableMissions.sort((a, b) => {
-    return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+  const missionPromises = foundMissionRepos.map(missionRepoData =>
+    convertRepoToBrowsableMission(missionRepoData, octokit)
+  );
+  Promise.all(missionPromises).then((browsableMissions: BrowsableMission[]) => {
+    browsableMissions.sort((a, b) => {
+      return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+    });
+    setBrowsableMissions(browsableMissions);
   });
-
-  setBrowsableMissions(browsableMissions);
 }
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {

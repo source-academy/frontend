@@ -11,7 +11,7 @@ exports[`Navbar renders correctly 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <ControlBarGitHubLoginButton loggedInAs={[undefined]} onClickLogIn={[Function: handleGitHubLogIn]} onClickLogOut={[Function: handleGitHubLogOut]} />
+    <ControlBarGitHubLoginButton onClickLogIn={[Function: handleGitHubLogIn]} onClickLogOut={[Function: handleGitHubLogOut]} />
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"
 `;
