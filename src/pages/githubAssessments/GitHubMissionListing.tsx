@@ -21,7 +21,6 @@ import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
-import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
 import {
   getContentAsString,
   parseMetadataProperties
@@ -37,16 +36,11 @@ import {
   GitHubRepositoryInformation
 } from '../../features/github/OctokitTypes';
 
-type DispatchProps = {
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
-};
-
 /**
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
-const GitHubMissionListing: React.FC<DispatchProps> = props => {
+const GitHubMissionListing: React.FC<any> = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
@@ -70,32 +64,12 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
   const handleTagClear = React.useCallback(() => handleTagChange([]), [handleTagChange]);
 
-  // Used to retrieve browsable missions
-  useEffect(() => {
-    if (octokit === undefined) {
-      setBrowsableMissions([]);
-      setDisplay(
-        <>
-          <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-          {isMobileBreakpoint && (
-            <ControlBarGitHubLoginButton
-              key="github"
-              onClickLogIn={props.handleGitHubLogIn}
-              onClickLogOut={props.handleGitHubLogOut}
-            />
-          )}
-        </>
-      );
-    } else {
-      setDisplay(
-        <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
-      );
-      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
-    }
-  }, [isMobileBreakpoint, octokit, props.handleGitHubLogIn, props.handleGitHubLogOut]);
-
   // After browsable missions retrieved, display mission listing
   useEffect(() => {
+    if (octokit === undefined) {
+      return;
+    }
+
     if (browsableMissions.length === 0) {
       setDisplay(
         <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
@@ -128,13 +102,6 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
         {tagFilter}
         <Divider />
         {cards}
-        {isMobileBreakpoint && (
-          <ControlBarGitHubLoginButton
-            key="github"
-            onClickLogIn={props.handleGitHubLogIn}
-            onClickLogOut={props.handleGitHubLogOut}
-          />
-        )}
       </>
     );
   }, [
@@ -144,9 +111,20 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     handleTagChange,
     handleTagClear,
     isMobileBreakpoint,
-    props.handleGitHubLogIn,
-    props.handleGitHubLogOut
+    octokit,
+    setDisplay
   ]);
+
+  // Used to retrieve browsable missions
+  useEffect(() => {
+    if (octokit === undefined) {
+      setDisplay(
+        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+      );
+    } else {
+      retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
+    }
+  }, [octokit, setBrowsableMissions, setDisplay]);
 
   return (
     <div className="Academy">
