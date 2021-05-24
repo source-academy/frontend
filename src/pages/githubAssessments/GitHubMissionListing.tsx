@@ -21,6 +21,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
+import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
 import {
   getContentAsString,
   parseMetadataProperties
@@ -36,11 +37,16 @@ import {
   GitHubRepositoryInformation
 } from '../../features/github/OctokitTypes';
 
+type DispatchProps = {
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
+};
+
 /**
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
-const GitHubMissionListing: React.FC<any> = () => {
+const GitHubMissionListing: React.FC<DispatchProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
@@ -119,12 +125,28 @@ const GitHubMissionListing: React.FC<any> = () => {
   useEffect(() => {
     if (octokit === undefined) {
       setDisplay(
-        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+        <>
+          <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+          {isMobileBreakpoint && (
+            <ControlBarGitHubLoginButton
+              key="github"
+              onClickLogIn={props.handleGitHubLogIn}
+              onClickLogOut={props.handleGitHubLogOut}
+            />
+          )}
+        </>
       );
     } else {
       retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
     }
-  }, [octokit, setBrowsableMissions, setDisplay]);
+  }, [
+    isMobileBreakpoint,
+    octokit,
+    props.handleGitHubLogIn,
+    props.handleGitHubLogOut,
+    setBrowsableMissions,
+    setDisplay
+  ]);
 
   return (
     <div className="Academy">
