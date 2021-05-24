@@ -16,6 +16,8 @@ type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 type DrawerProps = {
   isOpen: boolean;
   onClose: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 type OwnProps = {

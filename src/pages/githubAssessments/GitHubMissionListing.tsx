@@ -17,6 +17,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
+import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -30,11 +31,16 @@ import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
+type DispatchProps = {
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
+};
+
 /**
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
-const GitHubMissionListing: React.FC<any> = () => {
+const GitHubMissionListing: React.FC<DispatchProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
@@ -47,12 +53,29 @@ const GitHubMissionListing: React.FC<any> = () => {
   useEffect(() => {
     if (octokit === undefined) {
       setDisplay(
-        <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+        <>
+          <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+          {isMobileBreakpoint && (
+            <ControlBarGitHubLoginButton
+              loggedInAs={getGitHubOctokitInstance()}
+              key="github"
+              onClickLogIn={props.handleGitHubLogIn}
+              onClickLogOut={props.handleGitHubLogOut}
+            />
+          )}
+        </>
       );
     } else {
       retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
     }
-  }, [octokit, setBrowsableMissions, setDisplay]);
+  }, [
+    octokit,
+    setBrowsableMissions,
+    setDisplay,
+    isMobileBreakpoint,
+    props.handleGitHubLogIn,
+    props.handleGitHubLogOut
+  ]);
 
   useEffect(() => {
     if (browsableMissions.length > 0) {
