@@ -1,6 +1,8 @@
-import { EditableText } from '@blueprintjs/core';
+import { EditableText, NumericInput } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { cloneDeep } from 'lodash';
-import { useContext, useMemo, useReducer } from 'react';
+import { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {
@@ -22,7 +24,9 @@ import EditableView from './EditableView';
 
 type EditableCardProps = {
   uuid: string;
-  releaseUuid: (uuid: string) => void;
+  isNewAchievement: boolean;
+  releaseUuid: () => void;
+  removeCard: (uuid: string) => void;
   requestPublish: () => void;
 };
 
@@ -120,26 +124,46 @@ const reducer = (state: State, action: Action) => {
         },
         isDirty: true
       };
+    case ActionType.CHANGE_XP:
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          xp: action.payload
+        },
+        isDirty: true
+      };
+    case ActionType.CHANGE_IS_VARIABLE_XP:
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          isVariableXp: !state.editableAchievement.isVariableXp
+        },
+        isDirty: true
+      };
     default:
       return state;
   }
 };
 
 function EditableCard(props: EditableCardProps) {
-  const { uuid, releaseUuid, requestPublish } = props;
+  const { uuid, isNewAchievement, releaseUuid, removeCard, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
   const achievement = inferencer.getAchievement(uuid);
   const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
 
   const [state, dispatch] = useReducer(reducer, achievementClone, init);
+  const [isNew, setIsNew] = useState<boolean>(isNewAchievement);
   const { editableAchievement, isDirty } = state;
-  const { ability, cardBackground, deadline, release, title, view } = editableAchievement;
+  const { ability, cardBackground, deadline, release, title, view, xp } = editableAchievement;
 
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyAchievement(editableAchievement);
-    releaseUuid(uuid);
+    if (isNew) {
+      releaseUuid();
+      setIsNew(false);
+    }
     requestPublish();
   };
 
@@ -149,7 +173,11 @@ function EditableCard(props: EditableCardProps) {
   const deleteAchievement = () => {
     dispatch({ type: ActionType.DELETE_ACHIEVEMENT });
     inferencer.removeAchievement(uuid);
-    releaseUuid(uuid);
+    if (isNew) {
+      releaseUuid();
+      setIsNew(false);
+    }
+    removeCard(uuid);
     requestPublish();
   };
 
@@ -162,8 +190,9 @@ function EditableCard(props: EditableCardProps) {
   const changeDeadline = (deadline?: Date) =>
     dispatch({ type: ActionType.CHANGE_DEADLINE, payload: deadline });
 
-  const changeGoalUuids = (goalUuids: string[]) =>
+  const changeGoalUuids = (goalUuids: string[]) => {
     dispatch({ type: ActionType.CHANGE_GOAL_UUIDS, payload: goalUuids });
+  };
 
   const changePosition = (position: number) =>
     dispatch({ type: ActionType.CHANGE_POSITION, payload: position });
@@ -179,6 +208,10 @@ function EditableCard(props: EditableCardProps) {
 
   const changeView = (view: AchievementView) =>
     dispatch({ type: ActionType.CHANGE_VIEW, payload: view });
+
+  const changeXp = (xp: number) => dispatch({ type: ActionType.CHANGE_XP, payload: xp });
+
+  const changeIsVariableXp = () => dispatch({ type: ActionType.CHANGE_IS_VARIABLE_XP });
 
   return (
     <li
@@ -199,6 +232,18 @@ function EditableCard(props: EditableCardProps) {
         <h3 className="title">
           <EditableText onChange={changeTitle} placeholder="Enter your title here" value={title} />
         </h3>
+        <div className="xp">
+          <Tooltip2 content="XP">
+            <NumericInput
+              value={xp}
+              min={0}
+              allowNumericCharactersOnly={true}
+              leftIcon={IconNames.TRENDING_UP}
+              placeholder="XP"
+              onValueChange={changeXp}
+            />
+          </Tooltip2>
+        </div>
         <div className="details">
           <EditableAbility ability={ability} changeAbility={changeAbility} />
           <EditableDate changeDate={changeRelease} date={release} type="Release" />
@@ -213,6 +258,7 @@ function EditableCard(props: EditableCardProps) {
           changeGoalUuids={changeGoalUuids}
           changePosition={changePosition}
           changePrerequisiteUuids={changePrerequisiteUuids}
+          changeIsVariableXp={changeIsVariableXp}
           editableAchievement={editableAchievement}
         />
       </div>

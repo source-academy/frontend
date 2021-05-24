@@ -1,5 +1,6 @@
-import { Button, Tooltip } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 type ItemSaverProps = {
@@ -22,13 +23,13 @@ function ItemSaver(props: ItemSaverProps) {
 
   return (
     <>
-      <Tooltip content="Save Changes">
+      <Tooltip2 content="Save Changes">
         <Button icon={IconNames.FLOPPY_DISK} intent="primary" onClick={handleSaveChanges} />
-      </Tooltip>
+      </Tooltip2>
 
-      <Tooltip content="Discard Changes">
+      <Tooltip2 content="Discard Changes">
         <Button icon={IconNames.CROSS} intent="danger" onClick={handleDiscardChanges} />
-      </Tooltip>
+      </Tooltip2>
     </>
   );
 }

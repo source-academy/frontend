@@ -3,20 +3,26 @@ import { action } from 'typesafe-actions';
 import {
   AchievementGoal,
   AchievementItem,
+  AchievementUser,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
+  EventType,
   GET_ACHIEVEMENTS,
   GET_GOALS,
   GET_OWN_GOALS,
+  GET_USERS,
   GoalDefinition,
   GoalProgress,
+  HANDLE_EVENT,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
   SAVE_ACHIEVEMENTS,
   SAVE_GOALS,
-  UPDATE_GOAL_PROGRESS
+  SAVE_USERS,
+  UPDATE_GOAL_PROGRESS,
+  UPDATE_OWN_GOAL_PROGRESS
 } from './AchievementTypes';
 
 export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
@@ -35,9 +41,19 @@ export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
 
+export const getUsers = () => action(GET_USERS);
+
 export const removeAchievement = (uuid: string) => action(REMOVE_ACHIEVEMENT, uuid);
 
 export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
+
+export const updateOwnGoalProgress = (progress: GoalProgress) =>
+  action(UPDATE_OWN_GOAL_PROGRESS, progress);
+
+export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
+
+export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentId, progress });
 
 /*
   Note: This updates the frontend Achievement Redux store.
@@ -52,5 +68,8 @@ export const saveAchievements = (achievements: AchievementItem[]) =>
 */
 export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
 
-export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
-  action(UPDATE_GOAL_PROGRESS, { studentId, progress });
+/*
+  Note: This updates the frontend Achievement Redux store.
+  Please refer to AchievementReducer to find out more. 
+*/
+export const saveUsers = (users: AchievementUser[]) => action(SAVE_USERS, users);

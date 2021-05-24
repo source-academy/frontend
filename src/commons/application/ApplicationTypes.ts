@@ -175,7 +175,8 @@ export const defaultDashboard: DashboardState = {
 
 export const defaultAchievement: AchievementState = {
   achievements: [],
-  goals: []
+  goals: [],
+  users: []
 };
 
 export const defaultPlayground: PlaygroundState = {

@@ -1,22 +1,22 @@
 import { Button, Dialog } from '@blueprintjs/core';
-import { DatePicker } from '@blueprintjs/datetime';
+import { TimePicker } from '@blueprintjs/datetime';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
-import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
+import { prettifyTime } from 'src/commons/achievement/utils/DateHelper';
 
-type EditableDateProps = {
+type EditableTimeProps = {
   type: string;
-  date?: Date;
-  changeDate: (date?: Date) => void;
+  time?: Date;
+  changeTime: (time?: Date) => void;
 };
 
-function EditableDate(props: EditableDateProps) {
-  const { type, date, changeDate } = props;
+function EditableTime(props: EditableTimeProps) {
+  const { type, time, changeTime } = props;
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
 
-  const hoverText = date === undefined ? `No ${type}` : `${prettifyDate(date)}`;
+  const hoverText = time === undefined ? `No ${type}` : `${prettifyTime(time)}`;
 
   return (
     <>
@@ -35,15 +35,11 @@ function EditableDate(props: EditableDateProps) {
         }}
         title={`${type}`}
       >
-        <DatePicker
-          onChange={changeDate}
-          timePickerProps={{ showArrowButtons: true }}
-          value={date}
-        />
-        <Button onClick={() => changeDate(undefined)} text={`Remove ${type}`} />
+        <TimePicker onChange={changeTime} showArrowButtons={true} value={time} />
+        <Button onClick={() => changeTime(undefined)} text={`Remove ${type}`} />
       </Dialog>
     </>
   );
 }
 
-export default EditableDate;
+export default EditableTime;
