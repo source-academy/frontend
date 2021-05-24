@@ -6,7 +6,9 @@ import NavigationBarMobileSideMenu from '../NavigationBarMobileSideMenu';
 test('NavigationBarMobileSideMenu renders "Not logged in" correctly', () => {
   const props = {
     isOpen: true,
-    onClose: () => {}
+    onClose: () => {},
+    handleGitHubLogIn: () => {},
+    handleGitHubLogOut: () => {}
   };
   const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
   expect(tree.debug()).toMatchSnapshot();
@@ -16,7 +18,9 @@ test('NavigationBarMobileSideMenu renders correctly with student role', () => {
   const props = {
     isOpen: true,
     onClose: () => {},
-    role: Role.Student
+    role: Role.Student,
+    handleGitHubLogIn: () => {},
+    handleGitHubLogOut: () => {}
   };
   const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
   expect(tree.debug()).toMatchSnapshot();
