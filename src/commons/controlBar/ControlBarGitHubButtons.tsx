@@ -12,11 +12,11 @@ import Constants from '../utils/Constants';
 export type ControlBarGitHubButtonsProps = {
   loggedInAs: Octokit;
   githubSaveInfo: { repoName: string; filePath: string };
-  onClickOpen?: () => any;
-  onClickSave?: () => any;
-  onClickSaveAs?: () => any;
-  onClickLogIn?: () => any;
-  onClickLogOut?: () => any;
+  onClickOpen?: () => void;
+  onClickSave?: () => void;
+  onClickSaveAs?: () => void;
+  onClickLogIn?: () => void;
+  onClickLogOut?: () => void;
 };
 
 const stateToIntent: { [state in GitHubState]: Intent } = {
