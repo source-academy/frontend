@@ -212,7 +212,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <div style={{ width: 0 }}>
+        <div className={'sa-env-visualizer'}>
           <Stage width={Layout.width} height={Layout.height}>
             <Layer>
               <Rect

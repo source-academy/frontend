@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer component renders correctly 1`] = `
-"<div className=\\"sa-env-visualizer bp3-dark\\">
+"<div className=\\"bp3-dark\\">
   <p id=\\"env-visualizer-default-text\\" className=\\"bp3-running-text\\">
     The environmental visualizer generates the environmental model diagram based on breakpoints set in the editor.
     <br />
