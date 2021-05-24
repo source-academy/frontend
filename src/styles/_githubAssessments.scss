@@ -1,16 +1,3 @@
-.MissionEditor {
-  height: 100%;
-  display: flex;
-  background-color: $cadet-color-1;
-  flex-direction: column;
-  flex: 1 1 100%;
-
-  .Multi-line {
-    white-space: 'pre-line';
-    overflow-wrap: 'break-word';
-  }
-}
-
 .missionBrowser {
   background-color: $cadet-color-3;
   min-width: 600px;
