@@ -5,8 +5,8 @@ import {
   Dialog,
   InputGroup,
   Intent,
-  ITreeNode,
-  Tree
+  Tree,
+  TreeNodeInfo
 } from '@blueprintjs/core';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
@@ -35,7 +35,7 @@ export type FileExplorerDialogProps = {
 };
 
 const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
-  const [repoFiles, setRepoFiles] = useState<ITreeNode<GitHubFileNodeData>[]>([]);
+  const [repoFiles, setRepoFiles] = useState<TreeNodeInfo<GitHubFileNodeData>[]>([]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
 
@@ -148,17 +148,17 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   }
 
   async function handleNodeClick(
-    treeNode: ITreeNode<GitHubFileNodeData>,
+    treeNode: TreeNodeInfo<GitHubFileNodeData>,
     _nodePath: number[],
     e: React.MouseEvent<HTMLElement>
   ) {
     const originallySelected = treeNode.isSelected;
 
     const allNodesCallback = !e.shiftKey
-      ? (node: ITreeNode<GitHubFileNodeData>) => (node.isSelected = false)
-      : (node: ITreeNode<GitHubFileNodeData>) => {};
+      ? (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isSelected = false)
+      : (node: TreeNodeInfo<GitHubFileNodeData>) => {};
 
-    const specificNodeCallback = (node: ITreeNode<GitHubFileNodeData>) => {
+    const specificNodeCallback = (node: TreeNodeInfo<GitHubFileNodeData>) => {
       // if originally selected is null, set to true
       // else, toggle the selection
       node.isSelected = originallySelected === null ? true : !originallySelected;
@@ -179,12 +179,12 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     }
   }
 
-  async function handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
+  async function handleNodeCollapse(treeNode: TreeNodeInfo<GitHubFileNodeData>) {
     const newRepoFiles = await cloneWithCallbacks(
       repoFiles,
       treeNode,
-      (node: ITreeNode<GitHubFileNodeData>) => {},
-      (node: ITreeNode<GitHubFileNodeData>) => (node.isExpanded = false)
+      (node: TreeNodeInfo<GitHubFileNodeData>) => {},
+      (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isExpanded = false)
     );
 
     if (newRepoFiles !== null) {
@@ -192,12 +192,12 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     }
   }
 
-  async function handleNodeExpand(treeNode: ITreeNode<GitHubFileNodeData>) {
+  async function handleNodeExpand(treeNode: TreeNodeInfo<GitHubFileNodeData>) {
     const newRepoFiles = await cloneWithCallbacks(
       repoFiles,
       treeNode,
-      (node: ITreeNode<GitHubFileNodeData>) => {},
-      async (node: ITreeNode<GitHubFileNodeData>) => {
+      (node: TreeNodeInfo<GitHubFileNodeData>) => {},
+      async (node: TreeNodeInfo<GitHubFileNodeData>) => {
         node.isExpanded = true;
 
         if (node.nodeData !== undefined && !node.nodeData.childrenRetrieved) {
@@ -216,10 +216,10 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   }
 
   async function cloneWithCallbacks(
-    treeNodes: ITreeNode<GitHubFileNodeData>[],
-    treeNodeToEdit: ITreeNode<GitHubFileNodeData>,
-    allNodesCallback: (node: ITreeNode<GitHubFileNodeData>) => void,
-    specificNodeCallback: (node: ITreeNode<GitHubFileNodeData>) => void
+    treeNodes: TreeNodeInfo<GitHubFileNodeData>[],
+    treeNodeToEdit: TreeNodeInfo<GitHubFileNodeData>,
+    allNodesCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void,
+    specificNodeCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void
   ) {
     if (treeNodes === null) {
       return null;

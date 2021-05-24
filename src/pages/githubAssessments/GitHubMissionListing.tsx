@@ -18,10 +18,10 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { ControlBarGitHubLoginButton } from 'src/commons/controlBar/ControlBarGitHubLoginButton';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
+import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
 import {
   getContentAsString,
   parseMetadataProperties
@@ -73,12 +73,12 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
   // Used to retrieve browsable missions
   useEffect(() => {
     if (octokit === undefined) {
+      setBrowsableMissions([]);
       setDisplay(
         <>
           <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
           {isMobileBreakpoint && (
             <ControlBarGitHubLoginButton
-              loggedInAs={getGitHubOctokitInstance()}
               key="github"
               onClickLogIn={props.handleGitHubLogIn}
               onClickLogOut={props.handleGitHubLogOut}
@@ -87,16 +87,12 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
         </>
       );
     } else {
+      setDisplay(
+        <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
+      );
       retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
     }
-  }, [
-    octokit,
-    setBrowsableMissions,
-    setDisplay,
-    isMobileBreakpoint,
-    props.handleGitHubLogIn,
-    props.handleGitHubLogOut
-  ]);
+  }, [isMobileBreakpoint, octokit, props.handleGitHubLogIn, props.handleGitHubLogOut]);
 
   // After browsable missions retrieved, display mission listing
   useEffect(() => {
@@ -132,6 +128,13 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
         {tagFilter}
         <Divider />
         {cards}
+        {isMobileBreakpoint && (
+          <ControlBarGitHubLoginButton
+            key="github"
+            onClickLogIn={props.handleGitHubLogIn}
+            onClickLogOut={props.handleGitHubLogOut}
+          />
+        )}
       </>
     );
   }, [
@@ -141,7 +144,8 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     handleTagChange,
     handleTagClear,
     isMobileBreakpoint,
-    setDisplay
+    props.handleGitHubLogIn,
+    props.handleGitHubLogOut
   ]);
 
   return (
