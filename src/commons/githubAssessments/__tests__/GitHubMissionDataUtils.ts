@@ -83,6 +83,7 @@ test('getMissionData works properly', async () => {
   getContentMock
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Briefing String
       (contentResponse.data as GitHubFile).content = Buffer.from(
         'Briefing Content',
         'utf8'
@@ -91,6 +92,7 @@ test('getMissionData works properly', async () => {
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Metadata String
       (contentResponse.data as GitHubFile).content = Buffer.from(
         'coverImage=www.somelink.com\n' +
           'kind=Mission\n' +
@@ -105,16 +107,22 @@ test('getMissionData works properly', async () => {
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Get files/folders at root
       contentResponse.data = [generateGitHubSubDirectory('Q1'), generateGitHubSubDirectory('Q2')];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
+      // Get folder contents for Q1
       const contentResponse = generateGetContentResponse();
-      contentResponse.data = [];
+      contentResponse.data = [
+        generateGitHubSubDirectory('Problem.md'),
+        generateGitHubSubDirectory('StarterCode.js')
+      ];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Q1/Problem.md
       (contentResponse.data as GitHubFile).content = Buffer.from('Task A', 'utf8').toString(
         'base64'
       );
@@ -122,6 +130,7 @@ test('getMissionData works properly', async () => {
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Q1/StarterCode.js
       (contentResponse.data as GitHubFile).content = Buffer.from('Code A', 'utf8').toString(
         'base64'
       );
@@ -129,11 +138,19 @@ test('getMissionData works properly', async () => {
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
-      contentResponse.data = [];
+      // Folder contents for Q2
+      contentResponse.data = [
+        generateGitHubSubDirectory('Problem.md'),
+        generateGitHubSubDirectory('StarterCode.js'),
+        generateGitHubSubDirectory('SavedCode.js'),
+        generateGitHubSubDirectory('TestPrepend.js'),
+        generateGitHubSubDirectory('TestCases.json')
+      ];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Q2/Problem.md
       (contentResponse.data as GitHubFile).content = Buffer.from('Task B', 'utf8').toString(
         'base64'
       );
@@ -141,9 +158,38 @@ test('getMissionData works properly', async () => {
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
+      // Q2/StarterCode.js
       (contentResponse.data as GitHubFile).content = Buffer.from('Code B', 'utf8').toString(
         'base64'
       );
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      // Q2/SavedCode.js
+      (contentResponse.data as GitHubFile).content = Buffer.from('Code C', 'utf8').toString(
+        'base64'
+      );
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      // Q2/TestPrepend.js
+      (contentResponse.data as GitHubFile).content = Buffer.from('Code D', 'utf8').toString(
+        'base64'
+      );
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      // Q2/TestCases.json
+      (contentResponse.data as GitHubFile).content = Buffer.from(
+        `[{
+        "answer": "[[1, [2, [3, null]]], [4, [5, null]]]",
+        "program": "sort_pair_of_lists(pair(list(2, 1, 3), list(5, 4)));"
+      }]`,
+        'utf8'
+      ).toString('base64');
       return contentResponse;
     });
 
@@ -163,10 +209,33 @@ test('getMissionData works properly', async () => {
   expect(missionData.missionMetadata.sourceVersion).toBe(3);
 
   expect(missionData.tasksData.length).toBe(2);
+
+  expect(missionData.tasksData[0]).toEqual({
+    taskDescription: 'Task A',
+    starterCode: 'Code A',
+    savedCode: 'Code A',
+    testPrepend: '',
+    testCases: []
+  });
+  expect(missionData.tasksData[1]).toEqual({
+    taskDescription: 'Task B',
+    starterCode: 'Code B',
+    savedCode: 'Code C',
+    testPrepend: 'Code D',
+    testCases: [
+      {
+        answer: '[[1, [2, [3, null]]], [4, [5, null]]]',
+        program: 'sort_pair_of_lists(pair(list(2, 1, 3), list(5, 4)));'
+      }
+    ]
+  });
+
+  /*
   expect(missionData.tasksData[0].taskDescription).toBe('Task A');
   expect(missionData.tasksData[0].starterCode).toBe('Code A');
   expect(missionData.tasksData[1].taskDescription).toBe('Task B');
   expect(missionData.tasksData[1].starterCode).toBe('Code B');
+  */
 });
 
 function generateGitHubSubDirectory(name: string) {

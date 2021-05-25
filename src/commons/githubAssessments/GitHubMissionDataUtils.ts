@@ -59,13 +59,14 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
     return questions;
   }
 
-  const results: GetContentResponse = await octokit.repos.getContent({
+  // Get files in root
+  const rootFolderContents: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: ''
   });
 
-  const files = results.data;
+  const files = rootFolderContents.data;
 
   if (!Array.isArray(files)) {
     return questions;
@@ -80,13 +81,13 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       break;
     }
 
-    // Find out if there is already SavedCode for the question
     const folderContents: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: questionFolderName
     });
 
+    // folderContents is for some reason not an array
     if (!Array.isArray(folderContents.data)) {
       return questions;
     }

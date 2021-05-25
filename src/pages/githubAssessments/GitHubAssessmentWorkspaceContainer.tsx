@@ -19,13 +19,14 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  resetWorkspace,
   setEditorBreakpoint,
   updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {
@@ -73,6 +74,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+        resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
