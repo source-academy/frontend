@@ -71,33 +71,6 @@ test('parseMetadataProperties correctly discovers properties', () => {
   expect(retVal.dueDate).toStrictEqual(new Date('December 17, 1995 03:24:00'));
 });
 
-test('convertMissionMetadataToMetadataString works as expected', () => {
-  const missionMetadata = {
-    title: 'Dummy Mission',
-    coverImage: 'www.somelink.com',
-    webSummary: 'no',
-    dueDate: new Date('Sun Dec 17 1995 03:24:00 GMT+0800 (Singapore Standard Time)'),
-    kind: 'Mission',
-    number: 'M3',
-    sourceVersion: 3,
-    reading: 'Textbook Pages 1 to 234763'
-  } as MissionMetadata;
-
-  const metadataString =
-    GitHubMissionDataUtils.convertMissionMetadataToMetadataString(missionMetadata);
-
-  expect(metadataString).toBe(
-    'title=Dummy Mission\n' +
-      'coverImage=www.somelink.com\n' +
-      'webSummary=no\n' +
-      'dueDate=Sun Dec 17 1995 03:24:00 GMT+0800 (Singapore Standard Time)\n' +
-      'kind=Mission\n' +
-      'number=M3\n' +
-      'sourceVersion=3\n' +
-      'reading=Textbook Pages 1 to 234763'
-  );
-});
-
 test('getMissionData works properly', async () => {
   const missionRepoData: MissionRepoData = {
     repoOwner: 'Pain',
@@ -176,11 +149,8 @@ test('getMissionData works properly', async () => {
 
   const missionData = await GitHubMissionDataUtils.getMissionData(missionRepoData, octokit);
 
-  expect(missionData.missionRepoData).toEqual({
-    repoOwner: 'Pain',
-    repoName: 'Peko',
-    dateOfCreation: new Date('December 17, 1995 03:24:00')
-  });
+  expect(missionData.missionRepoData.repoOwner).toBe('Pain');
+  expect(missionData.missionRepoData.repoName).toBe('Peko');
 
   expect(missionData.missionBriefing).toBe('Briefing Content');
 
@@ -193,25 +163,10 @@ test('getMissionData works properly', async () => {
   expect(missionData.missionMetadata.sourceVersion).toBe(3);
 
   expect(missionData.tasksData.length).toBe(2);
-  expect(missionData.tasksData[0]).toEqual({
-    taskDescription: 'Task A',
-    starterCode: 'Code A',
-    savedCode: 'Code A',
-    testPrepend: '',
-    testCases: []
-  });
-  expect(missionData.tasksData[1]).toEqual({
-    taskDescription: 'Task B',
-    starterCode: 'Code B',
-    savedCode: 'Code C',
-    testPrepend: 'Code D',
-    testCases: [
-      {
-        answer: '[[1, [2, [3, null]]], [4, [5, null]]]',
-        program: 'sort_pair_of_lists(pair(list(2, 1, 3), list(5, 4)));'
-      }
-    ]
-  });
+  expect(missionData.tasksData[0].taskDescription).toBe('Task A');
+  expect(missionData.tasksData[0].starterCode).toBe('Code A');
+  expect(missionData.tasksData[1].taskDescription).toBe('Task B');
+  expect(missionData.tasksData[1].starterCode).toBe('Code B');
 });
 
 function generateGitHubSubDirectory(name: string) {
