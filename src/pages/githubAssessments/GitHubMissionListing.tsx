@@ -50,11 +50,6 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
-<<<<<<< HEAD
-  const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
-  const [missionsRetrieved, setMissionsRetrieved] = useState(false);
-=======
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
   const [display, setDisplay] = useState<JSX.Element>(<></>);
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
   const [filterTagNodes, setFilterTagNodes] = useState<React.ReactNode[]>([]);
@@ -75,14 +70,13 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
   const handleTagClear = React.useCallback(() => handleTagChange([]), [handleTagChange]);
 
-<<<<<<< HEAD
   const signInToGitHubDisplay = useMemo(
     () => <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />,
     []
   );
   const noMissionReposFoundDisplay = useMemo(
     () => (
-      <NonIdealState description="No mission repositories found for user." icon={IconNames.FLAME} />
+      <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
     ),
     []
   );
@@ -95,14 +89,6 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     []
   );
 
-  useEffect(() => {
-    if (octokit === undefined) {
-      setDisplay(signInToGitHubDisplay);
-    } else {
-      retrieveBrowsableMissions(octokit, setBrowsableMissions, setMissionsRetrieved, setDisplay);
-    }
-  }, [octokit, setBrowsableMissions, setDisplay, signInToGitHubDisplay]);
-=======
   // After browsable missions retrieved, display mission listing
   useEffect(() => {
     if (octokit === undefined) {
@@ -111,11 +97,13 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
     if (browsableMissions.length === 0) {
       setDisplay(
-        <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
+        <>
+          {createMissionButton}
+          {noMissionReposFoundDisplay}
+        </>
       );
       return;
     }
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
 
     // Create tag filter
     const clearButton = <Button icon={'cross'} minimal={true} onClick={handleTagClear} />;
@@ -141,6 +129,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
       <>
         {tagFilter}
         <Divider />
+        {createMissionButton}
         {cards}
       </>
     );
@@ -157,87 +146,10 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
   // Used to retrieve browsable missions
   useEffect(() => {
-<<<<<<< HEAD
-    // If octokit not defined, ask user to log-in
-    if (octokit === undefined) {
-      setDisplay(signInToGitHubDisplay);
-      return;
-    }
-
-    // If missions have not been retrieved, wait for them to be retrieved
-    if (!missionsRetrieved) {
-      return;
-    }
-
-    if (browsableMissions.length > 0) {
-      const filteredMissions: BrowsableMission[] = [];
-
-      browsableMissions.forEach(mission => {
-        if (!filteredMissions.includes(mission) && matchTag(mission, values)) {
-          filteredMissions.push(mission);
-        }
-      });
-
-      const handleChange = (values: React.ReactNode[]) => {
-        setValues(values);
-      };
-
-      const handleClear = () => {
-        handleChange([]);
-      };
-
-      const clearButton = <Button icon={'cross'} minimal={true} onClick={handleClear} />;
-
-      const tagFilter = (
-        <TagInput
-          leftIcon={IconNames.FILTER}
-          onChange={handleChange}
-          placeholder="Filter by classroom name!"
-          rightElement={clearButton}
-          tagProps={{ minimal: true }}
-          values={values}
-        />
-      );
-
-      const cards =
-        values.length === 0
-          ? browsableMissions.map(element => convertMissionToCard(element, isMobileBreakpoint))
-          : filteredMissions.map(element => convertMissionToCard(element, isMobileBreakpoint));
-
-      setDisplay(
-        <>
-          {tagFilter}
-          <Divider />
-          {createMissionButton}
-          {cards}
-        </>
-      );
-      return;
-    }
-
-    if (browsableMissions.length === 0) {
-      setDisplay(
-        <>
-          {createMissionButton}
-          {noMissionReposFoundDisplay}
-        </>
-      );
-    }
-  }, [
-    browsableMissions,
-    isMobileBreakpoint,
-    octokit,
-    setDisplay,
-    missionsRetrieved,
-    values,
-    createMissionButton,
-    noMissionReposFoundDisplay,
-    signInToGitHubDisplay
-=======
     if (octokit === undefined) {
       setDisplay(
         <>
-          <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+          {signInToGitHubDisplay}
           {isMobileBreakpoint && (
             <ControlBarGitHubLoginButton
               key="github"
@@ -257,7 +169,6 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     props.handleGitHubLogOut,
     setBrowsableMissions,
     setDisplay
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
   ]);
 
   return (
@@ -269,21 +180,6 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
   );
 };
 
-<<<<<<< HEAD
-function matchTag(mission: BrowsableMission, tags: React.ReactNode[]) {
-  let match = false;
-  tags.forEach(tag => {
-    if (tag !== null && tag !== undefined) {
-      if (mission.title.includes(tag.toString())) {
-        match = true;
-      } else if (mission.webSummary.includes(tag.toString())) {
-        match = true;
-      } else if (mission.missionRepoData.repoOwner.includes(tag.toString())) {
-        match = true;
-      }
-    }
-  });
-=======
 function missionMatchesTags(mission: BrowsableMission, tags: string[]) {
   let match = false;
 
@@ -301,8 +197,6 @@ function missionMatchesTags(mission: BrowsableMission, tags: string[]) {
       break;
     }
   }
-
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
   return match;
 }
 
@@ -316,7 +210,6 @@ function missionMatchesTags(mission: BrowsableMission, tags: string[]) {
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
-  setMissionsRetrieved: (missionsRetrieved: boolean) => void,
   setDisplay: (display: JSX.Element) => void
 ) {
   if (octokit === undefined) return;
@@ -377,12 +270,6 @@ async function retrieveBrowsableMissions(
     });
     setBrowsableMissions(browsableMissions);
   });
-<<<<<<< HEAD
-
-  setBrowsableMissions(browsableMissions);
-  setMissionsRetrieved(true);
-=======
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
 }
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {

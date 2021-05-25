@@ -80,12 +80,8 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       break;
     }
 
-<<<<<<< HEAD
-    const folderContents = await octokit.repos.getContent({
-=======
     // Find out if there is already SavedCode for the question
     const folderContents: GetContentResponse = await octokit.repos.getContent({
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
       owner: repoOwner,
       repo: repoName,
       path: questionFolderName
@@ -95,7 +91,6 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       return questions;
     }
 
-<<<<<<< HEAD
     const taskData = {
       taskDescription: '',
       starterCode: '',
@@ -106,7 +101,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
 
     const identity = (content: any) => content;
 
-    const folderContentsAsArray = folderContents.data as any[];
+    const folderContentsAsArray = folderContents.data as GitHubSubDirectory[];
 
     // Map from each property to an object storing the following information:
     // 1) fileName: the name of the file with the data corresponding to file data
@@ -134,11 +129,6 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
         }
       }
     }
-=======
-    const hasSavedCode = (folderContents.data as GitHubSubDirectory[]).find(
-      (file: GitHubSubDirectory) => file.name === 'SavedCode.js'
-    );
->>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
 
     try {
       for (let i = 0; i < propKeys.length; i++) {
