@@ -18,7 +18,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { AutogradingResult, Library, Testcase } from '../../commons/assessment/AssessmentTypes';
+import { AutogradingResult, Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -581,10 +581,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [missionRepoData, saveWithMissionRepoData, saveWithoutMissionRepoData]);
 
-  const onClickReset = useCallback(() => {
-    setShowResetTemplateOverlay(true);
+  const onClickReset = useCallback(
+    () => {
+      setShowResetTemplateOverlay(true);
 
-    /*
+      /*
     for (let i = 0; i < taskList.length; i++) {
       if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
         setHasUnsavedChanges(true);
@@ -594,7 +595,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setHasUnsavedChanges(false);
     */
-  }, [/*taskList, cachedTaskList*/]);
+    },
+    [
+      /*taskList, cachedTaskList*/
+    ]
+  );
 
   const changeStateDueToChangedTask = useCallback(
     (newTaskNumber: number) => {

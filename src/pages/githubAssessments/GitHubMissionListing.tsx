@@ -135,11 +135,13 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     );
   }, [
     browsableMissions,
+    createMissionButton,
     filterTagNodes,
     filterTagStrings,
     handleTagChange,
     handleTagClear,
     isMobileBreakpoint,
+    noMissionReposFoundDisplay,
     octokit,
     setDisplay
   ]);
@@ -168,7 +170,8 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     props.handleGitHubLogIn,
     props.handleGitHubLogOut,
     setBrowsableMissions,
-    setDisplay
+    setDisplay,
+    signInToGitHubDisplay
   ]);
 
   return (

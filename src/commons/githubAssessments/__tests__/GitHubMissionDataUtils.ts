@@ -98,22 +98,6 @@ test('convertMissionMetadataToMetadataString works as expected', () => {
   );
 });
 
-class MocktokitA {
-  readonly repos = {
-    getContent: this.getContent
-  };
-
-  async getContent(dummyObject: any) {
-    const contentObject = {
-      content: Buffer.from('Hello World!', 'utf8').toString('base64')
-    };
-
-    return {
-      data: contentObject
-    };
-  }
-}
-
 test('getMissionData works properly', async () => {
   const missionRepoData: MissionRepoData = {
     repoOwner: 'Pain',
