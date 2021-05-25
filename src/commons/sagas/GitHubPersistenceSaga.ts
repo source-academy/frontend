@@ -8,10 +8,15 @@ import {
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import {
+  GetAuthenticatedReponse,
+  GitHubRepositoryInformation,
+  ListForAuthenticatedUserResponse
+} from '../../features/github/OctokitTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
-import FileExplorerDialog from '../gitHubOverlay/FileExplorerDialog';
-import RepositoryDialog from '../gitHubOverlay/RepositoryDialog';
+import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
+import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
@@ -61,32 +66,39 @@ function* githubOpenFile(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  const results = yield call(octokit.repos.listForAuthenticatedUser);
-  const userRepos = results.data;
+  const results: ListForAuthenticatedUserResponse = yield call(
+    octokit.repos.listForAuthenticatedUser
+  );
+  const userRepos: GitHubRepositoryInformation[] = results.data;
 
-  const repoName = yield call(promisifyDialog, RepositoryDialog, resolve => ({
-    userRepos,
-    onSubmit: resolve
-  }));
+  const getRepoName = async () =>
+    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+      userRepos: userRepos,
+      onSubmit: resolve
+    }));
+  const repoName = yield call(getRepoName);
 
   const editorContent = '';
 
   if (repoName !== '') {
     const pickerType = 'Open';
-    yield call(promisifyDialog, FileExplorerDialog, resolve => ({
-      octokit,
-      repoName,
-      pickerType,
-      editorContent,
-      onSubmit: resolve
-    }));
+    const promisifiedDialog = async () =>
+      await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+        repoName: repoName,
+        pickerType: pickerType,
+        octokit: octokit,
+        editorContent: editorContent,
+        onSubmit: resolve
+      }));
+
+    yield call(promisifiedDialog);
   }
 }
 
 function* githubSaveFile(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
-  const authUser = yield call(octokit.users.getAuthenticated);
+  const authUser: GetAuthenticatedReponse = yield call(octokit.users.getAuthenticated);
   const githubLoginId = authUser.data.login;
   const repoName = store.getState().playground.githubSaveInfo.repoName;
   const filePath = store.getState().playground.githubSaveInfo.filePath;
@@ -113,25 +125,33 @@ function* githubSaveFileAs(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  const results = yield call(octokit.repos.listForAuthenticatedUser);
-  const userRepos = results.data;
+  const results: ListForAuthenticatedUserResponse = yield call(
+    octokit.repos.listForAuthenticatedUser
+  );
+  const userRepos: GitHubRepositoryInformation[] = results.data;
 
-  const repoName = yield call(promisifyDialog, RepositoryDialog, resolve => ({
-    userRepos,
-    onSubmit: resolve
-  }));
+  const getRepoName = async () =>
+    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+      userRepos: userRepos,
+      onSubmit: resolve
+    }));
+  const repoName = yield call(getRepoName);
 
-  const editorContent = store.getState().workspaces.playground.editorValue;
+  const editorContent = store.getState().workspaces.playground.editorValue || '';
 
   if (repoName !== '') {
     const pickerType = 'Save';
-    yield call(promisifyDialog, FileExplorerDialog, resolve => ({
-      octokit,
-      repoName,
-      pickerType,
-      editorContent,
-      onSubmit: resolve
-    }));
+
+    const promisifiedFileExplorer = async () =>
+      await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+        repoName: repoName,
+        pickerType: pickerType,
+        octokit: octokit,
+        editorContent: editorContent,
+        onSubmit: resolve
+      }));
+
+    yield call(promisifiedFileExplorer);
   }
 }
 

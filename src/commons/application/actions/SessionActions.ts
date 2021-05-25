@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import MissionRepoData from '../../../commons/githubAssessments/MissionRepoData';
+import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview, ContestEntry } from '../../assessment/AssessmentTypes';
 import {

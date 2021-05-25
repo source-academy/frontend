@@ -1,6 +1,5 @@
 import { ButtonGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
@@ -9,9 +8,8 @@ import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
 export type ControlBarGitHubLoginButtonProps = {
-  loggedInAs?: Octokit;
-  onClickLogIn?: () => any;
-  onClickLogOut?: () => any;
+  onClickLogIn: () => void;
+  onClickLogOut: () => void;
 };
 
 /**

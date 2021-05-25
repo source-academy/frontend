@@ -1,17 +1,19 @@
-import { ITreeNode } from '@blueprintjs/core';
+import { TreeNodeInfo } from '@blueprintjs/core';
 
 import * as GitHubUtils from '../../features/github/GitHubUtils';
+import { GetContentResponse } from '../../features/github/OctokitTypes';
+import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
 /**
- * A utility class for the GitHub overlay file explorer that handles the creation of ITreeNodes
+ * A utility class for the GitHub overlay file explorer that handles the creation of TreeNodeInfos
  */
 export class GitHubTreeNodeCreator {
   static fileIndex: number = 0;
   static currentRepoName: string = '';
 
   /**
-   * Generates an array of ITreeNodes corresponding to the first level of a given repository.
+   * Generates an array of TreeNodeInfos corresponding to the first level of a given repository.
    *
    * When loading a new repository, this function should always be called first as node creation is stateful.
    *
@@ -30,13 +32,13 @@ export class GitHubTreeNodeCreator {
   }
 
   /**
-   * Generates an array of ITreeNodes corresponding to the children of a given folder
+   * Generates an array of TreeNodeInfo corresponding to the children of a given folder
    *
    * @param repoName The name of the repository where the folder exists
    * @param filePath The filePath of the folder
    */
   public static async getChildNodes(repoName: string, filePath: string) {
-    const childNodes: ITreeNode<GitHubFileNodeData>[] = [];
+    const childNodes: TreeNodeInfo<GitHubFileNodeData>[] = [];
 
     // Ensures that we will only generate children if the repoNames match
     if (repoName !== GitHubTreeNodeCreator.currentRepoName) {
@@ -50,9 +52,9 @@ export class GitHubTreeNodeCreator {
     }
 
     try {
-      const authUser = await octokit.users.getAuthenticated();
+      const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
       const githubLoginID = authUser.data.login;
-      const results = await octokit.repos.getContent({
+      const results: GetContentResponse = await octokit.repos.getContent({
         owner: githubLoginID,
         repo: repoName,
         path: filePath
@@ -73,14 +75,14 @@ export class GitHubTreeNodeCreator {
   }
 
   /**
-   * Generates a single ITreeNode corresponding to a single file or folder.
+   * Generates a single TreeNodeInfo corresponding to a single file or folder.
    *
    * @param octokitFileData File data as described by Octokit's REST API
    */
   private static createNode(octokitFileData: any) {
     const index = GitHubTreeNodeCreator.fileIndex;
 
-    let node: ITreeNode<GitHubFileNodeData> = {
+    let node: TreeNodeInfo<GitHubFileNodeData> = {
       id: index,
       label: 'dummy file'
     };

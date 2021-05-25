@@ -2,6 +2,34 @@ const now = new Date();
 
 export const isExpired = (deadline?: Date) => deadline !== undefined && deadline <= now;
 
+export const isReleased = (release?: Date) => release === undefined || release <= now;
+
+export const isWithinTimeRange = (fromTime?: Date, toTime?: Date) => {
+  // if bounds not specified, return true
+  if (fromTime === undefined && toTime === undefined) {
+    return true;
+  }
+
+  // express times as numbers
+  const now = new Date();
+  const currentTime = now.getHours() * 100 + now.getMinutes();
+  const leftBound =
+    fromTime === undefined ? undefined : fromTime.getHours() * 100 + fromTime.getMinutes();
+  const rightBound =
+    toTime === undefined ? undefined : toTime.getHours() * 100 + toTime.getMinutes();
+
+  if (leftBound === undefined) {
+    return currentTime <= rightBound!;
+  } else if (rightBound === undefined) {
+    return currentTime >= leftBound!;
+  } else if (leftBound >= rightBound) {
+    // happens when, for example, leftBound = 2300, rightBound = 0100
+    return currentTime <= rightBound || currentTime >= leftBound;
+  } else {
+    return currentTime <= rightBound && currentTime >= leftBound;
+  }
+};
+
 export const timeFromExpired = (deadline?: Date) =>
   deadline === undefined ? 0 : deadline.getTime() - now.getTime();
 
@@ -30,6 +58,13 @@ export const prettifyDate = (deadline?: Date) => {
   const time = (hour < 10 ? '0' : '') + hour + ':' + (minute < 10 ? '0' : '') + minute;
 
   return `${day} ${month} ${year} ${time}`;
+};
+
+export const prettifyTime = (time?: Date) => {
+  if (time === undefined) return '';
+  const hour = time.getHours();
+  const minute = time.getMinutes();
+  return (hour < 10 ? '0' : '') + hour + ':' + (minute < 10 ? '0' : '') + minute;
 };
 
 // Converts Date to deadline countdown

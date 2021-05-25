@@ -1,9 +1,8 @@
 import { Octokit } from '@octokit/rest';
 
-import MissionData from './MissionData';
-import MissionMetadata from './MissionMetadata';
-import MissionRepoData from './MissionRepoData';
-import TaskData from './TaskData';
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { GetContentResponse, GitHubSubDirectory } from '../../features/github/OctokitTypes';
+import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 export const maximumTasksPerMission = 20;
 
@@ -13,7 +12,7 @@ export const maximumTasksPerMission = 20;
  * @param missionRepoData Repository information where the mission is stored
  * @param octokit The Octokit instance for the authenticated user
  */
-export async function getMissionData(missionRepoData: MissionRepoData, octokit: any) {
+export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
   const briefingString = await getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
@@ -56,7 +55,11 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
 export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
-  const results = await octokit.repos.getContent({
+  if (octokit === undefined) {
+    return questions;
+  }
+
+  const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: ''
@@ -77,7 +80,12 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       break;
     }
 
+<<<<<<< HEAD
     const folderContents = await octokit.repos.getContent({
+=======
+    // Find out if there is already SavedCode for the question
+    const folderContents: GetContentResponse = await octokit.repos.getContent({
+>>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
       owner: repoOwner,
       repo: repoName,
       path: questionFolderName
@@ -87,6 +95,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       return questions;
     }
 
+<<<<<<< HEAD
     const taskData = {
       taskDescription: '',
       starterCode: '',
@@ -125,6 +134,11 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
         }
       }
     }
+=======
+    const hasSavedCode = (folderContents.data as GitHubSubDirectory[]).find(
+      (file: GitHubSubDirectory) => file.name === 'SavedCode.js'
+    );
+>>>>>>> 8c389af6cb89646e2feb3eed084fbe405c06468f
 
     try {
       for (let i = 0; i < propKeys.length; i++) {
@@ -149,6 +163,7 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
 
       questions.push(taskData);
     } catch (err) {
+      showWarningMessage('Error occurred while trying to retrieve file content', 1000);
       console.error(err);
     }
   }
@@ -168,12 +183,16 @@ export async function getContentAsString(
   repoOwner: string,
   repoName: string,
   filepath: string,
-  octokit: any
+  octokit: Octokit
 ) {
   let contentString = '';
 
+  if (octokit === undefined) {
+    return contentString;
+  }
+
   try {
-    const fileInfo = await octokit.repos.getContent({
+    const fileInfo: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filepath
@@ -181,6 +200,7 @@ export async function getContentAsString(
 
     contentString = Buffer.from((fileInfo.data as any).content, 'base64').toString();
   } catch (err) {
+    showWarningMessage('Error occurred while trying to retrieve file content', 1000);
     console.error(err);
   }
 
@@ -254,7 +274,6 @@ export function parseMetadataProperties<R>(
   lines.forEach(line => {
     for (let i = 0; i < stringProps.length; i++) {
       const propName = stringProps[i];
-
       if (line.startsWith(propName)) {
         propertyContainer[propName] = line.substr(propName.length + 1);
         return;
@@ -269,9 +288,8 @@ export function parseMetadataProperties<R>(
       }
     }
 
-    for (let i = 0; i < numProps.length; i++) {
+    for (let i = 0; i < dateProps.length; i++) {
       const propName = dateProps[i];
-
       if (line.startsWith(propName)) {
         propertyContainer[propName] = new Date(line.substr(propName.length + 1));
         return;

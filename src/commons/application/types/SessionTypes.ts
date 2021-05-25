@@ -1,6 +1,6 @@
 import { Octokit } from '@octokit/rest';
 
-import MissionRepoData from '../../../commons/githubAssessments/MissionRepoData';
+import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';

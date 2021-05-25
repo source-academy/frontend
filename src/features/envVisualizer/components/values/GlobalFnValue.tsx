@@ -71,7 +71,7 @@ export class GlobalFnValue extends Value implements Hoverable {
     this.width = this.radius * 4;
     this.height = this.radius * 2;
 
-    this.paramsText = `params: (${getParamsText(this.data)})`;
+    this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));

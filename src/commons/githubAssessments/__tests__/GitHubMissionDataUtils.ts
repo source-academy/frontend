@@ -1,13 +1,29 @@
+import { Octokit } from '@octokit/rest';
+
+import {
+  GetContentResponse,
+  GitHubFile,
+  GitHubSubDirectory
+} from '../../../features/github/OctokitTypes';
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
-import MissionMetadata from '../MissionMetadata';
-import MissionRepoData from '../MissionRepoData';
+import { MissionMetadata, MissionRepoData } from '../GitHubMissionTypes';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
+  const octokit = new Octokit();
+  const getContentMock = jest.spyOn(octokit.repos, 'getContent');
+  getContentMock.mockImplementationOnce(async () => {
+    const contentResponse = generateGetContentResponse();
+    (contentResponse.data as GitHubFile).content = Buffer.from('Hello World!', 'utf8').toString(
+      'base64'
+    );
+    return contentResponse;
+  });
+
   const content = await GitHubMissionDataUtils.getContentAsString(
     'dummy owner',
     'dummy repo',
     'dummy path',
-    new MocktokitA()
+    octokit
   );
   expect(content).toBe('Hello World!');
 });
@@ -104,10 +120,77 @@ test('getMissionData works properly', async () => {
     repoName: 'Peko',
     dateOfCreation: new Date('December 17, 1995 03:24:00')
   };
-  const missionData = await GitHubMissionDataUtils.getMissionData(
-    missionRepoData,
-    new MocktokitB()
-  );
+
+  const octokit = new Octokit();
+  const getContentMock = jest.spyOn(octokit.repos, 'getContent');
+  getContentMock
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as GitHubFile).content = Buffer.from(
+        'Briefing Content',
+        'utf8'
+      ).toString('base64');
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as GitHubFile).content = Buffer.from(
+        'coverImage=www.somelink.com\n' +
+          'kind=Mission\n' +
+          'number=M3\n' +
+          'title=Dummy Mission\n' +
+          'reading=Textbook Pages 1 to 234763\n' +
+          'webSummary=no\n' +
+          'sourceVersion=3',
+        'utf-8'
+      ).toString('base64');
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      contentResponse.data = [generateGitHubSubDirectory('Q1'), generateGitHubSubDirectory('Q2')];
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      contentResponse.data = [];
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as GitHubFile).content = Buffer.from('Task A', 'utf8').toString(
+        'base64'
+      );
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as GitHubFile).content = Buffer.from('Code A', 'utf8').toString(
+        'base64'
+      );
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      contentResponse.data = [];
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as GitHubFile).content = Buffer.from('Task B', 'utf8').toString(
+        'base64'
+      );
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as GitHubFile).content = Buffer.from('Code B', 'utf8').toString(
+        'base64'
+      );
+      return contentResponse;
+    });
+
+  const missionData = await GitHubMissionDataUtils.getMissionData(missionRepoData, octokit);
 
   expect(missionData.missionRepoData).toEqual({
     repoOwner: 'Pain',
@@ -147,113 +230,47 @@ test('getMissionData works properly', async () => {
   });
 });
 
-// Trying to create Jest mocks failed; the mock functions were not called
-// Had to rely on dependency injection for testing
-class MocktokitB {
-  async getContent(dummyObject: any) {
-    const contentObject = MocktokitHelper.values[MocktokitHelper.index];
-    MocktokitHelper.index++;
-
-    return {
-      data: contentObject
-    };
-  }
-
-  readonly repos = {
-    getContent: this.getContent
-  };
+function generateGitHubSubDirectory(name: string) {
+  return {
+    type: 'dummy',
+    size: 0,
+    name: name,
+    path: 'dummy',
+    sha: 'string',
+    url: 'string',
+    git_url: null,
+    html_url: null,
+    download_url: null,
+    _links: {
+      self: '',
+      git: null,
+      html: null
+    }
+  } as GitHubSubDirectory;
 }
 
-class MocktokitHelper {
-  static index: number = 0;
-
-  // get briefing string
-  static first = {
-    content: Buffer.from('Briefing Content', 'utf8').toString('base64')
-  };
-
-  // get metadata string
-  static second = {
-    content: Buffer.from(
-      'coverImage=www.somelink.com\n' +
-        'kind=Mission\n' +
-        'number=M3\n' +
-        'title=Dummy Mission\n' +
-        'reading=Textbook Pages 1 to 234763\n' +
-        'webSummary=no\n' +
-        'sourceVersion=3',
-      'utf-8'
-    ).toString('base64')
-  };
-
-  // get root folder contents
-  static third = [{ name: 'Q1' }, { name: 'Q2' }];
-
-  // Q1 folder contents
-  static fourth = [{ name: 'Problem.md' }, { name: 'StarterCode.js' }];
-
-  // Q1/Problem.md
-  static fifth = {
-    content: Buffer.from('Task A', 'utf8').toString('base64')
-  };
-
-  // Q1/StarterCode.js
-  static sixth = {
-    content: Buffer.from('Code A', 'utf8').toString('base64')
-  };
-
-  // Q2 folder contents
-  static seventh = [
-    { name: 'Problem.md' },
-    { name: 'StarterCode.js' },
-    { name: 'SavedCode.js' },
-    { name: 'TestPrepend.js' },
-    { name: 'TestCases.json' }
-  ];
-
-  // Q2/Problem.md
-  static eighth = {
-    content: Buffer.from('Task B', 'utf8').toString('base64')
-  };
-
-  // Q2/StarterCode.js
-  static ninth = {
-    content: Buffer.from('Code B', 'utf8').toString('base64')
-  };
-
-  // Q2/SavedCode.js
-  static tenth = {
-    content: Buffer.from('Code C', 'utf8').toString('base64')
-  };
-
-  // Q2/TestPrepend.js
-  static eleventh = {
-    content: Buffer.from('Code D', 'utf8').toString('base64')
-  };
-
-  // Q2/TestCases.json
-  static twelfth = {
-    content: Buffer.from(
-      `[{
-        "answer": "[[1, [2, [3, null]]], [4, [5, null]]]",
-        "program": "sort_pair_of_lists(pair(list(2, 1, 3), list(5, 4)));"
-      }]`,
-      'utf8'
-    ).toString('base64')
-  };
-
-  static values = [
-    MocktokitHelper.first,
-    MocktokitHelper.second,
-    MocktokitHelper.third,
-    MocktokitHelper.fourth,
-    MocktokitHelper.fifth,
-    MocktokitHelper.sixth,
-    MocktokitHelper.seventh,
-    MocktokitHelper.eighth,
-    MocktokitHelper.ninth,
-    MocktokitHelper.tenth,
-    MocktokitHelper.eleventh,
-    MocktokitHelper.twelfth
-  ];
+function generateGetContentResponse() {
+  return {
+    url: '',
+    status: 200,
+    headers: {},
+    data: {
+      type: 'file',
+      encoding: 'base64',
+      size: 0,
+      name: 'name',
+      path: 'path',
+      content: 'pain',
+      sha: '123',
+      url: 'www.eh',
+      git_url: null,
+      html_url: null,
+      download_url: null,
+      _links: {
+        self: '',
+        git: null,
+        html: null
+      }
+    }
+  } as GetContentResponse;
 }

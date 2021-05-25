@@ -3,6 +3,7 @@ import { Octokit } from '@octokit/rest';
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { showSuccessMessage, showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { GetContentData, GetContentResponse } from '../../features/github/OctokitTypes';
 import { store } from '../../pages/createStore';
 
 /**
@@ -55,10 +56,10 @@ export async function checkIfFileCanBeOpened(
     return false;
   }
 
-  let files;
+  let files: GetContentData;
 
   try {
-    const results = await octokit.repos.getContent({
+    const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filePath
@@ -110,7 +111,7 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
   let files;
 
   try {
-    const results = await octokit.repos.getContent({
+    const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filePath
@@ -188,7 +189,7 @@ export async function openFileInEditor(
 ) {
   if (octokit === undefined) return;
 
-  const results = await octokit.repos.getContent({
+  const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: filePath
@@ -224,13 +225,13 @@ export async function performOverwritingSave(
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
 
   try {
-    const results = await octokit.repos.getContent({
+    const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filePath
     });
 
-    const files = results.data;
+    const files: GetContentData = results.data;
 
     // Cannot save over folder
     if (Array.isArray(files)) {
