@@ -282,6 +282,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
 
     setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
+    setHasUnsavedChanges(false);
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
   const onClickReset = useCallback(async () => {
