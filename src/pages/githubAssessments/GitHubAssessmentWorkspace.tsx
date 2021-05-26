@@ -1,10 +1,8 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   Classes,
   Dialog,
-  Intent,
   NonIdealState,
   Spinner,
   SpinnerSize
@@ -28,7 +26,6 @@ import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBa
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
-import controlButton from '../../commons/ControlButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import { getMissionData } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -49,7 +46,7 @@ import MobileWorkspace, {
 import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
-import { promisifyDialog } from '../../commons/utils/DialogHelper';
+import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -110,7 +107,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   }
 
   const [showOverlay, setShowOverlay] = React.useState(false);
-  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
 
@@ -169,51 +165,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     </Dialog>
   );
 
-  const closeOverlay = () => setShowResetTemplateOverlay(false);
-  const resetToTemplate = () => {
-    const originalCode = cachedTaskList[currentTaskNumber - 1].starterCode;
-    handleEditorValueChange(originalCode);
-    editCode(currentTaskNumber, originalCode);
-  };
-  const resetTemplateOverlay = (
-    <Dialog
-      className="assessment-reset"
-      icon={IconNames.ERROR}
-      isCloseButtonShown={true}
-      isOpen={showResetTemplateOverlay}
-      onClose={closeOverlay}
-      title="Confirmation: Reset editor?"
-    >
-      <div className={Classes.DIALOG_BODY}>
-        <Markdown content="Are you sure you want to reset the template?" />
-        <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          {controlButton('Cancel', null, closeOverlay, {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            null,
-            () => {
-              closeOverlay();
-              resetToTemplate();
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
-        </ButtonGroup>
-      </div>
-    </Dialog>
-  );
-
-  const getEditedCode = useCallback(
-    (questionNumber: number) => {
-      return taskList[questionNumber - 1].savedCode;
-    },
-    [taskList]
-  );
-
   const editCode = useCallback(
     (questionNumber: number, newValue: string) => {
       if (questionNumber > taskList.length) {
@@ -224,7 +175,29 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ...editedTaskList[questionNumber - 1],
         savedCode: newValue
       };
+
+      let hasUnsavedChanges = false;
+      for (let i = 0; i < cachedTaskList.length; i++) {
+        if (cachedTaskList[i].savedCode !== editedTaskList[i].savedCode) {
+          hasUnsavedChanges = true;
+          break;
+        }
+      }
+      setHasUnsavedChanges(hasUnsavedChanges);
       setTaskList(editedTaskList);
+    },
+    [taskList, cachedTaskList]
+  );
+
+  const resetToTemplate = useCallback(() => {
+    const originalCode = taskList[currentTaskNumber - 1].starterCode;
+    editCode(currentTaskNumber, originalCode);
+    handleEditorValueChange(originalCode);
+  }, [currentTaskNumber, editCode, handleEditorValueChange, taskList]);
+
+  const getEditedCode = useCallback(
+    (questionNumber: number) => {
+      return taskList[questionNumber - 1].savedCode;
     },
     [taskList]
   );
@@ -311,18 +284,25 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
-  const onClickReset = useCallback(() => {
-    setShowResetTemplateOverlay(true);
+  const onClickReset = useCallback(async () => {
+    const confirmReset = await showSimpleConfirmDialog({
+      contents: (
+        <div className={Classes.DIALOG_BODY}>
+          <Markdown content="Are you sure you want to reset the template?" />
+          <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+        </div>
+      ),
+      negativeLabel: 'Cancel',
+      positiveIntent: 'primary',
+      positiveLabel: 'Confirm'
+    });
 
-    for (let i = 0; i < taskList.length; i++) {
-      if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-        setHasUnsavedChanges(true);
-        return;
-      }
+    if (!confirmReset) {
+      return;
     }
 
-    setHasUnsavedChanges(false);
-  }, [taskList, cachedTaskList]);
+    resetToTemplate();
+  }, [resetToTemplate]);
 
   const onClickPrevious = useCallback(() => {
     const newTaskNumber = currentTaskNumber - 1;
@@ -360,17 +340,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     val => {
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
-
-      for (let i = 0; i < taskList.length; i++) {
-        if (taskList[i].savedCode !== cachedTaskList[i].savedCode) {
-          setHasUnsavedChanges(true);
-          return;
-        }
-      }
-
-      setHasUnsavedChanges(false);
     },
-    [currentTaskNumber, editCode, handleEditorValueChange, taskList, cachedTaskList]
+    [currentTaskNumber, editCode, handleEditorValueChange]
   );
 
   const onChangeTabs = (
@@ -556,7 +527,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     return (
       <div className={classNames('WorkspaceParent', Classes.DARK)}>
         {overlay}
-        {resetTemplateOverlay}
         {isMobileBreakpoint ? (
           <MobileWorkspace {...mobileWorkspaceProps} />
         ) : (
