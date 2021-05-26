@@ -34,7 +34,8 @@ import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import {
   GetContentData,
   GetContentResponse,
-  GitHubRepositoryInformation
+  GitHubRepositoryInformation,
+  GitHubSubDirectory
 } from '../../features/github/OctokitTypes';
 
 type DispatchProps = {
@@ -202,52 +203,92 @@ async function retrieveBrowsableMissions(
   const correctlyNamedRepos = allRepos.filter((repo: GitHubRepositoryInformation) =>
     repo.name.startsWith('sa-')
   );
-  const foundMissionRepos: MissionRepoData[] = [];
 
-  for (let i = 0; i < correctlyNamedRepos.length; i++) {
-    const repo = correctlyNamedRepos[i];
+  const getContentPromises = correctlyNamedRepos.map(repo => {
     const login = (repo.owner as any).login;
+    const repoName = repo.name;
+    const createdAt = repo.created_at;
 
-    const getContentResponse: GetContentResponse = await octokit.repos.getContent({
-      owner: login,
-      repo: repo.name,
-      path: ''
+    const promiseCreator = async () => {
+      const getContentResponse = await octokit.repos.getContent({
+        owner: login,
+        repo: repo.name,
+        path: ''
+      });
+
+      return {
+        getContentResponse: getContentResponse,
+        login: login,
+        repoName: repoName,
+        createdAt: createdAt
+      };
+    };
+
+    return promiseCreator();
+  });
+
+  const foundMissionRepos: MissionRepoData[] = [];
+  let unreachableCodeReached = false;
+
+  Promise.all(getContentPromises).then((promisedContents: any[]) => {
+    promisedContents.forEach((promisedContent: any) => {
+      const getContentResponse: GetContentResponse = promisedContent.getContentResponse;
+      const files: GetContentData = getContentResponse.data;
+      const login: string = promisedContent.login;
+      const repoName: string = promisedContent.repoName;
+      const createdAt: string = promisedContent.createdAt;
+
+      if (!Array.isArray(files)) {
+        // Code should not reach this point
+        unreachableCodeReached = true;
+        return;
+      }
+
+      const githubSubDirectories = files as GitHubSubDirectory[];
+
+      let repositoryContainsMetadataFile = false;
+      for (let j = 0; j < githubSubDirectories.length; j++) {
+        const file = githubSubDirectories[j];
+        if (file.name === '.metadata') {
+          repositoryContainsMetadataFile = true;
+          break;
+        }
+      }
+
+      if (repositoryContainsMetadataFile) {
+        const missionRepoData: MissionRepoData = {
+          repoOwner: login,
+          repoName: repoName,
+          dateOfCreation: new Date(createdAt)
+        };
+        foundMissionRepos.push(missionRepoData);
+      }
     });
-    const files: GetContentData = getContentResponse.data;
 
-    if (!Array.isArray(files)) {
-      setDisplay(<NonIdealState title="There are no assessments." icon={IconNames.FLAME} />);
+    if (unreachableCodeReached) {
       return;
     }
 
-    let repositoryContainsMetadataFile = false;
-    for (let j = 0; j < files.length; j++) {
-      const file = files[j];
-      if (file.name === '.metadata') {
-        repositoryContainsMetadataFile = true;
-        break;
-      }
-    }
-
-    if (repositoryContainsMetadataFile) {
-      const missionRepoData: MissionRepoData = {
-        repoOwner: login,
-        repoName: repo.name,
-        dateOfCreation: new Date(repo.created_at || '')
-      };
-      foundMissionRepos.push(missionRepoData);
-    }
-  }
-
-  const missionPromises = foundMissionRepos.map(missionRepoData =>
-    convertRepoToBrowsableMission(missionRepoData, octokit)
-  );
-  Promise.all(missionPromises).then((browsableMissions: BrowsableMission[]) => {
-    browsableMissions.sort((a, b) => {
-      return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+    const missionPromises = foundMissionRepos.map(missionRepoData =>
+      convertRepoToBrowsableMission(missionRepoData, octokit)
+    );
+    Promise.all(missionPromises).then((browsableMissions: BrowsableMission[]) => {
+      browsableMissions.sort((a, b) => {
+        return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
+      });
+      setBrowsableMissions(browsableMissions);
     });
-    setBrowsableMissions(browsableMissions);
   });
+
+  if (unreachableCodeReached) {
+    setDisplay(
+      <NonIdealState
+        title="Something went wrong when retrieving repository data."
+        icon={IconNames.FLAME}
+      />
+    );
+    return;
+  }
 }
 
 async function convertRepoToBrowsableMission(missionRepo: MissionRepoData, octokit: Octokit) {
