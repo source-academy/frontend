@@ -1,4 +1,4 @@
-import { ITreeNode, Tree } from '@blueprintjs/core';
+import { Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { useState } from 'react';
@@ -14,22 +14,22 @@ type OwnProps = {
 };
 
 const SicpToc: React.FC<TocProps> = props => {
-  const [sidebarContent, setSidebarContent] = useState(toc as ITreeNode[]);
+  const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
   const [hash, setHash] = useState('');
 
-  const handleNodeExpand = (node: ITreeNode, path: integer[]) => {
+  const handleNodeExpand = (node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = true;
     setSidebarContent(newState);
   };
 
-  const handleNodeCollapse = (node: ITreeNode, path: integer[]) => {
+  const handleNodeCollapse = (node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = false;
     setSidebarContent(newState);
   };
 
-  const handleNodeClicked = React.useCallback((node: ITreeNode) => {
+  const handleNodeClicked = React.useCallback((node: TreeNodeInfo) => {
     if (props.handleCloseToc) {
       props.handleCloseToc();
     }

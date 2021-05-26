@@ -115,7 +115,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/sicp"
       >
         <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text">SICP</div>
+        <div className="navbar-button-text">SICP JS</div>
       </NavLink>
 
       {props.role && Constants.enableAchievements && (
