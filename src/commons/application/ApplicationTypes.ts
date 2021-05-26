@@ -272,6 +272,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,
     timeResumed: 0
+  },
+  sicp: {
+    ...createDefaultWorkspace('sicp'),
+    usingSubst: false
   }
 };
 

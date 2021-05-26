@@ -1,103 +1,23 @@
 import { IconNames } from '@blueprintjs/icons';
-import { Octokit } from '@octokit/rest';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { useState } from 'react';
-import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { RouteComponentProps } from 'react-router';
+import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
 import controlButton from 'src/commons/ControlButton';
 import Repl from 'src/commons/repl/Repl';
 
-import {
-  InterpreterOutput
-} from '../../../commons/application/ApplicationTypes';
-import {
-  ExternalLibraryName
-} from '../../../commons/application/types/ExternalTypes';
-import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
+import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import Constants from '../../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
-import { PersistenceFile } from '../../../features/persistence/PersistenceTypes';
+import { DispatchProps, StateProps } from '../../../pages/playground/Playground';
 
-export type SicpWorkspaceProps = OwnProps;
+export type SicpWorkspaceProps = OwnProps & DispatchProps & StateProps & RouteComponentProps<{}>;
 
-export type DispatchProps = {
-  // handleActiveTabChange: (activeTab: SideContentType) => void;
-  // handleBrowseHistoryDown: () => void;
-  // handleBrowseHistoryUp: () => void;
-  // handleChangeExecTime: (execTime: number) => void;
-  // handleChangeStepLimit: (stepLimit: number) => void;
-  // handleChapterSelect: (chapter: number, variant: Variant) => void;
-  // handleDeclarationNavigate: (cursorPosition: Position) => void;
-  // handleEditorEval: () => void;
-  // handleEditorHeightChange: (height: number) => void;
-  // handleEditorValueChange: (val: string) => void;
-  // handleEditorWidthChange: (widthChange: number) => void;
-  // handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  // handleFetchSublanguage: () => void;
-  // handleGenerateLz: () => void;
-  // handleShortenURL: (s: string) => void;
-  // handleUpdateShortURL: (s: string) => void;
-  // handleInterruptEval: () => void;
-  // handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) => void;
-  // handleReplEval: () => void;
-  // handleReplOutputClear: () => void;
-  // handleReplValueChange: (newValue: string) => void;
-  // handleSendReplInputToOutput: (code: string) => void;
-  // handleSetEditorSessionId: (editorSessionId: string) => void;
-  // handleSetSharedbConnected: (connected: boolean) => void;
-  // handleSideContentHeightChange: (heightChange: number) => void;
-  // handleUsingSubst: (usingSubst: boolean) => void;
-  // handleDebuggerPause: () => void;
-  // handleDebuggerResume: () => void;
-  // handleDebuggerReset: () => void;
-  // handleToggleEditorAutorun: () => void;
-  // handleFetchChapter: () => void;
-  // handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  // handlePersistenceOpenPicker: () => void;
-  // handlePersistenceSaveFile: () => void;
-  // handlePersistenceUpdateFile: (file: PersistenceFile) => void;
-  // handlePersistenceInitialise: () => void;
-  // handlePersistenceLogOut: () => void;
-  // handleGitHubOpenFile: () => void;
-  // handleGitHubSaveFileAs: () => void;
-  // handleGitHubSaveFile: () => void;
-  // handleGitHubLogIn: () => void;
-  // handleGitHubLogOut: () => void;
-};
-
-export type StateProps = {
-  editorSessionId?: string;
-  // editorValue?: string;
-  editorHeight?: number;
-  editorWidth?: string;
-  execTime?: number;
-  breakpoints?: string[];
-  highlightedLines?: HighlightedLines[];
-  isEditorAutorun?: boolean;
-  isRunning?: boolean;
-  isDebugging?: boolean;
-  enableDebugging?: boolean;
-  newCursorPosition?: Position;
-  output?: InterpreterOutput[];
-  queryString?: string;
-  shortURL?: string;
-  replValue?: string;
-  sideContentHeight?: number;
-  sourceChapter?: number;
-  sourceVariant?: Variant;
-  stepLimit?: number;
-  sharedbConnected?: boolean;
-  externalLibraryName?: ExternalLibraryName;
-  usingSubst?: boolean;
-  persistenceUser?: string | undefined;
-  persistenceFile?: PersistenceFile | undefined;
-  githubOctokitInstance?: Octokit | undefined;
-  githubSaveInfo?: { repoName: string; filePath: string };
-};
-
-type OwnProps = {
-  editorValue: string;
+export type OwnProps = {
+  initialEditorValue: string;
 
   handleCloseEditor: () => void;
 };
@@ -133,58 +53,17 @@ type OwnProps = {
 // }
 
 const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
-  // Autorun Button
-  // const [isDebugging, setIsDebugging] = useState(false);
-  // const [isRunning, setIsRunning] = useState(false);
-  // const [isEditorAutorun, setIsEditorAutorun] = useState(false);
+  // const location = 'playground';
+  
+  const propsRef = React.useRef(props);
+  propsRef.current = props;
+  
+  // tslint:disable-next-line
+  const [selectedTab, 
+    // setSelectedTab
+  ] = React.useState(SideContentType.introduction);
+  const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
-  // const handleDebuggerPause = () => {
-    // TODO
-    // setIsRunning(false);
-    // setIsDebugging(false);
-  // };
-  // const handleDebuggerReset = () => {
-    // setIsRunning(false);
-    // setIsDebugging(false);
-  // };
-  // const handleDebuggerResume = () => {
-    // setIsRunning(true);
-    // setIsDebugging(false);
-//   };
-  const handleEditorEval = () => {
-    // setIsRunning(true);
-    // setIsDebugging(false);
-  };
-  // const handleInterruptEval = () => {
-  //   //TODO
-  // };
-  // const handleToggleEditorAutorun = () => {
-  //   //TODO
-  // };
-
-  // REPL
-  const [replValue, setReplValue] = useState("");
-
-  const handleBrowseHistoryDown = () => {};
-  const handleBrowseHistoryUp = () => {};
-  const handleReplEval = () => {
-    // const code = replValue;
-    // const execTime = 1000;
-    //beginInterruptExecution
-    //clearReplInput
-    //SentReplInputToOutput
-  };
-  const handleReplValueChange = (newCode: string) => {
-    setReplValue(newCode);
-  };
-
-  // const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  // const propsRef = React.useRef(props);
-  // propsRef.current = props;
-  // const [lastEdit, setLastEdit] = React.useState(new Date());
-  // // const [isGreen, setIsGreen] = React.useState(false);
-  // const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
-  // const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   // const [sessionId, setSessionId] = React.useState(() =>
   //   initSession('playground', {
   //     editorValue: propsRef.current.editorValue,
@@ -193,9 +72,21 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   //   })
   // );
 
-  // const usingRemoteExecution = useSelector(
-  //   (state: OverallState) => !!state.session.remoteExecutionSession
-  // );
+  const usingRemoteExecution = false;
+  // const [state, dispatch] = useReducer(SicpReducer, initialState);
+  // const { editorValue, editorHeight, editorWidth, isRunning, isDebugging, isEditorAutorun, replValue } =
+    // state.workspaces[location];
+
+  React.useEffect(() => {
+    props.handleEditorValueChange(props.editorValue);
+  }, [props]);
+
+  // const handleInterruptEval = () => {
+  //   //TODO
+  // };
+  // const handleToggleEditorAutorun = () => {
+  //   //TODO
+  // };
 
   // React.useEffect(() => {
   //   // Fixes some errors with runes and curves (see PR #1420)
@@ -230,34 +121,6 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   //   }
   //   handleHash(hash, propsRef.current);
   // }, [hash]);
-
-  /**
-   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
-   */
-  // React.useEffect(() => {
-  //   if (
-  //     isMobileBreakpoint &&
-  //     (selectedTab === SideContentType.introduction ||
-  //       selectedTab === SideContentType.remoteExecution)
-  //   ) {
-  //     props.handleActiveTabChange(SideContentType.mobileEditor);
-  //     setSelectedTab(SideContentType.mobileEditor);
-  //   } else if (
-  //     !isMobileBreakpoint &&
-  //     (selectedTab === SideContentType.mobileEditor ||
-  //       selectedTab === SideContentType.mobileEditorRun)
-  //   ) {
-  //     setSelectedTab(SideContentType.introduction);
-  //     props.handleActiveTabChange(SideContentType.introduction);
-  //   }
-  // }, [isMobileBreakpoint, props, selectedTab]);
-
-  // const handlers = React.useMemo(
-  //   () => ({
-  //     goGreen: () => setIsGreen(!isGreen)
-  //   }),
-  //   [isGreen]
-  // );
 
   // const onEditorValueChange = React.useCallback(val => {
   //   setLastEdit(new Date());
@@ -315,36 +178,37 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   //   }
   // };
 
-  // const pushLog = React.useCallback(
-  //   (newInput: Input) => {
-  //     log(sessionId, newInput);
-  //   },
-  //   [sessionId]
-  // );
-
   const closeButton = controlButton('', IconNames.CROSS, props.handleCloseEditor);
 
   const autorunButtons = React.useMemo(
     () => (
-      <ControlBarRunButton
-        handleEditorEval={handleEditorEval}
-        key="run"
+      <ControlBarAutorunButtons
+        handleDebuggerPause={props.handleDebuggerPause}
+        handleDebuggerReset={props.handleDebuggerReset}
+        handleDebuggerResume={props.handleDebuggerResume}
+        handleEditorEval={props.handleEditorEval}
+        handleInterruptEval={props.handleInterruptEval}
+        handleToggleEditorAutorun={props.handleToggleEditorAutorun}
+        isDebugging={props.isDebugging}
+        isEditorAutorun={props.isEditorAutorun}
+        isRunning={props.isRunning}
+        key="autorun"
+        autorunDisabled={usingRemoteExecution}
+        pauseDisabled={usingRemoteExecution}
       />
-
-      // <ControlBarAutorunButtons
-      //   handleDebuggerPause={handleDebuggerPause}
-      //   handleDebuggerReset={handleDebuggerReset}
-      //   handleDebuggerResume={handleDebuggerResume}
-      //   handleEditorEval={handleEditorEval}
-      //   handleInterruptEval={handleInterruptEval}
-      //   handleToggleEditorAutorun={handleToggleEditorAutorun}
-      //   isDebugging={isDebugging}
-      //   // isEditorAutorun={props.isEditorAutorun}
-      //   isRunning={isRunning}
-      //   key="autorun"
-      // />
     ),
-    []
+    [
+      props.handleDebuggerPause,
+      props.handleDebuggerReset,
+      props.handleDebuggerResume,
+      props.handleEditorEval,
+      props.handleInterruptEval,
+      props.handleToggleEditorAutorun,
+      props.isDebugging,
+      props.isEditorAutorun,
+      props.isRunning,
+      usingRemoteExecution
+    ]
   );
 
   // const chapterSelectHandler = React.useCallback(
@@ -384,28 +248,27 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   //   [chapterSelectHandler, props.sourceChapter, props.sourceVariant, usingRemoteExecution]
   // );
 
-  // const clearButton = React.useMemo(
-  //   () =>
-  //     selectedTab === SideContentType.substVisualizer ? null : (
-  //       <ControlBarClearButton
-  //         handleReplOutputClear={props.handleReplOutputClear}
-  //         key="clear_repl"
-  //       />
-  //     ),
-  //   [props.handleReplOutputClear, selectedTab]
-  // );
+  const clearButton = React.useMemo(
+    () => (
+        <ControlBarClearButton
+          handleReplOutputClear={props.handleReplOutputClear}
+          key="clear_repl"
+        />
+      ),
+    [props.handleReplOutputClear]
+  );
 
-  // const evalButton = React.useMemo(
-  //   () =>
-  //     selectedTab === SideContentType.substVisualizer ? null : (
-  //       <ControlBarEvalButton
-  //         handleReplEval={props.handleReplEval}
-  //         isRunning={props.isRunning}
-  //         key="eval_repl"
-  //       />
-  //     ),
-  //   [props.handleReplEval, props.isRunning, selectedTab]
-  // );
+  const evalButton = React.useMemo(
+    () =>
+      (
+        <ControlBarEvalButton
+          handleReplEval={props.handleReplEval}
+          isRunning={props.isRunning}
+          key="eval_repl"
+        />
+      ),
+    [props.handleReplEval, props.isRunning]
+  );
 
   // const { persistenceUser, persistenceFile, handlePersistenceUpdateFile } = props;
   // Compute this here to avoid re-rendering the button every keystroke
@@ -540,16 +403,19 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
 
   const replTab: SideContentTab = React.useMemo(() => {
     const replTabProps = {
-      output: [],
-      replValue: replValue,
-      sourceChapter: 1,
-      sourceVariant: Constants.defaultSourceVariant as Variant,
-      externalLibrary: ExternalLibraryName.NONE,
-      handleBrowseHistoryDown: handleBrowseHistoryDown,
-      handleBrowseHistoryUp: handleBrowseHistoryUp,
-      handleReplEval: handleReplEval,
-      handleReplValueChange: handleReplValueChange,
-      replButtons: []
+      sourceChapter: props.sourceChapter,
+      sourceVariant: props.sourceVariant,
+      externalLibrary: props.externalLibraryName,
+      output: props.output,
+      replValue: props.replValue,
+      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+      handleReplEval: props.handleReplEval,
+      handleReplValueChange: props.handleReplValueChange,
+      hidden: false,
+      inputHidden: false,
+      usingSubst: props.usingSubst,
+      replButtons: [evalButton, clearButton]
     };
 
     return {
@@ -559,7 +425,7 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
       id: SideContentType.introduction,
       toSpawn: () => true
     };
-  }, [replValue]);
+  }, [clearButton, evalButton, props.externalLibraryName, props.handleBrowseHistoryDown, props.handleBrowseHistoryUp, props.handleReplEval, props.handleReplValueChange, props.output, props.replValue, props.sourceChapter, props.sourceVariant, props.usingSubst]);
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [replTab];
@@ -625,34 +491,6 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   // mobileTabs.shift();
   // mobileTabs.pop();
 
-  // const onChangeMethod = React.useCallback(
-  //   (newCode: string, delta: CodeDelta) => {
-  //     handleEditorValueChange(newCode);
-
-  //     const input: Input = {
-  //       time: Date.now(),
-  //       type: 'codeDelta',
-  //       data: delta
-  //     };
-
-  //     pushLog(input);
-  //   },
-  //   [handleEditorValueChange, pushLog]
-  // );
-
-  // const onCursorChangeMethod = React.useCallback(
-  //   (selection: any) => {
-  //     const input: Input = {
-  //       time: Date.now(),
-  //       type: 'cursorPositionChange',
-  //       data: selection.getCursor()
-  //     };
-
-  //     pushLog(input);
-  //   },
-  //   [pushLog]
-  // );
-
   // const onSelectionChangeMethod = React.useCallback(
   //   (selection: any) => {
   //     const range: SelectionRange = selection.getRange();
@@ -670,48 +508,58 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   //   [pushLog]
   // );
 
-  // const handleEditorUpdateBreakpoints = React.useCallback(
-  //   (breakpoints: string[]) => {
-  //     // get rid of holes in array
-  //     const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
-  //     if (numberOfBreakpoints > 0) {
-  //       setHasBreakpoints(true);
-  //       if (propsRef.current.sourceChapter <= 2) {
-  //         /**
-  //          * There are breakpoints set on Source Chapter 2, so we set the
-  //          * Redux state for the editor to evaluate to the substituter
-  //          */
+  const handleEditorUpdateBreakpoints = React.useCallback(
+    (breakpoints: string[]) => {
+      // get rid of holes in array
+      const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
+      if (numberOfBreakpoints > 0) {
+        setHasBreakpoints(true);
+        if (propsRef.current.sourceChapter <= 2) {
+          /**
+           * There are breakpoints set on Source Chapter 2, so we set the
+           * Redux state for the editor to evaluate to the substituter
+           */
 
-  //         propsRef.current.handleUsingSubst(true);
-  //       }
-  //     }
-  //     if (numberOfBreakpoints === 0) {
-  //       setHasBreakpoints(false);
+          propsRef.current.handleUsingSubst(true);
+        }
+      }
+      if (numberOfBreakpoints === 0) {
+        if (hasBreakpoints) // TODOremove this line
+        setHasBreakpoints(false);
 
-  //       if (selectedTab !== SideContentType.substVisualizer) {
-  //         propsRef.current.handleReplOutputClear();
-  //         propsRef.current.handleUsingSubst(false);
-  //       }
-  //     }
-  //     propsRef.current.handleEditorUpdateBreakpoints(breakpoints);
-  //   },
-  //   [selectedTab]
-  // );
+        if (selectedTab !== SideContentType.substVisualizer) {
+          propsRef.current.handleReplOutputClear();
+          propsRef.current.handleUsingSubst(false);
+        }
+      }
+      propsRef.current.handleEditorUpdateBreakpoints(breakpoints);
+    },
+    [hasBreakpoints, selectedTab]
+  );
 
   // const replDisabled =
   //   props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
 
   const editorProps = {
-    breakpoints: [],
-    editorSessionId: '',
+    onChange: props.handleEditorValueChange,
+    // onCursorChange: onCursorChangeMethod,
+    // onSelectionChange: onSelectionChangeMethod,
+    sourceChapter: props.sourceChapter,
+    externalLibraryName: props.externalLibraryName,
+    sourceVariant: props.sourceVariant,
     editorValue: props.editorValue,
-    highlightedLines: [],
-    isEditorAutorun: false,
-    handleDeclarationNavigate: (cursorPosition: Position) => {},
-    handleEditorEval: () => {},
-    handleEditorValueChange: (newCode: string) => {},
-    handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
-    handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+    editorSessionId: props.editorSessionId,
+    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleEditorEval: props.handleEditorEval,
+    handleEditorValueChange: props.handleEditorValueChange,
+    handleSendReplInputToOutput: props.handleSendReplInputToOutput,
+    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    isEditorAutorun: props.isEditorAutorun,
+    breakpoints: props.breakpoints,
+    highlightedLines: props.highlightedLines,
+    newCursorPosition: props.newCursorPosition,
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+    handleSetSharedbConnected: props.handleSetSharedbConnected
   };
 
   const dummyReplProps = {
@@ -758,19 +606,17 @@ const SicpWorkspace: React.FC<SicpWorkspaceProps> = props => {
   };
 
   const workspaceProps: WorkspaceProps = {
-    handleEditorHeightChange: (height: number) => {},
-    handleEditorWidthChange: (widthChange: number) => {},
-    handleSideContentHeightChange: (height: number) => {},
+    handleEditorHeightChange: props.handleEditorHeightChange,
+    handleEditorWidthChange: props.handleEditorWidthChange,
+    handleSideContentHeightChange: props.handleSideContentHeightChange,
     // Either editorProps or mcqProps must be provided
     controlBarProps: controlBarProps,
     // customEditor?: JSX.Element,
     editorProps: editorProps,
-    // editorHeight: 1000,
-    editorWidth: '50%',
-    // hasUnsavedChanges?: boolean,
-    // mcqProps?: McqChooserProps;
+    editorHeight: props.editorHeight,
+    editorWidth: props.editorWidth,
     replProps: dummyReplProps,
-    // sideContentHeight?: number;
+    // sideContentHeight: 500,
     sideContentProps: sideContentProps,
     sideContentIsResizeable: false
   };

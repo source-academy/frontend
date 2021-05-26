@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import AceEditor from 'react-ace';
 
-import SicpWorkspace from './SicpWorkspace';
+import SicpWorkspaceContainer from './SicpWorkspaceContainer';
 
 type CodeSnippetProps = OwnProps;
 type OwnProps = {
@@ -21,7 +21,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   };
 
   const WorkspaceProps = {
-    editorValue: body,
+    initialEditorValue: body,
 
     handleCloseEditor: onClick
   };
@@ -32,7 +32,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   return (
     <div className="sicp-code-snippet">
       {open ? (
-        <SicpWorkspace {...WorkspaceProps} />
+        <SicpWorkspaceContainer {...WorkspaceProps} />
       ) : (
         <>
           <div className="code-body" onClick={onClick}>

@@ -67,12 +67,15 @@ type PlaygroundWorkspaceAttr = {
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 
+export type SicpWorkspaceState = PlaygroundWorkspaceState;
+
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
+  readonly sicp: SicpWorkspaceState;
 };
 
 export type WorkspaceState = {
