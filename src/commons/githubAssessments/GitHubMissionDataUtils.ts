@@ -52,7 +52,7 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
  * @param repoName The name of the mission repository
  * @param octokit The Octokit instance for the authenticated user
  */
-export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
+async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
   if (octokit === undefined) {
