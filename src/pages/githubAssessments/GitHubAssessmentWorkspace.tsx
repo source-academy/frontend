@@ -338,6 +338,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleEditorValueChange(getEditedCode(newTaskNumber));
   }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
 
+  const onClickReturn = useCallback(() => {
+    history.push('/githubassessments/missions');
+  }, []);
+
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
@@ -418,6 +422,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const nextButton = (
       <ControlBarNextButton
         onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
         questionProgress={[currentTaskNumber, taskList.length]}
         key={'next_question'}
       />
