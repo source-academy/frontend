@@ -12307,10 +12307,10 @@ sourcemap-codec@^1.4.4:
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
-sourceror@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/sourceror/-/sourceror-0.7.3.tgz#92010af8df81e7754fa8aa8d18da396258853a1d"
-  integrity sha512-s0q+QWOdLqFL8P2F5lM6PJkOidURMUXNoWmQIY17n+SUOJLh51eJ6Bwv63IjbhBwQ1QwMtfAcGbyjC44avqQ7g==
+sourceror@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/sourceror/-/sourceror-0.8.0.tgz#e4fc988de4fef4215d69404237c063f18a9b916c"
+  integrity sha512-vSdorpaYo0YMIIM/om7XGH9nGbpyRN5893xZE96aD+sVcbBta8jNRRcAZNShcsMrMPN6BCtjd5nSwfWqLG467Q==
   dependencies:
     acorn "^8.1.0"
     js-slang "^0.4.60"

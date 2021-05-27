@@ -1,5 +1,6 @@
-import { Button, Tooltip } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
 type ItemDeleterProps = {
@@ -23,9 +24,9 @@ function ItemDeleter(props: ItemDeleterProps) {
   };
 
   return (
-    <Tooltip content="Delete">
+    <Tooltip2 content="Delete">
       <Button icon={IconNames.TRASH} intent="danger" onClick={confirmDelete} />
-    </Tooltip>
+    </Tooltip2>
   );
 }
 
