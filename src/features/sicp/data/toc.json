@@ -815,15 +815,14 @@
       }
     ]
   },
-  { "id": 128, "hasCaret": false, "label": "Index", "nodeData": "index" },
   {
-    "id": 129,
+    "id": 128,
     "hasCaret": false,
     "label": "References",
     "nodeData": "references"
   },
   {
-    "id": 130,
+    "id": 129,
     "hasCaret": false,
     "label": "About the SICP JS Project",
     "nodeData": "making-of"

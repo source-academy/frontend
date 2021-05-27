@@ -20,6 +20,10 @@ $sicp-text-color: #333333;
   > .ContentDisplay {
     text-align: left;
     margin-top: 35px;
+
+    p {
+      display: inline;
+    }
   }
 }
 
