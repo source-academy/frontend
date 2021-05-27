@@ -38,7 +38,7 @@ const SicpToc: React.FC<TocProps> = props => {
 
   return (
     <div className="sicp-toc">
-      {hash !== '' ? <Redirect to={'/sicp#section=' + hash} /> : <></>}
+      {hash !== '' ? <Redirect to={'/interactive-sicp#section=' + hash} /> : <></>}
       <Tree
         contents={sidebarContent}
         onNodeClick={handleNodeClicked}

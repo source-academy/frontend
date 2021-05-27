@@ -112,7 +112,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sicp"
+        to="/interactive-sicp"
       >
         <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text">SICP JS</div>

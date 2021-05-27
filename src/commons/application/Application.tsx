@@ -142,7 +142,7 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
             <Route path="/callback/github" component={GitHubCallback} />
-            <Route path="/sicp" component={Sicp} />
+            <Route path="/interactive-sicp" component={Sicp} />
             {fullPaths}
             <Route
               exact={true}
