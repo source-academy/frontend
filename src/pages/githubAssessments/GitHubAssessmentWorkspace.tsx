@@ -177,6 +177,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  const hasUnsavedChanges = useMemo(() => {
+    return hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing || hasUnsavedChangesToTasks;
+  }, [hasUnsavedChangesToMetadata, hasUnsavedChangesToBriefing, hasUnsavedChangesToTasks]);
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleResetWorkspace = props.handleResetWorkspace;
   const missionRepoData = props.location.state as MissionRepoData;
@@ -428,7 +431,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     while (j < taskList.length) {
       const taskNumber = j + 1;
 
-      if (taskNumber >= cachedTaskList.length) {
+      if (taskNumber > cachedTaskList.length) {
         filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[j].starterCode;
         filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
       } else {
@@ -609,6 +612,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const newTaskNumber = currentTaskNumber + 1;
     changeStateDueToChangedTask(newTaskNumber);
   }, [currentTaskNumber, changeStateDueToChangedTask]);
+
+  const onClickReturn = useCallback(() => {
+    history.push('/githubassessments/missions');
+  }, []);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -794,9 +801,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const saveButton = (
       <ControlButtonSaveButton
-        hasUnsavedChanges={
-          hasUnsavedChangesToTasks || hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing
-        }
+        hasUnsavedChanges={hasUnsavedChanges}
         key="save"
         onClickSave={onClickSave}
       />
@@ -817,6 +822,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const nextButton = (
       <ControlBarNextButton
         onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
         questionProgress={[currentTaskNumber, taskList.length]}
         key={'next_question'}
       />
@@ -929,6 +935,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleEditorHeightChange: props.handleEditorHeightChange,
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
+    hasUnsavedChanges: hasUnsavedChanges,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props),
     replProps: replProps
@@ -936,6 +943,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorProps: editorProps,
     replProps: replProps,
+    hasUnsavedChanges: hasUnsavedChanges,
     mobileSideContentProps: mobileSideContentProps()
   };
 
