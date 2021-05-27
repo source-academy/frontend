@@ -5,8 +5,8 @@ import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
+import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 import SideContentResultCard from './SideContentResultCard';
-import SideContentTestcaseCard from './SideContentTestcaseCard';
 
 export type SideContentAutograderEditorProps = DispatchProps & StateProps;
 
@@ -19,76 +19,77 @@ type StateProps = {
   testcases: Testcase[];
 };
 
-const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograderEditorProps> = props => {
-  const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
-  const [showsResults, setResultsShown] = React.useState<boolean>(true);
+const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograderEditorProps> =
+  props => {
+    const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
+    const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-  const { testcases, autogradingResults, handleTestcaseEval } = props;
+    const { testcases, autogradingResults, handleTestcaseEval } = props;
 
-  const testcaseCards = React.useMemo(
-    () =>
-      testcases.length > 0 ? (
-        <div className="testcaseCards">
-          {testcasesHeader}
-          {testcases.map((testcase, index) => (
-            <SideContentTestcaseCard
-              key={index}
-              index={index}
-              testcase={testcase}
-              handleTestcaseEval={handleTestcaseEval}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="noResults">There are no testcases provided for this question.</div>
-      ),
-    [testcases, handleTestcaseEval]
-  );
+    const testcaseCards = React.useMemo(
+      () =>
+        testcases.length > 0 ? (
+          <div className="testcaseCards">
+            {testcasesHeader}
+            {testcases.map((testcase, index) => (
+              <SideContentEditableTestcaseCard
+                key={index}
+                index={index}
+                testcase={testcase}
+                handleTestcaseEval={handleTestcaseEval}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="noResults">There are no testcases provided for this question.</div>
+        ),
+      [testcases, handleTestcaseEval]
+    );
 
-  const resultCards = React.useMemo(
-    () =>
-      autogradingResults.length > 0 ? (
-        <div>
-          {resultsHeader}
-          {autogradingResults.map((result, index) => (
-            <SideContentResultCard key={index} index={index} result={result} />
-          ))}
-        </div>
-      ) : (
-        <div className="noResults">There are no results to show.</div>
-      ),
-    [autogradingResults]
-  );
+    const resultCards = React.useMemo(
+      () =>
+        autogradingResults.length > 0 ? (
+          <div>
+            {resultsHeader}
+            {autogradingResults.map((result, index) => (
+              <SideContentResultCard key={index} index={index} result={result} />
+            ))}
+          </div>
+        ) : (
+          <div className="noResults">There are no results to show.</div>
+        ),
+      [autogradingResults]
+    );
 
-  const toggleTestcases = React.useCallback(() => {
-    setTestcasesShown(!showsTestcases);
-  }, [showsTestcases]);
+    const toggleTestcases = React.useCallback(() => {
+      setTestcasesShown(!showsTestcases);
+    }, [showsTestcases]);
 
-  const toggleResults = React.useCallback(() => setResultsShown(!showsResults), [showsResults]);
+    const toggleResults = React.useCallback(() => setResultsShown(!showsResults), [showsResults]);
 
-  return (
-    <div className="Autograder">
-      <Button
-        className="collapse-button"
-        icon={showsTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-        minimal={true}
-        onClick={toggleTestcases}
-      >
-        <span>Testcases</span>
-        <Tooltip2 content={autograderTooltip} placement={PopoverPosition.LEFT}>
-          <Icon icon={IconNames.HELP} />
-        </Tooltip2>
-      </Button>
-      <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
-        {testcaseCards}
-      </Collapse>
-      {collapseButton('Autograder Results', showsResults, toggleResults)}
-      <Collapse isOpen={showsResults} keepChildrenMounted={true}>
-        {resultCards}
-      </Collapse>
-    </div>
-  );
-};
+    return (
+      <div className="Autograder">
+        <Button
+          className="collapse-button"
+          icon={showsTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+          minimal={true}
+          onClick={toggleTestcases}
+        >
+          <span>Testcases</span>
+          <Tooltip2 content={autograderTooltip} placement={PopoverPosition.LEFT}>
+            <Icon icon={IconNames.HELP} />
+          </Tooltip2>
+        </Button>
+        <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
+          {testcaseCards}
+        </Collapse>
+        {collapseButton('Autograder Results', showsResults, toggleResults)}
+        <Collapse isOpen={showsResults} keepChildrenMounted={true}>
+          {resultCards}
+        </Collapse>
+      </div>
+    );
+  };
 
 const autograderTooltip = (
   <div className="autograder-help-tooltip">
