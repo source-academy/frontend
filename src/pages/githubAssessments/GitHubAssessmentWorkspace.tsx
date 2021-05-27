@@ -56,7 +56,7 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
-import SideContentAutograder from '../../commons/sideContent/SideContentAutograder';
+import SideContentAutograderEditor from '../../commons/sideContent/SideContentAutograderEditor';
 import SideContentMarkdownEditor from '../../commons/sideContent/SideContentMarkdownEditor';
 import SideContentMissionEditor from '../../commons/sideContent/SideContentMissionEditor';
 import SideContentTaskEditor from '../../commons/sideContent/SideContentTaskEditor';
@@ -723,6 +723,20 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         label: 'Autograder',
         iconName: IconNames.AIRPLANE,
         body: (
+          <SideContentAutograderEditor
+            testcases={editorTestcases}
+            autogradingResults={autogradingResults ? autogradingResults : []}
+            handleTestcaseEval={props.handleTestcaseEval}
+          />
+        ),
+        id: SideContentType.autograder,
+        toSpawn: () => true
+      }
+      /*
+      {
+        label: 'Autograder',
+        iconName: IconNames.AIRPLANE,
+        body: (
           <SideContentAutograder
             testcases={editorTestcases}
             autogradingResults={autogradingResults ? autogradingResults : []}
@@ -732,6 +746,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         id: SideContentType.autograder,
         toSpawn: () => true
       }
+      */
     ];
 
     if (isTeacherMode) {
