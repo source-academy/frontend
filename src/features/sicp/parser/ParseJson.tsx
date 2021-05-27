@@ -15,12 +15,6 @@ type JsonType = {
   latex: boolean;
 };
 
-let key = 0;
-
-const getKey = () => {
-  return key++;
-}
-
 const processText = {
   APOS: (obj: JsonType) => {
     return parseText("'");
@@ -31,13 +25,13 @@ const processText = {
   DISPLAYFOOTNOTE: (obj: JsonType) => {
     return (
       <>
-        <hr key={getKey()}/>
-        <div key={getKey()} className="sicp-footnote">{parseJson(obj['child'])}</div>
+        <hr/>
+        <div className="sicp-footnote">{parseJson(obj['child'])}</div>
       </>
     );
   },
   '#text': (obj: JsonType) => {
-    return <p key={getKey()}>{obj['body']}</p>;
+    return <p>{obj['body']}</p>;
   },
   ELLIPSIS: (obj: JsonType) => {
     return parseText('…');
@@ -51,7 +45,7 @@ const processText = {
   TEXT: (obj: JsonType) => {
     return (
       <>
-        <div className="sicp-text" key={getKey()}>{parseJson(obj['child'])}</div>
+        <div className="sicp-text">{parseJson(obj['child'])}</div>
         <br />
       </>
     );
@@ -60,7 +54,7 @@ const processText = {
     return obj['images'].map(x => parseImage(x));
   },
   SUBHEADING: (obj: JsonType) => {
-    return <h2 key={getKey()}>{obj['child'][0]['child'][0]['body']}</h2>;
+    return <h2>{obj['child'][0]['child'][0]['body']}</h2>;
   },
   CHAPTER: (obj: JsonType) => {
     return parseContainer(obj);
@@ -77,12 +71,12 @@ const processText = {
   SNIPPET: (obj: JsonType) => {
     if (obj['latex']) {
       return (
-        <pre key={getKey()}>
+        <pre>
           <code>{parseJson(obj['child'])}</code>
         </pre>
       );
     } else {
-      return <CodeSnippet key={getKey()} body={obj['body']} output={obj['output']} />;
+      return <CodeSnippet body={obj['body']} output={obj['output']} />;
     }
   },
   SPACE: (obj: JsonType) => {
@@ -92,10 +86,10 @@ const processText = {
     return parseContainer(obj);
   },
   JAVASCRIPT: (obj: JsonType) => {
-    return <code key={getKey()}>{obj['output']}</code>;
+    return <code>{obj['output']}</code>;
   },
   JAVASCRIPTINLINE: (obj: JsonType) => {
-    return  <code key={getKey()}>{obj['body']}</code>;
+    return  <code>{obj['body']}</code>;
   },
   LaTeX: (obj: JsonType) => {
     return parseText("LaTeX");
@@ -127,31 +121,31 @@ const parseContainer = (obj: JsonType) => {
   return (
     <>
       {parseHeading(obj['body'])}
-      <div key={getKey()}>{parseJson(obj['child'])}</div>;
+      <div>{parseJson(obj['child'])}</div>;
     </>
   );
 };
 
 const parseHeading = (heading: string) => {
-  return <h1 key={getKey()}>{heading}</h1>;
+  return <h1>{heading}</h1>;
 }
 
 const parseText = (text: string) => {
-  return <p key={getKey()}>{text}</p>;
+  return <p>{text}</p>;
 };
 
 const parseLatex = (math: string, inline: boolean) => {
   if (inline) {
-    return <TeX math={math} key={getKey()}/>;
+    return <TeX math={math}/>;
   } else {
     // block math
-    return <TeX math={math} block key={getKey()}/>;
+    return <TeX math={math} block/>;
   }
 };
 
 const parseImage = (obj: JsonType) => {
   return (
-    <div className={'sicp-figure'} key={getKey()}>
+    <div className={'sicp-figure'}>
       {obj['src'] ? <img src={'/sicp/' + obj['src']} alt={'Figure'} /> : <></>}
       {obj['captionName'] ? <h5>{obj['captionName']}</h5> : <></>}
     </div>
@@ -161,22 +155,21 @@ const parseImage = (obj: JsonType) => {
 export const parseJson = (obj: Array<JsonType>) => {
   if (!obj) return <></>;
 
-  return <span key={getKey()}>{obj.map((item: JsonType) => parseObj(item))}</span>;
+  return <>{obj.map((item: JsonType, index: number) => parseObj(item, index))}</>;
 };
 
-const parseObj = (obj: JsonType) => {
-  key++;
+const parseObj = (obj: JsonType, index: number) => {
   if (obj['tag']) {
     if (processText[obj['tag']]) {
-      return processText[obj['tag']](obj);
+      return <span key={index}>{processText[obj['tag']](obj)}</span>;
     } else {
       return (
-        <span key={getKey()} style={{ color: 'red' }}>
+        <span style={{ color: 'red' }} key={index}>
           {obj['tag'] + ' ' + obj['body']}
         </span>
       );
     }
   } else {
-    return <span key={getKey()}>{parseJson(obj['child'])}</span>;
+    return <span key={index}>{parseJson(obj['child'])}</span>;
   }
 };
