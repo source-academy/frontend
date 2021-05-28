@@ -117,7 +117,10 @@ test('getMissionData works properly', async () => {
         headers: any;
         data: any;
       };
-      contentResponse.data = [generateGitHubSubDirectory('Problem.md'), generateGitHubSubDirectory('StarterCode.js')];
+      contentResponse.data = [
+        generateGitHubSubDirectory('Problem.md'),
+        generateGitHubSubDirectory('StarterCode.js')
+      ];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
@@ -159,17 +162,13 @@ test('getMissionData works properly', async () => {
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
       // Q2/SavedCode.js
-      (contentResponse.data as any).content = Buffer.from('Code C', 'utf8').toString(
-        'base64'
-      );
+      (contentResponse.data as any).content = Buffer.from('Code C', 'utf8').toString('base64');
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
       // Q2/TestPrepend.js
-      (contentResponse.data as any).content = Buffer.from('Code D', 'utf8').toString(
-        'base64'
-      );
+      (contentResponse.data as any).content = Buffer.from('Code D', 'utf8').toString('base64');
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
