@@ -1,5 +1,6 @@
 import { Blockquote, H1, H2, OL } from '@blueprintjs/core';
 import TeX from '@matejmazur/react-katex';
+import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
 import CodeSnippet from '../components/CodeSnippet';
 
@@ -17,6 +18,7 @@ type JsonType = {
   author: string;
   date: string;
   title: string;
+  solution: Array<JsonType>;
 };
 
 const processText = {
@@ -33,6 +35,9 @@ const processText = {
   },
   '#text': (obj: JsonType) => {
     return <p>{obj['body']}</p>;
+  },
+  EXERCISE: (obj: JsonType) => {
+    return parseExercise(obj);
   },
   TEXT: (obj: JsonType) => {
     return (
@@ -130,6 +135,10 @@ function parseEpigraph(obj: JsonType) {
       {hasAttribution ? <div className="sicp-attribution">{attribution}</div> : <></>}
     </Blockquote>
   );
+}
+
+function parseExercise(obj: JsonType) {
+  return <SicpExercise title={obj['title']} body={parseJson(obj['child'])} solution={parseJson(obj['solution'])}/>;
 }
 
 const parseContainer = (obj: JsonType) => {

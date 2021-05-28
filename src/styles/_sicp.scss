@@ -25,6 +25,10 @@ $sicp-text-color: #333333;
       display: inline;
     }
   }
+
+  .bp3-heading {
+    color: $sicp-text-color;
+  }
 }
 
 .sicp-toc {
@@ -80,6 +84,24 @@ $sicp-text-color: #333333;
 
   > .sicp-attribution {
     text-align: right;
+  }
+}
+
+.sicp-exercise {
+  margin: 10px;
+  padding: 10px;
+  text-align: justify;
+  background-color: white !important;
+
+  .sicp-button-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    > .bp3-button {
+      margin: 5px;
+    }
   }
 }
 

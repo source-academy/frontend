@@ -1,6 +1,5 @@
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import * as React from 'react';
-import { useState } from 'react';
 import AceEditor from 'react-ace';
 
 import SicpWorkspaceContainer from './SicpWorkspaceContainer';
@@ -14,10 +13,10 @@ type OwnProps = {
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output } = props;
 
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const onClick = () => {
-    setOpen(!open);
+    setIsOpen(!isOpen);
   };
 
   const WorkspaceProps = {
@@ -31,7 +30,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
 
   return (
     <div className="sicp-code-snippet">
-      {open ? (
+      {isOpen ? (
         <SicpWorkspaceContainer {...WorkspaceProps} />
       ) : (
         <>
