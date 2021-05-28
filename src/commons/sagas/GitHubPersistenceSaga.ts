@@ -1,3 +1,7 @@
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
@@ -8,11 +12,6 @@ import {
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
-import {
-  GetAuthenticatedReponse,
-  GitHubRepositoryInformation,
-  ListForAuthenticatedUserResponse
-} from '../../features/github/OctokitTypes';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
@@ -66,10 +65,17 @@ function* githubOpenFile(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
+  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
   const results: ListForAuthenticatedUserResponse = yield call(
     octokit.repos.listForAuthenticatedUser
   );
-  const userRepos: GitHubRepositoryInformation[] = results.data;
+
+  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const userRepos: ListForAuthenticatedUserData = results.data;
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
@@ -98,7 +104,12 @@ function* githubOpenFile(): any {
 function* githubSaveFile(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
-  const authUser: GetAuthenticatedReponse = yield call(octokit.users.getAuthenticated);
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
   const githubLoginId = authUser.data.login;
   const repoName = store.getState().playground.githubSaveInfo.repoName;
   const filePath = store.getState().playground.githubSaveInfo.filePath;
@@ -125,10 +136,17 @@ function* githubSaveFileAs(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
+  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
   const results: ListForAuthenticatedUserResponse = yield call(
     octokit.repos.listForAuthenticatedUser
   );
-  const userRepos: GitHubRepositoryInformation[] = results.data;
+
+  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const userRepos: ListForAuthenticatedUserData = results.data;
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({

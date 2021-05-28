@@ -696,8 +696,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled =
-    props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
+  const replDisabled = props.sourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,

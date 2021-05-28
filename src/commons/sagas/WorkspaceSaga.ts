@@ -653,20 +653,25 @@ export function* evalCode(
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
-      return call(wasm_compile_and_run, code, context);
+      return call(wasm_compile_and_run, code, context, actionType === EVAL_REPL);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
   }
-  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
-    return Sourceror.compile(wasmCode, wasmContext)
+  async function wasm_compile_and_run(
+    wasmCode: string,
+    wasmContext: Context,
+    isRepl: boolean
+  ): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext, isRepl)
       .then((wasmModule: WebAssembly.Module) => {
         const transcoder = new Sourceror.Transcoder();
         return Sourceror.run(
           wasmModule,
           Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
           transcoder,
-          wasmContext
+          wasmContext,
+          isRepl
         );
       })
       .then(

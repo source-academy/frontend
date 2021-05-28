@@ -1,8 +1,7 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 
 import * as GitHubUtils from '../../features/github/GitHubUtils';
-import { GetContentResponse } from '../../features/github/OctokitTypes';
-import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
 /**
@@ -52,8 +51,13 @@ export class GitHubTreeNodeCreator {
     }
 
     try {
-      const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
+      type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+        typeof octokit.users.getAuthenticated
+      >;
+      const authUser: GetAuthenticatedResponse = await octokit.users.getAuthenticated();
       const githubLoginID = authUser.data.login;
+
+      type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
       const results: GetContentResponse = await octokit.repos.getContent({
         owner: githubLoginID,
         repo: repoName,

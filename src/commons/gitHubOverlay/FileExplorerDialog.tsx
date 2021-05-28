@@ -9,6 +9,7 @@ import {
   TreeNodeInfo
 } from '@blueprintjs/core';
 import { Octokit } from '@octokit/rest';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
@@ -22,7 +23,6 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -96,7 +96,10 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   }
 
   async function handleSubmit() {
-    const authUser: GetAuthenticatedReponse = await props.octokit.users.getAuthenticated();
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof props.octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = await props.octokit.users.getAuthenticated();
     const githubLoginID = authUser.data.login;
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;

@@ -2,11 +2,6 @@ import { Octokit } from '@octokit/rest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
-import {
-  GetAuthenticatedReponse,
-  GetContentResponse,
-  GitHubSubDirectory
-} from '../../../features/github/OctokitTypes';
 import FileExplorerDialog from '../FileExplorerDialog';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
@@ -365,7 +360,7 @@ function generateGetContentResponse() {
         html: null
       }
     }
-  } as GetContentResponse;
+  } as any;
 }
 
 function generateGitHubSubDirectory(name: string, type: string, path: string) {
@@ -384,7 +379,7 @@ function generateGitHubSubDirectory(name: string, type: string, path: string) {
       git: null,
       html: null
     }
-  } as GitHubSubDirectory;
+  };
 }
 
 function generateGetAuthenticatedResponse() {
@@ -425,5 +420,5 @@ function generateGetAuthenticatedResponse() {
     headers: {},
     status: 200,
     url: 'www.eh'
-  } as GetAuthenticatedReponse;
+  } as any;
 }

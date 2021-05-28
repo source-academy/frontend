@@ -8,6 +8,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import React, { useCallback, useEffect, useMemo } from 'react';
@@ -74,7 +75,6 @@ import {
   performFolderDeletion,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -198,7 +198,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedBriefingContent(missionData.missionBriefing);
 
     setTaskList(missionData.tasksData);
-    setCachedTaskList(missionData.tasksData.map(taskData => Object.assign({}, taskData)));
+    setCachedTaskList(missionData.tasksData);
     setCurrentTaskNumber(1);
 
     setHasUnsavedChangesToTasks(false);
@@ -469,7 +469,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = await octokit.users.getAuthenticated();
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;
@@ -484,9 +487,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       await conductSave(filename, newFileContent, githubName, githubEmail, commitMessage);
     }
 
-    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
+    setCachedTaskList(taskList);
     setCachedBriefingContent(briefingContent);
     setCachedMissionMetadata(missionMetadata);
+
+    setHasUnsavedChangesToTasks(false);
+    setHasUnsavedChangesToBriefing(false);
+    setHasUnsavedChangesToMetadata(false);
   }, [
     briefingContent,
     cachedBriefingContent,
@@ -555,9 +562,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       );
     }
 
-    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
+    setCachedTaskList(taskList);
     setCachedBriefingContent(briefingContent);
     setCachedMissionMetadata(missionMetadata);
+
+    setHasUnsavedChangesToTasks(false);
+    setHasUnsavedChangesToBriefing(false);
+    setHasUnsavedChangesToMetadata(false);
   }, [briefingContent, missionMetadata, octokit, taskList]);
 
   const onClickSave = useCallback(() => {
@@ -746,21 +757,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         id: SideContentType.autograder,
         toSpawn: () => true
       }
-      /*
-      {
-        label: 'Autograder',
-        iconName: IconNames.AIRPLANE,
-        body: (
-          <SideContentAutograder
-            testcases={editorTestcases}
-            autogradingResults={autogradingResults ? autogradingResults : []}
-            handleTestcaseEval={props.handleTestcaseEval}
-          />
-        ),
-        id: SideContentType.autograder,
-        toSpawn: () => true
-      }
-      */
     ];
 
     if (isTeacherMode) {

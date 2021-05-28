@@ -14,6 +14,10 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -31,12 +35,6 @@ import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
-import {
-  GetContentData,
-  GetContentResponse,
-  GitHubRepositoryInformation,
-  GitHubSubDirectory
-} from '../../features/github/OctokitTypes';
 
 type DispatchProps = {
   handleGitHubLogIn: () => void;
@@ -222,12 +220,13 @@ async function retrieveBrowsableMissions(
     <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
   );
 
-  const allRepos: GitHubRepositoryInformation[] = (
+  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const allRepos: ListForAuthenticatedUserData = (
     await octokit.repos.listForAuthenticatedUser({ per_page: 100 })
   ).data;
-  const correctlyNamedRepos = allRepos.filter((repo: GitHubRepositoryInformation) =>
-    repo.name.startsWith('sa-')
-  );
+  const correctlyNamedRepos = allRepos.filter((repo: any) => repo.name.startsWith('sa-'));
 
   const getContentPromises = correctlyNamedRepos.map(repo => {
     const login = (repo.owner as any).login;
@@ -257,6 +256,9 @@ async function retrieveBrowsableMissions(
 
   Promise.all(getContentPromises).then((promisedContents: any[]) => {
     promisedContents.forEach((promisedContent: any) => {
+      type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+      type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+
       const getContentResponse: GetContentResponse = promisedContent.getContentResponse;
       const files: GetContentData = getContentResponse.data;
       const login: string = promisedContent.login;
@@ -269,7 +271,7 @@ async function retrieveBrowsableMissions(
         return;
       }
 
-      const githubSubDirectories = files as GitHubSubDirectory[];
+      const githubSubDirectories = files as any[];
 
       let repositoryContainsMetadataFile = false;
       for (let j = 0; j < githubSubDirectories.length; j++) {
