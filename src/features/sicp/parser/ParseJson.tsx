@@ -1,3 +1,4 @@
+import { OL } from '@blueprintjs/core';
 import TeX from '@matejmazur/react-katex';
 
 import CodeSnippet from '../components/CodeSnippet';
@@ -20,12 +21,12 @@ const processText = {
     return parseText("'");
   },
   AMP: (obj: JsonType) => {
-    return parseText("&");
+    return parseText('&');
   },
   DISPLAYFOOTNOTE: (obj: JsonType) => {
     return (
       <>
-        <hr/>
+        <hr />
         <div className="sicp-footnote">{parseJson(obj['child'])}</div>
       </>
     );
@@ -89,10 +90,10 @@ const processText = {
     return <code>{obj['output']}</code>;
   },
   JAVASCRIPTINLINE: (obj: JsonType) => {
-    return  <code>{obj['body']}</code>;
+    return <code>{obj['body']}</code>;
   },
   LaTeX: (obj: JsonType) => {
-    return parseText("LaTeX");
+    return parseText('LaTeX');
   },
   LATEX: (obj: JsonType) => {
     return parseLatex(obj['body'], false);
@@ -101,34 +102,44 @@ const processText = {
     return parseLatex(obj['body'], true);
   },
   OUML_LOWER: (obj: JsonType) => {
-    return parseText("ö");
+    return parseText('ö');
   },
   CCEDIL_LOWER: (obj: JsonType) => {
-    return parseText("ç");
+    return parseText('ç');
   },
   EACUTE_LOWER: (obj: JsonType) => {
-    return parseText("é");
+    return parseText('é');
   },
   EGRAVE_LOWER: (obj: JsonType) => {
-    return parseText("è");
+    return parseText('è');
   },
-  AGRAVE_LOWER:  (obj: JsonType) => {
-    return parseText("à");
+  AGRAVE_LOWER: (obj: JsonType) => {
+    return parseText('à');
   },
+  OL: (obj: JsonType) => {
+    return (
+      <OL key="OL">
+        {obj['child'].map((x, index) => (
+          //TODO BUG NON-UNIQUE KEY
+          <li key={index}>{parseObj(x, undefined)}</li>
+        ))}
+      </OL>
+    );
+  }
 };
 
 const parseContainer = (obj: JsonType) => {
   return (
     <>
       {parseHeading(obj['body'])}
-      <div>{parseJson(obj['child'])}</div>;
+      <div>{parseJson(obj['child'])}</div>
     </>
   );
 };
 
 const parseHeading = (heading: string) => {
   return <h1>{heading}</h1>;
-}
+};
 
 const parseText = (text: string) => {
   return <p>{text}</p>;
@@ -136,10 +147,10 @@ const parseText = (text: string) => {
 
 const parseLatex = (math: string, inline: boolean) => {
   if (inline) {
-    return <TeX math={math}/>;
+    return <TeX math={math} />;
   } else {
     // block math
-    return <TeX math={math} block/>;
+    return <TeX math={math} block />;
   }
 };
 
@@ -153,12 +164,14 @@ const parseImage = (obj: JsonType) => {
 };
 
 export const parseJson = (obj: Array<JsonType>) => {
-  if (!obj) return <></>;
+  if (!obj) {
+    return <></>;
+  }
 
-  return <>{obj.map((item: JsonType, index: number) => parseObj(item, index))}</>;
+  return <>{obj.map((item, index) => parseObj(item, index))}</>;
 };
 
-const parseObj = (obj: JsonType, index: number) => {
+const parseObj = (obj: JsonType, index: number | undefined) => {
   if (obj['tag']) {
     if (processText[obj['tag']]) {
       return <span key={index}>{processText[obj['tag']](obj)}</span>;
