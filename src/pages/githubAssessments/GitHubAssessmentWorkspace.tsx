@@ -141,7 +141,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setBriefingContent(missionData.missionBriefing);
     setTaskDescription(missionData.tasksData[0].taskDescription);
     setTaskList(missionData.tasksData);
-    setCachedTaskList(missionData.tasksData.map(taskData => Object.assign({}, taskData)));
+    setCachedTaskList(missionData.tasksData);
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
     setIsLoading(false);
@@ -281,7 +281,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     }
 
-    setCachedTaskList(taskList.map(taskData => Object.assign({}, taskData)));
+    setCachedTaskList(taskList);
     setHasUnsavedChanges(false);
   }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
 
