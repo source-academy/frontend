@@ -12,6 +12,7 @@ export type SideContentAutograderEditorProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
+  setTaskTestcases: (newTestcases: Testcase[]) => void;
 };
 
 type StateProps = {

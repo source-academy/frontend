@@ -670,6 +670,19 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
   );
 
+  const setTaskTestcases = useCallback(
+    (newTestcases: Testcase[]) => {
+      const editedTaskList = [...taskList];
+      editedTaskList[currentTaskNumber - 1] = {
+        ...editedTaskList[currentTaskNumber - 1],
+        testCases: newTestcases
+      };
+      setTaskList(editedTaskList);
+      computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
+    },
+    [currentTaskNumber, taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
+  );
+
   const setBriefingContentWrapper = useCallback(
     (newBriefingContent: string) => {
       setBriefingContent(newBriefingContent);
@@ -727,6 +740,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             testcases={editorTestcases}
             autogradingResults={autogradingResults ? autogradingResults : []}
             handleTestcaseEval={props.handleTestcaseEval}
+            setTaskTestcases={setTaskTestcases}
           />
         ),
         id: SideContentType.autograder,
