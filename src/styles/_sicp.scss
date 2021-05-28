@@ -74,3 +74,12 @@ $sicp-text-color: #333333;
 .sicp-text {
   text-align: justify;
 }
+
+.sicp-epigraph {
+  text-align: justify;
+
+  > .sicp-attribution {
+    text-align: right;
+  }
+}
+

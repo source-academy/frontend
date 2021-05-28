@@ -1,4 +1,4 @@
-import { OL } from '@blueprintjs/core';
+import { Blockquote, H1, H2, OL } from '@blueprintjs/core';
 import TeX from '@matejmazur/react-katex';
 
 import CodeSnippet from '../components/CodeSnippet';
@@ -14,15 +14,12 @@ type JsonType = {
   captionHref: string;
   captionName: string;
   latex: boolean;
+  author: string;
+  date: string;
+  title: string;
 };
 
 const processText = {
-  APOS: (obj: JsonType) => {
-    return parseText("'");
-  },
-  AMP: (obj: JsonType) => {
-    return parseText('&');
-  },
   DISPLAYFOOTNOTE: (obj: JsonType) => {
     return (
       <>
@@ -31,17 +28,11 @@ const processText = {
       </>
     );
   },
+  EPIGRAPH: (obj: JsonType) => {
+    return parseEpigraph(obj);
+  },
   '#text': (obj: JsonType) => {
     return <p>{obj['body']}</p>;
-  },
-  ELLIPSIS: (obj: JsonType) => {
-    return parseText('…');
-  },
-  ENDASH: (obj: JsonType) => {
-    return parseText('–');
-  },
-  EMDASH: (obj: JsonType) => {
-    return parseText('—');
   },
   TEXT: (obj: JsonType) => {
     return (
@@ -55,7 +46,7 @@ const processText = {
     return obj['images'].map(x => parseImage(x));
   },
   SUBHEADING: (obj: JsonType) => {
-    return <h2>{obj['child'][0]['child'][0]['body']}</h2>;
+    return <H2>{obj['child'][0]['child'][0]['body']}</H2>;
   },
   CHAPTER: (obj: JsonType) => {
     return parseContainer(obj);
@@ -113,6 +104,34 @@ const processText = {
   }
 };
 
+function parseEpigraph(obj: JsonType) {
+  const { child, author, title, date } = obj;
+
+  const hasAttribution = author || title || date;
+
+  const attribution = [];
+  attribution.push(<span key="attribution">-</span>);
+
+  if (author) {
+    attribution.push(<span key="author">{author}</span>);
+  }
+
+  if (title) {
+    attribution.push(<i key="title">{title}</i>);
+  }
+
+  if (date) {
+    attribution.push(<span key="date">{date}</span>);
+  }
+
+  return (
+    <Blockquote className="sicp-epigraph">
+      {child.map((x, index) => parseObj(x, index))}
+      {hasAttribution ? <div className="sicp-attribution">{attribution}</div> : <></>}
+    </Blockquote>
+  );
+}
+
 const parseContainer = (obj: JsonType) => {
   return (
     <>
@@ -123,7 +142,7 @@ const parseContainer = (obj: JsonType) => {
 };
 
 const parseHeading = (heading: string) => {
-  return <h1>{heading}</h1>;
+  return <H1>{heading}</H1>;
 };
 
 const parseText = (text: string) => {
