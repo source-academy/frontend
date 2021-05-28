@@ -101,21 +101,6 @@ const processText = {
   LATEXINLINE: (obj: JsonType) => {
     return parseLatex(obj['body'], true);
   },
-  OUML_LOWER: (obj: JsonType) => {
-    return parseText('ö');
-  },
-  CCEDIL_LOWER: (obj: JsonType) => {
-    return parseText('ç');
-  },
-  EACUTE_LOWER: (obj: JsonType) => {
-    return parseText('é');
-  },
-  EGRAVE_LOWER: (obj: JsonType) => {
-    return parseText('è');
-  },
-  AGRAVE_LOWER: (obj: JsonType) => {
-    return parseText('à');
-  },
   OL: (obj: JsonType) => {
     return (
       <OL key="OL">
