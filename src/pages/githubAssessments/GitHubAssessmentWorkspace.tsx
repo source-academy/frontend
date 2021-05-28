@@ -8,6 +8,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import React, { useCallback, useEffect } from 'react';
@@ -56,7 +57,6 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
-import { GetAuthenticatedReponse } from '../../features/github/OctokitTypes';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -238,7 +238,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const authUser: GetAuthenticatedReponse = await octokit.users.getAuthenticated();
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = await octokit.users.getAuthenticated();
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
     const commitMessage = dialogResults.commitMessage;

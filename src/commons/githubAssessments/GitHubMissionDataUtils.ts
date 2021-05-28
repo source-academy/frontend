@@ -1,7 +1,10 @@
 import { Octokit } from '@octokit/rest';
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { GetContentResponse, GitHubSubDirectory } from '../../features/github/OctokitTypes';
 import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 const maximumTasksPerMission = 20;
@@ -59,13 +62,15 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
     return questions;
   }
 
+  type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
   const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: ''
   });
 
-  const files = results.data;
+  type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  const files: GetContentData = results.data;
 
   if (!Array.isArray(files)) {
     return questions;
@@ -80,6 +85,8 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
       break;
     }
 
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+
     // Find out if there is already SavedCode for the question
     const folderContents: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
@@ -91,9 +98,7 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
       return questions;
     }
 
-    const hasSavedCode = (folderContents.data as GitHubSubDirectory[]).find(
-      (file: GitHubSubDirectory) => file.name === 'SavedCode.js'
-    );
+    const hasSavedCode = folderContents.data.find((file: any) => file.name === 'SavedCode.js');
 
     // If the question exists, get the data
     try {
@@ -152,6 +157,7 @@ export async function getContentAsString(
   }
 
   try {
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     const fileInfo: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,

@@ -1,11 +1,6 @@
 import { Octokit } from '@octokit/rest';
 
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
-import {
-  GetAuthenticatedReponse,
-  GetContentResponse,
-  GitHubSubDirectory
-} from '../../../features/github/OctokitTypes';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
 test('Test generate first level of a repo', async () => {
@@ -148,7 +143,7 @@ function generateGetContentResponse() {
         html: null
       }
     }
-  } as GetContentResponse;
+  } as any;
 }
 
 function generateGitHubSubDirectory(name: string, type: string, path: string) {
@@ -167,7 +162,7 @@ function generateGitHubSubDirectory(name: string, type: string, path: string) {
       git: null,
       html: null
     }
-  } as GitHubSubDirectory;
+  } as any;
 }
 
 function generateGetAuthenticatedResponse() {
@@ -208,5 +203,5 @@ function generateGetAuthenticatedResponse() {
     headers: {},
     status: 200,
     url: 'www.eh'
-  } as GetAuthenticatedReponse;
+  } as any;
 }

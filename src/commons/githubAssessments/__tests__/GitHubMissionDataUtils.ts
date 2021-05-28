@@ -1,21 +1,15 @@
 import { Octokit } from '@octokit/rest';
 
-import {
-  GetContentResponse,
-  GitHubFile,
-  GitHubSubDirectory
-} from '../../../features/github/OctokitTypes';
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
 import { MissionMetadata, MissionRepoData } from '../GitHubMissionTypes';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
   const octokit = new Octokit();
   const getContentMock = jest.spyOn(octokit.repos, 'getContent');
+
   getContentMock.mockImplementationOnce(async () => {
     const contentResponse = generateGetContentResponse();
-    (contentResponse.data as GitHubFile).content = Buffer.from('Hello World!', 'utf8').toString(
-      'base64'
-    );
+    (contentResponse.data as any).content = Buffer.from('Hello World!', 'utf8').toString('base64');
     return contentResponse;
   });
 
@@ -83,15 +77,14 @@ test('getMissionData works properly', async () => {
   getContentMock
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
-      (contentResponse.data as GitHubFile).content = Buffer.from(
-        'Briefing Content',
-        'utf8'
-      ).toString('base64');
+      (contentResponse.data as any).content = Buffer.from('Briefing Content', 'utf8').toString(
+        'base64'
+      );
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
-      (contentResponse.data as GitHubFile).content = Buffer.from(
+      (contentResponse.data as any).content = Buffer.from(
         'coverImage=www.somelink.com\n' +
           'kind=Mission\n' +
           'number=M3\n' +
@@ -104,46 +97,48 @@ test('getMissionData works properly', async () => {
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
+      const contentResponse = generateGetContentResponse() as {
+        url: any;
+        status: any;
+        headers: any;
+        data: any;
+      };
       contentResponse.data = [generateGitHubSubDirectory('Q1'), generateGitHubSubDirectory('Q2')];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse() as {
+        url: any;
+        status: any;
+        headers: any;
+        data: any;
+      };
+      contentResponse.data = [];
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as any).content = Buffer.from('Task A', 'utf8').toString('base64');
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      const contentResponse = generateGetContentResponse();
+      (contentResponse.data as any).content = Buffer.from('Code A', 'utf8').toString('base64');
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
       contentResponse.data = [];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
-      (contentResponse.data as GitHubFile).content = Buffer.from('Task A', 'utf8').toString(
-        'base64'
-      );
+      (contentResponse.data as any).content = Buffer.from('Task B', 'utf8').toString('base64');
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
-      (contentResponse.data as GitHubFile).content = Buffer.from('Code A', 'utf8').toString(
-        'base64'
-      );
-      return contentResponse;
-    })
-    .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
-      contentResponse.data = [];
-      return contentResponse;
-    })
-    .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
-      (contentResponse.data as GitHubFile).content = Buffer.from('Task B', 'utf8').toString(
-        'base64'
-      );
-      return contentResponse;
-    })
-    .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
-      (contentResponse.data as GitHubFile).content = Buffer.from('Code B', 'utf8').toString(
-        'base64'
-      );
+      (contentResponse.data as any).content = Buffer.from('Code B', 'utf8').toString('base64');
       return contentResponse;
     });
 
@@ -185,13 +180,13 @@ function generateGitHubSubDirectory(name: string) {
       git: null,
       html: null
     }
-  } as GitHubSubDirectory;
+  };
 }
 
 function generateGetContentResponse() {
   return {
     url: '',
-    status: 200,
+    status: 200 as const,
     headers: {},
     data: {
       type: 'file',
@@ -211,5 +206,5 @@ function generateGetContentResponse() {
         html: null
       }
     }
-  } as GetContentResponse;
+  } as any;
 }
