@@ -43,7 +43,9 @@ const processText = {
   TEXT: (obj: JsonType) => {
     return (
       <>
-        <div id={obj['id']} className="sicp-text">{parseJson(obj['child'])}</div>
+        <div id={obj['id']} className="sicp-text">
+          {parseJson(obj['child'])}
+        </div>
         <br />
       </>
     );
@@ -74,7 +76,7 @@ const processText = {
         </pre>
       );
     } else {
-      return <CodeSnippet body={obj['body']} output={obj['output']} />;
+      return <CodeSnippet body={obj['body']} output={obj['output']} id={obj['id']} />;
     }
   },
   SPACE: (obj: JsonType) => {
@@ -139,7 +141,13 @@ function parseEpigraph(obj: JsonType) {
 }
 
 function parseExercise(obj: JsonType) {
-  return <SicpExercise title={obj['title']} body={parseJson(obj['child'])} solution={parseJson(obj['solution'])}/>;
+  return (
+    <SicpExercise
+      title={obj['title']}
+      body={parseJson(obj['child'])}
+      solution={parseJson(obj['solution'])}
+    />
+  );
 }
 
 const parseContainer = (obj: JsonType) => {

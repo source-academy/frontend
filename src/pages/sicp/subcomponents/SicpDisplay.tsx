@@ -18,9 +18,14 @@ const indexContent = (
   </>
 );
 
+export const CodeSnippetContext = React.createContext({
+  active: '0',
+  setActive: (x: string) => {}
+});
+
 const SicpDisplay: React.FC<SicpDisplayProps> = props => {
   const { content, isJson } = props;
-  const CodeSnippetContext = React.createContext(0);
+  const [active, setActive] = React.useState('0');
 
   const sicpDisplayProps = {
     fullWidth: false,
@@ -28,8 +33,12 @@ const SicpDisplay: React.FC<SicpDisplayProps> = props => {
     loadContentDispatch: () => {}
   };
 
+  React.useEffect(() => {
+    setActive('0');
+  }, [content]);
+
   return (
-    <CodeSnippetContext.Provider value={0}>
+    <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
       <ContentDisplay {...sicpDisplayProps} />
     </CodeSnippetContext.Provider>
   );

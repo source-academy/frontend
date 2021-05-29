@@ -3,26 +3,31 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import SicpWorkspaceContainer from '../../../features/sicp/components/SicpWorkspaceContainer';
+import { CodeSnippetContext } from './SicpDisplay';
 
 type CodeSnippetProps = OwnProps;
 type OwnProps = {
   body: string;
   output: string;
+  id: string;
 };
 
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
-  const { body, output } = props;
+  const { body, output, id } = props;
+  const context = React.useContext(CodeSnippetContext);
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const handleOpen = () => {
+    context.setActive(id);
+  };
 
-  const onClick = () => {
-    setIsOpen(!isOpen);
+  const handleClose = () => {
+    context.setActive('0');
   };
 
   const WorkspaceProps = {
     initialEditorValue: body,
 
-    handleCloseEditor: onClick
+    handleCloseEditor: handleClose
   };
 
   HighlightRulesSelector(4);
@@ -30,11 +35,11 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
 
   return (
     <div className="sicp-code-snippet">
-      {isOpen ? (
+      {context.active === id ? (
         <SicpWorkspaceContainer {...WorkspaceProps} />
       ) : (
         <>
-          <div className="code-body" onClick={onClick}>
+          <div className="code-body" onClick={handleOpen}>
             <AceEditor
               className="react-ace"
               mode="source4defaultNONE"
@@ -54,7 +59,13 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
               }}
             />
           </div>
-          {output ? <pre className="code-result"><code>{output}</code></pre> : <></>}
+          {output ? (
+            <pre className="code-result">
+              <code>{output}</code>
+            </pre>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </div>
