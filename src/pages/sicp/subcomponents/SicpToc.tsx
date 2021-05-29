@@ -15,7 +15,7 @@ type OwnProps = {
 
 const SicpToc: React.FC<TocProps> = props => {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
-  const [hash, setHash] = useState('');
+  const [slug, setSlug] = useState('');
 
   const handleNodeExpand = (node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
@@ -33,12 +33,12 @@ const SicpToc: React.FC<TocProps> = props => {
     if (props.handleCloseToc) {
       props.handleCloseToc();
     }
-    setHash(String(node.nodeData));
+    setSlug(String(node.nodeData));
   }, [props]);
 
   return (
     <div className="sicp-toc">
-      {hash !== '' ? <Redirect to={'/interactive-sicp#section=' + hash} /> : <></>}
+      {slug !== '' ? <Redirect to={'/interactive-sicp/' + slug} /> : <></>}
       <Tree
         contents={sidebarContent}
         onNodeClick={handleNodeClicked}

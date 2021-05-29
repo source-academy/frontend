@@ -1,9 +1,7 @@
 import { Classes, Drawer, Position } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { parseQuery } from 'src/commons/utils/QueryHelper';
+import { RouteComponentProps, useParams } from 'react-router';
 
 import testData from '../../features/sicp/data/test.json';
 import SicpControlBar from './subcomponents/SicpControlBar';
@@ -13,30 +11,18 @@ import SicpToc from './subcomponents/SicpToc';
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
 
-const parseHash = (hash: string) => {
-  if (hash) {
-    const qs = parseQuery(hash);
-
-    if (qs.section) {
-      return qs.section;
-    }
-  }
-
-  return 'index';
-};
-
 const Sicp: React.FC<SicpProps> = props => {
-  const [data, setData] = useState<any[]>([]);
-  const [isJson, setIsJson] = useState(false);
-  const [isTocOpen, setIsTocOpen] = useState(false);
+  const [data, setData] = React.useState<any[]>([]);
+  const [isJson, setIsJson] = React.useState(false);
+  const [isTocOpen, setIsTocOpen] = React.useState(false);
+
+  const { section } = useParams<{section: string}>();
 
   const baseUrl = '/sicp/json/';
   const extension = '.json';
 
-  const getData = useCallback((hash: string) => {
-    const section = parseHash(hash);
-
-    if (section === 'index') {
+  React.useEffect(() => {
+    if (!section) {
       setIsJson(false);
       return;
     }
@@ -59,9 +45,7 @@ const Sicp: React.FC<SicpProps> = props => {
         setData(myJson);
       })
       .catch(error => console.log(error));
-  }, []);
-
-  useEffect(() => getData(props.location.hash), [getData, props.location.hash]);
+  }, [section]);
 
   const controlBarProps = {
     handleOpenToc: () => setIsTocOpen(true)
