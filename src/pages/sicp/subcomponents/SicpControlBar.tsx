@@ -1,6 +1,7 @@
 import * as React from 'react';
-import ControlBar from 'src/commons/controlBar/ControlBar';
-import { ControlBarTableOfContentsButton } from 'src/commons/controlBar/ControlBarTableOfContentsButton';
+
+import ControlBar from '../../../commons/controlBar/ControlBar';
+import { ControlBarTableOfContentsButton } from '../../../commons/controlBar/ControlBarTableOfContentsButton';
 
 type ControlBarProps = OwnProps;
 

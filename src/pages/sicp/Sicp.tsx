@@ -4,11 +4,11 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
-import SicpControlBar from 'src/features/sicp/components/SicpControlBar';
-import SicpToc from 'src/features/sicp/components/SicpToc';
 
-import SicpDisplay from '../../features/sicp/components/SicpDisplay';
 import testData from '../../features/sicp/data/test.json';
+import SicpControlBar from './subcomponents/SicpControlBar';
+import SicpDisplay from './subcomponents/SicpDisplay';
+import SicpToc from './subcomponents/SicpToc';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};

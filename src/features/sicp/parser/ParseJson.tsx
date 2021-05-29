@@ -2,7 +2,7 @@ import { Blockquote, H1, H2, OL } from '@blueprintjs/core';
 import TeX from '@matejmazur/react-katex';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
-import CodeSnippet from '../components/CodeSnippet';
+import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
 
 type JsonType = {
   child: Array<JsonType>;

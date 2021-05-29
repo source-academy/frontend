@@ -20,6 +20,7 @@ const indexContent = (
 
 const SicpDisplay: React.FC<SicpDisplayProps> = props => {
   const { content, isJson } = props;
+  const CodeSnippetContext = React.createContext(0);
 
   const sicpDisplayProps = {
     fullWidth: false,
@@ -27,7 +28,11 @@ const SicpDisplay: React.FC<SicpDisplayProps> = props => {
     loadContentDispatch: () => {}
   };
 
-  return <ContentDisplay {...sicpDisplayProps} />;
+  return (
+    <CodeSnippetContext.Provider value={0}>
+      <ContentDisplay {...sicpDisplayProps} />
+    </CodeSnippetContext.Provider>
+  );
 };
 
 export default SicpDisplay;

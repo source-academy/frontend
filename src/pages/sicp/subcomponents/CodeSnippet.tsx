@@ -2,7 +2,7 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import SicpWorkspaceContainer from './SicpWorkspaceContainer';
+import SicpWorkspaceContainer from '../../../features/sicp/components/SicpWorkspaceContainer';
 
 type CodeSnippetProps = OwnProps;
 type OwnProps = {

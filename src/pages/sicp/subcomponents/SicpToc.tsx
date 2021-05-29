@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Redirect } from 'react-router';
 
-import toc from '../data/toc.json';
+import toc from '../../../features/sicp/data/toc.json';
 
 type TocProps = OwnProps;
 
