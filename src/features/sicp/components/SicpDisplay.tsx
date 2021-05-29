@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { parseJson } from 'src/features/sicp/parser/ParseJson';
 
 import SicpToc from './SicpToc';
 
-type SicpDisplayProps = OwnProps;
+type SicpDisplayProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {
   content: any;
   isJson: boolean;

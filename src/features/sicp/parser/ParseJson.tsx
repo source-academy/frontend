@@ -19,6 +19,7 @@ type JsonType = {
   date: string;
   title: string;
   solution: Array<JsonType>;
+  id: string;
 };
 
 const processText = {
@@ -42,7 +43,7 @@ const processText = {
   TEXT: (obj: JsonType) => {
     return (
       <>
-        <div className="sicp-text">{parseJson(obj['child'])}</div>
+        <div id={obj['id']} className="sicp-text">{parseJson(obj['child'])}</div>
         <br />
       </>
     );

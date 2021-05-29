@@ -8,7 +8,7 @@ import SicpControlBar from 'src/features/sicp/components/SicpControlBar';
 import SicpToc from 'src/features/sicp/components/SicpToc';
 
 import SicpDisplay from '../../features/sicp/components/SicpDisplay';
-import testData from '../../features/sicp/data/test.json'
+import testData from '../../features/sicp/data/test.json';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
@@ -16,7 +16,10 @@ type OwnProps = {};
 const parseHash = (hash: string) => {
   if (hash) {
     const qs = parseQuery(hash);
-    return qs.section;
+
+    if (qs.section) {
+      return qs.section;
+    }
   }
 
   return 'index';
@@ -32,6 +35,7 @@ const Sicp: React.FC<SicpProps> = props => {
 
   const getData = useCallback((hash: string) => {
     const section = parseHash(hash);
+
     if (section === 'index') {
       setIsJson(false);
       return;
@@ -84,7 +88,7 @@ const Sicp: React.FC<SicpProps> = props => {
         <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
       </Drawer>
       <SicpControlBar {...controlBarProps} />
-      <SicpDisplay content={data} isJson={isJson}/>
+      <SicpDisplay content={data} isJson={isJson} {...props}/>
     </div>
   );
 };
