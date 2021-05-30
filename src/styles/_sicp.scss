@@ -7,6 +7,8 @@ $sicp-text-color: #333333;
   text-align: justify;
   line-height: 1.5;
   color: $sicp-text-color;
+  overflow: auto;
+  // overflow: hidden;
 
   > .ControlBar {
     position: fixed;
@@ -14,15 +16,21 @@ $sicp-text-color: #333333;
     width: 100%;
     background-color: $cadet-color-1;
     color: white;
-    z-index: 10;
   }
 
-  > .ContentDisplay {
-    text-align: left;
+  > .sicp-content {
+    height: 100%;
     margin-top: 35px;
+    // overflow: auto;
 
-    p {
-      display: inline;
+    > .ContentDisplay {
+      margin: 0 auto;
+      height: fit-content;
+      text-align: left;
+
+      p {
+        display: inline;
+      }
     }
   }
 

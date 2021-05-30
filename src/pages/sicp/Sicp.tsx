@@ -68,11 +68,13 @@ const Sicp: React.FC<SicpProps> = props => {
 
   return (
     <div className={classNames('Sicp', Classes.DARK)}>
+      <SicpControlBar {...controlBarProps} />
+      <div className="sicp-content">
+        <SicpDisplay content={data} isJson={isJson} {...props} />
+      </div>
       <Drawer {...drawerProps}>
         <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
       </Drawer>
-      <SicpControlBar {...controlBarProps} />
-      <SicpDisplay content={data} isJson={isJson} {...props} />
     </div>
   );
 };
