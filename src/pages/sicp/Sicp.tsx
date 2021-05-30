@@ -16,7 +16,7 @@ const Sicp: React.FC<SicpProps> = props => {
   const [isJson, setIsJson] = React.useState(false);
   const [isTocOpen, setIsTocOpen] = React.useState(false);
 
-  const { section } = useParams<{section: string}>();
+  const { section } = useParams<{ section: string }>();
 
   const baseUrl = '/sicp/json/';
   const extension = '.json';
@@ -72,7 +72,7 @@ const Sicp: React.FC<SicpProps> = props => {
         <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
       </Drawer>
       <SicpControlBar {...controlBarProps} />
-      <SicpDisplay content={data} isJson={isJson} {...props}/>
+      <SicpDisplay content={data} isJson={isJson} {...props} />
     </div>
   );
 };

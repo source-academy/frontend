@@ -11,7 +11,7 @@ type OwnProps = {
 
 const SicpControlBar: React.FC<ControlBarProps> = props => {
   const menuButton = React.useMemo(
-    () => <ControlBarTableOfContentsButton key="toc" handleOpenToc={props.handleOpenToc}/>,
+    () => <ControlBarTableOfContentsButton key="toc" handleOpenToc={props.handleOpenToc} />,
     [props.handleOpenToc]
   );
 

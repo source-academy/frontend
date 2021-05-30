@@ -625,7 +625,9 @@ export function* evalCode(
     (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
   );
   const substActiveAndCorrectChapter =
-    context.chapter <= 2 && (workspaceLocation === 'playground' || workspaceLocation === 'sicp') && substIsActive;
+    context.chapter <= 2 &&
+    (workspaceLocation === 'playground' || workspaceLocation === 'sicp') &&
+    substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
     // icon to blink

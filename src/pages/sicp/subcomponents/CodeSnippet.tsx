@@ -39,7 +39,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     initialEditorValueHash: showPrepend
       ? props.initialFullProgramHash
       : props.initialEditorValueHash,
-    initialPrependHash: showPrepend ? undefined: props.initialPrependHash,
+    initialPrependHash: showPrepend ? undefined : props.initialPrependHash,
     isSicpEditor: true,
 
     handleCloseEditor: handleClose
@@ -57,7 +57,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     () => (
       <ControlBarShowDependenciesButton
         key="dependencies"
-        buttonText={showPrepend ? "Hide Dependencies" : "Show Dependencies"}
+        buttonText={showPrepend ? 'Hide Dependencies' : 'Show Dependencies'}
         handleShowDependencies={handleShowDependencies}
       />
     ),
@@ -99,7 +99,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
       ) : (
         <>
           <div className="code-body" onClick={handleOpen}>
-            <AceEditor {...aceEditorProps}/>
+            <AceEditor {...aceEditorProps} />
           </div>
           {output ? (
             <pre className="code-result">

@@ -29,7 +29,7 @@ const SicpExercise: React.FC<SicpExerciseProps> = props => {
       <div>{props.body}</div>
       <div className="sicp-button-container">
         <Button onClick={onClick} large={true} className="sicp-show-solution-button">
-            {isOpen ? "Hide Solution" : "Show Solution"}
+          {isOpen ? 'Hide Solution' : 'Show Solution'}
         </Button>
       </div>
       <Collapse className="sicp-solution" isOpen={isOpen}>

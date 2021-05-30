@@ -29,12 +29,15 @@ const SicpToc: React.FC<TocProps> = props => {
     setSidebarContent(newState);
   };
 
-  const handleNodeClicked = React.useCallback((node: TreeNodeInfo) => {
-    if (props.handleCloseToc) {
-      props.handleCloseToc();
-    }
-    setSlug(String(node.nodeData));
-  }, [props]);
+  const handleNodeClicked = React.useCallback(
+    (node: TreeNodeInfo) => {
+      if (props.handleCloseToc) {
+        props.handleCloseToc();
+      }
+      setSlug(String(node.nodeData));
+    },
+    [props]
+  );
 
   return (
     <div className="sicp-toc">

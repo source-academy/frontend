@@ -117,8 +117,8 @@ const processText = {
   LATEXINLINE: (obj: JsonType) => {
     return parseLatex(obj['body'], false);
   },
-  LINK : (obj: JsonType) => {
-    return <a href={obj['body']}>{parseJson(obj['child'])}</a>
+  LINK: (obj: JsonType) => {
+    return <a href={obj['body']}>{parseJson(obj['child'])}</a>;
   },
   OL: (obj: JsonType) => {
     return (
