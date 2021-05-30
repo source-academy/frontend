@@ -93,6 +93,9 @@ const processText = {
   SPACE: (obj: JsonType) => {
     return parseText(' ');
   },
+  REFERENCE: (obj: JsonType) => {
+    return parseContainer(obj);
+  },
   REFERENCES: (obj: JsonType) => {
     return parseContainer(obj);
   },
