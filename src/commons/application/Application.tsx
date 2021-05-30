@@ -146,7 +146,7 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            {Constants.showGitHubAssessments && (
+            {Constants.enableGitHubAssessments && (
               <Route
                 path="/githubassessments/missions"
                 component={() => (
@@ -157,7 +157,7 @@ const Application: React.FC<ApplicationProps> = props => {
                 )}
               />
             )}
-            {Constants.showGitHubAssessments && (
+            {Constants.enableGitHubAssessments && (
               <Route
                 path="/githubassessments/editor"
                 component={GitHubAssessmentWorkspaceContainer}

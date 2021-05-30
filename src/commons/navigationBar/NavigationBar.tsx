@@ -114,7 +114,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text">Playground</div>
       </NavLink>
 
-      {Constants.showGitHubAssessments && (
+      {Constants.enableGitHubAssessments && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -187,7 +187,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
       <Switch>
         <Route path="/githubassessments">
-          {Constants.showGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
+          {Constants.enableGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
             <GitHubAssessmentsNavigationBar {...props} />
           )}
         </Route>
