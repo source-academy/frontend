@@ -1,4 +1,4 @@
-import { Classes, Drawer, Position } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 import { RouteComponentProps, useParams } from 'react-router';
@@ -6,7 +6,6 @@ import { RouteComponentProps, useParams } from 'react-router';
 import testData from '../../features/sicp/data/test.json';
 import SicpControlBar from './subcomponents/SicpControlBar';
 import SicpDisplay from './subcomponents/SicpDisplay';
-import SicpToc from './subcomponents/SicpToc';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
@@ -14,7 +13,6 @@ type OwnProps = {};
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState<any[]>([]);
   const [isJson, setIsJson] = React.useState(false);
-  const [isTocOpen, setIsTocOpen] = React.useState(false);
 
   const { section } = useParams<{ section: string }>();
 
@@ -47,34 +45,12 @@ const Sicp: React.FC<SicpProps> = props => {
       .catch(error => console.log(error));
   }, [section]);
 
-  const controlBarProps = {
-    handleOpenToc: () => setIsTocOpen(true)
-  };
-
-  const handleCloseToc = () => setIsTocOpen(false);
-
-  const drawerProps = {
-    onClose: handleCloseToc,
-    autoFocus: true,
-    canEscapeKeyClose: true,
-    canOutsideClickClose: true,
-    enforceFocus: true,
-    hasBackdrop: true,
-    isOpen: isTocOpen,
-    position: Position.LEFT,
-    size: '500px',
-    usePortal: false
-  };
-
   return (
     <div className={classNames('Sicp', Classes.DARK)}>
-      <SicpControlBar {...controlBarProps} />
+      <SicpControlBar />
       <div className="sicp-content">
         <SicpDisplay content={data} isJson={isJson} {...props} />
       </div>
-      <Drawer {...drawerProps}>
-        <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
-      </Drawer>
     </div>
   );
 };
