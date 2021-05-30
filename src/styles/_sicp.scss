@@ -62,7 +62,27 @@ $sicp-text-color: #333333;
   .code-result > code {
     white-space: pre;
     display: block;
-    margin-top: -1.00em;
+    margin-top: -1em;
+  }
+
+  > .ControlBar {
+    display: flex;
+    background-color: $cadet-color-1;
+    color: white;
+
+    // .ControlBar_editor {
+    // }
+
+    .ControlBar_flow {
+      flex-grow: 1;
+    }
+
+    // .ControlBar_editingWorkspace  {
+    // }
+  }
+
+  .workspace {
+    height: 300px !important;
   }
 }
 
@@ -104,4 +124,3 @@ $sicp-text-color: #333333;
     }
   }
 }
-

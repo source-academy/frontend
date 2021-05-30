@@ -20,6 +20,9 @@ type JsonType = {
   title: string;
   solution: Array<JsonType>;
   id: string;
+  withoutPrepend: string;
+  prepend: string;
+  program: string;
 };
 
 const processText = {
@@ -76,7 +79,15 @@ const processText = {
         </pre>
       );
     } else {
-      return <CodeSnippet body={obj['body']} output={obj['output']} id={obj['id']} />;
+      const CodeSnippetProps = {
+        body: obj['body'],
+        output: obj['output'],
+        id: obj['id'],
+        initialEditorValueHash: obj['withoutPrepend'],
+        initialPrependHash: obj['prepend'],
+        initialFullProgramHash: obj['program'],
+      };
+      return <CodeSnippet {...CodeSnippetProps} />;
     }
   },
   SPACE: (obj: JsonType) => {

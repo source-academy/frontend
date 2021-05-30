@@ -43,7 +43,8 @@ import {
   toggleEditorAutorun,
   updateActiveTab,
   updateEditorValue,
-  updateReplValue
+  updateReplValue,
+  updateWorkspace
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
@@ -63,10 +64,9 @@ import {
   toggleUsingSubst,
   updateShortURL
 } from '../../../features/playground/PlaygroundActions';
-import { DispatchProps, StateProps } from '../../../pages/playground/Playground';
-import SicpWorkspace from './SicpWorkspace';
+import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = (state) => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   editorSessionId: state.workspaces.sicp.editorSessionId,
   editorWidth: state.workspaces.sicp.editorWidth,
   editorValue: state.workspaces.sicp.editorValue!,
@@ -92,7 +92,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = (state) =
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitInstance: state.session.githubOctokitInstance,
-  githubSaveInfo: state.playground.githubSaveInfo,
+  githubSaveInfo: state.playground.githubSaveInfo
 });
 
 const workspaceLocation: WorkspaceLocation = 'sicp';
@@ -122,6 +122,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleGenerateLz: generateLzString,
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
+      handleUpdatePrepend: (s: string) =>
+        updateWorkspace(workspaceLocation, {
+          editorPrepend: s
+        }),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
@@ -157,6 +161,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const SicpWorkspaceContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(SicpWorkspace));
+const SicpWorkspaceContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
 
 export default SicpWorkspaceContainer;
