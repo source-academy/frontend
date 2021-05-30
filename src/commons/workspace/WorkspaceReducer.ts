@@ -9,7 +9,8 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
-  ResultOutput
+  ResultOutput,
+  RunningOutput
 } from '../application/ApplicationTypes';
 import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
@@ -311,16 +312,17 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
        * (3) state[workspaceLocation].output[-1] is RunningOutput */
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput === undefined || lastOutput.type !== 'running') {
+        // New block of output.
         newOutput = state[workspaceLocation].output.concat({
           type: 'running',
-          consoleLogs: [action.payload.logString]
+          consoleLogs: [...action.payload.logString]
         });
       } else {
-        const updatedLastOutput = {
-          type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
-        };
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat(updatedLastOutput);
+        // Append to existing output
+        newOutput = state[workspaceLocation].output;
+        (newOutput[newOutput.length - 1] as RunningOutput).consoleLogs.push(
+          ...action.payload.logString
+        );
       }
       return {
         ...state,

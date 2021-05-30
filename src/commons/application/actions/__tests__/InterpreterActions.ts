@@ -30,7 +30,7 @@ const playgroundWorkspace: WorkspaceLocation = 'playground';
 
 test('handleConsoleLog generates correct action object', () => {
   const logString = 'test-log-string';
-  const action = handleConsoleLog(logString, assessmentWorkspace);
+  const action = handleConsoleLog(assessmentWorkspace, logString);
   expect(action).toEqual({
     type: HANDLE_CONSOLE_LOG,
     payload: {
