@@ -1,5 +1,5 @@
 import { Blockquote, H1, H2, OL } from '@blueprintjs/core';
-import TeX from '@matejmazur/react-katex';
+import { MathComponent } from 'mathjax-react';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
 import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
@@ -85,7 +85,7 @@ const processText = {
         id: obj['id'],
         initialEditorValueHash: obj['withoutPrepend'],
         initialPrependHash: obj['prepend'],
-        initialFullProgramHash: obj['program'],
+        initialFullProgramHash: obj['program']
       };
       return <CodeSnippet {...CodeSnippetProps} />;
     }
@@ -106,10 +106,10 @@ const processText = {
     return parseText('LaTeX');
   },
   LATEX: (obj: JsonType) => {
-    return parseLatex(obj['body'], false);
+    return parseLatex(obj['body'], true);
   },
   LATEXINLINE: (obj: JsonType) => {
-    return parseLatex(obj['body'], true);
+    return parseLatex(obj['body'], false);
   },
   OL: (obj: JsonType) => {
     return (
@@ -178,14 +178,7 @@ const parseText = (text: string) => {
   return <p>{text}</p>;
 };
 
-const parseLatex = (math: string, inline: boolean) => {
-  if (inline) {
-    return <TeX math={math} />;
-  } else {
-    // block math
-    return <TeX math={math} block />;
-  }
-};
+const parseLatex = (math: string, block: boolean) => <MathComponent tex={math} display={block} />;
 
 const parseImage = (obj: JsonType) => {
   return (
