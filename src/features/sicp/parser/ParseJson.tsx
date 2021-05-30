@@ -26,6 +26,9 @@ type JsonType = {
 };
 
 const processText = {
+  BR: (obj: JsonType) => {
+    return <br />;
+  },
   DISPLAYFOOTNOTE: (obj: JsonType) => {
     return (
       <>
@@ -114,6 +117,9 @@ const processText = {
   LATEXINLINE: (obj: JsonType) => {
     return parseLatex(obj['body'], false);
   },
+  LINK : (obj: JsonType) => {
+    return <a href={obj['body']}>{parseJson(obj['child'])}</a>
+  },
   OL: (obj: JsonType) => {
     return (
       <OL key="OL">
@@ -181,7 +187,13 @@ const parseText = (text: string) => {
   return <p>{text}</p>;
 };
 
-const parseLatex = (math: string, block: boolean) => <MathComponent tex={math} display={block} />;
+const parseLatex = (math: string, block: boolean) => {
+  const onError = (s: string) => {
+    console.log('error in parseLatex function:\n' + s + '\n' + math);
+  };
+
+  return <MathComponent tex={math} display={block} onError={onError} />;
+};
 
 const parseImage = (obj: JsonType) => {
   return (
