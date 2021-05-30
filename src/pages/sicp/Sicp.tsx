@@ -4,7 +4,6 @@ import * as React from 'react';
 import { RouteComponentProps, useParams } from 'react-router';
 
 import testData from '../../features/sicp/data/test.json';
-import SicpControlBar from './subcomponents/SicpControlBar';
 import SicpDisplay from './subcomponents/SicpDisplay';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
@@ -47,10 +46,7 @@ const Sicp: React.FC<SicpProps> = props => {
 
   return (
     <div className={classNames('Sicp', Classes.DARK)}>
-      <SicpControlBar />
-      <div className="sicp-content">
-        <SicpDisplay content={data} isJson={isJson} {...props} />
-      </div>
+      <SicpDisplay content={data} isJson={isJson} {...props} />
     </div>
   );
 };

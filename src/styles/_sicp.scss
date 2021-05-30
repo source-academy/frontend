@@ -8,29 +8,14 @@ $sicp-text-color: #333333;
   line-height: 1.5;
   color: $sicp-text-color;
   overflow: auto;
-  // overflow: hidden;
 
-  > .ControlBar {
-    position: fixed;
-    padding: 5px;
-    width: 100%;
-    background-color: $cadet-color-1;
-    color: white;
-  }
+  > .ContentDisplay {
+    margin: 0 auto;
+    height: fit-content;
+    text-align: left;
 
-  > .sicp-content {
-    height: 100%;
-    margin-top: 35px;
-    // overflow: auto;
-
-    > .ContentDisplay {
-      margin: 0 auto;
-      height: fit-content;
-      text-align: left;
-
-      p {
-        display: inline;
-      }
+    p {
+      display: inline;
     }
   }
 
@@ -59,7 +44,7 @@ $sicp-text-color: #333333;
         > .sicp-authors {
           max-width: 500px;
 
-          > h5 {
+          > h4 {
             margin-bottom: 0;
           }
 

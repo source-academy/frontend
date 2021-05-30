@@ -15,7 +15,8 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import SicpControlBar from 'src/commons/navigationBar/subcomponents/SicpNavigationBar';
 
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
@@ -41,6 +42,8 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   FocusStyleManager.onlyShowFocusOnTabs();
+
+  const location = useLocation().pathname;
 
   const playgroundOnlyNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
@@ -181,6 +184,8 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
         <AcademyNavigationBar role={props.role} />
       )}
+
+      {location.startsWith('/interactive-sicp') && <SicpControlBar />}
     </>
   );
 };

@@ -1,9 +1,8 @@
-import { Drawer, Position } from '@blueprintjs/core';
+import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import * as React from 'react';
 
-import ControlBar from '../../../commons/controlBar/ControlBar';
-import { ControlBarTableOfContentsButton } from '../../../commons/controlBar/ControlBarTableOfContentsButton';
-import SicpToc from './SicpToc';
+import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
+import { ControlBarTableOfContentsButton } from '../../controlBar/ControlBarTableOfContentsButton';
 
 type ControlBarProps = OwnProps;
 
@@ -18,12 +17,6 @@ const SicpControlBar: React.FC<ControlBarProps> = props => {
     const handleOpenToc = () => setIsTocOpen(true);
     return <ControlBarTableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
   }, []);
-
-  const controlBarProps = {
-    editorButtons: [menuButton],
-    flowButtons: [],
-    editingWorkspaceButtons: []
-  };
 
   const drawerProps = {
     onClose: handleCloseToc,
@@ -40,7 +33,9 @@ const SicpControlBar: React.FC<ControlBarProps> = props => {
 
   return (
     <>
-      <ControlBar {...controlBarProps} />
+      <Navbar className="NavigationBar secondary-navbar">
+        <NavbarGroup align={Alignment.LEFT}>{menuButton}</NavbarGroup>
+      </Navbar>
       <Drawer {...drawerProps}>
         <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
       </Drawer>
