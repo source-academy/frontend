@@ -29,6 +29,39 @@ $sicp-text-color: #333333;
   .bp3-heading {
     color: $sicp-text-color;
   }
+
+  .sicp-index-page {
+    > h1,
+    > h2,
+    > .sicp-licenses {
+      text-align: center;
+    }
+
+    > .sicp-cover {
+      display: flex;
+      justify-content: space-evenly;
+
+      > .sicp-cover-text {
+        display: flex;
+        justify-content: space-between;
+        flex-flow: column nowrap;
+        text-align: right;
+        align-items: flex-end;
+
+        > .sicp-authors {
+          max-width: 500px;
+
+          > h5 {
+            margin-bottom: 0;
+          }
+
+          > h5 {
+            font-weight: 300;
+          }
+        }
+      }
+    }
+  }
 }
 
 .sicp-toc {

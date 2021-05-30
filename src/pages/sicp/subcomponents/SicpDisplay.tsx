@@ -3,20 +3,13 @@ import { RouteComponentProps } from 'react-router';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { parseJson } from 'src/features/sicp/parser/ParseJson';
 
-import SicpToc from './SicpToc';
+import SicpIndexPage from './SicpIndexPage';
 
 type SicpDisplayProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {
   content: any;
   isJson: boolean;
 };
-
-const indexContent = (
-  <>
-    <h2>Content</h2>
-    <SicpToc location={'index'} />
-  </>
-);
 
 export const CodeSnippetContext = React.createContext({
   active: '0',
@@ -29,7 +22,7 @@ const SicpDisplay: React.FC<SicpDisplayProps> = props => {
 
   const sicpDisplayProps = {
     fullWidth: false,
-    display: isJson ? parseJson(content) : indexContent,
+    display: isJson ? parseJson(content) : <SicpIndexPage />,
     loadContentDispatch: () => {}
   };
 
