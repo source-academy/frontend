@@ -1,3 +1,5 @@
+import { TOGGLE_USING_SUBST } from 'src/features/playground/PlaygroundTypes';
+
 import { createDefaultWorkspace, SourceLanguage } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
@@ -30,6 +32,7 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  toggleUsingSubst,
   updateActiveTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
@@ -484,6 +487,17 @@ test('updateChapter generates correct action object', () => {
     type: UPDATE_SUBLANGUAGE,
     payload: {
       sublang
+    }
+  });
+});
+
+test('toggleUsingSubst generates correct action object', () => {
+  const action = toggleUsingSubst(true, playgroundWorkspace);
+  expect(action).toEqual({
+    type: TOGGLE_USING_SUBST,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      usingSubst: true
     }
   });
 });

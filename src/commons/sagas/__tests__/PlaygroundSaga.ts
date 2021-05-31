@@ -76,7 +76,7 @@ describe('Playground saga tests', () => {
       .silentRun();
   });
 
-  test('puts updateShortURL with correct params when shorten request is succesful', () => {
+  test('puts updateShortURL with correct params when shorten request is successful', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: OverallState = {
       ...defaultState,
@@ -128,7 +128,7 @@ describe('Playground saga tests', () => {
       .silentRun();
   });
 
-  test('puts updateShortURL with correct params when shorten request with keyword is succesful', () => {
+  test('puts updateShortURL with correct params when shorten request with keyword is successful', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: OverallState = {
       ...defaultState,

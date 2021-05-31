@@ -1,3 +1,5 @@
+import { TOGGLE_USING_SUBST } from 'src/features/playground/PlaygroundTypes';
+
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import {
   CodeOutput,
@@ -1416,6 +1418,33 @@ describe('MOVE_CURSOR', () => {
           newCursorPosition: cursorPosition
         }
       });
+    });
+  });
+});
+
+describe('TOGGLE_USING_SUBST', () => {
+  test('sets usingSubst correctly', () => {
+    const usingSubst = true;
+    const actions = generateActions(TOGGLE_USING_SUBST, { usingSubst });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+
+      const expectedResult =
+        location === playgroundWorkspace || location === sicpWorkspace
+          ? {
+              ...defaultWorkspaceManager,
+              [location]: {
+                ...defaultWorkspaceManager[location],
+                usingSubst: true
+              }
+            }
+          : {
+              ...defaultWorkspaceManager
+            };
+
+      expect(result).toEqual(expectedResult);
     });
   });
 });

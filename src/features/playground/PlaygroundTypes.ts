@@ -11,7 +11,6 @@ export const PLAYGROUND_UPDATE_PERSISTENCE_FILE = 'PLAYGROUND_UPDATE_PERSISTENCE
 export type PlaygroundState = {
   readonly queryString?: string;
   readonly shortURL?: string;
-  readonly usingSubst: boolean;
   readonly persistenceFile?: PersistenceFile;
   readonly githubSaveInfo: { repoName: string; filePath: string };
 };

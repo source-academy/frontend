@@ -1,5 +1,6 @@
 import { Context } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
+import { TOGGLE_USING_SUBST } from 'src/features/playground/PlaygroundTypes';
 import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -283,3 +284,6 @@ export const notifyProgramEvaluated = (
     context,
     workspaceLocation
   });
+
+export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });

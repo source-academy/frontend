@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import { TOGGLE_USING_SUBST } from 'src/features/playground/PlaygroundTypes';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -663,6 +664,18 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
+    case TOGGLE_USING_SUBST:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingSubst: action.payload.usingSubst
+          }
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

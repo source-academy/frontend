@@ -180,7 +180,6 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultPlayground: PlaygroundState = {
-  usingSubst: false,
   githubSaveInfo: { repoName: '', filePath: '' }
 };
 

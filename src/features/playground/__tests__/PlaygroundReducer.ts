@@ -12,14 +12,3 @@ test('CHANGE_QUERY_STRING sets queryString correctly ', () => {
     queryString: action.payload
   });
 });
-
-test('TOGGLE_USING_SUBST sets usingSubst correctly ', () => {
-  const action = {
-    type: TOGGLE_USING_SUBST,
-    payload: true
-  };
-  expect(PlaygroundReducer(defaultPlayground, action)).toEqual({
-    ...defaultPlayground,
-    usingSubst: true
-  });
-});
