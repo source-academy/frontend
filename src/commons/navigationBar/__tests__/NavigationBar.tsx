@@ -3,6 +3,13 @@ import { shallow } from 'enzyme';
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({
+    pathname: '/'
+  })
+}));
+
 test('NavigationBar renders "Not logged in" correctly', () => {
   const props = {
     handleLogOut: () => {},
