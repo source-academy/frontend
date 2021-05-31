@@ -37,7 +37,7 @@ function display(value: Value, str: string, workspaceLocation: any) {
 
 let buffer: string[] = [];
 let currWorkspaceLocation: WorkspaceLocation = 'playground'; // Hardcode, doesn't matter what it is.
-const dumpBuffer = () => {
+export const dumpDisplayBuffer = () => {
   if (buffer.length === 0) {
     return;
   }
@@ -48,7 +48,7 @@ const dumpBuffer = () => {
   }
   buffer = [];
 };
-const dumpBufferThrottled = throttle(dumpBuffer, 100);
+const dumpBufferThrottled = throttle(dumpDisplayBuffer, 100);
 
 /**
  * Function that takes a value and displays it in the interpreter.
@@ -64,7 +64,7 @@ const dumpBufferThrottled = throttle(dumpBuffer, 100);
 function rawDisplay(value: Value, str: string, workspaceLocation: any) {
   const output = (str === undefined ? '' : str + ' ') + String(value);
   if (currWorkspaceLocation !== workspaceLocation) {
-    dumpBuffer(); // Force clear to keep message ordering in different workspaces.
+    dumpDisplayBuffer(); // Force clear to keep message ordering in different workspaces.
     currWorkspaceLocation = workspaceLocation;
   }
   buffer.push(output);
