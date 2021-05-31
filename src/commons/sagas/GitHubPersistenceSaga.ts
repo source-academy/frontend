@@ -56,7 +56,7 @@ function* githubLoginSaga() {
 }
 
 function* githubLogoutSaga() {
-  if (store.getState().workspaces.githubAssessment.hasUnsavedChanges) {
+  if (store.getState() && store.getState().workspaces.githubAssessment.hasUnsavedChanges) {
     yield call(showWarningMessage, 'You have unsaved changes!', 2000);
     return;
   }
