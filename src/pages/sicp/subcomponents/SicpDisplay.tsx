@@ -32,8 +32,6 @@ const SicpDisplay: React.FC<SicpDisplayProps> = props => {
   React.useLayoutEffect(() => {
     const hash = props.location.hash;
 
-    console.log(hash);
-
     if (!hash) {
       if (topRef.current) {
         topRef.current.scrollIntoView();

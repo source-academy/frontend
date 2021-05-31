@@ -23,24 +23,29 @@ type JsonType = {
   withoutPrepend: string;
   prepend: string;
   program: string;
+  href: string;
+  count: integer;
 };
 
 const processText = {
-  BR: (obj: JsonType) => {
+  BR: (_obj: JsonType) => {
     return <br />;
   },
   DISPLAYFOOTNOTE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return (
       <>
-        <hr />
-        <div className="sicp-footnote">{parseJson(obj['child'], refs)}</div>
+        {obj['count'] === 1 && <hr />}
+        <div ref={ref => (refs.current[obj['id']] = ref)} className="sicp-footnote">
+          <p>{'[' + obj['count'] + '] '}</p>
+          {parseJson(obj['child'], refs)}
+        </div>
       </>
     );
   },
   EPIGRAPH: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return parseEpigraph(obj, refs);
   },
-  '#text': (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  '#text': (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return <p>{obj['body']}</p>;
   },
   EXERCISE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -57,9 +62,16 @@ const processText = {
     );
   },
   FIGURE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
-    return obj['images'].map(x => parseImage(x));
+    return (
+      <div ref={ref => (refs.current[obj['id']] = ref)}>
+        {obj['images'].map(x => parseImage(x))}
+      </div>
+    );
   },
-  SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  FOOTNOTE_REF: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
+    return <sup>{parseRef(obj)}</sup>;
+  },
+  SUBHEADING: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return <H2>{obj['child'][0]['child'][0]['body']}</H2>;
   },
   CHAPTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -70,6 +82,9 @@ const processText = {
   },
   MATTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return parseContainer(obj, refs);
+  },
+  REF: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
+    return parseRef(obj);
   },
   SUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return parseContainer(obj, refs);
@@ -93,7 +108,7 @@ const processText = {
       return <CodeSnippet {...CodeSnippetProps} />;
     }
   },
-  SPACE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  SPACE: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return parseText(' ');
   },
   REFERENCE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -102,19 +117,19 @@ const processText = {
   REFERENCES: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return parseContainer(obj, refs);
   },
-  JAVASCRIPT: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  JAVASCRIPT: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return <code>{obj['output']}</code>;
   },
-  JAVASCRIPTINLINE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  JAVASCRIPTINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return <code>{obj['body']}</code>;
   },
-  LaTeX: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return parseText('LaTeX');
   },
-  LATEX: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return parseLatex(obj['body'], true);
   },
-  LATEXINLINE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     return parseLatex(obj['body'], false);
   },
   LINK: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -132,7 +147,11 @@ const processText = {
   }
 };
 
-function parseEpigraph(obj: JsonType, refs: React.MutableRefObject<{}>) {
+const parseRef = (obj: JsonType) => {
+  return <a href={obj['href']}>{obj['body']}</a>;
+};
+
+const parseEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   const { child, author, title, date } = obj;
 
   const hasAttribution = author || title || date;
@@ -158,17 +177,19 @@ function parseEpigraph(obj: JsonType, refs: React.MutableRefObject<{}>) {
       {hasAttribution ? <div className="sicp-attribution">{attribution}</div> : <></>}
     </Blockquote>
   );
-}
+};
 
-function parseExercise(obj: JsonType, refs: React.MutableRefObject<{}>) {
+const parseExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <SicpExercise
-      title={obj['title']}
-      body={parseJson(obj['child'], refs)}
-      solution={parseJson(obj['solution'], refs)}
-    />
+    <div ref={ref => (refs.current[obj['id']] = ref)}>
+      <SicpExercise
+        title={obj['title']}
+        body={parseJson(obj['child'], refs)}
+        solution={parseJson(obj['solution'], refs)}
+      />
+    </div>
   );
-}
+};
 
 const parseContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
@@ -198,7 +219,11 @@ const parseLatex = (math: string, block: boolean) => {
 const parseImage = (obj: JsonType) => {
   return (
     <div className={'sicp-figure'}>
-      {obj['src'] ? <img src={'/sicp/' + obj['src']} alt={'Figure'} /> : <></>}
+      {obj['src'] ? (
+        <img src={'https://source-academy/sicp/' + obj['src']} alt={'Figure'} />
+      ) : (
+        <></>
+      )}
       {obj['captionName'] ? <h5>{obj['captionName']}</h5> : <></>}
     </div>
   );
