@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const now = new Date();
 
 export const isExpired = (deadline?: Date) => deadline !== undefined && deadline <= now;
@@ -36,61 +38,27 @@ export const timeFromExpired = (deadline?: Date) =>
 export const prettifyDate = (deadline?: Date) => {
   if (deadline === undefined) return '';
 
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-  const day = deadline.getDate();
-  const month = months[deadline.getMonth()];
-  const year = deadline.getFullYear();
-  const hour = deadline.getHours();
-  const minute = deadline.getMinutes();
-  const time = (hour < 10 ? '0' : '') + hour + ':' + (minute < 10 ? '0' : '') + minute;
-
-  return `${day} ${month} ${year} ${time}`;
+  return moment(deadline).format('D MMMM YYYY HH:mm');
 };
 
 export const prettifyTime = (time?: Date) => {
   if (time === undefined) return '';
-  const hour = time.getHours();
-  const minute = time.getMinutes();
-  return (hour < 10 ? '0' : '') + hour + ':' + (minute < 10 ? '0' : '') + minute;
+  return moment(time).format('HH:mm');
 };
 
 // Converts Date to deadline countdown
 export const prettifyDeadline = (deadline?: Date) => {
-  /* ---------- Date constants ---------- */
-  const daysPerWeek = 7;
-  const hoursPerDay = 24;
-  const millisecondsPerHour = 3600000;
-
-  /* -------- Helper for Deadline -------- */
-  const isExpired = (deadline: Date): boolean => deadline.getTime() <= now.getTime();
-  const getHoursAway = (deadline: Date): number =>
-    (deadline.getTime() - now.getTime()) / millisecondsPerHour;
-  const getDaysAway = (deadline: Date): number => getHoursAway(deadline) / hoursPerDay;
-  const getWeeksAway = (deadline: Date): number => getDaysAway(deadline) / daysPerWeek;
-
-  /* -------- Prettifies Deadline -------- */
   if (deadline === undefined) {
     return 'Unlimited';
   } else if (isExpired(deadline)) {
     return 'Expired';
   }
 
-  const weeksAway = Math.ceil(getWeeksAway(deadline));
-  const daysAway = Math.ceil(getDaysAway(deadline));
-  const hoursAway = Math.ceil(getHoursAway(deadline));
+  const now = moment();
+
+  const weeksAway = Math.ceil(moment(deadline).diff(now, 'weeks', true));
+  const daysAway = Math.ceil(moment(deadline).diff(now, 'days', true));
+  const hoursAway = Math.ceil(moment(deadline).diff(now, 'hours', true));
 
   let prettifiedDeadline = '';
   if (weeksAway > 1) {
