@@ -1,4 +1,4 @@
-import { Blockquote, H1, H2, OL } from '@blueprintjs/core';
+import { Blockquote, H1, H2, H4, OL, UL } from '@blueprintjs/core';
 import { MathComponent } from 'mathjax-react';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
@@ -14,6 +14,7 @@ type JsonType = {
   src: string;
   captionHref: string;
   captionName: string;
+  captionBody: Array<JsonType>;
   latex: boolean;
   author: string;
   date: string;
@@ -64,7 +65,7 @@ const processText = {
   FIGURE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return (
       <div ref={ref => (refs.current[obj['id']] = ref)}>
-        {obj['images'].map(x => parseImage(x))}
+        {obj['images'].map(x => parseImage(x, refs))}
       </div>
     );
   },
@@ -89,7 +90,22 @@ const processText = {
   SUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return parseContainer(obj, refs);
   },
+  SUBSUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+    return parseContainer(obj, refs);
+  },
+  SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+    return (
+      <H4>
+        <br />
+        {parseJson(obj['child'], refs)}
+      </H4>
+    );
+  },
   SNIPPET: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+    if (!obj['body']) {
+      return;
+    }
+
     if (obj['latex']) {
       return (
         <pre>
@@ -107,9 +123,6 @@ const processText = {
       };
       return <CodeSnippet {...CodeSnippetProps} />;
     }
-  },
-  SPACE: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => {
-    return parseText(' ');
   },
   REFERENCE: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     return parseContainer(obj, refs);
@@ -144,6 +157,25 @@ const processText = {
         ))}
       </OL>
     );
+  },
+  UL: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+    return (
+      <UL key="UL">
+        {obj['child'].map((x, index) => (
+          //TODO BUG NON-UNIQUE KEY
+          <li key={index}>{parseObj(x, undefined, refs)}</li>
+        ))}
+      </UL>
+    );
+  },
+  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => {
+    return parseText('TeX');
+  },
+  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
+    return parseLatex(obj['body'], false);
+  },
+  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
+    return parseLatex('\\langle ' + obj['body'] + ' \\rangle', false);
   }
 };
 
@@ -216,15 +248,22 @@ const parseLatex = (math: string, block: boolean) => {
   return <MathComponent tex={math} display={block} onError={onError} />;
 };
 
-const parseImage = (obj: JsonType) => {
+const parseImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
     <div className={'sicp-figure'}>
       {obj['src'] ? (
-        <img src={'https://source-academy/sicp/' + obj['src']} alt={'Figure'} />
+        <img src={'https://source-academy.github.io/sicp/' + obj['src']} alt={obj['id']} />
       ) : (
         <></>
       )}
-      {obj['captionName'] ? <h5>{obj['captionName']}</h5> : <></>}
+      {obj['captionName'] ? (
+        <h5>
+          {obj['captionName']}
+          {parseJson(obj['captionBody'], refs)}
+        </h5>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
