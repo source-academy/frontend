@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import ContentDisplay from 'src/commons/ContentDisplay';
-import { parseJson } from 'src/features/sicp/parser/ParseJson';
+import { parseArr } from 'src/features/sicp/parser/ParseJson';
 
 import SicpIndexPage from './SicpIndexPage';
 
@@ -25,7 +25,7 @@ const SicpDisplay: React.FC<SicpDisplayProps> = props => {
 
   const sicpDisplayProps = {
     fullWidth: false,
-    display: isJson ? parseJson(content, refs) : <SicpIndexPage />,
+    display: isJson ? parseArr(content, refs) : <SicpIndexPage />,
     loadContentDispatch: () => {}
   };
 

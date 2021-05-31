@@ -4,11 +4,11 @@ import * as React from 'react';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
 import { ControlBarTableOfContentsButton } from '../../controlBar/ControlBarTableOfContentsButton';
 
-type ControlBarProps = OwnProps;
+type SicpNavigationBarProps = OwnProps;
 
 type OwnProps = {};
 
-const SicpControlBar: React.FC<ControlBarProps> = props => {
+const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
   const [isTocOpen, setIsTocOpen] = React.useState(false);
 
   const handleCloseToc = () => setIsTocOpen(false);
@@ -43,4 +43,4 @@ const SicpControlBar: React.FC<ControlBarProps> = props => {
   );
 };
 
-export default SicpControlBar;
+export default SicpNavigationBar;

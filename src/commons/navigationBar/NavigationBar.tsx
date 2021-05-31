@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { NavLink, useLocation } from 'react-router-dom';
-import SicpControlBar from 'src/commons/navigationBar/subcomponents/SicpNavigationBar';
+import SicpNavigationBar from 'src/commons/navigationBar/subcomponents/SicpNavigationBar';
 
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
@@ -185,7 +185,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <AcademyNavigationBar role={props.role} />
       )}
 
-      {location.startsWith('/interactive-sicp') && <SicpControlBar />}
+      {location.startsWith('/interactive-sicp') && <SicpNavigationBar />}
     </>
   );
 };
