@@ -319,19 +319,51 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     resetToTemplate();
   }, [resetToTemplate]);
 
+  const shouldProceedToChangeTask = useCallback(
+    (currentTaskNumber: number, taskList: TaskData[], cachedTaskList: TaskData[]) => {
+      if (taskList[currentTaskNumber - 1] !== cachedTaskList[currentTaskNumber - 1]) {
+        return window.confirm(
+          'You have unsaved changes to the current question. Are you sure you want to continue?'
+        );
+      }
+      return true;
+    },
+    []
+  );
+
   const onClickPrevious = useCallback(() => {
-    const newTaskNumber = currentTaskNumber - 1;
-    setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
-    handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
+    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      const newTaskNumber = currentTaskNumber - 1;
+      setCurrentTaskNumber(newTaskNumber);
+      setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
+      handleEditorValueChange(getEditedCode(newTaskNumber));
+    }
+  }, [
+    currentTaskNumber,
+    setCurrentTaskNumber,
+    taskList,
+    cachedTaskList,
+    shouldProceedToChangeTask,
+    getEditedCode,
+    handleEditorValueChange
+  ]);
 
   const onClickNext = useCallback(() => {
-    const newTaskNumber = currentTaskNumber + 1;
-    setCurrentTaskNumber(newTaskNumber);
-    setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
-    handleEditorValueChange(getEditedCode(newTaskNumber));
-  }, [currentTaskNumber, setCurrentTaskNumber, getEditedCode, handleEditorValueChange, taskList]);
+    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      const newTaskNumber = currentTaskNumber + 1;
+      setCurrentTaskNumber(newTaskNumber);
+      setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
+      handleEditorValueChange(getEditedCode(newTaskNumber));
+    }
+  }, [
+    currentTaskNumber,
+    setCurrentTaskNumber,
+    taskList,
+    cachedTaskList,
+    shouldProceedToChangeTask,
+    getEditedCode,
+    handleEditorValueChange
+  ]);
 
   const onClickReturn = useCallback(() => {
     history.push('/githubassessments/missions');
