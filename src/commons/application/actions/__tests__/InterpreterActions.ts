@@ -34,7 +34,7 @@ test('handleConsoleLog generates correct action object', () => {
   expect(action).toEqual({
     type: HANDLE_CONSOLE_LOG,
     payload: {
-      logString,
+      logString: [logString],
       workspaceLocation: assessmentWorkspace
     }
   });
