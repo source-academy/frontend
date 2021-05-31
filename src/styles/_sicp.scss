@@ -106,6 +106,18 @@ $sicp-text-color: #333333;
   }
 }
 
+.sicp-loading-page {
+  height: calc(100vh - 180px);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  > h3 {
+    margin-top: 10px;
+  }
+}
+
 .sicp-footnote {
   font-size: 0.8rem;
 }

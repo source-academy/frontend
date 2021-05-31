@@ -7,6 +7,7 @@ import { parseArr } from 'src/features/sicp/parser/ParseJson';
 
 import testData from '../../features/sicp/data/test.json';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
+import SicpLoadingPage from './subcomponents/SicpLoadingPage';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
@@ -21,8 +22,7 @@ export const CodeSnippetContext = React.createContext({
 });
 
 const Sicp: React.FC<SicpProps> = props => {
-  const [data, setData] = React.useState<any[]>([]);
-  const [isJson, setIsJson] = React.useState(false);
+  const [data, setData] = React.useState(<SicpLoadingPage />);
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
   const topRef = React.useRef<HTMLDivElement>(null);
@@ -30,15 +30,15 @@ const Sicp: React.FC<SicpProps> = props => {
 
   // Fetch json data
   React.useEffect(() => {
+    setData(<SicpLoadingPage />);
+
     if (!section) {
-      setIsJson(false);
+      setData(<SicpIndexPage />);
       return;
     }
 
-    setIsJson(true);
-
     if (section === 'test') {
-      setData(testData as any[]);
+      setData(parseArr(testData as any[], refs));
       return;
     }
 
@@ -50,7 +50,7 @@ const Sicp: React.FC<SicpProps> = props => {
         return response.json();
       })
       .then(myJson => {
-        setData(myJson);
+        setData(parseArr(myJson, refs));
       })
       .catch(error => console.log(error));
   }, [section]);
@@ -80,7 +80,7 @@ const Sicp: React.FC<SicpProps> = props => {
 
   const sicpDisplayProps = {
     fullWidth: false,
-    display: isJson ? parseArr(data, refs) : <SicpIndexPage />,
+    display: data,
     loadContentDispatch: () => {}
   };
 
