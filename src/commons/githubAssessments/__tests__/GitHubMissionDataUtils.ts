@@ -107,6 +107,19 @@ test('getMissionData works properly', async () => {
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
+      // folder contents
+      const contentResponse = generateGetContentResponse() as {
+        url: any;
+        status: any;
+        headers: any;
+        data: any;
+      };
+      // Mock a folder which contains 'SavedCode.js'
+      contentResponse.data = [{ name: 'SavedCode.js' }];
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
+      // folder contents
       const contentResponse = generateGetContentResponse() as {
         url: any;
         status: any;
@@ -128,7 +141,7 @@ test('getMissionData works properly', async () => {
     })
     .mockImplementationOnce(async () => {
       const contentResponse = generateGetContentResponse();
-      contentResponse.data = [];
+      (contentResponse.data as any).content = Buffer.from('SavedCode A', 'utf8').toString('base64');
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
@@ -160,8 +173,10 @@ test('getMissionData works properly', async () => {
   expect(missionData.tasksData.length).toBe(2);
   expect(missionData.tasksData[0].taskDescription).toBe('Task A');
   expect(missionData.tasksData[0].starterCode).toBe('Code A');
+  expect(missionData.tasksData[0].savedCode).toBe('SavedCode A');
   expect(missionData.tasksData[1].taskDescription).toBe('Task B');
   expect(missionData.tasksData[1].starterCode).toBe('Code B');
+  expect(missionData.tasksData[1].savedCode).toBe('Code B');
 });
 
 function generateGitHubSubDirectory(name: string) {

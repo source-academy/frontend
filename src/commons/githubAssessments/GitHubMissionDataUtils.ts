@@ -16,27 +16,32 @@ const maximumTasksPerMission = 20;
  * @param octokit The Octokit instance for the authenticated user
  */
 export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
-  const briefingString = await getContentAsString(
+  const briefingStringPromise = getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     'README.md',
     octokit
   );
 
-  const metadataString = await getContentAsString(
+  const metadataStringPromise = getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     '.metadata',
     octokit
   );
 
-  const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
-
-  const tasksData = await getTasksData(
+  const tasksDataPromise = getTasksData(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     octokit
   );
+
+  const [briefingString, metadataString, tasksData] = await Promise.all([
+    briefingStringPromise,
+    metadataStringPromise,
+    tasksDataPromise
+  ]);
+  const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
 
   const newMissionData: MissionData = {
     missionRepoData: missionRepoData,
@@ -76,6 +81,8 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
     return questions;
   }
 
+  const promises = [];
+
   for (let i = 1; i <= maximumTasksPerMission; i++) {
     const questionFolderName = 'Q' + i;
 
@@ -85,53 +92,56 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
       break;
     }
 
-    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    // Asynchronously fetch the data for each task
+    promises.push(
+      octokit.repos
+        .getContent({
+          owner: repoOwner,
+          repo: repoName,
+          path: questionFolderName
+        })
+        .then((folderContents: GetContentResponse) => {
+          if (!Array.isArray(folderContents.data)) {
+            return;
+          }
 
-    // Find out if there is already SavedCode for the question
-    const folderContents: GetContentResponse = await octokit.repos.getContent({
-      owner: repoOwner,
-      repo: repoName,
-      path: questionFolderName
-    });
-
-    if (!Array.isArray(folderContents.data)) {
-      return questions;
-    }
-
-    const hasSavedCode = folderContents.data.find((file: any) => file.name === 'SavedCode.js');
-
-    // If the question exists, get the data
-    try {
-      const taskDescription = await getContentAsString(
-        repoOwner,
-        repoName,
-        questionFolderName + '/Problem.md',
-        octokit
-      );
-      const starterCode = await getContentAsString(
-        repoOwner,
-        repoName,
-        questionFolderName + '/StarterCode.js',
-        octokit
-      );
-
-      const savedCode = hasSavedCode
-        ? await getContentAsString(
+          // If the question exists, get the data
+          const taskDescriptionPromise = getContentAsString(
             repoOwner,
             repoName,
-            questionFolderName + '/SavedCode.js',
+            questionFolderName + '/Problem.md',
             octokit
-          )
-        : starterCode;
+          );
+          const starterCodePromise = getContentAsString(
+            repoOwner,
+            repoName,
+            questionFolderName + '/StarterCode.js',
+            octokit
+          );
+          const hasSavedCode = folderContents.data.find(file => file.name === 'SavedCode.js');
+          const savedCodePromise = hasSavedCode
+            ? getContentAsString(repoOwner, repoName, questionFolderName + '/SavedCode.js', octokit)
+            : starterCodePromise;
 
-      const taskData = { taskDescription, starterCode, savedCode };
-
-      questions.push(taskData);
-    } catch (err) {
-      showWarningMessage('Error occurred while trying to retrieve file content', 1000);
-      console.error(err);
-    }
+          return Promise.all([taskDescriptionPromise, starterCodePromise, savedCodePromise]).then(
+            ([taskDescription, starterCode, savedCode]) => {
+              questions.push({
+                questionNumber: i,
+                taskDescription: taskDescription,
+                starterCode: starterCode,
+                savedCode: savedCode
+              });
+            }
+          );
+        })
+        .catch(err => {
+          showWarningMessage('Error occurred while trying to retrieve file content', 1000);
+          console.error(err);
+        })
+    );
   }
+  await Promise.all(promises);
+  questions.sort((a, b) => a.questionNumber - b.questionNumber);
 
   return questions;
 }
