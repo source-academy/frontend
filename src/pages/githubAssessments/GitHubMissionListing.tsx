@@ -25,7 +25,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
-import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
+import controlButton from '../../commons/ControlButton';
 import {
   getContentAsString,
   parseMetadataProperties
@@ -107,6 +107,11 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
         {tagFilter}
         <Divider />
         {cards}
+        {isMobileBreakpoint &&
+          controlButton('Log Out', IconNames.GIT_BRANCH, props.handleGitHubLogOut, {
+            intent: 'primary',
+            minimal: false
+          })}
       </>
     );
   }, [
@@ -117,7 +122,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     handleTagClear,
     isMobileBreakpoint,
     octokit,
-    setDisplay
+    props.handleGitHubLogOut
   ]);
 
   // Used to retrieve browsable missions
@@ -126,26 +131,17 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
       setDisplay(
         <>
           <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
-          {isMobileBreakpoint && (
-            <ControlBarGitHubLoginButton
-              key="github"
-              onClickLogIn={props.handleGitHubLogIn}
-              onClickLogOut={props.handleGitHubLogOut}
-            />
-          )}
+          {isMobileBreakpoint &&
+            controlButton('Log In', IconNames.GIT_BRANCH, props.handleGitHubLogIn, {
+              intent: 'primary',
+              minimal: false
+            })}
         </>
       );
     } else {
       retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
     }
-  }, [
-    isMobileBreakpoint,
-    octokit,
-    props.handleGitHubLogIn,
-    props.handleGitHubLogOut,
-    setBrowsableMissions,
-    setDisplay
-  ]);
+  }, [isMobileBreakpoint, octokit, props.handleGitHubLogIn, setBrowsableMissions, setDisplay]);
 
   return (
     <div className="Academy">
