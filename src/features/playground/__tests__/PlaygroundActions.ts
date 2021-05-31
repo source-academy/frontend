@@ -1,5 +1,5 @@
 import { changeQueryString, generateLzString } from '../PlaygroundActions';
-import { CHANGE_QUERY_STRING, GENERATE_LZ_STRING, TOGGLE_USING_SUBST } from '../PlaygroundTypes';
+import { CHANGE_QUERY_STRING, GENERATE_LZ_STRING } from '../PlaygroundTypes';
 
 test('generateLzString generates correct action object', () => {
   const action = generateLzString();
