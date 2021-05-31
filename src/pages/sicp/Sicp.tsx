@@ -2,22 +2,33 @@ import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 import { RouteComponentProps, useParams } from 'react-router';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { parseArr } from 'src/features/sicp/parser/ParseJson';
 
 import testData from '../../features/sicp/data/test.json';
-import SicpDisplay from './subcomponents/SicpDisplay';
+import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
 
+const baseUrl = '/sicp/json/';
+const extension = '.json';
+
+// Context to determine which code snippet is active
+export const CodeSnippetContext = React.createContext({
+  active: '0',
+  setActive: (x: string) => {}
+});
+
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState<any[]>([]);
   const [isJson, setIsJson] = React.useState(false);
-
+  const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
+  const topRef = React.useRef<HTMLDivElement>(null);
+  const refs = React.useRef({});
 
-  const baseUrl = '/sicp/json/';
-  const extension = '.json';
-
+  // Fetch json data
   React.useEffect(() => {
     if (!section) {
       setIsJson(false);
@@ -44,10 +55,42 @@ const Sicp: React.FC<SicpProps> = props => {
       .catch(error => console.log(error));
   }, [section]);
 
+  // Scroll to correct position
+  React.useLayoutEffect(() => {
+    const hash = props.location.hash;
+
+    if (!hash) {
+      if (topRef.current) {
+        topRef.current.scrollIntoView();
+      }
+      return;
+    }
+
+    const ref = refs.current[hash];
+
+    if (ref) {
+      ref.scrollIntoView({ block: 'start' });
+    }
+  }, [props.location.hash, data]);
+
+  // Set active code snippet to 0 when new page is loaded
+  React.useEffect(() => {
+    setActive('0');
+  }, [data]);
+
+  const sicpDisplayProps = {
+    fullWidth: false,
+    display: isJson ? parseArr(data, refs) : <SicpIndexPage />,
+    loadContentDispatch: () => {}
+  };
+
   return (
-    <div className={classNames('Sicp', Classes.DARK)}>
-      <SicpDisplay content={data} isJson={isJson} {...props} />
-    </div>
+    <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
+      <div className={classNames('Sicp', Classes.DARK)}>
+        <div ref={topRef} />
+        <ContentDisplay {...sicpDisplayProps} />
+      </div>
+    </CodeSnippetContext.Provider>
   );
 };
 

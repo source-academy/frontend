@@ -5,7 +5,7 @@ import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
 
-import { CodeSnippetContext } from './SicpDisplay';
+import { CodeSnippetContext } from '../Sicp';
 import SicpWorkspaceContainer from './SicpWorkspaceContainer';
 
 type CodeSnippetProps = OwnProps;
