@@ -1,57 +1,17 @@
 [
   {
     "tag": "SUBSECTION",
-    "body": "2.3.2  \n    Example: Symbolic Differentiation\n  ",
+    "body": "1.1.6  \n    Conditional Expressions and Predicates\n  ",
     "child": [
       {
         "tag": "TEXT",
         "id": "#p1",
         "child": [
+          { "tag": "#text", "body": "\n    The expressive power of the class of\n    " },
+          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tfunctions\n      " }] }] },
           {
             "tag": "#text",
-            "body": "\n    As an illustration of symbol manipulation and a further illustration\n    of data abstraction, consider the design of a\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    that performs symbolic differentiation of algebraic expressions.  We would\n    like the\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    to take as arguments an algebraic expression and a variable and to return\n    the derivative of the expression with respect to the variable. For example,\n    if the arguments to the\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          { "tag": "#text", "body": "\n    are " },
-          { "tag": "LATEXINLINE", "body": "ax^2 + bx +c" },
-          { "tag": "#text", "body": " and\n    " },
-          { "tag": "LATEXINLINE", "body": "x" },
-          { "tag": "#text", "body": ", the\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          { "tag": "#text", "body": "\n    should return " },
-          { "tag": "LATEXINLINE", "body": "2ax+b" },
-          {
-            "tag": "#text",
-            "body": ".  Symbolic differentiation\n    is of special historical significance in\n    "
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "#text", "body": "\n\tthe programming language Lisp." },
-                  {
-                    "tag": "FOOTNOTE_REF",
-                    "id": "footnote-link-1",
-                    "body": "1",
-                    "href": "/interactive-sicp/2.3.2#footnote-1"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    It was one of the\n    motivating examples behind the development of a computer language for\n    symbol manipulation.  Furthermore, it marked the beginning of the line of\n    research that led to the development of powerful systems for symbolic\n    mathematical work, which are\n    "
+            "body": "\n    that we can define at this point is very limited, because we have no way to\n    make tests and to perform different operations depending on the result of a\n    test.\n    "
           },
           {
             "child": [
@@ -59,697 +19,474 @@
                 "child": [
                   {
                     "tag": "#text",
-                    "body": "\n\ttoday routinely used by applied mathematicians and physicists.\n      "
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p2",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    In developing the symbolic-differentiation program, we will follow the same\n    strategy of data abstraction that we followed in developing the\n    rational-number system of section "
-          },
-          {
-            "tag": "REF",
-            "id": "2.3.2-ex-link-2.1.1",
-            "body": "2.1.1",
-            "href": "/interactive-sicp/2.1.1"
-          },
-          {
-            "tag": "#text",
-            "body": ".  That\n    is, we will first define a differentiation algorithm that operates on\n    abstract objects such as \"sums,\""
-          },
-          {
-            "tag": "#text",
-            "body": "\"products,\" and\n    \"variables\" without worrying about how these are to be\n    represented.  Only afterward will we address the representation problem.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "SUBHEADING",
-        "child": [
-          {
-            "child": [{ "tag": "#text", "body": "The differentiation program with abstract data" }]
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p3",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    In order to keep things simple, we will consider a very simple\n    symbolic-differentiation program that handles expressions that are built up\n    using only the operations of addition and multiplication with two\n    arguments.  Differentiation of any such expression can be carried out by\n    applying the following\n    "
-          },
-          { "tag": "#text", "body": "\n    reduction rules:\n    " },
-          {
-            "tag": "LATEX",
-            "body": "       \\begin{array}{rll}       \\dfrac{dc}{dx}     & = &                           0\\quad \\text{for c a constant or a variable different from x} \\\\[12pt]       \\dfrac{dx}{dx}     & = &  1  \\\\[12pt]       \\dfrac{d(u+v)}{dx} & = & \\dfrac{du}{dx}+\\dfrac{dv}{dx} \\\\[12pt]       \\dfrac{d(uv)}{dx}  & = &  u\\left( \\dfrac{dv}{dx}\\right)+v\\left(       \\dfrac{du}{dx}\\right)       \\end{array}       "
-          },
-          {
-            "tag": "#text",
-            "body": "\n    Observe that the latter two rules are recursive in nature.  That is, to\n    obtain the derivative of a sum we first find the derivatives of the terms\n    and add them.  Each of the terms may in turn be an expression that needs to\n    be decomposed.  Decomposing into smaller and smaller pieces will eventually\n    produce pieces that are either constants or variables, whose derivatives\n    will be either "
-          },
-          { "tag": "LATEXINLINE", "body": "0" },
-          { "tag": "#text", "body": " or\n    " },
-          { "tag": "LATEXINLINE", "body": "1" },
-          { "tag": "#text", "body": ".\n  " }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p4",
-        "child": [
-          { "tag": "#text", "body": "\n    To embody these rules in a\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          { "tag": "#text", "body": "\n    we indulge in a little\n    " },
-          {
-            "tag": "#text",
-            "body": "\n    wishful thinking, as we did in designing the rational-number implementation.\n    If we had a means for representing algebraic expressions, we should be able\n    to tell whether an expression is a sum, a product, a constant, or a\n    variable.  We should be able to extract the parts of an expression. For a\n    sum, for example we want to be able to extract the addend (first term) and\n    the augend (second term).  We should also be able to construct expressions\n    from parts.  Let us assume that we already have\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "functions" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    to implement the following selectors, constructors, and predicates:\n    "
-          },
-          {
-            "tag": "TABLE",
-            "child": [
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "is_variable(e)" }] }
-                        ]
-                      }
-                    ]
+                    "body": "\n        For instance, we cannot declare a function that computes the \n        "
                   },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Is " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": " a variable?\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          {
-                            "child": [
-                              { "tag": "JAVASCRIPTINLINE", "body": "is_same_variable(v1, v2)" }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "tag": "#text",
+                    "body": "\n        absolute value of a number by testing whether the number is nonnegative\n\tand taking different actions in each case according to the rule\n        "
                   },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Are " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "v1" },
-                      { "tag": "#text", "body": " and\n\t  " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "v2" },
-                      { "tag": "#text", "body": " the same variable?\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
+                    "tag": "LATEX",
+                    "body": "\\[\\begin{array}{lll}           |x| & = & \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x \\geq 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.       \\end{array}\\]"
+                  },
+                  { "tag": "#text", "body": "\n        This construct is a\n\t" },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "case analysis" }] },
+                  { "tag": "#text", "body": " and can be expressed\n\tin JavaScript using a " },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "conditional expression" }] },
+                  { "tag": "#text", "body": " as follows:\n        " },
                   {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "is_sum(e)" }] }]
-                      }
-                    ]
+                    "tag": "SNIPPET",
+                    "latex": false,
+                    "id": 1,
+                    "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBDAIwGcAKADwEpQBvbUf0ACcApmQKDabUAD4AvKAAMoAPygpALlABaNQG5sAX1yNWWgKwddQA",
+                    "body": "function abs(x) {\n    return x >= 0 ? x : - x;\n}\n"
                   },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Is " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": " a sum?\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "addend(e)" }] }]
-                      }
-                    ]
+                    "tag": "#text",
+                    "body": "\n        The general form of a conditional expression is\n        "
                   },
                   {
-                    "tag": "TD",
+                    "tag": "SNIPPET",
+                    "latex": true,
                     "child": [
-                      { "tag": "#text", "body": "\n          Addend of the sum " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": ".\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "augend(e)" }] }]
-                      }
+                      { "tag": "META", "body": "$predicate$" },
+                      { "tag": "#text", "body": " ? " },
+                      { "tag": "META", "body": "$consequent$-$expression$" },
+                      { "tag": "#text", "body": " : " },
+                      { "tag": "META", "body": "$alternative$-$expression$" }
                     ]
                   },
+                  { "tag": "#text", "body": "\n        Conditional\n\t" },
+                  { "tag": "#text", "body": "\n\texpressions begin with a\n        " },
+                  { "tag": "META", "body": "$predicate$" },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Augend of the sum " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": ".\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_sum(a1, a2)" }] }
-                        ]
-                      }
-                    ]
+                    "tag": "#text",
+                    "body": "—that is, \n        an expression whose value is either\n\t"
                   },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "true" }] },
+                  { "tag": "#text", "body": " or " },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "false" }] },
+                  { "tag": "#text", "body": ", two distinguished\n\t" },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "boolean" }] },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Construct the sum of " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "a1" },
-                      { "tag": "#text", "body": " and\n\t  " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "a2" },
-                      { "tag": "#text", "body": ".\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "is_product(e)" }] }
-                        ]
-                      }
-                    ]
+                    "tag": "#text",
+                    "body": " values in JavaScript.\n\tThe primitive boolean expressions\n\t"
                   },
+                  { "tag": "JAVASCRIPTINLINE", "body": "true" },
+                  { "tag": "#text", "body": " and\n\t" },
+                  { "tag": "JAVASCRIPTINLINE", "body": "false" },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Is " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": " a product?\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "multiplier(e)" }] }
-                        ]
-                      }
-                    ]
+                    "tag": "#text",
+                    "body": " trivially evaluate\n\tto the boolean values true and false, respectively.\n\tThe "
                   },
+                  { "tag": "META", "body": "$predicate$" },
                   {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Multiplier of the product " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": ".\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "multiplicand(e)" }] }
-                        ]
-                      }
-                    ]
+                    "tag": "#text",
+                    "body": " \n        is followed by a question mark, the \n        "
                   },
-                  {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Multiplicand of the product " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "e" },
-                      { "tag": "#text", "body": ".\n        " }
-                    ]
-                  }
-                ]
-              },
-              {
-                "tag": "TR",
-                "child": [
-                  {
-                    "tag": "TD",
-                    "child": [
-                      {
-                        "child": [
-                          {
-                            "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_product(m1, m2)" }]
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "tag": "TD",
-                    "child": [
-                      { "tag": "#text", "body": "\n          Construct the product of " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "m1" },
-                      { "tag": "#text", "body": " and\n\t  " },
-                      { "tag": "JAVASCRIPTINLINE", "body": "m2" },
-                      { "tag": "#text", "body": ".\n        " }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          { "tag": "#text", "body": "\n    Using these, and the primitive predicate\n    " },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "is_number" },
-                  { "tag": "#text", "body": "," }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    which identifies numbers, we can express the differentiation rules as the\n    following\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function:" }] }] },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 1,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpbNgBrBwZqoTZPUDYM-zlG4NA+RnIhCdGvDYvfadLzCtAF5aYWjmp+wgohW03bHfrApp0I4aU4AKnODx+12MMzulgG-QExEGDD8-32zV6AyE5HafCEqIMMNu5XhhG0SJRaICGLoWMGuMo+MZ+MJRJKZlJlRebw+J3EdRpQWaajaHS6MVA9KGBVG4JunLmD0IfCoLSOAk6qMFe2FdL6DLxBLE7NhXOVqso6sopDYyONOoaeqlBpxRpZxpNCtm90RXBYQgEIhaXjCzkE1N1gOSxGqPE1geDYn+SVAAH5QAAGFNJABcyTDEWEQZaydTAQzahs9hS4eLwdDTiLEgzOXz2fLcnzVbWJbLnfTDyWKzWfsoAYRlMTpcbqQjHhzA6SY4n5KnfdndZNi4C3eYPPenz7O7kGceI5q5+er0PJ1sKrVGs6G5PS7fchXXwfVqOtvtL-fQDAMLFwTQXIDUyvA8+SET970ta0EwAiCUNTED51fVDIO-a0-0GPttyXfNNVeZ8GzGEhFmIagAHc6BLBQGAYe5yAATxaARQAAWi40AV1GU0cE-YETjlCERLBCFRhEKTWIErwJLOLxpIhDAwLGGSDCAA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqCq4ANbq6MmUuAYouAHmrJnWKKQYsJQNtYYDC6bNsXIJKB3dmDn4iOXgcJQqgyoj6ZZZqFP8swBU8xsny1ItawoV5eSQlehm5+PZUoVSiwfKkSi-cQvVbxd7gIRfH5-CwA1BAyqg+DgzHgyFQmKyWGJHZ7A4zOhpFFWbK8PIFIouFDoqoRWr3FaEtobcCkBA5KbkQq-SljalosoYsEQ2j415E7m8+D8+DQXDfaUijJipkSkFSnHSmXRIA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgAmApgE6UBuAFIwB4AOANKDYBDVsIBGAG0YBKUAG8coZaGaNyhZnUoBnAPrFCAW3EsufGUpXWVAflAAGKzesAuULr0ixUxud6WLjb2njrCRoxeopQS0v6C3jG+cvYAjKDuTkFuHvo6xv6B2cr2RsIA1pH5RhxMrJzC9EzE9IUJ0bGy-M7FvXXsHMKEAOaMLW1CHclFxe6evMzU9IQUhT1BpRVVBWWVegtLK+QcRoSSVLySlGY8Ad29D4-K-Zyn55SXlKTC47cy909AU9Ep0ZP91kDlLtIgdlqsXiczhcrjcLADIRiXCDkujMYC3sivj9Wn8wRCbO4WItmPFQAAiEjlYjUADudFuah0OhodHIAE9eIxQABaYUMFjsOkyADcOAAvngEVcdMc6QAqOmCZWqjWCOncTX0vlSrW6VUAakN+sNGDBeoNMqAA",
-            "body": "function deriv(exp, variable) {\n    return is_number(exp)\n           ? 0\n           : is_variable(exp)\n           ? is_same_variable(exp, variable) ? 1 : 0\n           : is_sum(exp)\n           ? make_sum(deriv(addend(exp), variable),\n                      deriv(augend(exp), variable))\n           : is_product(exp)\n           ? make_sum(make_product(multiplier(exp),\n                                   deriv(multiplicand(exp),\n                                         variable)),\n                      make_product(deriv(multiplier(exp),\n                                         variable),\n                                   multiplicand(exp)))\n           : error(exp, \"unknown expression type -- deriv\");\n}\n"
-          },
-          { "tag": "#text", "body": "\n    This " },
-          { "tag": "JAVASCRIPTINLINE", "body": "deriv" },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    incorporates the complete differentiation algorithm. Since it is expressed\n    in terms of abstract data, it will work no matter how we choose to\n    represent algebraic expressions, as long as we design a proper set of\n    selectors and constructors.  This is the issue we must address next.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "SUBHEADING",
-        "child": [{ "child": [{ "tag": "#text", "body": "Representing algebraic expressions" }] }]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p5",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    We can imagine many ways to use list structure to represent algebraic\n    expressions.  For example, we could use lists of symbols that mirror the\n    usual algebraic notation, representing "
-          },
-          { "tag": "LATEXINLINE", "body": "ax+b" },
-          { "tag": "#text", "body": " as\n    " },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "list( \"a\", \"*\", \"x\", \"+\", \"b\")" },
+                  { "tag": "META", "body": "$consequent$-$expression$" },
+                  { "tag": "#text", "body": ", \n        a colon, and finally the\n        " },
+                  { "tag": "META", "body": "$alternative$-$expression$" },
                   { "tag": "#text", "body": ".\n      " }
                 ]
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "child": [
           {
             "child": [
               {
+                "tag": "TEXT",
+                "id": "#p2",
                 "child": [
+                  { "tag": "#text", "body": "\n        To\n\t" },
                   {
                     "tag": "#text",
-                    "body": "\n        However, it will be more convenient if we reflect the mathematical\n\tstructure of the expression in the JavaScript value representing it;\n\tthat is, to represent "
+                    "body": "\n\tevaluate a conditional expression,\n\tthe interpreter starts by evaluating the \n        "
                   },
-                  { "tag": "LATEXINLINE", "body": "ax+b" },
-                  { "tag": "#text", "body": " as\n\t" },
-                  {
-                    "tag": "JAVASCRIPTINLINE",
-                    "body": "list(\"+\", list(\"*\", \"a\", \"x\"), \"b\")"
-                  },
+                  { "tag": "META", "body": "$predicate$" },
+                  { "tag": "#text", "body": " \n        of the expression. If the\n\t" },
+                  { "tag": "META", "body": "$predicate$" },
                   {
                     "tag": "#text",
-                    "body": ".\n\tPlacing a binary operator in front of its operands is called\n\t"
+                    "body": " \n        evaluates to true, the interpreter evaluates the\n        "
                   },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "prefix notation" }] },
+                  { "tag": "META", "body": "$consequent$-$expression$" },
                   {
                     "tag": "#text",
-                    "body": ",\n\tin contrast with the infix notation introduced in\n\tsection "
+                    "body": " and returns its value as the value of the conditional.\n        If the "
+                  },
+                  { "tag": "META", "body": "$predicate$" },
+                  { "tag": "#text", "body": "\n\tevaluates to false, it evaluates the\n        " },
+                  { "tag": "META", "body": "$alternative$-$expression$" },
+                  {
+                    "tag": "#text",
+                    "body": " and returns its value as the value of the\n\tconditional."
                   },
                   {
-                    "tag": "REF",
-                    "id": "2.3.2-ex-link-1.1.1",
-                    "body": "1.1.1",
-                    "href": "/interactive-sicp/1.1.1"
-                  },
-                  { "tag": "#text", "body": ". With prefix notation, our\n      " }
+                    "tag": "FOOTNOTE_REF",
+                    "id": "footnote-link-1",
+                    "body": "1",
+                    "href": "/interactive-sicp/1.1.6#footnote-1"
+                  }
                 ]
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "child": [
           {
-            "tag": "#text",
-            "body": "\n    data representation for the differentiation problem is as follows:\n    "
-          },
-          {
-            "tag": "UL",
             "child": [
               {
-                "tag": "LI",
+                "tag": "TEXT",
+                "id": "#p3",
                 "child": [
-                  { "tag": "#text", "body": "\n\tThe variables are\n\t" },
-                  { "child": [{ "child": [{ "tag": "#text", "body": "strings." }] }] },
+                  { "tag": "#text", "body": "\n        The word\n        " },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "predicate" }] },
                   {
                     "tag": "#text",
-                    "body": "\n\tThey are identified by the primitive predicate\n\t"
+                    "body": " is used for operators and functions that\n\treturn true or false, as well as for expressions that\n\tevaluate to true or false. The absolute-value function\n\t"
                   },
+                  { "tag": "JAVASCRIPTINLINE", "body": "abs" },
+                  { "tag": "#text", "body": " makes use of the\n\t" },
+                  { "tag": "#text", "body": "\n        primitive predicate " },
+                  { "tag": "JAVASCRIPTINLINE", "body": ">=" },
                   {
-                    "child": [
-                      {
-                        "child": [
-                          { "tag": "JAVASCRIPTINLINE", "body": "is_string" },
-                          { "tag": "#text", "body": ":\n\t  " }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 2,
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvnjXsuvQUIBEIgJ4AvawaA",
-                    "body": "function is_variable(x) {\n    return is_string(x);\n}\n"
+                    "tag": "#text",
+                    "body": ",\n\tan operator that takes two numbers as arguments and tests whether the\n\tfirst number is greater than or equal to the second number, returning\n\ttrue or false accordingly.\n      "
                   }
                 ]
+              }
+            ]
+          }
+        ]
+      },
+      { "child": [{ "child": [] }] },
+      {
+        "child": [
+          {
+            "child": [
+              {
+                "tag": "#text",
+                "body": "\n      If we prefer to handle the zero case separately, we can specify the function\n      that computes the absolute value of a number by writing\n        "
               },
               {
-                "tag": "LI",
+                "tag": "LATEX",
+                "body": "\\[\\begin{array}{lll}           |x| &=& \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x > 0$} \\\\           0   & \\mbox{if $x = 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.           \\end{array}\\]"
+              },
+              {
+                "tag": "#text",
+                "body": "\n\tIn JavaScript, we express a case analysis with multiple cases by nesting\n\tconditional expressions as alternative expressions inside other conditional expressions:\n        "
+              },
+              {
+                "tag": "SNIPPET",
+                "latex": false,
+                "id": 2,
+                "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBDAIwGcAKADwEpQBvbUf0ACcApmQKDabUAD5QABj4ClAgPyg2i5UoBc60AF5D8zVv5qFpnaAC06gNzYAvrkatrAVg52gA",
+                "body": "function abs(x) {\n    return x > 0\n           ? x\n           : x === 0\n           ? 0\n           : - x;\n}\n"
+              },
+              {
+                "tag": "#text",
+                "body": "\n\tThere is no need for parentheses around the alternative expression\n\t"
+              },
+              { "tag": "JAVASCRIPTINLINE", "body": "x === 0 ? 0 : - x" },
+              {
+                "tag": "#text",
+                "body": ", because\n\tthe conditional-expression syntactic form\n\t"
+              },
+              {
+                "tag": "#text",
+                "body": "\n\tis right-associative.\n\tThe interpreter ignores spaces and line breaks, here inserted for readability\n\tto align the\n\t"
+              },
+              { "tag": "JAVASCRIPTINLINE", "body": "?" },
+              { "tag": "#text", "body": "'s\n\tand " },
+              { "tag": "JAVASCRIPTINLINE", "body": ":" },
+              {
+                "tag": "#text",
+                "body": "'s under the first predicate\n\tof the case analysis.\n\tThe general form of a\n\t"
+              },
+              { "tag": "#text", "body": "\n\tcase analysis is\n\t" },
+              {
+                "tag": "SNIPPET",
+                "latex": true,
                 "child": [
-                  { "tag": "#text", "body": "\n\tTwo variables are the same if the\n\t" },
+                  { "tag": "META", "body": "$p$" },
+                  { "tag": "#text", "body": "$_1$\n? " },
+                  { "tag": "META", "body": "$e$" },
+                  { "tag": "#text", "body": "$_1$\n: " },
+                  { "tag": "META", "body": "$p$" },
+                  { "tag": "#text", "body": "$_2$\n? " },
+                  { "tag": "META", "body": "$e$" },
+                  { "tag": "#text", "body": "$_2$\n$\\vdots$\n: " },
+                  { "tag": "META", "body": "$p$" },
+                  { "tag": "#text", "body": "$_n$\n? " },
+                  { "tag": "META", "body": "$e$" },
+                  { "tag": "#text", "body": "$_n$\n: " },
+                  { "tag": "META", "body": "$final$-$alternative$-$expression$" }
+                ]
+              },
+              { "tag": "#text", "body": "\n\tWe call a predicate " },
+              { "tag": "LATEXINLINE", "body": "$p_i$" },
+              { "tag": "#text", "body": "\n\ttogether with its consequent expression\n\t" },
+              { "tag": "LATEXINLINE", "body": "$e_i$" },
+              { "tag": "#text", "body": "\n\ta\n\t" },
+              { "tag": "EM", "child": [{ "tag": "#text", "body": "clause" }] },
+              {
+                "tag": "#text",
+                "body": ". A case analysis\n\tcan be seen as a sequence of clauses, followed by a final\n\talternative expression.\n\t"
+              },
+              {
+                "tag": "#text",
+                "body": "\n\tAccording to the evaluation of conditional expressions,\n\ta case analysis is evaluated by first evaluating\n\tthe predicate "
+              },
+              { "tag": "META", "body": "$p$" },
+              { "tag": "LATEXINLINE", "body": "$_1$" },
+              { "tag": "#text", "body": ".\n\tIf its value is false, then " },
+              { "tag": "META", "body": "$p$" },
+              { "tag": "LATEXINLINE", "body": "$_2$" },
+              { "tag": "#text", "body": "\n\tis evaluated.\n\tIf " },
+              { "tag": "META", "body": "$p$" },
+              { "tag": "LATEXINLINE", "body": "$_2$" },
+              { "tag": "#text", "body": "'s\n\tvalue is also false, then " },
+              { "tag": "META", "body": "$p$" },
+              { "tag": "LATEXINLINE", "body": "$_3$" },
+              {
+                "tag": "#text",
+                "body": "\n\tis evaluated. This process continues until a predicate is\n        found whose value is true, in which case the interpreter returns the\n        value of the corresponding\n\t"
+              },
+              { "tag": "#text", "body": "\n\tconsequent expression\n\t" },
+              { "tag": "META", "body": "$e$" },
+              {
+                "tag": "#text",
+                "body": "\n\tof the clause\n\tas the value of the case analysis.\n\tIf none of the\n\t"
+              },
+              { "tag": "META", "body": "$p$" },
+              {
+                "tag": "#text",
+                "body": "'s\n\tis found to be true, the value of the case analysis\n\tis the value of the final alternative expression.\n    "
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "child": [
+          {
+            "child": [
+              {
+                "tag": "TEXT",
+                "id": "#p4",
+                "child": [
                   {
+                    "tag": "#text",
+                    "body": "\n        In addition to primitive predicates such as\n\t"
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": ">=" },
+                  { "tag": "#text", "body": ", \n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": ">" },
+                  { "tag": "#text", "body": ", \n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "<" },
+                  { "tag": "#text", "body": ", \n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "<=" },
+                  { "tag": "#text", "body": ", \n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "===" },
+                  { "tag": "#text", "body": ", and\n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "!==" },
+                  { "tag": "#text", "body": " that are applied to\n\tnumbers," },
+                  {
+                    "tag": "FOOTNOTE_REF",
+                    "id": "footnote-link-2",
+                    "body": "2",
+                    "href": "/interactive-sicp/1.1.6#footnote-2"
+                  },
+                  {
+                    "tag": "#text",
+                    "body": "\n\tthere are logical composition operations, which enable us to construct\n\tcompound predicates. The three most frequently used are these:\n        "
+                  },
+                  {
+                    "tag": "UL",
                     "child": [
                       {
+                        "tag": "LI",
                         "child": [
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_1$" },
+                          { "tag": "JAVASCRIPTINLINE", "body": "&&" },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_2$" },
+                          { "tag": "BR" },
+                          { "tag": "#text", "body": "\n\t    This operation expresses\n\t    " },
+                          {
+                            "tag": "EM",
+                            "child": [{ "tag": "#text", "body": "logical conjunction" }]
+                          },
                           {
                             "tag": "#text",
-                            "body": "strings representing them are equal:\n          "
+                            "body": ", meaning roughly \n\t    the same as the English word \"and.\"\n\t    This syntactic form is syntactic sugar"
+                          },
+                          {
+                            "tag": "FOOTNOTE_REF",
+                            "id": "footnote-link-3",
+                            "body": "3",
+                            "href": "/interactive-sicp/1.1.6#footnote-3"
+                          },
+                          { "tag": "#text", "body": " for\n\t    " },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_1$" },
+                          { "tag": "JAVASCRIPTINLINE", "body": "?" },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_2$" },
+                          { "tag": "JAVASCRIPTINLINE", "body": ":" },
+                          { "tag": "JAVASCRIPTINLINE", "body": "false" },
+                          { "tag": "#text", "body": ".\n          " }
+                        ]
+                      },
+                      {
+                        "tag": "LI",
+                        "child": [
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_1$" },
+                          { "tag": "JAVASCRIPTINLINE", "body": "||" },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_2$" },
+                          { "tag": "BR" },
+                          { "tag": "#text", "body": "\n\t    This operation expresses\n\t    " },
+                          {
+                            "tag": "EM",
+                            "child": [{ "tag": "#text", "body": "logical disjunction" }]
+                          },
+                          {
+                            "tag": "#text",
+                            "body": ", meaning roughly\n\t    the same as the English word \"or.\"\n\t    This syntactic form is syntactic sugar for\n\t    "
+                          },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_1$" },
+                          { "tag": "JAVASCRIPTINLINE", "body": "?" },
+                          { "tag": "JAVASCRIPTINLINE", "body": "true" },
+                          { "tag": "JAVASCRIPTINLINE", "body": ":" },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "LATEXINLINE", "body": "$_2$" },
+                          { "tag": "#text", "body": ".\n\n          " }
+                        ]
+                      },
+                      {
+                        "tag": "LI",
+                        "child": [
+                          { "tag": "JAVASCRIPTINLINE", "body": "!" },
+                          { "tag": "META", "body": "$expression$" },
+                          { "tag": "BR" },
+                          { "tag": "#text", "body": "\n\t    This operation expresses\n\t    " },
+                          {
+                            "tag": "EM",
+                            "child": [{ "tag": "#text", "body": "logical negation" }]
+                          },
+                          {
+                            "tag": "#text",
+                            "body": ", meaning\n\t    roughly the same as the English word \"not.\"\n            The value of the expression is true when\n\t    "
+                          },
+                          { "tag": "META", "body": "$expression$" },
+                          {
+                            "tag": "#text",
+                            "body": "\n\t    evaluates to false, and false otherwise.\n          "
                           }
                         ]
                       }
                     ]
                   },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 3,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDExw1G3sU50iAIhEATwAvaq9axuqDIA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAvkA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gwIYC2ApkwG6sBOlVgCMANpwAUPAIwAaUDxQBKUAG8coTaH6dyhfnUa8BQsZJkqAZJY1a7Wo30EjxU5aGsLpoALx+FKADcOAC+eEZsXMbOZhIARAAeAJ4AXnHyialxSoFAA",
-                    "body": "function is_same_variable(v1, v2) {\n    return is_variable(v1) &&\n           is_variable(v2) && v1 === v2;\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
-                  { "tag": "#text", "body": "\n\tSums and products are constructed as lists:\n\t" },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 4,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gA4BO1AJoQoAKegEYANAxQBKUAG8coJaG6tyhbnQA2lAM7khAIgBUhyWPMyA3DgC+eImSq0GLDrsL0hjCaEYz5RWVVdU1QHX0jAGozP19-aRt7HCY2dg8vVI4efkEDQwAPWIxpczcuXgFhQwBPWMMAL0NpRKA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0AHAJ0QBNw4AKNARgBp0AmAShQG9gUuUidZwiqADbwAzrEoAiAFSSGteSwDcwAL5A",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88TNlx69bHAA4LqAE0IU9ADyOgMcREndlcPLx1dAE9-XQAvXXFxMyA",
-                    "body": "function make_sum(a1, a2) {\n    return list(\"+\", a1, a2);\n}\n"
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 5,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVoMWHAA4LqAE0IVe9YQwnSsvJKKmqgmtp6AFRGDH705lZ4TGxcPD5O7K4eXjq6AB6xGOIiKS5unt66AJ6xugBeuuLiZkA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXyA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gA4BO1AJoQoAKegEYANAxQBKUAG8coJaG6tyhbnQA2lAM7khAIgBUhyWPMyA3DgC+eJm3a7C9ESw49+gg4YAeZqAY0uYeXLwCwoYAnoGGAF6G0tJWQA",
-                    "body": "function make_product(m1, m2) {\n    return list(\"*\", m1, m2);\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
+                  { "tag": "#text", "body": "\n        Notice that " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "&&" },
+                  { "tag": "#text", "body": " and \n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "||" },
+                  { "tag": "#text", "body": " are syntactic forms,\n\tnot operators;\n\t" },
                   {
                     "tag": "#text",
-                    "body": "\n\tA sum is a list whose first element is the\n        "
+                    "body": "\n\ttheir right-hand\n        expression is not always evaluated. The operator\n        "
                   },
-                  {
-                    "child": [
-                      {
-                        "child": [
-                          { "tag": "#text", "body": "string " },
-                          { "tag": "JAVASCRIPTINLINE", "body": "\"+\"" },
-                          { "tag": "#text", "body": ":\n\t  " }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 6,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVqgtXHrwAekmfMXLVdJwAdGSgU3SQAyMNAAC1ZGABNQ0ABeFNADXQtrHCduPiY2Zz5dVyNQDHFxMyA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXyA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+g4QLYAUAHgJSgDeOUMNAAnAKblCouoyYAHAIaVR3PgDJ1oABbjFAEzWgAvKdAAiANTmA3DgC+eOa05tFAa3Et2Hc13MANKAYPDw2QA",
-                    "body": "function is_sum(x) {\n    return is_pair(x) && head(x) === \"+\";\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
+                  { "tag": "JAVASCRIPTINLINE", "body": "!" },
                   {
                     "tag": "#text",
-                    "body": "\n\tThe addend is the second item of the sum list:\n        "
+                    "body": ", on the other hand, \n        follows the evaluation rule of section\n\t"
                   },
                   {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 7,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVqiAJo9bFHvTpJnzFy1XQALVkZ3ckZKdQ9xcQtrHBCXN14mNi4ePQAPI1AMaLMgA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXyA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgCGAJowKbGMAUAzgJSgDeOUMNAAnFuUKi6ACxZMO5epQA23HjwDcOAL54mrdhwC29ANYsA+l0LGOAIgAe9gDSgMGzUA",
-                    "body": "function addend(s) {\n    return head(tail(s));\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
+                    "tag": "REF",
+                    "id": "1.1.6-ex-link-1.1.3",
+                    "body": "1.1.3",
+                    "href": "/interactive-sicp/1.1.3"
+                  },
+                  { "tag": "#text", "body": ".\n        It is a " },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "unary" }] },
                   {
                     "tag": "#text",
-                    "body": "\n\tThe augend is the third item of the sum list:\n        "
+                    "body": " operator, which means that it takes only\n\tone argument, whereas the arithmetic operators and primitive predicates\n\tdiscussed so far\n\tare "
                   },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 8,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVqjCAc1bEAJr06SZ8xctV0ABasjB7kjJTqvOGRnuLxFtY4jM6uHkxsXDx6AB5GoBgJQA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXyA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgCGhA5gKbEAmAFAM4CUoAbxygRoAE4tyhMXQAWLel3L1KAG07K1PXjoDcOAL55GrDpwC29ANYsA+t0LnOAIgAezgDSgMeoA",
-                    "body": "function augend(s) {\n    return head(tail(tail(s)));\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "binary" }] },
+                  { "tag": "#text", "body": ", taking two arguments. The operator\n        " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "!" },
+                  { "tag": "#text", "body": " precedes its argument;\n\twe call it a\n        " },
+                  { "tag": "EM", "child": [{ "tag": "#text", "body": "prefix operator" }] },
                   {
                     "tag": "#text",
-                    "body": "\n\tA product is a list whose first element is the\n        "
+                    "body": ". Another prefix operator is\n\tthe numeric negation operator, an example of\n\twhich is the expression "
                   },
-                  {
-                    "child": [
-                      {
-                        "child": [
-                          { "tag": "#text", "body": "string " },
-                          { "tag": "JAVASCRIPTINLINE", "body": "\"*\"" },
-                          { "tag": "#text", "body": ":\n\t  " }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 9,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVoMWHAA4LqAE0IVe9YQwnSsvJKKmqgmtp6AFRGDH705lY2JBQ0dFrsrh5eOgAekjLyisqq6ZyZjJQKvPmgAGR1oAAWrIzuNZIAvN2gujEW1jgZWZ7eTGyZbqM6urmxGOLiZkA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXxAQYCZOmz4ADh0QATcHBJoq6Bs1bsuPPikHCxAKinozaeUqA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gA4BO1AJoRQBQAeASlABvHKAmg2AU3KE2dRqwCGlNgOEAyTaAAW05Zw2gAvGdAAiAFQWA3DgC+eJey49yvALbKA1tNYc3HwW-BYANKAYgoK2QA",
-                    "body": "function is_product(x) {\n    return is_pair(x) && head(x) === \"*\";\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n\tThe multiplier is the second item of the product list:\n        "
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 10,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVoMWHAA4LqAE0IVe9YQwnSsvJKKmqgmtp6AFRGDH705lY2JBQ0dPSE6lTOmqwKvJySMvKKyqp0ABasjO685IyU6gXi4hbWOBlZlDmUeT5O7K4eXjq6AB6xGC1mQA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXxAQYCZOmz4ADh0QATcHBJoq6Bs1bsuPPikHCxAKinozaeUqA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2hANlQA5OUCmATgBQDOASlABvHKAmhuncoW50AFpwCGAE17lllJgMGCA3DgC+eRi0rsufesoDWnAPqtu1VYQq8ARAA9PAGlAMPX0gA",
-                    "body": "function multiplier(s) {\n    return head(tail(s));\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n\tThe multiplicand is the third item of the product list:\n        "
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 11,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgroAbSp3K8ARAGpdIwcYkBuHAF88RMlVoMWHAA4LqAE0IVe9YQwnSsvJKKmqgmtp6AFRGDH705lY2JBQ0dPSE6lTOmqSMxO68nJIy8orKqnQAFqyMheSMlOq8DU1F4h0W1jgZWZQ5lHkFPk7srh5eOroAHrEYnUA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAEBbAhgawKYH0BncNACgwEYAaFDAJgEoUBvYFNlAJx1nA9QBt4BWCQBEAalHUK0hgG5gAXxAQYCZOmz4ADh0QATcHBJoq6Bs1bsuPPikHCxAKinozaeUqA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2hANlQA5OWkCGxAJgBQBnAJSgA3jlBTQAJwCm5QjLoALOVwHkulJvy06hwowG4cAXzyMWldpx4D6XANZyA+qxnVehCvwBEAB5+ADSgGCZAA",
-                    "body": "function multiplicand(s) {\n    return head(tail(tail(s)));\n}\n"
-                  }
+                  { "tag": "JAVASCRIPTINLINE", "body": "- x" },
+                  { "tag": "#text", "body": "\n\tin the " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "abs" },
+                  { "tag": "#text", "body": " functions above.\n      " }
                 ]
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "child": [
           {
-            "tag": "#text",
-            "body": "\n    Thus, we need only combine these with the algorithm as embodied by\n    "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "deriv" },
-          {
-            "tag": "#text",
-            "body": " in order to have a working\n    symbolic-differentiation program.  Let us look at some examples of its\n    behavior:\n    "
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 12,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpbNgBrBwZqoTZPUDYM-zlG4NA+RnIhCdGvDYvfadLzCtAF5aYWjmp+wgohW03bHfrApp0I4aU4AKnODx+12MMzulgG-QExEGDD8-32zV6AyE5HafCEqIMMNu5XhhG0SJRaICGLoWMGuMo+MZ+MJRJKZlJlRebw+J3EdRpQWaajaHS6MVA9KGBVG4JunLmD0IfCoLSOAk6qMFe2FdL6DLxBLE7NhXOVqso6sopDYyONOoaeqlBpxRpZxpNCtm90RXBYQgEIhaXjCzkE1N1gOSxGqPE1geDYn+SVAAH5QAAGFNJABcyTDEWEQZaydTAQzahs9hS4eLwdDTiLEgzOXz2fLcnzVbWJbLnfTDyWKzWfsoAYRlMTpcbqQjHhzA6SY4n5KnfdndZNi4C3eYPPenz7O7kGceI5q5+er0PJ1sKrVGs6G5PS7fchXXwfVqOtvtL-fQDAMLFwTQXIDUyvA8+SET970ta0EwAiCUNTED51fVDIO-a0-0GPttyXfNNVeZ8GzGEhFmIagAHc6BLBQGAYe5yAATxaARQAAWi40AV1GU0cE-YETjOLxRhECEMDEcTJIMIA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqCq4ANbq6MmUuAYouAHmrJnWKKQYsJQNtYYDC6bNsXIJKB3dmDn4iOXgcJQqgyoj6ZZZqFP8swBU8xsny1ItawoV5eSQlehm5+PZUoVSiwfKkSi-cQvVbxd7gIRfH5-CwA1BAyqg+DgzHgyFQmKyWGJHZ7A4zOhpFFWbK8PIFIouFDoqoRWr3FaEtobcCkBA5KbkQq-SljalosoYsEQ2j415E7m8+D8+DQXDfaUijJipkSkFSnHSmUc1rrT6EbCUcjUHKGOxaCjI0WXbyQZLEQWW620c5eFAAfhQAAYfV4AFzeO0OKhWnLe30WAO8ZRqHz26PW22aKP0AMhcPB+OscNJvoxuOF-0bLo9Ppm+AWj6Iz2xzO+B36EMVrx1hvwptl1tpmWdizFrAk-aHMsj1gBzY1lLz7a7SczFQ8vkCwoDmddvesHtHDdKqaq9U7-eXy+R7QyjtX31LidkyiH9eK5Uei8Pn++m-t3df0fY9lTPSoy2HLtw0FXZtwzOooE6SBEAAd1QGN2HQdB1lgABPHJyBQABaIiUB7Wp8SAA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQDUzANKMwB6egYAlF17NBAbiA",
-            "body": "deriv(list(\"+\", \"x\", 3), \"x\");\n",
-            "output": "\nlist(\"+\", 1, 0)"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 13,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpbNgBrBwZqoTZPUDYM-zlG4NA+RnIhCdGvDYvfadLzCtAF5aYWjmp+wgohW03bHfrApp0I4aU4AKnODx+12MMzulgG-QExEGDD8-32zV6AyE5HafCEqIMMNu5XhhG0SJRaICGLoWMGuMo+MZ+MJRJKZlJlRebw+J3EdRpQWaajaHS6MVA9KGBVG4JunLmD0IfCoLSOAk6qMFe2FdL6DLxBLE7NhXOVqso6sopDYyONOoaeqlBpxRpZxpNCtm90RXBYQgEIhaXjCzkE1N1gOSxGqPE1geDYn+SVAAH5QAAGFNJABcyTDEWEQZaydTAQzahs9hS4eLwdDTiLEgzOXz2fLcnzVbWJbLnfTDyWKzWfsoAYRlMTpcbqQjHhzA6SY4n5KnfdndZNi4C3eYPPenz7O7kGceI5q5+er0PJ1sKrVGs6G5PS7fchXXwfVqOtvtL-fQDAMLFwTQXIDUyvA8+SET970ta0EwAiCUNTED51fVDIO-a0-0GPttyXfNNVeZ8GzGEhFmIagAHc6BLBQGAYe5yAATxaARQAAWi40AV1GU0cE-YETjlCFRhEcTWIErwJIE-QgA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqCq4ANbq6MmUuAYouAHmrJnWKKQYsJQNtYYDC6bNsXIJKB3dmDn4iOXgcJQqgyoj6ZZZqFP8swBU8xsny1ItawoV5eSQlehm5+PZUoVSiwfKkSi-cQvVbxd7gIRfH5-CwA1BAyqg+DgzHgyFQmKyWGJHZ7A4zOhpFFWbK8PIFIouFDoqoRWr3FaEtobcCkBA5KbkQq-SljalosoYsEQ2j415E7m8+D8+DQXDfaUijJipkSkFSnHSmUc1rrT6EbCUcjUHKGOxaCjI0WXbyQZLEQWW620c5eFAAfhQAAYfV4AFzeO0OKhWnLe30WAO8ZRqHz26PW22aKP0AMhcPB+OscNJvoxuOF-0bLo9Ppm+AWj6Iz2xzO+B36EMVrx1hvwptl1tpmWdizFrAk-aHMsj1gBzY1lLz7a7SczFQ8vkCwoDmddvesHtHDdKqaq9U7-eXy+R7QyjtX31LidkyiH9eK5Uei8Pn++m-t3df0fY9lTPSoy2HLtw0FXZtwzOooE6SBEAAd1QGN2HQdB1lgABPHJyBQABaIiUB7Wp8SAA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQBUzANKMwB6fcBPZgEouvEQG4gA",
-            "body": "deriv(list(\"*\", \"x\", \"y\"), \"x\");\n",
-            "output": "\nlist(\"+\", list(\"*\", \"x\", 0),\n          list(\"*\", 1, \"y\"))"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 14,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpbNgBrBwZqoTZPUDYM-zlG4NA+RnIhCdGvDYvfadLzCtAF5aYWjmp+wgohW03bHfrApp0I4aU4AKnODx+12MMzulgG-QExEGDD8-32zV6AyE5HafCEqIMMNu5XhhG0SJRaICGLoWMGuMo+MZ+MJRJKZlJlRebw+J3EdRpQWaajaHS6MVA9KGBVG4JunLmD0IfCoLSOAk6qMFe2FdL6DLxBLE7NhXOVqso6sopDYyONOoaeqlBpxRpZxpNCtm90RXBYQgEIhaXjCzkE1N1gOSxGqPE1geDYn+SVAAH5QAAGFNJABcyTDEWEQZaydTAQzahs9hS4eLwdDTiLEgzOXz2fLcnzVbWJbLnfTDyWKzWfsoAYRlMTpcbqQjHhzA6SY4n5KnfdndZNi4C3eYPPenz7O7kGceI5q5+er0PJ1sKrVGs6G5PS7fchXXwfVqOtvtL-fQDAMLFwTQXIDUyvA8+SET970ta0EwAiCUNTED51fVDIO-a0-0GPttyXfNNVeZ8GzGEhFmIagAHc6BLBQGAYe5yAATxaARQAAWi40AV1GU0cE-YETjlCERLBCFRhEKTWIErwJLOLxpIhDAwLGGSDCAA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqCq4ANbq6MmUuAYouAHmrJnWKKQYsJQNtYYDC6bNsXIJKB3dmDn4iOXgcJQqgyoj6ZZZqFP8swBU8xsny1ItawoV5eSQlehm5+PZUoVSiwfKkSi-cQvVbxd7gIRfH5-CwA1BAyqg+DgzHgyFQmKyWGJHZ7A4zOhpFFWbK8PIFIouFDoqoRWr3FaEtobcCkBA5KbkQq-SljalosoYsEQ2j415E7m8+D8+DQXDfaUijJipkSkFSnHSmUc1rrT6EbCUcjUHKGOxaCjI0WXbyQZLEQWW620c5eFAAfhQAAYfV4AFzeO0OKhWnLe30WAO8ZRqHz26PW22aKP0AMhcPB+OscNJvoxuOF-0bLo9Ppm+AWj6Iz2xzO+B36EMVrx1hvwptl1tpmWdizFrAk-aHMsj1gBzY1lLz7a7SczFQ8vkCwoDmddvesHtHDdKqaq9U7-eXy+R7QyjtX31LidkyiH9eK5Uei8Pn++m-t3df0fY9lTPSoy2HLtw0FXZtwzOooE6SBEAAd1QGN2HQdB1lgABPHJyBQABaIiUB7Wp8SAA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQBUzANKLYy+18wAenUMwCezAJRceTZgGoRQkRknTRwyQG4gA",
-            "body": "deriv(list(\"*\", list(\"*\", \"x\", \"y\"), list(\"+\", \"x\", 3)), \"x\");\n",
-            "output": "\nlist(\"+\", list(\"*\", list(\"*\", \"x\", \"y\"),\n                    list(\"+\", 1, 0)),\n          list(\"*\", list(\"+\", list(\"*\", \"x\", 0),\n                              list(\"*\", 1, \"y\")),\n                    list(\"+\", \"x\", 3)))"
-          },
-          {
-            "tag": "#text",
-            "body": "\n    The program produces answers that are correct; however, they are\n    unsimplified.  It is true that\n    "
-          },
-          {
-            "tag": "LATEX",
-            "body": "       \\begin{array}{lll}       \\dfrac{d(xy)}{dx} & = & x\\cdot 0+1\\cdot y       \\end{array}       "
-          },
-          { "tag": "#text", "body": "\n    but we would like the program to know that\n    " },
-          { "tag": "LATEXINLINE", "body": "x\\cdot 0 = 0" },
-          { "tag": "#text", "body": ",\n    " },
-          { "tag": "LATEXINLINE", "body": "1\\cdot y = y" },
-          { "tag": "#text", "body": ", and\n    " },
-          { "tag": "LATEXINLINE", "body": "0+y = y" },
-          {
-            "tag": "#text",
-            "body": ".  The answer for the second example\n    should have been simply "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "y" },
-          {
-            "tag": "#text",
-            "body": ".  As the\n    third example shows, this becomes a serious issue when the expressions are\n    complex.\n  "
+            "child": [
+              {
+                "tag": "TEXT",
+                "id": "#p5",
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n        As an example of how these predicates are used, the condition that a \n        number "
+                  },
+                  { "tag": "LATEXINLINE", "body": "$x$" },
+                  { "tag": "#text", "body": " be in the range\n\t" },
+                  { "tag": "LATEXINLINE", "body": "$5 < x < 10$" },
+                  { "tag": "#text", "body": " may be expressed as\n        " },
+                  { "tag": "SNIPPET", "latex": false, "id": 3, "body": "x > 5 && x < 10" },
+                  { "tag": "#text", "body": "\n        The syntactic form\n\t" },
+                  { "tag": "JAVASCRIPTINLINE", "body": "&&" },
+                  {
+                    "tag": "#text",
+                    "body": "\n        has lower precedence than the comparison operators\n        "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": ">" },
+                  { "tag": "#text", "body": "\n\tand " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "<" },
+                  {
+                    "tag": "#text",
+                    "body": ", and \n\tthe conditional-expression syntactic form\n\t"
+                  },
+                  { "tag": "LATEXINLINE", "body": "$\\cdots$" },
+                  { "tag": "JAVASCRIPTINLINE", "body": "?" },
+                  { "tag": "LATEXINLINE", "body": "$\\cdots$" },
+                  { "tag": "JAVASCRIPTINLINE", "body": ":" },
+                  { "tag": "LATEXINLINE", "body": "$\\cdots$" },
+                  {
+                    "tag": "#text",
+                    "body": "\n\thas lower precedence than any other operator we have encountered so far,\n\ta property we used in\n\tthe "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "abs" },
+                  { "tag": "#text", "body": " functions above.\n      " }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -757,343 +494,441 @@
         "tag": "TEXT",
         "id": "#p6",
         "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Our difficulty is much like the one we encountered with the rational-number\n    implementation:\n    "
-          },
-          {
-            "tag": "#text",
-            "body": "\n    we haven't reduced answers to simplest form.  To\n    accomplish the rational-number reduction, we needed to change only the\n    constructors and the selectors of the implementation. We can adopt a similar strategy here.  We won't change "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "deriv" },
-          { "tag": "#text", "body": " at\n    all.  Instead, we will change\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_sum" }] }] },
-          { "tag": "#text", "body": "\n    so that if both summands are numbers,\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_sum" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    will add them and return their sum.  Also, if one of the summands is 0,\n    then\n    "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_sum" }] }] },
-          { "tag": "#text", "body": "\n    will return the other summand.\n    " },
+          { "tag": "#text", "body": "\n    As another example, we can\n    " },
+          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tdeclare\n      " }] }] },
+          { "tag": "#text", "body": "\n    a predicate to test whether one number is \n    " },
+          { "child": [] },
+          { "tag": "#text", "body": "\n    greater than or equal to another as    \n    " },
           {
             "tag": "SNIPPET",
             "latex": false,
-            "id": 15,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGjGEC2ARgKYBOA+qwI6ECGAGwAUrAB4AHADT0mASlABvHKFWh2rcoXZ1KAZ04MWHUZIUAyc6HETQAXgezGAbhwBfPETJVaoRvwBrVk49JmF+AEYZfhQFZTV1TW06IzYuXgERSJkABjkVBMLQAH5QGIKitQAuJzTuPiFwlFz8yoTSyIq2mv1DJjTwiIsrXtSTGNa21Q6I0ABqMtwp1RrBfXJhACI5zeioxblXDxx-IJCw5tAMQ6A",
-            "prepend": "FDBmFcDsGMBcEsD2kAElwFsBGBTATgPo4CO4AhgDYAUOAHgA4A0amAlCgN7Ao8p46xweVPADOBdNnw0G7AGRyUdeigC86lhgDcwAL5A",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgrrEeAI1YL2rAI6FGAG37DQABnGz5t+QH5RuOy4BcoDfW26DR02JErGxcHUQFgkNB3Sk52T28zSQAyJNAYuK0dfgkIkMdBUABqJ1y3UGMY8l4AIkLqkUEGiQBuHABfPCY2Lh5eFBEMcWagA",
-            "body": "function make_sum(a1, a2) {\n    return number_equal(a1, 0)\n           ? a2\n           : number_equal(a2, 0)\n           ? a1\n           : is_number(a1) && is_number(a2)\n           ? a1 + a2\n           : list(\"+\", a1, a2);\n}\n"
+            "id": 4,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBzAJwFMBDMphgfSq6YEcCLADYAKAB4AaUAE8AlKADe2UCtDMyBBrTGgAfDNAAfQ6B0BeCzIDc2AL65Grdlx6d+g0QHYpAFllWgA",
+            "body": "function greater_or_equal(x, y) {\n    return x > y || x === y;\n}\n"
           },
-          { "tag": "#text", "body": "\n    This uses the\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
+          { "tag": "#text", "body": "\n    or alternatively as\n    " },
+          { "child": [] },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 5,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBzAJwFMBDMphgfSq6YEcCLADYAKAB4AaUAE8AlKADe2UCtDMyBBrQCEocaAA8M2QG5sAX1yNW7Lj079BogOxSALKaA",
+            "body": "function greater_or_equal(x, y) {\n    return ! (x < y);\n}\n"
+          },
           {
             "child": [
               {
                 "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "number_equal" },
-                  { "tag": "#text", "body": ",\n    " }
+                  { "tag": "#text", "body": "\n        The function " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "greater_or_equal" },
+                  {
+                    "tag": "#text",
+                    "body": "\n\twhen applied to two numbers, behaves the same as the operator\n\t"
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": ">=" },
+                  {
+                    "tag": "#text",
+                    "body": ". Unary operators\n\thave higher precedence than binary operators, which makes the\n\tparentheses in this example necessary.\n      "
+                  }
                 ]
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tag": "EXERCISE",
+        "title": "Exercise 1.1",
+        "id": "#ex_1.1",
+        "child": [
+          { "tag": "#text", "body": "\n    Below is a sequence of\n    " },
+          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tstatements.\n      " }] }] },
           {
             "tag": "#text",
-            "body": "\n    which checks whether an expression is equal to a given number:\n    "
+            "body": "\n    What is the result printed by the interpreter in response to each\n    "
+          },
+          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tstatement?\n      " }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    Assume that the sequence is to be evaluated in the order\n    in which it is presented.\n    "
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 6,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsoAwDcQA",
+            "body": "10;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 7,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsFZQBqUAZiNABYBuIA",
+            "body": "5 + 3 + 4;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 8,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsE5QBaVAbiA",
+            "body": "9 - 1;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 9,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChudGAEwDcQA",
+            "body": "6 / 2;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 10,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsCZQAqUAFlAGpQAKMgWlEwEoBuIA",
+            "body": "2 * 4 + (4 - 6);\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 11,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbiA",
+            "body": "const a = 3;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 12,
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVRoA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuIA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAI1AF5QBDUAalQG4g",
+            "body": "const b = a + 1;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 13,
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7NT6c+1AFSh2jIA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsENQBqUAIyNAICpSBuIA",
+            "body": "a + b + a * b;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 14,
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7NRrDQ7RkA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsENQBeY0AIwG4g",
+            "body": "a === b;\n"
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 15,
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7JwB83AGSjQnADzcAVJNAB+BQC4qjIA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsCNQA+UAQ1ADJzQCAeU0AKmtAH5mAuUgbiA",
+            "body": "b > a && b < a * b ? b : a;\n"
           },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 16,
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGjGEC2ARgKYBOA+qwI6ECGAGwAUrAB4AHADT0mASlABvHKFWh2rcoXZ1KAZ04MWHUZIUAyc6HETQAXgezGAbhwBfPEbZdeAkRhkMOWcgA",
-            "body": "function number_equal(exp, num) {\n    return is_number(exp) && exp === num;\n}\n"
-          },
-          { "tag": "#text", "body": "\n    Similarly, we will change\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_product" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    to build in the rules that 0 times anything is 0 and 1 times anything is\n    the thing itself:\n    "
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7NRrDQAFmwB+UDgBcoTsLripmXqADsaytjkAmAKyMgA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsENQBeY0AFmwH5QcAuUAIyJPKs1AGpQB2D0PbOgCYArAG4gA",
+            "body": "a === 4\n? 6\n: b === 4\n? 6 + 7 + a\n: 25;\n"
           },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 17,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGjGEC2ARgKYBOA+qwI6ECGAGwAUrAB4AHADT0mASlABvHKFWh2rcoXZ1KAZ04MWHUZIUAyc6HETQAXgezGAbhwBfPETJVaoRvwBrVk4JdmoAE0IKYUYARhlGFAVlNXVNbTojNi5eARE4mQAGBQAfEqds7j4hGJQiuRVUptAAflBCxua1AC4Kjiq8mPjQWIau1LbEzvHerP7cmsSZUemuydjV5t79QyZsoYsrHbn2WrHx1XXQACo-XAvVXsF9cmEAImu3hOHEuVcPHD+IIhMKRaJ1UAYP5AA",
-            "prepend": "FDBmFcDsGMBcEsD2kAElwFsBGBTATgPo4CO4AhgDYAUOAHgA4A0amAlCgN7Ao8p46xweVPADOBdNnw0G7AGRyUdeigC86lhgDcwAL5A",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gA4BO1AJoQoAKegEYANAxQBKUAG8coJaG6tyhbnWKF6AI1bd2rAI6FGAGxETQABlkAfe6G16DR0xZEpJdxcv-KAPy2fgH+AFzOOvqGJmaWYpKi0qFhSsH0uGkRUa6xHgneoMmpaRmipWGRlADO7C4xVrIAZM2gtfXRBl4p2UEMoqAAVFKVAZHmteRCAERDM5KJUtIA3DgAvnhMbFy8AsJFGKtAA",
-            "body": "function make_product(m1, m2) {\n    return number_equal(m1, 0) || number_equal(m2, 0)\n           ? 0\n           : number_equal(m1, 1)\n           ? m2\n           : number_equal(m2, 1)\n           ? m1\n           : is_number(m1) && is_number(m2)\n           ? m1 * m2\n           : list(\"*\", m1, m2);\n}\n"
-          },
-          {
-            "tag": "#text",
-            "body": "\n    Here is how this version works on our three examples:\n    "
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7ACZeoABScAfNwD8oTgC4qASkZA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsCZQBqUACgCNQA+UAQ1AH5QKAuWgSgG4g",
+            "body": "2 + (b > a ? b : a);\n"
           },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 18,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpiap4BDiYBAEdCNj4hAREWrwXbP3rApsrDpc7dltiY0Gu8gsPp0vMK0Fs2AGsHBmqhNieUBsDL+OSNYKgC7LVYbLYAoEABjEJySoAA-MDcGiAgAuKGLGHrTbbEFeZGopKYwGUxL4tTQzqA27JRkA3y0gLUnLjLGcuT4viMchCCajLyAiW+F5mcqWT4-JgtDjUfqEChCWxA2ygk4Q5qM2EkzVIiQAHzNBNslyN8J15JROLkmMR-Nk+MNxLtQLcjqdGI+2P9HsJKy923toF9boDWpj9OYbK1LIZoc1HP9sZyACpA-HQEKNKLs+KPtrpcYZm9LAN+gJiIMGMcAvq6L0BkJyO1tk2DJXXnK6GxCNp643m+Cgs124Mu5RtnOe2JlzLZu81MrVeqReI6i2p5U2h0uncZ0MCqMS6vq3RbIQ+FQWkLlkIm3vJ2dQGfF6+V-3ZXMHz3o+QqkGwDa-u+DQHl+fSzt2nYIb2fYlAB7x1lwLA7HsXhhM4ggTtBn6ptaL7XH6Touvmah4REwjkTGsiYkIag2PYKT4fROHeE4dHLgGOT4q6mbuskfw1AxInOh83y-P8GGUFhtZjthNy4bxLhiB4jFSaAClKSOKnkepqQERRIkJkqKpqhqkm6UxMmKuJmqyVZW4aneD6UE+lBkXsWk6fZAT6ZqwHeaB4GDMZgVBTitGaQFsWZgqDibjZIohZ5IG+Vc-naUlBVovFBH5YVhVZeFlBgRB5HLjFonLCquX7GMJBfMQ1AAO50NcCgMAw7zkAAni0AigAAtONenLIpowoXgIWFiKYpeKMIilhgWljOtBhAA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqJDJxOT4mOQAjuC4pJTk1DmGHSpm6ZZZiZNdhaM5ri4oy2ERk82xcgkoKrgA1uroyZS4Bii4AeasmdYoC929A0MXVwAMtDNeKAD812Mvy8AC4np0Xv1BsMboZviDPIDLoiLODeM9CpdVt5MRdTKjWMiQvUgYSWODSBhYJQGrVDJcGaYdrJ4gpDidMDl8IhyuA4JQVFcVLcZg9spjXjDBV96AAfOUQlSLKXvEXwn5-CyAz7klDgyXQtVXXSarUsQEivUGyE9I3DdUoU16y26a2420ynEYz0is3m10oABUB2B5opKCp-FpQfpB2FzKkLT2Cgq5XIkEq6GmFnFqFKFUosHyw2z4iTuzZqFw4CEGazOfuVmyBcqxfgw3bpdoPZZrX2vG5vP5NLoaVzzcSeQKRTWraqEVqsb7KdQKnApAQOSp3Uo2fHTbmKHnXb3vYrrLaBw3W6p0FwmbPB4yk+PZTbJaLn7L5Zil-26aENgIxjIYdhaBQjYvkePrKruyz+lqOrurw4EOFQCF6haKCULwyhqD4EEYaBRiaOhPYAk6+ooLq4asOiSjnJhdHagcxynOcgHwMBab1iBKxgWR2i0PoWEsSwXE8bWfEIYJviQYhdEMVyPJ8gKzHiUSbGcmcKQcuoQ5qTS66bvA27wPBYwiWJmmeJJgo3mZd4PpUsk2bZ5pocJ1keSx+kqcOAr2SZt4WUsVmib5UWeUJkGRdFCXXqZ5n3o+CE9u5EbdDy4XjHUUBHJAiAAO6oMs7DoOg+ywAAnjk5AoAAtI1KCSbUv5AA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQDUzANKMwB6egYAlF17NBAbiA",
-            "body": "deriv(list(\"+\", \"x\", 3), \"x\");\n",
-            "output": "\n1"
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7AApqAPlDtsoAPxVJALm4AecZJkTQCgLQoAlNgBUQ6n12MgA",
+            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsAoBDUAPlACNtQB+UAygLltAB5zKaLRGBaFASmwAqfEQDUqPgG4gA",
+            "body": "(a > b\n ? a\n : a < b\n ? b\n : -1)\n*\n(a + 1);\n"
           },
+          {
+            "tag": "#text",
+            "body": "\n\tThe parentheses around the conditional expressions in the last two statements\n\tare necessary because the\n\t"
+          },
+          { "tag": "#text", "body": "\n\tconditional-expression syntactic form has lower\n\t" },
+          { "tag": "#text", "body": "\n\tprecedence than the arithmetic operators\n\t" },
+          { "tag": "JAVASCRIPTINLINE", "body": "+" },
+          { "tag": "#text", "body": " and\n\t" },
+          { "tag": "JAVASCRIPTINLINE", "body": "*" },
+          { "tag": "#text", "body": ".\n  " }
+        ]
+      },
+      {
+        "tag": "EXERCISE",
+        "title": "Exercise 1.2",
+        "id": "#ex_1.2",
+        "child": [
+          { "tag": "#text", "body": "\n    Translate the following expression into \n    " },
+          { "child": [{ "child": [{ "tag": "#text", "body": "\n        JavaScript\n      " }] }] },
+          {
+            "tag": "LATEX",
+            "body": "\\[       \\begin{array}{l}       \\dfrac{5+4+\\left(2-\\left(3-(6+\\frac{4}{5})\\right)\\right)}{3 (6-2) (2-7)}       \\end{array}       \\]"
+          }
+        ],
+        "solution": [
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 19,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpiap4BDiYBAEdCNj4hAREWrwXbP3rApsrDpc7dltiY0Gu8gsPp0vMK0Fs2AGsHBmqhNieUBsDL+OSNYKgC7LVYbLYAoEABjEJySoAA-MDcGiAgAuKGLGHrTbbEFeZGopKYwGUxL4tTQzqA27JRkA3y0gLUnLjLGcuT4viMchCCajLyAiW+F5mcqWT4-JgtDjUfqEChCWxA2ygk4Q5qM2EkzVIiQAHzNBNslyN8J15JROLkmMR-Nk+MNxLtQLcjqdGI+2P9HsJKy923toF9boDWpj9OYbK1LIZoc1HP9sZyACpA-HQEKNKLs+KPtrpcYZm9LAN+gJiIMGMcAvq6L0BkJyO1tk2DJXXnK6GxCNp643m+Cgs124Mu5RtnOe2JlzLZu81MrVeqReI6i2p5U2h0uncZ0MCqMS6vq3RbIQ+FQWkLlkIm3vJ2dQGfF6+V-3ZXMHz3o+QqkGwDa-u+DQHl+fSzt2nYIb2fYlAB7x1lwLA7HsXhhM4ggTtBn6ptaL7XH6Touvmah4REwjkTGsiYkIag2PYKT4fROHeE4dHLgGOT4q6mbuskfw1AxInOh83y-P8GGUFhtZjthNy4bxLhiB4jFSaAClKSOKnkepqQERRIkJkqKpqhqkm6UxMmKuJmqyVZW4aneD6UE+lBkXsWk6fZAT6ZqwHeaB4GDMZgVBTitGaQFsWZgqDibjZIohZ5IG+Vc-naUlBVovFBH5YVhVZeFlBgRB5HLjFonLCquX7GMJBfMQ1AAO50NcCgMAw7zkAAni0AigAAtONenLIpowoXgIWFiKl6lqMIirUNc1eGtc36EAA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqJDJxOT4mOQAjuC4pJTk1DmGHSpm6ZZZiZNdhaM5ri4oy2ERk82xcgkoKrgA1uroyZS4Bii4AeasmdYoC929A0MXVwAMtDNeKAD812Mvy8AC4np0Xv1BsMboZviDPIDLoiLODeM9CpdVt5MRdTKjWMiQvUgYSWODSBhYJQGrVDJcGaYdrJ4gpDidMDl8IhyuA4JQVFcVLcZg9spjXjDBV96AAfOUQlSLKXvEXwn5-CyAz7klDgyXQtVXXSarUsQEivUGyE9I3DdUoU16y26a2420ynEYz0is3m10oABUB2B5opKCp-FpQfpB2FzKkLT2Cgq5XIkEq6GmFnFqFKFUosHyw2z4iTuzZqFw4CEGazOfuVmyBcqxfgw3bpdoPZZrX2vG5vP5NLoaVzzcSeQKRTWraqEVqsb7KdQKnApAQOSp3Uo2fHTbmKHnXb3vYrrLaBw3W6p0FwmbPB4yk+PZTbJaLn7L5Zil-26aENgIxjIYdhaBQjYvkePrKruyz+lqOrurw4EOFQCF6haKCULwyhqD4EEYaBRiaOhPYAk6+ooLq4asOiSjnJhdHagcxynOcgHwMBab1iBKxgWR2i0PoWEsSwXE8bWfEIYJviQYhdEMVyPJ8gKzHiUSbGcmcKQcuoQ5qTS66bvA27wPBYwiWJmmeJJgo3mZd4PpUsk2bZ5pocJ1keSx+kqcOAr2SZt4WUsVmib5UWeUJkGRdFCXXqZ5n3o+CE9u5EbdDy4XjHUUBHJAiAAO6oMs7DoOg+ywAAnjk5AoAAtI1KCSbUv5AA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQBUzANKMwB6fcBPZgEouvEQG4gA",
-            "body": "deriv(list(\"*\", \"x\", \"y\"), \"x\");\n",
-            "output": "\n\"y\""
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsAoBWUAalABYTQ8AmUAWioGZ6rNKKwCBKHr0bYPmYAqVi2p9RNFgHYeAbiA",
+            "body": "(5 + 4 + (2 - (3 - (6 + 4 / 5)))) \n/\n(3 * (6 - 2) * (2 - 7));\n"
+          }
+        ]
+      },
+      {
+        "tag": "EXERCISE",
+        "title": "Exercise 1.3",
+        "id": "#ex_1.3",
+        "child": [
+          {
+            "child": [{ "child": [{ "tag": "#text", "body": "\n\tDeclare a function\n      " }] }]
           },
+          {
+            "tag": "#text",
+            "body": "\n    that takes three numbers as arguments and returns\n    the sum of the squares of the two larger numbers.\n    "
+          }
+        ],
+        "solution": [
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 20,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpiap4BDiYBAEdCNj4hAREWrwXbP3rApsrDpc7dltiY0Gu8gsPp0vMK0Fs2AGsHBmqhNieUBsDL+OSNYKgC7LVYbLYAoEABjEJySoAA-MDcGiAgAuKGLGHrTbbEFeZGopKYwGUxL4tTQzqA27JRkA3y0gLUnLjLGcuT4viMchCCajLyAiW+F5mcqWT4-JgtDjUfqEChCWxA2ygk4Q5qM2EkzVIiQAHzNBNslyN8J15JROLkmMR-Nk+MNxLtQLcjqdGI+2P9HsJKy923toF9boDWpj9OYbK1LIZoc1HP9sZyACpA-HQEKNKLs+KPtrpcYZm9LAN+gJiIMGMcAvq6L0BkJyO1tk2DJXXnK6GxCNp643m+Cgs124Mu5RtnOe2JlzLZu81MrVeqReI6i2p5U2h0uncZ0MCqMS6vq3RbIQ+FQWkLlkIm3vJ2dQGfF6+V-3ZXMHz3o+QqkGwDa-u+DQHl+fSzt2nYIb2fYlAB7x1lwLA7HsXhhM4ggTtBn6ptaL7XH6Touvmah4REwjkTGsiYkIag2PYKT4fROHeE4dHLgGOT4q6mbuskfw1AxInOh83y-P8GGUFhtZjthNy4bxLhiB4jFSaAClKSOKnkepqQERRIkJkqKpqhqkm6UxMmKuJmqyVZW4aneD6UE+lBkXsWk6fZAT6ZqwHeaB4GDMZgVBTitGaQFsWZgqDibjZIohZ5IG+Vc-naUlBVovFBH5YVhVZeFlBgRB5HLjFonLCquX7GMJBfMQ1AAO50NcCgMAw7zkAAni0AigAAtONenLIpowoXgIWFiKl6lktxalqMIgbUNc1eGtYpeJtpYYMuh1bQYQA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqJDJxOT4mOQAjuC4pJTk1DmGHSpm6ZZZiZNdhaM5ri4oy2ERk82xcgkoKrgA1uroyZS4Bii4AeasmdYoC929A0MXVwAMtDNeKAD812Mvy8AC4np0Xv1BsMboZviDPIDLoiLODeM9CpdVt5MRdTKjWMiQvUgYSWODSBhYJQGrVDJcGaYdrJ4gpDidMDl8IhyuA4JQVFcVLcZg9spjXjDBV96AAfOUQlSLKXvEXwn5-CyAz7klDgyXQtVXXSarUsQEivUGyE9I3DdUoU16y26a2420ynEYz0is3m10oABUB2B5opKCp-FpQfpB2FzKkLT2Cgq5XIkEq6GmFnFqFKFUosHyw2z4iTuzZqFw4CEGazOfuVmyBcqxfgw3bpdoPZZrX2vG5vP5NLoaVzzcSeQKRTWraqEVqsb7KdQKnApAQOSp3Uo2fHTbmKHnXb3vYrrLaBw3W6p0FwmbPB4yk+PZTbJaLn7L5Zil-26aENgIxjIYdhaBQjYvkePrKruyz+lqOrurw4EOFQCF6haKCULwyhqD4EEYaBRiaOhPYAk6+ooLq4asOiSjnJhdHagcxynOcgHwMBab1iBKxgWR2i0PoWEsSwXE8bWfEIYJviQYhdEMVyPJ8gKzHiUSbGcmcKQcuoQ5qTS66bvA27wPBYwiWJmmeJJgo3mZd4PpUsk2bZ5pocJ1keSx+kqcOAr2SZt4WUsVmib5UWeUJkGRdFCXXqZ5n3o+CE9u5EbdDy4XjHUUBHJAiAAO6oMs7DoOg+ywAAnjk5AoAAtI1KCSbUv5AA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQBUzANKLYy+18wAenUMwCezAJRceTZgGoRQkRknTRwyQG4gA",
-            "body": "deriv(list(\"*\", list(\"*\", \"x\", \"y\"), list(\"+\", \"x\", 3)), \"x\");\n",
-            "output": "\nlist(\"+\",\n     list(\"*\", \"x\", \"y\"),\n     list(\"*\", \"y\", list(\"+\", \"x\", 3)))"
-          },
-          {
-            "tag": "#text",
-            "body": "\n    Although this is quite an improvement, the third example shows that there\n    is still a long way to go before we get a program that puts expressions\n    into a form that we might agree is \"simplest.\"  The problem\n    of algebraic simplification is complex because, among other reasons, a\n    form that may be simplest for one purpose may not be for another.\n    "
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBnARwIEMAnAUwAoAPASlADe2UCNAcyBVrW6gAVKG4BubAF9chUpRqg8PADSgAngYBe-IaPGTajFhx78A1PSZsuhpy7tczoALTCokEiIPQEAEZkrMzkoGQAFuxebqBUeHGJ9AC2zAA2uex0ZIHBorZuPKAAfEagAPygnIbVoCb1raAAXEb83ZU1bQ1t3Xy8ymr4nAAsBgDsBgBMY0A",
+            "prepend": "FDBmFcDsGMBcEsD2kAEBnAjuAhgJwKYAUAHgJQoDewKNKBs4uqxKAVCsQNzAC+QA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQ8AKADwBpQBPVgLwEpQBvbKCEAnAKZkCw2gGcAjgQCGYprwDUoOYuVs1G+UtH0eoALSChFyyA0EARmWELyoMgAtRerR6p4X7jQC2CgA2waLSZOaWlpoGTKAAfOygAPyg9GyJoJyp2aAAXOy8hfFJOWk5hYzc3ADc2AC+uAwALKwA7KwATHVAA",
+            "body": "function f(x, y, z) {\n   return square(x) + square(y) + square(z) -\n          // subtract the square of the smallest\n          square(x > y ? (y > z ? z : y) : (x > z ? z : x));\n}\n"
           }
         ]
       },
       {
         "tag": "EXERCISE",
-        "title": "Exercise 2.56",
-        "id": "#ex_2.56",
+        "title": "Exercise 1.4",
+        "id": "#ex_1.4",
         "child": [
           {
-            "tag": "#text",
-            "body": "\n    Show how to extend the basic differentiator to handle more kinds of\n    expressions.\n    "
-          },
-          {
-            "tag": "#text",
-            "body": "\n    For instance, implement the differentiation rule\n    "
-          },
-          {
-            "tag": "LATEX",
-            "body": "       \\begin{array}{lll}       \\dfrac {d(u^{n})}{dx} & = & nu^{n-1}\\left( \\dfrac{du}{dx}\\right)       \\end{array}       "
-          },
-          { "tag": "#text", "body": "\n    by adding a new clause to the " },
-          { "tag": "JAVASCRIPTINLINE", "body": "deriv" },
-          { "tag": "#text", "body": " program\n    and defining appropriate\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "functions" }] }] },
-          {
             "child": [
               {
                 "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "is_exp" },
-                  { "tag": "#text", "body": "," }
+                  {
+                    "tag": "#text",
+                    "body": "\n\tObserve that our model of evaluation allows for\n\t"
+                  },
+                  {
+                    "tag": "#text",
+                    "body": "\n\tapplications\n\twhose function expressions are compound expressions. Use this observation\n\tto describe the behavior of the following function:\n\t"
+                  },
+                  {
+                    "tag": "SNIPPET",
+                    "latex": false,
+                    "id": 21,
+                    "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQAHAGwIGcAKAQwBpQAjASlABvUACcApmQIja7UAGpeAblABffMXLVaAWwpEWHbvyGiJUmaAC0S1etKUaodgH1GLZ+x7NnPQ7wGC2KDBppLSoKw8oAB8ALygAAygAPz0TMygAFyguvrMfH78ithq2C5u3p7evgCs3JYALHyKQA",
+                    "body": "function plus(a, b) { return a + b; }\nfunction minus(a, b) { return a - b; }\nfunction a_plus_abs_b(a, b) {\n    return (b >= 0 ? plus : minus)(a, b);\n}\n"
+                  }
                 ]
               }
             ]
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "base" },
-          { "tag": "#text", "body": ", " },
-          { "tag": "JAVASCRIPTINLINE", "body": "exponent" },
-          { "tag": "#text", "body": ",\n    and\n    " },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "make_exp" },
-                  { "tag": "#text", "body": "." }
-                ]
-              }
-            ]
-          },
-          { "tag": "#text", "body": "\n    (You may use\n    " },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "#text", "body": "the string " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "\"**\"" }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    to denote exponentiation.) Build in the rules that anything raised to the\n    power 0 is 1 and anything raised to the power 1 is the thing itself.\n    "
           }
         ],
         "solution": [
+          { "tag": "#text", "body": "\n\t  According to section " },
           {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 21,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpbNgBrBwZqoTZPUDYM-zlG4NA+RnIhCdGvDYvfadLzCq3+-oFiQYY-esCmul6BoXJ2vhCN4GYwzO6WNiEbTPV7vAL7Zo-Qb-SiAlGA4EgkpmcqWNQtDjUfqECi1XYNILNfHtTriTIxUBIoYFUYAKimoNuuPmSwcBKJJJOtk2th2HwRdCOGlO7K8wrl105OLmoFshD4VBaRwEnTedXhlO+fWRAKBYixYO5qvVmqOpDYLzN+r2hsZxr+pvRZvNN2V92I1R4OqYAgAjoQ2ICBCIWl4A7Y4S6vsl40HOtGWrEGRm8gV477ZvceGwGMIBImKcmmV7yxa-ZYM7Rnidy87Kwdq57TbW64XLAtliGY0Ji6WvBmK58Dqng2GI1GY14AAxiD5JUAAflAbjXSQAXKAZxwQ+HI0IM143Kv10kt6OBLv1wepSc2bLQPfxzHe+DKhmyeKrrUh0XQMkydLDG+HImPWdBPFwLDnou3hOBErbklOVLMEeSGZo+ARbku+FyAeahhM4kQTsRBGgEIag2PYKQUWWyHkWhEhbjkB4rtRJHJKsNRUTe65bgOKxrPBlCIQMTyOhOXhsS4YgeLxwlJJJ0lQjCuHKShqSCOaql8fihLEqSQlqbeqq8lUNRiUw-JmUKNqUFqlA6jpKmWd5wkaUIaoaq5doOoM8lGT53mKQZynhRF9mOYKQh+QFtruem35eRFWXZXpzExTlWUpUFlD2nJ36GTlpHMP+Fk5aJNkJaS8WmYljbEM2nmxQViT2f+XXdeu96dQNI2gG1HUTqAAC027mipACQi1qX5Q3ybl7HXgVB46oS6WxmMJCLMQ1AAO50BmCgMAw9zkAAni0AjTTNGmjBaOB+S+MrvqMIjnKAAAsuk-a9+hAA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqCq4ANbq6MmUuAYouAHmrJnWKKQYsJQNtYYDC6bNsXIJQ+Xl5JCV6GbpllmopRWUsPmklHviUi1rCrjgQtu7+xbj2SeV5-CXP5fXG4xWTxBS8HL4RDlcBwVKjDJWbLg-KFOiBFwoL5VCK1ABUTVuq1B7S66ghUJhMxUgxUIwOH1QU34s3xhmpbOWhJBbRQKnApAQOSm5EKezS70RxzK3wuV1oQLuxN5-MFU2guB2cvFY0lmOlZ1l-zl8pW3PWkGSxBFmHIAEdwLhLuRqDlDBaVG8dUdvO6rYVnTlXBiA2EIu7okA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgBGAhgM4CmAFKwJSgDeOoQaABOrcoWF0AFq0YATduUaUANpy5cA3DgC+BEhRp1WADwAOtVsXLq+AoaPGTQM+YuVqlq9Ru16iZFS0oAC2jADWrAD6pmbsTGwANKCxPPxCImISdMSEIfSswjEAjoSMarHJAAxc9hn1APygAIx19UIAXKC5+YUlZRXmyc217WNNCaxtY4JdKpTMNgBEAFQrS8mTyal++oFGoAsx5uwmaW2O2YfMUWbKwqc8AGRPLrIKZ6AAvD+r67sBQzBOSFSgAN04Q1AYMYwkojHoKm4dgyl2cRx6BQeqWm7SaVVx9S6RxhcIRSMhZlGMwyTXYR2YjBC0VJ8MRHEq0NhbKRPCazVAXRqhPaxJuzDylOpNNpoQi0QlIXYILhEPkIOIClSyVZ5O4iRFMpmKvB7EYhAA5lYteYuDruXqNIbRddbsJqHJCBQpc7xnLIlFFewwgGzO7Pd6QoQVFQzPNClKDUbkzSTRCozHKHHKKRGJrE76U0XdeyNEmiymQ9Ewx6vTY08Ho7H49jbeWKx3iw7S+3O8mM82c3mbVSnZ2xcc4ji+6AmlW3bXI-KFxGbLFLNYCzOZ-PYuxC9uZZMt4ft+viFY17bQABaFplnAASGfMobx+1XLJpelHa6hXdrZmMkSwkOExDUAA7sY5iiMwzAHOQACeZisLed5pksWi6HgDbzIs7B-BsoBLCYREACx2sRpFaEAA",
-            "body": "function base(e) {\n    return head(tail(e));\n}\nfunction exponent(e) {\n    return head(tail(tail(e)));\n}\nfunction make_exp(base, exp) {\n    return number_equal(exp, 0)\n           ? 1\n           : number_equal(exp, 1)\n             ? base\n             : list(\"**\", base, exp);\n}\nfunction is_exp(x) {\n    return is_pair(x) && head(x) ===\"**\";\n}\nfunction deriv(exp, variable) {\n    return is_number(exp)\n           ? 0\n           : is_variable(exp)\n             ? (is_same_variable(exp, variable) ? 1 : 0)\n             : is_sum(exp)\n               ? make_sum(deriv(addend(exp), variable),\n                          deriv(augend(exp), variable))\n               : is_product(exp)\n                 ? make_sum(make_product(multiplier(exp),\n                                deriv(multiplicand(exp),\n                                      variable)),\n                            make_product(deriv(multiplier(exp),\n                                               variable),\n                                multiplicand(exp)))\n                 : is_exp(exp)\n                   ? make_product(make_product(exponent(exp),\n                                      make_exp(\n                                          base(exp),\n                                          exponent(exp) - 1)),\n\t\t\t          deriv(base(exp), variable))\n                   : error(exp, \"unknown expression type -- deriv\");\n}\n"
-          }
+            "tag": "REF",
+            "id": "1.1.6-ex-link-1.1.5",
+            "body": "1.1.5",
+            "href": "/interactive-sicp/1.1.5"
+          },
+          {
+            "tag": "#text",
+            "body": ", evaluation\n\t  of an application proceeds as follows:\n\t  "
+          },
+          {
+            "tag": "OL",
+            "child": [
+              {
+                "tag": "LI",
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "Evaluate the subexpressions of the application.\n\t    "
+                  }
+                ]
+              },
+              {
+                "tag": "LI",
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "Evaluate the return expression of the result of\n\t    the function expression with each\n\t    parameter replaced by the corresponding result of the respective\n\t    argument expression.\n            "
+                  }
+                ]
+              }
+            ]
+          },
+          { "tag": "#text", "body": "\n\t  Thus the evaluation of the application \n\t  " },
+          { "tag": "JAVASCRIPTINLINE", "body": "a_plus_abs_b(5, -4)" },
+          { "tag": "#text", "body": "\n\t  (1) evaluates " },
+          { "tag": "JAVASCRIPTINLINE", "body": "a_plus_abs_b" },
+          {
+            "tag": "#text",
+            "body": ",\n\t  resulting in the function given above, and the arguments are\n\t  already values. So we need to evaluate (2) the return expression\n\t  of the function, with the parameters replaced by the arguments, thus:\n\t  "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "(-4 >= 0 ? plus : minus)(5, -4)" },
+          {
+            "tag": "#text",
+            "body": ".\n\t  With the same rules, we need to (1) evaluate the function expression,\n\t  which in this case is the conditional expression\n\t  "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "-4 >= 0 ? plus : minus" },
+          {
+            "tag": "#text",
+            "body": ". Since\n\t  the predicate evaluates to false, the function expression\n\t  evaluates to "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "minus" },
+          {
+            "tag": "#text",
+            "body": ". The arguments,\n\t  again (1) are already values. Thus we end up evaluating (2) the body of\n\t  "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "minus" },
+          { "tag": "#text", "body": " with the parameters\n\t  " },
+          { "tag": "JAVASCRIPTINLINE", "body": "a" },
+          { "tag": "#text", "body": " and\n\t  " },
+          { "tag": "JAVASCRIPTINLINE", "body": "b" },
+          {
+            "tag": "#text",
+            "body": " replaced by 5 and -4,\n\t  respectively, resulting in\n\t  "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "5 - (-4)" },
+          { "tag": "#text", "body": ", which will finally\n\t  evaluate to 9.\n\t" }
         ]
       },
       {
         "tag": "EXERCISE",
-        "title": "Exercise 2.57",
-        "id": "#ex_2.57",
+        "title": "Exercise 1.5",
+        "id": "#ex_1.5",
         "child": [
           {
             "tag": "#text",
-            "body": "\n    Extend the differentiation program to handle sums and products of arbitrary\n    numbers of (two or more) terms. Then the last example above could be\n    expressed as\n    "
+            "body": "\n    Ben Bitdiddle has invented a test to determine whether the interpreter\n    he is faced with is using\n    "
           },
+          {
+            "tag": "#text",
+            "body": "\n    applicative-order evaluation or normal-order\n    evaluation. He \n    "
+          },
+          {
+            "child": [
+              {
+                "child": [
+                  { "tag": "#text", "body": "\n\tdeclares the following two functions\n      " }
+                ]
+              }
+            ]
+          },
+          { "tag": "#text", "body": ":\n      " },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 22,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpiap4BDiYBAEdCNj4hAREWrwXbP3rApsrDpc7dltiY0Gu8gsPp0vMK0Fs2AGsHBmqhNieUBsDL+OSNYKgC7LVYbLYAoEABjEJySoAA-MDcGiAgAuKGLGHrTbbEFeZGopKYwGUxL4tTQzqA27JRkA3y0gLUnLjLGcuT4viMchCCajLyAiW+F5mcqWT4-JgtDjUfqEChCWxA2ygk4Q5qM2EkzVIiQAHzNBNslyN8J15JROLkmMR-Nk+MNxLtQLcjqdGI+2P9HsJKy923toF9boDWpj9OYbK1LIZoc1HP9sZyACpA-HQEKNKLs+KPtrpcYZm9LAN+gJiIMGMcAvq6L0BkJyO1tk2DJXXnLKsrVeqReI6i2gs01G0Ol07u3BuPhmMSzLZu9bIQ+FQWkLlkImxPwVO231Bl3KD2xH2SiBQKRumwdAJQOReoFlQIGPWu3NQNQ+BvsstgMDg948AAnqAdb4JQxDwdowKENo9b9MCDYfNuu5CqQz79FWg4wcslAsDsexeGEziCM2J5nKyabXH6TouvmahUREwhMTGsiYkIag2PYKTUVxFHeE4nESJiOT4hSmbuskfw1Nx8nOh83y-P8dZcGRtZoeRNyURJLhiB4PGqcROkAih+lMUZqQ0cx8kJkqKpqhqKkWbx6mKkpmoaa5I4aluO6UHulAHnZ5leQE2mkZq2Fhbh+EGaZ0UxTiHEmWlGWZgqDjDu5IrpRlcVkSFOERVcew5bldVZTRZl1apFVJZQeENqlN4laA+LLCq1X7GMJBfMQ1AAO50NcCgMAw7zkJBLSvgAtMtlmkaMt54GVQiFiKowll4owiKWoyQaWe2ipMR0nV4GA3jdm36EAA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqJDJxOT4mOQAjuC4pJTk1DmGHSpm6ZZZiZNdhaM5ri4oy2ERk82xcgkoKrgA1uroyZS4Bii4AeasmdYoC929A0MXVwAMtDNeKAD812Mvy8AC4np0Xv1BsMboZviDPIDLoiLODeM9CpdVt5MRdTKjWMiQvUgYSWODSBhYJQGrVDJcGaYdrJ4gpDidMDl8IhyuA4JQVFcVLcZg9spjXjDBV96AAfOUQlSLKXvEXwn5-CyAz7klDgyXQtVXXSarUsQEivUGyE9I3DdUoU16y26a2420ynEYz0is3m10oABUB2B5opKCp-FpQfpB2FzKkLT2Cgq5XIkEq6GmFnFqFKFUosHyw2z4iTuzZiW5vP5NLoaVzVmyvDyBSKawLlQb1TqsZZrX2KnApAQOSp3Uo2cb92b+bKlWL8FLtHLMQA9OuUNBirhhOQULBSpZueR0Bni20UIhQIfuip0MBNyhiABPFDp0DwSDfoTXcBCBm5TXJmBwjmOVLQHu5TJlWH7dPA2AjGMhh2FoFA5rOcwesqk7LP6Wo6u6vBoQ4VD4XqFooJQvDKGoPjoeRKFGJoZH0ICITggi4asOiSjnBRPHagcxynOc6aEEhaZAchKyoax2i0PolFCSwEmIRcAEyfh8m+BhBE8XxXI8nyAqCapRIiZyZwpBy6g1qZNLDqO8DjvAeFjEpKkWZ46lIc5EHwFBmayV5PnhX8pGKWFEXhnZxm1gK3mxX5grga5E5LJ5ymxblLF6eQMV5XF6VucFlT4auyURt0PJZeMdRQEckCIAA7qgyzsOg6D7LAr45AeAC0g3wZJtRrkAA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4CYCmATgJYBuAFADakDOALpQEQBUzANKMwB6fcBPfrUYsA1P178MAShlcpMgNxA",
-            "body": "deriv(list(\"*\", \"x\", \"y\", list(\"+\", \"x\", 3)), \"x\");\n"
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQAHACgEpQBvUAJwFMyCPbGTANygAvrkKlKNUGS4BnMgwAeAGlABPFq2yg9nHn1rLQAXnOgADKAD8V0AC5NQ7KKA",
+            "body": "function p() { return p(); }\n\nfunction test(x, y) {\n    return x === 0 ? 0 : y;\n}\n"
           },
-          {
-            "tag": "#text",
-            "body": "\n    Try to do this by changing only the\n    representation for sums and products, without changing the\n    "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "deriv" },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          { "tag": "#text", "body": "\n    at all.  For example, the " },
-          { "tag": "JAVASCRIPTINLINE", "body": "addend" },
-          { "tag": "#text", "body": " of a sum would\n    be the first term, and the " },
-          { "tag": "JAVASCRIPTINLINE", "body": "augend" },
-          { "tag": "#text", "body": " would be the\n    sum of the rest of the terms.\n    " }
-        ],
-        "solution": [
+          { "tag": "#text", "body": "\n      Then he evaluates the \n      " },
+          { "child": [{ "child": [{ "tag": "#text", "body": "statement" }] }] },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 23,
-            "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISChoQ9UJbPSkE2QUlFWSABzZKDlqsgAsBNgATWvzc0AAiAGpR4tMyizpiap4BDiYBAEdCNj4hAREWrwXbP3rApsrDpc7dltiY0Gu8gsPp0vMK0Fs2AGsHBmqhNieUBsDL+OSNYKgC7LVYbLYAoEABjEJySoAA-MDcGiAgAuKGLGHrTbbEFeZGopKYwGUxL4tTQzqA27JRkA3y0gLUnLjLGcuT4viMchCCajLyAiW+F5mcqWT4-JgtDjUfqEChCWxA2ygk4Q5qM2EkzVIiQAHzNBNslyN8J15JROLkmMR-Nk+MNxLtQLcjqdGI+2P9HsJKy923toF9boDWpj9OYbK1LIZoc1HP9sZyACpA-HQEKNKLs+KPtrpcYZm9LAN+gJiIMGMcAvq6L0BkJyO1tk2DJXXnLKsrVeqReI6i2gs01G0Ol07u3BuPhmMSzLZu9bIQ+FQWkLlkImxPwVO231Bl3KD2xH2SiBQKRumwdAJQOReoFlQIGPWu3NQNQ+BvsstgMDg948AAnqAdb4JQxDwdowKENo9b9MCDYfNuu5CqQz79FWg4wcslAsDsexeGEziCM2J5nKyabXH6TouvmahUREwhMTGsiYkIag2PYKTUVxFHeE4nESJiOT4hSmbuskfw1Nx8nOh83y-P8dZcGRtZoeRNyURJLhiB4PGqcROkAih+lMUZqQ0cx8kJkqKpqhqKkWbx6mKkpmoaa5I4aluO6UHulAHnZ5leQE2mkZq2Fhbh+EGaZ0UxTiHEmWlGWZgqDjDu5IrpRlcVkSFOERVcew5bldVZTRZl1apFVJZQeENqlN4laA+LLCq1X7GMJBfMQ1AAO50NcCgMAw7zkJBLSvgAtMtlmkaMt6Ef+bA2Z1R5gg0p7AqQpDVNubDkMI+VVLY5JeJe2yPYeN5bbK-6teFHWNrRR30Wwp3nXwl3XQFhWjl4QLPc9vZbTgZVCIWIqjCWXijCIpajJBpZI6KkxoxjXgYDeBObfoQA",
-            "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSDZ84CqijB4s7Jzc3gAOuPD4qUEAFuS4ACap4aEoAEQA1LXRMnHyqJDJxOT4mOQAjuC4pJTk1DmGHSpm6ZZZiZNdhaM5ri4oy2ERk82xcgkoKrgA1uroyZS4Bii4AeasmdYoC929A0MXVwAMtDNeKAD812Mvy8AC4np0Xv1BsMboZviDPIDLoiLODeM9CpdVt5MRdTKjWMiQvUgYSWODSBhYJQGrVDJcGaYdrJ4gpDidMDl8IhyuA4JQVFcVLcZg9spjXjDBV96AAfOUQlSLKXvEXwn5-CyAz7klDgyXQtVXXSarUsQEivUGyE9I3DdUoU16y26a2420ynEYz0is3m10oABUB2B5opKCp-FpQfpB2FzKkLT2Cgq5XIkEq6GmFnFqFKFUosHyw2z4iTuzZiW5vP5NLoaVzVmyvDyBSKawLlQb1TqsZZrX2KnApAQOSp3Uo2cb92b+bKlWL8FLtHLMQA9OuUNBirhhOQULBSpZueR0Bni20UIhQIfuip0MBNyhiABPFDp0DwSDfoTXcBCBm5TXJmBwjmOVLQHu5TJlWH7dPA2AjGMhh2FoFA5rOcwesqk7LP6Wo6u6vBoQ4VD4XqFooJQvDKGoPjoeRKFGJoZH0ICITggi4asOiSjnBRPHagcxynOc6aEEhaZAchKyoax2i0PolFCSwEmIRcAEyfh8m+BhBE8XxXI8nyAqCapRIiZyZwpBy6g1qZNLDqO8DjvAeFjEpKkWZ46lIc5EHwFBmayV5PnhX8pGKWFEXhnZxm1gK3mxX5grga5E5LJ5ymxblLF6eQMV5XF6VucFlT4auyURt0PJZeMdRQEckCIAA7qgyzsOg6D7LAr45AeAC0g3wZJtRrkAA",
-            "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgCGhA5gKbEAmAFAM4CUoAbxygRoAE4tyhMXXqlShALaEANvXItOi+gGsWAfW5KANKAAMp8vUorOVmz15OA3DgC+BEhRp1lKqgAOKpSk9ByOgsKiElIyDPJKquqa2nr6AWLU7IQUpgCMlta29rZ8Lu547CxilABunMHc5JwARABULaYtAB6doC0Ann2NzS0A1H09fRhOXb28zkA",
-            "body": "function augend(s) {\n    return accumulate(make_sum, 0, tail(tail(s)));\n}\nfunction multiplicand(s) {\n    return accumulate(make_product, 1, tail(tail(s)));\n}\n"
-          }
-        ]
-      },
-      {
-        "tag": "EXERCISE",
-        "title": "Exercise 2.58",
-        "id": "#ex_2.58",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Suppose we want to modify the differentiation program so that it works\n    with ordinary mathematical notation, in which\n    "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"+\"" }] }] },
-          { "tag": "#text", "body": "\n    and\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"*\"" }] }] },
-          { "tag": "#text", "body": "\n    are\n    " },
-          {
-            "tag": "#text",
-            "body": "\n    infix rather than prefix operators.  Since the differentiation program\n    is defined in terms of abstract data, we can modify it to work with\n    different representations of expressions solely by changing the predicates,\n    selectors, and constructors that define the representation of the algebraic\n    expressions on which the differentiator is to operate.\n    "
+            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQAHACgEpQBvUAJwFMyCPbGTANygAvrkKlKNUGS4BnMgwAeAGlABPFq2yg9nHn1rLQAXnOgADKAD8V0AC5NQ7OOxzFDS+sHCgA",
+            "prepend": "FDBmFcDsGMBcEsD2kAEAHAFAShQbxQE4Cms4BqmWA3CgL4gQwLIqxEDOsGAHgDQoBPHLmAoxhEmVTcUAXnkoADCgD8SlAC5BVYLSA",
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsBcBTAZzwAoAGAGlAAdSBKegbiA",
+            "body": "test(0, p());\n"
           },
           {
-            "tag": "OL",
+            "tag": "#text",
+            "body": "\n      What behavior will Ben observe with an interpreter that uses\n      applicative-order evaluation?  What behavior will he observe with an\n      interpreter that uses normal-order evaluation?  Explain your answer.\n      "
+          },
+          { "tag": "#text", "body": "\n      (Assume that the evaluation rule for \n      " },
+          {
             "child": [
-              {
-                "tag": "LI",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n        Show how to do this in order to differentiate algebraic expressions\n\tpresented in infix form,\n\t"
-                  },
-                  {
-                    "child": [
-                      {
-                        "child": [
-                          { "tag": "#text", "body": "as in this example:\n\t  " },
-                          {
-                            "tag": "SNIPPET",
-                            "latex": false,
-                            "id": 24,
-                            "body": "list(\"x\", \"+\",\n     list(3, \"*\",\n          list(\"x\", \"+\",\n               list(\"y\", \"+\", 2))))"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  { "tag": "#text", "body": "\n        To simplify the task, assume that\n\t" },
-                  { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"+\"" }] }] },
-                  { "tag": "#text", "body": "\n\tand\n\t" },
-                  { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"*\"" }] }] },
-                  {
-                    "tag": "#text",
-                    "body": "\n\talways take two arguments and that expressions are fully parenthesized.\n      "
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n        The problem becomes substantially harder if we allow\n        "
-                  },
-                  {
-                    "child": [
-                      {
-                        "child": [
-                          {
-                            "tag": "#text",
-                            "body": "\n\t    a notation closer to ordinary infix notation, which omits unnecessary\n\t    parentheses and assumes that\n\t    multiplication has higher precedence than addition, as in this\n\t    example:\n\t    "
-                          },
-                          {
-                            "tag": "SNIPPET",
-                            "latex": false,
-                            "id": 25,
-                            "body": "list(\"x\", \"+\", \"3\", \"*\", list(\"x\", \"+\", \"y\", \"+\", 2))"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n        Can you design appropriate predicates, selectors, and constructors for\n\tthis notation such that our derivative program still works?\n      "
-                  }
-                ]
-              }
+              { "child": [{ "tag": "#text", "body": "\n          conditional expressions\n\t" }] }
             ]
+          },
+          {
+            "tag": "#text",
+            "body": "\n      is the same whether the interpreter is using normal or applicative order:\n      The predicate expression is evaluated first, and the result determines\n      whether to evaluate the consequent or the alternative expression.)\n      "
           }
         ],
         "solution": [
           {
-            "tag": "OL",
             "child": [
               {
-                "tag": "LI",
                 "child": [
+                  { "tag": "#text", "body": "\n\t    In applicative-order evaluation of\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
                   {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 26,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISCho6YkJbHgEOJgEAR0I2PiEBEQAHLyrbPwTZBSUVZN7ajnau2JjQDs68gt7i0zKLOls2AGsHBmqhNk9QNgz-OSHg0DG6hubW-cOABjEBpNkAfiPcV4CALkvq8Y3FptY5eJ4vb6gD5HNwQ75-NRXCYHaajAF1fa+OGQj4HUAAak+2PhoD4jHI9y8ACJ8VSvMcDMZSuYKsldrY9FIXucRmpOmxKBNxJkZgALARsAAmQnIAra4gk+VyoBpVOWZnKlilkoExGlDH6AR5dHFUqEBvVq1ZbEI2l1+sNZyCI1N0tllDa7raBrEjJMGrWoA22yYnQ41ElhAoQlsh1sJ25zsq6PqTWBMceEgAPln-jVrmm7vGwc9Ie9ZA9iXI-kigUXDm5S2Xy-Gq7884DC21i6BG23EtDY-324iUxnUaP8xN403mwEPrHQAAqINfOftskaDPUpd01d+5makKh8OR6PC06DJPJfmCzlZV0yuV6RUFKm7y0syy2Qh8KidMkMQNLkjWvR8LSZANWR-P9KAAyhSDYPVzUdK9hhNCU3WfL0UN9T8j1AHUuBYSZum8JwIgEVDAnQtEp1I2cB1ASsSTUMJnEiOZGKSD4hDUGx7BSDjhDmLx2MoiQPhyP5wTLBFrD2LjhwXLYdj2IjKBI7V7QYsSKJcMQPGHZsNK020dK4vTUkEX1h3kk8IyjCklPXKEg1U9Q9mDBww0c6MYP-QCJks4zXNkUyY1-QKEKQ6UQrChKAnEgzDNC5tvIcs8KQigK4KCoQ0sSorZHi4qyqS-SbKM8rEty+DEOQrjbNcv46nDYKumpEhNmIagAHc6DmBQGAYVlyAAT06ARQAAWhmwi6k0qkDxwCLNwpKkRD3d89wAFkMlUtoMIA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSKiQ4CrE5PiY5ACO4LiklOTUAA6GSSpmHizsnNzepan4+UWuLigFhWERpdFAA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGgC2AhgNYCmA+gM6H0AUjARgA0oRigCUoAN45Qc0ACdW5QgrrEeAI1YL2rAI6FGAG37DQABnGz5t+QH5RuOy4BcoDfW26DR02JErGxc7R1EBYJD5d0pOdk9vM0kAMmTQWPitHX4JSKiHcNAAaic8-NB3Y1jyMxEAIiK6kTFxAG4cAF8CEgoaOgzuPgAPSRlbJRU1dLiAB0ZKBV4R0FTQAAtWRgATXnJ50xHJAF4T0Aa69q6iMipaUS2t1mIdzlHIidU6De3eV8vum59USEADmTxeb3Gyk+602Oz2lFMCNMr3EbU6AN6dyYbHYMwU1C2hAovHo5noEmk72hUwSOj0hhMpPMVlAAB82R4sj5GaYKYFrOVQGELGU7O46Ty-MyRAJBULhQxnAqJdyGdL+aA5WKomEyTqQjE4pLmSk0hkTRT5QqCmTQAAqJUGqKVaoys72ppK9FXHq3fqzAlEknLMbyD5TDJzBZLM2wn7I2PHU51T3-a5Yuj0QjGKgzKrZV5UqGTL5w34+zH+hg5vNVUiMZ4V4vhmllhP7Xad1GVjPVx4KSgAN14rCGMxEQ8Yg8YmmMrEhrdL00yXmyY5m1tClh1RvYU5nc9Yo-HW5cjl4A0Y9A4B8os-nJ4noDvD4XioEFUsZ-FK8GT5-c8GBYDh-wHYd+AecEAMnad7yPcQhGdG1wJHRhQWgjdEJfOC3zRZCvyjINiRqLCCLkRwcVAnhSRAvFiJJbNc0ofNKHXU8kJtLi5FQ0laxY+tGx2LDOO4sT5FfBDEPIhUqPowkSN4XimLrNjFhk8TNPkESNK08pJPnaS9M0lSBMoBsmyw-CuPcHQCUWDd6hIZhiGoAB3OgNyUThOCBcgAE8ZlYUAAFoQtAVC6krHBeKqTgajqIYvVTL0ABZsMSqLWiAA",
-                    "body": "function make_sum(a1, a2) {\n    return number_equal(a1, 0)\n           ? a2\n           : number_equal(a2, 0)\n             ?  a1\n             : is_number(a1) && is_number(a2)\n               ? a1 + a2\n               : list(a1, \"+\", a2);\n}\nfunction is_sum(x) {\n    return is_pair(x) && head(tail(x)) === \"+\";\n}\nfunction addend(s) {\n    return head(s);\n}\nfunction augend(s) {\n    return head(tail(tail(s)));\n}\nfunction make_product(m1, m2) {\n    return number_equal(m1, 0) || number_equal(m2, 0)\n           ?  0\n           : number_equal(m1, 1)\n             ? m2\n             : number_equal(m2, 1)\n               ?  m1\n               : is_number(m1) && is_number(m2)\n                 ? m1 * m2\n                 : list(m1, \"*\", m2);\n}\nfunction is_product(x) {\n    return is_pair(x) && head(tail(x)) === \"*\";\n}\nfunction multiplier(s) {\n    return head(s);\n}\nfunction multiplicand(s) {\n    return head(tail(tail(s)));\n}\nfunction deriv(exp, variable) {\n    return is_number(exp)\n        ? 0\n        : is_variable(exp)\n          ? (is_same_variable(exp, variable) ? 1 : 0)\n          : is_sum(exp)\n            ? make_sum(deriv(addend(exp), variable),\n                       deriv(augend(exp), variable))\n            : is_product(exp)\n              ? make_sum(make_product(multiplier(exp),\n                             deriv(multiplicand(exp),\n                                   variable)),\n                         make_product(deriv(multiplier(\n                                                    exp),\n                                            variable),\n                                      multiplicand(exp)))\n              : error(exp, \"unknown expression type -- deriv\");\n}\n"
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
+                    "tag": "#text",
+                    "body": ",\n\t    we need to evaluate the argument expressions before we can evaluate\n\t    the return expression of the function\n\t    "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "test" },
                   {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 27,
-                    "program": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiUDOA+gG4CGATpWwEYA2AUwAUADwCUoAN45Qs0BwHlCHOoyYNyXYgHNRYgNw4AvniJkqteswZsAtgNadu-YSwCMAGlAsUE6XPlFZVVmdi5eQSF3CQAyGJkAxKtHcJco31A47zdQAF587xRDEwISCho6YkJbHgEOJgEAR0I2PiEBEQAHLyrbPwTZBSUVZN7ajnau2JjQDs68gt7i0zKLVXIBW2Za-GoFJnxKDg0ham7QBn6AoeDQAAsBNgATIUuF3NAzgaTZAH5QKp8PjfH4ALlAnTYRyED2erzEHhBPySlA2WyYOz2DkOx3Ip3O5ChbUuYgMxlK5gq9DRzDY+A29RxJzOXje-jkNxGsJeb3yHy+yLk-0JlGJYiRiXBqM2tPpdQOR2ZBKJ8OWZnKllsbAA1g4GNUhGxPKA2Bl2YMgiMxvKmi02kavAAGcWCv4m3Cu0Dg631W2tQ0oJ0uz2gf4mtwSpJS5g+w1uaajarjAPBkOh8OgADU7sjYNAfEYeIdoAARJmS15TWSTCATRdbQIyAJPvhQAytibiE9Pp06mxyHsGFY6-rbDha5RW2wu59iHwAJ70KfkfOPDSz5vZs59gccT6kUjKBgUjUhdQG8RSb6cs+Q6GXuK52QAQlAQjUgLa9hqdSEZYroDiNWJ5rCaTxPI2PJXBylrrDKGICLs+xMni-6ssB6qgWwhDaJB8JXtcsHUvBdIMgquJ-uW6FqqsVJarqTCdBw1BPIQFBCLYxq2Ga15ET6DTNP6nFBqAAA+okAkmNqCV+gagM6T7pvJinelJvoyRxxrxopbrcTpXqST+6l2hxcnaWmbqgJx+myNGTCxpxCYfmppmphZ-ycaAABUVkehZtn5oWmleCWXkAdxwG1mw9bNI2pDNtQrbtkO07dtuHD9oOw7RUxLFseQ45gJOnZpXOi7FcQ1BZj2O57Puh7HCBVJqLlrHsZe5qBMMt5QhMD4zM5QIcZsyZoYBGG0ZqhB8FQnQFr+bK8d1xHopiyGKqhYXUeSmF0dNs0FqQqX4Z1N4rbKZEoX+W0XBNlKWBBXAsJM5xhM4gjQRay3OUZL1uQE-yOpGdlvREwhzP9iT-O+1h2A4oNpHMXgIx96Y5OCCmunZo5-TpHk6nqBqPZQz3PBBXZ-cjThgwiNmCsTpM4XhENU6kH2Q1GyStfluPuVZBPnrYHEC9z7G2PtlBzZQv4s3TFkMxxEtS0dFOy-56sBCjAikoiGvIvRDii3iCvizNkvzRMat69bSRa7TNuCqbB2UCrLwQ6SNngnUzGW10IUkNqlUAO50HMCgMAwVLkPOvagAAtHHoAMyWwE4ArBYnCWIgAaFAEACwIqW2cGEAA",
-                    "prepend": "FDBmFcDsGMBcEsD2kAE8DOB9AbgQwE7y4BGANgKYAUAHgJQoDewKLK+5s4+qGm6shSAHMatANzAAviAgwEyNFnS4AtuRwEiZKtgCMAGhTYATPSas2HLjyx5CJCpT30AZC+YXPijfe1PTKG5GuigAvOFGxhLSYFBwSKiQ4CrE5PiY5ACO4LiklOTUAA6GSSpmHizsnNzepan4+UWuLigFhWERpdFAA",
-                    "withoutPrepend": "chap=2&prgrm=PTAEGUEkGEAVQFLlAJgHQGY0oFA4GYCuAdgMYAuAlgPbGiXkCmAtgM4D6ARo-tQE6N2+Sn1bkAFNQAOAGlCsAlKADeOUOtADyhPnQAWjAIYATcYtABeK6GlqN9jQH5QxQgBs3dh-YBcoKYYi4gYmZgoyXt5R6gwsHNy8AkIiYpKyoOSBbmEKCgDcOAC+BCQUNHSxbOyG+Ex8yaIS0nLmqvZaOvpGpuZWFjZSkVHOmZTZikPefpUcNXUNqc0ZWWEFxURkVLSgzIYA1oKshMzihgCMcoYoSm0aHboux9z1jACOhIbZ53IADAqTDmcVwBvkezGe7DeHy+KF+-2igPU5xBDmmHFc4MYfFOZyUADI8fR0U8sadrijvECzqAANSgYEIqagNyUVLfUAAIhpHMu1zWOBA9PkUMYZEYNnwGSxbHpxGMAyxhnI-FYRKFR2YArAlElhjlNmIbgAnvRdeRmUYxAbxXTpIrlXwbKRSDpWCVNuUiewNeIAB43SL3CocAJBf2gAkU0AAQlA4lZ7FcHnEzBYz3EXJ5oH9+SK7rK2xMxlFPQD7UY2geMy4PH4gmEjQz3JaufWpS2dEMhAA5iWwipAxXOvQmFU5liFhJMy3+RsC3Rdgd2FI+NRjIQKCmLjtrgPy5W6BiIVDPlu4aAAD4XsHH96n5iw0B-KPOJ9RvxHicn7LMbe4qPqM4D4AaAH4ki8d4-o+-6MoiOxnCB6hoom4FbvihIJp+2IPvCsGIr+oAAFQ7ohGh+CyqS-nIHKEVmOH8oKhjCu8oqkOK1CSnUMp6vKdp8EqKpqkxK5rhu5Baqasq8YaJo6i41C0gq-EOk6LqiPmHZeiJ66buGtzqEGWmBNi4YEl6SY-mmpLTtmrYaZ6zDuFQUgsqSrSDgeI5xDWiT1ikU60TOeZzppjluM5LKkDx-b6ZoQ5VqOsy1BODapDRWaKLO7aesWfCUAAbuIjC+uk+WGHlhicG4jBlnc8XBihmLYsVUi4ZSb7RMhZUVVVjBFSVbXDHGCasIYqbsN1lCVdV-WleVU29UozjUn4z6MshPotYN0RAfshzHOIuUFacxjFnKs3hKAk3TTVER4bBR2FV2vbnVtcjXYt21RMh2liRdiG7UuPqLoIv2bmFEWUKSb2kfdoCPSmTmUC5lBRa9A13XDWMOB91W5Jj2NRCDy6rjpEgIxDyOuc1GOw4TsG47ddN4ZTKNo6YW25IhfhYquNPpByJB7MQ1AAO50C1AisKwnrkEaUjigAtIr8NYgVHJ2TgCMUVOvpZulcgACyXRyev5EAA",
-                    "body": "function items_before_first(op, s) {\n    return head(s) === op\n           ? null\n           : pair(head(s),\n                  items_before_first(op, tail(s)));\n}\nfunction items_after_first(op, s) {\n    return head(s) === op\n           ? tail(s)\n           : items_after_first(op, tail(s);\n}\nfunction make_sum(a1, a2) {\n    return number_equal(a1, 0)\n           ? a2\n           : number_equal(a2, 0)\n             ?  a1\n             : is_number(a1) && is_number(a2)\n               ? a1 + a2\n               : list(a1, \"+\", a2);\n}\n// a sequence of terms and operators is a sum\n// if and only if at least one + operator occurs\nfunction is_sum(x) {\n    return is_pair(x) &&\n           ! (is_null(member(\"+\", x));\n}\nfunction addend(s) {\n    return items_before_first(\"+\", s);\n}\nfunction augend(s) {\n    return items_after_first(\"+\", s);\n}\nfunction make_product(m1, m2) {\n    return number_equal(m1, 0) || number_equal(m2, 0)\n           ?  0\n           : number_equal(m1, 1)\n             ? m2\n             : number_equal(m2, 1)\n               ?  m1\n               : is_number(m1) && is_number(m2)\n                 ? m1 * m2\n                 : list(m1, \"*\", m2);\n}\n// a sequence of terms and operators is a product\n// if and only if no + operator occurs\nfunction is_product(x) {\n    return is_pair(x) && is_null(member(\"+\", x);\n}\nfunction multiplier(s) {\n    return items_before_first(\"*\", s);\n}\nfunction multiplicand(s) {\n    return items_after_first(\"*\", s);\n}\nfunction deriv(exp, variable) {\n    return is_number(exp)\n        ? 0\n        : is_variable(exp)\n          ? (is_same_variable(exp, variable) ? 1 : 0)\n          : is_sum(exp)\n            ? make_sum(deriv(addend(exp), variable),\n                       deriv(augend(exp), variable))\n            : is_product(exp)\n              ? make_sum(make_product(multiplier(exp),\n                             deriv(multiplicand(exp),\n                                   variable)),\n                         make_product(deriv(multiplier(exp),\n                                            variable),\n                             multiplicand(exp)))\n              : error(exp, \"unknown expression type -- deriv\");\n}\n"
-                  }
+                    "tag": "#text",
+                    "body": ".\n\t    The evaluation of the argument expression\n\t    "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
+                  {
+                    "tag": "#text",
+                    "body": "\n\t    will not terminate, however: It will keep evaluating application\n\t    expressions of the form \n\t    "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
+                  { "tag": "#text", "body": ", and thus the evaluation of\n            " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
+                  {
+                    "tag": "#text",
+                    "body": " will not produce a\n\t    legitimate value. In normal-order evaluation, on the other hand,\n\t    the function application\n\t    "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
+                  {
+                    "tag": "#text",
+                    "body": "\n\t    would immediately evaluate the return expression of the function\n\t    "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "test" },
+                  { "tag": "#text", "body": ",\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "x === 0 ? 0 : y" },
+                  { "tag": "#text", "body": "\n\t    after replacing the parameter\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "x" },
+                  { "tag": "#text", "body": " with\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "0" },
+                  { "tag": "#text", "body": " and\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "y" },
+                  { "tag": "#text", "body": " with\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
+                  {
+                    "tag": "#text",
+                    "body": ".\n\t    The result of the replacing would be\n\t    "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "0 === 0 ? 0 : p()" },
+                  { "tag": "#text", "body": ".\n\t    The evaluation of the predicate\n\t    " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "0 === 0" },
+                  {
+                    "tag": "#text",
+                    "body": "\n\t    results in true and thus the conditional\n\t    expression evaluates to 0, without any need to\n\t    evaluate "
+                  },
+                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
+                  { "tag": "#text", "body": ".\n\t  " }
                 ]
               }
             ]
@@ -1105,10 +940,57 @@
         "id": "#footnote-1",
         "count": 1,
         "child": [
+          { "tag": "#text", "body": "\n        In JavaScript,\n\t" },
           {
             "tag": "#text",
-            "body": "The original version of this\n\tbook used the programming language Scheme, a dialect of Lisp."
+            "body": "\n\tother values of the predicate in conditionals\n\tare automatically converted to true or false\n        according to\n\t"
+          },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "conversion rules" }] },
+          {
+            "tag": "#text",
+            "body": ", but we choose not to make\n\tuse of these conversion rules in this book."
           }
+        ]
+      },
+      {
+        "tag": "DISPLAYFOOTNOTE",
+        "id": "#footnote-2",
+        "count": 2,
+        "child": [
+          {
+            "tag": "#text",
+            "body": "For now, we restrict these operators to number\n\targuments. In sections "
+          },
+          {
+            "tag": "REF",
+            "id": "1.1.6-ex-link-2.3.1",
+            "body": "2.3.1",
+            "href": "/interactive-sicp/2.3.1"
+          },
+          { "tag": "#text", "body": "\n\tand " },
+          {
+            "tag": "REF",
+            "id": "1.1.6-ex-link-3.3.1",
+            "body": "3.3.1",
+            "href": "/interactive-sicp/3.3.1"
+          },
+          { "tag": "#text", "body": ", we shall\n\tgeneralize the predicate\n\t" },
+          { "tag": "JAVASCRIPTINLINE", "body": "===" },
+          { "tag": "#text", "body": "." }
+        ]
+      },
+      {
+        "tag": "DISPLAYFOOTNOTE",
+        "id": "#footnote-3",
+        "count": 3,
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n            Syntactic forms that are simply convenient\n            alternative surface structures for things that can be written in more\n            uniform ways are sometimes called "
+          },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "syntactic sugar" }] },
+          { "tag": "#text", "body": ", to use a\n            phrase coined by \n            " },
+          { "tag": "#text", "body": "\n\t    Peter Landin.\t    \n\t    " }
         ]
       }
     ]

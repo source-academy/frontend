@@ -3563,6 +3563,13 @@ before-after-hook@^2.2.0:
   resolved "https://registry.npmjs.org/before-after-hook/-/before-after-hook-2.2.1.tgz"
   integrity sha512-/6FKxSTWoJdbsLDF8tdIjaRiFXiE6UHsEHE3OPI/cwPURCVi1ukP0gmLn7XWEiFk5TcwQjjY5PWsU+j+tgXgmw==
 
+better-react-mathjax@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/better-react-mathjax/-/better-react-mathjax-1.0.2.tgz#f29a61700f65f781ead8c301b68edfc69f01ec1c"
+  integrity sha512-wCSInSWHSe5+u54sZQ3yz7y5Kn274g8mT6Kfdz87hpt+94/B25O/HAqtHb68sgXWEHww0Deq0Oni3Qqu8HP/jg==
+  dependencies:
+    mathjax-full "^3.1.2"
+
 bfj@^7.0.2:
   version "7.0.2"
   resolved "https://registry.npmjs.org/bfj/-/bfj-7.0.2.tgz"
@@ -8650,7 +8657,7 @@ matchmediaquery@^0.3.0:
   dependencies:
     css-mediaquery "^0.1.2"
 
-mathjax-full@^3.0.4, mathjax-full@^3.1.4:
+mathjax-full@^3.1.2:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/mathjax-full/-/mathjax-full-3.1.4.tgz#ec9c51abf55b427e0fd54760ca9478d439406e59"
   integrity sha512-80lZZci7vqQQV2wdLcnFUtI7z5Aru0RL03wPw8JM6kFPmX4CA/SYfnlQQ1WIIBU+0p0YoxJ6Z3gAUcVzvDArhw==
@@ -8658,13 +8665,6 @@ mathjax-full@^3.0.4, mathjax-full@^3.1.4:
     esm "^3.2.25"
     mj-context-menu "^0.6.1"
     speech-rule-engine "^3.2.0"
-
-mathjax-react@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/mathjax-react/-/mathjax-react-1.0.6.tgz#48d78e848f1977169c118988a4f092d4ca74b034"
-  integrity sha512-GlkPAhaY0FKc95TMdo33mxNZHb+3xRgfgc3YcnQ0cZxvnM1UaF0o8mRI5y5xIwi3JnioeYuukZJWCbIZkACIVw==
-  dependencies:
-    mathjax-full "^3.0.4"
 
 md5.js@^1.3.4:
   version "1.3.5"

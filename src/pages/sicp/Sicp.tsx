@@ -1,4 +1,5 @@
 import { Classes } from '@blueprintjs/core';
+import { MathJaxContext } from 'better-react-mathjax';
 import classNames from 'classnames';
 import * as React from 'react';
 import { RouteComponentProps, useParams } from 'react-router';
@@ -84,11 +85,26 @@ const Sicp: React.FC<SicpProps> = props => {
     loadContentDispatch: () => {}
   };
 
+  const mathjaxConfig = {
+    tex: {
+      inlineMath: [
+        ['$', '$'],
+        ['\\(', '\\)']
+      ],
+      displayMath: [
+        ['$$', '$$'],
+        ['\\[', '\\]']
+      ]
+    }
+  };
+
   return (
     <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
       <div className={classNames('Sicp', Classes.DARK)}>
         <div ref={topRef} />
-        <ContentDisplay {...sicpDisplayProps} />
+        <MathJaxContext version={3} config={mathjaxConfig}>
+          <ContentDisplay {...sicpDisplayProps} />
+        </MathJaxContext>
       </div>
     </CodeSnippetContext.Provider>
   );

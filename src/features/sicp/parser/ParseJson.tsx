@@ -1,5 +1,5 @@
 import { Blockquote, H1, H2, H4, OL, UL } from '@blueprintjs/core';
-import { MathComponent } from 'mathjax-react';
+import { MathJax } from 'better-react-mathjax';
 import { Links } from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
@@ -235,11 +235,11 @@ const handleText = (text: string) => {
 };
 
 const handleLatex = (math: string, block: boolean) => {
-  const onError = (s: string) => {
-    console.log('error in handleLatex function:\n' + s + '\n' + math);
-  };
-
-  return <MathComponent tex={math} display={block} onError={onError} />;
+  if (block) {
+    return <MathJax>{math}</MathJax>;
+  } else {
+    return <MathJax inline>{math}</MathJax>;
+  }
 };
 
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>, index: integer) => {
