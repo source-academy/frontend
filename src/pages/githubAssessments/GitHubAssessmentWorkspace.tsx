@@ -76,6 +76,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
@@ -89,6 +90,7 @@ export type StateProps = {
   editorWidth: string;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
+  hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
@@ -127,7 +129,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
 
   const handleEditorValueChange = props.handleEditorValueChange;
-  const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
+  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
+  const hasUnsavedChanges = props.hasUnsavedChanges;
 
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -144,9 +147,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedTaskList(missionData.tasksData);
     setCurrentTaskNumber(1);
     handleEditorValueChange(missionData.tasksData[0].savedCode);
+    handleUpdateHasUnsavedChanges(false);
     setIsLoading(false);
     if (missionData.missionBriefing !== '') setShowOverlay(true);
-  }, [missionRepoData, octokit, handleEditorValueChange]);
+  }, [missionRepoData, octokit, handleEditorValueChange, handleUpdateHasUnsavedChanges]);
 
   useEffect(() => {
     loadMission();
@@ -183,10 +187,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           break;
         }
       }
-      setHasUnsavedChanges(hasUnsavedChanges);
+      handleUpdateHasUnsavedChanges(hasUnsavedChanges);
       setTaskList(editedTaskList);
     },
-    [taskList, cachedTaskList]
+    [taskList, cachedTaskList, handleUpdateHasUnsavedChanges]
   );
 
   const resetToTemplate = useCallback(() => {
@@ -285,8 +289,15 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
 
     setCachedTaskList(taskList);
-    setHasUnsavedChanges(false);
-  }, [cachedTaskList, getEditedCode, missionRepoData, octokit, taskList]);
+    handleUpdateHasUnsavedChanges(false);
+  }, [
+    cachedTaskList,
+    getEditedCode,
+    missionRepoData,
+    octokit,
+    taskList,
+    handleUpdateHasUnsavedChanges
+  ]);
 
   const onClickReset = useCallback(async () => {
     const confirmReset = await showSimpleConfirmDialog({
@@ -484,6 +495,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
     handleEditorValueChange: onEditorValueChange,
+    handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
     breakpoints: props.breakpoints,
     highlightedLines: props.highlightedLines,
     newCursorPosition: props.newCursorPosition,
