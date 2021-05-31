@@ -1,22 +1,7 @@
 [
-  {
-    "id": 0,
-    "hasCaret": false,
-    "label": "\n        Foreword\n    ",
-    "nodeData": "foreword"
-  },
-  {
-    "id": 1,
-    "hasCaret": false,
-    "label": "Foreword to SICP, 1984",
-    "nodeData": "foreword"
-  },
-  {
-    "id": 2,
-    "hasCaret": false,
-    "label": "\n    Preface\n  ",
-    "nodeData": "prefaces03"
-  },
+  { "id": 0, "hasCaret": false, "label": "\n        Foreword\n    ", "nodeData": "foreword" },
+  { "id": 1, "hasCaret": false, "label": "Foreword to SICP, 1984", "nodeData": "foreword" },
+  { "id": 2, "hasCaret": false, "label": "\n    Preface\n  ", "nodeData": "prefaces03" },
   {
     "id": 3,
     "hasCaret": false,
@@ -47,12 +32,7 @@
         "label": "1.1 The Elements of Programming",
         "nodeData": "1.1",
         "childNodes": [
-          {
-            "id": 9,
-            "hasCaret": false,
-            "label": "1.1.1 Expressions",
-            "nodeData": "1.1.1"
-          },
+          { "id": 9, "hasCaret": false, "label": "1.1.1 Expressions", "nodeData": "1.1.1" },
           {
             "id": 10,
             "hasCaret": false,
@@ -109,24 +89,9 @@
             "label": "1.2.1 Linear Recursion and Iteration",
             "nodeData": "1.2.1"
           },
-          {
-            "id": 19,
-            "hasCaret": false,
-            "label": "1.2.2 Tree Recursion",
-            "nodeData": "1.2.2"
-          },
-          {
-            "id": 20,
-            "hasCaret": false,
-            "label": "1.2.3 Orders of Growth",
-            "nodeData": "1.2.3"
-          },
-          {
-            "id": 21,
-            "hasCaret": false,
-            "label": "1.2.4 Exponentiation",
-            "nodeData": "1.2.4"
-          },
+          { "id": 19, "hasCaret": false, "label": "1.2.2 Tree Recursion", "nodeData": "1.2.2" },
+          { "id": 20, "hasCaret": false, "label": "1.2.3 Orders of Growth", "nodeData": "1.2.3" },
+          { "id": 21, "hasCaret": false, "label": "1.2.4 Exponentiation", "nodeData": "1.2.4" },
           {
             "id": 22,
             "hasCaret": false,
@@ -815,16 +780,6 @@
       }
     ]
   },
-  {
-    "id": 128,
-    "hasCaret": false,
-    "label": "References",
-    "nodeData": "references"
-  },
-  {
-    "id": 129,
-    "hasCaret": false,
-    "label": "About the SICP JS Project",
-    "nodeData": "making-of"
-  }
+  { "id": 128, "hasCaret": false, "label": "References", "nodeData": "references" },
+  { "id": 129, "hasCaret": false, "label": "About the SICP JS Project", "nodeData": "making-of" }
 ]
