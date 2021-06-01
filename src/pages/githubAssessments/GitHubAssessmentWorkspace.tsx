@@ -750,7 +750,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },
-    [currentTaskNumber, taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
+    [
+      autogradingResults,
+      currentTaskNumber,
+      taskList,
+      cachedTaskList,
+      computeAndSetHasUnsavedChangesToTasks,
+      handleResetWorkspace
+    ]
   );
 
   const setBriefingContentWrapper = useCallback(

@@ -76,25 +76,27 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const addTestcase = React.useCallback(() => {
       const newTestcases = [...testcases];
       newTestcases.push({
-        answer: "",
-        program: "",
+        answer: '',
+        program: '',
         score: 0,
-        type: "public"
+        type: 'public'
       });
       console.log(newTestcases);
       setTaskTestcases(newTestcases);
-    }, [testcases, setTaskTestcases]); 
+    }, [testcases, setTaskTestcases]);
 
     const createTestCaseButton = React.useMemo(
-      () =>
-      <Button
-        className="collapse-button"
-        icon={IconNames.ADD}
-        minimal={true}
-        text={"Add a new testcase"}
-        onClick={addTestcase}
-      />
-    , [addTestcase]);
+      () => (
+        <Button
+          className="collapse-button"
+          icon={IconNames.ADD}
+          minimal={true}
+          text={'Add a new testcase'}
+          onClick={addTestcase}
+        />
+      ),
+      [addTestcase]
+    );
 
     const resultCards = React.useMemo(
       () =>
