@@ -740,7 +740,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       };
 
       handleResetWorkspace({
-        autogradingResults: autogradingResults,
+        autogradingResults: [],
         editorValue: editedTaskList[currentTaskNumber - 1].savedCode,
         editorPrepend: editedTaskList[currentTaskNumber - 1].testPrepend,
         editorPostpend: '',
