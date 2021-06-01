@@ -25,7 +25,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
-import { ControlBarGitHubLoginButton } from '../../commons/controlBar/ControlBarGitHubLoginButton';
+import controlButton from '../../commons/ControlButton';
 import {
   getContentAsString,
   parseMetadataProperties
@@ -130,6 +130,11 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
         <Divider />
         {createMissionButton}
         {cards}
+        {isMobileBreakpoint &&
+          controlButton('Log Out', IconNames.GIT_BRANCH, props.handleGitHubLogOut, {
+            intent: 'primary',
+            minimal: false
+          })}
       </>
     );
   }, [
@@ -142,7 +147,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     isMobileBreakpoint,
     noMissionReposFoundDisplay,
     octokit,
-    setDisplay
+    props.handleGitHubLogOut
   ]);
 
   // Used to retrieve browsable missions
@@ -151,13 +156,11 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
       setDisplay(
         <>
           {signInToGitHubDisplay}
-          {isMobileBreakpoint && (
-            <ControlBarGitHubLoginButton
-              key="github"
-              onClickLogIn={props.handleGitHubLogIn}
-              onClickLogOut={props.handleGitHubLogOut}
-            />
-          )}
+          {isMobileBreakpoint &&
+            controlButton('Log In', IconNames.GIT_BRANCH, props.handleGitHubLogIn, {
+              intent: 'primary',
+              minimal: false
+            })}
         </>
       );
     } else {
@@ -167,7 +170,6 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     isMobileBreakpoint,
     octokit,
     props.handleGitHubLogIn,
-    props.handleGitHubLogOut,
     setBrowsableMissions,
     setDisplay,
     signInToGitHubDisplay

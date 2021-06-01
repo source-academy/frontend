@@ -19,7 +19,8 @@ import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/Reposi
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { showSuccessMessage } from '../utils/NotificationsHelper';
+import { history } from '../utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -55,8 +56,14 @@ function* githubLoginSaga() {
 }
 
 function* githubLogoutSaga() {
+  if (store.getState() && store.getState().workspaces.githubAssessment.hasUnsavedChanges) {
+    yield call(showWarningMessage, 'You have unsaved changes!', 2000);
+    return;
+  }
+
   yield put(actions.removeGitHubOctokitObject());
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
+  yield call(history.push, '/githubassessments/missions');
 }
 
 function* githubOpenFile(): any {

@@ -124,6 +124,19 @@ test('getMissionData works properly', async () => {
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
+      // Folder contents for Q2
+      const contentResponse = generateGetContentResponse();
+      contentResponse.data = [
+        generateGitHubSubDirectory('Problem.md'),
+        generateGitHubSubDirectory('StarterCode.js'),
+        generateGitHubSubDirectory('SavedCode.js'),
+        generateGitHubSubDirectory('TestPrepend.js'),
+        generateGitHubSubDirectory('TestCases.json')
+      ];
+      //(contentResponse.data as any).content = Buffer.from('SavedCode A', 'utf8').toString('base64');
+      return contentResponse;
+    })
+    .mockImplementationOnce(async () => {
       // Q1/Problem.md
       const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from('Task A', 'utf8').toString('base64');
@@ -133,18 +146,6 @@ test('getMissionData works properly', async () => {
       // Q1/StarterCode.js
       const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from('Code A', 'utf8').toString('base64');
-      return contentResponse;
-    })
-    .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
-      // Folder contents for Q2
-      contentResponse.data = [
-        generateGitHubSubDirectory('Problem.md'),
-        generateGitHubSubDirectory('StarterCode.js'),
-        generateGitHubSubDirectory('SavedCode.js'),
-        generateGitHubSubDirectory('TestPrepend.js'),
-        generateGitHubSubDirectory('TestCases.json')
-      ];
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
@@ -160,20 +161,20 @@ test('getMissionData works properly', async () => {
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
       // Q2/SavedCode.js
+      const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from('Code C', 'utf8').toString('base64');
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
       // Q2/TestPrepend.js
+      const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from('Code D', 'utf8').toString('base64');
       return contentResponse;
     })
     .mockImplementationOnce(async () => {
-      const contentResponse = generateGetContentResponse();
       // Q2/TestCases.json
+      const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from(
         `[{
         "answer": "[[1, [2, [3, null]]], [4, [5, null]]]",
@@ -202,6 +203,7 @@ test('getMissionData works properly', async () => {
   expect(missionData.tasksData.length).toBe(2);
 
   expect(missionData.tasksData[0]).toEqual({
+    questionNumber: 1,
     taskDescription: 'Task A',
     starterCode: 'Code A',
     savedCode: 'Code A',
@@ -209,6 +211,7 @@ test('getMissionData works properly', async () => {
     testCases: []
   });
   expect(missionData.tasksData[1]).toEqual({
+    questionNumber: 2,
     taskDescription: 'Task B',
     starterCode: 'Code B',
     savedCode: 'Code C',

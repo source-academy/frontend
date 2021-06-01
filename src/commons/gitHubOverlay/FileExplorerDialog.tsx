@@ -157,10 +157,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   ) {
     const originallySelected = treeNode.isSelected;
 
-    const allNodesCallback = !e.shiftKey
-      ? (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isSelected = false)
-      : (node: TreeNodeInfo<GitHubFileNodeData>) => {};
-
+    const allNodesCallback = (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isSelected = false);
     const specificNodeCallback = (node: TreeNodeInfo<GitHubFileNodeData>) => {
       // if originally selected is null, set to true
       // else, toggle the selection

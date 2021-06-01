@@ -16,27 +16,32 @@ export const maximumTasksPerMission = 20;
  * @param octokit The Octokit instance for the authenticated user
  */
 export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
-  const briefingString = await getContentAsString(
+  const briefingStringPromise = getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     'README.md',
     octokit
   );
 
-  const metadataString = await getContentAsString(
+  const metadataStringPromise = getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     '.metadata',
     octokit
   );
 
-  const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
-
-  const tasksData = await getTasksData(
+  const tasksDataPromise = getTasksData(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     octokit
   );
+
+  const [briefingString, metadataString, tasksData] = await Promise.all([
+    briefingStringPromise,
+    metadataStringPromise,
+    tasksDataPromise
+  ]);
+  const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
 
   const newMissionData: MissionData = {
     missionRepoData: missionRepoData,
@@ -77,6 +82,8 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
     return questions;
   }
 
+  const promises = [];
+
   for (let i = 1; i <= maximumTasksPerMission; i++) {
     const questionFolderName = 'Q' + i;
 
@@ -86,86 +93,102 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
       break;
     }
 
-    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    promises.push(
+      octokit.repos
+        .getContent({
+          owner: repoOwner,
+          repo: repoName,
+          path: questionFolderName
+        })
+        .then((folderContents: GetContentResponse) => {
+          if (!Array.isArray(folderContents.data)) {
+            return;
+          }
 
-    // Find out if there is already SavedCode for the question
-    const folderContents: GetContentResponse = await octokit.repos.getContent({
-      owner: repoOwner,
-      repo: repoName,
-      path: questionFolderName
-    });
+          const identity = (content: any) => content;
 
-    // folderContents is for some reason not an array
-    if (!Array.isArray(folderContents.data)) {
-      return questions;
-    }
+          const folderContentsAsArray = folderContents.data as any[];
 
-    const taskData = {
-      taskDescription: '',
-      starterCode: '',
-      savedCode: '',
-      testPrepend: '',
-      testCases: []
-    };
+          // Map from each property to an object storing the following information:
+          // 1) fileName: the name of the file with the data corresponding to file data
+          // 2) found: always initialised to false, whether the above file exists
+          // 3) processing: any additional processing to be performed on the raw text data
+          const properties = {
+            taskDescription: { fileName: 'Problem.md', found: false, processing: identity },
+            starterCode: { fileName: 'StarterCode.js', found: false, processing: identity },
+            savedCode: { fileName: 'SavedCode.js', found: false, processing: identity },
+            testPrepend: { fileName: 'TestPrepend.js', found: false, processing: identity },
+            testCases: { fileName: 'TestCases.json', found: false, processing: JSON.parse }
+          };
 
-    const identity = (content: any) => content;
+          const propKeys = Object.keys(properties);
 
-    const folderContentsAsArray = folderContents.data as any[];
+          // Figure out if the files exist
+          for (let j = 0; j < folderContentsAsArray.length; j++) {
+            const fileName = folderContentsAsArray[j].name;
 
-    // Map from each property to an object storing the following information:
-    // 1) fileName: the name of the file with the data corresponding to file data
-    // 2) found: always initialised to false, whether the above file exists
-    // 3) processing: any additional processing to be performed on the raw text data
-    const properties = {
-      taskDescription: { fileName: 'Problem.md', found: false, processing: identity },
-      starterCode: { fileName: 'StarterCode.js', found: false, processing: identity },
-      savedCode: { fileName: 'SavedCode.js', found: false, processing: identity },
-      testPrepend: { fileName: 'TestPrepend.js', found: false, processing: identity },
-      testCases: { fileName: 'TestCases.json', found: false, processing: JSON.parse }
-    };
+            for (let k = 0; k < propKeys.length; k++) {
+              const key = propKeys[k];
+              if (fileName === properties[key].fileName) {
+                properties[key].found = true;
+                break;
+              }
+            }
+          }
 
-    const propKeys = Object.keys(properties);
+          const stringContentPromises: Promise<string>[] = [];
+          const fileNameToIndexMap = {};
+          let arrayIndex = 0;
 
-    // Figure out if the files exist
-    for (let i = 0; i < folderContentsAsArray.length; i++) {
-      const fileName = folderContentsAsArray[i].name;
+          for (let m = 0; m < propKeys.length; m++) {
+            const key = propKeys[m];
+            const value = properties[key];
 
-      for (let j = 0; j < propKeys.length; j++) {
-        const key = propKeys[j];
-        if (fileName === properties[key].fileName) {
-          properties[key].found = true;
-          break;
-        }
-      }
-    }
+            if (value.found) {
+              stringContentPromises.push(
+                getContentAsString(
+                  repoOwner,
+                  repoName,
+                  questionFolderName + '/' + value.fileName,
+                  octokit
+                ).then((stringContent: string) => value.processing(stringContent))
+              );
+              fileNameToIndexMap[key] = arrayIndex;
+              arrayIndex++;
+            }
+          }
 
-    try {
-      for (let i = 0; i < propKeys.length; i++) {
-        const key = propKeys[i];
-        const value = properties[key];
+          return Promise.all(stringContentPromises).then((stringContents: string[]) => {
+            const taskData: TaskData = {
+              questionNumber: i,
+              taskDescription: '',
+              starterCode: '',
+              savedCode: '',
+              testPrepend: '',
+              testCases: []
+            };
 
-        if (value.found) {
-          taskData[key] = value.processing(
-            await getContentAsString(
-              repoOwner,
-              repoName,
-              questionFolderName + '/' + value.fileName,
-              octokit
-            )
-          );
-        }
-      }
+            const foundFileNames = Object.keys(fileNameToIndexMap);
 
-      if (taskData.savedCode === '') {
-        taskData.savedCode = taskData.starterCode;
-      }
+            foundFileNames.forEach((fileName: string) => {
+              taskData[fileName] = stringContents[fileNameToIndexMap[fileName]];
+            });
 
-      questions.push(taskData);
-    } catch (err) {
-      showWarningMessage('Error occurred while trying to retrieve file content', 1000);
-      console.error(err);
-    }
+            if (taskData.savedCode === '') {
+              taskData.savedCode = taskData.starterCode;
+            }
+
+            questions.push(taskData);
+          });
+        })
+        .catch(err => {
+          showWarningMessage('Error occurred while trying to retrieve file content', 1000);
+          console.error(err);
+        })
+    );
   }
+  await Promise.all(promises);
+  questions.sort((a, b) => a.questionNumber - b.questionNumber);
 
   return questions;
 }

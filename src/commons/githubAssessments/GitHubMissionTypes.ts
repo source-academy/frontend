@@ -4,6 +4,7 @@ import { Testcase } from '../assessment/AssessmentTypes';
  * Represents a single task for a mission hosted in a GitHub repository.
  */
 export type TaskData = {
+  questionNumber: number;
   taskDescription: string;
   starterCode: string;
   savedCode: string;

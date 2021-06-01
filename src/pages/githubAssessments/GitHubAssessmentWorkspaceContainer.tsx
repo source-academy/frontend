@@ -40,6 +40,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     editorWidth: state.workspaces.githubAssessment.editorWidth,
     breakpoints: state.workspaces.githubAssessment.breakpoints,
     highlightedLines: state.workspaces.githubAssessment.highlightedLines,
+    hasUnsavedChanges: state.workspaces.githubAssessment.hasUnsavedChanges,
     isRunning: state.workspaces.githubAssessment.isRunning,
     isDebugging: state.workspaces.githubAssessment.isDebugging,
     enableDebugging: state.workspaces.githubAssessment.enableDebugging,

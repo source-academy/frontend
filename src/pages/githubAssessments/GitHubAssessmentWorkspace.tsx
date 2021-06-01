@@ -95,6 +95,7 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
@@ -110,6 +111,7 @@ export type StateProps = {
   editorWidth: string;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
+  hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
@@ -177,14 +179,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const hasUnsavedChanges = useMemo(() => {
-    return hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing || hasUnsavedChangesToTasks;
-  }, [hasUnsavedChangesToMetadata, hasUnsavedChangesToBriefing, hasUnsavedChangesToTasks]);
+  const hasUnsavedChanges = props.hasUnsavedChanges;
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleResetWorkspace = props.handleResetWorkspace;
+  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
+
   const missionRepoData = props.location.state as MissionRepoData;
   const autogradingResults: AutogradingResult[] = props.autogradingResults;
   const editorTestcases = props.editorTestcases;
+
+  const computedHasUnsavedChanges = useMemo(() => {
+    return hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing || hasUnsavedChangesToTasks;
+  }, [hasUnsavedChangesToMetadata, hasUnsavedChangesToBriefing, hasUnsavedChangesToTasks]);
 
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
@@ -224,6 +230,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
     setIsTeacherMode(userInTeacherMode);
 
+    handleEditorValueChange(missionData.tasksData[0].savedCode);
+    handleUpdateHasUnsavedChanges(false);
     setIsLoading(false);
 
     handleResetWorkspace({
@@ -235,7 +243,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     });
 
     if (missionData.missionBriefing !== '') setShowOverlay(true);
-  }, [missionRepoData, octokit, handleResetWorkspace, autogradingResults]);
+  }, [
+    autogradingResults,
+    handleResetWorkspace,
+    missionRepoData,
+    octokit,
+    handleEditorValueChange,
+    handleUpdateHasUnsavedChanges
+  ]);
 
   const setUpWithoutMissionRepoData = useCallback(() => {
     setSummary(defaultMissionBriefing);
@@ -247,6 +262,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedBriefingContent(defaultMissionBriefing);
 
     const defaultTask = {
+      questionNumber: 0,
       taskDescription: defaultTaskDescription,
       starterCode: defaultStarterCode,
       savedCode: defaultStarterCode,
@@ -280,6 +296,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setUpWithMissionRepoData();
     }
   }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
+
+  useEffect(() => {
+    if (computedHasUnsavedChanges !== hasUnsavedChanges) {
+      handleUpdateHasUnsavedChanges(computedHasUnsavedChanges);
+    }
+  }, [computedHasUnsavedChanges, hasUnsavedChanges, handleUpdateHasUnsavedChanges]);
 
   const overlay = (
     <Dialog className="assessment-briefing" isOpen={showOverlay}>
@@ -599,6 +621,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     resetToTemplate();
   }, [resetToTemplate]);
 
+  const shouldProceedToChangeTask = useCallback(
+    (currentTaskNumber: number, taskList: TaskData[], cachedTaskList: TaskData[]) => {
+      if (taskList[currentTaskNumber - 1] !== cachedTaskList[currentTaskNumber - 1]) {
+        return window.confirm(
+          'You have unsaved changes to the current question. Are you sure you want to continue?'
+        );
+      }
+      return true;
+    },
+    []
+  );
+
   const changeStateDueToChangedTask = useCallback(
     (newTaskNumber: number) => {
       setCurrentTaskNumber(newTaskNumber);
@@ -615,14 +649,30 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   );
 
   const onClickPrevious = useCallback(() => {
-    const newTaskNumber = currentTaskNumber - 1;
-    changeStateDueToChangedTask(newTaskNumber);
-  }, [currentTaskNumber, changeStateDueToChangedTask]);
+    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      const newTaskNumber = currentTaskNumber - 1;
+      changeStateDueToChangedTask(newTaskNumber);
+    }
+  }, [
+    currentTaskNumber,
+    taskList,
+    cachedTaskList,
+    shouldProceedToChangeTask,
+    changeStateDueToChangedTask
+  ]);
 
   const onClickNext = useCallback(() => {
-    const newTaskNumber = currentTaskNumber + 1;
-    changeStateDueToChangedTask(newTaskNumber);
-  }, [currentTaskNumber, changeStateDueToChangedTask]);
+    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      const newTaskNumber = currentTaskNumber + 1;
+      changeStateDueToChangedTask(newTaskNumber);
+    }
+  }, [
+    currentTaskNumber,
+    taskList,
+    cachedTaskList,
+    shouldProceedToChangeTask,
+    changeStateDueToChangedTask
+  ]);
 
   const onClickReturn = useCallback(() => {
     history.push('/githubassessments/missions');
@@ -789,6 +839,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       .slice(0, currentTaskNumber)
       .concat([
         {
+          questionNumber: 0,
           taskDescription: defaultTaskDescription,
           starterCode: defaultStarterCode,
           savedCode: defaultStarterCode,
@@ -933,6 +984,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
     handleEditorValueChange: onEditorValueChange,
+    handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
     breakpoints: props.breakpoints,
     highlightedLines: props.highlightedLines,
     newCursorPosition: props.newCursorPosition,
