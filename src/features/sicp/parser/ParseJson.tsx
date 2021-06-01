@@ -1,4 +1,4 @@
-import { Blockquote, H1, H2, H4, OL, UL } from '@blueprintjs/core';
+import { Blockquote, H1, OL, UL } from '@blueprintjs/core';
 import { MathJax } from 'better-react-mathjax';
 import { Links } from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
@@ -27,6 +27,7 @@ type JsonType = {
   program: string;
   href: string;
   count: integer;
+  eval: string;
 };
 
 const processingFunctions = {
@@ -52,7 +53,9 @@ const processingFunctions = {
     </div>
   ),
 
-  FOOTNOTE_REF: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <sup>{handleRef(obj)}</sup>,
+  FOOTNOTE_REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <sup>{handleRef(obj, refs)}</sup>
+  ),
 
   JAVASCRIPT: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <code>{obj['output']}</code>,
 
@@ -78,11 +81,11 @@ const processingFunctions = {
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body'], false),
 
   METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex('\\langle ' + obj['body'] + ' \\rangle', false),
+    handleLatex('$\\langle$ ' + obj['body'] + ' $\\rangle$', false),
 
   OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child'], refs)}</OL>,
 
-  REF: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleRef(obj),
+  REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleRef(obj, refs),
 
   REFERENCE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
@@ -95,6 +98,12 @@ const processingFunctions = {
       return (
         <pre>
           <code>{handleLatex(obj['body'], true)}</code>
+        </pre>
+      );
+    } else if (!obj['eval']) {
+      return (
+        <pre>
+          <code>{obj['body']}</code>
         </pre>
       );
     } else {
@@ -114,17 +123,17 @@ const processingFunctions = {
     }
   },
 
-  SUBHEADING: (obj: JsonType, _refs: React.MutableRefObject<{}>) => (
-    <H2>{obj['child'][0]['child'][0]['body']}</H2>
+  SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <h2 ref={ref => (refs.current[obj['id']] = ref)}>{obj['child'][0]['child'][0]['body']}</h2>
   ),
 
   SUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <H4>
+    <h4 ref={ref => (refs.current[obj['id']] = ref)}>
       <br />
       {parseArr(obj['child'], refs)}
-    </H4>
+    </h4>
   ),
 
   SUBSUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
@@ -158,15 +167,19 @@ const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     <>
       {obj['count'] === 1 && <hr />}
       <div ref={ref => (refs.current[obj['id']] = ref)} className="sicp-footnote">
-        <p>{'[' + obj['count'] + '] '}</p>
+        <a href={obj['href']}>{'[' + obj['count'] + '] '}</a>
         {parseArr(obj['child'], refs)}
       </div>
     </>
   );
 };
 
-const handleRef = (obj: JsonType) => {
-  return <a href={obj['href']}>{obj['body']}</a>;
+const handleRef = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  return (
+    <a ref={ref => (refs.current[obj['id']] = ref)} href={obj['href']}>
+      {obj['body']}
+    </a>
+  );
 };
 
 const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {

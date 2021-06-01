@@ -22,6 +22,21 @@ export const CodeSnippetContext = React.createContext({
   setActive: (x: string) => {}
 });
 
+const mathjaxConfig = {
+  loader: { load: ['[tex]/html'] },
+  tex: {
+    packages: { '[+]': ['html'] },
+    inlineMath: [
+      ['$', '$'],
+      ['\\(', '\\)']
+    ],
+    displayMath: [
+      ['$$', '$$'],
+      ['\\[', '\\]']
+    ]
+  }
+};
+
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState(<></>);
   const [active, setActive] = React.useState('0');
@@ -74,7 +89,7 @@ const Sicp: React.FC<SicpProps> = props => {
     }
   }, [props.location.hash, data]);
 
-  // Set active code snippet to 0 when new page is loaded
+  // Close all active code snippet when new page is loaded
   React.useEffect(() => {
     setActive('0');
   }, [data]);
@@ -83,21 +98,6 @@ const Sicp: React.FC<SicpProps> = props => {
     fullWidth: false,
     display: data,
     loadContentDispatch: () => {}
-  };
-
-  const mathjaxConfig = {
-    loader: { load: ["[tex]/html"] },
-    tex: {
-      packages: { "[+]": ["html"] },
-      inlineMath: [
-        ['$', '$'],
-        ['\\(', '\\)']
-      ],
-      displayMath: [
-        ['$$', '$$'],
-        ['\\[', '\\]']
-      ]
-    }
   };
 
   return (

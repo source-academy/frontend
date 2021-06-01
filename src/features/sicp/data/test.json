@@ -1,564 +1,251 @@
 [
   {
     "tag": "SUBSECTION",
-    "body": "1.1.6  \n    Conditional Expressions and Predicates\n  ",
+    "body": "3.5.5  \n    Modularity of Functional Programs and Modularity of Objects\n  ",
     "child": [
       {
         "tag": "TEXT",
         "id": "#p1",
         "child": [
+          { "tag": "#text", "body": "\n    As we saw in section " },
           {
-            "tag": "#text",
-            "body": "\n    The expressive power of the class of\n    "
-          },
-          {
-            "child": [
-              { "child": [{ "tag": "#text", "body": "\n\tfunctions\n      " }] }
-            ]
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.1.2",
+            "body": "3.1.2",
+            "href": "/interactive-sicp/3.1.2"
           },
           {
             "tag": "#text",
-            "body": "\n    that we can define at this point is very limited, because we have no way to\n    make tests and to perform different operations depending on the result of a\n    test.\n    "
+            "body": ", one of\n    the major benefits of introducing assignment is that we can increase the\n    modularity of our systems by encapsulating, or \"hiding,\" parts\n    of the state of a large system within local variables.  Stream models can\n    provide an equivalent modularity without the use of assignment.  As an\n    illustration, we can reimplement the\n    "
+          },
+          { "tag": "#text", "body": "\n    Monte Carlo estimation\n    of " },
+          { "tag": "LATEXINLINE", "body": "$\\pi$" },
+          { "tag": "#text", "body": ", which we examined in\n    section " },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.1.2",
+            "body": "3.1.2",
+            "href": "/interactive-sicp/3.1.2"
+          },
+          { "tag": "#text", "body": ", from a\n    stream-processing point of view.\n  " }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p2",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    The key modularity issue was that we wished to hide the internal state\n    of a random-number generator from programs that used random numbers.\n    We began with a\n    "
           },
           {
             "child": [
               {
                 "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n        For instance, we cannot declare a function that computes the \n        "
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n        absolute value of a number by testing whether the number is nonnegative\n\tand taking different actions in each case according to the rule\n        "
-                  },
-                  {
-                    "tag": "LATEX",
-                    "body": "       \\[\\begin{array}{lll}           |x| & = & \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x \\geq 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.       \\end{array}\\]         "
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n        This construct is a\n\t"
-                  },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "case analysis" }]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": " and can be expressed\n\tin JavaScript using a "
-                  },
-                  {
-                    "tag": "EM",
-                    "child": [
-                      { "tag": "#text", "body": "conditional expression" }
-                    ]
-                  },
-                  { "tag": "#text", "body": " as follows:\n        " },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 1,
-                    "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBDAIwGcAKADwEpQBvbUf0ACcApmQKDabUAD4AvKAAMoAPygpALlABaNQG5sAX1yNWWgKwddQA",
-                    "body": "function abs(x) {\n    return x >= 0 ? x : - x;\n}\n"
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n        The general form of a conditional expression is\n        "
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": true,
-                    "body": "\n$predicate$ ? $consequent$-$expression$ : $alternative$-$expression$\n          "
-                  },
-                  { "tag": "#text", "body": "\n        Conditional\n\t" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\texpressions begin with a\n        "
-                  },
-                  { "tag": "META", "body": "$predicate$" },
-                  {
-                    "tag": "#text",
-                    "body": "—that is, \n        an expression whose value is either\n\t"
-                  },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "true" }]
-                  },
-                  { "tag": "#text", "body": " or " },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "false" }]
-                  },
-                  { "tag": "#text", "body": ", two distinguished\n\t" },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "boolean" }]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": " values in JavaScript.\n\tThe primitive boolean expressions\n\t"
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "true" },
-                  { "tag": "#text", "body": " and\n\t" },
-                  { "tag": "JAVASCRIPTINLINE", "body": "false" },
-                  {
-                    "tag": "#text",
-                    "body": " trivially evaluate\n\tto the boolean values true and false, respectively.\n\tThe "
-                  },
-                  { "tag": "META", "body": "$predicate$" },
-                  {
-                    "tag": "#text",
-                    "body": " \n        is followed by a question mark, the \n        "
-                  },
-                  { "tag": "META", "body": "$consequent$-$expression$" },
-                  {
-                    "tag": "#text",
-                    "body": ", \n        a colon, and finally the\n        "
-                  },
-                  { "tag": "META", "body": "$alternative$-$expression$" },
-                  { "tag": "#text", "body": ".\n      " }
+                  { "tag": "#text", "body": "function " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "rand_update" },
+                  { "tag": "#text", "body": ",\n      " }
                 ]
               }
             ]
+          },
+          {
+            "tag": "#text",
+            "body": "\n    whose successive values furnished our supply of random numbers, and used\n    this to produce a random-number generator:\n    "
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 1,
+            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtbr5EoVLtVqR+OHbFabXa2E0Suzw+oo9xGoq7fbHc73KyAHyga11judsscFHG0QSc2uWudkf1p0e4ej0CBoNKpnh0XZ3P5oe4MY0VicSi2Fer9eb7e7xX7+KHlEFodAA",
+            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDhpQA",
+            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBbAQwGsBTAfQCcGiATACgCUoAN7ZQ40ABsWZUAA9QAXlBdeVOmwpEKZANxiJHGQQ61BSgHwiDE23flKV3HmwIAHHgzIs+cgfvtA8SMyE1o5AKDxAF99aOwSGgBnWVUeR0ZWTmdBfWweCiS3SQYATz40wX98wuKyipyBaoKikvLKpt0gA",
+            "body": "function make_rand() {\n    let x = random_init;\n    return () => {\n               x = rand_update(x);\n               return x;\n           };\n}\nconst rand = make_rand();\n"
           }
         ]
       },
       {
+        "tag": "TEXT",
+        "id": "#p3",
         "child": [
+          {
+            "tag": "#text",
+            "body": "\n    In the stream formulation there is no random-number generator "
+          },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "per\n    se" }] },
+          {
+            "tag": "#text",
+            "body": ", just a stream of random numbers produced by successive calls to\n    "
+          },
           {
             "child": [
               {
-                "tag": "TEXT",
-                "id": "#p2",
                 "child": [
-                  { "tag": "#text", "body": "\n        To\n\t" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\tevaluate a conditional expression,\n\tthe interpreter starts by evaluating the \n        "
-                  },
-                  { "tag": "META", "body": "$predicate$" },
-                  {
-                    "tag": "#text",
-                    "body": " \n        of the expression. If the\n\t"
-                  },
-                  { "tag": "META", "body": "$predicate$" },
-                  {
-                    "tag": "#text",
-                    "body": " \n        evaluates to true, the interpreter evaluates the\n        "
-                  },
-                  { "tag": "META", "body": "$consequent$-$expression$" },
-                  {
-                    "tag": "#text",
-                    "body": " and returns its value as the value of the conditional.\n        If the "
-                  },
-                  { "tag": "META", "body": "$predicate$" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\tevaluates to false, it evaluates the\n        "
-                  },
-                  { "tag": "META", "body": "$alternative$-$expression$" },
-                  {
-                    "tag": "#text",
-                    "body": " and returns its value as the value of the\n\tconditional."
-                  },
-                  {
-                    "tag": "FOOTNOTE_REF",
-                    "id": "footnote-link-1",
-                    "body": "1",
-                    "href": "/interactive-sicp/1.1.6#footnote-1"
-                  }
+                  { "tag": "JAVASCRIPTINLINE", "body": "rand_update" },
+                  { "tag": "#text", "body": ":\n      " }
                 ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "child": [
+          },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 2,
+            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtaGOCj1Px9EYKNpWTa7Uw9uRbOGs9GxEM7TXbbZ3KyAHy0MRAziR3ZMMso42iCRzcuRnPGcg0VyubWkfIsfjQ0jt7t8LPDvNzDAToA",
+            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDhpQA",
+            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsGMB7AOwGcAXUAJwEMiATAgWwH0iBXRgIwFNKTQAvNlAjQAB2oBLSgAoa9Js0lFJZADTDRW0DICUggHyhylbtRaNqYubTrM2YutTLc1VW4vZdeJXboDcuNwAbtQANswmZow2CixePHxuGAFAA",
+            "body": "const random_numbers =\n    pair(random_init,\n         () => stream_map(rand_update, random_numbers));\n"
+          },
+          {
+            "tag": "#text",
+            "body": "\n    We use this to construct the stream of outcomes of the Cesàro\n    experiment performed on consecutive pairs in the\n    "
+          },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "random_numbers" }] }] },
+          { "tag": "#text", "body": "\n    stream:\n    " },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 3,
+            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtaGOCj1Px9EYKNpWTa7Uw9uRbOGs9GxEM7TXbbZ3KyAHy0MRAziR3ZMMso42iCRzcuRnPGcg0VyubW6+RKFSJWS8F1zQxWwu2oEOp2lNms9k2AD8nQAXKA5wvDMjQP7l0HcFP9czOEx+DRBLJZLSXKR+MW6KPbJI5jHUBrRrddHRUH9S0kWwlhGWwxzmWCF2hUh234Xo6BYeDx1cata3wmt6zZZtO2fV93xoT9vxLGhbFXAiGIYgD6MY1i7RQtCMKwjjIy47CcJvdMxjSWQ2jYMRn1bVCWQLGtSJfN8PzoMhqN-WiywiAdvAbZtTw0rSGx3MU8LY0zB2zAwRzHbVSHyFhJLbBhbGEkkxNICSeLmXwJyAA",
+            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDklzqIQMElEkMiQomJWp1OCmiHUrojnoYdR1We16kMxIAfOgGA9iO7JjgU0DFfQmF1U+6o7JEGh9PpJdLODw+L52OQjV1pBr49qHnqDYkScTSWoAPylABcEB7fekgIgtsHDqAA",
+            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBbAQwAcB9AZwJJIFM22KAbtxZMGFAE5sAFHgA0oNgEpQAb2ygNocdzIFxtURJlSAFtwYATKUvlnL1stoZ0WZMQBtri77PWb-AZpSygC8AHz0zOycPHyCwoaSUn6BqWmacinp2f5sjuYubhSeeU6FHl7eigDc2AC+2CQ0eaAWEhQkJu467PnOoCFZjKwcXLz8QiJiSVLiAIzy4gBMoREA5iRW84srAyEhoAtZOdniDEQWVC5EBHQARtySNbjcAgzuvWVSbeIdXT2lAryJYABhqQA",
+            "body": "function map_successive_pairs(f, s) {\n    return pair(f(head(s), head(stream_tail(s))),\n                () => map_successive_pairs(\n                          f,\n                          stream_tail(stream_tail(s))));\n}\nconst dirichlet_stream =\n    map_successive_pairs((r1, r2) => gcd(r1, r2) === 1,\n                         random_numbers);\n"
+          },
+          { "tag": "#text", "body": "\n    The\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "dirichlet_stream" }] }] },
+          { "tag": "#text", "body": "\n    is now fed to a\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "monte_carlo" }] }] },
+          { "child": [{ "child": [{ "tag": "#text", "body": "function," }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    which produces a stream of estimates of probabilities.  The results are then\n    converted into a stream of estimates of "
+          },
+          { "tag": "LATEXINLINE", "body": "$\\pi$" },
+          {
+            "tag": "#text",
+            "body": ".\n    This version of the program doesn't need a parameter telling how many\n    trials to perform.  Better estimates of "
+          },
+          { "tag": "LATEXINLINE", "body": "$\\pi$" },
+          {
+            "tag": "#text",
+            "body": "\n    (from performing more experiments) are obtained by looking farther into the\n    "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "pi" },
+          { "tag": "#text", "body": " stream:\n    " },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 4,
+            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtaGOCj1Px9EYKNpWTa7Uw9uRbOGs9GxEM7TXbbZ3KyAHy0MRAziR3ZMMso42iCRzcuRnPGcg0VyubW6+RKFSJWS8F1zQxWwu2oEOp2lNms9k2AD8nQAXKA5wvDMjQP7l0HcFP9czOEx+DRBLJZLSXKR+MW6KPbJI5jHUBrRrddHRUH9S0kWwlhGWwxzmWCF2hUh234Xo6BYeDx1cata3wmt6zZZtO2fV93xoT9vxLGhbFXAiGIYgD6MY1i7RQtCMKwjjIy47CcJvdMxjSWQ2jYMRn1bVCWQLGtSJfN8PzoMhqN-WiywiAdvAbZtTw0rSGx3MU8LY0zB2zAwRzHScZGnOEGGUCR+FJcgWEUWxSCKKkXmWCSeLmYtKN+OZJD2NheCtfD6LvGc9E8sRbECmhguyMLfhXBiwM3SDEs4IK-jAXL8tAb1Qsw9KTNM2siKbZlHK-Fy3PgqTOLCjyvIodJuD8lqGFwliqsG-CkpSsrwvHRUa2DUDSA3FQkPa7yup6ts+oG2sD24eKiuSv5vU01Lyoi9aa2PLaigSkbeBCtK9rFCdsGDJUmSYOhRR4-hO0S4iH02Z8AEdyASgJQDAJh+qGgiHO6hqEia4SSTE2bJNWuYrDRibcA+oFoNeuYJSsCcgA",
+            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDklzqIQMElEkMiQomJWp1OCmiHUrojnoYdR1We16kMxIAfOgGA9iO7JjgU0DFfQmF1U+6o7JEGh9PpJdLODw+L52OQjV1pBr49qHnqDYkScTSWoAPylABcEB7fekgIgtsHDpAHdlhOIOEoaGo7HY2L08EoiYwzfUzC6LYgmqzo-1fCvyeY6j6DXULa6377T54FLShKgwPBf1bfRM2zWCs1zElC3LQ9j1PNBz0vJM0HUYc4LwvC71w-DiJ1ICQLAiCyPdCjIKgrdQyaIJ2CKAgGEPYtgKJOMs2Qo8TzPDAEEw69sJTZw61MPNC2XMSJLzKcWRgkjlPrSMpCbFsaSAA",
+            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBbGsgUwH0SBDAJwBsqAKJgA8ADk04U6TImRYBnMpybs6AGlDD2s2UwAmavOwrddASlABvUFevZroQqUo1QRIWT4atu-YeM6z5rZ21opkBJy0GhScHpraOqBgsV4JANT2vqYqQcG5eXxmALwAfPSMrBw8-PKKyixkvgIiYhJSMjVKdCbZeb19-Xae8T5GpiYA3DmgAL5ToeG0ABZKOk2i4pLScgqdJlN5APwubsnxoOkAjCN+ewMAXMeC7kPeGaNpoBcT2LPYJDTydQUUCFUAdOp0djCDwg0qQsiLOQAR047gAbIl1N19gNcgxpBUuLw+DpohQSItjO0dso1AAGekmb7YcF0FiKPAeChqC50ukTIA",
+            "body": "function monte_carlo(experiment_stream, passed, failed) {      \n    function next(passed, failed) {\n        return pair(passed / (passed + failed),\n                    () => monte_carlo(stream_tail(experiment_stream),\n                                      passed, failed));\n    }\n    return head(experiment_stream)\n           ? next(passed + 1, failed)\n           : next(passed, failed + 1);\n}\n\nconst pi = stream_map(p => math_sqrt(6 / p),\n                      monte_carlo(dirichlet_stream, 0, 0));\n"
+          },
+          { "tag": "#text", "body": "\n    There is considerable\n    " },
+          {
+            "tag": "#text",
+            "body": "\n    modularity in this approach, because we still\n    can formulate a general \n    "
+          },
           {
             "child": [
               {
-                "tag": "TEXT",
-                "id": "#p3",
                 "child": [
-                  { "tag": "#text", "body": "\n        The word\n        " },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "predicate" }]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": " is used for operators and functions that\n\treturn true or false, as well as for expressions that\n\tevaluate to true or false. The absolute-value function\n\t"
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "abs" },
-                  { "tag": "#text", "body": " makes use of the\n\t" },
-                  { "tag": "#text", "body": "\n        primitive predicate " },
-                  { "tag": "JAVASCRIPTINLINE", "body": ">=" },
-                  {
-                    "tag": "#text",
-                    "body": ",\n\tan operator that takes two numbers as arguments and tests whether the\n\tfirst number is greater than or equal to the second number, returning\n\ttrue or false accordingly.\n      "
-                  }
+                  { "tag": "JAVASCRIPTINLINE", "body": "monte_carlo" },
+                  { "tag": "#text", "body": " function\n      " }
                 ]
               }
             ]
-          }
-        ]
-      },
-      { "child": [{ "child": [] }] },
-      {
-        "child": [
+          },
           {
-            "child": [
-              {
-                "tag": "#text",
-                "body": "\n      If we prefer to handle the zero case separately, we can specify the function\n      that computes the absolute value of a number by writing\n        "
-              },
-              {
-                "tag": "LATEX",
-                "body": "       \\[\\begin{array}{lll}           |x| &=& \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x > 0$} \\\\           0   & \\mbox{if $x = 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.           \\end{array}\\]         "
-              },
-              {
-                "tag": "#text",
-                "body": "\n\tIn JavaScript, we express a case analysis with multiple cases by nesting\n\tconditional expressions as alternative expressions inside other conditional expressions:\n        "
-              },
-              {
-                "tag": "SNIPPET",
-                "latex": false,
-                "id": 2,
-                "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBDAIwGcAKADwEpQBvbUf0ACcApmQKDabUAD5QABj4ClAgPyg2i5UoBc60AF5D8zVv5qFpnaAC06gNzYAvrkatrAVg52gA",
-                "body": "function abs(x) {\n    return x > 0\n           ? x\n           : x === 0\n           ? 0\n           : - x;\n}\n"
-              },
-              {
-                "tag": "#text",
-                "body": "\n\tThere is no need for parentheses around the alternative expression\n\t"
-              },
-              { "tag": "JAVASCRIPTINLINE", "body": "x === 0 ? 0 : - x" },
-              {
-                "tag": "#text",
-                "body": ", because\n\tthe conditional-expression syntactic form\n\t"
-              },
-              {
-                "tag": "#text",
-                "body": "\n\tis right-associative.\n\tThe interpreter ignores spaces and line breaks, here inserted for readability\n\tto align the\n\t"
-              },
-              { "tag": "JAVASCRIPTINLINE", "body": "?" },
-              { "tag": "#text", "body": "'s\n\tand " },
-              { "tag": "JAVASCRIPTINLINE", "body": ":" },
-              {
-                "tag": "#text",
-                "body": "'s under the first predicate\n\tof the case analysis.\n\tThe general form of a\n\t"
-              },
-              { "tag": "#text", "body": "\n\tcase analysis is\n\t" },
-              {
-                "tag": "SNIPPET",
-                "latex": true,
-                "body": "\n$p$$_1$\n? $e$$_1$\n: $p$$_2$\n? $e$$_2$\n$\\vdots$\n: $p$$_n$\n? $e$$_n$\n: $final$-$alternative$-$expression$\n\t  "
-              },
-              { "tag": "#text", "body": "\n\tWe call a predicate " },
-              { "tag": "LATEXINLINE", "body": "$p_i$" },
-              {
-                "tag": "#text",
-                "body": "\n\ttogether with its consequent expression\n\t"
-              },
-              { "tag": "LATEXINLINE", "body": "$e_i$" },
-              { "tag": "#text", "body": "\n\ta\n\t" },
-              { "tag": "EM", "child": [{ "tag": "#text", "body": "clause" }] },
-              {
-                "tag": "#text",
-                "body": ". A case analysis\n\tcan be seen as a sequence of clauses, followed by a final\n\talternative expression.\n\t"
-              },
-              {
-                "tag": "#text",
-                "body": "\n\tAccording to the evaluation of conditional expressions,\n\ta case analysis is evaluated by first evaluating\n\tthe predicate "
-              },
-              { "tag": "META", "body": "$p$" },
-              { "tag": "LATEXINLINE", "body": "$_1$" },
-              { "tag": "#text", "body": ".\n\tIf its value is false, then " },
-              { "tag": "META", "body": "$p$" },
-              { "tag": "LATEXINLINE", "body": "$_2$" },
-              { "tag": "#text", "body": "\n\tis evaluated.\n\tIf " },
-              { "tag": "META", "body": "$p$" },
-              { "tag": "LATEXINLINE", "body": "$_2$" },
-              { "tag": "#text", "body": "'s\n\tvalue is also false, then " },
-              { "tag": "META", "body": "$p$" },
-              { "tag": "LATEXINLINE", "body": "$_3$" },
-              {
-                "tag": "#text",
-                "body": "\n\tis evaluated. This process continues until a predicate is\n        found whose value is true, in which case the interpreter returns the\n        value of the corresponding\n\t"
-              },
-              { "tag": "#text", "body": "\n\tconsequent expression\n\t" },
-              { "tag": "META", "body": "$e$" },
-              {
-                "tag": "#text",
-                "body": "\n\tof the clause\n\tas the value of the case analysis.\n\tIf none of the\n\t"
-              },
-              { "tag": "META", "body": "$p$" },
-              {
-                "tag": "#text",
-                "body": "'s\n\tis found to be true, the value of the case analysis\n\tis the value of the final alternative expression.\n    "
-              }
-            ]
+            "tag": "#text",
+            "body": "\n    that can deal with arbitrary experiments.  Yet there is no assignment or\n    local state.\n  "
           }
         ]
       },
       {
+        "tag": "EXERCISE",
+        "title": "Exercise 3.81",
+        "id": "#ex_3.81",
         "child": [
+          { "tag": "#text", "body": "\n    Exercise " },
           {
-            "child": [
-              {
-                "tag": "TEXT",
-                "id": "#p4",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n        In addition to primitive predicates such as\n\t"
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": ">=" },
-                  { "tag": "#text", "body": ", \n        " },
-                  { "tag": "JAVASCRIPTINLINE", "body": ">" },
-                  { "tag": "#text", "body": ", \n        " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "<" },
-                  { "tag": "#text", "body": ", \n        " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "<=" },
-                  { "tag": "#text", "body": ", \n        " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "===" },
-                  { "tag": "#text", "body": ", and\n        " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "!==" },
-                  {
-                    "tag": "#text",
-                    "body": " that are applied to\n\tnumbers,"
-                  },
-                  {
-                    "tag": "FOOTNOTE_REF",
-                    "id": "footnote-link-2",
-                    "body": "2",
-                    "href": "/interactive-sicp/1.1.6#footnote-2"
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n\tthere are logical composition operations, which enable us to construct\n\tcompound predicates. The three most frequently used are these:\n        "
-                  },
-                  {
-                    "tag": "UL",
-                    "child": [
-                      {
-                        "tag": "LI",
-                        "child": [
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_1$" },
-                          { "tag": "JAVASCRIPTINLINE", "body": "&&" },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_2$" },
-                          { "tag": "BR" },
-                          {
-                            "tag": "#text",
-                            "body": "\n\t    This operation expresses\n\t    "
-                          },
-                          {
-                            "tag": "EM",
-                            "child": [
-                              { "tag": "#text", "body": "logical conjunction" }
-                            ]
-                          },
-                          {
-                            "tag": "#text",
-                            "body": ", meaning roughly \n\t    the same as the English word \"and.\"\n\t    This syntactic form is syntactic sugar"
-                          },
-                          {
-                            "tag": "FOOTNOTE_REF",
-                            "id": "footnote-link-3",
-                            "body": "3",
-                            "href": "/interactive-sicp/1.1.6#footnote-3"
-                          },
-                          { "tag": "#text", "body": " for\n\t    " },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_1$" },
-                          { "tag": "JAVASCRIPTINLINE", "body": "?" },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_2$" },
-                          { "tag": "JAVASCRIPTINLINE", "body": ":" },
-                          { "tag": "JAVASCRIPTINLINE", "body": "false" },
-                          { "tag": "#text", "body": ".\n          " }
-                        ]
-                      },
-                      {
-                        "tag": "LI",
-                        "child": [
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_1$" },
-                          { "tag": "JAVASCRIPTINLINE", "body": "||" },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_2$" },
-                          { "tag": "BR" },
-                          {
-                            "tag": "#text",
-                            "body": "\n\t    This operation expresses\n\t    "
-                          },
-                          {
-                            "tag": "EM",
-                            "child": [
-                              { "tag": "#text", "body": "logical disjunction" }
-                            ]
-                          },
-                          {
-                            "tag": "#text",
-                            "body": ", meaning roughly\n\t    the same as the English word \"or.\"\n\t    This syntactic form is syntactic sugar for\n\t    "
-                          },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_1$" },
-                          { "tag": "JAVASCRIPTINLINE", "body": "?" },
-                          { "tag": "JAVASCRIPTINLINE", "body": "true" },
-                          { "tag": "JAVASCRIPTINLINE", "body": ":" },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "LATEXINLINE", "body": "$_2$" },
-                          { "tag": "#text", "body": ".\n\n          " }
-                        ]
-                      },
-                      {
-                        "tag": "LI",
-                        "child": [
-                          { "tag": "JAVASCRIPTINLINE", "body": "!" },
-                          { "tag": "META", "body": "$expression$" },
-                          { "tag": "BR" },
-                          {
-                            "tag": "#text",
-                            "body": "\n\t    This operation expresses\n\t    "
-                          },
-                          {
-                            "tag": "EM",
-                            "child": [
-                              { "tag": "#text", "body": "logical negation" }
-                            ]
-                          },
-                          {
-                            "tag": "#text",
-                            "body": ", meaning\n\t    roughly the same as the English word \"not.\"\n            The value of the expression is true when\n\t    "
-                          },
-                          { "tag": "META", "body": "$expression$" },
-                          {
-                            "tag": "#text",
-                            "body": "\n\t    evaluates to false, and false otherwise.\n          "
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  { "tag": "#text", "body": "\n        Notice that " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "&&" },
-                  { "tag": "#text", "body": " and \n        " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "||" },
-                  {
-                    "tag": "#text",
-                    "body": " are syntactic forms,\n\tnot operators;\n\t"
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n\ttheir right-hand\n        expression is not always evaluated. The operator\n        "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "!" },
-                  {
-                    "tag": "#text",
-                    "body": ", on the other hand, \n        follows the evaluation rule of section\n\t"
-                  },
-                  {
-                    "tag": "REF",
-                    "id": "1.1.6-ex-link-1.1.3",
-                    "body": "1.1.3",
-                    "href": "/interactive-sicp/1.1.3"
-                  },
-                  { "tag": "#text", "body": ".\n        It is a " },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "unary" }]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": " operator, which means that it takes only\n\tone argument, whereas the arithmetic operators and primitive predicates\n\tdiscussed so far\n\tare "
-                  },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "binary" }]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": ", taking two arguments. The operator\n        "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "!" },
-                  {
-                    "tag": "#text",
-                    "body": " precedes its argument;\n\twe call it a\n        "
-                  },
-                  {
-                    "tag": "EM",
-                    "child": [{ "tag": "#text", "body": "prefix operator" }]
-                  },
-                  {
-                    "tag": "#text",
-                    "body": ". Another prefix operator is\n\tthe numeric negation operator, an example of\n\twhich is the expression "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "- x" },
-                  { "tag": "#text", "body": "\n\tin the " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "abs" },
-                  { "tag": "#text", "body": " functions above.\n      " }
-                ]
-              }
-            ]
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.6",
+            "body": "3.6",
+            "href": "/interactive-sicp/3.1.2#ex_3.6"
+          },
+          {
+            "tag": "#text",
+            "body": " discussed generalizing\n    the random-number generator to allow one to\n    "
+          },
+          {
+            "tag": "#text",
+            "body": "\n    reset the random-number sequence\n    so as to produce repeatable sequences of \"random\" numbers.\n    Produce a stream formulation of this same generator that operates on an\n    input stream of requests to\n    "
+          },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"generate\"" }] }] },
+          { "tag": "#text", "body": "\n    a new\n    random number or to\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"reset\"" }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    the sequence to a\n    specified value and that produces the desired stream of random numbers.\n    Don't use assignment in your solution.\n  "
           }
         ]
       },
       {
+        "tag": "EXERCISE",
+        "title": "Exercise 3.82",
+        "id": "#ex_3.82",
+        "child": [
+          { "tag": "#text", "body": "\n    Redo exercise " },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.5",
+            "body": "3.5",
+            "href": "/interactive-sicp/3.1.2#ex_3.5"
+          },
+          { "tag": "#text", "body": " on\n    " },
+          {
+            "tag": "#text",
+            "body": "\n    Monte Carlo integration in terms of streams.  The stream version of\n    "
+          },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "estimate_integral" }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    will not have an argument telling how many trials to perform.  Instead, it\n    will produce a stream of estimates based on successively more trials.\n  "
+          }
+        ]
+      },
+      {
+        "tag": "SUBHEADING",
+        "id": "#h1",
+        "child": [
+          { "child": [{ "tag": "#text", "body": "A functional-programming view of time" }] }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p4",
         "child": [
           {
-            "child": [
-              {
-                "tag": "TEXT",
-                "id": "#p5",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n        As an example of how these predicates are used, the condition that a \n        number "
-                  },
-                  { "tag": "LATEXINLINE", "body": "$x$" },
-                  { "tag": "#text", "body": " be in the range\n\t" },
-                  { "tag": "LATEXINLINE", "body": "$5 < x < 10$" },
-                  { "tag": "#text", "body": " may be expressed as\n        " },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 3,
-                    "body": "x > 5 && x < 10"
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n        The syntactic form\n\t"
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "&&" },
-                  {
-                    "tag": "#text",
-                    "body": "\n        has lower precedence than the comparison operators\n        "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": ">" },
-                  { "tag": "#text", "body": "\n\tand " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "<" },
-                  {
-                    "tag": "#text",
-                    "body": ", and \n\tthe conditional-expression syntactic form\n\t"
-                  },
-                  { "tag": "LATEXINLINE", "body": "$\\cdots$" },
-                  { "tag": "JAVASCRIPTINLINE", "body": "?" },
-                  { "tag": "LATEXINLINE", "body": "$\\cdots$" },
-                  { "tag": "JAVASCRIPTINLINE", "body": ":" },
-                  { "tag": "LATEXINLINE", "body": "$\\cdots$" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\thas lower precedence than any other operator we have encountered so far,\n\ta property we used in\n\tthe "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "abs" },
-                  { "tag": "#text", "body": " functions above.\n      " }
-                ]
-              }
-            ]
+            "tag": "#text",
+            "body": "\n    Let us now return to the issues of objects and state that were raised\n    at the beginning of this chapter and examine them in a new light.  We\n    introduced assignment and mutable objects to provide a mechanism for\n    modular construction of programs that model systems with state.\n    We constructed computational objects with local state variables and used\n    assignment to modify these variables.  We modeled the temporal behavior of\n    the objects in the world by the temporal behavior of the corresponding\n    computational objects.\n  "
+          }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p5",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    Now we have seen that streams provide an alternative way to model\n    objects with local state.  We can model a changing quantity, such as\n    the local state of some object, using a stream that represents the\n    time history of successive states.  In essence, we represent time\n    explicitly, using streams, so that we decouple time in our simulated\n    world from the sequence of events that take place during evaluation.\n    Indeed, because of the presence of\n    "
+          },
+          {
+            "child": [{ "child": [{ "tag": "#text", "body": "\n\tdelayed evaluation\n      " }] }]
+          },
+          {
+            "tag": "#text",
+            "body": "\n    there may be little relation between simulated time in the model and the\n    order of events during the evaluation.\n  "
           }
         ]
       },
@@ -566,523 +253,280 @@
         "tag": "TEXT",
         "id": "#p6",
         "child": [
-          { "tag": "#text", "body": "\n    As another example, we can\n    " },
           {
-            "child": [
-              { "child": [{ "tag": "#text", "body": "\n\tdeclare\n      " }] }
-            ]
+            "tag": "#text",
+            "body": "\n    In order to contrast these two approaches to modeling, let us\n    reconsider the implementation of a \"withdrawal processor\" that\n    monitors the balance in a\n    "
+          },
+          { "tag": "#text", "body": "\n    bank account.  In\n    section " },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.1.3",
+            "body": "3.1.3",
+            "href": "/interactive-sicp/3.1.3"
           },
           {
             "tag": "#text",
-            "body": "\n    a predicate to test whether one number is \n    "
+            "body": " we implemented a\n    simplified version of such a processor:\n    "
           },
-          { "child": [] },
-          {
-            "tag": "#text",
-            "body": "\n    greater than or equal to another as    \n    "
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 4,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBzAJwFMBDMphgfSq6YEcCLADYAKAB4AaUAE8AlKADe2UCtDMyBBrTGgAfDNAAfQ6B0BeCzIDc2AL65Grdlx6d+g0QHYpAFllWgA",
-            "body": "function greater_or_equal(x, y) {\n    return x > y || x === y;\n}\n"
-          },
-          { "tag": "#text", "body": "\n    or alternatively as\n    " },
-          { "child": [] },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 5,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBzAJwFMBDMphgfSq6YEcCLADYAKAB4AaUAE8AlKADe2UCtDMyBBrQCEocaAA8M2QG5sAX1yNW7Lj079BogOxSALKaA",
-            "body": "function greater_or_equal(x, y) {\n    return ! (x < y);\n}\n"
+            "eval": false,
+            "body": "function make_simplified_withdraw(balance) {\n    return amount => {\n               balance = balance - amount;\n               return balance;\n           };\n}"
           },
+          { "tag": "#text", "body": "\n    Calls to\n    " },
           {
             "child": [
-              {
-                "child": [
-                  { "tag": "#text", "body": "\n        The function " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "greater_or_equal" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\twhen applied to two numbers, behaves the same as the operator\n\t"
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": ">=" },
-                  {
-                    "tag": "#text",
-                    "body": ". Unary operators\n\thave higher precedence than binary operators, which makes the\n\tparentheses in this example necessary.\n      "
-                  }
-                ]
-              }
+              { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_simplified_withdraw" }] }
             ]
+          },
+          {
+            "tag": "#text",
+            "body": "\n    produce computational objects, each with a local state variable\n    "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "balance" },
+          {
+            "tag": "#text",
+            "body": " that is decremented by successive calls\n    to the object.  The object takes an "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "amount" },
+          {
+            "tag": "#text",
+            "body": " as\n    an argument and returns the new balance.  We can imagine the user of a bank\n    account typing a sequence of inputs to such an object and observing the\n    sequence of returned values shown on a display screen.\n  "
           }
         ]
       },
       {
-        "tag": "EXERCISE",
-        "title": "Exercise 1.1",
-        "id": "#ex_1.1",
+        "tag": "TEXT",
+        "id": "#p7",
         "child": [
-          { "tag": "#text", "body": "\n    Below is a sequence of\n    " },
-          {
-            "child": [
-              {
-                "child": [{ "tag": "#text", "body": "\n\tstatements.\n      " }]
-              }
-            ]
-          },
           {
             "tag": "#text",
-            "body": "\n    What is the result printed by the interpreter in response to each\n    "
+            "body": "\n    Alternatively, we can model a withdrawal processor as a\n    "
           },
-          {
-            "child": [
-              {
-                "child": [{ "tag": "#text", "body": "\n\tstatement?\n      " }]
-              }
-            ]
-          },
+          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
           {
             "tag": "#text",
-            "body": "\n    Assume that the sequence is to be evaluated in the order\n    in which it is presented.\n    "
+            "body": "\n    that takes as input a balance and a stream of amounts to withdraw and\n    produces the stream of successive balances in the account:\n    "
           },
           {
             "tag": "SNIPPET",
             "latex": false,
             "id": 6,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsoAwDcQA",
-            "body": "10;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 7,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsFZQBqUAZiNABYBuIA",
-            "body": "5 + 3 + 4;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 8,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsE5QBaVAbiA",
-            "body": "9 - 1;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 9,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChudGAEwDcQA",
-            "body": "6 / 2;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 10,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsCZQAqUAFlAGpQAKMgWlEwEoBuIA",
-            "body": "2 * 4 + (4 - 6);\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 11,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbiA",
-            "body": "const a = 3;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 12,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVRoA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuIA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAI1AF5QBDUAalQG4g",
-            "body": "const b = a + 1;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 13,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7NT6c+1AFSh2jIA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsENQBqUAIyNAICpSBuIA",
-            "body": "a + b + a * b;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 14,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7NRrDQ7RkA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsENQBeY0AIwG4g",
-            "body": "a === b;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 15,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7JwB83AGSjQnADzcAVJNAB+BQC4qjIA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsCNQA+UAQ1ADJzQCAeU0AKmtAH5mAuUgbiA",
-            "body": "b > a && b < a * b ? b : a;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 16,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7NRrDQAFmwB+UDgBcoTsLripmXqADsaytjkAmAKyMgA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsENQBeY0AFmwH5QcAuUAIyJPKs1AGpQB2D0PbOgCYArAG4gA",
-            "body": "a === 4\n? 6\n: b === 4\n? 6 + 7 + a\n: 25;\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 17,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7ACZeoABScAfNwD8oTgC4qASkZA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsCZQBqUACgCNQA+UAQ1AH5QKAuWgSgG4g",
-            "body": "2 + (b > a ? b : a);\n"
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 18,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsGMB7AOwGcAXUAQ1AF5QBmAbl0NIoCNarQBqVZ7AApqAPlDtsoAPxVJALm4AecZJkTQCgLQoAlNgBUQ6n12MgA",
-            "prepend": "FDDGHsDsGcBcAICG8C88DMBuEEYIEapLwDU8AjJkA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsAoBDUAPlACNtQB+UAygLltAB5zKaLRGBaFASmwAqfEQDUqPgG4gA",
-            "body": "(a > b\n ? a\n : a < b\n ? b\n : -1)\n*\n(a + 1);\n"
-          },
-          {
-            "tag": "#text",
-            "body": "\n\tThe parentheses around the conditional expressions in the last two statements\n\tare necessary because the\n\t"
-          },
-          {
-            "tag": "#text",
-            "body": "\n\tconditional-expression syntactic form has lower\n\t"
-          },
-          {
-            "tag": "#text",
-            "body": "\n\tprecedence than the arithmetic operators\n\t"
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "+" },
-          { "tag": "#text", "body": " and\n\t" },
-          { "tag": "JAVASCRIPTINLINE", "body": "*" },
-          { "tag": "#text", "body": ".\n  " }
-        ]
-      },
-      {
-        "tag": "EXERCISE",
-        "title": "Exercise 1.2",
-        "id": "#ex_1.2",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Translate the following expression into \n    "
+            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBnMgJwFMBDAWwH0B3CsgCwAmjVtwAUAI1YAbVqWYAaUByrEynBiw4BKUAG9Qho9iOgWZAo1oAHVhUaSZckopOn3HsboC8APnpMbFy8AsKiYm4eUdFGUrLyoAC0oPxsgmIqahqBOgqRMQWmmkGcZHbSGeyqROrFOtraANzGAL64JDQMoOwAnpyZNXSg3qDSFAylVNla7GJjDGIYAAxKAIxLK6AALEsNjdgdRF29-SQdWXXswwEzPHxCIuIATBtKJwNkdE0AkNjMAG4yaZBMTvM7VWo5dhKFBNIA",
+            "body": "function stream_withdraw(balance, amount_stream) {      \n    return pair(balance,\n                () => stream_withdraw(\n                          balance - head(amount_stream),\n                          stream_tail(amount_stream)));   \n}\n"
           },
           {
             "child": [
               {
                 "child": [
-                  { "tag": "#text", "body": "\n        JavaScript\n      " }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "LATEX",
-            "body": "       \\[       \\begin{array}{l}       \\dfrac{5+4+\\left(2-\\left(3-(6+\\frac{4}{5})\\right)\\right)}{3 (6-2) (2-7)}       \\end{array}       \\]     "
-          }
-        ],
-        "solution": [
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 19,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsAoBWUAalABYTQ8AmUAWioGZ6rNKKwCBKHr0bYPmYAqVi2p9RNFgHYeAbiA",
-            "body": "(5 + 4 + (2 - (3 - (6 + 4 / 5)))) \n/\n(3 * (6 - 2) * (2 - 7));\n"
-          }
-        ]
-      },
-      {
-        "tag": "EXERCISE",
-        "title": "Exercise 1.3",
-        "id": "#ex_1.3",
-        "child": [
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "#text", "body": "\n\tDeclare a function\n      " }
+                  { "tag": "#text", "body": "\n\tThe function " },
+                  { "tag": "JAVASCRIPTINLINE", "body": "stream_withdraw" }
                 ]
               }
             ]
           },
           {
             "tag": "#text",
-            "body": "\n    that takes three numbers as arguments and returns\n    the sum of the squares of the two larger numbers.\n    "
-          }
-        ],
-        "solution": [
+            "body": "\n    implements a well-defined mathematical function whose output is fully\n    determined by its input.  Suppose, however, that the input\n    "
+          },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "amount_stream" }] }] },
           {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 20,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQBnARwIEMAnAUwAoAPASlADe2UCNAcyBVrW6gAVKG4BubAF9chUpRqg8PADSgAngYBe-IaPGTajFhx78A1PSZsuhpy7tczoALTCokEiIPQEAEZkrMzkoGQAFuxebqBUeHGJ9AC2zAA2uex0ZIHBorZuPKAAfEagAPygnIbVoCb1raAAXEb83ZU1bQ1t3Xy8ymr4nAAsBgDsBgBMY0A",
-            "prepend": "FDBmFcDsGMBcEsD2kAEBnAjuAhgJwKYAUAHgJQoDewKNKBs4uqxKAVCsQNzAC+QA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQ8AKADwBpQBPVgLwEpQBvbKCEAnAKZkCw2gGcAjgQCGYprwDUoOYuVs1G+UtH0eoALSChFyyA0EARmWELyoMgAtRerR6p4X7jQC2CgA2waLSZOaWlpoGTKAAfOygAPyg9GyJoJyp2aAAXOy8hfFJOWk5hYzc3ADc2AC+uAwALKwA7KwATHVAA",
-            "body": "function f(x, y, z) {\n   return square(x) + square(y) + square(z) -\n          // subtract the square of the smallest\n          square(x > y ? (y > z ? z : y) : (x > z ? z : x));\n}\n"
-          }
-        ]
-      },
-      {
-        "tag": "EXERCISE",
-        "title": "Exercise 1.4",
-        "id": "#ex_1.4",
-        "child": [
+            "tag": "#text",
+            "body": "\n    is the stream of successive values typed by the user and that the resulting\n    stream of balances is displayed. Then, from the perspective of the user who\n    is typing values and watching results, the stream process has the same\n    behavior as the object created by\n    "
+          },
           {
             "child": [
               {
                 "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n\tObserve that our model of evaluation allows for\n\t"
-                  },
-                  {
-                    "tag": "#text",
-                    "body": "\n\tapplications\n\twhose function expressions are compound expressions. Use this observation\n\tto describe the behavior of the following function:\n\t"
-                  },
-                  {
-                    "tag": "SNIPPET",
-                    "latex": false,
-                    "id": 21,
-                    "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQAHAGwIGcAKAQwBpQAjASlABvUACcApmQIja7UAGpeAblABffMXLVaAWwpEWHbvyGiJUmaAC0S1etKUaodgH1GLZ+x7NnPQ7wGC2KDBppLSoKw8oAB8ALygAAygAPz0TMygAFyguvrMfH78ithq2C5u3p7evgCs3JYALHyKQA",
-                    "body": "function plus(a, b) { return a + b; }\nfunction minus(a, b) { return a - b; }\nfunction a_plus_abs_b(a, b) {\n    return (b >= 0 ? plus : minus)(a, b);\n}\n"
-                  }
+                  { "tag": "JAVASCRIPTINLINE", "body": "make_simplified_withdraw" },
+                  { "tag": "#text", "body": ".\n      " }
                 ]
               }
             ]
-          }
-        ],
-        "solution": [
-          { "tag": "#text", "body": "\n\t  According to section " },
+          },
+          {
+            "tag": "#text",
+            "body": "\n    However, with the stream version, there is no assignment, no local state\n    variable, and consequently none of the theoretical difficulties that we\n    encountered\n    "
+          },
+          { "tag": "#text", "body": "\n    in section " },
           {
             "tag": "REF",
-            "id": "1.1.6-ex-link-1.1.5",
-            "body": "1.1.5",
-            "href": "/interactive-sicp/1.1.5"
+            "id": "3.5.5-ex-link-3.1.3",
+            "body": "3.1.3",
+            "href": "/interactive-sicp/3.1.3"
           },
+          { "tag": "#text", "body": ".  Yet the system\n    has state!\n  " }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p8",
+        "child": [
+          { "tag": "#text", "body": "\n    This is really remarkable.  Even though\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "stream_withdraw" }] }] },
           {
             "tag": "#text",
-            "body": ", evaluation\n\t  of an application proceeds as follows:\n\t  "
+            "body": "\n    implements a well-defined mathematical function whose behavior does not\n    change, the user's perception here is one of interacting with a system\n    that has a changing state.  One way to resolve this paradox is to realize\n    that it is the user's temporal existence that imposes state on the\n    system.  If the user could step back from the interaction and think in terms\n    of streams of balances rather than individual transactions, the system\n    would appear stateless."
           },
           {
-            "tag": "OL",
-            "child": [
-              {
-                "tag": "LI",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "Evaluate the subexpressions of the application.\n\t    "
-                  }
-                ]
-              },
-              {
-                "tag": "LI",
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "Evaluate the return expression of the result of\n\t    the function expression with each\n\t    parameter replaced by the corresponding result of the respective\n\t    argument expression.\n            "
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n\t  Thus the evaluation of the application \n\t  "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "a_plus_abs_b(5, -4)" },
-          { "tag": "#text", "body": "\n\t  (1) evaluates " },
-          { "tag": "JAVASCRIPTINLINE", "body": "a_plus_abs_b" },
-          {
-            "tag": "#text",
-            "body": ",\n\t  resulting in the function given above, and the arguments are\n\t  already values. So we need to evaluate (2) the return expression\n\t  of the function, with the parameters replaced by the arguments, thus:\n\t  "
-          },
-          {
-            "tag": "JAVASCRIPTINLINE",
-            "body": "(-4 >= 0 ? plus : minus)(5, -4)"
-          },
-          {
-            "tag": "#text",
-            "body": ".\n\t  With the same rules, we need to (1) evaluate the function expression,\n\t  which in this case is the conditional expression\n\t  "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "-4 >= 0 ? plus : minus" },
-          {
-            "tag": "#text",
-            "body": ". Since\n\t  the predicate evaluates to false, the function expression\n\t  evaluates to "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "minus" },
-          {
-            "tag": "#text",
-            "body": ". The arguments,\n\t  again (1) are already values. Thus we end up evaluating (2) the body of\n\t  "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "minus" },
-          { "tag": "#text", "body": " with the parameters\n\t  " },
-          { "tag": "JAVASCRIPTINLINE", "body": "a" },
-          { "tag": "#text", "body": " and\n\t  " },
-          { "tag": "JAVASCRIPTINLINE", "body": "b" },
-          {
-            "tag": "#text",
-            "body": " replaced by 5 and -4,\n\t  respectively, resulting in\n\t  "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "5 - (-4)" },
-          {
-            "tag": "#text",
-            "body": ", which will finally\n\t  evaluate to 9.\n\t"
+            "tag": "FOOTNOTE_REF",
+            "id": "footnote-link-1",
+            "body": "1",
+            "href": "/interactive-sicp/3.5.5#footnote-1"
           }
         ]
       },
       {
-        "tag": "EXERCISE",
-        "title": "Exercise 1.5",
-        "id": "#ex_1.5",
+        "tag": "TEXT",
+        "id": "#p9",
         "child": [
           {
             "tag": "#text",
-            "body": "\n    Ben Bitdiddle has invented a test to determine whether the interpreter\n    he is faced with is using\n    "
-          },
-          {
-            "tag": "#text",
-            "body": "\n    applicative-order evaluation or normal-order\n    evaluation. He \n    "
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n\tdeclares the following two functions\n      "
-                  }
-                ]
-              }
-            ]
-          },
-          { "tag": "#text", "body": ":\n      " },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 22,
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQAHACgEpQBvUAJwFMyCPbGTANygAvrkKlKNUGS4BnMgwAeAGlABPFq2yg9nHn1rLQAXnOgADKAD8V0AC5NQ7KKA",
-            "body": "function p() { return p(); }\n\nfunction test(x, y) {\n    return x === 0 ? 0 : y;\n}\n"
-          },
-          { "tag": "#text", "body": "\n      Then he evaluates the \n      " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "statement" }] }] },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 23,
-            "program": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsDMBXAOwGMAXASwHsjQAHACgEpQBvUAJwFMyCPbGTANygAvrkKlKNUGS4BnMgwAeAGlABPFq2yg9nHn1rLQAXnOgADKAD8V0AC5NQ7OOxzFDS+sHCgA",
-            "prepend": "FDBmFcDsGMBcEsD2kAEAHAFAShQbxQE4Cms4BqmWA3CgL4gQwLIqxEDOsGAHgDQoBPHLmAoxhEmVTcUAXnkoADCgD8SlAC5BVYLSA",
-            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToGwChsBcBTAZzwAoAGAGlAAdSBKegbiA",
-            "body": "test(0, p());\n"
-          },
-          {
-            "tag": "#text",
-            "body": "\n      What behavior will Ben observe with an interpreter that uses\n      applicative-order evaluation?  What behavior will he observe with an\n      interpreter that uses normal-order evaluation?  Explain your answer.\n      "
-          },
-          {
-            "tag": "#text",
-            "body": "\n      (Assume that the evaluation rule for \n      "
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  {
-                    "tag": "#text",
-                    "body": "\n          conditional expressions\n\t"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n      is the same whether the interpreter is using normal or applicative order:\n      The predicate expression is evaluated first, and the result determines\n      whether to evaluate the consequent or the alternative expression.)\n      "
+            "body": "\n    From the point of view of one part of a complex process, the other parts\n    appear to change with time.  They have hidden time-varying local state.  If\n    we wish to write programs that model this kind of natural decomposition in\n    our world (as we see it from our viewpoint as a part of that world) with\n    structures in our computer, we make computational objects that are not\n    functional—they must change with time.  We model state with local\n    state variables, and we model the changes of state with assignments to\n    those variables.  By doing this we make the time of execution of a\n    computation model time in the world that we are part of, and thus we\n    get \"objects\" in our computer.\n  "
           }
-        ],
-        "solution": [
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p10",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    Modeling with objects is powerful and intuitive, largely because this\n    matches the perception of interacting with a world of which we are\n    part.  However, as we've seen repeatedly throughout this chapter,\n    these models raise thorny problems of constraining the order of events\n    and of synchronizing multiple processes.  The possibility of avoiding\n    these problems has stimulated the development of \n    "
+          },
+          {
+            "tag": "EM",
+            "child": [{ "tag": "#text", "body": "functional programming languages" }]
+          },
+          {
+            "tag": "#text",
+            "body": ", which do not include any\n    provision for assignment or mutable data.  In such a language, all\n    "
+          },
+          { "child": [{ "child": [{ "tag": "#text", "body": "functions" }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    implement well-defined mathematical functions of their arguments,\n    whose behavior does not change.  The functional approach is extremely\n    attractive for dealing with\n    "
+          },
+          { "tag": "#text", "body": "\n    concurrent systems." },
+          {
+            "tag": "FOOTNOTE_REF",
+            "id": "footnote-link-2",
+            "body": "2",
+            "href": "/interactive-sicp/3.5.5#footnote-2"
+          }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p11",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    On the other hand, if we look closely, we can see time-related problems\n    creeping into functional models as well.  One particularly troublesome area\n    arises when we wish to design interactive systems, especially ones that\n    model interactions between independent entities. For instance, consider once\n    more the implementation a banking system that permits joint bank accounts.\n    In a conventional system using assignment and objects, we would model the\n    fact that Peter and Paul share an account by having both Peter and Paul send\n    their transaction requests to the same bank-account object, as we saw in\n    section "
+          },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.1.3",
+            "body": "3.1.3",
+            "href": "/interactive-sicp/3.1.3"
+          },
+          {
+            "tag": "#text",
+            "body": ". From the stream point\n    of view, where there are no \"objects\""
+          },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "per se" }] },
+          {
+            "tag": "#text",
+            "body": ", we have\n    already indicated that a bank account can be modeled as a process that\n    operates on a stream of transaction requests to produce a stream of\n    responses.  Accordingly, we could model the fact that Peter and Paul have a\n    joint bank account by merging Peter's stream of transaction requests\n    with Paul's stream of requests and feeding the result to the\n    bank-account stream process, as shown in\n    figure "
+          },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.38",
+            "body": "3.38",
+            "href": "/interactive-sicp/3.5.5#fig_3.38"
+          },
+          { "tag": "#text", "body": ".\n    " },
           {
             "child": [
               {
-                "child": [
+                "tag": "FIGURE",
+                "images": [{ "class": "scale_factor_", "src": "img_original/ch3-Z-G-60.svg" }]
+              }
+            ],
+            "tag": "FIGURE",
+            "images": [
+              {
+                "class": "scale_factor_",
+                "src": "img_original/ch3-Z-G-60.svg",
+                "id": "#fig_3.38",
+                "captionHref": "/interactive-sicp/3.5.5#fig_3.38",
+                "captionName": "Figure 3.38 ",
+                "captionBody": [
+                  { "tag": "#text", "body": "\n\tA joint\n\t" },
                   {
                     "tag": "#text",
-                    "body": "\n\t    In applicative-order evaluation of\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
-                  {
-                    "tag": "#text",
-                    "body": ",\n\t    we need to evaluate the argument expressions before we can evaluate\n\t    the return expression of the function\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "test" },
-                  {
-                    "tag": "#text",
-                    "body": ".\n\t    The evaluation of the argument expression\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\t    will not terminate, however: It will keep evaluating application\n\t    expressions of the form \n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
-                  {
-                    "tag": "#text",
-                    "body": ", and thus the evaluation of\n            "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
-                  {
-                    "tag": "#text",
-                    "body": " will not produce a\n\t    legitimate value. In normal-order evaluation, on the other hand,\n\t    the function application\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\t    would immediately evaluate the return expression of the function\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "test" },
-                  { "tag": "#text", "body": ",\n\t    " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "x === 0 ? 0 : y" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\t    after replacing the parameter\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "x" },
-                  { "tag": "#text", "body": " with\n\t    " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "0" },
-                  { "tag": "#text", "body": " and\n\t    " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "y" },
-                  { "tag": "#text", "body": " with\n\t    " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
-                  {
-                    "tag": "#text",
-                    "body": ".\n\t    The result of the replacing would be\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "0 === 0 ? 0 : p()" },
-                  {
-                    "tag": "#text",
-                    "body": ".\n\t    The evaluation of the predicate\n\t    "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "0 === 0" },
-                  {
-                    "tag": "#text",
-                    "body": "\n\t    results in true and thus the conditional\n\t    expression evaluates to 0, without any need to\n\t    evaluate "
-                  },
-                  { "tag": "JAVASCRIPTINLINE", "body": "p()" },
-                  { "tag": "#text", "body": ".\n\t  " }
+                    "body": "\n\tbank account, modeled by merging two streams of transaction\n\trequests.\n      "
+                  }
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p12",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    The trouble with this formulation is in the notion of "
+          },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "merge" }] },
+          {
+            "tag": "#text",
+            "body": ".  It\n    will not do to merge the two streams by simply taking alternately one\n    request from Peter and one request from Paul. Suppose Paul accesses\n    the account only very rarely.  We could hardly force Peter to wait for\n    Paul to access the account before he could issue a second transaction.\n    "
+          },
+          {
+            "tag": "#text",
+            "body": "\n    However such a merge is implemented, it must interleave the two\n    transaction streams in some way that is constrained by \"real\n    time\" as perceived by Peter and Paul, in the sense that, if Peter and\n    Paul meet, they can agree that certain transactions were processed\n    before the meeting, and other transactions were processed after the\n    meeting."
+          },
+          {
+            "tag": "FOOTNOTE_REF",
+            "id": "footnote-link-3",
+            "body": "3",
+            "href": "/interactive-sicp/3.5.5#footnote-3"
+          },
+          {
+            "tag": "#text",
+            "body": "\n    This is precisely the same constraint that we had to deal with in\n    section "
+          },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-3.4.1",
+            "body": "3.4.1",
+            "href": "/interactive-sicp/3.4.1"
+          },
+          {
+            "tag": "#text",
+            "body": ", where we found the need to\n    introduce explicit synchronization to ensure a \"correct\" order\n    of events in concurrent processing of objects with state.  Thus, in an\n    attempt to support the functional style, the need to merge inputs from\n    different agents reintroduces the same problems that the functional style\n    was meant to eliminate.\n  "
+          }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p13",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    We began this chapter with the goal of building computational models\n    whose structure matches our perception of the real world we are trying\n    to model.  We can model the world as a collection of separate,\n    time-bound, interacting objects with state, or we can model the world\n    as a single, timeless, stateless unity.  Each view has powerful\n    advantages, but neither view alone is completely satisfactory.  A\n    grand unification has yet to emerge."
+          },
+          {
+            "tag": "FOOTNOTE_REF",
+            "id": "footnote-link-4",
+            "body": "4",
+            "href": "/interactive-sicp/3.5.5#footnote-4"
           }
         ]
       },
@@ -1090,49 +534,35 @@
         "tag": "DISPLAYFOOTNOTE",
         "id": "#footnote-1",
         "count": 1,
+        "href": "/interactive-sicp/3.5.5#footnote-link-1",
         "child": [
-          { "tag": "#text", "body": "\n        In JavaScript,\n\t" },
           {
             "tag": "#text",
-            "body": "\n\tother values of the predicate in conditionals\n\tare automatically converted to true or false\n        according to\n\t"
+            "body": "Similarly in physics, when we observe a\n    moving particle, we say that the position (state) of the particle is\n    changing.  However, from the perspective of the particle's \n    "
           },
-          {
-            "tag": "EM",
-            "child": [{ "tag": "#text", "body": "conversion rules" }]
-          },
-          {
-            "tag": "#text",
-            "body": ", but we choose not to make\n\tuse of these conversion rules in this book."
-          }
+          { "tag": "#text", "body": "\n    world line in space-time there is no change involved." }
         ]
       },
       {
         "tag": "DISPLAYFOOTNOTE",
         "id": "#footnote-2",
         "count": 2,
+        "href": "/interactive-sicp/3.5.5#footnote-link-2",
         "child": [
+          { "tag": "#text", "body": "John Backus, the\n    " },
           {
             "tag": "#text",
-            "body": "For now, we restrict these operators to number\n\targuments. In sections "
+            "body": "\n    inventor of Fortran, gave high\n    visibility to functional programming when he was awarded the ACM Turing\n    award in 1978.  His acceptance speech\n    "
           },
-          {
-            "tag": "REF",
-            "id": "1.1.6-ex-link-2.3.1",
-            "body": "2.3.1",
-            "href": "/interactive-sicp/2.3.1"
-          },
-          { "tag": "#text", "body": "\n\tand " },
-          {
-            "tag": "REF",
-            "id": "1.1.6-ex-link-3.3.1",
-            "body": "3.3.1",
-            "href": "/interactive-sicp/3.3.1"
-          },
+          { "tag": "#text", "body": "\n    (" },
+          { "child": [{ "tag": "#text", "body": "Backus 1978" }] },
           {
             "tag": "#text",
-            "body": ", we shall\n\tgeneralize the predicate\n\t"
+            "body": ")\n    strongly advocated the functional approach.  A good overview of functional\n    programming is given in \n    "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "===" },
+          { "child": [{ "tag": "#text", "body": "Henderson 1980" }] },
+          { "tag": "#text", "body": " and in \n    " },
+          { "child": [{ "tag": "#text", "body": "Darlington, Henderson, and Turner 1982" }] },
           { "tag": "#text", "body": "." }
         ]
       },
@@ -1140,20 +570,56 @@
         "tag": "DISPLAYFOOTNOTE",
         "id": "#footnote-3",
         "count": 3,
+        "href": "/interactive-sicp/3.5.5#footnote-link-3",
         "child": [
           {
             "tag": "#text",
-            "body": "\n            Syntactic forms that are simply convenient\n            alternative surface structures for things that can be written in more\n            uniform ways are sometimes called "
-          },
-          {
-            "tag": "EM",
-            "child": [{ "tag": "#text", "body": "syntactic sugar" }]
+            "body": "Observe that, for any two streams, there is in general\n    more than one\n    acceptable order of interleaving.  Thus, technically, \"merge\"\n    is a\n    "
           },
           {
             "tag": "#text",
-            "body": ", to use a\n            phrase coined by \n            "
+            "body": "\n    relation rather than a function—the answer is not a\n    deterministic function of the inputs.  We already mentioned\n    (footnote "
           },
-          { "tag": "#text", "body": "\n\t    Peter Landin.\t    \n\t    " }
+          {
+            "tag": "FOOTNOTE_REF",
+            "id": "3.5.5-foot-link-5",
+            "body": 5,
+            "href": "/interactive-sicp/3.4.1#footnote-5"
+          },
+          {
+            "tag": "#text",
+            "body": ") that nondeterminism\n    is essential when dealing with concurrency.  The merge relation illustrates\n    the same essential nondeterminism, from the functional perspective.\n    In section "
+          },
+          {
+            "tag": "REF",
+            "id": "3.5.5-ex-link-4.3",
+            "body": "4.3",
+            "href": "/interactive-sicp/4.3"
+          },
+          {
+            "tag": "#text",
+            "body": ", we\n    will look at nondeterminism from yet another point of view."
+          }
+        ]
+      },
+      {
+        "tag": "DISPLAYFOOTNOTE",
+        "id": "#footnote-4",
+        "count": 4,
+        "href": "/interactive-sicp/3.5.5#footnote-link-4",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "The object model approximates\n    the world by dividing it into separate pieces.  The functional model does\n    not\n    "
+          },
+          {
+            "tag": "#text",
+            "body": "\n    modularize along object boundaries.  The object model is useful when\n    the unshared state of the \"objects\" is much larger than the\n    state that they share.  An example of a place where the object viewpoint\n    fails is \n    "
+          },
+          {
+            "tag": "#text",
+            "body": "\n    quantum mechanics, where thinking of things as individual particles leads\n    to paradoxes and confusions.  Unifying the object view with the\n    functional view may have little to do with programming, but rather\n    with fundamental epistemological issues."
+          }
         ]
       }
     ]
