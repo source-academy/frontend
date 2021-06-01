@@ -11,6 +11,8 @@ import SideContentCanvasOutput from './SideContentCanvasOutput';
 type SideContentEditableTestcaseCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
+  setTestcaseProgram: (newProgram: string) => void;
+  setTestcaseExpectedResult: (newExpectedResult: string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
 };
 
@@ -65,13 +67,15 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
                 className="testcase-program"
                 fieldValue={testProgram}
                 allowEdits={true}
-                setContent={(pain: string) => {}}
+                testcaseId={props.index}
+                setContent={props.setTestcaseProgram}
               />
               <EditableField
                 className="testcase-expected"
                 fieldValue={expectedAnswer}
                 allowEdits={true}
-                setContent={(pain: string) => {}}
+                testcaseId={props.index}
+                setContent={props.setTestcaseExpectedResult}
               />
               <Pre className="testcase-actual">
                 {testcase.errors
@@ -117,6 +121,7 @@ type EditableFieldProps = {
   className: string;
   fieldValue: string;
   allowEdits: boolean;
+  testcaseId: number;
   setContent: (newContent: string) => void;
 };
 

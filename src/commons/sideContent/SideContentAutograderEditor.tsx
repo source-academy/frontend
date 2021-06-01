@@ -25,7 +25,25 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
     const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-    const { testcases, autogradingResults, handleTestcaseEval } = props;
+    const { testcases, autogradingResults, handleTestcaseEval, setTaskTestcases } = props;
+    
+    const setTestcaseProgramCreator = React.useCallback((testcaseId: number) => {
+      return (newProgram: string) => {
+        const newTestcases = [...testcases];
+        newTestcases[testcaseId].program = newProgram;
+        newTestcases[testcaseId].result = undefined;
+        setTaskTestcases(newTestcases);
+      };
+    }, [setTaskTestcases, testcases]);
+
+    const setTestcaseExpectedResultCreator = React.useCallback((testcaseId: number) => {
+      return (newExpectedResult: string) => {
+        const newTestcases = [...testcases];
+        newTestcases[testcaseId].answer = newExpectedResult;
+        newTestcases[testcaseId].result = undefined;
+        setTaskTestcases(newTestcases);
+      };
+    }, [setTaskTestcases, testcases]);
 
     const testcaseCards = React.useMemo(
       () =>
@@ -37,6 +55,8 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
                 key={index}
                 index={index}
                 testcase={testcase}
+                setTestcaseProgram={setTestcaseProgramCreator(index)}
+                setTestcaseExpectedResult={setTestcaseExpectedResultCreator(index)}
                 handleTestcaseEval={handleTestcaseEval}
               />
             ))}
@@ -44,7 +64,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         ) : (
           <div className="noResults">There are no testcases provided for this question.</div>
         ),
-      [testcases, handleTestcaseEval]
+      [testcases, handleTestcaseEval, setTestcaseProgramCreator, setTestcaseExpectedResultCreator]
     );
 
     const resultCards = React.useMemo(
