@@ -8268,10 +8268,15 @@ konva-node@^0.11.2:
     canvas "^2.5.0"
     konva "^7"
 
-konva@^7, konva@^7.2.5:
+konva@^7:
   version "7.2.5"
   resolved "https://registry.yarnpkg.com/konva/-/konva-7.2.5.tgz#9b4ac3a353e6be66e3e69123bf2a0cbc61efeb26"
   integrity sha512-yk/li8rUF+09QNlOdkwbEId+QvfATMe/aMGVouWW1oFoUVTYWHsQuIAE6lWy11DK8mLJEJijkNAXC5K+NVlMew==
+
+konva@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-8.0.2.tgz#8783b5bc905918934e9dc58f782472cbe661fe18"
+  integrity sha512-nQ4lsuyiuVt5Jk6MS761oMDoC0WZ/6ggYD6GBDFod0hwSUnBXSRYvrzKilc1snve19tr7kgXHjL1q+/dEAu73w==
 
 language-subtag-registry@~0.3.2:
   version "0.3.21"
