@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
+import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 import SideContentResultCard from './SideContentResultCard';
 
@@ -27,7 +28,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
 
     const { testcases, autogradingResults, handleTestcaseEval, setTaskTestcases } = props;
 
-    const setTestcaseProgramCreator = React.useCallback(
+    const setTestcaseProgramSetterCreator = React.useCallback(
       (testcaseId: number) => {
         return (newProgram: string) => {
           const newTestcases = [...testcases];
@@ -39,7 +40,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       [setTaskTestcases, testcases]
     );
 
-    const setTestcaseExpectedResultCreator = React.useCallback(
+    const setTestcaseExpectedResultSetterCreator = React.useCallback(
       (testcaseId: number) => {
         return (newExpectedResult: string) => {
           const newTestcases = [...testcases];
@@ -49,6 +50,36 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         };
       },
       [setTaskTestcases, testcases]
+    );
+
+    const addTestcase = React.useCallback(() => {
+      const newTestcases = [...testcases];
+      newTestcases.push({
+        answer: '',
+        program: '',
+        score: 0,
+        type: 'public'
+      });
+      setTaskTestcases(newTestcases);
+    }, [testcases, setTaskTestcases]);
+
+    const deleteTestcase = React.useCallback(
+      async (testcaseId: number) => {
+        const confirmDelete = await showSimpleConfirmDialog({
+          title: 'confirm testcase deletion',
+          contents: 'Are you sure you want to delete this testcase? This cannot be undone.',
+          positiveLabel: 'Confirm',
+          negativeLabel: 'Cancel'
+        });
+
+        if (!confirmDelete) {
+          return;
+        }
+
+        const newTestcases = testcases.slice(0, testcaseId).concat(testcases.slice(testcaseId + 1));
+        setTaskTestcases(newTestcases);
+      },
+      [testcases, setTaskTestcases]
     );
 
     const testcaseCards = React.useMemo(
@@ -61,8 +92,9 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
                 key={index}
                 index={index}
                 testcase={testcase}
-                setTestcaseProgram={setTestcaseProgramCreator(index)}
-                setTestcaseExpectedResult={setTestcaseExpectedResultCreator(index)}
+                setTestcaseProgram={setTestcaseProgramSetterCreator(index)}
+                setTestcaseExpectedResult={setTestcaseExpectedResultSetterCreator(index)}
+                deleteTestcase={deleteTestcase}
                 handleTestcaseEval={handleTestcaseEval}
               />
             ))}
@@ -70,20 +102,13 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         ) : (
           <div className="noResults">There are no testcases provided for this question.</div>
         ),
-      [testcases, handleTestcaseEval, setTestcaseProgramCreator, setTestcaseExpectedResultCreator]
+      [
+        testcases,
+        handleTestcaseEval,
+        setTestcaseProgramSetterCreator,
+        setTestcaseExpectedResultSetterCreator
+      ]
     );
-
-    const addTestcase = React.useCallback(() => {
-      const newTestcases = [...testcases];
-      newTestcases.push({
-        answer: '',
-        program: '',
-        score: 0,
-        type: 'public'
-      });
-      console.log(newTestcases);
-      setTaskTestcases(newTestcases);
-    }, [testcases, setTaskTestcases]);
 
     const createTestCaseButton = React.useMemo(
       () => (

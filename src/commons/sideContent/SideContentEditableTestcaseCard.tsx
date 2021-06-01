@@ -14,6 +14,7 @@ type DispatchProps = {
   setTestcaseProgram: (newProgram: string) => void;
   setTestcaseExpectedResult: (newExpectedResult: string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  deleteTestcase: (testcaseId: number) => void;
 };
 
 type StateProps = {
@@ -54,6 +55,9 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
     const expectedAnswer = testcase.answer;
 
     const playButton = <Button icon={IconNames.PLAY} onClick={handleRunTestcase} />;
+    const deleteButton = (
+      <Button icon={IconNames.DELETE} onClick={() => props.deleteTestcase(index)} />
+    );
 
     return (
       <div className={classNames('AutograderCard', extraClasses)}>
@@ -87,6 +91,7 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
             </>
           )}
           {playButton}
+          {deleteButton}
         </Card>
       </div>
     );
