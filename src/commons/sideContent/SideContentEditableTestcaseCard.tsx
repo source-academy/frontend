@@ -20,6 +20,7 @@ type DispatchProps = {
 type StateProps = {
   index: number;
   testcase: Testcase;
+  allowEdits: boolean;
 };
 
 const renderResult = (value: any) => {
@@ -34,7 +35,15 @@ const renderResult = (value: any) => {
 
 const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditableTestcaseCardProps> =
   props => {
-    const { index, testcase, handleTestcaseEval } = props;
+    const {
+      index,
+      testcase,
+      allowEdits,
+      setTestcaseProgram,
+      setTestcaseExpectedResult,
+      handleTestcaseEval,
+      deleteTestcase
+    } = props;
 
     const extraClasses = React.useMemo(() => {
       const isEvaluated = testcase.result !== undefined || testcase.errors;
@@ -55,9 +64,7 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
     const expectedAnswer = testcase.answer;
 
     const playButton = <Button icon={IconNames.PLAY} onClick={handleRunTestcase} />;
-    const deleteButton = (
-      <Button icon={IconNames.DELETE} onClick={() => props.deleteTestcase(index)} />
-    );
+    const deleteButton = <Button icon={IconNames.DELETE} onClick={() => deleteTestcase(index)} />;
 
     return (
       <div className={classNames('AutograderCard', extraClasses)}>
@@ -70,16 +77,16 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
               <EditableField
                 className="testcase-program"
                 fieldValue={testProgram}
-                allowEdits={true}
-                testcaseId={props.index}
-                setContent={props.setTestcaseProgram}
+                allowEdits={allowEdits}
+                testcaseId={index}
+                setContent={setTestcaseProgram}
               />
               <EditableField
                 className="testcase-expected"
                 fieldValue={expectedAnswer}
-                allowEdits={true}
-                testcaseId={props.index}
-                setContent={props.setTestcaseExpectedResult}
+                allowEdits={allowEdits}
+                testcaseId={index}
+                setContent={setTestcaseExpectedResult}
               />
               <Pre className="testcase-actual">
                 {testcase.errors
@@ -95,31 +102,6 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
         </Card>
       </div>
     );
-
-    /*
-    return (
-      <div className={classNames('AutograderCard', extraClasses)}>
-        <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE} onClick={handleRunTestcase}>
-          {testcase.type === TestcaseTypes.hidden ? (
-            // Render a placeholder cell in place of the actual testcase data for hidden testcases
-            <Pre className="testcase-placeholder">Hidden testcase</Pre>
-          ) : (
-            <>
-              <Pre className="testcase-program">{testcase.program}</Pre>
-              <Pre className="testcase-expected">{testcase.answer}</Pre>
-              <Pre className="testcase-actual">
-                {testcase.errors
-                  ? parseError(testcase.errors)
-                  : testcase.result !== undefined
-                  ? renderResult(testcase.result)
-                  : 'No Answer'}
-              </Pre>
-            </>
-          )}
-        </Card>
-      </div>
-    );
-    */
   };
 
 type EditableFieldProps = {

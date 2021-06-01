@@ -34,6 +34,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       testcases,
       autogradingResults,
       testPrepend,
+      isTeacherMode,
       handleTestcaseEval,
       setTaskTestcases,
       setTestPrepend
@@ -103,6 +104,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
                 key={index}
                 index={index}
                 testcase={testcase}
+                allowEdits={isTeacherMode}
                 setTestcaseProgram={setTestcaseProgramSetterCreator(index)}
                 setTestcaseExpectedResult={setTestcaseExpectedResultSetterCreator(index)}
                 deleteTestcase={deleteTestcase}
@@ -114,6 +116,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           <div className="noResults">There are no testcases provided for this question.</div>
         ),
       [
+        isTeacherMode,
         testcases,
         deleteTestcase,
         handleTestcaseEval,
@@ -183,14 +186,16 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           {resultCards}
         </Collapse>
 
-        {collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
-        <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
-          <TextArea
-            defaultValue={testPrepend}
-            onChange={(event: any) => setTestPrepend(event.target.value)}
-            fill={true}
-          />
-        </Collapse>
+        {isTeacherMode && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
+        {isTeacherMode && (
+          <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
+            <TextArea
+              defaultValue={testPrepend}
+              onChange={(event: any) => setTestPrepend(event.target.value)}
+              fill={true}
+            />
+          </Collapse>
+        )}
       </div>
     );
   };
