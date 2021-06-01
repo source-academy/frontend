@@ -54,7 +54,8 @@ const Sicp: React.FC<SicpProps> = props => {
     }
 
     if (section === 'test') {
-      setData(parseArr(testData as any[], refs));
+      const newData = parseArr(testData as any[], refs);
+      setData(newData);
       return;
     }
 
@@ -66,7 +67,8 @@ const Sicp: React.FC<SicpProps> = props => {
         return response.json();
       })
       .then(myJson => {
-        setData(parseArr(myJson, refs));
+        const newData = parseArr(myJson, refs);
+        setData(newData);
       })
       .catch(error => console.log(error));
   }, [section]);

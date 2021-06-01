@@ -10,7 +10,9 @@ type JsonType = {
   tag: string;
   body: string;
   output: string;
-  class: string;
+  scale: string;
+  snippet: JsonType;
+  table: JsonType;
   images: Array<JsonType>;
   src: string;
   captionHref: string;
@@ -47,11 +49,7 @@ const processingFunctions = {
 
   EXERCISE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleExercise(obj, refs),
 
-  FIGURE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <div ref={ref => (refs.current[obj['id']] = ref)}>
-      {obj['images'].map((x, index) => handleImage(x, refs, index))}
-    </div>
-  ),
+  FIGURE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleFigure(obj, refs),
 
   FOOTNOTE_REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <sup>{handleRef(obj, refs)}</sup>
@@ -210,6 +208,35 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   );
 };
 
+const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+  <div ref={ref => (refs.current[obj['id']] = ref)} className="sicp-figure">
+    {handleImage(obj, refs)}
+    {obj['captionName'] && (
+      <h5>
+        {obj['captionName']}
+        {parseArr(obj['captionBody'], refs)}
+      </h5>
+    )}
+  </div>
+);
+
+const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  if (obj['src']) {
+    return (
+      <div className={'sicp-figure'}>
+        {obj['src'] && <img src={Links.textbook + obj['src']} alt={obj['id']} />}
+      </div>
+    );
+  } else if (obj['snippet']) {
+    return processingFunctions['SNIPPET'](obj['snippet'], refs);
+  } else if (obj['table']) {
+    return processingFunctions['TABLE'](obj['table'], refs);
+  } else {
+    console.log('parseJson error: Figure has no image');
+    return <></>;
+  }
+};
+
 const handleTR = (obj: JsonType, refs: React.MutableRefObject<{}>, index: integer) => {
   return <tr key={index}>{obj['child'].map((x, index) => handleTD(x, refs, index))}</tr>;
 };
@@ -253,20 +280,6 @@ const handleLatex = (math: string, block: boolean) => {
   } else {
     return <MathJax inline>{math}</MathJax>;
   }
-};
-
-const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>, index: integer) => {
-  return (
-    <div key={index} className={'sicp-figure'}>
-      {obj['src'] && <img src={Links.textbook + obj['src']} alt={obj['id']} />}
-      {obj['captionName'] && (
-        <h5>
-          {obj['captionName']}
-          {parseArr(obj['captionBody'], refs)}
-        </h5>
-      )}
-    </div>
-  );
 };
 
 export const parseArr = (arr: Array<JsonType>, refs: React.MutableRefObject<{}>) => {

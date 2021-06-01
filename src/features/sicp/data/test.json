@@ -1,473 +1,67 @@
 [
   {
     "tag": "SUBSECTION",
-    "body": "3.5.5  \n    Modularity of Functional Programs and Modularity of Objects\n  ",
+    "body": "5.1.3  \n    Subroutines\n  ",
     "child": [
       {
         "tag": "TEXT",
         "id": "#p1",
         "child": [
-          { "tag": "#text", "body": "\n    As we saw in section " },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.1.2",
-            "body": "3.1.2",
-            "href": "/interactive-sicp/3.1.2"
-          },
           {
             "tag": "#text",
-            "body": ", one of\n    the major benefits of introducing assignment is that we can increase the\n    modularity of our systems by encapsulating, or \"hiding,\" parts\n    of the state of a large system within local variables.  Stream models can\n    provide an equivalent modularity without the use of assignment.  As an\n    illustration, we can reimplement the\n    "
+            "body": "\n    When designing a machine to perform a computation, we would often\n    prefer to arrange for components to be shared by different parts of\n    the computation rather than duplicate the components.  Consider a\n    machine that includes two GCD computations—one that finds the GCD of\n    the contents of registers "
           },
-          { "tag": "#text", "body": "\n    Monte Carlo estimation\n    of " },
-          { "tag": "LATEXINLINE", "body": "$\\pi$" },
-          { "tag": "#text", "body": ", which we examined in\n    section " },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.1.2",
-            "body": "3.1.2",
-            "href": "/interactive-sicp/3.1.2"
-          },
-          { "tag": "#text", "body": ", from a\n    stream-processing point of view.\n  " }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p2",
-        "child": [
+          { "tag": "JAVASCRIPTINLINE", "body": "a" },
+          { "tag": "#text", "body": " and\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "b" },
           {
             "tag": "#text",
-            "body": "\n    The key modularity issue was that we wished to hide the internal state\n    of a random-number generator from programs that used random numbers.\n    We began with a\n    "
+            "body": " and one that finds the\n    GCD of the contents of registers "
           },
+          { "tag": "JAVASCRIPTINLINE", "body": "c" },
+          { "tag": "#text", "body": " and\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "d" },
+          { "tag": "#text", "body": ".  We might start\n    by assuming we have a primitive " },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "#text", "body": " operation,\n    then expand the two instances of " },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "#text", "body": " in terms\n    of more primitive operations.\n    " },
           {
             "child": [
               {
                 "child": [
-                  { "tag": "#text", "body": "function " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "rand_update" },
-                  { "tag": "#text", "body": ",\n      " }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    whose successive values furnished our supply of random numbers, and used\n    this to produce a random-number generator:\n    "
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 1,
-            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtbr5EoVLtVqR+OHbFabXa2E0Suzw+oo9xGoq7fbHc73KyAHyga11judsscFHG0QSc2uWudkf1p0e4ej0CBoNKpnh0XZ3P5oe4MY0VicSi2Fer9eb7e7xX7+KHlEFodAA",
-            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDhpQA",
-            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBbAQwGsBTAfQCcGiATACgCUoAN7ZQ40ABsWZUAA9QAXlBdeVOmwpEKZANxiJHGQQ61BSgHwiDE23flKV3HmwIAHHgzIs+cgfvtA8SMyE1o5AKDxAF99aOwSGgBnWVUeR0ZWTmdBfWweCiS3SQYATz40wX98wuKyipyBaoKikvLKpt0gA",
-            "body": "function make_rand() {\n    let x = random_init;\n    return () => {\n               x = rand_update(x);\n               return x;\n           };\n}\nconst rand = make_rand();\n"
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p3",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    In the stream formulation there is no random-number generator "
-          },
-          { "tag": "EM", "child": [{ "tag": "#text", "body": "per\n    se" }] },
-          {
-            "tag": "#text",
-            "body": ", just a stream of random numbers produced by successive calls to\n    "
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "rand_update" },
-                  { "tag": "#text", "body": ":\n      " }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 2,
-            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtaGOCj1Px9EYKNpWTa7Uw9uRbOGs9GxEM7TXbbZ3KyAHy0MRAziR3ZMMso42iCRzcuRnPGcg0VyubWkfIsfjQ0jt7t8LPDvNzDAToA",
-            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDhpQA",
-            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsGMB7AOwGcAXUAJwEMiATAgWwH0iBXRgIwFNKTQAvNlAjQAB2oBLSgAoa9Js0lFJZADTDRW0DICUggHyhylbtRaNqYubTrM2YutTLc1VW4vZdeJXboDcuNwAbtQANswmZow2CixePHxuGAFAA",
-            "body": "const random_numbers =\n    pair(random_init,\n         () => stream_map(rand_update, random_numbers));\n"
-          },
-          {
-            "tag": "#text",
-            "body": "\n    We use this to construct the stream of outcomes of the Cesàro\n    experiment performed on consecutive pairs in the\n    "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "random_numbers" }] }] },
-          { "tag": "#text", "body": "\n    stream:\n    " },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 3,
-            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtaGOCj1Px9EYKNpWTa7Uw9uRbOGs9GxEM7TXbbZ3KyAHy0MRAziR3ZMMso42iCRzcuRnPGcg0VyubW6+RKFSJWS8F1zQxWwu2oEOp2lNms9k2AD8nQAXKA5wvDMjQP7l0HcFP9czOEx+DRBLJZLSXKR+MW6KPbJI5jHUBrRrddHRUH9S0kWwlhGWwxzmWCF2hUh234Xo6BYeDx1cata3wmt6zZZtO2fV93xoT9vxLGhbFXAiGIYgD6MY1i7RQtCMKwjjIy47CcJvdMxjSWQ2jYMRn1bVCWQLGtSJfN8PzoMhqN-WiywiAdvAbZtTw0rSGx3MU8LY0zB2zAwRzHbVSHyFhJLbBhbGEkkxNICSeLmXwJyAA",
-            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDklzqIQMElEkMiQomJWp1OCmiHUrojnoYdR1We16kMxIAfOgGA9iO7JjgU0DFfQmF1U+6o7JEGh9PpJdLODw+L52OQjV1pBr49qHnqDYkScTSWoAPylABcEB7fekgIgtsHDqAA",
-            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBbAQwAcB9AZwJJIFM22KAbtxZMGFAE5sAFHgA0oNgEpQAb2ygNocdzIFxtURJlSAFtwYATKUvlnL1stoZ0WZMQBtri77PWb-AZpSygC8AHz0zOycPHyCwoaSUn6BqWmacinp2f5sjuYubhSeeU6FHl7eigDc2AC+2CQ0eaAWEhQkJu467PnOoCFZjKwcXLz8QiJiSVLiAIzy4gBMoREA5iRW84srAyEhoAtZOdniDEQWVC5EBHQARtySNbjcAgzuvWVSbeIdXT2lAryJYABhqQA",
-            "body": "function map_successive_pairs(f, s) {\n    return pair(f(head(s), head(stream_tail(s))),\n                () => map_successive_pairs(\n                          f,\n                          stream_tail(stream_tail(s))));\n}\nconst dirichlet_stream =\n    map_successive_pairs((r1, r2) => gcd(r1, r2) === 1,\n                         random_numbers);\n"
-          },
-          { "tag": "#text", "body": "\n    The\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "dirichlet_stream" }] }] },
-          { "tag": "#text", "body": "\n    is now fed to a\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "monte_carlo" }] }] },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function," }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    which produces a stream of estimates of probabilities.  The results are then\n    converted into a stream of estimates of "
-          },
-          { "tag": "LATEXINLINE", "body": "$\\pi$" },
-          {
-            "tag": "#text",
-            "body": ".\n    This version of the program doesn't need a parameter telling how many\n    trials to perform.  Better estimates of "
-          },
-          { "tag": "LATEXINLINE", "body": "$\\pi$" },
-          {
-            "tag": "#text",
-            "body": "\n    (from performing more experiments) are obtained by looking farther into the\n    "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "pi" },
-          { "tag": "#text", "body": " stream:\n    " },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 4,
-            "program": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChslAIKgBuApgE4CeoAzgJYC2ADgDamjkCGAdgCYD6AVya9OAF3YAzQdwDGYugHtuoWYuaCJNUJ1DdBDAEYU8YSeXWgADKAAUdOS0H0yASlBjFoAExWrGADYrABYATisARhQIu10WTnIAc3YmckZSV1NQc0tdYk4ndgAPUENqBkEWBVZKB0TQOjFQAHdGgAsdVWUaMR4mzgAaLM5eXjrOtW4evtKBnT4PNtIVXoBrcbEljlIGTgdeE3xFSVAx4jox7nrG0upN9niklLSGUjRQAHV2Z1JeBqaluR2FlJIpyA0WE4elwFMpQMoWJQ5jw-rwvNxFE1ZPFGPNqFlpgoenRZAVQKlFEwKApSDQ0NhJj1QAxQABeHx+QIhcJRCIAblADO6-TZoAiESsKAwEQw3mCGD5QqmTUMooi3hQ8sV2GkclhKi4fCEInEpFsRXcAG9sKBbdsxIJyCpbLoAFSgEoAalK7gApMzFQBfXCMpqGtEMfgOG7s9WawIAdgAHKFtaGOCj1Px9EYKNpWTa7Uw9uRbOGs9GxEM7TXbbZ3KyAHy0MRAziR3ZMMso42iCRzcuRnPGcg0VyubW6+RKFSJWS8F1zQxWwu2oEOp2lNms9k2AD8nQAXKA5wvDMjQP7l0HcFP9czOEx+DRBLJZLSXKR+MW6KPbJI5jHUBrRrddHRUH9S0kWwlhGWwxzmWCF2hUh234Xo6BYeDx1cata3wmt6zZZtO2fV93xoT9vxLGhbFXAiGIYgD6MY1i7RQtCMKwjjIy47CcJvdMxjSWQ2jYMRn1bVCWQLGtSJfN8PzoMhqN-WiywiAdvAbZtTw0rSGx3MU8LY0zB2zAwRzHScZGnOEGGUCR+FJcgWEUWxSCKKkXmWCSeLmYtKN+OZJD2NheCtfD6LvGc9E8sRbECmhguyMLfhXBiwM3SDEs4IK-jAXL8tAb1Qsw9KTNM2siKbZlHK-Fy3PgqTOLCjyvIodJuD8lqGFwliqsG-CkpSsrwvHRUa2DUDSA3FQkPa7yup6ts+oG2sD24eKiuSv5vU01Lyoi9aa2PLaigSkbeBCtK9rFCdsGDJUmSYOhRR4-hO0S4iH02Z8AEdyASgJQDAJh+qGgiHO6hqEia4SSTE2bJNWuYrDRibcA+oFoNeuYJSsCcgA",
-            "prepend": "FDD0oAgQQg3BTATgTwgZwJYFsAOAbeCRAQwDsATAfQFcdziAXQgM2tIGMGMB7Uid7rmpM0EYhFLUsAIyRhIzRIIgAGCAAoMHPNUwIAlBAbcIAJhUqArADYVAFgCcKgIwBmZxvF5iiAOaEcRGx4fXkIRWVxWGIdQgAPCGlULGo8LnxkLV8IDAYIAHdcgAsxfl40BjI84gAaMOJycizSgVIKqsSasQojIvg+SoBrZoY+ongsYi1yOXAIbmYIJtgMJtJs3MTUUcJvPwCgrHgAOggAdUJdeHIcvL7EQjDmbkQcvB0Kki5eedI8ZC6ZBu5BMpG4eXY3mw3VQYXaXAqGHYMQggW4OCQXHgaGOwFaFQgWAgAF4zBYbPYnG5nABuCB48rVEkQZzOFSuSzOSymOyWGkMtp5aTM5ymVy8-nAVgcb58EgUGh0RjwdRxQwAb2AEG14wY1EQfHU4gAVBAEgBqRKGACkhP5AF8QPi8vKQVhKFpNqTReKbAB2AAcDklzqIQMElEkMiQomJWp1OCmiHUrojnoYdR1We16kMxIAfOgGA9iO7JjgU0DFfQmF1U+6o7JEGh9PpJdLODw+L52OQjV1pBr49qHnqDYkScTSWoAPylABcEB7fekgIgtsHDpAHdlhOIOEoaGo7HY2L08EoiYwzfUzC6LYgmqzo-1fCvyeY6j6DXULa6377T54FLShKgwPBf1bfRM2zWCs1zElC3LQ9j1PNBz0vJM0HUYc4LwvC71w-DiJ1ICQLAiCyPdCjIKgrdQyaIJ2CKAgGEPYtgKJOMs2Qo8TzPDAEEw69sJTZw61MPNC2XMSJLzKcWRgkjlPrSMpCbFsaSAA",
-            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBbGsgUwH0SBDAJwBsqAKJgA8ADk04U6TImRYBnMpybs6AGlDD2s2UwAmavOwrddASlABvUFevZroQqUo1QRIWT4atu-YeM6z5rZ21opkBJy0GhScHpraOqBgsV4JANT2vqYqQcG5eXxmALwAfPSMrBw8-PKKyixkvgIiYhJSMjVKdCbZeb19-Xae8T5GpiYA3DmgAL5ToeG0ABZKOk2i4pLScgqdJlN5APwubsnxoOkAjCN+ewMAXMeC7kPeGaNpoBcT2LPYJDTydQUUCFUAdOp0djCDwg0qQsiLOQAR047gAbIl1N19gNcgxpBUuLw+DpohQSItjO0dso1AAGekmb7YcF0FiKPAeChqC50ukTIA",
-            "body": "function monte_carlo(experiment_stream, passed, failed) {      \n    function next(passed, failed) {\n        return pair(passed / (passed + failed),\n                    () => monte_carlo(stream_tail(experiment_stream),\n                                      passed, failed));\n    }\n    return head(experiment_stream)\n           ? next(passed + 1, failed)\n           : next(passed, failed + 1);\n}\n\nconst pi = stream_map(p => math_sqrt(6 / p),\n                      monte_carlo(dirichlet_stream, 0, 0));\n"
-          },
-          { "tag": "#text", "body": "\n    There is considerable\n    " },
-          {
-            "tag": "#text",
-            "body": "\n    modularity in this approach, because we still\n    can formulate a general \n    "
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "monte_carlo" },
-                  { "tag": "#text", "body": " function\n      " }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    that can deal with arbitrary experiments.  Yet there is no assignment or\n    local state.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "EXERCISE",
-        "title": "Exercise 3.81",
-        "id": "#ex_3.81",
-        "child": [
-          { "tag": "#text", "body": "\n    Exercise " },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.6",
-            "body": "3.6",
-            "href": "/interactive-sicp/3.1.2#ex_3.6"
-          },
-          {
-            "tag": "#text",
-            "body": " discussed generalizing\n    the random-number generator to allow one to\n    "
-          },
-          {
-            "tag": "#text",
-            "body": "\n    reset the random-number sequence\n    so as to produce repeatable sequences of \"random\" numbers.\n    Produce a stream formulation of this same generator that operates on an\n    input stream of requests to\n    "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"generate\"" }] }] },
-          { "tag": "#text", "body": "\n    a new\n    random number or to\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "\"reset\"" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    the sequence to a\n    specified value and that produces the desired stream of random numbers.\n    Don't use assignment in your solution.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "EXERCISE",
-        "title": "Exercise 3.82",
-        "id": "#ex_3.82",
-        "child": [
-          { "tag": "#text", "body": "\n    Redo exercise " },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.5",
-            "body": "3.5",
-            "href": "/interactive-sicp/3.1.2#ex_3.5"
-          },
-          { "tag": "#text", "body": " on\n    " },
-          {
-            "tag": "#text",
-            "body": "\n    Monte Carlo integration in terms of streams.  The stream version of\n    "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "estimate_integral" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    will not have an argument telling how many trials to perform.  Instead, it\n    will produce a stream of estimates based on successively more trials.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "SUBHEADING",
-        "id": "#h1",
-        "child": [
-          { "child": [{ "tag": "#text", "body": "A functional-programming view of time" }] }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p4",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Let us now return to the issues of objects and state that were raised\n    at the beginning of this chapter and examine them in a new light.  We\n    introduced assignment and mutable objects to provide a mechanism for\n    modular construction of programs that model systems with state.\n    We constructed computational objects with local state variables and used\n    assignment to modify these variables.  We modeled the temporal behavior of\n    the objects in the world by the temporal behavior of the corresponding\n    computational objects.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p5",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Now we have seen that streams provide an alternative way to model\n    objects with local state.  We can model a changing quantity, such as\n    the local state of some object, using a stream that represents the\n    time history of successive states.  In essence, we represent time\n    explicitly, using streams, so that we decouple time in our simulated\n    world from the sequence of events that take place during evaluation.\n    Indeed, because of the presence of\n    "
-          },
-          {
-            "child": [{ "child": [{ "tag": "#text", "body": "\n\tdelayed evaluation\n      " }] }]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    there may be little relation between simulated time in the model and the\n    order of events during the evaluation.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p6",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    In order to contrast these two approaches to modeling, let us\n    reconsider the implementation of a \"withdrawal processor\" that\n    monitors the balance in a\n    "
-          },
-          { "tag": "#text", "body": "\n    bank account.  In\n    section " },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.1.3",
-            "body": "3.1.3",
-            "href": "/interactive-sicp/3.1.3"
-          },
-          {
-            "tag": "#text",
-            "body": " we implemented a\n    simplified version of such a processor:\n    "
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 5,
-            "eval": false,
-            "body": "function make_simplified_withdraw(balance) {\n    return amount => {\n               balance = balance - amount;\n               return balance;\n           };\n}"
-          },
-          { "tag": "#text", "body": "\n    Calls to\n    " },
-          {
-            "child": [
-              { "child": [{ "tag": "JAVASCRIPTINLINE", "body": "make_simplified_withdraw" }] }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    produce computational objects, each with a local state variable\n    "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "balance" },
-          {
-            "tag": "#text",
-            "body": " that is decremented by successive calls\n    to the object.  The object takes an "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "amount" },
-          {
-            "tag": "#text",
-            "body": " as\n    an argument and returns the new balance.  We can imagine the user of a bank\n    account typing a sequence of inputs to such an object and observing the\n    sequence of returned values shown on a display screen.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p7",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Alternatively, we can model a withdrawal processor as a\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "function" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    that takes as input a balance and a stream of amounts to withdraw and\n    produces the stream of successive balances in the account:\n    "
-          },
-          {
-            "tag": "SNIPPET",
-            "latex": false,
-            "id": 6,
-            "withoutPrepend": "chap=3&prgrm=PTAEGUEkGEAVQFLlAZgHQFZMChsDMBXAOwGMAXASwHsjQBnMgJwFMBDAWwH0B3CsgCwAmjVtwAUAI1YAbVqWYAaUByrEynBiw4BKUAG9Qho9iOgWZAo1oAHVhUaSZckopOn3HsboC8APnpMbFy8AsKiYm4eUdFGUrLyoAC0oPxsgmIqahqBOgqRMQWmmkGcZHbSGeyqROrFOtraANzGAL64JDQMoOwAnpyZNXSg3qDSFAylVNla7GJjDGIYAAxKAIxLK6AALEsNjdgdRF29-SQdWXXswwEzPHxCIuIATBtKJwNkdE0AkNjMAG4yaZBMTvM7VWo5dhKFBNIA",
-            "body": "function stream_withdraw(balance, amount_stream) {      \n    return pair(balance,\n                () => stream_withdraw(\n                          balance - head(amount_stream),\n                          stream_tail(amount_stream)));   \n}\n"
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "#text", "body": "\n\tThe function " },
-                  { "tag": "JAVASCRIPTINLINE", "body": "stream_withdraw" }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    implements a well-defined mathematical function whose output is fully\n    determined by its input.  Suppose, however, that the input\n    "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "amount_stream" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    is the stream of successive values typed by the user and that the resulting\n    stream of balances is displayed. Then, from the perspective of the user who\n    is typing values and watching results, the stream process has the same\n    behavior as the object created by\n    "
-          },
-          {
-            "child": [
-              {
-                "child": [
-                  { "tag": "JAVASCRIPTINLINE", "body": "make_simplified_withdraw" },
-                  { "tag": "#text", "body": ".\n      " }
-                ]
-              }
-            ]
-          },
-          {
-            "tag": "#text",
-            "body": "\n    However, with the stream version, there is no assignment, no local state\n    variable, and consequently none of the theoretical difficulties that we\n    encountered\n    "
-          },
-          { "tag": "#text", "body": "\n    in section " },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.1.3",
-            "body": "3.1.3",
-            "href": "/interactive-sicp/3.1.3"
-          },
-          { "tag": "#text", "body": ".  Yet the system\n    has state!\n  " }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p8",
-        "child": [
-          { "tag": "#text", "body": "\n    This is really remarkable.  Even though\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "stream_withdraw" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    implements a well-defined mathematical function whose behavior does not\n    change, the user's perception here is one of interacting with a system\n    that has a changing state.  One way to resolve this paradox is to realize\n    that it is the user's temporal existence that imposes state on the\n    system.  If the user could step back from the interaction and think in terms\n    of streams of balances rather than individual transactions, the system\n    would appear stateless."
-          },
-          {
-            "tag": "FOOTNOTE_REF",
-            "id": "footnote-link-1",
-            "body": "1",
-            "href": "/interactive-sicp/3.5.5#footnote-1"
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p9",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    From the point of view of one part of a complex process, the other parts\n    appear to change with time.  They have hidden time-varying local state.  If\n    we wish to write programs that model this kind of natural decomposition in\n    our world (as we see it from our viewpoint as a part of that world) with\n    structures in our computer, we make computational objects that are not\n    functional—they must change with time.  We model state with local\n    state variables, and we model the changes of state with assignments to\n    those variables.  By doing this we make the time of execution of a\n    computation model time in the world that we are part of, and thus we\n    get \"objects\" in our computer.\n  "
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p10",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    Modeling with objects is powerful and intuitive, largely because this\n    matches the perception of interacting with a world of which we are\n    part.  However, as we've seen repeatedly throughout this chapter,\n    these models raise thorny problems of constraining the order of events\n    and of synchronizing multiple processes.  The possibility of avoiding\n    these problems has stimulated the development of \n    "
-          },
-          {
-            "tag": "EM",
-            "child": [{ "tag": "#text", "body": "functional programming languages" }]
-          },
-          {
-            "tag": "#text",
-            "body": ", which do not include any\n    provision for assignment or mutable data.  In such a language, all\n    "
-          },
-          { "child": [{ "child": [{ "tag": "#text", "body": "functions" }] }] },
-          {
-            "tag": "#text",
-            "body": "\n    implement well-defined mathematical functions of their arguments,\n    whose behavior does not change.  The functional approach is extremely\n    attractive for dealing with\n    "
-          },
-          { "tag": "#text", "body": "\n    concurrent systems." },
-          {
-            "tag": "FOOTNOTE_REF",
-            "id": "footnote-link-2",
-            "body": "2",
-            "href": "/interactive-sicp/3.5.5#footnote-2"
-          }
-        ]
-      },
-      {
-        "tag": "TEXT",
-        "id": "#p11",
-        "child": [
-          {
-            "tag": "#text",
-            "body": "\n    On the other hand, if we look closely, we can see time-related problems\n    creeping into functional models as well.  One particularly troublesome area\n    arises when we wish to design interactive systems, especially ones that\n    model interactions between independent entities. For instance, consider once\n    more the implementation a banking system that permits joint bank accounts.\n    In a conventional system using assignment and objects, we would model the\n    fact that Peter and Paul share an account by having both Peter and Paul send\n    their transaction requests to the same bank-account object, as we saw in\n    section "
-          },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.1.3",
-            "body": "3.1.3",
-            "href": "/interactive-sicp/3.1.3"
-          },
-          {
-            "tag": "#text",
-            "body": ". From the stream point\n    of view, where there are no \"objects\""
-          },
-          { "tag": "EM", "child": [{ "tag": "#text", "body": "per se" }] },
-          {
-            "tag": "#text",
-            "body": ", we have\n    already indicated that a bank account can be modeled as a process that\n    operates on a stream of transaction requests to produce a stream of\n    responses.  Accordingly, we could model the fact that Peter and Paul have a\n    joint bank account by merging Peter's stream of transaction requests\n    with Paul's stream of requests and feeding the result to the\n    bank-account stream process, as shown in\n    figure "
-          },
-          {
-            "tag": "REF",
-            "id": "3.5.5-ex-link-3.38",
-            "body": "3.38",
-            "href": "/interactive-sicp/3.5.5#fig_3.38"
-          },
-          { "tag": "#text", "body": ".\n    " },
-          {
-            "child": [
-              {
-                "tag": "FIGURE",
-                "images": [{ "class": "scale_factor_", "src": "img_original/ch3-Z-G-60.svg" }]
-              }
-            ],
-            "tag": "FIGURE",
-            "images": [
-              {
-                "class": "scale_factor_",
-                "src": "img_original/ch3-Z-G-60.svg",
-                "id": "#fig_3.38",
-                "captionHref": "/interactive-sicp/3.5.5#fig_3.38",
-                "captionName": "Figure 3.38 ",
-                "captionBody": [
-                  { "tag": "#text", "body": "\n\tA joint\n\t" },
+                  { "tag": "#text", "body": "\n\tFigure " },
                   {
-                    "tag": "#text",
-                    "body": "\n\tbank account, modeled by merging two streams of transaction\n\trequests.\n      "
+                    "tag": "REF",
+                    "id": "5.1.3-ex-link-5.7",
+                    "body": "5.7",
+                    "href": "/interactive-sicp/5.1.3#fig_5.7"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tag": "#text",
+            "body": "\n    shows just the GCD portions of the resulting machine's data paths,\n    without showing how they connect to the rest of the machine.  The figure\n    also shows the corresponding portions of the machine's controller\n    sequence.\n    "
+          },
+          {
+            "child": [
+              {
+                "child": [
+                  {
+                    "tag": "FIGURE",
+                    "scale": "100%",
+                    "src": "img_javascript/Fig5.7b.std.svg",
+                    "id": "#fig_5.7",
+                    "captionHref": "/interactive-sicp/5.1.3#fig_5.7",
+                    "captionName": "Figure 5.7 ",
+                    "captionBody": [
+                      {
+                        "tag": "#text",
+                        "body": "Portions of the data paths and controller sequence for\n          a machine with two GCD computations."
+                      }
+                    ]
                   }
                 ]
               }
@@ -477,148 +71,255 @@
       },
       {
         "tag": "TEXT",
-        "id": "#p12",
+        "id": "#p2",
         "child": [
           {
             "tag": "#text",
-            "body": "\n    The trouble with this formulation is in the notion of "
+            "body": "\n    This machine has two remainder operation boxes and two boxes for\n    testing equality.  If the duplicated components are complicated, as is the\n    remainder box, this will not be an economical way to build the\n    machine.  We can avoid duplicating the data-path components by using\n    the same components for both GCD computations, provided that doing so\n    will not affect the rest of the larger machine's computation.  If the\n    values in registers "
           },
-          { "tag": "EM", "child": [{ "tag": "#text", "body": "merge" }] },
+          { "tag": "JAVASCRIPTINLINE", "body": "a" },
+          { "tag": "#text", "body": " and\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "b" },
+          { "tag": "#text", "body": " are not needed by the time the\n    controller gets to " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "gcd_2" }] }] },
           {
             "tag": "#text",
-            "body": ".  It\n    will not do to merge the two streams by simply taking alternately one\n    request from Peter and one request from Paul. Suppose Paul accesses\n    the account only very rarely.  We could hardly force Peter to wait for\n    Paul to access the account before he could issue a second transaction.\n    "
+            "body": " (or if these values\n    can be moved to other registers for safekeeping), we can change the machine\n    so that it uses registers "
           },
+          { "tag": "JAVASCRIPTINLINE", "body": "a" },
+          { "tag": "#text", "body": " and\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "b" },
+          { "tag": "#text", "body": ", rather than registers\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "c" },
+          { "tag": "#text", "body": " and " },
+          { "tag": "JAVASCRIPTINLINE", "body": "d" },
           {
             "tag": "#text",
-            "body": "\n    However such a merge is implemented, it must interleave the two\n    transaction streams in some way that is constrained by \"real\n    time\" as perceived by Peter and Paul, in the sense that, if Peter and\n    Paul meet, they can agree that certain transactions were processed\n    before the meeting, and other transactions were processed after the\n    meeting."
-          },
-          {
-            "tag": "FOOTNOTE_REF",
-            "id": "footnote-link-3",
-            "body": "3",
-            "href": "/interactive-sicp/3.5.5#footnote-3"
-          },
-          {
-            "tag": "#text",
-            "body": "\n    This is precisely the same constraint that we had to deal with in\n    section "
+            "body": ", in\n    computing the second GCD as well as the first.  If we do this, we obtain the\n    controller sequence shown in\n    figure "
           },
           {
             "tag": "REF",
-            "id": "3.5.5-ex-link-3.4.1",
-            "body": "3.4.1",
-            "href": "/interactive-sicp/3.4.1"
+            "id": "5.1.3-ex-link-5.8",
+            "body": "5.8",
+            "href": "/interactive-sicp/5.1.3#fig_5.8"
+          },
+          { "tag": "#text", "body": ".\n  " }
+        ]
+      },
+      {
+        "tag": "TEXT",
+        "id": "#p3",
+        "child": [
+          {
+            "tag": "#text",
+            "body": "\n    We have removed the duplicate data-path components (so that the data paths\n    are again as in figure "
+          },
+          {
+            "tag": "REF",
+            "id": "5.1.3-ex-link-5.1",
+            "body": "5.1",
+            "href": "/interactive-sicp/5.1#fig_5.1"
           },
           {
             "tag": "#text",
-            "body": ", where we found the need to\n    introduce explicit synchronization to ensure a \"correct\" order\n    of events in concurrent processing of objects with state.  Thus, in an\n    attempt to support the functional style, the need to merge inputs from\n    different agents reintroduces the same problems that the functional style\n    was meant to eliminate.\n  "
+            "body": "), but the\n    controller now has two GCD sequences that differ only in their entry-point\n    labels.  It would be better to replace these two sequences by branches to a\n    single sequence—a "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "subroutine" }] },
+          {
+            "tag": "#text",
+            "body": "—at the end of which we branch back to the\n    correct place in the main instruction sequence.  We can accomplish this as\n    follows: Before branching to "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          {
+            "tag": "#text",
+            "body": ", we place a\n    distinguishing value (such as 0 or 1) into a special register, \n    "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+          { "tag": "#text", "body": ".  At the end of the\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "#text", "body": " subroutine we return either to\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "after_gcd_1" }] }] },
+          { "tag": "#text", "body": " or to " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "after_gcd_2" }] }] },
+          { "tag": "#text", "body": ", depending\n    on the value of the " },
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+          { "tag": "#text", "body": " register.\n    Figure " },
+          {
+            "tag": "REF",
+            "id": "5.1.3-ex-link-5.9",
+            "body": "5.9",
+            "href": "/interactive-sicp/5.1.3#fig_5.9"
+          },
+          {
+            "tag": "#text",
+            "body": " shows the relevant portion\n    of the resulting controller sequence, which includes only a single copy of\n    the "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "#text", "body": " instructions.\n    " },
+          {
+            "tag": "FIGURE",
+            "snippet": {
+              "tag": "SNIPPET",
+              "latex": true,
+              "body": "\n\"gcd_1\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"after_gcd_1\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd_1\")),\n\"after_gcd_1\",\n  $\\vdots$\n\"gcd_2\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"after_gcd_2\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd_2\")),\n\"after_gcd_2\"\n\t"
+            },
+            "captionHref": "/interactive-sicp/5.1.3#fig_5.8",
+            "captionName": "Figure 5.8 ",
+            "captionBody": [
+              {
+                "tag": "#text",
+                "body": "Portions of the controller sequence for a machine that\n      uses the same data-path components for two different GCD\n      computations."
+              }
+            ]
+          },
+          {
+            "tag": "FIGURE",
+            "snippet": {
+              "tag": "SNIPPET",
+              "latex": true,
+              "body": "\n\"gcd\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"gcd_done\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd\")),\n\"gcd_done\",\n  test(list(op(\"=\"), reg(\"continue\"), constant(0))),\n  branch(label(\"after_gcd_1\")),\n  go_to(label(\"after_gcd_2\")),\n  $\\vdots$\n  // Before branching to \"gcd\" from the first place where\n  // it is needed, we place 0 in the \"continue\" register\n  assign(\"continue\", constant(0)),\n  go_to(label(\"gcd\")),\n\"after_gcd_1\",\n  $\\vdots$\n  // Before the second use of \"gcd\", we place 1 in the\n  // \"continue\" register\n  assign(\"continue\", constant(1)),\n  go_to(label(\"gcd\")),\n\"after_gcd_2\"\n\t"
+            },
+            "captionHref": "/interactive-sicp/5.1.3#fig_5.9",
+            "captionName": "Figure 5.9 ",
+            "captionBody": [
+              { "tag": "#text", "body": "\n\tUsing a " },
+              { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+              {
+                "tag": "#text",
+                "body": " register to avoid\n\tthe duplicate controller sequence in\n\tfigure "
+              },
+              {
+                "tag": "REF",
+                "id": "5.1.3-ex-link-5.8",
+                "body": "5.8",
+                "href": "/interactive-sicp/5.1.3#fig_5.8"
+              },
+              { "tag": "#text", "body": ".\n      " }
+            ]
+          },
+          {
+            "tag": "FIGURE",
+            "snippet": {
+              "tag": "SNIPPET",
+              "latex": true,
+              "body": "\n\"gcd\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"gcd_done\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd\")),\n\"gcd_done\",\n  go_to(reg(\"continue\")),\n  $\\vdots$\n  // Before calling \"gcd\", we assign to \"continue\"\n  // the label to which \"gcd\" should return.\n  assign(\"continue\", label(\"after_gcd_1\"))),\n  go_to(label(\"gcd\")),\n\"after_gcd_1\",\n  $\\vdots$\n  // Here is the second call to \"gcd\", with a different continuation.\n  assign(\"continue\", label(\"after_gcd_2\")),\n  go_to(label(\"gcd\")),\n\"after_gcd_2\"\n\t"
+            },
+            "captionHref": "/interactive-sicp/5.1.3#fig_5.10",
+            "captionName": "Figure 5.10 ",
+            "captionBody": [
+              { "tag": "#text", "body": "\n\tAssigning labels to the " },
+              { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+              {
+                "tag": "#text",
+                "body": " register\n\tsimplifies  and generalizes the strategy shown in\n\tfigure "
+              },
+              {
+                "tag": "REF",
+                "id": "5.1.3-ex-link-5.9",
+                "body": "5.9",
+                "href": "/interactive-sicp/5.1.3#fig_5.9"
+              },
+              { "tag": "#text", "body": ".\n      " }
+            ]
           }
         ]
       },
       {
         "tag": "TEXT",
-        "id": "#p13",
+        "id": "#p4",
         "child": [
           {
             "tag": "#text",
-            "body": "\n    We began this chapter with the goal of building computational models\n    whose structure matches our perception of the real world we are trying\n    to model.  We can model the world as a collection of separate,\n    time-bound, interacting objects with state, or we can model the world\n    as a single, timeless, stateless unity.  Each view has powerful\n    advantages, but neither view alone is completely satisfactory.  A\n    grand unification has yet to emerge."
+            "body": "\n    This is a reasonable approach for handling small problems, but it would be\n    awkward if there were many instances of GCD computations in the controller\n    sequence.  To decide where to continue executing after the\n    "
           },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
           {
-            "tag": "FOOTNOTE_REF",
-            "id": "footnote-link-4",
-            "body": "4",
-            "href": "/interactive-sicp/3.5.5#footnote-4"
+            "tag": "#text",
+            "body": " subroutine, we would need tests in the data\n    paths and branch instructions in the controller for all the places that use\n    "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          {
+            "tag": "#text",
+            "body": ". A more powerful method for implementing\n    subroutines is to have the "
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+          {
+            "tag": "#text",
+            "body": " register\n    hold the label of the entry point in the controller sequence at which\n    execution should continue when the subroutine is finished. Implementing this\n    strategy requires a new kind of connection between the data paths and the\n    controller of a register machine: There must be a way to assign to a\n    register a label in the controller sequence in such a way that this value\n    can be fetched from the register and used to continue execution at the\n    designated entry point.\n  "
           }
         ]
       },
       {
-        "tag": "DISPLAYFOOTNOTE",
-        "id": "#footnote-1",
-        "count": 1,
-        "href": "/interactive-sicp/3.5.5#footnote-link-1",
+        "tag": "TEXT",
+        "id": "#p5",
         "child": [
+          { "tag": "#text", "body": "\n    To reflect this ability, we will extend the\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "assign" },
           {
             "tag": "#text",
-            "body": "Similarly in physics, when we observe a\n    moving particle, we say that the position (state) of the particle is\n    changing.  However, from the perspective of the particle's \n    "
+            "body": "\n    instruction of the register-machine language to allow a register to be\n    assigned as value a label from the controller sequence (as a special\n    kind of constant).  We will also extend the\n    "
           },
-          { "tag": "#text", "body": "\n    world line in space-time there is no change involved." }
-        ]
-      },
-      {
-        "tag": "DISPLAYFOOTNOTE",
-        "id": "#footnote-2",
-        "count": 2,
-        "href": "/interactive-sicp/3.5.5#footnote-link-2",
-        "child": [
-          { "tag": "#text", "body": "John Backus, the\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "go_to" }] }] },
           {
             "tag": "#text",
-            "body": "\n    inventor of Fortran, gave high\n    visibility to functional programming when he was awarded the ACM Turing\n    award in 1978.  His acceptance speech\n    "
+            "body": "\n    instruction to allow execution to continue at the entry point described by\n    the contents of a register rather than only at an entry point described by\n    a constant label.  Using these new constructs we can terminate the\n    "
           },
-          { "tag": "#text", "body": "\n    (" },
-          { "child": [{ "tag": "#text", "body": "Backus 1978" }] },
+          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
           {
             "tag": "#text",
-            "body": ")\n    strongly advocated the functional approach.  A good overview of functional\n    programming is given in \n    "
+            "body": " subroutine with a branch to the location\n    stored in the "
           },
-          { "child": [{ "tag": "#text", "body": "Henderson 1980" }] },
-          { "tag": "#text", "body": " and in \n    " },
-          { "child": [{ "tag": "#text", "body": "Darlington, Henderson, and Turner 1982" }] },
-          { "tag": "#text", "body": "." }
-        ]
-      },
-      {
-        "tag": "DISPLAYFOOTNOTE",
-        "id": "#footnote-3",
-        "count": 3,
-        "href": "/interactive-sicp/3.5.5#footnote-link-3",
-        "child": [
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
           {
             "tag": "#text",
-            "body": "Observe that, for any two streams, there is in general\n    more than one\n    acceptable order of interleaving.  Thus, technically, \"merge\"\n    is a\n    "
-          },
-          {
-            "tag": "#text",
-            "body": "\n    relation rather than a function—the answer is not a\n    deterministic function of the inputs.  We already mentioned\n    (footnote "
-          },
-          {
-            "tag": "FOOTNOTE_REF",
-            "id": "3.5.5-foot-link-5",
-            "body": 5,
-            "href": "/interactive-sicp/3.4.1#footnote-5"
-          },
-          {
-            "tag": "#text",
-            "body": ") that nondeterminism\n    is essential when dealing with concurrency.  The merge relation illustrates\n    the same essential nondeterminism, from the functional perspective.\n    In section "
+            "body": " register.  This leads\n    to the controller sequence shown in\n    figure "
           },
           {
             "tag": "REF",
-            "id": "3.5.5-ex-link-4.3",
-            "body": "4.3",
-            "href": "/interactive-sicp/4.3"
+            "id": "5.1.3-ex-link-5.10",
+            "body": "5.10",
+            "href": "/interactive-sicp/5.1.3#fig_5.10"
           },
-          {
-            "tag": "#text",
-            "body": ", we\n    will look at nondeterminism from yet another point of view."
-          }
+          { "tag": "#text", "body": ".\n  " }
         ]
       },
       {
-        "tag": "DISPLAYFOOTNOTE",
-        "id": "#footnote-4",
-        "count": 4,
-        "href": "/interactive-sicp/3.5.5#footnote-link-4",
+        "tag": "TEXT",
+        "id": "#p6",
         "child": [
           {
             "tag": "#text",
-            "body": "The object model approximates\n    the world by dividing it into separate pieces.  The functional model does\n    not\n    "
+            "body": "\n    A machine with more than one subroutine could use multiple\n    continuation registers (e.g., "
           },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "gcd_continue" }] }] },
+          { "tag": "#text", "body": ",\n    " },
+          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "factorial_continue" }] }] },
           {
             "tag": "#text",
-            "body": "\n    modularize along object boundaries.  The object model is useful when\n    the unshared state of the \"objects\" is much larger than the\n    state that they share.  An example of a place where the object viewpoint\n    fails is \n    "
+            "body": ") or we could have all\n    subroutines share a single\n    "
           },
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
           {
             "tag": "#text",
-            "body": "\n    quantum mechanics, where thinking of things as individual particles leads\n    to paradoxes and confusions.  Unifying the object view with the\n    functional view may have little to do with programming, but rather\n    with fundamental epistemological issues."
+            "body": " register.  Sharing is more economical,\n    but we must be careful if we have a subroutine\n    ("
+          },
+          { "tag": "JAVASCRIPTINLINE", "body": "sub1" },
+          { "tag": "#text", "body": ") that calls another subroutine\n    (" },
+          { "tag": "JAVASCRIPTINLINE", "body": "sub2" },
+          { "tag": "#text", "body": ").  Unless\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "sub1" },
+          { "tag": "#text", "body": " saves the contents of\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+          { "tag": "#text", "body": " in some other register before setting\n    up " },
+          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
+          { "tag": "#text", "body": " for the call to\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "sub2" },
+          { "tag": "#text", "body": ", " },
+          { "tag": "JAVASCRIPTINLINE", "body": "sub1" },
+          {
+            "tag": "#text",
+            "body": " will\n    not know where to go when it is finished.  The mechanism developed in the\n    next section to handle recursion also provides a better solution to this\n    problem of nested subroutine calls.\n  "
           }
         ]
       }
