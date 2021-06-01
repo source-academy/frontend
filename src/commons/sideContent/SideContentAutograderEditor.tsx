@@ -30,7 +30,14 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
     const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-    const { testcases, autogradingResults, testPrepend, handleTestcaseEval, setTaskTestcases, setTestPrepend } = props;
+    const {
+      testcases,
+      autogradingResults,
+      testPrepend,
+      handleTestcaseEval,
+      setTaskTestcases,
+      setTestPrepend
+    } = props;
 
     const setTestcaseProgramSetterCreator = React.useCallback(
       (testcaseId: number) => {
@@ -170,7 +177,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           {testcaseCards}
           {createTestCaseButton}
         </Collapse>
-        
+
         {collapseButton('Autograder Results', showsResults, toggleResults)}
         <Collapse isOpen={showsResults} keepChildrenMounted={true}>
           {resultCards}
