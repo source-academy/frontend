@@ -452,17 +452,28 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     let j = 0;
     while (j < taskList.length) {
       const taskNumber = j + 1;
+      const qTaskNumber = 'Q' + taskNumber;
 
       if (taskNumber > cachedTaskList.length) {
-        filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[j].starterCode;
-        filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
+        filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].starterCode;
+        filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
       } else {
         if (taskList[j].savedCode !== cachedTaskList[j].savedCode) {
-          filenameToContentMap['Q' + taskNumber + '/SavedCode.js'] = taskList[j].savedCode;
+          filenameToContentMap[qTaskNumber + '/SavedCode.js'] = taskList[j].savedCode;
         }
 
         if (taskList[j].taskDescription !== cachedTaskList[j].taskDescription) {
-          filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[j].taskDescription;
+          filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
+        }
+
+        if (taskList[j].testCases !== cachedTaskList[j].testCases) {
+          filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
+            taskList[j].testCases
+          );
+        }
+
+        if (taskList[j].testPrepend !== cachedTaskList[j].testPrepend) {
+          filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[j].testPrepend;
         }
       }
 
