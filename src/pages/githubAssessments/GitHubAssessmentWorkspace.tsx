@@ -333,10 +333,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickPrevious = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      setTaskList(cachedTaskList);
       const newTaskNumber = currentTaskNumber - 1;
       setCurrentTaskNumber(newTaskNumber);
       setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
       handleEditorValueChange(getEditedCode(newTaskNumber));
+      handleUpdateHasUnsavedChanges(false);
     }
   }, [
     currentTaskNumber,
@@ -345,15 +347,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     cachedTaskList,
     shouldProceedToChangeTask,
     getEditedCode,
-    handleEditorValueChange
+    handleEditorValueChange,
+    handleUpdateHasUnsavedChanges
   ]);
 
   const onClickNext = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      setTaskList(cachedTaskList);
       const newTaskNumber = currentTaskNumber + 1;
       setCurrentTaskNumber(newTaskNumber);
       setTaskDescription(taskList[newTaskNumber - 1].taskDescription);
       handleEditorValueChange(getEditedCode(newTaskNumber));
+      handleUpdateHasUnsavedChanges(false);
     }
   }, [
     currentTaskNumber,
@@ -362,7 +367,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     cachedTaskList,
     shouldProceedToChangeTask,
     getEditedCode,
-    handleEditorValueChange
+    handleEditorValueChange,
+    handleUpdateHasUnsavedChanges
   ]);
 
   const onClickReturn = useCallback(() => {
