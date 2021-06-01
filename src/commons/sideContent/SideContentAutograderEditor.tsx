@@ -26,24 +26,30 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
     const { testcases, autogradingResults, handleTestcaseEval, setTaskTestcases } = props;
-    
-    const setTestcaseProgramCreator = React.useCallback((testcaseId: number) => {
-      return (newProgram: string) => {
-        const newTestcases = [...testcases];
-        newTestcases[testcaseId].program = newProgram;
-        newTestcases[testcaseId].result = undefined;
-        setTaskTestcases(newTestcases);
-      };
-    }, [setTaskTestcases, testcases]);
 
-    const setTestcaseExpectedResultCreator = React.useCallback((testcaseId: number) => {
-      return (newExpectedResult: string) => {
-        const newTestcases = [...testcases];
-        newTestcases[testcaseId].answer = newExpectedResult;
-        newTestcases[testcaseId].result = undefined;
-        setTaskTestcases(newTestcases);
-      };
-    }, [setTaskTestcases, testcases]);
+    const setTestcaseProgramCreator = React.useCallback(
+      (testcaseId: number) => {
+        return (newProgram: string) => {
+          const newTestcases = [...testcases];
+          newTestcases[testcaseId].program = newProgram;
+          newTestcases[testcaseId].result = undefined;
+          setTaskTestcases(newTestcases);
+        };
+      },
+      [setTaskTestcases, testcases]
+    );
+
+    const setTestcaseExpectedResultCreator = React.useCallback(
+      (testcaseId: number) => {
+        return (newExpectedResult: string) => {
+          const newTestcases = [...testcases];
+          newTestcases[testcaseId].answer = newExpectedResult;
+          newTestcases[testcaseId].result = undefined;
+          setTaskTestcases(newTestcases);
+        };
+      },
+      [setTaskTestcases, testcases]
+    );
 
     const testcaseCards = React.useMemo(
       () =>
