@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.1.2",
-    "@testing-library/react": "^11.2.6",
+    "@testing-library/react": "^11.2.7",
     "@types/acorn": "^4.0.5",
     "@types/common-tags": "^1.8.0",
     "@types/draft-js": "^0.11.2",
