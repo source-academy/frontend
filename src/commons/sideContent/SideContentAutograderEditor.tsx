@@ -1,4 +1,4 @@
-import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
+import { Button, Collapse, Icon, PopoverPosition, TextArea } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
@@ -14,19 +14,23 @@ export type SideContentAutograderEditorProps = DispatchProps & StateProps;
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
   setTaskTestcases: (newTestcases: Testcase[]) => void;
+  setTestPrepend: (newTestPrepend: string) => void;
 };
 
 type StateProps = {
   autogradingResults: AutogradingResult[];
   testcases: Testcase[];
+  testPrepend: string;
+  isTeacherMode: boolean;
 };
 
 const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograderEditorProps> =
   props => {
+    const [showsTestPrepend, setTestPrependShown] = React.useState<boolean>(true);
     const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
     const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-    const { testcases, autogradingResults, handleTestcaseEval, setTaskTestcases } = props;
+    const { testcases, autogradingResults, testPrepend, handleTestcaseEval, setTaskTestcases, setTestPrepend } = props;
 
     const setTestcaseProgramSetterCreator = React.useCallback(
       (testcaseId: number) => {
@@ -104,6 +108,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         ),
       [
         testcases,
+        deleteTestcase,
         handleTestcaseEval,
         setTestcaseProgramSetterCreator,
         setTestcaseExpectedResultSetterCreator
@@ -138,6 +143,10 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       [autogradingResults]
     );
 
+    const toggleTestPrepend = React.useCallback(() => {
+      setTestPrependShown(!showsTestPrepend);
+    }, [showsTestPrepend]);
+
     const toggleTestcases = React.useCallback(() => {
       setTestcasesShown(!showsTestcases);
     }, [showsTestcases]);
@@ -161,9 +170,19 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           {testcaseCards}
           {createTestCaseButton}
         </Collapse>
+        
         {collapseButton('Autograder Results', showsResults, toggleResults)}
         <Collapse isOpen={showsResults} keepChildrenMounted={true}>
           {resultCards}
+        </Collapse>
+
+        {collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
+        <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
+          <TextArea
+            defaultValue={testPrepend}
+            onChange={(event: any) => setTestPrepend(event.target.value)}
+            fill={true}
+          />
         </Collapse>
       </div>
     );
