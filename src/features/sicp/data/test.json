@@ -7,8 +7,15 @@
         "tag": "TEXT",
         "id": "#p1",
         "child": [
-          { "tag": "#text", "body": "\n    The expressive power of the class of\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tfunctions\n      " }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    The expressive power of the class of\n    "
+          },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n\tfunctions\n      " }] }
+            ]
+          },
           {
             "tag": "#text",
             "body": "\n    that we can define at this point is very limited, because we have no way to\n    make tests and to perform different operations depending on the result of a\n    test.\n    "
@@ -27,12 +34,26 @@
                   },
                   {
                     "tag": "LATEX",
-                    "body": "\\[\\begin{array}{lll}           |x| & = & \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x \\geq 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.       \\end{array}\\]"
+                    "body": "       \\[\\begin{array}{lll}           |x| & = & \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x \\geq 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.       \\end{array}\\]         "
                   },
-                  { "tag": "#text", "body": "\n        This construct is a\n\t" },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "case analysis" }] },
-                  { "tag": "#text", "body": " and can be expressed\n\tin JavaScript using a " },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "conditional expression" }] },
+                  {
+                    "tag": "#text",
+                    "body": "\n        This construct is a\n\t"
+                  },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "case analysis" }]
+                  },
+                  {
+                    "tag": "#text",
+                    "body": " and can be expressed\n\tin JavaScript using a "
+                  },
+                  {
+                    "tag": "EM",
+                    "child": [
+                      { "tag": "#text", "body": "conditional expression" }
+                    ]
+                  },
                   { "tag": "#text", "body": " as follows:\n        " },
                   {
                     "tag": "SNIPPET",
@@ -48,26 +69,32 @@
                   {
                     "tag": "SNIPPET",
                     "latex": true,
-                    "child": [
-                      { "tag": "META", "body": "$predicate$" },
-                      { "tag": "#text", "body": " ? " },
-                      { "tag": "META", "body": "$consequent$-$expression$" },
-                      { "tag": "#text", "body": " : " },
-                      { "tag": "META", "body": "$alternative$-$expression$" }
-                    ]
+                    "body": "\n$predicate$ ? $consequent$-$expression$ : $alternative$-$expression$\n          "
                   },
                   { "tag": "#text", "body": "\n        Conditional\n\t" },
-                  { "tag": "#text", "body": "\n\texpressions begin with a\n        " },
+                  {
+                    "tag": "#text",
+                    "body": "\n\texpressions begin with a\n        "
+                  },
                   { "tag": "META", "body": "$predicate$" },
                   {
                     "tag": "#text",
                     "body": "—that is, \n        an expression whose value is either\n\t"
                   },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "true" }] },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "true" }]
+                  },
                   { "tag": "#text", "body": " or " },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "false" }] },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "false" }]
+                  },
                   { "tag": "#text", "body": ", two distinguished\n\t" },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "boolean" }] },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "boolean" }]
+                  },
                   {
                     "tag": "#text",
                     "body": " values in JavaScript.\n\tThe primitive boolean expressions\n\t"
@@ -85,7 +112,10 @@
                     "body": " \n        is followed by a question mark, the \n        "
                   },
                   { "tag": "META", "body": "$consequent$-$expression$" },
-                  { "tag": "#text", "body": ", \n        a colon, and finally the\n        " },
+                  {
+                    "tag": "#text",
+                    "body": ", \n        a colon, and finally the\n        "
+                  },
                   { "tag": "META", "body": "$alternative$-$expression$" },
                   { "tag": "#text", "body": ".\n      " }
                 ]
@@ -108,7 +138,10 @@
                     "body": "\n\tevaluate a conditional expression,\n\tthe interpreter starts by evaluating the \n        "
                   },
                   { "tag": "META", "body": "$predicate$" },
-                  { "tag": "#text", "body": " \n        of the expression. If the\n\t" },
+                  {
+                    "tag": "#text",
+                    "body": " \n        of the expression. If the\n\t"
+                  },
                   { "tag": "META", "body": "$predicate$" },
                   {
                     "tag": "#text",
@@ -120,7 +153,10 @@
                     "body": " and returns its value as the value of the conditional.\n        If the "
                   },
                   { "tag": "META", "body": "$predicate$" },
-                  { "tag": "#text", "body": "\n\tevaluates to false, it evaluates the\n        " },
+                  {
+                    "tag": "#text",
+                    "body": "\n\tevaluates to false, it evaluates the\n        "
+                  },
                   { "tag": "META", "body": "$alternative$-$expression$" },
                   {
                     "tag": "#text",
@@ -147,7 +183,10 @@
                 "id": "#p3",
                 "child": [
                   { "tag": "#text", "body": "\n        The word\n        " },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "predicate" }] },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "predicate" }]
+                  },
                   {
                     "tag": "#text",
                     "body": " is used for operators and functions that\n\treturn true or false, as well as for expressions that\n\tevaluate to true or false. The absolute-value function\n\t"
@@ -177,7 +216,7 @@
               },
               {
                 "tag": "LATEX",
-                "body": "\\[\\begin{array}{lll}           |x| &=& \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x > 0$} \\\\           0   & \\mbox{if $x = 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.           \\end{array}\\]"
+                "body": "       \\[\\begin{array}{lll}           |x| &=& \\left\\{ \\begin{array}{rl}           x   & \\mbox{if $x > 0$} \\\\           0   & \\mbox{if $x = 0$} \\\\           -x  & \\mbox{otherwise}           \\end{array}           \\right.           \\end{array}\\]         "
               },
               {
                 "tag": "#text",
@@ -214,25 +253,14 @@
               {
                 "tag": "SNIPPET",
                 "latex": true,
-                "child": [
-                  { "tag": "META", "body": "$p$" },
-                  { "tag": "#text", "body": "$_1$\n? " },
-                  { "tag": "META", "body": "$e$" },
-                  { "tag": "#text", "body": "$_1$\n: " },
-                  { "tag": "META", "body": "$p$" },
-                  { "tag": "#text", "body": "$_2$\n? " },
-                  { "tag": "META", "body": "$e$" },
-                  { "tag": "#text", "body": "$_2$\n$\\vdots$\n: " },
-                  { "tag": "META", "body": "$p$" },
-                  { "tag": "#text", "body": "$_n$\n? " },
-                  { "tag": "META", "body": "$e$" },
-                  { "tag": "#text", "body": "$_n$\n: " },
-                  { "tag": "META", "body": "$final$-$alternative$-$expression$" }
-                ]
+                "body": "\n$p$$_1$\n? $e$$_1$\n: $p$$_2$\n? $e$$_2$\n$\\vdots$\n: $p$$_n$\n? $e$$_n$\n: $final$-$alternative$-$expression$\n\t  "
               },
               { "tag": "#text", "body": "\n\tWe call a predicate " },
               { "tag": "LATEXINLINE", "body": "$p_i$" },
-              { "tag": "#text", "body": "\n\ttogether with its consequent expression\n\t" },
+              {
+                "tag": "#text",
+                "body": "\n\ttogether with its consequent expression\n\t"
+              },
               { "tag": "LATEXINLINE", "body": "$e_i$" },
               { "tag": "#text", "body": "\n\ta\n\t" },
               { "tag": "EM", "child": [{ "tag": "#text", "body": "clause" }] },
@@ -297,7 +325,10 @@
                   { "tag": "JAVASCRIPTINLINE", "body": "===" },
                   { "tag": "#text", "body": ", and\n        " },
                   { "tag": "JAVASCRIPTINLINE", "body": "!==" },
-                  { "tag": "#text", "body": " that are applied to\n\tnumbers," },
+                  {
+                    "tag": "#text",
+                    "body": " that are applied to\n\tnumbers,"
+                  },
                   {
                     "tag": "FOOTNOTE_REF",
                     "id": "footnote-link-2",
@@ -320,10 +351,15 @@
                           { "tag": "META", "body": "$expression$" },
                           { "tag": "LATEXINLINE", "body": "$_2$" },
                           { "tag": "BR" },
-                          { "tag": "#text", "body": "\n\t    This operation expresses\n\t    " },
+                          {
+                            "tag": "#text",
+                            "body": "\n\t    This operation expresses\n\t    "
+                          },
                           {
                             "tag": "EM",
-                            "child": [{ "tag": "#text", "body": "logical conjunction" }]
+                            "child": [
+                              { "tag": "#text", "body": "logical conjunction" }
+                            ]
                           },
                           {
                             "tag": "#text",
@@ -355,10 +391,15 @@
                           { "tag": "META", "body": "$expression$" },
                           { "tag": "LATEXINLINE", "body": "$_2$" },
                           { "tag": "BR" },
-                          { "tag": "#text", "body": "\n\t    This operation expresses\n\t    " },
+                          {
+                            "tag": "#text",
+                            "body": "\n\t    This operation expresses\n\t    "
+                          },
                           {
                             "tag": "EM",
-                            "child": [{ "tag": "#text", "body": "logical disjunction" }]
+                            "child": [
+                              { "tag": "#text", "body": "logical disjunction" }
+                            ]
                           },
                           {
                             "tag": "#text",
@@ -380,10 +421,15 @@
                           { "tag": "JAVASCRIPTINLINE", "body": "!" },
                           { "tag": "META", "body": "$expression$" },
                           { "tag": "BR" },
-                          { "tag": "#text", "body": "\n\t    This operation expresses\n\t    " },
+                          {
+                            "tag": "#text",
+                            "body": "\n\t    This operation expresses\n\t    "
+                          },
                           {
                             "tag": "EM",
-                            "child": [{ "tag": "#text", "body": "logical negation" }]
+                            "child": [
+                              { "tag": "#text", "body": "logical negation" }
+                            ]
                           },
                           {
                             "tag": "#text",
@@ -402,7 +448,10 @@
                   { "tag": "JAVASCRIPTINLINE", "body": "&&" },
                   { "tag": "#text", "body": " and \n        " },
                   { "tag": "JAVASCRIPTINLINE", "body": "||" },
-                  { "tag": "#text", "body": " are syntactic forms,\n\tnot operators;\n\t" },
+                  {
+                    "tag": "#text",
+                    "body": " are syntactic forms,\n\tnot operators;\n\t"
+                  },
                   {
                     "tag": "#text",
                     "body": "\n\ttheir right-hand\n        expression is not always evaluated. The operator\n        "
@@ -419,16 +468,31 @@
                     "href": "/interactive-sicp/1.1.3"
                   },
                   { "tag": "#text", "body": ".\n        It is a " },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "unary" }] },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "unary" }]
+                  },
                   {
                     "tag": "#text",
                     "body": " operator, which means that it takes only\n\tone argument, whereas the arithmetic operators and primitive predicates\n\tdiscussed so far\n\tare "
                   },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "binary" }] },
-                  { "tag": "#text", "body": ", taking two arguments. The operator\n        " },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "binary" }]
+                  },
+                  {
+                    "tag": "#text",
+                    "body": ", taking two arguments. The operator\n        "
+                  },
                   { "tag": "JAVASCRIPTINLINE", "body": "!" },
-                  { "tag": "#text", "body": " precedes its argument;\n\twe call it a\n        " },
-                  { "tag": "EM", "child": [{ "tag": "#text", "body": "prefix operator" }] },
+                  {
+                    "tag": "#text",
+                    "body": " precedes its argument;\n\twe call it a\n        "
+                  },
+                  {
+                    "tag": "EM",
+                    "child": [{ "tag": "#text", "body": "prefix operator" }]
+                  },
                   {
                     "tag": "#text",
                     "body": ". Another prefix operator is\n\tthe numeric negation operator, an example of\n\twhich is the expression "
@@ -459,8 +523,16 @@
                   { "tag": "#text", "body": " be in the range\n\t" },
                   { "tag": "LATEXINLINE", "body": "$5 < x < 10$" },
                   { "tag": "#text", "body": " may be expressed as\n        " },
-                  { "tag": "SNIPPET", "latex": false, "id": 3, "body": "x > 5 && x < 10" },
-                  { "tag": "#text", "body": "\n        The syntactic form\n\t" },
+                  {
+                    "tag": "SNIPPET",
+                    "latex": false,
+                    "id": 3,
+                    "body": "x > 5 && x < 10"
+                  },
+                  {
+                    "tag": "#text",
+                    "body": "\n        The syntactic form\n\t"
+                  },
                   { "tag": "JAVASCRIPTINLINE", "body": "&&" },
                   {
                     "tag": "#text",
@@ -495,10 +567,20 @@
         "id": "#p6",
         "child": [
           { "tag": "#text", "body": "\n    As another example, we can\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tdeclare\n      " }] }] },
-          { "tag": "#text", "body": "\n    a predicate to test whether one number is \n    " },
+          {
+            "child": [
+              { "child": [{ "tag": "#text", "body": "\n\tdeclare\n      " }] }
+            ]
+          },
+          {
+            "tag": "#text",
+            "body": "\n    a predicate to test whether one number is \n    "
+          },
           { "child": [] },
-          { "tag": "#text", "body": "\n    greater than or equal to another as    \n    " },
+          {
+            "tag": "#text",
+            "body": "\n    greater than or equal to another as    \n    "
+          },
           {
             "tag": "SNIPPET",
             "latex": false,
@@ -542,12 +624,24 @@
         "id": "#ex_1.1",
         "child": [
           { "tag": "#text", "body": "\n    Below is a sequence of\n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tstatements.\n      " }] }] },
+          {
+            "child": [
+              {
+                "child": [{ "tag": "#text", "body": "\n\tstatements.\n      " }]
+              }
+            ]
+          },
           {
             "tag": "#text",
             "body": "\n    What is the result printed by the interpreter in response to each\n    "
           },
-          { "child": [{ "child": [{ "tag": "#text", "body": "\n\tstatement?\n      " }] }] },
+          {
+            "child": [
+              {
+                "child": [{ "tag": "#text", "body": "\n\tstatement?\n      " }]
+              }
+            ]
+          },
           {
             "tag": "#text",
             "body": "\n    Assume that the sequence is to be evaluated in the order\n    in which it is presented.\n    "
@@ -661,8 +755,14 @@
             "tag": "#text",
             "body": "\n\tThe parentheses around the conditional expressions in the last two statements\n\tare necessary because the\n\t"
           },
-          { "tag": "#text", "body": "\n\tconditional-expression syntactic form has lower\n\t" },
-          { "tag": "#text", "body": "\n\tprecedence than the arithmetic operators\n\t" },
+          {
+            "tag": "#text",
+            "body": "\n\tconditional-expression syntactic form has lower\n\t"
+          },
+          {
+            "tag": "#text",
+            "body": "\n\tprecedence than the arithmetic operators\n\t"
+          },
           { "tag": "JAVASCRIPTINLINE", "body": "+" },
           { "tag": "#text", "body": " and\n\t" },
           { "tag": "JAVASCRIPTINLINE", "body": "*" },
@@ -674,11 +774,22 @@
         "title": "Exercise 1.2",
         "id": "#ex_1.2",
         "child": [
-          { "tag": "#text", "body": "\n    Translate the following expression into \n    " },
-          { "child": [{ "child": [{ "tag": "#text", "body": "\n        JavaScript\n      " }] }] },
+          {
+            "tag": "#text",
+            "body": "\n    Translate the following expression into \n    "
+          },
+          {
+            "child": [
+              {
+                "child": [
+                  { "tag": "#text", "body": "\n        JavaScript\n      " }
+                ]
+              }
+            ]
+          },
           {
             "tag": "LATEX",
-            "body": "\\[       \\begin{array}{l}       \\dfrac{5+4+\\left(2-\\left(3-(6+\\frac{4}{5})\\right)\\right)}{3 (6-2) (2-7)}       \\end{array}       \\]"
+            "body": "       \\[       \\begin{array}{l}       \\dfrac{5+4+\\left(2-\\left(3-(6+\\frac{4}{5})\\right)\\right)}{3 (6-2) (2-7)}       \\end{array}       \\]     "
           }
         ],
         "solution": [
@@ -697,7 +808,13 @@
         "id": "#ex_1.3",
         "child": [
           {
-            "child": [{ "child": [{ "tag": "#text", "body": "\n\tDeclare a function\n      " }] }]
+            "child": [
+              {
+                "child": [
+                  { "tag": "#text", "body": "\n\tDeclare a function\n      " }
+                ]
+              }
+            ]
           },
           {
             "tag": "#text",
@@ -780,7 +897,10 @@
               }
             ]
           },
-          { "tag": "#text", "body": "\n\t  Thus the evaluation of the application \n\t  " },
+          {
+            "tag": "#text",
+            "body": "\n\t  Thus the evaluation of the application \n\t  "
+          },
           { "tag": "JAVASCRIPTINLINE", "body": "a_plus_abs_b(5, -4)" },
           { "tag": "#text", "body": "\n\t  (1) evaluates " },
           { "tag": "JAVASCRIPTINLINE", "body": "a_plus_abs_b" },
@@ -788,7 +908,10 @@
             "tag": "#text",
             "body": ",\n\t  resulting in the function given above, and the arguments are\n\t  already values. So we need to evaluate (2) the return expression\n\t  of the function, with the parameters replaced by the arguments, thus:\n\t  "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "(-4 >= 0 ? plus : minus)(5, -4)" },
+          {
+            "tag": "JAVASCRIPTINLINE",
+            "body": "(-4 >= 0 ? plus : minus)(5, -4)"
+          },
           {
             "tag": "#text",
             "body": ".\n\t  With the same rules, we need to (1) evaluate the function expression,\n\t  which in this case is the conditional expression\n\t  "
@@ -813,7 +936,10 @@
             "body": " replaced by 5 and -4,\n\t  respectively, resulting in\n\t  "
           },
           { "tag": "JAVASCRIPTINLINE", "body": "5 - (-4)" },
-          { "tag": "#text", "body": ", which will finally\n\t  evaluate to 9.\n\t" }
+          {
+            "tag": "#text",
+            "body": ", which will finally\n\t  evaluate to 9.\n\t"
+          }
         ]
       },
       {
@@ -833,7 +959,10 @@
             "child": [
               {
                 "child": [
-                  { "tag": "#text", "body": "\n\tdeclares the following two functions\n      " }
+                  {
+                    "tag": "#text",
+                    "body": "\n\tdeclares the following two functions\n      "
+                  }
                 ]
               }
             ]
@@ -861,10 +990,20 @@
             "tag": "#text",
             "body": "\n      What behavior will Ben observe with an interpreter that uses\n      applicative-order evaluation?  What behavior will he observe with an\n      interpreter that uses normal-order evaluation?  Explain your answer.\n      "
           },
-          { "tag": "#text", "body": "\n      (Assume that the evaluation rule for \n      " },
+          {
+            "tag": "#text",
+            "body": "\n      (Assume that the evaluation rule for \n      "
+          },
           {
             "child": [
-              { "child": [{ "tag": "#text", "body": "\n          conditional expressions\n\t" }] }
+              {
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n          conditional expressions\n\t"
+                  }
+                ]
+              }
             ]
           },
           {
@@ -877,7 +1016,10 @@
             "child": [
               {
                 "child": [
-                  { "tag": "#text", "body": "\n\t    In applicative-order evaluation of\n\t    " },
+                  {
+                    "tag": "#text",
+                    "body": "\n\t    In applicative-order evaluation of\n\t    "
+                  },
                   { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
                   {
                     "tag": "#text",
@@ -894,7 +1036,10 @@
                     "body": "\n\t    will not terminate, however: It will keep evaluating application\n\t    expressions of the form \n\t    "
                   },
                   { "tag": "JAVASCRIPTINLINE", "body": "p()" },
-                  { "tag": "#text", "body": ", and thus the evaluation of\n            " },
+                  {
+                    "tag": "#text",
+                    "body": ", and thus the evaluation of\n            "
+                  },
                   { "tag": "JAVASCRIPTINLINE", "body": "test(0, p())" },
                   {
                     "tag": "#text",
@@ -908,7 +1053,10 @@
                   { "tag": "JAVASCRIPTINLINE", "body": "test" },
                   { "tag": "#text", "body": ",\n\t    " },
                   { "tag": "JAVASCRIPTINLINE", "body": "x === 0 ? 0 : y" },
-                  { "tag": "#text", "body": "\n\t    after replacing the parameter\n\t    " },
+                  {
+                    "tag": "#text",
+                    "body": "\n\t    after replacing the parameter\n\t    "
+                  },
                   { "tag": "JAVASCRIPTINLINE", "body": "x" },
                   { "tag": "#text", "body": " with\n\t    " },
                   { "tag": "JAVASCRIPTINLINE", "body": "0" },
@@ -921,7 +1069,10 @@
                     "body": ".\n\t    The result of the replacing would be\n\t    "
                   },
                   { "tag": "JAVASCRIPTINLINE", "body": "0 === 0 ? 0 : p()" },
-                  { "tag": "#text", "body": ".\n\t    The evaluation of the predicate\n\t    " },
+                  {
+                    "tag": "#text",
+                    "body": ".\n\t    The evaluation of the predicate\n\t    "
+                  },
                   { "tag": "JAVASCRIPTINLINE", "body": "0 === 0" },
                   {
                     "tag": "#text",
@@ -945,7 +1096,10 @@
             "tag": "#text",
             "body": "\n\tother values of the predicate in conditionals\n\tare automatically converted to true or false\n        according to\n\t"
           },
-          { "tag": "EM", "child": [{ "tag": "#text", "body": "conversion rules" }] },
+          {
+            "tag": "EM",
+            "child": [{ "tag": "#text", "body": "conversion rules" }]
+          },
           {
             "tag": "#text",
             "body": ", but we choose not to make\n\tuse of these conversion rules in this book."
@@ -974,7 +1128,10 @@
             "body": "3.3.1",
             "href": "/interactive-sicp/3.3.1"
           },
-          { "tag": "#text", "body": ", we shall\n\tgeneralize the predicate\n\t" },
+          {
+            "tag": "#text",
+            "body": ", we shall\n\tgeneralize the predicate\n\t"
+          },
           { "tag": "JAVASCRIPTINLINE", "body": "===" },
           { "tag": "#text", "body": "." }
         ]
@@ -988,8 +1145,14 @@
             "tag": "#text",
             "body": "\n            Syntactic forms that are simply convenient\n            alternative surface structures for things that can be written in more\n            uniform ways are sometimes called "
           },
-          { "tag": "EM", "child": [{ "tag": "#text", "body": "syntactic sugar" }] },
-          { "tag": "#text", "body": ", to use a\n            phrase coined by \n            " },
+          {
+            "tag": "EM",
+            "child": [{ "tag": "#text", "body": "syntactic sugar" }]
+          },
+          {
+            "tag": "#text",
+            "body": ", to use a\n            phrase coined by \n            "
+          },
           { "tag": "#text", "body": "\n\t    Peter Landin.\t    \n\t    " }
         ]
       }

@@ -23,7 +23,7 @@ export const CodeSnippetContext = React.createContext({
 });
 
 const Sicp: React.FC<SicpProps> = props => {
-  const [data, setData] = React.useState(<SicpLoadingPage />);
+  const [data, setData] = React.useState(<></>);
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
   const topRef = React.useRef<HTMLDivElement>(null);
@@ -86,7 +86,9 @@ const Sicp: React.FC<SicpProps> = props => {
   };
 
   const mathjaxConfig = {
+    loader: { load: ["[tex]/html"] },
     tex: {
+      packages: { "[+]": ["html"] },
       inlineMath: [
         ['$', '$'],
         ['\\(', '\\)']

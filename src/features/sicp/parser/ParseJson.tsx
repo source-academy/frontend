@@ -34,7 +34,7 @@ const processingFunctions = {
 
   B: (obj: JsonType, refs: React.MutableRefObject<{}>) => <b>{parseArr(obj['child'], refs)}</b>,
 
-  BR: (_obj: JsonType, refs: React.MutableRefObject<{}>) => <br />,
+  BR: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => <br />,
 
   CHAPTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
@@ -90,11 +90,11 @@ const processingFunctions = {
 
   SECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
-  SNIPPET: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
     if (obj['latex']) {
       return (
         <pre>
-          <code>{parseArr(obj['child'], refs)}</code>
+          <code>{handleLatex(obj['body'], true)}</code>
         </pre>
       );
     } else {
