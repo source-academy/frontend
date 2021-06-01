@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import MissionMetadata from '../../githubAssessments/MissionMetadata';
+import { MissionMetadata } from '../../githubAssessments/GitHubMissionTypes';
 import SideContentMissionEditor from '../SideContentMissionEditor';
 
 test('typing into SideContentMissionEditor text boxes triggers setter function', () => {
