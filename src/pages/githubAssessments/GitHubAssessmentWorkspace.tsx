@@ -738,6 +738,15 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ...editedTaskList[currentTaskNumber - 1],
         testCases: newTestcases
       };
+
+      handleResetWorkspace({
+        autogradingResults: autogradingResults,
+        editorValue: editedTaskList[currentTaskNumber - 1].savedCode,
+        editorPrepend: editedTaskList[currentTaskNumber - 1].testPrepend,
+        editorPostpend: '',
+        editorTestcases: editedTaskList[currentTaskNumber - 1].testCases
+      });
+
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },

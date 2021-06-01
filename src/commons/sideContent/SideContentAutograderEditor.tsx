@@ -73,6 +73,29 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       [testcases, handleTestcaseEval, setTestcaseProgramCreator, setTestcaseExpectedResultCreator]
     );
 
+    const addTestcase = React.useCallback(() => {
+      const newTestcases = [...testcases];
+      newTestcases.push({
+        answer: "",
+        program: "",
+        score: 0,
+        type: "public"
+      });
+      console.log(newTestcases);
+      setTaskTestcases(newTestcases);
+    }, [testcases, setTaskTestcases]); 
+
+    const createTestCaseButton = React.useMemo(
+      () =>
+      <Button
+        className="collapse-button"
+        icon={IconNames.ADD}
+        minimal={true}
+        text={"Add a new testcase"}
+        onClick={addTestcase}
+      />
+    , [addTestcase]);
+
     const resultCards = React.useMemo(
       () =>
         autogradingResults.length > 0 ? (
@@ -109,6 +132,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         </Button>
         <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
           {testcaseCards}
+          {createTestCaseButton}
         </Collapse>
         {collapseButton('Autograder Results', showsResults, toggleResults)}
         <Collapse isOpen={showsResults} keepChildrenMounted={true}>
