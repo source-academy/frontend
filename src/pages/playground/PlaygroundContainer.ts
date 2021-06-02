@@ -90,7 +90,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
-  githubOctokitInstance: state.session.githubOctokitInstance,
+  githubOctokitObject: state.session.githubOctokitObject,
   githubSaveInfo: state.playground.githubSaveInfo
 });
 

@@ -1,5 +1,6 @@
 import { Context } from 'js-slang';
 
+import { GitHubAssessmentWorkspaceState } from '../../features/githubAssessment/GitHubAssessmentTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -73,6 +74,7 @@ export type WorkspaceManagerState = {
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
+  readonly githubAssessment: GitHubAssessmentWorkspaceState;
 };
 
 export type WorkspaceState = {
