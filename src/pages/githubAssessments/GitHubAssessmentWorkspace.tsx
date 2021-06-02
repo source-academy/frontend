@@ -129,6 +129,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     history.push('/githubassessments/missions');
   }
 
+  const defaultMissionBriefing =
+    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
+
+  const defaultTaskDescription =
+    'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
+
+  const defaultStarterCode = '// Your code here!\n';
+
   const defaultMissionMetadata = useMemo<MissionMetadata>(() => {
     return {
       coverImage: '',
@@ -142,13 +150,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     } as MissionMetadata;
   }, []);
 
-  const defaultMissionBriefing =
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
-
-  const defaultTaskDescription =
-    'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
-
-  const defaultStarterCode = '// Your code here!\n';
+  const defaultTask = useMemo<TaskData>(() => {
+    return {
+      questionNumber: 0,
+      taskDescription: defaultTaskDescription,
+      starterCode: defaultStarterCode,
+      savedCode: defaultStarterCode,
+      testPrepend: '',
+      testPostpend: '',
+      testCases: []
+    } as TaskData;
+  }, []);
 
   const [showOverlay, setShowOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
@@ -238,7 +250,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       autogradingResults: autogradingResults,
       editorValue: missionData.tasksData[0].savedCode,
       editorPrepend: missionData.tasksData[0].testPrepend,
-      editorPostpend: '',
+      editorPostpend: missionData.tasksData[0].testPostpend,
       editorTestcases: missionData.tasksData[0].testCases
     });
 
@@ -261,14 +273,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setBriefingContent(defaultMissionBriefing);
     setCachedBriefingContent(defaultMissionBriefing);
 
-    const defaultTask = {
-      questionNumber: 0,
-      taskDescription: defaultTaskDescription,
-      starterCode: defaultStarterCode,
-      savedCode: defaultStarterCode,
-      testPrepend: '',
-      testCases: []
-    } as TaskData;
     setTaskList([defaultTask]);
     setCachedTaskList([defaultTask]);
 
@@ -287,7 +291,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsTeacherMode(true);
     setIsLoading(false);
-  }, [autogradingResults, defaultMissionMetadata, handleResetWorkspace]);
+  }, [autogradingResults, defaultMissionMetadata, defaultTask, handleResetWorkspace]);
 
   useEffect(() => {
     if (missionRepoData === undefined) {
@@ -475,6 +479,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         if (taskList[j].testPrepend !== cachedTaskList[j].testPrepend) {
           filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[j].testPrepend;
         }
+
+        if (taskList[j].testPostpend !== cachedTaskList[j].testPostpend) {
+          filenameToContentMap[qTaskNumber + '/TestPostpend.js'] = taskList[j].testPostpend;
+        }
       }
 
       j++;
@@ -652,7 +660,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         autogradingResults: autogradingResults,
         editorValue: taskList[newTaskNumber - 1].savedCode,
         editorPrepend: taskList[newTaskNumber - 1].testPrepend,
-        editorPostpend: '',
+        editorPostpend: taskList[newTaskNumber - 1].testPostpend,
         editorTestcases: taskList[newTaskNumber - 1].testCases
       });
     },
@@ -754,7 +762,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         autogradingResults: [],
         editorValue: editedTaskList[currentTaskNumber - 1].savedCode,
         editorPrepend: editedTaskList[currentTaskNumber - 1].testPrepend,
-        editorPostpend: '',
+        editorPostpend: editedTaskList[currentTaskNumber - 1].testPostpend,
         editorTestcases: editedTaskList[currentTaskNumber - 1].testCases
       });
 
@@ -770,18 +778,55 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     ]
   );
 
+  const getTaskListWithSinglePropertyChanged = useCallback(
+    (changeAtIndex: number, taskList: TaskData[], propertyToChange: string, newValue: any) => {
+      const editedTaskList = [...taskList];
+      const taskReplacement = Object.assign({}, taskList[changeAtIndex]);
+      taskReplacement[propertyToChange] = newValue;
+      editedTaskList[changeAtIndex] = taskReplacement;
+      return editedTaskList;
+    },
+    []
+  );
+
   const setTestPrepend = useCallback(
     (newTestPrepend: string) => {
-      const editedTaskList = [...taskList];
-      editedTaskList[currentTaskNumber - 1] = {
-        ...editedTaskList[currentTaskNumber - 1],
-        testPrepend: newTestPrepend
-      };
-
+      const editedTaskList = getTaskListWithSinglePropertyChanged(
+        currentTaskNumber - 1,
+        taskList,
+        'testPrepend',
+        newTestPrepend
+      );
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },
-    [currentTaskNumber, taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
+    [
+      currentTaskNumber,
+      taskList,
+      cachedTaskList,
+      computeAndSetHasUnsavedChangesToTasks,
+      getTaskListWithSinglePropertyChanged
+    ]
+  );
+
+  const setTestPostpend = useCallback(
+    (newTestPostpend: string) => {
+      const editedTaskList = getTaskListWithSinglePropertyChanged(
+        currentTaskNumber - 1,
+        taskList,
+        'testPostpend',
+        newTestPostpend
+      );
+      setTaskList(editedTaskList);
+      computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
+    },
+    [
+      currentTaskNumber,
+      taskList,
+      cachedTaskList,
+      computeAndSetHasUnsavedChangesToTasks,
+      getTaskListWithSinglePropertyChanged
+    ]
   );
 
   const setBriefingContentWrapper = useCallback(
@@ -843,10 +888,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             testPrepend={
               taskList[currentTaskNumber - 1] ? taskList[currentTaskNumber - 1].testPrepend : ''
             }
+            testPostpend={
+              taskList[currentTaskNumber - 1] ? taskList[currentTaskNumber - 1].testPostpend : ''
+            }
             isTeacherMode={isTeacherMode}
             handleTestcaseEval={props.handleTestcaseEval}
             setTaskTestcases={setTaskTestcases}
             setTestPrepend={setTestPrepend}
+            setTestPostpend={setTestPostpend}
           />
         ),
         id: SideContentType.autograder,
@@ -882,16 +931,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const addNewQuestion = () => {
     const newTaskList = taskList
       .slice(0, currentTaskNumber)
-      .concat([
-        {
-          questionNumber: 0,
-          taskDescription: defaultTaskDescription,
-          starterCode: defaultStarterCode,
-          savedCode: defaultStarterCode,
-          testPrepend: '',
-          testCases: []
-        } as TaskData
-      ])
+      .concat([defaultTask])
       .concat(taskList.slice(currentTaskNumber, taskList.length));
     setTaskList(newTaskList);
 

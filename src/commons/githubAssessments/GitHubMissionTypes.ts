@@ -9,6 +9,7 @@ export type TaskData = {
   starterCode: string;
   savedCode: string;
   testPrepend: string;
+  testPostpend: string;
   testCases: Testcase[];
 };
 

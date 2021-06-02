@@ -208,6 +208,7 @@ test('getMissionData works properly', async () => {
     starterCode: 'Code A',
     savedCode: 'Code A',
     testPrepend: '',
+    testPostpend: '',
     testCases: []
   });
   expect(missionData.tasksData[1]).toEqual({
@@ -216,6 +217,7 @@ test('getMissionData works properly', async () => {
     starterCode: 'Code B',
     savedCode: 'Code C',
     testPrepend: 'Code D',
+    testPostpend: '',
     testCases: [
       {
         answer: '[[1, [2, [3, null]]], [4, [5, null]]]',

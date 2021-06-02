@@ -118,6 +118,7 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
             starterCode: { fileName: 'StarterCode.js', found: false, processing: identity },
             savedCode: { fileName: 'SavedCode.js', found: false, processing: identity },
             testPrepend: { fileName: 'TestPrepend.js', found: false, processing: identity },
+            testPostpend: { fileName: 'TestPostpend.js', found: false, processing: identity },
             testCases: { fileName: 'TestCases.json', found: false, processing: JSON.parse }
           };
 
@@ -165,6 +166,7 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
               starterCode: '',
               savedCode: '',
               testPrepend: '',
+              testPostpend: '',
               testCases: []
             };
 

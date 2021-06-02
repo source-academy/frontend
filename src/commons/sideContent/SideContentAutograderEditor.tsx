@@ -15,18 +15,21 @@ type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
   setTaskTestcases: (newTestcases: Testcase[]) => void;
   setTestPrepend: (newTestPrepend: string) => void;
+  setTestPostpend: (newTestPostpend: string) => void;
 };
 
 type StateProps = {
   autogradingResults: AutogradingResult[];
   testcases: Testcase[];
   testPrepend: string;
+  testPostpend: string;
   isTeacherMode: boolean;
 };
 
 const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograderEditorProps> =
   props => {
     const [showsTestPrepend, setTestPrependShown] = React.useState<boolean>(true);
+    const [showsTestPostpend, setTestPostpendShown] = React.useState<boolean>(true);
     const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
     const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
@@ -34,10 +37,12 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       testcases,
       autogradingResults,
       testPrepend,
+      testPostpend,
       isTeacherMode,
       handleTestcaseEval,
       setTaskTestcases,
-      setTestPrepend
+      setTestPrepend,
+      setTestPostpend
     } = props;
 
     const setTestcaseProgramSetterCreator = React.useCallback(
@@ -157,6 +162,10 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       setTestPrependShown(!showsTestPrepend);
     }, [showsTestPrepend]);
 
+    const toggleTestPostpend = React.useCallback(() => {
+      setTestPostpendShown(!showsTestPostpend);
+    }, [showsTestPostpend]);
+
     const toggleTestcases = React.useCallback(() => {
       setTestcasesShown(!showsTestcases);
     }, [showsTestcases]);
@@ -192,6 +201,17 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
             <TextArea
               defaultValue={testPrepend}
               onChange={(event: any) => setTestPrepend(event.target.value)}
+              fill={true}
+            />
+          </Collapse>
+        )}
+        {isTeacherMode &&
+          collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
+        {isTeacherMode && (
+          <Collapse isOpen={showsTestPostpend} keepChildrenMounted={true}>
+            <TextArea
+              defaultValue={testPostpend}
+              onChange={(event: any) => setTestPostpend(event.target.value)}
               fill={true}
             />
           </Collapse>
