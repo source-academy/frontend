@@ -14,8 +14,9 @@ const jsonStringify = (object: any) => JSON.stringify(object, null, 4);
 const identity = (content: any) => content;
 
 // 1) fileName: the name of the file corresponding to the named property
-// 2) fromStringConverter: a function to be applied to raw text data to convert it into the property
-// 3) toStringConverter: a function to be applied to the property to convert it to raw text data
+// 2) isDefaultValue: function should return true if the input value is the default value of the property
+// 3) fromStringConverter: a function to be applied to raw text data to convert it into the property
+// 4) toStringConverter: a function to be applied to the property to convert it to raw text data
 const taskDataPropertyTable = {
   taskDescription: {
     fileName: 'Problem.md',
@@ -384,51 +385,67 @@ export function discoverFilesToBeChangedWithMissionRepoData(
     filenameToContentMap['README.md'] = briefingContent;
   }
 
-  let j = 0;
-  while (j < taskList.length) {
-    const taskNumber = j + 1;
+  let i = 0;
+  while (i < taskList.length) {
+    const taskNumber = i + 1;
     const qTaskNumber = 'Q' + taskNumber;
 
     if (taskNumber > cachedTaskList.length) {
-      filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].savedCode;
-      filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
+      filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[i].savedCode;
+      filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[i].taskDescription;
+
+      const propertiesToCheck = ['testCases', 'testPrepend', 'testPostpend'];
+
+      for (const propertyName of propertiesToCheck) {
+        const currentValue = taskList[i][propertyName];
+        const isDefaultValue = taskDataPropertyTable[propertyName].isDefaultValue(currentValue);
+
+        if (!isDefaultValue) {
+          const onRepoFileName = qTaskNumber + '/' + taskDataPropertyTable[propertyName].fileName;
+          const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
+            taskList[i][propertyName]
+          );
+
+          filenameToContentMap[onRepoFileName] = stringContent;
+        }
+      }
     } else {
-      if (taskList[j].savedCode !== cachedTaskList[j].savedCode) {
-        if (isTeacherMode) {
-          filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].savedCode;
-        } else {
-          filenameToContentMap[qTaskNumber + '/SavedCode.js'] = taskList[j].savedCode;
+      const propertiesToCheck = Object.keys(taskDataPropertyTable);
+
+      for (const propertyName of propertiesToCheck) {
+        const currentValue = taskList[i][propertyName];
+        const cachedValue = cachedTaskList[i][propertyName];
+
+        if (currentValue !== cachedValue) {
+          const onRepoFileName = qTaskNumber + '/' + taskDataPropertyTable[propertyName].fileName;
+          const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
+            taskList[i][propertyName]
+          );
+
+          filenameToContentMap[onRepoFileName] = stringContent;
         }
       }
 
-      if (taskList[j].taskDescription !== cachedTaskList[j].taskDescription) {
-        filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
-      }
-
-      if (taskList[j].testCases !== cachedTaskList[j].testCases) {
-        filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
-          taskList[j].testCases,
-          null,
-          4
-        );
-      }
-
-      if (taskList[j].testPrepend !== cachedTaskList[j].testPrepend) {
-        filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[j].testPrepend;
-      }
-
-      if (taskList[j].testPostpend !== cachedTaskList[j].testPostpend) {
-        filenameToContentMap[qTaskNumber + '/TestPostpend.js'] = taskList[j].testPostpend;
+      if (
+        isTeacherMode &&
+        filenameToContentMap[qTaskNumber + '/' + taskDataPropertyTable['savedCode'].fileName]
+      ) {
+        const savedCodeValue =
+          filenameToContentMap[qTaskNumber + '/' + taskDataPropertyTable['savedCode'].fileName];
+        delete filenameToContentMap[
+          qTaskNumber + '/' + taskDataPropertyTable['savedCode'].fileName
+        ];
+        filenameToContentMap[qTaskNumber + '/' + taskDataPropertyTable['starterCode'].fileName] =
+          savedCodeValue;
       }
     }
-
-    j++;
+    i++;
   }
 
-  while (j < cachedTaskList.length) {
-    const taskNumber = j + 1;
+  while (i < cachedTaskList.length) {
+    const taskNumber = i + 1;
     foldersToDelete.push('Q' + taskNumber);
-    j++;
+    i++;
   }
 
   return [filenameToContentMap, foldersToDelete];
@@ -449,8 +466,10 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
     const taskNumber = i + 1;
     const qTaskNumber = 'Q' + taskNumber;
 
-    filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[i].savedCode;
-    filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[i].taskDescription;
+    filenameToContentMap[qTaskNumber + '/' + taskDataPropertyTable['starterCode'].fileName] =
+      taskList[i].savedCode;
+    filenameToContentMap[qTaskNumber + '/' + taskDataPropertyTable['taskDescription'].fileName] =
+      taskList[i].taskDescription;
 
     propertiesToCheck.forEach((propertyName: string) => {
       const currentValue = taskList[i][propertyName];
