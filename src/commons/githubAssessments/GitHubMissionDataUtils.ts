@@ -401,7 +401,8 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         const isDefaultValue = taskDataPropertyTable[propertyName].isDefaultValue(currentValue);
 
         if (!isDefaultValue) {
-          const onRepoFileName = questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
+          const onRepoFileName =
+            questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
           const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
             taskList[i][propertyName]
           );
@@ -417,7 +418,8 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         const cachedValue = cachedTaskList[i][propertyName];
 
         if (currentValue !== cachedValue) {
-          const onRepoFileName = questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
+          const onRepoFileName =
+            questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
           const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
             taskList[i][propertyName]
           );
@@ -431,12 +433,15 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         filenameToContentMap[questionFolderName + '/' + taskDataPropertyTable['savedCode'].fileName]
       ) {
         const savedCodeValue =
-          filenameToContentMap[questionFolderName + '/' + taskDataPropertyTable['savedCode'].fileName];
+          filenameToContentMap[
+            questionFolderName + '/' + taskDataPropertyTable['savedCode'].fileName
+          ];
         delete filenameToContentMap[
           questionFolderName + '/' + taskDataPropertyTable['savedCode'].fileName
         ];
-        filenameToContentMap[questionFolderName + '/' + taskDataPropertyTable['starterCode'].fileName] =
-          savedCodeValue;
+        filenameToContentMap[
+          questionFolderName + '/' + taskDataPropertyTable['starterCode'].fileName
+        ] = savedCodeValue;
       }
     }
     i++;
@@ -468,15 +473,17 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
 
     filenameToContentMap[questionFolderName + '/' + taskDataPropertyTable['starterCode'].fileName] =
       taskList[i].savedCode;
-    filenameToContentMap[questionFolderName + '/' + taskDataPropertyTable['taskDescription'].fileName] =
-      taskList[i].taskDescription;
+    filenameToContentMap[
+      questionFolderName + '/' + taskDataPropertyTable['taskDescription'].fileName
+    ] = taskList[i].taskDescription;
 
     propertiesToCheck.forEach((propertyName: string) => {
       const currentValue = taskList[i][propertyName];
       const isDefaultValue = taskDataPropertyTable[propertyName].isDefaultValue(currentValue);
 
       if (!isDefaultValue) {
-        const onRepoFileName = questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
+        const onRepoFileName =
+          questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
         const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
           taskList[i][propertyName]
         );
