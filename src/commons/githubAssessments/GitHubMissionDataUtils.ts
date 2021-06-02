@@ -9,6 +9,51 @@ import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHu
 
 export const maximumTasksPerMission = 20;
 
+const jsonStringify = (object: any) => JSON.stringify(object, null, 4);
+const identity = (content: any) => content;
+
+// 1) fileName: the name of the file corresponding to the named property
+// 2) fromStringConverter: a function to be applied to raw text data to convert it into the property
+// 3) toStringConverter: a function to be applied to the property to convert it to raw text data
+type TaskDataPropertyTableEntry = {
+  fileName: string;
+  fromStringConverter: (stringContent: string) => any;
+  toStringConverter: (object: any) => string;
+};
+
+const taskDataPropertyTable = {
+  taskDescription: {
+    fileName: 'Problem.md',
+    fromStringConverter: identity,
+    toStringConverter: identity
+  } as TaskDataPropertyTableEntry,
+  starterCode: {
+    fileName: 'StarterCode.js',
+    fromStringConverter: identity,
+    toStringConverter: identity
+  } as TaskDataPropertyTableEntry,
+  savedCode: {
+    fileName: 'SavedCode.js',
+    fromStringConverter: identity,
+    toStringConverter: identity
+  } as TaskDataPropertyTableEntry,
+  testPrepend: {
+    fileName: 'TestPrepend.js',
+    fromStringConverter: identity,
+    toStringConverter: identity
+  } as TaskDataPropertyTableEntry,
+  testPostpend: {
+    fileName: 'TestPostpend.js',
+    fromStringConverter: identity,
+    toStringConverter: identity
+  },
+  testCases: {
+    fileName: 'TestCases.json',
+    fromStringConverter: JSON.parse,
+    toStringConverter: jsonStringify
+  } as TaskDataPropertyTableEntry
+};
+
 /**
  * Retrieves mission information - such as the briefings, questions, metadata etc. from a GitHub Repository.
  *
@@ -105,59 +150,52 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
             return;
           }
 
-          const identity = (content: any) => content;
-
           const folderContentsAsArray = folderContents.data as any[];
 
-          // Map from each property to an object storing the following information:
-          // 1) fileName: the name of the file with the data corresponding to file data
-          // 2) found: always initialised to false, whether the above file exists
-          // 3) processing: any additional processing to be performed on the raw text data
-          const properties = {
-            taskDescription: { fileName: 'Problem.md', found: false, processing: identity },
-            starterCode: { fileName: 'StarterCode.js', found: false, processing: identity },
-            savedCode: { fileName: 'SavedCode.js', found: false, processing: identity },
-            testPrepend: { fileName: 'TestPrepend.js', found: false, processing: identity },
-            testPostpend: { fileName: 'TestPostpend.js', found: false, processing: identity },
-            testCases: { fileName: 'TestCases.json', found: false, processing: JSON.parse }
-          };
+          const properties = Object.keys(taskDataPropertyTable);
 
-          const propKeys = Object.keys(properties);
+          const propertyFileFound = {};
+          properties.forEach((propertyName: string) => {
+            propertyFileFound[propertyName] = false;
+          });
 
           // Figure out if the files exist
-          for (let j = 0; j < folderContentsAsArray.length; j++) {
-            const fileName = folderContentsAsArray[j].name;
+          folderContentsAsArray.forEach((folderContent: any) => {
+            const fileName = folderContent.name;
 
-            for (let k = 0; k < propKeys.length; k++) {
-              const key = propKeys[k];
-              if (fileName === properties[key].fileName) {
-                properties[key].found = true;
+            for (let k = 0; k < properties.length; k++) {
+              const property = properties[k];
+              if (fileName === taskDataPropertyTable[property].fileName) {
+                propertyFileFound[property] = true;
                 break;
               }
             }
-          }
+          });
 
           const stringContentPromises: Promise<string>[] = [];
-          const fileNameToIndexMap = {};
+          const propertyNameToIndexMap = {};
           let arrayIndex = 0;
 
-          for (let m = 0; m < propKeys.length; m++) {
-            const key = propKeys[m];
-            const value = properties[key];
+          properties.forEach((propertyName: string) => {
+            const fileName = taskDataPropertyTable[propertyName].fileName;
+            const found = propertyFileFound[propertyName];
 
-            if (value.found) {
+            if (found) {
               stringContentPromises.push(
                 getContentAsString(
                   repoOwner,
                   repoName,
-                  questionFolderName + '/' + value.fileName,
+                  questionFolderName + '/' + fileName,
                   octokit
-                ).then((stringContent: string) => value.processing(stringContent))
+                ).then((stringContent: string) =>
+                  taskDataPropertyTable[propertyName].fromStringConverter(stringContent)
+                )
               );
-              fileNameToIndexMap[key] = arrayIndex;
+
+              propertyNameToIndexMap[propertyName] = arrayIndex;
               arrayIndex++;
             }
-          }
+          });
 
           return Promise.all(stringContentPromises).then((stringContents: string[]) => {
             const taskData: TaskData = {
@@ -170,10 +208,10 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
               testCases: []
             };
 
-            const foundFileNames = Object.keys(fileNameToIndexMap);
+            const foundProperties = Object.keys(propertyNameToIndexMap);
 
-            foundFileNames.forEach((fileName: string) => {
-              taskData[fileName] = stringContents[fileNameToIndexMap[fileName]];
+            foundProperties.forEach((propertyName: string) => {
+              taskData[propertyName] = stringContents[propertyNameToIndexMap[propertyName]];
             });
 
             if (taskData.savedCode === '') {
