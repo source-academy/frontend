@@ -517,8 +517,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const filenameToContentMap = discoverFilesToBeCreatedWithoutMissionRepoData(
       missionMetadata,
       briefingContent,
-      taskList,
-      cachedTaskList
+      taskList
     );
 
     const changedFiles = Object.keys(filenameToContentMap).sort();
@@ -580,7 +579,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       console.error(err);
       showWarningMessage('Something went wrong while creating the repository!', 2000);
     }
-  }, [briefingContent, missionMetadata, octokit, taskList, cachedTaskList]);
+  }, [briefingContent, missionMetadata, octokit, taskList]);
 
   const onClickSave = useCallback(() => {
     if (missionRepoData !== undefined) {

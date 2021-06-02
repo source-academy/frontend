@@ -5,6 +5,7 @@ import {
 } from '@octokit/types';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { Testcase } from '../assessment/AssessmentTypes';
 import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 export const maximumTasksPerMission = 20;
@@ -15,43 +16,43 @@ const identity = (content: any) => content;
 // 1) fileName: the name of the file corresponding to the named property
 // 2) fromStringConverter: a function to be applied to raw text data to convert it into the property
 // 3) toStringConverter: a function to be applied to the property to convert it to raw text data
-type TaskDataPropertyTableEntry = {
-  fileName: string;
-  fromStringConverter: (stringContent: string) => any;
-  toStringConverter: (object: any) => string;
-};
-
 const taskDataPropertyTable = {
   taskDescription: {
     fileName: 'Problem.md',
+    isDefaultValue: (value: string) => value === '',
     fromStringConverter: identity,
     toStringConverter: identity
-  } as TaskDataPropertyTableEntry,
+  },
   starterCode: {
     fileName: 'StarterCode.js',
+    isDefaultValue: (value: string) => value === '',
     fromStringConverter: identity,
     toStringConverter: identity
-  } as TaskDataPropertyTableEntry,
+  },
   savedCode: {
     fileName: 'SavedCode.js',
+    isDefaultValue: (value: string) => value === '',
     fromStringConverter: identity,
     toStringConverter: identity
-  } as TaskDataPropertyTableEntry,
+  },
   testPrepend: {
     fileName: 'TestPrepend.js',
+    isDefaultValue: (value: string) => value === '',
     fromStringConverter: identity,
     toStringConverter: identity
-  } as TaskDataPropertyTableEntry,
+  },
   testPostpend: {
     fileName: 'TestPostpend.js',
+    isDefaultValue: (value: string) => value === '',
     fromStringConverter: identity,
     toStringConverter: identity
   },
   testCases: {
     fileName: 'TestCases.json',
+    isDefaultValue: (value: Testcase[]) => value.length === 0,
     fromStringConverter: JSON.parse,
     toStringConverter: jsonStringify
-  } as TaskDataPropertyTableEntry
+  }
 };
 
 /**
@@ -436,12 +437,13 @@ export function discoverFilesToBeChangedWithMissionRepoData(
 export function discoverFilesToBeCreatedWithoutMissionRepoData(
   missionMetadata: MissionMetadata,
   briefingContent: string,
-  taskList: TaskData[],
-  cachedTaskList: TaskData[]
+  taskList: TaskData[]
 ) {
   const filenameToContentMap = {};
   filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
   filenameToContentMap['README.md'] = briefingContent;
+
+  const propertiesToCheck = ['testCases', 'testPrepend', 'testPostpend'];
 
   for (let i = 0; i < taskList.length; i++) {
     const taskNumber = i + 1;
@@ -450,21 +452,19 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
     filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[i].savedCode;
     filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[i].taskDescription;
 
-    if (taskList[i].testCases !== cachedTaskList[i].testCases) {
-      filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
-        taskList[i].testCases,
-        null,
-        4
-      );
-    }
+    propertiesToCheck.forEach((propertyName: string) => {
+      const currentValue = taskList[i][propertyName];
+      const isDefaultValue = taskDataPropertyTable[propertyName].isDefaultValue(currentValue);
 
-    if (taskList[i].testPrepend !== cachedTaskList[i].testPrepend) {
-      filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[i].testPrepend;
-    }
+      if (!isDefaultValue) {
+        const onRepoFileName = qTaskNumber + '/' + taskDataPropertyTable[propertyName].fileName;
+        const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
+          taskList[i][propertyName]
+        );
 
-    if (taskList[i].testPostpend !== cachedTaskList[i].testPostpend) {
-      filenameToContentMap[qTaskNumber + '/TestPostpend.js'] = taskList[i].testPostpend;
-    }
+        filenameToContentMap[onRepoFileName] = stringContent;
+      }
+    });
   }
 
   return filenameToContentMap;
