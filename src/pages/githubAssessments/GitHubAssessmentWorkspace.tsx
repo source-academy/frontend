@@ -247,7 +247,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setIsLoading(false);
 
     handleResetWorkspace({
-      autogradingResults: autogradingResults,
+      autogradingResults: [],
       editorValue: missionData.tasksData[0].savedCode,
       editorPrepend: missionData.tasksData[0].testPrepend,
       editorPostpend: missionData.tasksData[0].testPostpend,
@@ -256,7 +256,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     if (missionData.missionBriefing !== '') setShowOverlay(true);
   }, [
-    autogradingResults,
     handleResetWorkspace,
     missionRepoData,
     octokit,
@@ -278,7 +277,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setCurrentTaskNumber(1);
     handleResetWorkspace({
-      autogradingResults: autogradingResults,
+      autogradingResults: [],
       editorValue: defaultStarterCode,
       editorPrepend: '',
       editorPostpend: '',
@@ -291,7 +290,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsTeacherMode(true);
     setIsLoading(false);
-  }, [autogradingResults, defaultMissionMetadata, defaultTask, handleResetWorkspace]);
+  }, [defaultMissionMetadata, defaultTask, handleResetWorkspace]);
 
   useEffect(() => {
     if (missionRepoData === undefined) {
@@ -472,7 +471,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
         if (taskList[j].testCases !== cachedTaskList[j].testCases) {
           filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
-            taskList[j].testCases
+            taskList[j].testCases, null, 4
           );
         }
 
@@ -657,14 +656,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setCurrentTaskNumber(newTaskNumber);
 
       handleResetWorkspace({
-        autogradingResults: autogradingResults,
+        autogradingResults: [],
         editorValue: taskList[newTaskNumber - 1].savedCode,
         editorPrepend: taskList[newTaskNumber - 1].testPrepend,
         editorPostpend: taskList[newTaskNumber - 1].testPostpend,
         editorTestcases: taskList[newTaskNumber - 1].testCases
       });
     },
-    [autogradingResults, setCurrentTaskNumber, handleResetWorkspace, taskList]
+    [setCurrentTaskNumber, handleResetWorkspace, taskList]
   );
 
   const onClickPrevious = useCallback(() => {
@@ -757,6 +756,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ...editedTaskList[currentTaskNumber - 1],
         testCases: newTestcases
       };
+
+      console.log(editedTaskList);
 
       handleResetWorkspace({
         autogradingResults: [],
