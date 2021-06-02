@@ -196,7 +196,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const handleResetWorkspace = props.handleResetWorkspace;
   const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
 
-  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData>(props.location.state as MissionRepoData);
+  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData>(
+    props.location.state as MissionRepoData
+  );
   const autogradingResults: AutogradingResult[] = props.autogradingResults;
   const editorTestcases = props.editorTestcases;
 
@@ -550,7 +552,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     conductSave,
     conductDelete,
     octokit,
-    missionRepoData
+    missionRepoData,
+    isTeacherMode
   ]);
 
   const saveWithoutMissionRepoData = useCallback(async () => {
@@ -566,7 +569,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     for (let i = 0; i < taskList.length; i++) {
       const taskNumber = i + 1;
       const qTaskNumber = 'Q' + taskNumber;
-      
+
       filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[i].savedCode;
       filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[i].taskDescription;
 
@@ -612,11 +615,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       await octokit.repos.createForAuthenticatedUser({
         name: repoName
       });
-  
+
       for (let i = 0; i < changedFiles.length; i++) {
         const fileToCreate = changedFiles[i];
         const fileContent = filenameToContentMap[fileToCreate];
-  
+
         await performCreatingSave(
           octokit,
           repoOwner,
@@ -628,11 +631,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           fileContent
         );
       }
-  
+
       setCachedTaskList(taskList);
       setCachedBriefingContent(briefingContent);
       setCachedMissionMetadata(missionMetadata);
-  
+
       setHasUnsavedChangesToTasks(false);
       setHasUnsavedChangesToBriefing(false);
       setHasUnsavedChangesToMetadata(false);
@@ -642,12 +645,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         repoName: repoName,
         dateOfCreation: new Date()
       });
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       showWarningMessage('Something went wrong while creating the repository!', 2000);
     }
-
-  }, [briefingContent, missionMetadata, octokit, taskList]);
+  }, [briefingContent, missionMetadata, octokit, taskList, cachedTaskList]);
 
   const onClickSave = useCallback(() => {
     if (missionRepoData !== undefined) {
