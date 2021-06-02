@@ -175,7 +175,8 @@ export const defaultDashboard: DashboardState = {
 
 export const defaultAchievement: AchievementState = {
   achievements: [],
-  goals: []
+  goals: [],
+  users: []
 };
 
 export const defaultPlayground: PlaygroundState = {
@@ -276,7 +277,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     timeResumed: 0
   },
   githubAssessment: {
-    ...createDefaultWorkspace('githubAssessment')
+    ...createDefaultWorkspace('githubAssessment'),
+    hasUnsavedChanges: false
   }
 };
 

@@ -1,4 +1,8 @@
 import { Octokit } from '@octokit/rest';
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
@@ -55,10 +59,12 @@ export async function checkIfFileCanBeOpened(
     return false;
   }
 
-  let files;
+  type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  let files: GetContentData;
 
   try {
-    const results = await octokit.repos.getContent({
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filePath
@@ -110,7 +116,8 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
   let files;
 
   try {
-    const results = await octokit.repos.getContent({
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filePath
@@ -188,7 +195,8 @@ export async function openFileInEditor(
 ) {
   if (octokit === undefined) return;
 
-  const results = await octokit.repos.getContent({
+  type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: filePath
@@ -224,13 +232,15 @@ export async function performOverwritingSave(
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
 
   try {
-    const results = await octokit.repos.getContent({
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filePath
     });
 
-    const files = results.data;
+    type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const files: GetContentData = results.data;
 
     // Cannot save over folder
     if (Array.isArray(files)) {

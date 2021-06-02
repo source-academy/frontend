@@ -1,9 +1,11 @@
 import { Octokit } from '@octokit/rest';
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 
-import MissionData from './MissionData';
-import MissionMetadata from './MissionMetadata';
-import MissionRepoData from './MissionRepoData';
-import TaskData from './TaskData';
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 const maximumTasksPerMission = 20;
 
@@ -13,28 +15,33 @@ const maximumTasksPerMission = 20;
  * @param missionRepoData Repository information where the mission is stored
  * @param octokit The Octokit instance for the authenticated user
  */
-export async function getMissionData(missionRepoData: MissionRepoData, octokit: any) {
-  const briefingString = await getContentAsString(
+export async function getMissionData(missionRepoData: MissionRepoData, octokit: Octokit) {
+  const briefingStringPromise = getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     'README.md',
     octokit
   );
 
-  const metadataString = await getContentAsString(
+  const metadataStringPromise = getContentAsString(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     '.metadata',
     octokit
   );
 
-  const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
-
-  const tasksData = await getTasksData(
+  const tasksDataPromise = getTasksData(
     missionRepoData.repoOwner,
     missionRepoData.repoName,
     octokit
   );
+
+  const [briefingString, metadataString, tasksData] = await Promise.all([
+    briefingStringPromise,
+    metadataStringPromise,
+    tasksDataPromise
+  ]);
+  const missionMetadata = convertMetadataStringToMissionMetadata(metadataString);
 
   const newMissionData: MissionData = {
     missionRepoData: missionRepoData,
@@ -53,20 +60,28 @@ export async function getMissionData(missionRepoData: MissionRepoData, octokit: 
  * @param repoName The name of the mission repository
  * @param octokit The Octokit instance for the authenticated user
  */
-export async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
+async function getTasksData(repoOwner: string, repoName: string, octokit: Octokit) {
   const questions: TaskData[] = [];
 
-  const results = await octokit.repos.getContent({
+  if (octokit === undefined) {
+    return questions;
+  }
+
+  type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
     path: ''
   });
 
-  const files = results.data;
+  type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  const files: GetContentData = results.data;
 
   if (!Array.isArray(files)) {
     return questions;
   }
+
+  const promises = [];
 
   for (let i = 1; i <= maximumTasksPerMission; i++) {
     const questionFolderName = 'Q' + i;
@@ -77,52 +92,56 @@ export async function getTasksData(repoOwner: string, repoName: string, octokit:
       break;
     }
 
-    // Find out if there is already SavedCode for the question
-    const folderContents = await octokit.repos.getContent({
-      owner: repoOwner,
-      repo: repoName,
-      path: questionFolderName
-    });
+    // Asynchronously fetch the data for each task
+    promises.push(
+      octokit.repos
+        .getContent({
+          owner: repoOwner,
+          repo: repoName,
+          path: questionFolderName
+        })
+        .then((folderContents: GetContentResponse) => {
+          if (!Array.isArray(folderContents.data)) {
+            return;
+          }
 
-    if (!Array.isArray(folderContents.data)) {
-      return questions;
-    }
-
-    const hasSavedCode = (folderContents.data as any[]).find(
-      (file: any) => file.name === 'SavedCode.js'
-    );
-
-    // If the question exists, get the data
-    try {
-      const taskDescription = await getContentAsString(
-        repoOwner,
-        repoName,
-        questionFolderName + '/Problem.md',
-        octokit
-      );
-      const starterCode = await getContentAsString(
-        repoOwner,
-        repoName,
-        questionFolderName + '/StarterCode.js',
-        octokit
-      );
-
-      const savedCode = hasSavedCode
-        ? await getContentAsString(
+          // If the question exists, get the data
+          const taskDescriptionPromise = getContentAsString(
             repoOwner,
             repoName,
-            questionFolderName + '/SavedCode.js',
+            questionFolderName + '/Problem.md',
             octokit
-          )
-        : starterCode;
+          );
+          const starterCodePromise = getContentAsString(
+            repoOwner,
+            repoName,
+            questionFolderName + '/StarterCode.js',
+            octokit
+          );
+          const hasSavedCode = folderContents.data.find(file => file.name === 'SavedCode.js');
+          const savedCodePromise = hasSavedCode
+            ? getContentAsString(repoOwner, repoName, questionFolderName + '/SavedCode.js', octokit)
+            : starterCodePromise;
 
-      const taskData = { taskDescription, starterCode, savedCode };
-
-      questions.push(taskData);
-    } catch (err) {
-      console.error(err);
-    }
+          return Promise.all([taskDescriptionPromise, starterCodePromise, savedCodePromise]).then(
+            ([taskDescription, starterCode, savedCode]) => {
+              questions.push({
+                questionNumber: i,
+                taskDescription: taskDescription,
+                starterCode: starterCode,
+                savedCode: savedCode
+              });
+            }
+          );
+        })
+        .catch(err => {
+          showWarningMessage('Error occurred while trying to retrieve file content', 1000);
+          console.error(err);
+        })
+    );
   }
+  await Promise.all(promises);
+  questions.sort((a, b) => a.questionNumber - b.questionNumber);
 
   return questions;
 }
@@ -139,12 +158,17 @@ export async function getContentAsString(
   repoOwner: string,
   repoName: string,
   filepath: string,
-  octokit: any
+  octokit: Octokit
 ) {
   let contentString = '';
 
+  if (octokit === undefined) {
+    return contentString;
+  }
+
   try {
-    const fileInfo = await octokit.repos.getContent({
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const fileInfo: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
       path: filepath
@@ -152,6 +176,7 @@ export async function getContentAsString(
 
     contentString = Buffer.from((fileInfo.data as any).content, 'base64').toString();
   } catch (err) {
+    showWarningMessage('Error occurred while trying to retrieve file content', 1000);
     console.error(err);
   }
 
@@ -210,7 +235,6 @@ export function parseMetadataProperties<R>(
   lines.forEach(line => {
     for (let i = 0; i < stringProps.length; i++) {
       const propName = stringProps[i];
-
       if (line.startsWith(propName)) {
         propertyContainer[propName] = line.substr(propName.length + 1);
         return;
@@ -225,9 +249,8 @@ export function parseMetadataProperties<R>(
       }
     }
 
-    for (let i = 0; i < numProps.length; i++) {
+    for (let i = 0; i < dateProps.length; i++) {
       const propName = dateProps[i];
-
       if (line.startsWith(propName)) {
         propertyContainer[propName] = new Date(line.substr(propName.length + 1));
         return;

@@ -12,7 +12,6 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
-const useAchievementBackend = !isTest && isTrue(process.env.REACT_APP_USE_ACHIEVEMENT_BACKEND);
 const defaultSourceChapter = 4;
 const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
@@ -25,13 +24,13 @@ const sharedbBackendUrl = process.env.REACT_APP_SHAREDB_BACKEND_URL || '';
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
 const enableGame = isTest || isTrue(process.env.REACT_APP_ENABLE_GAME);
 const enableAchievements = isTest || isTrue(process.env.REACT_APP_ENABLE_ACHIEVEMENTS);
+const enableGitHubAssessments = isTest || isTrue(process.env.REACT_APP_ENABLE_GITHUB_ASSESSMENTS);
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
-const showGitHubAssessments = isTest || isTrue(process.env.REACT_APP_SHOW_GITHUB_ASSESSMENTS);
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -104,7 +103,6 @@ const Constants = {
   backendUrl,
   cadetLoggerUrl,
   useBackend,
-  useAchievementBackend,
   defaultSourceChapter,
   defaultSourceVariant,
   defaultQuestionId,
@@ -117,6 +115,7 @@ const Constants = {
   playgroundOnly,
   enableGame,
   enableAchievements,
+  enableGitHubAssessments,
   sentryDsn,
   googleClientId,
   googleApiKey,
@@ -125,8 +124,7 @@ const Constants = {
   githubOAuthProxyUrl,
   sharedbBackendUrl,
   disablePeriods,
-  cadetLoggerInterval,
-  showGitHubAssessments
+  cadetLoggerInterval
 };
 
 export default Constants;

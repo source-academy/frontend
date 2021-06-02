@@ -1,4 +1,9 @@
-function AchievementMilestone() {
+type AchievementMilestoneProps = {
+  studentXp: number;
+};
+
+function AchievementMilestone(props: AchievementMilestoneProps) {
+  const { studentXp } = props;
   return (
     <div className="milestone">
       <h2>ACHIEVEMENT LEVEL</h2>
@@ -17,6 +22,7 @@ function AchievementMilestone() {
         <p className="description">Earn extra 1 MC from CS1010R</p>
       </div>
       <div className="footer">
+        <p>Total XP: {studentXp}</p>
         <p>Note: subject to change</p>
       </div>
     </div>

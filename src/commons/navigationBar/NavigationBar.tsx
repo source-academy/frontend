@@ -79,6 +79,8 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         role={props.role}
         isOpen={mobileSideMenuOpen}
         onClose={() => setMobileSideMenuOpen(false)}
+        handleGitHubLogIn={() => props.handleGitHubLogIn}
+        handleGitHubLogOut={() => props.handleGitHubLogOut}
       />
     </NavbarGroup>
   );
@@ -112,7 +114,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text">Playground</div>
       </NavLink>
 
-      {Constants.showGitHubAssessments && (
+      {Constants.enableGitHubAssessments && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -185,7 +187,9 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
       <Switch>
         <Route path="/githubassessments">
-          <GitHubAssessmentsNavigationBar {...props} />
+          {Constants.enableGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
+            <GitHubAssessmentsNavigationBar {...props} />
+          )}
         </Route>
         <Route>
           {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (

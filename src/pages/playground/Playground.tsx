@@ -696,8 +696,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled =
-    props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
+  const replDisabled = props.sourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -834,7 +833,7 @@ const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 
