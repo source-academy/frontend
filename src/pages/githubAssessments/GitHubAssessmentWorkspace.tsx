@@ -471,7 +471,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
         if (taskList[j].testCases !== cachedTaskList[j].testCases) {
           filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
-            taskList[j].testCases, null, 4
+            taskList[j].testCases,
+            null,
+            4
           );
         }
 
