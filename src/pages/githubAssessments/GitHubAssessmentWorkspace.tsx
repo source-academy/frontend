@@ -196,7 +196,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const handleResetWorkspace = props.handleResetWorkspace;
   const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
 
-  const missionRepoData = props.location.state as MissionRepoData;
+  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData>(props.location.state as MissionRepoData);
   const autogradingResults: AutogradingResult[] = props.autogradingResults;
   const editorTestcases = props.editorTestcases;
 
@@ -458,11 +458,15 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       const qTaskNumber = 'Q' + taskNumber;
 
       if (taskNumber > cachedTaskList.length) {
-        filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].starterCode;
+        filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].savedCode;
         filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
       } else {
         if (taskList[j].savedCode !== cachedTaskList[j].savedCode) {
-          filenameToContentMap[qTaskNumber + '/SavedCode.js'] = taskList[j].savedCode;
+          if (isTeacherMode) {
+            filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].savedCode;
+          } else {
+            filenameToContentMap[qTaskNumber + '/SavedCode.js'] = taskList[j].savedCode;
+          }
         }
 
         if (taskList[j].taskDescription !== cachedTaskList[j].taskDescription) {
@@ -561,8 +565,26 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     for (let i = 0; i < taskList.length; i++) {
       const taskNumber = i + 1;
-      filenameToContentMap['Q' + taskNumber + '/StarterCode.js'] = taskList[i].starterCode;
-      filenameToContentMap['Q' + taskNumber + '/Problem.md'] = taskList[i].taskDescription;
+      const qTaskNumber = 'Q' + taskNumber;
+      
+      filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[i].savedCode;
+      filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[i].taskDescription;
+
+      if (taskList[i].testCases !== cachedTaskList[i].testCases) {
+        filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
+          taskList[i].testCases,
+          null,
+          4
+        );
+      }
+
+      if (taskList[i].testPrepend !== cachedTaskList[i].testPrepend) {
+        filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[i].testPrepend;
+      }
+
+      if (taskList[i].testPostpend !== cachedTaskList[i].testPostpend) {
+        filenameToContentMap[qTaskNumber + '/TestPostpend.js'] = taskList[i].testPostpend;
+      }
     }
 
     const changedFiles = Object.keys(filenameToContentMap).sort();
@@ -583,34 +605,48 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
+    const repoName = dialogResults.repoName;
+    const repoOwner = authUser.data.login;
 
-    await octokit.repos.createForAuthenticatedUser({
-      name: dialogResults.repoName
-    });
+    try {
+      await octokit.repos.createForAuthenticatedUser({
+        name: repoName
+      });
+  
+      for (let i = 0; i < changedFiles.length; i++) {
+        const fileToCreate = changedFiles[i];
+        const fileContent = filenameToContentMap[fileToCreate];
+  
+        await performCreatingSave(
+          octokit,
+          repoOwner,
+          repoName,
+          fileToCreate,
+          githubName,
+          githubEmail,
+          'Repository created from Source Academy',
+          fileContent
+        );
+      }
+  
+      setCachedTaskList(taskList);
+      setCachedBriefingContent(briefingContent);
+      setCachedMissionMetadata(missionMetadata);
+  
+      setHasUnsavedChangesToTasks(false);
+      setHasUnsavedChangesToBriefing(false);
+      setHasUnsavedChangesToMetadata(false);
 
-    for (let i = 0; i < changedFiles.length; i++) {
-      const fileToCreate = changedFiles[i];
-      const fileContent = filenameToContentMap[fileToCreate];
-
-      await performCreatingSave(
-        octokit,
-        authUser.data.login,
-        dialogResults.repoName,
-        fileToCreate,
-        githubName,
-        githubEmail,
-        'Repository created from Source Academy',
-        fileContent
-      );
+      setMissionRepoData({
+        repoOwner: repoOwner,
+        repoName: repoName,
+        dateOfCreation: new Date()
+      });
+    } catch(err) {
+      console.error(err);
+      showWarningMessage('Something went wrong while creating the repository!', 2000);
     }
 
-    setCachedTaskList(taskList);
-    setCachedBriefingContent(briefingContent);
-    setCachedMissionMetadata(missionMetadata);
-
-    setHasUnsavedChangesToTasks(false);
-    setHasUnsavedChangesToBriefing(false);
-    setHasUnsavedChangesToMetadata(false);
   }, [briefingContent, missionMetadata, octokit, taskList]);
 
   const onClickSave = useCallback(() => {
