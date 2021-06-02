@@ -2,7 +2,6 @@
   "private": true,
   "name": "cadet-frontend",
   "version": "1.4.3",
-  "proxy": "https://samuelfangjw.com",
   "scripts-info": {
     "format": "Format source code",
     "start": "Start the Webpack development server",

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { RouteComponentProps, useParams } from 'react-router';
 import ContentDisplay from 'src/commons/ContentDisplay';
+import { Links } from 'src/commons/utils/Constants';
 import { parseArr } from 'src/features/sicp/parser/ParseJson';
 
 import testData from '../../features/sicp/data/test.json';
@@ -13,7 +14,7 @@ import SicpLoadingPage from './subcomponents/SicpLoadingPage';
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
 
-const baseUrl = '/sicp/json/';
+const baseUrl = Links.sicp + '/json/';
 const extension = '.json';
 
 // Context to determine which code snippet is active

@@ -202,7 +202,7 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
   return (
     <Blockquote className="sicp-epigraph">
-      {child.map((x, index) => parseObj(x, index, refs))}
+      {parseArr(child, refs)}
       {hasAttribution ? <div className="sicp-attribution">{attribution}</div> : <></>}
     </Blockquote>
   );
@@ -224,9 +224,7 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
       <div className={'sicp-figure'}>
-        {obj['src'] && (
-          <img src={Links.textbook + obj['src']} alt={obj['id']} width={obj['scale']} />
-        )}
+        {obj['src'] && <img src={Links.sicp + obj['src']} alt={obj['id']} width={obj['scale']} />}
       </div>
     );
   } else if (obj['snippet']) {

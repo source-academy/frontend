@@ -93,7 +93,9 @@ export enum Links {
   source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
   source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
   source_4 = 'https://source-academy.github.io/source/source_4/',
-  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/'
+  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/',
+
+  sicp = 'http://127.0.0.1:8080/'
 }
 
 const Constants = {
