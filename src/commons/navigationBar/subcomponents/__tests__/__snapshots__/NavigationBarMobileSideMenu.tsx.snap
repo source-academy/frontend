@@ -14,6 +14,12 @@ exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
       Playground
     </div>
   </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments/missions\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"briefcase\\" />
+    <div className=\\"navbar-button-text\\">
+      GitHub Assessments
+    </div>
+  </NavLink>
 </Blueprint3.Drawer>"
 `;
 
@@ -63,6 +69,12 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
     <Blueprint3.Icon icon=\\"code\\" />
     <div>
       Playground
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments/missions\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"briefcase\\" />
+    <div className=\\"navbar-button-text\\">
+      GitHub Assessments
     </div>
   </NavLink>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/achievement\\" onClick={[Function: onClose]}>
