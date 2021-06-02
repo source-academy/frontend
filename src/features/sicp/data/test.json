@@ -1,7 +1,7 @@
 [
   {
     "tag": "SUBSECTION",
-    "body": "5.1.3  \n    Subroutines\n  ",
+    "body": "1.1.3  \n    Evaluating\n    \n      \n      Operator Combinations\n    \n  ",
     "child": [
       {
         "tag": "TEXT",
@@ -9,33 +9,26 @@
         "child": [
           {
             "tag": "#text",
-            "body": "\n    When designing a machine to perform a computation, we would often\n    prefer to arrange for components to be shared by different parts of\n    the computation rather than duplicate the components.  Consider a\n    machine that includes two GCD computations—one that finds the GCD of\n    the contents of registers "
+            "body": "\n    One of our goals in this chapter is to isolate issues about thinking\n    procedurally.  As a case in point, let us consider that, in evaluating\n    \n\toperator\n      \n    combinations, the interpreter is itself following a procedure.\n    \n      To evaluate\n      \n\t  an operator combination,\n\t\n      do the following:\n      "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "a" },
-          { "tag": "#text", "body": " and\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "b" },
           {
-            "tag": "#text",
-            "body": " and one that finds the\n    GCD of the contents of registers "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "c" },
-          { "tag": "#text", "body": " and\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "d" },
-          { "tag": "#text", "body": ".  We might start\n    by assuming we have a primitive " },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
-          { "tag": "#text", "body": " operation,\n    then expand the two instances of " },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
-          { "tag": "#text", "body": " in terms\n    of more primitive operations.\n    " },
-          {
+            "tag": "OL",
             "child": [
               {
+                "tag": "LI",
                 "child": [
-                  { "tag": "#text", "body": "\n\tFigure " },
                   {
-                    "tag": "REF",
-                    "id": "5.1.3-ex-link-5.7",
-                    "body": "5.7",
-                    "href": "/interactive-sicp/5.1.3#fig_5.7"
+                    "tag": "#text",
+                    "body": "Evaluate the\n\t\n\t    operand expressions\n\t  \n\tof the combination."
+                  }
+                ]
+              },
+              {
+                "tag": "LI",
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n\t      Apply the function that is denoted by\n              the operator to the arguments that are the values of\n              the operands.\n\t    "
                   }
                 ]
               }
@@ -43,29 +36,12 @@
           },
           {
             "tag": "#text",
-            "body": "\n    shows just the GCD portions of the resulting machine's data paths,\n    without showing how they connect to the rest of the machine.  The figure\n    also shows the corresponding portions of the machine's controller\n    sequence.\n    "
+            "body": "\n    Even this simple rule illustrates some important points about\n    processes in general. First, observe that the first step dictates\n    that in order to accomplish the evaluation process for a\n    combination we must first perform the evaluation process on each\n    operand of the combination. Thus, the evaluation rule is\n    "
           },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "recursive" }] },
           {
-            "child": [
-              {
-                "child": [
-                  {
-                    "tag": "FIGURE",
-                    "scale": "100%",
-                    "src": "img_javascript/Fig5.7b.std.svg",
-                    "id": "#fig_5.7",
-                    "captionHref": "/interactive-sicp/5.1.3#fig_5.7",
-                    "captionName": "Figure 5.7 ",
-                    "captionBody": [
-                      {
-                        "tag": "#text",
-                        "body": "Portions of the data paths and controller sequence for\n          a machine with two GCD computations."
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
+            "tag": "#text",
+            "body": " in nature;\n    that is, it includes, as one of its steps, the need to invoke the rule\n    itself."
           }
         ]
       },
@@ -75,35 +51,44 @@
         "child": [
           {
             "tag": "#text",
-            "body": "\n    This machine has two remainder operation boxes and two boxes for\n    testing equality.  If the duplicated components are complicated, as is the\n    remainder box, this will not be an economical way to build the\n    machine.  We can avoid duplicating the data-path components by using\n    the same components for both GCD computations, provided that doing so\n    will not affect the rest of the larger machine's computation.  If the\n    values in registers "
+            "body": "\n    Notice how succinctly the idea of recursion can be used to express\n    \n    what, in the case of a deeply nested combination, would otherwise be\n    viewed as a rather complicated process.  For example, evaluating\n    "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "a" },
-          { "tag": "#text", "body": " and\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "b" },
-          { "tag": "#text", "body": " are not needed by the time the\n    controller gets to " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "gcd_2" }] }] },
+          {
+            "tag": "SNIPPET",
+            "latex": false,
+            "id": 1,
+            "withoutPrepend": "chap=1&prgrm=PTAEGUEkGEAVQFLlARgHToMwChsAoAmUAalABZQAqUANgEorQ9MTUC6BuIA",
+            "body": "(2 + 4 * 6) * (3 + 12);\n"
+          },
           {
             "tag": "#text",
-            "body": " (or if these values\n    can be moved to other registers for safekeeping), we can change the machine\n    so that it uses registers "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "a" },
-          { "tag": "#text", "body": " and\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "b" },
-          { "tag": "#text", "body": ", rather than registers\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "c" },
-          { "tag": "#text", "body": " and " },
-          { "tag": "JAVASCRIPTINLINE", "body": "d" },
-          {
-            "tag": "#text",
-            "body": ", in\n    computing the second GCD as well as the first.  If we do this, we obtain the\n    controller sequence shown in\n    figure "
+            "body": "\n    requires that the evaluation rule be applied to four different\n    combinations.  We can obtain a picture of this process by\n    representing the combination in the form of a\n    \n    tree, as shown in\n    \n\tfigure "
           },
           {
             "tag": "REF",
-            "id": "5.1.3-ex-link-5.8",
-            "body": "5.8",
-            "href": "/interactive-sicp/5.1.3#fig_5.8"
+            "id": "1.1.3-ex-link-1.1",
+            "body": "1.1",
+            "href": "/interactive-sicp/1.1.3#fig_1.1"
           },
-          { "tag": "#text", "body": ".\n  " }
+          {
+            "tag": "#text",
+            "body": ".\n      \n    Each combination is represented by a\n    \n    node with\n    \n    branches corresponding to the operator and the\n    operands of the combination stemming from it.\n    The\n    \n    terminal nodes (that is, nodes with\n    no branches stemming from them) represent either operators or numbers.\n    Viewing evaluation in terms of the tree, we can imagine that the\n    values of the operands percolate upward, starting from the terminal\n    nodes and then combining at higher and higher levels.  In general, we\n    shall see that recursion is a very powerful technique for dealing with\n    hierarchical, treelike objects.  In fact, the \"percolate values\n    upward\" form of the evaluation rule is an example of a general kind\n    of process known as\n    "
+          },
+          { "tag": "EM", "child": [{ "tag": "#text", "body": "tree accumulation" }] },
+          { "tag": "#text", "body": ".\n\n    " },
+          {
+            "tag": "FIGURE",
+            "src": "img_javascript/ch1-Z-G-1.svg",
+            "id": "#fig_1.1",
+            "captionHref": "/interactive-sicp/1.1.3#fig_1.1",
+            "captionName": "Figure 1.1 ",
+            "captionBody": [
+              {
+                "tag": "#text",
+                "body": "Tree representation, showing the value of each subexpression.\n          "
+              }
+            ]
+          }
         ]
       },
       {
@@ -112,115 +97,29 @@
         "child": [
           {
             "tag": "#text",
-            "body": "\n    We have removed the duplicate data-path components (so that the data paths\n    are again as in figure "
+            "body": "\n    Next, observe that the repeated application of the first step brings\n    us to the point where we need to evaluate, not combinations, but\n    primitive expressions such as \n    \n\tnumerals or names.  \n      \n    We take care of the primitive cases \n    \n    by stipulating that\n    "
           },
           {
-            "tag": "REF",
-            "id": "5.1.3-ex-link-5.1",
-            "body": "5.1",
-            "href": "/interactive-sicp/5.1#fig_5.1"
-          },
-          {
-            "tag": "#text",
-            "body": "), but the\n    controller now has two GCD sequences that differ only in their entry-point\n    labels.  It would be better to replace these two sequences by branches to a\n    single sequence—a "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
-          { "tag": "EM", "child": [{ "tag": "#text", "body": "subroutine" }] },
-          {
-            "tag": "#text",
-            "body": "—at the end of which we branch back to the\n    correct place in the main instruction sequence.  We can accomplish this as\n    follows: Before branching to "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
-          {
-            "tag": "#text",
-            "body": ", we place a\n    distinguishing value (such as 0 or 1) into a special register, \n    "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          { "tag": "#text", "body": ".  At the end of the\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
-          { "tag": "#text", "body": " subroutine we return either to\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "after_gcd_1" }] }] },
-          { "tag": "#text", "body": " or to " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "after_gcd_2" }] }] },
-          { "tag": "#text", "body": ", depending\n    on the value of the " },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          { "tag": "#text", "body": " register.\n    Figure " },
-          {
-            "tag": "REF",
-            "id": "5.1.3-ex-link-5.9",
-            "body": "5.9",
-            "href": "/interactive-sicp/5.1.3#fig_5.9"
-          },
-          {
-            "tag": "#text",
-            "body": " shows the relevant portion\n    of the resulting controller sequence, which includes only a single copy of\n    the "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
-          { "tag": "#text", "body": " instructions.\n    " },
-          {
-            "tag": "FIGURE",
-            "snippet": {
-              "tag": "SNIPPET",
-              "latex": true,
-              "body": "\n\"gcd_1\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"after_gcd_1\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd_1\")),\n\"after_gcd_1\",\n  $\\vdots$\n\"gcd_2\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"after_gcd_2\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd_2\")),\n\"after_gcd_2\"\n\t"
-            },
-            "captionHref": "/interactive-sicp/5.1.3#fig_5.8",
-            "captionName": "Figure 5.8 ",
-            "captionBody": [
+            "tag": "UL",
+            "child": [
               {
-                "tag": "#text",
-                "body": "Portions of the controller sequence for a machine that\n      uses the same data-path components for two different GCD\n      computations."
+                "tag": "LI",
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n        the values of numerals are the numbers that they name,\n\tand"
+                  }
+                ]
+              },
+              {
+                "tag": "LI",
+                "child": [
+                  {
+                    "tag": "#text",
+                    "body": "\n        the values of\n\t\n\tnames are the objects associated\n        with those names in the environment.\n      "
+                  }
+                ]
               }
-            ]
-          },
-          {
-            "tag": "FIGURE",
-            "snippet": {
-              "tag": "SNIPPET",
-              "latex": true,
-              "body": "\n\"gcd\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"gcd_done\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd\")),\n\"gcd_done\",\n  test(list(op(\"=\"), reg(\"continue\"), constant(0))),\n  branch(label(\"after_gcd_1\")),\n  go_to(label(\"after_gcd_2\")),\n  $\\vdots$\n  // Before branching to \"gcd\" from the first place where\n  // it is needed, we place 0 in the \"continue\" register\n  assign(\"continue\", constant(0)),\n  go_to(label(\"gcd\")),\n\"after_gcd_1\",\n  $\\vdots$\n  // Before the second use of \"gcd\", we place 1 in the\n  // \"continue\" register\n  assign(\"continue\", constant(1)),\n  go_to(label(\"gcd\")),\n\"after_gcd_2\"\n\t"
-            },
-            "captionHref": "/interactive-sicp/5.1.3#fig_5.9",
-            "captionName": "Figure 5.9 ",
-            "captionBody": [
-              { "tag": "#text", "body": "\n\tUsing a " },
-              { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-              {
-                "tag": "#text",
-                "body": " register to avoid\n\tthe duplicate controller sequence in\n\tfigure "
-              },
-              {
-                "tag": "REF",
-                "id": "5.1.3-ex-link-5.8",
-                "body": "5.8",
-                "href": "/interactive-sicp/5.1.3#fig_5.8"
-              },
-              { "tag": "#text", "body": ".\n      " }
-            ]
-          },
-          {
-            "tag": "FIGURE",
-            "snippet": {
-              "tag": "SNIPPET",
-              "latex": true,
-              "body": "\n\"gcd\",\n  test(list(op(\"=\"), reg(\"b\"), constant(0))),\n  branch(label(\"gcd_done\")),\n  assign(\"t\", list(op(\"rem\"), reg(\"a\"), reg(\"b\"))),\n  assign(\"a\", reg(\"b\")),\n  assign(\"b\", reg(\"t\")),\n  go_to(label(\"gcd\")),\n\"gcd_done\",\n  go_to(reg(\"continue\")),\n  $\\vdots$\n  // Before calling \"gcd\", we assign to \"continue\"\n  // the label to which \"gcd\" should return.\n  assign(\"continue\", label(\"after_gcd_1\"))),\n  go_to(label(\"gcd\")),\n\"after_gcd_1\",\n  $\\vdots$\n  // Here is the second call to \"gcd\", with a different continuation.\n  assign(\"continue\", label(\"after_gcd_2\")),\n  go_to(label(\"gcd\")),\n\"after_gcd_2\"\n\t"
-            },
-            "captionHref": "/interactive-sicp/5.1.3#fig_5.10",
-            "captionName": "Figure 5.10 ",
-            "captionBody": [
-              { "tag": "#text", "body": "\n\tAssigning labels to the " },
-              { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-              {
-                "tag": "#text",
-                "body": " register\n\tsimplifies  and generalizes the strategy shown in\n\tfigure "
-              },
-              {
-                "tag": "REF",
-                "id": "5.1.3-ex-link-5.9",
-                "body": "5.9",
-                "href": "/interactive-sicp/5.1.3#fig_5.9"
-              },
-              { "tag": "#text", "body": ".\n      " }
             ]
           }
         ]
@@ -231,22 +130,17 @@
         "child": [
           {
             "tag": "#text",
-            "body": "\n    This is a reasonable approach for handling small problems, but it would be\n    awkward if there were many instances of GCD computations in the controller\n    sequence.  To decide where to continue executing after the\n    "
+            "body": "\n    The key point to\n    notice is the role of the\n    \n    environment in determining the meaning of\n    the\n    \n\tnames\n      \n    in expressions.  In an interactive language such as\n    \n\tJavaScript,\n      \n    it is meaningless to speak of the value of an expression such as\n    "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "JAVASCRIPTINLINE", "body": "x + 1" },
           {
             "tag": "#text",
-            "body": " subroutine, we would need tests in the data\n    paths and branch instructions in the controller for all the places that use\n    "
+            "body": "\n    without specifying any information about the environment\n    that would provide a meaning for the\n    \n\tname "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "JAVASCRIPTINLINE", "body": "x" },
           {
             "tag": "#text",
-            "body": ". A more powerful method for implementing\n    subroutines is to have the "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          {
-            "tag": "#text",
-            "body": " register\n    hold the label of the entry point in the controller sequence at which\n    execution should continue when the subroutine is finished. Implementing this\n    strategy requires a new kind of connection between the data paths and the\n    controller of a register machine: There must be a way to assign to a\n    register a label in the controller sequence in such a way that this value\n    can be fetched from the register and used to continue execution at the\n    designated entry point.\n  "
+            "body": ".\n      \n    As we shall see in chapter 3, the general notion of\n    the environment as providing a context in which evaluation takes place\n    will play an important role in our understanding of program execution.\n    "
           }
         ]
       },
@@ -254,34 +148,26 @@
         "tag": "TEXT",
         "id": "#p5",
         "child": [
-          { "tag": "#text", "body": "\n    To reflect this ability, we will extend the\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "assign" },
           {
             "tag": "#text",
-            "body": "\n    instruction of the register-machine language to allow a register to be\n    assigned as value a label from the controller sequence (as a special\n    kind of constant).  We will also extend the\n    "
+            "body": "\n    Notice that the\n    evaluation rule given above does not handle\n    \n\tdeclarations.\n      \n    For instance, evaluating\n    "
           },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "go_to" }] }] },
+          { "tag": "JAVASCRIPTINLINE", "body": "const x = 3;" },
+          { "tag": "#text", "body": "\n    does not apply\n    \n\tan equality operator " },
+          { "tag": "JAVASCRIPTINLINE", "body": "=" },
           {
             "tag": "#text",
-            "body": "\n    instruction to allow execution to continue at the entry point described by\n    the contents of a register rather than only at an entry point described by\n    a constant label.  Using these new constructs we can terminate the\n    "
+            "body": "\n    to two arguments, one\n    of which is the value of the\n    \n\tname\n      "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "gcd" },
+          { "tag": "JAVASCRIPTINLINE", "body": "x" },
           {
             "tag": "#text",
-            "body": " subroutine with a branch to the location\n    stored in the "
+            "body": " and the other of which is\n    3, since the purpose of the\n    \n\tdeclaration\n      \n    is precisely to associate\n    "
           },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          {
-            "tag": "#text",
-            "body": " register.  This leads\n    to the controller sequence shown in\n    figure "
-          },
-          {
-            "tag": "REF",
-            "id": "5.1.3-ex-link-5.10",
-            "body": "5.10",
-            "href": "/interactive-sicp/5.1.3#fig_5.10"
-          },
-          { "tag": "#text", "body": ".\n  " }
+          { "tag": "JAVASCRIPTINLINE", "body": "x" },
+          { "tag": "#text", "body": " with a value.\n    (That is,\n    " },
+          { "tag": "JAVASCRIPTINLINE", "body": "const x = 3;" },
+          { "tag": "#text", "body": "\n    is not\n    a combination.)\n  " }
         ]
       },
       {
@@ -289,37 +175,26 @@
         "id": "#p6",
         "child": [
           {
-            "tag": "#text",
-            "body": "\n    A machine with more than one subroutine could use multiple\n    continuation registers (e.g., "
-          },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "gcd_continue" }] }] },
-          { "tag": "#text", "body": ",\n    " },
-          { "child": [{ "child": [{ "tag": "JAVASCRIPTINLINE", "body": "factorial_continue" }] }] },
-          {
-            "tag": "#text",
-            "body": ") or we could have all\n    subroutines share a single\n    "
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          {
-            "tag": "#text",
-            "body": " register.  Sharing is more economical,\n    but we must be careful if we have a subroutine\n    ("
-          },
-          { "tag": "JAVASCRIPTINLINE", "body": "sub1" },
-          { "tag": "#text", "body": ") that calls another subroutine\n    (" },
-          { "tag": "JAVASCRIPTINLINE", "body": "sub2" },
-          { "tag": "#text", "body": ").  Unless\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "sub1" },
-          { "tag": "#text", "body": " saves the contents of\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          { "tag": "#text", "body": " in some other register before setting\n    up " },
-          { "tag": "JAVASCRIPTINLINE", "body": "continue" },
-          { "tag": "#text", "body": " for the call to\n    " },
-          { "tag": "JAVASCRIPTINLINE", "body": "sub2" },
-          { "tag": "#text", "body": ", " },
-          { "tag": "JAVASCRIPTINLINE", "body": "sub1" },
-          {
-            "tag": "#text",
-            "body": " will\n    not know where to go when it is finished.  The mechanism developed in the\n    next section to handle recursion also provides a better solution to this\n    problem of nested subroutine calls.\n  "
+            "tag": "TEXT",
+            "id": "#p7",
+            "child": [
+              { "tag": "#text", "body": "\n          The letters in " },
+              { "tag": "JAVASCRIPTINLINE", "body": "const" },
+              {
+                "tag": "#text",
+                "body": " are \n          rendered in bold to indicate that it is a\n\t  "
+              },
+              { "tag": "EM", "child": [{ "tag": "#text", "body": "keyword" }] },
+              {
+                "tag": "#text",
+                "body": " in JavaScript. Keywords carry a\n\t  particular meaning, and thus cannot be used as names. A keyword or a\n\t  combination of keywords in a statement instructs the JavaScript\n\t  interpreter to treat the statement in a special way. Each such \n\t  "
+              },
+              { "tag": "EM", "child": [{ "tag": "#text", "body": "syntactic form" }] },
+              {
+                "tag": "#text",
+                "body": " has its own evaluation rule. The\n\t  various kinds of statements and expressions (each with its associated\n\t  evaluation rule) constitute the\n          \n          syntax of the programming language.\n        "
+              }
+            ]
           }
         ]
       }

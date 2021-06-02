@@ -122,7 +122,7 @@ const processingFunctions = {
   },
 
   SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h2 ref={ref => (refs.current[obj['id']] = ref)}>{obj['child'][0]['child'][0]['body']}</h2>
+    <h2 ref={ref => (refs.current[obj['id']] = ref)}>{parseArr(obj['child'], refs)}</h2>
   ),
 
   SUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
@@ -224,7 +224,9 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
       <div className={'sicp-figure'}>
-        {obj['src'] && <img src={Links.textbook + obj['src']} alt={obj['id']} />}
+        {obj['src'] && (
+          <img src={Links.textbook + obj['src']} alt={obj['id']} width={obj['scale']} />
+        )}
       </div>
     );
   } else if (obj['snippet']) {
