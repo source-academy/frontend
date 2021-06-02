@@ -37,7 +37,8 @@ import {
   GitHubMissionCreateDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionCreateDialog';
 import {
-  convertMissionMetadataToMetadataString,
+  discoverFilesToBeChangedWithMissionRepoData,
+  discoverFilesToBeCreatedWithoutMissionRepoData,
   getMissionData
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -443,64 +444,15 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const filenameToContentMap = {};
-    const foldersToDelete: string[] = [];
-
-    if (!objectsAreShallowlyEqual<MissionMetadata>(missionMetadata, cachedMissionMetadata)) {
-      filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
-    }
-
-    if (briefingContent !== cachedBriefingContent) {
-      filenameToContentMap['README.md'] = briefingContent;
-    }
-
-    let j = 0;
-    while (j < taskList.length) {
-      const taskNumber = j + 1;
-      const qTaskNumber = 'Q' + taskNumber;
-
-      if (taskNumber > cachedTaskList.length) {
-        filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].savedCode;
-        filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
-      } else {
-        if (taskList[j].savedCode !== cachedTaskList[j].savedCode) {
-          if (isTeacherMode) {
-            filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[j].savedCode;
-          } else {
-            filenameToContentMap[qTaskNumber + '/SavedCode.js'] = taskList[j].savedCode;
-          }
-        }
-
-        if (taskList[j].taskDescription !== cachedTaskList[j].taskDescription) {
-          filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[j].taskDescription;
-        }
-
-        if (taskList[j].testCases !== cachedTaskList[j].testCases) {
-          filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
-            taskList[j].testCases,
-            null,
-            4
-          );
-        }
-
-        if (taskList[j].testPrepend !== cachedTaskList[j].testPrepend) {
-          filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[j].testPrepend;
-        }
-
-        if (taskList[j].testPostpend !== cachedTaskList[j].testPostpend) {
-          filenameToContentMap[qTaskNumber + '/TestPostpend.js'] = taskList[j].testPostpend;
-        }
-      }
-
-      j++;
-    }
-
-    while (j < cachedTaskList.length) {
-      const taskNumber = j + 1;
-      foldersToDelete.push('Q' + taskNumber);
-      j++;
-    }
-
+    const [filenameToContentMap, foldersToDelete] = discoverFilesToBeChangedWithMissionRepoData(
+      missionMetadata,
+      cachedMissionMetadata,
+      briefingContent,
+      cachedBriefingContent,
+      taskList,
+      cachedTaskList,
+      isTeacherMode
+    );
     const changedFiles = Object.keys(filenameToContentMap).sort();
 
     const dialogResults = await promisifyDialog<
@@ -562,33 +514,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       return;
     }
 
-    const filenameToContentMap = {};
-    filenameToContentMap['.metadata'] = convertMissionMetadataToMetadataString(missionMetadata);
-    filenameToContentMap['README.md'] = briefingContent;
-
-    for (let i = 0; i < taskList.length; i++) {
-      const taskNumber = i + 1;
-      const qTaskNumber = 'Q' + taskNumber;
-
-      filenameToContentMap[qTaskNumber + '/StarterCode.js'] = taskList[i].savedCode;
-      filenameToContentMap[qTaskNumber + '/Problem.md'] = taskList[i].taskDescription;
-
-      if (taskList[i].testCases !== cachedTaskList[i].testCases) {
-        filenameToContentMap[qTaskNumber + '/TestCases.json'] = JSON.stringify(
-          taskList[i].testCases,
-          null,
-          4
-        );
-      }
-
-      if (taskList[i].testPrepend !== cachedTaskList[i].testPrepend) {
-        filenameToContentMap[qTaskNumber + '/TestPrepend.js'] = taskList[i].testPrepend;
-      }
-
-      if (taskList[i].testPostpend !== cachedTaskList[i].testPostpend) {
-        filenameToContentMap[qTaskNumber + '/TestPostpend.js'] = taskList[i].testPostpend;
-      }
-    }
+    const filenameToContentMap = discoverFilesToBeCreatedWithoutMissionRepoData(
+      missionMetadata,
+      briefingContent,
+      taskList,
+      cachedTaskList
+    );
 
     const changedFiles = Object.keys(filenameToContentMap).sort();
     const authUser = await octokit.users.getAuthenticated();
