@@ -17,7 +17,11 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { AutogradingResult, Testcase } from '../../commons/assessment/AssessmentTypes';
+import {
+  AutogradingResult,
+  IMCQQuestion,
+  Testcase
+} from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -37,6 +41,9 @@ import {
   GitHubMissionCreateDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionCreateDialog';
 import {
+  checkIsMCQText,
+  convertIMCQQuestionToMCQText,
+  convertMCQTextToIMCQQuestion,
   discoverFilesToBeChangedWithMissionRepoData,
   discoverFilesToBeCreatedWithoutMissionRepoData,
   getMissionData
@@ -163,6 +170,22 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     } as TaskData;
   }, []);
 
+  const defaultMCQQuestion = useMemo(() => {
+    return {
+      answer: -1,
+      choices: [],
+      solution: -1,
+      type: 'mcq',
+      content: '',
+      grade: 0,
+      id: 0,
+      library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+      maxGrade: 0,
+      xp: 0,
+      maxXp: 0
+    } as IMCQQuestion;
+  }, []);
+
   const [showOverlay, setShowOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
@@ -192,6 +215,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
+  const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
+
   const hasUnsavedChanges = props.hasUnsavedChanges;
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleResetWorkspace = props.handleResetWorkspace;
@@ -207,24 +233,51 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     return hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing || hasUnsavedChangesToTasks;
   }, [hasUnsavedChangesToMetadata, hasUnsavedChangesToBriefing, hasUnsavedChangesToTasks]);
 
+  const changeStateDueToChangedTask = useCallback(
+    (newTaskNumber: number, currentTaskList: TaskData[]) => {
+      setCurrentTaskNumber(newTaskNumber);
+      const actualTaskIndex = newTaskNumber - 1;
+
+      handleResetWorkspace({
+        autogradingResults: [],
+        editorValue: currentTaskList[actualTaskIndex].savedCode,
+        editorPrepend: currentTaskList[actualTaskIndex].testPrepend,
+        editorPostpend: currentTaskList[actualTaskIndex].testPostpend,
+        editorTestcases: currentTaskList[actualTaskIndex].testCases
+      });
+
+      let currentTaskIsMCQ = false;
+      if (checkIsMCQText(currentTaskList[actualTaskIndex].savedCode)) {
+        currentTaskIsMCQ = true;
+        const mcqRawText = currentTaskList[actualTaskIndex].savedCode;
+        const mcqQuestion = convertMCQTextToIMCQQuestion(mcqRawText);
+        setMCQQuestion(mcqQuestion);
+      }
+      setCurrentTaskIsMCQ(currentTaskIsMCQ);
+    },
+    [handleResetWorkspace]
+  );
+
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
     setSummary(missionData.missionBriefing);
 
     setMissionMetadata(missionData.missionMetadata);
-    setCachedMissionMetadata(Object.assign({}, missionData.missionMetadata));
+    setCachedMissionMetadata(missionData.missionMetadata);
 
     setBriefingContent(missionData.missionBriefing);
     setCachedBriefingContent(missionData.missionBriefing);
 
     setTaskList(missionData.tasksData);
     setCachedTaskList(missionData.tasksData);
-    setCurrentTaskNumber(1);
+
+    changeStateDueToChangedTask(1, missionData.tasksData);
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
     setHasUnsavedChangesToMetadata(false);
+    handleUpdateHasUnsavedChanges(false);
 
     let userInTeacherMode = false;
     const userLogin = (await octokit.users.getAuthenticated()).data.login;
@@ -245,26 +298,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
     setIsTeacherMode(userInTeacherMode);
 
-    handleEditorValueChange(missionData.tasksData[0].savedCode);
-    handleUpdateHasUnsavedChanges(false);
     setIsLoading(false);
-
-    handleResetWorkspace({
-      autogradingResults: [],
-      editorValue: missionData.tasksData[0].savedCode,
-      editorPrepend: missionData.tasksData[0].testPrepend,
-      editorPostpend: missionData.tasksData[0].testPostpend,
-      editorTestcases: missionData.tasksData[0].testCases
-    });
-
     if (missionData.missionBriefing !== '') setShowOverlay(true);
-  }, [
-    handleResetWorkspace,
-    missionRepoData,
-    octokit,
-    handleEditorValueChange,
-    handleUpdateHasUnsavedChanges
-  ]);
+  }, [changeStateDueToChangedTask, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
 
   const setUpWithoutMissionRepoData = useCallback(() => {
     setSummary(defaultMissionBriefing);
@@ -278,22 +314,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList([defaultTask]);
     setCachedTaskList([defaultTask]);
 
-    setCurrentTaskNumber(1);
-    handleResetWorkspace({
-      autogradingResults: [],
-      editorValue: defaultStarterCode,
-      editorPrepend: '',
-      editorPostpend: '',
-      editorTestcases: []
-    });
+    changeStateDueToChangedTask(1, [defaultTask]);
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
     setHasUnsavedChangesToMetadata(false);
+    handleUpdateHasUnsavedChanges(false);
 
     setIsTeacherMode(true);
     setIsLoading(false);
-  }, [defaultMissionMetadata, defaultTask, handleResetWorkspace]);
+  }, [
+    changeStateDueToChangedTask,
+    defaultMissionMetadata,
+    defaultTask,
+    handleUpdateHasUnsavedChanges
+  ]);
 
   useEffect(() => {
     if (missionRepoData === undefined) {
@@ -621,25 +656,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     []
   );
 
-  const changeStateDueToChangedTask = useCallback(
-    (newTaskNumber: number) => {
-      setCurrentTaskNumber(newTaskNumber);
-
-      handleResetWorkspace({
-        autogradingResults: [],
-        editorValue: taskList[newTaskNumber - 1].savedCode,
-        editorPrepend: taskList[newTaskNumber - 1].testPrepend,
-        editorPostpend: taskList[newTaskNumber - 1].testPostpend,
-        editorTestcases: taskList[newTaskNumber - 1].testCases
-      });
-    },
-    [setCurrentTaskNumber, handleResetWorkspace, taskList]
-  );
-
   const onClickPrevious = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
       const newTaskNumber = currentTaskNumber - 1;
-      changeStateDueToChangedTask(newTaskNumber);
+      changeStateDueToChangedTask(newTaskNumber, taskList);
     }
   }, [
     currentTaskNumber,
@@ -652,7 +672,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const onClickNext = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
       const newTaskNumber = currentTaskNumber + 1;
-      changeStateDueToChangedTask(newTaskNumber);
+      changeStateDueToChangedTask(newTaskNumber, taskList);
     }
   }, [
     currentTaskNumber,
@@ -726,8 +746,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ...editedTaskList[currentTaskNumber - 1],
         testCases: newTestcases
       };
-
-      console.log(editedTaskList);
 
       handleResetWorkspace({
         autogradingResults: [],
@@ -905,11 +923,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       .concat([defaultTask])
       .concat(taskList.slice(currentTaskNumber, taskList.length));
     setTaskList(newTaskList);
-
     const newTaskNumber = currentTaskNumber + 1;
-    setCurrentTaskNumber(newTaskNumber);
-    handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
 
+    changeStateDueToChangedTask(newTaskNumber, newTaskList);
     computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
   };
 
@@ -920,11 +936,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       .slice(0, deleteAtIndex)
       .concat(taskList.slice(currentTaskNumber, taskList.length));
     setTaskList(newTaskList);
-
     const newTaskNumber = currentTaskNumber === 1 ? currentTaskNumber : currentTaskNumber - 1;
-    setCurrentTaskNumber(newTaskNumber);
-    handleEditorValueChange(newTaskList[newTaskNumber - 1].savedCode);
 
+    changeStateDueToChangedTask(newTaskNumber, newTaskList);
     computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
   };
 
@@ -1034,6 +1048,30 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     return [evalButton, clearButton];
   };
 
+  const handleMCQSubmit = useCallback(
+    (choiceId: number) => {
+      if (!currentTaskIsMCQ) {
+        return;
+      }
+
+      const newMCQQuestion = Object.assign({}, mcqQuestion);
+      newMCQQuestion.answer = choiceId;
+
+      setMCQQuestion(newMCQQuestion);
+      editCode(currentTaskNumber, convertIMCQQuestionToMCQText(newMCQQuestion));
+    },
+    [currentTaskIsMCQ, currentTaskNumber, editCode, mcqQuestion]
+  );
+
+  const mcqProps = useMemo(() => {
+    return currentTaskIsMCQ
+      ? {
+          mcq: mcqQuestion,
+          handleMCQSubmit: handleMCQSubmit
+        }
+      : undefined;
+  }, [currentTaskIsMCQ, mcqQuestion, handleMCQSubmit]);
+
   const editorProps = {
     editorSessionId: '',
     editorValue: props.editorValue!,
@@ -1062,13 +1100,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
-    editorProps: editorProps,
+    editorProps: currentTaskIsMCQ ? undefined : editorProps,
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
+    mcqProps: mcqProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props),
     replProps: replProps
@@ -1077,6 +1116,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     editorProps: editorProps,
     replProps: replProps,
     hasUnsavedChanges: hasUnsavedChanges,
+    mcqProps: mcqProps,
     mobileSideContentProps: mobileSideContentProps()
   };
 

@@ -5,7 +5,7 @@ import {
 } from '@octokit/types';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { Testcase } from '../assessment/AssessmentTypes';
+import { IMCQQuestion, Testcase } from '../assessment/AssessmentTypes';
 import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 export const maximumTasksPerMission = 20;
@@ -494,4 +494,57 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
   }
 
   return filenameToContentMap;
+}
+
+export function checkIsMCQText(possibleMCQText: string) {
+  return possibleMCQText.substring(0, 3).toLowerCase() === 'mcq';
+}
+
+export function convertMCQTextToIMCQQuestion(MCQText: string) {
+  const onlyQuestionInformation = MCQText.substring(3, MCQText.length);
+
+  console.log(onlyQuestionInformation);
+
+  const intermediateObject = JSON.parse(onlyQuestionInformation);
+
+  const studentAnswer = intermediateObject.answer;
+  const questions = intermediateObject.questions as [];
+
+  const choices = questions.map((question: { solution: string; hint: string }) => {
+    return {
+      content: question.solution,
+      hint: question.hint
+    };
+  });
+
+  return {
+    answer: studentAnswer,
+    choices: choices,
+    solution: -1,
+    type: 'mcq',
+    content: '',
+    grade: 0,
+    id: 0,
+    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    maxGrade: 0,
+    xp: 0,
+    maxXp: 0
+  } as IMCQQuestion;
+}
+
+export function convertIMCQQuestionToMCQText(mcq: IMCQQuestion) {
+  const studentAnswer = mcq.answer;
+  const questions = mcq.choices.map((choice: { content: string; hint: string | null }) => {
+    return {
+      solution: choice.content,
+      hint: choice.hint
+    };
+  });
+
+  const json = {
+    questions: questions,
+    answer: studentAnswer
+  };
+
+  return 'MCQ\n' + jsonStringify(json);
 }
