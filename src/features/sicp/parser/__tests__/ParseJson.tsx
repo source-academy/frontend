@@ -1,7 +1,6 @@
 import { MathJaxContext } from 'better-react-mathjax';
 import { mount } from 'enzyme';
 import lzString from 'lz-string';
-import Constants from 'src/commons/utils/Constants';
 import { mathjaxConfig } from 'src/pages/sicp/Sicp';
 
 import { JsonType, parseArr, parseObj, processingFunctions } from '../ParseJson';
