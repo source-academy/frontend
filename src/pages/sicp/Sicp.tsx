@@ -1,4 +1,5 @@
-import { Classes } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { MathJaxContext } from 'better-react-mathjax';
 import classNames from 'classnames';
 import * as React from 'react';
@@ -9,7 +10,6 @@ import { parseArr } from 'src/features/sicp/parser/ParseJson';
 
 import testData from '../../features/sicp/data/test.json';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
-import SicpLoadingPage from './subcomponents/SicpLoadingPage';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
 type OwnProps = {};
@@ -38,6 +38,24 @@ export const mathjaxConfig = {
   }
 };
 
+const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
+const errorComponent = (
+  <NonIdealState
+    title="Something went wrong :("
+    description={
+      <div>
+        Something unexpected went wrong trying to load this page. Please try refreshing the page. If
+        the issue persists, let us know by filing an issue at{' '}
+        <a href="https://github.com/source-academy/cadet-frontend">
+          https://github.com/source-academy/cadet-frontend
+        </a>
+        .
+      </div>
+    }
+    icon={IconNames.ERROR}
+  />
+);
+
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState(<></>);
   const [active, setActive] = React.useState('0');
@@ -47,7 +65,7 @@ const Sicp: React.FC<SicpProps> = props => {
 
   // Fetch json data
   React.useEffect(() => {
-    setData(<SicpLoadingPage />);
+    setData(loadingComponent);
 
     if (section === 'index') {
       setData(<SicpIndexPage />);
@@ -71,7 +89,10 @@ const Sicp: React.FC<SicpProps> = props => {
         const newData = parseArr(myJson, refs);
         setData(newData);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        setData(errorComponent);
+      });
   }, [section]);
 
   // Scroll to correct position
