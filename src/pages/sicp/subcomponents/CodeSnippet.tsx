@@ -101,14 +101,12 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           <div className="code-body" onClick={handleOpen}>
             <AceEditor {...aceEditorProps} />
           </div>
-          {output ? (
-            <pre className="code-result">
-              <code>{output}</code>
-            </pre>
-          ) : (
-            <></>
-          )}
         </>
+      )}
+      {output && (
+        <pre className="code-result">
+          <code>{output}</code>
+        </pre>
       )}
     </div>
   );

@@ -91,35 +91,7 @@ const processingFunctions = {
 
   SECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
-  SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => {
-    if (obj['latex']) {
-      return (
-        <pre>
-          <code>{handleLatex(obj['body'], true)}</code>
-        </pre>
-      );
-    } else if (!obj['eval']) {
-      return (
-        <pre>
-          <code>{obj['body']}</code>
-        </pre>
-      );
-    } else {
-      if (!obj['body']) {
-        return;
-      }
-
-      const CodeSnippetProps = {
-        body: obj['body'],
-        id: obj['id'],
-        initialEditorValueHash: obj['withoutPrepend'],
-        initialFullProgramHash: obj['program'],
-        initialPrependHash: obj['prepend'],
-        output: obj['output']
-      };
-      return <CodeSnippet {...CodeSnippetProps} />;
-    }
-  },
+  SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleSnippet(obj),
 
   SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <h2 ref={ref => (refs.current[obj['id']] = ref)}>{parseArr(obj['child'], refs)}</h2>
@@ -206,6 +178,36 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
       {hasAttribution ? <div className="sicp-attribution">{attribution}</div> : <></>}
     </Blockquote>
   );
+};
+
+const handleSnippet = (obj: JsonType) => {
+  if (obj['latex']) {
+    return (
+      <pre>
+        <code>{handleLatex(obj['body'], true)}</code>
+      </pre>
+    );
+  } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
+    return (
+      <pre>
+        <code>{obj['body']}</code>
+      </pre>
+    );
+  } else {
+    if (!obj['body']) {
+      return;
+    }
+
+    const CodeSnippetProps = {
+      body: obj['body'],
+      id: obj['id'],
+      initialEditorValueHash: obj['withoutPrepend'],
+      initialFullProgramHash: obj['program'],
+      initialPrependHash: obj['prepend'],
+      output: obj['output']
+    };
+    return <CodeSnippet {...CodeSnippetProps} />;
+  }
 };
 
 const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (

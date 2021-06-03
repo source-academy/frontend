@@ -63,7 +63,7 @@ $sicp-text-color: #333333;
 
 // Styles for textbook content
 .sicp-code-snippet {
-  margin: 10px 0px;
+  margin: 10px 0;
 
   > .workspace {
     color: white;
@@ -85,10 +85,13 @@ $sicp-text-color: #333333;
     }
   }
 
-  .code-result > code {
-    white-space: pre;
-    display: block;
-    margin-top: -1em;
+  .code-result {
+    padding-left: 1em;
+
+    > code {
+      display: block;
+      margin-top: -1em;
+    }
   }
 
   > .ControlBar {
