@@ -199,39 +199,35 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         {isTeacherMode && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
         {isTeacherMode && (
           <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
-            <AceEditor
-              className="react-ace"
-              fontSize={14}
-              highlightActiveLine={false}
-              mode="javascript"
-              onChange={(newValue: string) => setTestPrepend(newValue)}
-              theme="source"
-              value={testPrepend}
-              width="100%"
-              height="250px"
-            />
+            {createEditor(testPrepend, (newValue: string) => setTestPrepend(newValue))}
           </Collapse>
         )}
         {isTeacherMode &&
           collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
         {isTeacherMode && (
           <Collapse isOpen={showsTestPostpend} keepChildrenMounted={true}>
-            <AceEditor
-              className="react-ace"
-              fontSize={14}
-              highlightActiveLine={false}
-              mode="javascript"
-              onChange={(newValue: string) => setTestPostpend(newValue)}
-              theme="source"
-              value={testPostpend}
-              width="100%"
-              height="250px"
-            />
+            {createEditor(testPostpend, (newValue: string) => setTestPostpend(newValue))}
           </Collapse>
         )}
       </div>
     );
   };
+
+function createEditor(value: string, onChange: (newValue: string) => void) {
+  return (
+    <AceEditor
+      className="react-ace"
+      fontSize={14}
+      highlightActiveLine={false}
+      mode="javascript"
+      onChange={onChange}
+      theme="source"
+      value={value}
+      width="100%"
+      height="250px"
+    />
+  );
+}
 
 const autograderTooltip = (
   <div className="autograder-help-tooltip">
