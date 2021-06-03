@@ -1,7 +1,8 @@
-import { Button, Collapse, Icon, PopoverPosition, TextArea } from '@blueprintjs/core';
+import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
+import AceEditor from 'react-ace';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
@@ -198,10 +199,16 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         {isTeacherMode && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
         {isTeacherMode && (
           <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
-            <TextArea
-              defaultValue={testPrepend}
-              onChange={(event: any) => setTestPrepend(event.target.value)}
-              fill={true}
+            <AceEditor
+              className="react-ace"
+              fontSize={14}
+              highlightActiveLine={false}
+              mode="javascript"
+              onChange={(newValue: string) => setTestPrepend(newValue)}
+              theme="source"
+              value={testPrepend}
+              width="100%"
+              height="250px"
             />
           </Collapse>
         )}
@@ -209,10 +216,16 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
         {isTeacherMode && (
           <Collapse isOpen={showsTestPostpend} keepChildrenMounted={true}>
-            <TextArea
-              defaultValue={testPostpend}
-              onChange={(event: any) => setTestPostpend(event.target.value)}
-              fill={true}
+            <AceEditor
+              className="react-ace"
+              fontSize={14}
+              highlightActiveLine={false}
+              mode="javascript"
+              onChange={(newValue: string) => setTestPostpend(newValue)}
+              theme="source"
+              value={testPostpend}
+              width="100%"
+              height="250px"
             />
           </Collapse>
         )}
