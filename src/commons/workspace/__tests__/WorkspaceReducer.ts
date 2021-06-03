@@ -65,6 +65,7 @@ const playgroundWorkspace: WorkspaceLocation = 'playground';
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 const sicpWorkspace: WorkspaceLocation = 'sicp';
+const githubAssessmentWorkspace: WorkspaceLocation = 'githubAssessment';
 
 function generateActions(type: string, payload: any = {}): any[] {
   return [
@@ -109,6 +110,13 @@ function generateActions(type: string, payload: any = {}): any[] {
         ...payload,
         workspaceLocation: sicpWorkspace
       }
+    },
+    {
+      type,
+      payload: {
+        ...payload,
+        workspaceLocation: githubAssessmentWorkspace
+      }
     }
   ];
 }
@@ -137,6 +145,10 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     },
     sicp: {
       ...defaultWorkspaceManager.sicp,
+      ...payload
+    },
+    githubAssessment: {
+      ...defaultWorkspaceManager.githubAssessment,
       ...payload
     }
   };

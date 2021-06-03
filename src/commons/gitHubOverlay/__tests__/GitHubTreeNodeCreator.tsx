@@ -1,3 +1,5 @@
+import { Octokit } from '@octokit/rest';
+
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
@@ -92,47 +94,114 @@ test('Test attempt to create repository while octokit not yet set', async () => 
   GitHubTreeNodeCreator.currentRepoName = '';
 });
 
-function getOctokitInstanceMock() {
-  return new Mocktokit();
-}
-
 function getOctokitInstanceReturnUndefined() {
   return undefined;
 }
 
-class Mocktokit {
-  readonly repos = {
-    getContent: this.getContent
-  };
+function getOctokitInstanceMock() {
+  const octokit = new Octokit();
 
-  readonly users = {
-    getAuthenticated: this.getAuthenticated
-  };
-
-  async getContent(dummyObject: any) {
-    const childFileArray = [
-      {
-        name: 'TestFile',
-        type: 'file',
-        path: 'TestFile'
-      },
-      {
-        name: 'TestFolder',
-        type: 'dir',
-        path: 'TestFolder'
-      }
+  const getContentMock = jest.spyOn(octokit.repos, 'getContent');
+  getContentMock.mockImplementation(async () => {
+    const contentResponse = generateGetContentResponse();
+    contentResponse.data = [
+      generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
+      generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
     ];
+    return contentResponse;
+  });
 
-    return {
-      data: childFileArray
-    };
-  }
+  const getAuthenticatedMock = jest.spyOn(octokit.users, 'getAuthenticated');
+  getAuthenticatedMock.mockImplementation(async () => {
+    const authResponse = generateGetAuthenticatedResponse();
+    return authResponse;
+  });
 
-  async getAuthenticated() {
-    return {
-      data: {
-        login: 'dummyUserName'
+  return octokit;
+}
+
+function generateGetContentResponse() {
+  return {
+    url: '',
+    status: 200,
+    headers: {},
+    data: {
+      type: 'file',
+      encoding: 'base64',
+      size: 0,
+      name: 'name',
+      path: 'path',
+      content: 'pain',
+      sha: '123',
+      url: 'www.eh',
+      git_url: null,
+      html_url: null,
+      download_url: null,
+      _links: {
+        self: '',
+        git: null,
+        html: null
       }
-    };
-  }
+    }
+  } as any;
+}
+
+function generateGitHubSubDirectory(name: string, type: string, path: string) {
+  return {
+    type: type,
+    size: 0,
+    name: name,
+    path: path,
+    sha: 'string',
+    url: 'string',
+    git_url: null,
+    html_url: null,
+    download_url: null,
+    _links: {
+      self: '',
+      git: null,
+      html: null
+    }
+  } as any;
+}
+
+function generateGetAuthenticatedResponse() {
+  return {
+    data: {
+      avatar_url: 'dummy',
+      bio: null,
+      blog: null,
+      company: null,
+      created_at: 'dummy',
+      email: null,
+      events_url: 'dummy',
+      followers: 0,
+      followers_url: 'dummy',
+      following: 0,
+      following_url: 'dummy',
+      gists_url: 'dummy',
+      gravatar_id: null,
+      hireable: null,
+      html_url: 'dummy',
+      id: 0,
+      location: null,
+      login: 'dummyUserName',
+      name: null,
+      node_id: 'dummy',
+      organizations_url: 'dummy',
+      public_gists: 0,
+      public_repos: 0,
+      received_events_url: 'dummy',
+      repos_url: 'dummy',
+      site_admin: false,
+      starred_url: 'dummy',
+      subscriptions_url: 'dummy',
+      type: 'dummy',
+      updated_at: 'dummy',
+      url: 'dummy'
+    },
+    headers: {},
+    status: 200,
+    url: 'www.eh'
+  } as any;
 }
