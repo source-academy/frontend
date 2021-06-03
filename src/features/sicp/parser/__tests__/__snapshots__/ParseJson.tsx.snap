@@ -213,7 +213,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 "<MathJaxContext version={3} config={{...}}>
   <div className=\\"sicp-figure\\">
     <div className=\\"sicp-figure\\">
-      <img src=\\"http://127.0.0.1:8080/badsrc.svg\\" alt=\\"id\\" width={[undefined]} />
+      <img src=\\"source-academy.github.io/sicp/badsrc.svg\\" alt=\\"id\\" width={[undefined]} />
     </div>
     <h5>
       name

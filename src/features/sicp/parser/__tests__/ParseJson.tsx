@@ -1,6 +1,7 @@
 import { MathJaxContext } from 'better-react-mathjax';
 import { mount } from 'enzyme';
 import lzString from 'lz-string';
+import Constants from 'src/commons/utils/Constants';
 import { mathjaxConfig } from 'src/pages/sicp/Sicp';
 
 import { JsonType, parseArr, parseObj, processingFunctions } from '../ParseJson';
@@ -32,6 +33,13 @@ const referenceTag = 'REFERENCE';
 const textTag = '#text';
 const unknownTag = 'unknown';
 
+jest.mock('src/commons/utils/Constants', () => ({
+  Links: {
+    sourceDocs: ''
+  },
+  interactiveSicpUrl: 'source-academy.github.io/sicp/'
+}));
+
 const mockData = {
   text: {
     tag: textTag,
@@ -45,7 +53,7 @@ const mockData = {
 
 const mockRef = { current: {} };
 
-const process = (tag: string, obj: JsonType) => {
+const processTag = (tag: string, obj: JsonType) => {
   obj['tag'] = tag;
 
   return (
@@ -57,7 +65,7 @@ const process = (tag: string, obj: JsonType) => {
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = mount(process(tag, obj));
+    const tree = mount(processTag(tag, obj));
 
     expect(tree.debug()).toMatchSnapshot();
   });
