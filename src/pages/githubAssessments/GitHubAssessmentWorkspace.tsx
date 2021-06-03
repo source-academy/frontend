@@ -658,6 +658,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickPrevious = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      setTaskList(cachedTaskList);
       const newTaskNumber = currentTaskNumber - 1;
       changeStateDueToChangedTask(newTaskNumber, taskList);
     }
@@ -671,6 +672,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickNext = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
+      setTaskList(cachedTaskList);
       const newTaskNumber = currentTaskNumber + 1;
       changeStateDueToChangedTask(newTaskNumber, taskList);
     }
