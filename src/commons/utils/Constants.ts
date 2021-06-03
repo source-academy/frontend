@@ -31,6 +31,8 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
+const interactiveSicpUrl =
+  process.env.REACT_APP_INTERACTIVE_SICP_URL || 'https://source-academy.github.io/sicp/';
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -94,9 +96,7 @@ export enum Links {
   source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
   source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
   source_4 = 'https://source-academy.github.io/source/source_4/',
-  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/',
-
-  sicp = 'http://127.0.0.1:8080/'
+  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/'
 }
 
 const Constants = {
@@ -126,7 +126,8 @@ const Constants = {
   githubOAuthProxyUrl,
   sharedbBackendUrl,
   disablePeriods,
-  cadetLoggerInterval
+  cadetLoggerInterval,
+  interactiveSicpUrl
 };
 
 export default Constants;

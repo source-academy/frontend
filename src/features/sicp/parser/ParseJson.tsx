@@ -1,6 +1,6 @@
 import { Blockquote, H1, OL, UL } from '@blueprintjs/core';
 import { MathJax } from 'better-react-mathjax';
-import { Links } from 'src/commons/utils/Constants';
+import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
 import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
@@ -226,7 +226,13 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
       <div className={'sicp-figure'}>
-        {obj['src'] && <img src={Links.sicp + obj['src']} alt={obj['id']} width={obj['scale']} />}
+        {obj['src'] && (
+          <img
+            src={Constants.interactiveSicpUrl + obj['src']}
+            alt={obj['id']}
+            width={obj['scale']}
+          />
+        )}
       </div>
     );
   } else if (obj['snippet']) {
