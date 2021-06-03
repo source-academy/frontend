@@ -129,7 +129,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/interactive-sicp"
+        to="/interactive-sicp/index"
       >
         <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text">SICP JS</div>
@@ -201,7 +201,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
             <GitHubAssessmentsNavigationBar {...props} />
           )}
         </Route>
-        <Route path="/interactive-sicp">
+        <Route path="/interactive-sicp/:section?">
           <SicpNavigationBar />
         </Route>
         <Route>

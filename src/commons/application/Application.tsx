@@ -165,7 +165,8 @@ const Application: React.FC<ApplicationProps> = props => {
               />
             )}
             <Route path="/callback/github" component={GitHubCallback} />
-            <Route path="/interactive-sicp/:section?" component={Sicp} />
+            <Route exact path="/interactive-sicp" render={redirectToSicp} />
+            <Route path="/interactive-sicp/:section" component={Sicp} />
             {fullPaths}
             <Route
               exact={true}
@@ -183,6 +184,7 @@ const Application: React.FC<ApplicationProps> = props => {
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
+const redirectToSicp = () => <Redirect to="/interactive-sicp/index" />;
 
 /**
  * A user routes to /academy,

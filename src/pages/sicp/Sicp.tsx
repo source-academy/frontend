@@ -49,7 +49,7 @@ const Sicp: React.FC<SicpProps> = props => {
   React.useEffect(() => {
     setData(<SicpLoadingPage />);
 
-    if (!section) {
+    if (section === 'index') {
       setData(<SicpIndexPage />);
       return;
     }

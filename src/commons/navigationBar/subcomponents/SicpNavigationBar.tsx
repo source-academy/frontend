@@ -1,7 +1,7 @@
 import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import controlButton from 'src/commons/ControlButton';
 
 import tocNavigation from '../../../features/sicp/data/toc-navigation.json';
@@ -14,8 +14,7 @@ type OwnProps = {};
 
 const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
   const [isTocOpen, setIsTocOpen] = React.useState(false);
-  const location = useLocation().pathname;
-
+  const { section } = useParams<{ section: string }>();
   const history = useHistory();
 
   const handleCloseToc = () => setIsTocOpen(false);
@@ -26,7 +25,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
   }, []);
 
   const prevButton = React.useMemo(() => {
-    const sect = tocNavigation[location];
+    const sect = tocNavigation[section];
     if (!sect) {
       return;
     }
@@ -37,16 +36,16 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
     }
 
     const handlePrev = () => {
-      history.push(prev);
+      history.push('/interactive-sicp/' + prev);
     };
 
     return (
       prev && <div key="prev">{controlButton('Previous', IconNames.ARROW_LEFT, handlePrev)}</div>
     );
-  }, [history, location]);
+  }, [history, section]);
 
   const nextButton = React.useMemo(() => {
-    const sect = tocNavigation[location];
+    const sect = tocNavigation[section];
     if (!sect) {
       return;
     }
@@ -57,7 +56,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
     }
 
     const handleNext = () => {
-      history.push(next);
+      history.push('/interactive-sicp/' + next);
     };
     return (
       next && (
@@ -66,7 +65,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
         </div>
       )
     );
-  }, [history, location]);
+  }, [history, section]);
 
   const drawerProps = {
     onClose: handleCloseToc,

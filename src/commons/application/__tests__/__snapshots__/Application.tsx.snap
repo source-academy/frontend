@@ -11,7 +11,8 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/githubassessments/missions\\" component={[Function: component]} />
       <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
-      <Route path=\\"/interactive-sicp/:section?\\" component={[Function: Sicp]} />
+      <Route exact={true} path=\\"/interactive-sicp\\" render={[Function: redirectToSicp]} />
+      <Route path=\\"/interactive-sicp/:section\\" component={[Function: Sicp]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
