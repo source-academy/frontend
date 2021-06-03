@@ -22,9 +22,9 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
     );
 
   return (
-    <div>
-      <div className="SideContentMissionEditorRow">
-        <div className="SideContentMissionEditorColumn">
+    <div className='SideContentMissionEditor'>
+      <div className='SideContentMissionEditorRow'>
+        <div className='SideContentMissionEditorLabelColumn'>
           <Label>Mission Title</Label>
           <Label>Cover Image Link</Label>
           <Label>Mission Summary</Label>
@@ -34,7 +34,7 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
           <Label>Reading</Label>
           <Label>Due Date</Label>
         </div>
-        <div className="SideContentMissionEditorColumn">
+        <div className='SideContentMissionEditorOptionColumn'>
           <InputGroup
             defaultValue={props.missionMetadata.title}
             onChange={handleChangeMissionTitle}
