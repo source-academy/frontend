@@ -23,7 +23,7 @@ export const CodeSnippetContext = React.createContext({
   setActive: (x: string) => {}
 });
 
-const mathjaxConfig = {
+export const mathjaxConfig = {
   loader: { load: ['[tex]/html'] },
   tex: {
     packages: { '[+]': ['html'] },

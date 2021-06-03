@@ -1,0 +1,930 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Parse array no child successful 1`] = `""`;
+
+exports[`Parse array one child successful 1`] = `
+"<span>
+  <p>
+    Mock Text
+  </p>
+</span>"
+`;
+
+exports[`Parse array two child successful 1`] = `
+"<span>
+  <p>
+    Mock Text
+  </p>
+</span>
+
+
+<span>
+  <p>
+    Mock Text
+  </p>
+</span>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component className=\\"sicp-epigraph\\">
+    <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+      <div className=\\"sicp-attribution\\">
+        <span>
+          -
+        </span>
+        <span>
+          Author
+        </span>
+        <i>
+          Title
+        </i>
+        <span>
+          2021
+        </span>
+      </div>
+    </blockquote>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component className=\\"sicp-epigraph\\">
+    <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+      <div className=\\"sicp-attribution\\">
+        <span>
+          -
+        </span>
+        <span>
+          Author
+        </span>
+      </div>
+    </blockquote>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component className=\\"sicp-epigraph\\">
+    <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+      <div className=\\"sicp-attribution\\">
+        <span>
+          -
+        </span>
+        <span>
+          2021
+        </span>
+      </div>
+    </blockquote>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component className=\\"sicp-epigraph\\">
+    <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </blockquote>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component className=\\"sicp-epigraph\\">
+    <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+      <div className=\\"sicp-attribution\\">
+        <span>
+          -
+        </span>
+        <i>
+          Title
+        </i>
+      </div>
+    </blockquote>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse exercise EXERCISE with solution successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div>
+    <SicpExercise title={[undefined]} body={{...}} solution={{...}}>
+      <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
+        <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
+          <b />
+          <div />
+          <div className=\\"sicp-button-container\\">
+            <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
+              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                <Blueprint3.Icon icon={[undefined]} />
+                <span className=\\"bp3-button-text\\">
+                  Show Solution
+                </span>
+                <Blueprint3.Icon icon={[undefined]} />
+              </button>
+            </Blueprint3.Button>
+          </div>
+          <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+            <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
+              <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+            </div>
+          </Blueprint3.Collapse>
+        </div>
+      </Blueprint3.Card>
+    </SicpExercise>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse exercise EXERCISE without solution successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div>
+    <SicpExercise title=\\"Title\\" body={{...}} solution={{...}}>
+      <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
+        <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
+          <b>
+            Title
+          </b>
+          <div>
+            <span>
+              <p>
+                Mock Text
+              </p>
+            </span>
+          </div>
+          <div className=\\"sicp-button-container\\">
+            <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
+              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                <Blueprint3.Icon icon={[undefined]} />
+                <span className=\\"bp3-button-text\\">
+                  Show Solution
+                </span>
+                <Blueprint3.Icon icon={[undefined]} />
+              </button>
+            </Blueprint3.Button>
+          </div>
+          <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+            <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
+              <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+            </div>
+          </Blueprint3.Collapse>
+        </div>
+      </Blueprint3.Card>
+    </SicpExercise>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse figures FIGURE with image and scale successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div className=\\"sicp-figure\\" />
+</MathJaxContext>"
+`;
+
+exports[`Parse figures FIGURE with image successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div className=\\"sicp-figure\\">
+    <div className=\\"sicp-figure\\">
+      <img src=\\"http://127.0.0.1:8080/badsrc.svg\\" alt=\\"id\\" width={[undefined]} />
+    </div>
+    <h5>
+      name
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </h5>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse figures FIGURE with snippet successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div className=\\"sicp-figure\\">
+    <CodeSnippet body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]}>
+      <div className=\\"sicp-code-snippet\\">
+        <div className=\\"code-body\\" onClick={[Function: handleOpen]}>
+          <ReactAce className=\\"react-ace\\" mode=\\"source4defaultNONE\\" theme=\\"source\\" fontSize={20} highlightActiveLine={false} wrapEnabled={true} height=\\"unset\\" width=\\"100%\\" showGutter={false} showPrintMargin={false} readOnly={true} maxLines={Infinity} value=\\"1 + 1; \\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} onChange={{...}} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true}>
+            <div id=\\"ace-editor\\" style={{...}} />
+          </ReactAce>
+        </div>
+      </div>
+    </CodeSnippet>
+    <h5>
+      name
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </h5>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse figures FIGURE with table successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div className=\\"sicp-figure\\">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <span>
+              <p>
+                Mock Text
+              </p>
+            </span>
+          </td>
+          <td>
+            <span>
+              <p>
+                Mock Text
+              </p>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span>
+              <p>
+                Mock Text
+              </p>
+            </span>
+          </td>
+          <td>
+            <span>
+              <p>
+                Mock Text
+              </p>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h5>
+      name
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </h5>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <hr />
+  <div className=\\"sicp-footnote\\">
+    <a href=\\"\\">
+      [1] 
+    </a>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse footnote DISPLAYFOOTNOTE count is 2 successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div className=\\"sicp-footnote\\">
+    <a href=\\"\\">
+      [2] 
+    </a>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse heading SUBHEADING  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <h2>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </h2>
+</MathJaxContext>"
+`;
+
+exports[`Parse heading SUBSUBHEADING  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <h4>
+    <br />
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </h4>
+</MathJaxContext>"
+`;
+
+exports[`Parse latex LATEX  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <MathJax>
+    <span id={[undefined]} style={{...}}>
+      $test$
+    </span>
+  </MathJax>
+</MathJaxContext>"
+`;
+
+exports[`Parse latex LATEXINLINE  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <MathJax inline={true}>
+    <span id={[undefined]} style={{...}}>
+      $test$
+    </span>
+  </MathJax>
+</MathJaxContext>"
+`;
+
+exports[`Parse latex META  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <MathJax inline={true}>
+    <span id={[undefined]} style={{...}}>
+      $test$
+    </span>
+  </MathJax>
+</MathJaxContext>"
+`;
+
+exports[`Parse latex METAPHRASE  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <MathJax inline={true}>
+    <span id={[undefined]} style={{...}}>
+      $\\\\langle$ $test$ $\\\\rangle$
+    </span>
+  </MathJax>
+</MathJaxContext>"
+`;
+
+exports[`Parse links FOOTNOTE_REF  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <sup>
+    <a href=\\"bad-link\\">
+      link
+    </a>
+  </sup>
+</MathJaxContext>"
+`;
+
+exports[`Parse links LINK  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <a href=\\"bad-link\\">
+    link
+  </a>
+</MathJaxContext>"
+`;
+
+exports[`Parse links REF  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <a href=\\"bad-link\\">
+    link
+  </a>
+</MathJaxContext>"
+`;
+
+exports[`Parse list OL  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <ol className=\\"bp3-list\\">
+      <span>
+        <li>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </li>
+      </span>
+    </ol>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse list UL  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <ul className=\\"bp3-list\\">
+      <span>
+        <li>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </li>
+      </span>
+    </ul>
+  </Component>
+</MathJaxContext>"
+`;
+
+exports[`Parse object no tag 1`] = `
+"<span>
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</span>"
+`;
+
+exports[`Parse object successful 1`] = `
+"<span>
+  <p>
+    Mock Text
+  </p>
+</span>"
+`;
+
+exports[`Parse object tag not found 1`] = `
+"<span style={{...}}>
+  unknown text
+</span>"
+`;
+
+exports[`Parse reference REFERENCE  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <div>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse section CHAPTER  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <h1 className=\\"bp3-heading\\">
+      Title
+    </h1>
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse section MATTER  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <h1 className=\\"bp3-heading\\">
+      Title
+    </h1>
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse section REFERENCES  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <h1 className=\\"bp3-heading\\">
+      Title
+    </h1>
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse section SECTION  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <h1 className=\\"bp3-heading\\">
+      Title
+    </h1>
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse section SUBSECTION  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <h1 className=\\"bp3-heading\\">
+      Title
+    </h1>
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse section SUBSUBHEADING  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <h4>
+    <br />
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </h4>
+</MathJaxContext>"
+`;
+
+exports[`Parse section SUBSUBSECTION  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <Component>
+    <h1 className=\\"bp3-heading\\">
+      Title
+    </h1>
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</MathJaxContext>"
+`;
+
+exports[`Parse snippet SNIPPET no eval successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <pre>
+    <code />
+  </pre>
+</MathJaxContext>"
+`;
+
+exports[`Parse snippet SNIPPET with latex successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <pre>
+    <code>
+      <MathJax>
+        <span id={[undefined]} style={{...}} />
+      </MathJax>
+    </code>
+  </pre>
+</MathJaxContext>"
+`;
+
+exports[`Parse snippet SNIPPET with prepend successful 1`] = `"<MathJaxContext version={3} config={{...}} />"`;
+
+exports[`Parse snippet SNIPPET without prepend successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <CodeSnippet body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]}>
+    <div className=\\"sicp-code-snippet\\">
+      <div className=\\"code-body\\" onClick={[Function: handleOpen]}>
+        <ReactAce className=\\"react-ace\\" mode=\\"source4defaultNONE\\" theme=\\"source\\" fontSize={20} highlightActiveLine={false} wrapEnabled={true} height=\\"unset\\" width=\\"100%\\" showGutter={false} showPrintMargin={false} readOnly={true} maxLines={Infinity} value=\\"1 + 1; \\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} onChange={{...}} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true}>
+          <div id=\\"ace-editor\\" style={{...}} />
+        </ReactAce>
+      </div>
+    </div>
+  </CodeSnippet>
+</MathJaxContext>"
+`;
+
+exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `"<MathJaxContext version={3} config={{...}} />"`;
+
+exports[`Parse styling B  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <b>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </b>
+</MathJaxContext>"
+`;
+
+exports[`Parse styling EM  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <em>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </em>
+</MathJaxContext>"
+`;
+
+exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <code />
+</MathJaxContext>"
+`;
+
+exports[`Parse styling TT  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <code>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </code>
+</MathJaxContext>"
+`;
+
+exports[`Parse symbol BR  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <br />
+</MathJaxContext>"
+`;
+
+exports[`Parse symbol LaTeX  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <p>
+    LaTeX
+  </p>
+</MathJaxContext>"
+`;
+
+exports[`Parse symbol TeX  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <p>
+    TeX
+  </p>
+</MathJaxContext>"
+`;
+
+exports[`Parse table TABLE  successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</MathJaxContext>"
+`;
