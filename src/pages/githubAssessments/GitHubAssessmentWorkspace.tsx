@@ -276,10 +276,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsTeacherMode(true);
     setIsLoading(false);
-  }, [
-    changeStateDueToChangedTask,
-    handleUpdateHasUnsavedChanges
-  ]);
+  }, [changeStateDueToChangedTask, handleUpdateHasUnsavedChanges]);
 
   useEffect(() => {
     if (missionRepoData === undefined) {
