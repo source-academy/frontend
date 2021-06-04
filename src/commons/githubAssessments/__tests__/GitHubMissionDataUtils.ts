@@ -313,6 +313,293 @@ test('discoverFilesToBeChangedWithMissionRepoData discovers files to create', ()
   expect(foldersToDelete.length).toBe(0);
 });
 
+test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit in Non-Teacher Mode', () => {
+  // missionMetadata and cachedMissionMetadata have different values
+  // briefingContent and cachedBriefingContent have different values
+  // taskList is the same length as cachedTaskList
+  // taskList shares one task with cachedTaskList
+
+  const missionMetadata = Object.assign(dummyMissionMetadata);
+  const cachedMissionMetadata = Object.assign(defaultMissionMetadata);
+
+  const briefingContent = 'new dummy';
+  const cachedBriefingContent = 'dummy';
+
+  const taskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'change',
+      starterCode: 'starter',
+      savedCode: 'change',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 2,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'change',
+      testPostpend: 'change',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 3,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: 'change',
+          program: 'change',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const cachedTaskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 2,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 3,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const isTeacherMode = false;
+
+  const [filenameToContentMap, foldersToDelete] =
+    GitHubMissionDataUtils.discoverFilesToBeChangedWithMissionRepoData(
+      missionMetadata,
+      cachedMissionMetadata,
+      briefingContent,
+      cachedBriefingContent,
+      taskList,
+      cachedTaskList,
+      isTeacherMode
+    );
+
+  const existingKeys = new Set();
+
+  Object.keys(filenameToContentMap).forEach((key: string) => existingKeys.add(key));
+
+  const expectedKeys = new Set([
+    '.metadata',
+    'README.md',
+    'Q1/SavedCode.js',
+    'Q1/Problem.md',
+    'Q2/TestPrepend.js',
+    'Q2/TestPostpend.js',
+    'Q3/TestCases.json'
+  ]);
+
+  expect(existingKeys).toEqual(expectedKeys);
+  expect(foldersToDelete.length).toBe(0);
+});
+
+test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit in Teacher Mode', () => {
+  // Test inputs should be same as above, but with isTeacherMode set to true
+  // This will turn any edits to 'SavedCode.js' into edits to 'StarterCode.js'
+  const missionMetadata = Object.assign(dummyMissionMetadata);
+  const cachedMissionMetadata = Object.assign(defaultMissionMetadata);
+
+  const briefingContent = 'new dummy';
+  const cachedBriefingContent = 'dummy';
+
+  const taskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'change',
+      starterCode: 'starter',
+      savedCode: 'change',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 2,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'change',
+      testPostpend: 'change',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 3,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: 'change',
+          program: 'change',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const cachedTaskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 2,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 3,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const isTeacherMode = true;
+
+  const [filenameToContentMap, foldersToDelete] =
+    GitHubMissionDataUtils.discoverFilesToBeChangedWithMissionRepoData(
+      missionMetadata,
+      cachedMissionMetadata,
+      briefingContent,
+      cachedBriefingContent,
+      taskList,
+      cachedTaskList,
+      isTeacherMode
+    );
+
+  const existingKeys = new Set();
+
+  Object.keys(filenameToContentMap).forEach((key: string) => existingKeys.add(key));
+
+  const expectedKeys = new Set([
+    '.metadata',
+    'README.md',
+    'Q1/StarterCode.js',
+    'Q1/Problem.md',
+    'Q2/TestPrepend.js',
+    'Q2/TestPostpend.js',
+    'Q3/TestCases.json'
+  ]);
+
+  expect(existingKeys).toEqual(expectedKeys);
+  expect(foldersToDelete.length).toBe(0);
+});
+
 test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
   const missionMetadata = Object.assign({}, dummyMissionMetadata);
   const briefingContent = 'dummy briefing';

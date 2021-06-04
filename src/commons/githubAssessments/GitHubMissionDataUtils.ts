@@ -3,7 +3,7 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
-import { values } from 'lodash';
+import { first, values } from 'lodash';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { IMCQQuestion, Testcase } from '../assessment/AssessmentTypes';
@@ -421,7 +421,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         const cachedValue = cachedTaskList[i][propertyName];
 
         const valuesAreUnequal = Array.isArray(currentValue)
-          ? testArrayEquality(currentValue, cachedValue)
+          ? !arraysAreEqual(currentValue, cachedValue)
           : currentValue !== cachedValue;
 
         if (valuesAreUnequal) {
@@ -463,14 +463,23 @@ export function discoverFilesToBeChangedWithMissionRepoData(
   return [filenameToContentMap, foldersToDelete];
 }
 
-function testArrayEquality(firstArray: any[], secondArray: any[]) {
+function arraysAreEqual(firstArray: any[], secondArray: any[]) {
   if (firstArray.length !== secondArray.length) {
     return false;
   }
 
   for (let i = 0; i < firstArray.length; i++) {
-    if (firstArray[i] != secondArray[i]) {
-      return false;
+    const propertySet = new Set(Object.keys(firstArray[i]));
+    Object.keys(secondArray[i]).forEach((key: string) => propertySet.add(key));
+
+    const setIter = propertySet.values();
+    let elem = setIter.next().value;
+
+    while (elem) {
+      if (firstArray[i][elem] !== secondArray[i][elem]) {
+        return false;
+      }
+      elem = setIter.next().value;
     }
   }
 
