@@ -156,7 +156,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   /**
    * State variables relating to the rendering and function of the workspace
-  */
+   */
   const [summary, setSummary] = React.useState('');
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
@@ -750,12 +750,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },
-    [
-      currentTaskNumber,
-      taskList,
-      cachedTaskList,
-      computeAndSetHasUnsavedChangesToTasks
-    ]
+    [currentTaskNumber, taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
   );
 
   const setTestPostpend = useCallback(
@@ -768,12 +763,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },
-    [
-      currentTaskNumber,
-      taskList,
-      cachedTaskList,
-      computeAndSetHasUnsavedChangesToTasks
-    ]
+    [currentTaskNumber, taskList, cachedTaskList, computeAndSetHasUnsavedChangesToTasks]
   );
 
   const setBriefingContentWrapper = useCallback(
