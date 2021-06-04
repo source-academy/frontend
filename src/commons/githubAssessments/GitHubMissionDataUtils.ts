@@ -420,7 +420,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         const cachedValue = cachedTaskList[i][propertyName];
 
         const valuesAreUnequal = Array.isArray(currentValue)
-          ? !arraysAreEqual(currentValue, cachedValue)
+          ? !objectArraysAreEqual(currentValue, cachedValue)
           : currentValue !== cachedValue;
 
         if (valuesAreUnequal) {
@@ -463,23 +463,35 @@ export function discoverFilesToBeChangedWithMissionRepoData(
   return [filenameToContentMap, foldersToDelete];
 }
 
-function arraysAreEqual(firstArray: any[], secondArray: any[]) {
+export function objectsAreEqual(firstObject: any, secondObject: any) {
+  const propertySet = new Set(Object.keys(firstObject));
+  Object.keys(secondObject).forEach((key: string) => propertySet.add(key));
+
+  const setIter = propertySet.values();
+  let elem = setIter.next().value;
+
+  while (elem) {
+    if (firstObject[elem] !== secondObject[elem]) {
+      return false;
+    }
+    elem = setIter.next().value;
+  }
+
+  return true;
+}
+
+export function objectArraysAreEqual(firstArray: any[], secondArray: any[]) {
   if (firstArray.length !== secondArray.length) {
     return false;
   }
 
   for (let i = 0; i < firstArray.length; i++) {
-    const propertySet = new Set(Object.keys(firstArray[i]));
-    Object.keys(secondArray[i]).forEach((key: string) => propertySet.add(key));
+    if (firstArray[i] === secondArray[i]) {
+      continue;
+    }
 
-    const setIter = propertySet.values();
-    let elem = setIter.next().value;
-
-    while (elem) {
-      if (firstArray[i][elem] !== secondArray[i][elem]) {
-        return false;
-      }
-      elem = setIter.next().value;
+    if (!objectsAreEqual(firstArray[i], secondArray[i])) {
+      return false;
     }
   }
 
