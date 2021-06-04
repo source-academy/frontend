@@ -8,6 +8,7 @@ import {
   GoalType
 } from '../../../features/achievement/AchievementTypes';
 import { store } from '../../../pages/createStore';
+import Constants from '../../utils/Constants';
 import { showSuccessMessage } from '../../utils/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased, isWithinTimeRange } from './DateHelper';
@@ -74,13 +75,15 @@ function resetLoggedEvents() {
 }
 
 export function processEvent(eventNames: EventType[]) {
-  loggedEvents.push(eventNames);
+  if (store.getState().session.role && !Constants.playgroundOnly && Constants.enableAchievements) {
+    loggedEvents.push(eventNames);
 
-  if (!timeoutSet) {
-    timeoutSet = true;
-    setTimeout(() => {
-      store.dispatch(handleEvent(loggedEvents));
-      resetLoggedEvents();
-    }, updateInterval);
+    if (!timeoutSet) {
+      timeoutSet = true;
+      setTimeout(() => {
+        store.dispatch(handleEvent(loggedEvents));
+        resetLoggedEvents();
+      }, updateInterval);
+    }
   }
 }
