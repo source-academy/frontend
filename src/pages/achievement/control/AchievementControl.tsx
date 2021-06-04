@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Prompt } from 'react-router';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';

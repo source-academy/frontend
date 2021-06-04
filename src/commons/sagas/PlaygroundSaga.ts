@@ -19,7 +19,7 @@ import { safeTakeEvery as takeEvery } from './SafeEffects';
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(GENERATE_LZ_STRING, updateQueryString);
 
-  yield takeEvery(SHORTEN_URL, function* (action: ReturnType<typeof shortenURL>) {
+  yield takeEvery(SHORTEN_URL, function* (action: ReturnType<typeof shortenURL>): any {
     const queryString = yield select((state: OverallState) => state.playground.queryString);
     const keyword = action.payload;
     const errorMsg = 'ERROR';
