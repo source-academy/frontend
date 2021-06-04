@@ -82,11 +82,11 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
 
   return (
     <>
-      <Navbar className="NavigationBar secondary-navbar">
+      <Navbar className="SicpNavigationBar secondary-navbar">
         <NavbarGroup align={Alignment.LEFT}>{[menuButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>{[prevButton, nextButton]}</NavbarGroup>
       </Navbar>
-      <Drawer {...drawerProps}>
+      <Drawer {...drawerProps} className="sicp-toc-drawer">
         <SicpToc handleCloseToc={handleCloseToc} location="sidebar" />
       </Drawer>
     </>

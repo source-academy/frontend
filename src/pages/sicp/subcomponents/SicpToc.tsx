@@ -46,6 +46,7 @@ const SicpToc: React.FC<TocProps> = props => {
     <div className="sicp-toc">
       {slug !== '' && <Redirect to={'/interactive-sicp/' + slug} />}
       <Tree
+        className="sicp-toc-tree"
         contents={sidebarContent}
         onNodeClick={handleNodeClicked}
         onNodeCollapse={handleNodeCollapse}

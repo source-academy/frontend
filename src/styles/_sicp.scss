@@ -147,3 +147,16 @@ $sicp-text-color: #333333;
     }
   }
 }
+
+// Styles for sicp table of contents
+.sicp-toc-drawer {
+  background-color: $cadet-color-2;
+  .sicp-toc-tree {
+    color: $cadet-color-4;
+    font-size: larger;
+
+    .bp3-tree-node-content {
+      height: 45px;
+    }
+  }
+}
