@@ -3,19 +3,11 @@ import { mount } from 'enzyme';
 import lzString from 'lz-string';
 import { mathjaxConfig } from 'src/pages/sicp/Sicp';
 
-import { JsonType, parseArr, parseObj, processingFunctions } from '../ParseJson';
+import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
 
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];
-const sectionTags = [
-  'SECTION',
-  'SUBSECTION',
-  'SUBSUBSECTION',
-  'SUBSUBHEADING',
-  'MATTER',
-  'CHAPTER',
-  'REFERENCES'
-];
+const sectionTags = ['SECTION', 'SUBSECTION', 'SUBSUBSECTION', 'MATTER', 'CHAPTER', 'REFERENCES'];
 const listTags = ['OL', 'UL'];
 const symbolTags = ['BR', 'LaTeX', 'TeX'];
 const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT'];
@@ -341,9 +333,8 @@ describe('Parse object', () => {
   test('tag not found', () => {
     const tag = unknownTag;
     const obj = { tag: tag, body: 'text' };
-    const tree = mount(parseObj(obj, 0, mockRef));
 
-    expect(tree.debug()).toMatchSnapshot();
+    expect(() => parseObj(obj, 0, mockRef)).toThrowError(ParseJsonError);
   });
 
   test('no tag', () => {
