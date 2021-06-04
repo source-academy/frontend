@@ -1,4 +1,5 @@
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import { Resizable } from 're-resizable';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 import ControlBar from 'src/commons/controlBar/ControlBar';
@@ -89,12 +90,34 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     }
   };
 
+  const resizableProps = {
+    enable: {
+      top: false,
+      right: false,
+      bottom: true,
+      left: false,
+      topRight: false,
+      bottomRight: false,
+      bottomLeft: false,
+      topLeft: false
+    },
+    defaultSize: {
+      width: '100%',
+      height: '400px'
+    },
+    minHeight: '250px'
+  };
+
   return (
     <div className="sicp-code-snippet">
       {context.active === id ? (
         <>
           <ControlBar {...controlBarProps} />
-          <SicpWorkspaceContainer {...WorkspaceProps} />
+          <Resizable {...resizableProps}>
+            <div className="sicp-resizable">
+              <SicpWorkspaceContainer {...WorkspaceProps} />
+            </div>
+          </Resizable>
         </>
       ) : (
         <>

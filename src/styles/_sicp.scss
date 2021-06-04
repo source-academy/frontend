@@ -65,10 +65,30 @@ $sicp-text-color: #333333;
 .sicp-code-snippet {
   margin: 10px 0;
 
-  > .workspace {
+  // editor workspace
+  .workspace {
     color: white;
+    overflow-y: auto;
   }
 
+  .sicp-resizable {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+  }
+
+  > .ControlBar {
+    display: flex;
+    background-color: $cadet-color-1;
+    color: white;
+    padding: 5px;
+
+    .ControlBar_flow {
+      flex-grow: 1;
+    }
+  }
+
+  // no editor
   > .code-body {
     background-color: $cadet-color-2;
     padding: 10px;
@@ -85,6 +105,7 @@ $sicp-text-color: #333333;
     }
   }
 
+  // code result
   .code-result {
     padding-left: 1em;
 
@@ -92,21 +113,6 @@ $sicp-text-color: #333333;
       display: block;
       margin-top: -1em;
     }
-  }
-
-  > .ControlBar {
-    display: flex;
-    background-color: $cadet-color-1;
-    color: white;
-    padding: 5px;
-
-    .ControlBar_flow {
-      flex-grow: 1;
-    }
-  }
-
-  .workspace {
-    height: 350px !important;
   }
 }
 

@@ -789,7 +789,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
-      workspaceLocation: 'playground'
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -814,7 +814,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
-      workspaceLocation: 'playground',
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
       handleEditorEval: props.handleEditorEval
     }
   };
