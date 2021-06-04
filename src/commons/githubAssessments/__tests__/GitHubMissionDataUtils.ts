@@ -219,6 +219,19 @@ test('getMissionData works properly', async () => {
   });
 });
 
+test('discoverFilesToBeChangedWithMissionRepoData discovers files to create', () => {
+  const missionMetadata = Object.assign(dummyMissionMetadata);
+  const cachedMissionMetadata = Object.assign(dummyMissionMetadata); 
+});
+
+test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit', () => {
+
+});
+
+test('discoverFilesToBeChangeWithMissionRepoData discovers files to delete', () => {
+  
+});
+
 test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
   const missionMetadata = Object.assign({}, dummyMissionMetadata);
   const briefingContent = 'dummy briefing';
@@ -246,45 +259,21 @@ test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
       [taskData]
     );
 
-  const savedCodeString = 'saved';
-  const taskDescriptionString = 'description';
+  const existingKeys = new Set();
 
-  const metadataString =
-    'title=Dummy\n' +
-    'coverImage=www.eh\n' +
-    'webSummary=no\n' +
-    'dueDate=' +
-    new Date('December 17, 1996 03:24:00') +
-    '\n' +
-    'kind=mission\n' +
-    'number=M2\n' +
-    'sourceVersion=1\n' +
-    'reading=none';
+  Object.keys(filenameToContentMap).forEach((key: string) => 
+    existingKeys.add(key)
+  );
 
-  const briefingString = 'dummy briefing';
-  const testcasesString =
-    '[\n' +
-    '    {\n' +
-    '        "answer": "",\n' +
-    '        "program": "",\n' +
-    '        "score": 0,\n' +
-    '        "type": "public"\n' +
-    '    }\n' +
-    ']';
-  const testPrependString = 'prepend';
-  const testPostpendString = 'postpend';
+  const expectedKeys = new Set(['Q1/StarterCode.js',
+  'Q1/Problem.md',
+  '.metadata',
+  'README.md',
+  'Q1/TestCases.json',
+  'Q1/TestPrepend.js',
+  'Q1/TestPostpend.js']);
 
-  const expectedValue = {
-    'Q1/StarterCode.js': savedCodeString,
-    'Q1/Problem.md': taskDescriptionString,
-    '.metadata': metadataString,
-    'README.md': briefingString,
-    'Q1/TestCases.json': testcasesString,
-    'Q1/TestPrepend.js': testPrependString,
-    'Q1/TestPostpend.js': testPostpendString
-  };
-
-  expect(filenameToContentMap).toEqual(expectedValue);
+  expect(existingKeys).toEqual(expectedKeys);
 });
 
 test('checkisMCQText works properly', () => {
