@@ -3,7 +3,6 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
-import { first, values } from 'lodash';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { IMCQQuestion, Testcase } from '../assessment/AssessmentTypes';
@@ -439,6 +438,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         isTeacherMode &&
         filenameToContentMap[questionFolderName + '/' + taskDataPropertyTable['savedCode'].fileName]
       ) {
+        // replace changes to savedCode with changes to starterCode
         const savedCodeValue =
           filenameToContentMap[
             questionFolderName + '/' + taskDataPropertyTable['savedCode'].fileName

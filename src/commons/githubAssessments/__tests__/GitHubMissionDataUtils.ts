@@ -318,6 +318,7 @@ test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit in Non
   // briefingContent and cachedBriefingContent have different values
   // taskList is the same length as cachedTaskList
   // taskList shares one task with cachedTaskList
+  // Expect: metadata and readme, as well as different files from Q1, Q2 and Q3 to be changed
 
   const missionMetadata = Object.assign(dummyMissionMetadata);
   const cachedMissionMetadata = Object.assign(defaultMissionMetadata);
@@ -509,8 +510,14 @@ test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit in Tea
       testPostpend: 'postpend',
       testCases: [
         {
-          answer: 'change',
-          program: 'change',
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        },
+        {
+          answer: 'another',
+          program: 'testcase',
           score: 0,
           type: 'public' as const
         }
@@ -598,6 +605,120 @@ test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit in Tea
 
   expect(existingKeys).toEqual(expectedKeys);
   expect(foldersToDelete.length).toBe(0);
+});
+
+test('discoverFilesToBeChangedWithMissionRepoData discovers files to delete', () => {
+  // missionMetadata and cachedMissionMetadata have same values
+  // briefingContent and cachedBriefingContent have same values
+  // taskList is the shorter as cachedTaskList
+  // taskList has a changed task from cachedTaskList
+  // isTeacherMode is true as deletion is only accessible in isTeacherMode
+  // Expect: files from Q1 to be changed, Q2 and Q3 to be deleted
+
+  const missionMetadata = Object.assign(defaultMissionMetadata);
+  const cachedMissionMetadata = Object.assign(defaultMissionMetadata);
+
+  const briefingContent = 'dummy';
+  const cachedBriefingContent = 'dummy';
+
+  const taskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'changed',
+      starterCode: 'starter',
+      savedCode: 'changed',
+      testPrepend: 'changed',
+      testPostpend: 'changed',
+      testCases: [
+        {
+          answer: 'different',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const cachedTaskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 2,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 3,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const isTeacherMode = true;
+
+  const [filenameToContentMap, foldersToDelete] =
+    GitHubMissionDataUtils.discoverFilesToBeChangedWithMissionRepoData(
+      missionMetadata,
+      cachedMissionMetadata,
+      briefingContent,
+      cachedBriefingContent,
+      taskList,
+      cachedTaskList,
+      isTeacherMode
+    );
+
+  const existingKeys = new Set();
+
+  Object.keys(filenameToContentMap).forEach((key: string) => existingKeys.add(key));
+
+  const expectedKeys = new Set([
+    'Q1/StarterCode.js',
+    'Q1/Problem.md',
+    'Q1/TestPrepend.js',
+    'Q1/TestPostpend.js',
+    'Q1/TestCases.json'
+  ]);
+
+  expect(existingKeys).toEqual(expectedKeys);
+
+  expect(foldersToDelete).toEqual(['Q2', 'Q3']);
 });
 
 test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
