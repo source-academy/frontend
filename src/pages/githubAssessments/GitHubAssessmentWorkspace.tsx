@@ -139,21 +139,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     history.push('/githubassessments/missions');
   }
 
-  const [showOverlay, setShowOverlay] = React.useState(false);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-
   /**
-   * Handles re-rendering the webpage + tracking states relating to the loaded mission
+   * State variables relating to information we are concerned with saving
    */
-  const [missionMetadata, setMissionMetadata] = React.useState(
-    Object.assign({}, defaultMissionMetadata)
-  );
-  const [summary, setSummary] = React.useState('');
-
-  const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(
-    Object.assign({}, defaultMissionMetadata)
-  );
+  const [missionMetadata, setMissionMetadata] = React.useState(defaultMissionMetadata);
+  const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(defaultMissionMetadata);
   const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = React.useState(false);
 
   const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
@@ -164,29 +154,41 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [taskList, setTaskList] = React.useState<TaskData[]>([]);
   const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = React.useState(false);
 
+  /**
+   * State variables relating to the rendering and function of the workspace
+  */
+  const [summary, setSummary] = React.useState('');
   const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-
   const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
   const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
-
-  const hasUnsavedChanges = props.hasUnsavedChanges;
-  const handleEditorValueChange = props.handleEditorValueChange;
-  const handleResetWorkspace = props.handleResetWorkspace;
-  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
-
   const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData>(
     props.location.state as MissionRepoData
   );
+
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+
+  /**
+   * Unpacked properties
+   */
+  const hasUnsavedChanges = props.hasUnsavedChanges;
   const autogradingResults: AutogradingResult[] = props.autogradingResults;
   const editorTestcases = props.editorTestcases;
+  const handleEditorValueChange = props.handleEditorValueChange;
+  const handleResetWorkspace = props.handleResetWorkspace;
+  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
 
   const computedHasUnsavedChanges = useMemo(() => {
     return hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing || hasUnsavedChangesToTasks;
   }, [hasUnsavedChangesToMetadata, hasUnsavedChangesToBriefing, hasUnsavedChangesToTasks]);
 
-  const changeStateDueToChangedTask = useCallback(
+  /**
+   * Should be called to change the task number, rather than using setCurrentTaskNumber.
+   */
+  const changeStateDueToChangedTaskNumber = useCallback(
     (newTaskNumber: number, currentTaskList: TaskData[]) => {
       setCurrentTaskNumber(newTaskNumber);
       const actualTaskIndex = newTaskNumber - 1;
@@ -211,6 +213,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [handleResetWorkspace]
   );
 
+  /**
+   * Sets up the workspace for when the user is retrieving Mission information from a GitHub repository.
+   */
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
     const missionData: MissionData = await getMissionData(missionRepoData, octokit);
@@ -225,7 +230,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList(missionData.tasksData);
     setCachedTaskList(missionData.tasksData);
 
-    changeStateDueToChangedTask(1, missionData.tasksData);
+    changeStateDueToChangedTaskNumber(1, missionData.tasksData);
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
@@ -253,8 +258,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsLoading(false);
     if (missionData.missionBriefing !== '') setShowOverlay(true);
-  }, [changeStateDueToChangedTask, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
+  }, [changeStateDueToChangedTaskNumber, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
 
+  /**
+   * Sets up the workspace for when the user is creating a new Mission.
+   */
   const setUpWithoutMissionRepoData = useCallback(() => {
     setSummary(defaultMissionBriefing);
 
@@ -267,7 +275,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList([defaultTask]);
     setCachedTaskList([defaultTask]);
 
-    changeStateDueToChangedTask(1, [defaultTask]);
+    changeStateDueToChangedTaskNumber(1, [defaultTask]);
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
@@ -276,7 +284,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     setIsTeacherMode(true);
     setIsLoading(false);
-  }, [changeStateDueToChangedTask, handleUpdateHasUnsavedChanges]);
+  }, [changeStateDueToChangedTaskNumber, handleUpdateHasUnsavedChanges]);
 
   useEffect(() => {
     if (missionRepoData === undefined) {
@@ -286,6 +294,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
 
+  // Forces a re-render when hasUnsavedChanges is re-computed to keep in-sync with state-changes
   useEffect(() => {
     if (computedHasUnsavedChanges !== hasUnsavedChanges) {
       handleUpdateHasUnsavedChanges(computedHasUnsavedChanges);
@@ -305,6 +314,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     </Dialog>
   );
 
+  /**
+   * Should be called whenever the taskList is set to a new value.
+   * Determines whether there were any save-able changes to the tasks.
+   */
   const computeAndSetHasUnsavedChangesToTasks = useCallback(
     (newTaskList: TaskData[], cachedTaskList: TaskData[]) => {
       if (newTaskList.length !== cachedTaskList.length) {
@@ -324,14 +337,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     []
   );
 
+  /**
+   * Handles the changes to the taskList.
+   */
   const editCode = useCallback(
-    (questionNumber: number, newValue: string) => {
-      if (questionNumber > taskList.length) {
+    (taskNumber: number, newValue: string) => {
+      if (taskNumber > taskList.length) {
         return;
       }
       const editedTaskList = [...taskList];
-      editedTaskList[questionNumber - 1] = {
-        ...editedTaskList[questionNumber - 1],
+      editedTaskList[taskNumber - 1] = {
+        ...editedTaskList[taskNumber - 1],
         savedCode: newValue
       };
       setTaskList(editedTaskList);
@@ -421,6 +437,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     return true;
   }
 
+  /**
+   * To be used when the information to be saved corresponds to an existing GitHub repository.
+   */
   const saveWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) {
       showWarningMessage('Please sign in with GitHub!', 2000);
@@ -491,6 +510,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     isTeacherMode
   ]);
 
+  /**
+   * To be used when the information to be saved to a new GitHub repository.
+   */
   const saveWithoutMissionRepoData = useCallback(async () => {
     if (octokit === undefined) {
       showWarningMessage('Please sign in with GitHub!', 2000);
@@ -585,13 +607,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       positiveLabel: 'Confirm'
     });
 
-    if (!confirmReset) {
-      return;
+    if (confirmReset) {
+      resetToTemplate();
     }
-
-    resetToTemplate();
   }, [resetToTemplate]);
 
+  /**
+   * Checks to ensure that the user wants to discard their current changes.
+   */
   const shouldProceedToChangeTask = useCallback(
     (currentTaskNumber: number, taskList: TaskData[], cachedTaskList: TaskData[]) => {
       if (taskList[currentTaskNumber - 1] !== cachedTaskList[currentTaskNumber - 1]) {
@@ -608,28 +631,28 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
       setTaskList(cachedTaskList);
       const newTaskNumber = currentTaskNumber - 1;
-      changeStateDueToChangedTask(newTaskNumber, taskList);
+      changeStateDueToChangedTaskNumber(newTaskNumber, taskList);
     }
   }, [
     currentTaskNumber,
     taskList,
     cachedTaskList,
     shouldProceedToChangeTask,
-    changeStateDueToChangedTask
+    changeStateDueToChangedTaskNumber
   ]);
 
   const onClickNext = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
       setTaskList(cachedTaskList);
       const newTaskNumber = currentTaskNumber + 1;
-      changeStateDueToChangedTask(newTaskNumber, taskList);
+      changeStateDueToChangedTaskNumber(newTaskNumber, taskList);
     }
   }, [
     currentTaskNumber,
     taskList,
     cachedTaskList,
     shouldProceedToChangeTask,
-    changeStateDueToChangedTask
+    changeStateDueToChangedTaskNumber
   ]);
 
   const onClickReturn = useCallback(() => {
@@ -717,25 +740,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     ]
   );
 
-  const getTaskListWithSinglePropertyChanged = useCallback(
-    (changeAtIndex: number, taskList: TaskData[], propertyToChange: string, newValue: any) => {
-      const editedTaskList = [...taskList];
-      const taskReplacement = Object.assign({}, taskList[changeAtIndex]);
-      taskReplacement[propertyToChange] = newValue;
-      editedTaskList[changeAtIndex] = taskReplacement;
-      return editedTaskList;
-    },
-    []
-  );
-
   const setTestPrepend = useCallback(
     (newTestPrepend: string) => {
-      const editedTaskList = getTaskListWithSinglePropertyChanged(
-        currentTaskNumber - 1,
-        taskList,
-        'testPrepend',
-        newTestPrepend
-      );
+      const editedTaskList = [...taskList];
+      editedTaskList[currentTaskNumber - 1] = {
+        ...editedTaskList[currentTaskNumber - 1],
+        testPrepend: newTestPrepend
+      };
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },
@@ -743,19 +754,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       currentTaskNumber,
       taskList,
       cachedTaskList,
-      computeAndSetHasUnsavedChangesToTasks,
-      getTaskListWithSinglePropertyChanged
+      computeAndSetHasUnsavedChangesToTasks
     ]
   );
 
   const setTestPostpend = useCallback(
     (newTestPostpend: string) => {
-      const editedTaskList = getTaskListWithSinglePropertyChanged(
-        currentTaskNumber - 1,
-        taskList,
-        'testPostpend',
-        newTestPostpend
-      );
+      const editedTaskList = [...taskList];
+      editedTaskList[currentTaskNumber - 1] = {
+        ...editedTaskList[currentTaskNumber - 1],
+        testPostpend: newTestPostpend
+      };
       setTaskList(editedTaskList);
       computeAndSetHasUnsavedChangesToTasks(editedTaskList, cachedTaskList);
     },
@@ -763,8 +772,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       currentTaskNumber,
       taskList,
       cachedTaskList,
-      computeAndSetHasUnsavedChangesToTasks,
-      getTaskListWithSinglePropertyChanged
+      computeAndSetHasUnsavedChangesToTasks
     ]
   );
 
@@ -875,7 +883,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList(newTaskList);
     const newTaskNumber = currentTaskNumber + 1;
 
-    changeStateDueToChangedTask(newTaskNumber, newTaskList);
+    changeStateDueToChangedTaskNumber(newTaskNumber, newTaskList);
     computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
   };
 
@@ -888,7 +896,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList(newTaskList);
     const newTaskNumber = currentTaskNumber === 1 ? currentTaskNumber : currentTaskNumber - 1;
 
-    changeStateDueToChangedTask(newTaskNumber, newTaskList);
+    changeStateDueToChangedTaskNumber(newTaskNumber, newTaskList);
     computeAndSetHasUnsavedChangesToTasks(newTaskList, cachedTaskList);
   };
 
