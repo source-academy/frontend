@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 
+import { IMCQQuestion } from '../../assessment/AssessmentTypes';
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
 import { MissionMetadata, MissionRepoData } from '../GitHubMissionTypes';
 
@@ -23,16 +24,7 @@ test('getContentAsString correctly gets content and translates from Base64 to ut
 });
 
 test('parseMetadataProperties correctly discovers properties', () => {
-  const missionMetadata = {
-    coverImage: '',
-    kind: '',
-    number: '',
-    title: '',
-    sourceVersion: 1,
-    dueDate: new Date(8640000000000000),
-    reading: '',
-    webSummary: ''
-  };
+  const missionMetadata = Object.assign({}, dummyMissionMetadata);
   const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];
@@ -227,6 +219,167 @@ test('getMissionData works properly', async () => {
   });
 });
 
+test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
+  const missionMetadata = Object.assign({}, dummyMissionMetadata);
+  const briefingContent = 'dummy briefing';
+  const taskData = {
+    questionNumber: 0,
+    taskDescription: 'description',
+    starterCode: 'starter',
+    savedCode: 'saved',
+    testPrepend: 'prepend',
+    testPostpend: 'postpend',
+    testCases: [
+      {
+        answer: '',
+        program: '',
+        score: 0,
+        type: 'public' as const
+      }
+    ]
+  };
+
+  const filenameToContentMap =
+    GitHubMissionDataUtils.discoverFilesToBeCreatedWithoutMissionRepoData(
+      missionMetadata,
+      briefingContent,
+      [taskData]
+    );
+
+  const savedCodeString = 'saved';
+  const taskDescriptionString = 'description';
+
+  const metadataString =
+    'title=Dummy\n' +
+    'coverImage=www.eh\n' +
+    'webSummary=no\n' +
+    'dueDate=' +
+    new Date('December 17, 1996 03:24:00') +
+    '\n' +
+    'kind=mission\n' +
+    'number=M2\n' +
+    'sourceVersion=1\n' +
+    'reading=none';
+
+  const briefingString = 'dummy briefing';
+  const testcasesString =
+    '[\n' +
+    '    {\n' +
+    '        "answer": "",\n' +
+    '        "program": "",\n' +
+    '        "score": 0,\n' +
+    '        "type": "public"\n' +
+    '    }\n' +
+    ']';
+  const testPrependString = 'prepend';
+  const testPostpendString = 'postpend';
+
+  const expectedValue = {
+    'Q1/StarterCode.js': savedCodeString,
+    'Q1/Problem.md': taskDescriptionString,
+    '.metadata': metadataString,
+    'README.md': briefingString,
+    'Q1/TestCases.json': testcasesString,
+    'Q1/TestPrepend.js': testPrependString,
+    'Q1/TestPostpend.js': testPostpendString
+  };
+
+  expect(filenameToContentMap).toEqual(expectedValue);
+});
+
+test('checkisMCQText works properly', () => {
+  expect(GitHubMissionDataUtils.checkIsMCQText('mcqddshkjf')).toBe(true);
+  expect(GitHubMissionDataUtils.checkIsMCQText('McQsdlkfjsd;f')).toBe(true);
+  expect(GitHubMissionDataUtils.checkIsMCQText('')).toBe(false);
+  expect(GitHubMissionDataUtils.checkIsMCQText('MCgQhjkf')).toBe(false);
+});
+
+test('convertMCQTextToIMCQQuestion works properly', () => {
+  const mcqText =
+    'MCQ\n' +
+    '{\n' +
+    '  "questions":\n' +
+    '  [\n' +
+    '    { "solution": "Θ(1)", "hint":"one" },\n' +
+    '    { "solution": "Θ(log _n_)", "hint":"two" },\n' +
+    '    { "solution": "Θ(_n_)", "hint":"14345" },\n' +
+    '    { "solution": "Θ(_n_ log _n_)", "hint":"yes" },\n' +
+    '    { "solution": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
+    '    { "solution": "Θ(_n_³)", "hint":"maybe" }\n' +
+    '  ],\n' +
+    '  "answer": 4\n' +
+    '}';
+
+  const expectedAnswer = 4;
+  const expectedChoices = [
+    { content: 'Θ(1)', hint: 'one' },
+    { content: 'Θ(log _n_)', hint: 'two' },
+    { content: 'Θ(_n_)', hint: '14345' },
+    { content: 'Θ(_n_ log _n_)', hint: 'yes' },
+    { content: 'Θ(_n_²)', hint: 'definitely wrong' },
+    { content: 'Θ(_n_³)', hint: 'maybe' }
+  ];
+
+  const mcqQuestionObject = GitHubMissionDataUtils.convertMCQTextToIMCQQuestion(mcqText);
+  expect(mcqQuestionObject).toEqual({
+    answer: expectedAnswer,
+    choices: expectedChoices,
+    solution: -1,
+    type: 'mcq',
+    content: '',
+    grade: 0,
+    id: 0,
+    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    maxGrade: 0,
+    xp: 0,
+    maxXp: 0
+  });
+});
+
+test('convertIMCQQuestionToMCQText works properly', () => {
+  const studentAnswer = 4;
+  const possibleChoices = [
+    { content: 'Θ(1)', hint: 'one' },
+    { content: 'Θ(log _n_)', hint: 'two' },
+    { content: 'Θ(_n_)', hint: '14345' },
+    { content: 'Θ(_n_ log _n_)', hint: 'yes' },
+    { content: 'Θ(_n_²)', hint: 'definitely wrong' },
+    { content: 'Θ(_n_³)', hint: 'maybe' }
+  ];
+
+  const inputMCQObject = {
+    answer: studentAnswer,
+    choices: possibleChoices,
+    solution: -1,
+    type: 'mcq',
+    content: '',
+    grade: 0,
+    id: 0,
+    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    maxGrade: 0,
+    xp: 0,
+    maxXp: 0
+  } as IMCQQuestion;
+
+  const expectedText =
+    'MCQ\n' +
+    JSON.stringify(
+      {
+        questions: possibleChoices.map((choice: { content: string; hint: string }) => {
+          return {
+            solution: choice.content,
+            hint: choice.hint
+          };
+        }),
+        answer: studentAnswer
+      },
+      null,
+      4
+    );
+
+  expect(GitHubMissionDataUtils.convertIMCQQuestionToMCQText(inputMCQObject)).toEqual(expectedText);
+});
+
 function generateGitHubSubDirectory(name: string) {
   return {
     type: 'dummy',
@@ -271,3 +424,14 @@ function generateGetContentResponse() {
     }
   } as any;
 }
+
+const dummyMissionMetadata = {
+  coverImage: 'www.eh',
+  kind: 'mission',
+  number: 'M2',
+  title: 'Dummy',
+  sourceVersion: 1,
+  dueDate: new Date('December 17, 1996 03:24:00'),
+  reading: 'none',
+  webSummary: 'no'
+};

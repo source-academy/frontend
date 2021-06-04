@@ -502,9 +502,6 @@ export function checkIsMCQText(possibleMCQText: string) {
 
 export function convertMCQTextToIMCQQuestion(MCQText: string) {
   const onlyQuestionInformation = MCQText.substring(3, MCQText.length);
-
-  console.log(onlyQuestionInformation);
-
   const intermediateObject = JSON.parse(onlyQuestionInformation);
 
   const studentAnswer = intermediateObject.answer;
