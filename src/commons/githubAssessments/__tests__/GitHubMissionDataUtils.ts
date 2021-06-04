@@ -221,16 +221,12 @@ test('getMissionData works properly', async () => {
 
 test('discoverFilesToBeChangedWithMissionRepoData discovers files to create', () => {
   const missionMetadata = Object.assign(dummyMissionMetadata);
-  const cachedMissionMetadata = Object.assign(dummyMissionMetadata); 
+  const cachedMissionMetadata = Object.assign(dummyMissionMetadata);
 });
 
-test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit', () => {
+test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit', () => {});
 
-});
-
-test('discoverFilesToBeChangeWithMissionRepoData discovers files to delete', () => {
-  
-});
+test('discoverFilesToBeChangeWithMissionRepoData discovers files to delete', () => {});
 
 test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
   const missionMetadata = Object.assign({}, dummyMissionMetadata);
@@ -261,17 +257,17 @@ test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
 
   const existingKeys = new Set();
 
-  Object.keys(filenameToContentMap).forEach((key: string) => 
-    existingKeys.add(key)
-  );
+  Object.keys(filenameToContentMap).forEach((key: string) => existingKeys.add(key));
 
-  const expectedKeys = new Set(['Q1/StarterCode.js',
-  'Q1/Problem.md',
-  '.metadata',
-  'README.md',
-  'Q1/TestCases.json',
-  'Q1/TestPrepend.js',
-  'Q1/TestPostpend.js']);
+  const expectedKeys = new Set([
+    'Q1/StarterCode.js',
+    'Q1/Problem.md',
+    '.metadata',
+    'README.md',
+    'Q1/TestCases.json',
+    'Q1/TestPrepend.js',
+    'Q1/TestPostpend.js'
+  ]);
 
   expect(existingKeys).toEqual(expectedKeys);
 });
