@@ -365,6 +365,19 @@ export function parseMetadataProperties<R>(
   return propertyContainer;
 }
 
+/**
+ * Discovers files to be changed when saving to an existing GitHub repository
+ * Return value is an array in the format [filenameToContentMap, foldersToDelete]
+ * filenameToContentMap is an object whose key-value pairs are filenames and their new contents
+ * foldersToDelete is an array containing the names of folders
+ * @param missionMetadata The current MissionMetadata
+ * @param cachedMissionMetadata The cached MissionMetadata
+ * @param briefingContent The current briefing
+ * @param cachedBriefingContent The cached briefing
+ * @param taskList The current taskList
+ * @param cachedTaskList The cached taskList
+ * @param isTeacherMode If this is true, any changes to the saved code will be made to starter code instead
+ */
 export function discoverFilesToBeChangedWithMissionRepoData(
   missionMetadata: MissionMetadata,
   cachedMissionMetadata: MissionMetadata,
@@ -498,6 +511,12 @@ export function objectArraysAreEqual(firstArray: any[], secondArray: any[]) {
   return true;
 }
 
+/**
+ * Discovers files to be changed when saving to a new GitHub repository
+ * @param missionMetadata The current MissionMetadata
+ * @param briefingContent The current briefing
+ * @param taskList The current taskList
+ */
 export function discoverFilesToBeCreatedWithoutMissionRepoData(
   missionMetadata: MissionMetadata,
   briefingContent: string,
@@ -538,10 +557,18 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
   return filenameToContentMap;
 }
 
+/**
+ * Checks if the textual contents of a GitHub-hosted file is for an MCQ question
+ * @param possibleMCQText The text to be checked
+ */
 export function checkIsMCQText(possibleMCQText: string) {
   return possibleMCQText.substring(0, 3).toLowerCase() === 'mcq';
 }
 
+/**
+ * Converts textual contents of a GitHub-hosted file know to be for an MCQ question into an IMCQQuestion object
+ * @param MCQText Known MCQ text
+ */
 export function convertMCQTextToIMCQQuestion(MCQText: string) {
   const onlyQuestionInformation = MCQText.substring(3, MCQText.length);
   const intermediateObject = JSON.parse(onlyQuestionInformation);
@@ -571,6 +598,10 @@ export function convertMCQTextToIMCQQuestion(MCQText: string) {
   } as IMCQQuestion;
 }
 
+/**
+ * Converts an IMCQQuestion object into textual contents to be saved to a GitHub repository
+ * @param mcq The IMCQQuestion object
+ */
 export function convertIMCQQuestionToMCQText(mcq: IMCQQuestion) {
   const studentAnswer = mcq.answer;
   const questions = mcq.choices.map((choice: { content: string; hint: string | null }) => {
