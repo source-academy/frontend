@@ -13,17 +13,20 @@ type OwnProps = {
   location: 'sidebar' | 'index';
 };
 
+/**
+ * Table of contents of SICP.
+ */
 const SicpToc: React.FC<TocProps> = props => {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
   const [slug, setSlug] = useState('');
 
-  const handleNodeExpand = (node: TreeNodeInfo, path: integer[]) => {
+  const handleNodeExpand = (_node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = true;
     setSidebarContent(newState);
   };
 
-  const handleNodeCollapse = (node: TreeNodeInfo, path: integer[]) => {
+  const handleNodeCollapse = (_node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = false;
     setSidebarContent(newState);
@@ -41,7 +44,7 @@ const SicpToc: React.FC<TocProps> = props => {
 
   return (
     <div className="sicp-toc">
-      {slug !== '' ? <Redirect to={'/interactive-sicp/' + slug} /> : <></>}
+      {slug !== '' && <Redirect to={'/interactive-sicp/' + slug} />}
       <Tree
         contents={sidebarContent}
         onNodeClick={handleNodeClicked}

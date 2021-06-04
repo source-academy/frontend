@@ -161,6 +161,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
+/**
+ * Playground container for SICP snippets.
+ */
 const SicpWorkspaceContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
 
 export default SicpWorkspaceContainer;

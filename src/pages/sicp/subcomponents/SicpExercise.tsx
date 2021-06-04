@@ -11,8 +11,12 @@ type OwnProps = {
 const noSolutionPlaceholder = (
   <span>
     There is currently no solution available for this exercise. This textbook adaptation is a
-    community effort. Do consider contributing by providing a solution for this exercise, using a
-    Pull Request in <a href="https://github.com/source-academy/sicp">Github</a>.
+    community effort. Do consider contributing by providing a solution for this exercise.
+    Instructions on how to contribute can be found at{' '}
+    <a href="https://github.com/source-academy/sicp/wiki/Contributing-Exercise-Solutions">
+      https://github.com/source-academy/sicp/wiki/Contributing-Exercise-Solutions
+    </a>
+    .
   </span>
 );
 
