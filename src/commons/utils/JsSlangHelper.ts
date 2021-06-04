@@ -171,7 +171,7 @@ export function makeElevatedContext(context: Context) {
   // while reflection should work on parent.
 
   const proxyGlobalEnv = new Proxy(context.runtime.environments[0], {
-    get(target, prop: string | number, receiver) {
+    get(target, prop: string | symbol, receiver) {
       if (prop === 'head') {
         return fakeFrame;
       }

@@ -1,7 +1,8 @@
 import { action } from 'typesafe-actions'; // EDITED
 
+import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { Assessment, AssessmentOverview, ContestEntry } from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -21,8 +22,9 @@ import {
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
-  REMOVE_GITHUB_OCTOKIT_INSTANCE,
-  SET_GITHUB_OCTOKIT_INSTANCE,
+  REMOVE_GITHUB_OCTOKIT_OBJECT,
+  SET_GITHUB_ASSESSMENT,
+  SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -80,12 +82,15 @@ export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const setGitHubOctokitInstance = (authToken?: string) =>
-  action(SET_GITHUB_OCTOKIT_INSTANCE, generateOctokitInstance(authToken || ''));
+export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
+  action(SET_GITHUB_ASSESSMENT, missionRepoData);
 
-export const removeGitHubOctokitInstance = () => action(REMOVE_GITHUB_OCTOKIT_INSTANCE);
+export const setGitHubOctokitObject = (authToken?: string) =>
+  action(SET_GITHUB_OCTOKIT_OBJECT, generateOctokitInstance(authToken || ''));
 
-export const submitAnswer = (id: number, answer: string | number) =>
+export const removeGitHubOctokitObject = () => action(REMOVE_GITHUB_OCTOKIT_OBJECT);
+
+export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {
     id,
     answer

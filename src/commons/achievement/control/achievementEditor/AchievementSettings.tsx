@@ -1,6 +1,7 @@
-import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
+import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import { Tooltip2 } from '@blueprintjs/popover2';
+import { useState } from 'react';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalUuids from './achievementSettings/EditableGoalUuids';
@@ -12,6 +13,7 @@ type AchievementSettingsProps = {
   changeGoalUuids: (goalUuids: string[]) => void;
   changePosition: (position: number) => void;
   changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
+  changeIsVariableXp: () => void;
   editableAchievement: AchievementItem;
 };
 
@@ -21,18 +23,20 @@ function AchievementSettings(props: AchievementSettingsProps) {
     changeGoalUuids,
     changePosition,
     changePrerequisiteUuids,
+    changeIsVariableXp,
     editableAchievement
   } = props;
-  const { uuid, cardBackground, goalUuids, position, prerequisiteUuids } = editableAchievement;
+  const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
+    editableAchievement;
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
 
   return (
     <>
-      <Tooltip content="More Settings">
+      <Tooltip2 content="More Settings">
         <Button icon={IconNames.WRENCH} onClick={toggleOpen} />
-      </Tooltip>
+      </Tooltip2>
 
       <Dialog title="More Settings" icon={IconNames.WRENCH} isOpen={isOpen} onClose={toggleOpen}>
         <div style={{ padding: '0 0.5em' }}>
@@ -54,6 +58,9 @@ function AchievementSettings(props: AchievementSettingsProps) {
           />
           <h3>Goals</h3>
           <EditableGoalUuids changeGoalUuids={changeGoalUuids} goalUuids={goalUuids} />
+          <Tooltip2 content="The rewarded XP will be equal to the sum of 'count' of goals">
+            <Button text={'Variable XP?'} active={isVariableXp} onClick={changeIsVariableXp} />
+          </Tooltip2>
         </div>
       </Dialog>
     </>

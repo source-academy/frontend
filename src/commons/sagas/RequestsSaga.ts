@@ -6,17 +6,17 @@ import {
   Assessment,
   AssessmentCategory,
   AssessmentOverview,
+  ContestEntry,
   GradingStatus,
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
+  AchievementUser,
   GoalDefinition,
-  GoalMeta,
   GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -27,7 +27,11 @@ import {
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
-import { backendifyGoalDefinition } from '../achievement/utils/AchievementBackender';
+import {
+  backendifyGoalDefinition,
+  frontendifyAchievementGoal,
+  frontendifyAchievementItem
+} from '../achievement/utils/AchievementBackender';
 import { Tokens, User } from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -136,26 +140,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 
   const achievements = await resp.json();
 
-  return achievements.map(
-    (achievement: any) =>
-      ({
-        uuid: achievement.uuid || '',
-        title: achievement.title || '',
-        ability: achievement.ability as AchievementAbility,
-        deadline: achievement.deadline && new Date(achievement.deadline),
-        release: achievement.release && new Date(achievement.release),
-        isTask: achievement.isTask,
-        position: achievement.position,
-        prerequisiteUuids: achievement.prerequisiteUuids,
-        goalUuids: achievement.goalUuids,
-        cardBackground: achievement.cardBackground || '',
-        view: {
-          coverImage: achievement.view.coverImage || '',
-          completionText: achievement.view.completionText || '',
-          description: achievement.view.description || ''
-        }
-      } as AchievementItem)
-  );
+  return achievements.map((achievement: any) => frontendifyAchievementItem(achievement));
 };
 
 /**
@@ -176,17 +161,7 @@ export const getGoals = async (
 
   const achievementGoals = await resp.json();
 
-  return achievementGoals.map(
-    (goal: any) =>
-      ({
-        uuid: goal.uuid || '',
-        text: goal.text || '',
-        meta: goal.meta as GoalMeta,
-        xp: goal.xp,
-        maxXp: goal.maxXp,
-        completed: goal.completed
-      } as AchievementGoal)
-  );
+  return achievementGoals.map((goal: any) => frontendifyAchievementGoal(goal));
 };
 
 /**
@@ -204,16 +179,31 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 
   const achievementGoals = await resp.json();
 
-  return achievementGoals.map(
-    (goal: any) =>
+  return achievementGoals.map((goal: any) => frontendifyAchievementGoal(goal));
+};
+
+/**
+ * GET /admin/users
+ */
+export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
+  const resp = await request('admin/users', 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const users = await resp.json();
+
+  return users.map(
+    (user: any) =>
       ({
-        uuid: goal.uuid || '',
-        text: goal.text || '',
-        meta: goal.meta as GoalMeta,
-        xp: goal.xp,
-        maxXp: goal.maxXp,
-        completed: goal.completed
-      } as AchievementGoal)
+        name: user.name,
+        userId: user.userId,
+        group: user.group
+      } as AchievementUser)
   );
 };
 
@@ -297,14 +287,32 @@ export const editGoal = async (
 };
 
 /**
- * POST /achievements/goals/{goalUuid}/{studentId}
+ * POST /self/goals/{goalUuid}/progress
+ */
+export const updateOwnGoalProgress = async (
+  progress: GoalProgress,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`self/goals/${progress.uuid}/progress`, 'POST', {
+    ...tokens,
+    body: { progress: progress },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /admin/users/{studentId}/goals/{goalUuid}/progress
  */
 export const updateGoalProgress = async (
   studentId: number,
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
+  const resp = await request(`admin/users/${studentId}/goals/${progress.uuid}/progress`, 'POST', {
     ...tokens,
     body: { progress: progress },
     noHeaderAccept: true,
@@ -416,10 +424,11 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
   }
 
   const assessment = (await resp.json()) as Assessment;
-  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest' | 'contestvoting'
+  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest' | 'ContestVoting'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
   delete (assessment as any).type;
+
   assessment.questions = assessment.questions.map(q => {
     if (q.type === QuestionTypes.programming) {
       const question = q as IProgrammingQuestion;
@@ -449,7 +458,6 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 
     return q;
   });
-
   return assessment;
 };
 
@@ -458,12 +466,12 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
  */
 export const postAnswer = async (
   id: number,
-  answer: string | number,
+  answer: string | number | ContestEntry[],
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/question/${id}/answer`, 'POST', {
     ...tokens,
-    body: { answer: `${answer}` },
+    body: typeof answer == 'object' ? { answer: answer } : { answer: `${answer}` },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -1097,7 +1105,7 @@ export const request = async (
  *
  * @param {(Response|null)} resp Result of the failed HTTP request
  */
-export function* handleResponseError(resp: Response | null) {
+export function* handleResponseError(resp: Response | null): any {
   // Default: check if the response is null
   if (!resp) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");

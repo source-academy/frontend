@@ -14,6 +14,10 @@ function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
 
   const inferencer = useContext(AchievementContext);
   const availableUuids = inferencer.listAvailablePrerequisiteUuids(uuid);
+  const selectedUuids = prerequisiteUuids.filter(
+    uuid => !inferencer.isInvalidAchievement(inferencer.getAchievement(uuid))
+  );
+
   const getUuid = (title: string) => inferencer.getUuidByTitle(title);
   const getTitle = (uuid: string) => inferencer.getTitleByUuid(uuid);
 
@@ -22,7 +26,7 @@ function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
     <MenuItem key={uuid} onClick={handleClick} text={getTitle(uuid)} />
   );
 
-  const selectedPrereqs = new Set(prerequisiteUuids);
+  const selectedPrereqs = new Set(selectedUuids);
   const availablePrereqs = new Set(availableUuids);
 
   const selectPrereq = (selectUuid: string) => {

@@ -47,7 +47,8 @@ export type TestcaseType = keyof typeof TestcaseTypes;
 
 export enum QuestionTypes {
   programming = 'programming',
-  mcq = 'mcq'
+  mcq = 'mcq',
+  voting = 'voting'
 }
 export type QuestionType = keyof typeof QuestionTypes;
 
@@ -114,8 +115,15 @@ export interface IMCQQuestion extends BaseQuestion {
   type: 'mcq';
 }
 
+export interface IContestVotingQuestion extends BaseQuestion {
+  answer: ContestEntry[];
+  contestEntries: ContestEntry[];
+  contestLeaderboard: ContestEntry[];
+  type: 'voting';
+}
+
 export type BaseQuestion = {
-  answer: string | number | null;
+  answer: string | number | ContestEntry[] | null;
   comments?: string;
   content: string;
   editorValue?: string | null;
@@ -134,7 +142,7 @@ export type BaseQuestion = {
   xp: number;
 };
 
-export type Question = IProgrammingQuestion | IMCQQuestion;
+export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
 export type Library = {
   chapter: number;
@@ -155,6 +163,18 @@ export type Testcase = {
   result?: any; // the result from the execution of the testcase
   score: number;
   type: TestcaseType;
+};
+
+export type ContestEntry = {
+  submission_id: number;
+  answer: ContestEntryCodeAnswer; //contest entry program to be input into editor
+  rank?: number;
+  score?: number;
+  student_name?: string;
+};
+
+export type ContestEntryCodeAnswer = {
+  code: string;
 };
 
 export type MCQChoice = {

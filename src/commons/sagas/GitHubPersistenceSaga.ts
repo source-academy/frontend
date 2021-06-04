@@ -1,3 +1,7 @@
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
@@ -7,14 +11,16 @@ import {
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
-import FileExplorerDialog from '../gitHubOverlay/FileExplorerDialog';
-import RepositoryDialog from '../gitHubOverlay/RepositoryDialog';
+import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
+import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { showSuccessMessage } from '../utils/NotificationsHelper';
+import { history } from '../utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -34,7 +40,7 @@ function* githubLoginSaga() {
   const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
 
   broadcastChannel.onmessage = receivedMessage => {
-    store.dispatch(actions.setGitHubOctokitInstance(receivedMessage.data));
+    store.dispatch(actions.setGitHubOctokitObject(receivedMessage.data));
     showSuccessMessage('Logged in to GitHub', 1000);
   };
 
@@ -50,51 +56,74 @@ function* githubLoginSaga() {
 }
 
 function* githubLogoutSaga() {
-  yield put(actions.removeGitHubOctokitInstance());
+  if (store.getState() && store.getState().workspaces.githubAssessment.hasUnsavedChanges) {
+    yield call(showWarningMessage, 'You have unsaved changes!', 2000);
+    return;
+  }
+
+  yield put(actions.removeGitHubOctokitObject());
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
+  yield call(history.push, '/githubassessments/missions');
 }
 
-function* githubOpenFile() {
+function* githubOpenFile(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  const results = yield call(octokit.repos.listForAuthenticatedUser);
-  const userRepos = results.data;
+  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const results: ListForAuthenticatedUserResponse = yield call(
+    octokit.repos.listForAuthenticatedUser
+  );
 
-  const repoName = yield call(promisifyDialog, RepositoryDialog, resolve => ({
-    userRepos,
-    onSubmit: resolve
-  }));
+  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const userRepos: ListForAuthenticatedUserData = results.data;
+
+  const getRepoName = async () =>
+    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+      userRepos: userRepos,
+      onSubmit: resolve
+    }));
+  const repoName = yield call(getRepoName);
+
+  const editorContent = '';
 
   if (repoName !== '') {
     const pickerType = 'Open';
-    yield call(promisifyDialog, FileExplorerDialog, resolve => ({
-      octokit,
-      repoName,
-      pickerType,
-      onSubmit: resolve
-    }));
+    const promisifiedDialog = async () =>
+      await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+        repoName: repoName,
+        pickerType: pickerType,
+        octokit: octokit,
+        editorContent: editorContent,
+        onSubmit: resolve
+      }));
+
+    yield call(promisifiedDialog);
   }
 }
 
-function* githubSaveFile() {
-  const octokit = GitHubUtils.getGitHubOctokitInstance();
-  const authUser = yield call(octokit.users.getAuthenticated);
+function* githubSaveFile(): any {
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
   const githubLoginId = authUser.data.login;
   const repoName = store.getState().playground.githubSaveInfo.repoName;
   const filePath = store.getState().playground.githubSaveInfo.filePath;
-  const githubEmail = authUser.data.email || 'No public email provided';
-  const githubName = authUser.data.name || 'Source Academy User';
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
-
-  console.log(githubLoginId);
-  console.log(repoName);
-  console.log(filePath);
-  console.log(githubEmail);
-  console.log(githubName);
-  console.log(commitMessage);
+  const content = store.getState().workspaces.playground.editorValue;
 
   GitHubUtils.performOverwritingSave(
     octokit,
@@ -103,32 +132,51 @@ function* githubSaveFile() {
     filePath,
     githubEmail,
     githubName,
-    commitMessage
+    commitMessage,
+    content
   );
 }
 
-function* githubSaveFileAs() {
+function* githubSaveFileAs(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance() || {
     users: { getAuthenticated: () => {} },
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  const results = yield call(octokit.repos.listForAuthenticatedUser);
-  const userRepos = results.data;
+  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const results: ListForAuthenticatedUserResponse = yield call(
+    octokit.repos.listForAuthenticatedUser
+  );
 
-  const repoName = yield call(promisifyDialog, RepositoryDialog, resolve => ({
-    userRepos,
-    onSubmit: resolve
-  }));
+  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const userRepos: ListForAuthenticatedUserData = results.data;
+
+  const getRepoName = async () =>
+    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+      userRepos: userRepos,
+      onSubmit: resolve
+    }));
+  const repoName = yield call(getRepoName);
+
+  const editorContent = store.getState().workspaces.playground.editorValue || '';
 
   if (repoName !== '') {
     const pickerType = 'Save';
-    yield call(promisifyDialog, FileExplorerDialog, resolve => ({
-      octokit,
-      repoName,
-      pickerType,
-      onSubmit: resolve
-    }));
+
+    const promisifiedFileExplorer = async () =>
+      await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+        repoName: repoName,
+        pickerType: pickerType,
+        octokit: octokit,
+        editorContent: editorContent,
+        onSubmit: resolve
+      }));
+
+    yield call(promisifiedFileExplorer);
   }
 }
 

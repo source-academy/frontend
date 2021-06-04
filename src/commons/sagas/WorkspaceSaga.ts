@@ -22,9 +22,11 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
+import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
+import { processEvent } from '../achievement/utils/EventHandler';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -117,6 +119,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       globals
     };
 
+    processEvent([EventType.RUN_CODE]);
+
     if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
       yield put(actions.remoteExecRun(editorCode));
     } else {
@@ -164,7 +168,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(
     PROMPT_AUTOCOMPLETE,
-    function* (action: ReturnType<typeof actions.promptAutocomplete>) {
+    function* (action: ReturnType<typeof actions.promptAutocomplete>): any {
       const workspaceLocation = action.payload.workspaceLocation;
 
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
@@ -229,7 +233,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(
     TOGGLE_EDITOR_AUTORUN,
-    function* (action: ReturnType<typeof actions.toggleEditorAutorun>) {
+    function* (action: ReturnType<typeof actions.toggleEditorAutorun>): any {
       const workspaceLocation = action.payload.workspaceLocation;
       const isEditorAutorun = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
@@ -298,6 +302,7 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
+    processEvent([EventType.RUN_CODE, EventType.RUN_TESTCASE]);
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
@@ -648,20 +653,25 @@ export function* evalCode(
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
-      return call(wasm_compile_and_run, code, context);
+      return call(wasm_compile_and_run, code, context, actionType === EVAL_REPL);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
   }
-  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
-    return Sourceror.compile(wasmCode, wasmContext)
+  async function wasm_compile_and_run(
+    wasmCode: string,
+    wasmContext: Context,
+    isRepl: boolean
+  ): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext, isRepl)
       .then((wasmModule: WebAssembly.Module) => {
         const transcoder = new Sourceror.Transcoder();
         return Sourceror.run(
           wasmModule,
           Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
           transcoder,
-          wasmContext
+          wasmContext,
+          isRepl
         );
       })
       .then(
@@ -733,21 +743,25 @@ export function* evalCode(
     const parsed = parse(code, context);
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
-
+    // for achievement event tracking
+    const events = context.errors.length > 0 ? [EventType.ERROR] : [];
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === 'default') {
       const infiniteLoopData = getInfiniteLoopData(context, code);
       if (infiniteLoopData) {
+        events.push(EventType.INFINITE_LOOP);
         const [error, code] = infiniteLoopData;
         yield call(reportInfiniteLoopError, error, code);
       }
     }
 
     if (typeErrors && typeErrors.length > 0) {
+      events.push(EventType.ERROR);
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
       );
     }
+    processEvent(events);
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
@@ -767,6 +781,9 @@ export function* evalCode(
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+    if (context.errors.length > 0) {
+      processEvent([EventType.ERROR]);
+    }
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
 

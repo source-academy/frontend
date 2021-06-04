@@ -12,7 +12,12 @@ import React, { useState } from 'react';
 
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
-const RepositoryDialog: React.FC<any> = props => {
+export type RepositoryDialogProps = {
+  userRepos: any[];
+  onSubmit: (repoName: string) => void;
+};
+
+const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
   const [repoName, setRepoName] = useState('');
 
   return (

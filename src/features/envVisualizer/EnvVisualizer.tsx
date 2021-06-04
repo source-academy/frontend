@@ -10,7 +10,7 @@ export default class EnvVisualizer {
   /** callback function to update the visualization state in the SideContentEnvVis component */
   private static setVis: SetVis;
 
-  /** SideContentEnvVis intializes this onMount with the callback function */
+  /** SideContentEnvVis initializes this onMount with the callback function */
   static init(setVis: SetVis) {
     this.setVis = setVis;
   }
@@ -24,7 +24,7 @@ export default class EnvVisualizer {
     this.setVis(Layout.draw());
 
     // icon to blink
-    const icon = document.getElementById('env_visualiser-icon');
+    const icon = document.getElementById('env_visualizer-icon');
     icon && icon.classList.add('side-content-tab-alert');
   }
 }

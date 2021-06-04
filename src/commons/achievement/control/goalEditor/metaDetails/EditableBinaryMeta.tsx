@@ -1,5 +1,6 @@
-import { Button, EditableText, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
+import { Button, EditableText, MenuItem, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionTypes';
@@ -44,7 +45,7 @@ const conditionSplitter = (condition: BooleanExpression): string[] => {
 
 function EditableBinaryMeta(props: EditableBinaryMetaProps) {
   const { binaryMeta, changeMeta } = props;
-  const { condition, maxXp } = binaryMeta;
+  const { condition, targetCount } = binaryMeta;
 
   const joiners: string[] = [];
   const conditions: string[] = [];
@@ -72,7 +73,8 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
     changeMeta({ ...binaryMeta, condition: condition });
   };
 
-  const changeMaxXp = (maxXp: number) => changeMeta({ ...binaryMeta, maxXp: maxXp });
+  const changeTargetCount = (targetCount: number) =>
+    changeMeta({ ...binaryMeta, targetCount: targetCount });
 
   // Adds the and/or, adds the condition to be edited
   const addCondition = () => {
@@ -111,26 +113,26 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
           idx % 2 === 0 ? (
             // the text to change the condition
             <>
-              <Tooltip content="Condition">
+              <Tooltip2 content="Condition">
                 <EditableText
                   onChange={value => changeConditionArray(value, idx / 2)}
                   multiline={true}
                   placeholder="Enter condition here"
                   value={op}
                 />
-              </Tooltip>
+              </Tooltip2>
               {
                 // should only be deleteable if not the only condition
                 conditions.length > 1 && (
-                  <Tooltip content="Delete Condition">
+                  <Tooltip2 content="Delete Condition">
                     <Button intent="danger" icon="trash" onClick={() => deleteCondition(idx)} />
-                  </Tooltip>
+                  </Tooltip2>
                 )
               }
             </>
           ) : (
             // the button to choose the joiner to use
-            <Tooltip content="And/Or">
+            <Tooltip2 content="And/Or">
               <JoinerSelect
                 filterable={false}
                 itemRenderer={joinerRenderer}
@@ -139,7 +141,7 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
               >
                 <Button minimal={true} outlined={true} text={op} />
               </JoinerSelect>
-            </Tooltip>
+            </Tooltip2>
           )
         }
       </div>
@@ -148,16 +150,16 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
 
   return (
     <>
-      <Tooltip content="Max XP">
+      <Tooltip2 content="Target Count">
         <NumericInput
           allowNumericCharactersOnly={true}
           leftIcon={IconNames.BANK_ACCOUNT}
           min={0}
-          onValueChange={changeMaxXp}
-          placeholder="Enter max XP here"
-          value={maxXp}
+          onValueChange={changeTargetCount}
+          placeholder="Enter target count here"
+          value={targetCount}
         />
-      </Tooltip>
+      </Tooltip2>
       {generateConditions()}
       <br />
       <Button minimal={true} outlined={true} text="Add Condition" onClick={addCondition} />

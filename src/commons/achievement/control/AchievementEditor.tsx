@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import AchievementAdder from './achievementEditor/AchievementAdder';
@@ -7,6 +7,8 @@ import EditableCard from './achievementEditor/EditableCard';
 type AchievementEditorProps = {
   requestPublish: () => void;
 };
+
+let editableCards: JSX.Element[] = [];
 
 function AchievementEditor(props: AchievementEditorProps) {
   const { requestPublish } = props;
@@ -23,46 +25,50 @@ function AchievementEditor(props: AchievementEditorProps) {
    * is being added to the system and the admin is not allowed to add two achievements
    * at one go. The newUuid holds the newly created achievement uuid until the new achievement
    * is added into the inferencer.
-   *
-   * NOTE: was previously NaN by default, unsure how this should change for uuid
    */
   const [newUuid, setNewUuid] = useState<string>('');
   const allowNewUuid = newUuid === '';
-  const releaseUuid = (uuid: string) => (uuid === newUuid ? setNewUuid('') : undefined);
+  const releaseUuid = () => setNewUuid('');
 
-  /**
-   * Generates <EditableAchievementCard /> components
-   *
-   * @param achievementUuids an array of achievementUuid
-   */
-  const generateEditableCards = (achievementUuids: string[]) =>
-    achievementUuids.map(uuid => (
-      <EditableCard
-        key={uuid}
-        uuid={uuid}
-        releaseUuid={releaseUuid}
-        requestPublish={requestPublish}
-      />
-    ));
+  const removeCard = (uuid: string) => {
+    let idx = 0;
+    while (editableCards[idx].key !== uuid && idx < editableCards.length) {
+      idx++;
+    }
+    editableCards.splice(idx, 1);
+  };
 
-  // NOTE: editable cards used to be sorted by id in descending order
-  // However, UUID removes the guarantee of order preserving IDs
+  const generateEditableCard = (achievementUuid: string, isNewAchievement: boolean) => (
+    <EditableCard
+      key={achievementUuid}
+      uuid={achievementUuid}
+      isNewAchievement={isNewAchievement}
+      releaseUuid={releaseUuid}
+      removeCard={removeCard}
+      requestPublish={requestPublish}
+    />
+  );
+
+  // load preexisting achievements from the inferencer
+  if (editableCards.length === 0) {
+    editableCards = inferencer
+      .listSortedAchievementUuids()
+      .map(uuid => generateEditableCard(uuid, false));
+  }
+
+  const addNewAchievement = (uuid: string) => {
+    setNewUuid(uuid);
+    // keep the new achievement on top by swapping it with the first achievement
+    editableCards[editableCards.length] = editableCards[0];
+    editableCards[0] = generateEditableCard(uuid, true);
+  };
+
   return (
     <div className="achievement-editor">
       <div className="command">
-        <AchievementAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
+        <AchievementAdder allowNewUuid={allowNewUuid} setNewUuid={addNewAchievement} />
       </div>
-      <ul className="achievement-container">
-        {generateEditableCards(
-          inferencer
-            .getAllAchievementUuids()
-            .sort(
-              (a, b) =>
-                inferencer.getAchievementPositionByUuid(a) -
-                inferencer.getAchievementPositionByUuid(b)
-            )
-        )}
-      </ul>
+      <ul className="achievement-container">{editableCards}</ul>
     </div>
   );
 }

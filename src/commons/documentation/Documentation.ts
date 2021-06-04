@@ -38,9 +38,8 @@ for (const [lib, names] of externalLibraries) {
 
 // Add remote device libraries
 for (const deviceType of deviceTypes) {
-  externalLibrariesDocumentation[deviceType.deviceLibraryName] = deviceType.internalFunctions.map(
-    mapExternalLibraryName
-  );
+  externalLibrariesDocumentation[deviceType.deviceLibraryName] =
+    deviceType.internalFunctions.map(mapExternalLibraryName);
 }
 
 const builtinDocumentation = {};

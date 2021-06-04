@@ -1,6 +1,5 @@
 import { mount, shallow } from 'enzyme';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
-import * as React from 'react';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockGrading } from '../../mocks/GradingMocks';

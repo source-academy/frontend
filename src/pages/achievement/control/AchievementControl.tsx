@@ -1,11 +1,10 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Prompt } from 'react-router';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import Constants from '../../../commons/utils/Constants';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
@@ -37,10 +36,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    if (Constants.useAchievementBackend) {
-      getAchievements();
-      getOwnGoals();
-    }
+    getAchievements();
+    getOwnGoals();
   }, [getAchievements, getOwnGoals]);
 
   /**
@@ -48,11 +45,11 @@ function AchievementControl(props: DispatchProps & StateProps) {
    */
   const [awaitPublish, setAwaitPublish] = useState<boolean>(false);
   const publishChanges = () => {
-    // NOTE: Update goals first because goals must exist before their UUID can be specified in achievements
+    // NOTE: Goals and achievements must exist in the backend before the association can be built
     bulkUpdateGoals(inferencer.getAllGoals());
     bulkUpdateAchievements(inferencer.getAllAchievements());
-    inferencer.getAchievementsToDelete().forEach(removeAchievement);
     inferencer.getGoalsToDelete().forEach(removeGoal);
+    inferencer.getAchievementsToDelete().forEach(removeAchievement);
     inferencer.resetToDelete();
     setAwaitPublish(false);
   };
