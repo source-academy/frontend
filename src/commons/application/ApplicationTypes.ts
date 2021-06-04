@@ -203,7 +203,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   ),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: workspaceLocation === 'playground' || 'sourcecast' ? defaultEditorValue : '',
+  editorValue: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+    ? defaultEditorValue
+    : '',
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],
@@ -273,6 +275,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,
     timeResumed: 0
+  },
+  githubAssessment: {
+    ...createDefaultWorkspace('githubAssessment'),
+    hasUnsavedChanges: false
   }
 };
 
@@ -280,6 +286,7 @@ export const defaultSession: SessionState = {
   accessToken: undefined,
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
+  githubOctokitObject: { octokit: undefined },
   grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
