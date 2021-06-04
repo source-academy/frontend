@@ -257,7 +257,7 @@ const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
       <SicpExercise
         title={obj['title']!}
         body={parseArr(obj['child']!, refs)}
-        solution={parseArr(obj['solution']!, refs)}
+        solution={obj['solution'] && parseArr(obj['solution'], refs)}
       />
     </div>
   );

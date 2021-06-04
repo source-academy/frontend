@@ -5,7 +5,7 @@ type SicpExerciseProps = OwnProps;
 type OwnProps = {
   title: string;
   body: JSX.Element;
-  solution: JSX.Element;
+  solution: JSX.Element | undefined;
 };
 
 const noSolutionPlaceholder = (
