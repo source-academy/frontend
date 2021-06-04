@@ -6,18 +6,17 @@ import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import { GitHubState } from '../../features/github/GitHubTypes';
-import { store } from '../../pages/createStore';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
-  loggedInAs?: Octokit;
+  loggedInAs: Octokit;
   githubSaveInfo: { repoName: string; filePath: string };
-  onClickOpen?: () => any;
-  onClickSave?: () => any;
-  onClickSaveAs?: () => any;
-  onClickLogIn?: () => any;
-  onClickLogOut?: () => any;
+  onClickOpen?: () => void;
+  onClickSave?: () => void;
+  onClickSaveAs?: () => void;
+  onClickLogIn?: () => void;
+  onClickLogOut?: () => void;
 };
 
 const stateToIntent: { [state in GitHubState]: Intent } = {
@@ -25,13 +24,15 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
   LOGGED_IN: Intent.NONE
 };
 
+/**
+ * GitHub buttons to be used specifically in the Playground.
+ * Creates a dropdown upon click.
+ *
+ * @param props Component properties
+ */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  // The 'loggedInAs' is not used directly in this code block
-  // However, keeping it in will ensure that the component re-renders immediately
-  // Or else, the re-render has to be triggered by something else
-
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const isLoggedIn = store.getState().session.githubOctokitInstance !== undefined;
+  const isLoggedIn = props.loggedInAs !== undefined;
 
   const shouldDisableButtons = !isLoggedIn;
   const shouldDisableSaveButton =

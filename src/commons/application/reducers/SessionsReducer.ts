@@ -8,9 +8,10 @@ import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
-  REMOVE_GITHUB_OCTOKIT_INSTANCE,
+  REMOVE_GITHUB_OCTOKIT_OBJECT,
   SessionState,
-  SET_GITHUB_OCTOKIT_INSTANCE,
+  SET_GITHUB_ASSESSMENT,
+  SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -29,10 +30,15 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
-    case SET_GITHUB_OCTOKIT_INSTANCE:
+    case SET_GITHUB_ASSESSMENT:
       return {
         ...state,
-        githubOctokitInstance: action.payload
+        githubAssessment: action.payload
+      };
+    case SET_GITHUB_OCTOKIT_OBJECT:
+      return {
+        ...state,
+        githubOctokitObject: { octokit: action.payload }
       };
     case SET_GOOGLE_USER:
       return {
@@ -103,10 +109,10 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         remoteExecutionSession: action.payload
       };
-    case REMOVE_GITHUB_OCTOKIT_INSTANCE:
+    case REMOVE_GITHUB_OCTOKIT_OBJECT:
       return {
         ...state,
-        githubOctokitInstance: undefined
+        githubOctokitObject: { octokit: undefined }
       };
     default:
       return state;

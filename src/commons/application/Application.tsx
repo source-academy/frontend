@@ -1,11 +1,13 @@
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
+import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
+import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
+import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
@@ -21,6 +23,8 @@ export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<
 
 export type DispatchProps = {
   handleLogOut: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -117,6 +121,8 @@ const Application: React.FC<ApplicationProps> = props => {
     <div className="Application">
       <NavigationBar
         handleLogOut={props.handleLogOut}
+        handleGitHubLogIn={props.handleGitHubLogIn}
+        handleGitHubLogOut={props.handleGitHubLogOut}
         role={props.role}
         name={props.name}
         title={props.title}
@@ -140,6 +146,23 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+            {Constants.enableGitHubAssessments && (
+              <Route
+                path="/githubassessments/missions"
+                component={() => (
+                  <GitHubMissionListing
+                    handleGitHubLogIn={props.handleGitHubLogIn}
+                    handleGitHubLogOut={props.handleGitHubLogOut}
+                  />
+                )}
+              />
+            )}
+            {Constants.enableGitHubAssessments && (
+              <Route
+                path="/githubassessments/editor"
+                component={GitHubAssessmentWorkspaceContainer}
+              />
+            )}
             <Route path="/callback/github" component={GitHubCallback} />
             {fullPaths}
             <Route

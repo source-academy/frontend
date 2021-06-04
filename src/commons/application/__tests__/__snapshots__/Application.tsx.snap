@@ -2,12 +2,14 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/sourcecast/:sourcecastId?\\" component={[Function: C] { displayName: 'withRouter(Connect(Sourcecast))', WrappedComponent: [Function: Sourcecast], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
+      <Route path=\\"/githubassessments/missions\\" component={[Function: component]} />
+      <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
@@ -22,7 +24,7 @@ exports[`Application renders correctly 1`] = `
 
 exports[`Application shows disabled when in disabled period 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
