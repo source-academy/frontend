@@ -8,7 +8,6 @@ import ContentDisplay from 'src/commons/ContentDisplay';
 import Constants from 'src/commons/utils/Constants';
 import { parseArr } from 'src/features/sicp/parser/ParseJson';
 
-import testData from '../../features/sicp/data/test.json';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = OwnProps & RouteComponentProps<{}>;
@@ -24,9 +23,8 @@ export const CodeSnippetContext = React.createContext({
 });
 
 export const mathjaxConfig = {
-  loader: { load: ['[tex]/html'] },
+  loader: { load: ['input/tex', 'output/svg'] },
   tex: {
-    packages: { '[+]': ['html'] },
     inlineMath: [
       ['$', '$'],
       ['\\(', '\\)']
@@ -69,12 +67,6 @@ const Sicp: React.FC<SicpProps> = props => {
 
     if (section === 'index') {
       setData(<SicpIndexPage />);
-      return;
-    }
-
-    if (section === 'test') {
-      const newData = parseArr(testData as any[], refs);
-      setData(newData);
       return;
     }
 
@@ -128,7 +120,7 @@ const Sicp: React.FC<SicpProps> = props => {
     <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
       <div className={classNames('Sicp', Classes.DARK)}>
         <div ref={topRef} />
-        <MathJaxContext version={3} config={mathjaxConfig}>
+        <MathJaxContext version={3} config={mathjaxConfig} hideUntilTypeset="first">
           <ContentDisplay {...sicpDisplayProps} />
         </MathJaxContext>
       </div>
