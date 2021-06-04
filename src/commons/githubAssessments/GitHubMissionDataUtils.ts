@@ -3,6 +3,7 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
+import { values } from 'lodash';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { IMCQQuestion, Testcase } from '../assessment/AssessmentTypes';
@@ -391,6 +392,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
     const questionFolderName = 'Q' + taskNumber;
 
     if (taskNumber > cachedTaskList.length) {
+      // Look for files to create
       filenameToContentMap[questionFolderName + '/StarterCode.js'] = taskList[i].savedCode;
       filenameToContentMap[questionFolderName + '/Problem.md'] = taskList[i].taskDescription;
 
@@ -411,13 +413,18 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         }
       }
     } else {
+      // Look for files to edit
       const propertiesToCheck = Object.keys(taskDataPropertyTable);
 
       for (const propertyName of propertiesToCheck) {
         const currentValue = taskList[i][propertyName];
         const cachedValue = cachedTaskList[i][propertyName];
 
-        if (currentValue !== cachedValue) {
+        const valuesAreUnequal = Array.isArray(currentValue)
+          ? testArrayEquality(currentValue, cachedValue)
+          : currentValue !== cachedValue;
+
+        if (valuesAreUnequal) {
           const onRepoFileName =
             questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
           const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
@@ -454,6 +461,20 @@ export function discoverFilesToBeChangedWithMissionRepoData(
   }
 
   return [filenameToContentMap, foldersToDelete];
+}
+
+function testArrayEquality(firstArray: any[], secondArray: any[]) {
+  if (firstArray.length !== secondArray.length) {
+    return false;
+  }
+
+  for (let i = 0; i < firstArray.length; i++) {
+    if (firstArray[i] != secondArray[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export function discoverFilesToBeCreatedWithoutMissionRepoData(

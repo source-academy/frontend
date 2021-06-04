@@ -220,13 +220,98 @@ test('getMissionData works properly', async () => {
 });
 
 test('discoverFilesToBeChangedWithMissionRepoData discovers files to create', () => {
+  // missionMetadata and cachedMissionMetadata have the same values
+  // briefingContent and cachedBriefingContent have the same values
+  // taskList is longer than cachedTaskList
+  // taskList shares one task with cachedTaskList
+
   const missionMetadata = Object.assign(dummyMissionMetadata);
   const cachedMissionMetadata = Object.assign(dummyMissionMetadata);
+
+  const briefingContent = 'dummy';
+  const cachedBriefingContent = 'dummy';
+
+  const taskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    },
+    {
+      questionNumber: 2,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+  const cachedTaskList = [
+    {
+      questionNumber: 1,
+      taskDescription: 'description',
+      starterCode: 'starter',
+      savedCode: 'saved',
+      testPrepend: 'prepend',
+      testPostpend: 'postpend',
+      testCases: [
+        {
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        }
+      ]
+    }
+  ];
+
+  const isTeacherMode = false;
+
+  const [filenameToContentMap, foldersToDelete] =
+    GitHubMissionDataUtils.discoverFilesToBeChangedWithMissionRepoData(
+      missionMetadata,
+      cachedMissionMetadata,
+      briefingContent,
+      cachedBriefingContent,
+      taskList,
+      cachedTaskList,
+      isTeacherMode
+    );
+
+  const existingKeys = new Set();
+
+  Object.keys(filenameToContentMap).forEach((key: string) => existingKeys.add(key));
+
+  const expectedKeys = new Set([
+    'Q2/StarterCode.js',
+    'Q2/Problem.md',
+    'Q2/TestCases.json',
+    'Q2/TestPrepend.js',
+    'Q2/TestPostpend.js'
+  ]);
+
+  expect(existingKeys).toEqual(expectedKeys);
+  expect(foldersToDelete.length).toBe(0);
 });
-
-test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit', () => {});
-
-test('discoverFilesToBeChangeWithMissionRepoData discovers files to delete', () => {});
 
 test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
   const missionMetadata = Object.assign({}, dummyMissionMetadata);
@@ -419,4 +504,15 @@ const dummyMissionMetadata = {
   dueDate: new Date('December 17, 1996 03:24:00'),
   reading: 'none',
   webSummary: 'no'
+};
+
+const defaultMissionMetadata = {
+  coverImage: '',
+  kind: '',
+  number: '',
+  title: '',
+  sourceVersion: 1,
+  dueDate: new Date(8640000000000000),
+  reading: '',
+  webSummary: ''
 };
