@@ -23,8 +23,9 @@ export const CodeSnippetContext = React.createContext({
 });
 
 export const mathjaxConfig = {
-  loader: { load: ['input/tex', 'output/svg'] },
-  tex: {
+  extensions: ['tex2jax.js'],
+  jax: ['input/TeX', 'output/HTML-CSS'],
+  tex2jax: {
     inlineMath: [
       ['$', '$'],
       ['\\(', '\\)']
@@ -151,7 +152,7 @@ const Sicp: React.FC<SicpProps> = props => {
     <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
       <div className={classNames('Sicp', Classes.DARK)}>
         <div ref={topRef} />
-        <MathJaxContext version={3} config={mathjaxConfig} hideUntilTypeset="first">
+        <MathJaxContext version={2} config={mathjaxConfig} hideUntilTypeset="first">
           <ContentDisplay {...sicpDisplayProps} />
         </MathJaxContext>
       </div>

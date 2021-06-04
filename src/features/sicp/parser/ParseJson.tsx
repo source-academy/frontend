@@ -1,7 +1,7 @@
 import { Blockquote, H1, OL, UL } from '@blueprintjs/core';
-import { MathJax } from 'better-react-mathjax';
 import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
+import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
 
 import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
 
@@ -62,10 +62,10 @@ export const processingFunctions = {
     <code>{obj['body']}</code>
   ),
 
-  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, true),
+  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
 
   LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex(obj['body']!, false),
+    handleLatex(obj['body']!, true),
 
   LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
 
@@ -75,10 +75,10 @@ export const processingFunctions = {
 
   MATTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
-  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
+  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, true),
 
   METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex('$\\langle$ ' + obj['body'] + ' $\\rangle$', false),
+    handleLatex('$\\langle$ ' + obj['body'] + ' $\\rangle$', true),
 
   OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
 
@@ -183,7 +183,7 @@ const handleSnippet = (obj: JsonType) => {
   if (obj['latex']) {
     return (
       <pre>
-        <code>{handleLatex(obj['body']!, true)}</code>
+        <code>{handleLatex(obj['body']!, false)}</code>
       </pre>
     );
   } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
@@ -276,12 +276,8 @@ const handleText = (text: string) => {
   return <p>{text}</p>;
 };
 
-const handleLatex = (math: string, block: boolean) => {
-  if (block) {
-    return <MathJax>{math}</MathJax>;
-  } else {
-    return <MathJax inline>{math}</MathJax>;
-  }
+const handleLatex = (math: string, inline: boolean) => {
+  return <SicpLatex inline={inline} math={math} />;
 };
 
 export const parseArr = (arr: Array<JsonType>, refs: React.MutableRefObject<{}>) => {
