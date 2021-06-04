@@ -14,6 +14,10 @@ function EditableGoalUuids(props: EditableGoalUuidsProps) {
 
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
+  const selectedUuids = goalUuids.filter(
+    uuid => !inferencer.isInvalidGoal(inferencer.getGoal(uuid))
+  );
+
   const getUuid = (text: string) => inferencer.getUuidByText(text);
   const getText = (uuid: string) => inferencer.getTextByUuid(uuid);
 
@@ -22,7 +26,7 @@ function EditableGoalUuids(props: EditableGoalUuidsProps) {
     <MenuItem key={uuid} onClick={handleClick} text={getText(uuid)} />
   );
 
-  const selectedGoals = new Set(goalUuids);
+  const selectedGoals = new Set(selectedUuids);
   const availableGoals = new Set(without(allGoalUuids, ...goalUuids));
 
   const selectGoal = (selectUuid: string) => {

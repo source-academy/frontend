@@ -131,7 +131,7 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
-  githubOctokitInstance: Octokit | undefined;
+  githubOctokitObject: { octokit: Octokit | undefined };
   githubSaveInfo: { repoName: string; filePath: string };
 };
 
@@ -434,11 +434,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { githubOctokitInstance } = props;
+  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
   const githubButtons = React.useMemo(() => {
+    const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
-        loggedInAs={githubOctokitInstance}
+        loggedInAs={octokit}
         githubSaveInfo={props.githubSaveInfo}
         key="github"
         onClickOpen={props.handleGitHubOpenFile}
@@ -449,7 +450,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       />
     );
   }, [
-    githubOctokitInstance,
+    githubOctokitObject,
     props.githubSaveInfo,
     props.handleGitHubOpenFile,
     props.handleGitHubSaveFileAs,
@@ -695,8 +696,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled =
-    props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
+  const replDisabled = props.sourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -833,7 +833,7 @@ const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 

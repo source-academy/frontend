@@ -1,5 +1,6 @@
-import { NumericInput, Tooltip } from '@blueprintjs/core';
+import { NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableManualMetaProps = {
@@ -9,21 +10,22 @@ type EditableManualMetaProps = {
 
 function EditableManualMeta(props: EditableManualMetaProps) {
   const { changeMeta, manualMeta } = props;
-  const { maxXp } = manualMeta;
+  const { targetCount } = manualMeta;
 
-  const changeMaxXp = (maxXp: number) => changeMeta({ ...manualMeta, maxXp: maxXp });
+  const changeTargetCount = (targetCount: number) =>
+    changeMeta({ ...manualMeta, targetCount: targetCount });
 
   return (
-    <Tooltip content="Max XP">
+    <Tooltip2 content="Target Count">
       <NumericInput
         allowNumericCharactersOnly={true}
         leftIcon={IconNames.BANK_ACCOUNT}
         min={0}
-        onValueChange={changeMaxXp}
-        placeholder="Enter max XP here"
-        value={maxXp}
+        onValueChange={changeTargetCount}
+        placeholder="Enter target count here"
+        value={targetCount}
       />
-    </Tooltip>
+    </Tooltip2>
   );
 }
 

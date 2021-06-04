@@ -1,7 +1,15 @@
 import { Node } from 'konva/types/Node';
 
+import { Value } from './components/values/Value';
 import { Config } from './EnvVisualizerConfig';
-import { Data, EmptyObject, Env, FnTypes, PrimitiveTypes } from './EnvVisualizerTypes';
+import {
+  Data,
+  EmptyObject,
+  Env,
+  FnTypes,
+  PrimitiveTypes,
+  ReferenceType
+} from './EnvVisualizerTypes';
 
 /** checks if `x` is an object */
 export function isObject(x: any): x is object {
@@ -66,6 +74,11 @@ export function isUnassigned(data: Data): data is symbol {
 /** checks if `data` is a primitive, defined as a null | data | number */
 export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data);
+}
+
+/** checks if `reference` is the main reference of the `value` */
+export function isMainReference(value: Value, reference: ReferenceType) {
+  return value.referencedBy[0] === reference;
 }
 
 /**

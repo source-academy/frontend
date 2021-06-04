@@ -1,17 +1,22 @@
 import { BooleanExpression } from './ExpressionTypes';
 
+export const ADD_EVENT = 'ADD_EVENT';
 export const BULK_UPDATE_ACHIEVEMENTS = 'BULK_UPDATE_ACHIEVEMENTS';
 export const BULK_UPDATE_GOALS = 'BULK_UPDATE_GOALS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
 export const EDIT_GOAL = 'EDIT_GOAL';
+export const HANDLE_EVENT = 'HANDLE_EVENT';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const GET_GOALS = 'GET_GOALS';
 export const GET_OWN_GOALS = 'GET_OWN_GOALS';
+export const GET_USERS = 'GET_USERS';
 export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
 export const REMOVE_GOAL = 'REMOVE_GOAL';
 export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const SAVE_GOALS = 'SAVE_GOALS';
+export const SAVE_USERS = 'SAVE_USERS';
 export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
+export const UPDATE_OWN_GOAL_PROGRESS = 'UPDATE_OWN_GOAL_PROGRESS';
 
 export enum AchievementAbility {
   CORE = 'Core',
@@ -24,7 +29,8 @@ export enum AchievementAbility {
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline
-  EXPIRED = 'EXPIRED' // deadline over and not completed
+  EXPIRED = 'EXPIRED', // deadline over and not completed
+  UNRELEASED = 'UNRELEASED' // release date not reached yet
 }
 
 export enum FilterStatus {
@@ -39,6 +45,7 @@ export enum FilterStatus {
  * @param {string} uuid unique uuid of the achievement item
  * @param {string} title title of the achievement
  * @param {AchievementAbility} ability ability of the achievement, string enum
+ * @param {number} xp the xp gained when completing the achievement
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task
@@ -52,6 +59,8 @@ export type AchievementItem = {
   uuid: string;
   title: string;
   ability: AchievementAbility;
+  xp: number;
+  isVariableXp: boolean;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
@@ -69,11 +78,13 @@ export type AchievementGoal = GoalDefinition & GoalProgress;
  *
  * @param {string} uuid unique uuid of the goal
  * @param {string} text goal description
+ * @param {string[]} achievementUuids an array of achievement uuids that use this goal
  * @param {GoalMeta} meta contains meta data relevant to the goal type
  */
 export type GoalDefinition = {
   uuid: string;
   text: string;
+  achievementUuids: string[];
   meta: GoalMeta;
 };
 
@@ -87,40 +98,59 @@ export type GoalDefinition = {
  */
 export type GoalProgress = {
   uuid: string;
-  xp: number;
-  maxXp: number;
+  count: number;
+  targetCount: number;
   completed: boolean;
 };
 
 export const defaultGoalProgress = {
-  xp: 0,
-  maxXp: 0,
+  count: 0,
+  targetCount: 1,
   completed: false
 };
 
 export enum GoalType {
-  ASSESSMENT = 'Assessment',
-  BINARY = 'Binary',
-  MANUAL = 'Manual'
+  MANUAL = 'Manual',
+  EVENT = 'Event',
+  ASSESSMENT = 'Assessment (unsupported)',
+  BINARY = 'Binary (unsupported)'
 }
 
-export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
+export enum EventType {
+  NONE = 'None', // This is just for the purposes of a default value
+  RUN_CODE = 'Run Code',
+  ERROR = 'Error',
+  INFINITE_LOOP = 'Infinite Loop',
+  RUN_TESTCASE = 'Run Testcase'
+}
+
+export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta | EventMeta;
 
 export type AssessmentMeta = {
   type: GoalType.ASSESSMENT;
-  assessmentNumber: string; // e.g. 'M1A', 'P2'
+  assessmentNumber: number;
   requiredCompletionFrac: number; // between [0..1]
 };
 
 export type BinaryMeta = {
   type: GoalType.BINARY;
   condition: BooleanExpression;
-  maxXp: number;
+  targetCount: number;
 };
 
 export type ManualMeta = {
   type: GoalType.MANUAL;
-  maxXp: number;
+  targetCount: number;
+};
+
+export type EventMeta = {
+  type: GoalType.EVENT;
+  eventNames: EventType[];
+  targetCount: number;
+  release?: Date;
+  deadline?: Date;
+  observeFrom?: Date;
+  observeTo?: Date;
 };
 
 /**
@@ -136,7 +166,14 @@ export type AchievementView = {
   completionText: string;
 };
 
+export type AchievementUser = {
+  name: string;
+  userId: number;
+  group: string;
+};
+
 export type AchievementState = {
   achievements: AchievementItem[];
   goals: AchievementGoal[];
+  users: AchievementUser[];
 };

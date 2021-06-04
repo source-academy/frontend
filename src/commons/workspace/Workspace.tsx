@@ -119,8 +119,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   /**
-   * Pre-condition: `this.props.editorProps`
-   * XOR `this.props.mcq` are defined.
+   * Pre-condition: `props.editorProps`
+   * XOR `props.mcq` are defined.
    */
   const createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.customEditor) {

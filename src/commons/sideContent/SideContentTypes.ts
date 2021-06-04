@@ -7,6 +7,8 @@ export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
+  contestVoting = 'contest_voting',
+  contestLeaderboard = 'contest_leaderboard',
   dataVisualizer = 'data_visualizer',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',
@@ -18,7 +20,7 @@ export enum SideContentType {
   editorManageQuestion = 'editor_manage_question',
   editorQuestionOverview = 'editor_question_overview',
   editorQuestionTemplate = 'editor_question_template',
-  envVisualiser = 'env_visualiser',
+  envVisualizer = 'env_visualizer',
   grading = 'grading',
   introduction = 'introduction',
   inspector = 'inspector',
