@@ -8,7 +8,7 @@ import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/Control
 import { CodeSnippetContext } from '../Sicp';
 import SicpWorkspaceContainer from './SicpWorkspaceContainer';
 
-type CodeSnippetProps = OwnProps;
+export type CodeSnippetProps = OwnProps;
 type OwnProps = {
   body: string;
   output: string;

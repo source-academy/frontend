@@ -87,7 +87,7 @@ const licenses = (
   </div>
 );
 
-const SicpIndexPage: React.FC = props => {
+const SicpIndexPage: React.FC = () => {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
