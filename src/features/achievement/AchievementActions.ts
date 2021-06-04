@@ -4,6 +4,7 @@ import {
   AchievementGoal,
   AchievementItem,
   AchievementUser,
+  ADD_EVENT,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
@@ -49,6 +50,8 @@ export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
 
 export const updateOwnGoalProgress = (progress: GoalProgress) =>
   action(UPDATE_OWN_GOAL_PROGRESS, progress);
+
+export const addEvent = (eventNames: EventType[]) => action(ADD_EVENT, eventNames);
 
 export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
 
