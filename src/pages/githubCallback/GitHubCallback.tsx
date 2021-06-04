@@ -1,4 +1,4 @@
-import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as qs from 'query-string';
@@ -50,7 +50,7 @@ function GitHubCallback({ location }: RouteComponentProps<{}>) {
     </Failure>
   ) : (
     <div className={classNames('NoPage', Classes.DARK)}>
-      <NonIdealState description="Logging In..." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+      <NonIdealState description="Logging In..." icon={<Spinner size={SpinnerSize.LARGE} />} />
     </div>
   );
 }

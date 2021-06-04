@@ -31,7 +31,7 @@ const baseProps = {
   usingSubst: false,
   persistenceUser: undefined,
   persistenceFile: undefined,
-  githubOctokitInstance: undefined,
+  githubOctokitObject: { octokit: undefined },
   githubSaveInfo: { repoName: '', filePath: '' },
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},

@@ -1,4 +1,8 @@
 import { Octokit } from '@octokit/rest';
+import {
+  GetResponseDataTypeFromEndpointMethod,
+  GetResponseTypeFromEndpointMethod
+} from '@octokit/types';
 
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
@@ -31,12 +35,17 @@ export async function exchangeAccessCode(
  * This function allows for mocking Octokit behaviour in tests.
  */
 export function getGitHubOctokitInstance(): any {
-  return store.getState().session.githubOctokitInstance;
+  const octokitObject = store.getState().session.githubOctokitObject;
+  if (octokitObject === undefined) {
+    return undefined;
+  } else {
+    return octokitObject.octokit;
+  }
 }
 
 export async function checkIfFileCanBeOpened(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string
 ) {
@@ -50,11 +59,13 @@ export async function checkIfFileCanBeOpened(
     return false;
   }
 
-  let files;
+  type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  let files: GetContentData;
 
   try {
-    const results = await octokit.repos.getContent({
-      owner: githubLoginID,
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const results: GetContentResponse = await octokit.repos.getContent({
+      owner: repoOwner,
       repo: repoName,
       path: filePath
     });
@@ -74,9 +85,19 @@ export async function checkIfFileCanBeOpened(
   return true;
 }
 
+/**
+ * Returns an object containing 2 properties: 'canBeSaved' and 'saveType'.
+ * 'canBeSaved' is a boolean that represents whether we should proceed with the save.
+ * If the file can be saved, then 'saveType' is either 'Create' or 'Overwrite'.
+ *
+ * @param octokit The Octokit instance for the authenticated user
+ * @param repoOwner The owner of the repository where the file is to be saved
+ * @param repoName The name of the repository
+ * @param filePath The filepath where the file will be saved to
+ */
 export async function checkIfFileCanBeSavedAndGetSaveType(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string
 ) {
@@ -95,8 +116,9 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
   let files;
 
   try {
-    const results = await octokit.repos.getContent({
-      owner: githubLoginID,
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const results: GetContentResponse = await octokit.repos.getContent({
+      owner: repoOwner,
       repo: repoName,
       path: filePath
     });
@@ -167,14 +189,15 @@ export async function checkIfUserAgreesToPerformCreatingSave() {
 
 export async function openFileInEditor(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string
 ) {
   if (octokit === undefined) return;
 
-  const results = await octokit.repos.getContent({
-    owner: githubLoginID,
+  type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+  const results: GetContentResponse = await octokit.repos.getContent({
+    owner: repoOwner,
     repo: repoName,
     path: filePath
   });
@@ -191,26 +214,33 @@ export async function openFileInEditor(
 
 export async function performOverwritingSave(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string,
-  githubName: string,
-  githubEmail: string,
-  commitMessage: string
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string,
+  content: string | null
 ) {
   if (octokit === undefined) return;
 
-  const content = store.getState().workspaces.playground.editorValue || '';
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+  content = content || '';
+
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
 
   try {
-    const results = await octokit.repos.getContent({
-      owner: githubLoginID,
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const results: GetContentResponse = await octokit.repos.getContent({
+      owner: repoOwner,
       repo: repoName,
       path: filePath
     });
 
-    const files = results.data;
+    type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const files: GetContentData = results.data;
 
     // Cannot save over folder
     if (Array.isArray(files)) {
@@ -220,7 +250,7 @@ export async function performOverwritingSave(
     const sha = files.sha;
 
     await octokit.repos.createOrUpdateFileContents({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath,
       message: commitMessage,
@@ -239,21 +269,26 @@ export async function performOverwritingSave(
 
 export async function performCreatingSave(
   octokit: Octokit,
-  githubLoginID: string,
+  repoOwner: string,
   repoName: string,
   filePath: string,
-  githubName: string,
-  githubEmail: string,
-  commitMessage: string
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string,
+  content: string | null
 ) {
   if (octokit === undefined) return;
 
-  const content = store.getState().workspaces.playground.editorValue || '';
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+  content = content || '';
+
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
 
   try {
     await octokit.repos.createOrUpdateFileContents({
-      owner: githubLoginID,
+      owner: repoOwner,
       repo: repoName,
       path: filePath,
       message: commitMessage,
