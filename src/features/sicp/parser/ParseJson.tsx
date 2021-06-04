@@ -5,6 +5,9 @@ import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 
 import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
 
+// Custom error class for errors when parsing JSON files.
+export class ParseJsonError extends Error {}
+
 export type JsonType = {
   child?: Array<JsonType>;
   tag?: string;
@@ -236,8 +239,7 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   } else if (obj['table']) {
     return processingFunctions['TABLE'](obj['table'], refs);
   } else {
-    console.log('parseJson error: Figure has no image');
-    return <></>;
+    throw new ParseJsonError('Figure has no image');
   }
 };
 
@@ -299,11 +301,7 @@ export const parseObj = (
     if (processingFunctions[obj['tag']]) {
       return <span key={index}>{processingFunctions[obj['tag']](obj, refs)}</span>;
     } else {
-      return (
-        <span style={{ color: 'red' }} key={index}>
-          {obj['tag'] + ' ' + obj['body']}
-        </span>
-      );
+      throw new ParseJsonError('Unrecognised Tag: ' + obj['tag']);
     }
   } else {
     return <span key={index}>{parseArr(obj['child']!, refs)}</span>;

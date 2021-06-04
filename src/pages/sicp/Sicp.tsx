@@ -6,7 +6,7 @@ import * as React from 'react';
 import { RouteComponentProps, useParams } from 'react-router';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import Constants from 'src/commons/utils/Constants';
-import { parseArr } from 'src/features/sicp/parser/ParseJson';
+import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
@@ -37,21 +37,39 @@ export const mathjaxConfig = {
 };
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
-const errorComponent = (
-  <NonIdealState
-    title="Something went wrong :("
-    description={
-      <div>
-        Something unexpected went wrong trying to load this page. Please try refreshing the page. If
-        the issue persists, let us know by filing an issue at{' '}
-        <a href="https://github.com/source-academy/cadet-frontend">
-          https://github.com/source-academy/cadet-frontend
-        </a>
-        .
-      </div>
-    }
-    icon={IconNames.ERROR}
-  />
+
+const unexpectedError = (
+  <div>
+    Something unexpected went wrong trying to load this page. Please try refreshing the page. If the
+    issue persists, kindly let us know by filing an issue at{' '}
+    <a href="https://github.com/source-academy/cadet-frontend">
+      https://github.com/source-academy/cadet-frontend
+    </a>
+    .
+  </div>
+);
+const pageNotFoundError = (
+  <div>
+    We could not find the page you were looking for. Please check the URL again. If you believe the
+    URL is correct, kindly let us know by filing an issue at{' '}
+    <a href="https://github.com/source-academy/cadet-frontend">
+      https://github.com/source-academy/cadet-frontend
+    </a>
+    .
+  </div>
+);
+const parsingError = (
+  <div>
+    An error occured while loading the page. Kindly let us know by filing an issue at{' '}
+    <a href="https://github.com/source-academy/cadet-frontend">
+      https://github.com/source-academy/cadet-frontend
+    </a>{' '}
+    and we will get it fixed as soon as possible.
+  </div>
+);
+
+const errorComponent = (description: JSX.Element) => (
+  <NonIdealState title="Something went wrong :(" description={description} icon={IconNames.ERROR} />
 );
 
 const Sicp: React.FC<SicpProps> = props => {
@@ -78,12 +96,25 @@ const Sicp: React.FC<SicpProps> = props => {
         return response.json();
       })
       .then(myJson => {
-        const newData = parseArr(myJson, refs);
-        setData(newData);
+        try {
+          const newData = parseArr(myJson, refs); // Might throw error
+          setData(newData);
+        } catch (error) {
+          throw new ParseJsonError(error.message);
+        }
       })
       .catch(error => {
         console.log(error);
-        setData(errorComponent);
+
+        if (error.message === 'Not Found') {
+          // page not found
+          setData(errorComponent(pageNotFoundError));
+        } else if (error instanceof ParseJsonError) {
+          // error occured while parsing JSON
+          setData(errorComponent(parsingError));
+        } else {
+          setData(errorComponent(unexpectedError));
+        }
       });
   }, [section]);
 
