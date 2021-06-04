@@ -2076,7 +2076,7 @@
     "@types/estree" "*"
     "@types/json-schema" "*"
 
-"@types/estree@*":
+"@types/estree@*", "@types/estree@0.0.47":
   version "0.0.47"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.47.tgz#d7a51db20f0650efec24cd04994f523d93172ed4"
   integrity sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==
@@ -8037,12 +8037,28 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.4.60, js-slang@^0.4.79:
+js-slang@^0.4.60:
   version "0.4.79"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.79.tgz#752cf9b39ec299165bc867bed58af5d8f2f95e82"
   integrity sha512-DcQgzAcyUv9Idh6rf7hfRyeDWnq9hSYQeCH402wq86wbzIG7V2/f/XsDnuw1yz+2vdMM+LC1eq59szGAGpj/Vw==
   dependencies:
     "@types/estree" "0.0.45"
+    acorn "^8.0.3"
+    acorn-loose "^8.0.0"
+    acorn-walk "^8.0.0"
+    astring "^1.4.3"
+    gpu.js "^2.10.4"
+    lodash "^4.17.20"
+    node-getopt "^0.3.2"
+    source-map "^0.7.3"
+    xmlhttprequest-ts "^1.0.1"
+
+js-slang@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.0.tgz#7a450eff23906f2ad5b67480a7bcc9002e99e92b"
+  integrity sha512-GwudvePCPQ6upkpOpHVuW0xOXjkh0mfJHyoNFHIbxDQOKIy0kQ2YpXcx45H1Eq+H7aGZzvanABWwWqmMOQFVUQ==
+  dependencies:
+    "@types/estree" "0.0.47"
     acorn "^8.0.3"
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
