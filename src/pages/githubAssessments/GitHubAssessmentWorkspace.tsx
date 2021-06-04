@@ -169,7 +169,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     props.location.state as MissionRepoData
   );
 
-  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
@@ -184,7 +184,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
 
   /**
-   * Should be called to change the task number, rather than using setCurrentTaskNumber.
+   * Should be called to change the task number, rather than using setCurrentTaskNumber
    */
   const changeStateDueToChangedTaskNumber = useCallback(
     (newTaskNumber: number, currentTaskList: TaskData[]) => {
@@ -247,7 +247,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   }, [computedHasUnsavedChanges, hasUnsavedChanges, handleUpdateHasUnsavedChanges]);
 
   /**
-   * Sets up the workspace for when the user is retrieving Mission information from a GitHub repository.
+   * Sets up the workspace for when the user is retrieving Mission information from a GitHub repository
    */
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
@@ -290,11 +290,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setIsTeacherMode(userInTeacherMode);
 
     setIsLoading(false);
-    if (missionData.missionBriefing !== '') setShowOverlay(true);
+    if (missionData.missionBriefing !== '') setShowBriefingOverlay(true);
   }, [changeStateDueToChangedTaskNumber, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
 
   /**
-   * Sets up the workspace for when the user is creating a new Mission.
+   * Sets up the workspace for when the user is creating a new Mission
    */
   const setUpWithoutMissionRepoData = useCallback(() => {
     setSummary(defaultMissionBriefing);
@@ -327,13 +327,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
 
-  const overlay = (
-    <Dialog className="assessment-briefing" isOpen={showOverlay}>
+  const briefingOverlay = (
+    <Dialog className="assessment-briefing" isOpen={showBriefingOverlay}>
       <Card>
         <Markdown content={summary} />
         <Button
           className="assessment-briefing-button"
-          onClick={() => setShowOverlay(false)}
+          onClick={() => setShowBriefingOverlay(false)}
           text="Continue"
         />
       </Card>
@@ -341,7 +341,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   );
 
   /**
-   * Handles the changes to the taskList.
+   * Handles the changes to the taskList
    */
   const editCode = useCallback(
     (taskNumber: number, newValue: string) => {
@@ -430,7 +430,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   );
 
   /**
-   * To be used when the information to be saved corresponds to an existing GitHub repository.
+   * To be used when the information to be saved corresponds to an existing GitHub repository
    */
   const saveWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) {
@@ -503,7 +503,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   ]);
 
   /**
-   * To be used when the information to be saved to a new GitHub repository.
+   * To be used when the information to be saved to a new GitHub repository
    */
   const saveWithoutMissionRepoData = useCallback(async () => {
     if (octokit === undefined) {
@@ -605,7 +605,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   }, [resetToTemplate]);
 
   /**
-   * Checks to ensure that the user wants to discard their current changes.
+   * Checks to ensure that the user wants to discard their current changes
    */
   const shouldProceedToChangeTask = useCallback(
     (currentTaskNumber: number, taskList: TaskData[], cachedTaskList: TaskData[]) => {
@@ -1039,7 +1039,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   } else {
     return (
       <div className={classNames('WorkspaceParent', Classes.DARK)}>
-        {overlay}
+        {briefingOverlay}
         {isMobileBreakpoint ? (
           <MobileWorkspace {...mobileWorkspaceProps} />
         ) : (
