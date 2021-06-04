@@ -17,11 +17,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import {
-  AutogradingResult,
-  IMCQQuestion,
-  Testcase
-} from '../../commons/assessment/AssessmentTypes';
+import { AutogradingResult, Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -83,6 +79,12 @@ import {
   performFolderDeletion,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import {
+  defaultMCQQuestion,
+  defaultMissionBriefing,
+  defaultMissionMetadata,
+  defaultTask
+} from './GitHubAssessmentDefaultValues';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -136,55 +138,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   if (octokit === undefined) {
     history.push('/githubassessments/missions');
   }
-
-  const defaultMissionBriefing =
-    'Welcome to Mission Mode! This is where the Mission Briefing for each assignment will appear.';
-
-  const defaultTaskDescription =
-    'Welcome to Mission Mode! This is where the Task Description for each assignment will appear.';
-
-  const defaultStarterCode = '// Your code here!\n';
-
-  const defaultMissionMetadata = useMemo<MissionMetadata>(() => {
-    return {
-      coverImage: '',
-      kind: '',
-      number: '',
-      title: '',
-      sourceVersion: 1,
-      dueDate: new Date(8640000000000000),
-      reading: '',
-      webSummary: ''
-    } as MissionMetadata;
-  }, []);
-
-  const defaultTask = useMemo<TaskData>(() => {
-    return {
-      questionNumber: 0,
-      taskDescription: defaultTaskDescription,
-      starterCode: defaultStarterCode,
-      savedCode: defaultStarterCode,
-      testPrepend: '',
-      testPostpend: '',
-      testCases: []
-    } as TaskData;
-  }, []);
-
-  const defaultMCQQuestion = useMemo(() => {
-    return {
-      answer: -1,
-      choices: [],
-      solution: -1,
-      type: 'mcq',
-      content: '',
-      grade: 0,
-      id: 0,
-      library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
-      maxGrade: 0,
-      xp: 0,
-      maxXp: 0
-    } as IMCQQuestion;
-  }, []);
 
   const [showOverlay, setShowOverlay] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
@@ -325,8 +278,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setIsLoading(false);
   }, [
     changeStateDueToChangedTask,
-    defaultMissionMetadata,
-    defaultTask,
     handleUpdateHasUnsavedChanges
   ]);
 
