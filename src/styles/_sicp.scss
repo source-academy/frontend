@@ -98,6 +98,7 @@ $sicp-text-color: #333333;
     display: flex;
     background-color: $cadet-color-1;
     color: white;
+    padding: 5px;
 
     .ControlBar_flow {
       flex-grow: 1;
@@ -105,7 +106,7 @@ $sicp-text-color: #333333;
   }
 
   .workspace {
-    height: 300px !important;
+    height: 350px !important;
   }
 }
 
@@ -124,10 +125,10 @@ $sicp-text-color: #333333;
 
 .sicp-epigraph {
   text-align: justify;
+}
 
-  > .sicp-attribution {
-    text-align: right;
-  }
+.sicp-attribution {
+  text-align: right;
 }
 
 .sicp-exercise {

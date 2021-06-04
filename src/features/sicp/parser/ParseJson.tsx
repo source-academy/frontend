@@ -171,11 +171,15 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     attribution.push(<span key="date">{date}</span>);
   }
 
-  return (
+  const text = child && parseArr(child!, refs);
+
+  return text ? (
     <Blockquote className="sicp-epigraph">
-      {parseArr(child!, refs)}
-      {hasAttribution ? <div className="sicp-attribution">{attribution}</div> : <></>}
+      {text}
+      {hasAttribution && <div className="sicp-attribution">{attribution}</div>}
     </Blockquote>
+  ) : (
+    <>{hasAttribution && <div className="sicp-attribution">{attribution}</div>}</>
   );
 };
 
