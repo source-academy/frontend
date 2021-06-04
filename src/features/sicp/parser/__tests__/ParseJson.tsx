@@ -171,23 +171,28 @@ describe('Parse snippet', () => {
   const program = lzString.compressToEncodedURIComponent(prependString + '\n' + body);
   const prepend = lzString.compressToEncodedURIComponent(prependString);
 
+  const base = {
+    id: 'id',
+    withoutPrepend: withoutPrepend,
+    body: body
+  };
+
   const objWithoutPrepend = objWithText(
     {
-      withoutPrepend: withoutPrepend,
-      body: body
+      ...base
     },
     'without prepend'
   );
   const objWithoutPrependWithOutput = objWithText(
     {
-      ...objWithoutPrepend,
+      ...base,
       output: output
     },
     'without prepend with output'
   );
   const objWithPrepend = objWithText(
     {
-      ...objWithoutPrepend,
+      ...base,
       program: program,
       prepend: prepend
     },
@@ -195,14 +200,14 @@ describe('Parse snippet', () => {
   );
   const objNoEval = objWithText(
     {
-      ...objWithoutPrepend,
+      ...base,
       eval: false
     },
     'no eval'
   );
   const objLatex = objWithText(
     {
-      ...objWithoutPrepend,
+      ...base,
       latex: true
     },
     'with latex'
@@ -220,7 +225,7 @@ describe('Parse snippet', () => {
 
 describe('Parse figures', () => {
   const tag = figureTag;
-  const src = 'badsrc.svg';
+  const src = 'sicp.png';
   const scale = '50%';
 
   // snippet
@@ -256,7 +261,8 @@ describe('Parse figures', () => {
   );
   const imageWithScale = objWithText(
     {
-      ...image,
+      ...base,
+      src: src,
       scale: scale
     },
     'with image and scale'

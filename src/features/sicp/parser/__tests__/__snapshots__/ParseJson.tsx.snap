@@ -205,7 +205,19 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
 
 exports[`Parse figures FIGURE with image and scale successful 1`] = `
 "<MathJaxContext version={3} config={{...}}>
-  <div className=\\"sicp-figure\\" />
+  <div className=\\"sicp-figure\\">
+    <div className=\\"sicp-figure\\">
+      <img src=\\"source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
+    </div>
+    <h5>
+      name
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </h5>
+  </div>
 </MathJaxContext>"
 `;
 
@@ -213,7 +225,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 "<MathJaxContext version={3} config={{...}}>
   <div className=\\"sicp-figure\\">
     <div className=\\"sicp-figure\\">
-      <img src=\\"source-academy.github.io/sicp/badsrc.svg\\" alt=\\"id\\" width={[undefined]} />
+      <img src=\\"source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
     </div>
     <h5>
       name
@@ -789,7 +801,9 @@ exports[`Parse section SUBSUBSECTION  successful 1`] = `
 exports[`Parse snippet SNIPPET no eval successful 1`] = `
 "<MathJaxContext version={3} config={{...}}>
   <pre>
-    <code />
+    <code>
+      1 + 1;
+    </code>
   </pre>
 </MathJaxContext>"
 `;
@@ -799,18 +813,18 @@ exports[`Parse snippet SNIPPET with latex successful 1`] = `
   <pre>
     <code>
       <MathJax>
-        <span id={[undefined]} style={{...}} />
+        <span id={[undefined]} style={{...}}>
+          1 + 1;
+        </span>
       </MathJax>
     </code>
   </pre>
 </MathJaxContext>"
 `;
 
-exports[`Parse snippet SNIPPET with prepend successful 1`] = `"<MathJaxContext version={3} config={{...}} />"`;
-
-exports[`Parse snippet SNIPPET without prepend successful 1`] = `
+exports[`Parse snippet SNIPPET with prepend successful 1`] = `
 "<MathJaxContext version={3} config={{...}}>
-  <CodeSnippet body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]}>
+  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"MYewdgzgLgBAhjAvDAjAbgFApgalWoA\\" initialPrependHash=\\"MYewdgzgLgBAhjAvDAjAbiA\\" output={[undefined]}>
     <div className=\\"sicp-code-snippet\\">
       <div className=\\"code-body\\" onClick={[Function: handleOpen]}>
         <ReactAce className=\\"react-ace\\" mode=\\"source4defaultNONE\\" theme=\\"source\\" fontSize={20} highlightActiveLine={false} wrapEnabled={true} height=\\"unset\\" width=\\"100%\\" showGutter={false} showPrintMargin={false} readOnly={true} maxLines={Infinity} value=\\"1 + 1; \\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} onChange={{...}} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true}>
@@ -822,7 +836,38 @@ exports[`Parse snippet SNIPPET without prepend successful 1`] = `
 </MathJaxContext>"
 `;
 
-exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `"<MathJaxContext version={3} config={{...}} />"`;
+exports[`Parse snippet SNIPPET without prepend successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]}>
+    <div className=\\"sicp-code-snippet\\">
+      <div className=\\"code-body\\" onClick={[Function: handleOpen]}>
+        <ReactAce className=\\"react-ace\\" mode=\\"source4defaultNONE\\" theme=\\"source\\" fontSize={20} highlightActiveLine={false} wrapEnabled={true} height=\\"unset\\" width=\\"100%\\" showGutter={false} showPrintMargin={false} readOnly={true} maxLines={Infinity} value=\\"1 + 1; \\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} onChange={{...}} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true}>
+          <div id=\\"ace-editor\\" style={{...}} />
+        </ReactAce>
+      </div>
+    </div>
+  </CodeSnippet>
+</MathJaxContext>"
+`;
+
+exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output=\\"2\\">
+    <div className=\\"sicp-code-snippet\\">
+      <div className=\\"code-body\\" onClick={[Function: handleOpen]}>
+        <ReactAce className=\\"react-ace\\" mode=\\"source4defaultNONE\\" theme=\\"source\\" fontSize={20} highlightActiveLine={false} wrapEnabled={true} height=\\"unset\\" width=\\"100%\\" showGutter={false} showPrintMargin={false} readOnly={true} maxLines={Infinity} value=\\"1 + 1; \\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} onChange={{...}} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true}>
+          <div id=\\"ace-editor\\" style={{...}} />
+        </ReactAce>
+      </div>
+      <pre className=\\"code-result\\">
+        <code>
+          2
+        </code>
+      </pre>
+    </div>
+  </CodeSnippet>
+</MathJaxContext>"
+`;
 
 exports[`Parse styling B  successful 1`] = `
 "<MathJaxContext version={3} config={{...}}>
