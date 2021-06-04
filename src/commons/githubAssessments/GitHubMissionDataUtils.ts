@@ -432,11 +432,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         const currentValue = taskList[i][propertyName];
         const cachedValue = cachedTaskList[i][propertyName];
 
-        const valuesAreUnequal = Array.isArray(currentValue)
-          ? !objectArraysAreEqual(currentValue, cachedValue)
-          : currentValue !== cachedValue;
-
-        if (valuesAreUnequal) {
+        if (!objectsAreEqual(currentValue, cachedValue)) {
           const onRepoFileName =
             questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
           const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
@@ -474,41 +470,6 @@ export function discoverFilesToBeChangedWithMissionRepoData(
   }
 
   return [filenameToContentMap, foldersToDelete];
-}
-
-export function objectsAreEqual(firstObject: any, secondObject: any) {
-  const propertySet = new Set(Object.keys(firstObject));
-  Object.keys(secondObject).forEach((key: string) => propertySet.add(key));
-
-  const setIter = propertySet.values();
-  let elem = setIter.next().value;
-
-  while (elem) {
-    if (firstObject[elem] !== secondObject[elem]) {
-      return false;
-    }
-    elem = setIter.next().value;
-  }
-
-  return true;
-}
-
-export function objectArraysAreEqual(firstArray: any[], secondArray: any[]) {
-  if (firstArray.length !== secondArray.length) {
-    return false;
-  }
-
-  for (let i = 0; i < firstArray.length; i++) {
-    if (firstArray[i] === secondArray[i]) {
-      continue;
-    }
-
-    if (!objectsAreEqual(firstArray[i], secondArray[i])) {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 /**
@@ -555,6 +516,52 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
   }
 
   return filenameToContentMap;
+}
+
+export function objectsAreEqual(firstObject: any, secondObject: any) {
+  if (firstObject === secondObject) {
+    return true;
+  }
+
+  if (typeof firstObject !== 'object' && typeof secondObject !== 'object') {
+    return firstObject === secondObject;
+  }
+
+  if (Array.isArray(firstObject) && Array.isArray(secondObject)) {
+    console.log(firstObject);
+    console.log(secondObject);
+
+    if (firstObject.length !== secondObject.length) {
+      return false;
+    }
+
+    for (let i = 0; i < firstObject.length; i++) {
+      if (!objectsAreEqual(firstObject[i], secondObject[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  const firstKeys = Object.keys(firstObject);
+  const secondKeys = Object.keys(secondObject);
+
+  if (firstKeys.length !== secondKeys.length) {
+    return false;
+  }
+
+  for (let i = 0; i < firstKeys.length; i++) {
+    if (!objectsAreEqual(firstObject[firstKeys[i]], secondObject[firstKeys[i]])) {
+      return false;
+    }
+
+    if (!objectsAreEqual(firstObject[secondKeys[i]], secondObject[secondKeys[i]])) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**

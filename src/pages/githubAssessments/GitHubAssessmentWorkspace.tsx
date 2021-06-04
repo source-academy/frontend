@@ -43,7 +43,6 @@ import {
   discoverFilesToBeChangedWithMissionRepoData,
   discoverFilesToBeCreatedWithoutMissionRepoData,
   getMissionData,
-  objectArraysAreEqual,
   objectsAreEqual
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
@@ -230,7 +229,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const setTaskListWrapper = useCallback(
     (newTaskList: TaskData[]) => {
       setTaskList(newTaskList);
-      setHasUnsavedChangesToTasks(!objectArraysAreEqual(newTaskList, cachedTaskList));
+      setHasUnsavedChangesToTasks(!objectsAreEqual(newTaskList, cachedTaskList));
     },
     [cachedTaskList]
   );
@@ -261,7 +260,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setCachedBriefingContent(missionData.missionBriefing);
 
     setTaskList(missionData.tasksData);
-    setCachedTaskList(missionData.tasksData);
+    setCachedTaskList(
+      missionData.tasksData.map((taskData: TaskData) => Object.assign({}, taskData))
+    );
 
     changeStateDueToChangedTaskNumber(1, missionData.tasksData);
 
@@ -348,7 +349,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (taskNumber > taskList.length) {
         return;
       }
-      const editedTaskList = [...taskList];
+      const editedTaskList = taskList.map((taskData: TaskData) => Object.assign({}, taskData));
       editedTaskList[taskNumber - 1] = {
         ...editedTaskList[taskNumber - 1],
         savedCode: newValue
@@ -705,7 +706,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const setTaskTestcases = useCallback(
     (newTestcases: Testcase[]) => {
-      const editedTaskList = [...taskList];
+      const editedTaskList = taskList.map((taskData: TaskData) => Object.assign({}, taskData));
       editedTaskList[currentTaskNumber - 1] = {
         ...editedTaskList[currentTaskNumber - 1],
         testCases: newTestcases
@@ -726,7 +727,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const setTestPrepend = useCallback(
     (newTestPrepend: string) => {
-      const editedTaskList = [...taskList];
+      const editedTaskList = taskList.map((taskData: TaskData) => Object.assign({}, taskData));
       editedTaskList[currentTaskNumber - 1] = {
         ...editedTaskList[currentTaskNumber - 1],
         testPrepend: newTestPrepend
@@ -738,7 +739,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const setTestPostpend = useCallback(
     (newTestPostpend: string) => {
-      const editedTaskList = [...taskList];
+      const editedTaskList = taskList.map((taskData: TaskData) => Object.assign({}, taskData));
       editedTaskList[currentTaskNumber - 1] = {
         ...editedTaskList[currentTaskNumber - 1],
         testPostpend: newTestPostpend

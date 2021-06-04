@@ -49,9 +49,9 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const setTestcaseProgramSetterCreator = React.useCallback(
       (testcaseId: number) => {
         return (newProgram: string) => {
-          const newTestcases = [...testcases];
+          const newTestcases = testcases.map((testcase: Testcase) => Object.assign({}, testcase));
           newTestcases[testcaseId].program = newProgram;
-          newTestcases[testcaseId].result = undefined;
+          delete newTestcases[testcaseId].result;
           setTaskTestcases(newTestcases);
         };
       },
@@ -61,9 +61,9 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const setTestcaseExpectedResultSetterCreator = React.useCallback(
       (testcaseId: number) => {
         return (newExpectedResult: string) => {
-          const newTestcases = [...testcases];
+          const newTestcases = testcases.map((testcase: Testcase) => Object.assign({}, testcase));
           newTestcases[testcaseId].answer = newExpectedResult;
-          newTestcases[testcaseId].result = undefined;
+          delete newTestcases[testcaseId].result;
           setTaskTestcases(newTestcases);
         };
       },

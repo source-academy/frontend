@@ -368,8 +368,14 @@ test('discoverFilesToBeChangedWithMissionRepoData discovers files to edit in Non
       testPostpend: 'postpend',
       testCases: [
         {
-          answer: 'change',
-          program: 'change',
+          answer: '',
+          program: '',
+          score: 0,
+          type: 'public' as const
+        },
+        {
+          answer: 'another',
+          program: 'testcase',
           score: 0,
           type: 'public' as const
         }
