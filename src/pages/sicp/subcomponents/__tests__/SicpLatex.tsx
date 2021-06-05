@@ -12,7 +12,7 @@ describe('Sicp latex renders', () => {
     };
 
     const tree = mount(
-      <MathJaxContext version={2} config={mathjaxConfig}>
+      <MathJaxContext version={3} config={mathjaxConfig}>
         <SicpLatex {...props} />
       </MathJaxContext>
     );
@@ -26,7 +26,7 @@ describe('Sicp latex renders', () => {
     };
 
     const tree = mount(
-      <MathJaxContext version={2} config={mathjaxConfig}>
+      <MathJaxContext version={3} config={mathjaxConfig}>
         <SicpLatex {...props} />
       </MathJaxContext>
     );
