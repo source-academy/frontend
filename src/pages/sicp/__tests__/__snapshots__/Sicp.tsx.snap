@@ -4,7 +4,7 @@ exports[`Sicp renders correctly 1`] = `
 "<ContextProvider value={{...}}>
   <div className=\\"Sicp bp3-running-text bp3-text-large bp3-dark\\">
     <div />
-    <MathJaxContext version={2} config={{...}}>
+    <MathJaxContext version={3} config={{...}}>
       <ContentDisplay fullWidth={false} display={{...}} loadContentDispatch={[Function: loadContentDispatch]} />
     </MathJaxContext>
   </div>

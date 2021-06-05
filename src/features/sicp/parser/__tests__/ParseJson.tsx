@@ -48,7 +48,7 @@ const processTag = (tag: string, obj: JsonType, math: boolean) => {
   obj['tag'] = tag;
 
   return math ? (
-    <MathJaxContext version={2} config={mathjaxConfig}>
+    <MathJaxContext version={3} config={mathjaxConfig}>
       {processingFunctions[tag](obj, mockRef)}
     </MathJaxContext>
   ) : (
