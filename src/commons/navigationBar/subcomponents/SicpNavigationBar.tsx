@@ -8,22 +8,23 @@ import tocNavigation from '../../../features/sicp/data/toc-navigation.json';
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
 
-type SicpNavigationBarProps = OwnProps;
-
-type OwnProps = {};
-
-const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
+/**
+ * Secondary navbar for SICP, should only be displayed when on pages related to interactive /SICP.
+ */
+const SicpNavigationBar: React.FC = () => {
   const [isTocOpen, setIsTocOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
   const history = useHistory();
 
   const handleCloseToc = () => setIsTocOpen(false);
 
-  const menuButton = React.useMemo(() => {
+  // Button to open table of contents
+  const tocButton = React.useMemo(() => {
     const handleOpenToc = () => setIsTocOpen(true);
     return <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
   }, []);
 
+  // Previous button only displayed when next page is valid.
   const prevButton = React.useMemo(() => {
     const sect = tocNavigation[section];
     if (!sect) {
@@ -44,6 +45,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
     );
   }, [history, section]);
 
+  // Next button only displayed when next page is valid.
   const nextButton = React.useMemo(() => {
     const sect = tocNavigation[section];
     if (!sect) {
@@ -58,6 +60,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
     const handleNext = () => {
       history.push('/interactive-sicp/' + next);
     };
+
     return (
       next && (
         <div key="next">
@@ -83,7 +86,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
   return (
     <>
       <Navbar className="SicpNavigationBar secondary-navbar">
-        <NavbarGroup align={Alignment.LEFT}>{[menuButton]}</NavbarGroup>
+        <NavbarGroup align={Alignment.LEFT}>{[tocButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>{[prevButton, nextButton]}</NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
