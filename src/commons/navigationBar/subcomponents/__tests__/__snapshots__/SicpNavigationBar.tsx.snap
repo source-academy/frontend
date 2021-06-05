@@ -4,7 +4,7 @@ exports[`Navbar renders correctly 1`] = `
 "<Fragment>
   <Blueprint3.Navbar className=\\"SicpNavigationBar secondary-navbar\\">
     <Blueprint3.NavbarGroup align=\\"left\\">
-      <ControlBarTableOfContentsButton handleOpenToc={[Function: handleOpenToc]} />
+      <TableOfContentsButton handleOpenToc={[Function: handleOpenToc]} />
     </Blueprint3.NavbarGroup>
     <Blueprint3.NavbarGroup align=\\"right\\">
       <div>

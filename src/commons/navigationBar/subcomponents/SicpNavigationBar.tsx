@@ -5,8 +5,8 @@ import { useHistory, useParams } from 'react-router';
 import controlButton from 'src/commons/ControlButton';
 
 import tocNavigation from '../../../features/sicp/data/toc-navigation.json';
+import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
-import { ControlBarTableOfContentsButton } from '../../controlBar/ControlBarTableOfContentsButton';
 
 type SicpNavigationBarProps = OwnProps;
 
@@ -21,7 +21,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
 
   const menuButton = React.useMemo(() => {
     const handleOpenToc = () => setIsTocOpen(true);
-    return <ControlBarTableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
+    return <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
   }, []);
 
   const prevButton = React.useMemo(() => {
