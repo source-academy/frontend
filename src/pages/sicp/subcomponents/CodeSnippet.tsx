@@ -19,6 +19,24 @@ type OwnProps = {
   initialFullProgramHash?: string | undefined;
 };
 
+const resizableProps = {
+  enable: {
+    top: false,
+    right: false,
+    bottom: true,
+    left: false,
+    topRight: false,
+    bottomRight: false,
+    bottomLeft: false,
+    topLeft: false
+  },
+  defaultSize: {
+    width: '100%',
+    height: '400px'
+  },
+  minHeight: '250px'
+};
+
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
   const context = React.useContext(CodeSnippetContext);
@@ -88,24 +106,6 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     setOptions: {
       fontFamily: "'Inconsolata', 'Consolas', monospace"
     }
-  };
-
-  const resizableProps = {
-    enable: {
-      top: false,
-      right: false,
-      bottom: true,
-      left: false,
-      topRight: false,
-      bottomRight: false,
-      bottomLeft: false,
-      topLeft: false
-    },
-    defaultSize: {
-      width: '100%',
-      height: '400px'
-    },
-    minHeight: '250px'
   };
 
   return (

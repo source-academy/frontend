@@ -133,13 +133,13 @@ export const processingFunctions = {
 
 const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <>
+    <div>
       {obj['count'] === 1 && <hr />}
       <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-footnote">
         <a href={obj['href']}>{'[' + obj['count'] + '] '}</a>
         {parseArr(obj['child']!, refs)}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -269,10 +269,10 @@ const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
 const handleContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <>
+    <div>
       {obj['body'] && <H1>{obj['body']!}</H1>}
       <div>{parseArr(obj['child']!, refs)}</div>
-    </>
+    </div>
   );
 };
 

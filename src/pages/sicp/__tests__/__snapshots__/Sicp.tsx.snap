@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp renders correctly 1`] = `
+"<ContextProvider value={{...}}>
+  <div className=\\"Sicp bp3-dark\\">
+    <div />
+    <MathJaxContext version={2} config={{...}} hideUntilTypeset=\\"first\\">
+      <ContentDisplay fullWidth={false} display={{...}} loadContentDispatch={[Function: loadContentDispatch]} />
+    </MathJaxContext>
+  </div>
+</ContextProvider>"
+`;

@@ -8,7 +8,7 @@ type OwnProps = {
   solution: JSX.Element | undefined;
 };
 
-const noSolutionPlaceholder = (
+export const noSolutionPlaceholder = (
   <span>
     There is currently no solution available for this exercise. This textbook adaptation is a
     community effort. Do consider contributing by providing a solution for this exercise.

@@ -99,7 +99,7 @@ const SicpIndexPage: React.FC = () => {
       </div>
       <br />
       <H2>Content</H2>
-      <SicpToc location={'index'} />
+      <SicpToc />
       <br />
       <H2>Licenses</H2>
       {licenses}

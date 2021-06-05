@@ -56,10 +56,10 @@ exports[`Sicp index page 1`] = `
         Content
       </h2>
     </Component>
-    <SicpToc location=\\"index\\">
+    <SicpToc>
       <div className=\\"sicp-toc\\">
-        <Blueprint3.Tree contents={{...}} onNodeClick={[Function (anonymous)]} onNodeCollapse={[Function: handleNodeCollapse]} onNodeExpand={[Function: handleNodeExpand]}>
-          <div className=\\"bp3-tree bp3-fixed-positioning-containing-block\\">
+        <Blueprint3.Tree className=\\"sicp-toc-tree\\" contents={{...}} onNodeClick={[Function (anonymous)]} onNodeCollapse={[Function: handleNodeCollapse]} onNodeExpand={[Function: handleNodeExpand]}>
+          <div className=\\"bp3-tree bp3-fixed-positioning-containing-block sicp-toc-tree\\">
             <ul className=\\"bp3-tree-node-list bp3-tree-root\\">
               <Blueprint3.TreeNode id={0} hasCaret={false} label=\\"\\\\n        Foreword\\\\n    \\" nodeData=\\"foreword\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
                 <li className=\\"bp3-tree-node\\">

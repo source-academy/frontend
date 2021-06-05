@@ -10,7 +10,6 @@ type TocProps = OwnProps;
 
 type OwnProps = {
   handleCloseToc?: () => void;
-  location: 'sidebar' | 'index';
 };
 
 /**

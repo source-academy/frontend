@@ -10,8 +10,7 @@ import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
-type SicpProps = OwnProps & RouteComponentProps<{}>;
-type OwnProps = {};
+type SicpProps = RouteComponentProps<{}>;
 
 const baseUrl = Constants.interactiveSicpUrl + '/json/';
 const extension = '.json';

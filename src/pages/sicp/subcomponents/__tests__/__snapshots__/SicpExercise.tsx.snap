@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp exercise renders correctly 1`] = `
+"<SicpExercise title=\\"Title\\" body={{...}} solution={{...}}>
+  <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
+    <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
+      <b>
+        Title
+      </b>
+      <div>
+        <div>
+          body
+        </div>
+      </div>
+      <div className=\\"sicp-button-container\\">
+        <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
+          <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+            <Blueprint3.Icon icon={[undefined]} />
+            <span className=\\"bp3-button-text\\">
+              Show Solution
+            </span>
+            <Blueprint3.Icon icon={[undefined]} />
+          </button>
+        </Blueprint3.Button>
+      </div>
+      <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+        <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
+          <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+        </div>
+      </Blueprint3.Collapse>
+    </div>
+  </Blueprint3.Card>
+</SicpExercise>"
+`;

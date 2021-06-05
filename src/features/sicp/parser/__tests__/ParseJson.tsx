@@ -1,5 +1,5 @@
 import { MathJaxContext } from 'better-react-mathjax';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import lzString from 'lz-string';
 import { mathjaxConfig } from 'src/pages/sicp/Sicp';
 
@@ -44,19 +44,21 @@ const mockData = {
 
 const mockRef = { current: {} };
 
-const processTag = (tag: string, obj: JsonType) => {
+const processTag = (tag: string, obj: JsonType, math: boolean) => {
   obj['tag'] = tag;
 
-  return (
-    <MathJaxContext version={3} config={mathjaxConfig}>
+  return math ? (
+    <MathJaxContext version={2} config={mathjaxConfig}>
       {processingFunctions[tag](obj, mockRef)}
     </MathJaxContext>
+  ) : (
+    processingFunctions[tag](obj, mockRef)
   );
 };
 
-const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
+const testTagSuccessful = (obj: JsonType, tag: string, text: string = '', math = false) => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = mount(processTag(tag, obj));
+    const tree = shallow(processTag(tag, obj, math));
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -212,7 +214,8 @@ describe('Parse snippet', () => {
     objNoEval,
     objLatex
   ];
-  objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text']));
+
+  objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text'], true));
 });
 
 describe('Parse figures', () => {
@@ -297,7 +300,7 @@ describe('Parse latex', () => {
     body: math
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag));
+  tag.forEach(tag => testTagSuccessful(obj, tag, '', true));
 });
 
 describe('Parse links', () => {
@@ -326,7 +329,7 @@ describe('Parse reference', () => {
 describe('Parse object', () => {
   test('successful', () => {
     const obj = mockData['text'];
-    const tree = mount(parseObj(obj, 0, mockRef));
+    const tree = shallow(parseObj(obj, 0, mockRef));
     expect(tree.debug()).toMatchSnapshot();
   });
 

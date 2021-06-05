@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp Code Snippet renders correctly 1`] = `
+"<div className=\\"sicp-code-snippet\\">
+  <div className=\\"code-body\\" onClick={[Function: handleOpen]}>
+    <ReactAce className=\\"react-ace\\" mode=\\"source4defaultNONE\\" theme=\\"source\\" fontSize={20} highlightActiveLine={false} wrapEnabled={true} height=\\"unset\\" width=\\"100%\\" showGutter={false} showPrintMargin={false} readOnly={true} maxLines={Infinity} value=\\"1+1; \\" setOptions={{...}} name=\\"ace-editor\\" focus={false} enableSnippets={false} onChange={{...}} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} enableBasicAutocompletion={false} enableLiveAutocompletion={false} placeholder={{...}} navigateToFileEnd={true} />
+  </div>
+  <pre className=\\"code-result\\">
+    <code>
+      2
+    </code>
+  </pre>
+</div>"
+`;
