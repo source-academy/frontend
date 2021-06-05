@@ -1,3 +1,4 @@
+import { Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
@@ -126,11 +127,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           </div>
         </>
       )}
-      {output && (
-        <pre className="code-result">
-          <code>{output}</code>
-        </pre>
-      )}
+      {output && <Pre>{output}</Pre>}
     </div>
   );
 };

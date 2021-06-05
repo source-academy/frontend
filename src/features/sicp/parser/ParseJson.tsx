@@ -1,4 +1,4 @@
-import { Blockquote, H1, OL, UL } from '@blueprintjs/core';
+import { Blockquote, Code, H1, OL, Pre, UL } from '@blueprintjs/core';
 import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
@@ -59,7 +59,7 @@ export const processingFunctions = {
   ),
 
   JAVASCRIPTINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => (
-    <code>{obj['body']}</code>
+    <Code>{obj['body']}</Code>
   ),
 
   LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
@@ -75,10 +75,9 @@ export const processingFunctions = {
 
   MATTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
-  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, true),
+  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
 
-  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex('$\\langle$ ' + obj['body'] + ' $\\rangle$', true),
+  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>&langle; &rangle;</p>,
 
   OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
 
@@ -93,13 +92,15 @@ export const processingFunctions = {
   SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleSnippet(obj),
 
   SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h2 ref={ref => (refs.current[obj['id']!] = ref)}>{parseArr(obj['child']!, refs)}</h2>
+    <h2 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
+      {parseArr(obj['child']!, refs)}
+    </h2>
   ),
 
   SUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
 
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h4 ref={ref => (refs.current[obj['id']!] = ref)}>
+    <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
       <br />
       {parseArr(obj['child']!, refs)}
     </h4>
@@ -123,7 +124,7 @@ export const processingFunctions = {
   ),
 
   TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <code>{parseArr(obj['child']!, refs)}</code>
+    <Code>{parseArr(obj['child']!, refs)}</Code>
   ),
 
   TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('TeX'),
@@ -185,17 +186,9 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
 const handleSnippet = (obj: JsonType) => {
   if (obj['latex']) {
-    return (
-      <pre>
-        <code>{handleLatex(obj['body']!, false)}</code>
-      </pre>
-    );
+    return <Pre>{handleLatex(obj['body']!, false)}</Pre>;
   } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
-    return (
-      <pre>
-        <code>{obj['body']}</code>
-      </pre>
-    );
+    return <Pre>{obj['body']}</Pre>;
   } else {
     if (!obj['body']) {
       return;

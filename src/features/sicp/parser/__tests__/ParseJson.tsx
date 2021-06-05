@@ -10,8 +10,8 @@ const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];
 const sectionTags = ['SECTION', 'SUBSECTION', 'SUBSUBSECTION', 'MATTER', 'CHAPTER', 'REFERENCES'];
 const listTags = ['OL', 'UL'];
 const symbolTags = ['BR', 'LaTeX', 'TeX'];
-const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT'];
-const latexTags = ['LATEX', 'LATEXINLINE', 'METAPHRASE', 'META'];
+const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'METAPHRASE', 'META'];
+const latexTags = ['LATEX', 'LATEXINLINE'];
 const linkTags = ['LINK', 'REF', 'FOOTNOTE_REF'];
 
 const epigraphTag = 'EPIGRAPH';

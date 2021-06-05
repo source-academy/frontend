@@ -149,9 +149,9 @@ const Sicp: React.FC<SicpProps> = props => {
 
   return (
     <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
-      <div className={classNames('Sicp', Classes.DARK)}>
+      <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
         <div ref={topRef} />
-        <MathJaxContext version={2} config={mathjaxConfig} hideUntilTypeset="first">
+        <MathJaxContext version={2} config={mathjaxConfig}>
           <ContentDisplay {...sicpDisplayProps} />
         </MathJaxContext>
       </div>
