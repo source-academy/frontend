@@ -20,7 +20,6 @@ export enum SideContentType {
   editorManageQuestion = 'editor_manage_question',
   editorQuestionOverview = 'editor_question_overview',
   editorQuestionTemplate = 'editor_question_template',
-  editorRun = 'editor_run',
   envVisualizer = 'env_visualizer',
   grading = 'grading',
   introduction = 'introduction',
