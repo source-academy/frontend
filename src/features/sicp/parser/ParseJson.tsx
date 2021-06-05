@@ -8,6 +8,9 @@ import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
 // Custom error class for errors when parsing JSON files.
 export class ParseJsonError extends Error {}
 
+/**
+ * Functions to handle parsing of JSON files into JSX elements.
+ */
 export type JsonType = {
   child?: Array<JsonType>;
   tag?: string;
@@ -277,6 +280,7 @@ const handleLatex = (math: string, inline: boolean) => {
   return <SicpLatex inline={inline} math={math} />;
 };
 
+// Parse array of objects. An array of objects represent sibling nodes.
 export const parseArr = (arr: Array<JsonType>, refs: React.MutableRefObject<{}>) => {
   if (!arr) {
     return <></>;
@@ -285,6 +289,7 @@ export const parseArr = (arr: Array<JsonType>, refs: React.MutableRefObject<{}>)
   return <>{arr.map((item, index) => parseObj(item, index, refs))}</>;
 };
 
+// Parse an object.
 export const parseObj = (
   obj: JsonType,
   index: number | undefined,
@@ -297,6 +302,7 @@ export const parseObj = (
       throw new ParseJsonError('Unrecognised Tag: ' + obj['tag']);
     }
   } else {
+    // Handle case where tag does not exists. Should not happen if json file is created properly.
     return <span key={index}>{parseArr(obj['child']!, refs)}</span>;
   }
 };

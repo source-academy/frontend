@@ -231,6 +231,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleHash(hash, propsRef.current);
   }, [hash]);
 
+  // Add prepend if exists.
   React.useEffect(() => {
     if (!initialPrependHash || !handleUpdatePrepend) {
       return;

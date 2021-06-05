@@ -90,6 +90,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     editingWorkspaceButtons: [closeButton]
   };
 
+  // For view only code snippets
   const aceEditorProps = {
     className: 'react-ace',
     mode: 'source4defaultNONE',
@@ -103,7 +104,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     showPrintMargin: false,
     readOnly: true,
     maxLines: Infinity,
-    value: body.replace(/\n$/, '') + ' ',
+    value: body,
     setOptions: {
       fontFamily: "'Inconsolata', 'Consolas', monospace"
     }
