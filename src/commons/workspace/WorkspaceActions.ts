@@ -1,6 +1,5 @@
 import { Context } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
-import { TOGGLE_USING_SUBST } from 'src/features/playground/PlaygroundTypes';
 import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -38,6 +37,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,

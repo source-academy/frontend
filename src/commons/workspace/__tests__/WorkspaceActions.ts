@@ -1,5 +1,3 @@
-import { TOGGLE_USING_SUBST } from 'src/features/playground/PlaygroundTypes';
-
 import { createDefaultWorkspace, SourceLanguage } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
@@ -66,6 +64,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
