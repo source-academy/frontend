@@ -3,9 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { MathJaxContext } from 'better-react-mathjax';
 import classNames from 'classnames';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useParams } from 'react-router';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import Constants from 'src/commons/utils/Constants';
+import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 
 import SicpIndexPage from './subcomponents/SicpIndexPage';
@@ -136,6 +138,13 @@ const Sicp: React.FC<SicpProps> = props => {
     setActive('0');
   }, [data]);
 
+  const dispatch = useDispatch();
+  const handleSnippetEditorOpen = (s: string) => {
+    setActive(s);
+    dispatch(resetWorkspace('sicp'));
+    dispatch(toggleUsingSubst(false, 'sicp'));
+  };
+
   const sicpDisplayProps = {
     fullWidth: false,
     display: data,
@@ -143,7 +152,7 @@ const Sicp: React.FC<SicpProps> = props => {
   };
 
   return (
-    <CodeSnippetContext.Provider value={{ active: active, setActive: setActive }}>
+    <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
       <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
         <div ref={topRef} />
         <MathJaxContext version={3} config={mathjaxConfig}>
