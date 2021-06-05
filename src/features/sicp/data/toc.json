@@ -1,29 +1,34 @@
 [
-  { "id": 0, "hasCaret": false, "label": "\n        Foreword\n    ", "nodeData": "foreword" },
-  { "id": 1, "hasCaret": false, "label": "Foreword to SICP, 1984", "nodeData": "foreword" },
-  { "id": 2, "hasCaret": false, "label": "\n    Preface\n  ", "nodeData": "prefaces03" },
+  { "id": 0, "hasCaret": false, "label": "Foreword", "nodeData": "foreword" },
+  {
+    "id": 1,
+    "hasCaret": false,
+    "label": "Foreword to SICP, 1984",
+    "nodeData": "foreword"
+  },
+  { "id": 2, "hasCaret": false, "label": "Preface", "nodeData": "prefaces03" },
   {
     "id": 3,
     "hasCaret": false,
-    "label": "\n    Preface to the First Edition of SICP, 1984\n  ",
+    "label": "Preface to the First Edition of SICP, 1984",
     "nodeData": "prefaces84"
   },
   {
     "id": 4,
     "hasCaret": false,
-    "label": "\n    Preface to the Second Edition of SICP, 1996\n  ",
+    "label": "Preface to the Second Edition of SICP, 1996",
     "nodeData": "prefaces96"
   },
   {
     "id": 5,
     "hasCaret": false,
-    "label": "\nAcknowledgments\n    ",
+    "label": "Acknowledgments",
     "nodeData": "acknowledgements"
   },
   {
     "id": 7,
     "hasCaret": true,
-    "label": "1 \n    Building Abstractions with \n    \n      \n      Functions\n    \n  ",
+    "label": "1 Building Abstractions with Functions",
     "nodeData": "1",
     "childNodes": [
       {
@@ -32,7 +37,12 @@
         "label": "1.1 The Elements of Programming",
         "nodeData": "1.1",
         "childNodes": [
-          { "id": 9, "hasCaret": false, "label": "1.1.1 Expressions", "nodeData": "1.1.1" },
+          {
+            "id": 9,
+            "hasCaret": false,
+            "label": "1.1.1 Expressions",
+            "nodeData": "1.1.1"
+          },
           {
             "id": 10,
             "hasCaret": false,
@@ -42,25 +52,25 @@
           {
             "id": 11,
             "hasCaret": false,
-            "label": "1.1.3 \n    Evaluating\n    \n      \n      Operator Combinations\n    \n  ",
+            "label": "1.1.3 Evaluating Operator Combinations",
             "nodeData": "1.1.3"
           },
           {
             "id": 12,
             "hasCaret": false,
-            "label": "1.1.4 \n    Compound \n    Functions\n  ",
+            "label": "1.1.4 Compound Functions",
             "nodeData": "1.1.4"
           },
           {
             "id": 13,
             "hasCaret": false,
-            "label": "1.1.5 \n    The Substitution Model for \n    \n      \n      \n        Function\n      \n    \n    Application\n  ",
+            "label": "1.1.5 The Substitution Model for Function Application",
             "nodeData": "1.1.5"
           },
           {
             "id": 14,
             "hasCaret": false,
-            "label": "1.1.6 \n    Conditional Expressions and Predicates\n  ",
+            "label": "1.1.6 Conditional Expressions and Predicates",
             "nodeData": "1.1.6"
           },
           {
@@ -72,7 +82,7 @@
           {
             "id": 16,
             "hasCaret": false,
-            "label": "1.1.8 \n    \n      \n      \n        Functions\n      \n    \n    as Black-Box Abstractions\n  ",
+            "label": "1.1.8 Functions as Black-Box Abstractions",
             "nodeData": "1.1.8"
           }
         ]
@@ -80,7 +90,7 @@
       {
         "id": 17,
         "hasCaret": true,
-        "label": "1.2 \n    \n      \n      Functions\n    \n    and the Processes They Generate\n  ",
+        "label": "1.2 Functions and the Processes They Generate",
         "nodeData": "1.2",
         "childNodes": [
           {
@@ -89,9 +99,24 @@
             "label": "1.2.1 Linear Recursion and Iteration",
             "nodeData": "1.2.1"
           },
-          { "id": 19, "hasCaret": false, "label": "1.2.2 Tree Recursion", "nodeData": "1.2.2" },
-          { "id": 20, "hasCaret": false, "label": "1.2.3 Orders of Growth", "nodeData": "1.2.3" },
-          { "id": 21, "hasCaret": false, "label": "1.2.4 Exponentiation", "nodeData": "1.2.4" },
+          {
+            "id": 19,
+            "hasCaret": false,
+            "label": "1.2.2 Tree Recursion",
+            "nodeData": "1.2.2"
+          },
+          {
+            "id": 20,
+            "hasCaret": false,
+            "label": "1.2.3 Orders of Growth",
+            "nodeData": "1.2.3"
+          },
+          {
+            "id": 21,
+            "hasCaret": false,
+            "label": "1.2.4 Exponentiation",
+            "nodeData": "1.2.4"
+          },
           {
             "id": 22,
             "hasCaret": false,
@@ -109,31 +134,31 @@
       {
         "id": 24,
         "hasCaret": true,
-        "label": "1.3 \n        Formulating Abstractions with Higher-Order \n        \n\t  \n\t  Functions\n\t\n      ",
+        "label": "1.3 Formulating Abstractions with Higher-Order Functions",
         "nodeData": "1.3",
         "childNodes": [
           {
             "id": 25,
             "hasCaret": false,
-            "label": "1.3.1 \n    \n      \n      Functions\n    \n    as Arguments\n  ",
+            "label": "1.3.1 Functions as Arguments",
             "nodeData": "1.3.1"
           },
           {
             "id": 26,
             "hasCaret": false,
-            "label": "1.3.2 \n    \n      \n      Constructing Functions using Lambda Expressions\n      \n    \n  ",
+            "label": "1.3.2 Constructing Functions using Lambda Expressions",
             "nodeData": "1.3.2"
           },
           {
             "id": 27,
             "hasCaret": false,
-            "label": "1.3.3 \n    \n      \n    Functions\n    as General Methods\n  ",
+            "label": "1.3.3 Functions as General Methods",
             "nodeData": "1.3.3"
           },
           {
             "id": 28,
             "hasCaret": false,
-            "label": "1.3.4 \n    \n      \n      Functions\n    \n    as Returned Values\n  ",
+            "label": "1.3.4 Functions as Returned Values",
             "nodeData": "1.3.4"
           }
         ]
@@ -155,25 +180,25 @@
           {
             "id": 31,
             "hasCaret": false,
-            "label": "2.1.1 \n    Example: Arithmetic Operations for Rational Numbers\n  ",
+            "label": "2.1.1 Example: Arithmetic Operations for Rational Numbers",
             "nodeData": "2.1.1"
           },
           {
             "id": 32,
             "hasCaret": false,
-            "label": "2.1.2 \n    Abstraction Barriers\n  ",
+            "label": "2.1.2 Abstraction Barriers",
             "nodeData": "2.1.2"
           },
           {
             "id": 33,
             "hasCaret": false,
-            "label": "2.1.3 \n    What Is Meant by Data?\n  ",
+            "label": "2.1.3 What Is Meant by Data?",
             "nodeData": "2.1.3"
           },
           {
             "id": 34,
             "hasCaret": false,
-            "label": "2.1.4 \n    Extended Exercise: Interval Arithmetic\n  ",
+            "label": "2.1.4 Extended Exercise: Interval Arithmetic",
             "nodeData": "2.1.4"
           }
         ]
@@ -187,25 +212,25 @@
           {
             "id": 36,
             "hasCaret": false,
-            "label": "2.2.1 \n    Representing Sequences\n  ",
+            "label": "2.2.1 Representing Sequences",
             "nodeData": "2.2.1"
           },
           {
             "id": 37,
             "hasCaret": false,
-            "label": "2.2.2 \n    Hierarchical Structures\n  ",
+            "label": "2.2.2 Hierarchical Structures",
             "nodeData": "2.2.2"
           },
           {
             "id": 38,
             "hasCaret": false,
-            "label": "2.2.3 \n    Sequences as Conventional Interfaces\n  ",
+            "label": "2.2.3 Sequences as Conventional Interfaces",
             "nodeData": "2.2.3"
           },
           {
             "id": 39,
             "hasCaret": false,
-            "label": "2.2.4 \n    Example: A Picture Language\n  ",
+            "label": "2.2.4 Example: A Picture Language",
             "nodeData": "2.2.4"
           }
         ]
@@ -219,25 +244,25 @@
           {
             "id": 41,
             "hasCaret": false,
-            "label": "2.3.1 \n    \n      \n      Strings\n    \n  ",
+            "label": "2.3.1 Strings",
             "nodeData": "2.3.1"
           },
           {
             "id": 42,
             "hasCaret": false,
-            "label": "2.3.2 \n    Example: Symbolic Differentiation\n  ",
+            "label": "2.3.2 Example: Symbolic Differentiation",
             "nodeData": "2.3.2"
           },
           {
             "id": 43,
             "hasCaret": false,
-            "label": "2.3.3 \n    Example: Representing Sets\n  ",
+            "label": "2.3.3 Example: Representing Sets",
             "nodeData": "2.3.3"
           },
           {
             "id": 44,
             "hasCaret": false,
-            "label": "2.3.4 \n    Example: Huffman Encoding Trees\n  ",
+            "label": "2.3.4 Example: Huffman Encoding Trees",
             "nodeData": "2.3.4"
           }
         ]
@@ -251,19 +276,19 @@
           {
             "id": 46,
             "hasCaret": false,
-            "label": "2.4.1 \n    Representations for Complex Numbers\n  ",
+            "label": "2.4.1 Representations for Complex Numbers",
             "nodeData": "2.4.1"
           },
           {
             "id": 47,
             "hasCaret": false,
-            "label": "2.4.2 \n    Tagged data\n  ",
+            "label": "2.4.2 Tagged data",
             "nodeData": "2.4.2"
           },
           {
             "id": 48,
             "hasCaret": false,
-            "label": "2.4.3 \n    Data-Directed Programming and Additivity\n  ",
+            "label": "2.4.3 Data-Directed Programming and Additivity",
             "nodeData": "2.4.3"
           }
         ]
@@ -277,19 +302,19 @@
           {
             "id": 50,
             "hasCaret": false,
-            "label": "2.5.1 \n    Generic Arithmetic Operations\n  ",
+            "label": "2.5.1 Generic Arithmetic Operations",
             "nodeData": "2.5.1"
           },
           {
             "id": 51,
             "hasCaret": false,
-            "label": "2.5.2 \n    Combining Data of Different Types\n  ",
+            "label": "2.5.2 Combining Data of Different Types",
             "nodeData": "2.5.2"
           },
           {
             "id": 52,
             "hasCaret": false,
-            "label": "2.5.3 \n    Example: Symbolic Algebra\n  ",
+            "label": "2.5.3 Example: Symbolic Algebra",
             "nodeData": "2.5.3"
           }
         ]
@@ -311,19 +336,19 @@
           {
             "id": 55,
             "hasCaret": false,
-            "label": "3.1.1 \n    Local State Variables\n  ",
+            "label": "3.1.1 Local State Variables",
             "nodeData": "3.1.1"
           },
           {
             "id": 56,
             "hasCaret": false,
-            "label": "3.1.2 \n    The Benefits of Introducing Assignment\n  ",
+            "label": "3.1.2 The Benefits of Introducing Assignment",
             "nodeData": "3.1.2"
           },
           {
             "id": 57,
             "hasCaret": false,
-            "label": "3.1.3 \n    The Costs of Introducing Assignment\n  ",
+            "label": "3.1.3 The Costs of Introducing Assignment",
             "nodeData": "3.1.3"
           }
         ]
@@ -337,25 +362,25 @@
           {
             "id": 59,
             "hasCaret": false,
-            "label": "3.2.1 \n    The Rules for Evaluation\n  ",
+            "label": "3.2.1 The Rules for Evaluation",
             "nodeData": "3.2.1"
           },
           {
             "id": 60,
             "hasCaret": false,
-            "label": "3.2.2 \n    Applying Simple\n    \n      \n      Functions\n    \n  ",
+            "label": "3.2.2 Applying Simple Functions",
             "nodeData": "3.2.2"
           },
           {
             "id": 61,
             "hasCaret": false,
-            "label": "3.2.3 \n    Frames as the Repository of Local State\n  ",
+            "label": "3.2.3 Frames as the Repository of Local State",
             "nodeData": "3.2.3"
           },
           {
             "id": 62,
             "hasCaret": false,
-            "label": "3.2.4 \n    Internal\n    \n      \n      Declarations\n    \n  ",
+            "label": "3.2.4 Internal Declarations",
             "nodeData": "3.2.4"
           }
         ]
@@ -369,31 +394,31 @@
           {
             "id": 64,
             "hasCaret": false,
-            "label": "3.3.1 \n    Mutable List Structure\n  ",
+            "label": "3.3.1 Mutable List Structure",
             "nodeData": "3.3.1"
           },
           {
             "id": 65,
             "hasCaret": false,
-            "label": "3.3.2 \n    Representing Queues\n  ",
+            "label": "3.3.2 Representing Queues",
             "nodeData": "3.3.2"
           },
           {
             "id": 66,
             "hasCaret": false,
-            "label": "3.3.3 \n    Representing Tables\n  ",
+            "label": "3.3.3 Representing Tables",
             "nodeData": "3.3.3"
           },
           {
             "id": 67,
             "hasCaret": false,
-            "label": "3.3.4 \n    A Simulator for Digital Circuits\n  ",
+            "label": "3.3.4 A Simulator for Digital Circuits",
             "nodeData": "3.3.4"
           },
           {
             "id": 68,
             "hasCaret": false,
-            "label": "3.3.5 \n    Propagation of Constraints\n  ",
+            "label": "3.3.5 Propagation of Constraints",
             "nodeData": "3.3.5"
           }
         ]
@@ -407,13 +432,13 @@
           {
             "id": 70,
             "hasCaret": false,
-            "label": "3.4.1 \n    The Nature of Time in Concurrent Systems\n  ",
+            "label": "3.4.1 The Nature of Time in Concurrent Systems",
             "nodeData": "3.4.1"
           },
           {
             "id": 71,
             "hasCaret": false,
-            "label": "3.4.2 \n    Mechanisms for Controlling Concurrency\n  ",
+            "label": "3.4.2 Mechanisms for Controlling Concurrency",
             "nodeData": "3.4.2"
           }
         ]
@@ -427,31 +452,31 @@
           {
             "id": 73,
             "hasCaret": false,
-            "label": "3.5.1 \n    Streams Are Delayed Lists\n  ",
+            "label": "3.5.1 Streams Are Delayed Lists",
             "nodeData": "3.5.1"
           },
           {
             "id": 74,
             "hasCaret": false,
-            "label": "3.5.2 \n    Infinite Streams\n  ",
+            "label": "3.5.2 Infinite Streams",
             "nodeData": "3.5.2"
           },
           {
             "id": 75,
             "hasCaret": false,
-            "label": "3.5.3 \n    Exploiting the Stream Paradigm\n  ",
+            "label": "3.5.3 Exploiting the Stream Paradigm",
             "nodeData": "3.5.3"
           },
           {
             "id": 76,
             "hasCaret": false,
-            "label": "3.5.4 \n    Streams and Delayed Evaluation\n  ",
+            "label": "3.5.4 Streams and Delayed Evaluation",
             "nodeData": "3.5.4"
           },
           {
             "id": 77,
             "hasCaret": false,
-            "label": "3.5.5 \n    Modularity of Functional Programs and Modularity of Objects\n  ",
+            "label": "3.5.5 Modularity of Functional Programs and Modularity of Objects",
             "nodeData": "3.5.5"
           }
         ]
@@ -473,43 +498,43 @@
           {
             "id": 80,
             "hasCaret": false,
-            "label": "4.1.1 \n    The Core of the Evaluator\n  ",
+            "label": "4.1.1 The Core of the Evaluator",
             "nodeData": "4.1.1"
           },
           {
             "id": 81,
             "hasCaret": false,
-            "label": "4.1.2 \n    Representing\n    \n      \n      Components\n    \n  ",
+            "label": "4.1.2 Representing Components",
             "nodeData": "4.1.2"
           },
           {
             "id": 82,
             "hasCaret": false,
-            "label": "4.1.3 \n    Evaluator Data Structures\n  ",
+            "label": "4.1.3 Evaluator Data Structures",
             "nodeData": "4.1.3"
           },
           {
             "id": 83,
             "hasCaret": false,
-            "label": "4.1.4 \n    Running the Evaluator as a Program\n  ",
+            "label": "4.1.4 Running the Evaluator as a Program",
             "nodeData": "4.1.4"
           },
           {
             "id": 84,
             "hasCaret": false,
-            "label": "4.1.5 \n    Data as Programs\n  ",
+            "label": "4.1.5 Data as Programs",
             "nodeData": "4.1.5"
           },
           {
             "id": 85,
             "hasCaret": false,
-            "label": "4.1.6 \n    Internal\n    \n      \n      Declarations\n    \n  ",
+            "label": "4.1.6 Internal Declarations",
             "nodeData": "4.1.6"
           },
           {
             "id": 86,
             "hasCaret": false,
-            "label": "4.1.7 \n    Separating Syntactic Analysis from Execution\n  ",
+            "label": "4.1.7 Separating Syntactic Analysis from Execution",
             "nodeData": "4.1.7"
           }
         ]
@@ -517,25 +542,25 @@
       {
         "id": 87,
         "hasCaret": true,
-        "label": "4.2 \n    \n      \n    \n    Lazy Evaluation\n",
+        "label": "4.2 Lazy Evaluation",
         "nodeData": "4.2",
         "childNodes": [
           {
             "id": 88,
             "hasCaret": false,
-            "label": "4.2.1 \n    Normal Order and Applicative Order\n  ",
+            "label": "4.2.1 Normal Order and Applicative Order",
             "nodeData": "4.2.1"
           },
           {
             "id": 89,
             "hasCaret": false,
-            "label": "4.2.2 \n    An Interpreter with Lazy Evaluation\n  ",
+            "label": "4.2.2 An Interpreter with Lazy Evaluation",
             "nodeData": "4.2.2"
           },
           {
             "id": 90,
             "hasCaret": false,
-            "label": "4.2.3 \n    Streams as Lazy Lists\n  ",
+            "label": "4.2.3 Streams as Lazy Lists",
             "nodeData": "4.2.3"
           }
         ]
@@ -543,25 +568,25 @@
       {
         "id": 91,
         "hasCaret": true,
-        "label": "4.3 \n    \n      \n    \n    Nondeterministic Computing\n  ",
+        "label": "4.3 Nondeterministic Computing",
         "nodeData": "4.3",
         "childNodes": [
           {
             "id": 92,
             "hasCaret": false,
-            "label": "4.3.1 \n    \n      \n      Search and amb\n    \n  ",
+            "label": "4.3.1 Search and amb",
             "nodeData": "4.3.1"
           },
           {
             "id": 93,
             "hasCaret": false,
-            "label": "4.3.2 \n    Examples of Nondeterministic Programs\n  ",
+            "label": "4.3.2 Examples of Nondeterministic Programs",
             "nodeData": "4.3.2"
           },
           {
             "id": 94,
             "hasCaret": false,
-            "label": "4.3.3 \n    Implementing the\n    \n      \n      amb\n    \n    Evaluator\n  ",
+            "label": "4.3.3 Implementing the amb Evaluator",
             "nodeData": "4.3.3"
           }
         ]
@@ -575,25 +600,25 @@
           {
             "id": 96,
             "hasCaret": false,
-            "label": "4.4.1 \n    Deductive Information Retrieval\n  ",
+            "label": "4.4.1 Deductive Information Retrieval",
             "nodeData": "4.4.1"
           },
           {
             "id": 97,
             "hasCaret": false,
-            "label": "4.4.2 \n    How the Query System Works\n  ",
+            "label": "4.4.2 How the Query System Works",
             "nodeData": "4.4.2"
           },
           {
             "id": 98,
             "hasCaret": false,
-            "label": "4.4.3 \n    Is Logic Programming Mathematical Logic?\n  ",
+            "label": "4.4.3 Is Logic Programming Mathematical Logic?",
             "nodeData": "4.4.3"
           },
           {
             "id": 99,
             "hasCaret": false,
-            "label": "4.4.4 \n    Implementing the Query System\n  ",
+            "label": "4.4.4 Implementing the Query System",
             "nodeData": "4.4.4"
           }
         ]
@@ -615,31 +640,31 @@
           {
             "id": 102,
             "hasCaret": false,
-            "label": "5.1.1 \n    A Language for Describing Register Machines\n  ",
+            "label": "5.1.1 A Language for Describing Register Machines",
             "nodeData": "5.1.1"
           },
           {
             "id": 103,
             "hasCaret": false,
-            "label": "5.1.2 \n    Abstraction in Machine Design\n  ",
+            "label": "5.1.2 Abstraction in Machine Design",
             "nodeData": "5.1.2"
           },
           {
             "id": 104,
             "hasCaret": false,
-            "label": "5.1.3 \n    Subroutines\n  ",
+            "label": "5.1.3 Subroutines",
             "nodeData": "5.1.3"
           },
           {
             "id": 105,
             "hasCaret": false,
-            "label": "5.1.4 \n    Using a Stack to Implement Recursion\n  ",
+            "label": "5.1.4 Using a Stack to Implement Recursion",
             "nodeData": "5.1.4"
           },
           {
             "id": 106,
             "hasCaret": false,
-            "label": "5.1.5 \n    Instruction Summary\n  ",
+            "label": "5.1.5 Instruction Summary",
             "nodeData": "5.1.5"
           }
         ]
@@ -653,25 +678,25 @@
           {
             "id": 108,
             "hasCaret": false,
-            "label": "5.2.1 \n    The Machine Model\n  ",
+            "label": "5.2.1 The Machine Model",
             "nodeData": "5.2.1"
           },
           {
             "id": 109,
             "hasCaret": false,
-            "label": "5.2.2 \n    The Assembler\n  ",
+            "label": "5.2.2 The Assembler",
             "nodeData": "5.2.2"
           },
           {
             "id": 110,
             "hasCaret": false,
-            "label": "5.2.3 \n    \n      \n      Instructions and their Execution Functions\n    \n  ",
+            "label": "5.2.3 Instructions and their Execution Functions",
             "nodeData": "5.2.3"
           },
           {
             "id": 111,
             "hasCaret": false,
-            "label": "5.2.4 \n    Monitoring Machine Performance\n  ",
+            "label": "5.2.4 Monitoring Machine Performance",
             "nodeData": "5.2.4"
           }
         ]
@@ -685,13 +710,13 @@
           {
             "id": 113,
             "hasCaret": false,
-            "label": "5.3.1 \n    Memory as Vectors\n  ",
+            "label": "5.3.1 Memory as Vectors",
             "nodeData": "5.3.1"
           },
           {
             "id": 114,
             "hasCaret": false,
-            "label": "5.3.2 \n    Maintaining the Illusion of Infinite Memory\n  ",
+            "label": "5.3.2 Maintaining the Illusion of Infinite Memory",
             "nodeData": "5.3.2"
           }
         ]
@@ -705,25 +730,25 @@
           {
             "id": 116,
             "hasCaret": false,
-            "label": "5.4.1 \n    \n      \n      The Dispatcher and Basic Evaluation\n    \n  ",
+            "label": "5.4.1 The Dispatcher and Basic Evaluation",
             "nodeData": "5.4.1"
           },
           {
             "id": 117,
             "hasCaret": false,
-            "label": "5.4.2 \n    \n      \n      \n        Evaluating function applications\n      \n        \n  ",
+            "label": "5.4.2 Evaluating function applications",
             "nodeData": "5.4.2"
           },
           {
             "id": 118,
             "hasCaret": false,
-            "label": "5.4.3 \n    \n      \n      \n        Blocks, Assignments, and Declarations\n      \n    \n  ",
+            "label": "5.4.3 Blocks, Assignments, and Declarations",
             "nodeData": "5.4.3"
           },
           {
             "id": 119,
             "hasCaret": false,
-            "label": "5.4.4 \n    Running the Evaluator\n  ",
+            "label": "5.4.4 Running the Evaluator",
             "nodeData": "5.4.4"
           }
         ]
@@ -737,49 +762,59 @@
           {
             "id": 121,
             "hasCaret": false,
-            "label": "5.5.1 \n    Structure of the Compiler\n  ",
+            "label": "5.5.1 Structure of the Compiler",
             "nodeData": "5.5.1"
           },
           {
             "id": 122,
             "hasCaret": false,
-            "label": "5.5.2 \n    Compiling\n    \n      \n      Components\n    \n  ",
+            "label": "5.5.2 Compiling Components",
             "nodeData": "5.5.2"
           },
           {
             "id": 123,
             "hasCaret": false,
-            "label": "5.5.3 \n    Compiling\n    \n      \n      \n\tApplications and Return Statements\n      \n    \n  ",
+            "label": "5.5.3 Compiling Applications and Return Statements",
             "nodeData": "5.5.3"
           },
           {
             "id": 124,
             "hasCaret": false,
-            "label": "5.5.4 \n    Combining Instruction Sequences\n  ",
+            "label": "5.5.4 Combining Instruction Sequences",
             "nodeData": "5.5.4"
           },
           {
             "id": 125,
             "hasCaret": false,
-            "label": "5.5.5 \n    An Example of Compiled Code\n  ",
+            "label": "5.5.5 An Example of Compiled Code",
             "nodeData": "5.5.5"
           },
           {
             "id": 126,
             "hasCaret": false,
-            "label": "5.5.6 \n    Lexical Addressing\n  ",
+            "label": "5.5.6 Lexical Addressing",
             "nodeData": "5.5.6"
           },
           {
             "id": 127,
             "hasCaret": false,
-            "label": "5.5.7 \n    Interfacing Compiled Code to the Evaluator\n  ",
+            "label": "5.5.7 Interfacing Compiled Code to the Evaluator",
             "nodeData": "5.5.7"
           }
         ]
       }
     ]
   },
-  { "id": 128, "hasCaret": false, "label": "References", "nodeData": "references" },
-  { "id": 129, "hasCaret": false, "label": "About the SICP JS Project", "nodeData": "making-of" }
+  {
+    "id": 128,
+    "hasCaret": false,
+    "label": "References",
+    "nodeData": "references"
+  },
+  {
+    "id": 129,
+    "hasCaret": false,
+    "label": "About the SICP JS Project",
+    "nodeData": "making-of"
+  }
 ]
