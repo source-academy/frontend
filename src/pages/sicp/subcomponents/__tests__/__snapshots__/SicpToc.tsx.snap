@@ -6,15 +6,13 @@ exports[`Sicp toc renders correctly 1`] = `
     <Blueprint3.Tree className=\\"sicp-toc-tree\\" contents={{...}} onNodeClick={[Function (anonymous)]} onNodeCollapse={[Function: handleNodeCollapse]} onNodeExpand={[Function: handleNodeExpand]}>
       <div className=\\"bp3-tree bp3-fixed-positioning-containing-block sicp-toc-tree\\">
         <ul className=\\"bp3-tree-node-list bp3-tree-root\\">
-          <Blueprint3.TreeNode id={0} hasCaret={false} label=\\"\\\\n        Foreword\\\\n    \\" nodeData=\\"foreword\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={0} hasCaret={false} label=\\"Foreword\\" nodeData=\\"foreword\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  
-                          Foreword
-                      
+                  Foreword
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -40,15 +38,13 @@ exports[`Sicp toc renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={2} hasCaret={false} label=\\"\\\\n    Preface\\\\n  \\" nodeData=\\"prefaces03\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={2} hasCaret={false} label=\\"Preface\\" nodeData=\\"prefaces03\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  
-                      Preface
-                    
+                  Preface
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -58,15 +54,13 @@ exports[`Sicp toc renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={3} hasCaret={false} label=\\"\\\\n    Preface to the First Edition of SICP, 1984\\\\n  \\" nodeData=\\"prefaces84\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={3} hasCaret={false} label=\\"Preface to the First Edition of SICP, 1984\\" nodeData=\\"prefaces84\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  
-                      Preface to the First Edition of SICP, 1984
-                    
+                  Preface to the First Edition of SICP, 1984
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -76,15 +70,13 @@ exports[`Sicp toc renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={4} hasCaret={false} label=\\"\\\\n    Preface to the Second Edition of SICP, 1996\\\\n  \\" nodeData=\\"prefaces96\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={4} hasCaret={false} label=\\"Preface to the Second Edition of SICP, 1996\\" nodeData=\\"prefaces96\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  
-                      Preface to the Second Edition of SICP, 1996
-                    
+                  Preface to the Second Edition of SICP, 1996
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -94,15 +86,13 @@ exports[`Sicp toc renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={5} hasCaret={false} label=\\"\\\\nAcknowledgments\\\\n    \\" nodeData=\\"acknowledgements\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={5} hasCaret={false} label=\\"Acknowledgments\\" nodeData=\\"acknowledgements\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  
                   Acknowledgments
-                      
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -112,7 +102,7 @@ exports[`Sicp toc renders correctly 1`] = `
               </Blueprint3.Collapse>
             </li>
           </Blueprint3.TreeNode>
-          <Blueprint3.TreeNode id={7} hasCaret={true} label=\\"1 \\\\n    Building Abstractions with \\\\n    \\\\n      \\\\n      Functions\\\\n    \\\\n  \\" nodeData=\\"1\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+          <Blueprint3.TreeNode id={7} hasCaret={true} label=\\"1 Building Abstractions with Functions\\" nodeData=\\"1\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
@@ -127,13 +117,7 @@ exports[`Sicp toc renders correctly 1`] = `
                 </Blueprint3.Icon>
                 <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                 <span className=\\"bp3-tree-node-label\\">
-                  1 
-                      Building Abstractions with 
-                      
-                        
-                        Functions
-                      
-                    
+                  1 Building Abstractions with Functions
                 </span>
               </div>
               <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
