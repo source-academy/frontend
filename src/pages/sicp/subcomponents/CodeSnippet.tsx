@@ -35,7 +35,8 @@ const resizableProps = {
     width: '100%',
     height: '400px'
   },
-  minHeight: '250px'
+  minHeight: '250px',
+  maxHeight: '2000px'
 };
 
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
