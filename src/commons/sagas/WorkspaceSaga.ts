@@ -25,7 +25,6 @@ import * as Sourceror from 'sourceror';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { processEvent } from '../achievement/utils/EventHandler';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -120,7 +119,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       globals
     };
 
-    processEvent([EventType.RUN_CODE]);
+    yield put(actions.addEvent([EventType.RUN_CODE]));
 
     if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
       yield put(actions.remoteExecRun(editorCode));
@@ -303,7 +302,7 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
-    processEvent([EventType.RUN_CODE, EventType.RUN_TESTCASE]);
+    yield put(actions.addEvent([EventType.RUN_TESTCASE]));
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
@@ -766,7 +765,7 @@ export function* evalCode(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
       );
     }
-    processEvent(events);
+    yield put(actions.addEvent(events));
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
@@ -787,7 +786,7 @@ export function* evalCode(
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
     if (context.errors.length > 0) {
-      processEvent([EventType.ERROR]);
+      yield put(actions.addEvent([EventType.ERROR]));
     }
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
