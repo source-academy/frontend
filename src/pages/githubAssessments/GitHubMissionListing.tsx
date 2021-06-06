@@ -318,7 +318,7 @@ async function retrieveUnacceptedMissions(octokit: Octokit, orgRepos: any[]) {
   const unacceptedMissions: BrowsableMission[] = [];
 
   if (courseRepo === undefined) {
-    showWarningMessage("This organisation is not a valid Source Academy Classroom.", 2000);
+    showWarningMessage('This organisation is not a valid Source Academy Classroom.', 2000);
     return unacceptedMissions;
   }
 

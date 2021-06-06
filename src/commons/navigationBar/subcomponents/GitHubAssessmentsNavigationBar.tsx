@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { store } from '../../../pages/createStore';
 
+import { store } from '../../../pages/createStore';
 import { ControlBarGitHubLoginButton } from '../../controlBar/ControlBarGitHubLoginButton';
 
 type OwnProps = {
