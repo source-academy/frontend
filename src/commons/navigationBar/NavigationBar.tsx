@@ -121,7 +121,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           to="/githubassessments/missions"
         >
           <Icon icon={IconNames.BRIEFCASE} />
-          <div className="navbar-button-text">GitHub Assessments</div>
+          <div className="navbar-button-text">Classroom</div>
         </NavLink>
       )}
 

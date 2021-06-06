@@ -25,7 +25,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments/missions\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
-          GitHub Assessments
+          Classroom
         </div>
       </NavLink>
     </Blueprint3.NavbarGroup>
@@ -79,7 +79,7 @@ exports[`NavigationBar renders correctly with student role 1`] = `
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments/missions\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
-          GitHub Assessments
+          Classroom
         </div>
       </NavLink>
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievement\\">
