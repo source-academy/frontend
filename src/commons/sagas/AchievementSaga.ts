@@ -1,8 +1,9 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, delay, put, select } from 'redux-saga/effects';
 
 import {
   AchievementGoal,
+  ADD_EVENT,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
@@ -22,6 +23,7 @@ import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
+import Constants from '../utils/Constants';
 import {
   bulkUpdateAchievements,
   bulkUpdateGoals,
@@ -230,6 +232,27 @@ export default function* AchievementSaga(): SagaIterator {
       }
     }
   );
+
+  let loggedEvents: EventType[][] = [];
+  let timeoutSet: boolean = false;
+  const updateInterval = 3000;
+
+  yield takeEvery(ADD_EVENT, function* (action: ReturnType<typeof actions.addEvent>): any {
+    const role = yield select((state: OverallState) => state.session.role);
+    if (role && Constants.enableAchievements && !Constants.playgroundOnly) {
+      loggedEvents.push(action.payload);
+
+      if (!timeoutSet && role) {
+        // make sure that only one action every interval will handleEvent
+        timeoutSet = true;
+        yield delay(updateInterval);
+
+        timeoutSet = false;
+        yield put(actions.handleEvent(loggedEvents));
+        loggedEvents = [];
+      }
+    }
+  });
 
   yield takeEvery(HANDLE_EVENT, function* (action: ReturnType<typeof actions.handleEvent>): any {
     const tokens = yield select((state: OverallState) => ({
