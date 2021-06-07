@@ -38,103 +38,6 @@ export type JsonType = {
   eval?: boolean;
 };
 
-export const processingFunctions = {
-  '#text': (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>{obj['body']}</p>,
-
-  B: (obj: JsonType, refs: React.MutableRefObject<{}>) => <b>{parseArr(obj['child']!, refs)}</b>,
-
-  BR: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => <br />,
-
-  CHAPTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  DISPLAYFOOTNOTE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleFootnote(obj, refs),
-
-  EM: (obj: JsonType, refs: React.MutableRefObject<{}>) => <em>{parseArr(obj['child']!, refs)}</em>,
-
-  EPIGRAPH: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleEpigraph(obj, refs),
-
-  EXERCISE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleExercise(obj, refs),
-
-  FIGURE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleFigure(obj, refs),
-
-  FOOTNOTE_REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <sup>{handleRef(obj, refs)}</sup>
-  ),
-
-  JAVASCRIPTINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => (
-    <Code>{obj['body']}</Code>
-  ),
-
-  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
-
-  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex(obj['body']!, true),
-
-  LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
-
-  LINK: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleRef(obj, refs),
-
-  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('LaTeX'),
-
-  MATTER: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
-
-  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>&langle; &rangle;</p>,
-
-  OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
-
-  REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleRef(obj, refs),
-
-  REFERENCE: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  REFERENCES: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  SECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleSnippet(obj),
-
-  SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h2 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
-      {parseArr(obj['child']!, refs)}
-    </h2>
-  ),
-
-  SUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
-      <br />
-      {parseArr(obj['child']!, refs)}
-    </h4>
-  ),
-
-  SUBSUBSECTION: (obj: JsonType, refs: React.MutableRefObject<{}>) => handleContainer(obj, refs),
-
-  TABLE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <table>
-      <tbody>{obj['child']!.map((x, index) => handleTR(x, refs, index))}</tbody>
-    </table>
-  ),
-
-  TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <>
-      <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-text">
-        {parseArr(obj['child']!, refs)}
-      </div>
-      <br />
-    </>
-  ),
-
-  TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <Code>{parseArr(obj['child']!, refs)}</Code>
-  ),
-
-  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('TeX'),
-
-  UL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <UL>{parseArr(obj['child']!, refs)}</UL>
-};
-
 const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
     <div>
@@ -278,6 +181,103 @@ const handleText = (text: string) => {
 
 const handleLatex = (math: string, inline: boolean) => {
   return <SicpLatex inline={inline} math={math} />;
+};
+
+export const processingFunctions = {
+  '#text': (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>{obj['body']}</p>,
+
+  B: (obj: JsonType, refs: React.MutableRefObject<{}>) => <b>{parseArr(obj['child']!, refs)}</b>,
+
+  BR: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => <br />,
+
+  CHAPTER: handleContainer,
+
+  DISPLAYFOOTNOTE: handleFootnote,
+
+  EM: (obj: JsonType, refs: React.MutableRefObject<{}>) => <em>{parseArr(obj['child']!, refs)}</em>,
+
+  EPIGRAPH: handleEpigraph,
+
+  EXERCISE: handleExercise,
+
+  FIGURE: handleFigure,
+
+  FOOTNOTE_REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <sup>{handleRef(obj, refs)}</sup>
+  ),
+
+  JAVASCRIPTINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => (
+    <Code>{obj['body']}</Code>
+  ),
+
+  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
+
+  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
+    handleLatex(obj['body']!, true),
+
+  LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
+
+  LINK: handleRef,
+
+  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('LaTeX'),
+
+  MATTER: handleContainer,
+
+  META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
+
+  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>&langle; &rangle;</p>,
+
+  OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
+
+  REF: handleRef,
+
+  REFERENCE: handleContainer,
+
+  REFERENCES: handleContainer,
+
+  SECTION: handleContainer,
+
+  SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleSnippet(obj),
+
+  SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <h2 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
+      {parseArr(obj['child']!, refs)}
+    </h2>
+  ),
+
+  SUBSECTION: handleContainer,
+
+  SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
+      <br />
+      {parseArr(obj['child']!, refs)}
+    </h4>
+  ),
+
+  SUBSUBSECTION: handleContainer,
+
+  TABLE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <table>
+      <tbody>{obj['child']!.map((x, index) => handleTR(x, refs, index))}</tbody>
+    </table>
+  ),
+
+  TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <>
+      <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-text">
+        {parseArr(obj['child']!, refs)}
+      </div>
+      <br />
+    </>
+  ),
+
+  TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <Code>{parseArr(obj['child']!, refs)}</Code>
+  ),
+
+  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('TeX'),
+
+  UL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <UL>{parseArr(obj['child']!, refs)}</UL>
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.

@@ -25,28 +25,24 @@ exports[`Sicp index page 1`] = `
               Harold Abelson and Gerald Jay Sussman
             </h4>
           </Component>
-          <Component>
-            <h5 className=\\"bp3-heading\\">
-              with Julie Sussman
-              <i>
-                — original authors
-              </i>
-            </h5>
-          </Component>
+          <p>
+            with Julie Sussman
+            <i>
+              — original authors
+            </i>
+          </p>
           <br />
           <Component>
             <h4 className=\\"bp3-heading\\">
               Martin Henz and Tobias Wrigstad
             </h4>
           </Component>
-          <Component>
-            <h5 className=\\"bp3-heading\\">
-              with Chan Ger Hean, He Xinyue, Liu Hang, Feng Piaopiao, Jolyn Tan and Wang Qian
-              <i>
-                — adapters to JavaScript
-              </i>
-            </h5>
-          </Component>
+          <p>
+            with Chan Ger Hean, He Xinyue, Liu Hang, Feng Piaopiao, Jolyn Tan and Wang Qian
+            <i>
+              — adapters to JavaScript
+            </i>
+          </p>
         </div>
       </div>
     </div>
