@@ -564,12 +564,60 @@ export function objectsAreEqual(firstObject: any, secondObject: any) {
   return true;
 }
 
+export function convertToMCQQuestionIfMCQText(possibleMCQText: string) {
+  let isMCQText = false;
+  const mcqQuestion = {
+    answer: 0,
+    choices: [],
+    solution: -1,
+    type: 'mcq',
+    content: '',
+    grade: 0,
+    id: 0,
+    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    maxGrade: 0,
+    xp: 0,
+    maxXp: 0
+  } as IMCQQuestion;
+
+  if (possibleMCQText.substring(0, 3).toLowerCase() === 'mcq') {
+    isMCQText = true;
+  }
+
+  if (isMCQText) {
+    const onlyQuestionInformation = possibleMCQText.substring(3, possibleMCQText.length);
+    try {
+      const intermediateObject = JSON.parse(onlyQuestionInformation);
+
+      const studentAnswer = intermediateObject.answer;
+      const questions = intermediateObject.questions as any[];
+      const choices = questions.map((question: { solution: string; hint: string }) => {
+        return {
+          content: question.solution,
+          hint: question.hint
+        };
+      });
+
+      mcqQuestion.answer = studentAnswer;
+      mcqQuestion.choices = choices;
+    } catch (err) {
+      isMCQText = false;
+    }
+  }
+
+  return [isMCQText, mcqQuestion];
+}
+
 /**
  * Checks if the textual contents of a GitHub-hosted file is for an MCQ question
  * @param possibleMCQText The text to be checked
  */
 export function checkIsMCQText(possibleMCQText: string) {
-  return possibleMCQText.substring(0, 3).toLowerCase() === 'mcq';
+  if (possibleMCQText.substring(0, 3).toLowerCase() !== 'mcq') {
+    return false;
+  }
+
+  return true;
 }
 
 /**

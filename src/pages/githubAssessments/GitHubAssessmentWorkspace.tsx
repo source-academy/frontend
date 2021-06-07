@@ -17,7 +17,11 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { AutogradingResult, Testcase } from '../../commons/assessment/AssessmentTypes';
+import {
+  AutogradingResult,
+  IMCQQuestion,
+  Testcase
+} from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -37,9 +41,8 @@ import {
   GitHubMissionCreateDialogResolution
 } from '../../commons/githubAssessments/GitHubMissionCreateDialog';
 import {
-  checkIsMCQText,
   convertIMCQQuestionToMCQText,
-  convertMCQTextToIMCQQuestion,
+  convertToMCQQuestionIfMCQText,
   discoverFilesToBeChangedWithMissionRepoData,
   discoverFilesToBeCreatedWithoutMissionRepoData,
   getMissionData,
@@ -198,6 +201,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         editorTestcases: currentTaskList[actualTaskIndex].testCases
       });
 
+      const [isMCQText, mcqQuestion] = convertToMCQQuestionIfMCQText(
+        currentTaskList[actualTaskIndex].savedCode
+      );
+
+      setCurrentTaskIsMCQ(isMCQText as boolean);
+      setMCQQuestion(mcqQuestion as IMCQQuestion);
+
+      /*
       let currentTaskIsMCQ = false;
       if (checkIsMCQText(currentTaskList[actualTaskIndex].savedCode)) {
         currentTaskIsMCQ = true;
@@ -206,6 +217,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         setMCQQuestion(mcqQuestion);
       }
       setCurrentTaskIsMCQ(currentTaskIsMCQ);
+      */
     },
     [handleResetWorkspace]
   );
