@@ -1,4 +1,3 @@
-import { handleEvent } from '../../../features/achievement/AchievementActions';
 import {
   AchievementGoal,
   AchievementItem,
@@ -7,14 +6,9 @@ import {
   GoalProgress,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
-import { store } from '../../../pages/createStore';
-import Constants from '../../utils/Constants';
 import { showSuccessMessage } from '../../utils/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased, isWithinTimeRange } from './DateHelper';
-
-// How long the system should wait before sending a request to the backend
-const updateInterval = 3000;
 
 function eventShouldCount(meta: EventMeta): boolean {
   // goal is not released, or has expired
@@ -64,26 +58,4 @@ export function goalIncludesEvents(goal: AchievementGoal, eventNames: EventType[
     }
   }
   return false;
-}
-
-let timeoutSet: boolean = false;
-let loggedEvents: EventType[][] = [];
-
-function resetLoggedEvents() {
-  loggedEvents = [];
-  timeoutSet = false;
-}
-
-export function processEvent(eventNames: EventType[]) {
-  if (store.getState().session.role && !Constants.playgroundOnly && Constants.enableAchievements) {
-    loggedEvents.push(eventNames);
-
-    if (!timeoutSet) {
-      timeoutSet = true;
-      setTimeout(() => {
-        store.dispatch(handleEvent(loggedEvents));
-        resetLoggedEvents();
-      }, updateInterval);
-    }
-  }
 }
