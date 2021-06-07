@@ -98,24 +98,6 @@ $sicp-background-color: #ffffff;
         flex-grow: 1;
       }
     }
-
-    // no editor
-    > .code-body {
-      background-color: $cadet-color-2;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-y: hidden;
-
-      > .react-ace {
-        background-color: transparent;
-        padding: 5px 10px;
-
-        .ace_cursor {
-          display: none;
-          color: transparent;
-        }
-      }
-    }
   }
 
   .sicp-footnote {

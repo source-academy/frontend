@@ -19,7 +19,8 @@ export const SourceTheme = {
     WebkitHyphens: 'none',
     MozHyphens: 'none',
     msHyphens: 'none',
-    hyphens: 'none'
+    hyphens: 'none',
+    fontSize: '1rem'
   },
   'pre[class*="language-"]': {
     color: 'white',
