@@ -2,7 +2,7 @@ import { Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
