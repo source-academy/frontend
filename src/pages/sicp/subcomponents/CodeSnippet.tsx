@@ -2,7 +2,6 @@ import { Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
-import AceEditor from 'react-ace';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
@@ -91,26 +90,6 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     editingWorkspaceButtons: [closeButton]
   };
 
-  // For view only code snippets
-  const aceEditorProps = {
-    className: 'react-ace',
-    mode: 'source4defaultNONE',
-    theme: 'source',
-    fontSize: 20,
-    highlightActiveLine: false,
-    wrapEnabled: true,
-    height: 'unset',
-    width: '100%',
-    showGutter: false,
-    showPrintMargin: false,
-    readOnly: true,
-    maxLines: Infinity,
-    value: body,
-    setOptions: {
-      fontFamily: "'Inconsolata', 'Consolas', monospace"
-    }
-  };
-
   return (
     <div className="sicp-code-snippet">
       {context.active === id ? (
@@ -123,11 +102,9 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           </Resizable>
         </>
       ) : (
-        <>
-          <div className="code-body" onClick={handleOpen}>
-            <AceEditor {...aceEditorProps} />
-          </div>
-        </>
+        <Pre className="code-body" onClick={handleOpen}>
+          {body}
+        </Pre>
       )}
       {output && <Pre>{output}</Pre>}
     </div>
