@@ -25,8 +25,8 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
+// import { RouteComponentProps } from 'react-router';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
 import controlButton from '../../commons/ControlButton';
@@ -36,9 +36,13 @@ import {
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import Markdown from '../../commons/Markdown';
+import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+
+type GitHubMissionListingProps = DispatchProps; //& RouteComponentProps<{ type: string }>
 
 type DispatchProps = {
   handleGitHubLogIn: () => void;
@@ -49,7 +53,7 @@ type DispatchProps = {
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
-const GitHubMissionListing: React.FC<DispatchProps> = props => {
+const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
@@ -57,6 +61,16 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
   const [orgList, setOrgList] = useState<string[]>([]);
   const [selectedOrg, setSelectedOrg] = useState('');
+  const [typeNames, setTypeNames] = useState<string[]>([
+    'Missions',
+    'Quests',
+    'Paths',
+    'Contests',
+    'Others'
+  ]);
+
+  // const type = props.match.params.type;
+  // console.log(type);
 
   // After browsable missions retrieved, display mission listing
   useEffect(() => {
@@ -73,6 +87,16 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
       );
       return;
     }
+
+    const handleRefresh = () => {
+      retrieveOrganizationList(octokit, setOrgList);
+      retrieveBrowsableMissions(octokit, setDisplay, selectedOrg, setBrowsableMissions);
+      
+      // To be removed temp
+      setTypeNames(['Mission', 'Quests', 'Paths', 'Contests', 'Others']);
+    };
+
+    const refreshButton = <Button icon={IconNames.REFRESH} onClick={handleRefresh} />;
 
     const handleClick = (e: any) => {
       handleChange(e);
@@ -99,6 +123,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
             <Button minimal={true} rightIcon="caret-down" />
           </Popover2>
         }
+        rightElement={refreshButton}
         onChange={handleChange}
         value={selectedOrg}
       />
@@ -151,6 +176,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
   return (
     <div className="Academy">
+      {!isMobileBreakpoint && <GitHubAssessmentsNavigationBar typeNames={typeNames} {...props} />}
       <div className="Assessment">
         <ContentDisplay display={display} loadContentDispatch={getGitHubOctokitInstance} />
       </div>
@@ -167,8 +193,9 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 async function retrieveOrganizationList(octokit: Octokit, setOrgList: (orgs: string[]) => void) {
   const orgList: string[] = [];
   const results = (await octokit.orgs.listForAuthenticatedUser({ per_page: 100 })).data;
-  results.forEach(result => {
-    orgList.push(result.login);
+  const orgs = results.filter(org => org.login.includes('githubclassroom')); // filter only organisations with 'githubclassroom' in name
+  orgs.forEach(org => {
+    orgList.push(org.login);
   });
   setOrgList(orgList);
 }

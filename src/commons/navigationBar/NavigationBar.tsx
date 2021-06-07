@@ -21,7 +21,6 @@ import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
-import GitHubAssessmentsNavigationBar from './subcomponents/GitHubAssessmentsNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;
@@ -186,11 +185,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       </Navbar>
 
       <Switch>
-        <Route path="/githubassessments">
-          {Constants.enableGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
-            <GitHubAssessmentsNavigationBar {...props} />
-          )}
-        </Route>
         <Route>
           {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
             <AcademyNavigationBar role={props.role} />

@@ -4,12 +4,12 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { store } from '../../../pages/createStore';
 import { ControlBarGitHubLoginButton } from '../../controlBar/ControlBarGitHubLoginButton';
 
-type OwnProps = {
-  handleGitHubLogIn: any;
-  handleGitHubLogOut: any;
+type DispatchProps = {
+  typeNames: string[];
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 /**
@@ -17,23 +17,63 @@ type OwnProps = {
  *
  * @param props Component properties
  */
-const GitHubAssessmentsNavigationBar: React.FC<OwnProps> = props => {
-  const octokit = store.getState().session.githubOctokitObject.octokit;
-
+const GitHubAssessmentsNavigationBar: React.FC<DispatchProps> = props => {
   return (
     <Navbar className="NavigationBar secondary-navbar">
-      {octokit !== undefined && (
-        <NavbarGroup align={Alignment.LEFT}>
-          <NavLink
-            to={`/githubassessments/missions`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          >
-            <Icon icon={IconNames.FLAME} />
-            <div className="navbar-button-text hidden-xs hidden-sm">Missions</div>
-          </NavLink>
-        </NavbarGroup>
-      )}
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          to={`/githubassessments/missions`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.FLAME} />
+          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[0]}</div>
+        </NavLink>
+      </NavbarGroup>
+
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          to={`/githubassessments/${props.typeNames[1]}`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.FLAME} />
+          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[1]}</div>
+        </NavLink>
+      </NavbarGroup>
+
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          to={`/githubassessments/${props.typeNames[2]}`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.FLAME} />
+          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[2]}</div>
+        </NavLink>
+      </NavbarGroup>
+
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          to={`/githubassessments/${props.typeNames[3]}`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.FLAME} />
+          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[3]}</div>
+        </NavLink>
+      </NavbarGroup>
+
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          to={`/githubassessments/${props.typeNames[4]}`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.FLAME} />
+          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[4]}</div>
+        </NavLink>
+      </NavbarGroup>
 
       <NavbarGroup align={Alignment.RIGHT}>
         <ControlBarGitHubLoginButton
