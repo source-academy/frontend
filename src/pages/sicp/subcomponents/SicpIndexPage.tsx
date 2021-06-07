@@ -1,4 +1,4 @@
-import { H1, H2, H4, H5 } from '@blueprintjs/core';
+import { H1, H2, H4 } from '@blueprintjs/core';
 import * as React from 'react';
 
 import SicpToc from './SicpToc';
@@ -13,16 +13,16 @@ const authors = (
   <div className="sicp-authors">
     <br />
     <H4>{originalAuthors}</H4>
-    <H5>
+    <p>
       {originalWithAuthors}
       <i>— original authors</i>
-    </H5>
+    </p>
     <br />
     <H4>{adaptedAuthors}</H4>
-    <H5>
+    <p>
       {adaptedWithAuthors}
       <i>— adapters to JavaScript</i>
-    </H5>
+    </p>
   </div>
 );
 
