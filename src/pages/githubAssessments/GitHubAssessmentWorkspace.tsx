@@ -21,6 +21,7 @@ import { AutogradingResult, Testcase } from '../../commons/assessment/Assessment
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
+import { ControlBarDisplayMCQButton } from '../../commons/controlBar/ControlBarDisplayMCQButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
@@ -162,6 +163,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [isTeacherMode, setIsTeacherMode] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
+  const [displayMCQInEditor, setDisplayMCQInEditor] = React.useState(true);
   const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
   const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData>(
     props.location.state as MissionRepoData
@@ -200,6 +202,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       const [isMCQText, mcqQuestion] = convertToMCQQuestionIfMCQText(
         currentTaskList[actualTaskIndex].savedCode
       );
+
       setCurrentTaskIsMCQ(isMCQText);
       setMCQQuestion(mcqQuestion);
     },
@@ -915,8 +918,18 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           key={'delete_task'}
         />
       );
+      const showMCQButton = (
+        <ControlBarDisplayMCQButton
+          displayMCQInEditor={() => setDisplayMCQInEditor(true)}
+          displayTextInEditor={() => setDisplayMCQInEditor(false)}
+          mcqDisplayed={displayMCQInEditor}
+          key={'display MCQ'}
+        />
+      );
+
       editorButtons.push(addTaskButton);
       editorButtons.push(deleteTaskButton);
+      editorButtons.push(showMCQButton);
     }
 
     const flowButtons = [previousButton, questionView, nextButton];
@@ -971,13 +984,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   );
 
   const mcqProps = useMemo(() => {
-    return currentTaskIsMCQ
+    return currentTaskIsMCQ && displayMCQInEditor
       ? {
           mcq: mcqQuestion,
           handleMCQSubmit: handleMCQSubmit
         }
       : undefined;
-  }, [currentTaskIsMCQ, mcqQuestion, handleMCQSubmit]);
+  }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
   const editorProps = {
     editorSessionId: '',
@@ -1007,7 +1020,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
-    editorProps: currentTaskIsMCQ ? undefined : editorProps,
+    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
