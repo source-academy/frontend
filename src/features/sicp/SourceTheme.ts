@@ -3,98 +3,74 @@
  * Tries to match the Source Theme for Ace Editor in js-slang
  */
 export const SourceTheme = {
-  'hljs-comment': {
-    color: '#d4d0ab'
+  'code[class*="language-"]': {
+    color: 'white',
+    background: '#2c3e50',
+    fontFamily: "'Inconsolata', 'Consolas', monospace",
+    textAlign: 'left',
+    whiteSpace: 'pre',
+    wordSpacing: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    lineHeight: '1.5',
+    MozTabSize: '4',
+    OTabSize: '4',
+    tabSize: '4',
+    WebkitHyphens: 'none',
+    MozHyphens: 'none',
+    msHyphens: 'none',
+    hyphens: 'none'
   },
-  'hljs-quote': {
-    color: '#d4d0ab'
+  'pre[class*="language-"]': {
+    color: 'white',
+    background: '#2c3e50',
+    fontFamily: "'Inconsolata', 'Consolas', monospace",
+    textAlign: 'left',
+    whiteSpace: 'pre',
+    wordSpacing: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    lineHeight: '1.5',
+    MozTabSize: '4',
+    OTabSize: '4',
+    tabSize: '4',
+    WebkitHyphens: 'none',
+    MozHyphens: 'none',
+    msHyphens: 'none',
+    hyphens: 'none',
+    padding: '1em',
+    margin: '0.5em 0',
+    overflow: 'auto',
+    borderRadius: '0.3em'
   },
-  'hljs-variable': {
-    color: '#ffa07a'
+  ':not(pre) > code[class*="language-"]': {
+    background: '#2c3e50',
+    padding: '0.1em',
+    borderRadius: '0.3em',
+    whiteSpace: 'normal'
   },
-  'hljs-template-variable': {
-    color: '#ffa07a'
+  comment: {
+    color: '#0088FF'
   },
-  'hljs-tag': {
-    color: '#ffa07a'
+  punctuation: {
+    color: 'white'
   },
-  'hljs-name': {
-    color: '#ffa07a'
+  boolean: {
+    color: '#FF628C'
   },
-  'hljs-selector-id': {
-    color: '#ffa07a'
+  number: {
+    color: '#FF628C'
   },
-  'hljs-selector-class': {
-    color: '#ffa07a'
+  string: {
+    color: '#3AD900'
   },
-  'hljs-regexp': {
-    color: '#ffa07a'
+  operator: {
+    color: '#FF9D00'
   },
-  'hljs-deletion': {
-    color: '#ffa07a'
+  function: {
+    color: '#ffdd00'
   },
-  'hljs-number': {
-    color: '#f5ab35'
-  },
-  'hljs-built_in': {
-    color: '#f5ab35'
-  },
-  'hljs-builtin-name': {
-    color: '#f5ab35'
-  },
-  'hljs-literal': {
-    color: '#f5ab35'
-  },
-  'hljs-type': {
-    color: '#f5ab35'
-  },
-  'hljs-params': {
-    color: '#f5ab35'
-  },
-  'hljs-meta': {
-    color: '#f5ab35'
-  },
-  'hljs-link': {
-    color: '#f5ab35'
-  },
-  'hljs-attribute': {
-    color: '#ffd700'
-  },
-  'hljs-string': {
-    color: '#abe338'
-  },
-  'hljs-symbol': {
-    color: '#abe338'
-  },
-  'hljs-bullet': {
-    color: '#abe338'
-  },
-  'hljs-addition': {
-    color: '#abe338'
-  },
-  'hljs-title': {
-    color: '#00e0e0'
-  },
-  'hljs-section': {
-    color: '#00e0e0'
-  },
-  'hljs-keyword': {
-    color: '#dcc6e0'
-  },
-  'hljs-selector-tag': {
-    color: '#dcc6e0'
-  },
-  hljs: {
-    display: 'block',
-    overflowX: 'auto',
-    background: '#2b2b2b',
-    color: '#f8f8f2',
-    padding: '0.5em'
-  },
-  'hljs-emphasis': {
-    fontStyle: 'italic'
-  },
-  'hljs-strong': {
-    fontWeight: 'bold'
+  keyword: {
+    color: '#FF9D00'
   }
 };
