@@ -10,13 +10,13 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  key: string;
   mcqDisplayed: boolean;
+  key: string;
 };
 
 export const ControlBarDisplayMCQButton: React.FC<ControlBarDisplayMCQButtonProps> = props => {
-  const displayText = props.mcqDisplayed ? 'Show Text' : 'Show MCQ';
-  const callback = props.mcqDisplayed ? props.displayTextInEditor : props.displayMCQInEditor;
+  const label = props.mcqDisplayed ? 'Show MCQ Text' : 'Hide MCQ Text';
+  const behaviour = props.mcqDisplayed ? props.displayTextInEditor : props.displayMCQInEditor;
 
-  return controlButton(displayText, IconNames.REFRESH, callback);
+  return controlButton(label, IconNames.REFRESH, behaviour);
 };
