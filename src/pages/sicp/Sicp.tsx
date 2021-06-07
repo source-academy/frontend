@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useParams } from 'react-router';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import Constants from 'src/commons/utils/Constants';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
@@ -77,8 +75,6 @@ const Sicp: React.FC<SicpProps> = props => {
   const { section } = useParams<{ section: string }>();
   const topRef = React.useRef<HTMLDivElement>(null);
   const refs = React.useRef({});
-
-  SyntaxHighlighter.registerLanguage('jsx', jsx);
 
   // Fetch json data
   React.useEffect(() => {
