@@ -33,7 +33,17 @@ export const mathjaxConfig = {
   }
 };
 
-const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
+const sicpDisplayProps = {
+  fullWidth: false,
+  loadContentDispatch: () => {}
+};
+
+const loadingComponent = (
+  <ContentDisplay
+    {...sicpDisplayProps}
+    display={<NonIdealState title="Loading Content" icon={<Spinner />} />}
+  />
+);
 
 const unexpectedError = (
   <div>
@@ -71,6 +81,7 @@ const errorComponent = (description: JSX.Element) => (
 
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState(<></>);
+  const [loading, setLoading] = React.useState(true);
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
   const topRef = React.useRef<HTMLDivElement>(null);
@@ -78,10 +89,11 @@ const Sicp: React.FC<SicpProps> = props => {
 
   // Fetch json data
   React.useEffect(() => {
-    setData(loadingComponent);
+    setLoading(true);
 
     if (section === 'index') {
       setData(<SicpIndexPage />);
+      setLoading(false);
       return;
     }
 
@@ -96,6 +108,7 @@ const Sicp: React.FC<SicpProps> = props => {
         try {
           const newData = parseArr(myJson, refs); // Might throw error
           setData(newData);
+          setLoading(false);
         } catch (error) {
           throw new ParseJsonError(error.message);
         }
@@ -145,18 +158,12 @@ const Sicp: React.FC<SicpProps> = props => {
     dispatch(toggleUsingSubst(false, 'sicp'));
   };
 
-  const sicpDisplayProps = {
-    fullWidth: false,
-    display: data,
-    loadContentDispatch: () => {}
-  };
-
   return (
     <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
       <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
         <div ref={topRef} />
         <MathJaxContext version={3} config={mathjaxConfig}>
-          <ContentDisplay {...sicpDisplayProps} />
+          {loading ? loadingComponent : <ContentDisplay {...sicpDisplayProps} display={data} />}
         </MathJaxContext>
       </div>
     </CodeSnippetContext.Provider>
