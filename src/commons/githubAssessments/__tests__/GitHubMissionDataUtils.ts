@@ -771,14 +771,35 @@ test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
   expect(existingKeys).toEqual(expectedKeys);
 });
 
-test('checkisMCQText works properly', () => {
-  expect(GitHubMissionDataUtils.checkIsMCQText('mcqddshkjf')).toBe(true);
-  expect(GitHubMissionDataUtils.checkIsMCQText('McQsdlkfjsd;f')).toBe(true);
-  expect(GitHubMissionDataUtils.checkIsMCQText('')).toBe(false);
-  expect(GitHubMissionDataUtils.checkIsMCQText('MCgQhjkf')).toBe(false);
+test('convertToMCQQuestionIfMCQText returns false if non-MCQ', () => {
+  const [isMCQText, mcqQuestion] =
+    GitHubMissionDataUtils.convertToMCQQuestionIfMCQText('McQsdlkfjsd;f');
+  expect(isMCQText).toBe(false);
+  mcqQuestion; // ignore this object
 });
 
-test('convertMCQTextToIMCQQuestion works properly', () => {
+test('convertToMCQQuestionIfMCQText returns false if mcq text is malformed', () => {
+  const malformedMcqText =
+    'MCQ\n' +
+    '{\n' +
+    '  "questions":\n' +
+    '  [\n' +
+    '    { "solution": "Θ(1)", "hint":"one" },\n' +
+    '    { "solution": "Θ(log _n_)", "hint":"two" },\n' +
+    '    { "solution": "Θ(_n_)", "hint":"14345" },\n' +
+    '    { "solution": "Θ(_n_ log _n_)", "hint":"yes" },\n' +
+    '    { "solution": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
+    '    { "solution": "Θ(_n_³)", "hint":"maybe" }\n' +
+    '  ],\n' +
+    '  "answer": 4';
+
+  const [isMCQText, mcqQuestion] =
+    GitHubMissionDataUtils.convertToMCQQuestionIfMCQText(malformedMcqText);
+  expect(isMCQText).toBe(false);
+  mcqQuestion; // ignore this object
+});
+
+test('convertToMCQQuestionIfMCQText returns false if mcq text is legitimate', () => {
   const mcqText =
     'MCQ\n' +
     '{\n' +
@@ -804,8 +825,9 @@ test('convertMCQTextToIMCQQuestion works properly', () => {
     { content: 'Θ(_n_³)', hint: 'maybe' }
   ];
 
-  const mcqQuestionObject = GitHubMissionDataUtils.convertMCQTextToIMCQQuestion(mcqText);
-  expect(mcqQuestionObject).toEqual({
+  const [isMCQText, mcqQuestion] = GitHubMissionDataUtils.convertToMCQQuestionIfMCQText(mcqText);
+  expect(isMCQText).toBe(true);
+  expect(mcqQuestion).toEqual({
     answer: expectedAnswer,
     choices: expectedChoices,
     solution: -1,
