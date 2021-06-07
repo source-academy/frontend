@@ -2,9 +2,11 @@ import { Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
+import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
 import { CodeSnippetContext } from '../Sicp';
 import SicpWorkspaceContainer from './SicpWorkspaceContainer';
@@ -102,9 +104,9 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           </Resizable>
         </>
       ) : (
-        <Pre className="code-body" onClick={handleOpen}>
+        <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
           {body}
-        </Pre>
+        </SyntaxHighlighter>
       )}
       {output && <Pre>{output}</Pre>}
     </div>
