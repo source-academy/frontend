@@ -528,9 +528,6 @@ export function objectsAreEqual(firstObject: any, secondObject: any) {
   }
 
   if (Array.isArray(firstObject) && Array.isArray(secondObject)) {
-    console.log(firstObject);
-    console.log(secondObject);
-
     if (firstObject.length !== secondObject.length) {
       return false;
     }

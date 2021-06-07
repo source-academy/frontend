@@ -772,10 +772,8 @@ test('discoverFilesToBeCreatedWithoutMissionRepoData works properly', () => {
 });
 
 test('convertToMCQQuestionIfMCQText returns false if non-MCQ', () => {
-  const [isMCQText, mcqQuestion] =
-    GitHubMissionDataUtils.convertToMCQQuestionIfMCQText('McQsdlkfjsd;f');
+  const isMCQText = GitHubMissionDataUtils.convertToMCQQuestionIfMCQText('McQsdlkfjsd;f')[0];
   expect(isMCQText).toBe(false);
-  mcqQuestion; // ignore this object
 });
 
 test('convertToMCQQuestionIfMCQText returns false if mcq text is malformed', () => {
@@ -793,10 +791,8 @@ test('convertToMCQQuestionIfMCQText returns false if mcq text is malformed', () 
     '  ],\n' +
     '  "answer": 4';
 
-  const [isMCQText, mcqQuestion] =
-    GitHubMissionDataUtils.convertToMCQQuestionIfMCQText(malformedMcqText);
+  const isMCQText = GitHubMissionDataUtils.convertToMCQQuestionIfMCQText(malformedMcqText)[0];
   expect(isMCQText).toBe(false);
-  mcqQuestion; // ignore this object
 });
 
 test('convertToMCQQuestionIfMCQText returns false if mcq text is legitimate', () => {
