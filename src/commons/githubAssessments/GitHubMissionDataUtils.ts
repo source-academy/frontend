@@ -386,7 +386,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
   taskList: TaskData[],
   cachedTaskList: TaskData[],
   isTeacherMode: boolean
-): any[] {
+): [any, string[]] {
   const filenameToContentMap = {};
   const foldersToDelete: string[] = [];
 
@@ -564,7 +564,14 @@ export function objectsAreEqual(firstObject: any, secondObject: any) {
   return true;
 }
 
-export function convertToMCQQuestionIfMCQText(possibleMCQText: string) {
+/**
+ * Checks if the textual contents of a GitHub-hosted file is for an MCQ question, and converts it if so
+ * returns an array of 2 values, a boolean and an IMCQQuestion
+ * The boolean specifies whether the input corresponded to an MCQQuestion
+ * The IMCQQuestion is only meaningful if the boolean is true, and contains the converted information
+ * @param possibleMCQText The text to be checked and converted
+ */
+export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean, IMCQQuestion] {
   let isMCQText = false;
   const mcqQuestion = {
     answer: 0,
@@ -606,51 +613,6 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string) {
   }
 
   return [isMCQText, mcqQuestion];
-}
-
-/**
- * Checks if the textual contents of a GitHub-hosted file is for an MCQ question
- * @param possibleMCQText The text to be checked
- */
-export function checkIsMCQText(possibleMCQText: string) {
-  if (possibleMCQText.substring(0, 3).toLowerCase() !== 'mcq') {
-    return false;
-  }
-
-  return true;
-}
-
-/**
- * Converts textual contents of a GitHub-hosted file know to be for an MCQ question into an IMCQQuestion object
- * @param MCQText Known MCQ text
- */
-export function convertMCQTextToIMCQQuestion(MCQText: string) {
-  const onlyQuestionInformation = MCQText.substring(3, MCQText.length);
-  const intermediateObject = JSON.parse(onlyQuestionInformation);
-
-  const studentAnswer = intermediateObject.answer;
-  const questions = intermediateObject.questions as [];
-
-  const choices = questions.map((question: { solution: string; hint: string }) => {
-    return {
-      content: question.solution,
-      hint: question.hint
-    };
-  });
-
-  return {
-    answer: studentAnswer,
-    choices: choices,
-    solution: -1,
-    type: 'mcq',
-    content: '',
-    grade: 0,
-    id: 0,
-    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
-    maxGrade: 0,
-    xp: 0,
-    maxXp: 0
-  } as IMCQQuestion;
 }
 
 /**

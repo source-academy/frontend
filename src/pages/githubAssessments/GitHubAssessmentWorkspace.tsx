@@ -17,11 +17,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import {
-  AutogradingResult,
-  IMCQQuestion,
-  Testcase
-} from '../../commons/assessment/AssessmentTypes';
+import { AutogradingResult, Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -204,20 +200,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       const [isMCQText, mcqQuestion] = convertToMCQQuestionIfMCQText(
         currentTaskList[actualTaskIndex].savedCode
       );
-
-      setCurrentTaskIsMCQ(isMCQText as boolean);
-      setMCQQuestion(mcqQuestion as IMCQQuestion);
-
-      /*
-      let currentTaskIsMCQ = false;
-      if (checkIsMCQText(currentTaskList[actualTaskIndex].savedCode)) {
-        currentTaskIsMCQ = true;
-        const mcqRawText = currentTaskList[actualTaskIndex].savedCode;
-        const mcqQuestion = convertMCQTextToIMCQQuestion(mcqRawText);
-        setMCQQuestion(mcqQuestion);
-      }
-      setCurrentTaskIsMCQ(currentTaskIsMCQ);
-      */
+      setCurrentTaskIsMCQ(isMCQText);
+      setMCQQuestion(mcqQuestion);
     },
     [handleResetWorkspace]
   );
