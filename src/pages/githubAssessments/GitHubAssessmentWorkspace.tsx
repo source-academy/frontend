@@ -183,6 +183,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleUpdateWorkspace = props.handleUpdateWorkspace;
   const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
+  const handleReplOutputClear = props.handleReplOutputClear;
 
   /**
    * Should be called to change the task number, rather than using setCurrentTaskNumber
@@ -199,6 +200,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         editorPostpend: currentTaskList[actualTaskIndex].testPostpend,
         editorTestcases: currentTaskList[actualTaskIndex].testCases
       });
+      handleReplOutputClear();
 
       const [isMCQText, mcqQuestion] = convertToMCQQuestionIfMCQText(
         currentTaskList[actualTaskIndex].savedCode
@@ -207,7 +209,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       setCurrentTaskIsMCQ(isMCQText);
       setMCQQuestion(mcqQuestion);
     },
-    [handleUpdateWorkspace]
+    [handleUpdateWorkspace, handleReplOutputClear]
   );
 
   const setBriefingContentWrapper = useCallback(
@@ -757,10 +759,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         editorPostpend: editedTaskList[currentTaskNumber - 1].testPostpend,
         editorTestcases: editedTaskList[currentTaskNumber - 1].testCases
       });
+      handleReplOutputClear();
 
       setTaskListWrapper(editedTaskList);
     },
-    [currentTaskNumber, taskList, handleUpdateWorkspace, setTaskListWrapper]
+    [currentTaskNumber, taskList, handleUpdateWorkspace, handleReplOutputClear, setTaskListWrapper]
   );
 
   const setTestPrepend = useCallback(
@@ -1010,7 +1013,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const replButtons = () => {
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
