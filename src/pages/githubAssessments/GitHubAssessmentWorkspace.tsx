@@ -609,43 +609,63 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * Checks to ensure that the user wants to discard their current changes
    */
   const shouldProceedToChangeTask = useCallback(
-    (currentTaskNumber: number, taskList: TaskData[], cachedTaskList: TaskData[]) => {
+    (
+      currentTaskNumber: number,
+      taskList: TaskData[],
+      cachedTaskList: TaskData[],
+      missionRepoData: MissionRepoData
+    ) => {
+      if (missionRepoData === undefined) {
+        return true;
+      }
+
       const taskIndex = currentTaskNumber - 1;
       if (!objectsAreEqual(taskList[taskIndex], cachedTaskList[taskIndex])) {
         return window.confirm(
           'You have unsaved changes to the current question. Are you sure you want to continue?'
         );
       }
+
       return true;
     },
     []
   );
 
   const onClickPrevious = useCallback(() => {
-    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
-      setTaskListWrapper(cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData)));
+    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList, missionRepoData)) {
+      let activeTaskList = taskList;
+      if (missionRepoData !== undefined) {
+        activeTaskList = cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData));
+        setTaskListWrapper(activeTaskList);
+      }
       const newTaskNumber = currentTaskNumber - 1;
-      changeStateDueToChangedTaskNumber(newTaskNumber, cachedTaskList);
+      changeStateDueToChangedTaskNumber(newTaskNumber, activeTaskList);
     }
   }, [
     currentTaskNumber,
     taskList,
     cachedTaskList,
+    missionRepoData,
     setTaskListWrapper,
     shouldProceedToChangeTask,
     changeStateDueToChangedTaskNumber
   ]);
 
   const onClickNext = useCallback(() => {
-    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
-      setTaskListWrapper(cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData)));
+    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList, missionRepoData)) {
+      let activeTaskList = taskList;
+      if (missionRepoData !== undefined) {
+        activeTaskList = cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData));
+        setTaskListWrapper(activeTaskList);
+      }
       const newTaskNumber = currentTaskNumber + 1;
-      changeStateDueToChangedTaskNumber(newTaskNumber, cachedTaskList);
+      changeStateDueToChangedTaskNumber(newTaskNumber, activeTaskList);
     }
   }, [
     currentTaskNumber,
     taskList,
     cachedTaskList,
+    missionRepoData,
     setTaskListWrapper,
     shouldProceedToChangeTask,
     changeStateDueToChangedTaskNumber
