@@ -609,7 +609,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    */
   const shouldProceedToChangeTask = useCallback(
     (currentTaskNumber: number, taskList: TaskData[], cachedTaskList: TaskData[]) => {
-      if (taskList[currentTaskNumber - 1] !== cachedTaskList[currentTaskNumber - 1]) {
+      const taskIndex = currentTaskNumber - 1;
+      if (!objectsAreEqual(taskList[taskIndex], cachedTaskList[taskIndex])) {
         return window.confirm(
           'You have unsaved changes to the current question. Are you sure you want to continue?'
         );
@@ -621,9 +622,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickPrevious = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
-      setTaskList(cachedTaskList);
+      setTaskListWrapper(cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData)));
       const newTaskNumber = currentTaskNumber - 1;
-      changeStateDueToChangedTaskNumber(newTaskNumber, taskList);
+      changeStateDueToChangedTaskNumber(newTaskNumber, cachedTaskList);
     }
   }, [
     currentTaskNumber,
@@ -635,9 +636,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickNext = useCallback(() => {
     if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList)) {
-      setTaskList(cachedTaskList);
+      setTaskListWrapper(cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData)));
       const newTaskNumber = currentTaskNumber + 1;
-      changeStateDueToChangedTaskNumber(newTaskNumber, taskList);
+      changeStateDueToChangedTaskNumber(newTaskNumber, cachedTaskList);
     }
   }, [
     currentTaskNumber,
