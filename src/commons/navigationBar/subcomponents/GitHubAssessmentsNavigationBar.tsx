@@ -1,15 +1,36 @@
-import { Alignment, Classes, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
+import {
+  Alignment,
+  Button,
+  Classes,
+  Icon,
+  InputGroup,
+  Menu,
+  MenuItem,
+  Navbar,
+  NavbarGroup
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Popover2 } from '@blueprintjs/popover2';
+import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { ControlBarGitHubLoginButton } from '../../controlBar/ControlBarGitHubLoginButton';
 
+type GitHubAssessmentsNavigationBarProps = DispatchProps & StateProps;
+
 type DispatchProps = {
-  typeNames: string[];
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+};
+
+type StateProps = {
+  octokit: Octokit;
+  courses: string[];
+  selectedCourse: string;
+  setSelectedCourse: (course: string) => void;
+  typeNames: string[];
 };
 
 /**
@@ -17,7 +38,15 @@ type DispatchProps = {
  *
  * @param props Component properties
  */
-const GitHubAssessmentsNavigationBar: React.FC<DispatchProps> = props => {
+const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarProps> = props => {
+  const handleClick = (e: any) => {
+    handleChange(e);
+  };
+
+  const handleChange = (e: any) => {
+    props.setSelectedCourse(e.target.innerText);
+  };
+
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
@@ -75,6 +104,7 @@ const GitHubAssessmentsNavigationBar: React.FC<DispatchProps> = props => {
         </NavLink>
       </NavbarGroup>
 
+
       <NavbarGroup align={Alignment.RIGHT}>
         <ControlBarGitHubLoginButton
           key="github"
@@ -82,6 +112,31 @@ const GitHubAssessmentsNavigationBar: React.FC<DispatchProps> = props => {
           onClickLogOut={props.handleGitHubLogOut}
         />
       </NavbarGroup>
+
+      {props.octokit !== undefined && (
+        <NavbarGroup align={Alignment.RIGHT}>
+          <InputGroup
+            disabled={true}
+            leftElement={
+              <Popover2
+                content={
+                  <Menu>
+                    {props.courses.map((course: string) => (
+                      <MenuItem key={course} onClick={handleClick} text={course} />
+                    ))}
+                  </Menu>
+                }
+                placement={'bottom-end'}
+              >
+                <Button minimal={true} rightIcon="caret-down" />
+              </Popover2>
+            }
+            placeholder={'Select Course'}
+            onChange={handleChange}
+            value={props.selectedCourse}
+          />
+        </NavbarGroup>
+      )}
     </Navbar>
   );
 };
