@@ -802,7 +802,9 @@ export function* evalCode(
      */
     if (
       activeTab === SideContentType.autograder &&
-      (workspaceLocation === 'assessment' || workspaceLocation === 'grading')
+      (workspaceLocation === 'assessment' ||
+        workspaceLocation === 'grading' ||
+        workspaceLocation === 'githubAssessment')
     ) {
       const testcases: Testcase[] = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
