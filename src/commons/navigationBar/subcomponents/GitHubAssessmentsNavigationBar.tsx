@@ -104,7 +104,6 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
         </NavLink>
       </NavbarGroup>
 
-
       <NavbarGroup align={Alignment.RIGHT}>
         <ControlBarGitHubLoginButton
           key="github"

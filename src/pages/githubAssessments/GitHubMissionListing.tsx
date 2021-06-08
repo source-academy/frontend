@@ -12,9 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
-import {
-  GetResponseDataTypeFromEndpointMethod
-} from '@octokit/types';
+import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -78,13 +76,7 @@ const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
       setBrowsableMissions([]);
       setCourses([]);
       setSelectedCourse('');
-      setTypeNames([
-        'Missions',
-        'Quests',
-        'Paths',
-        'Contests',
-        'Others'
-      ]);
+      setTypeNames(['Missions', 'Quests', 'Paths', 'Contests', 'Others']);
       return;
     }
 
@@ -100,9 +92,9 @@ const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
       setDisplay(
         <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
       );
-      retrieveBrowsableMissions(octokit, selectedCourse, setBrowsableMissions);
+      retrieveBrowsableMissions(octokit, selectedCourse, setBrowsableMissions, setTypeNames);
     }
-  },[octokit, selectedCourse]);
+  }, [octokit, selectedCourse]);
 
   // After missions retrieved, display mission listing
   useEffect(() => {
@@ -135,11 +127,7 @@ const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
           })}
       </>
     );
-  }, [
-    browsableMissions,
-    isMobileBreakpoint,
-    props.handleGitHubLogOut
-  ]);
+  }, [browsableMissions, isMobileBreakpoint, props.handleGitHubLogOut]);
 
   return (
     <div className="Academy">
@@ -201,16 +189,23 @@ type GitHubMission = {
  * Retrieves BrowsableMissions information from a mission repositories and sets them in the page's state.
  *
  * @param octokit The Octokit instance for the authenticated user
+ * @param selectedCourse The course that the user has selected to browse
  * @param setBrowsableMissions The React setter function for an array of BrowsableMissions
+ * @param setTypeNames The header names for the white navigation bar
  */
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   selectedCourse: string,
-  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void
+  setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
+  setTypeNames: (typeNames: string[]) => void
 ) {
   const userLogin = (await octokit.users.getAuthenticated()).data.login;
-  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.listForAuthenticatedUser>;
-  const userRepos: ListForAuthenticatedUserData = (await octokit.repos.listForAuthenticatedUser({ per_page: 100 })).data;
+  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+    typeof octokit.repos.listForAuthenticatedUser
+  >;
+  const userRepos: ListForAuthenticatedUserData = (
+    await octokit.repos.listForAuthenticatedUser({ per_page: 100 })
+  ).data;
   const courseRepos = userRepos.filter(repo => repo.owner!.login === selectedCourse);
   const courseInfoRepo = courseRepos.find(repo => repo.name.includes('course-info'));
 
@@ -229,16 +224,20 @@ async function retrieveBrowsableMissions(
     })
   ).data;
 
-  if (Array.isArray(files)){
+  if (Array.isArray(files)) {
     if (files.find(file => file.name === 'course-info.json')) {
       const result = await octokit.repos.getContent({
         owner: courseInfoRepo.owner!.login,
         repo: courseInfoRepo.name,
         path: 'course-info.json'
       });
-      const courseInfo = JSON.parse(
-        Buffer.from((result.data as any).content, 'base64').toString()
-      );
+      const courseInfo = JSON.parse(Buffer.from((result.data as any).content, 'base64').toString());
+
+      const typeNames: string[] = [];
+      courseInfo.types.forEach((type: { typeName: any; assessments: any }) => {
+        typeNames.push(type.typeName);
+      });
+      setTypeNames(typeNames);
 
       courseInfo.types[0].assessments.forEach((mission: GitHubMission) => {
         const prefixLogin = mission.repoPrefix + '-' + userLogin;
@@ -247,7 +246,7 @@ async function retrieveBrowsableMissions(
         let createdAt = new Date();
         let acceptLink = undefined;
         if (missionRepo === undefined) {
-          acceptLink = mission.acceptLink
+          acceptLink = mission.acceptLink;
         } else {
           if (missionRepo.created_at !== null) {
             createdAt = new Date(missionRepo.created_at);
@@ -282,7 +281,7 @@ async function retrieveBrowsableMissions(
  * @param missionRepo The BrowsableMission representation of a single mission repository
  * @param isMobileBreakpoint Whether we are using mobile breakpoint
  */
- function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean) {
+function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint: boolean) {
   const ratio = isMobileBreakpoint ? 5 : 3;
   const ownerSlashName =
     missionRepo.missionRepoData.repoOwner + '/' + missionRepo.missionRepoData.repoName;

@@ -1,10 +1,16 @@
+import { Octokit } from '@octokit/rest';
 import { shallow } from 'enzyme';
 
 import GitHubAssessmentsNavigationBar from '../GitHubAssessmentsNavigationBar';
 
 const props = {
   handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {}
+  handleGitHubLogOut: () => {},
+  octokit: new Octokit(),
+  courses: [],
+  selectedCourse: '',
+  setSelectedCourse: () => {},
+  typeNames: []
 };
 
 test('Navbar renders correctly', () => {
