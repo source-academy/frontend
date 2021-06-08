@@ -66,6 +66,7 @@ import SideContentMarkdownEditor from '../../commons/sideContent/githubAssessmen
 import SideContentMissionEditor from '../../commons/sideContent/githubAssessments/SideContentMissionEditor';
 import SideContentTaskEditor from '../../commons/sideContent/githubAssessments/SideContentTaskEditor';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
+import SideContentAutograder from '../../commons/sideContent/SideContentAutograder';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
@@ -630,6 +631,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     currentTaskNumber,
     taskList,
     cachedTaskList,
+    setTaskListWrapper,
     shouldProceedToChangeTask,
     changeStateDueToChangedTaskNumber
   ]);
@@ -644,6 +646,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     currentTaskNumber,
     taskList,
     cachedTaskList,
+    setTaskListWrapper,
     shouldProceedToChangeTask,
     changeStateDueToChangedTaskNumber
   ]);
@@ -779,8 +782,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ),
         id: SideContentType.briefing,
         toSpawn: () => true
-      },
-      {
+      }
+    ];
+
+    if (isTeacherMode) {
+      // Teachers have ability to edit test cases
+      tabs.push({
         label: 'Autograder',
         iconName: IconNames.AIRPLANE,
         body: (
@@ -802,10 +809,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ),
         id: SideContentType.autograder,
         toSpawn: () => true
-      }
-    ];
-
-    if (isTeacherMode) {
+      });
+      // Teachers have ability to edit mission metadata
       tabs.push({
         label: 'Mission Metadata',
         iconName: IconNames.BUILD,
@@ -816,6 +821,20 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           />
         ),
         id: SideContentType.missionMetadata,
+        toSpawn: () => true
+      });
+    } else {
+      tabs.push({
+        label: 'Autograder',
+        iconName: IconNames.AIRPLANE,
+        body: (
+          <SideContentAutograder
+            handleTestcaseEval={props.handleTestcaseEval}
+            autogradingResults={autogradingResults ? autogradingResults : []}
+            testcases={editorTestcases}
+          />
+        ),
+        id: SideContentType.autograder,
         toSpawn: () => true
       });
     }
