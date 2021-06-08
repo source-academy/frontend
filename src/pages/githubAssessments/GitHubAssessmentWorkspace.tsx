@@ -787,28 +787,30 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     if (isTeacherMode) {
       // Teachers have ability to edit test cases
+      const testPrepend = taskList[currentTaskNumber - 1]
+        ? taskList[currentTaskNumber - 1].testPrepend
+        : '';
+      const testPostpend = taskList[currentTaskNumber - 1]
+        ? taskList[currentTaskNumber - 1].testPostpend
+        : '';
       tabs.push({
         label: 'Autograder',
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentAutograderEditor
             testcases={editorTestcases}
-            testPrepend={
-              taskList[currentTaskNumber - 1] ? taskList[currentTaskNumber - 1].testPrepend : ''
-            }
-            testPostpend={
-              taskList[currentTaskNumber - 1] ? taskList[currentTaskNumber - 1].testPostpend : ''
-            }
-            isTeacherMode={isTeacherMode}
-            handleTestcaseEval={props.handleTestcaseEval}
+            testPrepend={testPrepend}
+            testPostpend={testPostpend}
             setTaskTestcases={setTaskTestcases}
             setTestPrepend={setTestPrepend}
             setTestPostpend={setTestPostpend}
+            handleTestcaseEval={props.handleTestcaseEval}
           />
         ),
         id: SideContentType.autograder,
         toSpawn: () => true
       });
+
       // Teachers have ability to edit mission metadata
       tabs.push({
         label: 'Mission Metadata',

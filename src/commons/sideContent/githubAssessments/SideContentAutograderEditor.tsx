@@ -22,7 +22,6 @@ type StateProps = {
   testcases: Testcase[];
   testPrepend: string;
   testPostpend: string;
-  isTeacherMode: boolean;
 };
 
 const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograderEditorProps> =
@@ -35,7 +34,6 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       testcases,
       testPrepend,
       testPostpend,
-      isTeacherMode,
       handleTestcaseEval,
       setTaskTestcases,
       setTestPrepend,
@@ -106,7 +104,6 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
                 key={index}
                 index={index}
                 testcase={testcase}
-                allowEdits={isTeacherMode}
                 setTestcaseProgram={setTestcaseProgramSetterCreator(index)}
                 setTestcaseExpectedResult={setTestcaseExpectedResultSetterCreator(index)}
                 deleteTestcase={deleteTestcase}
@@ -118,7 +115,6 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           <div className="noResults">There are no testcases provided for this question.</div>
         ),
       [
-        isTeacherMode,
         testcases,
         deleteTestcase,
         handleTestcaseEval,
@@ -170,19 +166,18 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
           {createTestCaseButton}
         </Collapse>
 
-        {isTeacherMode && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
-        {isTeacherMode && (
+        {collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
+        {
           <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
             {createEditor(testPrepend, (newValue: string) => setTestPrepend(newValue))}
           </Collapse>
-        )}
-        {isTeacherMode &&
-          collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
-        {isTeacherMode && (
+        }
+        {collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
+        {
           <Collapse isOpen={showsTestPostpend} keepChildrenMounted={true}>
             {createEditor(testPostpend, (newValue: string) => setTestPostpend(newValue))}
           </Collapse>
-        )}
+        }
       </div>
     );
   };

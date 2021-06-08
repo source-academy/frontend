@@ -20,7 +20,6 @@ type DispatchProps = {
 type StateProps = {
   index: number;
   testcase: Testcase;
-  allowEdits: boolean;
 };
 
 const renderResult = (value: any) => {
@@ -38,7 +37,6 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
     const {
       index,
       testcase,
-      allowEdits,
       setTestcaseProgram,
       setTestcaseExpectedResult,
       handleTestcaseEval,
@@ -69,24 +67,17 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
     return (
       <div className={classNames('AutograderCard', extraClasses)}>
         <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE}>
-          {testcase.type === TestcaseTypes.hidden ? (
-            // Render a placeholder cell in place of the actual testcase data for hidden testcases
-            <Pre className="testcase-placeholder">Hidden testcase</Pre>
-          ) : (
+          {
             <>
-              <EditableField
+              <InputGroup
                 className="testcase-program"
-                fieldValue={testProgram}
-                allowEdits={allowEdits}
-                testcaseId={index}
-                setContent={setTestcaseProgram}
+                value={testProgram}
+                onChange={(event: any) => setTestcaseProgram(event.target.value)}
               />
-              <EditableField
+              <InputGroup
                 className="testcase-expected"
-                fieldValue={expectedAnswer}
-                allowEdits={allowEdits}
-                testcaseId={index}
-                setContent={setTestcaseExpectedResult}
+                value={expectedAnswer}
+                onChange={(event: any) => setTestcaseExpectedResult(event.target.value)}
               />
               <Pre className="testcase-actual">
                 {testcase.errors
@@ -96,58 +87,12 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
                   : 'No Answer'}
               </Pre>
             </>
-          )}
+          }
           {playButton}
           {deleteButton}
         </Card>
       </div>
     );
   };
-
-type EditableFieldProps = {
-  className: string;
-  fieldValue: string;
-  allowEdits: boolean;
-  testcaseId: number;
-  setContent: (newContent: string) => void;
-};
-
-const EditableField: React.FC<EditableFieldProps> = props => {
-  const allowEdits = props.allowEdits;
-
-  const [editorModeOn, setEditorModeOn] = React.useState(false);
-
-  const node = React.useRef() as any;
-  React.useEffect(() => {
-    function handleClick(event: any) {
-      if (!allowEdits) {
-        return;
-      }
-
-      if (node.current && !node.current.contains(event.target)) {
-        setEditorModeOn(false);
-      }
-
-      if (node.current && node.current.contains(event.target)) {
-        setEditorModeOn(true);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClick);
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-    };
-  }, [allowEdits]);
-
-  function onEditorChange(event: any) {
-    props.setContent(event.target.value);
-  }
-
-  if (editorModeOn) {
-    return <Pre className={props.className}>{props.fieldValue}</Pre>;
-  } else {
-    return <InputGroup value={props.fieldValue} onChange={onEditorChange} />;
-  }
-};
 
 export default SideContentEditableTestcaseCard;
