@@ -793,7 +793,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         body: (
           <SideContentAutograderEditor
             testcases={editorTestcases}
-            autogradingResults={autogradingResults ? autogradingResults : []}
             testPrepend={
               taskList[currentTaskNumber - 1] ? taskList[currentTaskNumber - 1].testPrepend : ''
             }

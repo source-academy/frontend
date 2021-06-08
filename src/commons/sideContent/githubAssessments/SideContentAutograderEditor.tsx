@@ -4,10 +4,9 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
+import { Testcase } from '../../assessment/AssessmentTypes';
 import controlButton from '../../ControlButton';
 import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
-import SideContentResultCard from '../SideContentResultCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 
 export type SideContentAutograderEditorProps = DispatchProps & StateProps;
@@ -20,7 +19,6 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  autogradingResults: AutogradingResult[];
   testcases: Testcase[];
   testPrepend: string;
   testPostpend: string;
@@ -32,11 +30,9 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const [showsTestPrepend, setTestPrependShown] = React.useState<boolean>(true);
     const [showsTestPostpend, setTestPostpendShown] = React.useState<boolean>(true);
     const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
-    const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
     const {
       testcases,
-      autogradingResults,
       testPrepend,
       testPostpend,
       isTeacherMode,
@@ -144,21 +140,6 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       [addTestcase]
     );
 
-    const resultCards = React.useMemo(
-      () =>
-        autogradingResults.length > 0 ? (
-          <div>
-            {resultsHeader}
-            {autogradingResults.map((result, index) => (
-              <SideContentResultCard key={index} index={index} result={result} />
-            ))}
-          </div>
-        ) : (
-          <div className="noResults">There are no results to show.</div>
-        ),
-      [autogradingResults]
-    );
-
     const toggleTestPrepend = React.useCallback(() => {
       setTestPrependShown(!showsTestPrepend);
     }, [showsTestPrepend]);
@@ -170,8 +151,6 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
     const toggleTestcases = React.useCallback(() => {
       setTestcasesShown(!showsTestcases);
     }, [showsTestcases]);
-
-    const toggleResults = React.useCallback(() => setResultsShown(!showsResults), [showsResults]);
 
     return (
       <div className="Autograder">
@@ -189,11 +168,6 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
           {testcaseCards}
           {createTestCaseButton}
-        </Collapse>
-
-        {collapseButton('Autograder Results', showsResults, toggleResults)}
-        <Collapse isOpen={showsResults} keepChildrenMounted={true}>
-          {resultCards}
         </Collapse>
 
         {isTeacherMode && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
@@ -250,17 +224,6 @@ const columnHeader = (colClass: string, colTitle: string) => (
 const testcasesHeader = (
   <div className="testcases-header">
     {columnHeader('header-fn', 'Testcase')}
-    {columnHeader('header-expected', 'Expected result')}
-    {columnHeader('header-actual', 'Actual result')}
-  </div>
-);
-
-const resultsHeader = (
-  <div className="results-header">
-    <div className="header-data">
-      {columnHeader('header-sn', 'S/N')}
-      {columnHeader('header-status', 'Testcase status')}
-    </div>
     {columnHeader('header-expected', 'Expected result')}
     {columnHeader('header-actual', 'Actual result')}
   </div>
