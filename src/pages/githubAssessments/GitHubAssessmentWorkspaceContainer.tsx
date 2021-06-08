@@ -31,7 +31,6 @@ import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWork
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {
   return {
-    autogradingResults: state.workspaces.githubAssessment.autogradingResults,
     editorPrepend: state.workspaces.githubAssessment.editorPrepend,
     editorValue: state.workspaces.githubAssessment.editorValue,
     editorPostpend: state.workspaces.githubAssessment.editorPostpend,

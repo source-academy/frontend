@@ -18,7 +18,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { AutogradingResult, Testcase } from '../../commons/assessment/AssessmentTypes';
+import { Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -114,7 +114,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  autogradingResults: AutogradingResult[];
   editorPrepend: string;
   editorValue: string | null;
   editorTestcases: Testcase[];
@@ -178,7 +177,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * Unpacked properties
    */
   const hasUnsavedChanges = props.hasUnsavedChanges;
-  const autogradingResults: AutogradingResult[] = props.autogradingResults;
   const editorTestcases = props.editorTestcases;
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleUpdateWorkspace = props.handleUpdateWorkspace;
@@ -832,7 +830,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ? taskList[currentTaskNumber - 1].testPostpend
         : '';
       tabs.push({
-        label: 'Autograder',
+        label: 'Testcases',
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentAutograderEditor
@@ -845,7 +843,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             handleTestcaseEval={props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder,
+        id: SideContentType.testcases,
         toSpawn: () => true
       });
 
@@ -864,16 +862,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       });
     } else {
       tabs.push({
-        label: 'Autograder',
+        label: 'Testcases',
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentAutograder
             handleTestcaseEval={props.handleTestcaseEval}
-            autogradingResults={autogradingResults ? autogradingResults : []}
+            autogradingResults={[]}
             testcases={editorTestcases}
           />
         ),
-        id: SideContentType.autograder,
+        id: SideContentType.testcases,
         toSpawn: () => true
       });
     }

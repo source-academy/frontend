@@ -32,6 +32,7 @@ export enum SideContentType {
   mobileEditorRun = 'mobile_editor_run',
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
+  testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   videoDisplay = 'video_display'
 }

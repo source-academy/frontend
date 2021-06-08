@@ -800,12 +800,13 @@ export function* evalCode(
      *  Each testcase runs in its own "sandbox" since the Context is cleared for each,
      *    so side-effects from one testcase don't affect others
      */
-    if (
+    const runAllAutograderTestcases =
       activeTab === SideContentType.autograder &&
-      (workspaceLocation === 'assessment' ||
-        workspaceLocation === 'grading' ||
-        workspaceLocation === 'githubAssessment')
-    ) {
+      (workspaceLocation === 'assessment' || workspaceLocation === 'grading');
+    const runAllGitHubAssessmentTestcases =
+      activeTab === SideContentType.testcases && workspaceLocation === 'githubAssessment';
+
+    if (runAllAutograderTestcases || runAllGitHubAssessmentTestcases) {
       const testcases: Testcase[] = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
       );
