@@ -3,10 +3,10 @@ import { DatePicker } from '@blueprintjs/datetime';
 import { Variant } from 'js-slang/dist/types';
 import React from 'react';
 
-import { SourceLanguage } from '../application/ApplicationTypes';
-import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
-import { MissionMetadata } from '../githubAssessments/GitHubMissionTypes';
-import Constants from '../utils/Constants';
+import { SourceLanguage } from '../../application/ApplicationTypes';
+import { ControlBarChapterSelect } from '../../controlBar/ControlBarChapterSelect';
+import { MissionMetadata } from '../../githubAssessments/GitHubMissionTypes';
+import Constants from '../../utils/Constants';
 
 export type SideContentMissionEditorProps = {
   missionMetadata: MissionMetadata;

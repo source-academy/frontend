@@ -4,11 +4,11 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
-import { showSimpleConfirmDialog } from '../utils/DialogHelper';
+import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
+import controlButton from '../../ControlButton';
+import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
+import SideContentResultCard from '../SideContentResultCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
-import SideContentResultCard from './SideContentResultCard';
 
 export type SideContentAutograderEditorProps = DispatchProps & StateProps;
 

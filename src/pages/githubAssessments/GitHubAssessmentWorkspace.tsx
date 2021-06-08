@@ -61,11 +61,11 @@ import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSide
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import SideContentAutograderEditor from '../../commons/sideContent/githubAssessments/SideContentAutograderEditor';
+import SideContentMarkdownEditor from '../../commons/sideContent/githubAssessments/SideContentMarkdownEditor';
+import SideContentMissionEditor from '../../commons/sideContent/githubAssessments/SideContentMissionEditor';
+import SideContentTaskEditor from '../../commons/sideContent/githubAssessments/SideContentTaskEditor';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
-import SideContentAutograderEditor from '../../commons/sideContent/SideContentAutograderEditor';
-import SideContentMarkdownEditor from '../../commons/sideContent/SideContentMarkdownEditor';
-import SideContentMissionEditor from '../../commons/sideContent/SideContentMissionEditor';
-import SideContentTaskEditor from '../../commons/sideContent/SideContentTaskEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
