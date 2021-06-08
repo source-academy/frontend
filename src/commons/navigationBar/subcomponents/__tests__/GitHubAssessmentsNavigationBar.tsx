@@ -6,7 +6,7 @@ import GitHubAssessmentsNavigationBar from '../GitHubAssessmentsNavigationBar';
 const props = {
   handleGitHubLogIn: () => {},
   handleGitHubLogOut: () => {},
-  octokit: new Octokit(),
+  octokit: new Octokit(undefined),
   courses: [],
   selectedCourse: '',
   setSelectedCourse: () => {},
