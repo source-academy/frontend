@@ -234,6 +234,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [cachedTaskList]
   );
 
+  const setDisplayMCQInEditorWrapper = useCallback(
+    (shouldDisplayMCQ: boolean) => {
+      if (shouldDisplayMCQ) {
+        const [isMCQText, mcqQuestion] = convertToMCQQuestionIfMCQText(
+          taskList[currentTaskNumber - 1].savedCode
+        );
+        setCurrentTaskIsMCQ(isMCQText);
+        setMCQQuestion(mcqQuestion);
+      }
+
+      setDisplayMCQInEditor(shouldDisplayMCQ);
+    },
+    [taskList, currentTaskNumber]
+  );
+
   // Forces a re-render when saveable information changes, keeps environment state in-sync with component state
   const computedHasUnsavedChanges = useMemo(() => {
     return hasUnsavedChangesToMetadata || hasUnsavedChangesToBriefing || hasUnsavedChangesToTasks;
@@ -961,8 +976,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       );
       const showMCQButton = (
         <ControlBarDisplayMCQButton
-          displayMCQInEditor={() => setDisplayMCQInEditor(true)}
-          displayTextInEditor={() => setDisplayMCQInEditor(false)}
+          displayMCQInEditor={() => setDisplayMCQInEditorWrapper(true)}
+          displayTextInEditor={() => setDisplayMCQInEditorWrapper(false)}
           mcqDisplayed={displayMCQInEditor}
           key={'display MCQ'}
         />
