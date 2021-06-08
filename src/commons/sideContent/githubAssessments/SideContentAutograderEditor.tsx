@@ -7,6 +7,7 @@ import AceEditor from 'react-ace';
 import { Testcase } from '../../assessment/AssessmentTypes';
 import controlButton from '../../ControlButton';
 import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
+import SideContentTestcaseCard from '../SideContentTestcaseCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 
 export type SideContentAutograderEditorProps = DispatchProps & StateProps;
@@ -19,6 +20,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  allowEdits: boolean;
   testcases: Testcase[];
   testPrepend: string;
   testPostpend: string;
@@ -34,6 +36,7 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       testcases,
       testPrepend,
       testPostpend,
+      allowEdits,
       handleTestcaseEval,
       setTaskTestcases,
       setTestPrepend,
@@ -94,33 +97,51 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
       [testcases, setTaskTestcases]
     );
 
-    const testcaseCards = React.useMemo(
-      () =>
-        testcases.length > 0 ? (
-          <div className="testcaseCards">
-            {testcasesHeader}
-            {testcases.map((testcase, index) => (
-              <SideContentEditableTestcaseCard
-                key={index}
-                index={index}
-                testcase={testcase}
-                setTestcaseProgram={setTestcaseProgramSetterCreator(index)}
-                setTestcaseExpectedResult={setTestcaseExpectedResultSetterCreator(index)}
-                deleteTestcase={deleteTestcase}
-                handleTestcaseEval={handleTestcaseEval}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="noResults">There are no testcases provided for this question.</div>
-        ),
+    const convertToTestcaseCard = React.useCallback(
+      (testcase, index) => {
+        if (allowEdits) {
+          return (
+            <SideContentEditableTestcaseCard
+              key={index}
+              index={index}
+              testcase={testcase}
+              setTestcaseProgram={setTestcaseProgramSetterCreator(index)}
+              setTestcaseExpectedResult={setTestcaseExpectedResultSetterCreator(index)}
+              deleteTestcase={deleteTestcase}
+              handleTestcaseEval={handleTestcaseEval}
+            />
+          );
+        } else {
+          return (
+            <SideContentTestcaseCard
+              key={index}
+              index={index}
+              testcase={testcase}
+              handleTestcaseEval={handleTestcaseEval}
+            />
+          );
+        }
+      },
       [
-        testcases,
+        allowEdits,
         deleteTestcase,
         handleTestcaseEval,
         setTestcaseProgramSetterCreator,
         setTestcaseExpectedResultSetterCreator
       ]
+    );
+
+    const testcaseCards = React.useMemo(
+      () =>
+        testcases.length > 0 ? (
+          <div className="testcaseCards">
+            {testcasesHeader}
+            {testcases.map((testcase, index) => convertToTestcaseCard(testcase, index))}
+          </div>
+        ) : (
+          <div className="noResults">There are no testcases provided for this question.</div>
+        ),
+      [testcases, convertToTestcaseCard]
     );
 
     const createTestCaseButton = React.useMemo(
@@ -163,21 +184,21 @@ const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograder
         </Button>
         <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
           {testcaseCards}
-          {createTestCaseButton}
+          {allowEdits && createTestCaseButton}
         </Collapse>
 
-        {collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
-        {
+        {allowEdits && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
+        {allowEdits && (
           <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
             {createEditor(testPrepend, (newValue: string) => setTestPrepend(newValue))}
           </Collapse>
-        }
-        {collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
-        {
+        )}
+        {allowEdits && collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
+        {allowEdits && (
           <Collapse isOpen={showsTestPostpend} keepChildrenMounted={true}>
             {createEditor(testPostpend, (newValue: string) => setTestPostpend(newValue))}
           </Collapse>
-        }
+        )}
       </div>
     );
   };
