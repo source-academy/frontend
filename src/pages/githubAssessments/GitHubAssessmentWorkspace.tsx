@@ -820,12 +820,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     ];
 
-    const testPrepend = taskList[currentTaskNumber - 1]
-      ? taskList[currentTaskNumber - 1].testPrepend
-      : '';
-    const testPostpend = taskList[currentTaskNumber - 1]
-      ? taskList[currentTaskNumber - 1].testPostpend
-      : '';
+    const taskIndex = currentTaskNumber - 1;
+    const testPrepend = taskList[taskIndex] ? taskList[taskIndex].testPrepend : '';
+    const testPostpend = taskList[taskIndex] ? taskList[taskIndex].testPostpend : '';
     tabs.push({
       label: 'Testcases',
       iconName: IconNames.AIRPLANE,
@@ -860,64 +857,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         toSpawn: () => true
       });
     }
-
-    /*
-    if (isTeacherMode) {
-      // Teachers have ability to edit test cases
-      const testPrepend = taskList[currentTaskNumber - 1]
-        ? taskList[currentTaskNumber - 1].testPrepend
-        : '';
-      const testPostpend = taskList[currentTaskNumber - 1]
-        ? taskList[currentTaskNumber - 1].testPostpend
-        : '';
-      tabs.push({
-        label: 'Testcases',
-        iconName: IconNames.AIRPLANE,
-        body: (
-          <SideContentAutograderEditor
-            allowEdits={isTeacherMode}
-            testcases={editorTestcases}
-            testPrepend={testPrepend}
-            testPostpend={testPostpend}
-            setTaskTestcases={setTaskTestcases}
-            setTestPrepend={setTestPrepend}
-            setTestPostpend={setTestPostpend}
-            handleTestcaseEval={props.handleTestcaseEval}
-          />
-        ),
-        id: SideContentType.testcases,
-        toSpawn: () => true
-      });
-
-      // Teachers have ability to edit mission metadata
-      tabs.push({
-        label: 'Mission Metadata',
-        iconName: IconNames.BUILD,
-        body: (
-          <SideContentMissionEditor
-            missionMetadata={missionMetadata}
-            setMissionMetadata={setMissionMetadataWrapper}
-          />
-        ),
-        id: SideContentType.missionMetadata,
-        toSpawn: () => true
-      });
-    } else {
-      tabs.push({
-        label: 'Testcases',
-        iconName: IconNames.AIRPLANE,
-        body: (
-          <SideContentAutograder
-            handleTestcaseEval={props.handleTestcaseEval}
-            autogradingResults={[]}
-            testcases={editorTestcases}
-          />
-        ),
-        id: SideContentType.testcases,
-        toSpawn: () => true
-      });
-    }
-    */
 
     return {
       handleActiveTabChange: props.handleActiveTabChange,
