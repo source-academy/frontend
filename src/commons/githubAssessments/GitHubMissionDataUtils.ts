@@ -542,12 +542,14 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean
     maxXp: 0
   } as IMCQQuestion;
 
-  if (possibleMCQText.substring(0, 3).toLowerCase() === 'mcq') {
+  const trimmedText = possibleMCQText.trim();
+
+  if (trimmedText.substring(0, 3).toLowerCase() === 'mcq') {
     isMCQText = true;
   }
 
   if (isMCQText) {
-    const onlyQuestionInformation = possibleMCQText.substring(3, possibleMCQText.length);
+    const onlyQuestionInformation = trimmedText.substring(3, trimmedText.length);
     try {
       const intermediateObject = JSON.parse(onlyQuestionInformation);
 
