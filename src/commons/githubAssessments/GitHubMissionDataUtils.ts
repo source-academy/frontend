@@ -3,6 +3,7 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
+import { isEqual } from 'lodash';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { IMCQQuestion, Testcase } from '../assessment/AssessmentTypes';
@@ -432,7 +433,7 @@ export function discoverFilesToBeChangedWithMissionRepoData(
         const currentValue = taskList[i][propertyName];
         const cachedValue = cachedTaskList[i][propertyName];
 
-        if (!objectsAreEqual(currentValue, cachedValue)) {
+        if (!isEqual(currentValue, cachedValue)) {
           const onRepoFileName =
             questionFolderName + '/' + taskDataPropertyTable[propertyName].fileName;
           const stringContent = taskDataPropertyTable[propertyName].toStringConverter(
@@ -516,49 +517,6 @@ export function discoverFilesToBeCreatedWithoutMissionRepoData(
   }
 
   return filenameToContentMap;
-}
-
-export function objectsAreEqual(firstObject: any, secondObject: any) {
-  if (firstObject === secondObject) {
-    return true;
-  }
-
-  if (typeof firstObject !== 'object' && typeof secondObject !== 'object') {
-    return firstObject === secondObject;
-  }
-
-  if (Array.isArray(firstObject) && Array.isArray(secondObject)) {
-    if (firstObject.length !== secondObject.length) {
-      return false;
-    }
-
-    for (let i = 0; i < firstObject.length; i++) {
-      if (!objectsAreEqual(firstObject[i], secondObject[i])) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  const firstKeys = Object.keys(firstObject);
-  const secondKeys = Object.keys(secondObject);
-
-  if (firstKeys.length !== secondKeys.length) {
-    return false;
-  }
-
-  for (let i = 0; i < firstKeys.length; i++) {
-    if (!objectsAreEqual(firstObject[firstKeys[i]], secondObject[firstKeys[i]])) {
-      return false;
-    }
-
-    if (!objectsAreEqual(firstObject[secondKeys[i]], secondObject[secondKeys[i]])) {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 /**

@@ -11,6 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
+import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
@@ -42,8 +43,7 @@ import {
   convertToMCQQuestionIfMCQText,
   discoverFilesToBeChangedWithMissionRepoData,
   discoverFilesToBeCreatedWithoutMissionRepoData,
-  getMissionData,
-  objectsAreEqual
+  getMissionData
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
   GitHubMissionSaveDialog,
@@ -221,7 +221,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const setMissionMetadataWrapper = useCallback(
     (newMissionMetadata: MissionMetadata) => {
       setMissionMetadata(newMissionMetadata);
-      setHasUnsavedChangesToMetadata(!objectsAreEqual(newMissionMetadata, cachedMissionMetadata));
+      setHasUnsavedChangesToMetadata(!isEqual(newMissionMetadata, cachedMissionMetadata));
     },
     [cachedMissionMetadata]
   );
@@ -229,7 +229,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const setTaskListWrapper = useCallback(
     (newTaskList: TaskData[]) => {
       setTaskList(newTaskList);
-      setHasUnsavedChangesToTasks(!objectsAreEqual(newTaskList, cachedTaskList));
+      setHasUnsavedChangesToTasks(!isEqual(newTaskList, cachedTaskList));
     },
     [cachedTaskList]
   );
@@ -620,7 +620,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
 
       const taskIndex = currentTaskNumber - 1;
-      if (!objectsAreEqual(taskList[taskIndex], cachedTaskList[taskIndex])) {
+      if (!isEqual(taskList[taskIndex], cachedTaskList[taskIndex])) {
         return window.confirm(
           'You have unsaved changes to the current question. Are you sure you want to continue?'
         );
