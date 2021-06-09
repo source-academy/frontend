@@ -322,7 +322,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList([defaultTask]);
     setCachedTaskList([defaultTask]);
 
-    setDisplayMCQInEditorWrapper(false);
+    setDisplayMCQInEditor(false);
     changeStateDueToChangedTaskNumber(1, [defaultTask]);
 
     setHasUnsavedChangesToTasks(false);
@@ -750,7 +750,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       };
       setTaskListWrapper(editedTaskList);
     },
-    [currentTaskNumber, taskList, handleUpdateWorkspace, handleReplOutputClear, setTaskListWrapper]
+    [currentTaskNumber, taskList, setTaskListWrapper]
   );
 
   const setTestPrepend = useCallback(

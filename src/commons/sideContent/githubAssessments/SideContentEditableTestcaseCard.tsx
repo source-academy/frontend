@@ -1,4 +1,4 @@
-import { Button, Card, Classes, Elevation, InputGroup, Pre } from '@blueprintjs/core';
+import { Button, Card, Classes, Elevation, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
@@ -64,6 +64,18 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
     const playButton = <Button icon={IconNames.PLAY} onClick={handleRunTestcase} />;
     const deleteButton = <Button icon={IconNames.DELETE} onClick={() => deleteTestcase(index)} />;
 
+    const answer = React.useMemo(() => {
+      let answer = 'No Answer';
+      if (testcase.errors) {
+        answer = parseError(testcase.errors);
+      } else {
+        if (testcase.result !== undefined) {
+          answer = renderResult(testcase.result) as string;
+        }
+      }
+      return answer;
+    }, [testcase]);
+
     return (
       <div className={classNames('AutograderCard', extraClasses)}>
         <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE}>
@@ -79,13 +91,10 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
                 value={expectedAnswer}
                 onChange={(event: any) => setTestcaseExpectedResult(event.target.value)}
               />
-              <Pre className="testcase-actual">
-                {testcase.errors
-                  ? parseError(testcase.errors)
-                  : testcase.result !== undefined
-                  ? renderResult(testcase.result)
-                  : 'No Answer'}
-              </Pre>
+              <InputGroup
+                className="testcase-actual"
+                value={answer}
+              />
             </>
           }
           {playButton}
