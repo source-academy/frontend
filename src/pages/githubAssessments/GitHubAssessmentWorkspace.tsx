@@ -748,15 +748,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         ...editedTaskList[currentTaskNumber - 1],
         testCases: newTestcases
       };
-
-      handleUpdateWorkspace({
-        editorValue: editedTaskList[currentTaskNumber - 1].savedCode,
-        editorPrepend: editedTaskList[currentTaskNumber - 1].testPrepend,
-        editorPostpend: editedTaskList[currentTaskNumber - 1].testPostpend,
-        editorTestcases: editedTaskList[currentTaskNumber - 1].testCases
-      });
-      handleReplOutputClear();
-
       setTaskListWrapper(editedTaskList);
     },
     [currentTaskNumber, taskList, handleUpdateWorkspace, handleReplOutputClear, setTaskListWrapper]
