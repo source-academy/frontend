@@ -263,48 +263,59 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    */
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
-    const missionData: MissionData = await getMissionData(missionRepoData, octokit);
-    setSummary(missionData.missionBriefing);
 
-    setMissionMetadata(missionData.missionMetadata);
-    setCachedMissionMetadata(missionData.missionMetadata);
+    const setStateDueToMissionDataPromise = getMissionData(missionRepoData, octokit).then(
+      (missionData: MissionData) => {
+        setSummary(missionData.missionBriefing);
 
-    setBriefingContent(missionData.missionBriefing);
-    setCachedBriefingContent(missionData.missionBriefing);
+        setMissionMetadata(missionData.missionMetadata);
+        setCachedMissionMetadata(missionData.missionMetadata);
 
-    setTaskList(missionData.tasksData);
-    setCachedTaskList(
-      missionData.tasksData.map((taskData: TaskData) => Object.assign({}, taskData))
+        setBriefingContent(missionData.missionBriefing);
+        setCachedBriefingContent(missionData.missionBriefing);
+
+        setTaskList(missionData.tasksData);
+        setCachedTaskList(
+          missionData.tasksData.map((taskData: TaskData) => Object.assign({}, taskData))
+        );
+
+        changeStateDueToChangedTaskNumber(1, missionData.tasksData);
+      }
     );
 
-    changeStateDueToChangedTaskNumber(1, missionData.tasksData);
+    const setIsTeacherModePromise = octokit.users
+      .getAuthenticated()
+      .then((authenticatedUser: any) => {
+        const userLogin = authenticatedUser.data.login;
+        return userLogin === missionRepoData.repoOwner;
+      })
+      .then(async (userOwnsRepo: boolean) => {
+        if (userOwnsRepo) return true;
+
+        const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
+        let userOrganisationOwnsRepo = false;
+        for (let i = 0; i < userOrganisations.length; i++) {
+          const org = userOrganisations[i];
+          // User has admin access to an organization owning the repo
+          userOrganisationOwnsRepo = org.login === missionRepoData.repoOwner;
+          if (userOrganisationOwnsRepo) {
+            break;
+          }
+        }
+        return userOrganisationOwnsRepo;
+      })
+      .then((userInTeacherMode: boolean) => setIsTeacherMode(userInTeacherMode));
+
+    const promises = [setStateDueToMissionDataPromise, setIsTeacherModePromise];
 
     setHasUnsavedChangesToTasks(false);
     setHasUnsavedChangesToBriefing(false);
     setHasUnsavedChangesToMetadata(false);
     handleUpdateHasUnsavedChanges(false);
 
-    let userInTeacherMode = false;
-    const userLogin = (await octokit.users.getAuthenticated()).data.login;
-    if (userLogin === missionRepoData.repoOwner) {
-      // User is direct owner of repo
-      userInTeacherMode = true;
-    } else {
-      const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
-      for (let i = 0; i < userOrganisations.length; i++) {
-        const org = userOrganisations[i];
-
-        // User has admin access to an organization owning the repo
-        userInTeacherMode = org.login === missionRepoData.repoOwner;
-        if (userInTeacherMode) {
-          break;
-        }
-      }
-    }
-    setIsTeacherMode(userInTeacherMode);
-
-    setIsLoading(false);
-    if (missionData.missionBriefing !== '') setShowBriefingOverlay(true);
+    Promise.all(promises).then((results: any) => {
+      setIsLoading(false);
+    });
   }, [changeStateDueToChangedTaskNumber, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
 
   /**
