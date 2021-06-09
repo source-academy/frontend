@@ -840,6 +840,7 @@ test('convertToMCQQuestionIfMCQText returns false if mcq text is legitimate', ()
 
 test('convertIMCQQuestionToMCQText works properly', () => {
   const studentAnswer = 4;
+  const correctAnswer = 2;
   const possibleChoices = [
     { content: 'Θ(1)', hint: 'one' },
     { content: 'Θ(log _n_)', hint: 'two' },
@@ -852,7 +853,7 @@ test('convertIMCQQuestionToMCQText works properly', () => {
   const inputMCQObject = {
     answer: studentAnswer,
     choices: possibleChoices,
-    solution: -1,
+    solution: correctAnswer,
     type: 'mcq',
     content: '',
     grade: 0,
@@ -873,7 +874,8 @@ test('convertIMCQQuestionToMCQText works properly', () => {
             hint: choice.hint
           };
         }),
-        answer: studentAnswer
+        answer: studentAnswer,
+        solution: correctAnswer
       },
       null,
       4
