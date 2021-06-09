@@ -1,8 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
-import { maximumTasksPerMission } from '../githubAssessments/GitHubMissionDataUtils';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import controlButton from '../../ControlButton';
+import { maximumTasksPerMission } from '../../githubAssessments/GitHubMissionDataUtils';
+import { showWarningMessage } from '../../utils/NotificationsHelper';
 
 export type ControlBarTaskAddButtonProps = {
   addNewQuestion: () => void;

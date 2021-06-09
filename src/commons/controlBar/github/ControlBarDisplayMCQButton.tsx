@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
+import controlButton from '../../ControlButton';
 
 type ControlBarDisplayMCQButtonProps = DispatchProps & StateProps;
 

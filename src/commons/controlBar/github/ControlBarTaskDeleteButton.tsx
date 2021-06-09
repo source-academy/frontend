@@ -1,8 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
-import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import controlButton from '../../ControlButton';
+import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
+import { showWarningMessage } from '../../utils/NotificationsHelper';
 
 export type ControlBarTaskDeleteButtonProps = {
   deleteCurrentQuestion: () => void;

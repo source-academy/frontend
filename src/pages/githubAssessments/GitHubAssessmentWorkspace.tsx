@@ -22,7 +22,6 @@ import { Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarDisplayMCQButton } from '../../commons/controlBar/ControlBarDisplayMCQButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
@@ -30,8 +29,9 @@ import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBa
 import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
-import { ControlBarTaskAddButton } from '../../commons/controlBar/ControlBarTaskAddButton';
-import { ControlBarTaskDeleteButton } from '../../commons/controlBar/ControlBarTaskDeleteButton';
+import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
+import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
+import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import {
   GitHubMissionCreateDialog,

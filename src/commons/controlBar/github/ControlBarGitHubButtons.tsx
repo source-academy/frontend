@@ -5,9 +5,9 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { GitHubState } from '../../features/github/GitHubTypes';
-import controlButton from '../ControlButton';
-import Constants from '../utils/Constants';
+import { GitHubState } from '../../../features/github/GitHubTypes';
+import controlButton from '../../ControlButton';
+import Constants from '../../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs: Octokit;
