@@ -330,6 +330,7 @@ export async function performFolderDeletion(
 
     // This function must apply deletion to an entire folder
     if (!Array.isArray(files)) {
+      showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
       return;
     }
 
@@ -345,9 +346,9 @@ export async function performFolderDeletion(
       });
     }
 
-    showSuccessMessage('Successfully deleted file!', 1000);
+    showSuccessMessage('Successfully deleted folder!', 1000);
   } catch (err) {
     console.error(err);
-    showWarningMessage('Something went wrong when trying to delete the file.', 1000);
+    showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
   }
 }
