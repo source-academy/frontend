@@ -10,7 +10,7 @@ import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
 import SideContentTestcaseCard from '../SideContentTestcaseCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 
-export type SideContentAutograderEditorProps = DispatchProps & StateProps;
+export type SideContentTestcaseEditorProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
@@ -26,7 +26,7 @@ type StateProps = {
   testPostpend: string;
 };
 
-const SideContentAutograderEditor: React.FunctionComponent<SideContentAutograderEditorProps> =
+const SideContentTestcaseEditor: React.FunctionComponent<SideContentTestcaseEditorProps> =
   props => {
     const [showsTestPrepend, setTestPrependShown] = React.useState<boolean>(true);
     const [showsTestPostpend, setTestPostpendShown] = React.useState<boolean>(true);
@@ -251,4 +251,4 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     minimal: true
   });
 
-export default SideContentAutograderEditor;
+export default SideContentTestcaseEditor;
