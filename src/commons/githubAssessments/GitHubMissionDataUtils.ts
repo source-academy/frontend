@@ -539,6 +539,9 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean
 
       mcqQuestion.answer = studentAnswer;
       mcqQuestion.choices = choices;
+      if (intermediateObject.solution) {
+        mcqQuestion.solution = intermediateObject.solution;
+      }
     } catch (err) {
       isMCQText = false;
     }
