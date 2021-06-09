@@ -48,10 +48,7 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
             onChange={handleChangeMissionSummary}
           />
           <InputGroup defaultValue={props.missionMetadata.type} onChange={handleChangeType} />
-          <InputGroup
-            defaultValue={props.missionMetadata.id}
-            onChange={handleChangeMissionId}
-          />
+          <InputGroup defaultValue={props.missionMetadata.id} onChange={handleChangeMissionId} />
           <ControlBarChapterSelect
             sourceChapter={props.missionMetadata.sourceVersion}
             sourceVariant={Constants.defaultSourceVariant as Variant}
