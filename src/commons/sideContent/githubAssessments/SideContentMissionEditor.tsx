@@ -25,11 +25,11 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
     <div className="SideContentMissionEditor">
       <div className="SideContentMissionEditorRow">
         <div className="SideContentMissionEditorLabelColumn">
-          <Label>Mission Title</Label>
+          <Label>Title</Label>
           <Label>Cover Image Link</Label>
-          <Label>Mission Summary</Label>
-          <Label>Mission Type</Label>
-          <Label>Mission Number</Label>
+          <Label>Summary</Label>
+          <Label>Type</Label>
+          <Label>ID</Label>
           <Label>Source Version</Label>
           <Label>Reading</Label>
           <Label>Due Date</Label>
