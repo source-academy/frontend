@@ -7,7 +7,7 @@ import SideContentMissionEditor from '../SideContentMissionEditor';
 test('typing into SideContentMissionEditor text boxes triggers setter function', () => {
   const missionMetadata = {
     coverImage: 'dummyCoverImage',
-    kind: 'dummyKind',
+    type: 'dummyType',
     number: 'dummyNumber',
     title: 'dummyTitle',
     sourceVersion: 1,
@@ -37,10 +37,10 @@ test('typing into SideContentMissionEditor text boxes triggers setter function',
   userEvent.type(coverImageText, 'realCoverImage');
   expect(outsideValue.coverImage).toBe('realCoverImage');
 
-  const kindText = screen.getByDisplayValue('dummyKind');
-  userEvent.clear(kindText);
-  userEvent.type(kindText, 'realKind');
-  expect(outsideValue.kind).toBe('realKind');
+  const typeText = screen.getByDisplayValue('dummyType');
+  userEvent.clear(typeText);
+  userEvent.type(typeText, 'realType');
+  expect(outsideValue.type).toBe('realType');
 
   const numberText = screen.getByDisplayValue('dummyNumber');
   userEvent.clear(numberText);

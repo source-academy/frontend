@@ -11,7 +11,7 @@ export const defaultStarterCode = '// Your code here!\n';
 
 export const defaultMissionMetadata = {
   coverImage: '',
-  kind: '',
+  type: '',
   number: '',
   title: '',
   sourceVersion: 1,

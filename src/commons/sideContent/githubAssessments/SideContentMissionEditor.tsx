@@ -47,7 +47,7 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
             defaultValue={props.missionMetadata.webSummary}
             onChange={handleChangeMissionSummary}
           />
-          <InputGroup defaultValue={props.missionMetadata.kind} onChange={handleChangeKind} />
+          <InputGroup defaultValue={props.missionMetadata.type} onChange={handleChangeKind} />
           <InputGroup
             defaultValue={props.missionMetadata.number}
             onChange={handleChangeMissionNumber}
@@ -97,7 +97,7 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
   }
 
   function handleChangeKind(event: any) {
-    setMissionMetadataWrapper<string>('kind', event.target.value);
+    setMissionMetadataWrapper<string>('type', event.target.value);
   }
 
   function handleDateChange(date: Date) {

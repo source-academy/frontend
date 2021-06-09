@@ -25,13 +25,13 @@ test('getContentAsString correctly gets content and translates from Base64 to ut
 
 test('parseMetadataProperties correctly discovers properties', () => {
   const missionMetadata = Object.assign({}, dummyMissionMetadata);
-  const stringPropsToExtract = ['coverImage', 'kind', 'number', 'title', 'reading', 'webSummary'];
+  const stringPropsToExtract = ['coverImage', 'type', 'number', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];
 
   const metadataString =
     'coverImage=www.somelink.com\n' +
-    'kind=Mission\n' +
+    'type=Mission\n' +
     'number=M3\n' +
     'title=Dummy Mission\n' +
     'reading=Textbook Pages 1 to 234763\n' +
@@ -48,7 +48,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
   );
 
   expect(retVal.coverImage).toBe('www.somelink.com');
-  expect(retVal.kind).toBe('Mission');
+  expect(retVal.type).toBe('Mission');
   expect(retVal.number).toBe('M3');
   expect(retVal.title).toBe('Dummy Mission');
   expect(retVal.reading).toBe('Textbook Pages 1 to 234763');
@@ -80,7 +80,7 @@ test('getMissionData works properly', async () => {
       const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from(
         'coverImage=www.somelink.com\n' +
-          'kind=Mission\n' +
+          'type=Mission\n' +
           'number=M3\n' +
           'title=Dummy Mission\n' +
           'reading=Textbook Pages 1 to 234763\n' +
@@ -185,7 +185,7 @@ test('getMissionData works properly', async () => {
   expect(missionData.missionBriefing).toBe('Briefing Content');
 
   expect(missionData.missionMetadata.coverImage).toBe('www.somelink.com');
-  expect(missionData.missionMetadata.kind).toBe('Mission');
+  expect(missionData.missionMetadata.type).toBe('Mission');
   expect(missionData.missionMetadata.number).toBe('M3');
   expect(missionData.missionMetadata.title).toBe('Dummy Mission');
   expect(missionData.missionMetadata.reading).toBe('Textbook Pages 1 to 234763');
@@ -929,7 +929,7 @@ function generateGetContentResponse() {
 
 const dummyMissionMetadata = {
   coverImage: 'www.eh',
-  kind: 'mission',
+  type: 'mission',
   number: 'M2',
   title: 'Dummy',
   sourceVersion: 1,
@@ -940,7 +940,7 @@ const dummyMissionMetadata = {
 
 const defaultMissionMetadata = {
   coverImage: '',
-  kind: '',
+  type: '',
   number: '',
   title: '',
   sourceVersion: 1,
