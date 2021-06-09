@@ -12,7 +12,7 @@ export const defaultStarterCode = '// Your code here!\n';
 export const defaultMissionMetadata = {
   coverImage: '',
   type: '',
-  number: '',
+  id: '',
   title: '',
   sourceVersion: 1,
   dueDate: new Date(8640000000000000),

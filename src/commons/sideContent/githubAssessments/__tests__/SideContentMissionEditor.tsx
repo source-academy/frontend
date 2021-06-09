@@ -8,7 +8,7 @@ test('typing into SideContentMissionEditor text boxes triggers setter function',
   const missionMetadata = {
     coverImage: 'dummyCoverImage',
     type: 'dummyType',
-    number: 'dummyNumber',
+    id: 'dummyNumber',
     title: 'dummyTitle',
     sourceVersion: 1,
     dueDate: new Date(),
@@ -45,7 +45,7 @@ test('typing into SideContentMissionEditor text boxes triggers setter function',
   const numberText = screen.getByDisplayValue('dummyNumber');
   userEvent.clear(numberText);
   userEvent.type(numberText, 'realNumber');
-  expect(outsideValue.number).toBe('realNumber');
+  expect(outsideValue.id).toBe('realNumber');
 
   const titleText = screen.getByDisplayValue('dummyTitle');
   userEvent.clear(titleText);

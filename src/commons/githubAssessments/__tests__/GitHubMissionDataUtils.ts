@@ -25,14 +25,14 @@ test('getContentAsString correctly gets content and translates from Base64 to ut
 
 test('parseMetadataProperties correctly discovers properties', () => {
   const missionMetadata = Object.assign({}, dummyMissionMetadata);
-  const stringPropsToExtract = ['coverImage', 'type', 'number', 'title', 'reading', 'webSummary'];
+  const stringPropsToExtract = ['coverImage', 'type', 'id', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];
 
   const metadataString =
     'coverImage=www.somelink.com\n' +
     'type=Mission\n' +
-    'number=M3\n' +
+    'id=M3\n' +
     'title=Dummy Mission\n' +
     'reading=Textbook Pages 1 to 234763\n' +
     'dueDate=December 17, 1995 03:24:00\n' +
@@ -49,7 +49,7 @@ test('parseMetadataProperties correctly discovers properties', () => {
 
   expect(retVal.coverImage).toBe('www.somelink.com');
   expect(retVal.type).toBe('Mission');
-  expect(retVal.number).toBe('M3');
+  expect(retVal.id).toBe('M3');
   expect(retVal.title).toBe('Dummy Mission');
   expect(retVal.reading).toBe('Textbook Pages 1 to 234763');
   expect(retVal.webSummary).toBe('no');
@@ -81,7 +81,7 @@ test('getMissionData works properly', async () => {
       (contentResponse.data as any).content = Buffer.from(
         'coverImage=www.somelink.com\n' +
           'type=Mission\n' +
-          'number=M3\n' +
+          'id=M3\n' +
           'title=Dummy Mission\n' +
           'reading=Textbook Pages 1 to 234763\n' +
           'webSummary=no\n' +
@@ -186,7 +186,7 @@ test('getMissionData works properly', async () => {
 
   expect(missionData.missionMetadata.coverImage).toBe('www.somelink.com');
   expect(missionData.missionMetadata.type).toBe('Mission');
-  expect(missionData.missionMetadata.number).toBe('M3');
+  expect(missionData.missionMetadata.id).toBe('M3');
   expect(missionData.missionMetadata.title).toBe('Dummy Mission');
   expect(missionData.missionMetadata.reading).toBe('Textbook Pages 1 to 234763');
   expect(missionData.missionMetadata.webSummary).toBe('no');
@@ -930,7 +930,7 @@ function generateGetContentResponse() {
 const dummyMissionMetadata = {
   coverImage: 'www.eh',
   type: 'mission',
-  number: 'M2',
+  id: 'M2',
   title: 'Dummy',
   sourceVersion: 1,
   dueDate: new Date('December 17, 1996 03:24:00'),
@@ -941,7 +941,7 @@ const dummyMissionMetadata = {
 const defaultMissionMetadata = {
   coverImage: '',
   type: '',
-  number: '',
+  id: '',
   title: '',
   sourceVersion: 1,
   dueDate: new Date(8640000000000000),

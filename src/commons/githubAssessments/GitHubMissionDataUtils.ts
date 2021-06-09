@@ -282,14 +282,14 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
   const missionMetadata: MissionMetadata = {
     coverImage: '',
     type: '',
-    number: '',
+    id: '',
     title: '',
     sourceVersion: 1,
     dueDate: new Date(8640000000000000),
     reading: '',
     webSummary: ''
   };
-  const stringPropsToExtract = ['coverImage', 'type', 'number', 'title', 'reading', 'webSummary'];
+  const stringPropsToExtract = ['coverImage', 'type', 'id', 'title', 'reading', 'webSummary'];
   const numPropsToExtract = ['sourceVersion'];
   const datePropsToExtract = ['dueDate'];
 
@@ -311,7 +311,7 @@ function convertMissionMetadataToMetadataString(missionMetadata: MissionMetadata
     'webSummary',
     'dueDate',
     'type',
-    'number',
+    'id',
     'sourceVersion',
     'reading'
   ];

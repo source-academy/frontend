@@ -47,10 +47,10 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
             defaultValue={props.missionMetadata.webSummary}
             onChange={handleChangeMissionSummary}
           />
-          <InputGroup defaultValue={props.missionMetadata.type} onChange={handleChangeKind} />
+          <InputGroup defaultValue={props.missionMetadata.type} onChange={handleChangeType} />
           <InputGroup
-            defaultValue={props.missionMetadata.number}
-            onChange={handleChangeMissionNumber}
+            defaultValue={props.missionMetadata.id}
+            onChange={handleChangeMissionId}
           />
           <ControlBarChapterSelect
             sourceChapter={props.missionMetadata.sourceVersion}
@@ -88,15 +88,15 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
     setMissionMetadataWrapper<number>('sourceVersion', i.chapter);
   }
 
-  function handleChangeMissionNumber(event: any) {
-    setMissionMetadataWrapper<string>('number', event.target.value);
+  function handleChangeMissionId(event: any) {
+    setMissionMetadataWrapper<string>('id', event.target.value);
   }
 
   function handleChangeReading(event: any) {
     setMissionMetadataWrapper<string>('reading', event.target.value);
   }
 
-  function handleChangeKind(event: any) {
+  function handleChangeType(event: any) {
     setMissionMetadataWrapper<string>('type', event.target.value);
   }
 

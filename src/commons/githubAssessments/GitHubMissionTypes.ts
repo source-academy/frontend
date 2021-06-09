@@ -19,7 +19,7 @@ export type TaskData = {
 export type MissionMetadata = {
   coverImage: string;
   type: string;
-  number: string;
+  id: string;
   title: string;
   sourceVersion: number;
   dueDate: Date;
