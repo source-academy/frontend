@@ -154,53 +154,30 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
           }
 
           const folderContentsAsArray = folderContents.data as any[];
+          const folderContentFileNames = folderContentsAsArray.map(
+            (file: any) => file.name as string
+          );
 
           const properties = Object.keys(taskDataPropertyTable);
 
-          const propertyFileFound = {};
-          properties.forEach((propertyName: string) => {
-            propertyFileFound[propertyName] = false;
+          const filteredProperties = properties.filter((property: string) =>
+            folderContentFileNames.includes(taskDataPropertyTable[property].fileName)
+          );
+
+          const promises = filteredProperties.map(async (property: string) => {
+            const fileName = taskDataPropertyTable[property].fileName;
+
+            const stringContent = await getContentAsString(
+              repoOwner,
+              repoName,
+              questionFolderName + '/' + fileName,
+              octokit
+            );
+
+            return taskDataPropertyTable[property].fromStringConverter(stringContent);
           });
 
-          // Figure out if the files exist
-          folderContentsAsArray.forEach((folderContent: any) => {
-            const fileName = folderContent.name;
-
-            for (let k = 0; k < properties.length; k++) {
-              const property = properties[k];
-              if (fileName === taskDataPropertyTable[property].fileName) {
-                propertyFileFound[property] = true;
-                break;
-              }
-            }
-          });
-
-          const stringContentPromises: Promise<string>[] = [];
-          const propertyNameToIndexMap = {};
-          let arrayIndex = 0;
-
-          properties.forEach((propertyName: string) => {
-            const fileName = taskDataPropertyTable[propertyName].fileName;
-            const found = propertyFileFound[propertyName];
-
-            if (found) {
-              stringContentPromises.push(
-                getContentAsString(
-                  repoOwner,
-                  repoName,
-                  questionFolderName + '/' + fileName,
-                  octokit
-                ).then((stringContent: string) =>
-                  taskDataPropertyTable[propertyName].fromStringConverter(stringContent)
-                )
-              );
-
-              propertyNameToIndexMap[propertyName] = arrayIndex;
-              arrayIndex++;
-            }
-          });
-
-          return Promise.all(stringContentPromises).then((stringContents: string[]) => {
+          return Promise.all(promises).then((stringContents: string[]) => {
             const taskData: TaskData = {
               questionNumber: i,
               taskDescription: '',
@@ -211,11 +188,9 @@ async function getTasksData(repoOwner: string, repoName: string, octokit: Octoki
               testCases: []
             };
 
-            const foundProperties = Object.keys(propertyNameToIndexMap);
-
-            foundProperties.forEach((propertyName: string) => {
-              taskData[propertyName] = stringContents[propertyNameToIndexMap[propertyName]];
-            });
+            for (let i = 0; i < stringContents.length; i++) {
+              taskData[filteredProperties[i]] = stringContents[i];
+            }
 
             if (taskData.savedCode === '') {
               taskData.savedCode = taskData.starterCode;
