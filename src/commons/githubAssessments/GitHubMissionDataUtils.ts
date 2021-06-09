@@ -565,8 +565,13 @@ export function convertIMCQQuestionToMCQText(mcq: IMCQQuestion) {
 
   const json = {
     questions: questions,
-    answer: studentAnswer
+    answer: studentAnswer,
+    solution: -1
   };
+
+  if (mcq.solution) {
+    json.solution = mcq.solution;
+  }
 
   return 'MCQ\n' + jsonStringify(json);
 }
