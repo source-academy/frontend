@@ -91,7 +91,7 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
                 value={expectedAnswer}
                 onChange={(event: any) => setTestcaseExpectedResult(event.target.value)}
               />
-              <InputGroup className="testcase-actual" value={answer} />
+              <InputGroup className="testcase-actual" value={answer} readOnly={true} />
             </>
           }
           {playButton}
