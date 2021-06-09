@@ -191,7 +191,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       const actualTaskIndex = newTaskNumber - 1;
 
       handleUpdateWorkspace({
-        autogradingResults: [],
         editorValue: currentTaskList[actualTaskIndex].savedCode,
         editorPrepend: currentTaskList[actualTaskIndex].testPrepend,
         editorPostpend: currentTaskList[actualTaskIndex].testPostpend,
@@ -750,7 +749,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       };
 
       handleUpdateWorkspace({
-        autogradingResults: [],
         editorValue: editedTaskList[currentTaskNumber - 1].savedCode,
         editorPrepend: editedTaskList[currentTaskNumber - 1].testPrepend,
         editorPostpend: editedTaskList[currentTaskNumber - 1].testPostpend,
