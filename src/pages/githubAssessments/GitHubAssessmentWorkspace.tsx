@@ -322,6 +322,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setTaskList([defaultTask]);
     setCachedTaskList([defaultTask]);
 
+    setDisplayMCQInEditorWrapper(false);
     changeStateDueToChangedTaskNumber(1, [defaultTask]);
 
     setHasUnsavedChangesToTasks(false);
