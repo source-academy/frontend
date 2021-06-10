@@ -1,8 +1,7 @@
 import { IMCQQuestion } from '../../commons/assessment/AssessmentTypes';
 import { MissionMetadata, TaskData } from '../../commons/githubAssessments/GitHubMissionTypes';
 
-export const defaultMissionBriefing =
-`### Assignment Briefing (Click to Edit!)
+export const defaultMissionBriefing = `### Assignment Briefing (Click to Edit!)
 Welcome to Assignment Creator! This is where the Briefing for each assignment will appear.
 
 If you are on the SourceAcademy website, you may edit **this section** by clicking on it. You can also add or delete questions through the control bar.
@@ -35,8 +34,7 @@ It is also possible to embed images, like this:
 If you need a more detailed cheatsheet, please click [here](https://www.markdownguide.org/cheat-sheet/)!
 `;
 
-export const defaultTaskDescription =
-`### Problem Description (Click to Edit!)
+export const defaultTaskDescription = `### Problem Description (Click to Edit!)
 Welcome to the Assignment Creator! This is where the problem description specific to each problem should be written.
 
 If you are on the SourceAcademy website, you may edit **this section** by clicking on it. You can also add or delete questions through the control bar.
