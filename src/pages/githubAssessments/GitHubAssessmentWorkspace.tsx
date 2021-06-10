@@ -1088,7 +1088,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   if (isLoading) {
     return (
       <div className={classNames('missionLoading', Classes.DARK)}>
-        <NonIdealState description="Loading Mission" icon={<Spinner size={SpinnerSize.LARGE} />} />
+        <NonIdealState description="Loading" icon={<Spinner size={SpinnerSize.LARGE} />} />
       </div>
     );
   } else {

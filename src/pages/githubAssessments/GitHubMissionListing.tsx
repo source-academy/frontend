@@ -82,7 +82,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
   const createMissionButton = useMemo(
     () => (
       <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
-        Create a New Mission!
+        Create a New Assignment!
       </Button>
     ),
     []
@@ -219,7 +219,7 @@ async function retrieveBrowsableMissions(
   if (octokit === undefined) return;
 
   setDisplay(
-    <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
+    <NonIdealState description="Loading" icon={<Spinner size={SpinnerSize.LARGE} />} />
   );
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
