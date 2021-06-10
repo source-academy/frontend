@@ -25,7 +25,6 @@ type State = {
 };
 
 class Dropdown extends React.Component<DropdownProps, State> {
-  private boundary!: HTMLElement;
   constructor(props: DropdownProps) {
     super(props);
     this.state = {
@@ -35,10 +34,6 @@ class Dropdown extends React.Component<DropdownProps, State> {
     };
   }
 
-  public componentWillMount() {
-    this.boundary = document.body;
-  }
-
   public render() {
     return (
       <>
@@ -46,7 +41,6 @@ class Dropdown extends React.Component<DropdownProps, State> {
           content={this.menu(this.props)}
           inheritDarkTheme={false}
           placement={Position.BOTTOM}
-          boundary={this.boundary}
         >
           {controlButton('', IconNames.CARET_DOWN)}
         </Popover2>

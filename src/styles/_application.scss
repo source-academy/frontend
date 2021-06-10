@@ -11,6 +11,10 @@ html {
   background-attachment: fixed;
 }
 
+body {
+  overflow: hidden;
+}
+
 .Application {
   height: var(--application-height, 100vh);
   display: flex;
