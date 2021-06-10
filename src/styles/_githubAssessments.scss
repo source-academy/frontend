@@ -13,10 +13,8 @@
 
 // This is mostly a copy of 'Assessment' style in _academy.scss
 // Scrollbar is added to fit better within the dialog
-.missionBrowserContent {
+.MissionBrowserContent {
   color: $cadet-color-3;
-  max-height: 480px;
-  overflow-y: scroll;
 
   @media only screen and (max-width: 768px) {
     // for mobile display
@@ -36,6 +34,7 @@
 
       .listing-text {
         padding: 0 0 0 0.5rem;
+        justify-content: space-between;
 
         .#{$ns}-heading {
           margin: 0;

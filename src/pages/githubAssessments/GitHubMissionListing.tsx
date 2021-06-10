@@ -177,7 +177,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
   return (
     <div className="Academy">
-      <div className="Assessment">
+      <div className="MissionBrowserContent">
         <ContentDisplay display={display} loadContentDispatch={getGitHubOctokitInstance} />
       </div>
     </div>
@@ -218,9 +218,7 @@ async function retrieveBrowsableMissions(
 ) {
   if (octokit === undefined) return;
 
-  setDisplay(
-    <NonIdealState description="Loading" icon={<Spinner size={SpinnerSize.LARGE} />} />
-  );
+  setDisplay(<NonIdealState description="Loading" icon={<Spinner size={SpinnerSize.LARGE} />} />);
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
