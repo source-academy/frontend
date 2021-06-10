@@ -264,56 +264,56 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const setUpWithMissionRepoData = useCallback(async () => {
     if (octokit === undefined) return;
 
-    const setStateDueToMissionDataPromise = getMissionData(missionRepoData, octokit).then(
-      (missionData: MissionData) => {
-        setSummary(missionData.missionBriefing);
+    const missionDataPromise = getMissionData(missionRepoData, octokit);
+    const isTeacherModePromise = octokit.users
+    .getAuthenticated()
+    .then((authenticatedUser: any) => {
+      const userLogin = authenticatedUser.data.login;
+      return userLogin === missionRepoData.repoOwner;
+    })
+    .then(async (userOwnsRepo: boolean) => {
+      if (userOwnsRepo) return true;
 
-        setMissionMetadata(missionData.missionMetadata);
-        setCachedMissionMetadata(missionData.missionMetadata);
-
-        setBriefingContent(missionData.missionBriefing);
-        setCachedBriefingContent(missionData.missionBriefing);
-
-        setTaskList(missionData.tasksData);
-        setCachedTaskList(
-          missionData.tasksData.map((taskData: TaskData) => Object.assign({}, taskData))
-        );
-
-        changeStateDueToChangedTaskNumber(1, missionData.tasksData);
-      }
-    );
-
-    const setIsTeacherModePromise = octokit.users
-      .getAuthenticated()
-      .then((authenticatedUser: any) => {
-        const userLogin = authenticatedUser.data.login;
-        return userLogin === missionRepoData.repoOwner;
-      })
-      .then(async (userOwnsRepo: boolean) => {
-        if (userOwnsRepo) return true;
-
-        const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
-        let userOrganisationOwnsRepo = false;
-        for (let i = 0; i < userOrganisations.length; i++) {
-          const org = userOrganisations[i];
-          // User has admin access to an organization owning the repo
-          userOrganisationOwnsRepo = org.login === missionRepoData.repoOwner;
-          if (userOrganisationOwnsRepo) {
-            break;
-          }
+      const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
+      let userOrganisationOwnsRepo = false;
+      for (let i = 0; i < userOrganisations.length; i++) {
+        const org = userOrganisations[i];
+        // User has admin access to an organization owning the repo
+        userOrganisationOwnsRepo = org.login === missionRepoData.repoOwner;
+        if (userOrganisationOwnsRepo) {
+          break;
         }
-        return userOrganisationOwnsRepo;
-      })
-      .then((userInTeacherMode: boolean) => setIsTeacherMode(userInTeacherMode));
+      }
+      return userOrganisationOwnsRepo;
+    })
 
-    const promises = [setStateDueToMissionDataPromise, setIsTeacherModePromise];
+    const promises = [missionDataPromise, isTeacherModePromise];
 
-    setHasUnsavedChangesToTasks(false);
-    setHasUnsavedChangesToBriefing(false);
-    setHasUnsavedChangesToMetadata(false);
-    handleUpdateHasUnsavedChanges(false);
+    Promise.all(promises).then((promises: any[]) => {
+      setHasUnsavedChangesToTasks(false);
+      setHasUnsavedChangesToBriefing(false);
+      setHasUnsavedChangesToMetadata(false);
+      handleUpdateHasUnsavedChanges(false);
 
-    Promise.all(promises).then((results: any) => {
+      const missionData: MissionData = promises[0];
+      setSummary(missionData.missionBriefing);
+
+      setMissionMetadata(missionData.missionMetadata);
+      setCachedMissionMetadata(missionData.missionMetadata);
+
+      setBriefingContent(missionData.missionBriefing);
+      setCachedBriefingContent(missionData.missionBriefing);
+
+      setTaskList(missionData.tasksData);
+      setCachedTaskList(
+        missionData.tasksData.map((taskData: TaskData) => Object.assign({}, taskData))
+      );
+
+      changeStateDueToChangedTaskNumber(1, missionData.tasksData);
+
+      const isTeacherMode: boolean = promises[1];
+      setIsTeacherMode(isTeacherMode);
+
       setIsLoading(false);
     });
   }, [changeStateDueToChangedTaskNumber, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
