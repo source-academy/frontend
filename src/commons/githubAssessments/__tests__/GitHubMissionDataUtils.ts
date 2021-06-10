@@ -808,7 +808,8 @@ test('convertToMCQQuestionIfMCQText returns false if mcq text is legitimate', ()
     '    { "solution": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
     '    { "solution": "Θ(_n_³)", "hint":"maybe" }\n' +
     '  ],\n' +
-    '  "answer": 4\n' +
+    '  "answer": 4,\n' +
+    '  "solution": 3\n' +
     '}';
 
   const expectedAnswer = 4;
@@ -820,13 +821,14 @@ test('convertToMCQQuestionIfMCQText returns false if mcq text is legitimate', ()
     { content: 'Θ(_n_²)', hint: 'definitely wrong' },
     { content: 'Θ(_n_³)', hint: 'maybe' }
   ];
+  const expectedSolution = 3;
 
   const [isMCQText, mcqQuestion] = GitHubMissionDataUtils.convertToMCQQuestionIfMCQText(mcqText);
   expect(isMCQText).toBe(true);
   expect(mcqQuestion).toEqual({
     answer: expectedAnswer,
     choices: expectedChoices,
-    solution: -1,
+    solution: expectedSolution,
     type: 'mcq',
     content: '',
     grade: 0,
