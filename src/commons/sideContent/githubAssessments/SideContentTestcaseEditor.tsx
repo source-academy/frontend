@@ -183,20 +183,27 @@ const SideContentTestcaseEditor: React.FunctionComponent<SideContentTestcaseEdit
           </Tooltip2>
         </Button>
         <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
-          {testcaseCards}
-          {allowEdits && createTestCaseButton}
+          <div className="testcaseeditor-subcomponent">
+            {testcaseCards}
+            {allowEdits && createTestCaseButton}
+          </div>
         </Collapse>
 
         {allowEdits && collapseButton('Testcase Prepend', showsTestPrepend, toggleTestPrepend)}
         {allowEdits && (
           <Collapse isOpen={showsTestPrepend} keepChildrenMounted={true}>
-            {createEditor(testPrepend, (newValue: string) => setTestPrepend(newValue))}
+            <div className="testcaseeditor-subcomponent">
+              {createEditor(testPrepend, (newValue: string) => setTestPrepend(newValue))}
+            </div>
           </Collapse>
         )}
+
         {allowEdits && collapseButton('Testcase Postpend', showsTestPostpend, toggleTestPostpend)}
         {allowEdits && (
           <Collapse isOpen={showsTestPostpend} keepChildrenMounted={true}>
-            {createEditor(testPostpend, (newValue: string) => setTestPostpend(newValue))}
+            <div className="testcaseeditor-subcomponent">
+              {createEditor(testPostpend, (newValue: string) => setTestPostpend(newValue))}
+            </div>
           </Collapse>
         )}
       </div>
@@ -214,7 +221,7 @@ function createEditor(value: string, onChange: (newValue: string) => void) {
       theme="source"
       value={value}
       width="100%"
-      height="250px"
+      height="16rem"
     />
   );
 }
