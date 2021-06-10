@@ -8054,10 +8054,26 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5, js-slang@^0.5.0:
+js-slang@^0.5:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.0.tgz#7a450eff23906f2ad5b67480a7bcc9002e99e92b"
   integrity sha512-GwudvePCPQ6upkpOpHVuW0xOXjkh0mfJHyoNFHIbxDQOKIy0kQ2YpXcx45H1Eq+H7aGZzvanABWwWqmMOQFVUQ==
+  dependencies:
+    "@types/estree" "0.0.47"
+    acorn "^8.0.3"
+    acorn-loose "^8.0.0"
+    acorn-walk "^8.0.0"
+    astring "^1.4.3"
+    gpu.js "^2.10.4"
+    lodash "^4.17.20"
+    node-getopt "^0.3.2"
+    source-map "^0.7.3"
+    xmlhttprequest-ts "^1.0.1"
+
+js-slang@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.1.tgz#2e178c981812b6bb4455a5e449f6e82a630c2a8d"
+  integrity sha512-3AFceloPpGp2S64glgthg6XPEgdTTSeuhtHhbComuLDnQBJKjr7CbUNmFRCQjkIP/IgDZy6JtaG9vyAz9wICPw==
   dependencies:
     "@types/estree" "0.0.47"
     acorn "^8.0.3"
