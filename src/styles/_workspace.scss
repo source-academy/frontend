@@ -495,17 +495,6 @@ $code-color-error: #ff4444;
     // Set colour of icons in blueprintjs tabs
     color: #a7b6c2;
 
-    ::-webkit-scrollbar {
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: $cadet-color-4;
-      border-radius: 2px;
-    }
-
     &[aria-selected='true'] {
       .side-content-tooltip {
         background-color: #495a6b;
