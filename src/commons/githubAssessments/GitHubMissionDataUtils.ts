@@ -539,9 +539,7 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean
 
       mcqQuestion.answer = studentAnswer;
       mcqQuestion.choices = choices;
-      if (intermediateObject.solution) {
-        mcqQuestion.solution = intermediateObject.solution;
-      }
+      mcqQuestion.solution = intermediateObject.solution;
     } catch (err) {
       isMCQText = false;
     }
@@ -562,16 +560,13 @@ export function convertIMCQQuestionToMCQText(mcq: IMCQQuestion) {
       hint: choice.hint
     };
   });
+  const solution = mcq.solution;
 
   const json = {
     questions: questions,
     answer: studentAnswer,
-    solution: -1
+    solution: solution
   };
-
-  if (mcq.solution) {
-    json.solution = mcq.solution;
-  }
 
   return 'MCQ\n' + jsonStringify(json);
 }
