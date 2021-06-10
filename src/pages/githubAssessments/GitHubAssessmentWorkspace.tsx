@@ -1078,7 +1078,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: editorProps,
+    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
     replProps: replProps,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
