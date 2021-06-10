@@ -27,7 +27,7 @@ export function createStore(history: History) {
 
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
-  const createdStore = _createStore(createRootReducer(history), initialStore, enhancers);
+  const createdStore = _createStore(createRootReducer(history), initialStore as any, enhancers);
   sagaMiddleware.run(MainSaga);
 
   createdStore.subscribe(
