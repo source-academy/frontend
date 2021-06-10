@@ -529,17 +529,18 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean
       const intermediateObject = JSON.parse(onlyQuestionInformation);
 
       const studentAnswer = intermediateObject.answer;
-      const questions = intermediateObject.questions as any[];
-      const choices = questions.map((question: { solution: string; hint: string }) => {
+      const intermediateChoices = intermediateObject.choices as any[];
+      const choices = intermediateChoices.map((question: { option: string; hint: string }) => {
         return {
-          content: question.solution,
+          content: question.option,
           hint: question.hint
         };
       });
+      const solution = intermediateObject.solution;
 
       mcqQuestion.answer = studentAnswer;
       mcqQuestion.choices = choices;
-      mcqQuestion.solution = intermediateObject.solution;
+      mcqQuestion.solution = solution;
     } catch (err) {
       isMCQText = false;
     }
@@ -554,16 +555,16 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean
  */
 export function convertIMCQQuestionToMCQText(mcq: IMCQQuestion) {
   const studentAnswer = mcq.answer;
-  const questions = mcq.choices.map((choice: { content: string; hint: string | null }) => {
+  const choices = mcq.choices.map((choice: { content: string; hint: string | null }) => {
     return {
-      solution: choice.content,
+      option: choice.content,
       hint: choice.hint
     };
   });
   const solution = mcq.solution;
 
   const json = {
-    questions: questions,
+    choices: choices,
     answer: studentAnswer,
     solution: solution
   };

@@ -780,14 +780,14 @@ test('convertToMCQQuestionIfMCQText returns false if mcq text is malformed', () 
   const malformedMcqText =
     'MCQ\n' +
     '{\n' +
-    '  "questions":\n' +
+    '  "choices":\n' +
     '  [\n' +
-    '    { "solution": "Θ(1)", "hint":"one" },\n' +
-    '    { "solution": "Θ(log _n_)", "hint":"two" },\n' +
-    '    { "solution": "Θ(_n_)", "hint":"14345" },\n' +
-    '    { "solution": "Θ(_n_ log _n_)", "hint":"yes" },\n' +
-    '    { "solution": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
-    '    { "solution": "Θ(_n_³)", "hint":"maybe" }\n' +
+    '    { "option": "Θ(1)", "hint":"one" },\n' +
+    '    { "option": "Θ(log _n_)", "hint":"two" },\n' +
+    '    { "option": "Θ(_n_)", "hint":"14345" },\n' +
+    '    { "option": "Θ(_n_ log _n_)", "hint":"yes" },\n' +
+    '    { "option": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
+    '    { "option": "Θ(_n_³)", "hint":"maybe" }\n' +
     '  ],\n' +
     '  "answer": 4';
 
@@ -795,18 +795,18 @@ test('convertToMCQQuestionIfMCQText returns false if mcq text is malformed', () 
   expect(isMCQText).toBe(false);
 });
 
-test('convertToMCQQuestionIfMCQText returns false if mcq text is legitimate', () => {
+test('convertToMCQQuestionIfMCQText works properly', () => {
   const mcqText =
     'MCQ\n' +
     '{\n' +
-    '  "questions":\n' +
+    '  "choices":\n' +
     '  [\n' +
-    '    { "solution": "Θ(1)", "hint":"one" },\n' +
-    '    { "solution": "Θ(log _n_)", "hint":"two" },\n' +
-    '    { "solution": "Θ(_n_)", "hint":"14345" },\n' +
-    '    { "solution": "Θ(_n_ log _n_)", "hint":"yes" },\n' +
-    '    { "solution": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
-    '    { "solution": "Θ(_n_³)", "hint":"maybe" }\n' +
+    '    { "option": "Θ(1)", "hint":"one" },\n' +
+    '    { "option": "Θ(log _n_)", "hint":"two" },\n' +
+    '    { "option": "Θ(_n_)", "hint":"14345" },\n' +
+    '    { "option": "Θ(_n_ log _n_)", "hint":"yes" },\n' +
+    '    { "option": "Θ(_n_²)", "hint":"definitely wrong" },\n' +
+    '    { "option": "Θ(_n_³)", "hint":"maybe" }\n' +
     '  ],\n' +
     '  "answer": 4,\n' +
     '  "solution": 3\n' +
@@ -870,9 +870,9 @@ test('convertIMCQQuestionToMCQText works properly', () => {
     'MCQ\n' +
     JSON.stringify(
       {
-        questions: possibleChoices.map((choice: { content: string; hint: string }) => {
+        choices: possibleChoices.map((choice: { content: string; hint: string }) => {
           return {
-            solution: choice.content,
+            option: choice.content,
             hint: choice.hint
           };
         }),
