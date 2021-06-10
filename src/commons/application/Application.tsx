@@ -7,7 +7,7 @@ import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
 import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
-import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
+import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
@@ -148,19 +148,19 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
             {Constants.enableGitHubAssessments && (
               <Route
-                path="/githubassessments/missions"
-                component={() => (
-                  <GitHubMissionListing
-                    handleGitHubLogIn={props.handleGitHubLogIn}
-                    handleGitHubLogOut={props.handleGitHubLogOut}
-                  />
-                )}
+                path="/githubassessments/editor"
+                component={GitHubAssessmentWorkspaceContainer}
               />
             )}
             {Constants.enableGitHubAssessments && (
               <Route
-                path="/githubassessments/editor"
-                component={GitHubAssessmentWorkspaceContainer}
+                path="/githubassessments/:selectedType?"
+                component={() => (
+                  <GitHubClassroom
+                    handleGitHubLogIn={props.handleGitHubLogIn}
+                    handleGitHubLogOut={props.handleGitHubLogOut}
+                  />
+                )}
               />
             )}
             <Route path="/callback/github" component={GitHubCallback} />

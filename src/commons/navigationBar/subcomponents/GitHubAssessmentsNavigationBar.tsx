@@ -35,8 +35,6 @@ type StateProps = {
 
 /**
  * The white navbar for the website. Should only be displayed when using GitHub-hosted missions.
- *
- * @param props Component properties
  */
 const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarProps> = props => {
   const handleClick = (e: any) => {
@@ -50,71 +48,28 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
-        <NavLink
-          to={`/githubassessments/missions`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.FLAME} />
-          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[0]}</div>
-        </NavLink>
+        {props.typeNames.map(typeName => {
+          return (
+            <NavLink
+              key={typeName}
+              exact={true}
+              to={{
+                pathname: `${typeName}`,
+                state: props.selectedCourse
+              }}
+              activeClassName={Classes.ACTIVE}
+              className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            >
+              <Icon icon={IconNames.FLAME} />
+              <div className="navbar-button-text hidden-xs hidden-sm">{typeName}</div>
+            </NavLink>
+          );
+        })}
       </NavbarGroup>
-
-      <NavbarGroup align={Alignment.LEFT}>
-        <NavLink
-          to={`/githubassessments/${props.typeNames[1]}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.FLAME} />
-          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[1]}</div>
-        </NavLink>
-      </NavbarGroup>
-
-      <NavbarGroup align={Alignment.LEFT}>
-        <NavLink
-          to={`/githubassessments/${props.typeNames[2]}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.FLAME} />
-          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[2]}</div>
-        </NavLink>
-      </NavbarGroup>
-
-      <NavbarGroup align={Alignment.LEFT}>
-        <NavLink
-          to={`/githubassessments/${props.typeNames[3]}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.FLAME} />
-          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[3]}</div>
-        </NavLink>
-      </NavbarGroup>
-
-      <NavbarGroup align={Alignment.LEFT}>
-        <NavLink
-          to={`/githubassessments/${props.typeNames[4]}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.FLAME} />
-          <div className="navbar-button-text hidden-xs hidden-sm">{props.typeNames[4]}</div>
-        </NavLink>
-      </NavbarGroup>
-
       <NavbarGroup align={Alignment.RIGHT}>
-        <ControlBarGitHubLoginButton
-          key="github"
-          onClickLogIn={props.handleGitHubLogIn}
-          onClickLogOut={props.handleGitHubLogOut}
-        />
-      </NavbarGroup>
-
-      {props.octokit !== undefined && (
-        <NavbarGroup align={Alignment.RIGHT}>
+        {props.octokit !== undefined && (
           <InputGroup
+            key="courseselect"
             disabled={true}
             leftElement={
               <Popover2
@@ -134,8 +89,13 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
             onChange={handleChange}
             value={props.selectedCourse}
           />
-        </NavbarGroup>
-      )}
+        )}
+        <ControlBarGitHubLoginButton
+          key="loginlogout"
+          onClickLogIn={props.handleGitHubLogIn}
+          onClickLogOut={props.handleGitHubLogOut}
+        />
+      </NavbarGroup>
     </Navbar>
   );
 };

@@ -117,7 +117,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/githubassessments/missions"
+          to="/githubassessments/classroom"
         >
           <Icon icon={IconNames.BRIEFCASE} />
           <div className="navbar-button-text">Classroom</div>

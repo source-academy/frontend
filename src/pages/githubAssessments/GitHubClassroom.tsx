@@ -17,8 +17,8 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
+import { useLocation, useParams } from 'react-router-dom';
 
-// import { RouteComponentProps } from 'react-router';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
 import controlButton from '../../commons/ControlButton';
@@ -30,8 +30,6 @@ import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 
-type GitHubMissionListingProps = DispatchProps; //& RouteComponentProps<{ type: string }>
-
 type DispatchProps = {
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
@@ -41,24 +39,20 @@ type DispatchProps = {
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
-const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
+const GitHubClassroom: React.FC<DispatchProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
 
+  const locationState = useLocation().state as string;
+  const { selectedType } = useParams<{ selectedType: string }>();
+
   const [display, setDisplay] = useState<JSX.Element>(<></>);
   const [courses, setCourses] = useState<string[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [typeNames, setTypeNames] = useState<string[]>([
-    'Missions',
-    'Quests',
-    'Paths',
-    'Contests',
-    'Others'
-  ]);
+  const [selectedCourse, setSelectedCourse] = useState(
+    locationState === undefined ? '' : locationState
+  );
+  const [typeNames, setTypeNames] = useState<string[]>([]);
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
-
-  // const type = props.match.params.type;
-  // console.log(type);
 
   // GET user organisations after logging in
   useEffect(() => {
@@ -76,7 +70,7 @@ const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
       setBrowsableMissions([]);
       setCourses([]);
       setSelectedCourse('');
-      setTypeNames(['Missions', 'Quests', 'Paths', 'Contests', 'Others']);
+      setTypeNames([]);
       return;
     }
 
@@ -92,9 +86,15 @@ const GitHubMissionListing: React.FC<GitHubMissionListingProps> = props => {
       setDisplay(
         <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
       );
-      retrieveBrowsableMissions(octokit, selectedCourse, setBrowsableMissions, setTypeNames);
+      retrieveBrowsableMissions(
+        octokit,
+        selectedCourse,
+        selectedType,
+        setBrowsableMissions,
+        setTypeNames
+      );
     }
-  }, [octokit, selectedCourse]);
+  }, [octokit, selectedCourse, selectedType]);
 
   // After missions retrieved, display mission listing
   useEffect(() => {
@@ -173,7 +173,7 @@ type BrowsableMission = {
   link?: string;
 };
 
-type GitHubMission = {
+type GitHubAssessment = {
   id: string;
   title: string;
   openAt: string;
@@ -196,6 +196,7 @@ type GitHubMission = {
 async function retrieveBrowsableMissions(
   octokit: Octokit,
   selectedCourse: string,
+  selectedType: string,
   setBrowsableMissions: (browsableMissions: BrowsableMission[]) => void,
   setTypeNames: (typeNames: string[]) => void
 ) {
@@ -239,32 +240,36 @@ async function retrieveBrowsableMissions(
       });
       setTypeNames(typeNames);
 
-      courseInfo.types[0].assessments.forEach((mission: GitHubMission) => {
-        const prefixLogin = mission.repoPrefix + '-' + userLogin;
-        const missionRepo = userRepos.find(repo => repo.name === prefixLogin);
+      courseInfo.types.forEach((type: { typeName: string; assessments: [GitHubAssessment] }) => {
+        if (selectedType === undefined || selectedType === type.typeName) {
+          type.assessments.forEach((assessment: GitHubAssessment) => {
+            const prefixLogin = assessment.repoPrefix + '-' + userLogin;
+            const missionRepo = userRepos.find(repo => repo.name === prefixLogin);
 
-        let createdAt = new Date();
-        let acceptLink = undefined;
-        if (missionRepo === undefined) {
-          acceptLink = mission.acceptLink;
-        } else {
-          if (missionRepo.created_at !== null) {
-            createdAt = new Date(missionRepo.created_at);
-          }
+            let createdAt = new Date();
+            let acceptLink = undefined;
+            if (missionRepo === undefined) {
+              acceptLink = assessment.acceptLink;
+            } else {
+              if (missionRepo.created_at !== null) {
+                createdAt = new Date(missionRepo.created_at);
+              }
+            }
+
+            browsableMissions.push({
+              title: assessment.title,
+              coverImage: assessment.coverImage,
+              webSummary: assessment.shortSummary,
+              missionRepoData: {
+                repoOwner: courseInfoRepo.owner!.login,
+                repoName: prefixLogin,
+                dateOfCreation: createdAt
+              },
+              dueDate: new Date(assessment.closeAt),
+              link: acceptLink
+            });
+          });
         }
-
-        browsableMissions.push({
-          title: mission.title,
-          coverImage: mission.coverImage,
-          webSummary: mission.shortSummary,
-          missionRepoData: {
-            repoOwner: courseInfoRepo.owner!.login,
-            repoName: prefixLogin,
-            dateOfCreation: createdAt
-          },
-          dueDate: new Date(mission.closeAt),
-          link: acceptLink
-        });
       });
     } else {
       showWarningMessage('The course-info.json file cannot be located.', 2000);
@@ -349,115 +354,4 @@ function convertMissionToCard(missionRepo: BrowsableMission, isMobileBreakpoint:
   );
 }
 
-export default GitHubMissionListing;
-
-/*
-    const handleRefresh = () => {
-      retrieveBrowsableMissions(octokit, selectedCourse, setBrowsableMissions);
-    };
-  
-    const refreshButton = <Button icon={IconNames.REFRESH} onClick={handleRefresh} />;
-*/
-
-/*
-  const getContentPromises = missionRepos.map(repo => {
-    const login = (repo.owner as any).login;
-    const repoName = repo.name;
-    const createdAt = repo.created_at;
-
-    const promiseCreator = async () => {
-      const getContentResponse = await octokit.repos.getContent({
-        owner: login,
-        repo: repo.name,
-        path: ''
-      });
-
-      return {
-        getContentResponse: getContentResponse,
-        login: login,
-        repoName: repoName,
-        createdAt: createdAt
-      };
-    };
-
-    return promiseCreator();
-  });
-
-  const foundMissionRepos: MissionRepoData[] = [];
-  let browsableMissions: BrowsableMission[] = [];
-
-  let unreachableCodeReached = false;
-
-  Promise.all(getContentPromises).then((promisedContents: any[]) => {
-    promisedContents.forEach((promisedContent: any) => {
-      type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
-      type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
-
-      const getContentResponse: GetContentResponse = promisedContent.getContentResponse;
-      const files: GetContentData = getContentResponse.data;
-      const login: string = promisedContent.login;
-      const repoName: string = promisedContent.repoName;
-      const createdAt: string = promisedContent.createdAt;
-
-      if (!Array.isArray(files)) {
-        // Code should not reach this point
-        unreachableCodeReached = true;
-        return;
-      }
-
-      const githubSubDirectories = files as any[];
-
-      let repositoryContainsMetadataFile = false;
-      for (let j = 0; j < githubSubDirectories.length; j++) {
-        const file = githubSubDirectories[j];
-        if (file.name === '.metadata') {
-          repositoryContainsMetadataFile = true;
-          break;
-        }
-      }
-
-      if (repositoryContainsMetadataFile) {
-        const missionRepoData: MissionRepoData = {
-          repoOwner: login,
-          repoName: repoName,
-          dateOfCreation: new Date(createdAt)
-        };
-        foundMissionRepos.push(missionRepoData);
-      }
-    });
-
-    if (unreachableCodeReached) {
-      return;
-    }
-
-    const missionPromises = foundMissionRepos.map(missionRepoData =>
-      convertRepoToBrowsableMission(missionRepoData, octokit)
-    );
-
-    Promise.all(missionPromises).then((acceptedMissions: BrowsableMission[]) => {
-      browsableMissions = acceptedMissions;
-    });
-  });
-
-  const unacceptedMissions: BrowsableMission[] = await retrieveUnacceptedMissions(
-    octokit,
-    orgRepos
-  );
-
-  browsableMissions = browsableMissions.concat(unacceptedMissions);
-  browsableMissions.sort((a, b) => {
-    return a.missionRepoData.dateOfCreation < b.missionRepoData.dateOfCreation ? 1 : -1;
-  });
-
-  setBrowsableMissions(browsableMissions);
-
-  if (unreachableCodeReached) {
-    setDisplay(
-      <NonIdealState
-        title="Something went wrong when retrieving repository data."
-        icon={IconNames.FLAME}
-      />
-    );
-    return;
-  }
-  */
+export default GitHubClassroom;
