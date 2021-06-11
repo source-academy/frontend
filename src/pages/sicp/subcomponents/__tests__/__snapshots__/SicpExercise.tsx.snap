@@ -25,7 +25,7 @@ exports[`Sicp exercise renders correctly 1`] = `
       </div>
       <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
         <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
-          <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+          <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
         </div>
       </Blueprint3.Collapse>
     </div>

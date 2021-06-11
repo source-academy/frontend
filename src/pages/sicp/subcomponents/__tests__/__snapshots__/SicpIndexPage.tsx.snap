@@ -55,7 +55,7 @@ exports[`Sicp index page 1`] = `
     <SicpToc>
       <div className=\\"sicp-toc\\">
         <Blueprint3.Tree className=\\"sicp-toc-tree\\" contents={{...}} onNodeClick={[Function (anonymous)]} onNodeCollapse={[Function: handleNodeCollapse]} onNodeExpand={[Function: handleNodeExpand]}>
-          <div className=\\"bp3-tree bp3-fixed-positioning-containing-block sicp-toc-tree\\">
+          <div className=\\"bp3-tree sicp-toc-tree\\">
             <ul className=\\"bp3-tree-node-list bp3-tree-root\\">
               <Blueprint3.TreeNode id={0} hasCaret={false} label=\\"Foreword\\" nodeData=\\"foreword\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
                 <li className=\\"bp3-tree-node\\">
@@ -68,7 +68,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -84,7 +84,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -100,7 +100,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -116,7 +116,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -132,7 +132,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -148,7 +148,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -173,7 +173,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -198,7 +198,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -223,7 +223,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -248,7 +248,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -273,7 +273,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -289,7 +289,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>
@@ -305,7 +305,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp3-collapse\\" style={{...}}>
-                      <div className=\\"bp3-collapse-body bp3-fixed-positioning-containing-block\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
                     </div>
                   </Blueprint3.Collapse>
                 </li>

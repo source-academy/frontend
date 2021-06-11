@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { ControlBarGitHubLoginButton } from '../../controlBar/ControlBarGitHubLoginButton';
+import { ControlBarGitHubLoginButton } from '../../controlBar/github/ControlBarGitHubLoginButton';
 
 type OwnProps = {
   handleGitHubLogIn: any;
