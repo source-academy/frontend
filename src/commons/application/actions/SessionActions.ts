@@ -10,6 +10,8 @@ import {
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  CourseConfiguration,
+  CourseRegistration,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -23,6 +25,8 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
@@ -79,6 +83,12 @@ export const setTokens = ({
   });
 
 export const setUser = (user: User) => action(SET_USER, user);
+
+export const setCourseConfiguration = (courseConfiguration: CourseConfiguration) =>
+  action(SET_COURSE_CONFIGURATION, courseConfiguration);
+
+export const setCourseRegistration = (courseRegistration: CourseRegistration) =>
+  action(SET_COURSE_REGISTRATION, courseRegistration);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 

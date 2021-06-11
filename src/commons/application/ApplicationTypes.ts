@@ -283,31 +283,21 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
 };
 
 export const defaultSession: SessionState = {
-  accessToken: undefined,
+  tokens: undefined,
+  user: undefined,
+  courseRegistration: undefined,
+  courseConfiguration: undefined,
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   githubOctokitObject: { octokit: undefined },
-  grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
-  group: null,
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
   maxGrade: 0,
   maxXp: 0,
-  refreshToken: undefined,
-  role: undefined,
-  name: undefined,
-  story: {
-    story: '',
-    playStory: false
-  },
-  gameState: {
-    completed_quests: [],
-    collectibles: {}
-  },
   xp: 0,
   notifications: []
 };

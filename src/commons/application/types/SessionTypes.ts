@@ -19,6 +19,8 @@ export const LOGIN_GITHUB = 'LOGIN_GITHUB';
 export const LOGOUT_GITHUB = 'LOGOUT_GITHUB';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
+export const SET_COURSE_CONFIGURATION = 'SET_COURSE_CONFIGURATION';
+export const SET_COURSE_REGISTRATION = 'SET_COURSE_REGISTRATION';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
 export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_OBJECT = 'SET_GITHUB_OCTOKIT_OBJECT';
@@ -43,22 +45,17 @@ export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
-  readonly accessToken?: string;
+  readonly tokens?: Tokens;
+  readonly user?: User;
+  readonly courseRegistration?: CourseRegistration;
+  readonly courseConfiguration?: CourseConfiguration;
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
-  readonly grade: number;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
-  readonly group: string | null;
   readonly historyHelper: HistoryHelper;
   readonly maxGrade: number;
   readonly maxXp: number;
-  readonly refreshToken?: string;
-  readonly role?: Role;
-  readonly story: Story;
-  readonly gameState: GameState;
-  readonly name?: string;
-  readonly userId?: number;
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
@@ -76,9 +73,28 @@ export type Tokens = {
 export type User = {
   userId: number;
   name: string;
+  courses: number[];
+};
+
+export type CourseRegistration = {
   role: Role;
+  gameState?: GameState;
   group: string | null;
+  userId: number;
+  courseId: number;
   grade: number;
   story?: Story;
-  gameState?: GameState;
 };
+
+export type CourseConfiguration = {
+  name: string;
+  moduleCode: string;
+  viewable: boolean;
+  enableGame: boolean;
+  enableAchievements: boolean;
+  enableSourcecast: boolean;
+  sourceChapter: number;
+  sourceVariant: string;
+  moduleHelpText: string;
+  assessmentTypes: string[];
+}

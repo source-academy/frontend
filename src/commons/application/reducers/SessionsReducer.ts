@@ -10,6 +10,8 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_OBJECT,
   SessionState,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
@@ -48,13 +50,22 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_TOKENS:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken
+        tokens: action.payload
       };
     case SET_USER:
       return {
         ...state,
-        ...action.payload
+        user: action.payload
+      };
+    case SET_COURSE_CONFIGURATION:
+      return {
+        ...state,
+        courseConfiguration: action.payload
+      };
+    case SET_COURSE_REGISTRATION:
+      return {
+        ...state,
+        courseRegistration: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;
