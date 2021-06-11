@@ -495,17 +495,6 @@ $code-color-error: #ff4444;
     // Set colour of icons in blueprintjs tabs
     color: #a7b6c2;
 
-    ::-webkit-scrollbar {
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: $cadet-color-4;
-      border-radius: 2px;
-    }
-
     &[aria-selected='true'] {
       .side-content-tooltip {
         background-color: #495a6b;
@@ -872,6 +861,10 @@ $code-color-error: #ff4444;
       }
     }
 
+    .testcaseeditor-subcomponent {
+      padding: 0.5rem;
+    }
+
     .testcases-header,
     .results-header,
     .contestentries-header,
@@ -960,6 +953,7 @@ $code-color-error: #ff4444;
   }
 
   .AutograderCard,
+  .EditableAutograderCard,
   .ResultCard,
   .ContestEntryCard,
   .LeaderboardCard {
@@ -1066,6 +1060,85 @@ $code-color-error: #ff4444;
 
       .testcase-expected {
         width: 24%;
+      }
+
+      /* Following two are styles for rendered WebGL elements (runes, curves) */
+      .canvas-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Override canvas inline height and width */
+      canvas {
+        height: 12rem !important;
+        width: 12rem !important;
+      }
+    }
+
+    /* CSS animation styling for testcases when run */
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    @keyframes private-revert {
+      to {
+        background: rgba(192, 192, 192, 0.2);
+      }
+    }
+
+    &.correct > .#{$ns}-card {
+      animation: 4s correct;
+    }
+
+    &.wrong > .#{$ns}-card {
+      animation: 4s wrong;
+    }
+
+    &.correct.private > .#{$ns}-card {
+      animation: 4s correct, 4s private-revert 4s forwards;
+    }
+
+    &.wrong.private > .#{$ns}-card {
+      animation: 4s wrong, 4s private-revert 4s forwards;
+    }
+  }
+
+  .EditableAutograderCard {
+    /* Nested Blueprint Card component (with onClick attached) */
+    .#{$ns}-card {
+      .testcase-placeholder {
+        width: 100%;
+        text-align: center;
+      }
+
+      .testcase-program,
+      .testcase-expected {
+        width: 37%;
+      }
+
+      .testcase-actual {
+        width: 26%;
+      }
+
+      .testcase-button {
+        width: 0.1%;
       }
 
       /* Following two are styles for rendered WebGL elements (runes, curves) */

@@ -37,7 +37,8 @@ const SideContentContestVotingContainer: React.FunctionComponent<SideContentCont
      */
     const isSubmissionValid = (votingSubmission: ContestEntry[]) => {
       return votingSubmission.reduce((isValid, vote) => {
-        return isValid && vote.rank! >= 1 && vote.rank! <= contestEntries.length;
+        const rank = vote.rank!;
+        return isValid && rank >= 1 && rank <= contestEntries.length;
       }, true);
     };
 

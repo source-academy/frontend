@@ -23,9 +23,10 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateWorkspace
 } from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {
@@ -78,6 +79,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
+        updateWorkspace(workspaceLocation, options),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handleGitHubLogIn: loginGitHub,

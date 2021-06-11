@@ -19,7 +19,7 @@ import {
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
@@ -69,6 +69,25 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
   const handleTagClear = React.useCallback(() => handleTagChange([]), [handleTagChange]);
 
+  const signInToGitHubDisplay = useMemo(
+    () => <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />,
+    []
+  );
+  const noMissionReposFoundDisplay = useMemo(
+    () => (
+      <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
+    ),
+    []
+  );
+  const createMissionButton = useMemo(
+    () => (
+      <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+        Create a New Assignment!
+      </Button>
+    ),
+    []
+  );
+
   // After browsable missions retrieved, display mission listing
   useEffect(() => {
     if (octokit === undefined) {
@@ -77,7 +96,10 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
 
     if (browsableMissions.length === 0) {
       setDisplay(
-        <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
+        <>
+          {createMissionButton}
+          {noMissionReposFoundDisplay}
+        </>
       );
       return;
     }
@@ -106,6 +128,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
       <>
         {tagFilter}
         <Divider />
+        {createMissionButton}
         {cards}
         {isMobileBreakpoint &&
           controlButton('Log Out', IconNames.GIT_BRANCH, props.handleGitHubLogOut, {
@@ -116,11 +139,13 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     );
   }, [
     browsableMissions,
+    createMissionButton,
     filterTagNodes,
     filterTagStrings,
     handleTagChange,
     handleTagClear,
     isMobileBreakpoint,
+    noMissionReposFoundDisplay,
     octokit,
     props.handleGitHubLogOut
   ]);
@@ -130,7 +155,7 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     if (octokit === undefined) {
       setDisplay(
         <>
-          <NonIdealState description="Please sign in to GitHub." icon={IconNames.WARNING_SIGN} />
+          {signInToGitHubDisplay}
           {isMobileBreakpoint &&
             controlButton('Log In', IconNames.GIT_BRANCH, props.handleGitHubLogIn, {
               intent: 'primary',
@@ -141,11 +166,18 @@ const GitHubMissionListing: React.FC<DispatchProps> = props => {
     } else {
       retrieveBrowsableMissions(octokit, setBrowsableMissions, setDisplay);
     }
-  }, [isMobileBreakpoint, octokit, props.handleGitHubLogIn, setBrowsableMissions, setDisplay]);
+  }, [
+    isMobileBreakpoint,
+    octokit,
+    props.handleGitHubLogIn,
+    setBrowsableMissions,
+    setDisplay,
+    signInToGitHubDisplay
+  ]);
 
   return (
     <div className="Academy">
-      <div className="Assessment">
+      <div className="MissionBrowserContent">
         <ContentDisplay display={display} loadContentDispatch={getGitHubOctokitInstance} />
       </div>
     </div>
@@ -169,7 +201,6 @@ function missionMatchesTags(mission: BrowsableMission, tags: string[]) {
       break;
     }
   }
-
   return match;
 }
 
@@ -187,9 +218,7 @@ async function retrieveBrowsableMissions(
 ) {
   if (octokit === undefined) return;
 
-  setDisplay(
-    <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
-  );
+  setDisplay(<NonIdealState description="Loading" icon={<Spinner size={SpinnerSize.LARGE} />} />);
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser

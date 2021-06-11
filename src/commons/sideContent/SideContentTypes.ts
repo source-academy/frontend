@@ -27,10 +27,12 @@ export enum SideContentType {
   module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
+  missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
+  testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   videoDisplay = 'video_display'
 }
