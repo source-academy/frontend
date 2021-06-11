@@ -18,7 +18,7 @@ const convertTestsToSaveableJson = (tests: Testcase[]) => {
       answer: test.answer,
       program: test.program,
       score: test.score ? test.score : 0,
-      type: test.type ? test.type : "public"
+      type: test.type ? test.type : 'public'
     };
   });
   return jsonStringify(saveableTests);
