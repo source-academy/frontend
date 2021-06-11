@@ -12210,7 +12210,7 @@ sourcemap-codec@^1.4.4:
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
-sourceror@^0.8.2:
+sourceror@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/sourceror/-/sourceror-0.8.3.tgz#43db78583a2b776a4dbb6943333623922b1a94de"
   integrity sha512-5JMk1xCG9ERO6EK6J6ybP2EX1TbaJTPmFZ2wi+OhgaqB/nrrB4tqZqGZ/7pGy7z/B1lwcrafUNbkLsyeRy8q2Q==
