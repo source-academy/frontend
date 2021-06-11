@@ -12,6 +12,17 @@ import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHu
 export const maximumTasksPerMission = 20;
 
 const jsonStringify = (object: any) => JSON.stringify(object, null, 4);
+const convertTestsToSaveableJson = (tests: Testcase[]) => {
+  const saveableTests = tests.map((test: Testcase) => {
+    return {
+      answer: test.answer,
+      program: test.program,
+      score: test.score ? test.score : 0,
+      type: test.type ? test.type : "public"
+    };
+  });
+  return jsonStringify(saveableTests);
+};
 const identity = (content: any) => content;
 
 // 1) fileName: the name of the file corresponding to the named property
@@ -53,7 +64,7 @@ const taskDataPropertyTable = {
     fileName: 'TestCases.json',
     isDefaultValue: (value: Testcase[]) => value.length === 0,
     fromStringConverter: JSON.parse,
-    toStringConverter: jsonStringify
+    toStringConverter: convertTestsToSaveableJson
   }
 };
 
