@@ -13,8 +13,8 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
-      <Route path=\\"/login\\" render={[Function (anonymous)]} />
       <Route path=\\"/achievement\\" render={[Function: redirectToLogin]} />
+      <Route path=\\"/login\\" render={[Function (anonymous)]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToAcademy]} />
       <Route component={[Function: NotFound]} />
     </Switch>

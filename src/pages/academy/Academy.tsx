@@ -5,7 +5,6 @@ import { Role } from '../../commons/application/ApplicationTypes';
 import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer';
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { AssessmentCategories, AssessmentCategory } from '../../commons/assessment/AssessmentTypes';
-import Constants from '../../commons/utils/Constants';
 import { HistoryHelper } from '../../commons/utils/HistoryHelper';
 import { assessmentCategoryLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
@@ -55,7 +54,7 @@ class Academy extends React.Component<AcademyProps> {
             )}/${assessmentRegExp}`}
             render={this.assessmentRenderFactory(AssessmentCategories.Contest)}
           />
-          {Constants.enableGame && <Route path="/academy/game" component={Game} />}
+          <Route path="/academy/game" component={Game} />
           <Route
             path={`/academy/${assessmentCategoryLink(
               AssessmentCategories.Mission
@@ -104,15 +103,13 @@ class Academy extends React.Component<AcademyProps> {
     if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
       return () => <Redirect to={lastAcademy!} />;
     } else {
-      return Constants.enableGame ? this.redirectToGame : this.redirectToMissions;
+      return this.redirectToGame;
     }
   };
 
   private redirectTo404 = () => <Redirect to="/404" />;
 
   private redirectToGame = () => <Redirect to="/academy/game" />;
-
-  private redirectToMissions = () => <Redirect to="/academy/missions" />;
 }
 
 export default Academy;

@@ -8,7 +8,6 @@ import { Role } from '../../application/ApplicationTypes';
 import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
-import Constants from '../../utils/Constants';
 import { assessmentCategoryLink } from '../../utils/ParamParseHelper';
 
 type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
@@ -172,7 +171,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       <div className="navbar-button-text">GitHub Assessments</div>
     </NavLink>
 
-    {props.role && Constants.enableAchievements && (
+    {props.role && (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames(

@@ -106,11 +106,9 @@ const Application: React.FC<ApplicationProps> = props => {
           render={toIncubator}
           key={1}
         />,
+        <Route path="/achievement" render={toAchievement(props)} key={2} />,
         loginPath
       ];
-  if (!Constants.playgroundOnly && Constants.enableAchievements) {
-    fullPaths?.push(<Route path="/achievement" render={toAchievement(props)} key={2} />);
-  }
   const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
   const renderDisabled = () => (

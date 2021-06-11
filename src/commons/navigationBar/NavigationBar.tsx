@@ -201,7 +201,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         </NavLink>
       )}
 
-      {props.role && Constants.enableAchievements && (
+      {props.role && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
