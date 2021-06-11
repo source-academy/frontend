@@ -49,7 +49,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     position: relative;
     left: -15px;
 
-    button {
+    .collapse-button {
       margin: 0 20px;
       width: calc(100% - 40px) !important;
     }
