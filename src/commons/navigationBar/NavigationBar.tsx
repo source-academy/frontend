@@ -2,6 +2,7 @@ import {
   Alignment,
   Button,
   Classes,
+  Drawer,
   FocusStyleManager,
   Icon,
   Navbar,
@@ -46,7 +47,82 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
-  const playgroundOnlyNavbarLeft = (
+  const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
+    isMobileBreakpoint ? (
+      <>
+        <NavbarGroup align={Alignment.LEFT}>
+          <Button
+            onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+            icon={IconNames.MENU}
+            large={true}
+            minimal={true}
+          />
+          <NavLink
+            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            to="/"
+          >
+            <Icon icon={IconNames.SYMBOL_DIAMOND} />
+            <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+          </NavLink>
+          <Drawer
+            isOpen={mobileSideMenuOpen}
+            position="left"
+            onClose={() => setMobileSideMenuOpen(false)}
+            title=""
+            className={Classes.DARK}
+          >
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to="/playground"
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.CODE} />
+              <div>Playground</div>
+            </NavLink>
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to="/githubassessments/missions"
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.BRIEFCASE} />
+              <div>GitHub Assessments</div>
+            </NavLink>
+          </Drawer>
+        </NavbarGroup>
+      </>
+    ) : (
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to="/playground"
+        >
+          <Icon icon={IconNames.CODE} />
+          <div>Source Academy Playground</div>
+        </NavLink>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to="/githubassessments/missions"
+        >
+          <Icon icon={IconNames.BRIEFCASE} />
+          <div>GitHub Assessments</div>
+        </NavLink>
+      </NavbarGroup>
+    )
+  ) : (
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         activeClassName={Classes.ACTIVE}
