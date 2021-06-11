@@ -61,8 +61,16 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
     const testProgram = testcase.program;
     const expectedAnswer = testcase.answer;
 
-    const playButton = <Button className='testcase-button' icon={IconNames.PLAY} onClick={handleRunTestcase} />;
-    const deleteButton = <Button className='testcase-button' icon={IconNames.DELETE} onClick={() => deleteTestcase(index)} />;
+    const playButton = (
+      <Button className="testcase-button" icon={IconNames.PLAY} onClick={handleRunTestcase} />
+    );
+    const deleteButton = (
+      <Button
+        className="testcase-button"
+        icon={IconNames.DELETE}
+        onClick={() => deleteTestcase(index)}
+      />
+    );
 
     const answer = React.useMemo(() => {
       let answer = 'No Answer';
