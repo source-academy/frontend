@@ -21,6 +21,7 @@ type DrawerProps = {
 
 type OwnProps = {
   role?: Role;
+  enableAchievements?: boolean;
 };
 
 const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = props => (
@@ -171,7 +172,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       <div className="navbar-button-text">GitHub Assessments</div>
     </NavLink>
 
-    {props.role && (
+    {props.role && props.enableAchievements && (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames(

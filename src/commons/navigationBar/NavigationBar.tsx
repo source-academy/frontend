@@ -37,6 +37,7 @@ type StateProps = {
   role?: Role;
   title: string;
   name?: string;
+  enableAchievements?: boolean;
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
@@ -153,6 +154,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
       <NavigationBarMobileSideMenu
         role={props.role}
+        enableAchievements={props.enableAchievements}
         isOpen={mobileSideMenuOpen}
         onClose={() => setMobileSideMenuOpen(false)}
         handleGitHubLogIn={() => props.handleGitHubLogIn}
@@ -201,7 +203,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         </NavLink>
       )}
 
-      {props.role && (
+      {props.role && props.enableAchievements && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}

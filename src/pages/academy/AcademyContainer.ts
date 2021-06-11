@@ -7,7 +7,8 @@ import { OverallState } from '../../commons/application/ApplicationTypes';
 import Academy, { DispatchProps, StateProps } from './Academy';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  historyHelper: state.session.historyHelper
+  historyHelper: state.session.historyHelper,
+  enableGame: state.session.courseConfiguration?.enableGame
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch =>

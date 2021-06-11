@@ -239,7 +239,8 @@ export default function* AchievementSaga(): SagaIterator {
 
   yield takeEvery(ADD_EVENT, function* (action: ReturnType<typeof actions.addEvent>): any {
     const role = yield select((state: OverallState) => state.session.role);
-    if (role && !Constants.playgroundOnly) {
+    const enableAchievements = yield select((state: OverallState) => state.session.courseConfiguration?.enableAchievements)
+    if (role && enableAchievements && !Constants.playgroundOnly) {
       loggedEvents.push(action.payload);
 
       if (!timeoutSet && role) {

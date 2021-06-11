@@ -31,6 +31,7 @@ export type StateProps = {
   role?: Role;
   title: string;
   name?: string;
+  enableAchievements?: boolean;
 };
 
 const Application: React.FC<ApplicationProps> = props => {
@@ -106,9 +107,11 @@ const Application: React.FC<ApplicationProps> = props => {
           render={toIncubator}
           key={1}
         />,
-        <Route path="/achievement" render={toAchievement(props)} key={2} />,
         loginPath
       ];
+    if (!Constants.playgroundOnly && props.enableAchievements) {
+      fullPaths?.push(<Route path="/achievement" render={toAchievement(props)} key={2} />);
+    }
   const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
   const renderDisabled = () => (
@@ -124,6 +127,7 @@ const Application: React.FC<ApplicationProps> = props => {
         role={props.role}
         name={props.name}
         title={props.title}
+        enableAchievements={props.enableAchievements}
       />
       <div className="Application__main">
         {disabled && (
