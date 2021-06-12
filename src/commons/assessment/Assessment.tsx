@@ -132,9 +132,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/academy/${overview.type}/${overview.id.toString()}/${
-          Constants.defaultQuestionId
-        }`}
+        to={`/academy/${overview.type}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
       >
         <Button
           icon={icon}
@@ -168,7 +166,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderGradingStatus: boolean
   ) => {
     const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
-    const showGrade = overview.gradingStatus === 'graded'
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>

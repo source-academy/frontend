@@ -12,13 +12,14 @@ import Assessment, { DispatchProps, OwnProps, StateProps } from './Assessment';
 import { AssessmentOverview } from './AssessmentTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
-  const categoryFilter = (overview: AssessmentOverview) =>
-    overview.category === props.assessmentCategory;
+  const categoryFilter = (overview: AssessmentOverview) => overview.type === props.assessmentType;
   const stateProps: StateProps = {
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
-    isStudent: state.session.role ? state.session.role === Role.Student : true
+    isStudent: state.session.courseRegistration?.role
+      ? state.session.courseRegistration.role === Role.Student
+      : true
   };
   return stateProps;
 };

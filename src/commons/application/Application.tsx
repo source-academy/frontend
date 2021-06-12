@@ -33,6 +33,7 @@ export type StateProps = {
   name?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
+  assessmentTypes?: string[];
 };
 
 const Application: React.FC<ApplicationProps> = props => {
@@ -131,7 +132,11 @@ const Application: React.FC<ApplicationProps> = props => {
   // Paths for the Source Academy @NUS deployment
   const fullPaths = [
     loginPath,
-    <Route path="/playground" render={ensureRoleAndRouteTo(props, <Playground />)} key="authPlayground" />,
+    <Route
+      path="/playground"
+      render={ensureRoleAndRouteTo(props, <Playground />)}
+      key="authPlayground"
+    />,
     ...playgroundOnlyPaths,
     <Route path="/academy" render={toAcademy(props)} key="academy" />,
     <Route
@@ -142,10 +147,22 @@ const Application: React.FC<ApplicationProps> = props => {
   ];
 
   if (props.enableSourcecast) {
-    fullPaths.push(<Route path="/sourcecast/:sourcecastId?" render={ensureRoleAndRouteTo(props, <Sourcecast />)} key="sourcecast" />);
+    fullPaths.push(
+      <Route
+        path="/sourcecast/:sourcecastId?"
+        render={ensureRoleAndRouteTo(props, <Sourcecast />)}
+        key="sourcecast"
+      />
+    );
   }
   if (props.enableAchievements) {
-    fullPaths.push(<Route path="/achievement" render={ensureRoleAndRouteTo(props, <Achievement />)} key="achievements" />);
+    fullPaths.push(
+      <Route
+        path="/achievement"
+        render={ensureRoleAndRouteTo(props, <Achievement />)}
+        key="achievements"
+      />
+    );
   }
 
   const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
@@ -164,6 +181,7 @@ const Application: React.FC<ApplicationProps> = props => {
         name={props.name}
         title={props.title}
         enableAchievements={props.enableAchievements}
+        assessmentTypes={props.assessmentTypes}
       />
       <div className="Application__main">
         {disabled && (
@@ -216,7 +234,7 @@ const toAcademy = ({ role }: ApplicationProps) =>
  *  2. If the user is not logged in, redirect to /login
  */
 const ensureRoleAndRouteTo = ({ role }: ApplicationProps, to: JSX.Element) =>
-  role === undefined ? redirectToLogin : () => to
+  role === undefined ? redirectToLogin : () => to;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);

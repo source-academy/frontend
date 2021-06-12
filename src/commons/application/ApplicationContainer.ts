@@ -19,7 +19,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   role: state.session.role,
   name: state.session.name,
   enableAchievements: state.session.courseConfiguration?.enableAchievements,
-  enableSourcecast: state.session.courseConfiguration?.enableSourcecast
+  enableSourcecast: state.session.courseConfiguration?.enableSourcecast,
+  assessmentTypes: state.session.courseConfiguration?.assessmentTypes
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

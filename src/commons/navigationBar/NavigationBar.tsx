@@ -38,6 +38,7 @@ type StateProps = {
   title: string;
   name?: string;
   enableAchievements?: boolean;
+  assessmentTypes?: string[];
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
@@ -155,6 +156,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavigationBarMobileSideMenu
         role={props.role}
         enableAchievements={props.enableAchievements}
+        assessmentTypes={props.assessmentTypes}
         isOpen={mobileSideMenuOpen}
         onClose={() => setMobileSideMenuOpen(false)}
         handleGitHubLogIn={() => props.handleGitHubLogIn}
@@ -271,7 +273,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         </Route>
         <Route>
           {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
-            <AcademyNavigationBar role={props.role} />
+            <AcademyNavigationBar role={props.role} assessmentTypes={props.assessmentTypes} />
           )}
         </Route>
       </Switch>

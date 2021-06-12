@@ -8,7 +8,7 @@ import { Role } from '../../application/ApplicationTypes';
 import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
-import { assessmentCategoryLink } from '../../utils/ParamParseHelper';
+import { icons } from './AcademyNavigationBar';
 
 type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 
@@ -22,6 +22,7 @@ type DrawerProps = {
 type OwnProps = {
   role?: Role;
   enableAchievements?: boolean;
+  assessmentTypes?: string[];
 };
 
 const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = props => (
@@ -34,96 +35,26 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
   >
     {props.role && (
       <>
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Mission)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.FLAME} />
-          <div>Missions</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Sidequest)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.LIGHTBULB} />
-          <div>Quests</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Sidequest)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
-          <div>Paths</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Path)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Contest)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.COMPARISON} />
-          <div>Contests</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Contest)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Practical)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.MANUAL} />
-          <div>Others</div>
-        </NavLink>
+        {props.assessmentTypes?.map((assessmentTypes, idx) => (
+          <NavLink
+            to={`/academy/${assessmentTypes}`}
+            activeClassName={Classes.ACTIVE}
+            className={classNames(
+              'NavigationBar__link__mobile',
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              Classes.LARGE
+            )}
+            onClick={props.onClose}
+          >
+            <Icon icon={icons[idx]} />
+            <div>{assessmentTypes}</div>
+            <NotificationBadgeContainer
+              notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
+              disableHover={true}
+            />
+          </NavLink>
+        ))}
       </>
     )}
 
