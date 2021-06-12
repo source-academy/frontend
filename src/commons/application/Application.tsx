@@ -181,6 +181,7 @@ const Application: React.FC<ApplicationProps> = props => {
         name={props.name}
         title={props.title}
         enableAchievements={props.enableAchievements}
+        enableSourcecast={props.enableSourcecast}
         assessmentTypes={props.assessmentTypes}
       />
       <div className="Application__main">

@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Role } from '../../application/ApplicationTypes';
 import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
@@ -20,8 +19,8 @@ type DrawerProps = {
 };
 
 type OwnProps = {
-  role?: Role;
   enableAchievements?: boolean;
+  enableSourcecast?: boolean;
   assessmentTypes?: string[];
 };
 
@@ -33,45 +32,43 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     title=""
     className={Classes.DARK}
   >
-    {props.role && (
-      <>
-        {props.assessmentTypes?.map((assessmentTypes, idx) => (
-          <NavLink
-            to={`/academy/${assessmentTypes}`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames(
-              'NavigationBar__link__mobile',
-              Classes.BUTTON,
-              Classes.MINIMAL,
-              Classes.LARGE
-            )}
-            onClick={props.onClose}
-          >
-            <Icon icon={icons[idx]} />
-            <div>{assessmentTypes}</div>
-            <NotificationBadgeContainer
-              notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
-              disableHover={true}
-            />
-          </NavLink>
-        ))}
-      </>
-    )}
+    {props.assessmentTypes?.map((assessmentTypes, idx) => (
+      <NavLink
+        to={`/academy/${assessmentTypes}`}
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link__mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        onClick={props.onClose}
+      >
+        <Icon icon={icons[idx]} />
+        <div>{assessmentTypes}</div>
+        <NotificationBadgeContainer
+          notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
+          disableHover={true}
+        />
+      </NavLink>
+    ))}
 
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link__mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/sourcecast"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.MUSIC} />
-      <div>Sourcecast</div>
-    </NavLink>
+    {props.enableSourcecast && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link__mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/sourcecast"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.MUSIC} />
+        <div>Sourcecast</div>
+      </NavLink>
+    )}
 
     <NavLink
       activeClassName={Classes.ACTIVE}
@@ -103,7 +100,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       <div className="navbar-button-text">GitHub Assessments</div>
     </NavLink>
 
-    {props.role && props.enableAchievements && (
+    {props.enableAchievements && (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames(

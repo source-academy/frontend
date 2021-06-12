@@ -38,6 +38,7 @@ type StateProps = {
   title: string;
   name?: string;
   enableAchievements?: boolean;
+  enableSourcecast?: boolean;
   assessmentTypes?: string[];
 };
 
@@ -48,6 +49,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
+  // Handles both the desktop and mobile versions of the playground-only left navbar group
   const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
     isMobileBreakpoint ? (
       <>
@@ -136,14 +138,17 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     </NavbarGroup>
   );
 
+  // Handles the Source Academy @NUS left mobile navbar group
   const mobileNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
-      <Button
-        onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
-        icon={IconNames.MENU}
-        large={true}
-        minimal={true}
-      />
+      {props.role && (
+        <Button
+          onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+          icon={IconNames.MENU}
+          large={true}
+          minimal={true}
+        />
+      )}
 
       <NavLink
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -153,18 +158,21 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
       </NavLink>
 
-      <NavigationBarMobileSideMenu
-        role={props.role}
-        enableAchievements={props.enableAchievements}
-        assessmentTypes={props.assessmentTypes}
-        isOpen={mobileSideMenuOpen}
-        onClose={() => setMobileSideMenuOpen(false)}
-        handleGitHubLogIn={() => props.handleGitHubLogIn}
-        handleGitHubLogOut={() => props.handleGitHubLogOut}
-      />
+      {props.role && (
+        <NavigationBarMobileSideMenu
+          enableAchievements={props.enableAchievements}
+          enableSourcecast={props.enableSourcecast}
+          assessmentTypes={props.assessmentTypes}
+          isOpen={mobileSideMenuOpen}
+          onClose={() => setMobileSideMenuOpen(false)}
+          handleGitHubLogIn={() => props.handleGitHubLogIn}
+          handleGitHubLogOut={() => props.handleGitHubLogOut}
+        />
+      )}
     </NavbarGroup>
   );
 
+  // Handles the Source Academy @NUS left desktop navbar group
   const desktopNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
@@ -176,24 +184,26 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
       </NavLink>
 
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sourcecast"
-      >
-        <Icon icon={IconNames.MUSIC} />
-        <div className="navbar-button-text">Sourcecast</div>
-      </NavLink>
-
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/playground"
-      >
-        <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text">Playground</div>
-      </NavLink>
-
+      {props.role && props.enableSourcecast && (
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/sourcecast"
+        >
+          <Icon icon={IconNames.MUSIC} />
+          <div className="navbar-button-text">Sourcecast</div>
+        </NavLink>
+      )}
+      {props.role && (
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/playground"
+        >
+          <Icon icon={IconNames.CODE} />
+          <div className="navbar-button-text">Playground</div>
+        </NavLink>
+      )}
       {Constants.enableGitHubAssessments && (
         <NavLink
           activeClassName={Classes.ACTIVE}
