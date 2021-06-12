@@ -56,7 +56,7 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  assessmentCategory: AssessmentCategory;
+  assessmentType: string;
 };
 
 export type StateProps = {
@@ -132,7 +132,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/academy/${assessmentCategoryLink(overview.category)}/${overview.id.toString()}/${
+        to={`/academy/${overview.type}/${overview.id.toString()}/${
           Constants.defaultQuestionId
         }`}
       >
@@ -168,6 +168,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderGradingStatus: boolean
   ) => {
     const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
+    const showGrade = overview.gradingStatus === 'graded'
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>
@@ -328,7 +329,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Define the betcha dialog (in each card's menu)
   const submissionText = betchaAssessment ? (
     <p>
-      You are about to finalise your submission for the {betchaAssessment.category.toLowerCase()}{' '}
+      You are about to finalise your submission for the {betchaAssessment.type.toLowerCase()}{' '}
       <i>&quot;{betchaAssessment.title}&quot;</i>.
     </p>
   ) : (

@@ -24,6 +24,7 @@ export type DispatchProps = {
 export type StateProps = {
   historyHelper: HistoryHelper;
   enableGame: boolean | undefined;
+  assessmentTypes: string[] | undefined;
 };
 
 export type OwnProps = {
@@ -43,44 +44,20 @@ class Academy extends React.Component<AcademyProps> {
             <Route path="/academy/groundcontrol" component={GroundControl} key={0} />,
             <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} key={1} />,
             <Route path="/academy/sourcereel" component={Sourcereel} key={2} />,
-            <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />
+            <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />,
+            <Route path="/academy/dashboard" component={DashboardContainer} key={4} />
           ]
         : null;
     return (
       <div className="Academy">
         <Switch>
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Contest
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Contest)}
-          />
+          {this.props.assessmentTypes?.map(assessmentType => (
+            <Route
+              path={`/academy/${assessmentType}/${assessmentRegExp}`}
+              render={this.assessmentRenderFactory(assessmentType)}
+            />
+          ))}
           {this.props.enableGame && <Route path="/academy/game" component={Game} />}
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Mission
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Mission)}
-          />
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Path
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Path)}
-          />
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Sidequest
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Sidequest)}
-          />
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Practical
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Practical)}
-          />
-          <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
           {staffRoutes}
           <Route component={this.redirectTo404} />
@@ -90,8 +67,8 @@ class Academy extends React.Component<AcademyProps> {
   }
 
   private assessmentRenderFactory =
-    (cat: AssessmentCategory) => (routerProps: RouteComponentProps<any>) =>
-      <AssessmentContainer assessmentCategory={cat} />;
+    (assessmentType: string) => (routerProps: RouteComponentProps<any>) =>
+      <AssessmentContainer assessmentType={assessmentType} />;
 
   /**
    * 1. If user is in /academy.*, redirect to game
@@ -104,7 +81,7 @@ class Academy extends React.Component<AcademyProps> {
     if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
       return () => <Redirect to={lastAcademy!} />;
     } else {
-      return this.props.enableGame ? this.redirectToGame : this.redirectToMissions;
+      return this.props.enableGame ? this.redirectToGame : this.redirectToAssessments;
     }
   };
 
@@ -112,7 +89,13 @@ class Academy extends React.Component<AcademyProps> {
 
   private redirectToGame = () => <Redirect to="/academy/game" />;
 
-  private redirectToMissions = () => <Redirect to="/academy/missions" />
+  private redirectToAssessments = () => {
+    return this.props.assessmentTypes ? (
+      <Redirect to={`/academy/${this.props.assessmentTypes[0]}`} />
+    ) : (
+      this.redirectTo404()
+    );
+  };
 }
 
 export default Academy;

@@ -61,7 +61,7 @@ W* Used to display information regarding an assessment in the UI.
  *   the assessment opens
  */
 export type AssessmentOverview = {
-  category: AssessmentCategory;
+  type: string;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
@@ -86,7 +86,7 @@ export type AssessmentOverview = {
  * Used when an assessment is being actively attempted/graded.
  */
 export type Assessment = {
-  category: AssessmentCategory;
+  type: string;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
   id: number;
@@ -222,7 +222,7 @@ export const normalLibrary = (): Library => {
 
 export const overviewTemplate = (): AssessmentOverview => {
   return {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 1,
@@ -306,7 +306,7 @@ export const mcqTemplate = (): IMCQQuestion => {
 
 export const assessmentTemplate = (): Assessment => {
   return {
-    category: 'Mission',
+    type: 'Missions',
     globalDeployment: normalLibrary(),
     graderDeployment: emptyLibrary(),
     id: -1,
