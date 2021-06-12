@@ -13,7 +13,7 @@ import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
-import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
+import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { parseQuery } from '../utils/QueryHelper';
@@ -32,6 +32,7 @@ export type StateProps = {
   title: string;
   name?: string;
   enableAchievements?: boolean;
+  enableSourcecast?: boolean;
 };
 
 const Application: React.FC<ApplicationProps> = props => {
@@ -98,20 +99,55 @@ const Application: React.FC<ApplicationProps> = props => {
   }, [isPWA, isMobile]);
 
   const loginPath = <Route path="/login" render={toLogin(props)} key="login" />;
-  const fullPaths = Constants.playgroundOnly
-    ? null
-    : [
-        <Route path="/academy" render={toAcademy(props)} key={0} />,
+
+  const githubAssessmentsPaths = Constants.enableGitHubAssessments
+    ? [
         <Route
-          path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-          render={toIncubator}
-          key={1}
+          path="/githubassessments/missions"
+          component={() => (
+            <GitHubMissionListing
+              handleGitHubLogIn={props.handleGitHubLogIn}
+              handleGitHubLogOut={props.handleGitHubLogOut}
+            />
+          )}
+          key="githubAssessmentsMissions"
         />,
-        loginPath
-      ];
-    if (!Constants.playgroundOnly && props.enableAchievements) {
-      fullPaths?.push(<Route path="/achievement" render={toAchievement(props)} key={2} />);
-    }
+        <Route
+          path="/githubassessments/editor"
+          component={GitHubAssessmentWorkspaceContainer}
+          key="githubAssessmentsEditor"
+        />
+      ]
+    : [];
+
+  // Paths for the playground-only deployment
+  const playgroundOnlyPaths = [
+    <Route path="/playground" component={Playground} key="playground" />,
+    <Route path="/contributors" component={Contributors} key="contributors" />,
+    <Route path="/callback/github" component={GitHubCallback} key="githubCallback" />,
+    ...githubAssessmentsPaths
+  ];
+
+  // Paths for the Source Academy @NUS deployment
+  const fullPaths = [
+    loginPath,
+    <Route path="/playground" render={ensureRoleAndRouteTo(props, <Playground />)} key="authPlayground" />,
+    ...playgroundOnlyPaths,
+    <Route path="/academy" render={toAcademy(props)} key="academy" />,
+    <Route
+      path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+      render={toIncubator}
+      key="missionControl"
+    />
+  ];
+
+  if (props.enableSourcecast) {
+    fullPaths.push(<Route path="/sourcecast/:sourcecastId?" render={ensureRoleAndRouteTo(props, <Sourcecast />)} key="sourcecast" />);
+  }
+  if (props.enableAchievements) {
+    fullPaths.push(<Route path="/achievement" render={ensureRoleAndRouteTo(props, <Achievement />)} key="achievements" />);
+  }
+
   const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
   const renderDisabled = () => (
@@ -143,35 +179,17 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route render={renderDisabled} />
           </Switch>
         )}
-        {!disabled && (
+        {!disabled && Constants.playgroundOnly && (
           <Switch>
-            <Route path="/playground" component={Playground} />
-            <Route path="/contributors" component={Contributors} />
-            <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            {Constants.enableGitHubAssessments && (
-              <Route
-                path="/githubassessments/missions"
-                component={() => (
-                  <GitHubMissionListing
-                    handleGitHubLogIn={props.handleGitHubLogIn}
-                    handleGitHubLogOut={props.handleGitHubLogOut}
-                  />
-                )}
-              />
-            )}
-            {Constants.enableGitHubAssessments && (
-              <Route
-                path="/githubassessments/editor"
-                component={GitHubAssessmentWorkspaceContainer}
-              />
-            )}
-            <Route path="/callback/github" component={GitHubCallback} />
+            {playgroundOnlyPaths}
+            <Route exact={true} path="/" render={redirectToPlayground} />
+            <Route component={NotFound} />
+          </Switch>
+        )}
+        {!disabled && !Constants.playgroundOnly && (
+          <Switch>
             {fullPaths}
-            <Route
-              exact={true}
-              path="/"
-              render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
-            />
+            <Route exact={true} path="/" render={redirectToAcademy} />
             <Route component={NotFound} />
           </Switch>
         )}
@@ -193,12 +211,12 @@ const toAcademy = ({ role }: ApplicationProps) =>
   role === undefined ? redirectToLogin : () => <Academy role={role} />;
 
 /**
- * A user routes to /achievement,
- *  1. If the user is logged in, render the Achievement component
+ * Routes a user to the specified route,
+ *  1. If the user is logged in, render the specified component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAchievement = ({ role }: ApplicationProps) =>
-  role === undefined ? redirectToLogin : () => <Achievement />;
+const ensureRoleAndRouteTo = ({ role }: ApplicationProps, to: JSX.Element) =>
+  role === undefined ? redirectToLogin : () => to
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);
