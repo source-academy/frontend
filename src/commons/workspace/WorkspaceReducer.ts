@@ -9,8 +9,7 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
-  ResultOutput,
-  RunningOutput
+  ResultOutput
 } from '../application/ApplicationTypes';
 import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
@@ -310,7 +309,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
        * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
        * (2) state[workspaceLocation].output[-1] is not RunningOutput
        * (3) state[workspaceLocation].output[-1] is RunningOutput */
-      lastOutput = state[workspaceLocation].output.slice(-1)[0];
+      lastOutput = state[workspaceLocation].output[state[workspaceLocation].output.length - 1];
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         // New block of output.
         newOutput = state[workspaceLocation].output.concat({
@@ -318,21 +317,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           consoleLogs: [...action.payload.logString]
         });
       } else {
-        // Append to existing output
-        // NOTE: MUTATING, FOR PERFORMANCE.
-        // This is the new version which mutates the output.
-        // From manual testing, it works.
-        newOutput = state[workspaceLocation].output;
-        (newOutput[newOutput.length - 1] as RunningOutput).consoleLogs.push(
-          ...action.payload.logString
-        );
-        // This is the original version, 5x speed diff but obeys React/Redux contract.
-        // Please remove one of these during code review.
-        // const updatedLastOutput = {
-        //   type: lastOutput.type,
-        //   consoleLogs: lastOutput.consoleLogs.concat(...action.payload.logString)
-        // };
-        // newOutput = state[workspaceLocation].output.slice(0, -1).concat(updatedLastOutput);
+        const updatedLastOutput = {
+          type: lastOutput.type,
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
+        };
+        newOutput = state[workspaceLocation].output.slice(0, -1);
+        newOutput.push(updatedLastOutput);
       }
       return {
         ...state,
