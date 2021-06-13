@@ -13,10 +13,10 @@ import {
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  group: state.session.group,
+  group: state.session.courseRegistration.group,
   inferencer: new AchievementInferencer(state.achievement.achievements, state.achievement.goals),
-  name: state.session.name,
-  role: state.session.role,
+  name: state.session.user.name,
+  role: state.session.courseRegistration.role,
   assessmentOverviews: state.session.assessmentOverviews,
   users: state.achievement.users
 });

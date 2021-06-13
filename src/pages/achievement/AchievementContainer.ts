@@ -5,7 +5,7 @@ import { OverallState } from '../../commons/application/ApplicationTypes';
 import Achievement, { DispatchProps, StateProps } from './Achievement';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  role: state.session.role!
+  role: state.session.courseRegistration.role!
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

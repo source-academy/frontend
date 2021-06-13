@@ -38,11 +38,17 @@ export const saveState = (state: OverallState) => {
   try {
     const stateToBeSaved: SavedState = {
       session: {
-        accessToken: state.session.accessToken,
-        refreshToken: state.session.refreshToken,
-        role: state.session.role,
-        name: state.session.name,
-        userId: state.session.userId
+        tokens: {
+          accessToken: state.session.tokens.accessToken,
+          refreshToken: state.session.tokens.refreshToken
+        },
+        courseRegistration: {
+          role: state.session.courseRegistration.role,
+        },
+        user: {
+          name: state.session.user.name,
+          userId: state.session.user.userId
+        }
       },
       achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,

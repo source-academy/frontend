@@ -46,10 +46,10 @@ export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
-  readonly tokens: DefaultTokens;
-  readonly user: DefaultUser;
-  readonly courseRegistration: DefaultCourseRegistration;
-  readonly courseConfiguration: DefaultCourseConfiguration;
+  readonly tokens: Partial<Tokens>;
+  readonly user: Partial<User>;
+  readonly courseRegistration: Partial<CourseRegistration>;
+  readonly courseConfiguration: Partial<CourseConfiguration>;
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
@@ -105,39 +105,4 @@ export type CourseConfiguration = {
   assessmentTypes: AssessmentType[];
 };
 
-type DefaultUser = {
-  userId?: number;
-  name?: string;
-  courses: UserCourse[];
-};
-
-type DefaultTokens = {
-  accessToken?: string;
-  refreshToken?: string;
-};
-
-type DefaultCourseRegistration = {
-  role?: Role;
-  group: string | null;
-  gameState?: GameState;
-  courseId?: number;
-  grade: number;
-  maxGrade: number;
-  xp: number;
-  story: Story;
-};
-
-type DefaultCourseConfiguration = {
-  name?: string;
-  moduleCode?: string;
-  viewable?: boolean;
-  enableGame?: boolean;
-  enableAchievements?: boolean;
-  enableSourcecast?: boolean;
-  sourceChapter?: number;
-  sourceVariant?: Variant;
-  moduleHelpText?: string;
-  assessmentTypes: AssessmentType[];
-};
-
-export type UpdateCourseConfiguration = Omit<DefaultCourseConfiguration, 'assessmentTypes'>;
+export type UpdateCourseConfiguration = Partial<Omit<CourseConfiguration, 'assessmentTypes'>>;
