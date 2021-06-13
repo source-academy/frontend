@@ -3,9 +3,9 @@ import { Builder } from 'xml2js';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentType,
   BaseQuestion,
   GradingStatuses,
   IMCQQuestion,
@@ -72,7 +72,7 @@ const makeAssessmentOverview = (
   const task: XmlParseStrTask = result.CONTENT.TASK[0];
   const rawOverview: XmlParseStrOverview = task.$;
   return {
-    category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
+    type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     grade: 1,
@@ -97,7 +97,7 @@ const makeAssessment = (result: any): [Assessment, number, number] => {
   const questionArr = makeQuestions(task);
   return [
     {
-      category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
+      type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
       id: EDITING_ID,
       globalDeployment: makeLibrary(task.DEPLOYMENT),
       graderDeployment: makeLibrary(task.GRADERDEPLOYMENT),
@@ -306,7 +306,7 @@ export const assessmentToXml = (
   const rawOverview: XmlParseStrOverview = {
     coverimage: overview.coverImage,
     duedate: overview.closeAt,
-    kind: overview.category.toLowerCase(),
+    kind: overview.type.toLowerCase(),
     number: overview.number || '',
     startdate: overview.openAt,
     story: overview.story,
