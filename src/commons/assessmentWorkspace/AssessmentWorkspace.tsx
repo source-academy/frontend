@@ -27,7 +27,6 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AutogradingResult,
   ContestEntry,
   IContestVotingQuestion,
@@ -63,7 +62,6 @@ import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
@@ -407,7 +405,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             toSpawn: () => true
           },
           {
-            label: `${props.assessment!.category} Briefing`,
+            label: `${props.assessment!.type} Briefing`,
             iconName: IconNames.BRIEFCASE,
             body: (
               <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
@@ -416,13 +414,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             toSpawn: () => true
           },
           {
-            label: `${props.assessment!.category} Autograder`,
+            label: `${props.assessment!.type} Autograder`,
             iconName: IconNames.AIRPLANE,
             body: (
               <SideContentAutograder
                 testcases={props.editorTestcases}
                 autogradingResults={
-                  isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
+                  isGraded || props.assessment!.type === 'Paths' ? props.autogradingResults : []
                 }
                 handleTestcaseEval={props.handleTestcaseEval}
               />
@@ -503,7 +501,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
    */
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/academy/${assessmentCategoryLink(props.assessment!.category)}`;
+    const listingPath = `/academy/${props.assessment!.type.toLowerCase()}`;
     const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
 
@@ -562,12 +560,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessment!.category === AssessmentCategories.Path
+          props.assessment!.type === 'Paths'
             ? onClickProgress(onClickNext)
             : onClickNext
         }
         onClickReturn={
-          props.assessment!.category === AssessmentCategories.Path
+          props.assessment!.type === 'Paths'
             ? onClickProgress(onClickReturn)
             : onClickReturn
         }
