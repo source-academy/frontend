@@ -549,7 +549,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     } else {
       tabs = [
         {
-          label: `${assessment!.category} Briefing`,
+          label: `${assessment!.type} Briefing`,
           iconName: IconNames.BRIEFCASE,
           body: (
             <TextAreaContent
