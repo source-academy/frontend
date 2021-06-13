@@ -129,7 +129,7 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.setUser(user));
 
     if (!courseRegistration || !courseConfiguration) {
-      return yield history.push('/');
+      return yield history.push('/welcome');
     }
 
     yield put(actions.setCourseRegistration(courseRegistration));
@@ -294,9 +294,7 @@ function* BackendSaga(): SagaIterator {
       | ReturnType<typeof actions.submitGrading>
       | ReturnType<typeof actions.submitGradingAndContinue>
   ): any {
-    const role: Role = yield select(
-      (state: OverallState) => state.session.role!
-    );
+    const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
     }
@@ -436,9 +434,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     DELETE_SOURCECAST_ENTRY,
     function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
-      const role: Role = yield select(
-        (state: OverallState) => state.session.role!
-      );
+      const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
       }
@@ -475,9 +471,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     SAVE_SOURCECAST_DATA,
     function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
-      const role: Role = yield select(
-        (state: OverallState) => state.session.role!
-      );
+      const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
       }

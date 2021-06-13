@@ -14,6 +14,7 @@ import MissionControlContainer from '../../pages/missionControl/MissionControlCo
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
+import Welcome from '../../pages/welcome/WelcomeContainer';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
@@ -135,11 +136,12 @@ const Application: React.FC<ApplicationProps> = props => {
     loginPath,
     <Route
       path="/playground"
-      render={ensureRoleAndRouteTo(props, <Playground />)}
+      render={ensureUserAndRouteTo(props, <Playground />)}
       key="authPlayground"
     />,
     ...playgroundOnlyPaths,
-    <Route path="/academy" render={toAcademy(props)} key="academy" />
+    <Route path="/academy" render={toAcademy(props)} key="academy" />,
+    <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} key="welcome" />
   ];
 
   if (props.role && props.role !== 'student') {
@@ -156,7 +158,7 @@ const Application: React.FC<ApplicationProps> = props => {
     fullPaths.push(
       <Route
         path="/sourcecast/:sourcecastId?"
-        render={ensureRoleAndRouteTo(props, <Sourcecast />)}
+        render={ensureUserAndRoleAndRouteTo(props, <Sourcecast />)}
         key="sourcecast"
       />
     );
@@ -165,7 +167,7 @@ const Application: React.FC<ApplicationProps> = props => {
     fullPaths.push(
       <Route
         path="/achievement"
-        render={ensureRoleAndRouteTo(props, <Achievement />)}
+        render={ensureUserAndRoleAndRouteTo(props, <Achievement />)}
         key="achievements"
       />
     );
@@ -226,22 +228,37 @@ const Application: React.FC<ApplicationProps> = props => {
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
+const redirectToWelcome = () => <Redirect to="/welcome" />;
 
 /**
  * A user routes to /academy,
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = ({ role }: ApplicationProps) =>
-  role === undefined ? redirectToLogin : () => <Academy role={role} />;
+const toAcademy = ({ name, role }: ApplicationProps) =>
+  name === undefined
+    ? redirectToLogin
+    : role === undefined
+    ? redirectToWelcome
+    : () => <Academy role={role} />;
 
 /**
  * Routes a user to the specified route,
  *  1. If the user is logged in, render the specified component
  *  2. If the user is not logged in, redirect to /login
  */
-const ensureRoleAndRouteTo = ({ role }: ApplicationProps, to: JSX.Element) =>
-  role === undefined ? redirectToLogin : () => to;
+const ensureUserAndRouteTo = ({ name }: ApplicationProps, to: JSX.Element) =>
+  name === undefined ? redirectToLogin : () => to;
+
+/**
+ * Routes a user to the specified route,
+ *  1. If the user is logged in and has a latest viewed course, render the
+ *     specified component
+ *  2. If the user is not logged in, redirect to /login
+ *  3. If the user is logged in, but does not have a course, redirect to /welcome
+ */
+const ensureUserAndRoleAndRouteTo = ({ name, role }: ApplicationProps, to: JSX.Element) =>
+  name === undefined ? redirectToLogin : role === undefined ? redirectToWelcome : () => to;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);

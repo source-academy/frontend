@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Role } from 'src/commons/application/ApplicationTypes';
 
 import { AssessmentType } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
@@ -12,6 +13,7 @@ import { icons } from './AcademyNavigationBar';
 type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 
 type DrawerProps = {
+  role?: Role;
   isOpen: boolean;
   onClose: () => void;
   handleGitHubLogIn: () => void;
@@ -32,28 +34,32 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     title=""
     className={Classes.DARK}
   >
-    {props.assessmentTypes?.map((assessmentType, idx) => (
-      <NavLink
-        to={`/academy/${assessmentType.toLowerCase()}`}
-        activeClassName={Classes.ACTIVE}
-        className={classNames(
-          'NavigationBar__link__mobile',
-          Classes.BUTTON,
-          Classes.MINIMAL,
-          Classes.LARGE
-        )}
-        onClick={props.onClose}
-      >
-        <Icon icon={icons[idx]} />
-        <div>{assessmentType}</div>
-        <NotificationBadgeContainer
-          notificationFilter={filterNotificationsByType(assessmentType)}
-          disableHover={true}
-        />
-      </NavLink>
-    ))}
+    {props.role ? (
+      props.assessmentTypes?.map((assessmentType, idx) => (
+        <NavLink
+          to={`/academy/${assessmentType.toLowerCase()}`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames(
+            'NavigationBar__link__mobile',
+            Classes.BUTTON,
+            Classes.MINIMAL,
+            Classes.LARGE
+          )}
+          onClick={props.onClose}
+        >
+          <Icon icon={icons[idx]} />
+          <div>{assessmentType}</div>
+          <NotificationBadgeContainer
+            notificationFilter={filterNotificationsByType(assessmentType)}
+            disableHover={true}
+          />
+        </NavLink>
+      ))
+    ) : (
+      <></>
+    )}
 
-    {props.enableSourcecast && (
+    {props.role && props.enableSourcecast && (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames(
@@ -100,7 +106,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       <div className="navbar-button-text">GitHub Assessments</div>
     </NavLink>
 
-    {props.enableAchievements && (
+    {props.role && props.enableAchievements && (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames(

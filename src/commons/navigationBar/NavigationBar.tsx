@@ -142,7 +142,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
   // Handles the Source Academy @NUS left mobile navbar group
   const mobileNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
-      {props.role && (
+      {props.name && (
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
           icon={IconNames.MENU}
@@ -159,8 +159,9 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
       </NavLink>
 
-      {props.role && (
+      {props.name && (
         <NavigationBarMobileSideMenu
+          role={props.role}
           enableAchievements={props.enableAchievements}
           enableSourcecast={props.enableSourcecast}
           assessmentTypes={props.assessmentTypes}
@@ -195,7 +196,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           <div className="navbar-button-text">Sourcecast</div>
         </NavLink>
       )}
-      {props.role && (
+      {props.name && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
