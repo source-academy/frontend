@@ -283,25 +283,22 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
 };
 
 export const defaultSession: SessionState = {
-  tokens: {},
-  user: {
-    courses: []
+  courses: [],
+  group: null,
+  gameState: {
+    completed_quests: [],
+    collectibles: {}
   },
-  courseRegistration: {
-    group: null,
-    grade: 0,
-    maxGrade: 0,
-    xp: 0,
-    story: {
-      story: '',
-      playStory: false
-    }
+  grade: 0,
+  maxGrade: 0,
+  xp: 0,
+  story: {
+    story: '',
+    playStory: false
   },
-  courseConfiguration: {
-    sourceChapter: 1,
-    sourceVariant: 'default',
-    assessmentTypes: []
-  },
+  assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+  sourceChapter: Constants.defaultSourceChapter,
+  sourceVariant: Constants.defaultSourceVariant as Variant,
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   githubOctokitObject: { octokit: undefined },

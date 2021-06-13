@@ -42,7 +42,10 @@ import {
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 function selectTokens() {
-  return select((state: OverallState) => state.session.tokens);
+  return select((state: OverallState) => ({
+    accessToken: state.session.accessToken,
+    refreshToken: state.session.refreshToken
+  }));
 }
 
 export default function* AchievementSaga(): SagaIterator {
@@ -207,9 +210,9 @@ export default function* AchievementSaga(): SagaIterator {
   const updateInterval = 3000;
 
   yield takeEvery(ADD_EVENT, function* (action: ReturnType<typeof actions.addEvent>): any {
-    const role = yield select((state: OverallState) => state.session.courseRegistration.role);
+    const role = yield select((state: OverallState) => state.session.role);
     const enableAchievements = yield select(
-      (state: OverallState) => state.session.courseConfiguration.enableAchievements
+      (state: OverallState) => state.session.enableAchievements
     );
     if (role && enableAchievements && !Constants.playgroundOnly) {
       loggedEvents.push(action.payload);

@@ -12,9 +12,9 @@ import Grading, { DispatchProps, StateProps } from './Grading';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   gradingOverviews: state.session.gradingOverviews,
-  userId: state.session.user.userId,
+  userId: state.session.userId,
   notifications: state.session.notifications,
-  role: state.session.courseRegistration.role
+  role: state.session.role
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

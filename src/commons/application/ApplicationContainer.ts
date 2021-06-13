@@ -16,11 +16,11 @@ import { OverallState } from './ApplicationTypes';
  */
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   title: state.application.title,
-  role: state.session.courseRegistration.role,
-  name: state.session.user.name,
-  enableAchievements: state.session.courseConfiguration.enableAchievements,
-  enableSourcecast: state.session.courseConfiguration.enableSourcecast,
-  assessmentTypes: state.session.courseConfiguration.assessmentTypes
+  role: state.session.role,
+  name: state.session.name,
+  enableAchievements: state.session.enableAchievements,
+  enableSourcecast: state.session.enableSourcecast,
+  assessmentTypes: state.session.assessmentTypes
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

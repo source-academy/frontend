@@ -17,9 +17,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
-    isStudent: state.session.courseRegistration.role
-      ? state.session.courseRegistration.role === Role.Student
-      : true
+    isStudent: state.session.role ? state.session.role === Role.Student : true
   };
   return stateProps;
 };

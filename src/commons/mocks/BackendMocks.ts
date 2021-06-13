@@ -4,7 +4,13 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { store } from '../../pages/createStore';
-import { GameState, OverallState, Role, SourceLanguage, styliseSublanguage } from '../application/ApplicationTypes';
+import {
+  GameState,
+  OverallState,
+  Role,
+  SourceLanguage,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   CourseConfiguration,
@@ -44,17 +50,20 @@ export function* mockBackendSaga(): SagaIterator {
     const user: User = {
       userId: 123,
       name: 'DevStaff',
-      courses: [{
-        courseId: 1,
-        moduleCode: `CS1101S`,
-        name: `Programming Methodology`,
-        viewable: true
-      }, {
-        courseId: 2,
-        moduleCode: `CS2040S`,
-        name: `Data Structures and Algorithms`,
-        viewable: true
-      }]
+      courses: [
+        {
+          courseId: 1,
+          moduleCode: `CS1101S`,
+          name: `Programming Methodology`,
+          viewable: true
+        },
+        {
+          courseId: 2,
+          moduleCode: `CS2040S`,
+          name: `Data Structures and Algorithms`,
+          viewable: true
+        }
+      ]
     };
     const courseRegistration: CourseRegistration = {
       role: Role.Staff,
@@ -67,10 +76,10 @@ export function* mockBackendSaga(): SagaIterator {
       story: {
         story: 'mission-1',
         playStory: true
-      },
-    }
+      }
+    };
     const courseConfiguration: CourseConfiguration = {
-      name: `Programming Methodology`,
+      moduleName: `Programming Methodology`,
       moduleCode: `CS1101S`,
       viewable: true,
       enableGame: true,
@@ -80,18 +89,21 @@ export function* mockBackendSaga(): SagaIterator {
       sourceVariant: 'default',
       moduleHelpText: '',
       assessmentTypes: ['Missions', 'Quests', 'Contests', 'Paths', 'Others']
-    }
+    };
     const sublanguage: SourceLanguage = {
       chapter: courseConfiguration.sourceChapter,
       variant: courseConfiguration.sourceVariant,
-      displayName: styliseSublanguage(courseConfiguration.sourceChapter, courseConfiguration.sourceVariant)
-    }
-    
+      displayName: styliseSublanguage(
+        courseConfiguration.sourceChapter,
+        courseConfiguration.sourceVariant
+      )
+    };
+
     store.dispatch(actions.setTokens(tokens));
     store.dispatch(actions.setUser(user));
     store.dispatch(actions.setCourseRegistration(courseRegistration));
     store.dispatch(actions.setCourseConfiguration(courseConfiguration));
-    store.dispatch(actions.updateSublanguage(sublanguage))
+    store.dispatch(actions.updateSublanguage(sublanguage));
     yield history.push('/academy');
   });
 
@@ -108,7 +120,7 @@ export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(
     FETCH_GRADING_OVERVIEWS,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
-      const accessToken = yield select((state: OverallState) => state.session.tokens.accessToken);
+      const accessToken = yield select((state: OverallState) => state.session.accessToken);
       const filterToGroup = action.payload;
       const gradingOverviews = yield call(() =>
         mockFetchGradingOverview(accessToken, filterToGroup)
@@ -121,7 +133,7 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>): any {
     const submissionId = action.payload;
-    const accessToken = yield select((state: OverallState) => state.session.tokens.accessToken);
+    const accessToken = yield select((state: OverallState) => state.session.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
     if (grading !== null) {
       yield put(actions.updateGrading(submissionId, [...grading]));

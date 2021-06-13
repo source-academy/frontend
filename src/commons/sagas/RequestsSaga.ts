@@ -1141,7 +1141,7 @@ function fillTokens(tokens?: Tokens): Tokens {
 }
 
 function getTokensFromStore(): Tokens | undefined {
-  const { accessToken, refreshToken } = store.getState().session.tokens;
+  const { accessToken, refreshToken } = store.getState().session;
   return accessToken && refreshToken ? { accessToken, refreshToken } : undefined;
 }
 
@@ -1258,7 +1258,7 @@ const computeGradingStatus = (
     : 'excluded';
 
 const courseId: () => string = () => {
-  const id = store.getState().session.courseRegistration.courseId;
+  const id = store.getState().session.courseId;
   if (id) {
     return `course/${id}`;
   } else {

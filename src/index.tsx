@@ -19,7 +19,7 @@ if (Constants.sentryDsn) {
     environment: Constants.sourceAcademyEnvironment,
     release: `cadet-frontend@${Constants.sourceAcademyVersion}`
   });
-  const userId = store.getState().session.user.userId;
+  const userId = store.getState().session.userId;
   Sentry.setUser(typeof userId !== 'undefined' ? { id: userId.toString() } : null);
 }
 
@@ -55,7 +55,7 @@ registerServiceWorker({
 if (Constants.cadetLoggerUrl) {
   // Seriously: registerServiceWorker onSuccess and onUpdate are separate paths.
   // Neither of them actually fire in localhost...
-  const sync = () => triggerSyncLogs(store.getState().session.tokens.accessToken);
+  const sync = () => triggerSyncLogs(store.getState().session.accessToken);
   navigator.serviceWorker.ready.then(() => {
     setInterval(sync, Constants.cadetLoggerInterval);
   });

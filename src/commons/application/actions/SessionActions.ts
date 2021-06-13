@@ -10,7 +10,6 @@ import {
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  CourseConfiguration,
   CourseRegistration,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
@@ -44,6 +43,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
   UPDATE_NOTIFICATIONS,
+  UpdateCourseConfiguration,
   User
 } from '../types/SessionTypes';
 
@@ -79,7 +79,7 @@ export const setTokens = ({ accessToken, refreshToken }: Tokens) =>
 
 export const setUser = (user: User) => action(SET_USER, user);
 
-export const setCourseConfiguration = (courseConfiguration: CourseConfiguration) =>
+export const setCourseConfiguration = (courseConfiguration: UpdateCourseConfiguration) =>
   action(SET_COURSE_CONFIGURATION, courseConfiguration);
 
 export const setCourseRegistration = (courseRegistration: CourseRegistration) =>

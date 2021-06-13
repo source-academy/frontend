@@ -29,10 +29,10 @@ function Game() {
 
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo({
-      accessToken: session.tokens.accessToken,
-      refreshToken: session.tokens.refreshToken,
-      role: session.courseRegistration.role,
-      name: session.user.name
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+      role: session.role,
+      name: session.name
     } as AccountInfo);
     // TODO see above
     SourceAcademyGame.getInstance().setAchievements([]);

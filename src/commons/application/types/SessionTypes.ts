@@ -46,10 +46,37 @@ export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
-  readonly tokens: Partial<Tokens>;
-  readonly user: Partial<User>;
-  readonly courseRegistration: Partial<CourseRegistration>;
-  readonly courseConfiguration: Partial<CourseConfiguration>;
+  // Tokens
+  readonly accessToken?: string;
+  readonly refreshToken?: string;
+
+  // User
+  readonly userId?: number;
+  readonly name?: string;
+  readonly courses: UserCourse[];
+
+  // Course Registration
+  readonly role?: Role;
+  readonly group: string | null;
+  readonly gameState: GameState;
+  readonly courseId?: number;
+  readonly grade: number;
+  readonly maxGrade: number;
+  readonly xp: number;
+  readonly story: Story;
+
+  // Course Configuration
+  readonly moduleName?: string;
+  readonly moduleCode?: string;
+  readonly viewable?: boolean;
+  readonly enableGame?: boolean;
+  readonly enableAchievements?: boolean;
+  readonly enableSourcecast?: boolean;
+  readonly sourceChapter: number;
+  readonly sourceVariant: Variant;
+  readonly moduleHelpText?: string;
+  readonly assessmentTypes: AssessmentType[];
+
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
@@ -93,7 +120,7 @@ export type CourseRegistration = {
 };
 
 export type CourseConfiguration = {
-  name: string;
+  moduleName: string;
   moduleCode: string;
   viewable: boolean;
   enableGame: boolean;
@@ -101,7 +128,7 @@ export type CourseConfiguration = {
   enableSourcecast: boolean;
   sourceChapter: number;
   sourceVariant: Variant;
-  moduleHelpText?: string;
+  moduleHelpText: string;
   assessmentTypes: AssessmentType[];
 };
 

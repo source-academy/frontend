@@ -84,7 +84,10 @@ import {
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 function selectTokens() {
-  return select((state: OverallState) => state.session.tokens);
+  return select((state: OverallState) => ({
+    accessToken: state.session.accessToken,
+    refreshToken: state.session.refreshToken
+  }));
 }
 
 function* BackendSaga(): SagaIterator {
@@ -292,7 +295,7 @@ function* BackendSaga(): SagaIterator {
       | ReturnType<typeof actions.submitGradingAndContinue>
   ): any {
     const role: Role = yield select(
-      (state: OverallState) => state.session.courseRegistration.role!
+      (state: OverallState) => state.session.role!
     );
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
@@ -434,7 +437,7 @@ function* BackendSaga(): SagaIterator {
     DELETE_SOURCECAST_ENTRY,
     function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
       const role: Role = yield select(
-        (state: OverallState) => state.session.courseRegistration.role!
+        (state: OverallState) => state.session.role!
       );
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
@@ -473,7 +476,7 @@ function* BackendSaga(): SagaIterator {
     SAVE_SOURCECAST_DATA,
     function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
       const role: Role = yield select(
-        (state: OverallState) => state.session.courseRegistration.role!
+        (state: OverallState) => state.session.role!
       );
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
@@ -528,12 +531,8 @@ function* BackendSaga(): SagaIterator {
         return yield handleResponseError(resp);
       }
 
-      const courseConfig: CourseConfiguration = yield select(
-        (state: OverallState) => state.session.courseConfiguration
-      );
       yield put(
         actions.setCourseConfiguration({
-          ...courseConfig,
           sourceChapter: sublang.chapter,
           sourceVariant: sublang.variant
         })
