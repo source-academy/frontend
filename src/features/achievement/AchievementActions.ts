@@ -7,8 +7,8 @@ import {
   ADD_EVENT,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
-  EDIT_ACHIEVEMENT,
-  EDIT_GOAL,
+  // EDIT_ACHIEVEMENT,
+  // EDIT_GOAL,
   EventType,
   GET_ACHIEVEMENTS,
   GET_GOALS,
@@ -31,10 +31,10 @@ export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
 
 export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_GOALS, goals);
 
-export const editAchievement = (achievement: AchievementItem) =>
-  action(EDIT_ACHIEVEMENT, achievement);
+// export const editAchievement = (achievement: AchievementItem) =>
+//   action(EDIT_ACHIEVEMENT, achievement);
 
-export const editGoal = (definition: GoalDefinition) => action(EDIT_GOAL, definition);
+// export const editGoal = (definition: GoalDefinition) => action(EDIT_GOAL, definition);
 
 export const getAchievements = () => action(GET_ACHIEVEMENTS);
 

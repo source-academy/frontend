@@ -1,12 +1,12 @@
 import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
 import {
-  editAchievement,
+  // editAchievement,
   getAchievements,
   removeAchievement,
   saveAchievements
 } from '../AchievementActions';
 import {
-  EDIT_ACHIEVEMENT,
+  // EDIT_ACHIEVEMENT,
   GET_ACHIEVEMENTS,
   REMOVE_ACHIEVEMENT,
   SAVE_ACHIEVEMENTS
@@ -38,11 +38,11 @@ test('removeAchievement generates correct action object', () => {
   });
 });
 
-test('editAchievement generates correct action object', () => {
-  const action = editAchievement(mockAchievements[0]);
+// test('editAchievement generates correct action object', () => {
+//   const action = editAchievement(mockAchievements[0]);
 
-  expect(action).toEqual({
-    type: EDIT_ACHIEVEMENT,
-    payload: mockAchievements[0]
-  });
-});
+//   expect(action).toEqual({
+//     type: EDIT_ACHIEVEMENT,
+//     payload: mockAchievements[0]
+//   });
+// });
