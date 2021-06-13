@@ -36,6 +36,7 @@ import {
   SUBMIT_ASSESSMENT,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
+  Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
@@ -73,10 +74,7 @@ export const logoutGitHub = () => action(LOGOUT_GITHUB);
 export const setTokens = ({
   accessToken,
   refreshToken
-}: {
-  accessToken: string;
-  refreshToken: string;
-}) =>
+}: Tokens) =>
   action(SET_TOKENS, {
     accessToken,
     refreshToken

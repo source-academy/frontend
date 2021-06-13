@@ -283,10 +283,25 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
 };
 
 export const defaultSession: SessionState = {
-  tokens: undefined,
-  user: undefined,
-  courseRegistration: undefined,
-  courseConfiguration: undefined,
+  tokens: {},
+  user: {
+    courses: []
+  },
+  courseRegistration: {
+    group: null,
+    grade: 0,
+    maxGrade: 0,
+    xp: 0,
+    story: {
+      story: '',
+      playStory: false
+    }
+  },
+  courseConfiguration: {
+    sourceChapter: 1,
+    sourceVariant: 'default',
+    assessmentTypes: []
+  },
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   githubOctokitObject: { octokit: undefined },
@@ -296,9 +311,6 @@ export const defaultSession: SessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
-  maxGrade: 0,
-  maxXp: 0,
-  xp: 0,
   notifications: []
 };
 

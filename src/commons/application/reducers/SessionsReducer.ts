@@ -50,22 +50,34 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_TOKENS:
       return {
         ...state,
-        tokens: action.payload
+        tokens: {
+          ...state.tokens,
+          ...action.payload
+        }
       };
     case SET_USER:
       return {
         ...state,
-        user: action.payload
+        user: {
+          ...state.user,
+          ...action.payload
+        }
       };
     case SET_COURSE_CONFIGURATION:
       return {
         ...state,
-        courseConfiguration: action.payload
+        courseConfiguration: {
+          ...state.courseConfiguration,
+          ...action.payload
+        }
       };
     case SET_COURSE_REGISTRATION:
       return {
         ...state,
-        courseRegistration: action.payload
+        courseRegistration: {
+          ...state.courseRegistration,
+          ...action.payload
+        }
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;

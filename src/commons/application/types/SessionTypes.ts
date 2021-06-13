@@ -45,18 +45,15 @@ export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
-  readonly tokens?: Tokens;
-  readonly user?: User;
-  readonly courseRegistration?: CourseRegistration;
-  readonly courseConfiguration?: CourseConfiguration;
+  readonly tokens: Tokens;
+  readonly user: User;
+  readonly courseRegistration: CourseRegistration;
+  readonly courseConfiguration: CourseConfiguration;
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly historyHelper: HistoryHelper;
-  readonly maxGrade: number;
-  readonly maxXp: number;
-  readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubAssessment?: MissionRepoData;
@@ -66,35 +63,36 @@ export type SessionState = {
 };
 
 export type Tokens = {
-  accessToken: string;
-  refreshToken: string;
+  accessToken?: string;
+  refreshToken?: string;
 };
 
 export type User = {
-  userId: number;
-  name: string;
-  courses: number[];  // All the courses the user is in
+  userId?: number;
+  name?: string;
+  courses: number[];
 };
 
 export type CourseRegistration = {
-  role: Role;
-  gameState?: GameState;
+  role?: Role;
   group: string | null;
-  userId: number;
-  courseId: number;
+  gameState?: GameState;
+  courseId?: number;
   grade: number;
-  story?: Story;
+  maxGrade: number;
+  xp: number;
+  story: Story;
 };
 
 export type CourseConfiguration = {
-  name: string;
-  moduleCode: string;
-  viewable: boolean;
-  enableGame: boolean;
-  enableAchievements: boolean;
-  enableSourcecast: boolean;
+  name?: string;
+  moduleCode?: string;
+  viewable?: boolean;
+  enableGame?: boolean;
+  enableAchievements?: boolean;
+  enableSourcecast?: boolean;
   sourceChapter: number;
   sourceVariant: string;
-  moduleHelpText: string;
+  moduleHelpText?: string;
   assessmentTypes: AssessmentType[];
 };
