@@ -36,6 +36,7 @@ import {
   CourseConfiguration,
   CourseRegistration,
   Tokens,
+  UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
@@ -929,12 +930,10 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 
 /**
  * POST /course/{courseId}/admin/course_config
- *
- *
  */
 export const postCourseConfig = async (
   tokens: Tokens,
-  courseConfig: Omit<CourseConfiguration, 'assessmentTypes'>
+  courseConfig: UpdateCourseConfiguration
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/course_config`, 'POST', {
     ...tokens,

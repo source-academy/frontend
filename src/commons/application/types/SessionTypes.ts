@@ -46,10 +46,10 @@ export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
-  readonly tokens: Tokens;
-  readonly user: User;
-  readonly courseRegistration: CourseRegistration;
-  readonly courseConfiguration: CourseConfiguration;
+  readonly tokens: DefaultTokens;
+  readonly user: DefaultUser;
+  readonly courseRegistration: DefaultCourseRegistration;
+  readonly courseConfiguration: DefaultCourseConfiguration;
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
@@ -64,17 +64,59 @@ export type SessionState = {
 };
 
 export type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+type UserCourse = {
+  courseId: number;
+  moduleCode: string;
+  name: string;
+  viewable: boolean;
+};
+
+export type User = {
+  userId: number;
+  name: string;
+  courses: UserCourse[];
+};
+
+export type CourseRegistration = {
+  role: Role;
+  group: string | null;
+  gameState?: GameState;
+  courseId: number;
+  grade: number;
+  maxGrade: number;
+  xp: number;
+  story?: Story;
+};
+
+export type CourseConfiguration = {
+  name: string;
+  moduleCode: string;
+  viewable: boolean;
+  enableGame: boolean;
+  enableAchievements: boolean;
+  enableSourcecast: boolean;
+  sourceChapter: number;
+  sourceVariant: Variant;
+  moduleHelpText?: string;
+  assessmentTypes: AssessmentType[];
+};
+
+type DefaultUser = {
+  userId?: number;
+  name?: string;
+  courses: UserCourse[];
+};
+
+type DefaultTokens = {
   accessToken?: string;
   refreshToken?: string;
 };
 
-export type User = {
-  userId?: number;
-  name?: string;
-  courses: number[];
-};
-
-export type CourseRegistration = {
+type DefaultCourseRegistration = {
   role?: Role;
   group: string | null;
   gameState?: GameState;
@@ -85,15 +127,17 @@ export type CourseRegistration = {
   story: Story;
 };
 
-export type CourseConfiguration = {
+type DefaultCourseConfiguration = {
   name?: string;
   moduleCode?: string;
   viewable?: boolean;
   enableGame?: boolean;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  sourceChapter: number;
-  sourceVariant: Variant;
+  sourceChapter?: number;
+  sourceVariant?: Variant;
   moduleHelpText?: string;
   assessmentTypes: AssessmentType[];
 };
+
+export type UpdateCourseConfiguration = Omit<DefaultCourseConfiguration, 'assessmentTypes'>;
