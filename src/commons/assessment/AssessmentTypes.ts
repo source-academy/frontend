@@ -26,6 +26,7 @@ export enum GradingStatuses {
 }
 export type GradingStatus = keyof typeof GradingStatuses;
 
+export type AssessmentTypes = AssessmentType[];
 export type AssessmentType = string;
 
 export enum TestcaseTypes {
@@ -88,6 +89,12 @@ export type Assessment = {
   title: string;
   questions: Question[];
 };
+
+export type AssessmentConfiguration = {
+  earlySubmissionXp: number;
+  hoursBeforeEarlyXpDecay: number;
+  decayRatePointsPerHour: number;
+}
 
 export interface IProgrammingQuestion extends BaseQuestion {
   answer: string | null;

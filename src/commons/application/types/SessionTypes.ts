@@ -3,7 +3,7 @@ import { Octokit } from '@octokit/rest';
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
-import { Assessment, AssessmentOverview, AssessmentType } from '../../assessment/AssessmentTypes';
+import { Assessment, AssessmentOverview, AssessmentTypes } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
@@ -94,5 +94,5 @@ export type CourseConfiguration = {
   sourceChapter: number;
   sourceVariant: string;
   moduleHelpText?: string;
-  assessmentTypes: AssessmentType[];
+  assessmentTypes: AssessmentTypes;
 };
