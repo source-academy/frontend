@@ -251,8 +251,8 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         >
           {renderedTabs}
 
-          {/* Render the bottom ControlBar 'Cog' button only in the Playground Workspace */}
-          {props.workspaceLocation === 'playground' && (
+          {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
+          {(props.workspaceLocation === 'playground' || props.workspaceLocation === 'sicp') && (
             <MobileControlBar {...props.mobileControlBarProps} />
           )}
         </Tabs>

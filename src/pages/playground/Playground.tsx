@@ -645,9 +645,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs];
-  mobileTabs.shift();
-  mobileTabs.pop();
+  const mobileTabs = [...tabs].filter(x => x !== playgroundIntroductionTab && x !== remoteExecutionTab);
 
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {

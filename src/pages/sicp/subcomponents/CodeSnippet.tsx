@@ -2,10 +2,12 @@ import { Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
+import Constants from 'src/commons/utils/Constants';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
 import { CodeSnippetContext } from '../Sicp';
@@ -44,6 +46,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
   const context = React.useContext(CodeSnippetContext);
   const [showPrepend, setShowPrepend] = React.useState(false);
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   const handleShowDependencies = React.useCallback(() => {
     setShowPrepend(!showPrepend);
@@ -95,14 +98,20 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   return (
     <div className="sicp-code-snippet">
       {context.active === id ? (
-        <>
+        <div className="sicp-code-snippet-open">
           <ControlBar {...controlBarProps} />
-          <Resizable {...resizableProps}>
-            <div className="sicp-resizable">
+          {isMobileBreakpoint ? (
+            <div className="sicp-workspace-container-container">
               <SicpWorkspaceContainer {...WorkspaceProps} />
             </div>
-          </Resizable>
-        </>
+          ) : (
+            <Resizable {...resizableProps}>
+              <div className="sicp-workspace-container-container">
+                <SicpWorkspaceContainer {...WorkspaceProps} />
+              </div>
+            </Resizable>
+          )}
+        </div>
       ) : (
         <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
           {body}

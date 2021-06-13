@@ -6,7 +6,7 @@ $sicp-background-color: #ffffff;
   text-align: justify;
   color: $sicp-text-color;
   overflow: auto;
-  
+
   @media only screen and (max-width: 768px) {
     font-size: 1em;
   }
@@ -101,26 +101,37 @@ $sicp-background-color: #ffffff;
   .sicp-code-snippet {
     margin: 10px 0;
 
-    // editor workspace
-    .workspace {
-      color: white;
-      overflow-y: auto;
-    }
+    .sicp-code-snippet-open {
+      > .ControlBar {
+        display: flex;
+        background-color: $cadet-color-1;
+        color: white;
+        padding: 5px;
 
-    .sicp-resizable {
-      display: flex;
-      flex-flow: column nowrap;
-      height: 100%;
-    }
+        .ControlBar_flow {
+          flex-grow: 1;
+        }
+      }
 
-    > .ControlBar {
-      display: flex;
-      background-color: $cadet-color-1;
-      color: white;
-      padding: 5px;
+      .sicp-workspace-container-container {
+        display: flex;
+        flex-flow: column nowrap;
+        height: 100%;
 
-      .ControlBar_flow {
-        flex-grow: 1;
+        // editor workspace
+        .workspace {
+          color: white;
+          overflow-y: auto;
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        position: fixed;
+        z-index: 20;
+        top: 0;
+        left: 0;
+        height: calc(100vh - 40px);
+        width: 100vw;
       }
     }
   }
@@ -194,7 +205,6 @@ $sicp-background-color: #ffffff;
       font-size: small;
     }
   }
-
 
   @media only screen and (max-width: 768px) {
     width: 70% !important;
