@@ -35,7 +35,6 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchSublanguage,
   navigateToDeclaration,
   promptAutocomplete,
   sendReplInputToOutput,
@@ -110,7 +109,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
-      handleFetchSublanguage: fetchSublanguage,
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
@@ -139,7 +137,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
-      handleFetchChapter: fetchSublanguage,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handlePersistenceOpenPicker: persistenceOpenPicker,

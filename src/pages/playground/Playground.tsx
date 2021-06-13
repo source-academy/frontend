@@ -73,7 +73,6 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFetchSublanguage: () => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
@@ -91,7 +90,6 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
-  handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handlePersistenceOpenPicker: () => void;
   handlePersistenceSaveFile: () => void;
@@ -190,11 +188,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
     propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
-
-    // Only fetch default Playground sublanguage when not loaded via a share link
-    if (!propsRef.current.location.hash) {
-      propsRef.current.handleFetchSublanguage();
-    }
   }, []);
 
   React.useEffect(() => {
