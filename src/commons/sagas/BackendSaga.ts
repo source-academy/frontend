@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
-import { OverallState, Role, SourceLanguage } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role, /* SourceLanguage */ } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -17,8 +17,8 @@ import {
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
 import {
-  CHANGE_SUBLANGUAGE,
-  FETCH_SUBLANGUAGE,
+  // CHANGE_SUBLANGUAGE,
+  // FETCH_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../commons/workspace/WorkspaceTypes';
 import {
@@ -70,7 +70,6 @@ import {
   getGradingSummary,
   getNotifications,
   getSourcecastIndex,
-  getSublanguage,
   getUser,
   handleResponseError,
   postAcknowledgeNotifications,
@@ -81,7 +80,6 @@ import {
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
-  postSublanguage,
   postUnsubmit,
   updateAssessment,
   uploadAssessment
@@ -494,41 +492,41 @@ function* BackendSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(
-    FETCH_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.fetchSublanguage>): any {
-      const sublang: SourceLanguage | null = yield call(getSublanguage);
-      if (!sublang) {
-        return yield call(
-          showWarningMessage,
-          `Failed to load default Source sublanguage for Playground!`
-        );
-      }
+  // yield takeEvery(
+  //   FETCH_SUBLANGUAGE,
+  //   function* (action: ReturnType<typeof actions.fetchSublanguage>): any {
+  //     const sublang: SourceLanguage | null = yield call(getSublanguage);
+  //     if (!sublang) {
+  //       return yield call(
+  //         showWarningMessage,
+  //         `Failed to load default Source sublanguage for Playground!`
+  //       );
+  //     }
 
-      yield put(actions.updateSublanguage(sublang));
-    }
-  );
+  //     yield put(actions.updateSublanguage(sublang));
+  //   }
+  // );
 
-  yield takeEvery(
-    CHANGE_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.changeSublanguage>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { sublang } = action.payload;
+  // yield takeEvery(
+  //   CHANGE_SUBLANGUAGE,
+  //   function* (action: ReturnType<typeof actions.changeSublanguage>): any {
+  //     const tokens: Tokens = yield selectTokens();
+  //     const { sublang } = action.payload;
 
-      const resp: Response | null = yield call(
-        postSublanguage,
-        sublang.chapter,
-        sublang.variant,
-        tokens
-      );
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+  //     const resp: Response | null = yield call(
+  //       postSublanguage,
+  //       sublang.chapter,
+  //       sublang.variant,
+  //       tokens
+  //     );
+  //     if (!resp || !resp.ok) {
+  //       return yield handleResponseError(resp);
+  //     }
 
-      yield put(actions.updateSublanguage(sublang));
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
-  );
+  //     yield put(actions.updateSublanguage(sublang));
+  //     yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  //   }
+  // );
 
   yield takeEvery(
     FETCH_GROUP_GRADING_SUMMARY,

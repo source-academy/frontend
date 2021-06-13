@@ -14,7 +14,7 @@ import {
   updateAssessmentOverviews,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, SourceLanguage, Story } from '../../application/ApplicationTypes';
+import { GameState, Role, /* SourceLanguage, */ Story } from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -45,12 +45,12 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateHasUnsavedChanges, updateSublanguage } from '../../workspace/WorkspaceActions';
+import { updateHasUnsavedChanges, /* updateSublanguage */ } from '../../workspace/WorkspaceActions';
 import {
-  CHANGE_SUBLANGUAGE,
-  FETCH_SUBLANGUAGE,
+  // CHANGE_SUBLANGUAGE,
+  // FETCH_SUBLANGUAGE,
   UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_SUBLANGUAGE,
+  // UPDATE_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
@@ -59,7 +59,7 @@ import {
   getAssessmentOverviews,
   getGradingSummary,
   getNotifications,
-  getSublanguage,
+  // getSublanguage,
   getUser,
   postAcknowledgeNotifications,
   postAnswer,
@@ -67,7 +67,7 @@ import {
   postAuth,
   postReautogradeAnswer,
   postReautogradeSubmission,
-  postSublanguage
+  // postSublanguage
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -425,49 +425,49 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
   });
 });
 
-describe('Test FETCH_SUBLANGUAGE action', () => {
-  test('when sublanguage is obtained', () => {
-    const mockSublang: SourceLanguage = {
-      chapter: 4,
-      variant: 'gpu',
-      displayName: 'Source \xa74 GPU'
-    };
+// describe('Test FETCH_SUBLANGUAGE action', () => {
+//   test('when sublanguage is obtained', () => {
+//     const mockSublang: SourceLanguage = {
+//       chapter: 4,
+//       variant: 'gpu',
+//       displayName: 'Source \xa74 GPU'
+//     };
 
-    return expectSaga(BackendSaga)
-      .provide([[call(getSublanguage), mockSublang]])
-      .call(getSublanguage)
-      .put(updateSublanguage(mockSublang))
-      .dispatch({ type: FETCH_SUBLANGUAGE })
-      .silentRun();
-  });
+//     return expectSaga(BackendSaga)
+//       .provide([[call(getSublanguage), mockSublang]])
+//       .call(getSublanguage)
+//       .put(updateSublanguage(mockSublang))
+//       .dispatch({ type: FETCH_SUBLANGUAGE })
+//       .silentRun();
+//   });
 
-  test('when response is null', () => {
-    return expectSaga(BackendSaga)
-      .provide([[call(getSublanguage), null]])
-      .call(showWarningMessage, 'Failed to load default Source sublanguage for Playground!')
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
-      .dispatch({ type: FETCH_SUBLANGUAGE })
-      .silentRun();
-  });
-});
+//   test('when response is null', () => {
+//     return expectSaga(BackendSaga)
+//       .provide([[call(getSublanguage), null]])
+//       .call(showWarningMessage, 'Failed to load default Source sublanguage for Playground!')
+//       .not.put.actionType(UPDATE_SUBLANGUAGE)
+//       .dispatch({ type: FETCH_SUBLANGUAGE })
+//       .silentRun();
+//   });
+// });
 
-describe('Test CHANGE_SUBLANGUAGE action', () => {
-  test('when chapter is changed', () => {
-    const sublang: SourceLanguage = {
-      chapter: 4,
-      variant: 'gpu',
-      displayName: 'Source \xa74 GPU'
-    };
+// describe('Test CHANGE_SUBLANGUAGE action', () => {
+//   test('when chapter is changed', () => {
+//     const sublang: SourceLanguage = {
+//       chapter: 4,
+//       variant: 'gpu',
+//       displayName: 'Source \xa74 GPU'
+//     };
 
-    return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(postSublanguage, sublang.chapter, sublang.variant, mockTokens)
-      .put(updateSublanguage(sublang))
-      .provide([[call(postSublanguage, 4, 'gpu', mockTokens), { ok: true }]])
-      .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
-      .silentRun();
-  });
-});
+//     return expectSaga(BackendSaga)
+//       .withState({ session: { role: Role.Staff, ...mockTokens } })
+//       .call(postSublanguage, sublang.chapter, sublang.variant, mockTokens)
+//       .put(updateSublanguage(sublang))
+//       .provide([[call(postSublanguage, 4, 'gpu', mockTokens), { ok: true }]])
+//       .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
+//       .silentRun();
+//   });
+// });
 
 describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
   test('when grading summary is obtained', () => {

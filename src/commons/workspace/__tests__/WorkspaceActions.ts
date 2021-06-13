@@ -11,7 +11,7 @@ import {
   changeEditorWidth,
   changeExternalLibrary,
   changeSideContentHeight,
-  changeSublanguage,
+  // changeSublanguage,
   chapterSelect,
   clearReplInput,
   clearReplOutput,
@@ -21,7 +21,7 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
-  fetchSublanguage,
+  // fetchSublanguage,
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
@@ -46,7 +46,7 @@ import {
   CHANGE_EDITOR_WIDTH,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
-  CHANGE_SUBLANGUAGE,
+  // CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -55,7 +55,7 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
-  FETCH_SUBLANGUAGE,
+  // FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -451,27 +451,27 @@ test('moveCursor generates correct action object', () => {
   });
 });
 
-test('fetchSublanguage generates correct action object', () => {
-  const action = fetchSublanguage();
-  expect(action).toEqual({
-    type: FETCH_SUBLANGUAGE
-  });
-});
+// test('fetchSublanguage generates correct action object', () => {
+//   const action = fetchSublanguage();
+//   expect(action).toEqual({
+//     type: FETCH_SUBLANGUAGE
+//   });
+// });
 
-test('changeSublanguage generates correct action object', () => {
-  const sublang: SourceLanguage = {
-    chapter: 2,
-    variant: 'default',
-    displayName: 'Source \xa72'
-  };
-  const action = changeSublanguage(sublang);
-  expect(action).toEqual({
-    type: CHANGE_SUBLANGUAGE,
-    payload: {
-      sublang
-    }
-  });
-});
+// test('changeSublanguage generates correct action object', () => {
+//   const sublang: SourceLanguage = {
+//     chapter: 2,
+//     variant: 'default',
+//     displayName: 'Source \xa72'
+//   };
+//   const action = changeSublanguage(sublang);
+//   expect(action).toEqual({
+//     type: CHANGE_SUBLANGUAGE,
+//     payload: {
+//       sublang
+//     }
+//   });
+// });
 
 test('updateChapter generates correct action object', () => {
   const sublang: SourceLanguage = {
