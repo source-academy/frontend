@@ -1,5 +1,5 @@
-import Constants from 'src/commons/utils/Constants';
-
+import Constants from '../../commons/utils/Constants';
+import { store } from '../../pages/createStore';
 import SourceAcademyGame from '../game/SourceAcademyGame';
 
 const sendRequest =
@@ -29,8 +29,9 @@ const sendRequest =
     }
   };
 
-export const sendAssetRequest = sendRequest('admin/assets');
-export const sendStoryRequest = sendRequest('stories');
+const courseId = () => store.getState().session.courseId;
+export const sendAssetRequest = sendRequest(`course/${courseId()}/admin/assets`);
+export const sendStoryRequest = sendRequest(`course/${courseId()}/stories`);
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();
