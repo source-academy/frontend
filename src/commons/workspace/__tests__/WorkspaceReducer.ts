@@ -154,7 +154,7 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     githubAssessment: {
       ...defaultWorkspaceManager.githubAssessment,
       ...cloneDeep(payload)
-    },
+    }
   };
 }
 
