@@ -159,14 +159,14 @@ const Sicp: React.FC<SicpProps> = props => {
   };
 
   return (
-    <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
-      <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
+    <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
+      <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
         <div ref={topRef} />
         <MathJaxContext version={3} config={mathjaxConfig}>
           {loading ? loadingComponent : <ContentDisplay {...sicpDisplayProps} display={data} />}
         </MathJaxContext>
-      </div>
-    </CodeSnippetContext.Provider>
+      </CodeSnippetContext.Provider>
+    </div>
   );
 };
 

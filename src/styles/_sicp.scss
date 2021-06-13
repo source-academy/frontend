@@ -7,6 +7,11 @@ $sicp-background-color: #ffffff;
   color: $sicp-text-color;
   overflow: auto;
 
+  mjx-container,
+  pre {
+    overflow-x: scroll;
+  }
+
   .bp3-heading {
     margin-top: 10px;
   }
