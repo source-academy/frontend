@@ -6,6 +6,10 @@ $sicp-background-color: #ffffff;
   text-align: justify;
   color: $sicp-text-color;
   overflow: auto;
+  
+  @media only screen and (max-width: 768px) {
+    font-size: 1em;
+  }
 
   mjx-container,
   pre {
@@ -73,6 +77,22 @@ $sicp-background-color: #ffffff;
           > h5 {
             font-weight: 300;
           }
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        flex-direction: column;
+      }
+    }
+
+    .sicp-toc-tree {
+      .bp3-tree-node-content {
+        height: fit-content;
+        padding: 3px 0;
+
+        .bp3-tree-node-label {
+          white-space: normal;
+          text-overflow: clip;
         }
       }
     }
@@ -154,12 +174,29 @@ $sicp-background-color: #ffffff;
 
 .sicp-toc-drawer {
   background-color: $cadet-color-2;
+  width: 500px;
+
   .sicp-toc-tree {
     color: $cadet-color-4;
     font-size: larger;
 
     .bp3-tree-node-content {
-      height: 45px;
+      height: fit-content;
+      padding: 10px 0;
+
+      .bp3-tree-node-label {
+        white-space: normal;
+        text-overflow: clip;
+      }
     }
+
+    @media only screen and (max-width: 768px) {
+      font-size: small;
+    }
+  }
+
+
+  @media only screen and (max-width: 768px) {
+    width: 70% !important;
   }
 }

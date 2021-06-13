@@ -79,7 +79,6 @@ const SicpNavigationBar: React.FC = () => {
     hasBackdrop: true,
     isOpen: isTocOpen,
     position: Position.LEFT,
-    size: '500px',
     usePortal: false
   };
 
