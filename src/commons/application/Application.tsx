@@ -139,13 +139,18 @@ const Application: React.FC<ApplicationProps> = props => {
       key="authPlayground"
     />,
     ...playgroundOnlyPaths,
-    <Route path="/academy" render={toAcademy(props)} key="academy" />,
-    <Route
-      path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-      render={toIncubator}
-      key="missionControl"
-    />
+    <Route path="/academy" render={toAcademy(props)} key="academy" />
   ];
+
+  if (props.role && props.role !== 'student') {
+    fullPaths.push(
+      <Route
+        path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+        render={toIncubator}
+        key="missionControl"
+      />
+    )
+  }
 
   if (props.enableSourcecast) {
     fullPaths.push(

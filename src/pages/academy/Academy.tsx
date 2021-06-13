@@ -4,9 +4,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { Role } from '../../commons/application/ApplicationTypes';
 import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer';
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
-import { AssessmentCategories, AssessmentCategory } from '../../commons/assessment/AssessmentTypes';
 import { HistoryHelper } from '../../commons/utils/HistoryHelper';
-import { assessmentCategoryLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Game from './game/Game';
@@ -53,7 +51,7 @@ class Academy extends React.Component<AcademyProps> {
         <Switch>
           {this.props.assessmentTypes?.map(assessmentType => (
             <Route
-              path={`/academy/${assessmentType}/${assessmentRegExp}`}
+              path={`/academy/${assessmentType.toLowerCase()}/${assessmentRegExp}`}
               render={this.assessmentRenderFactory(assessmentType)}
             />
           ))}

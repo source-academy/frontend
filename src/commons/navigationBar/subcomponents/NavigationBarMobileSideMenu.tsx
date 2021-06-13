@@ -34,7 +34,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
   >
     {props.assessmentTypes?.map((assessmentType, idx) => (
       <NavLink
-        to={`/academy/${assessmentType}`}
+        to={`/academy/${assessmentType.toLowerCase()}`}
         activeClassName={Classes.ACTIVE}
         className={classNames(
           'NavigationBar__link__mobile',

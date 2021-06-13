@@ -19,7 +19,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
     <NavbarGroup align={Alignment.LEFT}>
       {props.assessmentTypes?.map((assessmentType, idx) => (
         <NavLink
-          to={`/academy/${assessmentType}`}
+          to={`/academy/${assessmentType.toLowerCase()}`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
