@@ -1,5 +1,5 @@
 import {
-  AssessmentCategory,
+  AssessmentType,
   AutogradingResult,
   GradingStatus,
   MCQChoice,
@@ -15,7 +15,7 @@ import { Notification } from '../../commons/notificationBadge/NotificationBadgeT
 export type GradingOverview = {
   assessmentId: number;
   assessmentName: string;
-  assessmentCategory: AssessmentCategory;
+  assessmentType: AssessmentType;
   initialGrade: number;
   gradeAdjustment: number;
   currentGrade: number;

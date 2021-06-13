@@ -1,8 +1,5 @@
 import { AssessmentType } from '../assessment/AssessmentTypes';
-import {
-  Notification,
-  NotificationFilterFunction
-} from './NotificationBadgeTypes';
+import { Notification, NotificationFilterFunction } from './NotificationBadgeTypes';
 
 /**
  * @return A function that takes in an array of notification and filters it by assessment id.
