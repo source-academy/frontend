@@ -14,7 +14,7 @@ import MissionControlContainer from '../../pages/missionControl/MissionControlCo
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
-import { AssessmentTypes } from '../assessment/AssessmentTypes';
+import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { parseQuery } from '../utils/QueryHelper';
@@ -34,7 +34,7 @@ export type StateProps = {
   name?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes: AssessmentTypes;
+  assessmentTypes: AssessmentType[];
 };
 
 const Application: React.FC<ApplicationProps> = props => {

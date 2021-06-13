@@ -4,7 +4,6 @@ import { ExternalLibraryName } from '../../commons/application/types/ExternalTyp
 import {
   Assessment,
   AssessmentType,
-  AssessmentTypes,
   AssessmentOverview,
   ContestEntry,
   GradingStatus,
@@ -971,7 +970,7 @@ export const postAssessmentConfig = async (
  */
 export const postAssessmentTypes = async (
   tokens: Tokens,
-  assessmentTypes: AssessmentTypes
+  assessmentTypes: AssessmentType[]
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessment_types`, 'POST', {
     ...tokens,

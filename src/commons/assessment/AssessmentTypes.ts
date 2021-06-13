@@ -26,7 +26,6 @@ export enum GradingStatuses {
 }
 export type GradingStatus = keyof typeof GradingStatuses;
 
-export type AssessmentTypes = AssessmentType[];
 export type AssessmentType = string;
 
 export enum TestcaseTypes {

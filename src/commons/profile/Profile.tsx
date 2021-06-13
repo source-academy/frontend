@@ -7,7 +7,6 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentType,
-  AssessmentTypes,
   GradingStatuses
 } from '../assessment/AssessmentTypes';
 import ProfileCard from './ProfileCard';
@@ -22,7 +21,7 @@ export type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
-  assessmentTypes: AssessmentTypes;
+  assessmentTypes: AssessmentType[];
 };
 
 type OwnProps = {

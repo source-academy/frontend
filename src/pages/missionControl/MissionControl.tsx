@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import {
   AssessmentOverview,
   AssessmentStatuses,
-  AssessmentTypes,
+  AssessmentType,
   AssessmentWorkspaceParams
 } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -19,7 +19,7 @@ import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLPars
 export type MissionControlProps = StateProps & DispatchProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
 export type StateProps = {
-  assessmentTypes: AssessmentTypes;
+  assessmentTypes: AssessmentType[];
 }
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;

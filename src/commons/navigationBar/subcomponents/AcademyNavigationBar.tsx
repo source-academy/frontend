@@ -3,7 +3,7 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { AssessmentTypes } from 'src/commons/assessment/AssessmentTypes';
+import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 
 import { Role } from '../../application/ApplicationTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
@@ -11,7 +11,7 @@ import { filterNotificationsByType } from '../../notificationBadge/NotificationB
 
 type OwnProps = {
   role: Role;
-  assessmentTypes: AssessmentTypes;
+  assessmentTypes: AssessmentType[];
 };
 
 const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (

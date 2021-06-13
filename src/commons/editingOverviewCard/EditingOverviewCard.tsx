@@ -19,7 +19,7 @@ import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { AssessmentOverview, AssessmentType, AssessmentTypes } from '../assessment/AssessmentTypes';
+import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
@@ -35,7 +35,7 @@ type DispatchProps = {
 type StateProps = {
   listingPath?: string;
   overview: AssessmentOverview;
-  assessmentTypes: AssessmentTypes;
+  assessmentTypes: AssessmentType[];
 };
 
 type State = {
