@@ -4,7 +4,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { OverallState } from '../../../../commons/application/ApplicationTypes';
 import {
   changeSublanguage,
-  fetchSublanguage
 } from '../../../../commons/workspace/WorkspaceActions';
 import DefaultChapterSelect, { DispatchProps, StateProps } from './DefaultChapterSelect';
 
@@ -16,7 +15,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleFetchSublanguage: fetchSublanguage,
       handleUpdateSublanguage: changeSublanguage
     },
     dispatch

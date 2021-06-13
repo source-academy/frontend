@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
-import { OverallState, Role, /* SourceLanguage */ } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -16,11 +16,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
-import {
-  // CHANGE_SUBLANGUAGE,
-  // FETCH_SUBLANGUAGE,
-  WorkspaceLocation
-} from '../../commons/workspace/WorkspaceTypes';
+import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
@@ -76,6 +72,7 @@ import {
   postAnswer,
   postAssessment,
   postAuth,
+  postCourseConfig,
   postGrading,
   postReautogradeAnswer,
   postReautogradeSubmission,
@@ -131,9 +128,19 @@ function* BackendSaga(): SagaIterator {
     if (!courseRegistration || !courseConfiguration) {
       return yield history.push('/');
     }
-    
+
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(
+      actions.updateSublanguage({
+        chapter: courseConfiguration.sourceChapter,
+        variant: courseConfiguration.sourceVariant,
+        displayName: styliseSublanguage(
+          courseConfiguration.sourceChapter,
+          courseConfiguration.sourceVariant
+        )
+      })
+    );
     yield history.push('/academy');
   });
 
@@ -507,26 +514,34 @@ function* BackendSaga(): SagaIterator {
   //   }
   // );
 
-  // yield takeEvery(
-  //   CHANGE_SUBLANGUAGE,
-  //   function* (action: ReturnType<typeof actions.changeSublanguage>): any {
-  //     const tokens: Tokens = yield selectTokens();
-  //     const { sublang } = action.payload;
+  yield takeEvery(
+    CHANGE_SUBLANGUAGE,
+    function* (action: ReturnType<typeof actions.changeSublanguage>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { sublang } = action.payload;
 
-  //     const resp: Response | null = yield call(
-  //       postSublanguage,
-  //       sublang.chapter,
-  //       sublang.variant,
-  //       tokens
-  //     );
-  //     if (!resp || !resp.ok) {
-  //       return yield handleResponseError(resp);
-  //     }
+      const resp: Response | null = yield call(postCourseConfig, tokens, {
+        sourceChapter: sublang.chapter,
+        sourceVariant: sublang.variant
+      });
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
 
-  //     yield put(actions.updateSublanguage(sublang));
-  //     yield call(showSuccessMessage, 'Updated successfully!', 1000);
-  //   }
-  // );
+      const courseConfig: CourseConfiguration = yield select(
+        (state: OverallState) => state.session.courseConfiguration
+      );
+      yield put(
+        actions.setCourseConfiguration({
+          ...courseConfig,
+          sourceChapter: sublang.chapter,
+          sourceVariant: sublang.variant
+        })
+      );
+      yield put(actions.updateSublanguage(sublang));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
 
   yield takeEvery(
     FETCH_GROUP_GRADING_SUMMARY,

@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import { Variant } from 'js-slang/dist/types';
 
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
@@ -92,7 +93,7 @@ export type CourseConfiguration = {
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   sourceChapter: number;
-  sourceVariant: string;
+  sourceVariant: Variant;
   moduleHelpText?: string;
   assessmentTypes: AssessmentType[];
 };

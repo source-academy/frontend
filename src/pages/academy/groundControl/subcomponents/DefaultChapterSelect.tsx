@@ -16,7 +16,6 @@ import controlButton from '../../../../commons/ControlButton';
 export type DefaultChapterSelectProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
-  handleFetchSublanguage: () => void;
   handleUpdateSublanguage: (sublang: SourceLanguage) => void;
 };
 
@@ -26,12 +25,7 @@ export type StateProps = {
 };
 
 const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> = props => {
-  const { handleFetchSublanguage, handleUpdateSublanguage } = props;
-
-  React.useEffect(() => {
-    handleFetchSublanguage();
-  }, [handleFetchSublanguage]);
-
+  const { handleUpdateSublanguage } = props;
   const { sourceChapter, sourceVariant } = props;
 
   const [chosenSublang, setSublanguage] = React.useState<SourceLanguage>(sourceLanguages[0]);
