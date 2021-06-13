@@ -1,5 +1,4 @@
 import {
-  filterByTypeOptions,
   Notification,
   NotificationFilterFunction
 } from './NotificationBadgeTypes';
@@ -21,14 +20,15 @@ export function filterNotificationsBySubmission(submissionId: number): Notificat
 }
 
 /**
- * Notifications will be filtered to either one of the Assessment Category, or the Grading Category.
+ * Notifications will be filtered to one of the Assessment types of the currently selected
+ * course, or the Grading type.
  *
- * Notifications with a submission id belongs to the Grading category.
+ * Notifications with a submission id belongs to the Grading type.
  *
  * @return A function that takes in an array of notification and filters it by the type of notification.
  */
 export function filterNotificationsByType(
-  assessmentType: filterByTypeOptions
+  assessmentType: string
 ): NotificationFilterFunction {
   return (notifications: Notification[]) =>
     notifications.filter(n => {

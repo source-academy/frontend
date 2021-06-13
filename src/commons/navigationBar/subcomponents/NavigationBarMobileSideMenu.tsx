@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
 import { icons } from './AcademyNavigationBar';
@@ -32,9 +31,9 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     title=""
     className={Classes.DARK}
   >
-    {props.assessmentTypes?.map((assessmentTypes, idx) => (
+    {props.assessmentTypes?.map((assessmentType, idx) => (
       <NavLink
-        to={`/academy/${assessmentTypes}`}
+        to={`/academy/${assessmentType}`}
         activeClassName={Classes.ACTIVE}
         className={classNames(
           'NavigationBar__link__mobile',
@@ -45,9 +44,9 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         onClick={props.onClose}
       >
         <Icon icon={icons[idx]} />
-        <div>{assessmentTypes}</div>
+        <div>{assessmentType}</div>
         <NotificationBadgeContainer
-          notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
+          notificationFilter={filterNotificationsByType(assessmentType)}
           disableHover={true}
         />
       </NavLink>

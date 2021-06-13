@@ -5,7 +5,6 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { Role } from '../../application/ApplicationTypes';
-import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
 
@@ -26,7 +25,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           <Icon icon={icons[idx]} />
           <div className="navbar-button-text hidden-xs hidden-sm">{assessmentType}</div>
           <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
+            notificationFilter={filterNotificationsByType(assessmentType)}
             disableHover={true}
           />
         </NavLink>
