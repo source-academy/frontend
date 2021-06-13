@@ -32,8 +32,8 @@ export function* remoteExecutionSaga(): SagaIterator {
     const [tokens, session]: [any, DeviceSession | undefined] = yield select(
       (state: OverallState) => [
         {
-          accessToken: state.session.accessToken,
-          refreshToken: state.session.refreshToken
+          accessToken: state.session.tokens.accessToken,
+          refreshToken: state.session.tokens.refreshToken
         },
         state.session.remoteExecutionSession
       ]
@@ -62,8 +62,8 @@ export function* remoteExecutionSaga(): SagaIterator {
       const [tokens, session]: [any, DeviceSession | undefined] = yield select(
         (state: OverallState) => [
           {
-            accessToken: state.session.accessToken,
-            refreshToken: state.session.refreshToken
+            accessToken: state.session.tokens.accessToken,
+            refreshToken: state.session.tokens.refreshToken
           },
           state.session.remoteExecutionSession
         ]
