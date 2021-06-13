@@ -560,14 +560,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessment!.type === 'Paths'
-            ? onClickProgress(onClickNext)
-            : onClickNext
+          props.assessment!.type === 'Paths' ? onClickProgress(onClickNext) : onClickNext
         }
         onClickReturn={
-          props.assessment!.type === 'Paths'
-            ? onClickProgress(onClickReturn)
-            : onClickReturn
+          props.assessment!.type === 'Paths' ? onClickProgress(onClickReturn) : onClickReturn
         }
         questionProgress={questionProgress}
         key="next_question"

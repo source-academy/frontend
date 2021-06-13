@@ -93,7 +93,7 @@ export type AssessmentConfiguration = {
   earlySubmissionXp: number;
   hoursBeforeEarlyXpDecay: number;
   decayRatePointsPerHour: number;
-}
+};
 
 export interface IProgrammingQuestion extends BaseQuestion {
   answer: string | null;

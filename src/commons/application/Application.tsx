@@ -149,7 +149,7 @@ const Application: React.FC<ApplicationProps> = props => {
         render={toIncubator}
         key="missionControl"
       />
-    )
+    );
   }
 
   if (props.enableSourcecast) {

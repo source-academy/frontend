@@ -71,10 +71,7 @@ export const loginGitHub = () => action(LOGIN_GITHUB);
 
 export const logoutGitHub = () => action(LOGOUT_GITHUB);
 
-export const setTokens = ({
-  accessToken,
-  refreshToken
-}: Tokens) =>
+export const setTokens = ({ accessToken, refreshToken }: Tokens) =>
   action(SET_TOKENS, {
     accessToken,
     refreshToken

@@ -3,14 +3,14 @@ import { call } from 'redux-saga/effects';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentType,
+  AssessmentConfiguration,
   AssessmentOverview,
+  AssessmentType,
   ContestEntry,
   GradingStatus,
   IProgrammingQuestion,
   QuestionType,
-  QuestionTypes,
-  AssessmentConfiguration
+  QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
   AchievementGoal,

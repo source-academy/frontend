@@ -8,11 +8,13 @@ import MissionControl, { DispatchProps, StateProps } from './MissionControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   assessmentTypes: state.session.courseConfiguration.assessmentTypes
-})
+});
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators({ handleAssessmentOverviewFetch: fetchAssessmentOverviews }, dispatch);
 
-const MissionControlContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(MissionControl));
+const MissionControlContainer = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(MissionControl)
+);
 
 export default MissionControlContainer;
