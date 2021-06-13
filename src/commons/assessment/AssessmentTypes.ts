@@ -26,14 +26,7 @@ export enum GradingStatuses {
 }
 export type GradingStatus = keyof typeof GradingStatuses;
 
-export enum AssessmentCategories {
-  Contest = 'Contest',
-  Mission = 'Mission',
-  Path = 'Path',
-  Sidequest = 'Sidequest',
-  Practical = 'Practical'
-}
-export type AssessmentCategory = keyof typeof AssessmentCategories;
+export type AssessmentType = string;
 
 export enum TestcaseTypes {
   // These are rendered in full by the Mission Autograder
@@ -61,7 +54,7 @@ W* Used to display information regarding an assessment in the UI.
  *   the assessment opens
  */
 export type AssessmentOverview = {
-  type: string;
+  type: AssessmentType;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
@@ -86,7 +79,7 @@ export type AssessmentOverview = {
  * Used when an assessment is being actively attempted/graded.
  */
 export type Assessment = {
-  type: string;
+  type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
   id: number;

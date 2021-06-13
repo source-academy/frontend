@@ -19,6 +19,7 @@ import { useMediaQuery } from 'react-responsive';
 import { NavLink, Route, Switch } from 'react-router-dom';
 
 import { Role } from '../application/ApplicationTypes';
+import { AssessmentType } from '../assessment/AssessmentTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
@@ -39,7 +40,7 @@ type StateProps = {
   name?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes?: string[];
+  assessmentTypes?: AssessmentType[];
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {

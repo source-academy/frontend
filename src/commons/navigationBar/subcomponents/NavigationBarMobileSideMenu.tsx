@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { AssessmentType } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
 import { icons } from './AcademyNavigationBar';
@@ -20,7 +21,7 @@ type DrawerProps = {
 type OwnProps = {
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes?: string[];
+  assessmentTypes?: AssessmentType[];
 };
 
 const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = props => (

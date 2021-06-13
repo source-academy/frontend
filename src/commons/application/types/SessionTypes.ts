@@ -3,7 +3,7 @@ import { Octokit } from '@octokit/rest';
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
-import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { Assessment, AssessmentOverview, AssessmentType } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
@@ -73,7 +73,7 @@ export type Tokens = {
 export type User = {
   userId: number;
   name: string;
-  courses: number[];
+  courses: number[];  // All the courses the user is in
 };
 
 export type CourseRegistration = {
@@ -96,5 +96,5 @@ export type CourseConfiguration = {
   sourceChapter: number;
   sourceVariant: string;
   moduleHelpText: string;
-  assessmentTypes: string[];
-}
+  assessmentTypes: AssessmentType[];
+};
