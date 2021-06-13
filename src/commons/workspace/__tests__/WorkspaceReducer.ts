@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import {
   CodeOutput,
@@ -120,36 +122,39 @@ function generateActions(type: string, payload: any = {}): any[] {
   ];
 }
 
+// cloneDeep not required for proper redux
+// only required because of high performance console mutating instead of cloning the entire consoleLogs buffer just to push 1 item.
+// Basically breaks redux guarantees but works perfectly fine in practice.
 function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
   return {
     assessment: {
       ...defaultWorkspaceManager.assessment,
-      ...payload
+      ...cloneDeep(payload)
     },
     grading: {
       ...defaultWorkspaceManager.grading,
-      ...payload
+      ...cloneDeep(payload)
     },
     playground: {
       ...defaultWorkspaceManager.playground,
-      ...payload
+      ...cloneDeep(payload)
     },
     sourcecast: {
       ...defaultWorkspaceManager.sourcecast,
-      ...payload
+      ...cloneDeep(payload)
     },
     sourcereel: {
       ...defaultWorkspaceManager.sourcereel,
-      ...payload
+      ...cloneDeep(payload)
     },
     sicp: {
       ...defaultWorkspaceManager.sicp,
-      ...payload
+      ...cloneDeep(payload)
     },
     githubAssessment: {
       ...defaultWorkspaceManager.githubAssessment,
-      ...payload
-    }
+      ...cloneDeep(payload)
+    },
   };
 }
 
@@ -950,11 +955,11 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
-
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
     actions.forEach(action => {
-      const result = WorkspaceReducer(consoleLogDefaultState, action);
+      const result = WorkspaceReducer(cloneDeep(consoleLogDefaultState), action);
       const location = action.payload.workspaceLocation;
+
       expect(result).toEqual({
         ...consoleLogDefaultState,
         [location]: {
@@ -978,7 +983,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const consoleLogDefaultState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput
     });
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
@@ -1000,7 +1005,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const logString = 'test-log-string-3';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: [] });
 
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);

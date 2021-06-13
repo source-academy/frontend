@@ -42,6 +42,7 @@ import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import { getInfiniteLoopData, reportInfiniteLoopError } from '../utils/InfiniteLoopReporter';
 import {
+  dumpDisplayBuffer,
   getBlockExtraMethodsString,
   getDifferenceInMethods,
   getRestoreExtraMethodsString,
@@ -739,6 +740,7 @@ export function* evalCode(
     result.status !== 'finished' &&
     result.status !== 'suspended-non-det'
   ) {
+    dumpDisplayBuffer();
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
 
     // we need to parse again, but preserve the errors in context
@@ -863,6 +865,7 @@ export function* evalTestCode(
 
   if (interrupted) {
     interrupt(context);
+    dumpDisplayBuffer();
     // Redundancy, added ensure that interruption results in an error.
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.endInterruptExecution(workspaceLocation));
@@ -870,6 +873,7 @@ export function* evalTestCode(
     return;
   }
 
+  dumpDisplayBuffer();
   /** result.status here is either 'error' or 'finished'; 'suspended' is not possible
    *  since debugger is presently disabled in assessment and grading environments
    */

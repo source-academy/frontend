@@ -310,18 +310,20 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
        * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
        * (2) state[workspaceLocation].output[-1] is not RunningOutput
        * (3) state[workspaceLocation].output[-1] is RunningOutput */
-      lastOutput = state[workspaceLocation].output.slice(-1)[0];
+      lastOutput = state[workspaceLocation].output[state[workspaceLocation].output.length - 1];
       if (lastOutput === undefined || lastOutput.type !== 'running') {
+        // New block of output.
         newOutput = state[workspaceLocation].output.concat({
           type: 'running',
-          consoleLogs: [action.payload.logString]
+          consoleLogs: [...action.payload.logString]
         });
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
           consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
         };
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat(updatedLastOutput);
+        newOutput = state[workspaceLocation].output.slice(0, -1);
+        newOutput.push(updatedLastOutput);
       }
       return {
         ...state,
@@ -571,6 +573,18 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           isEditorAutorun: !state[workspaceLocation].isEditorAutorun
         }
       };
+    case TOGGLE_USING_SUBST:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingSubst: action.payload.usingSubst
+          }
+        };
+      } else {
+        return state;
+      }
     case UPDATE_ACTIVE_TAB:
       return {
         ...state,
@@ -664,18 +678,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-    case TOGGLE_USING_SUBST:
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            usingSubst: action.payload.usingSubst
-          }
-        };
-      } else {
-        return state;
-      }
     default:
       return state;
   }
