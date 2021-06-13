@@ -124,7 +124,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
     DeviceSession | undefined
   ] = useSelector(
     (store: OverallState) => [
-      !!store.session.accessToken && !!store.session.role,
+      !!store.session.tokens.accessToken && !!store.session.courseRegistration.role,
       store.session.remoteExecutionDevices,
       store.session.remoteExecutionSession
     ],
