@@ -1,7 +1,6 @@
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses,
@@ -14,7 +13,7 @@ import {
 
 const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 1,
@@ -34,7 +33,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
 
 const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 2,
@@ -63,7 +62,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     grade: 3,
@@ -80,7 +79,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     grade: 4,
@@ -97,7 +96,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Path,
+    type: 'Paths',
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     grade: 0,
@@ -114,7 +113,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.excluded
   },
   {
-    category: AssessmentCategories.Practical,
+    type: 'Others',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     grade: 4,
@@ -135,7 +134,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
 
 const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     grade: 2700,
@@ -152,7 +151,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.grading
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     grade: 1950,
@@ -169,7 +168,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     grade: 300,
@@ -186,7 +185,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.graded
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     grade: 0,
@@ -869,7 +868,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
  */
 export const mockAssessments: Assessment[] = [
   {
-    category: 'Mission',
+    type: 'Missions',
     id: 1,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -878,7 +877,7 @@ export const mockAssessments: Assessment[] = [
     title: 'An Odessey to Runes'
   },
   {
-    category: 'Mission',
+    type: 'Missions',
     id: 2,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -887,7 +886,7 @@ export const mockAssessments: Assessment[] = [
     title: 'The Secret to Streams'
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     id: 3,
     longSummary: `###This is the sidequest briefing.
   
@@ -913,7 +912,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A sample Sidequest'
   },
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     id: 4,
     longSummary:
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -922,7 +921,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A Closed Mission'
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     id: 5,
     longSummary:
       'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
@@ -931,7 +930,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A Closed Sidequest'
   },
   {
-    category: AssessmentCategories.Path,
+    type: 'Paths',
     id: 6,
     longSummary: `### Basic logic gates
   
@@ -944,7 +943,7 @@ export const mockAssessments: Assessment[] = [
   },
   // mock assessment used for testing contest voting assessments
   {
-    category: AssessmentCategories.Practical,
+    type: 'Others',
     id: 7,
     title: 'A sample contest voting assessment',
     longSummary: 'Vote for your favourite contest entries here!',
