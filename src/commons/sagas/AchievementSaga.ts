@@ -22,6 +22,7 @@ import {
 import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
 import { OverallState } from '../application/ApplicationTypes';
+import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import {
@@ -40,14 +41,15 @@ import {
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
+function selectTokens() {
+  return select((state: OverallState) => state.session.tokens);
+}
+
 export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(
     BULK_UPDATE_ACHIEVEMENTS,
     function* (action: ReturnType<typeof actions.bulkUpdateAchievements>): any {
-      const tokens = yield select((state: OverallState) => ({
-        accessToken: state.session.tokens.accessToken,
-        refreshToken: state.session.tokens.refreshToken
-      }));
+      const tokens: Tokens = yield selectTokens();
 
       const achievements = action.payload;
 
@@ -62,10 +64,7 @@ export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(
     BULK_UPDATE_GOALS,
     function* (action: ReturnType<typeof actions.bulkUpdateGoals>): any {
-      const tokens = yield select((state: OverallState) => ({
-        accessToken: state.session.tokens.accessToken,
-        refreshToken: state.session.tokens.refreshToken
-      }));
+      const tokens: Tokens = yield selectTokens();
 
       const goals = action.payload;
 
@@ -80,10 +79,7 @@ export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(
     EDIT_ACHIEVEMENT,
     function* (action: ReturnType<typeof actions.editAchievement>): any {
-      const tokens = yield select((state: OverallState) => ({
-        accessToken: state.session.tokens.accessToken,
-        refreshToken: state.session.tokens.refreshToken
-      }));
+      const tokens: Tokens = yield selectTokens();
 
       const achievement = action.payload;
 
@@ -96,10 +92,7 @@ export default function* AchievementSaga(): SagaIterator {
   );
 
   yield takeEvery(EDIT_GOAL, function* (action: ReturnType<typeof actions.editGoal>): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const definition = action.payload;
 
@@ -111,10 +104,7 @@ export default function* AchievementSaga(): SagaIterator {
   });
 
   yield takeEvery(GET_ACHIEVEMENTS, function* (): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const achievements = yield call(getAchievements, tokens);
 
@@ -124,10 +114,7 @@ export default function* AchievementSaga(): SagaIterator {
   });
 
   yield takeEvery(GET_GOALS, function* (action: ReturnType<typeof actions.getGoals>): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const studentId = action.payload;
 
@@ -139,10 +126,7 @@ export default function* AchievementSaga(): SagaIterator {
   });
 
   yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getOwnGoals>): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const goals = yield call(getOwnGoals, tokens);
 
@@ -152,10 +136,7 @@ export default function* AchievementSaga(): SagaIterator {
   });
 
   yield takeEvery(GET_USERS, function* (action: ReturnType<typeof actions.getUsers>): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const users = yield call(getAllUsers, tokens);
 
@@ -167,10 +148,7 @@ export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(
     REMOVE_ACHIEVEMENT,
     function* (action: ReturnType<typeof actions.removeAchievement>): any {
-      const tokens = yield select((state: OverallState) => ({
-        accessToken: state.session.tokens.accessToken,
-        refreshToken: state.session.tokens.refreshToken
-      }));
+      const tokens: Tokens = yield selectTokens();
 
       const achievement = action.payload;
 
@@ -183,10 +161,7 @@ export default function* AchievementSaga(): SagaIterator {
   );
 
   yield takeEvery(REMOVE_GOAL, function* (action: ReturnType<typeof actions.removeGoal>): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const definition = action.payload;
 
@@ -200,10 +175,7 @@ export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(
     UPDATE_OWN_GOAL_PROGRESS,
     function* (action: ReturnType<typeof actions.updateOwnGoalProgress>): any {
-      const tokens = yield select((state: OverallState) => ({
-        accessToken: state.session.tokens.accessToken,
-        refreshToken: state.session.tokens.refreshToken
-      }));
+      const tokens: Tokens = yield selectTokens();
 
       const progress = action.payload;
 
@@ -218,10 +190,7 @@ export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(
     UPDATE_GOAL_PROGRESS,
     function* (action: ReturnType<typeof actions.updateGoalProgress>): any {
-      const tokens = yield select((state: OverallState) => ({
-        accessToken: state.session.tokens.accessToken,
-        refreshToken: state.session.tokens.refreshToken
-      }));
+      const tokens: Tokens = yield selectTokens();
 
       const { studentId, progress } = action.payload;
 
@@ -258,10 +227,7 @@ export default function* AchievementSaga(): SagaIterator {
   });
 
   yield takeEvery(HANDLE_EVENT, function* (action: ReturnType<typeof actions.handleEvent>): any {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.tokens.accessToken,
-      refreshToken: state.session.tokens.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     // get the most recent list of achievements
     const backendAchievements = yield call(getAchievements, tokens);
