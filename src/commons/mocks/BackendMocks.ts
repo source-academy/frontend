@@ -4,9 +4,11 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { store } from '../../pages/createStore';
-import { GameState, OverallState, Role } from '../application/ApplicationTypes';
+import { GameState, OverallState, Role, SourceLanguage, styliseSublanguage } from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  CourseConfiguration,
+  CourseRegistration,
   FETCH_ASSESSMENT,
   FETCH_AUTH,
   FETCH_GRADING,
@@ -15,7 +17,9 @@ import {
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
-  UNSUBMIT_SUBMISSION
+  Tokens,
+  UNSUBMIT_SUBMISSION,
+  User
 } from '../application/types/SessionTypes';
 import { FETCH_ASSESSMENT_OVERVIEWS, Question } from '../assessment/AssessmentTypes';
 import {
@@ -33,24 +37,61 @@ import { mockNotifications } from './UserMocks';
 
 export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
-    const tokens = {
+    const tokens: Tokens = {
       accessToken: 'accessToken',
       refreshToken: 'refreshToken'
     };
-    const user = {
+    const user: User = {
       userId: 123,
       name: 'DevStaff',
-      role: 'staff' as Role,
+      courses: [{
+        courseId: 1,
+        moduleCode: `CS1101S`,
+        name: `Programming Methodology`,
+        viewable: true
+      }, {
+        courseId: 2,
+        moduleCode: `CS2040S`,
+        name: `Data Structures and Algorithms`,
+        viewable: true
+      }]
+    };
+    const courseRegistration: CourseRegistration = {
+      role: Role.Staff,
       group: '1F',
+      gameState: {} as GameState,
+      courseId: 1,
+      grade: 0,
+      maxGrade: 10,
+      xp: 0,
       story: {
         story: 'mission-1',
         playStory: true
       },
-      grade: 0,
-      gameState: {} as GameState
-    };
+    }
+    const courseConfiguration: CourseConfiguration = {
+      name: `Programming Methodology`,
+      moduleCode: `CS1101S`,
+      viewable: true,
+      enableGame: true,
+      enableAchievements: true,
+      enableSourcecast: true,
+      sourceChapter: 4,
+      sourceVariant: 'default',
+      moduleHelpText: '',
+      assessmentTypes: ['Missions', 'Quests', 'Contests', 'Paths', 'Others']
+    }
+    const sublanguage: SourceLanguage = {
+      chapter: courseConfiguration.sourceChapter,
+      variant: courseConfiguration.sourceVariant,
+      displayName: styliseSublanguage(courseConfiguration.sourceChapter, courseConfiguration.sourceVariant)
+    }
+    
     store.dispatch(actions.setTokens(tokens));
     store.dispatch(actions.setUser(user));
+    store.dispatch(actions.setCourseRegistration(courseRegistration));
+    store.dispatch(actions.setCourseConfiguration(courseConfiguration));
+    store.dispatch(actions.updateSublanguage(sublanguage))
     yield history.push('/academy');
   });
 
@@ -67,7 +108,7 @@ export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(
     FETCH_GRADING_OVERVIEWS,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
-      const accessToken = yield select((state: OverallState) => state.session.accessToken);
+      const accessToken = yield select((state: OverallState) => state.session.tokens.accessToken);
       const filterToGroup = action.payload;
       const gradingOverviews = yield call(() =>
         mockFetchGradingOverview(accessToken, filterToGroup)
@@ -80,7 +121,7 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>): any {
     const submissionId = action.payload;
-    const accessToken = yield select((state: OverallState) => state.session.accessToken);
+    const accessToken = yield select((state: OverallState) => state.session.tokens.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
     if (grading !== null) {
       yield put(actions.updateGrading(submissionId, [...grading]));
