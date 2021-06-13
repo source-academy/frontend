@@ -8,7 +8,7 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     gradeAdjustment: 0,
     xpAdjustment: 0,
-    assessmentCategory: 'Mission',
+    assessmentType: 'Missions',
     assessmentId: 0,
     assessmentName: 'Mission 0 ',
     currentGrade: 69,
@@ -30,7 +30,7 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     gradeAdjustment: -2,
     xpAdjustment: -2,
-    assessmentCategory: 'Mission',
+    assessmentType: 'Missions',
     assessmentId: 1,
     assessmentName: 'Mission 1',
     currentGrade: -2,
@@ -52,7 +52,7 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     gradeAdjustment: 4,
     xpAdjustment: 4,
-    assessmentCategory: 'Mission',
+    assessmentType: 'Missions',
     assessmentId: 0,
     assessmentName: 'Mission 0',
     currentGrade: 1000,
