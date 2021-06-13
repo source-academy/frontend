@@ -24,7 +24,7 @@ function insertFakeAchievements(
     inferencer.insertFakeGoalDefinition(
       {
         uuid: idString + '0',
-        text: `Submitted ${assessmentOverview.category.toLowerCase()}`,
+        text: `Submitted ${assessmentOverview.type.toLowerCase()}`,
         achievementUuids: [idString],
         meta: {
           type: GoalType.ASSESSMENT,
@@ -38,7 +38,7 @@ function insertFakeAchievements(
     inferencer.insertFakeGoalDefinition(
       {
         uuid: idString + '1',
-        text: `Graded ${assessmentOverview.category.toLowerCase()}`,
+        text: `Graded ${assessmentOverview.type.toLowerCase()}`,
         achievementUuids: [idString],
         meta: {
           type: GoalType.ASSESSMENT,
@@ -53,7 +53,7 @@ function insertFakeAchievements(
       uuid: idString,
       title: assessmentOverview.title,
       ability:
-        assessmentOverview.category === 'Mission' || assessmentOverview.category === 'Path'
+        assessmentOverview.type === 'Missions' || assessmentOverview.type === 'Paths'
           ? AchievementAbility.CORE
           : AchievementAbility.EFFORT,
       xp:
