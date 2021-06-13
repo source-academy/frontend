@@ -1,13 +1,13 @@
 import { Drawer, NonIdealState, Spinner } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { IconName, IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { Role } from '../application/ApplicationTypes';
 import {
-  AssessmentCategories,
-  AssessmentCategory,
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentType,
+  AssessmentTypes,
   GradingStatuses
 } from '../assessment/AssessmentTypes';
 import ProfileCard from './ProfileCard';
@@ -22,6 +22,7 @@ export type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
+  assessmentTypes: AssessmentTypes;
 };
 
 type OwnProps = {
@@ -69,11 +70,11 @@ class Profile extends React.Component<ProfileProps, {}> {
         );
       } else {
         // Compute the user's current total grade and XP from submitted assessments
+        // TODO: Grade is no longer in use in AY20/21
         const [currentGrade, currentXp, maxGrade, maxXp] = this.props.assessmentOverviews!.reduce(
           (acc, item) =>
             item.status === AssessmentStatuses.submitted
-              ? item.category === AssessmentCategories.Mission &&
-                item.gradingStatus === GradingStatuses.graded
+              ? item.gradingStatus === GradingStatuses.graded
                 ? [
                     acc[0] + item.grade / item.maxGrade,
                     acc[1] + item.xp,
@@ -102,21 +103,19 @@ class Profile extends React.Component<ProfileProps, {}> {
         };
 
         // Given an assessment category, return its icon
-        const renderIcon = (category: AssessmentCategory) => {
-          switch (category) {
-            case AssessmentCategories.Mission:
-              return IconNames.FLAME;
-            case AssessmentCategories.Sidequest:
-              return IconNames.LIGHTBULB;
-            case AssessmentCategories.Path:
-              return IconNames.PREDICTIVE_ANALYSIS;
-            case AssessmentCategories.Contest:
-              return IconNames.COMPARISON;
-            default:
-              // For rendering hidden assessments not visible to the student
-              // e.g. studio participation marks
-              return IconNames.PULSE;
-          }
+        const renderIcon = (assessmentType: AssessmentType) => {
+          const icons: IconName[] = [
+            IconNames.FLAME,
+            IconNames.LIGHTBULB,
+            IconNames.PREDICTIVE_ANALYSIS,
+            IconNames.COMPARISON,
+            IconNames.MANUAL
+          ];
+          const index = this.props.assessmentTypes.indexOf(assessmentType);
+
+          // For rendering hidden assessments not visible to the student
+          // e.g. studio participation marks
+          return index > 0 ? icons[index] : IconNames.PULSE;
         };
 
         // Build condensed assessment cards from an array of assessments
