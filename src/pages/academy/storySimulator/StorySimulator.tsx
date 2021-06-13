@@ -31,7 +31,12 @@ function StorySimulator() {
   }, []);
 
   React.useEffect(() => {
-    SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
+    SourceAcademyGame.getInstance().setAccountInfo({
+      accessToken: session.tokens.accessToken,
+      refreshToken: session.tokens.refreshToken,
+      role: session.courseRegistration.role,
+      name: session.user.name
+    } as AccountInfo);
   }, [session]);
 
   return (
