@@ -14,7 +14,7 @@ exports[`Navbar renders correctly 1`] = `
       </div>
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
-  <Blueprint3.Drawer onClose={[Function: handleCloseToc]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" size=\\"500px\\" usePortal={false} className=\\"sicp-toc-drawer\\" shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
+  <Blueprint3.Drawer onClose={[Function: handleCloseToc]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
     <SicpToc handleCloseToc={[Function: handleCloseToc]} />
   </Blueprint3.Drawer>
 </Fragment>"
