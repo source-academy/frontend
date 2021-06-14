@@ -26,7 +26,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  octokit: Octokit;
+  octokit: Octokit | undefined;
   courses: string[];
   selectedCourse: string;
   setSelectedCourse: (course: string) => void;

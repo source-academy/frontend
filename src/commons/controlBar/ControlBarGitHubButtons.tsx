@@ -10,7 +10,7 @@ import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
-  loggedInAs: Octokit;
+  loggedInAs: Octokit | undefined;
   githubSaveInfo: { repoName: string; filePath: string };
   onClickOpen?: () => void;
   onClickSave?: () => void;

@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { useLocation, useParams } from 'react-router-dom';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -41,7 +42,9 @@ type DispatchProps = {
  */
 const GitHubClassroom: React.FC<DispatchProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  const octokit: Octokit = useSelector((store: any) => store.session.githubOctokitObject).octokit;
+  const octokit: Octokit | undefined = useSelector(
+    (store: OverallState) => store.session.githubOctokitObject
+  ).octokit;
 
   const locationState = useLocation().state as string;
   const { selectedType } = useParams<{ selectedType: string }>();

@@ -105,7 +105,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/missions');
+    history.push('/githubassessments/Classroom');
   }
 
   const [showOverlay, setShowOverlay] = React.useState(false);

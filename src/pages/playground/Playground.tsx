@@ -434,7 +434,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  const githubOctokitObject = useSelector(
+    (store: OverallState) => store.session.githubOctokitObject
+  );
   const githubButtons = React.useMemo(() => {
     const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
