@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useParams } from 'react-router';
-import ContentDisplay from 'src/commons/ContentDisplay';
 import Constants from 'src/commons/utils/Constants';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
@@ -33,16 +32,8 @@ export const mathjaxConfig = {
   }
 };
 
-const sicpDisplayProps = {
-  fullWidth: false,
-  loadContentDispatch: () => {}
-};
-
 const loadingComponent = (
-  <ContentDisplay
-    {...sicpDisplayProps}
-    display={<NonIdealState title="Loading Content" icon={<Spinner />} />}
-  />
+  <NonIdealState title="Loading Content" icon={<Spinner />} />
 );
 
 const unexpectedError = (
@@ -163,7 +154,7 @@ const Sicp: React.FC<SicpProps> = props => {
       <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
         <div ref={topRef} />
         <MathJaxContext version={3} config={mathjaxConfig}>
-          {loading ? loadingComponent : <ContentDisplay {...sicpDisplayProps} display={data} />}
+          {loading ? <div className="sicp-content">{loadingComponent}</div> : <div className="sicp-content">{data}</div>}
         </MathJaxContext>
       </CodeSnippetContext.Provider>
     </div>
