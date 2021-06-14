@@ -58,7 +58,15 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
-export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
+export type PlaygroundProps = OwnProps & DispatchProps & StateProps & RouteComponentProps<{}>;
+
+export type OwnProps = {
+  isSicpEditor?: boolean;
+  initialEditorValueHash?: string;
+  initialPrependHash?: string | undefined;
+
+  handleCloseEditor?: () => void;
+};
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -103,6 +111,7 @@ export type DispatchProps = {
   handleGitHubSaveFile: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  handleUpdatePrepend?: (s: string) => void;
 };
 
 export type StateProps = {
@@ -168,6 +177,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const { isSicpEditor, initialPrependHash, handleUpdatePrepend } = props;
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -183,9 +193,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     })
   );
 
-  const usingRemoteExecution = useSelector(
-    (state: OverallState) => !!state.session.remoteExecutionSession
-  );
+  const usingRemoteExecution =
+    useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
 
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
@@ -213,13 +222,27 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   }, [usingRemoteExecution, props.externalLibraryName]);
 
-  const hash = props.location.hash;
+  const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
+
   React.useEffect(() => {
     if (!hash) {
       return;
     }
     handleHash(hash, propsRef.current);
   }, [hash]);
+
+  // Add prepend if exists.
+  React.useEffect(() => {
+    if (!initialPrependHash || !handleUpdatePrepend) {
+      return;
+    }
+
+    const prepend = decompressFromEncodedURIComponent(initialPrependHash);
+
+    if (prepend) {
+      handleUpdatePrepend(prepend);
+    }
+  }, [handleUpdatePrepend, initialPrependHash]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -605,10 +628,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
       });
     }
 
-    tabs.push(remoteExecutionTab);
+    if (!isSicpEditor) {
+      tabs.push(remoteExecutionTab);
+    }
 
     return tabs;
   }, [
+    isSicpEditor,
     playgroundIntroductionTab,
     props.externalLibraryName,
     props.handleSendReplInputToOutput,
@@ -619,9 +645,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs];
-  mobileTabs.shift();
-  mobileTabs.pop();
+  const mobileTabs = [...tabs].filter(
+    x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
+  );
 
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
@@ -733,7 +759,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     hidden: selectedTab === SideContentType.substVisualizer,
     inputHidden: replDisabled,
     usingSubst: props.usingSubst,
-    replButtons: [replDisabled ? null : evalButton, clearButton]
+    replButtons: [replDisabled ? null : evalButton, clearButton],
+    disableScrolling: isSicpEditor
   };
 
   const workspaceProps: WorkspaceProps = {
@@ -743,7 +770,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         shareButton,
         chapterSelect,
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
-        sessionButtons,
+        isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
@@ -763,7 +790,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
-      workspaceLocation: 'playground'
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -778,7 +805,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           chapterSelect,
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
-          sessionButtons,
+          isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons
         ]
@@ -788,7 +815,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
-      workspaceLocation: 'playground',
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
       handleEditorEval: props.handleEditorEval
     }
   };

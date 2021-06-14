@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp Code Snippet renders correctly 1`] = `
+"<div className=\\"sicp-code-snippet\\">
+  <ReactAsyncHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
+    1+1;
+  </ReactAsyncHighlighter>
+  <Component>
+    2
+  </Component>
+</div>"
+`;

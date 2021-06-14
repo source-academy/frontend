@@ -1,0 +1,730 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Parse array no child successful 1`] = `""`;
+
+exports[`Parse array one child successful 1`] = `
+"<span>
+  <p>
+    Mock Text
+  </p>
+</span>"
+`;
+
+exports[`Parse array two child successful 1`] = `
+"<span>
+  <p>
+    Mock Text
+  </p>
+</span>
+
+
+<span>
+  <p>
+    Mock Text
+  </p>
+</span>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
+"<blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+  <div className=\\"sicp-attribution\\">
+    <span>
+      -
+    </span>
+    <span>
+      Author
+    </span>
+    <i>
+      Title
+    </i>
+    <span>
+      2021
+    </span>
+  </div>
+</blockquote>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
+"<blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+  <div className=\\"sicp-attribution\\">
+    <span>
+      -
+    </span>
+    <span>
+      Author
+    </span>
+  </div>
+</blockquote>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
+"<blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+  <div className=\\"sicp-attribution\\">
+    <span>
+      -
+    </span>
+    <span>
+      2021
+    </span>
+  </div>
+</blockquote>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
+"<blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</blockquote>"
+`;
+
+exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
+"<blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+  <div className=\\"sicp-attribution\\">
+    <span>
+      -
+    </span>
+    <i>
+      Title
+    </i>
+  </div>
+</blockquote>"
+`;
+
+exports[`Parse exercise EXERCISE with solution successful 1`] = `
+"<div>
+  <SicpExercise title={[undefined]} body={{...}} solution={{...}} />
+</div>"
+`;
+
+exports[`Parse exercise EXERCISE without solution successful 1`] = `
+"<div>
+  <SicpExercise title=\\"Title\\" body={{...}} solution={[undefined]} />
+</div>"
+`;
+
+exports[`Parse figures FIGURE with image and scale successful 1`] = `
+"<div className=\\"sicp-figure\\">
+  <div className=\\"sicp-figure\\">
+    <img src=\\"source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
+  </div>
+  <h5>
+    name
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </h5>
+</div>"
+`;
+
+exports[`Parse figures FIGURE with image successful 1`] = `
+"<div className=\\"sicp-figure\\">
+  <div className=\\"sicp-figure\\">
+    <img src=\\"source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
+  </div>
+  <h5>
+    name
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </h5>
+</div>"
+`;
+
+exports[`Parse figures FIGURE with snippet successful 1`] = `
+"<div className=\\"sicp-figure\\">
+  <CodeSnippet body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
+  <h5>
+    name
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </h5>
+</div>"
+`;
+
+exports[`Parse figures FIGURE with table successful 1`] = `
+"<div className=\\"sicp-figure\\">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+        <td>
+          <span>
+            <p>
+              Mock Text
+            </p>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>
+    name
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </h5>
+</div>"
+`;
+
+exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
+"<div>
+  <hr />
+  <div className=\\"sicp-footnote\\">
+    <a href=\\"\\">
+      [1] 
+    </a>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse footnote DISPLAYFOOTNOTE count is 2 successful 1`] = `
+"<div>
+  <div className=\\"sicp-footnote\\">
+    <a href=\\"\\">
+      [2] 
+    </a>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse heading SUBHEADING  successful 1`] = `
+"<h2 className=\\"bp3-heading\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</h2>"
+`;
+
+exports[`Parse heading SUBSUBHEADING  successful 1`] = `
+"<h4 className=\\"bp3-heading\\">
+  <br />
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</h4>"
+`;
+
+exports[`Parse latex LATEX  successful 1`] = `
+"<ContextProvider value={{...}}>
+  <SicpLatex inline={false} math=\\"$test$\\" />
+</ContextProvider>"
+`;
+
+exports[`Parse latex LATEXINLINE  successful 1`] = `
+"<ContextProvider value={{...}}>
+  <SicpLatex inline={true} math=\\"$test$\\" />
+</ContextProvider>"
+`;
+
+exports[`Parse links FOOTNOTE_REF  successful 1`] = `
+"<sup>
+  <a href=\\"bad-link\\">
+    link
+  </a>
+</sup>"
+`;
+
+exports[`Parse links LINK  successful 1`] = `
+"<a href=\\"bad-link\\">
+  link
+</a>"
+`;
+
+exports[`Parse links REF  successful 1`] = `
+"<a href=\\"bad-link\\">
+  link
+</a>"
+`;
+
+exports[`Parse list OL  successful 1`] = `
+"<ol className=\\"bp3-list\\">
+  <span>
+    <li>
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </li>
+  </span>
+</ol>"
+`;
+
+exports[`Parse list UL  successful 1`] = `
+"<ul className=\\"bp3-list\\">
+  <span>
+    <li>
+      <span>
+        <p>
+          Mock Text
+        </p>
+      </span>
+    </li>
+  </span>
+</ul>"
+`;
+
+exports[`Parse object no tag 1`] = `
+"<span>
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</span>"
+`;
+
+exports[`Parse object successful 1`] = `
+"<span>
+  <p>
+    Mock Text
+  </p>
+</span>"
+`;
+
+exports[`Parse reference REFERENCE  successful 1`] = `
+"<div>
+  <div>
+    <span>
+      <p>
+        Mock Text
+      </p>
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse section CHAPTER  successful 1`] = `
+"<div>
+  <Component>
+    Title
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse section MATTER  successful 1`] = `
+"<div>
+  <Component>
+    Title
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse section REFERENCES  successful 1`] = `
+"<div>
+  <Component>
+    Title
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse section SECTION  successful 1`] = `
+"<div>
+  <Component>
+    Title
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse section SUBSECTION  successful 1`] = `
+"<div>
+  <Component>
+    Title
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse section SUBSUBSECTION  successful 1`] = `
+"<div>
+  <Component>
+    Title
+  </Component>
+  <div>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+    <span>
+      <div className=\\"sicp-text\\">
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </div>
+      <br />
+    </span>
+  </div>
+</div>"
+`;
+
+exports[`Parse snippet SNIPPET no eval successful 1`] = `
+"<ContextProvider value={{...}}>
+  <Component>
+    1 + 1;
+  </Component>
+</ContextProvider>"
+`;
+
+exports[`Parse snippet SNIPPET with latex successful 1`] = `
+"<ContextProvider value={{...}}>
+  <Component>
+    <SicpLatex inline={false} math=\\"1 + 1;\\" />
+  </Component>
+</ContextProvider>"
+`;
+
+exports[`Parse snippet SNIPPET with prepend successful 1`] = `
+"<ContextProvider value={{...}}>
+  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"MYewdgzgLgBAhjAvDAjAbgFApgalWoA\\" initialPrependHash=\\"MYewdgzgLgBAhjAvDAjAbiA\\" output={[undefined]} />
+</ContextProvider>"
+`;
+
+exports[`Parse snippet SNIPPET without prepend successful 1`] = `
+"<ContextProvider value={{...}}>
+  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
+</ContextProvider>"
+`;
+
+exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
+"<ContextProvider value={{...}}>
+  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output=\\"2\\" />
+</ContextProvider>"
+`;
+
+exports[`Parse styling B  successful 1`] = `
+"<b>
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</b>"
+`;
+
+exports[`Parse styling EM  successful 1`] = `
+"<em>
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</em>"
+`;
+
+exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `"<code className=\\"bp3-code\\" />"`;
+
+exports[`Parse styling META  successful 1`] = `"<em />"`;
+
+exports[`Parse styling METAPHRASE  successful 1`] = `
+"<p>
+  &amp;langle; &amp;rangle;
+</p>"
+`;
+
+exports[`Parse styling TT  successful 1`] = `
+"<code className=\\"bp3-code\\">
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
+</code>"
+`;
+
+exports[`Parse symbol BR  successful 1`] = `"<br />"`;
+
+exports[`Parse symbol LaTeX  successful 1`] = `
+"<p>
+  LaTeX
+</p>"
+`;
+
+exports[`Parse symbol TeX  successful 1`] = `
+"<p>
+  TeX
+</p>"
+`;
+
+exports[`Parse table TABLE  successful 1`] = `
+"<table>
+  <tbody>
+    <tr>
+      <td>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </td>
+      <td>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </td>
+      <td>
+        <span>
+          <p>
+            Mock Text
+          </p>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>"
+`;

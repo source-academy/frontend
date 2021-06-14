@@ -1,0 +1,376 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp index page 1`] = `
+"<SicpIndexPage>
+  <div className=\\"sicp-index-page\\">
+    <div className=\\"sicp-cover\\">
+      <img src=\\"http://source-academy.github.io/sicp/sicp.png\\" alt=\\"SICP\\" />
+      <div className=\\"sicp-cover-text\\">
+        <div>
+          <Component>
+            <h1 className=\\"bp3-heading\\">
+              Structure and Interpretation of Computer Programs
+            </h1>
+          </Component>
+          <Component>
+            <h2 className=\\"bp3-heading\\">
+              — JavaScript Adaptation
+            </h2>
+          </Component>
+        </div>
+        <div className=\\"sicp-authors\\">
+          <br />
+          <Component>
+            <h4 className=\\"bp3-heading\\">
+              Harold Abelson and Gerald Jay Sussman
+            </h4>
+          </Component>
+          <p>
+            with Julie Sussman
+            <i>
+              — original authors
+            </i>
+          </p>
+          <br />
+          <Component>
+            <h4 className=\\"bp3-heading\\">
+              Martin Henz and Tobias Wrigstad
+            </h4>
+          </Component>
+          <p>
+            with Chan Ger Hean, He Xinyue, Liu Hang, Feng Piaopiao, Jolyn Tan and Wang Qian
+            <i>
+              — adapters to JavaScript
+            </i>
+          </p>
+        </div>
+      </div>
+    </div>
+    <br />
+    <Component>
+      <h2 className=\\"bp3-heading\\">
+        Content
+      </h2>
+    </Component>
+    <SicpToc>
+      <div className=\\"sicp-toc\\">
+        <Blueprint3.Tree className=\\"sicp-toc-tree\\" contents={{...}} onNodeClick={[Function (anonymous)]} onNodeCollapse={[Function: handleNodeCollapse]} onNodeExpand={[Function: handleNodeExpand]}>
+          <div className=\\"bp3-tree sicp-toc-tree\\">
+            <ul className=\\"bp3-tree-node-list bp3-tree-root\\">
+              <Blueprint3.TreeNode id={0} hasCaret={false} label=\\"Foreword\\" nodeData=\\"foreword\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      Foreword
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={1} hasCaret={false} label=\\"Foreword to SICP, 1984\\" nodeData=\\"foreword\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      Foreword to SICP, 1984
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={2} hasCaret={false} label=\\"Preface\\" nodeData=\\"prefaces03\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      Preface
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={3} hasCaret={false} label=\\"Preface to the First Edition of SICP, 1984\\" nodeData=\\"prefaces84\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      Preface to the First Edition of SICP, 1984
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={4} hasCaret={false} label=\\"Preface to the Second Edition of SICP, 1996\\" nodeData=\\"prefaces96\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      Preface to the Second Edition of SICP, 1996
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={5} hasCaret={false} label=\\"Acknowledgments\\" nodeData=\\"acknowledgements\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      Acknowledgments
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={7} hasCaret={true} label=\\"1 Building Abstractions with Functions\\" nodeData=\\"1\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
+                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp3-icon bp3-icon-chevron-right bp3-tree-node-caret bp3-tree-node-caret-closed\\" title={[undefined]}>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                          <desc>
+                            chevron-right
+                          </desc>
+                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
+                        </svg>
+                      </span>
+                    </Blueprint3.Icon>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      1 Building Abstractions with Functions
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={29} hasCaret={true} label=\\"2 Building Abstractions with Data\\" nodeData=\\"2\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
+                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp3-icon bp3-icon-chevron-right bp3-tree-node-caret bp3-tree-node-caret-closed\\" title={[undefined]}>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                          <desc>
+                            chevron-right
+                          </desc>
+                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
+                        </svg>
+                      </span>
+                    </Blueprint3.Icon>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      2 Building Abstractions with Data
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={53} hasCaret={true} label=\\"3 Modularity, Objects, and State\\" nodeData=\\"3\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
+                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp3-icon bp3-icon-chevron-right bp3-tree-node-caret bp3-tree-node-caret-closed\\" title={[undefined]}>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                          <desc>
+                            chevron-right
+                          </desc>
+                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
+                        </svg>
+                      </span>
+                    </Blueprint3.Icon>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      3 Modularity, Objects, and State
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={78} hasCaret={true} label=\\"4 Metalinguistic Abstraction\\" nodeData=\\"4\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
+                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp3-icon bp3-icon-chevron-right bp3-tree-node-caret bp3-tree-node-caret-closed\\" title={[undefined]}>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                          <desc>
+                            chevron-right
+                          </desc>
+                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
+                        </svg>
+                      </span>
+                    </Blueprint3.Icon>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      4 Metalinguistic Abstraction
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={100} hasCaret={true} label=\\"5 Computing with Register Machines\\" nodeData=\\"5\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-caret bp3-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
+                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp3-icon bp3-icon-chevron-right bp3-tree-node-caret bp3-tree-node-caret-closed\\" title={[undefined]}>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                          <desc>
+                            chevron-right
+                          </desc>
+                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
+                        </svg>
+                      </span>
+                    </Blueprint3.Icon>
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      5 Computing with Register Machines
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={128} hasCaret={false} label=\\"References\\" nodeData=\\"references\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      References
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+              <Blueprint3.TreeNode id={129} hasCaret={false} label=\\"About the SICP JS Project\\" nodeData=\\"making-of\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+                <li className=\\"bp3-tree-node\\">
+                  <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                    <span className=\\"bp3-tree-node-caret-none\\" />
+                    <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                    <span className=\\"bp3-tree-node-label\\">
+                      About the SICP JS Project
+                    </span>
+                  </div>
+                  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                    <div className=\\"bp3-collapse\\" style={{...}}>
+                      <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                    </div>
+                  </Blueprint3.Collapse>
+                </li>
+              </Blueprint3.TreeNode>
+            </ul>
+          </div>
+        </Blueprint3.Tree>
+      </div>
+    </SicpToc>
+    <br />
+    <Component>
+      <h2 className=\\"bp3-heading\\">
+        Licenses
+      </h2>
+    </Component>
+    <div className=\\"sicp-licenses\\">
+      <div>
+        <a href=\\"http://creativecommons.org/licenses/by-nc-sa/4.0/\\" rel=\\"nofollow\\">
+          <img src=\\"https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png\\" alt=\\"CC BY-NC-SA 4.0\\" />
+        </a>
+      </div>
+      <div>
+        <p>
+          This work is licensed under a
+           
+          <a href=\\"http://creativecommons.org/licenses/by-nc-sa/4.0/\\" rel=\\"nofollow\\">
+            Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+          </a>
+          .
+        </p>
+      </div>
+      <br />
+      <div>
+        <a href=\\"https://www.gnu.org/licenses/gpl-3.0.en.html\\" rel=\\"nofollow\\">
+          <img src=\\"https://camo.githubusercontent.com/46d38fe6087a9b9bdf7e45458901b818765b8391/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f7468756d622f372f37392f4c6963656e73655f69636f6e2d67706c2e7376672f353070782d4c6963656e73655f69636f6e2d67706c2e7376672e706e67\\" alt=\\"GPL 3\\" data-canonical-src=\\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/License_icon-gpl.svg/50px-License_icon-gpl.svg.png\\" />
+        </a>
+      </div>
+      <div>
+        <p>
+          All JavaScript programs in this work are licensed under the
+           
+          <a href=\\"https://www.gnu.org/licenses/gpl-3.0.en.html\\" rel=\\"nofollow\\">
+            GNU General Public License Version 3
+          </a>
+          .
+        </p>
+      </div>
+      <br />
+      <div>
+        <a href=\\"http://creativecommons.org/licenses/by-nc-sa/4.0/\\" rel=\\"nofollow\\">
+          <img src=\\"https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png\\" alt=\\"CC BY-NC-SA 4.0\\" />
+        </a>
+      </div>
+      <div>
+        <p>
+          The final version of this work will be published by The MIT Press under a
+           
+          <a href=\\"http://creativecommons.org/licenses/by-nc-sa/4.0/\\" rel=\\"nofollow\\">
+            Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+          </a>
+          .
+        </p>
+      </div>
+      <br />
+    </div>
+  </div>
+</SicpIndexPage>"
+`;

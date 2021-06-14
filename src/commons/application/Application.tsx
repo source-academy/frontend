@@ -13,6 +13,7 @@ import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
+import Sicp from '../../pages/sicp/Sicp';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
@@ -164,6 +165,8 @@ const Application: React.FC<ApplicationProps> = props => {
               />
             )}
             <Route path="/callback/github" component={GitHubCallback} />
+            <Route exact path="/interactive-sicp" render={redirectToSicp} />
+            <Route path="/interactive-sicp/:section" component={Sicp} />
             {fullPaths}
             <Route
               exact={true}
@@ -181,6 +184,7 @@ const Application: React.FC<ApplicationProps> = props => {
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
+const redirectToSicp = () => <Redirect to="/interactive-sicp/index" />;
 
 /**
  * A user routes to /academy,

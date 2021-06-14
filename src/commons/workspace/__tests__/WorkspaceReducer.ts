@@ -49,6 +49,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -64,6 +65,7 @@ const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
+const sicpWorkspace: WorkspaceLocation = 'sicp';
 const githubAssessmentWorkspace: WorkspaceLocation = 'githubAssessment';
 
 function generateActions(type: string, payload: any = {}): any[] {
@@ -107,6 +109,13 @@ function generateActions(type: string, payload: any = {}): any[] {
       type,
       payload: {
         ...payload,
+        workspaceLocation: sicpWorkspace
+      }
+    },
+    {
+      type,
+      payload: {
+        ...payload,
         workspaceLocation: githubAssessmentWorkspace
       }
     }
@@ -136,6 +145,10 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     },
     sourcereel: {
       ...defaultWorkspaceManager.sourcereel,
+      ...cloneDeep(payload)
+    },
+    sicp: {
+      ...defaultWorkspaceManager.sicp,
       ...cloneDeep(payload)
     },
     githubAssessment: {
@@ -1421,6 +1434,33 @@ describe('MOVE_CURSOR', () => {
           newCursorPosition: cursorPosition
         }
       });
+    });
+  });
+});
+
+describe('TOGGLE_USING_SUBST', () => {
+  test('sets usingSubst correctly', () => {
+    const usingSubst = true;
+    const actions = generateActions(TOGGLE_USING_SUBST, { usingSubst });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+
+      const expectedResult =
+        location === playgroundWorkspace || location === sicpWorkspace
+          ? {
+              ...defaultWorkspaceManager,
+              [location]: {
+                ...defaultWorkspaceManager[location],
+                usingSubst: true
+              }
+            }
+          : {
+              ...defaultWorkspaceManager
+            };
+
+      expect(result).toEqual(expectedResult);
     });
   });
 });

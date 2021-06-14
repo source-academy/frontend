@@ -28,6 +28,12 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
           GitHub Assessments
         </div>
       </NavLink>
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/interactive-sicp/index\\">
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text\\">
+          SICP JS
+        </div>
+      </NavLink>
     </Blueprint3.NavbarGroup>
     <Blueprint3.NavbarGroup align=\\"right\\">
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
@@ -48,6 +54,9 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
   <Switch>
     <Route path=\\"/githubassessments\\">
       <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} title=\\"Source Academy\\" />
+    </Route>
+    <Route path=\\"/interactive-sicp/:section?\\">
+      <SicpNavigationBar />
     </Route>
     <Route />
   </Switch>
@@ -82,6 +91,12 @@ exports[`NavigationBar renders correctly with student role 1`] = `
           GitHub Assessments
         </div>
       </NavLink>
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/interactive-sicp/index\\">
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text\\">
+          SICP JS
+        </div>
+      </NavLink>
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievement\\">
         <Blueprint3.Icon icon=\\"mountain\\" />
         <div className=\\"navbar-button-text\\">
@@ -112,6 +127,9 @@ exports[`NavigationBar renders correctly with student role 1`] = `
   <Switch>
     <Route path=\\"/githubassessments\\">
       <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role=\\"student\\" title=\\"Source Academy\\" />
+    </Route>
+    <Route path=\\"/interactive-sicp/:section?\\">
+      <SicpNavigationBar />
     </Route>
     <Route>
       <AcademyNavigationBar role=\\"student\\" />
