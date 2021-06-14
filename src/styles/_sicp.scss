@@ -6,6 +6,7 @@ $sicp-background-color: #ffffff;
   text-align: justify;
   color: $sicp-text-color;
   overflow: auto;
+  background-color: $sicp-background-color;
 
   @media only screen and (max-width: 768px) {
     font-size: 1em;
@@ -31,17 +32,24 @@ $sicp-background-color: #ffffff;
     background-color: $sicp-background-color;
   }
 
-  .ContentDisplay {
-    margin: 0 auto;
-    height: fit-content;
-    text-align: left;
+  .sicp-content {
+    margin: 1em auto;
+    padding: 0 5em;
+    max-width: 1300px;
 
-    .bp3-card {
-      background-color: $sicp-background-color;
+    height: fit-content;
+    background-color: $sicp-background-color;
+
+    h1 {
+      text-align: left;
     }
 
     p {
       display: inline;
+    }
+
+    @media only screen and (max-width: 768px) {
+      padding: 0 1em;
     }
   }
 
@@ -184,11 +192,10 @@ $sicp-background-color: #ffffff;
 }
 
 .sicp-toc-drawer {
-  background-color: $cadet-color-2;
-  width: 500px;
+  width: 500px !important;
 
   .sicp-toc-tree {
-    color: $cadet-color-4;
+    color: $sicp-text-color;
     font-size: larger;
 
     .bp3-tree-node-content {
