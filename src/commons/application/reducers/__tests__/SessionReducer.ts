@@ -12,6 +12,7 @@ import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
   SessionState,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -79,6 +80,20 @@ test('SET_USER works correctly', () => {
   expect(result).toEqual({
     ...defaultSession,
     ...payload
+  });
+});
+
+test('SET_GITHUB_ACCESS_TOKEN works correctly', () => {
+  const token = 'githubAccessToken';
+  const action = {
+    type: SET_GITHUB_ACCESS_TOKEN,
+    payload: token
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    githubAccessToken: token
   });
 });
 

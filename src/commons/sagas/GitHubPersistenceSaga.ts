@@ -41,6 +41,7 @@ function* githubLoginSaga() {
 
   broadcastChannel.onmessage = receivedMessage => {
     store.dispatch(actions.setGitHubOctokitObject(receivedMessage.data));
+    store.dispatch(actions.setGitHubAccessToken(receivedMessage.data));
     showSuccessMessage('Logged in to GitHub', 1000);
   };
 
@@ -61,7 +62,7 @@ function* githubLogoutSaga() {
     return;
   }
 
-  yield put(actions.removeGitHubOctokitObject());
+  yield put(actions.removeGitHubOctokitObjectAndAccessToken());
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
   yield call(history.push, '/githubassessments/missions');
 }

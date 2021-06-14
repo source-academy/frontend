@@ -13,6 +13,7 @@ import {
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_TOKENS,
   SET_USER,
@@ -39,6 +40,7 @@ import {
   login,
   reautogradeAnswer,
   reautogradeSubmission,
+  setGitHubAccessToken,
   setGitHubOctokitObject,
   setTokens,
   setUser,
@@ -171,6 +173,15 @@ test('setGitHubOctokitInstance generates correct action object', async () => {
   const authObject = (await action.payload.auth()) as any;
   expect(authObject.token).toBe('testAuthToken12345');
   expect(authObject.tokenType).toBe('oauth');
+});
+
+test('setGitHubAccessToken generates correct action object', () => {
+  const authToken = 'testAuthToken12345';
+  const action = setGitHubAccessToken(authToken);
+  expect(action).toEqual({
+    type: SET_GITHUB_ACCESS_TOKEN,
+    payload: authToken
+  });
 });
 
 test('submitAnswer generates correct action object', () => {
