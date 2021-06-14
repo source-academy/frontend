@@ -1,7 +1,6 @@
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import ReactRouter from 'react-router';
-import ContentDisplay from 'src/commons/ContentDisplay';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import Sicp from '../Sicp';
@@ -36,7 +35,7 @@ describe('Sicp renders', () => {
       </Provider>
     );
     const wrapper = mount(sicp);
-    const display = wrapper.find(ContentDisplay);
-    expect(display.prop('display')).toEqual(<SicpIndexPage />);
+    const display = wrapper.find(".sicp-content");
+    expect(display.prop('children')).toEqual(<SicpIndexPage />);
   });
 });
