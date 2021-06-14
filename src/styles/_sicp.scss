@@ -1,0 +1,219 @@
+$sicp-text-color: #333333;
+$sicp-background-color: #ffffff;
+
+.Sicp {
+  width: 100%;
+  text-align: justify;
+  color: $sicp-text-color;
+  overflow: auto;
+  background-color: $sicp-background-color;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 1em;
+  }
+
+  mjx-container,
+  pre {
+    overflow-x: scroll;
+  }
+
+  .bp3-heading {
+    margin-top: 10px;
+  }
+
+  .bp3-code {
+    color: $sicp-text-color;
+    background-color: $sicp-background-color;
+    box-shadow: none;
+  }
+
+  .bp3-code-block {
+    color: $sicp-text-color;
+    background-color: $sicp-background-color;
+  }
+
+  .sicp-content {
+    margin: 1em auto;
+    padding: 0 5em;
+    max-width: 1300px;
+
+    height: fit-content;
+    background-color: $sicp-background-color;
+
+    h1 {
+      text-align: left;
+    }
+
+    p {
+      display: inline;
+    }
+
+    @media only screen and (max-width: 768px) {
+      padding: 0 1em;
+    }
+  }
+
+  .bp3-heading {
+    color: $sicp-text-color;
+  }
+
+  .sicp-index-page {
+    > h1,
+    > h2,
+    > .sicp-licenses {
+      text-align: center;
+    }
+
+    > .sicp-cover {
+      display: flex;
+      justify-content: space-evenly;
+
+      > .sicp-cover-text {
+        display: flex;
+        justify-content: space-between;
+        flex-flow: column nowrap;
+        text-align: right;
+        align-items: flex-end;
+
+        > .sicp-authors {
+          max-width: 500px;
+
+          > h4 {
+            margin-bottom: 0;
+          }
+
+          > h5 {
+            font-weight: 300;
+          }
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        flex-direction: column;
+      }
+    }
+
+    .sicp-toc-tree {
+      .bp3-tree-node-content {
+        height: fit-content;
+        padding: 3px 0;
+
+        .bp3-tree-node-label {
+          white-space: normal;
+          text-overflow: clip;
+        }
+      }
+    }
+  }
+
+  .sicp-code-snippet {
+    margin: 10px 0;
+
+    .sicp-code-snippet-open {
+      > .ControlBar {
+        display: flex;
+        background-color: $cadet-color-1;
+        color: white;
+        padding: 5px;
+
+        .ControlBar_flow {
+          flex-grow: 1;
+        }
+      }
+
+      .sicp-workspace-container-container {
+        display: flex;
+        flex-flow: column nowrap;
+        height: 100%;
+
+        // editor workspace
+        .workspace {
+          color: white;
+          overflow-y: auto;
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        position: fixed;
+        z-index: 20;
+        top: 0;
+        left: 0;
+        height: calc(100% - 40px);
+        width: 100vw;
+      }
+    }
+  }
+
+  .sicp-footnote {
+    font-size: 0.8rem;
+  }
+
+  .sicp-figure {
+    margin: auto;
+    text-align: center;
+  }
+
+  // text container
+  .sicp-text {
+    text-align: justify;
+  }
+
+  .sicp-epigraph {
+    text-align: justify;
+  }
+
+  .sicp-attribution {
+    text-align: right;
+  }
+
+  .sicp-exercise {
+    margin: 10px 0;
+    padding: 10px;
+    text-align: justify;
+    background-color: $sicp-background-color !important;
+
+    .sicp-button-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      > .bp3-button {
+        margin: 5px;
+      }
+    }
+  }
+}
+
+// Styles for sicp table of contents
+
+.sicp-toc {
+  overflow-y: auto;
+}
+
+.sicp-toc-drawer {
+  width: 500px !important;
+
+  .sicp-toc-tree {
+    color: $sicp-text-color;
+    font-size: larger;
+
+    .bp3-tree-node-content {
+      height: fit-content;
+      padding: 10px 0;
+
+      .bp3-tree-node-label {
+        white-space: normal;
+        text-overflow: clip;
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+      font-size: small;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    width: 70% !important;
+  }
+}

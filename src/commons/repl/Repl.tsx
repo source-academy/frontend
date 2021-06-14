@@ -24,6 +24,7 @@ type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
+  disableScrolling?: boolean;
 };
 
 type DispatchProps = {

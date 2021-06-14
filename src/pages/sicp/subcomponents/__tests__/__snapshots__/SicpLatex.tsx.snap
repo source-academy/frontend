@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp latex renders correctly block 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <SicpLatex math=\\"1+1\\" inline={false}>
+    <MathJax inline={false} dynamic={false}>
+      <span id={[undefined]} style={{...}}>
+        1+1
+      </span>
+    </MathJax>
+  </SicpLatex>
+</MathJaxContext>"
+`;
+
+exports[`Sicp latex renders correctly inline 1`] = `
+"<MathJaxContext version={3} config={{...}}>
+  <SicpLatex math=\\"1+1\\" inline={true}>
+    <MathJax inline={true} dynamic={false}>
+      <span id={[undefined]} style={{...}}>
+        1+1
+      </span>
+    </MathJax>
+  </SicpLatex>
+</MathJaxContext>"
+`;

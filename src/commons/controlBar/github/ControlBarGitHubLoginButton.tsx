@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
-import { OverallState } from '../application/ApplicationTypes';
-import controlButton from '../ControlButton';
-import Constants from '../utils/Constants';
+import { OverallState } from '../../application/ApplicationTypes';
+import controlButton from '../../ControlButton';
+import Constants from '../../utils/Constants';
 
 export type ControlBarGitHubLoginButtonProps = {
   onClickLogIn: () => void;

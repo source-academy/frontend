@@ -2,6 +2,7 @@ import {
   Alignment,
   Button,
   Classes,
+  Drawer,
   FocusStyleManager,
   Icon,
   Navbar,
@@ -17,10 +18,12 @@ import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { NavLink, Route, Switch } from 'react-router-dom';
 
+import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
+import GitHubAssessmentsNavigationBar from './subcomponents/GitHubAssessmentsNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;
@@ -44,7 +47,104 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
-  const playgroundOnlyNavbarLeft = (
+  const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
+    isMobileBreakpoint ? (
+      <>
+        <NavbarGroup align={Alignment.LEFT}>
+          <Button
+            onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+            icon={IconNames.MENU}
+            large={true}
+            minimal={true}
+          />
+          <NavLink
+            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            to="/"
+          >
+            <Icon icon={IconNames.SYMBOL_DIAMOND} />
+            <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+          </NavLink>
+          <Drawer
+            isOpen={mobileSideMenuOpen}
+            position="left"
+            onClose={() => setMobileSideMenuOpen(false)}
+            title=""
+            className={Classes.DARK}
+          >
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to="/playground"
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.CODE} />
+              <div>Playground</div>
+            </NavLink>
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to="/githubassessments/missions"
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.BRIEFCASE} />
+              <div>GitHub Assessments</div>
+            </NavLink>
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to="/interactive-sicp/index"
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.BOOK} />
+              <div>SICP JS</div>
+            </NavLink>
+          </Drawer>
+        </NavbarGroup>
+      </>
+    ) : (
+      <NavbarGroup align={Alignment.LEFT}>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to="/playground"
+        >
+          <Icon icon={IconNames.CODE} />
+          <div>Source Academy Playground</div>
+        </NavLink>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to="/githubassessments/missions"
+        >
+          <Icon icon={IconNames.BRIEFCASE} />
+          <div>GitHub Assessments</div>
+        </NavLink>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to="/interactive-sicp/index"
+        >
+          <Icon icon={IconNames.BOOK} />
+          <div>SICP JS</div>
+        </NavLink>
+      </NavbarGroup>
+    )
+  ) : (
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         activeClassName={Classes.ACTIVE}
@@ -53,6 +153,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       >
         <Icon icon={IconNames.CODE} />
         <div>Source Academy Playground</div>
+      </NavLink>
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+        to="/interactive-sicp/index"
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div>SICP JS</div>
       </NavLink>
     </NavbarGroup>
   );
@@ -124,6 +232,15 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         </NavLink>
       )}
 
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/interactive-sicp/index"
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text">SICP JS</div>
+      </NavLink>
+
       {props.role && Constants.enableAchievements && (
         <NavLink
           activeClassName={Classes.ACTIVE}
@@ -185,6 +302,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       </Navbar>
 
       <Switch>
+        <Route path="/githubassessments">
+          {Constants.enableGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
+            <GitHubAssessmentsNavigationBar {...props} />
+          )}
+        </Route>
+        <Route path="/interactive-sicp/:section?">
+          <SicpNavigationBar />
+        </Route>
         <Route>
           {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (
             <AcademyNavigationBar role={props.role} />

@@ -30,6 +30,7 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  toggleUsingSubst,
   updateActiveTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
@@ -63,6 +64,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -484,6 +486,17 @@ test('updateChapter generates correct action object', () => {
     type: UPDATE_SUBLANGUAGE,
     payload: {
       sublang
+    }
+  });
+});
+
+test('toggleUsingSubst generates correct action object', () => {
+  const action = toggleUsingSubst(true, playgroundWorkspace);
+  expect(action).toEqual({
+    type: TOGGLE_USING_SUBST,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      usingSubst: true
     }
   });
 });
