@@ -40,7 +40,7 @@ jobs:
         ln -s index.html build/playground.html
         ln -s index.html build/contributors.html
         ln -s index.html build/sourcecast.html
-        ln -s index.html build/sicp.html
+        ln -s index.html build/interactive-sicp.html
       # the `ln`s above are a hack to make GitHub Pages route /playground
       # and /contributors etc to index, instead of 404-ing.
       env:
