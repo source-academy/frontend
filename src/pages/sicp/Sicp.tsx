@@ -32,9 +32,7 @@ export const mathjaxConfig = {
   }
 };
 
-const loadingComponent = (
-  <NonIdealState title="Loading Content" icon={<Spinner />} />
-);
+const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
 const unexpectedError = (
   <div>
@@ -154,7 +152,11 @@ const Sicp: React.FC<SicpProps> = props => {
       <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
         <div ref={topRef} />
         <MathJaxContext version={3} config={mathjaxConfig}>
-          {loading ? <div className="sicp-content">{loadingComponent}</div> : <div className="sicp-content">{data}</div>}
+          {loading ? (
+            <div className="sicp-content">{loadingComponent}</div>
+          ) : (
+            <div className="sicp-content">{data}</div>
+          )}
         </MathJaxContext>
       </CodeSnippetContext.Provider>
     </div>

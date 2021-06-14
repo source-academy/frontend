@@ -35,7 +35,7 @@ describe('Sicp renders', () => {
       </Provider>
     );
     const wrapper = mount(sicp);
-    const display = wrapper.find(".sicp-content");
+    const display = wrapper.find('.sicp-content');
     expect(display.prop('children')).toEqual(<SicpIndexPage />);
   });
 });
