@@ -156,16 +156,14 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
 
   return (
     <div className="Academy">
-      {!isMobileBreakpoint && (
-        <GitHubAssessmentsNavigationBar
-          {...props}
-          octokit={octokit}
-          courses={courses}
-          selectedCourse={selectedCourse}
-          setSelectedCourse={setSelectedCourse}
-          typeNames={typeNames}
-        />
-      )}
+      <GitHubAssessmentsNavigationBar
+        {...props}
+        octokit={octokit}
+        courses={courses}
+        selectedCourse={selectedCourse}
+        setSelectedCourse={setSelectedCourse}
+        typeNames={typeNames}
+      />
       <div className="Assessment">
         <ContentDisplay display={display} loadContentDispatch={getGitHubOctokitInstance} />
       </div>
