@@ -14,13 +14,13 @@ import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { useLocation, useParams } from 'react-router-dom';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import { OverallState } from '../../commons/application/ApplicationTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import controlButton from '../../commons/ControlButton';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
@@ -57,6 +57,15 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
   const [typeNames, setTypeNames] = useState<string[]>([]);
   const [browsableMissions, setBrowsableMissions] = useState<BrowsableMission[]>([]);
 
+  const createMissionButton = useMemo(
+    () => (
+      <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+        Create a New Assignment!
+      </Button>
+    ),
+    []
+  );
+
   // GET user organisations after logging in
   useEffect(() => {
     if (octokit === undefined) {
@@ -85,6 +94,7 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
     if (octokit === undefined) {
       return;
     }
+
     if (selectedCourse !== '') {
       setDisplay(
         <NonIdealState description="Loading Missions" icon={<Spinner size={SpinnerSize.LARGE} />} />
@@ -101,9 +111,14 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
 
   // After missions retrieved, display mission listing
   useEffect(() => {
+    if (octokit === undefined) {
+      return;
+    }
+
     if (browsableMissions.length === 0) {
       setDisplay(
         <>
+          {createMissionButton}
           <NonIdealState description="No mission repositories found!" icon={IconNames.STAR_EMPTY} />
           {isMobileBreakpoint &&
             controlButton('Log Out', IconNames.GIT_BRANCH, props.handleGitHubLogOut, {
@@ -122,6 +137,7 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
 
     setDisplay(
       <>
+        {createMissionButton}
         {cards}
         {isMobileBreakpoint &&
           controlButton('Log Out', IconNames.GIT_BRANCH, props.handleGitHubLogOut, {
@@ -130,7 +146,13 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
           })}
       </>
     );
-  }, [browsableMissions, isMobileBreakpoint, props.handleGitHubLogOut]);
+  }, [
+    browsableMissions,
+    createMissionButton,
+    isMobileBreakpoint,
+    octokit,
+    props.handleGitHubLogOut
+  ]);
 
   return (
     <div className="Academy">
