@@ -66,8 +66,8 @@ export type SessionState = {
   readonly story: Story;
 
   // Course Configuration
-  readonly moduleName?: string;
-  readonly moduleCode?: string;
+  readonly courseName?: string;
+  readonly courseShortname?: string;
   readonly viewable?: boolean;
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
@@ -120,8 +120,8 @@ export type CourseRegistration = {
 };
 
 export type CourseConfiguration = {
-  moduleName: string;
-  moduleCode: string;
+  courseName: string;
+  courseShortname: string;
   viewable: boolean;
   enableGame: boolean;
   enableAchievements: boolean;

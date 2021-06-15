@@ -30,7 +30,6 @@ export type OverallState = {
 };
 
 export type ApplicationState = {
-  readonly title: string;
   readonly environment: ApplicationEnvironment;
 };
 
@@ -165,7 +164,6 @@ export const defaultAcademy: AcademyState = {
 };
 
 export const defaultApplication: ApplicationState = {
-  title: 'Cadet',
   environment: currentEnvironment()
 };
 

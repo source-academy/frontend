@@ -36,8 +36,8 @@ type DispatchProps = {
 
 type StateProps = {
   role?: Role;
-  title: string;
   name?: string;
+  courseShortname?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes: AssessmentType[];
@@ -139,10 +139,10 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     </NavbarGroup>
   );
 
-  // Handles the Source Academy @NUS left mobile navbar group
+  // Handles the Source Academy @ NUS left mobile navbar group
   const mobileNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
-      {props.name && (
+      {(props.role || Constants.enableGitHubAssessments) && (
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
           icon={IconNames.MENU}
@@ -156,10 +156,15 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+        {props.courseShortname && (
+          <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortname}</NavbarHeading>
+        )}
+        {!props.courseShortname && (
+          <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy @ NUS</NavbarHeading>
+        )}
       </NavLink>
 
-      {props.name && (
+      {(props.role || Constants.enableGitHubAssessments) && (
         <NavigationBarMobileSideMenu
           role={props.role}
           enableAchievements={props.enableAchievements}
@@ -174,7 +179,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     </NavbarGroup>
   );
 
-  // Handles the Source Academy @NUS left desktop navbar group
+  // Handles the Source Academy @ NUS left desktop navbar group
   const desktopNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
@@ -183,7 +188,12 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+        {props.courseShortname && (
+          <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortname}</NavbarHeading>
+        )}
+        {!props.courseShortname && (
+          <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy @ NUS</NavbarHeading>
+        )}
       </NavLink>
 
       {props.role && props.enableSourcecast && (
@@ -196,7 +206,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           <div className="navbar-button-text">Sourcecast</div>
         </NavLink>
       )}
-      {props.name && (
+      {props.role && (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -216,7 +226,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           <div className="navbar-button-text">GitHub Assessments</div>
         </NavLink>
       )}
-
       {props.role && props.enableAchievements && (
         <NavLink
           activeClassName={Classes.ACTIVE}

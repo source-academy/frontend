@@ -31,8 +31,8 @@ export type DispatchProps = {
 
 export type StateProps = {
   role?: Role;
-  title: string;
   name?: string;
+  courseShortname?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes: AssessmentType[];
@@ -187,7 +187,7 @@ const Application: React.FC<ApplicationProps> = props => {
         handleGitHubLogOut={props.handleGitHubLogOut}
         role={props.role}
         name={props.name}
-        title={props.title}
+        courseShortname={props.courseShortname}
         enableAchievements={props.enableAchievements}
         enableSourcecast={props.enableSourcecast}
         assessmentTypes={props.assessmentTypes}

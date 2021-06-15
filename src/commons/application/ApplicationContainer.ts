@@ -15,9 +15,9 @@ import { OverallState } from './ApplicationTypes';
  * provided using the withRouter() method below.
  */
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  title: state.application.title,
   role: state.session.role,
   name: state.session.name,
+  courseShortname: state.session.courseShortname,
   enableAchievements: state.session.enableAchievements,
   enableSourcecast: state.session.enableSourcecast,
   assessmentTypes: state.session.assessmentTypes

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import Constants from 'src/commons/utils/Constants';
 
 import { AssessmentType } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
@@ -76,35 +77,39 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       </NavLink>
     )}
 
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link__mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/playground"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.CODE} />
-      <div>Playground</div>
-    </NavLink>
+    {props.role && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link__mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/playground"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.CODE} />
+        <div>Playground</div>
+      </NavLink>
+    )}
 
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link_mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/githubassessments/missions"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.BRIEFCASE} />
-      <div className="navbar-button-text">GitHub Assessments</div>
-    </NavLink>
+    {Constants.enableGitHubAssessments && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link_mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/githubassessments/missions"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.BRIEFCASE} />
+        <div className="navbar-button-text">GitHub Assessments</div>
+      </NavLink>
+    )}
 
     {props.role && props.enableAchievements && (
       <NavLink

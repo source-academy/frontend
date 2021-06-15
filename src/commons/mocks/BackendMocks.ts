@@ -79,8 +79,8 @@ export function* mockBackendSaga(): SagaIterator {
       }
     };
     const courseConfiguration: CourseConfiguration = {
-      moduleName: `Programming Methodology`,
-      moduleCode: `CS1101S`,
+      courseName: `Programming Methodology`,
+      courseShortname: `CS1101S`,
       viewable: true,
       enableGame: true,
       enableAchievements: true,
