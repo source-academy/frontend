@@ -42,7 +42,14 @@ export const saveState = (state: OverallState) => {
         refreshToken: state.session.refreshToken,
         role: state.session.role,
         name: state.session.name,
-        userId: state.session.userId
+        userId: state.session.userId,
+        courseId: state.session.courseId,
+        courseShortname: state.session.courseShortname,
+        enableGame: state.session.enableGame,
+        enableAchievements: state.session.enableSourcecast,
+        enableSourcecast: state.session.enableSourcecast,
+        moduleHelpText: state.session.moduleHelpText,
+        assessmentTypes: state.session.assessmentTypes
       },
       achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,
