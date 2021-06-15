@@ -11,7 +11,6 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 
 export type LoginProps = DispatchProps & OwnProps;
 
@@ -64,7 +63,6 @@ const Login: React.FunctionComponent<LoginProps> = props => {
             {props.providers.map(({ id, name }) => (
               <LoginButton handleClick={props.handleLogin} name={name} id={id} key={id} />
             ))}
-            {playgroundButton}
           </ButtonGroup>
         </div>
       </Card>
@@ -91,13 +89,5 @@ const LoginButton = ({
     </Button>
   );
 };
-
-const playgroundButton = (
-  <NavLink to="/playground">
-    <Button className={Classes.LARGE} rightIcon={IconNames.CODE}>
-      Try out the playground
-    </Button>
-  </NavLink>
-);
 
 export default Login;
