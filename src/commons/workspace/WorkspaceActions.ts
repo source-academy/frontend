@@ -37,6 +37,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -283,3 +284,6 @@ export const notifyProgramEvaluated = (
     context,
     workspaceLocation
   });
+
+export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });

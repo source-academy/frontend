@@ -178,7 +178,6 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultPlayground: PlaygroundState = {
-  usingSubst: false,
   githubSaveInfo: { repoName: '', filePath: '' }
 };
 
@@ -273,6 +272,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,
     timeResumed: 0
+  },
+  sicp: {
+    ...createDefaultWorkspace('sicp'),
+    usingSubst: false
   },
   githubAssessment: {
     ...createDefaultWorkspace('githubAssessment'),

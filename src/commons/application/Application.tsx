@@ -13,6 +13,7 @@ import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
+import Sicp from '../../pages/sicp/Sicp';
 import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
 import Welcome from '../../pages/welcome/WelcomeContainer';
 import { AssessmentType } from '../assessment/AssessmentTypes';
@@ -128,6 +129,8 @@ const Application: React.FC<ApplicationProps> = props => {
     <Route path="/playground" component={Playground} key="playground" />,
     <Route path="/contributors" component={Contributors} key="contributors" />,
     <Route path="/callback/github" component={GitHubCallback} key="githubCallback" />,
+    <Route exact path="/interactive-sicp" render={redirectToSicp} />,
+    <Route path="/interactive-sicp/:section" component={Sicp} />,
     ...githubAssessmentsPaths
   ];
 
@@ -229,6 +232,7 @@ const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
 const redirectToWelcome = () => <Redirect to="/welcome" />;
+const redirectToSicp = () => <Redirect to="/interactive-sicp/index" />;
 
 /**
  * A user routes to /academy,

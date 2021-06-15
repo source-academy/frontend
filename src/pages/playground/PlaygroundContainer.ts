@@ -40,6 +40,7 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
   updateReplValue
@@ -59,7 +60,6 @@ import {
 import {
   generateLzString,
   shortenURL,
-  toggleUsingSubst,
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import Playground, { DispatchProps, StateProps } from './Playground';
@@ -86,7 +86,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sourceVariant: state.workspaces.playground.context.variant,
   sharedbConnected: state.workspaces.playground.sharedbConnected,
   externalLibraryName: state.workspaces.playground.externalLibrary,
-  usingSubst: state.playground.usingSubst,
+  usingSubst: state.workspaces.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitObject: state.session.githubOctokitObject,
@@ -133,7 +133,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
-      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
+      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),

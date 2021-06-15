@@ -124,9 +124,24 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         onClick={props.onClose}
       >
         <Icon icon={IconNames.MOUNTAIN} />
-        <div>Achievement</div>
+        <div>Achievements</div>
       </NavLink>
     )}
+
+    <NavLink
+      activeClassName={Classes.ACTIVE}
+      className={classNames(
+        'NavigationBar__link_mobile',
+        Classes.BUTTON,
+        Classes.MINIMAL,
+        Classes.LARGE
+      )}
+      to="/interactive-sicp/index"
+      onClick={props.onClose}
+    >
+      <Icon icon={IconNames.BOOK} />
+      <div className="navbar-button-text">SICP JS</div>
+    </NavLink>
   </Drawer>
 );
 

@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { NavLink, Route, Switch } from 'react-router-dom';
+import SicpNavigationBar from 'src/commons/navigationBar/subcomponents/SicpNavigationBar';
 
 import { Role } from '../application/ApplicationTypes';
 import { AssessmentType } from '../assessment/AssessmentTypes';
@@ -103,6 +104,20 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
               <Icon icon={IconNames.BRIEFCASE} />
               <div>GitHub Assessments</div>
             </NavLink>
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to="/interactive-sicp/index"
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.BOOK} />
+              <div>SICP JS</div>
+            </NavLink>
           </Drawer>
         </NavbarGroup>
       </>
@@ -124,6 +139,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           <Icon icon={IconNames.BRIEFCASE} />
           <div>GitHub Assessments</div>
         </NavLink>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to="/interactive-sicp/index"
+        >
+          <Icon icon={IconNames.BOOK} />
+          <div>SICP JS</div>
+        </NavLink>
       </NavbarGroup>
     )
   ) : (
@@ -135,6 +158,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       >
         <Icon icon={IconNames.CODE} />
         <div>Source Academy Playground</div>
+      </NavLink>
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+        to="/interactive-sicp/index"
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div>SICP JS</div>
       </NavLink>
     </NavbarGroup>
   );
@@ -233,9 +264,17 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           to="/achievement"
         >
           <Icon icon={IconNames.MOUNTAIN} />
-          <div className="navbar-button-text">Achievement</div>
+          <div className="navbar-button-text">Achievements</div>
         </NavLink>
       )}
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/interactive-sicp/index"
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text">SICP JS</div>
+      </NavLink>
     </NavbarGroup>
   );
 
@@ -291,6 +330,9 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           {Constants.enableGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
             <GitHubAssessmentsNavigationBar {...props} />
           )}
+        </Route>
+        <Route path="/interactive-sicp/:section?">
+          <SicpNavigationBar />
         </Route>
         <Route>
           {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && desktopMenuOpen && (

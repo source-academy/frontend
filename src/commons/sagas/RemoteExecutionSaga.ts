@@ -112,7 +112,7 @@ export function* remoteExecutionSaga(): SagaIterator {
       client.on('display', (message, type) => {
         switch (type) {
           case 'output':
-            store.dispatch(actions.handleConsoleLog(`${message}`, workspace));
+            store.dispatch(actions.handleConsoleLog(workspace, `${message}`));
             break;
           case 'error': {
             const error = new ExceptionError(new Error(`${message}`), dummyLocation);
