@@ -58,7 +58,10 @@ $sicp-background-color: #ffffff;
   }
 
   .sicp-index-page {
-    > h1,
+    h1, h2 {
+      text-align: right;
+    }
+
     > h2,
     > .sicp-licenses {
       text-align: center;
@@ -102,6 +105,22 @@ $sicp-background-color: #ffffff;
           white-space: normal;
           text-overflow: clip;
         }
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+      h1, h2, h4, h5 {
+        text-align: left;
+      }
+
+      > .sicp-cover {
+        .sicp-cover-text {
+          text-align: left;
+        }
+      }
+
+      > h2 {
+        text-align: center;
       }
     }
   }
