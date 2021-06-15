@@ -5,11 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import Welcome, { DispatchProps } from './Welcome';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-
-    }, dispatch
-  );
+  bindActionCreators({}, dispatch);
 
 const WelcomeContainer = withRouter(connect(null, mapDispatchToProps)(Welcome));
 
