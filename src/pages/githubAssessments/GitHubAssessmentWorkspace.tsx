@@ -270,21 +270,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       .then((authenticatedUser: any) => {
         const userLogin = authenticatedUser.data.login;
         return userLogin === missionRepoData.repoOwner;
-      })
-      .then(async (userOwnsRepo: boolean) => {
-        if (userOwnsRepo) return true;
-
-        const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
-        let userOrganisationOwnsRepo = false;
-        for (let i = 0; i < userOrganisations.length; i++) {
-          const org = userOrganisations[i];
-          // User has admin access to an organization owning the repo
-          userOrganisationOwnsRepo = org.login === missionRepoData.repoOwner;
-          if (userOrganisationOwnsRepo) {
-            break;
-          }
-        }
-        return userOrganisationOwnsRepo;
       });
 
     const promises = [missionDataPromise, isTeacherModePromise];
