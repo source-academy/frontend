@@ -265,12 +265,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     if (octokit === undefined) return;
 
     const missionDataPromise = getMissionData(missionRepoData, octokit);
-    const isTeacherModePromise = octokit.users
-      .getAuthenticated()
-      .then((authenticatedUser: any) => {
-        const userLogin = authenticatedUser.data.login;
-        return userLogin === missionRepoData.repoOwner;
-      });
+    const isTeacherModePromise = octokit.users.getAuthenticated().then((authenticatedUser: any) => {
+      const userLogin = authenticatedUser.data.login;
+      return userLogin === missionRepoData.repoOwner;
+    });
 
     const promises = [missionDataPromise, isTeacherModePromise];
 
