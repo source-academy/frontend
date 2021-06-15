@@ -47,6 +47,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
             Classes.LARGE
           )}
           onClick={props.onClose}
+          key={assessmentType}
         >
           <Icon icon={icons[idx]} />
           <div>{assessmentType}</div>
@@ -120,7 +121,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
           Classes.MINIMAL,
           Classes.LARGE
         )}
-        to="/achievement"
+        to="/achievements"
         onClick={props.onClose}
       >
         <Icon icon={IconNames.MOUNTAIN} />

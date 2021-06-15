@@ -22,6 +22,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           to={`/academy/${assessmentType.toLowerCase()}`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          key={assessmentType}
         >
           <Icon icon={icons[idx]} />
           <div className="navbar-button-text hidden-xs hidden-sm">{assessmentType}</div>

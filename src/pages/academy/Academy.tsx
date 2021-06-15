@@ -53,6 +53,7 @@ class Academy extends React.Component<AcademyProps> {
             <Route
               path={`/academy/${assessmentType.toLowerCase()}/${assessmentRegExp}`}
               render={this.assessmentRenderFactory(assessmentType)}
+              key={assessmentType}
             />
           ))}
           {this.props.enableGame && <Route path="/academy/game" component={Game} />}

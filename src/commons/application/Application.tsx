@@ -129,8 +129,8 @@ const Application: React.FC<ApplicationProps> = props => {
     <Route path="/playground" component={Playground} key="playground" />,
     <Route path="/contributors" component={Contributors} key="contributors" />,
     <Route path="/callback/github" component={GitHubCallback} key="githubCallback" />,
-    <Route exact path="/interactive-sicp" render={redirectToSicp} />,
-    <Route path="/interactive-sicp/:section" component={Sicp} />,
+    <Route exact path="/interactive-sicp" render={redirectToSicp} key="sicpRedirect" />,
+    <Route path="/interactive-sicp/:section" component={Sicp} key="sicp" />,
     ...githubAssessmentsPaths
   ];
 
@@ -169,7 +169,7 @@ const Application: React.FC<ApplicationProps> = props => {
   if (props.enableAchievements) {
     fullPaths.push(
       <Route
-        path="/achievement"
+        path="/achievements"
         render={ensureUserAndRoleAndRouteTo(props, <Achievement />)}
         key="achievements"
       />
