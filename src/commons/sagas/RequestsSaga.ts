@@ -432,8 +432,6 @@ export const getAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    overview.type = capitalise(overview.type);
-
     overview.gradingStatus = computeGradingStatus(
       overview.type,
       overview.status,
@@ -483,8 +481,6 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
   }
 
   const assessment = (await resp.json()) as Assessment;
-  assessment.type = capitalise(assessment.type);
-  delete (assessment as any).type;
 
   assessment.questions = assessment.questions.map(q => {
     if (q.type === QuestionTypes.programming) {
@@ -570,7 +566,7 @@ export const getGradingOverviews = async (
       const gradingOverview: GradingOverview = {
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
-        assessmentType: capitalise(overview.assessment.type) as AssessmentType,
+        assessmentType: overview.assessment.type,
         studentId: overview.student.id,
         studentName: overview.student.name,
         submissionId: overview.id,
@@ -768,7 +764,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
       type: notification.type,
       assessment_id: notification.assessment_id || undefined,
       assessment_type: notification.assessment
-        ? capitalise(notification.assessment.type)
+        ? notification.assessment.type
         : undefined,
       assessment_title: notification.assessment ? notification.assessment.title : undefined,
       submission_id: notification.submission_id || undefined
@@ -1197,8 +1193,6 @@ export function* handleResponseError(resp: Response | null): any {
   yield call(showWarningMessage, respText);
 }
 
-const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
-
 const computeGradingStatus = (
   assessmentType: AssessmentType,
   submissionStatus: any,
@@ -1218,6 +1212,8 @@ const courseId: () => string = () => {
   if (id) {
     return `course/${id}`;
   } else {
+    // TODO: Rewrite this logic
+    showWarningMessage(`No course selected!`, 1000);
     throw new Error(`No course selected`);
   }
 };
