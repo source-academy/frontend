@@ -568,7 +568,8 @@ function* BackendSaga(): SagaIterator {
           )
         })
       );
-      yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 1000);
+      yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
+      yield history.push('/academy');
     }
   );
 

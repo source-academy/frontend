@@ -4,17 +4,9 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { store } from '../../pages/createStore';
-import {
-  GameState,
-  OverallState,
-  Role,
-  SourceLanguage,
-  styliseSublanguage
-} from '../application/ApplicationTypes';
+import { OverallState, SourceLanguage, styliseSublanguage } from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  CourseConfiguration,
-  CourseRegistration,
   FETCH_ASSESSMENT,
   FETCH_AUTH,
   FETCH_GRADING,
@@ -25,7 +17,10 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
   UNSUBMIT_SUBMISSION,
-  User
+  UPDATE_ASSESSMENT_CONFIG,
+  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_COURSE_CONFIG,
+  UPDATE_LATEST_VIEWED_COURSE
 } from '../application/types/SessionTypes';
 import { FETCH_ASSESSMENT_OVERVIEWS, Question } from '../assessment/AssessmentTypes';
 import {
@@ -39,7 +34,12 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { mockAssessmentOverviews, mockAssessments } from './AssessmentMocks';
 import { mockFetchGrading, mockFetchGradingOverview } from './GradingMocks';
 import { mockGradingSummary } from './GroupMocks';
-import { mockNotifications } from './UserMocks';
+import {
+  mockCourseConfigurations,
+  mockCourseRegistrations,
+  mockNotifications,
+  mockUser
+} from './UserMocks';
 
 export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
@@ -47,49 +47,9 @@ export function* mockBackendSaga(): SagaIterator {
       accessToken: 'accessToken',
       refreshToken: 'refreshToken'
     };
-    const user: User = {
-      userId: 123,
-      name: 'DevStaff',
-      courses: [
-        {
-          courseId: 1,
-          courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
-          courseShortname: `CS1101S`,
-          viewable: true
-        },
-        {
-          courseId: 2,
-          courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
-          courseShortname: `CS2040S`,
-          viewable: true
-        }
-      ]
-    };
-    const courseRegistration: CourseRegistration = {
-      role: Role.Staff,
-      group: '1F',
-      gameState: {} as GameState,
-      courseId: 1,
-      grade: 0,
-      maxGrade: 10,
-      xp: 0,
-      story: {
-        story: 'mission-1',
-        playStory: true
-      }
-    };
-    const courseConfiguration: CourseConfiguration = {
-      courseName: `Programming Methodology`,
-      courseShortname: `CS1101S`,
-      viewable: true,
-      enableGame: true,
-      enableAchievements: true,
-      enableSourcecast: true,
-      sourceChapter: 4,
-      sourceVariant: 'default',
-      moduleHelpText: '',
-      assessmentTypes: ['Missions', 'Quests', 'Contests', 'Paths', 'Others']
-    };
+    const user = mockUser;
+    const courseRegistration = mockCourseRegistrations[0];
+    const courseConfiguration = mockCourseConfigurations[0];
     const sublanguage: SourceLanguage = {
       chapter: courseConfiguration.sourceChapter,
       variant: courseConfiguration.sourceVariant,
@@ -272,6 +232,61 @@ export function* mockBackendSaga(): SagaIterator {
     FETCH_NOTIFICATIONS,
     function* (action: ReturnType<typeof actions.fetchNotifications>) {
       yield put(actions.updateNotifications(mockNotifications));
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_LATEST_VIEWED_COURSE,
+    function* (action: ReturnType<typeof actions.updateLatestViewedCourse>) {
+      const { courseId } = action.payload;
+      const idx = courseId - 1; // zero-indexed
+
+      const courseConfiguration = mockCourseConfigurations[idx];
+      yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(actions.setCourseRegistration(mockCourseRegistrations[idx]));
+      yield put(
+        actions.updateSublanguage({
+          chapter: courseConfiguration.sourceChapter,
+          variant: courseConfiguration.sourceVariant,
+          displayName: styliseSublanguage(
+            courseConfiguration.sourceChapter,
+            courseConfiguration.sourceVariant
+          )
+        })
+      );
+      yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
+      yield history.push('/academy');
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_COURSE_CONFIG,
+    function* (action: ReturnType<typeof actions.updateCourseConfig>) {
+      const courseConfig = action.payload;
+
+      yield put(actions.setCourseConfiguration(courseConfig));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_ASSESSMENT_CONFIG,
+    function* (action: ReturnType<typeof actions.updateAssessmentConfig>) {
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_ASSESSMENT_TYPES,
+    function* (action: ReturnType<typeof actions.updateAssessmentTypes>): any {
+      const assessmentTypes = action.payload;
+
+      if (assessmentTypes.length > 5) {
+        return yield call(showWarningMessage, 'Invalid number of Assessment Types!');
+      }
+
+      yield put(actions.setCourseConfiguration({ assessmentTypes }));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
 

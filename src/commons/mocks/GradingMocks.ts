@@ -1,8 +1,9 @@
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
+import { Role } from '../application/ApplicationTypes';
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockRuneLibrary } from './AssessmentMocks';
-import { mockFetchRole, Role, Roles } from './UserMocks';
+import { mockFetchRole } from './UserMocks';
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
@@ -85,7 +86,7 @@ export const mockFetchGradingOverview = (
   group: boolean
 ): GradingOverview[] | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
     return null;
@@ -405,7 +406,7 @@ New message from **Avenger**!
  */
 export const mockFetchGrading = (accessToken: string, submissionId: number): Grading | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
     return null;

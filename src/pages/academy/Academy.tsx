@@ -90,7 +90,7 @@ class Academy extends React.Component<AcademyProps> {
 
   private redirectToAssessments = () => {
     return this.props.assessmentTypes ? (
-      <Redirect to={`/academy/${this.props.assessmentTypes[0]}`} />
+      <Redirect to={`/academy/${this.props.assessmentTypes[0].toLowerCase()}`} />
     ) : (
       this.redirectTo404()
     );
