@@ -127,9 +127,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
 
 exports[`Parse figures FIGURE with image and scale successful 1`] = `
 "<div className=\\"sicp-figure\\">
-  <div className=\\"sicp-figure\\">
-    <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
-  </div>
+  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
   <h5 className=\\"sicp-caption\\">
     name
     <span>
@@ -143,9 +141,7 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 
 exports[`Parse figures FIGURE with image successful 1`] = `
 "<div className=\\"sicp-figure\\">
-  <div className=\\"sicp-figure\\">
-    <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
-  </div>
+  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
   <h5 className=\\"sicp-caption\\">
     name
     <span>
