@@ -11,7 +11,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
     <br />
     The environment model diagram follows a notation introduced in
      
-    <a href=\\"https://source-academy.github.io/sicp/chapters/3.2.html\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
+    <a href=\\"https://source-academy.github.io/interactive-sicp/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
       <i>
         Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 3, Section 2
       </i>

@@ -8194,11 +8194,14 @@ jest@26.6.0:
     jest-cli "^26.6.0"
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 js-slang@^0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.3.tgz#5600f6782eae2a684debdf3577ff0b1849fc91d2"
   integrity sha512-4dFdk8vPqKuuEV4gSw85wS7GLh5i9V4yFrXl65qbJoZ50PJ38c9MP626ylTk6xNCaB5A0C8WWpzu8KDmAGy+0A==
 =======
+=======
+>>>>>>> Stashed changes
 js-slang@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.1.tgz#2e178c981812b6bb4455a5e449f6e82a630c2a8d"
