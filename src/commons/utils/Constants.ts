@@ -33,7 +33,7 @@ const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const interactiveSicpData =
   process.env.REACT_APP_INTERACTIVE_SICP_DATA_URL ||
-  'https://source-academy.github.io/sicp/'; // Data for interactive-sicp (images and json files)
+  'https://source-academy.github.io/sicp/'; // data for interactive-sicp (images and json files)
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
