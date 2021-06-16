@@ -3,7 +3,7 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import { Resizable } from 're-resizable';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';

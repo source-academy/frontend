@@ -81,7 +81,6 @@ const Sicp: React.FC<SicpProps> = props => {
     setLoading(true);
 
     if (section === 'index') {
-      setData(<SicpIndexPage />);
       setLoading(false);
       return;
     }
@@ -154,6 +153,8 @@ const Sicp: React.FC<SicpProps> = props => {
         <MathJaxContext version={3} config={mathjaxConfig}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
+          ) : section === 'index' ? (
+            <SicpIndexPage />
           ) : (
             <div className="sicp-content">{data}</div>
           )}
