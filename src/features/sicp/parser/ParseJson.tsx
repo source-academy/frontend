@@ -225,7 +225,7 @@ export const processingFunctions = {
 
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
 
-  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>&langle; &rangle;</p>,
+  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText(obj['body']!),
 
   OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
 
