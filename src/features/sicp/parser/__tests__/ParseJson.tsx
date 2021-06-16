@@ -7,16 +7,16 @@ import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } fro
 
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];
-const sectionTags = ['SECTION', 'SUBSECTION', 'SUBSUBSECTION', 'MATTER', 'CHAPTER', 'REFERENCES'];
 const listTags = ['OL', 'UL'];
 const symbolTags = ['BR', 'LaTeX', 'TeX'];
-const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'METAPHRASE', 'META'];
+const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'META'];
 const latexTags = ['LATEX', 'LATEXINLINE'];
 const linkTags = ['LINK', 'REF', 'FOOTNOTE_REF'];
 
 const epigraphTag = 'EPIGRAPH';
 const tableTag = 'TABLE';
 const exerciseTag = 'EXERCISE';
+const sectionTag = 'SECTION';
 const snippetTag = 'SNIPPET';
 const figureTag = 'FIGURE';
 const displayFootnoteTag = 'DISPLAYFOOTNOTE';
@@ -79,12 +79,12 @@ describe('Parse heading', () => {
 });
 
 describe('Parse section', () => {
-  const tags = sectionTags;
+  const tag = sectionTag;
   const text = { tag: 'TEXT', child: [mockData['text'], mockData['text']] };
   const content = [text, text];
   const obj = { body: 'Title', child: content };
 
-  tags.forEach(x => testTagSuccessful(obj, x));
+  testTagSuccessful(obj, tag);
 });
 
 describe('Parse list', () => {

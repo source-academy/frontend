@@ -116,7 +116,7 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
   <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-figure">
     {handleImage(obj, refs)}
     {obj['captionName'] && (
-      <h5>
+      <h5 className="sicp-caption">
         {obj['captionName']}
         {parseArr(obj['captionBody']!, refs)}
       </h5>
@@ -127,13 +127,11 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
-      <div className={'sicp-figure'}>
-        <img
-          src={Constants.interactiveSicpDataUrl + obj['src']}
-          alt={obj['id']}
-          width={obj['scale']}
-        />
-      </div>
+      <img
+        src={Constants.interactiveSicpDataUrl + obj['src']}
+        alt={obj['id']}
+        width={obj['scale']}
+      />
     );
   } else if (obj['snippet']) {
     return processingFunctions['SNIPPET'](obj['snippet'], refs);
@@ -171,6 +169,10 @@ const handleContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
       <div>{parseArr(obj['child']!, refs)}</div>
     </div>
   );
+};
+
+const handleReference = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  return <div>{parseArr(obj['child']!, refs)}</div>;
 };
 
 const handleText = (text: string) => {
@@ -219,19 +221,13 @@ export const processingFunctions = {
 
   LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('LaTeX'),
 
-  MATTER: handleContainer,
-
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
-
-  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>&langle; &rangle;</p>,
 
   OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
 
   REF: handleRef,
 
-  REFERENCE: handleContainer,
-
-  REFERENCES: handleContainer,
+  REFERENCE: handleReference,
 
   SECTION: handleContainer,
 
@@ -243,16 +239,12 @@ export const processingFunctions = {
     </h2>
   ),
 
-  SUBSECTION: handleContainer,
-
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
       <br />
       {parseArr(obj['child']!, refs)}
     </h4>
   ),
-
-  SUBSUBSECTION: handleContainer,
 
   TABLE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <table>

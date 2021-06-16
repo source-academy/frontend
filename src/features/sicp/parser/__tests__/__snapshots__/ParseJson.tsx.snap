@@ -130,7 +130,7 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
   <div className=\\"sicp-figure\\">
     <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
   </div>
-  <h5>
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -146,7 +146,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
   <div className=\\"sicp-figure\\">
     <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
   </div>
-  <h5>
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -160,7 +160,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 exports[`Parse figures FIGURE with snippet successful 1`] = `
 "<div className=\\"sicp-figure\\">
   <CodeSnippet body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
-  <h5>
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -209,7 +209,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
       </tr>
     </tbody>
   </table>
-  <h5>
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -352,217 +352,15 @@ exports[`Parse object successful 1`] = `
 
 exports[`Parse reference REFERENCE  successful 1`] = `
 "<div>
-  <div>
-    <span>
-      <p>
-        Mock Text
-      </p>
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section CHAPTER  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section MATTER  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section REFERENCES  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
 </div>"
 `;
 
 exports[`Parse section SECTION  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section SUBSECTION  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section SUBSUBSECTION  successful 1`] = `
 "<div>
   <Component>
     Title
@@ -659,12 +457,6 @@ exports[`Parse styling EM  successful 1`] = `
 exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `"<code className=\\"bp3-code\\" />"`;
 
 exports[`Parse styling META  successful 1`] = `"<em />"`;
-
-exports[`Parse styling METAPHRASE  successful 1`] = `
-"<p>
-  &amp;langle; &amp;rangle;
-</p>"
-`;
 
 exports[`Parse styling TT  successful 1`] = `
 "<code className=\\"bp3-code\\">
