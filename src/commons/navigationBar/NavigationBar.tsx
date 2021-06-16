@@ -43,6 +43,7 @@ type StateProps = {
   role?: Role;
   name?: string;
   courses: UserCourse[];
+  courseId?: number;
   courseShortname?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
@@ -347,6 +348,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         handleLogOut={props.handleLogOut}
         updateLatestViewedCourse={props.updateLatestViewedCourse}
         courses={props.courses}
+        courseId={props.courseId}
         name={props.name}
       />
     </NavbarGroup>

@@ -20,6 +20,7 @@ type DispatchProps = {
 type StateProps = {
   name?: string;
   courses: UserCourse[];
+  courseId?: number;
 };
 
 type State = {
@@ -58,6 +59,7 @@ class Dropdown extends React.Component<DropdownProps, State> {
             onClose={this.toggleMyCoursesOpen}
             updateLatestViewedCourse={this.props.updateLatestViewedCourse}
             courses={this.props.courses}
+            courseId={this.props.courseId}
           />
         ) : null}
         {this.props.name ? (

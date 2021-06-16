@@ -9,6 +9,7 @@ type DialogProps = {
   onClose: () => void;
   updateLatestViewedCourse: (courseId: number) => void;
   courses: UserCourse[];
+  courseId?: number;
 };
 
 const DropdownCourses: React.FC<DialogProps> = props => {
@@ -22,6 +23,7 @@ const DropdownCourses: React.FC<DialogProps> = props => {
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateLatestViewedCourse(parseInt(e.currentTarget.value, 10));
+    props.onClose();
   };
 
   return (
@@ -36,6 +38,7 @@ const DropdownCourses: React.FC<DialogProps> = props => {
       <div className={Classes.DIALOG_BODY}>
         <div>Select a course to switch to:</div>
         <HTMLSelect
+          value={props.courseId}
           options={options}
           fill
           onChange={onChangeHandler}

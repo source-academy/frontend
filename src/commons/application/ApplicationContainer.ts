@@ -18,6 +18,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   role: state.session.role,
   name: state.session.name,
   courses: state.session.courses,
+  courseId: state.session.courseId,
   courseShortname: state.session.courseShortname,
   enableAchievements: state.session.enableAchievements,
   enableSourcecast: state.session.enableSourcecast,
