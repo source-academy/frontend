@@ -35,9 +35,8 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { assessmentCategoryLink, stringParamToInt } from '../utils/ParamParseHelper';
+import { stringParamToInt } from '../utils/ParamParseHelper';
 import {
-  AssessmentCategory,
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams,
@@ -165,7 +164,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => {
-    const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
+   const showGrade = overview.gradingStatus === 'graded';
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>
