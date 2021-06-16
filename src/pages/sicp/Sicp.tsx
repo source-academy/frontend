@@ -13,7 +13,7 @@ import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = RouteComponentProps<{}>;
 
-const baseUrl = Constants.interactiveSicpUrl + '/json/';
+const baseUrl = Constants.interactiveSicpDataUrl + '/json/';
 const extension = '.json';
 
 // Context to determine which code snippet is active
@@ -81,7 +81,6 @@ const Sicp: React.FC<SicpProps> = props => {
     setLoading(true);
 
     if (section === 'index') {
-      setData(<SicpIndexPage />);
       setLoading(false);
       return;
     }
@@ -154,6 +153,8 @@ const Sicp: React.FC<SicpProps> = props => {
         <MathJaxContext version={3} config={mathjaxConfig}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
+          ) : section === 'index' ? (
+            <SicpIndexPage />
           ) : (
             <div className="sicp-content">{data}</div>
           )}
