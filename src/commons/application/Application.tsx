@@ -21,6 +21,7 @@ import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role } from './ApplicationTypes';
+import { UserCourse } from './types/SessionTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -28,11 +29,13 @@ export type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  updateLatestViewedCourse: (courseId: number) => void;
 };
 
 export type StateProps = {
   role?: Role;
   name?: string;
+  courses: UserCourse[];
   courseShortname?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
@@ -188,8 +191,10 @@ const Application: React.FC<ApplicationProps> = props => {
         handleLogOut={props.handleLogOut}
         handleGitHubLogIn={props.handleGitHubLogIn}
         handleGitHubLogOut={props.handleGitHubLogOut}
+        updateLatestViewedCourse={props.updateLatestViewedCourse}
         role={props.role}
         name={props.name}
+        courses={props.courses}
         courseShortname={props.courseShortname}
         enableAchievements={props.enableAchievements}
         enableSourcecast={props.enableSourcecast}

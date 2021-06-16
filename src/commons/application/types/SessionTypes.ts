@@ -99,10 +99,10 @@ export type Tokens = {
   refreshToken: string;
 };
 
-type UserCourse = {
+export type UserCourse = {
   courseId: number;
-  moduleCode: string;
-  name: string;
+  courseName: string;
+  courseShortname: string;
   viewable: boolean;
 };
 

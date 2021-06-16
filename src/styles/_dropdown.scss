@@ -209,3 +209,9 @@ div.#{$ns}-dialog.help {
     }
   }
 }
+
+.my-courses {
+  .#{$ns}-html-select {
+    margin-top: 10px;
+  }
+}

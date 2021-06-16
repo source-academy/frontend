@@ -53,14 +53,14 @@ export function* mockBackendSaga(): SagaIterator {
       courses: [
         {
           courseId: 1,
-          moduleCode: `CS1101S`,
-          name: `Programming Methodology`,
+          courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+          courseShortname: `CS1101S`,
           viewable: true
         },
         {
           courseId: 2,
-          moduleCode: `CS2040S`,
-          name: `Data Structures and Algorithms`,
+          courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
+          courseShortname: `CS2040S`,
           viewable: true
         }
       ]

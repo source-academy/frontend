@@ -20,6 +20,7 @@ import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import SicpNavigationBar from 'src/commons/navigationBar/subcomponents/SicpNavigationBar';
 
 import { Role } from '../application/ApplicationTypes';
+import { UserCourse } from '../application/types/SessionTypes';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadgeContainer from '../notificationBadge/NotificationBadgeContainer';
@@ -35,11 +36,13 @@ type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  updateLatestViewedCourse: (courseId: number) => void;
 };
 
 type StateProps = {
   role?: Role;
   name?: string;
+  courses: UserCourse[];
   courseShortname?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
@@ -340,7 +343,12 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavbarDivider className="default-divider" />
       </div>
 
-      <Dropdown handleLogOut={props.handleLogOut} name={props.name} />
+      <Dropdown
+        handleLogOut={props.handleLogOut}
+        updateLatestViewedCourse={props.updateLatestViewedCourse}
+        courses={props.courses}
+        name={props.name}
+      />
     </NavbarGroup>
   );
 

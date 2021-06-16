@@ -43,6 +43,7 @@ export const saveState = (state: OverallState) => {
         role: state.session.role,
         name: state.session.name,
         userId: state.session.userId,
+        courses: state.session.courses,
         courseId: state.session.courseId,
         courseShortname: state.session.courseShortname,
         enableGame: state.session.enableGame,
