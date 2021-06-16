@@ -1,3 +1,5 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
@@ -13,6 +15,8 @@ import {
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_TOKENS,
   SET_USER,
@@ -22,10 +26,14 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIG,
   UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_COURSE_CONFIG,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
 import {
@@ -39,6 +47,8 @@ import {
   login,
   reautogradeAnswer,
   reautogradeSubmission,
+  setCourseConfiguration,
+  setCourseRegistration,
   setGitHubOctokitObject,
   setTokens,
   setUser,
@@ -48,10 +58,14 @@ import {
   submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
+  updateAssessmentConfig,
   updateAssessmentOverviews,
+  updateAssessmentTypes,
+  updateCourseConfig,
   updateGrading,
   updateGradingOverviews,
   updateHistoryHelpers,
+  updateLatestViewedCourse,
   updateNotifications
 } from '../SessionActions';
 
@@ -150,16 +164,69 @@ test('setUser generates correct action object', () => {
   const user = {
     userId: 123,
     name: 'test student',
-    role: 'student' as Role,
-    group: '42D',
-    grade: 150,
-    story: {} as Story,
-    gameState: {} as GameState
+    courses: [
+      {
+        courseId: 1,
+        courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+        courseShortname: `CS1101S`,
+        viewable: true
+      },
+      {
+        courseId: 2,
+        courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
+        courseShortname: `CS2030S`,
+        viewable: true
+      }
+    ]
   };
   const action = setUser(user);
   expect(action).toEqual({
     type: SET_USER,
     payload: user
+  });
+});
+
+test('setCourseConfiguration generates correct action object', () => {
+  const courseConfig = {
+    courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+    courseShortname: `CS1101S`,
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default' as Variant,
+    moduleHelpText: 'Help text',
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  };
+  const action = setCourseConfiguration(courseConfig);
+  expect(action).toEqual({
+    type: SET_COURSE_CONFIGURATION,
+    payload: courseConfig
+  });
+});
+
+test('setCourseRegistration generates correct action object', () => {
+  const courseRegistration = {
+    role: Role.Student,
+    group: '42D',
+    gameState: {
+      collectibles: {},
+      completed_quests: []
+    } as GameState,
+    courseId: 1,
+    grade: 1,
+    maxGrade: 10,
+    xp: 1,
+    story: {
+      story: '',
+      playStory: false
+    } as Story
+  };
+  const action = setCourseRegistration(courseRegistration);
+  expect(action).toEqual({
+    type: SET_COURSE_REGISTRATION,
+    payload: courseRegistration
   });
 });
 
@@ -315,7 +382,7 @@ test('updateHistoryHelpers generates correct action object', () => {
 test('updateAssessmentOverviews generates correct action object', () => {
   const overviews: AssessmentOverview[] = [
     {
-      category: 'Mission',
+      type: 'Missions',
       closeAt: 'test_string',
       coverImage: 'test_string',
       grade: 0,
@@ -340,7 +407,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
 
 test('updateAssessment generates correct action object', () => {
   const assessment: Assessment = {
-    category: 'Mission',
+    type: 'Missions',
     globalDeployment: undefined,
     graderDeployment: undefined,
     id: 1,
@@ -362,7 +429,7 @@ test('updateGradingOverviews generates correct action object', () => {
     {
       assessmentId: 1,
       assessmentName: 'test assessment',
-      assessmentCategory: 'Contest',
+      assessmentType: 'Contests',
       initialGrade: 0,
       gradeAdjustment: 0,
       currentGrade: 10,
@@ -447,5 +514,57 @@ test('updateNotifications generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_NOTIFICATIONS,
     payload: notifications
+  });
+});
+
+test('updateLatestViewedCourse generates correct action object', () => {
+  const courseId = 2;
+  const action = updateLatestViewedCourse(courseId);
+  expect(action).toEqual({
+    type: UPDATE_LATEST_VIEWED_COURSE,
+    payload: { courseId }
+  });
+});
+
+test('updateCourseConfig generates correct action object', () => {
+  const courseConfig = {
+    courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+    courseShortname: `CS1101S`,
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default' as Variant,
+    moduleHelpText: 'Help text',
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  };
+  const action = updateCourseConfig(courseConfig);
+  expect(action).toEqual({
+    type: UPDATE_COURSE_CONFIG,
+    payload: courseConfig
+  });
+});
+
+test('updateAssessmentConfig generates correct action object', () => {
+  const assessmentConfig = {
+    order: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    decayRatePointsPerHour: 1
+  };
+  const action = updateAssessmentConfig(assessmentConfig);
+  expect(action).toEqual({
+    type: UPDATE_ASSESSMENT_CONFIG,
+    payload: assessmentConfig
+  });
+});
+
+test('updateAssessmentTypes generates correct action object', () => {
+  const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
+  const action = updateAssessmentTypes(assessmentTypes);
+  expect(action).toEqual({
+    type: UPDATE_ASSESSMENT_TYPES,
+    payload: assessmentTypes
   });
 });

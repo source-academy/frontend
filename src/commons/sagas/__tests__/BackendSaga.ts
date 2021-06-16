@@ -1,3 +1,4 @@
+import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
@@ -8,29 +9,48 @@ import {
   UPDATE_GROUP_GRADING_SUMMARY
 } from '../../../features/dashboard/DashboardTypes';
 import {
+  setCourseConfiguration,
+  setCourseRegistration,
   setTokens,
   setUser,
   updateAssessment,
   updateAssessmentOverviews,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, /* SourceLanguage, */ Story } from '../../application/ApplicationTypes';
+import {
+  GameState,
+  Role,
+  SourceLanguage,
+  Story,
+  styliseSublanguage
+} from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  CourseConfiguration,
+  CourseRegistration,
   FETCH_ASSESSMENT,
   FETCH_AUTH,
   FETCH_NOTIFICATIONS,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
   UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_OVERVIEWS
+  UPDATE_ASSESSMENT_CONFIG,
+  UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_COURSE_CONFIG,
+  UPDATE_LATEST_VIEWED_COURSE,
+  User
 } from '../../application/types/SessionTypes';
 import {
   Assessment,
+  AssessmentConfiguration,
   AssessmentStatuses,
+  AssessmentType,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
@@ -45,12 +65,11 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateHasUnsavedChanges, /* updateSublanguage */ } from '../../workspace/WorkspaceActions';
+import { updateHasUnsavedChanges, updateSublanguage } from '../../workspace/WorkspaceActions';
 import {
-  // CHANGE_SUBLANGUAGE,
-  // FETCH_SUBLANGUAGE,
+  CHANGE_SUBLANGUAGE,
   UPDATE_HAS_UNSAVED_CHANGES,
-  // UPDATE_SUBLANGUAGE,
+  UPDATE_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
@@ -58,16 +77,19 @@ import {
   getAssessment,
   getAssessmentOverviews,
   getGradingSummary,
+  getLatestCourseRegistrationAndConfiguration,
   getNotifications,
-  // getSublanguage,
   getUser,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
+  postAssessmentConfig,
+  postAssessmentTypes,
   postAuth,
+  postCourseConfig,
+  postLatestViewedCourse,
   postReautogradeAnswer,
-  postReautogradeSubmission,
-  // postSublanguage
+  postReautogradeSubmission
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -81,15 +103,94 @@ const mockAssessmentQuestion = mockAssessmentQuestions[0];
 
 const mockTokens = { accessToken: 'access', refreshToken: 'refresherOrb' };
 
-// mock states here starts as student
+const mockUser: User = {
+  userId: 123,
+  name: 'user',
+  courses: [
+    {
+      courseId: 1,
+      courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+      courseShortname: `CS1101S`,
+      viewable: true
+    },
+    {
+      courseId: 2,
+      courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
+      courseShortname: `CS2030S`,
+      viewable: true
+    }
+  ]
+};
+
+const mockCourseRegistration1: CourseRegistration = {
+  role: Role.Student,
+  group: '42D',
+  gameState: {
+    collectibles: {},
+    completed_quests: []
+  } as GameState,
+  courseId: 1,
+  grade: 1,
+  maxGrade: 10,
+  xp: 1,
+  story: {
+    story: '',
+    playStory: false
+  } as Story
+};
+
+const mockCourseConfiguration1: CourseConfiguration = {
+  courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+  courseShortname: `CS1101S`,
+  viewable: true,
+  enableGame: true,
+  enableAchievements: true,
+  enableSourcecast: true,
+  sourceChapter: 1,
+  sourceVariant: 'default' as Variant,
+  moduleHelpText: 'Help text',
+  assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+};
+
+const mockCourseRegistration2: CourseRegistration = {
+  role: Role.Student,
+  group: '4D',
+  gameState: {
+    collectibles: {},
+    completed_quests: []
+  } as GameState,
+  courseId: 2,
+  grade: 1,
+  maxGrade: 10,
+  xp: 1,
+  story: {
+    story: '',
+    playStory: false
+  } as Story
+};
+
+const mockCourseConfiguration2: CourseConfiguration = {
+  courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
+  courseShortname: `CS2030S`,
+  viewable: true,
+  enableGame: true,
+  enableAchievements: true,
+  enableSourcecast: true,
+  sourceChapter: 4,
+  sourceVariant: 'default' as Variant,
+  moduleHelpText: 'Help text',
+  assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+};
+
 const mockStates = {
   session: {
-    accessToken: 'access',
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
     notifications: mockNotifications,
-    refreshToken: 'refresherOrb',
-    role: Role.Student
+    ...mockTokens,
+    ...mockUser,
+    ...mockCourseRegistration1,
+    ...mockCourseConfiguration1
   },
   workspaces: {
     assessment: { currentAssessment: mockAssessment.id }
@@ -97,7 +198,7 @@ const mockStates = {
 };
 
 const okResp = { ok: true };
-const errorResp = { ok: false };
+const errorResp = { ok: false, text: () => 'Some Error' };
 // ----------------------------------------
 
 describe('Test FETCH_AUTH action', () => {
@@ -111,31 +212,31 @@ describe('Test FETCH_AUTH action', () => {
   });
   const redirectUrl = computeRedirectUri(providerId);
 
-  const user = {
-    userId: 123,
-    name: 'user',
-    role: 'student' as Role,
-    group: '42D',
-    story: {
-      story: '',
-      playStory: false
-    } as Story,
-    grade: 1,
-    gameState: {
-      collectibles: {},
-      completed_quests: []
-    } as GameState
+  const user = mockUser;
+  const courseConfiguration = mockCourseConfiguration1;
+  const courseRegistration = mockCourseRegistration1;
+
+  const sublanguage: SourceLanguage = {
+    chapter: mockCourseConfiguration1.sourceChapter,
+    variant: mockCourseConfiguration1.sourceVariant,
+    displayName: styliseSublanguage(
+      mockCourseConfiguration1.sourceChapter,
+      mockCourseConfiguration1.sourceVariant
+    )
   };
 
-  test('when tokens and user obtained', () => {
+  test('when tokens, user, course registration and course configuration are obtained', () => {
     return expectSaga(BackendSaga)
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .call(getUser, mockTokens)
       .put(setTokens(mockTokens))
       .put(setUser(user))
+      .put(setCourseRegistration(courseRegistration))
+      .put(setCourseConfiguration(courseConfiguration))
+      .put(updateSublanguage(sublanguage))
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
-        [call(getUser, mockTokens), user]
+        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]
       ])
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
@@ -145,27 +246,52 @@ describe('Test FETCH_AUTH action', () => {
     return expectSaga(BackendSaga)
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), null],
-        [call(getUser, mockTokens), user]
+        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]
       ])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .not.call.fn(getUser)
       .not.put.actionType(SET_TOKENS)
       .not.put.actionType(SET_USER)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
+      .silentRun();
+  });
+
+  test('when user is obtained, but course registration and course configuration are null', () => {
+    return expectSaga(BackendSaga)
+      .provide([
+        [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
+        [call(getUser, mockTokens), { user, courseRegistration: null, courseConfiguration: null }]
+      ])
+      .call(postAuth, code, providerId, clientId, redirectUrl)
+      .call(getUser, mockTokens)
+      .put(setTokens(mockTokens))
+      .put(setUser(user))
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
 
   test('when user is null', () => {
-    const nullUser = null;
     return expectSaga(BackendSaga)
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
-        [call(getUser, mockTokens), nullUser]
+        [
+          call(getUser, mockTokens),
+          { user: null, courseRegistration: null, courseConfiguration: null }
+        ]
       ])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .call(getUser, mockTokens)
       .not.put.actionType(SET_TOKENS)
       .not.put.actionType(SET_USER)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
@@ -425,49 +551,211 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
   });
 });
 
-// describe('Test FETCH_SUBLANGUAGE action', () => {
-//   test('when sublanguage is obtained', () => {
-//     const mockSublang: SourceLanguage = {
-//       chapter: 4,
-//       variant: 'gpu',
-//       displayName: 'Source \xa74 GPU'
-//     };
+describe('Test CHANGE_SUBLANGUAGE action', () => {
+  test('when chapter is changed', () => {
+    const sublang: SourceLanguage = {
+      chapter: 4,
+      variant: 'gpu',
+      displayName: 'Source \xa74 GPU'
+    };
 
-//     return expectSaga(BackendSaga)
-//       .provide([[call(getSublanguage), mockSublang]])
-//       .call(getSublanguage)
-//       .put(updateSublanguage(mockSublang))
-//       .dispatch({ type: FETCH_SUBLANGUAGE })
-//       .silentRun();
-//   });
+    return expectSaga(BackendSaga)
+      .withState({ session: { role: Role.Staff, ...mockTokens } })
+      .call(postCourseConfig, mockTokens, {
+        sourceChapter: sublang.chapter,
+        sourceVariant: sublang.variant
+      })
+      .put(
+        setCourseConfiguration({ sourceChapter: sublang.chapter, sourceVariant: sublang.variant })
+      )
+      .put(updateSublanguage(sublang))
+      .provide([
+        [
+          call(postCourseConfig, mockTokens, { sourceChapter: 4, sourceVariant: 'gpu' }),
+          { ok: true }
+        ]
+      ])
+      .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
+      .silentRun();
+  });
+});
 
-//   test('when response is null', () => {
-//     return expectSaga(BackendSaga)
-//       .provide([[call(getSublanguage), null]])
-//       .call(showWarningMessage, 'Failed to load default Source sublanguage for Playground!')
-//       .not.put.actionType(UPDATE_SUBLANGUAGE)
-//       .dispatch({ type: FETCH_SUBLANGUAGE })
-//       .silentRun();
-//   });
-// });
+describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
+  const courseId = 2;
 
-// describe('Test CHANGE_SUBLANGUAGE action', () => {
-//   test('when chapter is changed', () => {
-//     const sublang: SourceLanguage = {
-//       chapter: 4,
-//       variant: 'gpu',
-//       displayName: 'Source \xa74 GPU'
-//     };
+  const sublanguage: SourceLanguage = {
+    chapter: mockCourseConfiguration2.sourceChapter,
+    variant: mockCourseConfiguration2.sourceVariant,
+    displayName: styliseSublanguage(
+      mockCourseConfiguration2.sourceChapter,
+      mockCourseConfiguration2.sourceVariant
+    )
+  };
 
-//     return expectSaga(BackendSaga)
-//       .withState({ session: { role: Role.Staff, ...mockTokens } })
-//       .call(postSublanguage, sublang.chapter, sublang.variant, mockTokens)
-//       .put(updateSublanguage(sublang))
-//       .provide([[call(postSublanguage, 4, 'gpu', mockTokens), { ok: true }]])
-//       .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
-//       .silentRun();
-//   });
-// });
+  test('when latest viewed course is changed', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postLatestViewedCourse, mockTokens, courseId)
+      .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
+      .put(setCourseRegistration(mockCourseRegistration2))
+      .put(setCourseConfiguration(mockCourseConfiguration2))
+      .put(updateSublanguage(sublanguage))
+      .provide([
+        [call(postLatestViewedCourse, mockTokens, courseId), okResp],
+        [
+          call(getLatestCourseRegistrationAndConfiguration, mockTokens),
+          {
+            courseRegistration: mockCourseRegistration2,
+            courseConfiguration: mockCourseConfiguration2
+          }
+        ]
+      ])
+      .dispatch({ type: UPDATE_LATEST_VIEWED_COURSE, payload: { courseId } })
+      .silentRun();
+  });
+
+  test('when latest viewed course update returns error', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .provide([[call(postLatestViewedCourse, mockTokens, courseId), errorResp]])
+      .call(postLatestViewedCourse, mockTokens, courseId)
+      .not.call.fn(getLatestCourseRegistrationAndConfiguration)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: UPDATE_LATEST_VIEWED_COURSE, payload: { courseId } })
+      .silentRun();
+  });
+
+  test('when fail to load course after update', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .provide([
+        [call(postLatestViewedCourse, mockTokens, courseId), okResp],
+        [
+          call(getLatestCourseRegistrationAndConfiguration, mockTokens),
+          { courseRegistration: null, courseConfiguration: null }
+        ]
+      ])
+      .call(postLatestViewedCourse, mockTokens, courseId)
+      .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: UPDATE_LATEST_VIEWED_COURSE, payload: { courseId } })
+      .silentRun();
+  });
+});
+
+describe('Test UPDATE_COURSE_CONFIG action', () => {
+  const courseConfiguration: CourseConfiguration = {
+    courseName: `CS2040S Data Structures and Algorithms (AY20/21 Semester 2)`,
+    courseShortname: `CS2040S`,
+    viewable: true,
+    enableGame: false,
+    enableAchievements: false,
+    enableSourcecast: false,
+    sourceChapter: 4,
+    sourceVariant: 'default',
+    moduleHelpText: 'Help',
+    assessmentTypes: ['Missions', 'Quests']
+  };
+
+  test('when course config is changed', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postCourseConfig, mockTokens, courseConfiguration)
+      .put(setCourseConfiguration(courseConfiguration))
+      .call.fn(showSuccessMessage)
+      .provide([[call(postCourseConfig, mockTokens, courseConfiguration), okResp]])
+      .dispatch({ type: UPDATE_COURSE_CONFIG, payload: courseConfiguration })
+      .silentRun();
+  });
+
+  test('when course config update fails', () => {
+    return expectSaga(BackendSaga)
+      .provide([[call(postCourseConfig, mockTokens, courseConfiguration), errorResp]])
+      .withState(mockStates)
+      .call(postCourseConfig, mockTokens, courseConfiguration)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.call.fn(showSuccessMessage)
+      .dispatch({ type: UPDATE_COURSE_CONFIG, payload: courseConfiguration })
+      .silentRun();
+  });
+});
+
+describe('Test UPDATE_ASSESSMENT_CONFIG action', () => {
+  const assessmentConfiguration: AssessmentConfiguration = {
+    order: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    decayRatePointsPerHour: 1
+  };
+
+  test('when assessment config is changed', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postAssessmentConfig, mockTokens, assessmentConfiguration)
+      .call.fn(showSuccessMessage)
+      .provide([[call(postAssessmentConfig, mockTokens, assessmentConfiguration), okResp]])
+      .dispatch({ type: UPDATE_ASSESSMENT_CONFIG, payload: assessmentConfiguration })
+      .silentRun();
+  });
+
+  test('when assessment config update fails', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postAssessmentConfig, mockTokens, assessmentConfiguration)
+      .not.call.fn(showSuccessMessage)
+      .provide([[call(postAssessmentConfig, mockTokens, assessmentConfiguration), errorResp]])
+      .dispatch({ type: UPDATE_ASSESSMENT_CONFIG, payload: assessmentConfiguration })
+      .silentRun();
+  });
+});
+
+describe('Test UPDATE_ASSESSMENT_TYPES action', () => {
+  const assessmentTypes: AssessmentType[] = ['Mission 1', 'Mission 2'];
+  const failedAssessmentTypes: AssessmentType[] = [
+    'Mission 1',
+    'Mission 2',
+    'Mission 3',
+    'Mission 4',
+    'Mission 5',
+    'Mission 6'
+  ];
+
+  test('when assessment types is changed', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postAssessmentTypes, mockTokens, assessmentTypes)
+      .put(setCourseConfiguration({ assessmentTypes }))
+      .call.fn(showSuccessMessage)
+      .provide([[call(postAssessmentTypes, mockTokens, assessmentTypes), okResp]])
+      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: assessmentTypes })
+      .silentRun();
+  });
+
+  test('when assessment types update fails', () => {
+    return expectSaga(BackendSaga)
+      .provide([[call(postAssessmentTypes, mockTokens, assessmentTypes), errorResp]])
+      .withState(mockStates)
+      .call(postAssessmentTypes, mockTokens, assessmentTypes)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.call.fn(showSuccessMessage)
+      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: assessmentTypes })
+      .silentRun();
+  });
+
+  test('when assessment types array has length > 5', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .not.call.fn(postAssessmentTypes)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.call.fn(showSuccessMessage)
+      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: failedAssessmentTypes })
+      .silentRun();
+  });
+});
 
 describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
   test('when grading summary is obtained', () => {

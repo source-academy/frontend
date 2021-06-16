@@ -1,7 +1,8 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses
@@ -12,6 +13,8 @@ import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
   SessionState,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -53,25 +56,81 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
 });
 
 test('SET_USER works correctly', () => {
-  const story: Story = {
-    story: 'test story',
-    playStory: true
-  };
-  const gameState: GameState = {
-    collectibles: {},
-    completed_quests: []
-  };
   const payload = {
     name: 'test student',
     role: Role.Student,
-    group: '42D',
-    grade: 150,
-    story,
-    gameState
+    courses: [
+      {
+        courseId: 1,
+        courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+        courseShortname: `CS1101S`,
+        viewable: true
+      },
+      {
+        courseId: 2,
+        courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
+        courseShortname: `CS2030S`,
+        viewable: true
+      }
+    ]
   };
 
   const action = {
     type: SET_USER,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    ...payload
+  });
+});
+
+test('SET_COURSE_CONFIGURATION works correctly', () => {
+  const payload = {
+    courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+    courseShortname: `CS1101S`,
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default' as Variant,
+    moduleHelpText: 'Help text',
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  };
+  const action = {
+    type: SET_COURSE_CONFIGURATION,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    ...payload
+  });
+});
+
+test('SET_COURSE_REGISTRATION works correctly', () => {
+  const payload = {
+    role: Role.Student,
+    group: '42D',
+    gameState: {
+      collectibles: {},
+      completed_quests: []
+    } as GameState,
+    courseId: 1,
+    grade: 1,
+    maxGrade: 10,
+    xp: 1,
+    story: {
+      story: '',
+      playStory: false
+    } as Story
+  };
+  const action = {
+    type: SET_COURSE_REGISTRATION,
     payload
   };
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -135,7 +194,7 @@ test('UPDATE_HISTORY_HELPERS works on academy location', () => {
 
 // Test Data for UPDATE_ASSESSMENT
 const assessmentTest1: Assessment = {
-  category: 'Mission',
+  type: 'Mission',
   globalDeployment: undefined,
   graderDeployment: undefined,
   id: 1,
@@ -146,7 +205,7 @@ const assessmentTest1: Assessment = {
 };
 
 const assessmentTest2: Assessment = {
-  category: 'Contest',
+  type: 'Contest',
   globalDeployment: undefined,
   graderDeployment: undefined,
   id: 1,
@@ -157,7 +216,7 @@ const assessmentTest2: Assessment = {
 };
 
 const assessmentTest3: Assessment = {
-  category: 'Path',
+  type: 'Path',
   globalDeployment: undefined,
   graderDeployment: undefined,
   id: 3,
@@ -216,7 +275,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
 // Test data for UPDATE_ASSESSMENT_OVERVIEWS
 const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: 'test_string',
     coverImage: 'test_string',
     grade: 0,
@@ -235,7 +294,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
 
 const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Contest,
+    type: 'Contests',
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
@@ -385,7 +444,7 @@ const gradingOverviewTest1: GradingOverview[] = [
   {
     assessmentId: 1,
     assessmentName: 'test assessment',
-    assessmentCategory: 'Contest',
+    assessmentType: 'Contests',
     initialGrade: 0,
     gradeAdjustment: 0,
     currentGrade: 10,
@@ -410,7 +469,7 @@ const gradingOverviewTest2: GradingOverview[] = [
   {
     assessmentId: 2,
     assessmentName: 'another assessment',
-    assessmentCategory: 'Sidequest',
+    assessmentType: 'Quests',
     initialGrade: 5,
     gradeAdjustment: 10,
     currentGrade: 20,
