@@ -3,8 +3,7 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import { Resizable } from 're-resizable';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import js from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
@@ -48,8 +47,6 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const context = React.useContext(CodeSnippetContext);
   const [showPrepend, setShowPrepend] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-
-  SyntaxHighlighter.registerLanguage('javascript', js);
 
   const handleShowDependencies = React.useCallback(() => {
     setShowPrepend(!showPrepend);
