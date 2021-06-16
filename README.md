@@ -15,7 +15,7 @@ The Source Academy (<https://source-academy.github.io/>) is an immersive online 
 
 ## Getting Started
 
-### Installation of Source Academy (deployed in GitHub Pages)
+### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
 
 1. Install a stable version of NodeJS. The active LTS or current version should work fine.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
