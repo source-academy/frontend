@@ -22,8 +22,8 @@ function Achievement(props: AchievementProps) {
 
   return (
     <Switch>
-      <Route exact={true} path="/achievement" component={AchievementDashboard}></Route>
-      <Route path="/achievement/control" component={toAchievementControl}></Route>
+      <Route exact={true} path="/achievements" component={AchievementDashboard}></Route>
+      <Route path="/achievements/control" component={toAchievementControl}></Route>
       <Route component={redirectTo404} />
     </Switch>
   );
