@@ -32,7 +32,8 @@ const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const interactiveSicpUrl =
-  process.env.REACT_APP_INTERACTIVE_SICP_URL || 'https://source-academy.github.io/interactive-sicp/';
+  process.env.REACT_APP_INTERACTIVE_SICP_URL ||
+  'https://source-academy.github.io/interactive-sicp/';
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
