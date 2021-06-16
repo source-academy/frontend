@@ -41,6 +41,10 @@ export const UPDATE_GRADING = 'UPDATE_GRADING';
 export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
+export const UPDATE_LATEST_VIEWED_COURSE = 'UPDATE_LATEST_VIEWED_COURSE';
+export const UPDATE_COURSE_CONFIG = 'UPDATE_COURSE_CONFIG';
+export const UPDATE_ASSESSMENT_CONFIG = 'UPDATE_ASSESSMENT_CONFIG';
+export const UPDATE_ASSESSMENT_TYPES = 'UPDATE_ASSESSMENT_TYPES';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -132,4 +136,4 @@ export type CourseConfiguration = {
   assessmentTypes: AssessmentType[];
 };
 
-export type UpdateCourseConfiguration = Partial<Omit<CourseConfiguration, 'assessmentTypes'>>;
+export type UpdateCourseConfiguration = Partial<CourseConfiguration>;

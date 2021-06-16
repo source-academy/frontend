@@ -90,6 +90,7 @@ export type Assessment = {
 };
 
 export type AssessmentConfiguration = {
+  order: number; // reference to the 'index' of the assessment type to update
   earlySubmissionXp: number;
   hoursBeforeEarlyXpDecay: number;
   decayRatePointsPerHour: number;

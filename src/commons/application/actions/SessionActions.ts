@@ -2,7 +2,13 @@ import { action } from 'typesafe-actions'; // EDITED
 
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Assessment, AssessmentOverview, ContestEntry } from '../../assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentType,
+  ContestEntry
+} from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -38,10 +44,14 @@ import {
   Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIG,
   UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_COURSE_CONFIG,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
   UpdateCourseConfiguration,
   User
@@ -177,3 +187,15 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
+
+export const updateLatestViewedCourse = (courseId: number) =>
+  action(UPDATE_LATEST_VIEWED_COURSE, { courseId });
+
+export const updateCourseConfig = (courseConfiguration: UpdateCourseConfiguration) =>
+  action(UPDATE_COURSE_CONFIG, courseConfiguration);
+
+export const updateAssessmentConfig = (assessmentConfiguration: AssessmentConfiguration) =>
+  action(UPDATE_ASSESSMENT_CONFIG, assessmentConfiguration);
+
+export const updateAssessmentTypes = (assessmentTypes: AssessmentType[]) =>
+  action(UPDATE_ASSESSMENT_TYPES, assessmentTypes);

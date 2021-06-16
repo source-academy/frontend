@@ -6,8 +6,10 @@ import { call, put, select } from 'redux-saga/effects';
 import { OverallState, Role, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentType,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
@@ -50,6 +52,11 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
   UNSUBMIT_SUBMISSION,
+  UPDATE_ASSESSMENT_CONFIG,
+  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_COURSE_CONFIG,
+  UPDATE_LATEST_VIEWED_COURSE,
+  UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -64,6 +71,7 @@ import {
   getGrading,
   getGradingOverviews,
   getGradingSummary,
+  getLatestCourseRegistrationAndConfiguration,
   getNotifications,
   getSourcecastIndex,
   getUser,
@@ -71,9 +79,12 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
+  postAssessmentConfig,
+  postAssessmentTypes,
   postAuth,
   postCourseConfig,
   postGrading,
+  postLatestViewedCourse,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
@@ -496,21 +507,6 @@ function* BackendSaga(): SagaIterator {
     }
   );
 
-  // yield takeEvery(
-  //   FETCH_SUBLANGUAGE,
-  //   function* (action: ReturnType<typeof actions.fetchSublanguage>): any {
-  //     const sublang: SourceLanguage | null = yield call(getSublanguage);
-  //     if (!sublang) {
-  //       return yield call(
-  //         showWarningMessage,
-  //         `Failed to load default Source sublanguage for Playground!`
-  //       );
-  //     }
-
-  //     yield put(actions.updateSublanguage(sublang));
-  //   }
-  // );
-
   yield takeEvery(
     CHANGE_SUBLANGUAGE,
     function* (action: ReturnType<typeof actions.changeSublanguage>): any {
@@ -532,6 +528,97 @@ function* BackendSaga(): SagaIterator {
         })
       );
       yield put(actions.updateSublanguage(sublang));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_LATEST_VIEWED_COURSE,
+    function* (action: ReturnType<typeof actions.updateLatestViewedCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { courseId } = action.payload;
+
+      const resp: Response | null = yield call(postLatestViewedCourse, tokens, courseId);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const {
+        courseRegistration,
+        courseConfiguration
+      }: {
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+      } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
+
+      if (!courseRegistration || !courseConfiguration) {
+        yield call(showWarningMessage, `Failed to load course!`);
+        return yield history.push('/welcome');
+      }
+
+      yield put(actions.setCourseRegistration(courseRegistration));
+      yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(
+        actions.updateSublanguage({
+          chapter: courseConfiguration.sourceChapter,
+          variant: courseConfiguration.sourceVariant,
+          displayName: styliseSublanguage(
+            courseConfiguration.sourceChapter,
+            courseConfiguration.sourceVariant
+          )
+        })
+      );
+      yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_COURSE_CONFIG,
+    function* (action: ReturnType<typeof actions.updateCourseConfig>): any {
+      const tokens: Tokens = yield selectTokens();
+      const courseConfig: UpdateCourseConfiguration = action.payload;
+
+      const resp: Response | null = yield call(postCourseConfig, tokens, courseConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.setCourseConfiguration(courseConfig));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_ASSESSMENT_CONFIG,
+    function* (action: ReturnType<typeof actions.updateAssessmentConfig>): any {
+      const tokens: Tokens = yield selectTokens();
+      const assessmentConfig: AssessmentConfiguration = action.payload;
+
+      const resp: Response | null = yield call(postAssessmentConfig, tokens, assessmentConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_ASSESSMENT_TYPES,
+    function* (action: ReturnType<typeof actions.updateAssessmentTypes>): any {
+      const tokens: Tokens = yield selectTokens();
+      const assessmentTypes: AssessmentType[] = action.payload;
+
+      if (assessmentTypes.length > 5) {
+        return yield call(showWarningMessage, 'Invalid number of Assessment Types!');
+      }
+
+      const resp: Response | null = yield call(postAssessmentTypes, tokens, assessmentTypes);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );

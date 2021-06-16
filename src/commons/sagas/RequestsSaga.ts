@@ -163,13 +163,13 @@ export const getLatestCourseRegistrationAndConfiguration = async (
 };
 
 /**
- * POST /user/latest_viewed/{courseId}
+ * PUT /user/latest_viewed/{courseId}
  */
 export const postLatestViewedCourse = async (
   tokens: Tokens,
   courseId: number
 ): Promise<Response | null> => {
-  const resp = await request(`user/latest_viewed/${courseId}`, 'POST', {
+  const resp = await request(`user/latest_viewed/${courseId}`, 'PUT', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -929,13 +929,13 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 };
 
 /**
- * POST /course/{courseId}/admin/course_config
+ * PUT /course/{courseId}/admin/course_config
  */
 export const postCourseConfig = async (
   tokens: Tokens,
   courseConfig: UpdateCourseConfiguration
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/course_config`, 'POST', {
+  const resp = await request(`${courseId()}/admin/course_config`, 'PUT', {
     ...tokens,
     body: courseConfig,
     noHeaderAccept: true,
@@ -947,13 +947,13 @@ export const postCourseConfig = async (
 };
 
 /**
- * POST /course/{courseId}/admin/assessment_config
+ * PUT /course/{courseId}/admin/assessment_config
  */
 export const postAssessmentConfig = async (
   tokens: Tokens,
   assessmentConfig: AssessmentConfiguration
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/assessment_config`, 'POST', {
+  const resp = await request(`${courseId()}/admin/assessment_config`, 'PUT', {
     ...tokens,
     body: assessmentConfig,
     noHeaderAccept: true,
@@ -965,13 +965,13 @@ export const postAssessmentConfig = async (
 };
 
 /**
- * POST /course/{courseId}/admin/assessment_types
+ * PUT /course/{courseId}/admin/assessment_types
  */
 export const postAssessmentTypes = async (
   tokens: Tokens,
   assessmentTypes: AssessmentType[]
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/assessment_types`, 'POST', {
+  const resp = await request(`${courseId()}/admin/assessment_types`, 'PUT', {
     ...tokens,
     body: { assessmentTypes: assessmentTypes },
     noHeaderAccept: true,
@@ -981,50 +981,6 @@ export const postAssessmentTypes = async (
 
   return resp;
 };
-
-/**
- * GET /settings/sublanguage
- *
- * Note: Deprecated. Sublanguage is now part of CourseConfiguration
- */
-// export const getSublanguage = async (): Promise<SourceLanguage | null> => {
-//   const resp = await request('settings/sublanguage', 'GET', {
-//     noHeaderAccept: true,
-//     shouldAutoLogout: false,
-//     shouldRefresh: true
-//   });
-//   if (!resp || !resp.ok) {
-//     return null;
-//   }
-
-//   const sublang = (await resp.json()).sublanguage;
-
-//   return {
-//     ...sublang,
-//     displayName: styliseSublanguage(sublang.chapter, sublang.variant)
-//   };
-// };
-
-/**
- * PUT /admin/settings/sublanguage
- *
- * Note: Deprecated. Sublanguage is now part of CourseConfiguration
- */
-// export const postSublanguage = async (
-//   chapter: number,
-//   variant: string,
-//   tokens: Tokens
-// ): Promise<Response | null> => {
-//   const resp = await request(`admin/settings/sublanguage`, 'PUT', {
-//     ...tokens,
-//     body: { chapter, variant },
-//     noHeaderAccept: true,
-//     shouldAutoLogout: false,
-//     shouldRefresh: true
-//   });
-
-//   return resp;
-// };
 
 /**
  * GET /course/{courseId}/devices
