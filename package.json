@@ -135,7 +135,7 @@
     "react-test-renderer": "^17.0.2",
     "redux-saga-test-plan": "^4.0.1",
     "sass": "^1.34.1",
-    "typescript": "~4.2"
+    "typescript": "~4.3"
   },
   "browserslist": {
     "production": [
