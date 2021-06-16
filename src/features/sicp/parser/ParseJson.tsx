@@ -128,13 +128,11 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
       <div className={'sicp-figure'}>
-        {obj['src'] && (
-          <img
-            src={Constants.interactiveSicpData + obj['src']}
-            alt={obj['id']}
-            width={obj['scale']}
-          />
-        )}
+        <img
+          src={Constants.interactiveSicpDataUrl + obj['src']}
+          alt={obj['id']}
+          width={obj['scale']}
+        />
       </div>
     );
   } else if (obj['snippet']) {

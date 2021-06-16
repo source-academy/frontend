@@ -28,7 +28,7 @@ jest.mock('src/commons/utils/Constants', () => ({
   Links: {
     sourceDocs: ''
   },
-  interactiveSicpUrl: 'source-academy.github.io/sicp/'
+  interactiveSicpDataUrl: 'https://source-academy.github.io/sicp/'
 }));
 
 const mockData = {

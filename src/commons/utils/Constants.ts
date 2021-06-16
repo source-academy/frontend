@@ -31,7 +31,7 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
-const interactiveSicpData =
+const interactiveSicpDataUrl =
   process.env.REACT_APP_INTERACTIVE_SICP_DATA_URL || 'https://source-academy.github.io/sicp/'; // data for interactive-sicp (images and json files)
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
@@ -127,7 +127,7 @@ const Constants = {
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval,
-  interactiveSicpData
+  interactiveSicpDataUrl
 };
 
 export default Constants;
