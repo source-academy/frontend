@@ -51,7 +51,7 @@ $sicp-background-color: #ffffff;
     }
 
     @media only screen and (max-width: 768px) {
-      padding: 0 1em;
+      padding: 0 1.2em;
     }
   }
 
@@ -60,7 +60,8 @@ $sicp-background-color: #ffffff;
   }
 
   .sicp-index-page {
-    h1, h2 {
+    h1,
+    h2 {
       text-align: right;
     }
 
@@ -111,7 +112,10 @@ $sicp-background-color: #ffffff;
     }
 
     @media only screen and (max-width: 768px) {
-      h1, h2, h4, h5 {
+      h1,
+      h2,
+      h4,
+      h5 {
         text-align: left;
       }
 
