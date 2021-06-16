@@ -255,6 +255,7 @@ async function retrieveBrowsableMissions(
         repo: courseInfoRepo.name,
         path: 'course-info.json'
       });
+
       const courseInfo = JSON.parse(Buffer.from((result.data as any).content, 'base64').toString());
 
       const typeNames: string[] = [];

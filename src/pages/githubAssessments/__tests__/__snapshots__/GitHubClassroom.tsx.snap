@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GitHubClassroom renders correctly 1`] = `
+"<div className=\\"Academy\\">
+  <GitHubAssessmentsNavigationBar handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} octokit={{...}} courses={{...}} selectedCourse=\\"\\" setSelectedCourse={[Function: bound _dispatchAction]} typeNames={{...}} />
+  <div className=\\"Assessment\\">
+    <ContentDisplay display={{...}} loadContentDispatch={[Function: getGitHubOctokitInstance]} />
+  </div>
+</div>"
+`;

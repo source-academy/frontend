@@ -43,6 +43,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
 
   const handleChange = (e: any) => {
     props.setSelectedCourse(e.target.innerText);
+    console.log(e.target.innerText);
   };
 
   return (
@@ -82,7 +83,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
                 }
                 placement={'bottom-end'}
               >
-                <Button minimal={true} rightIcon="caret-down" />
+                <Button minimal={true} rightIcon="caret-down" aria-label="choose" />
               </Popover2>
             }
             placeholder={'Select Course'}
