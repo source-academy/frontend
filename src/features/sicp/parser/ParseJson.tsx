@@ -116,7 +116,7 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
   <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-figure">
     {handleImage(obj, refs)}
     {obj['captionName'] && (
-      <h5>
+      <h5 className="sicp-caption">
         {obj['captionName']}
         {parseArr(obj['captionBody']!, refs)}
       </h5>
@@ -127,7 +127,7 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
-      <div className={'sicp-figure'}>
+      <div>
         {obj['src'] && (
           <img
             src={Constants.interactiveSicpUrl + obj['src']}

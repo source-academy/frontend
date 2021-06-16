@@ -180,8 +180,12 @@ $sicp-background-color: #ffffff;
   }
 
   .sicp-figure {
-    margin: auto;
-    text-align: center;
+    margin: 45px auto 25px auto;
+
+    > .sicp-caption {
+      margin: 15px auto;
+      text-align: center;
+    }
   }
 
   // text container
