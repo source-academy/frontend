@@ -13,7 +13,7 @@ import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = RouteComponentProps<{}>;
 
-const baseUrl = Constants.interactiveSicpUrl + '/json/';
+const baseUrl = Constants.interactiveSicpDataUrl + '/json/';
 const extension = '.json';
 
 // Context to determine which code snippet is active

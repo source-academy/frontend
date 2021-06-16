@@ -181,6 +181,9 @@ $sicp-background-color: #ffffff;
 
   .sicp-figure {
     margin: 45px auto 25px auto;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
 
     > .sicp-caption {
       margin: 15px auto;

@@ -127,15 +127,11 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
-      <div>
-        {obj['src'] && (
-          <img
-            src={Constants.interactiveSicpUrl + obj['src']}
-            alt={obj['id']}
-            width={obj['scale']}
-          />
-        )}
-      </div>
+      <img
+        src={Constants.interactiveSicpDataUrl + obj['src']}
+        alt={obj['id']}
+        width={obj['scale']}
+      />
     );
   } else if (obj['snippet']) {
     return processingFunctions['SNIPPET'](obj['snippet'], refs);
