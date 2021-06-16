@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
@@ -19,7 +20,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
     <NavbarGroup align={Alignment.LEFT}>
       {props.assessmentTypes?.map((assessmentType, idx) => (
         <NavLink
-          to={`/academy/${assessmentType.toLowerCase()}`}
+          to={`/academy/${assessmentTypeLink(assessmentType)}`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
           key={assessmentType}

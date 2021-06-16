@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../commons/application/ApplicationTypes';
 import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer';
@@ -51,7 +52,7 @@ class Academy extends React.Component<AcademyProps> {
         <Switch>
           {this.props.assessmentTypes?.map(assessmentType => (
             <Route
-              path={`/academy/${assessmentType.toLowerCase()}/${assessmentRegExp}`}
+              path={`/academy/${assessmentTypeLink(assessmentType)}/${assessmentRegExp}`}
               render={this.assessmentRenderFactory(assessmentType)}
               key={assessmentType}
             />
@@ -90,7 +91,7 @@ class Academy extends React.Component<AcademyProps> {
 
   private redirectToAssessments = () => {
     return this.props.assessmentTypes ? (
-      <Redirect to={`/academy/${this.props.assessmentTypes[0].toLowerCase()}`} />
+      <Redirect to={`/academy/${assessmentTypeLink(this.props.assessmentTypes[0])}`} />
     ) : (
       this.redirectTo404()
     );

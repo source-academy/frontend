@@ -26,6 +26,7 @@ import Dropdown from '../dropdown/Dropdown';
 import NotificationBadgeContainer from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
+import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import GitHubAssessmentsNavigationBar from './subcomponents/GitHubAssessmentsNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
@@ -221,7 +222,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavbarGroup>
         {props.assessmentTypes?.map((assessmentType, idx) => (
           <NavLink
-            to={`/academy/${assessmentType.toLowerCase()}`}
+            to={`/academy/${assessmentTypeLink(assessmentType)}`}
             activeClassName={Classes.ACTIVE}
             className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
             key={assessmentType}

@@ -5,6 +5,7 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import Constants from 'src/commons/utils/Constants';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { AssessmentType } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
@@ -38,7 +39,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     {props.role ? (
       props.assessmentTypes?.map((assessmentType, idx) => (
         <NavLink
-          to={`/academy/${assessmentType.toLowerCase()}`}
+          to={`/academy/${assessmentTypeLink(assessmentType)}`}
           activeClassName={Classes.ACTIVE}
           className={classNames(
             'NavigationBar__link__mobile',

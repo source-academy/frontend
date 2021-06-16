@@ -24,6 +24,7 @@ import controlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
+import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
@@ -273,7 +274,7 @@ const createPlaceholder = (str: string): string => {
 
 const makeOverviewCardButton = (overview: AssessmentOverview, listingPath: string | undefined) => {
   const label: string = 'Edit mission';
-  listingPath = listingPath || '/academy/' + overview.type.toLowerCase();
+  listingPath = listingPath || '/academy/' + assessmentTypeLink(overview.type);
   return (
     <NavLink to={listingPath + `/${overview.id.toString()}/${Constants.defaultQuestionId}`}>
       {controlButton(label, IconNames.EDIT)}

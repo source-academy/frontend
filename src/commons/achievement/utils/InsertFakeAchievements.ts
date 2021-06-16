@@ -24,7 +24,7 @@ function insertFakeAchievements(
     inferencer.insertFakeGoalDefinition(
       {
         uuid: idString + '0',
-        text: `Submitted ${assessmentOverview.type.toLowerCase()}`,
+        text: `Submitted ${assessmentOverview.type}`,
         achievementUuids: [idString],
         meta: {
           type: GoalType.ASSESSMENT,
@@ -38,7 +38,7 @@ function insertFakeAchievements(
     inferencer.insertFakeGoalDefinition(
       {
         uuid: idString + '1',
-        text: `Graded ${assessmentOverview.type.toLowerCase()}`,
+        text: `Graded ${assessmentOverview.type}`,
         achievementUuids: [idString],
         meta: {
           type: GoalType.ASSESSMENT,

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
+import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 type ProfileCardProps = DispatchProps & StateProps;
 
@@ -64,7 +65,7 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
         className="profile-summary-navlink"
         key={`${item.title}-${item.id}`}
         target="_blank"
-        to={`/academy/${item.type.toLowerCase()}/${item.id}/0`}
+        to={`/academy/${assessmentTypeLink(item.type)}/${item.id}/0`}
         activeClassName="profile-summary-navlink"
       >
         <Callout
