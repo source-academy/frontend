@@ -130,7 +130,7 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
       <div className={'sicp-figure'}>
         {obj['src'] && (
           <img
-            src={Constants.interactiveSicpUrl + obj['src']}
+            src={Constants.interactiveSicpData + obj['src']}
             alt={obj['id']}
             width={obj['scale']}
           />
