@@ -335,7 +335,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
-        <div className="navbar-button-text hidden-sm hidden-xs">Contributors</div>
       </NavLink>
 
       <div className="visible-xs">
