@@ -21,5 +21,8 @@ export const changeQueryString = (queryString: string) => action(CHANGE_QUERY_ST
 export const playgroundUpdatePersistenceFile = (file?: PersistenceFile) =>
   action(PLAYGROUND_UPDATE_PERSISTENCE_FILE, file);
 
-export const playgroundUpdateGitHubSaveInfo = (repoName: string, filePath: string) =>
-  action(PLAYGROUND_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath });
+  export const playgroundUpdateGitHubSaveInfo = (
+    repoName: string,
+    filePath: string,
+    lastSaved: Date
+  ) => action(PLAYGROUND_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath, lastSaved });
