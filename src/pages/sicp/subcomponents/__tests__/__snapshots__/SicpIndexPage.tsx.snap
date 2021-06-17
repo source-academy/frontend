@@ -38,9 +38,20 @@ exports[`Sicp index page 1`] = `
             </h4>
           </Component>
           <p>
-            with Samuel Fang
+            with Julie Sussman
             <i>
               — adapters to JavaScript
+            </i>
+          </p>
+          <br />
+          <Component>
+            <h4 className="bp3-heading">
+              Samuel Fang
+            </h4>
+          </Component>
+          <p>
+            <i>
+              — designer and developer of Interactive SICP
             </i>
           </p>
         </div>
