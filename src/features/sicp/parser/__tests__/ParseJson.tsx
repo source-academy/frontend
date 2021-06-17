@@ -1,7 +1,6 @@
-import { MathJaxContext } from 'better-react-mathjax';
 import { mount, shallow } from 'enzyme';
 import lzString from 'lz-string';
-import { mathjaxConfig } from 'src/pages/sicp/Sicp';
+import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
 import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
 
@@ -31,6 +30,10 @@ jest.mock('src/commons/utils/Constants', () => ({
   interactiveSicpDataUrl: 'https://source-academy.github.io/sicp/'
 }));
 
+jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => {
+  return (props: CodeSnippetProps) => <div {...props}>Code Snippet</div>;
+});
+
 const mockData = {
   text: {
     tag: textTag,
@@ -44,21 +47,15 @@ const mockData = {
 
 const mockRef = { current: {} };
 
-const processTag = (tag: string, obj: JsonType, math: boolean) => {
+const processTag = (tag: string, obj: JsonType) => {
   obj['tag'] = tag;
 
-  return math ? (
-    <MathJaxContext version={3} config={mathjaxConfig}>
-      {processingFunctions[tag](obj, mockRef)}
-    </MathJaxContext>
-  ) : (
-    processingFunctions[tag](obj, mockRef)
-  );
+  return processingFunctions[tag](obj, mockRef);
 };
 
-const testTagSuccessful = (obj: JsonType, tag: string, text: string = '', math = false) => {
+const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = shallow(processTag(tag, obj, math));
+    const tree = shallow(processTag(tag, obj));
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -215,7 +212,7 @@ describe('Parse snippet', () => {
     objLatex
   ];
 
-  objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text'], true));
+  objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text']));
 });
 
 describe('Parse figures', () => {
@@ -300,7 +297,7 @@ describe('Parse latex', () => {
     body: math
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag, '', true));
+  tag.forEach(tag => testTagSuccessful(obj, tag, ''));
 });
 
 describe('Parse links', () => {

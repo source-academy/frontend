@@ -92,7 +92,7 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
 const handleSnippet = (obj: JsonType) => {
   if (obj['latex']) {
-    return <Pre>{handleLatex(obj['body']!, false)}</Pre>;
+    return <Pre>{handleLatex(obj['body']!)}</Pre>;
   } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
     return <Pre>{obj['body']}</Pre>;
   } else {
@@ -179,8 +179,8 @@ const handleText = (text: string) => {
   return <p>{text}</p>;
 };
 
-const handleLatex = (math: string, inline: boolean) => {
-  return <SicpLatex inline={inline} math={math} />;
+const handleLatex = (math: string) => {
+  return <SicpLatex math={math} />;
 };
 
 export const processingFunctions = {
@@ -210,10 +210,9 @@ export const processingFunctions = {
     <Code>{obj['body']}</Code>
   ),
 
-  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
+  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
 
-  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex(obj['body']!, true),
+  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
 
   LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
 
