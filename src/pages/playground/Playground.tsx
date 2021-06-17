@@ -51,6 +51,7 @@ import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
+import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -141,7 +142,7 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitObject: { octokit: Octokit | undefined };
-  githubSaveInfo: { repoName: string; filePath: string };
+  githubSaveInfo: GitHubSaveInfo;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -457,16 +458,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const githubOctokitObject = useSelector(
-    (store: OverallState) => store.session.githubOctokitObject
-  );
+  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  const githubSaveInfo = props.githubSaveInfo;
+  const githubPersistenceIsDirty =
+    githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
     const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
-        loggedInAs={octokit}
-        githubSaveInfo={props.githubSaveInfo}
         key="github"
+        loggedInAs={octokit}
+        githubSaveInfo={githubSaveInfo}
+        isDirty={githubPersistenceIsDirty}
         onClickOpen={props.handleGitHubOpenFile}
         onClickSave={props.handleGitHubSaveFile}
         onClickSaveAs={props.handleGitHubSaveFileAs}
@@ -476,7 +479,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [
     githubOctokitObject,
-    props.githubSaveInfo,
+    githubPersistenceIsDirty,
+    githubSaveInfo,
     props.handleGitHubOpenFile,
     props.handleGitHubSaveFileAs,
     props.handleGitHubSaveFile,

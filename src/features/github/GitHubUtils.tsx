@@ -173,20 +173,6 @@ export async function checkIfUserAgreesToPerformOverwritingSave() {
   });
 }
 
-export async function checkIfUserAgreesToPerformCreatingSave() {
-  return await showSimpleConfirmDialog({
-    contents: (
-      <div>
-        <p>Warning: You are creating a new file in the repository.</p>
-        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
-      </div>
-    ),
-    negativeLabel: 'Cancel',
-    positiveIntent: 'primary',
-    positiveLabel: 'Confirm'
-  });
-}
-
 export async function openFileInEditor(
   octokit: Octokit,
   repoOwner: string,
@@ -207,7 +193,7 @@ export async function openFileInEditor(
   if (content) {
     const newEditorValue = Buffer.from(content, 'base64').toString();
     store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath));
+    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully loaded file!', 1000);
   }
 }
@@ -259,7 +245,7 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath));
+    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
     console.error(err);
@@ -296,7 +282,7 @@ export async function performCreatingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath));
+    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully created file!', 1000);
   } catch (err) {
     console.error(err);
