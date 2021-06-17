@@ -19,7 +19,6 @@ exports[`Sicp index page 1`] = `
           </Component>
         </div>
         <div className=\\"sicp-authors\\">
-          <br />
           <Component>
             <h4 className=\\"bp3-heading\\">
               Harold Abelson and Gerald Jay Sussman
@@ -31,7 +30,6 @@ exports[`Sicp index page 1`] = `
               — original authors
             </i>
           </p>
-          <br />
           <Component>
             <h4 className=\\"bp3-heading\\">
               Martin Henz and Tobias Wrigstad
@@ -43,7 +41,6 @@ exports[`Sicp index page 1`] = `
               — adapters to JavaScript
             </i>
           </p>
-          <br />
           <Component>
             <h4 className=\\"bp3-heading\\">
               Samuel Fang
