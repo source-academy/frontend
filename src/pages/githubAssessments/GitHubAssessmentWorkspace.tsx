@@ -136,7 +136,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/Classroom');
+    history.push('/githubassessments/login');
   }
 
   /**
