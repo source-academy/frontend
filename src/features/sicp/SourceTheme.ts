@@ -7,7 +7,7 @@ const SourceThemeBackground = '#2c3e50';
 export const SourceTheme = {
   'code[class*="language-"]': {
     color: 'white',
-    background: SourceThemeBackground,
+    background: 'transparent',
     fontFamily: "'Inconsolata', 'Consolas', monospace",
     textAlign: 'left',
     whiteSpace: 'pre',
@@ -47,7 +47,7 @@ export const SourceTheme = {
     borderRadius: '0.3em'
   },
   ':not(pre) > code[class*="language-"]': {
-    background: SourceThemeBackground,
+    background: 'transparent',
     padding: '0.1em',
     borderRadius: '0.3em',
     whiteSpace: 'normal'

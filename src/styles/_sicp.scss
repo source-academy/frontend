@@ -19,6 +19,10 @@ $sicp-background-color: #ffffff;
     overflow-x: scroll;
   }
 
+  .bp3-blockquote {
+    margin: 10px 0;
+  }
+
   .bp3-heading {
     margin-top: 10px;
   }
@@ -67,6 +71,10 @@ $sicp-background-color: #ffffff;
     h1,
     h2 {
       text-align: right;
+    }
+
+    h4 {
+      margin-top: 15px;
     }
 
     > h2,
@@ -173,6 +181,11 @@ $sicp-background-color: #ffffff;
         width: 100vw;
       }
     }
+
+    .sicp-code-snippet-closed {
+      padding: 0;
+      margin: 0;
+    }
   }
 
   .sicp-footnote {
@@ -227,6 +240,16 @@ $sicp-background-color: #ffffff;
 
 .sicp-toc {
   overflow-y: auto;
+  text-align: left;
+
+  .bp3-tree-node-caret {
+    color: #777777 !important;
+    scale: 1.25;
+  }
+
+  .bp3-tree-node-caret:hover {
+    color: $sicp-text-color !important;
+  }
 }
 
 .sicp-toc-drawer {
