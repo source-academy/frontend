@@ -2,9 +2,9 @@
 
 exports[`Sicp Code Snippet renders correctly 1`] = `
 "<div className=\\"sicp-code-snippet\\">
-  <ReactAsyncHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
+  <SyntaxHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
     1+1;
-  </ReactAsyncHighlighter>
+  </SyntaxHighlighter>
   <Component>
     2
   </Component>

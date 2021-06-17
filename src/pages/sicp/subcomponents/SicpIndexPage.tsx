@@ -6,8 +6,7 @@ import SicpToc from './SicpToc';
 const originalAuthors = 'Harold Abelson and Gerald Jay Sussman';
 const originalWithAuthors = 'with Julie Sussman';
 const adaptedAuthors = 'Martin Henz and Tobias Wrigstad';
-const adaptedWithAuthors =
-  'with Chan Ger Hean, He Xinyue, Liu Hang, Feng Piaopiao, Jolyn Tan and Wang Qian';
+const adaptedWithAuthors = 'with Samuel Fang';
 
 const authors = (
   <div className="sicp-authors">
