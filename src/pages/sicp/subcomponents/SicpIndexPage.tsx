@@ -6,7 +6,8 @@ import SicpToc from './SicpToc';
 const originalAuthors = 'Harold Abelson and Gerald Jay Sussman';
 const originalWithAuthors = 'with Julie Sussman';
 const adaptedAuthors = 'Martin Henz and Tobias Wrigstad';
-const adaptedWithAuthors = 'with Samuel Fang';
+const adaptedWithAuthors = 'with Julie Sussman';
+const developers = 'Samuel Fang';
 
 const authors = (
   <div className="sicp-authors">
@@ -21,6 +22,11 @@ const authors = (
     <p>
       {adaptedWithAuthors}
       <i>— adapters to JavaScript</i>
+    </p>
+    <br />
+    <H4>{developers}</H4>
+    <p>
+      <i>— designer and developer of Interactive SICP</i>
     </p>
   </div>
 );
