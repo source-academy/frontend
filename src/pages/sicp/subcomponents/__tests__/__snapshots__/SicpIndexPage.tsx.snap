@@ -45,7 +45,7 @@ exports[`Sicp index page 1`] = `
           </p>
           <br />
           <Component>
-            <h4 className="bp3-heading">
+            <h4 className=\\"bp3-heading\\">
               Samuel Fang
             </h4>
           </Component>
