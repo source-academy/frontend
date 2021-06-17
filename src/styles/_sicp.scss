@@ -236,6 +236,16 @@ $sicp-background-color: #ffffff;
 
 .sicp-toc {
   overflow-y: auto;
+  text-align: left;
+
+  .bp3-tree-node-caret {
+    color: #777777 !important;
+    scale: 1.25;
+  }
+
+  .bp3-tree-node-caret:hover {
+    color: $sicp-text-color !important;
+  }
 }
 
 .sicp-toc-drawer {
