@@ -1,19 +1,20 @@
-import { NonIdealState } from '@blueprintjs/core';
+import { NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
+import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
 
 type DispatchProps = {
   handleGitHubLogIn: () => void;
@@ -25,15 +26,23 @@ type DispatchProps = {
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
 const GitHubClassroom: React.FC<DispatchProps> = props => {
+  const location = useLocation<{
+    courses: string[] | undefined;
+    types: string[] | undefined;
+    assessmentOverviews: GHAssessmentOverview[] | undefined;
+    selectedCourse: string | undefined;
+  }>();
   const octokit: Octokit | undefined = useSelector(
     (store: OverallState) => store.session.githubOctokitObject
   ).octokit;
-  const [courses, setCourses] = useState<string[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<string>('');
-  const [types, setTypes] = useState<string[]>([]);
-  const [assessmentOverviews, setAssessmentOverviews] = useState<GHAssessmentOverview[] | null>(
-    null
+  const [courses, setCourses] = useState<string[] | undefined>(location.state?.courses);
+  const [selectedCourse, setSelectedCourse] = useState<string>(
+    location.state?.selectedCourse || ''
   );
+  const [types, setTypes] = useState<string[]>(location.state?.types || []);
+  const [assessmentOverviews, setAssessmentOverviews] = useState<
+    GHAssessmentOverview[] | undefined
+  >(location.state?.assessmentOverviews);
 
   useEffect(() => {
     if (octokit === undefined) {
@@ -51,8 +60,24 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
       return;
     }
 
+    setAssessmentOverviews(undefined);
     fetchAssessmentOverviews(octokit, selectedCourse, setTypes, setAssessmentOverviews);
   };
+
+  const redirectToLogin = () => <Redirect to="/githubassessments/login" />;
+  const redirectToAssessments = () => (
+    <Redirect
+      to={{
+        pathname: `/githubassessments/${assessmentTypeLink(types[0])}`,
+        state: {
+          courses: courses,
+          types: types,
+          assessmentOverviews: assessmentOverviews,
+          selectedCourse: selectedCourse
+        }
+      }}
+    />
+  );
 
   return (
     <div className="Academy">
@@ -64,40 +89,54 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
         courses={courses}
         selectedCourse={selectedCourse}
         types={types}
+        assessmentOverviews={assessmentOverviews}
       />
-      {octokit === undefined ? (
-        <div>
-          <ContentDisplay
-            display={
-              <NonIdealState
-                description="Please sign in to GitHub."
-                icon={IconNames.WARNING_SIGN}
+      <Switch>
+        <Route
+          path="/githubassessments/login"
+          render={() =>
+            octokit && (!courses || !assessmentOverviews) ? (
+              <ContentDisplay
+                display={<NonIdealState description="Loading..." icon={<Spinner />} />}
+                loadContentDispatch={() => {}}
               />
-            }
-            loadContentDispatch={getGitHubOctokitInstance}
-          />
-        </div>
-      ) : (
-        <Switch>
-          {types.map(type => {
-            const filteredAssessments =
-              assessmentOverviews === null
-                ? null
-                : assessmentOverviews.filter(assessment => {
-                    return assessment.type === type;
-                  });
-            return (
-              <Route
-                path={`/githubassessments/${type}`}
-                component={() => (
-                  <GitHubAssessmentListing assessmentOverviews={filteredAssessments} />
-                )}
+            ) : octokit ? (
+              redirectToAssessments()
+            ) : (
+              <ContentDisplay
+                display={
+                  <NonIdealState
+                    description="Please sign in to GitHub."
+                    icon={IconNames.WARNING_SIGN}
+                  />
+                }
+                loadContentDispatch={() => {}}
               />
-            );
-          })}
-          <Route component={() => <Redirect to="/githubassessments" />} />
-        </Switch>
-      )}
+            )
+          }
+        />
+        <Route
+          path="/githubassessments/editor"
+          component={GitHubAssessmentWorkspaceContainer}
+        />
+        {octokit
+          ? types.map((type, idx) => {
+              const filteredAssessments = assessmentOverviews?.filter(
+                assessment => assessment.type === type
+              );
+              return (
+                <Route
+                  path={`/githubassessments/${assessmentTypeLink(type)}`}
+                  render={() => (
+                    <GitHubAssessmentListing assessmentOverviews={filteredAssessments} />
+                  )}
+                  key={idx}
+                />
+              );
+            })
+          : null}
+        <Route render={redirectToLogin} />
+      </Switch>
     </div>
   );
 };

@@ -13,6 +13,8 @@ import { AssessmentCategories, AssessmentCategory } from '../assessment/Assessme
 export const assessmentCategoryLink = (cat: AssessmentCategory): string =>
   cat === AssessmentCategories.Sidequest ? 'quests' : cat.toLowerCase().concat('s');
 
+export const assessmentTypeLink = (type: string): string => type.toLowerCase().replace(/\W+/g, '_');
+
 /** Converts an optinal string
  *  parameter into an integer or null value.
  *

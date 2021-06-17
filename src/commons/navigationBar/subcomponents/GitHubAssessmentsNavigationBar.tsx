@@ -9,12 +9,14 @@ import {
   Navbar,
   NavbarGroup
 } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { IconName, IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
+import { GHAssessmentOverview } from 'src/pages/githubAssessments/GitHubClassroom';
 
 import { ControlBarGitHubLoginButton } from '../../controlBar/github/ControlBarGitHubLoginButton';
 
@@ -27,10 +29,11 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  octokit: Octokit | undefined;
-  courses: string[];
+  octokit?: Octokit;
+  courses?: string[];
   selectedCourse: string;
   types: string[];
+  assessmentOverviews?: GHAssessmentOverview[];
 };
 
 /**
@@ -44,22 +47,30 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
-        {props.types.map(type => {
+        {props.types.map((type, idx) => {
           return (
             <NavLink
               key={type}
-              to={`${type}`}
+              to={{
+                pathname: `/githubassessments/${assessmentTypeLink(type)}`,
+                state: {
+                  courses: props.courses,
+                  types: props.types,
+                  assessmentOverviews: props.assessmentOverviews,
+                  selectedCourse: props.selectedCourse
+                }
+              }}
               activeClassName={Classes.ACTIVE}
               className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
             >
-              <Icon icon={IconNames.FLAME} />
+              <Icon icon={idx < 5 ? icons[idx] : icons[0]} />
               <div className="navbar-button-text hidden-xs hidden-sm">{type}</div>
             </NavLink>
           );
         })}
       </NavbarGroup>
       <NavbarGroup align={Alignment.RIGHT}>
-        {props.octokit !== undefined && (
+        {props.octokit !== undefined && props.types.length > 0 && (
           <InputGroup
             key="courseselect"
             disabled={true}
@@ -67,7 +78,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
               <Popover2
                 content={
                   <Menu>
-                    {props.courses.map((course: string) => (
+                    {props.courses?.map((course: string) => (
                       <MenuItem key={course} onClick={handleClick} text={course} />
                     ))}
                   </Menu>
@@ -91,5 +102,13 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
     </Navbar>
   );
 };
+
+const icons: IconName[] = [
+  IconNames.FLAME,
+  IconNames.LIGHTBULB,
+  IconNames.PREDICTIVE_ANALYSIS,
+  IconNames.COMPARISON,
+  IconNames.MANUAL
+];
 
 export default GitHubAssessmentsNavigationBar;

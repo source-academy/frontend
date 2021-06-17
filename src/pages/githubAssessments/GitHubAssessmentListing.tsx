@@ -18,11 +18,10 @@ import ContentDisplay from '../../commons/ContentDisplay';
 import Markdown from '../../commons/Markdown';
 import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
 type GitHubAssessmentListingProps = {
-  assessmentOverviews: GHAssessmentOverview[] | null;
+  assessmentOverviews?: GHAssessmentOverview[];
 };
 
 /**
@@ -43,18 +42,18 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
     []
   );
 
-  if (props.assessmentOverviews === null) {
+  if (!props.assessmentOverviews) {
     display = (
       <>
         {createAssessmentButton}
-        display = <NonIdealState description="Fetching assessment..." icon={<Spinner />} />;
+        <NonIdealState description="Fetching assessment..." icon={<Spinner />} />
       </>
     );
   } else if (props.assessmentOverviews.length === 0) {
     display = (
       <>
         {createAssessmentButton}
-        <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
+        <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />
       </>
     );
   } else {
@@ -72,7 +71,7 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
 
   return (
     <div className="Assessment">
-      <ContentDisplay display={display} loadContentDispatch={getGitHubOctokitInstance} />
+      <ContentDisplay display={display} loadContentDispatch={() => {}} />
     </div>
   );
 };

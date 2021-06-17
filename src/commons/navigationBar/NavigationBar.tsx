@@ -128,7 +128,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to="/githubassessments/missions"
+          to="/githubassessments"
         >
           <Icon icon={IconNames.BRIEFCASE} />
           <div>GitHub Assessments</div>
@@ -224,7 +224,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/githubassessments/classroom"
+          to="/githubassessments"
         >
           <Icon icon={IconNames.BRIEFCASE} />
           <div className="navbar-button-text">Classroom</div>
