@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { shallow } from 'enzyme';
 import { useSelector } from 'react-redux';
 
@@ -122,20 +122,5 @@ describe('GitHubClassroom', () => {
       const tree = shallow(<GitHubClassroom {...mockProps} />);
       expect(tree.debug()).toMatchSnapshot();
     });
-  });
-
-  test('Course List displays correct number of courses', async () => {
-    await act(async () => {
-      render(<GitHubClassroom {...mockProps} />);
-      screen.queryByPlaceholderText('Select Course');
-      fireEvent.click(
-        screen.getByRole('button', {
-          name: /choose/i
-        })
-      );
-    });
-    expect(screen.getByText('source-academy-course-test')).toBeTruthy();
-    expect(screen.getByText('source-academy-course-second')).toBeTruthy();
-    expect(screen.getByText('source-academy-course-third')).toBeTruthy();
   });
 });

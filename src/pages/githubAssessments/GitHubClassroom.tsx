@@ -177,7 +177,11 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
  * @param octokit The Octokit instance for the authenticated user
  * @param setOrgList The React setter function for an array of organization names
  */
-async function retrieveOrganizationList(octokit: Octokit, setCourses: (courses: string[]) => void, setSelectedCourse: (course: string) => void) {
+async function retrieveOrganizationList(
+  octokit: Octokit,
+  setCourses: (courses: string[]) => void,
+  setSelectedCourse: (course: string) => void
+) {
   const orgList: string[] = [];
   const results = (await octokit.orgs.listForAuthenticatedUser({ per_page: 100 })).data;
   const orgs = results.filter(org => org.login.includes('source-academy-course')); // filter only organisations with 'source-academy-course' in name
