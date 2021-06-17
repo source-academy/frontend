@@ -2,9 +2,11 @@
 
 exports[`Sicp Code Snippet renders correctly 1`] = `
 "<div className=\\"sicp-code-snippet\\">
-  <SyntaxHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
-    1+1;
-  </SyntaxHighlighter>
+  <Blueprint3.Card className=\\"sicp-code-snippet-closed\\" interactive={true} elevation={2}>
+    <SyntaxHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
+      1+1;
+    </SyntaxHighlighter>
+  </Blueprint3.Card>
   <Component>
     2
   </Component>
