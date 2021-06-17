@@ -11,7 +11,7 @@ const mockShortDefaultState: SavedState = {
     name: defaultState.session.name,
     userId: defaultState.session.userId,
     courseId: defaultState.session.courseId,
-    courseShortname: defaultState.session.courseShortname,
+    courseShortName: defaultState.session.courseShortName,
     enableGame: defaultState.session.enableGame,
     enableAchievements: defaultState.session.enableAchievements,
     enableSourcecast: defaultState.session.enableSourcecast,

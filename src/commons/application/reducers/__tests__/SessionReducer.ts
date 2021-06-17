@@ -63,13 +63,13 @@ test('SET_USER works correctly', () => {
       {
         courseId: 1,
         courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-        courseShortname: `CS1101S`,
+        courseShortName: `CS1101S`,
         viewable: true
       },
       {
         courseId: 2,
         courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
-        courseShortname: `CS2030S`,
+        courseShortName: `CS2030S`,
         viewable: true
       }
     ]
@@ -90,7 +90,7 @@ test('SET_USER works correctly', () => {
 test('SET_COURSE_CONFIGURATION works correctly', () => {
   const payload = {
     courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-    courseShortname: `CS1101S`,
+    courseShortName: `CS1101S`,
     viewable: true,
     enableGame: true,
     enableAchievements: true,

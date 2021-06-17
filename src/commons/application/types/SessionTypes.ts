@@ -71,7 +71,7 @@ export type SessionState = {
 
   // Course Configuration
   readonly courseName?: string;
-  readonly courseShortname?: string;
+  readonly courseShortName?: string;
   readonly viewable?: boolean;
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
@@ -102,7 +102,7 @@ export type Tokens = {
 export type UserCourse = {
   courseId: number;
   courseName: string;
-  courseShortname: string;
+  courseShortName: string;
   viewable: boolean;
 };
 
@@ -125,7 +125,7 @@ export type CourseRegistration = {
 
 export type CourseConfiguration = {
   courseName: string;
-  courseShortname: string;
+  courseShortName: string;
   viewable: boolean;
   enableGame: boolean;
   enableAchievements: boolean;

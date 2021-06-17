@@ -110,13 +110,13 @@ const mockUser: User = {
     {
       courseId: 1,
       courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-      courseShortname: `CS1101S`,
+      courseShortName: `CS1101S`,
       viewable: true
     },
     {
       courseId: 2,
       courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
-      courseShortname: `CS2030S`,
+      courseShortName: `CS2030S`,
       viewable: true
     }
   ]
@@ -141,7 +141,7 @@ const mockCourseRegistration1: CourseRegistration = {
 
 const mockCourseConfiguration1: CourseConfiguration = {
   courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-  courseShortname: `CS1101S`,
+  courseShortName: `CS1101S`,
   viewable: true,
   enableGame: true,
   enableAchievements: true,
@@ -171,7 +171,7 @@ const mockCourseRegistration2: CourseRegistration = {
 
 const mockCourseConfiguration2: CourseConfiguration = {
   courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
-  courseShortname: `CS2030S`,
+  courseShortName: `CS2030S`,
   viewable: true,
   enableGame: true,
   enableAchievements: true,
@@ -650,7 +650,7 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
 describe('Test UPDATE_COURSE_CONFIG action', () => {
   const courseConfiguration: CourseConfiguration = {
     courseName: `CS2040S Data Structures and Algorithms (AY20/21 Semester 2)`,
-    courseShortname: `CS2040S`,
+    courseShortName: `CS2040S`,
     viewable: true,
     enableGame: false,
     enableAchievements: false,

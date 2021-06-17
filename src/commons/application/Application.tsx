@@ -37,7 +37,7 @@ export type StateProps = {
   name?: string;
   courses: UserCourse[];
   courseId?: number;
-  courseShortname?: string;
+  courseShortName?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes: AssessmentType[];
@@ -197,7 +197,7 @@ const Application: React.FC<ApplicationProps> = props => {
         name={props.name}
         courses={props.courses}
         courseId={props.courseId}
-        courseShortname={props.courseShortname}
+        courseShortName={props.courseShortName}
         enableAchievements={props.enableAchievements}
         enableSourcecast={props.enableSourcecast}
         assessmentTypes={props.assessmentTypes}

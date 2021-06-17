@@ -45,7 +45,7 @@ type StateProps = {
   name?: string;
   courses: UserCourse[];
   courseId?: number;
-  courseShortname?: string;
+  courseShortName?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes: AssessmentType[];
@@ -194,16 +194,17 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        {props.courseShortname && (
-          <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortname}</NavbarHeading>
+        {props.courseShortName && (
+          <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortName}</NavbarHeading>
         )}
-        {!props.courseShortname && (
+        {!props.courseShortName && (
           <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy @ NUS</NavbarHeading>
         )}
       </NavLink>
 
       {(props.role || Constants.enableGitHubAssessments) && (
         <NavigationBarMobileSideMenu
+          name={props.name}
           role={props.role}
           enableAchievements={props.enableAchievements}
           enableSourcecast={props.enableSourcecast}
@@ -246,10 +247,10 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       to="/academy"
     >
       <Icon icon={IconNames.SYMBOL_DIAMOND} />
-      {props.courseShortname && (
-        <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortname}</NavbarHeading>
+      {props.courseShortName && (
+        <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortName}</NavbarHeading>
       )}
-      {!props.courseShortname && (
+      {!props.courseShortName && (
         <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy @ NUS</NavbarHeading>
       )}
     </NavLink>
@@ -316,14 +317,16 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           <div className="navbar-button-text">Achievements</div>
         </NavLink>
       )}
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/interactive-sicp/index"
-      >
-        <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text">SICP JS</div>
-      </NavLink>
+      {props.name && (
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/interactive-sicp/index"
+        >
+          <Icon icon={IconNames.BOOK} />
+          <div className="navbar-button-text">SICP JS</div>
+        </NavLink>
+      )}
     </NavbarGroup>
   );
 

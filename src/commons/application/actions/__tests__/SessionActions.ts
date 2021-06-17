@@ -168,13 +168,13 @@ test('setUser generates correct action object', () => {
       {
         courseId: 1,
         courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-        courseShortname: `CS1101S`,
+        courseShortName: `CS1101S`,
         viewable: true
       },
       {
         courseId: 2,
         courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
-        courseShortname: `CS2030S`,
+        courseShortName: `CS2030S`,
         viewable: true
       }
     ]
@@ -189,7 +189,7 @@ test('setUser generates correct action object', () => {
 test('setCourseConfiguration generates correct action object', () => {
   const courseConfig = {
     courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-    courseShortname: `CS1101S`,
+    courseShortName: `CS1101S`,
     viewable: true,
     enableGame: true,
     enableAchievements: true,
@@ -529,7 +529,7 @@ test('updateLatestViewedCourse generates correct action object', () => {
 test('updateCourseConfig generates correct action object', () => {
   const courseConfig = {
     courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
-    courseShortname: `CS1101S`,
+    courseShortName: `CS1101S`,
     viewable: true,
     enableGame: true,
     enableAchievements: true,

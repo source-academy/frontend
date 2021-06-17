@@ -41,19 +41,19 @@ export const mockUser: User = {
     {
       courseId: 1,
       courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
-      courseShortname: `CS1101S`,
+      courseShortName: `CS1101S`,
       viewable: true
     },
     {
       courseId: 2,
       courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
-      courseShortname: `CS2040S`,
+      courseShortName: `CS2040S`,
       viewable: true
     },
     {
       courseId: 3,
       courseName: `CS2030S Programming Methodology II (AY21/22 Sem 1)`,
-      courseShortname: `CS2030S`,
+      courseShortName: `CS2030S`,
       viewable: false
     }
   ]
@@ -91,7 +91,7 @@ export const mockCourseRegistrations: CourseRegistration[] = [
 export const mockCourseConfigurations: CourseConfiguration[] = [
   {
     courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
-    courseShortname: `CS1101S`,
+    courseShortName: `CS1101S`,
     viewable: true,
     enableGame: false,
     enableAchievements: true,
@@ -103,7 +103,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
   },
   {
     courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
-    courseShortname: `CS2040S`,
+    courseShortName: `CS2040S`,
     viewable: true,
     enableGame: false,
     enableAchievements: false,

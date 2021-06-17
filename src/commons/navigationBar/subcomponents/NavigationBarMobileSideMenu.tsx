@@ -15,6 +15,7 @@ import { icons } from './AcademyNavigationBar';
 type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 
 type DrawerProps = {
+  name?: string;
   role?: Role;
   isOpen: boolean;
   onClose: () => void;
@@ -130,20 +131,22 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       </NavLink>
     )}
 
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link_mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/interactive-sicp/index"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.BOOK} />
-      <div className="navbar-button-text">SICP JS</div>
-    </NavLink>
+    {props.name && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link_mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/interactive-sicp/index"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text">SICP JS</div>
+      </NavLink>
+    )}
   </Drawer>
 );
 

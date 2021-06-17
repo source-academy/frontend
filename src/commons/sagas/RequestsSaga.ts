@@ -763,9 +763,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
       id: notification.id,
       type: notification.type,
       assessment_id: notification.assessment_id || undefined,
-      assessment_type: notification.assessment
-        ? notification.assessment.type
-        : undefined,
+      assessment_type: notification.assessment ? notification.assessment.type : undefined,
       assessment_title: notification.assessment ? notification.assessment.title : undefined,
       submission_id: notification.submission_id || undefined
     } as Notification;

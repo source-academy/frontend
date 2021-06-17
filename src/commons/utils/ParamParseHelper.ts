@@ -1,4 +1,4 @@
-import { AssessmentType } from "../assessment/AssessmentTypes";
+import { AssessmentType } from '../assessment/AssessmentTypes';
 
 /**
  * Converts an AssessmentType into a string for use in URLs.
