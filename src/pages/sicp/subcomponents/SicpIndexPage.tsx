@@ -11,19 +11,16 @@ const developers = 'Samuel Fang';
 
 const authors = (
   <div className="sicp-authors">
-    <br />
     <H4>{originalAuthors}</H4>
     <p>
       {originalWithAuthors}
       <i>— original authors</i>
     </p>
-    <br />
     <H4>{adaptedAuthors}</H4>
     <p>
       {adaptedWithAuthors}
       <i>— adapters to JavaScript</i>
     </p>
-    <br />
     <H4>{developers}</H4>
     <p>
       <i>— designer and developer of Interactive SICP</i>
