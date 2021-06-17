@@ -21,6 +21,7 @@ import { ControlBarGitHubLoginButton } from '../../controlBar/github/ControlBarG
 type GitHubAssessmentsNavigationBarProps = DispatchProps & StateProps;
 
 type DispatchProps = {
+  changeCourseHandler: (e: any) => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
 };
@@ -29,8 +30,7 @@ type StateProps = {
   octokit: Octokit | undefined;
   courses: string[];
   selectedCourse: string;
-  setSelectedCourse: (course: string) => void;
-  typeNames: string[];
+  types: string[];
 };
 
 /**
@@ -38,31 +38,22 @@ type StateProps = {
  */
 const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarProps> = props => {
   const handleClick = (e: any) => {
-    handleChange(e);
-  };
-
-  const handleChange = (e: any) => {
-    props.setSelectedCourse(e.target.innerText);
-    console.log(e.target.innerText);
+    props.changeCourseHandler(e);
   };
 
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
-        {props.typeNames.map(typeName => {
+        {props.types.map(type => {
           return (
             <NavLink
-              key={typeName}
-              exact={true}
-              to={{
-                pathname: `${typeName}`,
-                state: props.selectedCourse
-              }}
+              key={type}
+              to={`${type}`}
               activeClassName={Classes.ACTIVE}
               className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
             >
               <Icon icon={IconNames.FLAME} />
-              <div className="navbar-button-text hidden-xs hidden-sm">{typeName}</div>
+              <div className="navbar-button-text hidden-xs hidden-sm">{type}</div>
             </NavLink>
           );
         })}
@@ -87,7 +78,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
               </Popover2>
             }
             placeholder={'Select Course'}
-            onChange={handleChange}
+            onChange={props.changeCourseHandler}
             value={props.selectedCourse}
           />
         )}
