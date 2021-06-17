@@ -115,10 +115,7 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
             )
           }
         />
-        <Route
-          path="/githubassessments/editor"
-          component={GitHubAssessmentWorkspaceContainer}
-        />
+        <Route path="/githubassessments/editor" component={GitHubAssessmentWorkspaceContainer} />
         {octokit
           ? types.map((type, idx) => {
               const filteredAssessments = assessmentOverviews?.filter(

@@ -2,9 +2,11 @@
 
 exports[`GitHubClassroom renders correctly 1`] = `
 "<div className=\\"Academy\\">
-  <GitHubAssessmentsNavigationBar handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} octokit={{...}} courses={{...}} selectedCourse=\\"\\" setSelectedCourse={[Function: bound _dispatchAction]} typeNames={{...}} />
-  <div className=\\"Assessment\\">
-    <ContentDisplay display={{...}} loadContentDispatch={[Function: getGitHubOctokitInstance]} />
-  </div>
+  <GitHubAssessmentsNavigationBar changeCourseHandler={[Function: changeCourseHandler]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} octokit={{...}} courses={[undefined]} selectedCourse=\\"\\" types={{...}} assessmentOverviews={[undefined]} />
+  <Switch>
+    <Route path=\\"/githubassessments/login\\" render={[Function: render]} />
+    <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
+    <Route render={[Function: redirectToLogin]} />
+  </Switch>
 </div>"
 `;

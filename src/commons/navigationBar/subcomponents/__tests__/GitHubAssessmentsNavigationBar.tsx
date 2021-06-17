@@ -4,13 +4,14 @@ import { shallow } from 'enzyme';
 import GitHubAssessmentsNavigationBar from '../GitHubAssessmentsNavigationBar';
 
 const props = {
+  changeCourseHandler: () => {},
   handleGitHubLogIn: () => {},
   handleGitHubLogOut: () => {},
   octokit: new Octokit(undefined),
   courses: [],
   selectedCourse: '',
   setSelectedCourse: () => {},
-  typeNames: []
+  types: ['Missions', 'Quests']
 };
 
 test('Navbar renders correctly', () => {

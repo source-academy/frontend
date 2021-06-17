@@ -2,9 +2,22 @@
 
 exports[`Navbar renders correctly 1`] = `
 "<Blueprint3.Navbar className=\\"NavigationBar secondary-navbar\\">
-  <Blueprint3.NavbarGroup align=\\"left\\" />
+  <Blueprint3.NavbarGroup align=\\"left\\">
+    <NavLink to={{...}} activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
+      <Blueprint3.Icon icon=\\"flame\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+        Missions
+      </div>
+    </NavLink>
+    <NavLink to={{...}} activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
+      <Blueprint3.Icon icon=\\"lightbulb\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+        Quests
+      </div>
+    </NavLink>
+  </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <Blueprint3.InputGroup disabled={true} leftElement={{...}} placeholder=\\"Select Course\\" onChange={[Function: handleChange]} value=\\"\\" />
+    <Blueprint3.InputGroup disabled={true} leftElement={{...}} placeholder=\\"Select Course\\" onChange={[Function: changeCourseHandler]} value=\\"\\" />
     <ControlBarGitHubLoginButton onClickLogIn={[Function: handleGitHubLogIn]} onClickLogOut={[Function: handleGitHubLogOut]} />
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"

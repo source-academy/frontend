@@ -8,8 +8,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/sourcecast/:sourcecastId?\\" component={[Function: C] { displayName: 'withRouter(Connect(Sourcecast))', WrappedComponent: [Function: Sourcecast], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-      <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-      <Route path=\\"/githubassessments/:selectedType?\\" component={[Function: component]} />
+      <Route path=\\"/githubassessments\\" component={[Function: component]} />
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
       <Route exact={true} path=\\"/interactive-sicp\\" render={[Function: redirectToSicp]} />
       <Route path=\\"/interactive-sicp/:section\\" component={[Function: Sicp]} />
