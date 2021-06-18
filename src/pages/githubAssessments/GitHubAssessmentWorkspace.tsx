@@ -46,11 +46,6 @@ import {
   getMissionData
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
-  GitHubMissionSaveDialog,
-  GitHubMissionSaveDialogProps,
-  GitHubMissionSaveDialogResolution
-} from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import {
   MissionData,
   MissionMetadata,
   MissionRepoData,
@@ -165,7 +160,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
   const [displayMCQInEditor, setDisplayMCQInEditor] = React.useState(true);
   const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
-  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData | undefined>(undefined);
+  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData | undefined>(
+    undefined
+  );
   const assessmentOverview = props.location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
@@ -469,21 +466,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       cachedTaskList,
       isTeacherMode
     );
-    const changedFiles = Object.keys(filenameToContentMap).sort();
-
-    const dialogResults = await promisifyDialog<
-      GitHubMissionSaveDialogProps,
-      GitHubMissionSaveDialogResolution
-    >(GitHubMissionSaveDialog, resolve => ({
-      repoName: (missionRepoData as MissionRepoData).repoName,
-      filesToChangeOrCreate: changedFiles,
-      filesToDelete: foldersToDelete,
-      resolveDialog: dialogResults => resolve(dialogResults)
-    }));
-
-    if (!dialogResults.confirmSave) {
-      return;
-    }
+    const changedFiles = Object.keys(filenameToContentMap);
 
     type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
       typeof octokit.users.getAuthenticated
@@ -491,7 +474,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const authUser: GetAuthenticatedResponse = await octokit.users.getAuthenticated();
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
-    const commitMessage = dialogResults.commitMessage;
+    const commitMessage = '';
 
     for (let i = 0; i < foldersToDelete.length; i++) {
       await conductDelete(foldersToDelete[i], githubName, githubEmail, commitMessage);
@@ -511,17 +494,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setHasUnsavedChangesToBriefing(false);
     setHasUnsavedChangesToMetadata(false);
   }, [
+    octokit,
+    isTeacherMode,
     briefingContent,
-    cachedBriefingContent,
+    missionMetadata,
     taskList,
     cachedTaskList,
-    missionMetadata,
+    cachedBriefingContent,
     cachedMissionMetadata,
     conductSave,
-    conductDelete,
-    octokit,
-    missionRepoData,
-    isTeacherMode
+    conductDelete
   ]);
 
   /**
@@ -602,7 +584,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onClickSave = useCallback(() => {
     if (assessmentOverview !== undefined && new Date() > assessmentOverview.dueDate) {
-      showWarningMessage("It is past the due date for this assessment!");
+      showWarningMessage('It is past the due date for this assessment!');
       return;
     }
 
@@ -658,7 +640,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   );
 
   const onClickPrevious = useCallback(() => {
-    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList, missionRepoData as MissionRepoData)) {
+    if (
+      shouldProceedToChangeTask(
+        currentTaskNumber,
+        taskList,
+        cachedTaskList,
+        missionRepoData as MissionRepoData
+      )
+    ) {
       let activeTaskList = taskList;
       if (missionRepoData !== undefined) {
         activeTaskList = cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData));
@@ -678,7 +667,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   ]);
 
   const onClickNext = useCallback(() => {
-    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList, missionRepoData as MissionRepoData)) {
+    if (
+      shouldProceedToChangeTask(
+        currentTaskNumber,
+        taskList,
+        cachedTaskList,
+        missionRepoData as MissionRepoData
+      )
+    ) {
       let activeTaskList = taskList;
       if (missionRepoData !== undefined) {
         activeTaskList = cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData));
