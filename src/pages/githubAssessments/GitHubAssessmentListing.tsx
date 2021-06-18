@@ -104,24 +104,18 @@ function convertAssessmentOverviewToCard(
   const hasDueDate = new Date(8640000000000000) > assessmentOverview.dueDate;
   const isOverdue = new Date() > assessmentOverview.dueDate;
 
+  const assessmentNotAccepted = assessmentOverview.link !== undefined;
   let buttonText = 'Open';
-  if (assessmentOverview.link) {
+  const handleClick = () => history.push(`/githubassessments/editor`, assessmentOverview);
+
+  if (assessmentNotAccepted) {
     buttonText = 'Accept';
-  } else {
-    if (isOverdue) {
-      buttonText = 'Review Answers';
-    }
+    window.open(assessmentOverview.link);
   }
 
-  const data = assessmentOverview.missionRepoData;
-
-  const handleClick = () => {
-    if (assessmentOverview.link) {
-      window.open(assessmentOverview.link);
-    } else {
-      history.push(`/githubassessments/editor`, data);
-    }
-  };
+  if (isOverdue) {
+    buttonText = 'Review Answers';
+  }
 
   return (
     <div key={ownerSlashName}>
