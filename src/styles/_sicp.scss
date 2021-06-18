@@ -227,6 +227,14 @@ $sicp-background-color: #ffffff;
   overflow-y: auto;
   text-align: left;
 
+  .bp3-tree-node-list {
+    padding: 0;
+  }
+
+  .bp3-tree-node-label {
+    padding-left: 7px;
+  }
+
   .bp3-tree-node-caret {
     color: #777777 !important;
     scale: 1.25;
