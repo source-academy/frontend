@@ -1,19 +1,12 @@
-import { MathJax } from 'better-react-mathjax';
 import * as React from 'react';
+import Latex from 'react-latex-next';
 
 type SicpLatexProps = {
   math: string;
-  inline: boolean;
 };
 
 const SicpLatex: React.FC<SicpLatexProps> = props => {
-  const { math, inline } = props;
-
-  return (
-    <MathJax inline={inline} dynamic={false}>
-      {math}
-    </MathJax>
-  );
+  return <Latex>{props.math}</Latex>;
 };
 
 export default SicpLatex;
