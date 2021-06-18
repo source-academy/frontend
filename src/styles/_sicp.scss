@@ -3,7 +3,6 @@ $sicp-background-color: #ffffff;
 
 .Sicp {
   width: 100%;
-  text-align: justify;
   color: $sicp-text-color;
   overflow: auto;
   background-color: $sicp-background-color;
@@ -45,10 +44,6 @@ $sicp-background-color: #ffffff;
 
     height: fit-content;
     background-color: $sicp-background-color;
-
-    h1 {
-      text-align: left;
-    }
 
     p {
       display: inline;
@@ -204,15 +199,6 @@ $sicp-background-color: #ffffff;
     }
   }
 
-  // text container
-  .sicp-text {
-    text-align: justify;
-  }
-
-  .sicp-epigraph {
-    text-align: justify;
-  }
-
   .sicp-attribution {
     text-align: right;
   }
@@ -220,7 +206,6 @@ $sicp-background-color: #ffffff;
   .sicp-exercise {
     margin: 10px 0;
     padding: 10px;
-    text-align: justify;
     background-color: $sicp-background-color !important;
 
     .sicp-button-container {
@@ -241,6 +226,14 @@ $sicp-background-color: #ffffff;
 .sicp-toc {
   overflow-y: auto;
   text-align: left;
+
+  .bp3-tree-node-list {
+    padding: 0;
+  }
+
+  .bp3-tree-node-label {
+    padding-left: 7px;
+  }
 
   .bp3-tree-node-caret {
     color: #777777 !important;
