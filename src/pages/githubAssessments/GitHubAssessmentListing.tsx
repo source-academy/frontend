@@ -115,9 +115,7 @@ function convertAssessmentOverviewToCard(
   if (assessmentNotAccepted) {
     buttonText = 'Accept';
     handleClick = () => window.open(assessmentOverview.link);
-  }
-
-  if (isOverdue) {
+  } else if (isOverdue) {
     buttonText = 'Review Answers';
   }
 
