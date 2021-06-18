@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
-import { GHAssessmentOverview } from 'src/pages/githubAssessments/GitHubClassroom';
+import { GHAssessmentTypeOverview } from 'src/pages/githubAssessments/GitHubClassroom';
 
 import { ControlBarGitHubLoginButton } from '../../controlBar/github/ControlBarGitHubLoginButton';
 
@@ -32,8 +32,8 @@ type StateProps = {
   octokit?: Octokit;
   courses?: string[];
   selectedCourse: string;
-  types: string[];
-  assessmentOverviews?: GHAssessmentOverview[];
+  types?: string[];
+  assessmentTypeOverviews?: GHAssessmentTypeOverview[];
 };
 
 /**
@@ -47,7 +47,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
-        {props.types.map((type, idx) => {
+        {props.types?.map((type, idx) => {
           return (
             <NavLink
               key={type}
@@ -55,8 +55,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
                 pathname: `/githubassessments/${assessmentTypeLink(type)}`,
                 state: {
                   courses: props.courses,
-                  types: props.types,
-                  assessmentOverviews: props.assessmentOverviews,
+                  assessmentTypeOverviews: props.assessmentTypeOverviews,
                   selectedCourse: props.selectedCourse
                 }
               }}
@@ -70,7 +69,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
         })}
       </NavbarGroup>
       <NavbarGroup align={Alignment.RIGHT}>
-        {props.octokit !== undefined && props.types.length > 0 && (
+        {props.octokit !== undefined && props.types && props.types.length > 0 && (
           <InputGroup
             key="courseselect"
             disabled={true}

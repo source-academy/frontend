@@ -28,8 +28,7 @@ type DispatchProps = {
 const GitHubClassroom: React.FC<DispatchProps> = props => {
   const location = useLocation<{
     courses: string[] | undefined;
-    types: string[] | undefined;
-    assessmentOverviews: GHAssessmentOverview[] | undefined;
+    assessmentTypeOverviews: GHAssessmentTypeOverview[] | undefined;
     selectedCourse: string | undefined;
   }>();
   const octokit: Octokit | undefined = useSelector(
@@ -39,10 +38,10 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
   const [selectedCourse, setSelectedCourse] = useState<string>(
     location.state?.selectedCourse || ''
   );
-  const [types, setTypes] = useState<string[]>(location.state?.types || []);
-  const [assessmentOverviews, setAssessmentOverviews] = useState<
-    GHAssessmentOverview[] | undefined
-  >(location.state?.assessmentOverviews);
+  const [assessmentTypeOverviews, setAssessmentTypeOverviews] = useState<
+    GHAssessmentTypeOverview[] | undefined
+  >(location.state?.assessmentTypeOverviews);
+  const types = assessmentTypeOverviews?.map(overview => overview.typeName);
 
   useEffect(() => {
     if (octokit === undefined) {
@@ -50,38 +49,51 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
     }
 
     if (!courses) {
-      fetchCourses(octokit, setCourses, setSelectedCourse, setTypes, setAssessmentOverviews);
+      fetchCourses(octokit, setCourses, setSelectedCourse, setAssessmentTypeOverviews);
     }
   }, [courses, octokit]);
 
-  const changeCourseHandler = (e: any) => {
-    setSelectedCourse(e.target.innerText);
-    if (octokit === undefined) {
-      return;
-    }
+  const changeCourseHandler = React.useCallback(
+    (e: any) => {
+      if (octokit === undefined) {
+        return;
+      }
 
-    setAssessmentOverviews(undefined);
-    fetchAssessmentOverviews(octokit, selectedCourse, setTypes, setAssessmentOverviews);
-  };
+      fetchAssessmentOverviews(octokit, e.target.innerText, setAssessmentTypeOverviews);
+      setSelectedCourse(e.target.innerText);
+    },
+    [octokit, setSelectedCourse, setAssessmentTypeOverviews]
+  );
 
   const refreshAssessmentOverviews = () => {
     if (octokit === undefined) {
       return;
     }
 
-    setAssessmentOverviews(undefined);
-    fetchAssessmentOverviews(octokit, selectedCourse, setTypes, setAssessmentOverviews);
+    fetchAssessmentOverviews(octokit, selectedCourse, setAssessmentTypeOverviews);
   };
 
-  const redirectToLogin = () => <Redirect to="/githubassessments/login" />;
+  const redirectToLogin = () => (
+    <Redirect
+      to={{
+        pathname: '/githubassessments/login',
+        state: {
+          courses: courses,
+          assessmentTypeOverviews: assessmentTypeOverviews,
+          selectedCourse: selectedCourse
+        }
+      }}
+    />
+  );
   const redirectToAssessments = () => (
     <Redirect
       to={{
-        pathname: `/githubassessments/${assessmentTypeLink(types[0])}`,
+        // Types should exist whenever we redirect to assessments as this redirect is only called
+        // when a course exists. Unless the course.json is configured wrongly.
+        pathname: `/githubassessments/${assessmentTypeLink(types ? types[0] : 'login')}`,
         state: {
           courses: courses,
-          types: types,
-          assessmentOverviews: assessmentOverviews,
+          assessmentTypeOverviews: assessmentTypeOverviews,
           selectedCourse: selectedCourse
         }
       }}
@@ -93,18 +105,23 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
       <GitHubAssessmentsNavigationBar
         changeCourseHandler={changeCourseHandler}
         handleGitHubLogIn={props.handleGitHubLogIn}
-        handleGitHubLogOut={props.handleGitHubLogOut}
+        handleGitHubLogOut={() => {
+          props.handleGitHubLogOut();
+          setCourses(undefined);
+          setAssessmentTypeOverviews(undefined);
+          setSelectedCourse('');
+        }}
         octokit={octokit}
         courses={courses}
         selectedCourse={selectedCourse}
         types={types}
-        assessmentOverviews={assessmentOverviews}
+        assessmentTypeOverviews={assessmentTypeOverviews}
       />
       <Switch>
         <Route
           path="/githubassessments/login"
-          render={() =>
-            octokit && (!courses || !assessmentOverviews) ? (
+          render={() => {
+            return octokit && (!courses || (courses.length > 0 && !assessmentTypeOverviews)) ? (
               <ContentDisplay
                 display={<NonIdealState description="Loading..." icon={<Spinner />} />}
                 loadContentDispatch={() => {}}
@@ -121,15 +138,15 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
                 }
                 loadContentDispatch={() => {}}
               />
-            )
-          }
+            );
+          }}
         />
         <Route path="/githubassessments/editor" component={GitHubAssessmentWorkspaceContainer} />
         {octokit
-          ? types.map((type, idx) => {
-              const filteredAssessments = assessmentOverviews?.filter(
-                assessment => assessment.type === type
-              );
+          ? types?.map((type, idx) => {
+              const filteredAssessments = assessmentTypeOverviews
+                ? assessmentTypeOverviews[idx].assessments
+                : undefined;
               return (
                 <Route
                   path={`/githubassessments/${assessmentTypeLink(type)}`}
@@ -161,8 +178,7 @@ async function fetchCourses(
   octokit: Octokit,
   setCourses: (courses: string[]) => void,
   setSelectedCourse: (course: string) => void,
-  setTypes: (types: string[]) => void,
-  setAssessmentOverviews: (assessmentOverviews: GHAssessmentOverview[]) => void
+  setAssessmentTypeOverviews: (assessmentTypeOverviews: GHAssessmentTypeOverview[]) => void
 ) {
   const courses: string[] = [];
   const results = (await octokit.orgs.listForAuthenticatedUser({ per_page: 100 })).data;
@@ -173,12 +189,16 @@ async function fetchCourses(
   setCourses(courses);
   if (courses.length > 0) {
     setSelectedCourse(courses[0]);
-    fetchAssessmentOverviews(octokit, courses[0], setTypes, setAssessmentOverviews);
+    fetchAssessmentOverviews(octokit, courses[0], setAssessmentTypeOverviews);
   }
 }
 
+export type GHAssessmentTypeOverview = {
+  typeName: string;
+  assessments: GHAssessmentOverview[];
+};
+
 export type GHAssessmentOverview = {
-  type: string;
   title: string;
   coverImage: string;
   webSummary: string;
@@ -202,9 +222,9 @@ type GitHubAssessment = {
 async function fetchAssessmentOverviews(
   octokit: Octokit,
   selectedCourse: string,
-  setTypes: (types: string[]) => void,
-  setAssessmentOverviews: (assessmentOverviews: GHAssessmentOverview[]) => void
+  setAssessmentTypeOverviews: (assessmentTypeOverviews: GHAssessmentTypeOverview[]) => void
 ) {
+  console.log(selectedCourse);
   const userLogin = (await octokit.users.getAuthenticated()).data.login;
   const orgLogin = 'source-academy-course-'.concat(selectedCourse);
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
@@ -215,8 +235,6 @@ async function fetchAssessmentOverviews(
   ).data;
   const courseRepos = userRepos.filter(repo => repo.owner!.login === orgLogin);
   const courseInfoRepo = courseRepos.find(repo => repo.name.includes('course-info'));
-
-  const assessmentOverviews: GHAssessmentOverview[] = [];
 
   if (courseInfoRepo === undefined) {
     showWarningMessage('The course-info repository cannot be located.', 2000);
@@ -241,13 +259,8 @@ async function fetchAssessmentOverviews(
 
       const courseInfo = JSON.parse(Buffer.from((result.data as any).content, 'base64').toString());
 
-      const typeNames: string[] = [];
-      courseInfo.types.forEach((type: { typeName: any; assessments: any }) => {
-        typeNames.push(type.typeName);
-      });
-      setTypes(typeNames);
-
       courseInfo.types.forEach((type: { typeName: string; assessments: [GitHubAssessment] }) => {
+        const assessmentOverviews: GHAssessmentOverview[] = [];
         type.assessments.forEach((assessment: GitHubAssessment) => {
           if (!assessment.published) {
             return;
@@ -267,7 +280,6 @@ async function fetchAssessmentOverviews(
           }
 
           assessmentOverviews.push({
-            type: type.typeName,
             title: assessment.title,
             coverImage: assessment.coverImage,
             webSummary: assessment.shortSummary,
@@ -282,14 +294,14 @@ async function fetchAssessmentOverviews(
 
           assessmentOverviews.sort((a, b) => (a.dueDate <= b.dueDate ? -1 : 1));
         });
+        (type as any).assessments = assessmentOverviews;
       });
+      setAssessmentTypeOverviews(courseInfo.types);
     } else {
       showWarningMessage('The course-info.json file cannot be located.', 2000);
       return;
     }
   }
-
-  setAssessmentOverviews(assessmentOverviews);
 }
 
 export default GitHubClassroom;
