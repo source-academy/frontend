@@ -74,24 +74,13 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
     fetchAssessmentOverviews(octokit, selectedCourse, setAssessmentTypeOverviews);
   };
 
-  const redirectToLogin = () => (
-    <Redirect
-      to={{
-        pathname: '/githubassessments/login',
-        state: {
-          courses: courses,
-          assessmentTypeOverviews: assessmentTypeOverviews,
-          selectedCourse: selectedCourse
-        }
-      }}
-    />
-  );
+  const redirectToLogin = () => <Redirect to="/githubassessments/login" />;
   const redirectToAssessments = () => (
     <Redirect
       to={{
         // Types should exist whenever we redirect to assessments as this redirect is only called
         // when a course exists. Unless the course.json is configured wrongly.
-        pathname: `/githubassessments/${assessmentTypeLink(types ? types[0] : 'login')}`,
+        pathname: `/githubassessments/${assessmentTypeLink(types ? types[0] : 'welcome')}`,
         state: {
           courses: courses,
           assessmentTypeOverviews: assessmentTypeOverviews,
@@ -146,9 +135,7 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
         />
         <Route
           path="/githubassessments/welcome"
-          component={() =>
-            octokit ? <GitHubClassroomWelcome /> : <Redirect to="/githubassessments/login" />
-          }
+          component={() => (octokit ? <GitHubClassroomWelcome /> : redirectToLogin())}
         />
         <Route path="/githubassessments/editor" component={GitHubAssessmentWorkspaceContainer} />
         {octokit
@@ -170,7 +157,11 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
               );
             })
           : null}
-        <Route render={redirectToLogin} />
+        <Route
+          render={
+            octokit && courses && courses.length > 0 ? redirectToAssessments : redirectToLogin
+          }
+        />
       </Switch>
     </div>
   );
