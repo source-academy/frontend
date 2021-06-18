@@ -130,7 +130,7 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
       <img
         src={Constants.interactiveSicpDataUrl + obj['src']}
         alt={obj['id']}
-        width={obj['scale']}
+        width={obj['scale'] || '100%'}
       />
     );
   } else if (obj['snippet']) {
