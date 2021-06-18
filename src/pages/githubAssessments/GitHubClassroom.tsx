@@ -15,6 +15,7 @@ import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcompo
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
+import GitHubClassroomWelcome from './GitHubClassroomWelcome';
 
 type DispatchProps = {
   handleGitHubLogIn: () => void;
@@ -126,6 +127,8 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
                 display={<NonIdealState description="Loading..." icon={<Spinner />} />}
                 loadContentDispatch={() => {}}
               />
+            ) : octokit && courses && courses.length === 0 ? (
+              <Redirect to="/githubassessments/welcome" />
             ) : octokit ? (
               redirectToAssessments()
             ) : (
@@ -140,6 +143,12 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
               />
             );
           }}
+        />
+        <Route
+          path="/githubassessments/welcome"
+          component={() =>
+            octokit ? <GitHubClassroomWelcome /> : <Redirect to="/githubassessments/login" />
+          }
         />
         <Route path="/githubassessments/editor" component={GitHubAssessmentWorkspaceContainer} />
         {octokit
@@ -224,7 +233,6 @@ async function fetchAssessmentOverviews(
   selectedCourse: string,
   setAssessmentTypeOverviews: (assessmentTypeOverviews: GHAssessmentTypeOverview[]) => void
 ) {
-  console.log(selectedCourse);
   const userLogin = (await octokit.users.getAuthenticated()).data.login;
   const orgLogin = 'source-academy-course-'.concat(selectedCourse);
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
