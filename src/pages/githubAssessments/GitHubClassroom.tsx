@@ -64,6 +64,15 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
     fetchAssessmentOverviews(octokit, selectedCourse, setTypes, setAssessmentOverviews);
   };
 
+  const refreshAssessmentOverviews = () => {
+    if (octokit === undefined) {
+      return;
+    }
+
+    setAssessmentOverviews(undefined);
+    fetchAssessmentOverviews(octokit, selectedCourse, setTypes, setAssessmentOverviews);
+  };
+
   const redirectToLogin = () => <Redirect to="/githubassessments/login" />;
   const redirectToAssessments = () => (
     <Redirect
@@ -125,7 +134,10 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
                 <Route
                   path={`/githubassessments/${assessmentTypeLink(type)}`}
                   render={() => (
-                    <GitHubAssessmentListing assessmentOverviews={filteredAssessments} />
+                    <GitHubAssessmentListing
+                      assessmentOverviews={filteredAssessments}
+                      refreshAssessmentOverviews={refreshAssessmentOverviews}
+                    />
                   )}
                   key={idx}
                 />
@@ -152,16 +164,16 @@ async function fetchCourses(
   setTypes: (types: string[]) => void,
   setAssessmentOverviews: (assessmentOverviews: GHAssessmentOverview[]) => void
 ) {
-  const orgList: string[] = [];
+  const courses: string[] = [];
   const results = (await octokit.orgs.listForAuthenticatedUser({ per_page: 100 })).data;
   const orgs = results.filter(org => org.login.includes('source-academy-course')); // filter only organisations with 'source-academy-course' in name
   orgs.forEach(org => {
-    orgList.push(org.login);
+    courses.push(org.login.replace('source-academy-course-', ''));
   });
-  setCourses(orgList);
-  if (orgList.length > 0) {
-    setSelectedCourse(orgList[0]);
-    fetchAssessmentOverviews(octokit, orgList[0], setTypes, setAssessmentOverviews);
+  setCourses(courses);
+  if (courses.length > 0) {
+    setSelectedCourse(courses[0]);
+    fetchAssessmentOverviews(octokit, courses[0], setTypes, setAssessmentOverviews);
   }
 }
 
@@ -194,13 +206,14 @@ async function fetchAssessmentOverviews(
   setAssessmentOverviews: (assessmentOverviews: GHAssessmentOverview[]) => void
 ) {
   const userLogin = (await octokit.users.getAuthenticated()).data.login;
+  const orgLogin = 'source-academy-course-'.concat(selectedCourse);
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
   >;
   const userRepos: ListForAuthenticatedUserData = (
     await octokit.repos.listForAuthenticatedUser({ per_page: 100 })
   ).data;
-  const courseRepos = userRepos.filter(repo => repo.owner!.login === selectedCourse);
+  const courseRepos = userRepos.filter(repo => repo.owner!.login === orgLogin);
   const courseInfoRepo = courseRepos.find(repo => repo.name.includes('course-info'));
 
   const assessmentOverviews: GHAssessmentOverview[] = [];
@@ -236,6 +249,10 @@ async function fetchAssessmentOverviews(
 
       courseInfo.types.forEach((type: { typeName: string; assessments: [GitHubAssessment] }) => {
         type.assessments.forEach((assessment: GitHubAssessment) => {
+          if (!assessment.published) {
+            return;
+          }
+
           const prefixLogin = assessment.repoPrefix + '-' + userLogin;
           const missionRepo = userRepos.find(repo => repo.name === prefixLogin);
 
@@ -262,6 +279,8 @@ async function fetchAssessmentOverviews(
             dueDate: new Date(assessment.closeAt),
             link: acceptLink
           });
+
+          assessmentOverviews.sort((a, b) => (a.dueDate <= b.dueDate ? -1 : 1));
         });
       });
     } else {

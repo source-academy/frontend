@@ -22,6 +22,7 @@ import { GHAssessmentOverview } from './GitHubClassroom';
 
 type GitHubAssessmentListingProps = {
   assessmentOverviews?: GHAssessmentOverview[];
+  refreshAssessmentOverviews: () => void;
 };
 
 /**
@@ -42,6 +43,11 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
     []
   );
 
+  const refreshButton = useMemo(
+    () => <Button icon={IconNames.REFRESH} onClick={props.refreshAssessmentOverviews} />,
+    [props.refreshAssessmentOverviews]
+  );
+
   if (!props.assessmentOverviews) {
     display = (
       <>
@@ -53,6 +59,7 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
     display = (
       <>
         {createAssessmentButton}
+        {refreshButton}
         <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />
       </>
     );
@@ -64,6 +71,7 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
     display = (
       <>
         {createAssessmentButton}
+        {refreshButton}
         {cards}
       </>
     );
