@@ -147,6 +147,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         }
       }
     }
+    props.onSubmit('');
   }
 
   async function handleNodeClick(
