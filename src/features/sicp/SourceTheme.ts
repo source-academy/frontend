@@ -2,10 +2,12 @@
  * Source Theme for use with react-syntax-highlighter.
  * Tries to match the Source Theme for Ace Editor in js-slang
  */
+const SourceThemeBackground = '#2c3e50';
+
 export const SourceTheme = {
   'code[class*="language-"]': {
     color: 'white',
-    background: '#2c3e50',
+    background: 'transparent',
     fontFamily: "'Inconsolata', 'Consolas', monospace",
     textAlign: 'left',
     whiteSpace: 'pre',
@@ -24,7 +26,7 @@ export const SourceTheme = {
   },
   'pre[class*="language-"]': {
     color: 'white',
-    background: '#2c3e50',
+    background: SourceThemeBackground,
     fontFamily: "'Inconsolata', 'Consolas', monospace",
     textAlign: 'left',
     whiteSpace: 'pre',
@@ -45,7 +47,7 @@ export const SourceTheme = {
     borderRadius: '0.3em'
   },
   ':not(pre) > code[class*="language-"]': {
-    background: '#2c3e50',
+    background: 'transparent',
     padding: '0.1em',
     borderRadius: '0.3em',
     whiteSpace: 'normal'

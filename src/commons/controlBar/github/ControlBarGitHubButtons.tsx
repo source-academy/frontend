@@ -5,23 +5,19 @@ import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { GitHubState } from '../../../features/github/GitHubTypes';
+import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import controlButton from '../../ControlButton';
 import Constants from '../../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs: Octokit;
-  githubSaveInfo: { repoName: string; filePath: string };
+  githubSaveInfo: GitHubSaveInfo;
+  isDirty: boolean;
   onClickOpen?: () => void;
   onClickSave?: () => void;
   onClickSaveAs?: () => void;
   onClickLogIn?: () => void;
   onClickLogOut?: () => void;
-};
-
-const stateToIntent: { [state in GitHubState]: Intent } = {
-  LOGGED_OUT: Intent.NONE,
-  LOGGED_IN: Intent.NONE
 };
 
 /**
@@ -32,16 +28,23 @@ const stateToIntent: { [state in GitHubState]: Intent } = {
  */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+
+  const filePath = props.githubSaveInfo.filePath || '';
+  const fileName = (filePath.split('\\').pop() || '').split('/').pop() || '';
+
   const isLoggedIn = props.loggedInAs !== undefined;
-
   const shouldDisableButtons = !isLoggedIn;
-  const shouldDisableSaveButton =
-    props.githubSaveInfo.repoName === '' || props.githubSaveInfo.filePath === '';
+  const hasFilePath = filePath !== '';
+  const hasOpenFile = isLoggedIn && hasFilePath;
 
-  const state: GitHubState = isLoggedIn ? 'LOGGED_IN' : 'LOGGED_OUT';
+  const mainButtonDisplayText = hasOpenFile ? fileName : 'GitHub';
+  let mainButtonIntent: Intent = Intent.NONE;
+  if (hasOpenFile) {
+    mainButtonIntent = props.isDirty ? Intent.WARNING : Intent.PRIMARY;
+  }
 
-  const mainButton = controlButton('GitHub', IconNames.GIT_BRANCH, null, {
-    intent: stateToIntent[state]
+  const mainButton = controlButton(mainButtonDisplayText, IconNames.GIT_BRANCH, null, {
+    intent: mainButtonIntent
   });
 
   const openButton = controlButton(
@@ -57,7 +60,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     IconNames.FLOPPY_DISK,
     props.onClickSave,
     undefined,
-    shouldDisableButtons || shouldDisableSaveButton
+    shouldDisableButtons || !hasOpenFile
   );
 
   const saveAsButton = controlButton(

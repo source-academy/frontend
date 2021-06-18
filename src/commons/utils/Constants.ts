@@ -31,8 +31,8 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
-const interactiveSicpUrl =
-  process.env.REACT_APP_INTERACTIVE_SICP_URL || 'https://source-academy.github.io/sicp/';
+const interactiveSicpDataUrl =
+  process.env.REACT_APP_INTERACTIVE_SICP_DATA_URL || 'https://source-academy.github.io/sicp/'; // data for interactive-sicp (images and json files)
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -80,9 +80,9 @@ export enum Links {
   sourceDocs = 'https://source-academy.github.io/source/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
-  textbook = 'https://source-academy.github.io/sicp/',
-  textbookChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
-  textbookChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
+  textbook = 'https://source-academy.github.io/interactive-sicp/',
+  textbookChapter2_2 = 'https://source-academy.github.io/interactive-sicp/2.2',
+  textbookChapter3_2 = 'https://source-academy.github.io/interactive-sicp/3.2',
 
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
@@ -127,7 +127,7 @@ const Constants = {
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval,
-  interactiveSicpUrl
+  interactiveSicpDataUrl
 };
 
 export default Constants;

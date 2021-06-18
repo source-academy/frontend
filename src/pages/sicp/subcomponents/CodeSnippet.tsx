@@ -1,9 +1,9 @@
-import { Pre } from '@blueprintjs/core';
+import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
@@ -113,9 +113,11 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           )}
         </div>
       ) : (
-        <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
-          {body}
-        </SyntaxHighlighter>
+        <Card className="sicp-code-snippet-closed" interactive={true} elevation={Elevation.TWO}>
+          <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
+            {body}
+          </SyntaxHighlighter>
+        </Card>
       )}
       {output && <Pre>{output}</Pre>}
     </div>

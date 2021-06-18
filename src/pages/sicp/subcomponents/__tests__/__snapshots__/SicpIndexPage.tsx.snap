@@ -19,7 +19,6 @@ exports[`Sicp index page 1`] = `
           </Component>
         </div>
         <div className=\\"sicp-authors\\">
-          <br />
           <Component>
             <h4 className=\\"bp3-heading\\">
               Harold Abelson and Gerald Jay Sussman
@@ -31,16 +30,25 @@ exports[`Sicp index page 1`] = `
               — original authors
             </i>
           </p>
-          <br />
           <Component>
             <h4 className=\\"bp3-heading\\">
               Martin Henz and Tobias Wrigstad
             </h4>
           </Component>
           <p>
-            with Chan Ger Hean, He Xinyue, Liu Hang, Feng Piaopiao, Jolyn Tan and Wang Qian
+            with Julie Sussman
             <i>
               — adapters to JavaScript
+            </i>
+          </p>
+          <Component>
+            <h4 className=\\"bp3-heading\\">
+              Samuel Fang
+            </h4>
+          </Component>
+          <p>
+            <i>
+              — designer and developer of Interactive SICP
             </i>
           </p>
         </div>

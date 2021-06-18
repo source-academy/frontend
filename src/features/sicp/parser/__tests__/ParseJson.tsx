@@ -1,22 +1,21 @@
-import { MathJaxContext } from 'better-react-mathjax';
 import { mount, shallow } from 'enzyme';
 import lzString from 'lz-string';
-import { mathjaxConfig } from 'src/pages/sicp/Sicp';
+import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
 import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
 
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];
-const sectionTags = ['SECTION', 'SUBSECTION', 'SUBSUBSECTION', 'MATTER', 'CHAPTER', 'REFERENCES'];
 const listTags = ['OL', 'UL'];
 const symbolTags = ['BR', 'LaTeX', 'TeX'];
-const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'METAPHRASE', 'META'];
+const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'META'];
 const latexTags = ['LATEX', 'LATEXINLINE'];
 const linkTags = ['LINK', 'REF', 'FOOTNOTE_REF'];
 
 const epigraphTag = 'EPIGRAPH';
 const tableTag = 'TABLE';
 const exerciseTag = 'EXERCISE';
+const sectionTag = 'SECTION';
 const snippetTag = 'SNIPPET';
 const figureTag = 'FIGURE';
 const displayFootnoteTag = 'DISPLAYFOOTNOTE';
@@ -28,8 +27,12 @@ jest.mock('src/commons/utils/Constants', () => ({
   Links: {
     sourceDocs: ''
   },
-  interactiveSicpUrl: 'source-academy.github.io/sicp/'
+  interactiveSicpDataUrl: 'https://source-academy.github.io/sicp/'
 }));
+
+jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => {
+  return (props: CodeSnippetProps) => <div {...props}>Code Snippet</div>;
+});
 
 const mockData = {
   text: {
@@ -44,21 +47,15 @@ const mockData = {
 
 const mockRef = { current: {} };
 
-const processTag = (tag: string, obj: JsonType, math: boolean) => {
+const processTag = (tag: string, obj: JsonType) => {
   obj['tag'] = tag;
 
-  return math ? (
-    <MathJaxContext version={3} config={mathjaxConfig}>
-      {processingFunctions[tag](obj, mockRef)}
-    </MathJaxContext>
-  ) : (
-    processingFunctions[tag](obj, mockRef)
-  );
+  return processingFunctions[tag](obj, mockRef);
 };
 
-const testTagSuccessful = (obj: JsonType, tag: string, text: string = '', math = false) => {
+const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = shallow(processTag(tag, obj, math));
+    const tree = shallow(processTag(tag, obj));
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -79,12 +76,12 @@ describe('Parse heading', () => {
 });
 
 describe('Parse section', () => {
-  const tags = sectionTags;
+  const tag = sectionTag;
   const text = { tag: 'TEXT', child: [mockData['text'], mockData['text']] };
   const content = [text, text];
   const obj = { body: 'Title', child: content };
 
-  tags.forEach(x => testTagSuccessful(obj, x));
+  testTagSuccessful(obj, tag);
 });
 
 describe('Parse list', () => {
@@ -215,7 +212,7 @@ describe('Parse snippet', () => {
     objLatex
   ];
 
-  objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text'], true));
+  objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text']));
 });
 
 describe('Parse figures', () => {
@@ -300,7 +297,7 @@ describe('Parse latex', () => {
     body: math
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag, '', true));
+  tag.forEach(tag => testTagSuccessful(obj, tag, ''));
 });
 
 describe('Parse links', () => {

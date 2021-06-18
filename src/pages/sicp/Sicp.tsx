@@ -1,6 +1,7 @@
+import 'katex/dist/katex.min.css';
+
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { MathJaxContext } from 'better-react-mathjax';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
@@ -13,7 +14,7 @@ import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = RouteComponentProps<{}>;
 
-const baseUrl = Constants.interactiveSicpUrl + '/json/';
+const baseUrl = Constants.interactiveSicpDataUrl + 'json/';
 const extension = '.json';
 
 // Context to determine which code snippet is active
@@ -21,16 +22,6 @@ export const CodeSnippetContext = React.createContext({
   active: '0',
   setActive: (x: string) => {}
 });
-
-export const mathjaxConfig = {
-  tex: {
-    inlineMath: [
-      ['$', '$'],
-      ['\\(', '\\)']
-    ],
-    displayMath: [['\\[', '\\]']]
-  }
-};
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
@@ -81,7 +72,6 @@ const Sicp: React.FC<SicpProps> = props => {
     setLoading(true);
 
     if (section === 'index') {
-      setData(<SicpIndexPage />);
       setLoading(false);
       return;
     }
@@ -114,6 +104,7 @@ const Sicp: React.FC<SicpProps> = props => {
         } else {
           setData(errorComponent(unexpectedError));
         }
+        setLoading(false);
       });
   }, [section]);
 
@@ -151,13 +142,13 @@ const Sicp: React.FC<SicpProps> = props => {
     <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
       <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
         <div ref={topRef} />
-        <MathJaxContext version={3} config={mathjaxConfig}>
-          {loading ? (
-            <div className="sicp-content">{loadingComponent}</div>
-          ) : (
-            <div className="sicp-content">{data}</div>
-          )}
-        </MathJaxContext>
+        {loading ? (
+          <div className="sicp-content">{loadingComponent}</div>
+        ) : section === 'index' ? (
+          <SicpIndexPage />
+        ) : (
+          <div className="sicp-content">{data}</div>
+        )}
       </CodeSnippetContext.Provider>
     </div>
   );

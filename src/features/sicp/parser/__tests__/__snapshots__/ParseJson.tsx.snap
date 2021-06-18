@@ -127,10 +127,8 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
 
 exports[`Parse figures FIGURE with image and scale successful 1`] = `
 "<div className=\\"sicp-figure\\">
-  <div className=\\"sicp-figure\\">
-    <img src=\\"source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
-  </div>
-  <h5>
+  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -143,10 +141,8 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 
 exports[`Parse figures FIGURE with image successful 1`] = `
 "<div className=\\"sicp-figure\\">
-  <div className=\\"sicp-figure\\">
-    <img src=\\"source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
-  </div>
-  <h5>
+  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -159,8 +155,8 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 
 exports[`Parse figures FIGURE with snippet successful 1`] = `
 "<div className=\\"sicp-figure\\">
-  <CodeSnippet body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
-  <h5>
+  <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -209,7 +205,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
       </tr>
     </tbody>
   </table>
-  <h5>
+  <h5 className=\\"sicp-caption\\">
     name
     <span>
       <p>
@@ -273,15 +269,15 @@ exports[`Parse heading SUBSUBHEADING  successful 1`] = `
 `;
 
 exports[`Parse latex LATEX  successful 1`] = `
-"<ContextProvider value={{...}}>
-  <SicpLatex inline={false} math=\\"$test$\\" />
-</ContextProvider>"
+"<Latex delimiters={{...}} strict={false}>
+  $test$
+</Latex>"
 `;
 
 exports[`Parse latex LATEXINLINE  successful 1`] = `
-"<ContextProvider value={{...}}>
-  <SicpLatex inline={true} math=\\"$test$\\" />
-</ContextProvider>"
+"<Latex delimiters={{...}} strict={false}>
+  $test$
+</Latex>"
 `;
 
 exports[`Parse links FOOTNOTE_REF  successful 1`] = `
@@ -352,133 +348,11 @@ exports[`Parse object successful 1`] = `
 
 exports[`Parse reference REFERENCE  successful 1`] = `
 "<div>
-  <div>
-    <span>
-      <p>
-        Mock Text
-      </p>
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section CHAPTER  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section MATTER  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section REFERENCES  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
+  <span>
+    <p>
+      Mock Text
+    </p>
+  </span>
 </div>"
 `;
 
@@ -522,118 +396,34 @@ exports[`Parse section SECTION  successful 1`] = `
 </div>"
 `;
 
-exports[`Parse section SUBSECTION  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
-exports[`Parse section SUBSUBSECTION  successful 1`] = `
-"<div>
-  <Component>
-    Title
-  </Component>
-  <div>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-    <span>
-      <div className=\\"sicp-text\\">
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-        <span>
-          <p>
-            Mock Text
-          </p>
-        </span>
-      </div>
-      <br />
-    </span>
-  </div>
-</div>"
-`;
-
 exports[`Parse snippet SNIPPET no eval successful 1`] = `
-"<ContextProvider value={{...}}>
-  <Component>
-    1 + 1;
-  </Component>
-</ContextProvider>"
+"<pre className=\\"bp3-code-block\\">
+  1 + 1;
+</pre>"
 `;
 
 exports[`Parse snippet SNIPPET with latex successful 1`] = `
-"<ContextProvider value={{...}}>
-  <Component>
-    <SicpLatex inline={false} math=\\"1 + 1;\\" />
-  </Component>
-</ContextProvider>"
+"<pre className=\\"bp3-code-block\\">
+  <SicpLatex math=\\"1 + 1;\\" />
+</pre>"
 `;
 
 exports[`Parse snippet SNIPPET with prepend successful 1`] = `
-"<ContextProvider value={{...}}>
-  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"MYewdgzgLgBAhjAvDAjAbgFApgalWoA\\" initialPrependHash=\\"MYewdgzgLgBAhjAvDAjAbiA\\" output={[undefined]} />
-</ContextProvider>"
+"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"MYewdgzgLgBAhjAvDAjAbgFApgalWoA\\" initialPrependHash=\\"MYewdgzgLgBAhjAvDAjAbiA\\" output={[undefined]}>
+  Code Snippet
+</div>"
 `;
 
 exports[`Parse snippet SNIPPET without prepend successful 1`] = `
-"<ContextProvider value={{...}}>
-  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
-</ContextProvider>"
+"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]}>
+  Code Snippet
+</div>"
 `;
 
 exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
-"<ContextProvider value={{...}}>
-  <CodeSnippet body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output=\\"2\\" />
-</ContextProvider>"
+"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output=\\"2\\">
+  Code Snippet
+</div>"
 `;
 
 exports[`Parse styling B  successful 1`] = `
@@ -659,12 +449,6 @@ exports[`Parse styling EM  successful 1`] = `
 exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `"<code className=\\"bp3-code\\" />"`;
 
 exports[`Parse styling META  successful 1`] = `"<em />"`;
-
-exports[`Parse styling METAPHRASE  successful 1`] = `
-"<p>
-  &amp;langle; &amp;rangle;
-</p>"
-`;
 
 exports[`Parse styling TT  successful 1`] = `
 "<code className=\\"bp3-code\\">
