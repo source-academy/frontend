@@ -44,7 +44,11 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
   );
 
   const refreshButton = useMemo(
-    () => <Button icon={IconNames.REFRESH} onClick={props.refreshAssessmentOverviews} />,
+    () => (
+      <Button icon={IconNames.REFRESH} onClick={props.refreshAssessmentOverviews}>
+        Refresh Assessments
+      </Button>
+    ),
     [props.refreshAssessmentOverviews]
   );
 
@@ -106,11 +110,11 @@ function convertAssessmentOverviewToCard(
 
   const assessmentNotAccepted = assessmentOverview.link !== undefined;
   let buttonText = 'Open';
-  const handleClick = () => history.push(`/githubassessments/editor`, assessmentOverview);
+  let handleClick = () => history.push(`/githubassessments/editor`, assessmentOverview);
 
   if (assessmentNotAccepted) {
     buttonText = 'Accept';
-    window.open(assessmentOverview.link);
+    handleClick = () => window.open(assessmentOverview.link);
   }
 
   if (isOverdue) {

@@ -6,13 +6,13 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
 import GitHubClassroomWelcome from './GitHubClassroomWelcome';

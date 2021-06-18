@@ -15,9 +15,9 @@ import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
-import { GHAssessmentTypeOverview } from 'src/pages/githubAssessments/GitHubClassroom';
 
+import { assessmentTypeLink } from '../../../commons/utils/ParamParseHelper';
+import { GHAssessmentTypeOverview } from '../../../pages/githubAssessments/GitHubClassroom';
 import { ControlBarGitHubLoginButton } from '../../controlBar/github/ControlBarGitHubLoginButton';
 
 type GitHubAssessmentsNavigationBarProps = DispatchProps & StateProps;
