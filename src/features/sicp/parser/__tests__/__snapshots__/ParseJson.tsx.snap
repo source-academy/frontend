@@ -141,7 +141,7 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 
 exports[`Parse figures FIGURE with image successful 1`] = `
 "<div className=\\"sicp-figure\\">
-  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width={[undefined]} />
+  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"100%\\" />
   <h5 className=\\"sicp-caption\\">
     name
     <span>
