@@ -17,15 +17,7 @@ export type TaskData = {
  * An code representation of a GitHub-hosted mission's '.metadata' file.
  */
 export type MissionMetadata = {
-  coverImage: string;
-  type: string;
-  id: string;
-  title: string;
   sourceVersion: number;
-  dueDate: Date;
-
-  reading: string;
-  webSummary: string;
 };
 
 /**
