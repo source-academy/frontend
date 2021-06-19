@@ -44,6 +44,23 @@ $sicp-background-color: #ffffff;
     height: fit-content;
     background-color: $sicp-background-color;
 
+    .sicp-navigation-buttons {
+      margin: 25px 0;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+
+      .bp3-button {
+        background-color: $cadet-color-3;
+        width: 80px;
+        padding: 10px 15px;
+      }
+
+      .bp3-button:hover {
+        background-color: $cadet-color-1;
+      }
+    }
+
     p {
       display: inline;
     }

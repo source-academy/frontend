@@ -1,6 +1,6 @@
 import 'katex/dist/katex.min.css';
 
-import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
@@ -138,6 +138,13 @@ const Sicp: React.FC<SicpProps> = props => {
     dispatch(toggleUsingSubst(false, 'sicp'));
   };
 
+  const navigationButtons = (
+    <div className="sicp-navigation-buttons">
+      <Button>Previous</Button>
+      <Button>Next</Button>
+    </div>
+  );
+
   return (
     <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
       <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
@@ -147,7 +154,10 @@ const Sicp: React.FC<SicpProps> = props => {
         ) : section === 'index' ? (
           <SicpIndexPage />
         ) : (
-          <div className="sicp-content">{data}</div>
+          <div className="sicp-content">
+            {data}
+            {navigationButtons}
+          </div>
         )}
       </CodeSnippetContext.Provider>
     </div>
