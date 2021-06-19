@@ -32,7 +32,22 @@ const Sicp: React.FC<SicpProps> = props => {
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
   const topRef = React.useRef<HTMLDivElement>(null);
+  const bottomRef = React.useRef<HTMLDivElement>(null);
   const refs = React.useRef({});
+
+  const scrollRefIntoView = (ref :HTMLDivElement | null) => {
+    if (!ref) {
+      return;
+    }
+    
+    // Hack to get scrolling to work properly.
+    // When 'block: start' option is used with scrollIntoView, the whole page scrolls with it.
+    // This issue does not occur when the option 'block: nearest' is used.
+    // To get `block: nearest` to mimic `block: start` behaviour, we first scroll to the bottom of 
+    // the page before scrolling to the desired ref using the `block: nearest` option.
+    bottomRef.current!.scrollIntoView({ block: 'end' });  
+    ref.scrollIntoView({ block: 'nearest' });  
+  }
 
   // Fetch json data
   React.useEffect(() => {
@@ -81,17 +96,13 @@ const Sicp: React.FC<SicpProps> = props => {
     const hash = props.location.hash;
 
     if (!hash) {
-      if (topRef.current) {
-        topRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
+      scrollRefIntoView(topRef.current);
       return;
     }
 
     const ref = refs.current[hash];
 
-    if (ref) {
-      ref.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }
+    scrollRefIntoView(ref);
   }, [props.location.hash]);
 
   // Close all active code snippet when new page is loaded
@@ -118,6 +129,7 @@ const Sicp: React.FC<SicpProps> = props => {
           ) : (
             <div className="sicp-content">{data}</div>
           )}
+          <div ref={bottomRef} />
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
     </div>
