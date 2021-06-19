@@ -5,10 +5,11 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { RouteComponentProps, useParams } from 'react-router';
+import { RouteComponentProps, useHistory, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
+import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
@@ -66,6 +67,7 @@ const Sicp: React.FC<SicpProps> = props => {
   const { section } = useParams<{ section: string }>();
   const topRef = React.useRef<HTMLDivElement>(null);
   const refs = React.useRef({});
+  const history = useHistory();
 
   // Fetch json data
   React.useEffect(() => {
@@ -137,11 +139,16 @@ const Sicp: React.FC<SicpProps> = props => {
     dispatch(resetWorkspace('sicp'));
     dispatch(toggleUsingSubst(false, 'sicp'));
   };
+  const handleNavigation = (sect: string | undefined) => {
+    history.push('/interactive-sicp/' + sect);
+  };
 
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
-      <Button>Previous</Button>
-      <Button>Next</Button>
+      {getPrev(section) && (
+        <Button onClick={() => handleNavigation(getPrev(section))}>Previous</Button>
+      )}
+      {getNext(section) && <Button onClick={() => handleNavigation(getNext(section))}>Next</Button>}
     </div>
   );
 

@@ -20,25 +20,25 @@ const SicpNavigationBar: React.FC = () => {
   const next = getNext(section);
 
   const handleCloseToc = () => setIsTocOpen(false);
-  const handleNavigation = (sect: string) => () => {
+  const handleOpenToc = () => setIsTocOpen(true);
+  const handleNavigation = (sect: string) => {
     history.push('/interactive-sicp/' + sect);
   };
 
   // Button to open table of contents
-  const tocButton = React.useMemo(() => {
-    const handleOpenToc = () => setIsTocOpen(true);
-    return <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
-  }, []);
+  const tocButton = <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
 
   // Previous button only displayed when next page is valid.
   const prevButton = prev && (
-    <div key="prev">{controlButton('Previous', IconNames.ARROW_LEFT, handleNavigation(prev))}</div>
+    <div key="prev">
+      {controlButton('Previous', IconNames.ARROW_LEFT, () => handleNavigation(prev))}
+    </div>
   );
 
   // Next button only displayed when next page is valid.
   const nextButton = next && (
     <div key="next">
-      {controlButton('Next', IconNames.ARROW_RIGHT, handleNavigation(next), {
+      {controlButton('Next', IconNames.ARROW_RIGHT, () => handleNavigation(next), {
         iconOnRight: true
       })}
     </div>
