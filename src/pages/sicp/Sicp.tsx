@@ -35,19 +35,19 @@ const Sicp: React.FC<SicpProps> = props => {
   const bottomRef = React.useRef<HTMLDivElement>(null);
   const refs = React.useRef({});
 
-  const scrollRefIntoView = (ref :HTMLDivElement | null) => {
+  const scrollRefIntoView = (ref: HTMLDivElement | null) => {
     if (!ref) {
       return;
     }
-    
+
     // Hack to get scrolling to work properly.
     // When 'block: start' option is used with scrollIntoView, the whole page scrolls with it.
     // This issue does not occur when the option 'block: nearest' is used.
-    // To get `block: nearest` to mimic `block: start` behaviour, we first scroll to the bottom of 
+    // To get `block: nearest` to mimic `block: start` behaviour, we first scroll to the bottom of
     // the page before scrolling to the desired ref using the `block: nearest` option.
-    bottomRef.current!.scrollIntoView({ block: 'end' });  
-    ref.scrollIntoView({ block: 'nearest' });  
-  }
+    bottomRef.current!.scrollIntoView({ block: 'end' });
+    ref.scrollIntoView({ block: 'nearest' });
+  };
 
   // Fetch json data
   React.useEffect(() => {
