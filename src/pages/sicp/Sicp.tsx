@@ -109,12 +109,12 @@ const Sicp: React.FC<SicpProps> = props => {
   }, [section]);
 
   // Scroll to correct position
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const hash = props.location.hash;
 
     if (!hash) {
       if (topRef.current) {
-        topRef.current.scrollIntoView();
+        topRef.current.scrollIntoView({block: 'nearest', behavior: 'smooth'});
       }
       return;
     }
@@ -122,9 +122,9 @@ const Sicp: React.FC<SicpProps> = props => {
     const ref = refs.current[hash];
 
     if (ref) {
-      ref.scrollIntoView({ block: 'start' });
+      ref.scrollIntoView({block: 'nearest', behavior: 'smooth'});
     }
-  }, [props.location.hash, data]);
+  }, [props.location.hash]);
 
   // Close all active code snippet when new page is loaded
   React.useEffect(() => {
