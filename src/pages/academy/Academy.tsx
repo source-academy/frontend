@@ -7,6 +7,7 @@ import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer'
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { HistoryHelper } from '../../commons/utils/HistoryHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
+import AdminPanel from './adminPanel/AdminPanelContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Game from './game/Game';
 import Grading from './grading/GradingContainer';
@@ -60,6 +61,9 @@ class Academy extends React.Component<AcademyProps> {
           {this.props.enableGame && <Route path="/academy/game" component={Game} />}
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
           {staffRoutes}
+          {this.props.role === 'admin' && (
+            <Route path="/academy/adminpanel" component={AdminPanel} />
+          )}
           <Route component={this.redirectTo404} />
         </Switch>
       </div>

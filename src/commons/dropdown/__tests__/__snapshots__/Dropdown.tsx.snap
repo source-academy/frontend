@@ -7,7 +7,7 @@ exports[`Dropdown correctly mounts Profile and DropdownCourses component when a 
   </Blueprint3.Popover2>
   <DropdownAbout isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownHelp isOpen={false} onClose={[Function (anonymous)]} />
-  <DropdownCourses isOpen={false} onClose={[Function (anonymous)]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} courses={{...}} />
+  <DropdownCourses isOpen={false} onClose={[Function (anonymous)]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} courses={{...}} courseId={[undefined]} />
   <Connect(Profile) isOpen={false} onClose={[Function (anonymous)]} />
 </Fragment>"
 `;

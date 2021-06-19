@@ -2,83 +2,13 @@
 
 exports[`Grading NavLink does NOT renders for Role.Student 1`] = `
 "<Blueprint3.Navbar className=\\"NavigationBar secondary-navbar\\">
-  <Blueprint3.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"flame\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Missions
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"lightbulb\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Quests
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"predictive-analysis\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Paths
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"comparison\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Contests
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"manual\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Others
-      </div>
-    </NavLink>
-  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"left\\" />
 </Blueprint3.Navbar>"
 `;
 
 exports[`Grading NavLink renders for Role.Admin 1`] = `
 "<Blueprint3.Navbar className=\\"NavigationBar secondary-navbar\\">
-  <Blueprint3.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"flame\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Missions
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"lightbulb\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Quests
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"predictive-analysis\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Paths
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"comparison\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Contests
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"manual\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Others
-      </div>
-    </NavLink>
-  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"left\\" />
   <Blueprint3.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"satellite\\" />
@@ -111,48 +41,19 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
         Story Simulator
       </div>
     </NavLink>
+    <NavLink to=\\"/academy/adminpanel\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
+      <Blueprint3.Icon icon=\\"settings\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
+        Admin Panel
+      </div>
+    </NavLink>
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"
 `;
 
 exports[`Grading NavLink renders for Role.Staff 1`] = `
 "<Blueprint3.Navbar className=\\"NavigationBar secondary-navbar\\">
-  <Blueprint3.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"flame\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Missions
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"lightbulb\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Quests
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"predictive-analysis\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Paths
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"comparison\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Contests
-      </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
-    </NavLink>
-    <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"manual\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Others
-      </div>
-    </NavLink>
-  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"left\\" />
   <Blueprint3.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"satellite\\" />

@@ -164,7 +164,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => {
-   const showGrade = overview.gradingStatus === 'graded';
+    const showGrade = overview.gradingStatus === 'graded';
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>

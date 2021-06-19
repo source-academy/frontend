@@ -84,6 +84,17 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           <Icon icon={IconNames.CROWN} />
           <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Story Simulator</div>
         </NavLink>
+
+        {props.role === Role.Admin && (
+          <NavLink
+            to={'/academy/adminpanel'}
+            activeClassName={Classes.ACTIVE}
+            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          >
+            <Icon icon={IconNames.SETTINGS} />
+            <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Admin Panel</div>
+          </NavLink>
+        )}
       </NavbarGroup>
     ) : null}
   </Navbar>
