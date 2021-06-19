@@ -93,6 +93,10 @@ const Sicp: React.FC<SicpProps> = props => {
 
   // Scroll to correct position
   React.useEffect(() => {
+    if (loading) {
+      return;
+    }
+
     const hash = props.location.hash;
 
     if (!hash) {
@@ -103,7 +107,7 @@ const Sicp: React.FC<SicpProps> = props => {
     const ref = refs.current[hash];
 
     scrollRefIntoView(ref);
-  }, [props.location.hash]);
+  }, [props.location.hash, loading]);
 
   // Close all active code snippet when new page is loaded
   React.useEffect(() => {
