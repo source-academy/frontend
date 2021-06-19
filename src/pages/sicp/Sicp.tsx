@@ -1,7 +1,6 @@
 import 'katex/dist/katex.min.css';
 
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
@@ -10,6 +9,8 @@ import Constants from 'src/commons/utils/Constants';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 
+import SicpErrorBoundary from './SicpErrorBoundary';
+import getSicpError, { SicpErrorType } from './subcomponents/SicpErrors';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = RouteComponentProps<{}>;
@@ -24,40 +25,6 @@ export const CodeSnippetContext = React.createContext({
 });
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
-
-const unexpectedError = (
-  <div>
-    Something unexpected went wrong trying to load this page. Please try refreshing the page. If the
-    issue persists, kindly let us know by filing an issue at{' '}
-    <a href="https://github.com/source-academy/cadet-frontend">
-      https://github.com/source-academy/cadet-frontend
-    </a>
-    .
-  </div>
-);
-const pageNotFoundError = (
-  <div>
-    We could not find the page you were looking for. Please check the URL again. If you believe the
-    URL is correct, kindly let us know by filing an issue at{' '}
-    <a href="https://github.com/source-academy/cadet-frontend">
-      https://github.com/source-academy/cadet-frontend
-    </a>
-    .
-  </div>
-);
-const parsingError = (
-  <div>
-    An error occured while loading the page. Kindly let us know by filing an issue at{' '}
-    <a href="https://github.com/source-academy/cadet-frontend">
-      https://github.com/source-academy/cadet-frontend
-    </a>{' '}
-    and we will get it fixed as soon as possible.
-  </div>
-);
-
-const errorComponent = (description: JSX.Element) => (
-  <NonIdealState title="Something went wrong :(" description={description} icon={IconNames.ERROR} />
-);
 
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState(<></>);
@@ -93,17 +60,18 @@ const Sicp: React.FC<SicpProps> = props => {
         }
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
 
         if (error.message === 'Not Found') {
           // page not found
-          setData(errorComponent(pageNotFoundError));
+          setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
         } else if (error instanceof ParseJsonError) {
           // error occured while parsing JSON
-          setData(errorComponent(parsingError));
+          setData(getSicpError(SicpErrorType.PARSING_ERROR));
         } else {
-          setData(errorComponent(unexpectedError));
+          setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
         }
+
         setLoading(false);
       });
   }, [section]);
@@ -140,16 +108,18 @@ const Sicp: React.FC<SicpProps> = props => {
 
   return (
     <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
-      <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
-        <div ref={topRef} />
-        {loading ? (
-          <div className="sicp-content">{loadingComponent}</div>
-        ) : section === 'index' ? (
-          <SicpIndexPage />
-        ) : (
-          <div className="sicp-content">{data}</div>
-        )}
-      </CodeSnippetContext.Provider>
+      <SicpErrorBoundary>
+        <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
+          <div ref={topRef} />
+          {loading ? (
+            <div className="sicp-content">{loadingComponent}</div>
+          ) : section === 'index' ? (
+            <SicpIndexPage />
+          ) : (
+            <div className="sicp-content">{data}</div>
+          )}
+        </CodeSnippetContext.Provider>
+      </SicpErrorBoundary>
     </div>
   );
 };
