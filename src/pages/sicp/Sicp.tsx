@@ -114,7 +114,7 @@ const Sicp: React.FC<SicpProps> = props => {
 
     if (!hash) {
       if (topRef.current) {
-        topRef.current.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+        topRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
       return;
     }
@@ -122,7 +122,7 @@ const Sicp: React.FC<SicpProps> = props => {
     const ref = refs.current[hash];
 
     if (ref) {
-      ref.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+      ref.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
   }, [props.location.hash]);
 
