@@ -44,6 +44,11 @@ $sicp-background-color: #ffffff;
     background-color: $sicp-background-color;
   }
 
+  .katex,
+  .katex-display {
+    font-size: 1em;
+  }
+
   .sicp-content {
     margin: 1em auto;
     padding: 0 6em;
