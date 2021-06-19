@@ -9,8 +9,8 @@ import Constants from 'src/commons/utils/Constants';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 
-import SicpErrorBoundary from './SicpErrorBoundary';
-import getSicpError, { SicpErrorType } from './subcomponents/SicpErrors';
+import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
+import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = RouteComponentProps<{}>;

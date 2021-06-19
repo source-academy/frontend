@@ -1,6 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 
-import getSicpError, { SicpErrorType } from './subcomponents/SicpErrors';
+import getSicpError, { SicpErrorType } from './SicpErrors';
 
 type Props = {
   children: ReactNode;
