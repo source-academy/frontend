@@ -7,7 +7,7 @@ import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_CONFIG,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
@@ -29,8 +29,8 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
-  UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
@@ -41,7 +41,7 @@ import {
 import {
   acknowledgeNotifications,
   fetchAssessment,
-  fetchAssessmentConfig,
+  fetchAssessmentConfigs,
   fetchAssessmentOverviews,
   fetchAuth,
   fetchCourseConfig,
@@ -63,8 +63,8 @@ import {
   submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
+  updateAssessmentConfigs,
   updateAssessmentOverviews,
-  updateAssessmentTypes,
   updateCourseConfig,
   updateGrading,
   updateGradingOverviews,
@@ -592,14 +592,14 @@ test('updateCourseConfig generates correct action object', () => {
 });
 
 test('fetchAssessmentConfig generates correct action object', () => {
-  const action = fetchAssessmentConfig();
+  const action = fetchAssessmentConfigs();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_CONFIG
+    type: FETCH_ASSESSMENT_CONFIGS
   });
 });
 
 test('updateAssessmentTypes generates correct action object', () => {
-  const assessmentConfig = [
+  const assessmentConfigs = [
     {
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
@@ -641,9 +641,9 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Others'
     }
   ];
-  const action = updateAssessmentTypes(assessmentConfig);
+  const action = updateAssessmentConfigs(assessmentConfigs);
   expect(action).toEqual({
-    type: UPDATE_ASSESSMENT_TYPES,
-    payload: assessmentConfig
+    type: UPDATE_ASSESSMENT_CONFIGS,
+    payload: assessmentConfigs
   });
 });

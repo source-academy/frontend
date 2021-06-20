@@ -30,7 +30,7 @@ import {
   CourseConfiguration,
   CourseRegistration,
   FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_CONFIG,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
   FETCH_NOTIFICATIONS,
@@ -43,8 +43,8 @@ import {
   SET_USER,
   SUBMIT_ANSWER,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
-  UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE,
   User
@@ -77,7 +77,7 @@ import {
 import BackendSaga from '../BackendSaga';
 import {
   getAssessment,
-  getAssessmentConfig,
+  getAssessmentConfigs,
   getAssessmentOverviews,
   getCourseConfig,
   getGradingSummary,
@@ -87,7 +87,7 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAssessmentTypes,
+  postAssessmentConfigs,
   postAuth,
   postCourseConfig,
   postLatestViewedCourse,
@@ -754,25 +754,25 @@ describe('Test FETCH_ASSESSMENT_CONFIG action', () => {
   test('when assessment configurations are obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(getAssessmentConfig, mockTokens)
+      .call(getAssessmentConfigs, mockTokens)
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
-      .provide([[call(getAssessmentConfig, mockTokens), mockAssessmentConfigurations]])
-      .dispatch({ type: FETCH_ASSESSMENT_CONFIG })
+      .provide([[call(getAssessmentConfigs, mockTokens), mockAssessmentConfigurations]])
+      .dispatch({ type: FETCH_ASSESSMENT_CONFIGS })
       .silentRun();
   });
 
   test('when assessment configurations is null', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .provide([[call(getAssessmentConfig, mockTokens), null]])
-      .call(getAssessmentConfig, mockTokens)
+      .provide([[call(getAssessmentConfigs, mockTokens), null]])
+      .call(getAssessmentConfigs, mockTokens)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .dispatch({ type: FETCH_ASSESSMENT_CONFIG })
+      .dispatch({ type: FETCH_ASSESSMENT_CONFIGS })
       .silentRun();
   });
 });
 
-describe('Test UPDATE_ASSESSMENT_TYPES action', () => {
+describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
   const failedAssessmentConfig: AssessmentConfiguration[] = [
     ...mockAssessmentConfigurations,
     {
@@ -787,37 +787,37 @@ describe('Test UPDATE_ASSESSMENT_TYPES action', () => {
 
   const assessmentTypes = mockAssessmentConfigurations.map(e => e.type);
 
-  test('when assessment types is changed', () => {
+  test('when assessment configs is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations)
+      .call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
       .put(setCourseConfiguration({ assessmentTypes }))
       .call.fn(showSuccessMessage)
-      .provide([[call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations), okResp]])
-      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: mockAssessmentConfigurations })
+      .provide([[call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp]])
+      .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
       .silentRun();
   });
 
-  test('when assessment types update fails', () => {
+  test('when assessment configs update fails', () => {
     return expectSaga(BackendSaga)
-      .provide([[call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations), errorResp]])
+      .provide([[call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations), errorResp]])
       .withState(mockStates)
-      .call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations)
+      .call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
-      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: mockAssessmentConfigurations })
+      .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
       .silentRun();
   });
 
-  test('when assessment types array has length > 5', () => {
+  test('when assessment configs array has length > 5', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .not.call.fn(postAssessmentTypes)
+      .not.call.fn(postAssessmentConfigs)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
-      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: failedAssessmentConfig })
+      .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: failedAssessmentConfig })
       .silentRun();
   });
 });

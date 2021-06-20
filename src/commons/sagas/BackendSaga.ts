@@ -40,7 +40,7 @@ import {
   CourseConfiguration,
   CourseRegistration,
   FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_CONFIG,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
   FETCH_GRADING,
@@ -53,7 +53,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
   UNSUBMIT_SUBMISSION,
-  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE,
   UpdateCourseConfiguration,
@@ -67,7 +67,7 @@ import {
   deleteAssessment,
   deleteSourcecastEntry,
   getAssessment,
-  getAssessmentConfig,
+  getAssessmentConfigs,
   getAssessmentOverviews,
   getCourseConfig,
   getGrading,
@@ -81,7 +81,7 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAssessmentTypes,
+  postAssessmentConfigs,
   postAuth,
   postCourseConfig,
   postGrading,
@@ -598,36 +598,36 @@ function* BackendSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(FETCH_ASSESSMENT_CONFIG, function* (): any {
+  yield takeEvery(FETCH_ASSESSMENT_CONFIGS, function* (): any {
     const tokens: Tokens = yield selectTokens();
 
-    const assessmentConfig: AssessmentConfiguration[] | null = yield call(
-      getAssessmentConfig,
+    const assessmentConfigs: AssessmentConfiguration[] | null = yield call(
+      getAssessmentConfigs,
       tokens
     );
 
-    if (assessmentConfig) {
-      yield put(actions.setAssessmentConfigurations(assessmentConfig));
+    if (assessmentConfigs) {
+      yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
   });
 
   yield takeEvery(
-    UPDATE_ASSESSMENT_TYPES,
-    function* (action: ReturnType<typeof actions.updateAssessmentTypes>): any {
+    UPDATE_ASSESSMENT_CONFIGS,
+    function* (action: ReturnType<typeof actions.updateAssessmentConfigs>): any {
       const tokens: Tokens = yield selectTokens();
-      const assessmentConfig: AssessmentConfiguration[] = action.payload;
+      const assessmentConfigs: AssessmentConfiguration[] = action.payload;
 
-      if (assessmentConfig.length > 5) {
+      if (assessmentConfigs.length > 5) {
         return yield call(showWarningMessage, 'Invalid number of Assessment Types!');
       }
 
-      const resp: Response | null = yield call(postAssessmentTypes, tokens, assessmentConfig);
+      const resp: Response | null = yield call(postAssessmentConfigs, tokens, assessmentConfigs);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
 
-      const assessmentTypes = assessmentConfig.map(e => e.type);
-      yield put(actions.setAssessmentConfigurations(assessmentConfig));
+      const assessmentTypes = assessmentConfigs.map(e => e.type);
+      yield put(actions.setAssessmentConfigurations(assessmentConfigs));
       yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }

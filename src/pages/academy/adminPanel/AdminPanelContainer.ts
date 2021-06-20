@@ -2,9 +2,9 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  fetchAssessmentConfig,
+  fetchAssessmentConfigs,
   fetchCourseConfig,
-  updateAssessmentTypes,
+  updateAssessmentConfigs,
   updateCourseConfig
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
@@ -28,9 +28,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleFetchCourseConfiguration: fetchCourseConfig,
-      handleFetchAssessmentConfig: fetchAssessmentConfig,
+      handleFetchAssessmentConfigs: fetchAssessmentConfigs,
       handleUpdateCourseConfig: updateCourseConfig,
-      handleUpdateAssessmentTypes: updateAssessmentTypes
+      handleUpdateAssessmentConfigs: updateAssessmentConfigs
     },
     dispatch
   );

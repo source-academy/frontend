@@ -17,7 +17,7 @@ import {
   ACKNOWLEDGE_NOTIFICATIONS,
   CourseRegistration,
   FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_CONFIG,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
@@ -46,8 +46,8 @@ import {
   Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
-  UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
@@ -200,7 +200,7 @@ export const updateLatestViewedCourse = (courseId: number) =>
 export const updateCourseConfig = (courseConfiguration: UpdateCourseConfiguration) =>
   action(UPDATE_COURSE_CONFIG, courseConfiguration);
 
-export const fetchAssessmentConfig = () => action(FETCH_ASSESSMENT_CONFIG);
+export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
 
-export const updateAssessmentTypes = (assessmentConfig: AssessmentConfiguration[]) =>
-  action(UPDATE_ASSESSMENT_TYPES, assessmentConfig);
+export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
+  action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);

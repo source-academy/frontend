@@ -8,7 +8,7 @@ import { OverallState, SourceLanguage, styliseSublanguage } from '../application
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_CONFIG,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
@@ -18,7 +18,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
   UNSUBMIT_SUBMISSION,
-  UPDATE_ASSESSMENT_TYPES,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE
 } from '../application/types/SessionTypes';
@@ -274,15 +274,15 @@ export function* mockBackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    FETCH_ASSESSMENT_CONFIG,
-    function* (action: ReturnType<typeof actions.fetchAssessmentConfig>): any {
+    FETCH_ASSESSMENT_CONFIGS,
+    function* (action: ReturnType<typeof actions.fetchAssessmentConfigs>): any {
       yield put(actions.setAssessmentConfigurations(mockAssessmentConfigurations));
     }
   );
 
   yield takeEvery(
-    UPDATE_ASSESSMENT_TYPES,
-    function* (action: ReturnType<typeof actions.updateAssessmentTypes>): any {
+    UPDATE_ASSESSMENT_CONFIGS,
+    function* (action: ReturnType<typeof actions.updateAssessmentConfigs>): any {
       const assessmentConfig = action.payload;
 
       if (assessmentConfig.length > 5) {

@@ -18,9 +18,9 @@ export type AdminPanelProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleFetchCourseConfiguration: () => void;
-  handleFetchAssessmentConfig: () => void;
+  handleFetchAssessmentConfigs: () => void;
   handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
-  handleUpdateAssessmentTypes: (assessmentConfig: AssessmentConfiguration[]) => void;
+  handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
 };
 
 export type StateProps = {
@@ -40,7 +40,7 @@ export type StateProps = {
 const AdminPanel: React.FC<AdminPanelProps> = props => {
   React.useEffect(() => {
     props.handleFetchCourseConfiguration();
-    props.handleFetchAssessmentConfig();
+    props.handleFetchAssessmentConfigs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

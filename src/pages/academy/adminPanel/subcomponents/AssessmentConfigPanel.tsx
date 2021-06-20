@@ -9,7 +9,7 @@ import UpdateRow from './UpdateRow';
 export type AssessmentConfigPanelProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
-  handleUpdateAssessmentTypes: (assessmentConfig: AssessmentConfiguration[]) => void;
+  handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
 };
 
 export type StateProps = {
@@ -72,7 +72,8 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       field: '',
       cellRendererFramework: UpdateRow,
       cellRendererParams: {
-        handleUpdateAssessmentConfig: props.handleUpdateAssessmentConfig
+        // TODO
+        // handleUpdateAssessmentConfig: props.handleUpdateAssessmentConfig
       },
       editable: false,
       width: 100
