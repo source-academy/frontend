@@ -9,21 +9,11 @@ import UpdateRow from './UpdateRow';
 export type AssessmentConfigPanelProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
-  handleUpdateAssessmentConfig: (assessmentConfiguration: AssessmentConfiguration) => void;
-  handleUpdateAssessmentTypes: (assessmentTypes: AssessmentType[]) => void;
+  handleUpdateAssessmentTypes: (assessmentConfig: AssessmentConfiguration[]) => void;
 };
 
 export type StateProps = {
   assessmentTypes: AssessmentType[];
-};
-
-export type ConfigRow = {
-  order: number;
-  type: AssessmentType;
-  isGraded: boolean;
-  hoursBeforeEarlyXpDecay: number;
-  earlySubmissionXp: number;
-  decayRatePointsPerHour: number;
 };
 
 const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {

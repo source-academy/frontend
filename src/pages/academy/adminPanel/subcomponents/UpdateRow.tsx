@@ -1,10 +1,9 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
-import { showSuccessMessage } from 'src/commons/utils/NotificationsHelper';
 
-import { ConfigRow } from './AssessmentConfigPanel';
+import { AssessmentConfiguration } from '../../../../commons/assessment/AssessmentTypes';
+import controlButton from '../../../../commons/ControlButton';
+import { showSuccessMessage } from '../../../../commons/utils/NotificationsHelper';
 
 export type UpdateRowProps = DispatchProps & StateProps;
 
@@ -13,7 +12,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  data: ConfigRow;
+  data: AssessmentConfiguration;
 };
 
 const UpdateRow: React.FunctionComponent<UpdateRowProps> = props => {

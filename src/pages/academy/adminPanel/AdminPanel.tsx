@@ -17,9 +17,9 @@ import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 export type AdminPanelProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
+  handleFetchAssessmentConfig: () => void;
   handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
-  handleUpdateAssessmentConfig: (assessmentConfiguration: AssessmentConfiguration) => void;
-  handleUpdateAssessmentTypes: (assessmentTypes: AssessmentType[]) => void;
+  handleUpdateAssessmentTypes: (assessmentConfig: AssessmentConfiguration[]) => void;
 };
 
 export type StateProps = {
@@ -33,9 +33,14 @@ export type StateProps = {
   sourceVariant: Variant;
   moduleHelpText?: string;
   assessmentTypes: AssessmentType[];
+  assessmentConfigurations?: AssessmentConfiguration[];
 };
 
 const AdminPanel: React.FC<AdminPanelProps> = props => {
+  React.useEffect(() => {
+    props.handleFetchAssessmentConfig();
+  }, []);
+
   const data = (
     <div className="admin-panel">
       <H1>Admin Panel</H1>
