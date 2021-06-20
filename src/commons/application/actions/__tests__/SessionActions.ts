@@ -10,6 +10,7 @@ import {
   FETCH_ASSESSMENT_CONFIG,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
@@ -43,6 +44,7 @@ import {
   fetchAssessmentConfig,
   fetchAssessmentOverviews,
   fetchAuth,
+  fetchCourseConfig,
   fetchGrading,
   fetchGradingOverviews,
   fetchNotifications,
@@ -88,6 +90,13 @@ test('fetchAuth generates correct action object', () => {
   expect(action).toEqual({
     type: FETCH_AUTH,
     payload: { code }
+  });
+});
+
+test('fetchCourseConfig generates correct action object', () => {
+  const action = fetchCourseConfig();
+  expect(action).toEqual({
+    type: FETCH_COURSE_CONFIG
   });
 });
 

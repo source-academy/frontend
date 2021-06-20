@@ -20,6 +20,7 @@ import {
   FETCH_ASSESSMENT_CONFIG,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
@@ -59,6 +60,8 @@ import {
 
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });
+
+export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 
 export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 

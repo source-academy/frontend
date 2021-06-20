@@ -180,6 +180,22 @@ export const postLatestViewedCourse = async (
 };
 
 /**
+ * GET /course/{courseId}/config
+ */
+export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfiguration | null> => {
+  const resp = await request(`${courseId()}/config`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return resp.json();
+};
+
+/**
  * GET /course/{courseId}/achievements
  *
  * Will be updated after a separate db for student progress is ready

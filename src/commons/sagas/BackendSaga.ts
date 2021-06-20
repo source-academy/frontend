@@ -42,6 +42,7 @@ import {
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIG,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
@@ -68,6 +69,7 @@ import {
   getAssessment,
   getAssessmentConfig,
   getAssessmentOverviews,
+  getCourseConfig,
   getGrading,
   getGradingOverviews,
   getGradingSummary,
@@ -155,6 +157,14 @@ function* BackendSaga(): SagaIterator {
       })
     );
     yield history.push('/academy');
+  });
+
+  yield takeEvery(FETCH_COURSE_CONFIG, function* () {
+    const tokens: Tokens = yield selectTokens();
+    const courseConfig: CourseConfiguration | null = yield call(getCourseConfig, tokens);
+    if (courseConfig) {
+      yield put(actions.setCourseConfiguration(courseConfig));
+    }
   });
 
   yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {

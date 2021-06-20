@@ -32,6 +32,7 @@ import {
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIG,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_NOTIFICATIONS,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
@@ -78,6 +79,7 @@ import {
   getAssessment,
   getAssessmentConfig,
   getAssessmentOverviews,
+  getCourseConfig,
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
@@ -337,6 +339,26 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_COURSE_CONFIG action', () => {
+  test('when course config is obtained', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .provide([[call(getCourseConfig, mockTokens), mockCourseConfiguration1]])
+      .put(setCourseConfiguration(mockCourseConfiguration1))
+      .dispatch({ type: FETCH_COURSE_CONFIG })
+      .silentRun();
+  });
+
+  test('when course config is null', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .provide([[call(getCourseConfig, mockTokens), null]])
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();
   });
 });

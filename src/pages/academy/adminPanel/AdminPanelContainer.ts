@@ -3,6 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   fetchAssessmentConfig,
+  fetchCourseConfig,
   updateAssessmentTypes,
   updateCourseConfig
 } from '../../../commons/application/actions/SessionActions';
@@ -26,6 +27,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
+      handleFetchCourseConfiguration: fetchCourseConfig,
       handleFetchAssessmentConfig: fetchAssessmentConfig,
       handleUpdateCourseConfig: updateCourseConfig,
       handleUpdateAssessmentTypes: updateAssessmentTypes
