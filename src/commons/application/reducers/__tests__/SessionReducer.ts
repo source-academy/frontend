@@ -13,6 +13,7 @@ import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
   SessionState,
+  SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_TOKENS,
@@ -138,6 +139,46 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
   expect(result).toEqual({
     ...defaultSession,
     ...payload
+  });
+});
+
+test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
+  const payload = [
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 1,
+      type: 'Mission1'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: false,
+      order: 2,
+      type: 'Mission2'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 3,
+      type: 'Mission3'
+    }
+  ];
+
+  const action = {
+    type: SET_ASSESSMENT_CONFIGURATIONS,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    assessmentConfigurations: payload
   });
 });
 

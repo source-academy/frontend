@@ -941,21 +941,20 @@ export const postCourseConfig = async (
 };
 
 /**
- * PUT /course/{courseId}/admin/assessment_config
+ * GET /course/{courseId}/admin/assessment_config
  */
-export const postAssessmentConfig = async (
-  tokens: Tokens,
-  assessmentConfig: AssessmentConfiguration
-): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/assessment_config`, 'PUT', {
+export const getAssessmentConfig = async (
+  tokens: Tokens
+): Promise<AssessmentConfiguration[] | null> => {
+  const resp = await request(`${courseId()}/admin/assessment_config`, 'GET', {
     ...tokens,
-    body: assessmentConfig,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
     shouldRefresh: true
   });
+  if (!resp || !resp.ok) {
+    return null;
+  }
 
-  return resp;
+  return await resp.json();
 };
 
 /**
@@ -963,11 +962,11 @@ export const postAssessmentConfig = async (
  */
 export const postAssessmentTypes = async (
   tokens: Tokens,
-  assessmentTypes: AssessmentType[]
+  assessmentConfig: AssessmentConfiguration[]
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessment_types`, 'PUT', {
     ...tokens,
-    body: { assessmentTypes: assessmentTypes },
+    body: { assessmentTypes: assessmentConfig },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

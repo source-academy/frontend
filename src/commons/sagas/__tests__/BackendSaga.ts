@@ -9,6 +9,7 @@ import {
   UPDATE_GROUP_GRADING_SUMMARY
 } from '../../../features/dashboard/DashboardTypes';
 import {
+  setAssessmentConfigurations,
   setCourseConfiguration,
   setCourseRegistration,
   setTokens,
@@ -29,17 +30,18 @@ import {
   CourseConfiguration,
   CourseRegistration,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIG,
   FETCH_AUTH,
   FETCH_NOTIFICATIONS,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
   UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_CONFIG,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
@@ -50,7 +52,6 @@ import {
   Assessment,
   AssessmentConfiguration,
   AssessmentStatuses,
-  AssessmentType,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
@@ -75,6 +76,7 @@ import {
 import BackendSaga from '../BackendSaga';
 import {
   getAssessment,
+  getAssessmentConfig,
   getAssessmentOverviews,
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
@@ -83,7 +85,6 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAssessmentConfig,
   postAssessmentTypes,
   postAuth,
   postCourseConfig,
@@ -181,6 +182,49 @@ const mockCourseConfiguration2: CourseConfiguration = {
   moduleHelpText: 'Help text',
   assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
 };
+
+const mockAssessmentConfigurations: AssessmentConfiguration[] = [
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 1,
+    type: 'Missions'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: false,
+    order: 2,
+    type: 'Quests'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 3,
+    type: 'Paths'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 3,
+    type: 'Contests'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 3,
+    type: 'Others'
+  }
+];
 
 const mockStates = {
   session: {
@@ -684,65 +728,64 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
   });
 });
 
-describe('Test UPDATE_ASSESSMENT_CONFIG action', () => {
-  const assessmentConfiguration: AssessmentConfiguration = {
-    order: 1,
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    decayRatePointsPerHour: 1
-  };
-
-  test('when assessment config is changed', () => {
+describe('Test FETCH_ASSESSMENT_CONFIG action', () => {
+  test('when assessment configurations are obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postAssessmentConfig, mockTokens, assessmentConfiguration)
-      .call.fn(showSuccessMessage)
-      .provide([[call(postAssessmentConfig, mockTokens, assessmentConfiguration), okResp]])
-      .dispatch({ type: UPDATE_ASSESSMENT_CONFIG, payload: assessmentConfiguration })
+      .call(getAssessmentConfig, mockTokens)
+      .put(setAssessmentConfigurations(mockAssessmentConfigurations))
+      .provide([[call(getAssessmentConfig, mockTokens), mockAssessmentConfigurations]])
+      .dispatch({ type: FETCH_ASSESSMENT_CONFIG })
       .silentRun();
   });
 
-  test('when assessment config update fails', () => {
+  test('when assessment configurations is null', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postAssessmentConfig, mockTokens, assessmentConfiguration)
-      .not.call.fn(showSuccessMessage)
-      .provide([[call(postAssessmentConfig, mockTokens, assessmentConfiguration), errorResp]])
-      .dispatch({ type: UPDATE_ASSESSMENT_CONFIG, payload: assessmentConfiguration })
+      .provide([[call(getAssessmentConfig, mockTokens), null]])
+      .call(getAssessmentConfig, mockTokens)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
+      .dispatch({ type: FETCH_ASSESSMENT_CONFIG })
       .silentRun();
   });
 });
 
 describe('Test UPDATE_ASSESSMENT_TYPES action', () => {
-  const assessmentTypes: AssessmentType[] = ['Mission 1', 'Mission 2'];
-  const failedAssessmentTypes: AssessmentType[] = [
-    'Mission 1',
-    'Mission 2',
-    'Mission 3',
-    'Mission 4',
-    'Mission 5',
-    'Mission 6'
+  const failedAssessmentConfig: AssessmentConfiguration[] = [
+    ...mockAssessmentConfigurations,
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 3,
+      type: 'Mission 6'
+    }
   ];
+
+  const assessmentTypes = mockAssessmentConfigurations.map(e => e.type);
 
   test('when assessment types is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postAssessmentTypes, mockTokens, assessmentTypes)
+      .call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations)
+      .put(setAssessmentConfigurations(mockAssessmentConfigurations))
       .put(setCourseConfiguration({ assessmentTypes }))
       .call.fn(showSuccessMessage)
-      .provide([[call(postAssessmentTypes, mockTokens, assessmentTypes), okResp]])
-      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: assessmentTypes })
+      .provide([[call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations), okResp]])
+      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: mockAssessmentConfigurations })
       .silentRun();
   });
 
   test('when assessment types update fails', () => {
     return expectSaga(BackendSaga)
-      .provide([[call(postAssessmentTypes, mockTokens, assessmentTypes), errorResp]])
+      .provide([[call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations), errorResp]])
       .withState(mockStates)
-      .call(postAssessmentTypes, mockTokens, assessmentTypes)
+      .call(postAssessmentTypes, mockTokens, mockAssessmentConfigurations)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
-      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: assessmentTypes })
+      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: mockAssessmentConfigurations })
       .silentRun();
   });
 
@@ -752,7 +795,7 @@ describe('Test UPDATE_ASSESSMENT_TYPES action', () => {
       .not.call.fn(postAssessmentTypes)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
-      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: failedAssessmentTypes })
+      .dispatch({ type: UPDATE_ASSESSMENT_TYPES, payload: failedAssessmentConfig })
       .silentRun();
   });
 });

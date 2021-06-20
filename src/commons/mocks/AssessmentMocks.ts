@@ -1,6 +1,7 @@
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses,
@@ -10,6 +11,49 @@ import {
   Library,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
+
+export const mockAssessmentConfigurations: AssessmentConfiguration[] = [
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 1,
+    type: 'Missions'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: false,
+    order: 2,
+    type: 'Quests'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 3,
+    type: 'Paths'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 3,
+    type: 'Contests'
+  },
+  {
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 3,
+    type: 'Others'
+  }
+];
 
 const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
   {

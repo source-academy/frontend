@@ -8,6 +8,7 @@ import { OverallState, SourceLanguage, styliseSublanguage } from '../application
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIG,
   FETCH_AUTH,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
@@ -17,7 +18,6 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
   UNSUBMIT_SUBMISSION,
-  UPDATE_ASSESSMENT_CONFIG,
   UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE
@@ -31,7 +31,11 @@ import { actions } from '../utils/ActionsHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { mockAssessmentOverviews, mockAssessments } from './AssessmentMocks';
+import {
+  mockAssessmentConfigurations,
+  mockAssessmentOverviews,
+  mockAssessments
+} from './AssessmentMocks';
 import { mockFetchGrading, mockFetchGradingOverview } from './GradingMocks';
 import { mockGradingSummary } from './GroupMocks';
 import {
@@ -270,21 +274,23 @@ export function* mockBackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    UPDATE_ASSESSMENT_CONFIG,
-    function* (action: ReturnType<typeof actions.updateAssessmentConfig>) {
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    FETCH_ASSESSMENT_CONFIG,
+    function* (action: ReturnType<typeof actions.fetchAssessmentConfig>): any {
+      yield put(actions.setAssessmentConfigurations(mockAssessmentConfigurations));
     }
   );
 
   yield takeEvery(
     UPDATE_ASSESSMENT_TYPES,
     function* (action: ReturnType<typeof actions.updateAssessmentTypes>): any {
-      const assessmentTypes = action.payload;
+      const assessmentConfig = action.payload;
 
-      if (assessmentTypes.length > 5) {
+      if (assessmentConfig.length > 5) {
         return yield call(showWarningMessage, 'Invalid number of Assessment Types!');
       }
 
+      const assessmentTypes = assessmentConfig.map(e => e.type);
+      yield put(actions.setAssessmentConfigurations(assessmentConfig));
       yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }

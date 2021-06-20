@@ -7,6 +7,7 @@ import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIG,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
   FETCH_GRADING,
@@ -15,6 +16,7 @@ import {
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_OCTOKIT_OBJECT,
@@ -26,7 +28,6 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_CONFIG,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
@@ -39,6 +40,7 @@ import {
 import {
   acknowledgeNotifications,
   fetchAssessment,
+  fetchAssessmentConfig,
   fetchAssessmentOverviews,
   fetchAuth,
   fetchGrading,
@@ -47,6 +49,7 @@ import {
   login,
   reautogradeAnswer,
   reautogradeSubmission,
+  setAssessmentConfigurations,
   setCourseConfiguration,
   setCourseRegistration,
   setGitHubOctokitObject,
@@ -58,7 +61,6 @@ import {
   submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
-  updateAssessmentConfig,
   updateAssessmentOverviews,
   updateAssessmentTypes,
   updateCourseConfig,
@@ -227,6 +229,40 @@ test('setCourseRegistration generates correct action object', () => {
   expect(action).toEqual({
     type: SET_COURSE_REGISTRATION,
     payload: courseRegistration
+  });
+});
+
+test('setAssessmentConfigurations generates correct action object', () => {
+  const assesmentConfigurations = [
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 1,
+      type: 'Mission1'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: false,
+      order: 2,
+      type: 'Mission2'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 3,
+      type: 'Mission3'
+    }
+  ];
+  const action = setAssessmentConfigurations(assesmentConfigurations);
+  expect(action).toEqual({
+    type: SET_ASSESSMENT_CONFIGURATIONS,
+    payload: assesmentConfigurations
   });
 });
 
@@ -546,25 +582,59 @@ test('updateCourseConfig generates correct action object', () => {
   });
 });
 
-test('updateAssessmentConfig generates correct action object', () => {
-  const assessmentConfig = {
-    order: 1,
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    decayRatePointsPerHour: 1
-  };
-  const action = updateAssessmentConfig(assessmentConfig);
+test('fetchAssessmentConfig generates correct action object', () => {
+  const action = fetchAssessmentConfig();
   expect(action).toEqual({
-    type: UPDATE_ASSESSMENT_CONFIG,
-    payload: assessmentConfig
+    type: FETCH_ASSESSMENT_CONFIG
   });
 });
 
 test('updateAssessmentTypes generates correct action object', () => {
-  const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
-  const action = updateAssessmentTypes(assessmentTypes);
+  const assessmentConfig = [
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 1,
+      type: 'Missions'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: false,
+      order: 2,
+      type: 'Quests'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 3,
+      type: 'Paths'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 3,
+      type: 'Contests'
+    },
+    {
+      decayRatePointsPerHour: 1,
+      earlySubmissionXp: 200,
+      hoursBeforeEarlyXpDecay: 48,
+      isGraded: true,
+      order: 3,
+      type: 'Others'
+    }
+  ];
+  const action = updateAssessmentTypes(assessmentConfig);
   expect(action).toEqual({
     type: UPDATE_ASSESSMENT_TYPES,
-    payload: assessmentTypes
+    payload: assessmentConfig
   });
 });

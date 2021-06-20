@@ -4,7 +4,12 @@ import { Variant } from 'js-slang/dist/types';
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
-import { Assessment, AssessmentOverview, AssessmentType } from '../../assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentType
+} from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
@@ -22,6 +27,7 @@ export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
 export const SET_COURSE_CONFIGURATION = 'SET_COURSE_CONFIGURATION';
 export const SET_COURSE_REGISTRATION = 'SET_COURSE_REGISTRATION';
+export const SET_ASSESSMENT_CONFIGURATIONS = 'SET_ASSESSMENT_CONFIGURATIONS';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
 export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_OBJECT = 'SET_GITHUB_OCTOKIT_OBJECT';
@@ -43,7 +49,7 @@ export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 export const UPDATE_LATEST_VIEWED_COURSE = 'UPDATE_LATEST_VIEWED_COURSE';
 export const UPDATE_COURSE_CONFIG = 'UPDATE_COURSE_CONFIG';
-export const UPDATE_ASSESSMENT_CONFIG = 'UPDATE_ASSESSMENT_CONFIG';
+export const FETCH_ASSESSMENT_CONFIG = 'FETCH_ASSESSMENT_CONFIG';
 export const UPDATE_ASSESSMENT_TYPES = 'UPDATE_ASSESSMENT_TYPES';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
@@ -80,6 +86,7 @@ export type SessionState = {
   readonly sourceVariant: Variant;
   readonly moduleHelpText?: string;
   readonly assessmentTypes: AssessmentType[];
+  readonly assessmentConfigurations?: AssessmentConfiguration[];
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;

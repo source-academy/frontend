@@ -6,7 +6,6 @@ import {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
-  AssessmentType,
   ContestEntry
 } from '../../assessment/AssessmentTypes';
 import {
@@ -18,6 +17,7 @@ import {
   ACKNOWLEDGE_NOTIFICATIONS,
   CourseRegistration,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIG,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
   FETCH_GRADING,
@@ -30,6 +30,7 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT,
+  SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ASSESSMENT,
@@ -44,7 +45,6 @@ import {
   Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_CONFIG,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_ASSESSMENT_TYPES,
   UPDATE_COURSE_CONFIG,
@@ -94,6 +94,9 @@ export const setCourseConfiguration = (courseConfiguration: UpdateCourseConfigur
 
 export const setCourseRegistration = (courseRegistration: CourseRegistration) =>
   action(SET_COURSE_REGISTRATION, courseRegistration);
+
+export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
+  action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
@@ -194,8 +197,7 @@ export const updateLatestViewedCourse = (courseId: number) =>
 export const updateCourseConfig = (courseConfiguration: UpdateCourseConfiguration) =>
   action(UPDATE_COURSE_CONFIG, courseConfiguration);
 
-export const updateAssessmentConfig = (assessmentConfiguration: AssessmentConfiguration) =>
-  action(UPDATE_ASSESSMENT_CONFIG, assessmentConfiguration);
+export const fetchAssessmentConfig = () => action(FETCH_ASSESSMENT_CONFIG);
 
-export const updateAssessmentTypes = (assessmentTypes: AssessmentType[]) =>
-  action(UPDATE_ASSESSMENT_TYPES, assessmentTypes);
+export const updateAssessmentTypes = (assessmentConfig: AssessmentConfiguration[]) =>
+  action(UPDATE_ASSESSMENT_TYPES, assessmentConfig);
