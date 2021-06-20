@@ -1,12 +1,12 @@
-import { connect, MapDispatchToProps } from 'react-redux';
-import { withRouter } from 'react-router';
-import { bindActionCreators, Dispatch } from 'redux';
+import { connect, MapStateToProps } from 'react-redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 
-import Welcome, { DispatchProps } from './Welcome';
+import Welcome, { StateProps } from './Welcome';
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators({}, dispatch);
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
+  name: state.session.name,
+});
 
-const WelcomeContainer = withRouter(connect(null, mapDispatchToProps)(Welcome));
+const WelcomeContainer = connect(mapStateToProps, null)(Welcome);
 
 export default WelcomeContainer;
