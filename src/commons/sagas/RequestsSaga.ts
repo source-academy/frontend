@@ -940,13 +940,13 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 };
 
 /**
- * PUT /courses/{courseId}/admin/course_config
+ * PUT /courses/{courseId}/admin/config
  */
 export const postCourseConfig = async (
   tokens: Tokens,
   courseConfig: UpdateCourseConfiguration
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/course_config`, 'PUT', {
+  const resp = await request(`${courseId()}/admin/config`, 'PUT', {
     ...tokens,
     body: courseConfig,
     noHeaderAccept: true,
@@ -958,12 +958,12 @@ export const postCourseConfig = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessment_config
+ * GET /courses/{courseId}/admin/config/assessment_types
  */
 export const getAssessmentConfig = async (
   tokens: Tokens
 ): Promise<AssessmentConfiguration[] | null> => {
-  const resp = await request(`${courseId()}/admin/assessment_config`, 'GET', {
+  const resp = await request(`${courseId()}/admin/config/assessment_types`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -975,13 +975,13 @@ export const getAssessmentConfig = async (
 };
 
 /**
- * PUT /courses/{courseId}/admin/assessment_types
+ * PUT /courses/{courseId}/admin/config/assessment_types
  */
 export const postAssessmentTypes = async (
   tokens: Tokens,
   assessmentConfig: AssessmentConfiguration[]
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/assessment_types`, 'PUT', {
+  const resp = await request(`${courseId()}/admin/config/assessment_types`, 'PUT', {
     ...tokens,
     body: { assessmentTypes: assessmentConfig },
     noHeaderAccept: true,
