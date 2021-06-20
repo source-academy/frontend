@@ -2,8 +2,8 @@ import {
   Alert,
   Button,
   FormGroup,
-  H1,
   H2,
+  H3,
   InputGroup,
   Intent,
   Switch,
@@ -80,8 +80,8 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
 
   return (
     <div className="course-configuration">
-      <H1>{courseName}</H1>
-      <H2>{courseShortName}</H2>
+      <H2>{courseName}</H2>
+      <H3>{courseShortName}</H3>
       <div className="inputs">
         <div className="text">
           <FormGroup
@@ -97,7 +97,9 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
             />
           </FormGroup>
           <FormGroup
-            helperText={'Usually the module code of the course. Will be displayed on the top left.'}
+            helperText={
+              'Usually the module code of the course. This will be displayed on the top left.'
+            }
             inline={true}
             label={'Course Short Name'}
             labelFor="courseShortName"
@@ -109,7 +111,9 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
             />
           </FormGroup>
           <FormGroup
-            helperText={'Please enter the module help text that will be used in...'}
+            helperText={
+              'Please enter the module help text that will be used in this and this place.'
+            }
             inline={true}
             label={'Module Help Text'}
             labelFor="moduleHelpText"

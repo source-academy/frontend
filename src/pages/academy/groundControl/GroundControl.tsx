@@ -57,7 +57,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       },
       {
         headerName: 'Category',
-        field: 'category',
+        field: 'type',
         width: 100
       },
       {

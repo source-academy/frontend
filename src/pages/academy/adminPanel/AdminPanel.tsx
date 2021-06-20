@@ -1,6 +1,7 @@
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 
+import { Divider, H1 } from '@blueprintjs/core';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
@@ -10,6 +11,7 @@ import {
   AssessmentType
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import AssessmentConfigPanel from './subcomponents/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 
 export type AdminPanelProps = DispatchProps & StateProps;
@@ -34,7 +36,14 @@ export type StateProps = {
 };
 
 const AdminPanel: React.FC<AdminPanelProps> = props => {
-  const data = <CourseConfigPanel {...props} />;
+  const data = (
+    <div className="admin-panel">
+      <H1>Admin Panel</H1>
+      <CourseConfigPanel {...props} />
+      <Divider />
+      <AssessmentConfigPanel {...props} />
+    </div>
+  );
   return <ContentDisplay loadContentDispatch={() => {}} display={data} fullWidth={false} />;
 };
 

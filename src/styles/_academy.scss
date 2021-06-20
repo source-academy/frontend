@@ -390,22 +390,54 @@
 }
 
 .course-configuration {
+  // @media only screen and (max-width: 768px) {
+  //   .inputs {
+  //     display: flex;
+  //     flex-direction: row;
+  //     .text {
+  //       flex-grow: 4;
+  //       display: flex;
+  //       flex-direction: column;
+  //       justify-content: space-evenly;
+  //       align-items: flex-end;
+  //     }
+  //     .divider {
+  //       border-left: 2px solid $cadet-color-4;
+  //       flex-grow: 1;
+  //     }
+  //     .booleans {
+  //       flex-grow: 3;
+  //       display: flex;
+  //       flex-direction: column;
+  //       justify-content: space-evenly;
+  //       align-items: flex-start;
+  //     }
+  //   }
+  // }
   .inputs {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     .text {
       flex-grow: 4;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 16px;
     }
     .divider {
-      border-left: 2px solid $cadet-color-4;
+      // border-left: 2px solid $cadet-color-4;
       flex-grow: 1;
     }
     .booleans {
+      border-left: 2px solid $cadet-color-4;
       flex-grow: 3;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
       align-items: flex-start;
+      padding: 30px;
+      margin: 20px 60px;
     }
   }
 }

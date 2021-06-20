@@ -60,7 +60,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.MOBILE_VIDEO} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Sourcereel</div>
+          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Sourcereel</div>
         </NavLink>
 
         <NavLink
@@ -69,7 +69,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.ENDORSED} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Grading</div>
+          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Grading</div>
           <NotificationBadgeContainer
             notificationFilter={filterNotificationsByType('Grading')}
             disableHover={true}
@@ -92,7 +92,9 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
             className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
           >
             <Icon icon={IconNames.SETTINGS} />
-            <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Admin Panel</div>
+            <div className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg">
+              Admin Panel
+            </div>
           </NavLink>
         )}
       </NavbarGroup>
