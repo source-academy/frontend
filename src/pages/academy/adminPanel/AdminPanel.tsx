@@ -38,12 +38,6 @@ export type StateProps = {
 };
 
 const AdminPanel: React.FC<AdminPanelProps> = props => {
-  React.useEffect(() => {
-    props.handleFetchCourseConfiguration();
-    props.handleFetchAssessmentConfigs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const data = (
     <div className="admin-panel">
       <H1>Admin Panel</H1>
@@ -52,7 +46,17 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
       <AssessmentConfigPanel {...props} />
     </div>
   );
-  return <ContentDisplay loadContentDispatch={() => {}} display={data} fullWidth={false} />;
+
+  return (
+    <ContentDisplay
+      loadContentDispatch={() => {
+        props.handleFetchCourseConfiguration();
+        props.handleFetchAssessmentConfigs();
+      }}
+      display={data}
+      fullWidth={false}
+    />
+  );
 };
 
 export default AdminPanel;
