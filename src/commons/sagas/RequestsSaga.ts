@@ -169,8 +169,9 @@ export const postLatestViewedCourse = async (
   tokens: Tokens,
   courseId: number
 ): Promise<Response | null> => {
-  const resp = await request(`user/latest_viewed/${courseId}`, 'PUT', {
+  const resp = await request(`user/latest_viewed`, 'PUT', {
     ...tokens,
+    body: { courseId },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
