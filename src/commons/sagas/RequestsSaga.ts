@@ -181,7 +181,7 @@ export const postLatestViewedCourse = async (
 };
 
 /**
- * GET /course/{courseId}/config
+ * GET /courses/{courseId}/config
  */
 export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfiguration | null> => {
   const resp = await request(`${courseId()}/config`, 'GET', {
@@ -197,7 +197,7 @@ export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfigurati
 };
 
 /**
- * GET /course/{courseId}/achievements
+ * GET /courses/{courseId}/achievements
  *
  * Will be updated after a separate db for student progress is ready
  */
@@ -217,7 +217,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 };
 
 /**
- * GET /course/{courseId}/achievements/goals/{studentId}
+ * GET /courses/{courseId}/achievements/goals/{studentId}
  */
 export const getGoals = async (
   tokens: Tokens,
@@ -238,7 +238,7 @@ export const getGoals = async (
 };
 
 /**
- * GET /course/{courseId}/self/goals
+ * GET /courses/{courseId}/self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await request(`${courseId()}/self/goals`, 'GET', {
@@ -256,7 +256,7 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 };
 
 /**
- * GET /course/{courseId}/admin/users
+ * GET /courses/{courseId}/admin/users
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'GET', {
@@ -281,7 +281,7 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
 };
 
 /**
- * PUT /course/{courseId}/admin/achievements
+ * PUT /courses/{courseId}/admin/achievements
  */
 export async function bulkUpdateAchievements(
   achievements: AchievementItem[],
@@ -301,7 +301,7 @@ export async function bulkUpdateAchievements(
 }
 
 /**
- * PUT /course/{courseId}/admin/goals
+ * PUT /courses/{courseId}/admin/goals
  */
 export async function bulkUpdateGoals(
   goals: GoalDefinition[],
@@ -364,7 +364,7 @@ export async function bulkUpdateGoals(
 // };
 
 /**
- * POST /course/{courseId}/self/goals/{goalUuid}/progress
+ * POST /courses/{courseId}/self/goals/{goalUuid}/progress
  */
 export const updateOwnGoalProgress = async (
   progress: GoalProgress,
@@ -382,7 +382,7 @@ export const updateOwnGoalProgress = async (
 };
 
 /**
- * POST /course/{courseId}/admin/users/{studentId}/goals/{goalUuid}/progress
+ * POST /courses/{courseId}/admin/users/{studentId}/goals/{goalUuid}/progress
  */
 export const updateGoalProgress = async (
   studentId: number,
@@ -405,7 +405,7 @@ export const updateGoalProgress = async (
 };
 
 /**
- * DELETE /course/{courseId}/admin/achievements/{achievementUuid}
+ * DELETE /courses/{courseId}/admin/achievements/{achievementUuid}
  */
 export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/achievements/${uuid}`, 'DELETE', {
@@ -420,7 +420,7 @@ export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<R
 };
 
 /**
- * DELETE /course/{courseId}/admin/goals/{goalUuid}
+ * DELETE /courses/{courseId}/admin/goals/{goalUuid}
  */
 export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/goals/${uuid}`, 'DELETE', {
@@ -435,7 +435,7 @@ export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response
 };
 
 /**
- * GET /course/{courseId}/assessments
+ * GET /courses/{courseId}/assessments
  */
 export const getAssessmentOverviews = async (
   tokens: Tokens
@@ -463,9 +463,9 @@ export const getAssessmentOverviews = async (
 };
 
 /**
- * GET /course/{courseId}/assessments/{assessmentId}
+ * GET /courses/{courseId}/assessments/{assessmentId}
  * Note: if assessment is password-protected, a corresponding unlock request will be sent to
- * POST /course/{courseId}/assessments/{assessmentId}/unlock
+ * POST /courses/{courseId}/assessments/{assessmentId}/unlock
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
   let resp = await request(`${courseId()}/assessments/${id}`, 'GET', {
@@ -532,7 +532,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 };
 
 /**
- * POST /course/{courseId}/assessments/question/{questionId}/answer
+ * POST /courses/{courseId}/assessments/question/{questionId}/answer
  */
 export const postAnswer = async (
   id: number,
@@ -550,7 +550,7 @@ export const postAnswer = async (
 };
 
 /**
- * POST /course/{courseId}/assessments/{assessmentId}/submit
+ * POST /courses/{courseId}/assessments/{assessmentId}/submit
  */
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/assessments/${id}/submit`, 'POST', {
@@ -564,7 +564,7 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 };
 
 /*
- * GET /course/{courseId}/admin/grading
+ * GET /courses/{courseId}/admin/grading
  */
 export const getGradingOverviews = async (
   tokens: Tokens,
@@ -621,7 +621,7 @@ export const getGradingOverviews = async (
 };
 
 /**
- * GET /course/{courseId}/admin/grading/{submissionId}
+ * GET /courses/{courseId}/admin/grading/{submissionId}
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
@@ -675,7 +675,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 };
 
 /**
- * POST /course/{courseId}/admin/grading/{submissionId}/{questionId}
+ * POST /courses/{courseId}/admin/grading/{submissionId}/{questionId}
  */
 export const postGrading = async (
   submissionId: number,
@@ -703,7 +703,7 @@ export const postGrading = async (
 };
 
 /**
- * POST /course/{courseId}/admin/grading/{submissionId}/autograde
+ * POST /courses/{courseId}/admin/grading/{submissionId}/autograde
  */
 export const postReautogradeSubmission = async (
   submissionId: number,
@@ -720,7 +720,7 @@ export const postReautogradeSubmission = async (
 };
 
 /**
- * POST /course/{courseId}/admin/grading/{submissionId}/{questionId}/autograde
+ * POST /courses/{courseId}/admin/grading/{submissionId}/{questionId}/autograde
  */
 export const postReautogradeAnswer = async (
   submissionId: number,
@@ -742,7 +742,7 @@ export const postReautogradeAnswer = async (
 };
 
 /**
- * POST /course/{courseId}/admin/grading/{submissionId}/unsubmit
+ * POST /courses/{courseId}/admin/grading/{submissionId}/unsubmit
  */
 export const postUnsubmit = async (
   submissionId: number,
@@ -759,7 +759,7 @@ export const postUnsubmit = async (
 };
 
 /**
- * GET /course/{courseId}/notifications
+ * GET /courses/{courseId}/notifications
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
   const resp: Response | null = await request(`${courseId()}/notifications`, 'GET', {
@@ -790,7 +790,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
 };
 
 /**
- * POST /course/{courseId}/notifications/acknowledge
+ * POST /courses/{courseId}/notifications/acknowledge
  */
 export const postAcknowledgeNotifications = async (
   tokens: Tokens,
@@ -806,7 +806,7 @@ export const postAcknowledgeNotifications = async (
 };
 
 /**
- * GET /course/{courseId}/sourcecast
+ * GET /courses/{courseId}/sourcecast
  */
 export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
   const resp = await request(`${courseId()}/sourcecast`, 'GET', {
@@ -822,7 +822,7 @@ export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData
 };
 
 /**
- * POST /course/{courseId}/sourcecast
+ * POST /courses/{courseId}/sourcecast
  */
 export const postSourcecast = async (
   title: string,
@@ -852,7 +852,7 @@ export const postSourcecast = async (
 };
 
 /**
- * DELETE /course/{courseId}/sourcecast/{sourcecastId}
+ * DELETE /courses/{courseId}/sourcecast/{sourcecastId}
  */
 export const deleteSourcecastEntry = async (
   id: number,
@@ -869,7 +869,7 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
- * POST /course/{courseId}/admin/assessments/{assessmentId}
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}
  */
 export const updateAssessment = async (
   id: number,
@@ -888,7 +888,7 @@ export const updateAssessment = async (
 };
 
 /**
- * DELETE /course/{courseId}/admin/assessments/{assessmentId}
+ * DELETE /courses/{courseId}/admin/assessments/{assessmentId}
  */
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'DELETE', {
@@ -902,7 +902,7 @@ export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Resp
 };
 
 /**
- * POST /course/{courseId}/admin/assessments
+ * POST /courses/{courseId}/admin/assessments
  */
 export const uploadAssessment = async (
   file: File,
@@ -925,7 +925,7 @@ export const uploadAssessment = async (
 };
 
 /**
- * GET /course/{courseId}/admin/grading/summary
+ * GET /courses/{courseId}/admin/grading/summary
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
   const resp = await request(`${courseId()}/admin/grading/summary`, 'GET', {
@@ -940,7 +940,7 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 };
 
 /**
- * PUT /course/{courseId}/admin/course_config
+ * PUT /courses/{courseId}/admin/course_config
  */
 export const postCourseConfig = async (
   tokens: Tokens,
@@ -958,7 +958,7 @@ export const postCourseConfig = async (
 };
 
 /**
- * GET /course/{courseId}/admin/assessment_config
+ * GET /courses/{courseId}/admin/assessment_config
  */
 export const getAssessmentConfig = async (
   tokens: Tokens
@@ -975,7 +975,7 @@ export const getAssessmentConfig = async (
 };
 
 /**
- * PUT /course/{courseId}/admin/assessment_types
+ * PUT /courses/{courseId}/admin/assessment_types
  */
 export const postAssessmentTypes = async (
   tokens: Tokens,
@@ -993,7 +993,7 @@ export const postAssessmentTypes = async (
 };
 
 /**
- * GET /course/{courseId}/devices
+ * GET /courses/{courseId}/devices
  */
 export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
   const resp = await request(`${courseId()}/devices`, 'GET', {
@@ -1006,7 +1006,7 @@ export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
 }
 
 /**
- * GET /course/{courseId}/devices/:id/ws_endpoint
+ * GET /courses/{courseId}/devices/:id/ws_endpoint
  */
 export async function getDeviceWSEndpoint(
   device: Device,
@@ -1023,7 +1023,7 @@ export async function getDeviceWSEndpoint(
 }
 
 /**
- * POST /course/{courseId}/devices
+ * POST /courses/{courseId}/devices
  */
 export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens): Promise<Device> {
   tokens = fillTokens(tokens);
@@ -1048,7 +1048,7 @@ export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens
 }
 
 /**
- * POST /course/{courseId}/devices/:id
+ * POST /courses/{courseId}/devices/:id
  */
 export async function editDevice(
   device: Pick<Device, 'id' | 'title'>,
@@ -1076,7 +1076,7 @@ export async function editDevice(
 }
 
 /**
- * DELETE /course/{courseId}/devices/:id
+ * DELETE /courses/{courseId}/devices/:id
  */
 export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens): Promise<boolean> {
   tokens = fillTokens(tokens);
@@ -1224,7 +1224,7 @@ const computeGradingStatus = (
 const courseId: () => string = () => {
   const id = store.getState().session.courseId;
   if (id) {
-    return `course/${id}`;
+    return `courses/${id}`;
   } else {
     // TODO: Rewrite this logic
     showWarningMessage(`No course selected!`, 1000);
