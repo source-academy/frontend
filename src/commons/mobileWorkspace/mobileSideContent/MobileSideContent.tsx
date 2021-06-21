@@ -89,7 +89,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
    * would force React.useMemo to recompute the nullary function anyway
    */
   const renderedPanels = () => {
-    // TODO: Fix the CSS of all the panels (e.g. subst_visualizer, inspector, etc.)
+    // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
       const tabBody: JSX.Element = workspaceLocation
         ? {
@@ -175,7 +175,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       /**
        * Remove the 'side-content-tab-alert' class that causes tabs flash.
        * To be run when tabs are changed.
-       * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
+       * Currently this style is only used for the "Env Visualizer" tab.
        */
       const resetAlert = (prevTabId: TabId) => {
         const iconId = generateIconId(prevTabId);
