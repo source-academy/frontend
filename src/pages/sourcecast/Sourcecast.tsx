@@ -20,7 +20,6 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -259,7 +258,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       toSpawn: () => true
     },
     dataVisualizerTab,
-    inspectorTab,
     envVisualizerTab
   ];
 
@@ -386,14 +384,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer,
-  toSpawn: () => true
-};
-
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
   toSpawn: () => true
 };
 
