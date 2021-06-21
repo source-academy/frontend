@@ -77,7 +77,6 @@ function generateDefaultState(
 beforeEach(() => {
   // Mock the inspector
   (window as any).Inspector = jest.fn();
-  (window as any).Inspector.updateContext = jest.fn();
   (window as any).Inspector.highlightClean = jest.fn();
   (window as any).Inspector.highlightLine = jest.fn();
 });
