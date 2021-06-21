@@ -13,7 +13,7 @@ import { GameChapter } from './GameChapterTypes';
  */
 export async function fetchGameChapters(): Promise<GameChapter[]> {
   const courseId = store.getState().session.courseId;
-  const response = await request(`course/${courseId}/stories`, 'GET', {
+  const response = await request(`courses/${courseId}/stories`, 'GET', {
     accessToken: SourceAcademyGame.getInstance().getAccountInfo().accessToken,
     refreshToken: SourceAcademyGame.getInstance().getAccountInfo().refreshToken,
     shouldAutoLogout: false,

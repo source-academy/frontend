@@ -146,7 +146,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
           />
         </div>
       </div>
-      <Button onClick={saveChanges}>Save</Button>
+      {/* <Button onClick={saveChanges}>Save</Button> */}
       <Button onClick={handleOpenAlert}>Submit</Button>
       <Alert
         cancelButtonText="Cancel"

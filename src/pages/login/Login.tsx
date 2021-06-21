@@ -6,7 +6,8 @@ import {
   H4,
   Icon,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -41,7 +42,7 @@ const Login: React.FunctionComponent<LoginProps> = props => {
           <div className="login-body">
             <NonIdealState
               description="Logging In..."
-              icon={<Spinner size={Spinner.SIZE_LARGE} />}
+              icon={<Spinner size={SpinnerSize.LARGE} />}
             />
           </div>
         </Card>

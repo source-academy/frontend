@@ -30,8 +30,8 @@ const sendRequest =
   };
 
 const courseId = () => store.getState().session.courseId;
-export const sendAssetRequest = sendRequest(`course/${courseId()}/admin/assets`);
-export const sendStoryRequest = sendRequest(`course/${courseId()}/stories`);
+export const sendAssetRequest = sendRequest(`courses/${courseId()}/admin/assets`);
+export const sendStoryRequest = sendRequest(`courses/${courseId()}/stories`);
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();
