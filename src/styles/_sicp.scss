@@ -13,7 +13,10 @@ $sicp-background-color: #ffffff;
     font-size: 1.2em;
   }
 
-  mjx-container,
+  .bp3-non-ideal-state {
+    font-size: 1rem;
+  }
+
   pre {
     overflow-x: scroll;
   }
@@ -33,8 +36,16 @@ $sicp-background-color: #ffffff;
   }
 
   .bp3-code-block {
+    font-size: 0.9em;
+    padding: 0 15px;
+    margin: 0;
+    box-shadow: none;
     color: $sicp-text-color;
     background-color: $sicp-background-color;
+  }
+
+  .katex {
+    font-size: 1em;
   }
 
   .sicp-content {
@@ -43,6 +54,23 @@ $sicp-background-color: #ffffff;
     max-width: 1050px;
     height: fit-content;
     background-color: $sicp-background-color;
+
+    .sicp-navigation-buttons {
+      margin: 25px 0;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+
+      .bp3-button {
+        background-color: $cadet-color-3;
+        width: 80px;
+        padding: 10px 15px;
+      }
+
+      .bp3-button:hover {
+        background-color: $cadet-color-1;
+      }
+    }
 
     p {
       display: inline;
@@ -103,18 +131,6 @@ $sicp-background-color: #ffffff;
 
       @media only screen and (max-width: 768px) {
         flex-direction: column;
-      }
-    }
-
-    .sicp-toc-tree {
-      .bp3-tree-node-content {
-        height: fit-content;
-        padding: 3px 0;
-
-        .bp3-tree-node-label {
-          white-space: normal;
-          text-overflow: clip;
-        }
       }
     }
 
@@ -221,10 +237,13 @@ $sicp-background-color: #ffffff;
 }
 
 // Styles for sicp table of contents
-
 .sicp-toc {
   overflow-y: auto;
   text-align: left;
+
+  .bp3-tree-node-content {
+    height: fit-content;
+  }
 
   .bp3-tree-node-list {
     padding: 0;
@@ -232,6 +251,8 @@ $sicp-background-color: #ffffff;
 
   .bp3-tree-node-label {
     padding-left: 7px;
+    white-space: normal;
+    text-overflow: clip;
   }
 
   .bp3-tree-node-caret {
@@ -252,13 +273,8 @@ $sicp-background-color: #ffffff;
     font-size: larger;
 
     .bp3-tree-node-content {
-      height: fit-content;
-      padding: 10px 0;
-
-      .bp3-tree-node-label {
-        white-space: normal;
-        text-overflow: clip;
-      }
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
     @media only screen and (max-width: 768px) {
