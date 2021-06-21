@@ -40,7 +40,6 @@ import MobileWorkspace, {
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
-import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -618,8 +617,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.sourceVariant !== 'non-det' &&
       !usingRemoteExecution
     ) {
-      // Enable Inspector, Env Visualizer for Source Chapter 3 and above
-      tabs.push(inspectorTab);
+      // Enable Env Visualizer for Source Chapter 3 and above
       tabs.push(envVisualizerTab);
     }
 
@@ -851,14 +849,6 @@ const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
   body: <SideContentFaceapiDisplay />,
-  toSpawn: () => true
-};
-
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
   toSpawn: () => true
 };
 

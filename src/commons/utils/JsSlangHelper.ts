@@ -130,14 +130,6 @@ export function highlightLine(line: number | undefined) {
   }
 }
 
-export function inspectorUpdate(context: Context | undefined) {
-  if ((window as any).Inspector) {
-    (window as any).Inspector.updateContext(context, stringify);
-  } else {
-    throw new Error('Inspector not loaded');
-  }
-}
-
 export const externalBuiltIns = {
   display,
   rawDisplay,

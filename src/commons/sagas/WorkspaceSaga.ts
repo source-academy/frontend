@@ -48,7 +48,6 @@ import {
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
   highlightLine,
-  inspectorUpdate,
   makeElevatedContext,
   visualizeEnv
 } from '../utils/JsSlangHelper';
@@ -278,7 +277,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
-    inspectorUpdate(undefined);
     highlightLine(undefined);
     yield put(actions.clearReplOutput(workspaceLocation));
     context.runtime.break = false;
@@ -564,7 +562,6 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], workspaceLocation));
-    inspectorUpdate(lastDebuggerResult);
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
     yield put(actions.highlightEditorLine([], workspaceLocation));
@@ -613,10 +610,6 @@ export function* evalCode(
 ): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
-  if (!context.runtime.debuggerOn && context.chapter > 2 && actionType !== EVAL_SILENT) {
-    // Interface not guaranteed to exist, e.g. mission editor.
-    inspectorUpdate(undefined); // effectively resets the interface
-  }
 
   // Logic for execution of substitution model visualizer
   const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
