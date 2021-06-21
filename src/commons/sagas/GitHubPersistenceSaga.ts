@@ -19,7 +19,6 @@ import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/Reposi
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
@@ -63,7 +62,6 @@ function* githubLogoutSaga() {
 
   yield put(actions.removeGitHubOctokitObject());
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
-  yield call(history.push, '/githubassessments/missions');
 }
 
 function* githubOpenFile(): any {
