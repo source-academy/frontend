@@ -38,8 +38,8 @@ const SubstDefaultText = () => {
         b: Move to the previous step
         <br />
         <br />
-        Note that these shortcuts are only active when the browser focus is on
-        this tab (click on or above the explanation text).
+        Note that these shortcuts are only active when the browser focus is on this tab (click on or
+        above the explanation text).
       </div>
     </div>
   );
@@ -99,7 +99,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
           PREVIOUS_STEP: () => {},
           LAST_STEP: () => {}
         };
-     // console.log(this.props.content);
+    // console.log(this.props.content);
 
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
@@ -258,7 +258,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   private stepNext = () => {
     const lastStepValue = this.props.content.length;
     if (this.state.value !== lastStepValue) {
-    this.sliderShift(this.state.value + 1);
+      this.sliderShift(this.state.value + 1);
     }
   };
 
