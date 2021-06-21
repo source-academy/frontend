@@ -115,18 +115,21 @@ exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
 
 exports[`Parse exercise EXERCISE with solution successful 1`] = `
 "<div>
+  <div />
   <SicpExercise title={[undefined]} body={{...}} solution={{...}} />
 </div>"
 `;
 
 exports[`Parse exercise EXERCISE without solution successful 1`] = `
 "<div>
+  <div />
   <SicpExercise title=\\"Title\\" body={{...}} solution={[undefined]} />
 </div>"
 `;
 
 exports[`Parse figures FIGURE with image and scale successful 1`] = `
 "<div className=\\"sicp-figure\\">
+  <div />
   <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
   <h5 className=\\"sicp-caption\\">
     name
@@ -141,6 +144,7 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 
 exports[`Parse figures FIGURE with image successful 1`] = `
 "<div className=\\"sicp-figure\\">
+  <div />
   <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"100%\\" />
   <h5 className=\\"sicp-caption\\">
     name
@@ -155,6 +159,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 
 exports[`Parse figures FIGURE with snippet successful 1`] = `
 "<div className=\\"sicp-figure\\">
+  <div />
   <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
   <h5 className=\\"sicp-caption\\">
     name
@@ -169,6 +174,7 @@ exports[`Parse figures FIGURE with snippet successful 1`] = `
 
 exports[`Parse figures FIGURE with table successful 1`] = `
 "<div className=\\"sicp-figure\\">
+  <div />
   <table>
     <tbody>
       <tr>
@@ -220,6 +226,7 @@ exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
 "<div>
   <hr />
   <div className=\\"sicp-footnote\\">
+    <div />
     <a href=\\"\\">
       [1] 
     </a>
@@ -235,6 +242,7 @@ exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
 exports[`Parse footnote DISPLAYFOOTNOTE count is 2 successful 1`] = `
 "<div>
   <div className=\\"sicp-footnote\\">
+    <div />
     <a href=\\"\\">
       [2] 
     </a>
@@ -364,6 +372,7 @@ exports[`Parse section SECTION  successful 1`] = `
   <div>
     <span>
       <div className=\\"sicp-text\\">
+        <div />
         <span>
           <p>
             Mock Text
@@ -379,6 +388,7 @@ exports[`Parse section SECTION  successful 1`] = `
     </span>
     <span>
       <div className=\\"sicp-text\\">
+        <div />
         <span>
           <p>
             Mock Text

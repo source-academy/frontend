@@ -100,12 +100,6 @@ const Sicp: React.FC<SicpProps> = props => {
     }
 
     const hash = props.location.hash;
-
-    if (!hash) {
-      scrollRefIntoView(topRef.current);
-      return;
-    }
-
     const ref = refs.current[hash];
 
     scrollRefIntoView(ref);
