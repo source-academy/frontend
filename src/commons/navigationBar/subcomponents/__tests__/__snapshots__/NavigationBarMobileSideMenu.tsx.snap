@@ -14,10 +14,10 @@ exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
       Playground
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments/missions\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
-      GitHub Assessments
+      Classroom
     </div>
   </NavLink>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/interactive-sicp/index\\" onClick={[Function: onClose]}>
@@ -77,10 +77,10 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
       Playground
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments/missions\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
-      GitHub Assessments
+      Classroom
     </div>
   </NavLink>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/interactive-sicp/index\\" onClick={[Function: onClose]}>

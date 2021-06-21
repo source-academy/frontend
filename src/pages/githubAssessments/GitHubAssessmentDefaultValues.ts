@@ -70,14 +70,7 @@ If you need a more detailed cheatsheet, please click [here](https://www.markdown
 export const defaultStarterCode = '// Your program here!\n';
 
 export const defaultMissionMetadata = {
-  coverImage: '',
-  type: '',
-  id: '',
-  title: '',
-  sourceVersion: 1,
-  dueDate: new Date(8640000000000000),
-  reading: '',
-  webSummary: ''
+  sourceVersion: 1
 } as MissionMetadata;
 
 export const defaultTask = {
