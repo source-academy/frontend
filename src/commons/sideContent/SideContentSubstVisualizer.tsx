@@ -1,6 +1,5 @@
 /* eslint-disable simple-import-sort/imports */
 import { Card, Classes, Divider, Pre, Slider, Button, ButtonGroup } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -8,8 +7,6 @@ import { HotKeys } from 'react-hotkeys';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
-
-import controlButton from '../ControlButton';
 
 const SubstDefaultText = () => {
   return (
@@ -32,24 +29,27 @@ const SubstDefaultText = () => {
         Some useful keyboard shortcuts:
         <br />
         <br />
-        {controlButton('(Comma)', IconNames.LESS_THAN)}: Move to the first step
+        a: Move to the first step
         <br />
-        {controlButton('(Period)', IconNames.GREATER_THAN)}: Move to the last step
+        e: Move to the last step
+        <br />
+        f: Move to the next step
+        <br />
+        b: Move to the previous step
         <br />
         <br />
-        Note that the first and last step shortcuts are only active when the browser focus is on
-        this panel (click on the slider or the text!).
-        <br />
-        <br />
-        When the focus is on the slider, the arrow keys may also be used to move a single step.
+        Note that these shortcuts are only active when the browser focus is on
+        this tab (click on or above the explanation text).
       </div>
     </div>
   );
 };
 
 const substKeyMap = {
-  FIRST_STEP: ',',
-  LAST_STEP: '.'
+  FIRST_STEP: 'a',
+  NEXT_STEP: 'f',
+  PREVIOUS_STEP: 'b',
+  LAST_STEP: 'e'
 };
 
 const SubstCodeDisplay = (props: { content: string }) => {
@@ -89,13 +89,17 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     const substHandlers = hasRunCode
       ? {
           FIRST_STEP: this.stepFirst,
+          NEXT_STEP: this.stepNext,
+          PREVIOUS_STEP: this.stepPrevious,
           LAST_STEP: this.stepLast(lastStepValue)
         }
       : {
           FIRST_STEP: () => {},
+          NEXT_STEP: () => {},
+          PREVIOUS_STEP: () => {},
           LAST_STEP: () => {}
         };
-    // console.log(this.props.content);
+     // console.log(this.props.content);
 
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
@@ -246,11 +250,16 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   };
 
   private stepPrevious = () => {
-    this.sliderShift(this.state.value - 1);
+    if (this.state.value !== 1) {
+      this.sliderShift(this.state.value - 1);
+    }
   };
 
   private stepNext = () => {
+    const lastStepValue = this.props.content.length;
+    if (this.state.value !== lastStepValue) {
     this.sliderShift(this.state.value + 1);
+    }
   };
 
   private stepPreviousFunctionCall = (value: number) => () => {
