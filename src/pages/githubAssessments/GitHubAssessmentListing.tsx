@@ -82,7 +82,7 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
   }
 
   return (
-    <div className="Assessment">
+    <div className="Assessment" style={{ overflow: 'auto' }}>
       <ContentDisplay display={display} loadContentDispatch={() => {}} />
     </div>
   );

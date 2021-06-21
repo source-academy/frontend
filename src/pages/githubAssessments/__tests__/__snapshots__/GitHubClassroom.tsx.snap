@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GitHubClassroom renders correctly 1`] = `
-"<div className=\\"Academy\\">
+"<div className=\\"Academy\\" style={{...}}>
   <GitHubAssessmentsNavigationBar changeCourseHandler={[Function (anonymous)]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} octokit={{...}} courses={[undefined]} selectedCourse=\\"\\" types={[undefined]} assessmentTypeOverviews={[undefined]} />
   <Switch>
     <Route path=\\"/githubassessments/login\\" render={[Function: render]} />

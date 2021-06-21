@@ -91,7 +91,7 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
   );
 
   return (
-    <div className="Academy">
+    <div className="Academy" style={{ overflow: 'hidden' }}>
       <GitHubAssessmentsNavigationBar
         changeCourseHandler={changeCourseHandler}
         handleGitHubLogIn={props.handleGitHubLogIn}
