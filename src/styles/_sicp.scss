@@ -1,6 +1,16 @@
 $sicp-text-color: #333333;
 $sicp-background-color: #ffffff;
 
+$sicp-max-width: 1050px;
+$sicp-code-snippet-width: 90vw;
+$sicp-code-snippet-max-width: 1500px;
+$sicp-content-lr-padding: 6em;
+
+// Override Sass min()
+@function min($numbers...) {
+  @return m#{i}n(#{$numbers});
+}
+
 .Sicp {
   width: 100%;
   color: $sicp-text-color;
@@ -50,8 +60,8 @@ $sicp-background-color: #ffffff;
 
   .sicp-content {
     margin: 1em auto;
-    padding: 0 6em;
-    max-width: 1050px;
+    padding: 0 $sicp-content-lr-padding;
+    max-width: $sicp-max-width;
     height: fit-content;
     background-color: $sicp-background-color;
 
@@ -159,15 +169,39 @@ $sicp-background-color: #ffffff;
     margin: 10px 0;
 
     .sicp-code-snippet-open {
+      width: 100vw;
+      margin: 25px 0;
+      transform: translateX(
+        min(
+          -$sicp-content-lr-padding,
+          calc(#{$sicp-max-width} / 2 - 50vw - #{$sicp-content-lr-padding})
+        )
+      );
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+
       > .ControlBar {
         display: flex;
         background-color: $cadet-color-1;
         color: white;
         padding: 5px;
+        width: $sicp-code-snippet-width;
+        max-width: $sicp-code-snippet-max-width;
 
         .ControlBar_flow {
           flex-grow: 1;
         }
+
+        @media only screen and (max-width: 768px) {
+          width: 100%;
+          max-width: unset;
+        }
+      }
+
+      .sicp-code-snippet-desktop-open {
+        width: $sicp-code-snippet-width;
+        max-width: $sicp-code-snippet-max-width;
       }
 
       .sicp-workspace-container-container {
@@ -183,11 +217,14 @@ $sicp-background-color: #ffffff;
       }
 
       @media only screen and (max-width: 768px) {
+        display: block;
         position: fixed;
+        margin: 0;
+        transform: none;
         z-index: 20;
         top: 0;
         left: 0;
-        height: calc(100% - 40px);
+        height: calc(100% - 40px); // minus size of control bar
         width: 100vw;
       }
     }
