@@ -19,8 +19,8 @@ type OwnProps = {
   output: string;
   id: string;
   initialEditorValueHash: string;
-  initialPrependHash?: string | undefined;
-  initialFullProgramHash?: string | undefined;
+  initialPrependHash: string | undefined;
+  initialFullProgramHash: string | undefined;
 };
 
 const resizableProps = {
@@ -65,6 +65,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
       ? props.initialFullProgramHash
       : props.initialEditorValueHash,
     initialPrependHash: showPrepend ? undefined : props.initialPrependHash,
+    initialFullProgramHash: props.initialFullProgramHash,
     isSicpEditor: true,
 
     handleCloseEditor: handleClose
