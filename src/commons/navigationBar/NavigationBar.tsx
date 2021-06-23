@@ -96,7 +96,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
               onClick={() => setMobileSideMenuOpen(false)}
             >
               <Icon icon={IconNames.BRIEFCASE} />
-              <div>GitHub Assessments</div>
+              <div>Classroom</div>
             </NavLink>
             <NavLink
               activeClassName={Classes.ACTIVE}
@@ -123,7 +123,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           to="/playground"
         >
           <Icon icon={IconNames.CODE} />
-          <div>Source Academy Playground</div>
+          <div>Playground</div>
         </NavLink>
         <NavLink
           activeClassName={Classes.ACTIVE}
@@ -131,7 +131,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           to="/githubassessments"
         >
           <Icon icon={IconNames.BRIEFCASE} />
-          <div>GitHub Assessments</div>
+          <div>Classroom</div>
         </NavLink>
         <NavLink
           activeClassName={Classes.ACTIVE}
@@ -151,7 +151,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
-        <div>Source Academy Playground</div>
+        <div>Playground</div>
       </NavLink>
       <NavLink
         activeClassName={Classes.ACTIVE}
