@@ -77,7 +77,7 @@ export enum Links {
   piazza = 'https://piazza.com/class/kas136yscf8605',
 
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
-  sourceDocs = 'https://source-academy.github.io/source/',
+  sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
   textbook = 'https://sourceacademy.org/interactive-sicp/',
@@ -87,16 +87,16 @@ export enum Links {
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  source_1 = 'https://source-academy.github.io/source/source_1/',
-  source_1_Lazy = 'https://source-academy.github.io/source/source_1_lazy/',
-  source_1_Wasm = 'https://source-academy.github.io/source/source_1_wasm/',
-  source_2 = 'https://source-academy.github.io/source/source_2/',
-  source_2_Lazy = 'https://source-academy.github.io/source/source_2_lazy/',
-  source_3 = 'https://source-academy.github.io/source/source_3/',
-  source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
-  source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
-  source_4 = 'https://source-academy.github.io/source/source_4/',
-  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/'
+  source_1 = 'https://docs.sourceacademy.org/source_1/',
+  source_1_Lazy = 'https://docs.sourceacademy.org/source_1_lazy/',
+  source_1_Wasm = 'https://docs.sourceacademy.org/source_1_wasm/',
+  source_2 = 'https://docs.sourceacademy.org/source_2/',
+  source_2_Lazy = 'https://docs.sourceacademy.org/source_2_lazy/',
+  source_3 = 'https://docs.sourceacademy.org/source_3/',
+  source_3_Concurrent = 'https://docs.sourceacademy.org/source_3_concurrent/',
+  source_3_Nondet = 'https://docs.sourceacademy.org/source_3_non-det/',
+  source_4 = 'https://docs.sourceacademy.org/source_4/',
+  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/'
 }
 
 const Constants = {
