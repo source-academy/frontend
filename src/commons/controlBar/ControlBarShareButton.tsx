@@ -1,4 +1,4 @@
-import { NonIdealState, Position, Spinner, Text } from '@blueprintjs/core';
+import { NonIdealState, Position, Spinner, SpinnerSize, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
@@ -19,6 +19,7 @@ type StateProps = {
   queryString?: string;
   shortURL?: string;
   key: string;
+  isSicp?: boolean;
 };
 
 type State = {
@@ -51,6 +52,15 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
           Share your programs! Type something into the editor (left), then click on this button
           again.
         </Text>
+      ) : this.props.isSicp ? (
+        <div>
+          <input defaultValue={this.props.queryString!} readOnly={true} ref={this.shareInputElem} />
+          <Tooltip2 content="Copy link to clipboard">
+            <CopyToClipboard text={this.props.queryString!}>
+              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+            </CopyToClipboard>
+          </Tooltip2>
+        </div>
       ) : (
         <>
           {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
@@ -71,7 +81,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
               <div>
                 <NonIdealState
                   description="Generating Shareable Link..."
-                  icon={<Spinner size={Spinner.SIZE_SMALL} />}
+                  icon={<Spinner size={SpinnerSize.SMALL} />}
                 />
               </div>
             )

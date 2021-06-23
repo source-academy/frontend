@@ -105,7 +105,7 @@ const handleSnippet = (obj: JsonType) => {
       body: obj['body']!,
       id: obj['id']!,
       initialEditorValueHash: obj['withoutPrepend']!,
-      initialFullProgramHash: obj['program']!,
+      initialFullProgramHash: obj['program']! || obj['withoutPrepend']!,
       initialPrependHash: obj['prepend']!,
       output: obj['output']!
     };
