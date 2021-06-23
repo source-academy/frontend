@@ -81,6 +81,7 @@ export enum Links {
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
   textbook = 'https://source-academy.github.io/interactive-sicp/',
+  playground = 'https://source-academy.github.io/playground',
   textbookChapter2_2 = 'https://source-academy.github.io/interactive-sicp/2.2',
   textbookChapter3_2 = 'https://source-academy.github.io/interactive-sicp/3.2',
 

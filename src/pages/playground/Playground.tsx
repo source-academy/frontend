@@ -44,7 +44,7 @@ import SideContentRemoteExecution from '../../commons/sideContent/SideContentRem
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
-import Constants from '../../commons/utils/Constants';
+import Constants, { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
@@ -64,6 +64,7 @@ export type OwnProps = {
   isSicpEditor?: boolean;
   initialEditorValueHash?: string;
   initialPrependHash?: string | undefined;
+  initialFullProgramHash?: string;
 
   handleCloseEditor?: () => void;
 };
@@ -551,25 +552,30 @@ const Playground: React.FC<PlaygroundProps> = props => {
     />
   );
 
-  const shareButton = React.useMemo(
-    () => (
+  const shareButton = React.useMemo(() => {
+    const queryString = isSicpEditor
+      ? Links.playground + '#' + props.initialFullProgramHash
+      : props.queryString;
+    return (
       <ControlBarShareButton
         handleGenerateLz={props.handleGenerateLz}
         handleShortenURL={props.handleShortenURL}
         handleUpdateShortURL={props.handleUpdateShortURL}
-        queryString={props.queryString}
+        queryString={queryString}
         shortURL={props.shortURL}
+        isSicp={isSicpEditor}
         key="share"
       />
-    ),
-    [
-      props.handleGenerateLz,
-      props.handleShortenURL,
-      props.handleUpdateShortURL,
-      props.queryString,
-      props.shortURL
-    ]
-  );
+    );
+  }, [
+    isSicpEditor,
+    props.handleGenerateLz,
+    props.handleShortenURL,
+    props.handleUpdateShortURL,
+    props.initialFullProgramHash,
+    props.queryString,
+    props.shortURL
+  ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({

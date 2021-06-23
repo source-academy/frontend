@@ -160,7 +160,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 exports[`Parse figures FIGURE with snippet successful 1`] = `
 "<div className=\\"sicp-figure\\">
   <div />
-  <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]} />
+  <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"IwAg1CwNxA\\" initialPrependHash={[undefined]} output={[undefined]} />
   <h5 className=\\"sicp-caption\\">
     name
     <span>
@@ -425,13 +425,13 @@ exports[`Parse snippet SNIPPET with prepend successful 1`] = `
 `;
 
 exports[`Parse snippet SNIPPET without prepend successful 1`] = `
-"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output={[undefined]}>
+"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"IwAg1CwNxA\\" initialPrependHash={[undefined]} output={[undefined]}>
   Code Snippet
 </div>"
 `;
 
 exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
-"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash={[undefined]} initialPrependHash={[undefined]} output=\\"2\\">
+"<div body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"IwAg1CwNxA\\" initialPrependHash={[undefined]} output=\\"2\\">
   Code Snippet
 </div>"
 `;
