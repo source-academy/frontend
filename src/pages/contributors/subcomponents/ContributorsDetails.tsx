@@ -13,9 +13,11 @@ class ContributorsDetails extends React.Component {
         <Card className="contributorsDetails" elevation={Elevation.ONE}>
           <H3>The Team behind the Source Academy</H3>
           <p>
-            The <i>Source Academy</i> is designed and developed by a team of students, most of who have used the system to learn the fundamentals of computing and enjoyed it. This page includes all
-            developers who contributed to the Source Academy <i>Rook</i> (2022) and its precursors <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded Source Academy 2 (2017) and
-            ultimately the original Source Academy (2016).
+            The <i>Source Academy</i> is designed and developed by a team of students, most of who
+            have used the system to learn the fundamentals of computing and enjoyed it. This page
+            includes all developers who contributed to the Source Academy <i>Rook</i> (2022) and its
+            precursors <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded Source
+            Academy 2 (2017) and ultimately the original Source Academy (2016).
           </p>
           <div className="leadership">
             <H5>
@@ -177,8 +179,7 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p className="evenWider">
-              Daryl Tan,
-	      Thomas Tan
+              Daryl Tan, Thomas Tan
               <br />
               (Source)
             </p>
