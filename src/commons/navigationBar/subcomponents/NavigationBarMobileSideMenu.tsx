@@ -165,11 +165,11 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         Classes.MINIMAL,
         Classes.LARGE
       )}
-      to="/githubassessments/missions"
+      to="/githubassessments"
       onClick={props.onClose}
     >
       <Icon icon={IconNames.BRIEFCASE} />
-      <div className="navbar-button-text">GitHub Assessments</div>
+      <div className="navbar-button-text">Classroom</div>
     </NavLink>
 
     <NavLink
@@ -180,7 +180,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         Classes.MINIMAL,
         Classes.LARGE
       )}
-      to="/interactive-sicp/index"
+      to="/sicpjs/index"
       onClick={props.onClose}
     >
       <Icon icon={IconNames.BOOK} />

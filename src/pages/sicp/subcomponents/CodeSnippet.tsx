@@ -19,8 +19,8 @@ type OwnProps = {
   output: string;
   id: string;
   initialEditorValueHash: string;
-  initialPrependHash?: string | undefined;
-  initialFullProgramHash?: string | undefined;
+  initialPrependHash: string | undefined;
+  initialFullProgramHash: string | undefined;
 };
 
 const resizableProps = {
@@ -36,7 +36,7 @@ const resizableProps = {
   },
   defaultSize: {
     width: '100%',
-    height: '400px'
+    height: '500px'
   },
   minHeight: '250px',
   maxHeight: '2000px'
@@ -65,6 +65,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
       ? props.initialFullProgramHash
       : props.initialEditorValueHash,
     initialPrependHash: showPrepend ? undefined : props.initialPrependHash,
+    initialFullProgramHash: props.initialFullProgramHash,
     isSicpEditor: true,
 
     handleCloseEditor: handleClose
@@ -105,11 +106,13 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
               <SicpWorkspaceContainer {...WorkspaceProps} />
             </div>
           ) : (
-            <Resizable {...resizableProps}>
-              <div className="sicp-workspace-container-container">
-                <SicpWorkspaceContainer {...WorkspaceProps} />
-              </div>
-            </Resizable>
+            <div className="sicp-code-snippet-desktop-open">
+              <Resizable {...resizableProps}>
+                <div className="sicp-workspace-container-container">
+                  <SicpWorkspaceContainer {...WorkspaceProps} />
+                </div>
+              </Resizable>
+            </div>
           )}
         </div>
       ) : (

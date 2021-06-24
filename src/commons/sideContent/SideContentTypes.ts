@@ -23,7 +23,6 @@ export enum SideContentType {
   envVisualizer = 'env_visualizer',
   grading = 'grading',
   introduction = 'introduction',
-  inspector = 'inspector',
   module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',

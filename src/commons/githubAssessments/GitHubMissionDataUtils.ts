@@ -265,91 +265,18 @@ export async function getContentAsString(
  * @param metadataString The file contents of the '.metadata' file of a mission repository
  */
 function convertMetadataStringToMissionMetadata(metadataString: string) {
-  const missionMetadata: MissionMetadata = {
-    coverImage: '',
-    type: '',
-    id: '',
-    title: '',
-    sourceVersion: 1,
-    dueDate: new Date(8640000000000000),
-    reading: '',
-    webSummary: ''
-  };
-  const stringPropsToExtract = ['coverImage', 'type', 'id', 'title', 'reading', 'webSummary'];
-  const numPropsToExtract = ['sourceVersion'];
-  const datePropsToExtract = ['dueDate'];
-
-  const retVal = parseMetadataProperties<MissionMetadata>(
-    missionMetadata,
-    stringPropsToExtract,
-    numPropsToExtract,
-    datePropsToExtract,
-    metadataString
-  );
-
-  return retVal;
+  try {
+    return JSON.parse(metadataString) as MissionMetadata;
+  } catch (err) {
+    console.error(err);
+    return {
+      sourceVersion: 4
+    } as MissionMetadata;
+  }
 }
 
 function convertMissionMetadataToMetadataString(missionMetadata: MissionMetadata) {
-  const properties: string[] = [
-    'title',
-    'coverImage',
-    'webSummary',
-    'dueDate',
-    'type',
-    'id',
-    'sourceVersion',
-    'reading'
-  ];
-  const propertyValuePairs = properties.map(property => property + '=' + missionMetadata[property]);
-  return propertyValuePairs.join('\n');
-}
-
-/**
- * Converts the contents of a '.metadata' file into an object of type R.
- *
- * @param propertyContainer The object of which properties will be set
- * @param stringProps An array containing the names of properties with string values
- * @param numProps An array containing the names of properties with numerical values
- * @param dateProps An array containing the names of properties with date values
- * @param metadataString The content of the '.metadata' file to be parsed
- */
-export function parseMetadataProperties<R>(
-  propertyContainer: R,
-  stringProps: string[],
-  numProps: string[],
-  dateProps: string[],
-  metadataString: string
-) {
-  const lines = metadataString.replace(/\r/g, '').split(/\n/);
-
-  lines.forEach(line => {
-    for (let i = 0; i < stringProps.length; i++) {
-      const propName = stringProps[i];
-      if (line.startsWith(propName)) {
-        propertyContainer[propName] = line.substr(propName.length + 1);
-        return;
-      }
-    }
-
-    for (let i = 0; i < numProps.length; i++) {
-      const propName = numProps[i];
-      if (line.startsWith(propName)) {
-        propertyContainer[propName] = parseInt(line.substr(propName.length + 1), 10);
-        return;
-      }
-    }
-
-    for (let i = 0; i < dateProps.length; i++) {
-      const propName = dateProps[i];
-      if (line.startsWith(propName)) {
-        propertyContainer[propName] = new Date(line.substr(propName.length + 1));
-        return;
-      }
-    }
-  });
-
-  return propertyContainer;
+  return jsonStringify(missionMetadata);
 }
 
 /**

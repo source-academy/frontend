@@ -1,9 +1,18 @@
 $sicp-text-color: #333333;
 $sicp-background-color: #ffffff;
 
+$sicp-max-width: 1050px;
+$sicp-code-snippet-width: 90vw;
+$sicp-code-snippet-max-width: 1500px;
+$sicp-content-lr-padding: 6em;
+
+// Override Sass min()
+@function min($numbers...) {
+  @return m#{i}n(#{$numbers});
+}
+
 .Sicp {
   width: 100%;
-  text-align: justify;
   color: $sicp-text-color;
   overflow: auto;
   background-color: $sicp-background-color;
@@ -14,7 +23,10 @@ $sicp-background-color: #ffffff;
     font-size: 1.2em;
   }
 
-  mjx-container,
+  .bp3-non-ideal-state {
+    font-size: 1rem;
+  }
+
   pre {
     overflow-x: scroll;
   }
@@ -34,20 +46,40 @@ $sicp-background-color: #ffffff;
   }
 
   .bp3-code-block {
+    font-size: 0.9em;
+    padding: 0 15px;
+    margin: 0;
+    box-shadow: none;
     color: $sicp-text-color;
     background-color: $sicp-background-color;
   }
 
+  .katex {
+    font-size: 1em;
+  }
+
   .sicp-content {
     margin: 1em auto;
-    padding: 0 6em;
-    max-width: 1050px;
-
+    padding: 0 $sicp-content-lr-padding;
+    max-width: $sicp-max-width;
     height: fit-content;
     background-color: $sicp-background-color;
 
-    h1 {
-      text-align: left;
+    .sicp-navigation-buttons {
+      margin: 25px 0;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+
+      .bp3-button {
+        background-color: $cadet-color-3;
+        width: 80px;
+        padding: 10px 15px;
+      }
+
+      .bp3-button:hover {
+        background-color: $cadet-color-1;
+      }
     }
 
     p {
@@ -112,18 +144,6 @@ $sicp-background-color: #ffffff;
       }
     }
 
-    .sicp-toc-tree {
-      .bp3-tree-node-content {
-        height: fit-content;
-        padding: 3px 0;
-
-        .bp3-tree-node-label {
-          white-space: normal;
-          text-overflow: clip;
-        }
-      }
-    }
-
     @media only screen and (max-width: 768px) {
       h1,
       h2,
@@ -147,17 +167,42 @@ $sicp-background-color: #ffffff;
 
   .sicp-code-snippet {
     margin: 10px 0;
+    line-height: 1;
 
     .sicp-code-snippet-open {
+      width: 100vw;
+      margin: 25px 0;
+      transform: translateX(
+        min(
+          -$sicp-content-lr-padding,
+          calc(#{$sicp-max-width} / 2 - 50vw - #{$sicp-content-lr-padding})
+        )
+      );
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+
       > .ControlBar {
         display: flex;
         background-color: $cadet-color-1;
         color: white;
         padding: 5px;
+        width: $sicp-code-snippet-width;
+        max-width: $sicp-code-snippet-max-width;
 
         .ControlBar_flow {
           flex-grow: 1;
         }
+
+        @media only screen and (max-width: 768px) {
+          width: 100%;
+          max-width: unset;
+        }
+      }
+
+      .sicp-code-snippet-desktop-open {
+        width: $sicp-code-snippet-width;
+        max-width: $sicp-code-snippet-max-width;
       }
 
       .sicp-workspace-container-container {
@@ -173,11 +218,14 @@ $sicp-background-color: #ffffff;
       }
 
       @media only screen and (max-width: 768px) {
+        display: block;
         position: fixed;
+        margin: 0;
+        transform: none;
         z-index: 20;
         top: 0;
         left: 0;
-        height: calc(100% - 40px);
+        height: calc(100% - 40px); // minus size of control bar
         width: 100vw;
       }
     }
@@ -204,15 +252,6 @@ $sicp-background-color: #ffffff;
     }
   }
 
-  // text container
-  .sicp-text {
-    text-align: justify;
-  }
-
-  .sicp-epigraph {
-    text-align: justify;
-  }
-
   .sicp-attribution {
     text-align: right;
   }
@@ -220,7 +259,6 @@ $sicp-background-color: #ffffff;
   .sicp-exercise {
     margin: 10px 0;
     padding: 10px;
-    text-align: justify;
     background-color: $sicp-background-color !important;
 
     .sicp-button-container {
@@ -237,10 +275,23 @@ $sicp-background-color: #ffffff;
 }
 
 // Styles for sicp table of contents
-
 .sicp-toc {
   overflow-y: auto;
   text-align: left;
+
+  .bp3-tree-node-content {
+    height: fit-content;
+  }
+
+  .bp3-tree-node-list {
+    padding: 0;
+  }
+
+  .bp3-tree-node-label {
+    padding-left: 7px;
+    white-space: normal;
+    text-overflow: clip;
+  }
 
   .bp3-tree-node-caret {
     color: #777777 !important;
@@ -260,13 +311,8 @@ $sicp-background-color: #ffffff;
     font-size: larger;
 
     .bp3-tree-node-content {
-      height: fit-content;
-      padding: 10px 0;
-
-      .bp3-tree-node-label {
-        white-space: normal;
-        text-overflow: clip;
-      }
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
     @media only screen and (max-width: 768px) {

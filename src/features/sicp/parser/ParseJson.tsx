@@ -42,7 +42,8 @@ const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
     <div>
       {obj['count'] === 1 && <hr />}
-      <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-footnote">
+      <div className="sicp-footnote">
+        <div ref={ref => (refs.current[obj['id']!] = ref)} />
         <a href={obj['href']}>{'[' + obj['count'] + '] '}</a>
         {parseArr(obj['child']!, refs)}
       </div>
@@ -104,7 +105,7 @@ const handleSnippet = (obj: JsonType) => {
       body: obj['body']!,
       id: obj['id']!,
       initialEditorValueHash: obj['withoutPrepend']!,
-      initialFullProgramHash: obj['program']!,
+      initialFullProgramHash: obj['program']! || obj['withoutPrepend']!,
       initialPrependHash: obj['prepend']!,
       output: obj['output']!
     };
@@ -113,7 +114,8 @@ const handleSnippet = (obj: JsonType) => {
 };
 
 const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-  <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-figure">
+  <div className="sicp-figure">
+    <div ref={ref => (refs.current[obj['id']!] = ref)} />
     {handleImage(obj, refs)}
     {obj['captionName'] && (
       <h5 className="sicp-caption">
@@ -130,7 +132,7 @@ const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
       <img
         src={Constants.interactiveSicpDataUrl + obj['src']}
         alt={obj['id']}
-        width={obj['scale']}
+        width={obj['scale'] || '100%'}
       />
     );
   } else if (obj['snippet']) {
@@ -152,7 +154,8 @@ const handleTD = (obj: JsonType, refs: React.MutableRefObject<{}>, index: intege
 
 const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div ref={ref => (refs.current[obj['id']!] = ref)}>
+    <div>
+      <div ref={ref => (refs.current[obj['id']!] = ref)} />
       <SicpExercise
         title={obj['title']!}
         body={parseArr(obj['child']!, refs)}
@@ -253,7 +256,8 @@ export const processingFunctions = {
 
   TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <>
-      <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-text">
+      <div className="sicp-text">
+        <div ref={ref => (refs.current[obj['id']!] = ref)} />
         {parseArr(obj['child']!, refs)}
       </div>
       <br />

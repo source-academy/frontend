@@ -17,13 +17,12 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { NavLink, Route, Switch } from 'react-router-dom';
-import SicpNavigationBar from 'src/commons/navigationBar/subcomponents/SicpNavigationBar';
 
+import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
-import GitHubAssessmentsNavigationBar from './subcomponents/GitHubAssessmentsNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;
@@ -97,7 +96,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
               onClick={() => setMobileSideMenuOpen(false)}
             >
               <Icon icon={IconNames.BRIEFCASE} />
-              <div>GitHub Assessments</div>
+              <div>Classroom</div>
             </NavLink>
             <NavLink
               activeClassName={Classes.ACTIVE}
@@ -107,7 +106,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
                 Classes.MINIMAL,
                 Classes.LARGE
               )}
-              to="/interactive-sicp/index"
+              to="/sicpjs/index"
               onClick={() => setMobileSideMenuOpen(false)}
             >
               <Icon icon={IconNames.BOOK} />
@@ -124,20 +123,20 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           to="/playground"
         >
           <Icon icon={IconNames.CODE} />
-          <div>Source Academy Playground</div>
+          <div>Playground</div>
         </NavLink>
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to="/githubassessments/missions"
+          to="/githubassessments"
         >
           <Icon icon={IconNames.BRIEFCASE} />
-          <div>GitHub Assessments</div>
+          <div>Classroom</div>
         </NavLink>
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to="/interactive-sicp/index"
+          to="/sicpjs/index"
         >
           <Icon icon={IconNames.BOOK} />
           <div>SICP JS</div>
@@ -152,12 +151,12 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
-        <div>Source Academy Playground</div>
+        <div>Playground</div>
       </NavLink>
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-        to="/interactive-sicp/index"
+        to="/sicpjs/index"
       >
         <Icon icon={IconNames.BOOK} />
         <div>SICP JS</div>
@@ -225,17 +224,17 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/githubassessments/missions"
+          to="/githubassessments"
         >
           <Icon icon={IconNames.BRIEFCASE} />
-          <div className="navbar-button-text">GitHub Assessments</div>
+          <div className="navbar-button-text">Classroom</div>
         </NavLink>
       )}
 
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/interactive-sicp/index"
+        to="/sicpjs/index"
       >
         <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text">SICP JS</div>
@@ -302,12 +301,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       </Navbar>
 
       <Switch>
-        <Route path="/githubassessments">
-          {Constants.enableGitHubAssessments && !isMobileBreakpoint && desktopMenuOpen && (
-            <GitHubAssessmentsNavigationBar {...props} />
-          )}
-        </Route>
-        <Route path="/interactive-sicp/:section?">
+        <Route path="/sicpjs/:section?">
           <SicpNavigationBar />
         </Route>
         <Route>

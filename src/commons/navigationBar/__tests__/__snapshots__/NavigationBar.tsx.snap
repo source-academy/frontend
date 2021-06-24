@@ -22,13 +22,13 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
           Playground
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments/missions\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
-          GitHub Assessments
+          Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/interactive-sicp/index\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/index\\">
         <Blueprint3.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
@@ -52,10 +52,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>
-    <Route path=\\"/githubassessments\\">
-      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} title=\\"Source Academy\\" />
-    </Route>
-    <Route path=\\"/interactive-sicp/:section?\\">
+    <Route path=\\"/sicpjs/:section?\\">
       <SicpNavigationBar />
     </Route>
     <Route />
@@ -85,13 +82,13 @@ exports[`NavigationBar renders correctly with student role 1`] = `
           Playground
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments/missions\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
-          GitHub Assessments
+          Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/interactive-sicp/index\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/index\\">
         <Blueprint3.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
@@ -125,10 +122,7 @@ exports[`NavigationBar renders correctly with student role 1`] = `
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>
-    <Route path=\\"/githubassessments\\">
-      <GitHubAssessmentsNavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role=\\"student\\" title=\\"Source Academy\\" />
-    </Route>
-    <Route path=\\"/interactive-sicp/:section?\\">
+    <Route path=\\"/sicpjs/:section?\\">
       <SicpNavigationBar />
     </Route>
     <Route>

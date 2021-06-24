@@ -6,8 +6,7 @@ import Academy from '../../pages/academy/AcademyContainer';
 import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
-import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
-import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
+import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
@@ -149,24 +148,19 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
             {Constants.enableGitHubAssessments && (
               <Route
-                path="/githubassessments/missions"
+                path="/githubassessments"
                 component={() => (
-                  <GitHubMissionListing
+                  <GitHubClassroom
                     handleGitHubLogIn={props.handleGitHubLogIn}
                     handleGitHubLogOut={props.handleGitHubLogOut}
                   />
                 )}
               />
             )}
-            {Constants.enableGitHubAssessments && (
-              <Route
-                path="/githubassessments/editor"
-                component={GitHubAssessmentWorkspaceContainer}
-              />
-            )}
             <Route path="/callback/github" component={GitHubCallback} />
-            <Route exact path="/interactive-sicp" render={redirectToSicp} />
-            <Route path="/interactive-sicp/:section" component={Sicp} />
+            <Redirect from="/interactive-sicp/:section?" to="/sicpjs/:section?" />
+            <Route exact path="/sicpjs" render={redirectToSicp} />
+            <Route path="/sicpjs/:section" component={Sicp} />
             {fullPaths}
             <Route
               exact={true}
@@ -184,7 +178,7 @@ const Application: React.FC<ApplicationProps> = props => {
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
-const redirectToSicp = () => <Redirect to="/interactive-sicp/index" />;
+const redirectToSicp = () => <Redirect to="/sicpjs/index" />;
 
 /**
  * A user routes to /academy,

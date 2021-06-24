@@ -14,7 +14,6 @@ import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/Con
 import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -345,7 +344,6 @@ class Sourcereel extends React.Component<SourcereelProps> {
             toSpawn: () => true
           },
           dataVisualizerTab,
-          inspectorTab,
           envVisualizerTab
         ],
         workspaceLocation: 'sourcereel'
@@ -403,14 +401,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer,
-  toSpawn: () => true
-};
-
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
   toSpawn: () => true
 };
 

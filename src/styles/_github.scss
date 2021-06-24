@@ -41,3 +41,19 @@
   width: auto;
   overflow-y: scroll;
 }
+
+.github-welcome {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  .github-welcome-content {
+    padding: 10px 20px 10px 20px;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    width: 80%;
+    @include mQ(750px) {
+      width: 90%;
+    }
+  }
+}
