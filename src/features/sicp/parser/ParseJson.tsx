@@ -291,7 +291,9 @@ export const parseObj = (
 ) => {
   if (obj['tag']) {
     if (processingFunctions[obj['tag']]) {
-      return <React.Fragment key={index}>{processingFunctions[obj['tag']](obj, refs)}</React.Fragment>;
+      return (
+        <React.Fragment key={index}>{processingFunctions[obj['tag']](obj, refs)}</React.Fragment>
+      );
     } else {
       throw new ParseJsonError('Unrecognised Tag: ' + obj['tag']);
     }
