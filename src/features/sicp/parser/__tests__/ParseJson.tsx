@@ -1,4 +1,4 @@
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import lzString from 'lz-string';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
