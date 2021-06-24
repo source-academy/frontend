@@ -38,7 +38,6 @@
     padding: 1% 1% 1% 1%;
 
     h3 {
-      text-transform: capitalize;
       font-weight: bold;
       font-style: oblique;
     }
@@ -62,9 +61,11 @@
         vertical-align: top;
         display: inline-block;
         width: 120px;
-
         &.wider {
           width: 140px;
+        }
+        &.evenWider {
+          width: 180px;
         }
       }
     }

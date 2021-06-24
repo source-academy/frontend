@@ -40,17 +40,17 @@ import MobileWorkspace, {
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
-import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
-import Constants from '../../commons/utils/Constants';
+import Constants, { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
+import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -64,6 +64,7 @@ export type OwnProps = {
   isSicpEditor?: boolean;
   initialEditorValueHash?: string;
   initialPrependHash?: string | undefined;
+  initialFullProgramHash?: string;
 
   handleCloseEditor?: () => void;
 };
@@ -139,7 +140,7 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
   githubOctokitObject: { octokit: Octokit | undefined };
-  githubSaveInfo: { repoName: string; filePath: string };
+  githubSaveInfo: GitHubSaveInfo;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -451,13 +452,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  const githubSaveInfo = props.githubSaveInfo;
+  const githubPersistenceIsDirty =
+    githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
     const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
-        loggedInAs={octokit}
-        githubSaveInfo={props.githubSaveInfo}
         key="github"
+        loggedInAs={octokit}
+        githubSaveInfo={githubSaveInfo}
+        isDirty={githubPersistenceIsDirty}
         onClickOpen={props.handleGitHubOpenFile}
         onClickSave={props.handleGitHubSaveFile}
         onClickSaveAs={props.handleGitHubSaveFileAs}
@@ -467,7 +472,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [
     githubOctokitObject,
-    props.githubSaveInfo,
+    githubPersistenceIsDirty,
+    githubSaveInfo,
     props.handleGitHubOpenFile,
     props.handleGitHubSaveFileAs,
     props.handleGitHubSaveFile,
@@ -539,25 +545,30 @@ const Playground: React.FC<PlaygroundProps> = props => {
     />
   );
 
-  const shareButton = React.useMemo(
-    () => (
+  const shareButton = React.useMemo(() => {
+    const queryString = isSicpEditor
+      ? Links.playground + '#' + props.initialFullProgramHash
+      : props.queryString;
+    return (
       <ControlBarShareButton
         handleGenerateLz={props.handleGenerateLz}
         handleShortenURL={props.handleShortenURL}
         handleUpdateShortURL={props.handleUpdateShortURL}
-        queryString={props.queryString}
+        queryString={queryString}
         shortURL={props.shortURL}
+        isSicp={isSicpEditor}
         key="share"
       />
-    ),
-    [
-      props.handleGenerateLz,
-      props.handleShortenURL,
-      props.handleUpdateShortURL,
-      props.queryString,
-      props.shortURL
-    ]
-  );
+    );
+  }, [
+    isSicpEditor,
+    props.handleGenerateLz,
+    props.handleShortenURL,
+    props.handleUpdateShortURL,
+    props.initialFullProgramHash,
+    props.queryString,
+    props.shortURL
+  ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -605,8 +616,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.sourceVariant !== 'non-det' &&
       !usingRemoteExecution
     ) {
-      // Enable Inspector, Env Visualizer for Source Chapter 3 and above
-      tabs.push(inspectorTab);
+      // Enable Env Visualizer for Source Chapter 3 and above
       tabs.push(envVisualizerTab);
     }
 
@@ -838,14 +848,6 @@ const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
   body: <SideContentFaceapiDisplay />,
-  toSpawn: () => true
-};
-
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
   toSpawn: () => true
 };
 

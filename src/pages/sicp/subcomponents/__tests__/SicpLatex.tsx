@@ -1,7 +1,5 @@
-import { MathJaxContext } from 'better-react-mathjax';
 import { mount } from 'enzyme';
 
-import { mathjaxConfig } from '../../Sicp';
 import SicpLatex from '../SicpLatex';
 
 describe('Sicp latex renders', () => {
@@ -11,11 +9,7 @@ describe('Sicp latex renders', () => {
       inline: false
     };
 
-    const tree = mount(
-      <MathJaxContext version={3} config={mathjaxConfig}>
-        <SicpLatex {...props} />
-      </MathJaxContext>
-    );
+    const tree = mount(<SicpLatex {...props} />);
     expect(tree.debug()).toMatchSnapshot();
   });
 
@@ -25,11 +19,7 @@ describe('Sicp latex renders', () => {
       inline: true
     };
 
-    const tree = mount(
-      <MathJaxContext version={3} config={mathjaxConfig}>
-        <SicpLatex {...props} />
-      </MathJaxContext>
-    );
+    const tree = mount(<SicpLatex {...props} />);
     expect(tree.debug()).toMatchSnapshot();
   });
 });

@@ -1,9 +1,9 @@
-import { Pre } from '@blueprintjs/core';
+import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
@@ -19,8 +19,8 @@ type OwnProps = {
   output: string;
   id: string;
   initialEditorValueHash: string;
-  initialPrependHash?: string | undefined;
-  initialFullProgramHash?: string | undefined;
+  initialPrependHash: string | undefined;
+  initialFullProgramHash: string | undefined;
 };
 
 const resizableProps = {
@@ -36,7 +36,7 @@ const resizableProps = {
   },
   defaultSize: {
     width: '100%',
-    height: '400px'
+    height: '500px'
   },
   minHeight: '250px',
   maxHeight: '2000px'
@@ -65,6 +65,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
       ? props.initialFullProgramHash
       : props.initialEditorValueHash,
     initialPrependHash: showPrepend ? undefined : props.initialPrependHash,
+    initialFullProgramHash: props.initialFullProgramHash,
     isSicpEditor: true,
 
     handleCloseEditor: handleClose
@@ -105,17 +106,21 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
               <SicpWorkspaceContainer {...WorkspaceProps} />
             </div>
           ) : (
-            <Resizable {...resizableProps}>
-              <div className="sicp-workspace-container-container">
-                <SicpWorkspaceContainer {...WorkspaceProps} />
-              </div>
-            </Resizable>
+            <div className="sicp-code-snippet-desktop-open">
+              <Resizable {...resizableProps}>
+                <div className="sicp-workspace-container-container">
+                  <SicpWorkspaceContainer {...WorkspaceProps} />
+                </div>
+              </Resizable>
+            </div>
           )}
         </div>
       ) : (
-        <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
-          {body}
-        </SyntaxHighlighter>
+        <Card className="sicp-code-snippet-closed" interactive={true} elevation={Elevation.TWO}>
+          <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
+            {body}
+          </SyntaxHighlighter>
+        </Card>
       )}
       {output && <Pre>{output}</Pre>}
     </div>

@@ -6,8 +6,7 @@ import Academy from '../../pages/academy/AcademyContainer';
 import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
-import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
-import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
+import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
@@ -111,19 +110,14 @@ const Application: React.FC<ApplicationProps> = props => {
   const githubAssessmentsPaths = Constants.enableGitHubAssessments
     ? [
         <Route
-          path="/githubassessments/missions"
+          path="/githubassessments"
           component={() => (
-            <GitHubMissionListing
+            <GitHubClassroom
               handleGitHubLogIn={props.handleGitHubLogIn}
               handleGitHubLogOut={props.handleGitHubLogOut}
             />
           )}
-          key="githubAssessmentsMissions"
-        />,
-        <Route
-          path="/githubassessments/editor"
-          component={GitHubAssessmentWorkspaceContainer}
-          key="githubAssessmentsEditor"
+          key="githubAssessments"
         />
       ]
     : [];

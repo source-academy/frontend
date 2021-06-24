@@ -17,7 +17,6 @@ import {
   checkIfFileCanBeOpened,
   checkIfFileCanBeSavedAndGetSaveType,
   checkIfUserAgreesToOverwriteEditorData,
-  checkIfUserAgreesToPerformCreatingSave,
   checkIfUserAgreesToPerformOverwritingSave,
   openFileInEditor,
   performCreatingSave,
@@ -134,7 +133,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
           );
         }
 
-        if (saveType === 'Create' && (await checkIfUserAgreesToPerformCreatingSave())) {
+        if (saveType === 'Create') {
           performCreatingSave(
             props.octokit,
             githubLoginID,
@@ -148,6 +147,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         }
       }
     }
+    props.onSubmit('');
   }
 
   async function handleNodeClick(

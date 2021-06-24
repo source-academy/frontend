@@ -24,13 +24,13 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
     <NavLink to=\\"/academy/sourcereel\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"mobile-video\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Sourcereel
       </div>
     </NavLink>
     <NavLink to=\\"/academy/grading\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"endorsed\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Grading
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
@@ -43,7 +43,7 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
     <NavLink to=\\"/academy/adminpanel\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"settings\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
         Admin Panel
       </div>
     </NavLink>
@@ -69,13 +69,13 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     </NavLink>
     <NavLink to=\\"/academy/sourcereel\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"mobile-video\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Sourcereel
       </div>
     </NavLink>
     <NavLink to=\\"/academy/grading\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"endorsed\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Grading
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />

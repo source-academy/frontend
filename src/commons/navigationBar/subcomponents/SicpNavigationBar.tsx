@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { useHistory, useParams } from 'react-router';
 import controlButton from 'src/commons/ControlButton';
+import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
-import tocNavigation from '../../../features/sicp/data/toc-navigation.json';
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
 
@@ -16,59 +16,33 @@ const SicpNavigationBar: React.FC = () => {
   const { section } = useParams<{ section: string }>();
   const history = useHistory();
 
+  const prev = getPrev(section);
+  const next = getNext(section);
+
   const handleCloseToc = () => setIsTocOpen(false);
+  const handleOpenToc = () => setIsTocOpen(true);
+  const handleNavigation = (sect: string) => {
+    history.push('/interactive-sicp/' + sect);
+  };
 
   // Button to open table of contents
-  const tocButton = React.useMemo(() => {
-    const handleOpenToc = () => setIsTocOpen(true);
-    return <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
-  }, []);
+  const tocButton = <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
 
   // Previous button only displayed when next page is valid.
-  const prevButton = React.useMemo(() => {
-    const sect = tocNavigation[section];
-    if (!sect) {
-      return;
-    }
-
-    const prev = sect['prev'];
-    if (!prev) {
-      return;
-    }
-
-    const handlePrev = () => {
-      history.push('/interactive-sicp/' + prev);
-    };
-
-    return (
-      prev && <div key="prev">{controlButton('Previous', IconNames.ARROW_LEFT, handlePrev)}</div>
-    );
-  }, [history, section]);
+  const prevButton = prev && (
+    <div key="prev">
+      {controlButton('Previous', IconNames.ARROW_LEFT, () => handleNavigation(prev))}
+    </div>
+  );
 
   // Next button only displayed when next page is valid.
-  const nextButton = React.useMemo(() => {
-    const sect = tocNavigation[section];
-    if (!sect) {
-      return;
-    }
-
-    const next = sect['next'];
-    if (!next) {
-      return;
-    }
-
-    const handleNext = () => {
-      history.push('/interactive-sicp/' + next);
-    };
-
-    return (
-      next && (
-        <div key="next">
-          {controlButton('Next', IconNames.ARROW_RIGHT, handleNext, { iconOnRight: true })}
-        </div>
-      )
-    );
-  }, [history, section]);
+  const nextButton = next && (
+    <div key="next">
+      {controlButton('Next', IconNames.ARROW_RIGHT, () => handleNavigation(next), {
+        iconOnRight: true
+      })}
+    </div>
+  );
 
   const drawerProps = {
     onClose: handleCloseToc,

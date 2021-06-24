@@ -15,11 +15,11 @@ Everything here is written in Markdown.
 
 This means that you can **bolden** or *italicize* text by adding asterisks.
 
-Code-blocks can be formatted through the use of backticks:
+Programs can be formatted through the use of triple backticks:
 \`\`\`
-// This is a code example
+// This is a program example
 \`\`\`
-If you want to in-line code, rather than display a whole code-block, you can also do \`this\`. 
+If you want to in-line program snippets, rather than display it as a block, you can also use single backticks like \`this\`.
 
 Lists can be created by adding dashes to the start of a line:
 - First element
@@ -48,11 +48,11 @@ Everything here is written in Markdown.
 
 This means that you can **bolden** or *italicize* text by adding asterisks.
 
-Code-blocks can be formatted through the use of backticks:
+Programs can be formatted through the use of triple backticks:
 \`\`\`
-// This is a code example
+// This is a program example
 \`\`\`
-If you want to in-line code, rather than display a whole code-block, you can also do \`this\`. 
+If you want to in-line program snippets, rather than display it as a block, you can also use single backticks like \`this\`.
 
 Lists can be created by adding dashes to the start of a line:
 - First element
@@ -67,17 +67,10 @@ It is also possible to embed images, like this:
 If you need a more detailed cheatsheet, please click [here](https://www.markdownguide.org/cheat-sheet/)!
 `;
 
-export const defaultStarterCode = '// Your code here!\n';
+export const defaultStarterCode = '// Your program here!\n';
 
 export const defaultMissionMetadata = {
-  coverImage: '',
-  type: '',
-  id: '',
-  title: '',
-  sourceVersion: 1,
-  dueDate: new Date(8640000000000000),
-  reading: '',
-  webSummary: ''
+  sourceVersion: 1
 } as MissionMetadata;
 
 export const defaultTask = {

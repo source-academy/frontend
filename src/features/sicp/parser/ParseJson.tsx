@@ -42,7 +42,8 @@ const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
     <div>
       {obj['count'] === 1 && <hr />}
-      <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-footnote">
+      <div className="sicp-footnote">
+        <div ref={ref => (refs.current[obj['id']!] = ref)} />
         <a href={obj['href']}>{'[' + obj['count'] + '] '}</a>
         {parseArr(obj['child']!, refs)}
       </div>
@@ -92,7 +93,7 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
 const handleSnippet = (obj: JsonType) => {
   if (obj['latex']) {
-    return <Pre>{handleLatex(obj['body']!, false)}</Pre>;
+    return <Pre>{handleLatex(obj['body']!)}</Pre>;
   } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
     return <Pre>{obj['body']}</Pre>;
   } else {
@@ -104,7 +105,7 @@ const handleSnippet = (obj: JsonType) => {
       body: obj['body']!,
       id: obj['id']!,
       initialEditorValueHash: obj['withoutPrepend']!,
-      initialFullProgramHash: obj['program']!,
+      initialFullProgramHash: obj['program']! || obj['withoutPrepend']!,
       initialPrependHash: obj['prepend']!,
       output: obj['output']!
     };
@@ -113,10 +114,11 @@ const handleSnippet = (obj: JsonType) => {
 };
 
 const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-  <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-figure">
+  <div className="sicp-figure">
+    <div ref={ref => (refs.current[obj['id']!] = ref)} />
     {handleImage(obj, refs)}
     {obj['captionName'] && (
-      <h5>
+      <h5 className="sicp-caption">
         {obj['captionName']}
         {parseArr(obj['captionBody']!, refs)}
       </h5>
@@ -127,15 +129,11 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   if (obj['src']) {
     return (
-      <div className={'sicp-figure'}>
-        {obj['src'] && (
-          <img
-            src={Constants.interactiveSicpUrl + obj['src']}
-            alt={obj['id']}
-            width={obj['scale']}
-          />
-        )}
-      </div>
+      <img
+        src={Constants.interactiveSicpDataUrl + obj['src']}
+        alt={obj['id']}
+        width={obj['scale'] || '100%'}
+      />
     );
   } else if (obj['snippet']) {
     return processingFunctions['SNIPPET'](obj['snippet'], refs);
@@ -156,7 +154,8 @@ const handleTD = (obj: JsonType, refs: React.MutableRefObject<{}>, index: intege
 
 const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div ref={ref => (refs.current[obj['id']!] = ref)}>
+    <div>
+      <div ref={ref => (refs.current[obj['id']!] = ref)} />
       <SicpExercise
         title={obj['title']!}
         body={parseArr(obj['child']!, refs)}
@@ -175,12 +174,16 @@ const handleContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   );
 };
 
+const handleReference = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+  return <div>{parseArr(obj['child']!, refs)}</div>;
+};
+
 const handleText = (text: string) => {
   return <p>{text}</p>;
 };
 
-const handleLatex = (math: string, inline: boolean) => {
-  return <SicpLatex inline={inline} math={math} />;
+const handleLatex = (math: string) => {
+  return <SicpLatex math={math} />;
 };
 
 export const processingFunctions = {
@@ -210,10 +213,9 @@ export const processingFunctions = {
     <Code>{obj['body']}</Code>
   ),
 
-  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!, false),
+  LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
 
-  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) =>
-    handleLatex(obj['body']!, true),
+  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
 
   LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
 
@@ -221,19 +223,13 @@ export const processingFunctions = {
 
   LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('LaTeX'),
 
-  MATTER: handleContainer,
-
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
-
-  METAPHRASE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>&langle; &rangle;</p>,
 
   OL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <OL>{parseArr(obj['child']!, refs)}</OL>,
 
   REF: handleRef,
 
-  REFERENCE: handleContainer,
-
-  REFERENCES: handleContainer,
+  REFERENCE: handleReference,
 
   SECTION: handleContainer,
 
@@ -245,16 +241,12 @@ export const processingFunctions = {
     </h2>
   ),
 
-  SUBSECTION: handleContainer,
-
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
       <br />
       {parseArr(obj['child']!, refs)}
     </h4>
   ),
-
-  SUBSUBSECTION: handleContainer,
 
   TABLE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <table>
@@ -264,7 +256,8 @@ export const processingFunctions = {
 
   TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <>
-      <div ref={ref => (refs.current[obj['id']!] = ref)} className="sicp-text">
+      <div className="sicp-text">
+        <div ref={ref => (refs.current[obj['id']!] = ref)} />
         {parseArr(obj['child']!, refs)}
       </div>
       <br />

@@ -2,7 +2,7 @@ import { Octokit } from '@octokit/rest';
 
 import { IMCQQuestion } from '../../assessment/AssessmentTypes';
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
-import { MissionMetadata, MissionRepoData } from '../GitHubMissionTypes';
+import { MissionRepoData } from '../GitHubMissionTypes';
 
 test('getContentAsString correctly gets content and translates from Base64 to utf-8', async () => {
   const octokit = new Octokit();
@@ -21,40 +21,6 @@ test('getContentAsString correctly gets content and translates from Base64 to ut
     octokit
   );
   expect(content).toBe('Hello World!');
-});
-
-test('parseMetadataProperties correctly discovers properties', () => {
-  const missionMetadata = Object.assign({}, dummyMissionMetadata);
-  const stringPropsToExtract = ['coverImage', 'type', 'id', 'title', 'reading', 'webSummary'];
-  const numPropsToExtract = ['sourceVersion'];
-  const datePropsToExtract = ['dueDate'];
-
-  const metadataString =
-    'coverImage=www.somelink.com\n' +
-    'type=Mission\n' +
-    'id=M3\n' +
-    'title=Dummy Mission\n' +
-    'reading=Textbook Pages 1 to 234763\n' +
-    'dueDate=December 17, 1995 03:24:00\n' +
-    'webSummary=no\n' +
-    'sourceVersion=3';
-
-  const retVal = GitHubMissionDataUtils.parseMetadataProperties<MissionMetadata>(
-    missionMetadata,
-    stringPropsToExtract,
-    numPropsToExtract,
-    datePropsToExtract,
-    metadataString
-  );
-
-  expect(retVal.coverImage).toBe('www.somelink.com');
-  expect(retVal.type).toBe('Mission');
-  expect(retVal.id).toBe('M3');
-  expect(retVal.title).toBe('Dummy Mission');
-  expect(retVal.reading).toBe('Textbook Pages 1 to 234763');
-  expect(retVal.webSummary).toBe('no');
-  expect(retVal.sourceVersion).toBe(3);
-  expect(retVal.dueDate).toStrictEqual(new Date('December 17, 1995 03:24:00'));
 });
 
 test('getMissionData works properly', async () => {
@@ -79,13 +45,9 @@ test('getMissionData works properly', async () => {
       // Metadata String
       const contentResponse = generateGetContentResponse();
       (contentResponse.data as any).content = Buffer.from(
-        'coverImage=www.somelink.com\n' +
-          'type=Mission\n' +
-          'id=M3\n' +
-          'title=Dummy Mission\n' +
-          'reading=Textbook Pages 1 to 234763\n' +
-          'webSummary=no\n' +
-          'sourceVersion=3',
+        `{
+          "sourceVersion": 3
+        }`,
         'utf-8'
       ).toString('base64');
       return contentResponse;
@@ -183,13 +145,6 @@ test('getMissionData works properly', async () => {
   expect(missionData.missionRepoData.repoName).toBe('Peko');
 
   expect(missionData.missionBriefing).toBe('Briefing Content');
-
-  expect(missionData.missionMetadata.coverImage).toBe('www.somelink.com');
-  expect(missionData.missionMetadata.type).toBe('Mission');
-  expect(missionData.missionMetadata.id).toBe('M3');
-  expect(missionData.missionMetadata.title).toBe('Dummy Mission');
-  expect(missionData.missionMetadata.reading).toBe('Textbook Pages 1 to 234763');
-  expect(missionData.missionMetadata.webSummary).toBe('no');
   expect(missionData.missionMetadata.sourceVersion).toBe(3);
 
   expect(missionData.tasksData.length).toBe(2);
@@ -932,14 +887,7 @@ function generateGetContentResponse() {
 }
 
 const dummyMissionMetadata = {
-  coverImage: 'www.eh',
-  type: 'mission',
-  id: 'M2',
-  title: 'Dummy',
-  sourceVersion: 1,
-  dueDate: new Date('December 17, 1996 03:24:00'),
-  reading: 'none',
-  webSummary: 'no'
+  sourceVersion: 1
 };
 
 const defaultMissionMetadata = {

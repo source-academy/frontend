@@ -2,10 +2,10 @@
 
 exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 "<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments/missions\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
-      GitHub Assessments
+      Classroom
     </div>
   </NavLink>
 </Blueprint3.Drawer>"
@@ -19,10 +19,10 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
       Playground
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments/missions\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
-      GitHub Assessments
+      Classroom
     </div>
   </NavLink>
 </Blueprint3.Drawer>"

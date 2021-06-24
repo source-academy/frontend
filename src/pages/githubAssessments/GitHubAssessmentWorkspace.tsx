@@ -46,11 +46,6 @@ import {
   getMissionData
 } from '../../commons/githubAssessments/GitHubMissionDataUtils';
 import {
-  GitHubMissionSaveDialog,
-  GitHubMissionSaveDialogProps,
-  GitHubMissionSaveDialogResolution
-} from '../../commons/githubAssessments/GitHubMissionSaveDialog';
-import {
   MissionData,
   MissionMetadata,
   MissionRepoData,
@@ -86,6 +81,7 @@ import {
   defaultMissionMetadata,
   defaultTask
 } from './GitHubAssessmentDefaultValues';
+import { GHAssessmentOverview } from './GitHubClassroom';
 
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
@@ -136,7 +132,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/missions');
+    history.push('/githubassessments/login');
   }
 
   /**
@@ -164,9 +160,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
   const [displayMCQInEditor, setDisplayMCQInEditor] = React.useState(true);
   const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
-  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData>(
-    props.location.state as MissionRepoData
+  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData | undefined>(
+    undefined
   );
+  const assessmentOverview = props.location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
@@ -261,35 +258,22 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Sets up the workspace for when the user is retrieving Mission information from a GitHub repository
    */
-  const setUpWithMissionRepoData = useCallback(async () => {
+  const setUpWithAssessmentOverview = useCallback(async () => {
     if (octokit === undefined) return;
 
-    const missionDataPromise = getMissionData(missionRepoData, octokit);
-    const isTeacherModePromise = octokit.users
-      .getAuthenticated()
-      .then((authenticatedUser: any) => {
-        const userLogin = authenticatedUser.data.login;
-        return userLogin === missionRepoData.repoOwner;
-      })
-      .then(async (userOwnsRepo: boolean) => {
-        if (userOwnsRepo) return true;
+    const missionRepoData = assessmentOverview.missionRepoData;
 
-        const userOrganisations = (await octokit.orgs.listForAuthenticatedUser()).data;
-        let userOrganisationOwnsRepo = false;
-        for (let i = 0; i < userOrganisations.length; i++) {
-          const org = userOrganisations[i];
-          // User has admin access to an organization owning the repo
-          userOrganisationOwnsRepo = org.login === missionRepoData.repoOwner;
-          if (userOrganisationOwnsRepo) {
-            break;
-          }
-        }
-        return userOrganisationOwnsRepo;
-      });
+    const missionDataPromise = getMissionData(missionRepoData, octokit);
+    const isTeacherModePromise = octokit.users.getAuthenticated().then((authenticatedUser: any) => {
+      const userLogin = authenticatedUser.data.login;
+      return userLogin === missionRepoData.repoOwner;
+    });
 
     const promises = [missionDataPromise, isTeacherModePromise];
 
     Promise.all(promises).then((promises: any[]) => {
+      setMissionRepoData(missionRepoData);
+
       setHasUnsavedChangesToTasks(false);
       setHasUnsavedChangesToBriefing(false);
       setHasUnsavedChangesToMetadata(false);
@@ -316,12 +300,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
       setIsLoading(false);
     });
-  }, [changeStateDueToChangedTaskNumber, missionRepoData, octokit, handleUpdateHasUnsavedChanges]);
+  }, [
+    assessmentOverview,
+    octokit,
+    changeStateDueToChangedTaskNumber,
+    handleUpdateHasUnsavedChanges
+  ]);
 
   /**
    * Sets up the workspace for when the user is creating a new Mission
    */
-  const setUpWithoutMissionRepoData = useCallback(() => {
+  const setUpWithoutAssessmentOverview = useCallback(() => {
     setSummary(defaultMissionBriefing);
 
     setMissionMetadata(defaultMissionMetadata);
@@ -346,12 +335,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   }, [changeStateDueToChangedTaskNumber, handleUpdateHasUnsavedChanges]);
 
   useEffect(() => {
-    if (missionRepoData === undefined) {
-      setUpWithoutMissionRepoData();
+    if (assessmentOverview === undefined) {
+      setUpWithoutAssessmentOverview();
     } else {
-      setUpWithMissionRepoData();
+      setUpWithAssessmentOverview();
     }
-  }, [missionRepoData, setUpWithMissionRepoData, setUpWithoutMissionRepoData]);
+  }, [assessmentOverview, setUpWithAssessmentOverview, setUpWithoutAssessmentOverview]);
 
   const briefingOverlay = (
     <Dialog className="assessment-briefing" isOpen={showBriefingOverlay}>
@@ -399,18 +388,20 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       githubEmail: string | null,
       commitMessage: string
     ) => {
+      const typedMissionRepoData = missionRepoData as MissionRepoData;
+
       const { saveType } = await checkIfFileCanBeSavedAndGetSaveType(
         octokit,
-        missionRepoData.repoOwner,
-        missionRepoData.repoName,
+        typedMissionRepoData.repoOwner,
+        typedMissionRepoData.repoName,
         changedFile
       );
 
       if (saveType === 'Overwrite') {
         await performOverwritingSave(
           octokit,
-          missionRepoData.repoOwner,
-          missionRepoData.repoName,
+          typedMissionRepoData.repoOwner,
+          typedMissionRepoData.repoName,
           changedFile,
           githubName,
           githubEmail,
@@ -422,8 +413,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       if (saveType === 'Create') {
         await performCreatingSave(
           octokit,
-          missionRepoData.repoOwner,
-          missionRepoData.repoName,
+          typedMissionRepoData.repoOwner,
+          typedMissionRepoData.repoName,
           changedFile,
           githubName,
           githubEmail,
@@ -442,10 +433,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       githubEmail: string | null,
       commitMessage: string
     ) => {
+      const typedMissionRepoData = missionRepoData as MissionRepoData;
+
       await performFolderDeletion(
         octokit,
-        missionRepoData.repoOwner,
-        missionRepoData.repoName,
+        typedMissionRepoData.repoOwner,
+        typedMissionRepoData.repoName,
         fileName,
         githubName,
         githubEmail,
@@ -473,21 +466,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       cachedTaskList,
       isTeacherMode
     );
-    const changedFiles = Object.keys(filenameToContentMap).sort();
-
-    const dialogResults = await promisifyDialog<
-      GitHubMissionSaveDialogProps,
-      GitHubMissionSaveDialogResolution
-    >(GitHubMissionSaveDialog, resolve => ({
-      repoName: missionRepoData.repoName,
-      filesToChangeOrCreate: changedFiles,
-      filesToDelete: foldersToDelete,
-      resolveDialog: dialogResults => resolve(dialogResults)
-    }));
-
-    if (!dialogResults.confirmSave) {
-      return;
-    }
+    const changedFiles = Object.keys(filenameToContentMap);
 
     type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
       typeof octokit.users.getAuthenticated
@@ -495,7 +474,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const authUser: GetAuthenticatedResponse = await octokit.users.getAuthenticated();
     const githubName = authUser.data.name;
     const githubEmail = authUser.data.email;
-    const commitMessage = dialogResults.commitMessage;
+    const commitMessage = '';
 
     for (let i = 0; i < foldersToDelete.length; i++) {
       await conductDelete(foldersToDelete[i], githubName, githubEmail, commitMessage);
@@ -515,17 +494,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setHasUnsavedChangesToBriefing(false);
     setHasUnsavedChangesToMetadata(false);
   }, [
+    octokit,
+    isTeacherMode,
     briefingContent,
-    cachedBriefingContent,
+    missionMetadata,
     taskList,
     cachedTaskList,
-    missionMetadata,
+    cachedBriefingContent,
     cachedMissionMetadata,
     conductSave,
-    conductDelete,
-    octokit,
-    missionRepoData,
-    isTeacherMode
+    conductDelete
   ]);
 
   /**
@@ -605,12 +583,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   }, [briefingContent, missionMetadata, octokit, taskList]);
 
   const onClickSave = useCallback(() => {
+    if (assessmentOverview !== undefined && new Date() > assessmentOverview.dueDate) {
+      showWarningMessage('It is past the due date for this assessment!');
+      return;
+    }
+
     if (missionRepoData !== undefined) {
       saveWithMissionRepoData();
     } else {
       saveWithoutMissionRepoData();
     }
-  }, [missionRepoData, saveWithMissionRepoData, saveWithoutMissionRepoData]);
+  }, [assessmentOverview, missionRepoData, saveWithMissionRepoData, saveWithoutMissionRepoData]);
 
   const onClickReset = useCallback(async () => {
     const confirmReset = await showSimpleConfirmDialog({
@@ -657,7 +640,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   );
 
   const onClickPrevious = useCallback(() => {
-    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList, missionRepoData)) {
+    if (
+      shouldProceedToChangeTask(
+        currentTaskNumber,
+        taskList,
+        cachedTaskList,
+        missionRepoData as MissionRepoData
+      )
+    ) {
       let activeTaskList = taskList;
       if (missionRepoData !== undefined) {
         activeTaskList = cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData));
@@ -677,7 +667,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   ]);
 
   const onClickNext = useCallback(() => {
-    if (shouldProceedToChangeTask(currentTaskNumber, taskList, cachedTaskList, missionRepoData)) {
+    if (
+      shouldProceedToChangeTask(
+        currentTaskNumber,
+        taskList,
+        cachedTaskList,
+        missionRepoData as MissionRepoData
+      )
+    ) {
       let activeTaskList = taskList;
       if (missionRepoData !== undefined) {
         activeTaskList = cachedTaskList.map((taskData: TaskData) => Object.assign({}, taskData));

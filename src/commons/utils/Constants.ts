@@ -29,8 +29,8 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
-const interactiveSicpUrl =
-  process.env.REACT_APP_INTERACTIVE_SICP_URL || 'https://source-academy.github.io/sicp/';
+const interactiveSicpDataUrl =
+  process.env.REACT_APP_INTERACTIVE_SICP_DATA_URL || 'https://sicp.sourceacademy.org/'; // data for interactive-sicp (images and json files)
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -75,26 +75,26 @@ export enum Links {
   piazza = 'https://piazza.com/class/kas136yscf8605',
 
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
-  sourceDocs = 'https://source-academy.github.io/source/',
+  sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
-  textbook = 'https://source-academy.github.io/sicp/',
-  textbookChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
-  textbookChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
-
+  textbook = 'https://sourceacademy.org/interactive-sicp/',
+  playground = 'https://sourceacademy.org/playground',
+  textbookChapter2_2 = 'https://sourceacademy.org/interactive-sicp/2.2',
+  textbookChapter3_2 = 'https://sourceacademy.org/interactive-sicp/3.2',
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  source_1 = 'https://source-academy.github.io/source/source_1/',
-  source_1_Lazy = 'https://source-academy.github.io/source/source_1_lazy/',
-  source_1_Wasm = 'https://source-academy.github.io/source/source_1_wasm/',
-  source_2 = 'https://source-academy.github.io/source/source_2/',
-  source_2_Lazy = 'https://source-academy.github.io/source/source_2_lazy/',
-  source_3 = 'https://source-academy.github.io/source/source_3/',
-  source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
-  source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
-  source_4 = 'https://source-academy.github.io/source/source_4/',
-  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/'
+  source_1 = 'https://docs.sourceacademy.org/source_1/',
+  source_1_Lazy = 'https://docs.sourceacademy.org/source_1_lazy/',
+  source_1_Wasm = 'https://docs.sourceacademy.org/source_1_wasm/',
+  source_2 = 'https://docs.sourceacademy.org/source_2/',
+  source_2_Lazy = 'https://docs.sourceacademy.org/source_2_lazy/',
+  source_3 = 'https://docs.sourceacademy.org/source_3/',
+  source_3_Concurrent = 'https://docs.sourceacademy.org/source_3_concurrent/',
+  source_3_Nondet = 'https://docs.sourceacademy.org/source_3_non-det/',
+  source_4 = 'https://docs.sourceacademy.org/source_4/',
+  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/'
 }
 
 const Constants = {
@@ -123,7 +123,7 @@ const Constants = {
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval,
-  interactiveSicpUrl
+  interactiveSicpDataUrl
 };
 
 export default Constants;

@@ -1,4 +1,4 @@
-name: Build source-academy.github.io
+name: Build sourceacademy.org
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
+    name: Build and deploy sourceacademy.org
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -14,6 +14,9 @@ jobs:
       uses: actions/setup-node@v2-beta
       with:
         node-version: '14'
+    - name: Setup Sentry CLI
+      run: |
+        curl -sL https://sentry.io/get-cli/ | INSTALL_DIR=. bash
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -37,12 +40,6 @@ jobs:
       run: |
         yarn install
         yarn run build
-        ln -s index.html build/playground.html
-        ln -s index.html build/contributors.html
-        ln -s index.html build/sourcecast.html
-        ln -s index.html build/interactive-sicp.html
-      # the `ln`s above are a hack to make GitHub Pages route /playground
-      # and /contributors etc to index, instead of 404-ing.
       env:
         REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
         REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
@@ -56,15 +53,31 @@ jobs:
         REACT_APP_ENVIRONMENT: "pages"
         REACT_APP_MODULE_BACKEND_URL: https://source-academy.github.io/modules
         REACT_APP_SHAREDB_BACKEND_URL: ${{ secrets.REACT_APP_SHAREDB_BACKEND_URL }}
-        REACT_APP_SW_EXCLUDE_REGEXES: '["^/source", "^/sicp", "^/modules", "^/ev3-source"]'
-        PUBLIC_URL: "https://source-academy.github.io"
+        PUBLIC_URL: "https://sourceacademy.org"
         REACT_APP_GITHUB_OAUTH_PROXY_URL: ${{ secrets.REACT_APP_GITHUB_OAUTH_PROXY_URL }}
         REACT_APP_GITHUB_CLIENT_ID: ${{ secrets.REACT_APP_GITHUB_CLIENT_ID }}
-
+    - name: Create Sentry release
+      working-directory: build
+      run: |
+        SENTRY_RELEASE="cadet-frontend@$REACT_APP_VERSION"
+        "$GITHUB_WORKSPACE/sentry-cli" releases new -p "$SENTRY_PROJECT" "$SENTRY_RELEASE"
+        "$GITHUB_WORKSPACE/sentry-cli" releases set-commits --auto "$SENTRY_RELEASE"
+        "$GITHUB_WORKSPACE/sentry-cli" releases files "$SENTRY_RELEASE" upload-sourcemaps --url-prefix '~/static/js' --rewrite static/js
+        "$GITHUB_WORKSPACE/sentry-cli" releases finalize "$SENTRY_RELEASE"
+        "$GITHUB_WORKSPACE/sentry-cli" releases deploys "$SENTRY_RELEASE" new -e pages
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: sourceacademy
+        SENTRY_PROJECT: cadet-frontend
+        REACT_APP_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+    - name: Remove sourcemaps
+      working-directory: build
+      run: |
+        find -name '*.map' -print -delete
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
-        external_repository: source-academy/source-academy.github.io
+        external_repository: source-academy/sourceacademy.org
         deploy_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         publish_dir: ./build
         publish_branch: master
