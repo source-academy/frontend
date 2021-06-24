@@ -158,7 +158,7 @@ const Application: React.FC<ApplicationProps> = props => {
               />
             )}
             <Route path="/callback/github" component={GitHubCallback} />
-            <Redirect from="/interactive-sicp/:section?" to="/sicpjs/:section?"/>
+            <Redirect from="/interactive-sicp/:section?" to="/sicpjs/:section?" />
             <Route exact path="/sicpjs" render={redirectToSicp} />
             <Route path="/sicpjs/:section" component={Sicp} />
             {fullPaths}

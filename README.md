@@ -7,6 +7,7 @@
 The Source Academy (<https://source-academy.github.io/>) is an immersive online experiential environment for learning programming. It is developed by a community of learners (also called "Source Academy") who use the book [Structure and Interpretation of Computer Programs, JavaScript Adaptation](https://source-academy.github.io/sicpjs) (SICP JS). This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
 
 ## Features
+
 - Playground to write and test programs
 - Built-in Debugger and Visualizer to interact with your programs
 - Missions/Quests/Contests to solve challenging problems while learning about programming fundamentals
