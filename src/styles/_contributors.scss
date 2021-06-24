@@ -37,7 +37,6 @@
     padding: 1% 1% 1% 1%;
 
     h3 {
-      text-transform: capitalize;
       font-weight: bold;
       font-style: oblique;
     }
@@ -49,6 +48,10 @@
       margin-left: 0.5%;
     }
 
+    strong {
+        width: 400px;
+    }      
+    
     span.dot {
       padding: 0 0.2rem 0 0.2rem;
     }
@@ -61,9 +64,11 @@
         vertical-align: top;
         display: inline-block;
         width: 120px;
-
         &.wider {
           width: 140px;
+        }
+        &.evenWider {
+          width: 180px;
         }
       }
     }
@@ -140,7 +145,7 @@ div.repoDetailsPermalink {
   h3::first-letter {
     text-transform: uppercase;
   }
-
+  
   h5 {
     margin: 0% 2% 1% 2%;
     font-style: italic;
