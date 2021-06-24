@@ -33,6 +33,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
   <Switch>
     <Route path=\\"/playground\\" />
     <Route path=\\"/sourcecast\\" />
+    <Route path=\\"/githubassessments\\" />
     <Route path=\\"/interactive-sicp/:section?\\">
       <SicpNavigationBar />
     </Route>
@@ -98,6 +99,7 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
   <Switch>
     <Route path=\\"/playground\\" />
     <Route path=\\"/sourcecast\\" />
+    <Route path=\\"/githubassessments\\" />
     <Route path=\\"/interactive-sicp/:section?\\">
       <SicpNavigationBar />
     </Route>
@@ -147,6 +149,7 @@ exports[`NavigationBar renders correctly for student without course 1`] = `
   <Switch>
     <Route path=\\"/playground\\" />
     <Route path=\\"/sourcecast\\" />
+    <Route path=\\"/githubassessments\\" />
     <Route path=\\"/interactive-sicp/:section?\\">
       <SicpNavigationBar />
     </Route>

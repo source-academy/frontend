@@ -370,6 +370,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <Switch>
         <Route path="/playground" />
         <Route path="/sourcecast" />
+        <Route path="/githubassessments" />
         <Route path="/interactive-sicp/:section?">
           <SicpNavigationBar />
         </Route>
