@@ -6,10 +6,9 @@ import { store } from '../../../pages/createStore';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Assessment, { AssessmentProps } from '../Assessment';
-import { AssessmentCategories } from '../AssessmentTypes';
 
 const defaultProps: AssessmentProps = {
-  assessmentCategory: AssessmentCategories.Mission,
+  assessmentType: 'Missions',
   assessmentOverviews: undefined,
   handleAcknowledgeNotifications: () => {},
   handleAssessmentOverviewFetch: () => {},

@@ -35,7 +35,7 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { stringParamToInt } from '../utils/ParamParseHelper';
+import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
 import {
   AssessmentOverview,
   AssessmentStatuses,
@@ -131,7 +131,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/academy/${overview.type}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
+        to={`/academy/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
+          Constants.defaultQuestionId
+        }`}
       >
         <Button
           icon={icon}
