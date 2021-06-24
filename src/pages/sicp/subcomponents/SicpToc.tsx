@@ -36,7 +36,7 @@ const SicpToc: React.FC<TocProps> = props => {
       if (props.handleCloseToc) {
         props.handleCloseToc();
       }
-      history.push('/interactive-sicp/' + String(node.nodeData));
+      history.push('/sicpjs/' + String(node.nodeData));
     },
     [history, props]
   );
