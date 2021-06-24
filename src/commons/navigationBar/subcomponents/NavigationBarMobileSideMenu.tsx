@@ -180,7 +180,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         Classes.MINIMAL,
         Classes.LARGE
       )}
-      to="/interactive-sicp/index"
+      to="/sicpjs/index"
       onClick={props.onClose}
     >
       <Icon icon={IconNames.BOOK} />
