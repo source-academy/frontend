@@ -11,45 +11,42 @@ class ContributorsDetails extends React.Component {
     return (
       <div className="outsideDetails">
         <Card className="contributorsDetails" elevation={Elevation.ONE}>
-          <H3>The People behind Source Academy</H3>
+          <H3>The Team behind the Source Academy</H3>
           <p>
-            The <i>Source Academy</i> is designed by and for students of the National University of
-            Singapore. Students who completed the CS1101S module come back to coach their juniors as
-            "Avengers" or to further develop and improve the Academy. This page includes all
-            developers who contributed to the Source Academy <i>Knight</i> (2020) and its its
-            precursor, <i>Cadet</i> (2018). Both of these succeeded Source Academy 2 (2017) and
-            ultimately the original Source Academy (2016).
+            The <i>Source Academy</i> is designed and developed by a team of students, most of who
+            have used the system to learn the fundamentals of computing and enjoyed it. This page
+            includes all developers who contributed to the Source Academy <i>Rook</i> (2022) and its
+            precursors <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded Source
+            Academy 2 (2017) and ultimately the original Source Academy (2016).
           </p>
           <div className="leadership">
             <H5>
               <strong>
-                <u>2021 Leadership</u>
+                <u>2022 Leadership</u>
               </strong>
             </H5>
             <p>
-              Tiffany Chong
+              Tee Hao Wei
               <br />
-              <strong>(Game)</strong>
+              <strong>(CTO)</strong>
             </p>
             {dot}
             <p>
-              Anthony Halim
+              Chow En Rong
               <br />
               <strong>(Frontend)</strong>
             </p>
             {dot}
-            <p className="wider">
-              Daryl Tan,
-              <br />
+            <p>
               Thomas Tan
               <br />
               <strong>(Source)</strong>
             </p>
             {dot}
-            <p className="wider">
-              Tee Hao Wei
+            <p>
+              Chen Yanyu
               <br />
-              <strong>(Backend &amp; DevOps)</strong>
+              <strong>(Backend)</strong>
             </p>
             {dot}
             <p>
@@ -124,8 +121,8 @@ class ContributorsDetails extends React.Component {
             </p>
           </div>
           <div className="leadership">
-            <p>
-              <strong>2020 Leadership</strong>
+            <p className="evenWider">
+              <strong>2020 Leadership (Knight)</strong>
             </p>
             <br />
             <p>
@@ -154,6 +151,35 @@ class ContributorsDetails extends React.Component {
             {dot}
             <p>
               Daryl Tan
+              <br />
+              (Source)
+            </p>
+            {dot}
+            <p className="wider">
+              Tee Hao Wei
+              <br />
+              (Backend &amp; DevOps)
+            </p>
+          </div>
+          <div className="leadership">
+            <p>
+              <strong>2021 Leadership</strong>
+            </p>
+            <br />
+            <p>
+              Tiffany Chong
+              <br />
+              (Game)
+            </p>
+            {dot}
+            <p>
+              Anthony Halim
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p className="evenWider">
+              Daryl Tan, Thomas Tan
               <br />
               (Source)
             </p>
