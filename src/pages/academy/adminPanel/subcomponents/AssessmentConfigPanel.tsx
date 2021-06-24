@@ -1,97 +1,161 @@
-import { Alert, H2, Intent } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import { GridApi, GridReadyEvent } from 'ag-grid-community';
+import { H2 } from '@blueprintjs/core';
+import { CellValueChangedEvent, GridApi, GridReadyEvent, RowDragEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-// import { cloneDeep } from 'lodash';
-import * as React from 'react';
-import { AssessmentConfiguration, AssessmentType } from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
+import { isEqual } from 'lodash';
+import React from 'react';
 
-export type AssessmentConfigPanelProps = DispatchProps & StateProps;
+import { AssessmentConfiguration } from '../../../../commons/assessment/AssessmentTypes';
+import IsGradedCell from './IsGradedCell';
+import NumericCell, { AssessmentConfigNumericField } from './NumericCell';
 
-export type DispatchProps = {
-  handleFetchAssessmentConfigs: () => void;
-  handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
-};
+export type AssessmentConfigPanelProps = OwnProps;
 
-export type StateProps = {
-  assessmentTypes: AssessmentType[];
-  assessmentConfigurations?: AssessmentConfiguration[];
+type OwnProps = {
+  assessmentConfigurations: AssessmentConfiguration[];
+  setAssessmentConfigurations: (assessmentConfig: AssessmentConfiguration[]) => void;
 };
 
 const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
-  const [assessmentConfig, setAssessmentConfig] = React.useState<AssessmentConfiguration[]>([]);
-  const [gridApi, setGridApi] = React.useState<GridApi>();
-  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [assessmentConfig, setAssessmentConfig] = React.useState<AssessmentConfiguration[]>(
+    props.assessmentConfigurations
+  );
+  const gridApi = React.useRef<GridApi>();
 
-  React.useEffect(() => {
-    if (props.assessmentConfigurations) {
-      setAssessmentConfig(props.assessmentConfigurations);
-    } else {
-      console.log('undefined');
-    }
-  }, [props.assessmentConfigurations]);
+  /**
+   * Although we are tracking the form in local React state, we do not pass this React state
+   * as props into the ag-grid component as this would cause a flicker in ag-grid whenever this
+   * state is updated. Instead, we use ag-grid's API to update the corresponding cell.
+   */
+  const setIsGraded = (index: number, value: boolean) => {
+    const temp = [...assessmentConfig];
+    temp[index] = {
+      ...temp[index],
+      isGraded: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGraded', value);
+  };
+
+  const setEarlyXp = (index: number, value: number) => {
+    const temp = [...assessmentConfig];
+    temp[index] = {
+      ...temp[index],
+      earlySubmissionXp: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('earlySubmissionXp', value);
+  };
+
+  const setHoursBeforeDecay = (index: number, value: number) => {
+    const temp = [...assessmentConfig];
+    temp[index] = {
+      ...temp[index],
+      hoursBeforeEarlyXpDecay: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hoursBeforeEarlyXpDecay', value);
+  };
+
+  const setDecayRate = (index: number, value: number) => {
+    const temp = [...assessmentConfig];
+    temp[index] = {
+      ...temp[index],
+      decayRatePointsPerHour: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('decayRatePointsPerHour', value);
+  };
 
   const columnDefs = [
     {
       headerName: 'Assessment Type',
       field: 'type',
-      rowDrag: true
+      rowDrag: true,
+      editable: true
     },
     {
       headerName: 'Graded?',
-      field: 'isGraded'
+      field: 'isGraded',
+      cellRendererFramework: IsGradedCell,
+      cellRendererParams: {
+        setIsGraded: setIsGraded
+      }
     },
     {
       headerName: 'Max Bonus XP',
-      field: 'earlySubmissionXp'
+      field: 'earlySubmissionXp',
+      cellRendererFramework: NumericCell,
+      cellRendererParams: {
+        setStateHandler: setEarlyXp,
+        field: AssessmentConfigNumericField.EARLY_XP
+      }
     },
     {
       headerName: 'Early Hours Before Decay',
-      field: 'hoursBeforeEarlyXpDecay'
+      field: 'hoursBeforeEarlyXpDecay',
+      cellRendererFramework: NumericCell,
+      cellRendererParams: {
+        setStateHandler: setHoursBeforeDecay,
+        field: AssessmentConfigNumericField.HOURS_BEFORE_DECAY
+      }
     },
     {
       headerName: 'Decay Rate Per Hour',
-      field: 'decayRatePointsPerHour'
+      field: 'decayRatePointsPerHour',
+      cellRendererFramework: NumericCell,
+      cellRendererParams: {
+        setStateHandler: setDecayRate,
+        field: AssessmentConfigNumericField.DECAY_RATE
+      }
     }
   ];
 
   const defaultColumnDefs = {
-    editable: true,
     filter: false,
     resizable: true,
     sortable: false
   };
 
-  const fetchAndRefresh = () => {
-    props.handleFetchAssessmentConfigs();
-    const params = {
-      force: true,
-      suppressFlash: false
-    };
-    if (gridApi) {
-      gridApi.sizeColumnsToFit();
-      gridApi.refreshCells(params);
-    }
+  // Tracks the movement of rows in our local React state while dragging
+  const onRowDragMove = React.useCallback(
+    (event: RowDragEvent) => {
+      const movingNode = event.node;
+      const overNode = event.overNode;
+      const rowNeedsToMove = movingNode !== overNode;
+      if (rowNeedsToMove) {
+        const movingData = movingNode.data;
+        const overData = overNode.data;
+        const fromIndex = indexOfObject(assessmentConfig, movingData);
+        const toIndex = indexOfObject(assessmentConfig, overData);
+
+        const temp = [...assessmentConfig];
+        moveInArray(temp, fromIndex, toIndex);
+        setAssessmentConfig(temp);
+      }
+    },
+    [assessmentConfig]
+  );
+
+  // Updates the data passed into ag-grid (this is necessary to update the rowIndex in our custom
+  // cellRendererFramework)
+  const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
+    gridApi.current?.setRowData(assessmentConfig);
   };
 
-  const saveChanges = () => {
-    let newData: AssessmentConfiguration[] = [];
-    for (let i = 0; i < assessmentConfig.length; i++) {
-      const node = gridApi!.getRowNode(i + '');
-      newData = newData.concat([node!.data]);
+  // Updates our local React state whenever there are changes to the Assessment Type column
+  const onCellValueChanged = (event: CellValueChangedEvent) => {
+    if (event.colDef.field === 'type') {
+      const temp = [...assessmentConfig];
+      temp[event.rowIndex!] = {
+        ...temp[event.rowIndex!],
+        type: event.value
+      };
+      setAssessmentConfig(temp);
     }
-    setAssessmentConfig(newData);
-    // gridApi!.forEachNode((node, i) => {
-    // 	const old = cloneDeep(assessmentConfig);
-    // 	setAssessmentConfig(old.concat([node.data]));
-    // 	console.log(i);
-    // 	console.log(old);
-    // });
   };
 
   const onGridReady = (params: GridReadyEvent) => {
-    setGridApi(params.api);
+    gridApi.current = params.api;
     params.api.sizeColumnsToFit();
   };
 
@@ -102,50 +166,41 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        rowData={assessmentConfig}
-        // rowData={props.assessmentConfigurations!}
+        rowData={props.assessmentConfigurations}
         rowHeight={36}
         rowDragManaged={true}
         suppressCellSelection={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}
-        enableCellChangeFlash={true}
+        onRowDragMove={onRowDragMove}
+        onRowDragLeave={onRowDragLeaveOrEnd}
+        onRowDragEnd={onRowDragLeaveOrEnd}
+        onCellValueChanged={onCellValueChanged}
       />
     </div>
   );
 
-  const handleOpenAlert = () => {
-    saveChanges();
-    setAlertOpen(true);
-  };
-  const handleCloseAlert = () => setAlertOpen(false);
-
-  const updateAssessmentConfig = () => {
-    saveChanges();
-    props.handleUpdateAssessmentConfigs(assessmentConfig);
-    handleCloseAlert();
-  };
-
   return (
     <div className="assessment-configuration">
       <H2>Assessment Configuration</H2>
-      {controlButton('Refresh', IconNames.REFRESH, fetchAndRefresh)}
-      {controlButton('Save', IconNames.FLOPPY_DISK, handleOpenAlert)}
-      {/* {assessmentConfig} */}
       {grid}
-      <Alert
-        cancelButtonText="Cancel"
-        confirmButtonText="Confirm"
-        icon="warning-sign"
-        intent={Intent.WARNING}
-        isOpen={alertOpen}
-        onCancel={handleCloseAlert}
-        onConfirm={updateAssessmentConfig}
-      >
-        <p>Are you sure you want to save the Assessment Configuration to the backend?</p>
-      </Alert>
     </div>
   );
 };
+
+function moveInArray(arr: any[], fromIndex: number, toIndex: number): void {
+  const element = arr[fromIndex];
+  arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, element);
+}
+
+function indexOfObject(arr: any[], obj: any): number {
+  for (let i = 0; i < arr.length; i++) {
+    if (isEqual(arr[i], obj)) {
+      return i;
+    }
+  }
+  return -1;
+}
 
 export default AssessmentConfigPanel;
