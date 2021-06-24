@@ -32,6 +32,12 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
+              Gokul Rajiv
+              <br />
+              <strong>(Game)</strong>
+            </p>
+            {dot}
+            <p>
               Chow En Rong
               <br />
               <strong>(Frontend)</strong>
