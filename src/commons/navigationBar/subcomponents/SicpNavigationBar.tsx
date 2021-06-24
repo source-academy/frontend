@@ -22,7 +22,7 @@ const SicpNavigationBar: React.FC = () => {
   const handleCloseToc = () => setIsTocOpen(false);
   const handleOpenToc = () => setIsTocOpen(true);
   const handleNavigation = (sect: string) => {
-    history.push('/interactive-sicp/' + sect);
+    history.push('/sicpjs/' + sect);
   };
 
   // Button to open table of contents
