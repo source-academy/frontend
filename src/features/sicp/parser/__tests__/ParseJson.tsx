@@ -30,8 +30,8 @@ jest.mock('src/commons/utils/Constants', () => ({
   interactiveSicpDataUrl: 'https://source-academy.github.io/sicp/'
 }));
 
-jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => {
-  return (props: CodeSnippetProps) => <div {...props}>Code Snippet</div>;
+jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => (props: CodeSnippetProps) => {
+  return <div>Code Snippet</div>;
 });
 
 const mockData = {
@@ -55,7 +55,7 @@ const processTag = (tag: string, obj: JsonType) => {
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = shallow(processTag(tag, obj));
+    const tree = mount(processTag(tag, obj));
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -326,7 +326,7 @@ describe('Parse reference', () => {
 describe('Parse object', () => {
   test('successful', () => {
     const obj = mockData['text'];
-    const tree = shallow(parseObj(obj, 0, mockRef));
+    const tree = mount(parseObj(obj, 0, mockRef));
     expect(tree.debug()).toMatchSnapshot();
   });
 
