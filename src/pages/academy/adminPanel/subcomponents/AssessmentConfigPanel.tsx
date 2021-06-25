@@ -6,7 +6,7 @@ import React from 'react';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import { AssessmentConfiguration } from '../../../../commons/assessment/AssessmentTypes';
-import DeleteCell from './DeleteCell';
+import DeleteRowCell from './DeleteRowCell';
 import IsGradedCell from './IsGradedCell';
 import NumericCell, { AssessmentConfigNumericField } from './NumericCell';
 
@@ -141,12 +141,12 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     },
     {
       headerName: 'Delete Row',
-      field: 'deleteRow',
-      cellRendererFramework: DeleteCell,
+      cellRendererFramework: DeleteRowCell,
       cellRendererParams: {
         deleteRowHandler: deleteRowHandler
       },
-      width: 100
+      width: 100,
+      resizable: false
     }
   ];
 

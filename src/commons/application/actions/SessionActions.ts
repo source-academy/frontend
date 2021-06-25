@@ -13,10 +13,12 @@ import {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
+import { Role } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
   CourseRegistration,
+  DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
@@ -57,6 +59,7 @@ import {
   UPDATE_HISTORY_HELPERS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
+  UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
 } from '../types/SessionTypes';
@@ -214,3 +217,9 @@ export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfigurati
 
 export const fetchAdminPanelCourseRegistrations = () =>
   action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
+
+export const updateUserRole = (crId: number, role: Role) =>
+  action(UPDATE_USER_ROLE, { crId, role });
+
+export const deleteUserCourseRegistration = (crId: number) =>
+  action(DELETE_USER_COURSE_REGISTRATION, { crId });

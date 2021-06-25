@@ -61,6 +61,7 @@ export const mockUser: User = {
 
 export const mockCourseRegistrations: CourseRegistration[] = [
   {
+    crId: 1,
     role: Role.Staff,
     group: '1F',
     gameState: {} as GameState,
@@ -74,6 +75,7 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     }
   },
   {
+    crId: 2,
     role: Role.Student,
     group: '1F',
     gameState: {} as GameState,

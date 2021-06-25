@@ -1,10 +1,14 @@
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 
-import { Divider, H1, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import * as React from 'react';
+import { Divider, H1, NonIdealState, Spinner, SpinnerSize, Tab, Tabs } from '@blueprintjs/core';
+import React from 'react';
+import { Role } from 'src/commons/application/ApplicationTypes';
 
-import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
+import {
+  AdminPanelCourseRegistration,
+  UpdateCourseConfiguration
+} from '../../../commons/application/types/SessionTypes';
 import {
   AssessmentConfiguration,
   AssessmentType
@@ -12,17 +16,22 @@ import {
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AssessmentConfigPanel from './subcomponents/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
+import UserConfigPanel from './subcomponents/UserConfigPanel';
 
 export type AdminPanelProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleFetchCourseConfiguration: () => void;
   handleFetchAssessmentConfigs: () => void;
+  handleFetchUserCourseRegistrations: () => void;
   handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
   handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
+  handleUpdateUserRole: (crId: number, role: Role) => void;
+  handleDeleteUserFromCourse: (crId: number) => void;
 };
 
 export type StateProps = {
+  crId?: number;
   courseName?: string;
   courseShortName?: string;
   viewable?: boolean;
@@ -34,6 +43,7 @@ export type StateProps = {
   moduleHelpText?: string;
   assessmentTypes: AssessmentType[];
   assessmentConfigurations?: AssessmentConfiguration[];
+  userCourseRegistrations?: AdminPanelCourseRegistration[];
 };
 
 const AdminPanel: React.FC<AdminPanelProps> = props => {
@@ -50,13 +60,13 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   React.useEffect(() => {
     props.handleFetchCourseConfiguration();
     props.handleFetchAssessmentConfigs();
+    props.handleFetchUserCourseRegistrations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // After updated configs have been loaded from the backend, put them into local React state
   React.useEffect(() => {
-    // props.assessmentConfigurations is undefined until it is fetched in the useEffect above.
-    if (props.assessmentConfigurations && !isLoaded) {
+    if (props.assessmentConfigurations && props.userCourseRegistrations && !isLoaded) {
       setCourseConfiguration({
         courseName: props.courseName,
         courseShortName: props.courseShortName,
@@ -81,14 +91,32 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
     setAssessmentConfigurations: setAssessmentConfigurations
   };
 
+  const userConfigPanelProps = {
+    crId: props.crId,
+    userCourseRegistrations: props.userCourseRegistrations,
+    handleUpdateUserRole: props.handleUpdateUserRole,
+    handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
+  };
+
   const data = !isLoaded ? (
     <NonIdealState description="Loading..." icon={<Spinner size={SpinnerSize.LARGE} />} />
   ) : (
     <div className="admin-panel">
       <H1>Admin Panel</H1>
-      <CourseConfigPanel {...courseConfigPanelProps} />
-      <Divider />
-      <AssessmentConfigPanel {...assessmentConfigPanelProps} />
+      <Tabs id="admin-panel">
+        <Tab
+          id="configuration"
+          title="Configuration"
+          panel={
+            <>
+              <CourseConfigPanel {...courseConfigPanelProps} />
+              <Divider />
+              <AssessmentConfigPanel {...assessmentConfigPanelProps} />
+            </>
+          }
+        />
+        <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
+      </Tabs>
     </div>
   );
 

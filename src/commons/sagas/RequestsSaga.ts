@@ -32,6 +32,7 @@ import {
   frontendifyAchievementGoal,
   frontendifyAchievementItem
 } from '../achievement/utils/AchievementBackender';
+import { Role } from '../application/ApplicationTypes';
 import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
@@ -1008,6 +1009,43 @@ export const getUserCourseRegistrations = async (
   }
 
   return await resp.json();
+};
+
+/**
+ * PUT /courses/{courseId}/admin/users/role
+ */
+export const postUserRole = async (
+  tokens: Tokens,
+  crId: number,
+  role: Role
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/users/role`, 'PUT', {
+    ...tokens,
+    body: { crId, role },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * DELETE /courses/{courseId}/admin/users
+ */
+export const removeUserCourseRegistration = async (
+  tokens: Tokens,
+  crId: number
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/users`, 'DELETE', {
+    ...tokens,
+    body: { crId },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
 };
 
 /**

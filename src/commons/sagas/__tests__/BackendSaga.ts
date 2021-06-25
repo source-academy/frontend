@@ -9,6 +9,7 @@ import {
   UPDATE_GROUP_GRADING_SUMMARY
 } from '../../../features/dashboard/DashboardTypes';
 import {
+  fetchAdminPanelCourseRegistrations,
   setAdminPanelCourseRegistrations,
   setAssessmentConfigurations,
   setCourseConfiguration,
@@ -31,6 +32,7 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
@@ -51,6 +53,7 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_USER_ROLE,
   User
 } from '../../application/types/SessionTypes';
 import {
@@ -97,7 +100,9 @@ import {
   postCourseConfig,
   postLatestViewedCourse,
   postReautogradeAnswer,
-  postReautogradeSubmission
+  postReautogradeSubmission,
+  postUserRole,
+  removeUserCourseRegistration
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -783,12 +788,14 @@ describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
       crId: 1,
       courseId: 1,
       name: 'Bob',
+      username: 'E0000001',
       role: Role.Student
     },
     {
       crId: 2,
       courseId: 1,
       name: 'Avenger',
+      username: 'E0000002',
       role: Role.Staff
     }
   ];
@@ -809,6 +816,92 @@ describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
       .call(getUserCourseRegistrations, mockTokens)
       .not.put.actionType(SET_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .dispatch({ type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS })
+      .silentRun();
+  });
+});
+
+describe('Test UPDATE_USER_ROLE action', () => {
+  const crId = 2;
+  const role = Role.Staff;
+
+  const userCourseRegistrations: AdminPanelCourseRegistration[] = [
+    {
+      crId: 1,
+      courseId: 1,
+      name: 'Bob',
+      username: 'E0000001',
+      role: Role.Student
+    },
+    {
+      crId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      username: 'E0000002',
+      role: Role.Staff
+    }
+  ];
+
+  test('updated successfully', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postUserRole, mockTokens, crId, role)
+      .put(fetchAdminPanelCourseRegistrations())
+      .call.fn(showSuccessMessage)
+      .provide([
+        [call(postUserRole, mockTokens, crId, role), okResp],
+        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
+      ])
+      .dispatch({ type: UPDATE_USER_ROLE, payload: { crId, role } })
+      .silentRun();
+  });
+
+  test('update unsuccessful', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postUserRole, mockTokens, crId, role)
+      .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
+      .not.call.fn(showSuccessMessage)
+      .provide([[call(postUserRole, mockTokens, crId, role), errorResp]])
+      .dispatch({ type: UPDATE_USER_ROLE, payload: { crId, role } })
+      .silentRun();
+  });
+});
+
+describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
+  const crId = 1;
+
+  const userCourseRegistrations: AdminPanelCourseRegistration[] = [
+    {
+      crId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      username: 'E0000002',
+      role: Role.Staff
+    }
+  ];
+
+  test('deleted successfully', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(removeUserCourseRegistration, mockTokens, crId)
+      .put(fetchAdminPanelCourseRegistrations())
+      .call.fn(showSuccessMessage)
+      .provide([
+        [call(removeUserCourseRegistration, mockTokens, crId), okResp],
+        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
+      ])
+      .dispatch({ type: DELETE_USER_COURSE_REGISTRATION, payload: { crId } })
+      .silentRun();
+  });
+
+  test('delete unsucessful', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(removeUserCourseRegistration, mockTokens, crId)
+      .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
+      .not.call.fn(showSuccessMessage)
+      .provide([[call(removeUserCourseRegistration, mockTokens, crId), errorResp]])
+      .dispatch({ type: DELETE_USER_COURSE_REGISTRATION, payload: { crId } })
       .silentRun();
   });
 });

@@ -6,6 +6,8 @@ import { Notification } from '../../../notificationBadge/NotificationBadgeTypes'
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  DELETE_USER_COURSE_REGISTRATION,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
@@ -37,10 +39,13 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
   UPDATE_LATEST_VIEWED_COURSE,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  UPDATE_USER_ROLE
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
+  deleteUserCourseRegistration,
+  fetchAdminPanelCourseRegistrations,
   fetchAssessment,
   fetchAssessmentConfigs,
   fetchAssessmentOverviews,
@@ -72,7 +77,8 @@ import {
   updateGradingOverviews,
   updateHistoryHelpers,
   updateLatestViewedCourse,
-  updateNotifications
+  updateNotifications,
+  updateUserRole
 } from '../SessionActions';
 
 test('acknowledgeNotifications generates correct action object', () => {
@@ -669,5 +675,31 @@ test('updateAssessmentTypes generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_ASSESSMENT_CONFIGS,
     payload: assessmentConfigs
+  });
+});
+
+test('fetchAdminPanelCourseRegistrations generates correct action object', () => {
+  const action = fetchAdminPanelCourseRegistrations();
+  expect(action).toEqual({
+    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS
+  });
+});
+
+test('updateUserRole generates correct action object', () => {
+  const crId = 1;
+  const role = Role.Staff;
+  const action = updateUserRole(crId, role);
+  expect(action).toEqual({
+    type: UPDATE_USER_ROLE,
+    payload: { crId, role }
+  });
+});
+
+test('deleteUserCourseRegistration generates correct action object', () => {
+  const crId = 1;
+  const action = deleteUserCourseRegistration(crId);
+  expect(action).toEqual({
+    type: DELETE_USER_COURSE_REGISTRATION,
+    payload: { crId }
   });
 });

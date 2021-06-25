@@ -40,6 +40,7 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
@@ -58,6 +59,7 @@ import {
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
@@ -93,6 +95,8 @@ import {
   postReautogradeSubmission,
   postSourcecast,
   postUnsubmit,
+  postUserRole,
+  removeUserCourseRegistration,
   updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
@@ -648,6 +652,38 @@ function* BackendSaga(): SagaIterator {
       if (courseRegistrations) {
         yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
       }
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_USER_ROLE,
+    function* (action: ReturnType<typeof actions.updateUserRole>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { crId, role }: { crId: number; role: Role } = action.payload;
+
+      const resp: Response | null = yield call(postUserRole, tokens, crId, role);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'Role updated!');
+    }
+  );
+
+  yield takeEvery(
+    DELETE_USER_COURSE_REGISTRATION,
+    function* (action: ReturnType<typeof actions.deleteUserCourseRegistration>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { crId }: { crId: number } = action.payload;
+
+      const resp: Response | null = yield call(removeUserCourseRegistration, tokens, crId);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'User deleted!');
     }
   );
 

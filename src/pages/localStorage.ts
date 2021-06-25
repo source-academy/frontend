@@ -40,6 +40,7 @@ export const saveState = (state: OverallState) => {
       session: {
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken,
+        crId: state.session.crId,
         role: state.session.role,
         name: state.session.name,
         userId: state.session.userId,

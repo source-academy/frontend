@@ -2,15 +2,19 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
+  deleteUserCourseRegistration,
+  fetchAdminPanelCourseRegistrations,
   fetchAssessmentConfigs,
   fetchCourseConfig,
   updateAssessmentConfigs,
-  updateCourseConfig
+  updateCourseConfig,
+  updateUserRole
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import AdminPanel, { DispatchProps, StateProps } from './AdminPanel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
+  crId: state.session.crId,
   courseName: state.session.courseName,
   courseShortName: state.session.courseShortName,
   viewable: state.session.viewable,
@@ -21,7 +25,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sourceVariant: state.session.sourceVariant,
   moduleHelpText: state.session.moduleHelpText,
   assessmentTypes: state.session.assessmentTypes,
-  assessmentConfigurations: state.session.assessmentConfigurations
+  assessmentConfigurations: state.session.assessmentConfigurations,
+  userCourseRegistrations: state.session.userCourseRegistrations
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
@@ -29,8 +34,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleFetchCourseConfiguration: fetchCourseConfig,
       handleFetchAssessmentConfigs: fetchAssessmentConfigs,
+      handleFetchUserCourseRegistrations: fetchAdminPanelCourseRegistrations,
       handleUpdateCourseConfig: updateCourseConfig,
-      handleUpdateAssessmentConfigs: updateAssessmentConfigs
+      handleUpdateAssessmentConfigs: updateAssessmentConfigs,
+      handleUpdateUserRole: updateUserRole,
+      handleDeleteUserFromCourse: deleteUserCourseRegistration
     },
     dispatch
   );

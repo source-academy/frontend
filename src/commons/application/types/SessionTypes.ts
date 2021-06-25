@@ -54,6 +54,8 @@ export const UPDATE_COURSE_CONFIG = 'UPDATE_COURSE_CONFIG';
 export const FETCH_ASSESSMENT_CONFIGS = 'FETCH_ASSESSMENT_CONFIGS';
 export const UPDATE_ASSESSMENT_CONFIGS = 'UPDATE_ASSESSMENT_CONFIGS';
 export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS';
+export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
+export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -69,6 +71,7 @@ export type SessionState = {
   readonly courses: UserCourse[];
 
   // Course Registration
+  readonly crId?: number;
   readonly role?: Role;
   readonly group: string | null;
   readonly gameState: GameState;
@@ -125,6 +128,7 @@ export type User = {
 };
 
 export type CourseRegistration = {
+  crId: number;
   role: Role;
   group: string | null;
   gameState?: GameState;
@@ -151,7 +155,8 @@ export type CourseConfiguration = {
 export type AdminPanelCourseRegistration = {
   crId: number;
   courseId: number;
-  name: string;
+  name?: string;
+  username: string;
   role: Role;
   group?: string;
 };
