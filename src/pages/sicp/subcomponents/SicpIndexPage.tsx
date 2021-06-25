@@ -23,7 +23,7 @@ const authors = (
     </p>
     <H4>{developers}</H4>
     <p>
-      <i>— designer and developer of Interactive SICP</i>
+      <i>— designer and developer of this Interactive SICP JS edition</i>
     </p>
   </div>
 );
