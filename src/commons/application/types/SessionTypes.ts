@@ -29,6 +29,7 @@ export const SET_USER = 'SET_USER';
 export const SET_COURSE_CONFIGURATION = 'SET_COURSE_CONFIGURATION';
 export const SET_COURSE_REGISTRATION = 'SET_COURSE_REGISTRATION';
 export const SET_ASSESSMENT_CONFIGURATIONS = 'SET_ASSESSMENT_CONFIGURATIONS';
+export const SET_ADMIN_PANEL_COURSE_REGISTRATIONS = 'SET_ADMIN_PANEL_COURSE_REGISTRATIONS';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
 export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_OBJECT = 'SET_GITHUB_OCTOKIT_OBJECT';
@@ -52,6 +53,7 @@ export const UPDATE_LATEST_VIEWED_COURSE = 'UPDATE_LATEST_VIEWED_COURSE';
 export const UPDATE_COURSE_CONFIG = 'UPDATE_COURSE_CONFIG';
 export const FETCH_ASSESSMENT_CONFIGS = 'FETCH_ASSESSMENT_CONFIGS';
 export const UPDATE_ASSESSMENT_CONFIGS = 'UPDATE_ASSESSMENT_CONFIGS';
+export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -87,7 +89,9 @@ export type SessionState = {
   readonly sourceVariant: Variant;
   readonly moduleHelpText?: string;
   readonly assessmentTypes: AssessmentType[];
+
   readonly assessmentConfigurations?: AssessmentConfiguration[];
+  readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
@@ -142,6 +146,14 @@ export type CourseConfiguration = {
   sourceVariant: Variant;
   moduleHelpText: string;
   assessmentTypes: AssessmentType[];
+};
+
+export type AdminPanelCourseRegistration = {
+  crId: number;
+  courseId: number;
+  name: string;
+  role: Role;
+  group?: string;
 };
 
 export type UpdateCourseConfiguration = Partial<CourseConfiguration>;

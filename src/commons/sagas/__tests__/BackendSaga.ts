@@ -9,6 +9,7 @@ import {
   UPDATE_GROUP_GRADING_SUMMARY
 } from '../../../features/dashboard/DashboardTypes';
 import {
+  setAdminPanelCourseRegistrations,
   setAssessmentConfigurations,
   setCourseConfiguration,
   setCourseRegistration,
@@ -27,8 +28,10 @@ import {
 } from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
@@ -36,6 +39,7 @@ import {
   FETCH_NOTIFICATIONS,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
@@ -84,6 +88,7 @@ import {
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
   getUser,
+  getUserCourseRegistrations,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
@@ -768,6 +773,42 @@ describe('Test FETCH_ASSESSMENT_CONFIG action', () => {
       .call(getAssessmentConfigs, mockTokens)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .dispatch({ type: FETCH_ASSESSMENT_CONFIGS })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
+  const userCourseRegistrations: AdminPanelCourseRegistration[] = [
+    {
+      crId: 1,
+      courseId: 1,
+      name: 'Bob',
+      role: Role.Student
+    },
+    {
+      crId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      role: Role.Staff
+    }
+  ];
+  test('when course registrations are obtained', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(getUserCourseRegistrations, mockTokens)
+      .put(setAdminPanelCourseRegistrations(userCourseRegistrations))
+      .provide([[call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]])
+      .dispatch({ type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS })
+      .silentRun();
+  });
+
+  test('when course registrations is null', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .provide([[call(getUserCourseRegistrations, mockTokens), null]])
+      .call(getUserCourseRegistrations, mockTokens)
+      .not.put.actionType(SET_ADMIN_PANEL_COURSE_REGISTRATIONS)
+      .dispatch({ type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS })
       .silentRun();
   });
 });

@@ -33,6 +33,7 @@ import {
   frontendifyAchievementItem
 } from '../achievement/utils/AchievementBackender';
 import {
+  AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
   Tokens,
@@ -990,6 +991,23 @@ export const postAssessmentConfigs = async (
   });
 
   return resp;
+};
+
+/**
+ * GET /courses/{courseId}/admin/users
+ */
+export const getUserCourseRegistrations = async (
+  tokens: Tokens
+): Promise<AdminPanelCourseRegistration[] | null> => {
+  const resp = await request(`${courseId()}/admin/users`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
 };
 
 /**

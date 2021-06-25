@@ -15,7 +15,9 @@ import {
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  AdminPanelCourseRegistration,
   CourseRegistration,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
@@ -31,6 +33,7 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
@@ -100,6 +103,10 @@ export const setCourseRegistration = (courseRegistration: CourseRegistration) =>
 
 export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
   action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
+
+export const setAdminPanelCourseRegistrations = (
+  courseRegistrations: AdminPanelCourseRegistration[]
+) => action(SET_ADMIN_PANEL_COURSE_REGISTRATIONS, courseRegistrations);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
@@ -204,3 +211,6 @@ export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
 
 export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
   action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);
+
+export const fetchAdminPanelCourseRegistrations = () =>
+  action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);

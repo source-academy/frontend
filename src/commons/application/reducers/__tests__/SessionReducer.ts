@@ -13,6 +13,7 @@ import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
   SessionState,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
@@ -179,6 +180,34 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
   expect(result).toEqual({
     ...defaultSession,
     assessmentConfigurations: payload
+  });
+});
+
+test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
+  const payload = [
+    {
+      crId: 1,
+      courseId: 1,
+      name: 'Bob',
+      role: Role.Student
+    },
+    {
+      crId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      role: Role.Staff
+    }
+  ];
+
+  const action = {
+    type: SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    userCourseRegistrations: payload
   });
 });
 

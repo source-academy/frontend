@@ -17,6 +17,7 @@ import {
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
@@ -51,6 +52,7 @@ import {
   login,
   reautogradeAnswer,
   reautogradeSubmission,
+  setAdminPanelCourseRegistrations,
   setAssessmentConfigurations,
   setCourseConfiguration,
   setCourseRegistration,
@@ -272,6 +274,28 @@ test('setAssessmentConfigurations generates correct action object', () => {
   expect(action).toEqual({
     type: SET_ASSESSMENT_CONFIGURATIONS,
     payload: assesmentConfigurations
+  });
+});
+
+test('setAdminPanelCourseRegistrations generates correct action object', async () => {
+  const userCourseRegistrations = [
+    {
+      crId: 1,
+      courseId: 1,
+      name: 'Bob',
+      role: Role.Student
+    },
+    {
+      crId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      role: Role.Staff
+    }
+  ];
+  const action = setAdminPanelCourseRegistrations(userCourseRegistrations);
+  expect(action).toEqual({
+    type: SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    payload: userCourseRegistrations
   });
 });
 

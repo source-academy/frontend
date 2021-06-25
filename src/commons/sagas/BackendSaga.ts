@@ -37,8 +37,10 @@ import {
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
@@ -77,6 +79,7 @@ import {
   getNotifications,
   getSourcecastIndex,
   getUser,
+  getUserCourseRegistrations,
   handleResponseError,
   postAcknowledgeNotifications,
   postAnswer,
@@ -630,6 +633,21 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
       yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    function* (action: ReturnType<typeof actions.fetchAdminPanelCourseRegistrations>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const courseRegistrations: AdminPanelCourseRegistration[] | null = yield call(
+        getUserCourseRegistrations,
+        tokens
+      );
+      if (courseRegistrations) {
+        yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
+      }
     }
   );
 
