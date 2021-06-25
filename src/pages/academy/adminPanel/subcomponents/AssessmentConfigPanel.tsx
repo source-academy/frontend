@@ -52,16 +52,6 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hoursBeforeEarlyXpDecay', value);
   };
 
-  const setDecayRate = (index: number, value: number) => {
-    const temp = [...assessmentConfig.current];
-    temp[index] = {
-      ...temp[index],
-      decayRatePointsPerHour: value
-    };
-    setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('decayRatePointsPerHour', value);
-  };
-
   const addRowHandler = () => {
     if (assessmentConfig.current.length >= 8) {
       showWarningMessage('You can have at most 8 assessment types!');
@@ -70,12 +60,11 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
 
     const temp = [...assessmentConfig.current];
     temp.push({
-      order: -1, // TODO: Remove order from the frontend (and/or backend)
+      AssessmentConfigId: -1, // TODO: Remove order from the frontend (and/or backend)
       type: 'untitled',
       isGraded: true,
       hoursBeforeEarlyXpDecay: 0,
-      earlySubmissionXp: 0,
-      decayRatePointsPerHour: 0 // TODO: Remove from the frontend and backend
+      earlySubmissionXp: 0
     });
     setAssessmentConfig(temp);
     gridApi.current?.setRowData(temp);
@@ -124,15 +113,6 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       cellRendererParams: {
         setStateHandler: setHoursBeforeDecay,
         field: AssessmentConfigNumericField.HOURS_BEFORE_DECAY
-      }
-    },
-    {
-      headerName: 'Decay Rate Per Hour',
-      field: 'decayRatePointsPerHour',
-      cellRendererFramework: NumericCell,
-      cellRendererParams: {
-        setStateHandler: setDecayRate,
-        field: AssessmentConfigNumericField.DECAY_RATE
       }
     },
     {

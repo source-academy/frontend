@@ -14,43 +14,38 @@ import {
 
 export const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   {
-    decayRatePointsPerHour: 1,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 1,
+    AssessmentConfigId: 1,
     type: 'Missions'
   },
   {
-    decayRatePointsPerHour: 1,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: false,
-    order: 2,
+    AssessmentConfigId: 2,
     type: 'Quests'
   },
   {
-    decayRatePointsPerHour: 1,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 3,
+    AssessmentConfigId: 3,
     type: 'Paths'
   },
   {
-    decayRatePointsPerHour: 1,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 3,
+    AssessmentConfigId: 4,
     type: 'Contests'
   },
   {
-    decayRatePointsPerHour: 1,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 3,
+    AssessmentConfigId: 5,
     type: 'Others'
   }
 ];

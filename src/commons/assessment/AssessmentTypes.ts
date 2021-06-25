@@ -90,12 +90,11 @@ export type Assessment = {
 };
 
 export type AssessmentConfiguration = {
-  order: number; // reference to the 'index' of the assessment type to update
+  AssessmentConfigId: number;
   type: AssessmentType;
   isGraded: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
-  decayRatePointsPerHour: number;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {

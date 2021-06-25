@@ -13,8 +13,7 @@ type OwnProps = {
 
 export enum AssessmentConfigNumericField {
   EARLY_XP = 'EARLY_XP',
-  HOURS_BEFORE_DECAY = 'HOURS_BEFORE_DECAY',
-  DECAY_RATE = 'DECAY_RATE'
+  HOURS_BEFORE_DECAY = 'HOURS_BEFORE_DECAY'
 }
 
 const NumericCell: React.FC<IsGradedCellProps> = props => {
@@ -37,13 +36,6 @@ const NumericCell: React.FC<IsGradedCellProps> = props => {
   ) : props.field === AssessmentConfigNumericField.HOURS_BEFORE_DECAY ? (
     <NumericInput
       value={data.hoursBeforeEarlyXpDecay}
-      min={0}
-      clampValueOnBlur
-      onValueChange={changeHandler}
-    />
-  ) : props.field === AssessmentConfigNumericField.DECAY_RATE ? (
-    <NumericInput
-      value={data.decayRatePointsPerHour}
       min={0}
       clampValueOnBlur
       onValueChange={changeHandler}
