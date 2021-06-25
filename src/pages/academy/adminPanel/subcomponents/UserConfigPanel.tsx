@@ -31,10 +31,9 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     {
       headerName: 'Name',
       field: 'name'
-      //   width: 210
     },
     {
-      headName: 'Username',
+      headerName: 'Username',
       field: 'username'
     },
     {
@@ -63,18 +62,16 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   const defaultColumnDefs = {
     filter: true,
     resizable: true
-    // sortable: false
   };
 
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
-    params.api.sizeColumnsToFit();
   };
 
   const grid = (
     <div
       className="Grid ag-grid-parent ag-theme-balham"
-      style={{ width: '40%', minWidth: '450px' }}
+      // style={{ width: '60%', /* minWidth: '640px' */}}
     >
       <AgGridReact
         domLayout={'autoHeight'}

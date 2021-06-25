@@ -1,21 +1,9 @@
-import {
-  // Alert,
-  // Button,
-  Divider,
-  FormGroup,
-  H2,
-  H3,
-  InputGroup,
-  // Intent,
-  Switch,
-  TextArea
-} from '@blueprintjs/core';
+import { Divider, FormGroup, H2, H3, InputGroup, Switch, TextArea } from '@blueprintjs/core';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import Constants from 'src/commons/utils/Constants';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
-// import { showSuccessMessage } from '../../../../commons/utils/NotificationsHelper';
 
 export type CourseConfigPanelProps = OwnProps;
 
@@ -24,63 +12,8 @@ type OwnProps = {
   setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
 };
 
-// export type DispatchProps = {
-//   // handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
-// };
-
-// export type StateProps = {
-// };
-
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
-  // const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({});
-
-  // const [courseName, setCourseName] = React.useState(props.courseName);
-  // const [courseShortName, setCourseShortName] = React.useState(props.courseShortName);
-  // const [viewable, setViewable] = React.useState(props.viewable);
-  // const [enableGame, setEnableGame] = React.useState(props.enableGame);
-  // const [enableAchievements, setEnableAchievements] = React.useState(props.enableAchievements);
-  // const [enableSourcecast, setEnableSourcecast] = React.useState(props.enableSourcecast);
-  // const [moduleHelpText, setModuleHelpText] = React.useState(props.moduleHelpText);
-
-  // const [alertOpen, setAlertOpen] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-
-  // const handleOpenAlert = () => {
-  //   saveChanges();
-  //   setAlertOpen(true);
-  // };
-  // const handleCloseAlert = () => setAlertOpen(false);
-
-  // const saveChanges = () => {
-  //   setCourseConfig({
-  //     ...courseConfig,
-  //     courseName: courseName,
-  //     courseShortName: courseShortName,
-  //     viewable: viewable,
-  //     enableGame: enableGame,
-  //     enableAchievements: enableAchievements,
-  //     enableSourcecast: enableSourcecast,
-  //     moduleHelpText: moduleHelpText
-  //   });
-
-  //   showSuccessMessage('changes saved on this page', 1000);
-  // };
-
-  // const updateCourseConfig = () => {
-  //   props.handleUpdateCourseConfig(courseConfig);
-  //   handleCloseAlert();
-  // };
-
-  // const handleBooleanChange = (handler: (checked: boolean) => void) => {
-  //   return (event: React.FormEvent<HTMLElement>) =>
-  //     handler((event.target as HTMLInputElement).checked);
-  // };
-
-  // const handleStringChange = (handler: (value: string) => void) => {
-  //   return (event: React.FormEvent<HTMLElement>) =>
-  //     handler((event.target as HTMLInputElement).value);
-  // };
-
   const {
     courseName,
     courseShortName,
@@ -154,7 +87,6 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
             />
           </FormGroup>
         </div>
-        {/* <div className="divider" /> */}
         {!isMobileBreakpoint && <Divider />}
         <div className="booleans">
           <Switch
@@ -199,21 +131,6 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
           />
         </div>
       </div>
-      {/* <Button onClick={saveChanges}>Save</Button> */}
-      {/* <div>
-        <Button onClick={handleOpenAlert}>Submit</Button>
-      </div> */}
-      {/* <Alert
-        cancelButtonText="Cancel"
-        confirmButtonText="Confirm"
-        icon="warning-sign"
-        intent={Intent.WARNING}
-        isOpen={alertOpen}
-        onCancel={handleCloseAlert}
-        onConfirm={updateCourseConfig}
-      >
-        <p>Are you sure you want to save the Course Configuration to the backend?</p>
-      </Alert> */}
     </div>
   );
 };

@@ -50,7 +50,7 @@ export const saveState = (state: OverallState) => {
         courseShortName: state.session.courseShortName,
         viewable: state.session.viewable,
         enableGame: state.session.enableGame,
-        enableAchievements: state.session.enableSourcecast,
+        enableAchievements: state.session.enableAchievements,
         enableSourcecast: state.session.enableSourcecast,
         moduleHelpText: state.session.moduleHelpText,
         assessmentTypes: state.session.assessmentTypes

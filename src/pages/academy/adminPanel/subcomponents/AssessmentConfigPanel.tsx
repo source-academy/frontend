@@ -13,17 +13,13 @@ import NumericCell, { AssessmentConfigNumericField } from './NumericCell';
 export type AssessmentConfigPanelProps = OwnProps;
 
 type OwnProps = {
-  assessmentConfigurations: AssessmentConfiguration[];
-  setAssessmentConfigurations: (assessmentConfig: AssessmentConfiguration[]) => void;
+  assessmentConfig: React.MutableRefObject<AssessmentConfiguration[]>;
+  setAssessmentConfig: (assessmentConfig: AssessmentConfiguration[]) => void;
+  setHasChangesAssessmentConfig: (val: boolean) => void;
 };
 
 const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
-  /**
-   * Mutable ref to track form state. This is because ag-grid does not update the cellRendererParams
-   * whenever there is an update in rowData, leading to a stale closure problem where the handlers
-   * capture the old value of assessmentConfig.
-   */
-  const assessmentConfig = React.useRef(props.assessmentConfigurations);
+  const { assessmentConfig, setAssessmentConfig } = props;
   const gridApi = React.useRef<GridApi>();
 
   const setIsGraded = (index: number, value: boolean) => {
@@ -32,7 +28,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       ...temp[index],
       isGraded: value
     };
-    assessmentConfig.current = temp;
+    setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGraded', value);
   };
 
@@ -42,7 +38,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       ...temp[index],
       earlySubmissionXp: value
     };
-    assessmentConfig.current = temp;
+    setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('earlySubmissionXp', value);
   };
 
@@ -52,7 +48,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       ...temp[index],
       hoursBeforeEarlyXpDecay: value
     };
-    assessmentConfig.current = temp;
+    setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hoursBeforeEarlyXpDecay', value);
   };
 
@@ -62,7 +58,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       ...temp[index],
       decayRatePointsPerHour: value
     };
-    assessmentConfig.current = temp;
+    setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('decayRatePointsPerHour', value);
   };
 
@@ -81,7 +77,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       earlySubmissionXp: 0,
       decayRatePointsPerHour: 0 // TODO: Remove from the frontend and backend
     });
-    assessmentConfig.current = temp;
+    setAssessmentConfig(temp);
     gridApi.current?.setRowData(temp);
   };
 
@@ -94,7 +90,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     const temp = [...assessmentConfig.current];
     temp.splice(index, 1);
     gridApi.current?.setRowData(temp);
-    assessmentConfig.current = temp;
+    setAssessmentConfig(temp);
   };
 
   const columnDefs = [
@@ -141,11 +137,12 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     },
     {
       headerName: 'Delete Row',
+      field: 'placeholderToPreventColumnRerender',
       cellRendererFramework: DeleteRowCell,
       cellRendererParams: {
         deleteRowHandler: deleteRowHandler
       },
-      width: 100,
+      maxWidth: 120,
       resizable: false
     }
   ];
@@ -180,6 +177,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   // cellRendererFramework)
   const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
     gridApi.current?.setRowData(assessmentConfig.current);
+    props.setHasChangesAssessmentConfig(true);
   };
 
   // Updates our local React state whenever there are changes to the Assessment Type column
@@ -191,6 +189,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         type: event.value
       };
       assessmentConfig.current = temp;
+      props.setHasChangesAssessmentConfig(true);
     }
   };
 
@@ -206,7 +205,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        rowData={props.assessmentConfigurations}
+        rowData={props.assessmentConfig.current}
         rowHeight={36}
         rowDragManaged={true}
         suppressCellSelection={true}
@@ -225,6 +224,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       <H2>Assessment Configuration</H2>
       {grid}
       <Button text="Add Row" onClick={addRowHandler} className="add-row-button" />
+      <Button onClick={() => console.log(assessmentConfig.current)} className="add-row-button" />
     </div>
   );
 };

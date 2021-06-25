@@ -20,7 +20,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   viewable: state.session.viewable,
   enableGame: state.session.enableGame,
   enableAchievements: state.session.enableAchievements,
-  enableSourcecast: state.session.enableGame,
+  enableSourcecast: state.session.enableSourcecast,
   sourceChapter: state.session.sourceChapter,
   sourceVariant: state.session.sourceVariant,
   moduleHelpText: state.session.moduleHelpText,
