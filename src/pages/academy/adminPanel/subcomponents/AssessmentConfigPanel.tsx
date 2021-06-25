@@ -1,10 +1,12 @@
-import { H2 } from '@blueprintjs/core';
+import { Button, H2 } from '@blueprintjs/core';
 import { CellValueChangedEvent, GridApi, GridReadyEvent, RowDragEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import { AssessmentConfiguration } from '../../../../commons/assessment/AssessmentTypes';
+import DeleteCell from './DeleteCell';
 import IsGradedCell from './IsGradedCell';
 import NumericCell, { AssessmentConfigNumericField } from './NumericCell';
 
@@ -16,54 +18,83 @@ type OwnProps = {
 };
 
 const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
-  const [assessmentConfig, setAssessmentConfig] = React.useState<AssessmentConfiguration[]>(
-    props.assessmentConfigurations
-  );
+  /**
+   * Mutable ref to track form state. This is because ag-grid does not update the cellRendererParams
+   * whenever there is an update in rowData, leading to a stale closure problem where the handlers
+   * capture the old value of assessmentConfig.
+   */
+  const assessmentConfig = React.useRef(props.assessmentConfigurations);
   const gridApi = React.useRef<GridApi>();
 
-  /**
-   * Although we are tracking the form in local React state, we do not pass this React state
-   * as props into the ag-grid component as this would cause a flicker in ag-grid whenever this
-   * state is updated. Instead, we use ag-grid's API to update the corresponding cell.
-   */
   const setIsGraded = (index: number, value: boolean) => {
-    const temp = [...assessmentConfig];
+    const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
       isGraded: value
     };
-    setAssessmentConfig(temp);
+    assessmentConfig.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGraded', value);
   };
 
   const setEarlyXp = (index: number, value: number) => {
-    const temp = [...assessmentConfig];
+    const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
       earlySubmissionXp: value
     };
-    setAssessmentConfig(temp);
+    assessmentConfig.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('earlySubmissionXp', value);
   };
 
   const setHoursBeforeDecay = (index: number, value: number) => {
-    const temp = [...assessmentConfig];
+    const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
       hoursBeforeEarlyXpDecay: value
     };
-    setAssessmentConfig(temp);
+    assessmentConfig.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hoursBeforeEarlyXpDecay', value);
   };
 
   const setDecayRate = (index: number, value: number) => {
-    const temp = [...assessmentConfig];
+    const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
       decayRatePointsPerHour: value
     };
-    setAssessmentConfig(temp);
+    assessmentConfig.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('decayRatePointsPerHour', value);
+  };
+
+  const addRowHandler = () => {
+    if (assessmentConfig.current.length >= 8) {
+      showWarningMessage('You can have at most 8 assessment types!');
+      return;
+    }
+
+    const temp = [...assessmentConfig.current];
+    temp.push({
+      order: -1, // TODO: Remove order from the frontend (and/or backend)
+      type: 'untitled',
+      isGraded: true,
+      hoursBeforeEarlyXpDecay: 0,
+      earlySubmissionXp: 0,
+      decayRatePointsPerHour: 0 // TODO: Remove from the frontend and backend
+    });
+    assessmentConfig.current = temp;
+    gridApi.current?.setRowData(temp);
+  };
+
+  const deleteRowHandler = (index: number) => {
+    if (assessmentConfig.current.length <= 1) {
+      showWarningMessage('You must have at least 1 assessment type!');
+      return;
+    }
+
+    const temp = [...assessmentConfig.current];
+    temp.splice(index, 1);
+    gridApi.current?.setRowData(temp);
+    assessmentConfig.current = temp;
   };
 
   const columnDefs = [
@@ -107,6 +138,15 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         setStateHandler: setDecayRate,
         field: AssessmentConfigNumericField.DECAY_RATE
       }
+    },
+    {
+      headerName: 'Delete Row',
+      field: 'deleteRow',
+      cellRendererFramework: DeleteCell,
+      cellRendererParams: {
+        deleteRowHandler: deleteRowHandler
+      },
+      width: 100
     }
   ];
 
@@ -125,12 +165,12 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       if (rowNeedsToMove) {
         const movingData = movingNode.data;
         const overData = overNode.data;
-        const fromIndex = indexOfObject(assessmentConfig, movingData);
-        const toIndex = indexOfObject(assessmentConfig, overData);
+        const fromIndex = indexOfObject(assessmentConfig.current, movingData);
+        const toIndex = indexOfObject(assessmentConfig.current, overData);
 
-        const temp = [...assessmentConfig];
+        const temp = [...assessmentConfig.current];
         moveInArray(temp, fromIndex, toIndex);
-        setAssessmentConfig(temp);
+        assessmentConfig.current = temp;
       }
     },
     [assessmentConfig]
@@ -139,18 +179,18 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   // Updates the data passed into ag-grid (this is necessary to update the rowIndex in our custom
   // cellRendererFramework)
   const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
-    gridApi.current?.setRowData(assessmentConfig);
+    gridApi.current?.setRowData(assessmentConfig.current);
   };
 
   // Updates our local React state whenever there are changes to the Assessment Type column
   const onCellValueChanged = (event: CellValueChangedEvent) => {
     if (event.colDef.field === 'type') {
-      const temp = [...assessmentConfig];
+      const temp = [...assessmentConfig.current];
       temp[event.rowIndex!] = {
         ...temp[event.rowIndex!],
         type: event.value
       };
-      setAssessmentConfig(temp);
+      assessmentConfig.current = temp;
     }
   };
 
@@ -184,6 +224,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     <div className="assessment-configuration">
       <H2>Assessment Configuration</H2>
       {grid}
+      <Button text="Add Row" onClick={addRowHandler} className="add-row-button" />
     </div>
   );
 };

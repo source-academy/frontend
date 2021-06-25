@@ -2,7 +2,7 @@ import { Switch } from '@blueprintjs/core';
 import React from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 
-export type IsGradedCellProps = OwnProps;
+type IsGradedCellProps = OwnProps;
 
 type OwnProps = {
   data: AssessmentConfiguration;
