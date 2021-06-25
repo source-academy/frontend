@@ -134,3 +134,13 @@ There are a few additional environment variables that are used when building and
 1. `REACT_APP_SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. The service worker will ignore paths matching any of these regexes. This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
 1. `REACT_APP_CADET_LOGGER`: Log server URL. To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
 1. `REACT_APP_CADET_LOGGER_INTERVAL`: The interval (in ms) that the frontend should upload logs.
+
+## Testing
+
+`cadet-frontend` comes with an extensive test suite. To run the tests after you made your modifications, run 
+`yarn test`. Regression tests are run automatically when you want to push changes to this repository. 
+The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`.  After modifying `cadet-frontend`, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:  
+``` {.}
+$ yarn test --updateSnapshot
+```
+and then typing `a` to update all snapshots.
