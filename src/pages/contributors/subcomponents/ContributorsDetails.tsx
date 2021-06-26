@@ -32,27 +32,33 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
-              Gokul Rajiv
-              <br />
-              <strong>(Game)</strong>
-            </p>
-            {dot}
-            <p>
               Chow En Rong
               <br />
               <strong>(Frontend)</strong>
             </p>
             {dot}
             <p>
-              Thomas Tan
-              <br />
-              <strong>(Source)</strong>
-            </p>
-            {dot}
-            <p>
               Chen Yanyu
               <br />
               <strong>(Backend)</strong>
+            </p>
+            {dot}
+            <p>
+              Samuel Fang
+              <br />
+              <strong>(SICP JS)</strong>
+            </p>
+            {dot}
+            <p>
+              Gokul Rajiv
+              <br />
+              <strong>(Game)</strong>
+            </p>
+            {dot}
+            <p>
+              Thomas Tan
+              <br />
+              <strong>(Source)</strong>
             </p>
             {dot}
             <p>
