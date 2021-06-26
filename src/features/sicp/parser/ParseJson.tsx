@@ -31,12 +31,11 @@ export type JsonType = {
   title?: string;
   solution?: Array<JsonType>;
   id?: string;
-  withoutPrepend?: string;
-  prepend?: string;
   program?: string;
   href?: string;
   count?: integer;
   eval?: boolean;
+  prependLength?: number;
 };
 
 const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -105,9 +104,8 @@ const handleSnippet = (obj: JsonType) => {
     const CodeSnippetProps = {
       body: obj['body']!,
       id: obj['id']!,
-      initialEditorValueHash: obj['withoutPrepend']!,
-      initialFullProgramHash: obj['program']! || obj['withoutPrepend']!,
-      initialPrependHash: obj['prepend']!,
+      initialEditorValueHash: obj['program']!,
+      prependLength: obj['prependLength']!,
       output: obj['output']!
     };
     return <CodeSnippet {...CodeSnippetProps} />;
