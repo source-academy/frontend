@@ -133,7 +133,6 @@ export default class RoomPreview extends Phaser.Scene {
      * Hence, we replace the scope instead of appending
      * new one each time.
      */
-    this.context!.nativeStorage.globals = this.context!.nativeStorage.globals!.previousScope;
     this.eval(`update();`);
   }
 
