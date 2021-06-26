@@ -162,7 +162,7 @@ describe('Parse snippet', () => {
   const base = {
     id: 'id',
     program: program,
-    body: body,
+    body: body
   };
 
   const objWithoutPrepend = objWithText(
