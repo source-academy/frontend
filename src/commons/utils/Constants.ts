@@ -17,7 +17,7 @@ const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;
-const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
+const urlShortenerBase = process.env.REACT_APP_URL_SHORTENER_BASE;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const sharedbBackendUrl = process.env.REACT_APP_SHAREDB_BACKEND_URL || '';
@@ -110,7 +110,7 @@ const Constants = {
   defaultQuestionId,
   maxBrowseIndex,
   mobileBreakpoint,
-  urlShortener,
+  urlShortenerBase,
   urlShortenerSignature,
   moduleBackendUrl,
   authProviders,
