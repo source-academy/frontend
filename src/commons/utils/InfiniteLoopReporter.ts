@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/browser';
 import { infiniteLoopErrorType } from 'js-slang/dist/infiniteLoops/errorMessages';
-import { Context, NativeStorage, SourceError } from 'js-slang/dist/types';
+import { Context, SourceError } from 'js-slang/dist/types';
 
 function getInfiniteLoopErrors(errors: SourceError[]) {
   for (const error of errors) {
@@ -58,30 +58,25 @@ function stringifyArray(arr: any[]) {
  * NOTE: variables trapped in closures can not be saved/recovered, e.g.
  * function f(x) {return (y)=>(x+y)}; //f(2).tostring() = "(y)=>(x+y)", 2 is gone forever
  *
- * @param {Globals} scope - Globals object from context.nativeStorage
+ * @param {Globals} previousIdentifiers - Globals object from context.nativeStorage
  *
  * @returns {string} code
  */
-function getPreviousCode(scope: NativeStorage['globals'] | null): Array<string> {
-  const output = [];
-  while (scope !== null) {
-    let code = '';
-    for (const [key, value] of scope.variables.entries()) {
-      const theVar = value.getValue();
-      //add newline for readability
-      if (code !== '') code += '\n';
-      if (typeof theVar === 'function') {
-        code += `${theVar.toString()}`;
-      } else if (Array.isArray(theVar)) {
-        code += `const ${key}=${stringifyArray(theVar)};`;
-      } else {
-        code += `const ${key}=${JSON.stringify(theVar)};`;
-      }
+function getPreviousCode(context: Context): string {
+  let code = '';
+  for (const key of context.nativeStorage.previousProgramsIdentifiers) {
+    const theVar = context.nativeStorage.evaller!(key);
+    //add newline for readability
+    if (code !== '') code += '\n';
+    if (typeof theVar === 'function') {
+      code += `${theVar.toString()}`;
+    } else if (Array.isArray(theVar)) {
+      code += `const ${key}=${stringifyArray(theVar)};`;
+    } else {
+      code += `const ${key}=${JSON.stringify(theVar)};`;
     }
-    output.unshift(code);
-    scope = scope.previousScope;
   }
-  return output;
+  return code;
 }
 
 /**
@@ -99,12 +94,7 @@ function getPreviousCode(scope: NativeStorage['globals'] | null): Array<string> 
 export function getInfiniteLoopData(context: Context, code: string) {
   const errors = getInfiniteLoopErrors(context.errors);
   if (errors) {
-    const innerCode = getPreviousCode(context.nativeStorage.globals);
-    innerCode.shift();
-    if (context.chapter >= 2) innerCode.shift();
-    let fullCode = innerCode.reduce((acc: string, current: string) => acc + current + '\n{');
-    fullCode += code + '}'.repeat(innerCode.length - 1);
-    return [errors, fullCode];
+    return [errors, getPreviousCode(context)];
   } else {
     return null;
   }
