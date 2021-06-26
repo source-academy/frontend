@@ -1,4 +1,5 @@
 import { Blockquote, Code, H1, OL, Pre, UL } from '@blueprintjs/core';
+import React from 'react';
 import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
@@ -40,14 +41,14 @@ export type JsonType = {
 
 const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div>
+    <>
       {obj['count'] === 1 && <hr />}
       <div className="sicp-footnote">
         <div ref={ref => (refs.current[obj['id']!] = ref)} />
         <a href={obj['href']}>{'[' + obj['count'] + '] '}</a>
         {parseArr(obj['child']!, refs)}
       </div>
-    </div>
+    </>
   );
 };
 
@@ -65,10 +66,10 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   const hasAttribution = author || title || date;
 
   const attribution = [];
-  attribution.push(<span key="attribution">-</span>);
+  attribution.push(<React.Fragment key="attribution">-</React.Fragment>);
 
   if (author) {
-    attribution.push(<span key="author">{author}</span>);
+    attribution.push(<React.Fragment key="author">{author}</React.Fragment>);
   }
 
   if (title) {
@@ -76,7 +77,7 @@ const handleEpigraph = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   }
 
   if (date) {
-    attribution.push(<span key="date">{date}</span>);
+    attribution.push(<React.Fragment key="date">{date}</React.Fragment>);
   }
 
   const text = child && parseArr(child!, refs);
@@ -179,7 +180,7 @@ const handleReference = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 };
 
 const handleText = (text: string) => {
-  return <p>{text}</p>;
+  return <>{text}</>;
 };
 
 const handleLatex = (math: string) => {
@@ -187,7 +188,7 @@ const handleLatex = (math: string) => {
 };
 
 export const processingFunctions = {
-  '#text': (obj: JsonType, _refs: React.MutableRefObject<{}>) => <p>{obj['body']}</p>,
+  '#text': (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText(obj['body']!),
 
   B: (obj: JsonType, refs: React.MutableRefObject<{}>) => <b>{parseArr(obj['child']!, refs)}</b>,
 
@@ -290,12 +291,14 @@ export const parseObj = (
 ) => {
   if (obj['tag']) {
     if (processingFunctions[obj['tag']]) {
-      return <span key={index}>{processingFunctions[obj['tag']](obj, refs)}</span>;
+      return (
+        <React.Fragment key={index}>{processingFunctions[obj['tag']](obj, refs)}</React.Fragment>
+      );
     } else {
       throw new ParseJsonError('Unrecognised Tag: ' + obj['tag']);
     }
   } else {
     // Handle case where tag does not exists. Should not happen if json file is created properly.
-    return <span key={index}>{parseArr(obj['child']!, refs)}</span>;
+    return <React.Fragment key={index}>{parseArr(obj['child']!, refs)}</React.Fragment>;
   }
 };
