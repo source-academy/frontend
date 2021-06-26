@@ -69,7 +69,7 @@ if (!isTest) {
 }
 
 export enum Links {
-  githubIssues = 'https://github.com/source-academy/cadet-frontend/issues',
+  githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
 
   moduleDetails = 'https://www.comp.nus.edu.sg/~cs1101s',
@@ -85,7 +85,7 @@ export enum Links {
   textbookChapter2_2 = 'https://sourceacademy.org/sicpjs/2.2',
   textbookChapter3_2 = 'https://sourceacademy.org/sicpjs/3.2',
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
-  sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
+  sourceHotkeys = 'https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
   source_1 = 'https://docs.sourceacademy.org/source_1/',
   source_1_Lazy = 'https://docs.sourceacademy.org/source_1_lazy/',

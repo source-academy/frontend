@@ -118,7 +118,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
    * which contains the ag-grid table of available Sourcecasts. This is intentional
-   * to avoid an ag-grid console warning. For more info, see issue #1152 in cadet-frontend.
+   * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
 
