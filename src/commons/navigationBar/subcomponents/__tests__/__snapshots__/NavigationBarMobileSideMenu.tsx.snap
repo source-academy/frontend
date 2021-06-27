@@ -11,8 +11,60 @@ exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 </Blueprint3.Drawer>"
 `;
 
-exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
+exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course selected) 1`] = `
 "<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"briefcase\\" />
+    <div className=\\"navbar-button-text\\">
+      Classroom
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sicpjs/index\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"book\\" />
+    <div className=\\"navbar-button-text\\">
+      SICP JS
+    </div>
+  </NavLink>
+</Blueprint3.Drawer>"
+`;
+
+exports[`NavigationBarMobileSideMenu renders correctly when logged in (with course selected) 1`] = `
+"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
+  <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"flame\\" />
+    <div>
+      Missions
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"lightbulb\\" />
+    <div>
+      Quests
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"predictive-analysis\\" />
+    <div>
+      Paths
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"comparison\\" />
+    <div>
+      Contests
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/others\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"manual\\" />
+    <div>
+      Others
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"code\\" />
     <div>
@@ -23,6 +75,12 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
     <Blueprint3.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
       Classroom
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sicpjs/index\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"book\\" />
+    <div className=\\"navbar-button-text\\">
+      SICP JS
     </div>
   </NavLink>
 </Blueprint3.Drawer>"
