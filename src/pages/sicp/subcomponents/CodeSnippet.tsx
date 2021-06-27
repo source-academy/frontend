@@ -6,7 +6,6 @@ import { useMediaQuery } from 'react-responsive';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
-import { ControlBarShowDependenciesButton } from 'src/commons/controlBar/ControlBarShowDependenciesButton';
 import Constants from 'src/commons/utils/Constants';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
@@ -19,8 +18,7 @@ type OwnProps = {
   output: string;
   id: string;
   initialEditorValueHash: string;
-  initialPrependHash: string | undefined;
-  initialFullProgramHash: string | undefined;
+  prependLength: number | undefined;
 };
 
 const resizableProps = {
@@ -45,12 +43,7 @@ const resizableProps = {
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
   const context = React.useContext(CodeSnippetContext);
-  const [showPrepend, setShowPrepend] = React.useState(false);
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-
-  const handleShowDependencies = React.useCallback(() => {
-    setShowPrepend(!showPrepend);
-  }, [showPrepend]);
 
   const handleOpen = () => {
     context.setActive(id);
@@ -61,11 +54,8 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   }, [context]);
 
   const WorkspaceProps = {
-    initialEditorValueHash: showPrepend
-      ? props.initialFullProgramHash
-      : props.initialEditorValueHash,
-    initialPrependHash: showPrepend ? undefined : props.initialPrependHash,
-    initialFullProgramHash: props.initialFullProgramHash,
+    initialEditorValueHash: props.initialEditorValueHash,
+    prependLength: props.prependLength,
     isSicpEditor: true,
 
     handleCloseEditor: handleClose
@@ -79,19 +69,8 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     [handleClose]
   );
 
-  const showDependenciesButton = React.useMemo(
-    () => (
-      <ControlBarShowDependenciesButton
-        key="dependencies"
-        buttonText={showPrepend ? 'Hide Dependencies' : 'Show Dependencies'}
-        handleShowDependencies={handleShowDependencies}
-      />
-    ),
-    [handleShowDependencies, showPrepend]
-  );
-
   const controlBarProps = {
-    editorButtons: props.initialPrependHash ? [showDependenciesButton] : [],
+    editorButtons: [],
     flowButtons: [],
     editingWorkspaceButtons: [closeButton]
   };

@@ -162,7 +162,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 exports[`Parse figures FIGURE with snippet successful 1`] = `
 "<div className=\\"sicp-figure\\">
   <div />
-  <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"IwAg1CwNxA\\" initialPrependHash={[undefined]} output={[undefined]}>
+  <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash={[undefined]} prependLength={[undefined]} output={[undefined]}>
     <div>
       Code Snippet
     </div>
@@ -333,7 +333,8 @@ exports[`Parse section SECTION  successful 1`] = `
 exports[`Parse snippet SNIPPET no eval successful 1`] = `
 "<Component>
   <pre className=\\"bp3-code-block\\">
-    1 + 1;
+    const a = 1;
+    a+1;
   </pre>
 </Component>"
 `;
@@ -341,7 +342,7 @@ exports[`Parse snippet SNIPPET no eval successful 1`] = `
 exports[`Parse snippet SNIPPET with latex successful 1`] = `
 "<Component>
   <pre className=\\"bp3-code-block\\">
-    <SicpLatex math=\\"1 + 1;\\">
+    <SicpLatex math=\\"const a = 1;\\\\na+1;\\">
       <Latex delimiters={{...}} strict={false}>
         <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
       </Latex>
@@ -351,7 +352,7 @@ exports[`Parse snippet SNIPPET with latex successful 1`] = `
 `;
 
 exports[`Parse snippet SNIPPET with prepend successful 1`] = `
-"<Component body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"MYewdgzgLgBAhjAvDAjAbgFApgalWoA\\" initialPrependHash=\\"MYewdgzgLgBAhjAvDAjAbiA\\" output={[undefined]}>
+"<Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={1} output={[undefined]}>
   <div>
     Code Snippet
   </div>
@@ -359,7 +360,7 @@ exports[`Parse snippet SNIPPET with prepend successful 1`] = `
 `;
 
 exports[`Parse snippet SNIPPET without prepend successful 1`] = `
-"<Component body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"IwAg1CwNxA\\" initialPrependHash={[undefined]} output={[undefined]}>
+"<Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output={[undefined]}>
   <div>
     Code Snippet
   </div>
@@ -367,7 +368,7 @@ exports[`Parse snippet SNIPPET without prepend successful 1`] = `
 `;
 
 exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
-"<Component body=\\"1 + 1;\\" id=\\"id\\" initialEditorValueHash=\\"IwAg1CwNxA\\" initialFullProgramHash=\\"IwAg1CwNxA\\" initialPrependHash={[undefined]} output=\\"2\\">
+"<Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output=\\"2\\">
   <div>
     Code Snippet
   </div>

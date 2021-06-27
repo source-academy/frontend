@@ -155,16 +155,13 @@ describe('Parse exercise', () => {
 
 describe('Parse snippet', () => {
   const tag = snippetTag;
-  const body = '1 + 1;';
+  const body = 'const a = 1;\na+1;';
   const output = '2';
-  const prependString = 'const a = 1;';
-  const withoutPrepend = lzString.compressToEncodedURIComponent(body);
-  const program = lzString.compressToEncodedURIComponent(prependString + '\n' + body);
-  const prepend = lzString.compressToEncodedURIComponent(prependString);
+  const program = lzString.compressToEncodedURIComponent(body);
 
   const base = {
     id: 'id',
-    withoutPrepend: withoutPrepend,
+    program: program,
     body: body
   };
 
@@ -184,8 +181,7 @@ describe('Parse snippet', () => {
   const objWithPrepend = objWithText(
     {
       ...base,
-      program: program,
-      prepend: prepend
+      prependLength: 1
     },
     'with prepend'
   );
