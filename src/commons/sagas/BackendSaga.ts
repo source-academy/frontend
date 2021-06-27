@@ -2,7 +2,7 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-import { ADD_NEW_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
+import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { OverallState, Role, styliseSublanguage } from '../../commons/application/ApplicationTypes';
@@ -91,6 +91,7 @@ import {
   postAssessmentConfigs,
   postAuth,
   postCourseConfig,
+  postCreateCourse,
   postGrading,
   postLatestViewedCourse,
   postNewUsers,
@@ -657,6 +658,46 @@ function* BackendSaga(): SagaIterator {
       }
     }
   );
+
+  yield takeEvery(CREATE_COURSE, function* (action: ReturnType<typeof actions.createCourse>): any {
+    const tokens: Tokens = yield selectTokens();
+    const courseConfig: UpdateCourseConfiguration = action.payload;
+
+    const resp: Response | null = yield call(postCreateCourse, tokens, courseConfig);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    const {
+      user,
+      courseRegistration,
+      courseConfiguration
+    }: {
+      user: User | null;
+      courseRegistration: CourseRegistration | null;
+      courseConfiguration: CourseConfiguration | null;
+    } = yield call(getUser, tokens);
+
+    if (!user || !courseRegistration || !courseConfiguration) {
+      return yield showWarningMessage('An error occurred. Please try again.');
+    }
+
+    yield put(actions.setUser(user));
+    yield put(actions.setCourseRegistration(courseRegistration));
+    yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(
+      actions.updateSublanguage({
+        chapter: courseConfiguration.sourceChapter,
+        variant: courseConfiguration.sourceVariant,
+        displayName: styliseSublanguage(
+          courseConfiguration.sourceChapter,
+          courseConfiguration.sourceVariant
+        )
+      })
+    );
+    yield call(showSuccessMessage, 'Successfully created your new course!');
+    yield history.push('/academy');
+  });
 
   yield takeEvery(
     ADD_NEW_USERS_TO_COURSE,

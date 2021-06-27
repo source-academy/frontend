@@ -166,7 +166,7 @@ export const getLatestCourseRegistrationAndConfiguration = async (
 };
 
 /**
- * PUT /user/latest_viewed/{courseId}
+ * PUT /user/latest_viewed
  */
 export const postLatestViewedCourse = async (
   tokens: Tokens,
@@ -175,6 +175,24 @@ export const postLatestViewedCourse = async (
   const resp = await request(`user/latest_viewed`, 'PUT', {
     ...tokens,
     body: { courseId: courseId },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /config/create
+ */
+export const postCreateCourse = async (
+  tokens: Tokens,
+  courseConfig: UpdateCourseConfiguration
+): Promise<Response | null> => {
+  const resp = await request(`config/create`, 'POST', {
+    ...tokens,
+    body: { ...courseConfig },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

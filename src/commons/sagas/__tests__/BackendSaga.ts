@@ -1,7 +1,7 @@
 import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
-import { ADD_NEW_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
+import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
@@ -56,6 +56,7 @@ import {
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_USER_ROLE,
+  UpdateCourseConfiguration,
   User
 } from '../../application/types/SessionTypes';
 import {
@@ -100,6 +101,7 @@ import {
   postAssessmentConfigs,
   postAuth,
   postCourseConfig,
+  postCreateCourse,
   postLatestViewedCourse,
   postNewUsers,
   postReautogradeAnswer,
@@ -819,6 +821,64 @@ describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
       .call(getUserCourseRegistrations, mockTokens)
       .not.put.actionType(SET_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .dispatch({ type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS })
+      .silentRun();
+  });
+});
+
+describe('Test CREATE_COURSE action', () => {
+  const courseConfig: UpdateCourseConfiguration = {
+    courseName: 'CS1101S Programming Methodology (AY20/21 Sem 1)',
+    courseShortName: 'CS1101S',
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default',
+    moduleHelpText: 'Help Text'
+  };
+  const user = mockUser;
+  const courseConfiguration = mockCourseConfiguration1;
+  const courseRegistration = mockCourseRegistration1;
+
+  const sublanguage: SourceLanguage = {
+    chapter: mockCourseConfiguration1.sourceChapter,
+    variant: mockCourseConfiguration1.sourceVariant,
+    displayName: styliseSublanguage(
+      mockCourseConfiguration1.sourceChapter,
+      mockCourseConfiguration1.sourceVariant
+    )
+  };
+  test('created successfully', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postCreateCourse, mockTokens, courseConfig)
+      .call(getUser, mockTokens)
+      .put(setUser(user))
+      .put(setCourseRegistration(courseRegistration))
+      .put(setCourseConfiguration(courseConfiguration))
+      .put(updateSublanguage(sublanguage))
+      .call.fn(showSuccessMessage)
+      .provide([
+        [call(postCreateCourse, mockTokens, courseConfig), okResp],
+        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]
+      ])
+      .dispatch({ type: CREATE_COURSE, payload: courseConfig })
+      .silentRun();
+  });
+
+  test('unsuccessful', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postCreateCourse, mockTokens, courseConfig)
+      .not.call.fn(getUser)
+      .not.put.actionType(SET_USER)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .not.call.fn(showSuccessMessage)
+      .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
+      .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();
   });
 });
