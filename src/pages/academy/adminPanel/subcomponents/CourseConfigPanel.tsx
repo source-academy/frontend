@@ -68,7 +68,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
           </FormGroup>
           <FormGroup
             helperText={
-              'Please enter the module help text that will be used in this and this place.'
+              'Please enter the module help text that will be used in the course help dialog.'
             }
             inline={true}
             label={'Module Help Text'}

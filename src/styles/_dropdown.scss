@@ -215,3 +215,16 @@ div.#{$ns}-dialog.help {
     margin-top: 10px;
   }
 }
+
+.create-course {
+  .boolean-container {
+    display: flex;
+  }
+
+  .create-course-button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

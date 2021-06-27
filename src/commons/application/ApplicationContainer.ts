@@ -1,6 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
+import { createCourse } from 'src/features/academy/AcademyActions';
 
 import { logOut } from './actions/CommonsActions';
 import { loginGitHub, logoutGitHub, updateLatestViewedCourse } from './actions/SessionActions';
@@ -31,7 +32,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleLogOut: logOut,
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub,
-      updateLatestViewedCourse: updateLatestViewedCourse
+      updateLatestViewedCourse: updateLatestViewedCourse,
+      handleCreateCourse: createCourse
     },
     dispatch
   );

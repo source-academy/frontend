@@ -20,7 +20,7 @@ import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 
 import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import { Role } from '../application/ApplicationTypes';
-import { UserCourse } from '../application/types/SessionTypes';
+import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadgeContainer from '../notificationBadge/NotificationBadgeContainer';
@@ -37,6 +37,7 @@ type DispatchProps = {
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
   updateLatestViewedCourse: (courseId: number) => void;
+  handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
 
 type StateProps = {
@@ -349,6 +350,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <Dropdown
         handleLogOut={props.handleLogOut}
         updateLatestViewedCourse={props.updateLatestViewedCourse}
+        handleCreateCourse={props.handleCreateCourse}
         courses={props.courses}
         courseId={props.courseId}
         name={props.name}

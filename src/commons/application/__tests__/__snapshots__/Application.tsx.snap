@@ -2,7 +2,7 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[undefined]} role={[undefined]} name={[undefined]} courses={[undefined]} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[undefined]} handleCreateCourse={[undefined]} role={[undefined]} name={[undefined]} courses={[undefined]} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
@@ -24,7 +24,7 @@ exports[`Application renders correctly 1`] = `
 
 exports[`Application shows disabled when in disabled period 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[undefined]} role={[undefined]} name={[undefined]} courses={[undefined]} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[undefined]} handleCreateCourse={[undefined]} role={[undefined]} name={[undefined]} courses={[undefined]} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" render={[Function (anonymous)]} />
