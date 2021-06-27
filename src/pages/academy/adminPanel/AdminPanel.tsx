@@ -25,7 +25,7 @@ import {
   AssessmentType
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import AddUserPanel from './subcomponents/AddUserPanel';
+import AddUserPanel, { UsernameAndRole } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import UserConfigPanel from './subcomponents/UserConfigPanel';
@@ -40,6 +40,7 @@ export type DispatchProps = {
   handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
   handleUpdateUserRole: (crId: number, role: Role) => void;
   handleDeleteUserFromCourse: (crId: number) => void;
+  handleAddNewUsersToCourse: (users: UsernameAndRole[], provider: string) => void;
 };
 
 export type StateProps = {
@@ -133,7 +134,9 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
     handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
   };
 
-  const addUserPanelProps = {};
+  const addUserPanelProps = {
+    handleAddNewUsersToCourse: props.handleAddNewUsersToCourse
+  };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.

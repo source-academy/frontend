@@ -27,10 +27,21 @@ type OwnProps = {
 const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   const gridApi = React.useRef<GridApi>();
 
+  const userCourseRegistrations = props.userCourseRegistrations?.map(e => {
+    if (!e.name) {
+      return {
+        ...e,
+        name: '(user has yet to log in)'
+      };
+    }
+    return e;
+  });
+
   const columnDefs = [
     {
       headerName: 'Name',
-      field: 'name'
+      field: 'name',
+      sort: 'asc'
     },
     {
       headerName: 'Username',
@@ -61,7 +72,8 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
 
   const defaultColumnDefs = {
     filter: true,
-    resizable: true
+    resizable: true,
+    sortable: true
   };
 
   const onGridReady = (params: GridReadyEvent) => {
@@ -76,7 +88,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
-        rowData={props.userCourseRegistrations}
+        rowData={userCourseRegistrations}
         rowHeight={36}
         suppressCellSelection={true}
         suppressMovableColumns={true}

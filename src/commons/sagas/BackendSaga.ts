@@ -2,6 +2,8 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+import { ADD_NEW_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
+import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { OverallState, Role, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import {
@@ -91,6 +93,7 @@ import {
   postCourseConfig,
   postGrading,
   postLatestViewedCourse,
+  postNewUsers,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
@@ -652,6 +655,22 @@ function* BackendSaga(): SagaIterator {
       if (courseRegistrations) {
         yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
       }
+    }
+  );
+
+  yield takeEvery(
+    ADD_NEW_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider }: { users: UsernameAndRole[]; provider: string } = action.payload;
+
+      const resp: Response | null = yield call(postNewUsers, tokens, users, provider);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'Users added!');
     }
   );
 

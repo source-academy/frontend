@@ -1,4 +1,13 @@
-import { FileInput, FormGroup, H2, HTMLSelect, Icon, Position } from '@blueprintjs/core';
+import {
+  Button,
+  FileInput,
+  FormGroup,
+  H2,
+  HTMLSelect,
+  Icon,
+  Intent,
+  Position
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
@@ -14,10 +23,10 @@ import Constants from '../../../../commons/utils/Constants';
 export type AddUserPanelProps = OwnProps;
 
 type OwnProps = {
-  //   handleAddUsers: (users: ) => void;
+  handleAddNewUsersToCourse: (users: UsernameAndRole[], provider: string) => void;
 };
 
-type UsernameAndRole = {
+export type UsernameAndRole = {
   username: string;
   role: Role;
 };
@@ -86,6 +95,12 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
       showWarningMessage('Invalid entries have been ignored!');
     }
     setUsers(uniqBy(processed, val => val.username));
+  };
+
+  const submitHandler = () => {
+    props.handleAddNewUsersToCourse(users, provider);
+    setUsers([]);
+    setProvider(htmlSelectOptions[0]);
   };
 
   return (
@@ -180,6 +195,11 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
           />
         </FormGroup>
       </div>
+      <Button
+        text="Add Users"
+        intent={users.length === 0 ? Intent.NONE : Intent.WARNING}
+        onClick={submitHandler}
+      />
     </div>
   );
 };

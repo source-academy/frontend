@@ -1,5 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 
 import {
   deleteUserCourseRegistration,
@@ -38,7 +39,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateCourseConfig: updateCourseConfig,
       handleUpdateAssessmentConfigs: updateAssessmentConfigs,
       handleUpdateUserRole: updateUserRole,
-      handleDeleteUserFromCourse: deleteUserCourseRegistration
+      handleDeleteUserFromCourse: deleteUserCourseRegistration,
+      handleAddNewUsersToCourse: addNewUsersToCourse
     },
     dispatch
   );

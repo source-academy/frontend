@@ -1,6 +1,8 @@
 import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { ADD_NEW_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
+import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
@@ -99,6 +101,7 @@ import {
   postAuth,
   postCourseConfig,
   postLatestViewedCourse,
+  postNewUsers,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postUserRole,
@@ -816,6 +819,56 @@ describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
       .call(getUserCourseRegistrations, mockTokens)
       .not.put.actionType(SET_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .dispatch({ type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS })
+      .silentRun();
+  });
+});
+
+describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
+  const users: UsernameAndRole[] = [
+    { username: 'student1', role: Role.Student },
+    { username: 'staff1', role: Role.Staff }
+  ];
+  const provider: string = 'test';
+
+  const userCourseRegistrations: AdminPanelCourseRegistration[] = [
+    {
+      crId: 1,
+      courseId: 1,
+      name: 'student1',
+      username: 'student1',
+      role: Role.Student
+    },
+    {
+      crId: 2,
+      courseId: 1,
+      name: 'staff1',
+      username: 'staff1',
+      role: Role.Staff
+    }
+  ];
+
+  test('added successfully', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postNewUsers, mockTokens, users, provider)
+      .put(fetchAdminPanelCourseRegistrations())
+      .call.fn(showSuccessMessage)
+      .provide([
+        [call(postNewUsers, mockTokens, users, provider), okResp],
+        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
+      ])
+      .dispatch({ type: ADD_NEW_USERS_TO_COURSE, payload: { users, provider } })
+      .silentRun();
+  });
+
+  test('adding unsuccessful', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(postNewUsers, mockTokens, users, provider)
+      .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
+      .not.call.fn(showSuccessMessage)
+      .provide([[call(postNewUsers, mockTokens, users, provider), errorResp]])
+      .dispatch({ type: ADD_NEW_USERS_TO_COURSE, payload: { users, provider } })
       .silentRun();
   });
 });
