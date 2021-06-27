@@ -185,6 +185,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
+        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={props.assessmentConfig.current}
         rowHeight={36}
         rowDragManaged={true}
@@ -204,7 +205,6 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       <H2>Assessment Configuration</H2>
       {grid}
       <Button text="Add Row" onClick={addRowHandler} className="add-row-button" />
-      <Button onClick={() => console.log(assessmentConfig.current)} className="add-row-button" />
     </div>
   );
 };

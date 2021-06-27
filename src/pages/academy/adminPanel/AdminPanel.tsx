@@ -25,6 +25,7 @@ import {
   AssessmentType
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import AddUserPanel from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import UserConfigPanel from './subcomponents/UserConfigPanel';
@@ -132,6 +133,8 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
     handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
   };
 
+  const addUserPanelProps = {};
+
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = () => {
@@ -173,6 +176,7 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
           }
         />
         <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
+        <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
       </Tabs>
     </div>
   );

@@ -429,3 +429,48 @@
     margin-top: 10px;
   }
 }
+
+.add-users {
+  .upload-settings {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+    margin-top: 20px;
+
+    .file-input {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #bdc3c7;
+
+      .file-input-icon {
+        margin-left: 6px;
+      }
+    }
+
+    .html-select {
+      margin: 10px;
+      padding: 18px 10px 12px 10px;
+      border: 1px solid #bdc3c7;
+
+      .html-select-label {
+        display: flex;
+        justify-content: center;
+
+        .html-select-label-icon {
+          position: relative;
+          top: -5px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
+.html-select-popover,
+.file-input-popover {
+  .#{$ns}-popover2-arrow {
+    margin-left: 3px;
+  }
+}

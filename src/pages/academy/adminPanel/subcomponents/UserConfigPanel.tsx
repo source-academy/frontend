@@ -69,18 +69,15 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   };
 
   const grid = (
-    <div
-      className="Grid ag-grid-parent ag-theme-balham"
-      // style={{ width: '60%', /* minWidth: '640px' */}}
-    >
+    <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact
         domLayout={'autoHeight'}
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
+        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={props.userCourseRegistrations}
         rowHeight={36}
-        rowDragManaged={true}
         suppressCellSelection={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}
@@ -89,7 +86,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   );
 
   return (
-    <div className="users">
+    <div>
       <H2>Users</H2>
       {grid}
     </div>
