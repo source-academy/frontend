@@ -1,12 +1,13 @@
-# Cadet Frontend
+# Source Academy Frontend
 
-[![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
-[![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
-[![License](https://img.shields.io/github/license/source-academy/cadet-frontend)](https://github.com/source-academy/cadet-frontend/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/source-academy/frontend.svg?branch=master)](https://travis-ci.org/source-academy/frontend)
+[![Coverage Status](https://coveralls.io/repos/github/source-academy/frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/frontend?branch=master)
+[![License](https://img.shields.io/github/license/source-academy/frontend)](https://github.com/source-academy/frontend/blob/master/LICENSE)
 
-The Source Academy (<https://source-academy.github.io/>) is an immersive online experiential environment for learning programming. It is developed by a community of learners (also called "Source Academy") who use the book [Structure and Interpretation of Computer Programs, JavaScript Adaptation](https://source-academy.github.io/interactive-sicp) (SICP JS). This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
+The Source Academy (<https://sourceacademy.org/>) is an immersive online experiential environment for learning programming. It is developed by a community of learners (also called "Source Academy") who use the book [Structure and Interpretation of Computer Programs, JavaScript Adaptation](https://sourceacademy.org/sicpjs) (SICP JS). This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
 
 ## Features
+
 - Playground to write and test programs
 - Built-in Debugger and Visualizer to interact with your programs
 - Missions/Quests/Contests to solve challenging problems while learning about programming fundamentals
@@ -40,7 +41,7 @@ The project requires some environment variables to be set to work properly. In t
 #### Backend configuration
 
 1. `REACT_APP_BACKEND_URL`: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
-1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
+1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/backend).
 1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can just use the default value in development.
 1. `REACT_APP_SHAREDB_BACKEND_URL`: The base URL of the [ShareDB collaborative editor backend](https://github.com/source-academy/sharedb-ace-backend). The protocol must be HTTP or HTTPS (it will automatically be set to WS/WSS as appropriate). **Must end in a trailing `/`.**
 
@@ -69,7 +70,7 @@ The following properties are used for the Playground Google Drive integration. Y
 1. `REACT_APP_GOOGLE_API_KEY`: The Picker API key issued by Google.
 1. `REACT_APP_GOOGLE_APP_ID`: The project ID of the Google API project.
 
-See [here](https://github.com/source-academy/cadet-frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
+See [here](https://github.com/source-academy/frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
 
 #### Disable periods
 
@@ -95,7 +96,7 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 ### Running your own js-slang
 
-See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
+See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the frontend.
 
 ### Contribution Guidelines
 
@@ -115,11 +116,11 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
-See also the [this standard in the wiki](https://github.com/source-academy/cadet-frontend/wiki/Coding-Standard).
+See also the [this standard in the wiki](https://github.com/source-academy/frontend/wiki/Coding-Standard).
 
 ## Projects
 
-For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/cadet-frontend/wiki).
+For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/frontend/wiki).
 
 ## Build and deployment
 
@@ -131,3 +132,13 @@ There are a few additional environment variables that are used when building and
 1. `REACT_APP_SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. The service worker will ignore paths matching any of these regexes. This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
 1. `REACT_APP_CADET_LOGGER`: Log server URL. To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
 1. `REACT_APP_CADET_LOGGER_INTERVAL`: The interval (in ms) that the frontend should upload logs.
+
+## Testing
+
+The frontend comes with an extensive test suite. To run the tests after you made your modifications, run
+`yarn test`. Regression tests are run automatically when you want to push changes to this repository.
+The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`.  After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
+``` {.}
+$ yarn test --updateSnapshot
+```
+and then typing `a` to update all snapshots.

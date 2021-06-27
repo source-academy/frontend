@@ -43,8 +43,7 @@ import {
   toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
-  updateReplValue,
-  updateWorkspace
+  updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
@@ -120,10 +119,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleGenerateLz: generateLzString,
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
-      handleUpdatePrepend: (s: string) =>
-        updateWorkspace(workspaceLocation, {
-          editorPrepend: s
-        }),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),

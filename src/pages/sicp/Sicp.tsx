@@ -117,7 +117,7 @@ const Sicp: React.FC<SicpProps> = props => {
     dispatch(toggleUsingSubst(false, 'sicp'));
   };
   const handleNavigation = (sect: string | undefined) => {
-    history.push('/interactive-sicp/' + sect);
+    history.push('/sicpjs/' + sect);
   };
 
   const navigationButtons = (

@@ -11,8 +11,8 @@ const unexpectedError = (
   <div>
     Something unexpected went wrong trying to load this page. Please try refreshing the page. If the
     issue persists, kindly let us know by filing an issue at{' '}
-    <a href="https://github.com/source-academy/cadet-frontend">
-      https://github.com/source-academy/cadet-frontend
+    <a href="https://github.com/source-academy/frontend">
+      https://github.com/source-academy/frontend
     </a>
     .
   </div>
@@ -22,8 +22,8 @@ const pageNotFoundError = (
   <div>
     We could not find the page you were looking for. Please check the URL again. If you believe the
     URL is correct, kindly let us know by filing an issue at{' '}
-    <a href="https://github.com/source-academy/cadet-frontend">
-      https://github.com/source-academy/cadet-frontend
+    <a href="https://github.com/source-academy/frontend">
+      https://github.com/source-academy/frontend
     </a>
     .
   </div>
@@ -32,8 +32,8 @@ const pageNotFoundError = (
 const parsingError = (
   <div>
     An error occured while loading the page. Kindly let us know by filing an issue at{' '}
-    <a href="https://github.com/source-academy/cadet-frontend">
-      https://github.com/source-academy/cadet-frontend
+    <a href="https://github.com/source-academy/frontend">
+      https://github.com/source-academy/frontend
     </a>{' '}
     and we will get it fixed as soon as possible.
   </div>

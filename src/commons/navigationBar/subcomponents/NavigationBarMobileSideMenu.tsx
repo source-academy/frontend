@@ -113,7 +113,22 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         <div className="navbar-button-text">Classroom</div>
       </NavLink>
     )}
-
+    {props.name && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link_mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/sicpjs/index"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text">SICP JS</div>
+      </NavLink>
+    )}
     {props.role && props.enableAchievements && (
       <NavLink
         activeClassName={Classes.ACTIVE}
@@ -128,23 +143,6 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       >
         <Icon icon={IconNames.MOUNTAIN} />
         <div>Achievements</div>
-      </NavLink>
-    )}
-
-    {props.name && (
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames(
-          'NavigationBar__link_mobile',
-          Classes.BUTTON,
-          Classes.MINIMAL,
-          Classes.LARGE
-        )}
-        to="/interactive-sicp/index"
-        onClick={props.onClose}
-      >
-        <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text">SICP JS</div>
       </NavLink>
     )}
   </Drawer>

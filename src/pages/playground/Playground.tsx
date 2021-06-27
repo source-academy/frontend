@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
+import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -63,9 +64,7 @@ export type PlaygroundProps = OwnProps & DispatchProps & StateProps & RouteCompo
 export type OwnProps = {
   isSicpEditor?: boolean;
   initialEditorValueHash?: string;
-  initialPrependHash?: string | undefined;
-  initialFullProgramHash?: string;
-
+  prependLength?: number;
   handleCloseEditor?: () => void;
 };
 
@@ -176,7 +175,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const { isSicpEditor, initialPrependHash, handleUpdatePrepend } = props;
+  const { isSicpEditor } = props;
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -224,19 +223,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
     handleHash(hash, propsRef.current);
   }, [hash]);
-
-  // Add prepend if exists.
-  React.useEffect(() => {
-    if (!initialPrependHash || !handleUpdatePrepend) {
-      return;
-    }
-
-    const prepend = decompressFromEncodedURIComponent(initialPrependHash);
-
-    if (prepend) {
-      handleUpdatePrepend(prepend);
-    }
-  }, [handleUpdatePrepend, initialPrependHash]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -547,7 +533,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const shareButton = React.useMemo(() => {
     const queryString = isSicpEditor
-      ? Links.playground + '#' + props.initialFullProgramHash
+      ? Links.playground + '#' + props.initialEditorValueHash
       : props.queryString;
     return (
       <ControlBarShareButton
@@ -565,7 +551,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleGenerateLz,
     props.handleShortenURL,
     props.handleUpdateShortURL,
-    props.initialFullProgramHash,
+    props.initialEditorValueHash,
     props.queryString,
     props.shortURL
   ]);
@@ -652,6 +638,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
     x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
   );
 
+  const onLoadMethod = React.useCallback(
+    (editor: Ace.Editor) => {
+      const addFold = () => {
+        editor.getSession().addFold('    ', new Range(1, 0, props.prependLength!, 0));
+        editor.renderer.off('afterRender', addFold);
+      };
+
+      editor.renderer.on('afterRender', addFold);
+    },
+    [props.prependLength]
+  );
+
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
       handleEditorValueChange(newCode);
@@ -731,6 +729,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
+    onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: props.sourceChapter,
     externalLibraryName: props.externalLibraryName,
     sourceVariant: props.sourceVariant,

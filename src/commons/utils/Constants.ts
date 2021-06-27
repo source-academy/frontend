@@ -17,7 +17,7 @@ const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;
-const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
+const urlShortenerBase = process.env.REACT_APP_URL_SHORTENER_BASE;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const sharedbBackendUrl = process.env.REACT_APP_SHAREDB_BACKEND_URL || '';
@@ -30,7 +30,7 @@ const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const interactiveSicpDataUrl =
-  process.env.REACT_APP_INTERACTIVE_SICP_DATA_URL || 'https://sicp.sourceacademy.org/'; // data for interactive-sicp (images and json files)
+  process.env.REACT_APP_INTERACTIVE_SICP_DATA_URL || 'https://sicp.sourceacademy.org/'; // data for sicpjs (images and json files)
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -67,7 +67,7 @@ if (!isTest) {
 }
 
 export enum Links {
-  githubIssues = 'https://github.com/source-academy/cadet-frontend/issues',
+  githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
 
   moduleDetails = 'https://www.comp.nus.edu.sg/~cs1101s',
@@ -78,12 +78,12 @@ export enum Links {
   sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
-  textbook = 'https://sourceacademy.org/interactive-sicp/',
+  textbook = 'https://sourceacademy.org/sicpjs/',
   playground = 'https://sourceacademy.org/playground',
-  textbookChapter2_2 = 'https://sourceacademy.org/interactive-sicp/2.2',
-  textbookChapter3_2 = 'https://sourceacademy.org/interactive-sicp/3.2',
+  textbookChapter2_2 = 'https://sourceacademy.org/sicpjs/2.2',
+  textbookChapter3_2 = 'https://sourceacademy.org/sicpjs/3.2',
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
-  sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
+  sourceHotkeys = 'https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
   source_1 = 'https://docs.sourceacademy.org/source_1/',
   source_1_Lazy = 'https://docs.sourceacademy.org/source_1_lazy/',
@@ -108,7 +108,7 @@ const Constants = {
   defaultQuestionId,
   maxBrowseIndex,
   mobileBreakpoint,
-  urlShortener,
+  urlShortenerBase,
   urlShortenerSignature,
   moduleBackendUrl,
   authProviders,
