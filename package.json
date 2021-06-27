@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "cadet-frontend",
+  "name": "frontend",
   "version": "1.4.3",
   "scripts-info": {
     "format": "Format source code",
