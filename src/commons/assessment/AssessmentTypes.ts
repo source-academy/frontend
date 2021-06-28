@@ -90,7 +90,7 @@ export type Assessment = {
 };
 
 export type AssessmentConfiguration = {
-  AssessmentConfigId: number;
+  assessmentConfigId: number;
   type: AssessmentType;
   isGraded: boolean;
   hoursBeforeEarlyXpDecay: number;

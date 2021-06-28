@@ -60,7 +60,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
 
     const temp = [...assessmentConfig.current];
     temp.push({
-      AssessmentConfigId: -1, // TODO: Remove order from the frontend (and/or backend)
+      assessmentConfigId: -1,
       type: 'untitled',
       isGraded: true,
       hoursBeforeEarlyXpDecay: 0,

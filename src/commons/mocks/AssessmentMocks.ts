@@ -17,35 +17,35 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    AssessmentConfigId: 1,
+    assessmentConfigId: 1,
     type: 'Missions'
   },
   {
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: false,
-    AssessmentConfigId: 2,
+    assessmentConfigId: 2,
     type: 'Quests'
   },
   {
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    AssessmentConfigId: 3,
+    assessmentConfigId: 3,
     type: 'Paths'
   },
   {
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    AssessmentConfigId: 4,
+    assessmentConfigId: 4,
     type: 'Contests'
   },
   {
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    AssessmentConfigId: 5,
+    assessmentConfigId: 5,
     type: 'Others'
   }
 ];

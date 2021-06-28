@@ -141,6 +141,7 @@ const mockUser: User = {
 };
 
 const mockCourseRegistration1: CourseRegistration = {
+  crId: 1,
   role: Role.Student,
   group: '42D',
   gameState: {
@@ -171,6 +172,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
 };
 
 const mockCourseRegistration2: CourseRegistration = {
+  crId: 2,
   role: Role.Student,
   group: '4D',
   gameState: {
@@ -202,43 +204,38 @@ const mockCourseConfiguration2: CourseConfiguration = {
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   {
-    decayRatePointsPerHour: 1,
+    assessmentConfigId: 1,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 1,
     type: 'Missions'
   },
   {
-    decayRatePointsPerHour: 1,
+    assessmentConfigId: 2,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: false,
-    order: 2,
     type: 'Quests'
   },
   {
-    decayRatePointsPerHour: 1,
+    assessmentConfigId: 3,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 3,
     type: 'Paths'
   },
   {
-    decayRatePointsPerHour: 1,
+    assessmentConfigId: 4,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 3,
     type: 'Contests'
   },
   {
-    decayRatePointsPerHour: 1,
+    assessmentConfigId: 5,
     earlySubmissionXp: 200,
     hoursBeforeEarlyXpDecay: 48,
     isGraded: true,
-    order: 3,
     type: 'Others'
   }
 ];
