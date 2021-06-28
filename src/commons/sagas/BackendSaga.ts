@@ -628,10 +628,6 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const assessmentConfigs: AssessmentConfiguration[] = action.payload;
 
-      if (assessmentConfigs.length > 5) {
-        return yield call(showWarningMessage, 'Invalid number of Assessment Types!');
-      }
-
       const resp: Response | null = yield call(postAssessmentConfigs, tokens, assessmentConfigs);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);

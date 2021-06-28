@@ -1,17 +1,7 @@
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 
-import {
-  Button,
-  Divider,
-  H1,
-  Intent,
-  NonIdealState,
-  Spinner,
-  SpinnerSize,
-  Tab,
-  Tabs
-} from '@blueprintjs/core';
+import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
@@ -60,9 +50,6 @@ export type StateProps = {
 };
 
 const AdminPanel: React.FC<AdminPanelProps> = props => {
-  // Boolean to track the loading status of CourseConfiguration and AssessmentConfiguration
-  const [isLoaded, setIsLoaded] = React.useState(false);
-
   const [hasChangesCourseConfig, setHasChangesCourseConfig] = React.useState(false);
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = React.useState(false);
 
@@ -90,22 +77,19 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
 
   // After updated configs have been loaded from the backend, put them into local React state
   React.useEffect(() => {
-    if (props.assessmentConfigurations && props.userCourseRegistrations && !isLoaded) {
-      setCourseConfiguration({
-        courseName: props.courseName,
-        courseShortName: props.courseShortName,
-        viewable: props.viewable,
-        enableGame: props.enableGame,
-        enableAchievements: props.enableAchievements,
-        enableSourcecast: props.enableSourcecast,
-        moduleHelpText: props.moduleHelpText
-      });
+    setCourseConfiguration({
+      courseName: props.courseName,
+      courseShortName: props.courseShortName,
+      viewable: props.viewable,
+      enableGame: props.enableGame,
+      enableAchievements: props.enableAchievements,
+      enableSourcecast: props.enableSourcecast,
+      moduleHelpText: props.moduleHelpText
+    });
 
-      // IMPT: To prevent mutation of props
-      assessmentConfig.current = cloneDeep(props.assessmentConfigurations);
-      setIsLoaded(true);
-    }
-  }, [props, isLoaded]);
+    // IMPT: To prevent mutation of props
+    assessmentConfig.current = cloneDeep(props.assessmentConfigurations);
+  }, [props]);
 
   const courseConfigPanelProps = {
     courseConfiguration: courseConfiguration,
@@ -152,9 +136,7 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
     }
   };
 
-  const data = !isLoaded ? (
-    <NonIdealState description="Loading..." icon={<Spinner size={SpinnerSize.LARGE} />} />
-  ) : (
+  const data = (
     <div className="admin-panel">
       <H1>Admin Panel</H1>
       <Tabs id="admin-panel">

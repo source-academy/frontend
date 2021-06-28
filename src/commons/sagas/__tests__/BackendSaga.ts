@@ -1020,18 +1020,6 @@ describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
 });
 
 describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
-  const failedAssessmentConfig: AssessmentConfiguration[] = [
-    ...mockAssessmentConfigurations,
-    {
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
-      hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 3,
-      type: 'Mission 6'
-    }
-  ];
-
   const assessmentTypes = mockAssessmentConfigurations.map(e => e.type);
 
   test('when assessment configs is changed', () => {
@@ -1055,16 +1043,6 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
-      .silentRun();
-  });
-
-  test('when assessment configs array has length > 5', () => {
-    return expectSaga(BackendSaga)
-      .withState(mockStates)
-      .not.call.fn(postAssessmentConfigs)
-      .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.call.fn(showSuccessMessage)
-      .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: failedAssessmentConfig })
       .silentRun();
   });
 });

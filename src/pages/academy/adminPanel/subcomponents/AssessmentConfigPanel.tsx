@@ -1,7 +1,7 @@
 import { Button, H2 } from '@blueprintjs/core';
 import { CellValueChangedEvent, GridApi, GridReadyEvent, RowDragEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { isEqual } from 'lodash';
+import { capitalize, isEqual } from 'lodash';
 import React from 'react';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
@@ -166,7 +166,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       const temp = [...assessmentConfig.current];
       temp[event.rowIndex!] = {
         ...temp[event.rowIndex!],
-        type: event.value
+        type: capitalize(event.value)
       };
       assessmentConfig.current = temp;
       props.setHasChangesAssessmentConfig(true);
