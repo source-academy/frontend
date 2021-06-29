@@ -20,7 +20,6 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -119,7 +118,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
    * which contains the ag-grid table of available Sourcecasts. This is intentional
-   * to avoid an ag-grid console warning. For more info, see issue #1152 in cadet-frontend.
+   * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
 
@@ -259,7 +258,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       toSpawn: () => true
     },
     dataVisualizerTab,
-    inspectorTab,
     envVisualizerTab
   ];
 
@@ -389,19 +387,11 @@ const dataVisualizerTab: SideContentTab = {
   toSpawn: () => true
 };
 
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
-  toSpawn: () => true
-};
-
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 

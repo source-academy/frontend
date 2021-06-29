@@ -5,9 +5,11 @@ import {
   Dialog,
   InputGroup,
   Intent,
-  ITreeNode,
-  Tree
+  Tree,
+  TreeNodeInfo
 } from '@blueprintjs/core';
+import { Octokit } from '@octokit/rest';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
@@ -15,7 +17,6 @@ import {
   checkIfFileCanBeOpened,
   checkIfFileCanBeSavedAndGetSaveType,
   checkIfUserAgreesToOverwriteEditorData,
-  checkIfUserAgreesToPerformCreatingSave,
   checkIfUserAgreesToPerformOverwritingSave,
   openFileInEditor,
   performCreatingSave,
@@ -24,21 +25,21 @@ import {
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
-const FileExplorerDialog: React.FC<any> = props => {
-  const [refresh, setRefresh] = useState(0);
+export type FileExplorerDialogProps = {
+  repoName: string;
+  pickerType: string;
+  octokit: Octokit;
+  editorContent: string;
+  onSubmit: (submitContent: string) => void;
+};
 
-  const [repoFiles, setRepoFiles] = useState([] as ITreeNode<GitHubFileNodeData>[]);
+const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
+  const [repoFiles, setRepoFiles] = useState<TreeNodeInfo<GitHubFileNodeData>[]>([]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
 
-  let githubLoginID: string;
-  let githubName: string;
-  let githubEmail: string;
-
-  getUserDetails();
-
   useEffect(() => {
-    setFirstLayerRepoFiles(props.repoName, setRepoFiles); // this is an async call
+    setFirstLayerRepoFiles(props.repoName, setRepoFiles);
   }, [props.repoName]);
 
   return (
@@ -80,13 +81,6 @@ const FileExplorerDialog: React.FC<any> = props => {
     </Dialog>
   );
 
-  async function getUserDetails() {
-    const authUser = await props.octokit.users.getAuthenticated();
-    githubLoginID = authUser.data.login;
-    githubName = authUser.data.name || 'Source Academy User';
-    githubEmail = authUser.data.email || 'no public email provided';
-  }
-
   async function setFirstLayerRepoFiles(repoName: string, setRepoFiles: any) {
     try {
       const initialRepoFiles = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes(repoName);
@@ -101,6 +95,14 @@ const FileExplorerDialog: React.FC<any> = props => {
   }
 
   async function handleSubmit() {
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof props.octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = await props.octokit.users.getAuthenticated();
+    const githubLoginID = authUser.data.login;
+    const githubName = authUser.data.name;
+    const githubEmail = authUser.data.email;
+
     if (props.pickerType === 'Open') {
       if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
         if (await checkIfUserAgreesToOverwriteEditorData()) {
@@ -126,11 +128,12 @@ const FileExplorerDialog: React.FC<any> = props => {
             filePath,
             githubName,
             githubEmail,
-            commitMessage
+            commitMessage,
+            props.editorContent
           );
         }
 
-        if (saveType === 'Create' && (await checkIfUserAgreesToPerformCreatingSave())) {
+        if (saveType === 'Create') {
           performCreatingSave(
             props.octokit,
             githubLoginID,
@@ -138,66 +141,118 @@ const FileExplorerDialog: React.FC<any> = props => {
             filePath,
             githubName,
             githubEmail,
-            commitMessage
+            commitMessage,
+            props.editorContent
           );
         }
       }
     }
+    props.onSubmit('');
   }
 
-  function handleNodeClick(
-    treeNode: ITreeNode<GitHubFileNodeData>,
+  async function handleNodeClick(
+    treeNode: TreeNodeInfo<GitHubFileNodeData>,
     _nodePath: number[],
     e: React.MouseEvent<HTMLElement>
   ) {
     const originallySelected = treeNode.isSelected;
 
-    if (!e.shiftKey) {
-      forEachNode(repoFiles, n => (n.isSelected = false));
-    }
-
-    treeNode.isSelected = originallySelected == null ? true : !originallySelected;
-    const newFilePath = treeNode.nodeData !== undefined ? treeNode.nodeData.filePath : '';
-    if (treeNode.isSelected) {
+    const allNodesCallback = (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isSelected = false);
+    const specificNodeCallback = (node: TreeNodeInfo<GitHubFileNodeData>) => {
+      // if originally selected is null, set to true
+      // else, toggle the selection
+      node.isSelected = originallySelected === null ? true : !originallySelected;
+      const newFilePath =
+        node.nodeData !== undefined && node.isSelected ? node.nodeData.filePath : '';
       setFilePath(newFilePath);
-    } else {
-      setFilePath('');
+    };
+
+    const newRepoFiles = await cloneWithCallbacks(
+      repoFiles,
+      treeNode,
+      allNodesCallback,
+      specificNodeCallback
+    );
+
+    if (newRepoFiles !== null) {
+      setRepoFiles(newRepoFiles);
     }
-    refreshPage();
   }
 
-  function handleNodeCollapse(treeNode: ITreeNode<GitHubFileNodeData>) {
-    treeNode.isExpanded = false;
-    refreshPage();
+  async function handleNodeCollapse(treeNode: TreeNodeInfo<GitHubFileNodeData>) {
+    const newRepoFiles = await cloneWithCallbacks(
+      repoFiles,
+      treeNode,
+      (node: TreeNodeInfo<GitHubFileNodeData>) => {},
+      (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isExpanded = false)
+    );
+
+    if (newRepoFiles !== null) {
+      setRepoFiles(newRepoFiles);
+    }
   }
 
-  async function handleNodeExpand(treeNode: ITreeNode<GitHubFileNodeData>) {
-    treeNode.isExpanded = true;
+  async function handleNodeExpand(treeNode: TreeNodeInfo<GitHubFileNodeData>) {
+    const newRepoFiles = await cloneWithCallbacks(
+      repoFiles,
+      treeNode,
+      (node: TreeNodeInfo<GitHubFileNodeData>) => {},
+      async (node: TreeNodeInfo<GitHubFileNodeData>) => {
+        node.isExpanded = true;
 
-    if (treeNode.nodeData !== undefined && !treeNode.nodeData.childrenRetrieved) {
-      treeNode.childNodes = await GitHubTreeNodeCreator.getChildNodes(
-        props.repoName,
-        treeNode.nodeData.filePath
-      );
-      treeNode.nodeData.childrenRetrieved = true;
-    }
-    refreshPage();
-  }
-
-  function forEachNode(
-    treeNodes: ITreeNode<GitHubFileNodeData>[],
-    callback: (node: ITreeNode<GitHubFileNodeData>) => void
-  ) {
-    if (treeNodes == null) {
-      return;
-    }
-
-    for (const node of treeNodes) {
-      callback(node);
-      if (node.childNodes !== undefined) {
-        forEachNode(node.childNodes, callback);
+        if (node.nodeData !== undefined && !node.nodeData.childrenRetrieved) {
+          node.childNodes = await GitHubTreeNodeCreator.getChildNodes(
+            props.repoName,
+            node.nodeData.filePath
+          );
+          node.nodeData.childrenRetrieved = true;
+        }
       }
+    );
+
+    if (newRepoFiles !== null) {
+      setRepoFiles(newRepoFiles);
     }
+  }
+
+  async function cloneWithCallbacks(
+    treeNodes: TreeNodeInfo<GitHubFileNodeData>[],
+    treeNodeToEdit: TreeNodeInfo<GitHubFileNodeData>,
+    allNodesCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void,
+    specificNodeCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void
+  ) {
+    if (treeNodes === null) {
+      return null;
+    }
+
+    const newTreeNodes = [];
+
+    for (let i = 0; i < treeNodes.length; i++) {
+      const node = treeNodes[i];
+      const clonedNode = Object.assign({}, node);
+      await allNodesCallback(clonedNode);
+
+      if (treeNodeToEdit === node) {
+        await specificNodeCallback(clonedNode);
+      }
+
+      if (clonedNode.childNodes !== undefined) {
+        const newChildNodes = await cloneWithCallbacks(
+          clonedNode.childNodes,
+          treeNodeToEdit,
+          allNodesCallback,
+          specificNodeCallback
+        );
+
+        if (newChildNodes !== null) {
+          clonedNode.childNodes = newChildNodes;
+        }
+      }
+
+      newTreeNodes.push(clonedNode);
+    }
+
+    return newTreeNodes;
   }
 
   function handleFileNameChange(e: any) {
@@ -212,10 +267,6 @@ const FileExplorerDialog: React.FC<any> = props => {
     if (filePath === '') {
       setFilePath('.js');
     }
-  }
-
-  function refreshPage() {
-    setRefresh(refresh + 1);
   }
 };
 

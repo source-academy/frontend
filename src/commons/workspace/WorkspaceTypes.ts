@@ -1,5 +1,6 @@
 import { Context } from 'js-slang';
 
+import { GitHubAssessmentWorkspaceState } from '../../features/githubAssessment/GitHubAssessmentTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -34,6 +35,7 @@ export const RESET_TESTCASE = 'RESET_TESTCASE';
 export const RESET_WORKSPACE = 'RESET_WORKSPACE';
 export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
+export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const UPDATE_ACTIVE_TAB = 'UPDATE_ACTIVE_TAB';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
@@ -67,12 +69,16 @@ type PlaygroundWorkspaceAttr = {
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 
+export type SicpWorkspaceState = PlaygroundWorkspaceState;
+
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
+  readonly sicp: SicpWorkspaceState;
+  readonly githubAssessment: GitHubAssessmentWorkspaceState;
 };
 
 export type WorkspaceState = {

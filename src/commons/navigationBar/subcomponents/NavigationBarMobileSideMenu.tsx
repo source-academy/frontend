@@ -16,6 +16,8 @@ type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 type DrawerProps = {
   isOpen: boolean;
   onClose: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 type OwnProps = {
@@ -153,6 +155,36 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     >
       <Icon icon={IconNames.CODE} />
       <div>Playground</div>
+    </NavLink>
+
+    <NavLink
+      activeClassName={Classes.ACTIVE}
+      className={classNames(
+        'NavigationBar__link_mobile',
+        Classes.BUTTON,
+        Classes.MINIMAL,
+        Classes.LARGE
+      )}
+      to="/githubassessments"
+      onClick={props.onClose}
+    >
+      <Icon icon={IconNames.BRIEFCASE} />
+      <div className="navbar-button-text">Classroom</div>
+    </NavLink>
+
+    <NavLink
+      activeClassName={Classes.ACTIVE}
+      className={classNames(
+        'NavigationBar__link_mobile',
+        Classes.BUTTON,
+        Classes.MINIMAL,
+        Classes.LARGE
+      )}
+      to="/sicpjs/index"
+      onClick={props.onClose}
+    >
+      <Icon icon={IconNames.BOOK} />
+      <div className="navbar-button-text">SICP JS</div>
     </NavLink>
 
     {props.role && Constants.enableAchievements && (

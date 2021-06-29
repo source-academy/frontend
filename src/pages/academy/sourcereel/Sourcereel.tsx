@@ -14,7 +14,6 @@ import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/Con
 import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -296,7 +295,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
          * NOTE: An ag-grid console warning is shown here on load as the 'Sourcecast Table' tab
          * is not the default tab, and the ag-grid table inside it has not been rendered.
          * This is a known issue with ag-grid, and is okay since only staff and admins have
-         * access to Sourcereel. For more info, see issue #1152 in cadet-frontend.
+         * access to Sourcereel. For more info, see issue #1152 in frontend.
          */
         tabs: [
           {
@@ -345,7 +344,6 @@ class Sourcereel extends React.Component<SourcereelProps> {
             toSpawn: () => true
           },
           dataVisualizerTab,
-          inspectorTab,
           envVisualizerTab
         ],
         workspaceLocation: 'sourcereel'
@@ -406,19 +404,11 @@ const dataVisualizerTab: SideContentTab = {
   toSpawn: () => true
 };
 
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
-  toSpawn: () => true
-};
-
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 

@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import {
   CodeOutput,
@@ -47,6 +49,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -62,6 +65,8 @@ const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
+const sicpWorkspace: WorkspaceLocation = 'sicp';
+const githubAssessmentWorkspace: WorkspaceLocation = 'githubAssessment';
 
 function generateActions(type: string, payload: any = {}): any[] {
   return [
@@ -99,31 +104,56 @@ function generateActions(type: string, payload: any = {}): any[] {
         ...payload,
         workspaceLocation: sourcereelWorkspace
       }
+    },
+    {
+      type,
+      payload: {
+        ...payload,
+        workspaceLocation: sicpWorkspace
+      }
+    },
+    {
+      type,
+      payload: {
+        ...payload,
+        workspaceLocation: githubAssessmentWorkspace
+      }
     }
   ];
 }
 
+// cloneDeep not required for proper redux
+// only required because of high performance console mutating instead of cloning the entire consoleLogs buffer just to push 1 item.
+// Basically breaks redux guarantees but works perfectly fine in practice.
 function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
   return {
     assessment: {
       ...defaultWorkspaceManager.assessment,
-      ...payload
+      ...cloneDeep(payload)
     },
     grading: {
       ...defaultWorkspaceManager.grading,
-      ...payload
+      ...cloneDeep(payload)
     },
     playground: {
       ...defaultWorkspaceManager.playground,
-      ...payload
+      ...cloneDeep(payload)
     },
     sourcecast: {
       ...defaultWorkspaceManager.sourcecast,
-      ...payload
+      ...cloneDeep(payload)
     },
     sourcereel: {
       ...defaultWorkspaceManager.sourcereel,
-      ...payload
+      ...cloneDeep(payload)
+    },
+    sicp: {
+      ...defaultWorkspaceManager.sicp,
+      ...cloneDeep(payload)
+    },
+    githubAssessment: {
+      ...defaultWorkspaceManager.githubAssessment,
+      ...cloneDeep(payload)
     }
   };
 }
@@ -925,11 +955,11 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
-
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
     actions.forEach(action => {
-      const result = WorkspaceReducer(consoleLogDefaultState, action);
+      const result = WorkspaceReducer(cloneDeep(consoleLogDefaultState), action);
       const location = action.payload.workspaceLocation;
+
       expect(result).toEqual({
         ...consoleLogDefaultState,
         [location]: {
@@ -953,7 +983,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const consoleLogDefaultState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput
     });
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
@@ -975,7 +1005,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const logString = 'test-log-string-3';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: [] });
 
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
@@ -1404,6 +1434,33 @@ describe('MOVE_CURSOR', () => {
           newCursorPosition: cursorPosition
         }
       });
+    });
+  });
+});
+
+describe('TOGGLE_USING_SUBST', () => {
+  test('sets usingSubst correctly', () => {
+    const usingSubst = true;
+    const actions = generateActions(TOGGLE_USING_SUBST, { usingSubst });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+
+      const expectedResult =
+        location === playgroundWorkspace || location === sicpWorkspace
+          ? {
+              ...defaultWorkspaceManager,
+              [location]: {
+                ...defaultWorkspaceManager[location],
+                usingSubst: true
+              }
+            }
+          : {
+              ...defaultWorkspaceManager
+            };
+
+      expect(result).toEqual(expectedResult);
     });
   });
 });

@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sicp errors: page not found error renders correctly 1`] = `
+"<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
+  <div className=\\"bp3-non-ideal-state\\">
+    <div className=\\"bp3-non-ideal-state-visual\\">
+      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+        <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
+          <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
+            <desc>
+              error
+            </desc>
+            <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
+          </svg>
+        </span>
+      </Blueprint3.Icon>
+    </div>
+    <Component>
+      <h4 className=\\"bp3-heading\\">
+        Something went wrong :(
+      </h4>
+    </Component>
+    <div>
+      We could not find the page you were looking for. Please check the URL again. If you believe the URL is correct, kindly let us know by filing an issue at
+       
+      <a href=\\"https://github.com/source-academy/frontend\\">
+        https://github.com/source-academy/frontend
+      </a>
+      .
+    </div>
+  </div>
+</Blueprint3.NonIdealState>"
+`;
+
+exports[`Sicp errors: unexpected error renders correctly 1`] = `
+"<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
+  <div className=\\"bp3-non-ideal-state\\">
+    <div className=\\"bp3-non-ideal-state-visual\\">
+      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+        <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
+          <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
+            <desc>
+              error
+            </desc>
+            <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
+          </svg>
+        </span>
+      </Blueprint3.Icon>
+    </div>
+    <Component>
+      <h4 className=\\"bp3-heading\\">
+        Something went wrong :(
+      </h4>
+    </Component>
+    <div>
+      Something unexpected went wrong trying to load this page. Please try refreshing the page. If the issue persists, kindly let us know by filing an issue at
+       
+      <a href=\\"https://github.com/source-academy/frontend\\">
+        https://github.com/source-academy/frontend
+      </a>
+      .
+    </div>
+  </div>
+</Blueprint3.NonIdealState>"
+`;
+
+exports[`Sicp errors: unexpected error renders correctly 2`] = `
+"<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
+  <div className=\\"bp3-non-ideal-state\\">
+    <div className=\\"bp3-non-ideal-state-visual\\">
+      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+        <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
+          <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
+            <desc>
+              error
+            </desc>
+            <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
+          </svg>
+        </span>
+      </Blueprint3.Icon>
+    </div>
+    <Component>
+      <h4 className=\\"bp3-heading\\">
+        Something went wrong :(
+      </h4>
+    </Component>
+    <div>
+      An error occured while loading the page. Kindly let us know by filing an issue at
+       
+      <a href=\\"https://github.com/source-academy/frontend\\">
+        https://github.com/source-academy/frontend
+      </a>
+       
+      and we will get it fixed as soon as possible.
+    </div>
+  </div>
+</Blueprint3.NonIdealState>"
+`;

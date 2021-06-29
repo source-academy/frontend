@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer component renders correctly 1`] = `
-"<div className=\\"sa-env-visualizer bp3-dark\\">
-  <div id=\\"stage\\" />
+"<div className=\\"bp3-dark\\">
   <p id=\\"env-visualizer-default-text\\" className=\\"bp3-running-text\\">
     The environmental visualizer generates the environmental model diagram based on breakpoints set in the editor.
     <br />
@@ -12,7 +11,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
     <br />
     The environment model diagram follows a notation introduced in
      
-    <a href=\\"https://source-academy.github.io/sicp/chapters/3.2.html\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
+    <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
       <i>
         Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 3, Section 2
       </i>

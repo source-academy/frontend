@@ -120,6 +120,7 @@
 
       .listing-text {
         padding: 0 0 0 0.5rem;
+        justify-content: space-between;
 
         .#{$ns}-heading {
           margin: 0;
@@ -291,6 +292,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 }
 
 /* Increase default margin of Blueprint's Divider for greater vertical spacing */

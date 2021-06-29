@@ -1,16 +1,18 @@
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
+import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
+import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
+import Sicp from '../../pages/sicp/Sicp';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
@@ -21,6 +23,8 @@ export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<
 
 export type DispatchProps = {
   handleLogOut: () => void;
+  handleGitHubLogIn: () => void;
+  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {
@@ -117,6 +121,8 @@ const Application: React.FC<ApplicationProps> = props => {
     <div className="Application">
       <NavigationBar
         handleLogOut={props.handleLogOut}
+        handleGitHubLogIn={props.handleGitHubLogIn}
+        handleGitHubLogOut={props.handleGitHubLogOut}
         role={props.role}
         name={props.name}
         title={props.title}
@@ -140,7 +146,21 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route path="/playground" component={Playground} />
             <Route path="/contributors" component={Contributors} />
             <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
+            {Constants.enableGitHubAssessments && (
+              <Route
+                path="/githubassessments"
+                component={() => (
+                  <GitHubClassroom
+                    handleGitHubLogIn={props.handleGitHubLogIn}
+                    handleGitHubLogOut={props.handleGitHubLogOut}
+                  />
+                )}
+              />
+            )}
             <Route path="/callback/github" component={GitHubCallback} />
+            <Redirect from="/interactive-sicp/:section?" to="/sicpjs/:section?" />
+            <Route exact path="/sicpjs" render={redirectToSicp} />
+            <Route path="/sicpjs/:section" component={Sicp} />
             {fullPaths}
             <Route
               exact={true}
@@ -158,6 +178,7 @@ const Application: React.FC<ApplicationProps> = props => {
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
+const redirectToSicp = () => <Redirect to="/sicpjs/index" />;
 
 /**
  * A user routes to /academy,

@@ -134,7 +134,7 @@ const SideContent = (props: SideContentProps) => {
       /**
        * Remove the 'side-content-tab-alert' class that causes tabs flash.
        * To be run when tabs are changed.
-       * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
+       * Currently this style is only used for the "Env Visualizer" tab.
        */
       const resetAlert = (prevTabId: TabId) => {
         const iconId = generateIconId(prevTabId);

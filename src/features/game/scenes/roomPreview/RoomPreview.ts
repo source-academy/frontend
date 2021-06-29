@@ -133,20 +133,20 @@ export default class RoomPreview extends Phaser.Scene {
      * Hence, we replace the scope instead of appending
      * new one each time.
      */
-    this.context!.nativeStorage.globals = this.context!.nativeStorage.globals!.previousScope;
     this.eval(`update();`);
   }
 
   public createContext() {
     this.context = createContext(4, [], 'playground', 'default', {
-      scene: this,
-      phaser: Phaser,
-      preloadImageMap: this.preloadImageMap,
-      preloadSoundMap: this.preloadSoundMap,
-      preloadSpritesheetMap: this.preloadSpritesheetMap,
-      remotePath: Constants.assetsFolder,
-      screenSize: screenSize,
-      createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
+      game: {
+        scene: this,
+        preloadImageMap: this.preloadImageMap,
+        preloadSoundMap: this.preloadSoundMap,
+        preloadSpritesheetMap: this.preloadSpritesheetMap,
+        remotePath: Constants.assetsFolder,
+        screenSize: screenSize,
+        createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
+      }
     });
   }
 

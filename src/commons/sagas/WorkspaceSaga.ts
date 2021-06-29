@@ -22,8 +22,8 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
+import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -42,12 +42,12 @@ import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import { getInfiniteLoopData, reportInfiniteLoopError } from '../utils/InfiniteLoopReporter';
 import {
+  dumpDisplayBuffer,
   getBlockExtraMethodsString,
   getDifferenceInMethods,
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
   highlightLine,
-  inspectorUpdate,
   makeElevatedContext,
   visualizeEnv
 } from '../utils/JsSlangHelper';
@@ -63,7 +63,9 @@ import {
   EVAL_TESTCASE,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
+  PlaygroundWorkspaceState,
   PROMPT_AUTOCOMPLETE,
+  SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_EDITOR_BREAKPOINTS,
   WorkspaceLocation
@@ -116,6 +118,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       },
       globals
     };
+
+    yield put(actions.addEvent([EventType.RUN_CODE]));
 
     if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
       yield put(actions.remoteExecRun(editorCode));
@@ -273,7 +277,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
-    inspectorUpdate(undefined);
     highlightLine(undefined);
     yield put(actions.clearReplOutput(workspaceLocation));
     context.runtime.break = false;
@@ -298,6 +301,7 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
+    yield put(actions.addEvent([EventType.RUN_TESTCASE]));
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
@@ -558,7 +562,6 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], workspaceLocation));
-    inspectorUpdate(lastDebuggerResult);
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
     yield put(actions.highlightEditorLine([], workspaceLocation));
@@ -607,20 +610,20 @@ export function* evalCode(
 ): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
-  if (!context.runtime.debuggerOn && context.chapter > 2 && actionType !== EVAL_SILENT) {
-    // Interface not guaranteed to exist, e.g. mission editor.
-    inspectorUpdate(undefined); // effectively resets the interface
-  }
 
   // Logic for execution of substitution model visualizer
-  const substIsActive: boolean = yield select(
-    (state: OverallState) => (state.playground as PlaygroundState).usingSubst
-  );
+  const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
+  const substIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingSubst
+      )
+    : false;
   const stepLimit: number = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
   );
-  const substActiveAndCorrectChapter =
-    context.chapter <= 2 && workspaceLocation === 'playground' && substIsActive;
+  const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
     // icon to blink
@@ -648,20 +651,25 @@ export function* evalCode(
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
-      return call(wasm_compile_and_run, code, context);
+      return call(wasm_compile_and_run, code, context, actionType === EVAL_REPL);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
   }
-  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
-    return Sourceror.compile(wasmCode, wasmContext)
+  async function wasm_compile_and_run(
+    wasmCode: string,
+    wasmContext: Context,
+    isRepl: boolean
+  ): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext, isRepl)
       .then((wasmModule: WebAssembly.Module) => {
         const transcoder = new Sourceror.Transcoder();
         return Sourceror.run(
           wasmModule,
           Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
           transcoder,
-          wasmContext
+          wasmContext,
+          isRepl
         );
       })
       .then(
@@ -725,6 +733,7 @@ export function* evalCode(
     result.status !== 'finished' &&
     result.status !== 'suspended-non-det'
   ) {
+    dumpDisplayBuffer();
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
 
     // we need to parse again, but preserve the errors in context
@@ -733,21 +742,25 @@ export function* evalCode(
     const parsed = parse(code, context);
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
-
+    // for achievement event tracking
+    const events = context.errors.length > 0 ? [EventType.ERROR] : [];
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === 'default') {
       const infiniteLoopData = getInfiniteLoopData(context, code);
       if (infiniteLoopData) {
+        events.push(EventType.INFINITE_LOOP);
         const [error, code] = infiniteLoopData;
         yield call(reportInfiniteLoopError, error, code);
       }
     }
 
     if (typeErrors && typeErrors.length > 0) {
+      events.push(EventType.ERROR);
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
       );
     }
+    yield put(actions.addEvent(events));
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
@@ -767,6 +780,9 @@ export function* evalCode(
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+    if (context.errors.length > 0) {
+      yield put(actions.addEvent([EventType.ERROR]));
+    }
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
 
@@ -784,10 +800,13 @@ export function* evalCode(
      *  Each testcase runs in its own "sandbox" since the Context is cleared for each,
      *    so side-effects from one testcase don't affect others
      */
-    if (
+    const runAllAutograderTestcases =
       activeTab === SideContentType.autograder &&
-      (workspaceLocation === 'assessment' || workspaceLocation === 'grading')
-    ) {
+      (workspaceLocation === 'assessment' || workspaceLocation === 'grading');
+    const runAllGitHubAssessmentTestcases =
+      activeTab === SideContentType.testcases && workspaceLocation === 'githubAssessment';
+
+    if (runAllAutograderTestcases || runAllGitHubAssessmentTestcases) {
       const testcases: Testcase[] = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
       );
@@ -839,6 +858,7 @@ export function* evalTestCode(
 
   if (interrupted) {
     interrupt(context);
+    dumpDisplayBuffer();
     // Redundancy, added ensure that interruption results in an error.
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.endInterruptExecution(workspaceLocation));
@@ -846,6 +866,7 @@ export function* evalTestCode(
     return;
   }
 
+  dumpDisplayBuffer();
   /** result.status here is either 'error' or 'finished'; 'suspended' is not possible
    *  since debugger is presently disabled in assessment and grading environments
    */

@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
+import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -27,11 +28,11 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { ControlBarGitHubButtons } from '../../commons/controlBar/ControlBarGitHubButtons';
 import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
+import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -40,17 +41,17 @@ import MobileWorkspace, {
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
-import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
-import Constants from '../../commons/utils/Constants';
+import Constants, { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
+import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -58,7 +59,14 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
-export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
+export type PlaygroundProps = OwnProps & DispatchProps & StateProps & RouteComponentProps<{}>;
+
+export type OwnProps = {
+  isSicpEditor?: boolean;
+  initialEditorValueHash?: string;
+  prependLength?: number;
+  handleCloseEditor?: () => void;
+};
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -103,6 +111,7 @@ export type DispatchProps = {
   handleGitHubSaveFile: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  handleUpdatePrepend?: (s: string) => void;
 };
 
 export type StateProps = {
@@ -131,8 +140,8 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
-  githubOctokitInstance: Octokit | undefined;
-  githubSaveInfo: { repoName: string; filePath: string };
+  githubOctokitObject: { octokit: Octokit | undefined };
+  githubSaveInfo: GitHubSaveInfo;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -168,6 +177,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const { isSicpEditor } = props;
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -183,9 +193,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     })
   );
 
-  const usingRemoteExecution = useSelector(
-    (state: OverallState) => !!state.session.remoteExecutionSession
-  );
+  const usingRemoteExecution =
+    useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
 
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
@@ -213,7 +222,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   }, [usingRemoteExecution, props.externalLibraryName]);
 
-  const hash = props.location.hash;
+  const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
+
   React.useEffect(() => {
     if (!hash) {
       return;
@@ -434,13 +444,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { githubOctokitInstance } = props;
+  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  const githubSaveInfo = props.githubSaveInfo;
+  const githubPersistenceIsDirty =
+    githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
+    const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
-        loggedInAs={githubOctokitInstance}
-        githubSaveInfo={props.githubSaveInfo}
         key="github"
+        loggedInAs={octokit}
+        githubSaveInfo={githubSaveInfo}
+        isDirty={githubPersistenceIsDirty}
         onClickOpen={props.handleGitHubOpenFile}
         onClickSave={props.handleGitHubSaveFile}
         onClickSaveAs={props.handleGitHubSaveFileAs}
@@ -449,8 +464,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       />
     );
   }, [
-    githubOctokitInstance,
-    props.githubSaveInfo,
+    githubOctokitObject,
+    githubPersistenceIsDirty,
+    githubSaveInfo,
     props.handleGitHubOpenFile,
     props.handleGitHubSaveFileAs,
     props.handleGitHubSaveFile,
@@ -522,25 +538,30 @@ const Playground: React.FC<PlaygroundProps> = props => {
     />
   );
 
-  const shareButton = React.useMemo(
-    () => (
+  const shareButton = React.useMemo(() => {
+    const queryString = isSicpEditor
+      ? Links.playground + '#' + props.initialEditorValueHash
+      : props.queryString;
+    return (
       <ControlBarShareButton
         handleGenerateLz={props.handleGenerateLz}
         handleShortenURL={props.handleShortenURL}
         handleUpdateShortURL={props.handleUpdateShortURL}
-        queryString={props.queryString}
+        queryString={queryString}
         shortURL={props.shortURL}
+        isSicp={isSicpEditor}
         key="share"
       />
-    ),
-    [
-      props.handleGenerateLz,
-      props.handleShortenURL,
-      props.handleUpdateShortURL,
-      props.queryString,
-      props.shortURL
-    ]
-  );
+    );
+  }, [
+    isSicpEditor,
+    props.handleGenerateLz,
+    props.handleShortenURL,
+    props.handleUpdateShortURL,
+    props.initialEditorValueHash,
+    props.queryString,
+    props.shortURL
+  ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -588,8 +609,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.sourceVariant !== 'non-det' &&
       !usingRemoteExecution
     ) {
-      // Enable Inspector, Env Visualizer for Source Chapter 3 and above
-      tabs.push(inspectorTab);
+      // Enable Env Visualizer for Source Chapter 3 and above
       tabs.push(envVisualizerTab);
     }
 
@@ -604,10 +624,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
       });
     }
 
-    tabs.push(remoteExecutionTab);
+    if (!isSicpEditor) {
+      tabs.push(remoteExecutionTab);
+    }
 
     return tabs;
   }, [
+    isSicpEditor,
     playgroundIntroductionTab,
     props.externalLibraryName,
     props.handleSendReplInputToOutput,
@@ -618,9 +641,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs];
-  mobileTabs.shift();
-  mobileTabs.pop();
+  const mobileTabs = [...tabs].filter(
+    x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
+  );
+
+  const onLoadMethod = React.useCallback(
+    (editor: Ace.Editor) => {
+      const addFold = () => {
+        editor.getSession().addFold('    ', new Range(1, 0, props.prependLength!, 0));
+        editor.renderer.off('afterRender', addFold);
+      };
+
+      editor.renderer.on('afterRender', addFold);
+    },
+    [props.prependLength]
+  );
 
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
@@ -695,13 +730,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled =
-    props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
+  const replDisabled = props.sourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
+    onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: props.sourceChapter,
     externalLibraryName: props.externalLibraryName,
     sourceVariant: props.sourceVariant,
@@ -733,7 +768,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     hidden: selectedTab === SideContentType.substVisualizer,
     inputHidden: replDisabled,
     usingSubst: props.usingSubst,
-    replButtons: [replDisabled ? null : evalButton, clearButton]
+    replButtons: [replDisabled ? null : evalButton, clearButton],
+    disableScrolling: isSicpEditor
   };
 
   const workspaceProps: WorkspaceProps = {
@@ -743,7 +779,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         shareButton,
         chapterSelect,
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
-        sessionButtons,
+        isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
@@ -763,7 +799,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
-      workspaceLocation: 'playground'
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -778,7 +814,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           chapterSelect,
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
-          sessionButtons,
+          isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons
         ]
@@ -788,7 +824,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
-      workspaceLocation: 'playground',
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
       handleEditorEval: props.handleEditorEval
     }
   };
@@ -821,19 +857,11 @@ const FaceapiDisplayTab: SideContentTab = {
   toSpawn: () => true
 };
 
-const inspectorTab: SideContentTab = {
-  label: 'Inspector',
-  iconName: IconNames.SEARCH,
-  body: <SideContentInspector />,
-  id: SideContentType.inspector,
-  toSpawn: () => true
-};
-
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser,
+  id: SideContentType.envVisualizer,
   toSpawn: () => true
 };
 

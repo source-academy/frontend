@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Markdown page renders correctly 1`] = `
-"<Memo(Markdown) content=\\"\\\\nWelcome to the Source Academy playground!\\\\n\\\\nThe language [_Source_](https://source-academy.github.io/source/) is the official language of the textbook [_Structure and\\\\nInterpretation of Computer Programs, JavaScript Adaptation_](https://source-academy.github.io/sicp/). You have chosen the sublanguage [_Source §1_](https://source-academy.github.io/source/source_1/).\\\\n\\\\nIn the editor on the left, you can use the [_Ace keyboard shortcuts_](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts) \\\\nand also the [_Source Academy keyboard shortcuts_](https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts).\\\\n\\\\n\\" openLinksInNewWindow={true}>
+"<Memo(Markdown) content=\\"\\\\nWelcome to the Source Academy playground!\\\\n\\\\nThe language [_Source_](https://docs.sourceacademy.org/) is the official language of the textbook [_Structure and\\\\nInterpretation of Computer Programs, JavaScript Adaptation_](https://sourceacademy.org/sicpjs/). You have chosen the sublanguage [_Source §1_](https://docs.sourceacademy.org/source_1/).\\\\n\\\\nIn the editor on the left, you can use the [_Ace keyboard shortcuts_](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts) \\\\nand also the [_Source Academy keyboard shortcuts_](https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts).\\\\n\\\\n\\" openLinksInNewWindow={true}>
   <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
 </Memo(Markdown)>"
 `;

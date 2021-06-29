@@ -61,6 +61,7 @@ export class Frame implements Visible, Hoverable {
     // derive the x coordinate from the left sibling frame
     this.leftSiblingFrame &&
       (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
+
     this.name = new Text(
       String(frameNames.get(this.environment.name) || this.environment.name),
       this.x,
