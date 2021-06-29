@@ -8,21 +8,30 @@ import lzString from 'lz-string';
 import CodeSnippet from '../CodeSnippet';
 
 describe('Sicp Code Snippet', () => {
-  const body = '1+1;';
+  const body = 'const a = 1;\na+1;';
   const output = '2';
-  const prependString = 'const a = 1;';
-  const withoutPrepend = lzString.compressToEncodedURIComponent(body);
-  const program = lzString.compressToEncodedURIComponent(prependString + '\n' + body);
-  const prepend = lzString.compressToEncodedURIComponent(prependString);
+  const program = lzString.compressToEncodedURIComponent(body);
 
-  test('renders correctly', () => {
+  test('renders correctly with prepend', () => {
     const props = {
       body: body,
       output: output,
       id: 'id',
-      initialEditorValueHash: withoutPrepend,
-      initialPrependHash: prepend,
-      initialFullProgramHash: program
+      initialEditorValueHash: program,
+      prependLength: 1
+    };
+
+    const tree = shallow(<CodeSnippet {...props} />);
+    expect(tree.debug()).toMatchSnapshot();
+  });
+
+  test('renders correctly without prepend', () => {
+    const props = {
+      body: body,
+      output: output,
+      id: 'id',
+      initialEditorValueHash: program,
+      prependLength: 0
     };
 
     const tree = shallow(<CodeSnippet {...props} />);

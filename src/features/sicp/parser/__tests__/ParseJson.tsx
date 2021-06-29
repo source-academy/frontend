@@ -1,4 +1,4 @@
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import lzString from 'lz-string';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
@@ -30,8 +30,8 @@ jest.mock('src/commons/utils/Constants', () => ({
   interactiveSicpDataUrl: 'https://source-academy.github.io/sicp/'
 }));
 
-jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => {
-  return (props: CodeSnippetProps) => <div {...props}>Code Snippet</div>;
+jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => (props: CodeSnippetProps) => {
+  return <div>Code Snippet</div>;
 });
 
 const mockData = {
@@ -55,7 +55,7 @@ const processTag = (tag: string, obj: JsonType) => {
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = shallow(processTag(tag, obj));
+    const tree = mount(processTag(tag, obj));
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -155,16 +155,13 @@ describe('Parse exercise', () => {
 
 describe('Parse snippet', () => {
   const tag = snippetTag;
-  const body = '1 + 1;';
+  const body = 'const a = 1;\na+1;';
   const output = '2';
-  const prependString = 'const a = 1;';
-  const withoutPrepend = lzString.compressToEncodedURIComponent(body);
-  const program = lzString.compressToEncodedURIComponent(prependString + '\n' + body);
-  const prepend = lzString.compressToEncodedURIComponent(prependString);
+  const program = lzString.compressToEncodedURIComponent(body);
 
   const base = {
     id: 'id',
-    withoutPrepend: withoutPrepend,
+    program: program,
     body: body
   };
 
@@ -184,8 +181,7 @@ describe('Parse snippet', () => {
   const objWithPrepend = objWithText(
     {
       ...base,
-      program: program,
-      prepend: prepend
+      prependLength: 1
     },
     'with prepend'
   );
@@ -326,7 +322,7 @@ describe('Parse reference', () => {
 describe('Parse object', () => {
   test('successful', () => {
     const obj = mockData['text'];
-    const tree = shallow(parseObj(obj, 0, mockRef));
+    const tree = mount(parseObj(obj, 0, mockRef));
     expect(tree.debug()).toMatchSnapshot();
   });
 
