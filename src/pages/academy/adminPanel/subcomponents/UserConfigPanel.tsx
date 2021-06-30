@@ -5,8 +5,8 @@ import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
-import DeleteUserCell from './DeleteUserCell';
 import RolesCell from './RolesCell';
+import UserActionsCell from './UserActionsCell';
 
 export type UserConfigPanelProps = OwnProps;
 
@@ -58,9 +58,9 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
       width: 110
     },
     {
-      headerName: 'Delete User',
-      field: 'deleteRow',
-      cellRendererFramework: DeleteUserCell,
+      headerName: 'Actions',
+      field: 'actions',
+      cellRendererFramework: UserActionsCell,
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
       },
