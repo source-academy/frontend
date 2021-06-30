@@ -6,6 +6,7 @@ import { Notification } from '../../../notificationBadge/NotificationBadgeTypes'
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
@@ -44,6 +45,7 @@ import {
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
+  deleteAssessmentConfig,
   deleteUserCourseRegistration,
   fetchAdminPanelCourseRegistrations,
   fetchAssessment,
@@ -631,6 +633,7 @@ test('fetchAssessmentConfig generates correct action object', () => {
 test('updateAssessmentTypes generates correct action object', () => {
   const assessmentConfigs = [
     {
+      assessmentConfigId: 1,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -639,6 +642,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Missions'
     },
     {
+      assessmentConfigId: 2,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -647,6 +651,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Quests'
     },
     {
+      assessmentConfigId: 3,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -655,6 +660,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Paths'
     },
     {
+      assessmentConfigId: 4,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -663,6 +669,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Contests'
     },
     {
+      assessmentConfigId: 5,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -675,6 +682,23 @@ test('updateAssessmentTypes generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_ASSESSMENT_CONFIGS,
     payload: assessmentConfigs
+  });
+});
+
+test('deleteAssessmentConfig generates correct action object', () => {
+  const assessmentConfig = {
+    assessmentConfigId: 1,
+    decayRatePointsPerHour: 1,
+    earlySubmissionXp: 200,
+    hoursBeforeEarlyXpDecay: 48,
+    isGraded: true,
+    order: 1,
+    type: 'Missions'
+  };
+  const action = deleteAssessmentConfig(assessmentConfig);
+  expect(action).toEqual({
+    type: DELETE_ASSESSMENT_CONFIG,
+    payload: assessmentConfig
   });
 });
 

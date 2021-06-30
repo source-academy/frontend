@@ -1014,6 +1014,24 @@ export const postAssessmentConfigs = async (
 };
 
 /**
+ * DELETE /courses/{courseId}/admin/config/assessment_config
+ */
+export const removeAssessmentConfig = async (
+  tokens: Tokens,
+  assessmentConfig: AssessmentConfiguration
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/config/assessment_config`, 'DELETE', {
+    ...tokens,
+    body: { assessmentConfig },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
  * GET /courses/{courseId}/admin/users
  */
 export const getUserCourseRegistrations = async (

@@ -28,6 +28,7 @@ export type DispatchProps = {
   handleFetchUserCourseRegistrations: () => void;
   handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
   handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
+  handleDeleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => void;
   handleUpdateUserRole: (crId: number, role: Role) => void;
   handleDeleteUserFromCourse: (crId: number) => void;
   handleAddNewUsersToCourse: (users: UsernameAndRole[], provider: string) => void;
@@ -68,6 +69,11 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
    */
   const assessmentConfig = React.useRef(props.assessmentConfigurations);
 
+  // Tracks the assessment configurations to be deleted in the backend when the save button is clicked
+  const [assessmentConfigsToDelete, setAssessmentConfigsToDelete] = React.useState<
+    AssessmentConfiguration[]
+  >([]);
+
   React.useEffect(() => {
     props.handleFetchCourseConfiguration();
     props.handleFetchAssessmentConfigs();
@@ -107,9 +113,17 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
         assessmentConfig.current = val;
         setHasChangesAssessmentConfig(true);
       },
+      setAssessmentConfigsToDelete: (deletedElement: AssessmentConfiguration) => {
+        // If it is not a newly created row that is yet to be persisted in the backend
+        if (deletedElement.assessmentConfigId !== -1) {
+          const temp = [...assessmentConfigsToDelete];
+          temp.push(deletedElement);
+          setAssessmentConfigsToDelete(temp);
+        }
+      },
       setHasChangesAssessmentConfig: setHasChangesAssessmentConfig
     };
-  }, []);
+  }, [assessmentConfigsToDelete]);
 
   const userConfigPanelProps = {
     crId: props.crId,
@@ -128,6 +142,12 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
     if (hasChangesCourseConfig) {
       props.handleUpdateCourseConfig(courseConfiguration);
       setHasChangesCourseConfig(false);
+    }
+    if (assessmentConfigsToDelete.length > 0) {
+      assessmentConfigsToDelete.forEach(assessmentConfig => {
+        props.handleDeleteAssessmentConfig(assessmentConfig);
+      });
+      setAssessmentConfigsToDelete([]);
     }
     if (hasChangesAssessmentConfig) {
       // Will exist after first load

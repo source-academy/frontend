@@ -3,6 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 
 import {
+  deleteAssessmentConfig,
   deleteUserCourseRegistration,
   fetchAdminPanelCourseRegistrations,
   fetchAssessmentConfigs,
@@ -38,6 +39,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleFetchUserCourseRegistrations: fetchAdminPanelCourseRegistrations,
       handleUpdateCourseConfig: updateCourseConfig,
       handleUpdateAssessmentConfigs: updateAssessmentConfigs,
+      handleDeleteAssessmentConfig: deleteAssessmentConfig,
       handleUpdateUserRole: updateUserRole,
       handleDeleteUserFromCourse: deleteUserCourseRegistration,
       handleAddNewUsersToCourse: addNewUsersToCourse

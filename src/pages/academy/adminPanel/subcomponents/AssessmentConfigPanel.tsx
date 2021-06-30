@@ -15,11 +15,12 @@ export type AssessmentConfigPanelProps = OwnProps;
 type OwnProps = {
   assessmentConfig: React.MutableRefObject<AssessmentConfiguration[]>;
   setAssessmentConfig: (assessmentConfig: AssessmentConfiguration[]) => void;
+  setAssessmentConfigsToDelete: (assessmentConfig: AssessmentConfiguration) => void;
   setHasChangesAssessmentConfig: (val: boolean) => void;
 };
 
 const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
-  const { assessmentConfig, setAssessmentConfig } = props;
+  const { assessmentConfig, setAssessmentConfig, setAssessmentConfigsToDelete } = props;
   const gridApi = React.useRef<GridApi>();
 
   const setIsGraded = (index: number, value: boolean) => {
@@ -77,9 +78,10 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     }
 
     const temp = [...assessmentConfig.current];
-    temp.splice(index, 1);
+    const deleted = temp.splice(index, 1);
     gridApi.current?.setRowData(temp);
     setAssessmentConfig(temp);
+    setAssessmentConfigsToDelete(deleted[0]);
   };
 
   const columnDefs = [

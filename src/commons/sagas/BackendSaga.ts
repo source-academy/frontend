@@ -42,6 +42,7 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
@@ -100,6 +101,7 @@ import {
   postSourcecast,
   postUnsubmit,
   postUserRole,
+  removeAssessmentConfig,
   removeUserCourseRegistration,
   updateAssessment,
   uploadAssessment
@@ -637,6 +639,19 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
       yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    DELETE_ASSESSMENT_CONFIG,
+    function* (action: ReturnType<typeof actions.deleteAssessmentConfig>): any {
+      const tokens: Tokens = yield selectTokens();
+      const assessmentConfig: AssessmentConfiguration = action.payload;
+
+      const resp: Response | null = yield call(removeAssessmentConfig, tokens, assessmentConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
     }
   );
 

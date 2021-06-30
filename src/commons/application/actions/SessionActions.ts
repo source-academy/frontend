@@ -18,6 +18,7 @@ import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
   CourseRegistration,
+  DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
@@ -214,6 +215,9 @@ export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
 
 export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
   action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);
+
+export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration) =>
+  action(DELETE_ASSESSMENT_CONFIG, assessmentConfig);
 
 export const fetchAdminPanelCourseRegistrations = () =>
   action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
