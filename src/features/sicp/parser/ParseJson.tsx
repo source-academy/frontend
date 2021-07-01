@@ -220,7 +220,7 @@ export const processingFunctions = {
 
   LINK: handleRef,
 
-  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('LaTeX'),
+  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex('$\\LaTeX$'),
 
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
 
@@ -267,7 +267,7 @@ export const processingFunctions = {
     <Code>{parseArr(obj['child']!, refs)}</Code>
   ),
 
-  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('TeX'),
+  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex('$\\TeX$'),
 
   UL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <UL>{parseArr(obj['child']!, refs)}</UL>
 };

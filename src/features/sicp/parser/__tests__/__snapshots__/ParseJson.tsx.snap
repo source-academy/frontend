@@ -405,9 +405,21 @@ exports[`Parse styling TT  successful 1`] = `
 
 exports[`Parse symbol BR  successful 1`] = `"<br />"`;
 
-exports[`Parse symbol LaTeX  successful 1`] = `"LaTeX"`;
+exports[`Parse symbol LaTeX  successful 1`] = `
+"<SicpLatex math=\\"$\\\\\\\\LaTeX$\\">
+  <Latex delimiters={{...}} strict={false}>
+    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
+  </Latex>
+</SicpLatex>"
+`;
 
-exports[`Parse symbol TeX  successful 1`] = `"TeX"`;
+exports[`Parse symbol TeX  successful 1`] = `
+"<SicpLatex math=\\"$\\\\\\\\TeX$\\">
+  <Latex delimiters={{...}} strict={false}>
+    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
+  </Latex>
+</SicpLatex>"
+`;
 
 exports[`Parse table TABLE  successful 1`] = `
 "<table>
