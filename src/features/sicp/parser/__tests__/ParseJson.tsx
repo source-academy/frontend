@@ -7,9 +7,8 @@ import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } fro
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];
 const listTags = ['OL', 'UL'];
-const symbolTags = ['BR', 'LaTeX', 'TeX'];
+const symbolTags = ['BR'];
 const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'META'];
-const latexTags = ['LATEX', 'LATEXINLINE'];
 const linkTags = ['LINK', 'REF', 'FOOTNOTE_REF'];
 
 const epigraphTag = 'EPIGRAPH';
@@ -21,6 +20,7 @@ const figureTag = 'FIGURE';
 const displayFootnoteTag = 'DISPLAYFOOTNOTE';
 const referenceTag = 'REFERENCE';
 const textTag = '#text';
+const latexTag = 'LATEX';
 const unknownTag = 'unknown';
 
 jest.mock('src/commons/utils/Constants', () => ({
@@ -287,13 +287,16 @@ describe('Parse footnote', () => {
 });
 
 describe('Parse latex', () => {
-  const tag = latexTags;
-  const math = '$test$';
-  const obj = {
-    body: math
+  const tag = latexTag;
+  const inline = {
+    body: '$test$'
+  };
+  const block = {
+    body: '\\[test\\]'
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag, ''));
+  testTagSuccessful(inline, tag, 'inline');
+  testTagSuccessful(block, tag, 'block');
 });
 
 describe('Parse links', () => {

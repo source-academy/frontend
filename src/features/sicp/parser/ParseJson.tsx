@@ -214,13 +214,9 @@ export const processingFunctions = {
 
   LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
 
-  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
-
   LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
 
   LINK: handleRef,
-
-  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex('$\\LaTeX$'),
 
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
 
@@ -266,8 +262,6 @@ export const processingFunctions = {
   TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <Code>{parseArr(obj['child']!, refs)}</Code>
   ),
-
-  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex('$\\TeX$'),
 
   UL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <UL>{parseArr(obj['child']!, refs)}</UL>
 };

@@ -240,15 +240,15 @@ exports[`Parse heading SUBSUBHEADING  successful 1`] = `
 </h4>"
 `;
 
-exports[`Parse latex LATEX  successful 1`] = `
-"<SicpLatex math=\\"$test$\\">
+exports[`Parse latex LATEX block successful 1`] = `
+"<SicpLatex math=\\"\\\\\\\\[test\\\\\\\\]\\">
   <Latex delimiters={{...}} strict={false}>
     <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
   </Latex>
 </SicpLatex>"
 `;
 
-exports[`Parse latex LATEXINLINE  successful 1`] = `
+exports[`Parse latex LATEX inline successful 1`] = `
 "<SicpLatex math=\\"$test$\\">
   <Latex delimiters={{...}} strict={false}>
     <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
@@ -404,22 +404,6 @@ exports[`Parse styling TT  successful 1`] = `
 `;
 
 exports[`Parse symbol BR  successful 1`] = `"<br />"`;
-
-exports[`Parse symbol LaTeX  successful 1`] = `
-"<SicpLatex math=\\"$\\\\\\\\LaTeX$\\">
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
-`;
-
-exports[`Parse symbol TeX  successful 1`] = `
-"<SicpLatex math=\\"$\\\\\\\\TeX$\\">
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
-`;
 
 exports[`Parse table TABLE  successful 1`] = `
 "<table>
