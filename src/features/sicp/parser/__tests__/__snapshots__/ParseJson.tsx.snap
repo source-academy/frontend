@@ -301,7 +301,7 @@ exports[`Parse object no tag 1`] = `"Mock Text"`;
 exports[`Parse object successful 1`] = `"Mock Text"`;
 
 exports[`Parse reference REFERENCE  successful 1`] = `
-"<div>
+"<div className=\\"sicp-reference\\">
   Mock Text
 </div>"
 `;

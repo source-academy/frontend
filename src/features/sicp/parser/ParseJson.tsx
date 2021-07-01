@@ -174,7 +174,7 @@ const handleContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 };
 
 const handleReference = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
-  return <div>{parseArr(obj['child']!, refs)}</div>;
+  return <div className="sicp-reference">{parseArr(obj['child']!, refs)}</div>;
 };
 
 const handleText = (text: string) => {
