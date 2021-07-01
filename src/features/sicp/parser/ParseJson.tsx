@@ -1,5 +1,6 @@
 import { Blockquote, Code, H1, OL, Pre, UL } from '@blueprintjs/core';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
@@ -53,9 +54,9 @@ const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
 const handleRef = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <a ref={ref => (refs.current[obj['id']!] = ref)} href={obj['href']}>
+    <Link ref={ref => (refs.current[obj['id']!] = ref)} to={obj['href']!}>
       {obj['body']}
-    </a>
+    </Link>
   );
 };
 
@@ -216,7 +217,9 @@ export const processingFunctions = {
 
   LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
 
-  LINK: handleRef,
+  LINK: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <a href={obj['href']}>{obj['body']}</a>
+  ),
 
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
 

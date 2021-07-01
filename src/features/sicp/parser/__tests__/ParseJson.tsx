@@ -1,5 +1,6 @@
 import { mount } from 'enzyme';
 import lzString from 'lz-string';
+import { BrowserRouter } from 'react-router-dom';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
 import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
@@ -309,7 +310,13 @@ describe('Parse links', () => {
     href: href
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag));
+  tag.forEach(tag => {
+    test(tag + ' successful', () => {
+      const tree = mount(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
+
+      expect(tree.debug()).toMatchSnapshot();
+    });
+  });
 });
 
 describe('Parse reference', () => {

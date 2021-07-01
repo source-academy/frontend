@@ -256,24 +256,44 @@ exports[`Parse latex LATEX inline successful 1`] = `
 </SicpLatex>"
 `;
 
-exports[`Parse links FOOTNOTE_REF  successful 1`] = `
-"<sup>
-  <a href=\\"bad-link\\">
-    link
-  </a>
-</sup>"
+exports[`Parse links FOOTNOTE_REF successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <sup>
+      <Link to=\\"bad-link\\">
+        <LinkAnchor href=\\"/bad-link\\" navigate={[Function: navigate]}>
+          <a href=\\"/bad-link\\" onClick={[Function: onClick]}>
+            link
+          </a>
+        </LinkAnchor>
+      </Link>
+    </sup>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse links LINK  successful 1`] = `
-"<a href=\\"bad-link\\">
-  link
-</a>"
+exports[`Parse links LINK successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <a href=\\"bad-link\\">
+      link
+    </a>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse links REF  successful 1`] = `
-"<a href=\\"bad-link\\">
-  link
-</a>"
+exports[`Parse links REF successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Link to=\\"bad-link\\">
+      <LinkAnchor href=\\"/bad-link\\" navigate={[Function: navigate]}>
+        <a href=\\"/bad-link\\" onClick={[Function: onClick]}>
+          link
+        </a>
+      </LinkAnchor>
+    </Link>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse list OL  successful 1`] = `
