@@ -16,6 +16,7 @@ test('NavigationBar renders "Not logged in" correctly', () => {
     handleGitHubLogIn: () => {},
     handleGitHubLogOut: () => {},
     updateLatestViewedCourse: () => {},
+    handleCreateCourse: () => {},
     courses: [],
     assessmentTypes: []
   };
@@ -29,6 +30,7 @@ test('NavigationBar renders correctly for student with course', () => {
     handleGitHubLogIn: () => {},
     handleGitHubLogOut: () => {},
     updateLatestViewedCourse: () => {},
+    handleCreateCourse: () => {},
     courses: [
       {
         courseId: 1,
@@ -55,6 +57,7 @@ test('NavigationBar renders correctly for student without course', () => {
     handleGitHubLogIn: () => {},
     handleGitHubLogOut: () => {},
     updateLatestViewedCourse: () => {},
+    handleCreateCourse: () => {},
     courses: [],
     name: 'Bob',
     assessmentTypes: []

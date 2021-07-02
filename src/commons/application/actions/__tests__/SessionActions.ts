@@ -238,6 +238,7 @@ test('setCourseConfiguration generates correct action object', () => {
 
 test('setCourseRegistration generates correct action object', () => {
   const courseRegistration = {
+    crId: 1,
     role: Role.Student,
     group: '42D',
     gameState: {
@@ -263,6 +264,7 @@ test('setCourseRegistration generates correct action object', () => {
 test('setAssessmentConfigurations generates correct action object', () => {
   const assesmentConfigurations = [
     {
+      assessmentConfigId: 1,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -271,6 +273,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission1'
     },
     {
+      assessmentConfigId: 2,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -279,6 +282,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission2'
     },
     {
+      assessmentConfigId: 3,
       decayRatePointsPerHour: 1,
       earlySubmissionXp: 200,
       hoursBeforeEarlyXpDecay: 48,
@@ -300,12 +304,14 @@ test('setAdminPanelCourseRegistrations generates correct action object', async (
       crId: 1,
       courseId: 1,
       name: 'Bob',
+      username: 'test/bob123',
       role: Role.Student
     },
     {
       crId: 2,
       courseId: 1,
       name: 'Avenger',
+      username: 'test/avenger456',
       role: Role.Staff
     }
   ];
