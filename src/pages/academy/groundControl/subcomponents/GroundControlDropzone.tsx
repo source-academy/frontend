@@ -1,32 +1,57 @@
-import { Card, Elevation, Intent, Switch } from '@blueprintjs/core';
+import { Card, Elevation, HTMLSelect, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 
 import controlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
-export type DropzoneProps = DispatchProps;
+export type DropzoneProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleUploadAssessment: (file: File, forceUpdate: boolean) => void;
+  handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
+};
+
+type StateProps = {
+  assessmentConfigurations?: AssessmentConfiguration[];
 };
 
 const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
   const [file, setFile] = React.useState<File | undefined>(undefined);
   const [isWarningShown, setPromptShown] = React.useState<boolean>(false);
   const [forceUpdate, setForceUpdate] = React.useState<boolean>(false);
+  const [assessmentConfigId, setAssessmentConfigId] = React.useState<number>(-1);
+
+  React.useEffect(() => {
+    if (props.assessmentConfigurations && assessmentConfigId === -1) {
+      setAssessmentConfigId(props.assessmentConfigurations[0].assessmentConfigId);
+    }
+  }, [props.assessmentConfigurations, assessmentConfigId]);
 
   const { handleUploadAssessment } = props;
 
+  const htmlSelectOptions = React.useMemo(() => {
+    return props.assessmentConfigurations?.map(e => {
+      return {
+        value: e.assessmentConfigId,
+        label: e.type
+      };
+    });
+  }, [props.assessmentConfigurations]);
+
   const handleConfirmUpload = React.useCallback(() => {
+    if (assessmentConfigId === -1) {
+      showWarningMessage('Please select a valid assessment type before uploading!');
+      return;
+    }
     if (file) {
-      handleUploadAssessment(file, forceUpdate);
+      handleUploadAssessment(file, forceUpdate, assessmentConfigId);
       setForceUpdate(false);
     }
     setFile(undefined);
-  }, [file, forceUpdate, handleUploadAssessment]);
+  }, [file, forceUpdate, handleUploadAssessment, assessmentConfigId]);
   const handleCancelUpload = React.useCallback(() => setFile(undefined), [setFile]);
 
   const handleDropAccepted = React.useCallback(
@@ -112,6 +137,11 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
           {!isWarningShown && (
             <>
               <div className="dropzone-controls">
+                <HTMLSelect
+                  options={htmlSelectOptions}
+                  onChange={e => setAssessmentConfigId(parseInt(e.target.value))}
+                  value={assessmentConfigId}
+                />
                 {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload, {
                   minimal: false,
                   intent: Intent.DANGER

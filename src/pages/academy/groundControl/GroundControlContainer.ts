@@ -1,7 +1,10 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
+import {
+  fetchAssessmentConfigs,
+  fetchAssessmentOverviews
+} from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
@@ -12,7 +15,8 @@ import {
 import GroundControl, { DispatchProps, StateProps } from './GroundControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  assessmentOverviews: state.session.assessmentOverviews
+  assessmentOverviews: state.session.assessmentOverviews,
+  assessmentConfigurations: state.session.assessmentConfigurations
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
@@ -22,7 +26,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
-      handlePublishAssessment: publishAssessment
+      handlePublishAssessment: publishAssessment,
+      handleFetchAssessmentConfigs: fetchAssessmentConfigs
     },
     dispatch
   );

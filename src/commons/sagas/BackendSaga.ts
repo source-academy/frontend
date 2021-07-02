@@ -876,10 +876,14 @@ function* BackendSaga(): SagaIterator {
     UPLOAD_ASSESSMENT,
     function* (action: ReturnType<typeof actions.uploadAssessment>): any {
       const tokens: Tokens = yield selectTokens();
-      const file = action.payload.file;
-      const forceUpdate = action.payload.forceUpdate;
+      const { file, forceUpdate, assessmentConfigId } = action.payload;
 
-      const resp: Response | null = yield uploadAssessment(file, tokens, forceUpdate);
+      const resp: Response | null = yield uploadAssessment(
+        file,
+        tokens,
+        forceUpdate,
+        assessmentConfigId
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }

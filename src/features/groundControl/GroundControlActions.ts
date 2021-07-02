@@ -15,5 +15,5 @@ export const deleteAssessment = (id: number) => action(DELETE_ASSESSMENT, id);
 export const publishAssessment = (togglePublishTo: boolean, id: number) =>
   action(PUBLISH_ASSESSMENT, { id, togglePublishTo });
 
-export const uploadAssessment = (file: File, forceUpdate: boolean) =>
-  action(UPLOAD_ASSESSMENT, { file, forceUpdate });
+export const uploadAssessment = (file: File, forceUpdate: boolean, assessmentConfigId: number) =>
+  action(UPLOAD_ASSESSMENT, { file, forceUpdate, assessmentConfigId });

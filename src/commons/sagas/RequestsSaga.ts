@@ -928,11 +928,13 @@ export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Resp
 export const uploadAssessment = async (
   file: File,
   tokens: Tokens,
-  forceUpdate: boolean
+  forceUpdate: boolean,
+  assessmentConfigId: number
 ): Promise<Response | null> => {
   const formData = new FormData();
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
+  formData.append('assessmentConfigId', String(assessmentConfigId));
   const resp = await request(`${courseId()}/admin/assessments`, 'POST', {
     ...tokens,
     body: formData,
