@@ -8,6 +8,7 @@ import {
   fetchAdminPanelCourseRegistrations,
   fetchAssessmentConfigs,
   fetchCourseConfig,
+  setAssessmentConfigurations,
   updateAssessmentConfigs,
   updateCourseConfig,
   updateUserRole
@@ -39,6 +40,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleFetchUserCourseRegistrations: fetchAdminPanelCourseRegistrations,
       handleUpdateCourseConfig: updateCourseConfig,
       handleUpdateAssessmentConfigs: updateAssessmentConfigs,
+      setAssessmentConfigurations: setAssessmentConfigurations,
       handleDeleteAssessmentConfig: deleteAssessmentConfig,
       handleUpdateUserRole: updateUserRole,
       handleDeleteUserFromCourse: deleteUserCourseRegistration,

@@ -28,6 +28,7 @@ export type DispatchProps = {
   handleFetchUserCourseRegistrations: () => void;
   handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
   handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
+  setAssessmentConfigurations: (assessmentConfigs: AssessmentConfiguration[]) => void;
   handleDeleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => void;
   handleUpdateUserRole: (crId: number, role: Role) => void;
   handleDeleteUserFromCourse: (crId: number) => void;
@@ -150,7 +151,10 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
       setAssessmentConfigsToDelete([]);
     }
     if (hasChangesAssessmentConfig) {
-      // Will exist after first load
+      // Reset the store first so that old props do not propagate down and cause a flicker
+      props.setAssessmentConfigurations([]);
+
+      // assessmentConfig.current will exist after the first load
       props.handleUpdateAssessmentConfigs(assessmentConfig.current!);
       setHasChangesAssessmentConfig(false);
     }

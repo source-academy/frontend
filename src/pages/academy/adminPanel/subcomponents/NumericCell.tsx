@@ -2,7 +2,7 @@ import { NumericInput } from '@blueprintjs/core';
 import React from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 
-type IsGradedCellProps = OwnProps;
+type NumericCellProps = OwnProps;
 
 type OwnProps = {
   data: AssessmentConfiguration;
@@ -16,7 +16,7 @@ export enum AssessmentConfigNumericField {
   HOURS_BEFORE_DECAY = 'HOURS_BEFORE_DECAY'
 }
 
-const NumericCell: React.FC<IsGradedCellProps> = props => {
+const NumericCell: React.FC<NumericCellProps> = props => {
   const { data } = props;
 
   const changeHandler = React.useCallback(

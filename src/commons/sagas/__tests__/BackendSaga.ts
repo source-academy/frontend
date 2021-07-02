@@ -206,38 +206,48 @@ const mockCourseConfiguration2: CourseConfiguration = {
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   {
     assessmentConfigId: 1,
-    earlySubmissionXp: 200,
+    type: 'Missions',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
-    type: 'Missions'
+    earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 2,
-    earlySubmissionXp: 200,
+    type: 'Quests',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
-    isGraded: false,
-    type: 'Quests'
+    earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 3,
-    earlySubmissionXp: 200,
+    type: 'Paths',
+    buildHidden: true,
+    buildSolution: true,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
-    type: 'Paths'
+    earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 4,
-    earlySubmissionXp: 200,
+    type: 'Contests',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: true,
     hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
-    type: 'Contests'
+    earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 5,
-    earlySubmissionXp: 200,
+    type: 'Others',
+    buildHidden: false,
+    buildSolution: true,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
-    type: 'Others'
+    earlySubmissionXp: 200
   }
 ];
 

@@ -265,30 +265,30 @@ test('setAssessmentConfigurations generates correct action object', () => {
   const assesmentConfigurations = [
     {
       assessmentConfigId: 1,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 1,
-      type: 'Mission1'
+      earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 2,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Mission2',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: false,
-      order: 2,
-      type: 'Mission2'
+      earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 3,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Mission3',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 3,
-      type: 'Mission3'
+      earlySubmissionXp: 200
     }
   ];
   const action = setAssessmentConfigurations(assesmentConfigurations);
@@ -649,48 +649,48 @@ test('updateAssessmentTypes generates correct action object', () => {
   const assessmentConfigs = [
     {
       assessmentConfigId: 1,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Missions',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 1,
-      type: 'Missions'
+      earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 2,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Quests',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: false,
-      order: 2,
-      type: 'Quests'
+      earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 3,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Paths',
+      buildHidden: true,
+      buildSolution: true,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 3,
-      type: 'Paths'
+      earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 4,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Contests',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: true,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 3,
-      type: 'Contests'
+      earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 5,
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      type: 'Others',
+      buildHidden: false,
+      buildSolution: true,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 3,
-      type: 'Others'
+      earlySubmissionXp: 200
     }
   ];
   const action = updateAssessmentConfigs(assessmentConfigs);
@@ -703,12 +703,12 @@ test('updateAssessmentTypes generates correct action object', () => {
 test('deleteAssessmentConfig generates correct action object', () => {
   const assessmentConfig = {
     assessmentConfigId: 1,
-    decayRatePointsPerHour: 1,
-    earlySubmissionXp: 200,
+    type: 'Mission1',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
-    order: 1,
-    type: 'Missions'
+    earlySubmissionXp: 200
   };
   const action = deleteAssessmentConfig(assessmentConfig);
   expect(action).toEqual({

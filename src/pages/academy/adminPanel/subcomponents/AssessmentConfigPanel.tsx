@@ -1,13 +1,13 @@
 import { Button, H2 } from '@blueprintjs/core';
 import { CellValueChangedEvent, GridApi, GridReadyEvent, RowDragEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { capitalize, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import React from 'react';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import { AssessmentConfiguration } from '../../../../commons/assessment/AssessmentTypes';
+import BooleanCell, { AssessmentConfigBooleanField } from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
-import IsGradedCell from './IsGradedCell';
 import NumericCell, { AssessmentConfigNumericField } from './NumericCell';
 
 export type AssessmentConfigPanelProps = OwnProps;
@@ -23,14 +23,34 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   const { assessmentConfig, setAssessmentConfig, setAssessmentConfigsToDelete } = props;
   const gridApi = React.useRef<GridApi>();
 
-  const setIsGraded = (index: number, value: boolean) => {
+  const setBuildHidden = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      isGraded: value
+      buildHidden: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGraded', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('buildHidden', value);
+  };
+
+  const setBuildSolution = (index: number, value: boolean) => {
+    const temp = [...assessmentConfig.current];
+    temp[index] = {
+      ...temp[index],
+      buildSolution: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('buildSolution', value);
+  };
+
+  const setIsContest = (index: number, value: boolean) => {
+    const temp = [...assessmentConfig.current];
+    temp[index] = {
+      ...temp[index],
+      isContest: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isContest', value);
   };
 
   const setEarlyXp = (index: number, value: number) => {
@@ -63,7 +83,9 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     temp.push({
       assessmentConfigId: -1,
       type: 'untitled',
-      isGraded: true,
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 0,
       earlySubmissionXp: 0
     });
@@ -92,11 +114,30 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       editable: true
     },
     {
-      headerName: 'Graded?',
-      field: 'isGraded',
-      cellRendererFramework: IsGradedCell,
+      headerName: 'Build Hidden',
+      field: 'buildHidden',
+      cellRendererFramework: BooleanCell,
       cellRendererParams: {
-        setIsGraded: setIsGraded
+        setStateHandler: setBuildHidden,
+        field: AssessmentConfigBooleanField.BUILD_HIDDEN
+      }
+    },
+    {
+      headerName: 'Build Solution',
+      field: 'buildSolution',
+      cellRendererFramework: BooleanCell,
+      cellRendererParams: {
+        setStateHandler: setBuildSolution,
+        field: AssessmentConfigBooleanField.BUILD_SOLUTION
+      }
+    },
+    {
+      headerName: 'Is Contest',
+      field: 'isContest',
+      cellRendererFramework: BooleanCell,
+      cellRendererParams: {
+        setStateHandler: setIsContest,
+        field: AssessmentConfigBooleanField.IS_CONTEST
       }
     },
     {
@@ -168,7 +209,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       const temp = [...assessmentConfig.current];
       temp[event.rowIndex!] = {
         ...temp[event.rowIndex!],
-        type: capitalize(event.value)
+        type: event.value
       };
       assessmentConfig.current = temp;
       props.setHasChangesAssessmentConfig(true);

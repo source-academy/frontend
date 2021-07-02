@@ -14,39 +14,49 @@ import {
 
 export const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   {
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
     assessmentConfigId: 1,
-    type: 'Missions'
+    type: 'Missions',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
   },
   {
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    isGraded: false,
     assessmentConfigId: 2,
-    type: 'Quests'
+    type: 'Quests',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
   },
   {
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
     assessmentConfigId: 3,
-    type: 'Paths'
+    type: 'Paths',
+    buildHidden: true,
+    buildSolution: true,
+    isContest: false,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
   },
   {
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
     assessmentConfigId: 4,
-    type: 'Contests'
+    type: 'Contests',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: true,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
   },
   {
-    earlySubmissionXp: 200,
-    hoursBeforeEarlyXpDecay: 48,
-    isGraded: true,
     assessmentConfigId: 5,
-    type: 'Others'
+    type: 'Others',
+    buildHidden: false,
+    buildSolution: true,
+    isContest: false,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
   }
 ];
 

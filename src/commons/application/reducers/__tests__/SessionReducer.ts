@@ -146,28 +146,31 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
 test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
   const payload = [
     {
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 1,
-      type: 'Mission1'
+      earlySubmissionXp: 200
     },
     {
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: false,
-      order: 2,
-      type: 'Mission2'
+      earlySubmissionXp: 200
     },
     {
-      decayRatePointsPerHour: 1,
-      earlySubmissionXp: 200,
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      isGraded: true,
-      order: 3,
-      type: 'Mission3'
+      earlySubmissionXp: 200
     }
   ];
 
