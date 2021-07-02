@@ -100,8 +100,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableSourcecast: true,
     sourceChapter: 1,
     sourceVariant: 'default',
-    moduleHelpText: '',
-    assessmentTypes: ['Missions', 'Quests', 'Contests', 'Paths', 'Others']
+    moduleHelpText: ''
   },
   {
     courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
@@ -112,8 +111,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableSourcecast: false,
     sourceChapter: 2,
     sourceVariant: 'default',
-    moduleHelpText: 'Help Text!',
-    assessmentTypes: ['Homework', 'Shorts', 'Graded Assessments']
+    moduleHelpText: 'Help Text!'
   }
 ];
 

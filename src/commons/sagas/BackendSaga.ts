@@ -137,18 +137,16 @@ function* BackendSaga(): SagaIterator {
       return yield history.push('/');
     }
 
-    // yield put(actions.setTokens(tokens));
-    // yield put(actions.fetchUserAndCourse());
-    // yield history.push('/academy')
-
     const {
       user,
       courseRegistration,
-      courseConfiguration
+      courseConfiguration,
+      assessmentConfigurations
     }: {
       user: User | null;
       courseRegistration: CourseRegistration | null;
       courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getUser, tokens);
 
     if (!user) {
@@ -158,12 +156,13 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.setTokens(tokens));
     yield put(actions.setUser(user));
 
-    if (!courseRegistration || !courseConfiguration) {
+    if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
       return yield history.push('/welcome');
     }
 
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
     yield put(
       actions.updateSublanguage({
         chapter: courseConfiguration.sourceChapter,
@@ -183,11 +182,13 @@ function* BackendSaga(): SagaIterator {
     const {
       user,
       courseRegistration,
-      courseConfiguration
+      courseConfiguration,
+      assessmentConfigurations
     }: {
       user: User | null;
       courseRegistration: CourseRegistration | null;
       courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getUser, tokens);
 
     if (!user) {
@@ -196,12 +197,13 @@ function* BackendSaga(): SagaIterator {
 
     yield put(actions.setUser(user));
 
-    if (!courseRegistration || !courseConfiguration) {
+    if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
       return yield history.push('/welcome');
     }
 
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
     yield put(
       actions.updateSublanguage({
         chapter: courseConfiguration.sourceChapter,
@@ -677,9 +679,7 @@ function* BackendSaga(): SagaIterator {
         return yield handleResponseError(resp);
       }
 
-      const assessmentTypes = assessmentConfigs.map(e => e.type);
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
-      yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
@@ -724,20 +724,23 @@ function* BackendSaga(): SagaIterator {
     const {
       user,
       courseRegistration,
-      courseConfiguration
+      courseConfiguration,
+      assessmentConfigurations
     }: {
       user: User | null;
       courseRegistration: CourseRegistration | null;
       courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getUser, tokens);
 
-    if (!user || !courseRegistration || !courseConfiguration) {
+    if (!user || !courseRegistration || !courseConfiguration || !assessmentConfigurations) {
       return yield showWarningMessage('An error occurred. Please try again.');
     }
 
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
     yield put(
       actions.updateSublanguage({
         chapter: courseConfiguration.sourceChapter,

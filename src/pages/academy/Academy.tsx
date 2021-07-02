@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../commons/application/ApplicationTypes';
@@ -24,8 +25,8 @@ export type DispatchProps = {
 
 export type StateProps = {
   historyHelper: HistoryHelper;
-  enableGame: boolean | undefined;
-  assessmentTypes: string[] | undefined;
+  enableGame?: boolean;
+  assessmentConfigurations?: AssessmentConfiguration[];
 };
 
 export type OwnProps = {
@@ -57,11 +58,13 @@ class Academy extends React.Component<AcademyProps> {
     return (
       <div className="Academy">
         <Switch>
-          {this.props.assessmentTypes?.map(assessmentType => (
+          {this.props.assessmentConfigurations?.map(assessmentConfiguration => (
             <Route
-              path={`/academy/${assessmentTypeLink(assessmentType)}/${assessmentRegExp}`}
-              render={this.assessmentRenderFactory(assessmentType)}
-              key={assessmentType}
+              path={`/academy/${assessmentTypeLink(
+                assessmentConfiguration.type
+              )}/${assessmentRegExp}`}
+              render={this.assessmentRenderFactory(assessmentConfiguration)}
+              key={assessmentConfiguration.type}
             />
           ))}
           {this.props.enableGame && <Route path="/academy/game" component={Game} />}
@@ -77,8 +80,8 @@ class Academy extends React.Component<AcademyProps> {
   }
 
   private assessmentRenderFactory =
-    (assessmentType: string) => (routerProps: RouteComponentProps<any>) =>
-      <AssessmentContainer assessmentType={assessmentType} />;
+    (assessmentConfiguration: AssessmentConfiguration) => (routerProps: RouteComponentProps<any>) =>
+      <AssessmentContainer assessmentConfiguration={assessmentConfiguration} />;
 
   /**
    * 1. If user is in /academy.*, redirect to game
@@ -100,8 +103,10 @@ class Academy extends React.Component<AcademyProps> {
   private redirectToGame = () => <Redirect to="/academy/game" />;
 
   private redirectToAssessments = () => {
-    return this.props.assessmentTypes ? (
-      <Redirect to={`/academy/${assessmentTypeLink(this.props.assessmentTypes[0])}`} />
+    return this.props.assessmentConfigurations ? (
+      <Redirect
+        to={`/academy/${assessmentTypeLink(this.props.assessmentConfigurations[0].type)}`}
+      />
     ) : (
       this.redirectTo404()
     );

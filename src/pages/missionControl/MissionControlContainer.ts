@@ -7,7 +7,7 @@ import { fetchAssessmentOverviews } from '../../commons/application/actions/Sess
 import MissionControl, { DispatchProps, StateProps } from './MissionControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  assessmentTypes: state.session.assessmentTypes
+  assessmentTypes: state.session.assessmentConfigurations?.map(e => e.type) || []
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

@@ -7,8 +7,7 @@ import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteE
 import {
   Assessment,
   AssessmentConfiguration,
-  AssessmentOverview,
-  AssessmentType
+  AssessmentOverview
 } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
@@ -93,7 +92,6 @@ export type SessionState = {
   readonly sourceChapter: number;
   readonly sourceVariant: Variant;
   readonly moduleHelpText?: string;
-  readonly assessmentTypes: AssessmentType[];
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
@@ -151,7 +149,6 @@ export type CourseConfiguration = {
   sourceChapter: number;
   sourceVariant: Variant;
   moduleHelpText: string;
-  assessmentTypes: AssessmentType[];
 };
 
 export type AdminPanelCourseRegistration = {

@@ -40,7 +40,7 @@ export type StateProps = {
   courseShortName?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes: AssessmentType[];
+  assessmentTypes?: AssessmentType[];
 };
 
 const Application: React.FC<ApplicationProps> = props => {

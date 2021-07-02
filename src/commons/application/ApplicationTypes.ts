@@ -297,7 +297,6 @@ export const defaultSession: SessionState = {
     story: '',
     playStory: false
   },
-  assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
   sourceChapter: Constants.defaultSourceChapter,
   sourceVariant: Constants.defaultSourceVariant as Variant,
   assessments: new Map<number, Assessment>(),

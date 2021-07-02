@@ -9,7 +9,7 @@ import Academy, { DispatchProps, StateProps } from './Academy';
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   historyHelper: state.session.historyHelper,
   enableGame: state.session.enableGame,
-  assessmentTypes: state.session.assessmentTypes
+  assessmentConfigurations: state.session.assessmentConfigurations
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch =>

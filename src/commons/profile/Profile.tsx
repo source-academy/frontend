@@ -21,7 +21,7 @@ export type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
-  assessmentTypes: AssessmentType[];
+  assessmentTypes?: AssessmentType[];
 };
 
 type OwnProps = {
@@ -110,11 +110,17 @@ class Profile extends React.Component<ProfileProps, {}> {
             IconNames.COMPARISON,
             IconNames.MANUAL
           ];
-          const index = this.props.assessmentTypes.indexOf(assessmentType);
+          if (this.props.assessmentTypes) {
+            const index = this.props.assessmentTypes.indexOf(assessmentType);
 
-          // For rendering hidden assessments not visible to the student
-          // e.g. studio participation marks
-          return index > 0 ? icons[index] : IconNames.PULSE;
+            // For rendering hidden assessments not visible to the student
+            // e.g. studio participation marks
+            return index > 0 ? icons[index] : IconNames.PULSE;
+          } else {
+            // Should never hit this case as there are no assessments, submissions or answers
+            // if there are no assessmentTypes
+            return IconNames.PULSE;
+          }
         };
 
         // Build condensed assessment cards from an array of assessments

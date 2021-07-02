@@ -10,10 +10,7 @@ import {
   AdminPanelCourseRegistration,
   UpdateCourseConfiguration
 } from '../../../commons/application/types/SessionTypes';
-import {
-  AssessmentConfiguration,
-  AssessmentType
-} from '../../../commons/assessment/AssessmentTypes';
+import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddUserPanel, { UsernameAndRole } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/AssessmentConfigPanel';
@@ -46,7 +43,6 @@ export type StateProps = {
   // sourceChapter: number;
   // sourceVariant: Variant;
   moduleHelpText?: string;
-  assessmentTypes: AssessmentType[];
   assessmentConfigurations?: AssessmentConfiguration[];
   userCourseRegistrations?: AdminPanelCourseRegistration[];
 };

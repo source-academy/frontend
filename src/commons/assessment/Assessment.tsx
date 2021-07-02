@@ -37,6 +37,7 @@ import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
 import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
 import {
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams,
@@ -55,7 +56,7 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  assessmentType: string;
+  assessmentConfiguration: AssessmentConfiguration;
 };
 
 export type StateProps = {

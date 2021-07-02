@@ -9,7 +9,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   assessmentOverviews: state.session.assessmentOverviews,
   name: state.session.name,
   role: state.session.role,
-  assessmentTypes: state.session.assessmentTypes
+  assessmentTypes: state.session.assessmentConfigurations?.map(e => e.type)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

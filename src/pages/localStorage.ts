@@ -53,7 +53,7 @@ export const saveState = (state: OverallState) => {
         enableAchievements: state.session.enableAchievements,
         enableSourcecast: state.session.enableSourcecast,
         moduleHelpText: state.session.moduleHelpText,
-        assessmentTypes: state.session.assessmentTypes
+        assessmentConfigurations: state.session.assessmentConfigurations
       },
       achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,

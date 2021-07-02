@@ -26,7 +26,7 @@ type DrawerProps = {
 type OwnProps = {
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes: AssessmentType[];
+  assessmentTypes?: AssessmentType[];
 };
 
 const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = props => (

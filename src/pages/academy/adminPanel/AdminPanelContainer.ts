@@ -27,7 +27,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sourceChapter: state.session.sourceChapter,
   sourceVariant: state.session.sourceVariant,
   moduleHelpText: state.session.moduleHelpText,
-  assessmentTypes: state.session.assessmentTypes,
   assessmentConfigurations: state.session.assessmentConfigurations,
   userCourseRegistrations: state.session.userCourseRegistrations
 });

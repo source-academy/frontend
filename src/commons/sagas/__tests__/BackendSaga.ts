@@ -168,8 +168,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableSourcecast: true,
   sourceChapter: 1,
   sourceVariant: 'default' as Variant,
-  moduleHelpText: 'Help text',
-  assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  moduleHelpText: 'Help text'
 };
 
 const mockCourseRegistration2: CourseRegistration = {
@@ -199,8 +198,7 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableSourcecast: true,
   sourceChapter: 4,
   sourceVariant: 'default' as Variant,
-  moduleHelpText: 'Help text',
-  assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  moduleHelpText: 'Help text'
 };
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
@@ -284,6 +282,7 @@ describe('Test FETCH_AUTH action', () => {
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
   const courseRegistration = mockCourseRegistration1;
+  const assessmentConfigurations = mockAssessmentConfigurations;
 
   const sublanguage: SourceLanguage = {
     chapter: mockCourseConfiguration1.sourceChapter,
@@ -302,10 +301,14 @@ describe('Test FETCH_AUTH action', () => {
       .put(setUser(user))
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
+      .put(setAssessmentConfigurations(assessmentConfigurations))
       .put(updateSublanguage(sublanguage))
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
-        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]
+        [
+          call(getUser, mockTokens),
+          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
+        ]
       ])
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
@@ -313,26 +316,32 @@ describe('Test FETCH_AUTH action', () => {
 
   test('when tokens is null', () => {
     return expectSaga(BackendSaga)
-      .provide([
-        [call(postAuth, code, providerId, clientId, redirectUrl), null],
-        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]
-      ])
+      .provide([[call(postAuth, code, providerId, clientId, redirectUrl), null]])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .not.call.fn(getUser)
       .not.put.actionType(SET_TOKENS)
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
 
-  test('when user is obtained, but course registration and course configuration are null', () => {
+  test('when user is obtained, but course registration, course configuration and assessmentConfigurations are null', () => {
     return expectSaga(BackendSaga)
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
-        [call(getUser, mockTokens), { user, courseRegistration: null, courseConfiguration: null }]
+        [
+          call(getUser, mockTokens),
+          {
+            user,
+            courseRegistration: null,
+            courseConfiguration: null,
+            assessmentConfigurations: null
+          }
+        ]
       ])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .call(getUser, mockTokens)
@@ -340,6 +349,7 @@ describe('Test FETCH_AUTH action', () => {
       .put(setUser(user))
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
@@ -351,7 +361,12 @@ describe('Test FETCH_AUTH action', () => {
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [
           call(getUser, mockTokens),
-          { user: null, courseRegistration: null, courseConfiguration: null }
+          {
+            user: null,
+            courseRegistration: null,
+            courseConfiguration: null,
+            assessmentConfigurations: null
+          }
         ]
       ])
       .call(postAuth, code, providerId, clientId, redirectUrl)
@@ -360,6 +375,7 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
@@ -370,6 +386,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
   const courseRegistration = mockCourseRegistration1;
+  const assessmentConfigurations = mockAssessmentConfigurations;
 
   const sublanguage: SourceLanguage = {
     chapter: mockCourseConfiguration1.sourceChapter,
@@ -387,22 +404,37 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .put(setUser(user))
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
+      .put(setAssessmentConfigurations(assessmentConfigurations))
       .put(updateSublanguage(sublanguage))
-      .provide([[call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]])
+      .provide([
+        [
+          call(getUser, mockTokens),
+          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
+        ]
+      ])
       .dispatch({ type: FETCH_USER_AND_COURSE })
       .silentRun();
   });
 
-  test('when user is obtained, but course registration and course configuration are null', () => {
+  test('when user is obtained, but course registration, course configuration and assessment configurations are null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([
-        [call(getUser, mockTokens), { user, courseRegistration: null, courseConfiguration: null }]
+        [
+          call(getUser, mockTokens),
+          {
+            user,
+            courseRegistration: null,
+            courseConfiguration: null,
+            assessmentConfigurations: null
+          }
+        ]
       ])
       .call(getUser, mockTokens)
       .put(setUser(user))
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_USER_AND_COURSE })
       .silentRun();
@@ -414,13 +446,19 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .provide([
         [
           call(getUser, mockTokens),
-          { user: null, courseRegistration: null, courseConfiguration: null }
+          {
+            user: null,
+            courseRegistration: null,
+            courseConfiguration: null,
+            assessmentConfigurations: null
+          }
         ]
       ])
       .call(getUser, mockTokens)
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_USER_AND_COURSE })
       .silentRun();
@@ -807,8 +845,7 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableSourcecast: false,
     sourceChapter: 4,
     sourceVariant: 'default',
-    moduleHelpText: 'Help',
-    assessmentTypes: ['Missions', 'Quests']
+    moduleHelpText: 'Help'
   };
 
   test('when course config is changed', () => {
@@ -909,6 +946,7 @@ describe('Test CREATE_COURSE action', () => {
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
   const courseRegistration = mockCourseRegistration1;
+  const assessmentConfigurations = mockAssessmentConfigurations;
 
   const sublanguage: SourceLanguage = {
     chapter: mockCourseConfiguration1.sourceChapter,
@@ -926,11 +964,15 @@ describe('Test CREATE_COURSE action', () => {
       .put(setUser(user))
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
+      .put(setAssessmentConfigurations(assessmentConfigurations))
       .put(updateSublanguage(sublanguage))
       .call.fn(showSuccessMessage)
       .provide([
         [call(postCreateCourse, mockTokens, courseConfig), okResp],
-        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]
+        [
+          call(getUser, mockTokens),
+          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
+        ]
       ])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();
@@ -944,6 +986,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .not.call.fn(showSuccessMessage)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
@@ -1089,14 +1132,11 @@ describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
 });
 
 describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
-  const assessmentTypes = mockAssessmentConfigurations.map(e => e.type);
-
   test('when assessment configs is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
       .call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
-      .put(setCourseConfiguration({ assessmentTypes }))
       .call.fn(showSuccessMessage)
       .provide([[call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp]])
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
@@ -1109,7 +1149,6 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
       .withState(mockStates)
       .call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
       .silentRun();

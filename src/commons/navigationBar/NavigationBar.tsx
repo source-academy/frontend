@@ -48,7 +48,7 @@ type StateProps = {
   courseShortName?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes: AssessmentType[];
+  assessmentTypes?: AssessmentType[];
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {

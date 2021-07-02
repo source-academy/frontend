@@ -126,6 +126,7 @@ export const getUser = async (
   user: User | null;
   courseRegistration: CourseRegistration | null;
   courseConfiguration: CourseConfiguration | null;
+  assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
   const resp = await request('user', 'GET', {
     ...tokens,
@@ -135,7 +136,8 @@ export const getUser = async (
     return {
       user: null,
       courseRegistration: null,
-      courseConfiguration: null
+      courseConfiguration: null,
+      assessmentConfigurations: null
     };
   }
 

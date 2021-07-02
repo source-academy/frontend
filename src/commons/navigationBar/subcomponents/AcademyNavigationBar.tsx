@@ -12,7 +12,7 @@ import { filterNotificationsByType } from '../../notificationBadge/NotificationB
 
 type OwnProps = {
   role: Role;
-  assessmentTypes: AssessmentType[];
+  assessmentTypes?: AssessmentType[];
 };
 
 const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (

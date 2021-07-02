@@ -285,13 +285,7 @@ export function* mockBackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.updateAssessmentConfigs>): any {
       const assessmentConfig = action.payload;
 
-      if (assessmentConfig.length > 5) {
-        return yield call(showWarningMessage, 'Invalid number of Assessment Types!');
-      }
-
-      const assessmentTypes = assessmentConfig.map(e => e.type);
       yield put(actions.setAssessmentConfigurations(assessmentConfig));
-      yield put(actions.setCourseConfiguration({ assessmentTypes }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
