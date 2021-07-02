@@ -1,4 +1,5 @@
 import { Card, H2, UL } from '@blueprintjs/core';
+import { Links } from 'src/commons/utils/Constants';
 
 export type WelcomeProps = StateProps;
 
@@ -25,12 +26,14 @@ const Welcome: React.FC<WelcomeProps> = props => {
                 </li>
                 <li>
                   If you are looking for a course to join, check{' '}
-                  <a href="https://github.com/source-academy/general/blob/master/learner/README.md">
-                    here
-                  </a>{' '}
-                  to find a course that suits your needs.
+                  <a href={Links.resourcesForLearners}>here</a> to find a course that suits your
+                  needs.
                 </li>
-                <li>If you are an instructor and want to create a course, #TODO</li>
+                <li>
+                  If you are an instructor and want to create a course, click{' '}
+                  <a href={Links.resourcesForEducators}>here</a> for a list of resources to get
+                  started.
+                </li>
               </UL>
             </div>
           </div>

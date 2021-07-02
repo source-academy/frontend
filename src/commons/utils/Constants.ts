@@ -74,6 +74,9 @@ export enum Links {
   luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
   piazza = 'https://piazza.com/class/kas136yscf8605',
 
+  resourcesForEducators = 'https://about.sourceacademy.org/educator/README.html',
+  resourcesForLearners = 'https://about.sourceacademy.org/learner/README.html',
+
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
   sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
