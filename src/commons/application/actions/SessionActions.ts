@@ -29,6 +29,7 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   LOGIN,
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
@@ -67,6 +68,8 @@ import {
 
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });
+
+export const fetchUserAndCourse = () => action(FETCH_USER_AND_COURSE);
 
 export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 

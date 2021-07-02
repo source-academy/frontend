@@ -52,6 +52,7 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -136,6 +137,10 @@ function* BackendSaga(): SagaIterator {
       return yield history.push('/');
     }
 
+    // yield put(actions.setTokens(tokens));
+    // yield put(actions.fetchUserAndCourse());
+    // yield history.push('/academy')
+
     const {
       user,
       courseRegistration,
@@ -170,6 +175,43 @@ function* BackendSaga(): SagaIterator {
       })
     );
     yield history.push('/academy');
+  });
+
+  yield takeEvery(FETCH_USER_AND_COURSE, function* (): any {
+    const tokens: Tokens = yield selectTokens();
+
+    const {
+      user,
+      courseRegistration,
+      courseConfiguration
+    }: {
+      user: User | null;
+      courseRegistration: CourseRegistration | null;
+      courseConfiguration: CourseConfiguration | null;
+    } = yield call(getUser, tokens);
+
+    if (!user) {
+      return yield history.push('/');
+    }
+
+    yield put(actions.setUser(user));
+
+    if (!courseRegistration || !courseConfiguration) {
+      return yield history.push('/welcome');
+    }
+
+    yield put(actions.setCourseRegistration(courseRegistration));
+    yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(
+      actions.updateSublanguage({
+        chapter: courseConfiguration.sourceChapter,
+        variant: courseConfiguration.sourceVariant,
+        displayName: styliseSublanguage(
+          courseConfiguration.sourceChapter,
+          courseConfiguration.sourceVariant
+        )
+      })
+    );
   });
 
   yield takeEvery(FETCH_COURSE_CONFIG, function* () {

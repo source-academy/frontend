@@ -28,6 +28,7 @@ export type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  fetchUserAndCourse: () => void;
   updateLatestViewedCourse: (courseId: number) => void;
   handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
@@ -49,6 +50,15 @@ const Application: React.FC<ApplicationProps> = props => {
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
   const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
   const browserDimensions = React.useRef({ height: 0, width: 0 });
+
+  // Effect to fetch the latest user info and course configurations from the backend on refresh,
+  // if the user was previously logged in
+  React.useEffect(() => {
+    if (props.name) {
+      props.fetchUserAndCourse();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     if (Constants.disablePeriods.length > 0) {

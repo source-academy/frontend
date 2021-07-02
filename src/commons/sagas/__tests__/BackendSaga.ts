@@ -41,6 +41,7 @@ import {
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
@@ -351,6 +352,67 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_USER_AND_COURSE action', () => {
+  const user = mockUser;
+  const courseConfiguration = mockCourseConfiguration1;
+  const courseRegistration = mockCourseRegistration1;
+
+  const sublanguage: SourceLanguage = {
+    chapter: mockCourseConfiguration1.sourceChapter,
+    variant: mockCourseConfiguration1.sourceVariant,
+    displayName: styliseSublanguage(
+      mockCourseConfiguration1.sourceChapter,
+      mockCourseConfiguration1.sourceVariant
+    )
+  };
+
+  test('when user, course registration and course configuration are obtained', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .call(getUser, mockTokens)
+      .put(setUser(user))
+      .put(setCourseRegistration(courseRegistration))
+      .put(setCourseConfiguration(courseConfiguration))
+      .put(updateSublanguage(sublanguage))
+      .provide([[call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }]])
+      .dispatch({ type: FETCH_USER_AND_COURSE })
+      .silentRun();
+  });
+
+  test('when user is obtained, but course registration and course configuration are null', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([
+        [call(getUser, mockTokens), { user, courseRegistration: null, courseConfiguration: null }]
+      ])
+      .call(getUser, mockTokens)
+      .put(setUser(user))
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_USER_AND_COURSE })
+      .silentRun();
+  });
+
+  test('when user is null', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([
+        [
+          call(getUser, mockTokens),
+          { user: null, courseRegistration: null, courseConfiguration: null }
+        ]
+      ])
+      .call(getUser, mockTokens)
+      .not.put.actionType(SET_USER)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_USER_AND_COURSE })
       .silentRun();
   });
 });

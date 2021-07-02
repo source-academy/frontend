@@ -17,6 +17,7 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
@@ -56,6 +57,7 @@ import {
   fetchGrading,
   fetchGradingOverviews,
   fetchNotifications,
+  fetchUserAndCourse,
   login,
   reautogradeAnswer,
   reautogradeSubmission,
@@ -100,6 +102,13 @@ test('fetchAuth generates correct action object', () => {
   expect(action).toEqual({
     type: FETCH_AUTH,
     payload: { code }
+  });
+});
+
+test('fetchUserAndCourse generates correct action object', () => {
+  const action = fetchUserAndCourse();
+  expect(action).toEqual({
+    type: FETCH_USER_AND_COURSE
   });
 });
 

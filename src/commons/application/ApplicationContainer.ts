@@ -4,7 +4,12 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { createCourse } from 'src/features/academy/AcademyActions';
 
 import { logOut } from './actions/CommonsActions';
-import { loginGitHub, logoutGitHub, updateLatestViewedCourse } from './actions/SessionActions';
+import {
+  fetchUserAndCourse,
+  loginGitHub,
+  logoutGitHub,
+  updateLatestViewedCourse
+} from './actions/SessionActions';
 import Application, { DispatchProps, StateProps } from './Application';
 import { OverallState } from './ApplicationTypes';
 
@@ -32,6 +37,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleLogOut: logOut,
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub,
+      fetchUserAndCourse: fetchUserAndCourse,
       updateLatestViewedCourse: updateLatestViewedCourse,
       handleCreateCourse: createCourse
     },

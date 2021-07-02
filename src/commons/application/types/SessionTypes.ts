@@ -15,6 +15,7 @@ import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
 export const FETCH_AUTH = 'FETCH_AUTH';
+export const FETCH_USER_AND_COURSE = 'FETCH_USER_AND_COURSE';
 export const FETCH_COURSE_CONFIG = 'FETCH_COURSE_CONFIG';
 export const FETCH_ASSESSMENT = 'FETCH_ASSESSMENT';
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
