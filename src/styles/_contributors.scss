@@ -100,13 +100,13 @@ div.inPermalink {
     text-align: center;
     vertical-align: top;
     display: inline-block;
-    width: (100% / 5);
-    height: (100% / 5);
+    width: math.div(100%, 5);
+    height: math.div(100%, 5);
     margin-top: 1%;
     margin-bottom: 0.5%;
     @include mQ(1000px) {
-      width: (100% / 3);
-      height: (100% / 3);
+      width: math.div(100%, 3);
+      height: math.div(100%, 3);
     }
   }
 
