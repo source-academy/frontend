@@ -27,7 +27,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       <div className=\\"hidden-xs\\">
         <Blueprint3.NavbarDivider className=\\"default-divider\\" />
       </div>
-      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[undefined]} courses={{...}} courseId={[undefined]} name={[undefined]} />
+      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={[undefined]} name={[undefined]} />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>
@@ -93,7 +93,7 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
       <div className=\\"hidden-xs\\">
         <Blueprint3.NavbarDivider className=\\"default-divider\\" />
       </div>
-      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[undefined]} courses={{...}} courseId={1} name=\\"Bob\\" />
+      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={1} name=\\"Bob\\" />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>
@@ -143,7 +143,7 @@ exports[`NavigationBar renders correctly for student without course 1`] = `
       <div className=\\"hidden-xs\\">
         <Blueprint3.NavbarDivider className=\\"default-divider\\" />
       </div>
-      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[undefined]} courses={{...}} courseId={[undefined]} name=\\"Bob\\" />
+      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={[undefined]} name=\\"Bob\\" />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>

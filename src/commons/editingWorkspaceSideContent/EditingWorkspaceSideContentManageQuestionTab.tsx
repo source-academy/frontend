@@ -105,7 +105,7 @@ export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, S
       questions[newIndex] = question;
       assessment.questions = questions;
       this.props.updateAssessment(assessment);
-      history.push('/mission-control/-1/' + newIndex.toString());
+      history.push('/academy/mission-control/-1/' + newIndex.toString());
     }
   };
 
@@ -116,7 +116,7 @@ export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, S
     questions.splice(index, 0, template());
     assessment.questions = questions;
     this.props.updateAssessment(assessment);
-    history.push('/mission-control/-1/' + index.toString());
+    history.push('/academy/mission-control/-1/' + index.toString());
   };
 
   private deleteQuestion = (index: number) => () => {

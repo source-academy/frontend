@@ -9,7 +9,6 @@ import Disabled from '../../pages/disabled/Disabled';
 import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
-import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
@@ -161,16 +160,6 @@ const Application: React.FC<ApplicationProps> = props => {
     <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} key="welcome" />
   ];
 
-  if (props.role && props.role !== 'student') {
-    fullPaths.push(
-      <Route
-        path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-        render={toIncubator}
-        key="missionControl"
-      />
-    );
-  }
-
   if (props.enableSourcecast) {
     fullPaths.push(
       <Route
@@ -296,8 +285,6 @@ const toLogin = (props: ApplicationProps) => () => {
     />
   );
 };
-
-const toIncubator = () => <MissionControlContainer />;
 
 function computeDisabledState() {
   const now = moment();

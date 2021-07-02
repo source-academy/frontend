@@ -7,6 +7,7 @@ import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer'
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { HistoryHelper } from '../../commons/utils/HistoryHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
+import MissionControlContainer from '../missionControl/MissionControlContainer';
 import AdminPanel from './adminPanel/AdminPanelContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Game from './game/Game';
@@ -45,7 +46,12 @@ class Academy extends React.Component<AcademyProps> {
             <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} key={1} />,
             <Route path="/academy/sourcereel" component={Sourcereel} key={2} />,
             <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />,
-            <Route path="/academy/dashboard" component={DashboardContainer} key={4} />
+            <Route path="/academy/dashboard" component={DashboardContainer} key={4} />,
+            <Route
+              path={'/academy/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+              component={MissionControlContainer}
+              key={5}
+            />
           ]
         : null;
     return (

@@ -71,7 +71,7 @@ class MissionControl extends React.Component<MissionControlProps, State> {
           <EditingOverviewCard
             overview={this.state.editingOverview}
             updateEditingOverview={this.updateEditingOverview}
-            listingPath="/mission-control"
+            listingPath="/academy/mission-control"
             assessmentTypes={this.props.assessmentTypes}
           />
         )}

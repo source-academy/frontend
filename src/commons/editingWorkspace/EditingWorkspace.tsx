@@ -615,7 +615,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
 
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = '/mission-control';
+    const listingPath = '/academy/mission-control';
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [
       questionId + 1,
