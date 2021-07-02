@@ -19,6 +19,15 @@ const defaultProps: AssessmentWorkspaceProps = {
   autogradingResults: [],
   notAttempted: true,
   canSave: true,
+  assessmentConfiguration: {
+    assessmentConfigId: 1,
+    type: 'Missions',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
+  },
   editorPrepend: '',
   editorValue: null,
   editorPostpend: '',

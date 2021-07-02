@@ -258,7 +258,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
         !props.isStudent ||
-        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt))
+        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
+      assessmentConfiguration: props.assessmentConfiguration
     };
     return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
   }

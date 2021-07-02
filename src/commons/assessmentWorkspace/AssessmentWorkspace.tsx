@@ -27,6 +27,7 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
+  AssessmentConfiguration,
   AutogradingResult,
   ContestEntry,
   IContestVotingQuestion,
@@ -102,6 +103,7 @@ export type OwnProps = {
   questionId: number;
   notAttempted: boolean;
   canSave: boolean;
+  assessmentConfiguration: AssessmentConfiguration;
 };
 
 export type StateProps = {
@@ -406,7 +408,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             toSpawn: () => true
           },
           {
-            label: `${props.assessment!.type} Briefing`,
+            label: `Briefing`,
             iconName: IconNames.BRIEFCASE,
             body: (
               <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
@@ -415,13 +417,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             toSpawn: () => true
           },
           {
-            label: `${props.assessment!.type} Autograder`,
+            label: `Autograder`,
             iconName: IconNames.AIRPLANE,
             body: (
               <SideContentAutograder
                 testcases={props.editorTestcases}
                 autogradingResults={
-                  isGraded || props.assessment!.type === 'Paths' ? props.autogradingResults : []
+                  // buildHidden directly corresponds to the 'Path' assessment type in SA Knight
+                  isGraded || props.assessmentConfiguration.buildHidden
+                    ? props.autogradingResults
+                    : []
                 }
                 handleTestcaseEval={props.handleTestcaseEval}
               />
@@ -520,8 +525,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
     const onClickReturn = () => history.push(listingPath);
 
-    // Returns a nullary function that defers the navigation of the browser window, until the
-    // student's answer passes some checks - presently only used for Paths
+    /**
+     * Returns a nullary function that defers the navigation of the browser window, until the
+     * student's answer passes some checks - presently only used for assessments types with buildHidden = true
+     * (previously used for the 'Path' assessment type in SA Knight)
+     */
     const onClickProgress = (deferredNavigate: () => void) => {
       return () => {
         // Perform question blocking - determine the highest question number previously accessed
@@ -558,13 +566,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       setShowResetTemplateOverlay(true);
     };
 
+    // buildHidden directly corresponds to the 'Path' assessment type in SA Knight
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessment!.type === 'Paths' ? onClickProgress(onClickNext) : onClickNext
+          props.assessmentConfiguration.buildHidden ? onClickProgress(onClickNext) : onClickNext
         }
         onClickReturn={
-          props.assessment!.type === 'Paths' ? onClickProgress(onClickReturn) : onClickReturn
+          props.assessmentConfiguration.buildHidden ? onClickProgress(onClickReturn) : onClickReturn
         }
         questionProgress={questionProgress}
         key="next_question"
