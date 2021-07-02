@@ -8,7 +8,15 @@ import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Assessment, { AssessmentProps } from '../Assessment';
 
 const defaultProps: AssessmentProps = {
-  assessmentType: 'Missions',
+  assessmentConfiguration: {
+    assessmentConfigId: 1,
+    type: 'Missions',
+    buildHidden: false,
+    buildSolution: false,
+    isContest: false,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
+  },
   assessmentOverviews: undefined,
   handleAcknowledgeNotifications: () => {},
   handleAssessmentOverviewFetch: () => {},
