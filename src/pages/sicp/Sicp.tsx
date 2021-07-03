@@ -82,7 +82,7 @@ const Sicp: React.FC<SicpProps> = props => {
           // page not found
           setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
         } else if (error instanceof ParseJsonError) {
-          // error occured while parsing JSON
+          // error occurred while parsing JSON
           setData(getSicpError(SicpErrorType.PARSING_ERROR));
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
