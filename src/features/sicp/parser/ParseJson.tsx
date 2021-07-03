@@ -182,14 +182,13 @@ const handleTD = (obj: JsonType, refs: React.MutableRefObject<{}>, index: intege
 
 const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div>
-      <div ref={ref => (refs.current[obj['id']!] = ref)} />
+    <AnchorLink id={obj['id']} refs={refs} top={5}>
       <SicpExercise
         title={obj['title']!}
         body={parseArr(obj['child']!, refs)}
         solution={obj['solution'] && parseArr(obj['solution'], refs)}
       />
-    </div>
+    </AnchorLink>
   );
 };
 
