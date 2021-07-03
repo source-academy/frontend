@@ -1,5 +1,3 @@
-import { IconNames } from '@blueprintjs/icons';
-
 import controlButton from '../../commons/ControlButton';
 
 type TableOfContentsButtonProps = OwnProps;
@@ -10,5 +8,5 @@ type OwnProps = {
 };
 
 export function TableOfContentsButton(props: TableOfContentsButtonProps) {
-  return controlButton('Table of Contents', IconNames.MENU, props.handleOpenToc);
+  return controlButton('Table of Contents', null, props.handleOpenToc);
 }
