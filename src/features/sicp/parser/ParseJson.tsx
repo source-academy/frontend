@@ -192,12 +192,11 @@ const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   );
 };
 
-const handleContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+const handleTitle = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div>
-      {obj['body'] && <H1>{obj['body']!}</H1>}
-      <div>{parseArr(obj['child']!, refs)}</div>
-    </div>
+    <AnchorLink id={obj['id']} refs={refs} top={6}>
+      <H1>{obj['body']!}</H1>
+    </AnchorLink>
   );
 };
 
@@ -219,8 +218,6 @@ export const processingFunctions = {
   B: (obj: JsonType, refs: React.MutableRefObject<{}>) => <b>{parseArr(obj['child']!, refs)}</b>,
 
   BR: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => <br />,
-
-  CHAPTER: handleContainer,
 
   DISPLAYFOOTNOTE: handleFootnote,
 
@@ -256,21 +253,21 @@ export const processingFunctions = {
 
   REFERENCE: handleReference,
 
-  SECTION: handleContainer,
-
   SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleSnippet(obj),
 
   SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h2 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
-      {parseArr(obj['child']!, refs)}
-    </h2>
+    <AnchorLink id={obj['id']} refs={refs} top={2}>
+      <h2 className="bp3-heading">{parseArr(obj['child']!, refs)}</h2>
+    </AnchorLink>
   ),
 
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
-      <br />
-      {parseArr(obj['child']!, refs)}
-    </h4>
+    <AnchorLink id={obj['id']} refs={refs} top={16}>
+      <h4 className="bp3-heading">
+        <br />
+        {parseArr(obj['child']!, refs)}
+      </h4>
+    </AnchorLink>
   ),
 
   TABLE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
@@ -285,6 +282,8 @@ export const processingFunctions = {
       <br />
     </AnchorLink>
   ),
+
+  TITLE: handleTitle,
 
   TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <Code>{parseArr(obj['child']!, refs)}</Code>

@@ -12,251 +12,403 @@ Mock Text"
 `;
 
 exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
-"<Component className=\\"sicp-epigraph\\">
-  <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
-    Mock Text
-    <div className=\\"sicp-attribution\\">
-      -
-      Author
-      <i>
-        Title
-      </i>
-      2021
-    </div>
-  </blockquote>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component className=\\"sicp-epigraph\\">
+      <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+        Mock Text
+        <div className=\\"sicp-attribution\\">
+          -
+          Author
+          <i>
+            Title
+          </i>
+          2021
+        </div>
+      </blockquote>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
-"<Component className=\\"sicp-epigraph\\">
-  <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
-    Mock Text
-    <div className=\\"sicp-attribution\\">
-      -
-      Author
-    </div>
-  </blockquote>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component className=\\"sicp-epigraph\\">
+      <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+        Mock Text
+        <div className=\\"sicp-attribution\\">
+          -
+          Author
+        </div>
+      </blockquote>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
-"<Component className=\\"sicp-epigraph\\">
-  <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
-    Mock Text
-    <div className=\\"sicp-attribution\\">
-      -
-      2021
-    </div>
-  </blockquote>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component className=\\"sicp-epigraph\\">
+      <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+        Mock Text
+        <div className=\\"sicp-attribution\\">
+          -
+          2021
+        </div>
+      </blockquote>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
-"<Component className=\\"sicp-epigraph\\">
-  <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
-    Mock Text
-  </blockquote>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component className=\\"sicp-epigraph\\">
+      <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+        Mock Text
+      </blockquote>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
-"<Component className=\\"sicp-epigraph\\">
-  <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
-    Mock Text
-    <div className=\\"sicp-attribution\\">
-      -
-      <i>
-        Title
-      </i>
-    </div>
-  </blockquote>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component className=\\"sicp-epigraph\\">
+      <blockquote className=\\"bp3-blockquote sicp-epigraph\\">
+        Mock Text
+        <div className=\\"sicp-attribution\\">
+          -
+          <i>
+            Title
+          </i>
+        </div>
+      </blockquote>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse exercise EXERCISE with solution successful 1`] = `
-"<div>
-  <div />
-  <SicpExercise title={[undefined]} body={{...}} solution={{...}}>
-    <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
-      <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
-        <b />
-        <div />
-        <div className=\\"sicp-button-container\\">
-          <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
-            <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-              <Blueprint3.Icon icon={[undefined]} />
-              <span className=\\"bp3-button-text\\">
-                Show Solution
-              </span>
-              <Blueprint3.Icon icon={[undefined]} />
-            </button>
-          </Blueprint3.Button>
-        </div>
-        <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-          <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
-            <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
-          </div>
-        </Blueprint3.Collapse>
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id={[undefined]} refs={{...}} top={5}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <SicpExercise title={[undefined]} body={{...}} solution={{...}}>
+          <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
+            <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
+              <b />
+              <div />
+              <div className=\\"sicp-button-container\\">
+                <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
+                  <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Icon icon={[undefined]} />
+                    <span className=\\"bp3-button-text\\">
+                      Show Solution
+                    </span>
+                    <Blueprint3.Icon icon={[undefined]} />
+                  </button>
+                </Blueprint3.Button>
+              </div>
+              <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
+                  <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                </div>
+              </Blueprint3.Collapse>
+            </div>
+          </Blueprint3.Card>
+        </SicpExercise>
       </div>
-    </Blueprint3.Card>
-  </SicpExercise>
-</div>"
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse exercise EXERCISE without solution successful 1`] = `
-"<div>
-  <div />
-  <SicpExercise title=\\"Title\\" body={{...}} solution={[undefined]}>
-    <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
-      <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
-        <b>
-          Title
-        </b>
-        <div>
-          Mock Text
-        </div>
-        <div className=\\"sicp-button-container\\">
-          <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
-            <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-              <Blueprint3.Icon icon={[undefined]} />
-              <span className=\\"bp3-button-text\\">
-                Show Solution
-              </span>
-              <Blueprint3.Icon icon={[undefined]} />
-            </button>
-          </Blueprint3.Button>
-        </div>
-        <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-          <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
-            <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
-          </div>
-        </Blueprint3.Collapse>
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id={[undefined]} refs={{...}} top={5}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <SicpExercise title=\\"Title\\" body={{...}} solution={[undefined]}>
+          <Blueprint3.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
+            <div className=\\"bp3-card bp3-elevation-1 sicp-exercise\\">
+              <b>
+                Title
+              </b>
+              <div>
+                Mock Text
+              </div>
+              <div className=\\"sicp-button-container\\">
+                <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
+                  <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint3.Icon icon={[undefined]} />
+                    <span className=\\"bp3-button-text\\">
+                      Show Solution
+                    </span>
+                    <Blueprint3.Icon icon={[undefined]} />
+                  </button>
+                </Blueprint3.Button>
+              </div>
+              <Blueprint3.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+                <div className=\\"bp3-collapse sicp-solution\\" style={{...}}>
+                  <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+                </div>
+              </Blueprint3.Collapse>
+            </div>
+          </Blueprint3.Card>
+        </SicpExercise>
       </div>
-    </Blueprint3.Card>
-  </SicpExercise>
-</div>"
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse figures FIGURE with image and scale successful 1`] = `
-"<div className=\\"sicp-figure\\">
-  <div />
-  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
-  <h5 className=\\"sicp-caption\\">
-    name
-    Mock Text
-  </h5>
-</div>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id=\\"id\\" refs={{...}} top={36}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
+          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
+            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
+              <Blueprint3.Icon icon=\\"link\\">
+                <span icon=\\"link\\" className=\\"bp3-icon bp3-icon-link\\" title={[undefined]}>
+                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                    <desc>
+                      link
+                    </desc>
+                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                  </svg>
+                </span>
+              </Blueprint3.Icon>
+            </a>
+          </LinkAnchor>
+        </Link>
+        <div className=\\"sicp-figure\\">
+          <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
+          <h5 className=\\"sicp-caption\\">
+            name
+            Mock Text
+          </h5>
+        </div>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse figures FIGURE with image successful 1`] = `
-"<div className=\\"sicp-figure\\">
-  <div />
-  <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"100%\\" />
-  <h5 className=\\"sicp-caption\\">
-    name
-    Mock Text
-  </h5>
-</div>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id=\\"id\\" refs={{...}} top={36}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
+          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
+            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
+              <Blueprint3.Icon icon=\\"link\\">
+                <span icon=\\"link\\" className=\\"bp3-icon bp3-icon-link\\" title={[undefined]}>
+                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                    <desc>
+                      link
+                    </desc>
+                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                  </svg>
+                </span>
+              </Blueprint3.Icon>
+            </a>
+          </LinkAnchor>
+        </Link>
+        <div className=\\"sicp-figure\\">
+          <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"100%\\" />
+          <h5 className=\\"sicp-caption\\">
+            name
+            Mock Text
+          </h5>
+        </div>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse figures FIGURE with snippet successful 1`] = `
-"<div className=\\"sicp-figure\\">
-  <div />
-  <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash={[undefined]} prependLength={[undefined]} output={[undefined]}>
-    <div>
-      Code Snippet
-    </div>
-  </Component>
-  <h5 className=\\"sicp-caption\\">
-    name
-    Mock Text
-  </h5>
-</div>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id=\\"id\\" refs={{...}} top={36}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
+          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
+            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
+              <Blueprint3.Icon icon=\\"link\\">
+                <span icon=\\"link\\" className=\\"bp3-icon bp3-icon-link\\" title={[undefined]}>
+                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                    <desc>
+                      link
+                    </desc>
+                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                  </svg>
+                </span>
+              </Blueprint3.Icon>
+            </a>
+          </LinkAnchor>
+        </Link>
+        <div className=\\"sicp-figure\\">
+          <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash={[undefined]} prependLength={[undefined]} output={[undefined]}>
+            <div>
+              Code Snippet
+            </div>
+          </Component>
+          <h5 className=\\"sicp-caption\\">
+            name
+            Mock Text
+          </h5>
+        </div>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse figures FIGURE with table successful 1`] = `
-"<div className=\\"sicp-figure\\">
-  <div />
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          Mock Text
-        </td>
-        <td>
-          Mock Text
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Mock Text
-        </td>
-        <td>
-          Mock Text
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 className=\\"sicp-caption\\">
-    name
-    Mock Text
-  </h5>
-</div>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id=\\"id\\" refs={{...}} top={36}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
+          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
+            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
+              <Blueprint3.Icon icon=\\"link\\">
+                <span icon=\\"link\\" className=\\"bp3-icon bp3-icon-link\\" title={[undefined]}>
+                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                    <desc>
+                      link
+                    </desc>
+                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                  </svg>
+                </span>
+              </Blueprint3.Icon>
+            </a>
+          </LinkAnchor>
+        </Link>
+        <div className=\\"sicp-figure\\">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  Mock Text
+                </td>
+                <td>
+                  Mock Text
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Mock Text
+                </td>
+                <td>
+                  Mock Text
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h5 className=\\"sicp-caption\\">
+            name
+            Mock Text
+          </h5>
+        </div>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
-"<hr />
-
-
-<div className=\\"sicp-footnote\\">
-  <div />
-  <a href=\\"\\">
-    [1] 
-  </a>
-  Mock Text
-</div>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <hr />
+    <div className=\\"sicp-footnote\\">
+      <div />
+      <a href=\\"\\">
+        [1] 
+      </a>
+      Mock Text
+    </div>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse footnote DISPLAYFOOTNOTE count is 2 successful 1`] = `
-"<div className=\\"sicp-footnote\\">
-  <div />
-  <a href=\\"\\">
-    [2] 
-  </a>
-  Mock Text
-</div>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <div className=\\"sicp-footnote\\">
+      <div />
+      <a href=\\"\\">
+        [2] 
+      </a>
+      Mock Text
+    </div>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse heading SUBHEADING  successful 1`] = `
-"<h2 className=\\"bp3-heading\\">
-  Mock Text
-</h2>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id={[undefined]} refs={{...}} top={2}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <h2 className=\\"bp3-heading\\">
+          Mock Text
+        </h2>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse heading SUBSUBHEADING  successful 1`] = `
-"<h4 className=\\"bp3-heading\\">
-  <br />
-  Mock Text
-</h4>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id={[undefined]} refs={{...}} top={16}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <h4 className=\\"bp3-heading\\">
+          <br />
+          Mock Text
+        </h4>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse latex LATEX block successful 1`] = `
-"<SicpLatex math=\\"\\\\\\\\[test\\\\\\\\]\\">
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <SicpLatex math=\\"\\\\\\\\[test\\\\\\\\]\\">
+      <Latex delimiters={{...}} strict={false}>
+        <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
+      </Latex>
+    </SicpLatex>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse latex LATEX inline successful 1`] = `
-"<SicpLatex math=\\"$test$\\">
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <SicpLatex math=\\"$test$\\">
+      <Latex delimiters={{...}} strict={false}>
+        <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
+      </Latex>
+    </SicpLatex>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse links FOOTNOTE_REF successful 1`] = `
+exports[`Parse links FOOTNOTE_REF  successful 1`] = `
 "<BrowserRouter>
   <Router history={{...}}>
     <sup>
@@ -272,7 +424,7 @@ exports[`Parse links FOOTNOTE_REF successful 1`] = `
 </BrowserRouter>"
 `;
 
-exports[`Parse links LINK successful 1`] = `
+exports[`Parse links LINK  successful 1`] = `
 "<BrowserRouter>
   <Router history={{...}}>
     <a href=\\"bad-link\\">
@@ -282,7 +434,7 @@ exports[`Parse links LINK successful 1`] = `
 </BrowserRouter>"
 `;
 
-exports[`Parse links REF successful 1`] = `
+exports[`Parse links REF  successful 1`] = `
 "<BrowserRouter>
   <Router history={{...}}>
     <Link to=\\"bad-link\\">
@@ -297,23 +449,31 @@ exports[`Parse links REF successful 1`] = `
 `;
 
 exports[`Parse list OL  successful 1`] = `
-"<Component>
-  <ol className=\\"bp3-list\\">
-    <li>
-      Mock Text
-    </li>
-  </ol>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component>
+      <ol className=\\"bp3-list\\">
+        <li>
+          Mock Text
+        </li>
+      </ol>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse list UL  successful 1`] = `
-"<Component>
-  <ul className=\\"bp3-list\\">
-    <li>
-      Mock Text
-    </li>
-  </ul>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component>
+      <ul className=\\"bp3-list\\">
+        <li>
+          Mock Text
+        </li>
+      </ul>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse object no tag 1`] = `"Mock Text"`;
@@ -321,129 +481,177 @@ exports[`Parse object no tag 1`] = `"Mock Text"`;
 exports[`Parse object successful 1`] = `"Mock Text"`;
 
 exports[`Parse reference REFERENCE  successful 1`] = `
-"<div className=\\"sicp-reference\\">
-  Mock Text
-</div>"
-`;
-
-exports[`Parse section SECTION  successful 1`] = `
-"<div>
-  <Component>
-    <h1 className=\\"bp3-heading\\">
-      Title
-    </h1>
-  </Component>
-  <div>
-    <div className=\\"sicp-text\\">
-      <div />
-      Mock Text
+"<BrowserRouter>
+  <Router history={{...}}>
+    <div className=\\"sicp-reference\\">
       Mock Text
     </div>
-    <br />
-    <div className=\\"sicp-text\\">
-      <div />
-      Mock Text
-      Mock Text
-    </div>
-    <br />
-  </div>
-</div>"
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse snippet SNIPPET no eval successful 1`] = `
-"<Component>
-  <pre className=\\"bp3-code-block\\">
-    const a = 1;
-    a+1;
-  </pre>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component>
+      <pre className=\\"bp3-code-block\\">
+        const a = 1;
+        a+1;
+      </pre>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse snippet SNIPPET with latex successful 1`] = `
-"<Component>
-  <pre className=\\"bp3-code-block\\">
-    <SicpLatex math=\\"const a = 1;\\\\na+1;\\">
-      <Latex delimiters={{...}} strict={false}>
-        <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-      </Latex>
-    </SicpLatex>
-  </pre>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component>
+      <pre className=\\"bp3-code-block\\">
+        <SicpLatex math=\\"const a = 1;\\\\na+1;\\">
+          <Latex delimiters={{...}} strict={false}>
+            <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
+          </Latex>
+        </SicpLatex>
+      </pre>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse snippet SNIPPET with prepend successful 1`] = `
-"<Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={1} output={[undefined]}>
-  <div>
-    Code Snippet
-  </div>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={1} output={[undefined]}>
+      <div>
+        Code Snippet
+      </div>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse snippet SNIPPET without prepend successful 1`] = `
-"<Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output={[undefined]}>
-  <div>
-    Code Snippet
-  </div>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output={[undefined]}>
+      <div>
+        Code Snippet
+      </div>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
-"<Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output=\\"2\\">
-  <div>
-    Code Snippet
-  </div>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output=\\"2\\">
+      <div>
+        Code Snippet
+      </div>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse styling B  successful 1`] = `
-"<b>
-  Mock Text
-</b>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <b>
+      Mock Text
+    </b>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse styling EM  successful 1`] = `
-"<em>
-  Mock Text
-</em>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <em>
+      Mock Text
+    </em>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `
-"<Component>
-  <code className=\\"bp3-code\\" />
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component>
+      <code className=\\"bp3-code\\" />
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse styling META  successful 1`] = `"<em />"`;
+exports[`Parse styling META  successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <em />
+  </Router>
+</BrowserRouter>"
+`;
 
 exports[`Parse styling TT  successful 1`] = `
-"<Component>
-  <code className=\\"bp3-code\\">
-    Mock Text
-  </code>
-</Component>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Component>
+      <code className=\\"bp3-code\\">
+        Mock Text
+      </code>
+    </Component>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse symbol BR  successful 1`] = `"<br />"`;
+exports[`Parse symbol BR  successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <br />
+  </Router>
+</BrowserRouter>"
+`;
 
 exports[`Parse table TABLE  successful 1`] = `
-"<table>
-  <tbody>
-    <tr>
-      <td>
-        Mock Text
-      </td>
-      <td>
-        Mock Text
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Mock Text
-      </td>
-      <td>
-        Mock Text
-      </td>
-    </tr>
-  </tbody>
-</table>"
+"<BrowserRouter>
+  <Router history={{...}}>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            Mock Text
+          </td>
+          <td>
+            Mock Text
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Mock Text
+          </td>
+          <td>
+            Mock Text
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </Router>
+</BrowserRouter>"
+`;
+
+exports[`Parse title TITLE  successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <AnchorLink id={[undefined]} refs={{...}} top={6}>
+      <div className=\\"sicp-anchor-link-container\\">
+        <Component>
+          <h1 className=\\"bp3-heading\\">
+            Title
+          </h1>
+        </Component>
+      </div>
+    </AnchorLink>
+  </Router>
+</BrowserRouter>"
 `;
