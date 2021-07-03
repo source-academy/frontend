@@ -65,6 +65,26 @@ $sicp-content-lr-padding: 6em;
     height: fit-content;
     background-color: $sicp-background-color;
 
+    .sicp-anchor-link {
+      position: relative;
+      display: block;
+      overflow: visible;
+      width: 16px;
+      height: 0px;
+      top: -3px;
+      left: -22px;
+      color: #dddddd;
+    }
+
+    .sicp-anchor-link:hover {
+      color: $sicp-text-color;
+    }
+
+    .sicp-anchor-link:hover + div {
+      background-color: #dddddd;
+      border-radius: 5px;
+    }
+
     .sicp-navigation-buttons {
       margin: 25px 0;
       display: flex;

@@ -1,4 +1,5 @@
-import { Blockquote, Code, H1, OL, Pre, UL } from '@blueprintjs/core';
+import { Blockquote, Code, H1, Icon, OL, Pre, UL } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
@@ -37,6 +38,26 @@ export type JsonType = {
   count?: integer;
   eval?: boolean;
   prependLength?: number;
+};
+
+type AnchorLinkType = {
+  children: React.ReactNode;
+  id: string | undefined;
+  refs: React.MutableRefObject<{}>;
+};
+
+const AnchorLink: React.FC<AnchorLinkType> = props => {
+  const { refs, id, children } = props;
+  return (
+    <>
+      {id && (
+        <Link className="sicp-anchor-link" ref={ref => (refs.current[id] = ref)} to={id}>
+          <Icon icon={IconNames.LINK} />
+        </Link>
+      )}
+      {children}
+    </>
+  );
 };
 
 const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -253,13 +274,10 @@ export const processingFunctions = {
   ),
 
   TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <>
-      <div className="sicp-text">
-        <div ref={ref => (refs.current[obj['id']!] = ref)} />
-        {parseArr(obj['child']!, refs)}
-      </div>
+    <AnchorLink id={obj['id']} refs={refs}>
+      <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
       <br />
-    </>
+    </AnchorLink>
   ),
 
   TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
