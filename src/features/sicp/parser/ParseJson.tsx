@@ -44,14 +44,20 @@ type AnchorLinkType = {
   children: React.ReactNode;
   id: string | undefined;
   refs: React.MutableRefObject<{}>;
+  top: number;
 };
 
 const AnchorLink: React.FC<AnchorLinkType> = props => {
-  const { refs, id, children } = props;
+  const { refs, id, children, top } = props;
   return (
     <>
       {id && (
-        <Link className="sicp-anchor-link" ref={ref => (refs.current[id] = ref)} to={id}>
+        <Link
+          className="sicp-anchor-link"
+          style={{ top: top }}
+          ref={ref => (refs.current[id] = ref)}
+          to={id}
+        >
           <Icon icon={IconNames.LINK} />
         </Link>
       )}
@@ -135,16 +141,17 @@ const handleSnippet = (obj: JsonType) => {
 };
 
 const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-  <div className="sicp-figure">
-    <div ref={ref => (refs.current[obj['id']!] = ref)} />
-    {handleImage(obj, refs)}
-    {obj['captionName'] && (
-      <h5 className="sicp-caption">
-        {obj['captionName']}
-        {parseArr(obj['captionBody']!, refs)}
-      </h5>
-    )}
-  </div>
+  <AnchorLink id={obj['id']} refs={refs} top={36}>
+    <div className="sicp-figure">
+      {handleImage(obj, refs)}
+      {obj['captionName'] && (
+        <h5 className="sicp-caption">
+          {obj['captionName']}
+          {parseArr(obj['captionBody']!, refs)}
+        </h5>
+      )}
+    </div>
+  </AnchorLink>
 );
 
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
@@ -274,7 +281,7 @@ export const processingFunctions = {
   ),
 
   TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <AnchorLink id={obj['id']} refs={refs}>
+    <AnchorLink id={obj['id']} refs={refs} top={-3}>
       <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
       <br />
     </AnchorLink>
