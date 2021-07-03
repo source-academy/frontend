@@ -230,7 +230,7 @@ export const processingFunctions = {
   FIGURE: handleFigure,
 
   FOOTNOTE_REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <sup>{handleRef(obj, refs)}</sup>
+    <sup ref={ref => (refs.current[obj['id']!] = ref)}>{handleRef(obj, refs)}</sup>
   ),
 
   JAVASCRIPTINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => (
