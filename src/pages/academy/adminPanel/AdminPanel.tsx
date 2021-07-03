@@ -51,9 +51,15 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   const [hasChangesCourseConfig, setHasChangesCourseConfig] = React.useState(false);
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = React.useState(false);
 
-  const [courseConfiguration, setCourseConfiguration] = React.useState<UpdateCourseConfiguration>(
-    {}
-  );
+  const [courseConfiguration, setCourseConfiguration] = React.useState<UpdateCourseConfiguration>({
+    courseName: '',
+    courseShortName: '',
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    moduleHelpText: ''
+  });
 
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is

@@ -35,7 +35,7 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
     <>
       <Popover2
         content="You cannot delete an admin!"
-        interactionKind="hover-target"
+        interactionKind="click"
         position={Position.TOP}
         disabled={props.data.role !== Role.Admin}
       >

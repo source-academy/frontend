@@ -40,7 +40,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
   return (
     <Popover2
       content="You cannot downgrade yourself from an admin role!"
-      interactionKind="hover-target"
+      interactionKind="click"
       position={Position.TOP}
       disabled={props.crId !== data.crId}
     >
