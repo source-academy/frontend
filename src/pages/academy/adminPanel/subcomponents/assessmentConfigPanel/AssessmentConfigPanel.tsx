@@ -23,34 +23,34 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   const { assessmentConfig, setAssessmentConfig, setAssessmentConfigsToDelete } = props;
   const gridApi = React.useRef<GridApi>();
 
-  const setBuildHidden = (index: number, value: boolean) => {
+  const setIsGraded = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      buildHidden: value
+      isGraded: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('buildHidden', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGraded', value);
   };
 
-  const setBuildSolution = (index: number, value: boolean) => {
+  const setSkippable = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      buildSolution: value
+      skippable: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('buildSolution', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('skippable', value);
   };
 
-  const setIsContest = (index: number, value: boolean) => {
+  const setIsAutograded = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      isContest: value
+      isAutograded: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isContest', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isAutograded', value);
   };
 
   const setEarlyXp = (index: number, value: number) => {
@@ -83,9 +83,9 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     temp.push({
       assessmentConfigId: -1,
       type: 'untitled',
-      buildHidden: false,
-      buildSolution: false,
-      isContest: false,
+      isGraded: true,
+      skippable: true,
+      isAutograded: true,
       hoursBeforeEarlyXpDecay: 0,
       earlySubmissionXp: 0
     });
@@ -114,30 +114,30 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       editable: true
     },
     {
-      headerName: 'Build Hidden',
-      field: 'buildHidden',
+      headerName: 'Is Graded',
+      field: 'isGraded',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setBuildHidden,
-        field: AssessmentConfigBooleanField.BUILD_HIDDEN
+        setStateHandler: setIsGraded,
+        field: AssessmentConfigBooleanField.IS_GRADED
       }
     },
     {
-      headerName: 'Build Solution',
-      field: 'buildSolution',
+      headerName: 'Skippable',
+      field: 'skippable',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setBuildSolution,
-        field: AssessmentConfigBooleanField.BUILD_SOLUTION
+        setStateHandler: setSkippable,
+        field: AssessmentConfigBooleanField.SKIPPABLE
       }
     },
     {
-      headerName: 'Is Contest',
-      field: 'isContest',
+      headerName: 'Is Autograded',
+      field: 'isAutograded',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setIsContest,
-        field: AssessmentConfigBooleanField.IS_CONTEST
+        setStateHandler: setIsAutograded,
+        field: AssessmentConfigBooleanField.IS_AUTOGRADED
       }
     },
     {

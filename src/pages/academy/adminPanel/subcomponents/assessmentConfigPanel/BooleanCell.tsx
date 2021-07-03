@@ -13,20 +13,20 @@ type OwnProps = {
 };
 
 export enum AssessmentConfigBooleanField {
-  BUILD_HIDDEN = 'BUILD_HIDDEN',
-  BUILD_SOLUTION = 'BUILD_SOLUTION',
-  IS_CONTEST = 'IS_CONTEST'
+  IS_GRADED = 'IS_GRADED',
+  SKIPPABLE = 'SKIPPABLE',
+  IS_AUTOGRADED = 'IS_AUTOGRADED'
 }
 
 const BooleanCell: React.FC<BooleanCellProps> = props => {
   const { data } = props;
 
   const checked =
-    props.field === AssessmentConfigBooleanField.BUILD_HIDDEN
-      ? data.buildHidden
-      : props.field === AssessmentConfigBooleanField.BUILD_SOLUTION
-      ? data.buildSolution
-      : data.isContest;
+    props.field === AssessmentConfigBooleanField.IS_GRADED
+      ? data.isGraded
+      : props.field === AssessmentConfigBooleanField.SKIPPABLE
+      ? data.skippable
+      : data.isAutograded;
 
   const changeHandler = React.useCallback(() => {
     props.setStateHandler(props.rowIndex, !checked);

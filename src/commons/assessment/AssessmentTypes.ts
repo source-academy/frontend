@@ -92,9 +92,9 @@ export type Assessment = {
 export type AssessmentConfiguration = {
   assessmentConfigId: number;
   type: AssessmentType;
-  buildHidden: boolean;
-  buildSolution: boolean;
-  isContest: boolean;
+  isGraded: boolean;
+  skippable: boolean;
+  isAutograded: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
 };

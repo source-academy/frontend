@@ -423,8 +423,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               <SideContentAutograder
                 testcases={props.editorTestcases}
                 autogradingResults={
-                  // buildHidden directly corresponds to the 'Path' assessment type in SA Knight
-                  isGraded || props.assessmentConfiguration.buildHidden
+                  // !props.assessmentConfiguration.isGraded directly corresponds to the 'Path' assessment type in SA Knight
+                  isGraded || !props.assessmentConfiguration.isGraded
                     ? props.autogradingResults
                     : []
                 }
@@ -527,7 +527,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     /**
      * Returns a nullary function that defers the navigation of the browser window, until the
-     * student's answer passes some checks - presently only used for assessments types with buildHidden = true
+     * student's answer passes some checks - presently only used for assessments types with skippable = false
      * (previously used for the 'Path' assessment type in SA Knight)
      */
     const onClickProgress = (deferredNavigate: () => void) => {
@@ -566,14 +566,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       setShowResetTemplateOverlay(true);
     };
 
-    // buildHidden directly corresponds to the 'Path' assessment type in SA Knight
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessmentConfiguration.buildHidden ? onClickProgress(onClickNext) : onClickNext
+          props.assessmentConfiguration.skippable ? onClickNext : onClickProgress(onClickNext)
         }
         onClickReturn={
-          props.assessmentConfiguration.buildHidden ? onClickProgress(onClickReturn) : onClickReturn
+          props.assessmentConfiguration.skippable ? onClickReturn : onClickProgress(onClickReturn)
         }
         questionProgress={questionProgress}
         key="next_question"
