@@ -1,12 +1,12 @@
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
-import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { addNewUsersToCourse, createCourse } from '../AcademyActions';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from '../AcademyTypes';
 
 test('addNewUsersToCourse generates correct action object', () => {
-  const users: UsernameAndRole[] = [
+  const users: UsernameRoleGroup[] = [
     { username: 'student1', role: Role.Student },
     { username: 'staff1', role: Role.Staff }
   ];

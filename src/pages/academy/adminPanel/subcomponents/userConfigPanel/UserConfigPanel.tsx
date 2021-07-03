@@ -48,6 +48,10 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
       field: 'username'
     },
     {
+      headerName: 'Group',
+      field: 'group'
+    },
+    {
       headerName: 'Role',
       field: 'role',
       cellRendererFramework: RolesCell,

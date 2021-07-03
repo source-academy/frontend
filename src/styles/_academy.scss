@@ -431,40 +431,52 @@
 }
 
 .add-users {
-  .upload-settings {
+  h4 {
+    margin: 20px 0 10px 0;
+  }
+
+  .upload-container {
     display: flex;
-    flex-flow: wrap;
     justify-content: center;
-    margin-top: 20px;
 
-    .file-input {
+    .upload-settings {
       display: flex;
-      align-items: center;
-      padding: 10px;
-      margin: 10px;
-      border: 1px solid #bdc3c7;
+      flex-flow: wrap;
+      justify-content: center;
+      // margin-top: 10px;
 
-      .file-input-icon {
-        margin-left: 6px;
-      }
-    }
-
-    .html-select {
-      margin: 10px;
-      padding: 18px 10px 12px 10px;
-      border: 1px solid #bdc3c7;
-
-      .html-select-label {
+      .file-input {
         display: flex;
-        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #bdc3c7;
 
-        .html-select-label-icon {
-          position: relative;
-          top: -5px;
-          margin-left: 5px;
+        .file-input-icon {
+          margin-left: 6px;
+        }
+      }
+
+      .html-select {
+        margin: 10px;
+        padding: 18px 10px 12px 10px;
+        border: 1px solid #bdc3c7;
+
+        .html-select-label {
+          display: flex;
+          justify-content: center;
+
+          .html-select-label-icon {
+            position: relative;
+            top: -5px;
+            margin-left: 5px;
+          }
         }
       }
     }
+  }
+  .add-button {
+    margin-top: 10px;
   }
 }
 

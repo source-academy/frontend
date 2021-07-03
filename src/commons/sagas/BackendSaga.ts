@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
-import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { OverallState, Role, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import {
@@ -759,7 +759,7 @@ function* BackendSaga(): SagaIterator {
     ADD_NEW_USERS_TO_COURSE,
     function* (action: ReturnType<typeof actions.addNewUsersToCourse>): any {
       const tokens: Tokens = yield selectTokens();
-      const { users, provider }: { users: UsernameAndRole[]; provider: string } = action.payload;
+      const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
 
       const resp: Response | null = yield call(postNewUsers, tokens, users, provider);
       if (!resp || !resp.ok) {

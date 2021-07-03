@@ -2,7 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
-import { UsernameAndRole } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
@@ -996,7 +996,7 @@ describe('Test CREATE_COURSE action', () => {
 });
 
 describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
-  const users: UsernameAndRole[] = [
+  const users: UsernameRoleGroup[] = [
     { username: 'student1', role: Role.Student },
     { username: 'staff1', role: Role.Staff }
   ];
