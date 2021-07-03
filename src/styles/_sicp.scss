@@ -41,7 +41,7 @@ $sicp-content-lr-padding: 6em;
 
   .bp3-code {
     color: $sicp-text-color;
-    background-color: $sicp-background-color;
+    background-color: inherit;
     box-shadow: none;
   }
 
@@ -51,7 +51,7 @@ $sicp-content-lr-padding: 6em;
     margin: 0;
     box-shadow: none;
     color: $sicp-text-color;
-    background-color: $sicp-background-color;
+    background-color: inherit;
   }
 
   .katex {
