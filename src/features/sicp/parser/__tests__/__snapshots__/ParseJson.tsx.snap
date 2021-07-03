@@ -240,7 +240,15 @@ exports[`Parse heading SUBSUBHEADING  successful 1`] = `
 </h4>"
 `;
 
-exports[`Parse latex LATEX  successful 1`] = `
+exports[`Parse latex LATEX block successful 1`] = `
+"<SicpLatex math=\\"\\\\\\\\[test\\\\\\\\]\\">
+  <Latex delimiters={{...}} strict={false}>
+    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
+  </Latex>
+</SicpLatex>"
+`;
+
+exports[`Parse latex LATEX inline successful 1`] = `
 "<SicpLatex math=\\"$test$\\">
   <Latex delimiters={{...}} strict={false}>
     <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
@@ -248,32 +256,44 @@ exports[`Parse latex LATEX  successful 1`] = `
 </SicpLatex>"
 `;
 
-exports[`Parse latex LATEXINLINE  successful 1`] = `
-"<SicpLatex math=\\"$test$\\">
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
+exports[`Parse links FOOTNOTE_REF successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <sup>
+      <Link to=\\"bad-link\\">
+        <LinkAnchor href=\\"/bad-link\\" navigate={[Function: navigate]}>
+          <a href=\\"/bad-link\\" onClick={[Function: onClick]}>
+            link
+          </a>
+        </LinkAnchor>
+      </Link>
+    </sup>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse links FOOTNOTE_REF  successful 1`] = `
-"<sup>
-  <a href=\\"bad-link\\">
-    link
-  </a>
-</sup>"
+exports[`Parse links LINK successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <a href=\\"bad-link\\">
+      link
+    </a>
+  </Router>
+</BrowserRouter>"
 `;
 
-exports[`Parse links LINK  successful 1`] = `
-"<a href=\\"bad-link\\">
-  link
-</a>"
-`;
-
-exports[`Parse links REF  successful 1`] = `
-"<a href=\\"bad-link\\">
-  link
-</a>"
+exports[`Parse links REF successful 1`] = `
+"<BrowserRouter>
+  <Router history={{...}}>
+    <Link to=\\"bad-link\\">
+      <LinkAnchor href=\\"/bad-link\\" navigate={[Function: navigate]}>
+        <a href=\\"/bad-link\\" onClick={[Function: onClick]}>
+          link
+        </a>
+      </LinkAnchor>
+    </Link>
+  </Router>
+</BrowserRouter>"
 `;
 
 exports[`Parse list OL  successful 1`] = `
@@ -301,7 +321,7 @@ exports[`Parse object no tag 1`] = `"Mock Text"`;
 exports[`Parse object successful 1`] = `"Mock Text"`;
 
 exports[`Parse reference REFERENCE  successful 1`] = `
-"<div>
+"<div className=\\"sicp-reference\\">
   Mock Text
 </div>"
 `;
@@ -404,10 +424,6 @@ exports[`Parse styling TT  successful 1`] = `
 `;
 
 exports[`Parse symbol BR  successful 1`] = `"<br />"`;
-
-exports[`Parse symbol LaTeX  successful 1`] = `"LaTeX"`;
-
-exports[`Parse symbol TeX  successful 1`] = `"TeX"`;
 
 exports[`Parse table TABLE  successful 1`] = `
 "<table>
