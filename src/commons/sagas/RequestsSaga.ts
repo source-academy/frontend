@@ -5,7 +5,6 @@ import {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
-  AssessmentType,
   ContestEntry,
   GradingStatus,
   IProgrammingQuestion,
@@ -473,11 +472,12 @@ export const getAssessmentOverviews = async (
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
     overview.gradingStatus = computeGradingStatus(
-      overview.type,
+      overview.isGraded,
       overview.status,
       overview.gradedCount,
       overview.questionCount
     );
+    delete overview.isGraded;
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -629,7 +629,7 @@ export const getGradingOverviews = async (
         xpBonus: overview.xpBonus
       };
       gradingOverview.gradingStatus = computeGradingStatus(
-        gradingOverview.assessmentType,
+        overview.isGraded,
         gradingOverview.submissionStatus,
         gradingOverview.gradedCount,
         gradingOverview.questionCount
@@ -1324,12 +1324,14 @@ export function* handleResponseError(resp: Response | null): any {
 }
 
 const computeGradingStatus = (
-  assessmentType: AssessmentType,
+  isGraded: boolean,
   submissionStatus: any,
   numGraded: number,
   numQuestions: number
 ): GradingStatus =>
-  ['Mission', 'Sidequest', 'Practical'].includes(assessmentType) && submissionStatus === 'submitted'
+  // isGraded refers to whether the assessment type is graded or not, as specified in
+  // the respective assessment configuration
+  isGraded && submissionStatus === 'submitted'
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
