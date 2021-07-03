@@ -15,7 +15,7 @@ const linkTags = ['LINK', 'REF', 'FOOTNOTE_REF'];
 const epigraphTag = 'EPIGRAPH';
 const tableTag = 'TABLE';
 const exerciseTag = 'EXERCISE';
-const sectionTag = 'SECTION';
+const titleTag = 'TITLE';
 const snippetTag = 'SNIPPET';
 const figureTag = 'FIGURE';
 const displayFootnoteTag = 'DISPLAYFOOTNOTE';
@@ -56,7 +56,7 @@ const processTag = (tag: string, obj: JsonType) => {
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = mount(processTag(tag, obj));
+    const tree = mount(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -76,11 +76,9 @@ describe('Parse heading', () => {
   tags.forEach(x => testTagSuccessful(obj, x));
 });
 
-describe('Parse section', () => {
-  const tag = sectionTag;
-  const text = { tag: 'TEXT', child: [mockData['text'], mockData['text']] };
-  const content = [text, text];
-  const obj = { body: 'Title', child: content };
+describe('Parse title', () => {
+  const tag = titleTag;
+  const obj = { body: 'Title' };
 
   testTagSuccessful(obj, tag);
 });
@@ -311,11 +309,7 @@ describe('Parse links', () => {
   };
 
   tag.forEach(tag => {
-    test(tag + ' successful', () => {
-      const tree = mount(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
-
-      expect(tree.debug()).toMatchSnapshot();
-    });
+    testTagSuccessful(obj, tag);
   });
 });
 

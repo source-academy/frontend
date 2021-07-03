@@ -41,7 +41,7 @@ $sicp-content-lr-padding: 6em;
 
   .bp3-code {
     color: $sicp-text-color;
-    background-color: $sicp-background-color;
+    background-color: inherit;
     box-shadow: none;
   }
 
@@ -51,7 +51,7 @@ $sicp-content-lr-padding: 6em;
     margin: 0;
     box-shadow: none;
     color: $sicp-text-color;
-    background-color: $sicp-background-color;
+    background-color: inherit;
   }
 
   .katex {
@@ -64,6 +64,29 @@ $sicp-content-lr-padding: 6em;
     max-width: $sicp-max-width;
     height: fit-content;
     background-color: $sicp-background-color;
+
+    .sicp-anchor-link-container:hover > .sicp-anchor-link {
+      color: #cccccc;
+    }
+
+    .sicp-anchor-link {
+      position: relative;
+      display: block;
+      overflow: visible;
+      width: 16px;
+      height: 0px;
+      left: -22px;
+      color: transparent;
+    }
+
+    .sicp-anchor-link:hover {
+      color: $sicp-text-color;
+    }
+
+    .sicp-anchor-link:hover + div {
+      background-color: #dddddd;
+      border-radius: 5px;
+    }
 
     .sicp-navigation-buttons {
       margin: 25px 0;
@@ -87,7 +110,7 @@ $sicp-content-lr-padding: 6em;
     }
 
     @media only screen and (max-width: 768px) {
-      padding: 0 1.2em;
+      padding: 0 1.4em;
     }
   }
 
