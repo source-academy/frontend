@@ -22,9 +22,9 @@ const defaultProps: AssessmentWorkspaceProps = {
   assessmentConfiguration: {
     assessmentConfigId: 1,
     type: 'Missions',
-    buildHidden: false,
-    buildSolution: false,
-    isContest: false,
+    isGraded: true,
+    skippable: true,
+    isAutograded: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
