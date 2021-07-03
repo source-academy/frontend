@@ -5,7 +5,7 @@ import { isEqual } from 'lodash';
 import React from 'react';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
-import { AssessmentConfiguration } from '../../../../commons/assessment/AssessmentTypes';
+import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
 import BooleanCell, { AssessmentConfigBooleanField } from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
 import NumericCell, { AssessmentConfigNumericField } from './NumericCell';

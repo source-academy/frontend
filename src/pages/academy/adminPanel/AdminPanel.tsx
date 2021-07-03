@@ -13,9 +13,9 @@ import {
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddUserPanel, { UsernameAndRole } from './subcomponents/AddUserPanel';
-import AssessmentConfigPanel from './subcomponents/AssessmentConfigPanel';
+import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
-import UserConfigPanel from './subcomponents/UserConfigPanel';
+import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
 export type AdminPanelProps = DispatchProps & StateProps;
 
