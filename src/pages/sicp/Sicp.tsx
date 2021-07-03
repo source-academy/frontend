@@ -32,23 +32,22 @@ const Sicp: React.FC<SicpProps> = props => {
   const [loading, setLoading] = React.useState(true);
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
-  const topRef = React.useRef<HTMLDivElement>(null);
-  const bottomRef = React.useRef<HTMLDivElement>(null);
+  const parentRef = React.useRef<HTMLDivElement>(null);
   const refs = React.useRef({});
   const history = useHistory();
 
   const scrollRefIntoView = (ref: HTMLDivElement | null) => {
-    if (!ref) {
+    if (!ref || !parentRef?.current) {
       return;
     }
 
-    // Hack to get scrolling to work properly.
-    // When 'block: start' option is used with scrollIntoView, the whole page scrolls with it.
-    // This issue does not occur when the option 'block: nearest' is used.
-    // To get `block: nearest` to mimic `block: start` behaviour, we first scroll to the bottom of
-    // the page before scrolling to the desired ref using the `block: nearest` option.
-    bottomRef.current!.scrollIntoView({ block: 'end' });
-    ref.scrollIntoView({ block: 'nearest' });
+    const parent = parentRef.current!;
+    const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
+
+    parent.scrollTo({
+      behavior: 'smooth',
+      top: ref.offsetTop - relativeTop
+    });
   };
 
   // Fetch json data
@@ -83,7 +82,7 @@ const Sicp: React.FC<SicpProps> = props => {
           // page not found
           setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
         } else if (error instanceof ParseJsonError) {
-          // error occured while parsing JSON
+          // error occurred while parsing JSON
           setData(getSicpError(SicpErrorType.PARSING_ERROR));
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
@@ -130,10 +129,12 @@ const Sicp: React.FC<SicpProps> = props => {
   );
 
   return (
-    <div className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}>
+    <div
+      className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
+      ref={parentRef}
+    >
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
-          <div ref={topRef} />
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
@@ -144,7 +145,6 @@ const Sicp: React.FC<SicpProps> = props => {
               {navigationButtons}
             </div>
           )}
-          <div ref={bottomRef} />
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
     </div>
