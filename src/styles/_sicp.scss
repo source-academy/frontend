@@ -65,6 +65,10 @@ $sicp-content-lr-padding: 6em;
     height: fit-content;
     background-color: $sicp-background-color;
 
+    .sicp-anchor-link-container:hover > .sicp-anchor-link {
+      color: #cccccc;
+    }
+
     .sicp-anchor-link {
       position: relative;
       display: block;
@@ -72,7 +76,7 @@ $sicp-content-lr-padding: 6em;
       width: 16px;
       height: 0px;
       left: -22px;
-      color: #dddddd;
+      color: transparent;
     }
 
     .sicp-anchor-link:hover {
