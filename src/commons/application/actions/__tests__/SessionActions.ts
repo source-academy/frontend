@@ -364,7 +364,6 @@ test('submitGrading generates correct action object with default values', () => 
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment: 0,
       xpAdjustment: 0,
       comments: undefined
     }
@@ -381,7 +380,6 @@ test('submitGradingAndContinue generates correct action object with default valu
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment: 0,
       xpAdjustment: 0,
       comments: undefined
     }
@@ -391,16 +389,14 @@ test('submitGradingAndContinue generates correct action object with default valu
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
-  const gradeAdjustment = 10;
   const xpAdjustment = 100;
   const comments = 'my comment';
-  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, comments);
+  const action = submitGrading(submissionId, questionId, xpAdjustment, comments);
   expect(action).toEqual({
     type: SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment,
       xpAdjustment,
       comments
     }
@@ -410,22 +406,14 @@ test('submitGrading generates correct action object', () => {
 test('submitGradingAndContinue generates correct action object', () => {
   const submissionId = 4;
   const questionId = 7;
-  const gradeAdjustment = 90;
   const xpAdjustment = 55;
   const comments = 'another comment';
-  const action = submitGradingAndContinue(
-    submissionId,
-    questionId,
-    gradeAdjustment,
-    xpAdjustment,
-    comments
-  );
+  const action = submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments);
   expect(action).toEqual({
     type: SUBMIT_GRADING_AND_CONTINUE,
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment,
       xpAdjustment,
       comments
     }
@@ -477,9 +465,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
       type: 'Missions',
       closeAt: 'test_string',
       coverImage: 'test_string',
-      grade: 0,
       id: 0,
-      maxGrade: 0,
       maxXp: 0,
       openAt: 'test_string',
       title: 'test_string',
@@ -522,10 +508,6 @@ test('updateGradingOverviews generates correct action object', () => {
       assessmentId: 1,
       assessmentName: 'test assessment',
       assessmentType: 'Contests',
-      initialGrade: 0,
-      gradeAdjustment: 0,
-      currentGrade: 10,
-      maxGrade: 20,
       initialXp: 0,
       xpBonus: 100,
       xpAdjustment: 50,
@@ -559,8 +541,6 @@ test('updateGrading generates correct action object', () => {
         id: 234
       },
       grade: {
-        grade: 10,
-        gradeAdjustment: 0,
         xp: 100,
         xpAdjustment: 0,
         comments: 'Well done.',

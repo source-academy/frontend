@@ -72,7 +72,7 @@ test('Profile renders correctly when there are closed assessments', () => {
 
   // Expect the correct number of each of the other HTML elements to be rendered
   ['.profile-spinner', '.type', '.total-value', '.percentage'].forEach(className => {
-    expect(tree.find(className).hostNodes()).toHaveLength(2);
+    expect(tree.find(className).hostNodes()).toHaveLength(1);
   });
 
   const numClosedAssessments =

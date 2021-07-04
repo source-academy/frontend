@@ -445,8 +445,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             graderName={props.assessment!.questions[questionId].grader!.name}
             gradedAt={props.assessment!.questions[questionId].gradedAt!}
             xp={props.assessment!.questions[questionId].xp}
-            grade={props.assessment!.questions[questionId].grade}
-            maxGrade={props.assessment!.questions[questionId].maxGrade}
             maxXp={props.assessment!.questions[questionId].maxXp}
             comments={props.assessment!.questions[questionId].comments}
           />

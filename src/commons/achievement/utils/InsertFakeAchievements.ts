@@ -71,7 +71,7 @@ function insertFakeAchievements(
       view: {
         coverImage: `${coverImageUrl}/default.png`,
         description: assessmentOverview.shortSummary,
-        completionText: `Grade: ${assessmentOverview.grade} / ${assessmentOverview.maxGrade}`
+        completionText: `XP: ${assessmentOverview.xp} / ${assessmentOverview.maxXp}`
       }
     });
   }

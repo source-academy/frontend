@@ -58,11 +58,9 @@ export type AssessmentOverview = {
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
-  grade: number;
   gradingStatus: GradingStatus;
   id: number;
   isPublished?: boolean;
-  maxGrade: number;
   maxXp: number;
   number?: string; // For mission control
   openAt: string;
@@ -130,7 +128,6 @@ export type BaseQuestion = {
   comments?: string;
   content: string;
   editorValue?: string | null;
-  grade: number;
   gradedAt?: string;
   grader?: {
     name: string;
@@ -139,7 +136,6 @@ export type BaseQuestion = {
   graderLibrary?: Library; // For mission control
   id: number;
   library: Library;
-  maxGrade: number;
   maxXp: number;
   type: QuestionType;
   xp: number;
@@ -228,9 +224,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     type: 'Missions',
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 1,
     id: -1,
-    maxGrade: 0,
     maxXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
@@ -258,8 +252,6 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     testcasesPrivate: [],
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
     maxXp: 0
   };
 };
@@ -301,8 +293,6 @@ export const mcqTemplate = (): IMCQQuestion => {
     type: 'mcq',
     solution: 0,
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
     maxXp: 0
   };
 };

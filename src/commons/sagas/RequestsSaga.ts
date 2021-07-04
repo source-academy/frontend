@@ -613,11 +613,7 @@ export const getGradingOverviews = async (
         submissionStatus: overview.status,
         groupName: overview.student.groupName,
         groupLeaderId: overview.student.groupLeaderId,
-        // Grade
-        initialGrade: overview.grade,
-        gradeAdjustment: overview.adjustment,
-        currentGrade: overview.grade + overview.adjustment,
-        maxGrade: overview.assessment.maxGrade,
+        // Grading Status
         gradingStatus: 'none',
         questionCount: overview.assessment.questionCount,
         gradedCount: overview.gradedCount,
@@ -673,14 +669,11 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
         postpend: question.postpend || '',
         testcases: question.testcases || [],
         type: question.type as QuestionType,
-        maxGrade: question.maxGrade,
         maxXp: question.maxXp
       },
       student,
       grade: {
-        grade: grade.grade,
         xp: grade.xp,
-        gradeAdjustment: grade.adjustment,
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
       }
@@ -703,7 +696,6 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 export const postGrading = async (
   submissionId: number,
   questionId: number,
-  gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens,
   comments?: string
@@ -712,7 +704,6 @@ export const postGrading = async (
     ...tokens,
     body: {
       grading: {
-        adjustment: gradeAdjustment,
         xpAdjustment,
         comments
       }

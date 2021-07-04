@@ -376,13 +376,12 @@ function* BackendSaga(): SagaIterator {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
     }
 
-    const { submissionId, questionId, gradeAdjustment, xpAdjustment, comments } = action.payload;
+    const { submissionId, questionId, xpAdjustment, comments } = action.payload;
     const tokens: Tokens = yield selectTokens();
 
     const resp: Response | null = yield postGrading(
       submissionId,
       questionId,
-      gradeAdjustment,
       xpAdjustment,
       tokens,
       comments
@@ -400,9 +399,7 @@ function* BackendSaga(): SagaIterator {
     const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
-          gradeAdjustment,
           xpAdjustment,
-          grade: gradingQuestion.grade.grade,
           xp: gradingQuestion.grade.xp,
           comments
         };

@@ -136,14 +136,12 @@ export const submitAssessment = (id: number) => action(SUBMIT_ASSESSMENT, id);
 export const submitGrading = (
   submissionId: number,
   questionId: number,
-  gradeAdjustment: number = 0,
   xpAdjustment: number = 0,
   comments?: string
 ) =>
   action(SUBMIT_GRADING, {
     submissionId,
     questionId,
-    gradeAdjustment,
     xpAdjustment,
     comments
   });
@@ -151,14 +149,12 @@ export const submitGrading = (
 export const submitGradingAndContinue = (
   submissionId: number,
   questionId: number,
-  gradeAdjustment: number = 0,
   xpAdjustment: number = 0,
   comments?: string
 ) =>
   action(SUBMIT_GRADING_AND_CONTINUE, {
     submissionId,
     questionId,
-    gradeAdjustment,
     xpAdjustment,
     comments
   });

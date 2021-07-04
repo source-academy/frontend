@@ -65,9 +65,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     type: 'Missions',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 1,
     id: 1,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
@@ -85,9 +83,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     type: 'Missions',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 2,
     id: 1,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
@@ -114,9 +110,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     type: 'Missions',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
-    grade: 3,
     id: 2,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
@@ -131,9 +125,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     type: 'Quests',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-    grade: 4,
     id: 3,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Sidequest',
@@ -148,9 +140,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     type: 'Paths',
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
-    grade: 0,
     id: 6,
-    maxGrade: 0,
     maxXp: 200,
     openAt: '2018-01-01T00:00:00.000Z',
     title: 'Basic logic gates',
@@ -165,9 +155,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     type: 'Others',
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-    grade: 4,
     id: 5,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Practical',
@@ -186,9 +174,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     type: 'Missions',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 2700,
     id: 4,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
@@ -203,9 +189,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     type: 'Quests',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 1950,
     id: 5,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
@@ -220,9 +204,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     type: 'Quests',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 300,
     id: 5,
-    maxGrade: 700,
     maxXp: 500,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
@@ -237,9 +219,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     type: 'Quests',
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 0,
     id: 5,
-    maxGrade: 0,
     maxXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
@@ -348,8 +328,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   `,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2
   },
   {
@@ -391,8 +369,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2
   },
   {
@@ -422,8 +398,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'mcq',
     solution: 0,
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2
   },
   {
@@ -453,8 +427,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'mcq',
     solution: null,
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2
   },
   {
@@ -469,8 +441,6 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2
   }
 ];
@@ -519,8 +489,6 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2,
     comments: `Good job. You are awarded the full marks!
   
@@ -592,8 +560,6 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2,
     comments: `You open the Report Card, not knowing what to expect...
   
@@ -660,8 +626,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     type: 'mcq',
     solution: 1,
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
     maxXp: 0
   },
   {
@@ -738,8 +702,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
     maxXp: 0
   },
   {
@@ -798,8 +760,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
     maxXp: 0
   },
   {
@@ -870,8 +830,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
     maxXp: 0
   }
 ];
@@ -881,8 +839,6 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     id: 0,
     type: 'voting',
     content: 'Sample Contest Voting Question',
-    grade: 0,
-    maxGrade: 0,
     xp: 0,
     maxXp: 0,
     answer: [],

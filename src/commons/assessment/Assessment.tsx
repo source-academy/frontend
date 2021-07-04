@@ -186,13 +186,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
           </div>
           <div className={`col-xs-${String(12 - ratio)} listing-text`}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
-            <div className="listing-grade">
-              <H6>
-                {showGrade
-                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                  : `Max Grade: ${overview.maxGrade}`}
-              </H6>
-            </div>
             <div className="listing-xp">
               <H6>
                 {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}

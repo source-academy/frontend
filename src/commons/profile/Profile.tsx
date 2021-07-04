@@ -1,4 +1,4 @@
-import { Drawer, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -68,21 +68,13 @@ class Profile extends React.Component<ProfileProps, {}> {
           </div>
         );
       } else {
-        // Compute the user's current total grade and XP from submitted assessments
-        // TODO: Grade is no longer in use in AY20/21
-        const [currentGrade, currentXp, maxGrade, maxXp] = this.props.assessmentOverviews!.reduce(
+        // Compute the user's current total XP from submitted and graded assessments, and submitted and not manually graded assessments
+        const [currentXp, maxXp] = this.props.assessmentOverviews!.reduce(
           (acc, item) =>
-            item.status === AssessmentStatuses.submitted
-              ? item.gradingStatus === GradingStatuses.graded
-                ? [
-                    acc[0] + item.grade / item.maxGrade,
-                    acc[1] + item.xp,
-                    acc[2] + 1,
-                    acc[3] + item.maxXp
-                  ]
-                : [acc[0], acc[1] + item.xp, acc[2], acc[3] + item.maxXp]
+            item.status === AssessmentStatuses.submitted && (item.gradingStatus === GradingStatuses.graded || item.gradingStatus === GradingStatuses.excluded)
+              ? [acc[0] + item.xp, acc[1] + item.maxXp]
               : acc,
-          [0, 0, 0, 0]
+          [0, 0]
         );
 
         // Performs boundary checks if denominator is 0 or if it exceeds 1 (100%)
@@ -143,20 +135,6 @@ class Profile extends React.Component<ProfileProps, {}> {
           <div className="profile-content">
             {userDetails}
             <div className="profile-progress">
-              <div className="profile-grade">
-                <Spinner
-                  className={'profile-spinner' + parseColour(getFrac(currentGrade, maxGrade))}
-                  size={144}
-                  value={getFrac(currentGrade, maxGrade)}
-                />
-                <div className="type">Grade</div>
-                <div className="total-value">
-                  {currentGrade.toFixed(2)} / {maxGrade.toFixed(2)}
-                </div>
-                <div className="percentage">
-                  {(getFrac(currentGrade, maxGrade) * 100).toFixed(2)}%
-                </div>
-              </div>
               <div className="profile-xp">
                 <Spinner
                   className={'profile-spinner' + parseColour(getFrac(currentXp, maxXp))}
@@ -185,7 +163,7 @@ class Profile extends React.Component<ProfileProps, {}> {
         onClose={this.props.onClose}
         title="User Profile"
         position="left"
-        size={'30%'}
+        size={DrawerSize.SMALL}
       >
         {content}
       </Drawer>

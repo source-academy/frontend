@@ -7,17 +7,13 @@ import { mockFetchRole } from './UserMocks';
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
-    gradeAdjustment: 0,
     xpAdjustment: 0,
     assessmentType: 'Missions',
     assessmentId: 0,
     assessmentName: 'Mission 0 ',
-    currentGrade: 69,
     currentXp: 69,
     xpBonus: 10,
-    initialGrade: 69,
     initialXp: 69,
-    maxGrade: 100,
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
@@ -29,17 +25,13 @@ export const mockGradingOverviews: GradingOverview[] = [
     gradedCount: 6
   },
   {
-    gradeAdjustment: -2,
     xpAdjustment: -2,
     assessmentType: 'Missions',
     assessmentId: 1,
     assessmentName: 'Mission 1',
-    currentGrade: -2,
     currentXp: -2,
     xpBonus: 12,
-    initialGrade: 0,
     initialXp: 0,
-    maxGrade: 400,
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
@@ -51,17 +43,13 @@ export const mockGradingOverviews: GradingOverview[] = [
     gradedCount: 2
   },
   {
-    gradeAdjustment: 4,
     xpAdjustment: 4,
     assessmentType: 'Missions',
     assessmentId: 0,
     assessmentName: 'Mission 0',
-    currentGrade: 1000,
     currentXp: 1000,
     xpBonus: 12,
-    initialGrade: 996,
     initialXp: 996,
-    maxGrade: 1000,
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
@@ -133,7 +121,6 @@ function remainder(n, d) {
   return n % d;
 }`,
       type: 'programming',
-      maxGrade: 1000,
       maxXp: 1000,
       grader: {
         name: 'avenger',
@@ -141,7 +128,6 @@ function remainder(n, d) {
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1,
       autogradingResults: [
         {
           resultType: 'pass'
@@ -186,9 +172,7 @@ function remainder(n, d) {
       ]
     },
     grade: {
-      gradeAdjustment: 0,
       xpAdjustment: 0,
-      grade: 0,
       xp: 0,
       comments: `Good job. You are awarded the full marks!
 
@@ -238,7 +222,6 @@ _italics_
       solutionTemplate: '1st question mock solution template',
       solution: null,
       type: 'programming',
-      maxGrade: 200,
       maxXp: 200,
       grader: {
         name: 'avenger',
@@ -246,7 +229,6 @@ _italics_
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1,
       autogradingResults: [
         {
           resultType: 'pass'
@@ -274,9 +256,7 @@ _italics_
       ]
     },
     grade: {
-      gradeAdjustment: 0,
       xpAdjustment: 0,
-      grade: 100,
       xp: 100,
       comments: `You open the Report Card, not knowing what to expect...
 
@@ -350,7 +330,6 @@ New message from **Avenger**!
       id: 2,
       library: mockRuneLibrary,
       type: 'mcq',
-      maxGrade: 100,
       maxXp: 100,
       grader: {
         name: 'avenger',
@@ -358,7 +337,6 @@ New message from **Avenger**!
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1,
       autogradingResults: [
         {
           resultType: 'pass'
@@ -386,9 +364,7 @@ New message from **Avenger**!
       ]
     },
     grade: {
-      gradeAdjustment: 0,
       xpAdjustment: 0,
-      grade: 50,
       xp: 50
     },
     student: {

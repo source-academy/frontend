@@ -351,9 +351,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     type: 'Missions',
     closeAt: 'test_string',
     coverImage: 'test_string',
-    grade: 0,
     id: 0,
-    maxGrade: 0,
     maxXp: 0,
     openAt: 'test_string',
     title: 'test_string',
@@ -371,9 +369,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
-    grade: 1,
     id: 1,
-    maxGrade: 1,
     maxXp: 1,
     openAt: 'test_string_0',
     title: 'test_string_0',
@@ -427,8 +423,6 @@ const gradingTest1: Grading = [
       id: 234
     },
     grade: {
-      grade: 10,
-      gradeAdjustment: 0,
       xp: 100,
       xpAdjustment: 0,
       comments: 'Well done. Please try the quest!'
@@ -444,8 +438,6 @@ const gradingTest2: Grading = [
       id: 345
     },
     grade: {
-      grade: 30,
-      gradeAdjustment: 10,
       xp: 500,
       xpAdjustment: 20,
       comments: 'Good job! All the best for the finals.'
@@ -518,10 +510,6 @@ const gradingOverviewTest1: GradingOverview[] = [
     assessmentId: 1,
     assessmentName: 'test assessment',
     assessmentType: 'Contests',
-    initialGrade: 0,
-    gradeAdjustment: 0,
-    currentGrade: 10,
-    maxGrade: 20,
     initialXp: 0,
     xpBonus: 100,
     xpAdjustment: 50,
@@ -543,10 +531,6 @@ const gradingOverviewTest2: GradingOverview[] = [
     assessmentId: 2,
     assessmentName: 'another assessment',
     assessmentType: 'Quests',
-    initialGrade: 5,
-    gradeAdjustment: 10,
-    currentGrade: 20,
-    maxGrade: 50,
     initialXp: 20,
     xpBonus: 250,
     xpAdjustment: 100,

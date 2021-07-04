@@ -127,13 +127,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -239,13 +232,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 0
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -384,13 +370,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -501,13 +480,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -617,13 +589,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -736,13 +701,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -980,13 +938,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -1122,13 +1073,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 0
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -1267,13 +1211,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -1384,13 +1321,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -1500,13 +1430,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -1619,13 +1542,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>

@@ -129,9 +129,6 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
 
         <div className="col-xs-9 listing-text">
           {this.makeEditingOverviewCardTitle(overview, overview.title)}
-          <div className="row listing-grade">
-            <H6> {`Max Grade: ${overview.maxGrade}`} </H6>
-          </div>
           <div className="row listing-xp">
             <H6> {`Max XP: ${overview.maxXp}`} </H6>
           </div>
