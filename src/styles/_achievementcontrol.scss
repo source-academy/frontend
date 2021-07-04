@@ -28,7 +28,7 @@
     margin: 0 auto;
     min-width: max-content;
     overflow: hidden;
-    padding: $default-spacing $default-spacing / 2;
+    padding: $default-spacing math.div($default-spacing, 2);
   }
 
   // Command buttons on top of the interfaces, e.g. Add A Task, Publish Changes, etc.
@@ -198,7 +198,7 @@
               align-items: center;
               display: flex;
               flex-direction: row;
-              height: $card-height * 3 / 5;
+              height: math.div($card-height * 3, 5);
             }
 
             .details {
@@ -245,7 +245,7 @@
           $shrink-factor: 0.9;
           $line-width: 1em;
           // remaining-width is the empty space between line and card
-          $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
+          $remaining-width: math.div((1 - $shrink-factor) * $card-width - 2 * $line-width, 2);
           $top-spacing: 0.2em;
 
           display: flex;
@@ -258,7 +258,7 @@
 
             .dropdown-lines {
               height: $top-spacing + $card-height;
-              margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
+              margin: -#{math.div($card-height, 2)} -#{$line-width + $remaining-width} 0 $line-width;
               min-width: $line-width;
             }
 
@@ -270,7 +270,7 @@
 
           .prerequisite:first-child {
             .dropdown-lines {
-              height: $top-spacing + $card-height / 2;
+              height: $top-spacing + math.div($card-height, 2);
               margin-top: 0;
             }
           }
