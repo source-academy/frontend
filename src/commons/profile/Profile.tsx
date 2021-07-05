@@ -71,7 +71,9 @@ class Profile extends React.Component<ProfileProps, {}> {
         // Compute the user's current total XP from submitted and graded assessments, and submitted and not manually graded assessments
         const [currentXp, maxXp] = this.props.assessmentOverviews!.reduce(
           (acc, item) =>
-            item.status === AssessmentStatuses.submitted && (item.gradingStatus === GradingStatuses.graded || item.gradingStatus === GradingStatuses.excluded)
+            item.status === AssessmentStatuses.submitted &&
+            (item.gradingStatus === GradingStatuses.graded ||
+              item.gradingStatus === GradingStatuses.excluded)
               ? [acc[0] + item.xp, acc[1] + item.maxXp]
               : acc,
           [0, 0]

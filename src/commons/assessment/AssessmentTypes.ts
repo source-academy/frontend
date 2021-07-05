@@ -90,9 +90,8 @@ export type Assessment = {
 export type AssessmentConfiguration = {
   assessmentConfigId: number;
   type: AssessmentType;
-  isGraded: boolean;
-  skippable: boolean;
-  isAutograded: boolean;
+  isManuallyGraded: boolean;
+  displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
 };
@@ -139,6 +138,9 @@ export type BaseQuestion = {
   maxXp: number;
   type: QuestionType;
   xp: number;
+  blocking?: boolean; // Determines whether the learner can progress to the next question without passing local testcases
+  // TODO: The blocking field is made optional now as the Question type is being shared with GitHub Assessments, which has not implemented
+  // the question-level blocking feature. Is to be made compulsory after this is implemented in GitHub Assessments
 };
 
 export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
@@ -252,7 +254,8 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     testcasesPrivate: [],
     type: 'programming',
     xp: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   };
 };
 
@@ -293,7 +296,8 @@ export const mcqTemplate = (): IMCQQuestion => {
     type: 'mcq',
     solution: 0,
     xp: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   };
 };
 

@@ -11,9 +11,8 @@ const defaultProps: AssessmentProps = {
   assessmentConfiguration: {
     assessmentConfigId: 1,
     type: 'Missions',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },

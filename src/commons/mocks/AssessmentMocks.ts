@@ -16,45 +16,40 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   {
     assessmentConfigId: 1,
     type: 'Missions',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 2,
     type: 'Quests',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 3,
     type: 'Paths',
-    isGraded: false,
-    skippable: false,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 4,
     type: 'Contests',
-    isGraded: true,
-    skippable: true,
-    isAutograded: false,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 5,
     type: 'Others',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   }
@@ -328,7 +323,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   `,
     type: 'programming',
     xp: 0,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -369,7 +365,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   }`,
     type: 'programming',
     xp: 0,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     answer: 3,
@@ -398,7 +395,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'mcq',
     solution: 0,
     xp: 0,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     answer: 3,
@@ -427,7 +425,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'mcq',
     solution: null,
     xp: 0,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -441,7 +440,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
     xp: 0,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   }
 ];
 
@@ -490,6 +490,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
     maxXp: 2,
+    blocking: false,
     comments: `Good job. You are awarded the full marks!
   
   ----
@@ -561,6 +562,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
     maxXp: 2,
+    blocking: false,
     comments: `You open the Report Card, not knowing what to expect...
   
       ## WOW!
@@ -626,7 +628,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     type: 'mcq',
     solution: 1,
     xp: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -702,7 +705,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -760,7 +764,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -830,7 +835,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   }
 ];
 
@@ -864,7 +870,8 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         answer: { code: 'function leaderboard_test() { return true; }' }
       }
     ],
-    library: mockRuneLibrary
+    library: mockRuneLibrary,
+    blocking: false
   }
 ];
 

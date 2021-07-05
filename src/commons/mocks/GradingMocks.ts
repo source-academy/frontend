@@ -169,7 +169,8 @@ function remainder(n, d) {
             }
           ]
         }
-      ]
+      ],
+      blocking: false
     },
     grade: {
       xpAdjustment: 0,
@@ -253,7 +254,8 @@ _italics_
             }
           ]
         }
-      ]
+      ],
+      blocking: false
     },
     grade: {
       xpAdjustment: 0,
@@ -361,7 +363,8 @@ New message from **Avenger**!
             }
           ]
         }
-      ]
+      ],
+      blocking: false
     },
     grade: {
       xpAdjustment: 0,

@@ -423,8 +423,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               <SideContentAutograder
                 testcases={props.editorTestcases}
                 autogradingResults={
-                  // !props.assessmentConfiguration.isGraded directly corresponds to the 'Path' assessment type in SA Knight
-                  isGraded || !props.assessmentConfiguration.isGraded
+                  // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
+                  isGraded || !props.assessmentConfiguration.isManuallyGraded
                     ? props.autogradingResults
                     : []
                 }
@@ -567,10 +567,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessmentConfiguration.skippable ? onClickNext : onClickProgress(onClickNext)
+          props.assessment!.questions[questionId].blocking
+            ? onClickProgress(onClickNext)
+            : onClickNext
         }
         onClickReturn={
-          props.assessmentConfiguration.skippable ? onClickReturn : onClickProgress(onClickReturn)
+          props.assessment!.questions[questionId].blocking
+            ? onClickProgress(onClickReturn)
+            : onClickReturn
         }
         questionProgress={questionProgress}
         key="next_question"

@@ -23,34 +23,24 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   const { assessmentConfig, setAssessmentConfig, setAssessmentConfigsToDelete } = props;
   const gridApi = React.useRef<GridApi>();
 
-  const setIsGraded = (index: number, value: boolean) => {
+  const setIsManuallyGraded = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      isGraded: value
+      isManuallyGraded: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGraded', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', value);
   };
 
-  const setSkippable = (index: number, value: boolean) => {
+  const setDisplayInDashboard = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      skippable: value
+      displayInDashboard: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('skippable', value);
-  };
-
-  const setIsAutograded = (index: number, value: boolean) => {
-    const temp = [...assessmentConfig.current];
-    temp[index] = {
-      ...temp[index],
-      isAutograded: value
-    };
-    setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isAutograded', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('displayInDashboard', value);
   };
 
   const setEarlyXp = (index: number, value: number) => {
@@ -83,9 +73,8 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     temp.push({
       assessmentConfigId: -1,
       type: 'untitled',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
       earlySubmissionXp: 0
     });
@@ -114,30 +103,21 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       editable: true
     },
     {
-      headerName: 'Is Graded',
-      field: 'isGraded',
+      headerName: 'Is Manually Graded',
+      field: 'isManuallyGraded',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setIsGraded,
-        field: AssessmentConfigBooleanField.IS_GRADED
+        setStateHandler: setIsManuallyGraded,
+        field: AssessmentConfigBooleanField.IS_MANUALLY_GRADED
       }
     },
     {
-      headerName: 'Skippable',
-      field: 'skippable',
+      headerName: 'Display in Dashboard',
+      field: 'displayInDashboard',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setSkippable,
-        field: AssessmentConfigBooleanField.SKIPPABLE
-      }
-    },
-    {
-      headerName: 'Is Autograded',
-      field: 'isAutograded',
-      cellRendererFramework: BooleanCell,
-      cellRendererParams: {
-        setStateHandler: setIsAutograded,
-        field: AssessmentConfigBooleanField.IS_AUTOGRADED
+        setStateHandler: setDisplayInDashboard,
+        field: AssessmentConfigBooleanField.DISPLAY_IN_DASHBOARD
       }
     },
     {
