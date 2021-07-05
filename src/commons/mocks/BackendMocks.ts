@@ -36,8 +36,7 @@ import {
   mockAssessmentOverviews,
   mockAssessments
 } from './AssessmentMocks';
-import { mockFetchGrading, mockFetchGradingOverview } from './GradingMocks';
-import { mockGradingSummary } from './GroupMocks';
+import { mockFetchGrading, mockFetchGradingOverview, mockGradingSummary } from './GradingMocks';
 import {
   mockCourseConfigurations,
   mockCourseRegistrations,
@@ -289,6 +288,6 @@ export function* mockBackendSaga(): SagaIterator {
   );
 
   yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* () {
-    yield put(actions.updateGroupGradingSummary([...mockGradingSummary]));
+    yield put(actions.updateGroupGradingSummary({ ...mockGradingSummary }));
   });
 }

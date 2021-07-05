@@ -3,27 +3,55 @@ import { DashboardReducer } from '../DashboardReducer';
 import { DashboardState, UPDATE_GROUP_GRADING_SUMMARY } from '../DashboardTypes';
 import { GradingSummary } from '../DashboardTypes';
 
-const gradingSummaryTest1: GradingSummary = [
-  {
-    leaderName: 'Billy',
-    groupName: 'Test Group 1',
-    ungradedMissions: 12,
-    ungradedSidequests: 34,
-    submittedMissions: 56,
-    submittedSidequests: 78
-  }
-];
+const gradingSummaryTest1: GradingSummary = {
+  cols: [
+    'group',
+    'avenger',
+    'ungradedMissions',
+    'submittedMissions',
+    'ungradedQuests',
+    'submittedQuests'
+  ],
+  rows: [
+    {
+      group: 'Mock Group 1',
+      avenger: 'John',
+      ungradedMissions: 123,
+      submittedMissions: 200,
+      ungradedQuests: 100,
+      submittedQuests: 117
+    }
+  ]
+};
 
-const gradingSummaryTest2: GradingSummary = [
-  {
-    leaderName: 'Justin',
-    groupName: 'Test Group 2',
-    ungradedMissions: 312,
-    ungradedSidequests: 434,
-    submittedMissions: 556,
-    submittedSidequests: 678
-  }
-];
+const gradingSummaryTest2: GradingSummary = {
+  cols: [
+    'group',
+    'avenger',
+    'ungradedMissions',
+    'submittedMissions',
+    'ungradedQuests',
+    'submittedQuests'
+  ],
+  rows: [
+    {
+      group: 'Mock Group 2',
+      avenger: 'Molly',
+      ungradedMissions: 1232,
+      submittedMissions: 205430,
+      ungradedQuests: 345,
+      submittedQuests: 11547
+    },
+    {
+      group: 'Mock Group 3',
+      avenger: 'Lenny',
+      ungradedMissions: 1532,
+      submittedMissions: 22200,
+      ungradedQuests: 134500,
+      submittedQuests: 6777
+    }
+  ]
+};
 
 test('UPDATE_GROUP_GRADING_SUMMARY initialises dashboard state', () => {
   const action = {
@@ -45,7 +73,7 @@ test('UPDATE_GROUP_GRADING_SUMMARY updates dashboard state', () => {
     gradingSummary: gradingSummaryTest1
   };
 
-  const gradingSummaryPayload = [...gradingSummaryTest1, ...gradingSummaryTest2];
+  const gradingSummaryPayload = gradingSummaryTest2;
   const action = {
     type: UPDATE_GROUP_GRADING_SUMMARY,
     payload: gradingSummaryPayload

@@ -168,7 +168,10 @@ export const defaultApplication: ApplicationState = {
 };
 
 export const defaultDashboard: DashboardState = {
-  gradingSummary: []
+  gradingSummary: {
+    cols: [],
+    rows: []
+  }
 };
 
 export const defaultAchievement: AchievementState = {

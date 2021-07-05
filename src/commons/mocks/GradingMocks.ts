@@ -394,29 +394,39 @@ export const mockFetchGrading = (accessToken: string, submissionId: number): Gra
   }
 };
 
-export const mockGradingSummary: GradingSummary = [
-  {
-    leaderName: 'John',
-    groupName: 'Mock Group 1',
-    ungradedMissions: 123,
-    submittedMissions: 200,
-    ungradedSidequests: 100,
-    submittedSidequests: 117
-  },
-  {
-    leaderName: 'Molly',
-    groupName: 'Mock Group 2',
-    ungradedMissions: 1232,
-    submittedMissions: 205430,
-    ungradedSidequests: 345,
-    submittedSidequests: 11547
-  },
-  {
-    leaderName: 'Lenny',
-    groupName: 'Mock Group 3',
-    ungradedMissions: 1532,
-    submittedMissions: 22200,
-    ungradedSidequests: 134500,
-    submittedSidequests: 6777
-  }
-];
+export const mockGradingSummary: GradingSummary = {
+  cols: [
+    'group',
+    'avenger',
+    'ungradedMissions',
+    'submittedMissions',
+    'ungradedQuests',
+    'submittedQuests'
+  ],
+  rows: [
+    {
+      group: 'Mock Group 1',
+      avenger: 'John',
+      ungradedMissions: 123,
+      submittedMissions: 200,
+      ungradedQuests: 100,
+      submittedQuests: 117
+    },
+    {
+      group: 'Mock Group 2',
+      avenger: 'Molly',
+      ungradedMissions: 1232,
+      submittedMissions: 205430,
+      ungradedQuests: 345,
+      submittedQuests: 11547
+    },
+    {
+      group: 'Mock Group 3',
+      avenger: 'Lenny',
+      ungradedMissions: 1532,
+      submittedMissions: 22200,
+      ungradedQuests: 134500,
+      submittedQuests: 6777
+    }
+  ]
+};

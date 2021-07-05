@@ -3,6 +3,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import { startCase } from 'lodash';
 import * as React from 'react';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -26,34 +27,7 @@ class Dashboard extends React.Component<DashboardProps> {
   public constructor(props: DashboardProps) {
     super(props);
 
-    this.columnDefs = [
-      {
-        headerName: 'Group',
-        field: 'groupName',
-        width: 80,
-        sort: 'asc'
-      },
-      {
-        headerName: 'Avenger',
-        field: 'leaderName'
-      },
-      {
-        headerName: 'Ungraded Missions',
-        field: 'ungradedMissions'
-      },
-      {
-        headerName: 'Submitted Missions',
-        field: 'submittedMissions'
-      },
-      {
-        headerName: 'Ungraded Quests',
-        field: 'ungradedSidequests'
-      },
-      {
-        headerName: 'Submitted Quests',
-        field: 'submittedSidequests'
-      }
-    ];
+    this.columnDefs = [];
 
     this.defaultColumnDefs = {
       filter: true,
@@ -63,8 +37,17 @@ class Dashboard extends React.Component<DashboardProps> {
   }
 
   public componentDidUpdate(prevProps: DashboardProps) {
-    if (this.gridApi && this.props.gradingSummary.length !== prevProps.gradingSummary.length) {
-      this.gridApi.setRowData(this.props.gradingSummary);
+    this.columnDefs = this.props.gradingSummary.cols.map(e => {
+      return {
+        headerName: startCase(e),
+        field: e
+      };
+    });
+    if (
+      this.gridApi &&
+      this.props.gradingSummary.rows.length !== prevProps.gradingSummary.rows.length
+    ) {
+      this.gridApi.setRowData(this.props.gradingSummary.rows);
     }
   }
 
@@ -82,7 +65,7 @@ class Dashboard extends React.Component<DashboardProps> {
             defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
             onGridSizeChanged={this.resizeGrid}
-            rowData={this.props.gradingSummary}
+            rowData={this.props.gradingSummary.rows}
             rowHeight={30}
             suppressCellSelection={true}
             suppressMovableColumns={true}
