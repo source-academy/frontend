@@ -1100,10 +1100,10 @@ export const removeUserCourseRegistration = async (
 };
 
 /**
- * GET /courses/{courseId}/devices
+ * GET /devices
  */
 export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
-  const resp = await request(`${courseId()}/devices`, 'GET', {
+  const resp = await request(`devices`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -1113,13 +1113,13 @@ export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
 }
 
 /**
- * GET /courses/{courseId}/devices/:id/ws_endpoint
+ * GET /devices/:id/ws_endpoint
  */
 export async function getDeviceWSEndpoint(
   device: Device,
   tokens: Tokens
 ): Promise<WebSocketEndpointInformation | null> {
-  const resp = await request(`${courseId()}/devices/${device.id}/ws_endpoint`, 'GET', {
+  const resp = await request(`devices/${device.id}/ws_endpoint`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true,
@@ -1130,11 +1130,11 @@ export async function getDeviceWSEndpoint(
 }
 
 /**
- * POST /courses/{courseId}/devices
+ * POST /devices
  */
 export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens): Promise<Device> {
   tokens = fillTokens(tokens);
-  const resp = await request(`${courseId()}/devices`, 'POST', {
+  const resp = await request(`devices`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true,
@@ -1155,14 +1155,14 @@ export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens
 }
 
 /**
- * POST /courses/{courseId}/devices/:id
+ * POST /devices/:id
  */
 export async function editDevice(
   device: Pick<Device, 'id' | 'title'>,
   tokens?: Tokens
 ): Promise<boolean> {
   tokens = fillTokens(tokens);
-  const resp = await request(`${courseId()}/devices/${device.id}`, 'POST', {
+  const resp = await request(`devices/${device.id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true,
@@ -1183,11 +1183,11 @@ export async function editDevice(
 }
 
 /**
- * DELETE /courses/{courseId}/devices/:id
+ * DELETE /devices/:id
  */
 export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens): Promise<boolean> {
   tokens = fillTokens(tokens);
-  const resp = await request(`${courseId()}/devices/${device.id}`, 'DELETE', {
+  const resp = await request(`devices/${device.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
