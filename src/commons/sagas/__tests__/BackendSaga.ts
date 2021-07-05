@@ -205,45 +205,40 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   {
     assessmentConfigId: 1,
     type: 'Missions',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 2,
     type: 'Quests',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 3,
     type: 'Paths',
-    isGraded: false,
-    skippable: false,
-    isAutograded: true,
+    isManuallyGraded: false,
+    displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 4,
     type: 'Contests',
-    isGraded: true,
-    skippable: true,
-    isAutograded: false,
+    isManuallyGraded: false,
+    displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
   {
     assessmentConfigId: 5,
     type: 'Others',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   }

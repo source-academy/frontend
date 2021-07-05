@@ -266,27 +266,24 @@ test('setAssessmentConfigurations generates correct action object', () => {
     {
       assessmentConfigId: 1,
       type: 'Mission1',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 2,
       type: 'Mission2',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 3,
       type: 'Mission3',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -630,45 +627,40 @@ test('updateAssessmentTypes generates correct action object', () => {
     {
       assessmentConfigId: 1,
       type: 'Missions',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 2,
       type: 'Quests',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 3,
       type: 'Paths',
-      isGraded: false,
-      skippable: false,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 4,
       type: 'Contests',
-      isGraded: true,
-      skippable: true,
-      isAutograded: false,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
     {
       assessmentConfigId: 5,
       type: 'Others',
-      isGraded: true,
-      skippable: true,
-      isAutograded: true,
+      isManuallyGraded: true,
+      displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -684,9 +676,8 @@ test('deleteAssessmentConfig generates correct action object', () => {
   const assessmentConfig = {
     assessmentConfigId: 1,
     type: 'Mission1',
-    isGraded: true,
-    skippable: true,
-    isAutograded: true,
+    isManuallyGraded: true,
+    displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   };
