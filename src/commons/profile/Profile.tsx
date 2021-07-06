@@ -119,7 +119,12 @@ class Profile extends React.Component<ProfileProps, {}> {
 
         // Build condensed assessment cards from an array of assessments
         const summaryCallouts = this.props
-          .assessmentOverviews!.filter(item => item.status === AssessmentStatuses.submitted)
+          .assessmentOverviews!.filter(
+            item =>
+              item.status === AssessmentStatuses.submitted &&
+              (item.gradingStatus === GradingStatuses.graded ||
+                item.gradingStatus === GradingStatuses.excluded)
+          )
           .map((assessment, index) => {
             return (
               <ProfileCard

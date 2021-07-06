@@ -625,7 +625,7 @@ export const getGradingOverviews = async (
         xpBonus: overview.xpBonus
       };
       gradingOverview.gradingStatus = computeGradingStatus(
-        overview.isManuallyGraded,
+        overview.assessment.isManuallyGraded,
         gradingOverview.submissionStatus,
         gradingOverview.gradedCount,
         gradingOverview.questionCount

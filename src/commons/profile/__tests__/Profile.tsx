@@ -51,7 +51,8 @@ test('Profile renders correctly when there are no closed assessments', () => {
   expect(tree.find('.profile-callouts').hostNodes().exists()).toEqual(false);
 });
 
-test('Profile renders correctly when there are closed assessments', () => {
+test('Profile renders correctly when there are closed and graded, or closed and not manually graded assessments', () => {
+  // Only closed and graded, and closed and not manually graded assessments will be rendered in the Profile
   const props = {
     name: 'yeeet',
     role: Role.Staff,
@@ -75,13 +76,15 @@ test('Profile renders correctly when there are closed assessments', () => {
     expect(tree.find(className).hostNodes()).toHaveLength(1);
   });
 
-  const numClosedAssessments =
-    mockAssessmentOverviews.length - mockNoClosedAssessmentOverviews.length;
-  expect(tree.find('.profile-summary-navlink').hostNodes()).toHaveLength(numClosedAssessments);
-  expect(tree.find('.profile-summary-callout').hostNodes()).toHaveLength(numClosedAssessments);
-  // expect(tree.find('.grade-details').hostNodes()).toHaveLength(1);
-  expect(tree.find('.xp-details').hostNodes()).toHaveLength(4);
+  const numProfileCards = mockAssessmentOverviews.filter(
+    item =>
+      item.status === AssessmentStatuses.submitted &&
+      (item.gradingStatus === 'graded' || item.gradingStatus === 'excluded')
+  ).length;
+  expect(tree.find('.profile-summary-navlink').hostNodes()).toHaveLength(numProfileCards);
+  expect(tree.find('.profile-summary-callout').hostNodes()).toHaveLength(numProfileCards);
+  expect(tree.find('.xp-details').hostNodes()).toHaveLength(numProfileCards);
   ['.title', '.value', '.value-bar'].forEach(className => {
-    expect(tree.find(className).hostNodes()).toHaveLength(4);
+    expect(tree.find(className).hostNodes()).toHaveLength(numProfileCards);
   });
 });
