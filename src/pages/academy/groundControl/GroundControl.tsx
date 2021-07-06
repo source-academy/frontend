@@ -197,10 +197,8 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   }
 
   private loadContent = () => {
-    if (!this.props.assessmentOverviews) {
-      // If assessment overviews are not loaded, fetch them
-      this.props.handleAssessmentOverviewFetch();
-    }
+    // Always load AssessmentOverviews and AssessmentConfigs as course might have changed
+    this.props.handleAssessmentOverviewFetch();
     this.props.handleFetchAssessmentConfigs();
   };
 

@@ -225,19 +225,18 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
                           <p>
                             <i>
                               (Luminus): &nbsp;E1234567,student &nbsp;•&nbsp;
-                              E1234567,student,Group1,member
+                              E1234567,student,Group1
                             </i>
                           </p>
                           <p>
                             <i>
                               (Google): &nbsp;learner@gmail.com,staff &nbsp;•&nbsp;
-                              learner@gmail.com,staff,Group1,leader
+                              learner@gmail.com,staff,Group1
                             </i>
                           </p>
                           <p>
                             <i>
-                              (GitHub): &nbsp;ghusername,admin &nbsp;•&nbsp;
-                              ghusername,admin,Group1,mentor
+                              (GitHub): &nbsp;ghusername,admin &nbsp;•&nbsp; ghusername,admin,Group1
                             </i>
                           </p>
                         </div>
