@@ -782,6 +782,7 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
       .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
       .put(setCourseRegistration(mockCourseRegistration2))
       .put(setCourseConfiguration(mockCourseConfiguration2))
+      .put(setAssessmentConfigurations(mockAssessmentConfigurations))
       .put(updateSublanguage(sublanguage))
       .provide([
         [call(postLatestViewedCourse, mockTokens, courseId), okResp],
@@ -789,7 +790,8 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
           call(getLatestCourseRegistrationAndConfiguration, mockTokens),
           {
             courseRegistration: mockCourseRegistration2,
-            courseConfiguration: mockCourseConfiguration2
+            courseConfiguration: mockCourseConfiguration2,
+            assessmentConfigurations: mockAssessmentConfigurations
           }
         ]
       ])

@@ -151,6 +151,7 @@ export const getLatestCourseRegistrationAndConfiguration = async (
 ): Promise<{
   courseRegistration: CourseRegistration | null;
   courseConfiguration: CourseConfiguration | null;
+  assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
   const resp = await request('user/latest_viewed', 'GET', {
     ...tokens,
@@ -159,7 +160,8 @@ export const getLatestCourseRegistrationAndConfiguration = async (
   if (!resp || !resp.ok) {
     return {
       courseRegistration: null,
-      courseConfiguration: null
+      courseConfiguration: null,
+      assessmentConfigurations: null
     };
   }
 

@@ -53,6 +53,7 @@ export function* mockBackendSaga(): SagaIterator {
     const user = mockUser;
     const courseRegistration = mockCourseRegistrations[0];
     const courseConfiguration = mockCourseConfigurations[0];
+    const assessmentConfigurations = mockAssessmentConfigurations;
     const sublanguage: SourceLanguage = {
       chapter: courseConfiguration.sourceChapter,
       variant: courseConfiguration.sourceVariant,
@@ -66,6 +67,7 @@ export function* mockBackendSaga(): SagaIterator {
     store.dispatch(actions.setUser(user));
     store.dispatch(actions.setCourseRegistration(courseRegistration));
     store.dispatch(actions.setCourseConfiguration(courseConfiguration));
+    store.dispatch(actions.setAssessmentConfigurations(assessmentConfigurations));
     store.dispatch(actions.updateSublanguage(sublanguage));
     yield history.push('/academy');
   });
@@ -245,6 +247,7 @@ export function* mockBackendSaga(): SagaIterator {
       const courseConfiguration = mockCourseConfigurations[idx];
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setCourseRegistration(mockCourseRegistrations[idx]));
+      yield put(actions.setAssessmentConfigurations(mockAssessmentConfigurations));
       yield put(
         actions.updateSublanguage({
           chapter: courseConfiguration.sourceChapter,

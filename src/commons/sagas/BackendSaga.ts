@@ -608,19 +608,22 @@ function* BackendSaga(): SagaIterator {
 
       const {
         courseRegistration,
-        courseConfiguration
+        courseConfiguration,
+        assessmentConfigurations
       }: {
         courseRegistration: CourseRegistration | null;
         courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
       } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
 
-      if (!courseRegistration || !courseConfiguration) {
+      if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
         yield call(showWarningMessage, `Failed to load course!`);
         return yield history.push('/welcome');
       }
 
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield put(
         actions.updateSublanguage({
           chapter: courseConfiguration.sourceChapter,
