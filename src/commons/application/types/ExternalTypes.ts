@@ -102,7 +102,6 @@ const curvesLibrary = [
   'put_in_standard_position',
   'translate_curve',
   'scale_proportional',
-  'picture_mse', // for grading
   /** Contest functions */
   'scale_curve',
   'repeated',
