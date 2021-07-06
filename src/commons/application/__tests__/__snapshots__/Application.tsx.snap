@@ -16,6 +16,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/githubassessments\\" component={[Function: component]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />
+      <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToAcademy]} />
       <Route component={[Function: NotFound]} />
     </Switch>

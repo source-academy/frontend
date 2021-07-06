@@ -37,14 +37,6 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
         <NavLink
-          to="/academy/mission-control"
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.CELL_TOWER} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Mission Control</div>
-        </NavLink>
-        <NavLink
           to={'/academy/groundcontrol'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}

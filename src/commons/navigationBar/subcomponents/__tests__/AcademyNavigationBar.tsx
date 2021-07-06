@@ -15,9 +15,6 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
   ).toHaveLength(0);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/mission-control' }).exists())
-  ).toHaveLength(0);
-  expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/groundcontrol' }).exists())
   ).toHaveLength(0);
   expect(
@@ -46,9 +43,6 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and G
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/mission-control' }).exists())
-  ).toHaveLength(1);
-  expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/groundcontrol' }).exists())
   ).toHaveLength(1);
   expect(
@@ -75,9 +69,6 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   expect(tree.debug()).toMatchSnapshot();
   expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
-  ).toHaveLength(1);
-  expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/mission-control' }).exists())
   ).toHaveLength(1);
   expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/groundcontrol' }).exists())

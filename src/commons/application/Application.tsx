@@ -9,6 +9,7 @@ import Disabled from '../../pages/disabled/Disabled';
 import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/LoginContainer';
+import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
@@ -152,12 +153,17 @@ const Application: React.FC<ApplicationProps> = props => {
     loginPath,
     <Route
       path="/playground"
-      render={ensureUserAndRouteTo(props, <Playground />)}
+      render={ensureUserAndRoleAndRouteTo(props, <Playground />)}
       key="authPlayground"
     />,
     ...playgroundOnlyPaths,
     <Route path="/academy" render={toAcademy(props)} key="academy" />,
-    <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} key="welcome" />
+    <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} key="welcome" />,
+    <Route
+      path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+      render={ensureUserAndRoleAndRouteTo(props, <MissionControlContainer />)}
+      key="mission-control"
+    />
   ];
 
   if (props.enableSourcecast) {

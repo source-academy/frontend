@@ -40,12 +40,6 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/academy/mission-control\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"cell-tower\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Mission Control
-      </div>
-    </NavLink>
     <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
@@ -163,12 +157,6 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/academy/mission-control\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"cell-tower\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Mission Control
-      </div>
-    </NavLink>
     <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
