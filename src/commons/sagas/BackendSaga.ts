@@ -724,8 +724,7 @@ function* BackendSaga(): SagaIterator {
     const {
       user,
       courseRegistration,
-      courseConfiguration,
-      assessmentConfigurations
+      courseConfiguration
     }: {
       user: User | null;
       courseRegistration: CourseRegistration | null;
@@ -733,14 +732,37 @@ function* BackendSaga(): SagaIterator {
       assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getUser, tokens);
 
-    if (!user || !courseRegistration || !courseConfiguration || !assessmentConfigurations) {
+    if (!user || !courseRegistration || !courseConfiguration) {
       return yield showWarningMessage('An error occurred. Please try again.');
     }
 
+    // Set CourseRegistration first to ensure correct courseId when inserting the placeholder
+    // AssessmentConfigurations in new course
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
-    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+
+    // Add a placeholder AssessmentConfig to ensure that the course has at least 1 AssessmentType
+    const placeholderAssessmentConfig = [
+      {
+        type: 'Missions',
+        assessmentConfigId: -1,
+        isManuallyGraded: true,
+        displayInDashboard: true,
+        hoursBeforeEarlyXpDecay: 0,
+        earlySubmissionXp: 0
+      }
+    ];
+
+    const resp1: Response | null = yield call(
+      postAssessmentConfigs,
+      tokens,
+      placeholderAssessmentConfig
+    );
+    if (!resp1 || !resp1.ok) {
+      return yield handleResponseError(resp);
+    }
+    yield put(actions.setAssessmentConfigurations(placeholderAssessmentConfig));
     yield put(
       actions.updateSublanguage({
         chapter: courseConfiguration.sourceChapter,

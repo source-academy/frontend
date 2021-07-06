@@ -943,7 +943,16 @@ describe('Test CREATE_COURSE action', () => {
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
   const courseRegistration = mockCourseRegistration1;
-  const assessmentConfigurations = mockAssessmentConfigurations;
+  const placeholderAssessmentConfig = [
+    {
+      type: 'Missions',
+      assessmentConfigId: -1,
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 0,
+      earlySubmissionXp: 0
+    }
+  ];
 
   const sublanguage: SourceLanguage = {
     chapter: mockCourseConfiguration1.sourceChapter,
@@ -961,15 +970,14 @@ describe('Test CREATE_COURSE action', () => {
       .put(setUser(user))
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
-      .put(setAssessmentConfigurations(assessmentConfigurations))
+      .call(postAssessmentConfigs, mockTokens, placeholderAssessmentConfig)
+      .put(setAssessmentConfigurations(placeholderAssessmentConfig))
       .put(updateSublanguage(sublanguage))
       .call.fn(showSuccessMessage)
       .provide([
         [call(postCreateCourse, mockTokens, courseConfig), okResp],
-        [
-          call(getUser, mockTokens),
-          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
-        ]
+        [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }],
+        [call(postAssessmentConfigs, mockTokens, placeholderAssessmentConfig), okResp]
       ])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();
@@ -983,6 +991,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.call.fn(postAssessmentConfigs)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .not.call.fn(showSuccessMessage)
