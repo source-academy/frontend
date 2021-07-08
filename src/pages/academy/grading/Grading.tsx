@@ -9,7 +9,8 @@ import {
   InputGroup,
   Intent,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
@@ -84,7 +85,7 @@ class Grading extends React.Component<GradingProps, State> {
         suppressSizeToFit: true
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
-      { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
+      { headerName: 'Category', field: 'assessmentType', maxWidth: 100 },
       { headerName: 'Student Name', field: 'studentName' },
       {
         headerName: 'Group',
@@ -193,7 +194,7 @@ class Grading extends React.Component<GradingProps, State> {
       <NonIdealState
         className="Grading"
         description="Fetching submissions..."
-        icon={<Spinner size={Spinner.SIZE_LARGE} />}
+        icon={<Spinner size={SpinnerSize.LARGE} />}
       />
     );
 
