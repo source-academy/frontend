@@ -90,18 +90,18 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAssessmentConfigs,
   postAuth,
-  postCourseConfig,
   postCreateCourse,
   postGrading,
-  postLatestViewedCourse,
-  postNewUsers,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
   postUnsubmit,
-  postUserRole,
+  putAssessmentConfigs,
+  putCourseConfig,
+  putLatestViewedCourse,
+  putNewUsers,
+  putUserRole,
   removeAssessmentConfig,
   removeUserCourseRegistration,
   updateAssessment,
@@ -576,7 +576,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { sublang } = action.payload;
 
-      const resp: Response | null = yield call(postCourseConfig, tokens, {
+      const resp: Response | null = yield call(putCourseConfig, tokens, {
         sourceChapter: sublang.chapter,
         sourceVariant: sublang.variant
       });
@@ -601,7 +601,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { courseId } = action.payload;
 
-      const resp: Response | null = yield call(postLatestViewedCourse, tokens, courseId);
+      const resp: Response | null = yield call(putLatestViewedCourse, tokens, courseId);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -645,7 +645,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const courseConfig: UpdateCourseConfiguration = action.payload;
 
-      const resp: Response | null = yield call(postCourseConfig, tokens, courseConfig);
+      const resp: Response | null = yield call(putCourseConfig, tokens, courseConfig);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -674,7 +674,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const assessmentConfigs: AssessmentConfiguration[] = action.payload;
 
-      const resp: Response | null = yield call(postAssessmentConfigs, tokens, assessmentConfigs);
+      const resp: Response | null = yield call(putAssessmentConfigs, tokens, assessmentConfigs);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -755,7 +755,7 @@ function* BackendSaga(): SagaIterator {
     ];
 
     const resp1: Response | null = yield call(
-      postAssessmentConfigs,
+      putAssessmentConfigs,
       tokens,
       placeholderAssessmentConfig
     );
@@ -783,7 +783,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
 
-      const resp: Response | null = yield call(postNewUsers, tokens, users, provider);
+      const resp: Response | null = yield call(putNewUsers, tokens, users, provider);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -799,7 +799,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { crId, role }: { crId: number; role: Role } = action.payload;
 
-      const resp: Response | null = yield call(postUserRole, tokens, crId, role);
+      const resp: Response | null = yield call(putUserRole, tokens, crId, role);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }

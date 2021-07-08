@@ -99,15 +99,15 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAssessmentConfigs,
   postAuth,
-  postCourseConfig,
   postCreateCourse,
-  postLatestViewedCourse,
-  postNewUsers,
   postReautogradeAnswer,
   postReautogradeSubmission,
-  postUserRole,
+  putAssessmentConfigs,
+  putCourseConfig,
+  putLatestViewedCourse,
+  putNewUsers,
+  putUserRole,
   removeUserCourseRegistration
 } from '../RequestsSaga';
 
@@ -744,7 +744,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
 
     return expectSaga(BackendSaga)
       .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(postCourseConfig, mockTokens, {
+      .call(putCourseConfig, mockTokens, {
         sourceChapter: sublang.chapter,
         sourceVariant: sublang.variant
       })
@@ -754,7 +754,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
       .put(updateSublanguage(sublang))
       .provide([
         [
-          call(postCourseConfig, mockTokens, { sourceChapter: 4, sourceVariant: 'gpu' }),
+          call(putCourseConfig, mockTokens, { sourceChapter: 4, sourceVariant: 'gpu' }),
           { ok: true }
         ]
       ])
@@ -778,14 +778,14 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
   test('when latest viewed course is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postLatestViewedCourse, mockTokens, courseId)
+      .call(putLatestViewedCourse, mockTokens, courseId)
       .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
       .put(setCourseRegistration(mockCourseRegistration2))
       .put(setCourseConfiguration(mockCourseConfiguration2))
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
       .put(updateSublanguage(sublanguage))
       .provide([
-        [call(postLatestViewedCourse, mockTokens, courseId), okResp],
+        [call(putLatestViewedCourse, mockTokens, courseId), okResp],
         [
           call(getLatestCourseRegistrationAndConfiguration, mockTokens),
           {
@@ -802,8 +802,8 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
   test('when latest viewed course update returns error', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .provide([[call(postLatestViewedCourse, mockTokens, courseId), errorResp]])
-      .call(postLatestViewedCourse, mockTokens, courseId)
+      .provide([[call(putLatestViewedCourse, mockTokens, courseId), errorResp]])
+      .call(putLatestViewedCourse, mockTokens, courseId)
       .not.call.fn(getLatestCourseRegistrationAndConfiguration)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
@@ -816,13 +816,13 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
       .provide([
-        [call(postLatestViewedCourse, mockTokens, courseId), okResp],
+        [call(putLatestViewedCourse, mockTokens, courseId), okResp],
         [
           call(getLatestCourseRegistrationAndConfiguration, mockTokens),
           { courseRegistration: null, courseConfiguration: null }
         ]
       ])
-      .call(postLatestViewedCourse, mockTokens, courseId)
+      .call(putLatestViewedCourse, mockTokens, courseId)
       .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
@@ -848,19 +848,19 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
   test('when course config is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postCourseConfig, mockTokens, courseConfiguration)
+      .call(putCourseConfig, mockTokens, courseConfiguration)
       .put(setCourseConfiguration(courseConfiguration))
       .call.fn(showSuccessMessage)
-      .provide([[call(postCourseConfig, mockTokens, courseConfiguration), okResp]])
+      .provide([[call(putCourseConfig, mockTokens, courseConfiguration), okResp]])
       .dispatch({ type: UPDATE_COURSE_CONFIG, payload: courseConfiguration })
       .silentRun();
   });
 
   test('when course config update fails', () => {
     return expectSaga(BackendSaga)
-      .provide([[call(postCourseConfig, mockTokens, courseConfiguration), errorResp]])
+      .provide([[call(putCourseConfig, mockTokens, courseConfiguration), errorResp]])
       .withState(mockStates)
-      .call(postCourseConfig, mockTokens, courseConfiguration)
+      .call(putCourseConfig, mockTokens, courseConfiguration)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(showSuccessMessage)
       .dispatch({ type: UPDATE_COURSE_CONFIG, payload: courseConfiguration })
@@ -970,14 +970,14 @@ describe('Test CREATE_COURSE action', () => {
       .put(setUser(user))
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
-      .call(postAssessmentConfigs, mockTokens, placeholderAssessmentConfig)
+      .call(putAssessmentConfigs, mockTokens, placeholderAssessmentConfig)
       .put(setAssessmentConfigurations(placeholderAssessmentConfig))
       .put(updateSublanguage(sublanguage))
       .call.fn(showSuccessMessage)
       .provide([
         [call(postCreateCourse, mockTokens, courseConfig), okResp],
         [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }],
-        [call(postAssessmentConfigs, mockTokens, placeholderAssessmentConfig), okResp]
+        [call(putAssessmentConfigs, mockTokens, placeholderAssessmentConfig), okResp]
       ])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();
@@ -991,7 +991,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.call.fn(postAssessmentConfigs)
+      .not.call.fn(putAssessmentConfigs)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.put.actionType(UPDATE_SUBLANGUAGE)
       .not.call.fn(showSuccessMessage)
@@ -1028,11 +1028,11 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
   test('added successfully', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postNewUsers, mockTokens, users, provider)
+      .call(putNewUsers, mockTokens, users, provider)
       .put(fetchAdminPanelCourseRegistrations())
       .call.fn(showSuccessMessage)
       .provide([
-        [call(postNewUsers, mockTokens, users, provider), okResp],
+        [call(putNewUsers, mockTokens, users, provider), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
       .dispatch({ type: ADD_NEW_USERS_TO_COURSE, payload: { users, provider } })
@@ -1042,10 +1042,10 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
   test('adding unsuccessful', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postNewUsers, mockTokens, users, provider)
+      .call(putNewUsers, mockTokens, users, provider)
       .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .not.call.fn(showSuccessMessage)
-      .provide([[call(postNewUsers, mockTokens, users, provider), errorResp]])
+      .provide([[call(putNewUsers, mockTokens, users, provider), errorResp]])
       .dispatch({ type: ADD_NEW_USERS_TO_COURSE, payload: { users, provider } })
       .silentRun();
   });
@@ -1075,11 +1075,11 @@ describe('Test UPDATE_USER_ROLE action', () => {
   test('updated successfully', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postUserRole, mockTokens, crId, role)
+      .call(putUserRole, mockTokens, crId, role)
       .put(fetchAdminPanelCourseRegistrations())
       .call.fn(showSuccessMessage)
       .provide([
-        [call(postUserRole, mockTokens, crId, role), okResp],
+        [call(putUserRole, mockTokens, crId, role), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
       .dispatch({ type: UPDATE_USER_ROLE, payload: { crId, role } })
@@ -1089,10 +1089,10 @@ describe('Test UPDATE_USER_ROLE action', () => {
   test('update unsuccessful', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postUserRole, mockTokens, crId, role)
+      .call(putUserRole, mockTokens, crId, role)
       .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .not.call.fn(showSuccessMessage)
-      .provide([[call(postUserRole, mockTokens, crId, role), errorResp]])
+      .provide([[call(putUserRole, mockTokens, crId, role), errorResp]])
       .dispatch({ type: UPDATE_USER_ROLE, payload: { crId, role } })
       .silentRun();
   });
@@ -1141,19 +1141,19 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
   test('when assessment configs is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
+      .call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
       .call.fn(showSuccessMessage)
-      .provide([[call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp]])
+      .provide([[call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp]])
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
       .silentRun();
   });
 
   test('when assessment configs update fails', () => {
     return expectSaga(BackendSaga)
-      .provide([[call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations), errorResp]])
+      .provide([[call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations), errorResp]])
       .withState(mockStates)
-      .call(postAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
+      .call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.call.fn(showSuccessMessage)
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })

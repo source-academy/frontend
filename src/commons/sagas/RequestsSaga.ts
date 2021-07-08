@@ -171,7 +171,7 @@ export const getLatestCourseRegistrationAndConfiguration = async (
 /**
  * PUT /user/latest_viewed
  */
-export const postLatestViewedCourse = async (
+export const putLatestViewedCourse = async (
   tokens: Tokens,
   courseId: number
 ): Promise<Response | null> => {
@@ -960,7 +960,7 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 /**
  * PUT /courses/{courseId}/admin/config
  */
-export const postCourseConfig = async (
+export const putCourseConfig = async (
   tokens: Tokens,
   courseConfig: UpdateCourseConfiguration
 ): Promise<Response | null> => {
@@ -995,7 +995,7 @@ export const getAssessmentConfigs = async (
 /**
  * PUT /courses/{courseId}/admin/config/assessment_configs
  */
-export const postAssessmentConfigs = async (
+export const putAssessmentConfigs = async (
   tokens: Tokens,
   assessmentConfigs: AssessmentConfiguration[]
 ): Promise<Response | null> => {
@@ -1048,7 +1048,7 @@ export const getUserCourseRegistrations = async (
 /**
  * PUT /courses/{courseId}/admin/users
  */
-export const postNewUsers = async (
+export const putNewUsers = async (
   tokens: Tokens,
   users: UsernameRoleGroup[],
   provider: string
@@ -1067,7 +1067,7 @@ export const postNewUsers = async (
 /**
  * PUT /courses/{courseId}/admin/users/role
  */
-export const postUserRole = async (
+export const putUserRole = async (
   tokens: Tokens,
   crId: number,
   role: Role
