@@ -12,47 +12,75 @@ import {
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
-export const mockAssessmentConfigurations: AssessmentConfiguration[] = [
-  {
-    assessmentConfigId: 1,
-    type: 'Missions',
-    isManuallyGraded: true,
-    displayInDashboard: true,
-    hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
-  },
-  {
-    assessmentConfigId: 2,
-    type: 'Quests',
-    isManuallyGraded: true,
-    displayInDashboard: true,
-    hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
-  },
-  {
-    assessmentConfigId: 3,
-    type: 'Paths',
-    isManuallyGraded: true,
-    displayInDashboard: true,
-    hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
-  },
-  {
-    assessmentConfigId: 4,
-    type: 'Contests',
-    isManuallyGraded: true,
-    displayInDashboard: true,
-    hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
-  },
-  {
-    assessmentConfigId: 5,
-    type: 'Others',
-    isManuallyGraded: true,
-    displayInDashboard: true,
-    hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
-  }
+export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
+  [
+    {
+      assessmentConfigId: 1,
+      type: 'Missions',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 2,
+      type: 'Quests',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 3,
+      type: 'Paths',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 4,
+      type: 'Contests',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 5,
+      type: 'Others',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ],
+  [
+    {
+      assessmentConfigId: 1,
+      type: 'Mission Impossible',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 2,
+      type: 'Data Structures',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 3,
+      type: 'Algorithm Frenzy',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ]
 ];
 
 const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [

@@ -1,5 +1,10 @@
 import { GameState, Role } from '../application/ApplicationTypes';
-import { CourseConfiguration, CourseRegistration, User } from '../application/types/SessionTypes';
+import {
+  AdminPanelCourseRegistration,
+  CourseConfiguration,
+  CourseRegistration,
+  User
+} from '../application/types/SessionTypes';
 import { Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
 
 /**
@@ -36,7 +41,7 @@ const mockStudentInfo = [
 
 export const mockUser: User = {
   userId: 123,
-  name: 'DevStaff',
+  name: 'DevAdmin',
   courses: [
     {
       courseId: 1,
@@ -62,7 +67,7 @@ export const mockUser: User = {
 export const mockCourseRegistrations: CourseRegistration[] = [
   {
     crId: 1,
-    role: Role.Staff,
+    role: Role.Admin,
     group: '1F',
     gameState: {} as GameState,
     courseId: 1,
@@ -87,6 +92,30 @@ export const mockCourseRegistrations: CourseRegistration[] = [
       story: 'mission-1',
       playStory: true
     }
+  }
+];
+
+export const mockAdminPanelCourseRegistrations: AdminPanelCourseRegistration[] = [
+  {
+    crId: 1,
+    courseId: 1,
+    name: 'DevAdmin',
+    username: 'test/admin',
+    role: Role.Admin
+  },
+  {
+    crId: 3,
+    courseId: 1,
+    name: 'Dummy student',
+    username: 'test/student',
+    role: Role.Student
+  },
+  {
+    crId: 4,
+    courseId: 1,
+    name: 'Dummy staff',
+    username: 'test/staff',
+    role: Role.Staff
   }
 ];
 
