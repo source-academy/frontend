@@ -224,8 +224,8 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
                           </p>
                           <p>
                             <i>
-                              (Luminus): &nbsp;E1234567,student &nbsp;•&nbsp;
-                              E1234567,student,Group1
+                              (Luminus): &nbsp;e1234567,student &nbsp;•&nbsp;
+                              e1234567,student,Group1
                             </i>
                           </p>
                           <p>
