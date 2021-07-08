@@ -66,7 +66,7 @@ export const mockUser: User = {
 
 export const mockCourseRegistrations: CourseRegistration[] = [
   {
-    crId: 1,
+    courseRegId: 1,
     role: Role.Admin,
     group: '1F',
     gameState: {} as GameState,
@@ -80,7 +80,7 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     }
   },
   {
-    crId: 2,
+    courseRegId: 2,
     role: Role.Student,
     group: '1F',
     gameState: {} as GameState,
@@ -97,21 +97,21 @@ export const mockCourseRegistrations: CourseRegistration[] = [
 
 export const mockAdminPanelCourseRegistrations: AdminPanelCourseRegistration[] = [
   {
-    crId: 1,
+    courseRegId: 1,
     courseId: 1,
     name: 'DevAdmin',
     username: 'test/admin',
     role: Role.Admin
   },
   {
-    crId: 3,
+    courseRegId: 3,
     courseId: 1,
     name: 'Dummy student',
     username: 'test/student',
     role: Role.Student
   },
   {
-    crId: 4,
+    courseRegId: 4,
     courseId: 1,
     name: 'Dummy staff',
     username: 'test/staff',

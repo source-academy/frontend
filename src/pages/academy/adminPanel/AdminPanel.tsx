@@ -27,13 +27,13 @@ export type DispatchProps = {
   handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
   setAssessmentConfigurations: (assessmentConfigs: AssessmentConfiguration[]) => void;
   handleDeleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => void;
-  handleUpdateUserRole: (crId: number, role: Role) => void;
-  handleDeleteUserFromCourse: (crId: number) => void;
+  handleUpdateUserRole: (courseRegId: number, role: Role) => void;
+  handleDeleteUserFromCourse: (courseRegId: number) => void;
   handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;
 };
 
 export type StateProps = {
-  crId?: number;
+  courseRegId?: number;
   courseName?: string;
   courseShortName?: string;
   viewable?: boolean;
@@ -129,7 +129,7 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   }, [assessmentConfigsToDelete]);
 
   const userConfigPanelProps = {
-    crId: props.crId,
+    courseRegId: props.courseRegId,
     userCourseRegistrations: props.userCourseRegistrations,
     handleUpdateUserRole: props.handleUpdateUserRole,
     handleDeleteUserFromCourse: props.handleDeleteUserFromCourse

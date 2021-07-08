@@ -771,9 +771,9 @@ function* BackendSaga(): SagaIterator {
     UPDATE_USER_ROLE,
     function* (action: ReturnType<typeof actions.updateUserRole>): any {
       const tokens: Tokens = yield selectTokens();
-      const { crId, role }: { crId: number; role: Role } = action.payload;
+      const { courseRegId, role }: { courseRegId: number; role: Role } = action.payload;
 
-      const resp: Response | null = yield call(putUserRole, tokens, crId, role);
+      const resp: Response | null = yield call(putUserRole, tokens, courseRegId, role);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -787,9 +787,9 @@ function* BackendSaga(): SagaIterator {
     DELETE_USER_COURSE_REGISTRATION,
     function* (action: ReturnType<typeof actions.deleteUserCourseRegistration>): any {
       const tokens: Tokens = yield selectTokens();
-      const { crId }: { crId: number } = action.payload;
+      const { courseRegId }: { courseRegId: number } = action.payload;
 
-      const resp: Response | null = yield call(removeUserCourseRegistration, tokens, crId);
+      const resp: Response | null = yield call(removeUserCourseRegistration, tokens, courseRegId);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }

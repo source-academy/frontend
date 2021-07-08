@@ -17,7 +17,7 @@ import { OverallState } from '../../../commons/application/ApplicationTypes';
 import AdminPanel, { DispatchProps, StateProps } from './AdminPanel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  crId: state.session.crId,
+  courseRegId: state.session.courseRegId,
   courseName: state.session.courseName,
   courseShortName: state.session.courseShortName,
   viewable: state.session.viewable,

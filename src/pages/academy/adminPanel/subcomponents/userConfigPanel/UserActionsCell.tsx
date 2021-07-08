@@ -12,7 +12,7 @@ type DeleteUserCellProps = OwnProps;
 type OwnProps = {
   data: AdminPanelCourseRegistration;
   rowIndex: number;
-  handleDeleteUserFromCourse: (crId: number) => void;
+  handleDeleteUserFromCourse: (courseRegId: number) => void;
 };
 
 const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
@@ -27,7 +27,7 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
   };
 
   const handleDelete = React.useCallback(() => {
-    props.handleDeleteUserFromCourse(props.data.crId);
+    props.handleDeleteUserFromCourse(props.data.courseRegId);
     setIsDialogOpen(false);
   }, [props]);
 

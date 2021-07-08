@@ -9,8 +9,8 @@ type RolesCellProps = OwnProps;
 type OwnProps = {
   data: AdminPanelCourseRegistration;
   rowIndex: number;
-  crId: number;
-  handleUpdateUserRole: (crId: number, role: Role) => void;
+  courseRegId: number;
+  handleUpdateUserRole: (courseRegId: number, role: Role) => void;
 };
 
 const RolesCell: React.FC<RolesCellProps> = props => {
@@ -18,7 +18,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
 
   const changeHandler = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      props.handleUpdateUserRole(data.crId, e.target.value as Role);
+      props.handleUpdateUserRole(data.courseRegId, e.target.value as Role);
     },
     [data, props]
   );
@@ -42,7 +42,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
       content="You cannot downgrade yourself from an admin role!"
       interactionKind="click"
       position={Position.TOP}
-      disabled={props.crId !== data.crId}
+      disabled={props.courseRegId !== data.courseRegId}
     >
       <HTMLSelect
         options={roleOptions}
@@ -51,7 +51,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
         minimal
         style={{ textAlign: 'center' }}
         value={data.role}
-        disabled={props.crId === data.crId}
+        disabled={props.courseRegId === data.courseRegId}
       />
     </Popover2>
   );

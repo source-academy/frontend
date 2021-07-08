@@ -1069,12 +1069,12 @@ export const putNewUsers = async (
  */
 export const putUserRole = async (
   tokens: Tokens,
-  crId: number,
+  courseRegId: number,
   role: Role
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users/role`, 'PUT', {
     ...tokens,
-    body: { crId, role },
+    body: { courseRegId, role },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -1088,11 +1088,11 @@ export const putUserRole = async (
  */
 export const removeUserCourseRegistration = async (
   tokens: Tokens,
-  crId: number
+  courseRegId: number
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'DELETE', {
     ...tokens,
-    body: { crId },
+    body: { courseRegId },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

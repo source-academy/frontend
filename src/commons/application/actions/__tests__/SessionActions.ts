@@ -238,7 +238,7 @@ test('setCourseConfiguration generates correct action object', () => {
 
 test('setCourseRegistration generates correct action object', () => {
   const courseRegistration = {
-    crId: 1,
+    courseRegId: 1,
     role: Role.Student,
     group: '42D',
     gameState: {
@@ -298,14 +298,14 @@ test('setAssessmentConfigurations generates correct action object', () => {
 test('setAdminPanelCourseRegistrations generates correct action object', async () => {
   const userCourseRegistrations = [
     {
-      crId: 1,
+      courseRegId: 1,
       courseId: 1,
       name: 'Bob',
       username: 'test/bob123',
       role: Role.Student
     },
     {
-      crId: 2,
+      courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'test/avenger456',
@@ -696,20 +696,20 @@ test('fetchAdminPanelCourseRegistrations generates correct action object', () =>
 });
 
 test('updateUserRole generates correct action object', () => {
-  const crId = 1;
+  const courseRegId = 1;
   const role = Role.Staff;
-  const action = updateUserRole(crId, role);
+  const action = updateUserRole(courseRegId, role);
   expect(action).toEqual({
     type: UPDATE_USER_ROLE,
-    payload: { crId, role }
+    payload: { courseRegId, role }
   });
 });
 
 test('deleteUserCourseRegistration generates correct action object', () => {
-  const crId = 1;
-  const action = deleteUserCourseRegistration(crId);
+  const courseRegId = 1;
+  const action = deleteUserCourseRegistration(courseRegId);
   expect(action).toEqual({
     type: DELETE_USER_COURSE_REGISTRATION,
-    payload: { crId }
+    payload: { courseRegId }
   });
 });

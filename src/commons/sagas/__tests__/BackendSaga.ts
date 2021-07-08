@@ -142,7 +142,7 @@ const mockUser: User = {
 };
 
 const mockCourseRegistration1: CourseRegistration = {
-  crId: 1,
+  courseRegId: 1,
   role: Role.Student,
   group: '42D',
   gameState: {
@@ -172,7 +172,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
 };
 
 const mockCourseRegistration2: CourseRegistration = {
-  crId: 2,
+  courseRegId: 2,
   role: Role.Student,
   group: '4D',
   gameState: {
@@ -893,14 +893,14 @@ describe('Test FETCH_ASSESSMENT_CONFIG action', () => {
 describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
   const userCourseRegistrations: AdminPanelCourseRegistration[] = [
     {
-      crId: 1,
+      courseRegId: 1,
       courseId: 1,
       name: 'Bob',
       username: 'E0000001',
       role: Role.Student
     },
     {
-      crId: 2,
+      courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'E0000002',
@@ -1010,14 +1010,14 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
 
   const userCourseRegistrations: AdminPanelCourseRegistration[] = [
     {
-      crId: 1,
+      courseRegId: 1,
       courseId: 1,
       name: 'student1',
       username: 'student1',
       role: Role.Student
     },
     {
-      crId: 2,
+      courseRegId: 2,
       courseId: 1,
       name: 'staff1',
       username: 'staff1',
@@ -1052,19 +1052,19 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
 });
 
 describe('Test UPDATE_USER_ROLE action', () => {
-  const crId = 2;
+  const courseRegId = 2;
   const role = Role.Staff;
 
   const userCourseRegistrations: AdminPanelCourseRegistration[] = [
     {
-      crId: 1,
+      courseRegId: 1,
       courseId: 1,
       name: 'Bob',
       username: 'E0000001',
       role: Role.Student
     },
     {
-      crId: 2,
+      courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'E0000002',
@@ -1075,35 +1075,35 @@ describe('Test UPDATE_USER_ROLE action', () => {
   test('updated successfully', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(putUserRole, mockTokens, crId, role)
+      .call(putUserRole, mockTokens, courseRegId, role)
       .put(fetchAdminPanelCourseRegistrations())
       .call.fn(showSuccessMessage)
       .provide([
-        [call(putUserRole, mockTokens, crId, role), okResp],
+        [call(putUserRole, mockTokens, courseRegId, role), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
-      .dispatch({ type: UPDATE_USER_ROLE, payload: { crId, role } })
+      .dispatch({ type: UPDATE_USER_ROLE, payload: { courseRegId, role } })
       .silentRun();
   });
 
   test('update unsuccessful', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(putUserRole, mockTokens, crId, role)
+      .call(putUserRole, mockTokens, courseRegId, role)
       .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .not.call.fn(showSuccessMessage)
-      .provide([[call(putUserRole, mockTokens, crId, role), errorResp]])
-      .dispatch({ type: UPDATE_USER_ROLE, payload: { crId, role } })
+      .provide([[call(putUserRole, mockTokens, courseRegId, role), errorResp]])
+      .dispatch({ type: UPDATE_USER_ROLE, payload: { courseRegId, role } })
       .silentRun();
   });
 });
 
 describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
-  const crId = 1;
+  const courseRegId = 1;
 
   const userCourseRegistrations: AdminPanelCourseRegistration[] = [
     {
-      crId: 2,
+      courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'E0000002',
@@ -1114,25 +1114,25 @@ describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
   test('deleted successfully', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(removeUserCourseRegistration, mockTokens, crId)
+      .call(removeUserCourseRegistration, mockTokens, courseRegId)
       .put(fetchAdminPanelCourseRegistrations())
       .call.fn(showSuccessMessage)
       .provide([
-        [call(removeUserCourseRegistration, mockTokens, crId), okResp],
+        [call(removeUserCourseRegistration, mockTokens, courseRegId), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
-      .dispatch({ type: DELETE_USER_COURSE_REGISTRATION, payload: { crId } })
+      .dispatch({ type: DELETE_USER_COURSE_REGISTRATION, payload: { courseRegId } })
       .silentRun();
   });
 
   test('delete unsucessful', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .call(removeUserCourseRegistration, mockTokens, crId)
+      .call(removeUserCourseRegistration, mockTokens, courseRegId)
       .not.put.actionType(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS)
       .not.call.fn(showSuccessMessage)
-      .provide([[call(removeUserCourseRegistration, mockTokens, crId), errorResp]])
-      .dispatch({ type: DELETE_USER_COURSE_REGISTRATION, payload: { crId } })
+      .provide([[call(removeUserCourseRegistration, mockTokens, courseRegId), errorResp]])
+      .dispatch({ type: DELETE_USER_COURSE_REGISTRATION, payload: { courseRegId } })
       .silentRun();
   });
 });

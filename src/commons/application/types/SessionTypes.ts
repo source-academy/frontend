@@ -72,7 +72,7 @@ export type SessionState = {
   readonly courses: UserCourse[];
 
   // Course Registration
-  readonly crId?: number;
+  readonly courseRegId?: number;
   readonly role?: Role;
   readonly group: string | null;
   readonly gameState: GameState;
@@ -128,7 +128,7 @@ export type User = {
 };
 
 export type CourseRegistration = {
-  crId: number;
+  courseRegId: number;
   role: Role;
   group: string | null;
   gameState?: GameState;
@@ -152,7 +152,7 @@ export type CourseConfiguration = {
 };
 
 export type AdminPanelCourseRegistration = {
-  crId: number;
+  courseRegId: number;
   courseId: number;
   name?: string;
   username: string;

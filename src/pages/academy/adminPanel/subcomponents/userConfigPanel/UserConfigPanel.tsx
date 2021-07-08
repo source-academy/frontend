@@ -11,10 +11,10 @@ import UserActionsCell from './UserActionsCell';
 export type UserConfigPanelProps = OwnProps;
 
 type OwnProps = {
-  crId?: number;
+  courseRegId?: number;
   userCourseRegistrations?: AdminPanelCourseRegistration[];
-  handleUpdateUserRole: (crId: number, role: Role) => void;
-  handleDeleteUserFromCourse: (crId: number) => void;
+  handleUpdateUserRole: (courseRegId: number, role: Role) => void;
+  handleDeleteUserFromCourse: (courseRegId: number) => void;
 };
 
 /**
@@ -56,7 +56,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
       field: 'role',
       cellRendererFramework: RolesCell,
       cellRendererParams: {
-        crId: props.crId,
+        courseRegId: props.courseRegId,
         handleUpdateUserRole: props.handleUpdateUserRole
       },
       width: 110

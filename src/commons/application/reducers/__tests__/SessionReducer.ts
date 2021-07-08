@@ -189,13 +189,13 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
 test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
   const payload = [
     {
-      crId: 1,
+      courseRegId: 1,
       courseId: 1,
       name: 'Bob',
       role: Role.Student
     },
     {
-      crId: 2,
+      courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       role: Role.Staff

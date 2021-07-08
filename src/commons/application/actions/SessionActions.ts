@@ -221,8 +221,8 @@ export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration
 export const fetchAdminPanelCourseRegistrations = () =>
   action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
 
-export const updateUserRole = (crId: number, role: Role) =>
-  action(UPDATE_USER_ROLE, { crId, role });
+export const updateUserRole = (courseRegId: number, role: Role) =>
+  action(UPDATE_USER_ROLE, { courseRegId, role });
 
-export const deleteUserCourseRegistration = (crId: number) =>
-  action(DELETE_USER_COURSE_REGISTRATION, { crId });
+export const deleteUserCourseRegistration = (courseRegId: number) =>
+  action(DELETE_USER_COURSE_REGISTRATION, { courseRegId });
