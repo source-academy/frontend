@@ -136,85 +136,59 @@ function* BackendSaga(): SagaIterator {
     if (!tokens) {
       return yield history.push('/');
     }
-
-    const {
-      user,
-      courseRegistration,
-      courseConfiguration,
-      assessmentConfigurations
-    }: {
-      user: User | null;
-      courseRegistration: CourseRegistration | null;
-      courseConfiguration: CourseConfiguration | null;
-      assessmentConfigurations: AssessmentConfiguration[] | null;
-    } = yield call(getUser, tokens);
-
-    if (!user) {
-      return yield history.push('/');
-    }
-
     yield put(actions.setTokens(tokens));
-    yield put(actions.setUser(user));
 
-    if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
-      return yield history.push('/welcome');
-    }
-
-    yield put(actions.setCourseRegistration(courseRegistration));
-    yield put(actions.setCourseConfiguration(courseConfiguration));
-    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-    yield put(
-      actions.updateSublanguage({
-        chapter: courseConfiguration.sourceChapter,
-        variant: courseConfiguration.sourceVariant,
-        displayName: styliseSublanguage(
-          courseConfiguration.sourceChapter,
-          courseConfiguration.sourceVariant
-        )
-      })
-    );
+    yield getUserAndCourse(tokens)();
     yield history.push('/academy');
   });
 
-  yield takeEvery(FETCH_USER_AND_COURSE, function* (): any {
-    const tokens: Tokens = yield selectTokens();
+  const getUserAndCourse = (tk?: Tokens) =>
+    function* (): any {
+      let tokens: Tokens;
+      if (tk) {
+        tokens = tk;
+      } else {
+        tokens = yield selectTokens();
+      }
 
-    const {
-      user,
-      courseRegistration,
-      courseConfiguration,
-      assessmentConfigurations
-    }: {
-      user: User | null;
-      courseRegistration: CourseRegistration | null;
-      courseConfiguration: CourseConfiguration | null;
-      assessmentConfigurations: AssessmentConfiguration[] | null;
-    } = yield call(getUser, tokens);
+      const {
+        user,
+        courseRegistration,
+        courseConfiguration,
+        assessmentConfigurations
+      }: {
+        user: User | null;
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getUser, tokens);
 
-    if (!user) {
-      return yield history.push('/');
-    }
+      if (!user) {
+        return yield history.push('/');
+      }
 
-    yield put(actions.setUser(user));
+      yield put(actions.setUser(user));
 
-    if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
-      return yield history.push('/welcome');
-    }
+      if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
+        return yield history.push('/welcome');
+      }
 
-    yield put(actions.setCourseRegistration(courseRegistration));
-    yield put(actions.setCourseConfiguration(courseConfiguration));
-    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-    yield put(
-      actions.updateSublanguage({
-        chapter: courseConfiguration.sourceChapter,
-        variant: courseConfiguration.sourceVariant,
-        displayName: styliseSublanguage(
-          courseConfiguration.sourceChapter,
-          courseConfiguration.sourceVariant
-        )
-      })
-    );
-  });
+      yield put(actions.setCourseRegistration(courseRegistration));
+      yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+      yield put(
+        actions.updateSublanguage({
+          chapter: courseConfiguration.sourceChapter,
+          variant: courseConfiguration.sourceVariant,
+          displayName: styliseSublanguage(
+            courseConfiguration.sourceChapter,
+            courseConfiguration.sourceVariant
+          )
+        })
+      );
+    };
+
+  yield takeEvery(FETCH_USER_AND_COURSE, getUserAndCourse());
 
   yield takeEvery(FETCH_COURSE_CONFIG, function* () {
     const tokens: Tokens = yield selectTokens();

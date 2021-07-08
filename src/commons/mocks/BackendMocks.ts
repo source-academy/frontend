@@ -64,29 +64,13 @@ export function* mockBackendSaga(): SagaIterator {
       accessToken: 'accessToken',
       refreshToken: 'refreshToken'
     };
-    const user = { ...mockUser };
-    const courseRegistration = { ...mockCourseRegistrations[0] };
-    const courseConfiguration = { ...mockCourseConfigurations[0] };
-    const assessmentConfigurations = [...mockAssessmentConfigurations[0]];
-    const sublanguage: SourceLanguage = {
-      chapter: courseConfiguration.sourceChapter,
-      variant: courseConfiguration.sourceVariant,
-      displayName: styliseSublanguage(
-        courseConfiguration.sourceChapter,
-        courseConfiguration.sourceVariant
-      )
-    };
 
     yield put(actions.setTokens(tokens));
-    yield put(actions.setUser(user));
-    yield put(actions.setCourseRegistration(courseRegistration));
-    yield put(actions.setCourseConfiguration(courseConfiguration));
-    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-    yield put(actions.updateSublanguage(sublanguage));
+    yield mockGetUserAndCourse();
     yield history.push('/academy');
   });
 
-  yield takeEvery(FETCH_USER_AND_COURSE, function* () {
+  const mockGetUserAndCourse = function* () {
     const user = { ...mockUser };
     const courseRegistration = { ...mockCourseRegistrations[0] };
     const courseConfiguration = { ...mockCourseConfigurations[0] };
@@ -105,7 +89,9 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.setCourseConfiguration(courseConfiguration));
     yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
     yield put(actions.updateSublanguage(sublanguage));
-  });
+  };
+
+  yield takeEvery(FETCH_USER_AND_COURSE, mockGetUserAndCourse);
 
   yield takeEvery(FETCH_COURSE_CONFIG, function* () {
     const courseConfiguration = { ...mockCourseConfigurations[0] };
