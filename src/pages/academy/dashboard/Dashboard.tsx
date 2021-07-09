@@ -20,14 +20,11 @@ export type StateProps = {
 };
 
 class Dashboard extends React.Component<DashboardProps> {
-  private columnDefs: ColDef[];
   private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: DashboardProps) {
     super(props);
-
-    this.columnDefs = [];
 
     this.defaultColumnDefs = {
       filter: true,
@@ -36,32 +33,24 @@ class Dashboard extends React.Component<DashboardProps> {
     };
   }
 
-  public componentDidUpdate(prevProps: DashboardProps) {
-    this.columnDefs = this.props.gradingSummary.cols.map(e => {
-      return {
-        headerName: startCase(e),
-        field: e
-      };
-    });
-    if (
-      this.gridApi &&
-      this.props.gradingSummary.rows.length !== prevProps.gradingSummary.rows.length
-    ) {
-      this.gridApi.setRowData(this.props.gradingSummary.rows);
-    }
-  }
-
   public handleFetchGradingSummary = () => {
     this.props.handleFetchGradingSummary();
   };
 
   public render() {
+    const columnDefs = this.props.gradingSummary.cols.map(e => {
+      return {
+        headerName: startCase(e),
+        field: e
+      };
+    });
+
     const content = (
       <div className="Dashboard">
         <div className="Grid ag-grid-parent ag-theme-balham">
           <AgGridReact
             domLayout={'autoHeight'}
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
             onGridSizeChanged={this.resizeGrid}
