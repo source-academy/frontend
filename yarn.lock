@@ -8181,10 +8181,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.5:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.5.tgz#edb70e68249c3143c1ad2d87f80423f223fd0d3f"
-  integrity sha512-FzGh2Q5xZN/MHi+F4Y9iN40eGs8g0FEYLxDP8rtpp0NPr40H6PeUxDNPXPiY7RnnZEqW1IBiEdKL+hcYU4IOHA==
+js-slang@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.6.tgz#d3d7dec8a024c6fb2fdc57e9ce51782966a2ef24"
+  integrity sha512-hZ2tYctVnwdw6712kEhi+nvjw0fOXFv3iV8Sd9LFcXrE7TjGdszVtL0bxCnbALYnWjMwYnarI2aKjeWG7vNWsg==
   dependencies:
     "@types/estree" "0.0.47"
     acorn "^8.0.3"
