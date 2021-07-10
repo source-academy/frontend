@@ -6,7 +6,6 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
-import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {
@@ -33,7 +32,6 @@ const baseProps = {
   persistenceFile: undefined,
   githubOctokitObject: { octokit: undefined },
   githubSaveInfo: { repoName: '', filePath: '' },
-  handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
