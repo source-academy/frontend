@@ -193,7 +193,8 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       // Evaluate program upon pressing the 'Run' tab on mobile
       if (
         (prevTabId === SideContentType.substVisualizer ||
-          prevTabId === SideContentType.autograder) &&
+          prevTabId === SideContentType.autograder ||
+          prevTabId === SideContentType.testcases) &&
         newTabId === SideContentType.mobileEditorRun
       ) {
         props.handleEditorEval();
