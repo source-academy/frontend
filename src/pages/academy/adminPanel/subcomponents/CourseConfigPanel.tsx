@@ -1,9 +1,20 @@
-import { Divider, FormGroup, H2, H3, InputGroup, Switch, TextArea } from '@blueprintjs/core';
+import {
+  Divider,
+  FormGroup,
+  H2,
+  H3,
+  InputGroup,
+  Switch,
+  Tab,
+  Tabs,
+  TextArea
+} from '@blueprintjs/core';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import Constants from 'src/commons/utils/Constants';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
+import Markdown from '../../../../commons/Markdown';
+import Constants from '../../../../commons/utils/Constants';
 
 export type CourseConfigPanelProps = OwnProps;
 
@@ -12,8 +23,16 @@ type OwnProps = {
   setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
 };
 
+export enum CourseHelpTextEditorTab {
+  WRITE = 'WRITE',
+  PREVIEW = 'PREVIEW'
+}
+
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
+    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+
   const {
     courseName,
     courseShortName,
@@ -23,6 +42,41 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
     enableSourcecast,
     moduleHelpText
   } = props.courseConfiguration;
+
+  const writePanel = (
+    <TextArea
+      id="moduleHelpText"
+      className="input-textarea"
+      fill={true}
+      value={moduleHelpText}
+      onChange={e =>
+        props.setCourseConfiguration({
+          ...props.courseConfiguration,
+          moduleHelpText: e.target.value
+        })
+      }
+    />
+  );
+
+  const previewPanel = (
+    <div className="input-markdown">
+      <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
+    </div>
+  );
+
+  const onChangeTabs = React.useCallback(
+    (
+      newTabId: CourseHelpTextEditorTab,
+      prevTabId: CourseHelpTextEditorTab,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
+        return;
+      }
+      setCourseHelpTextSelectedTab(newTabId);
+    },
+    [setCourseHelpTextSelectedTab]
+  );
 
   return (
     <div className="course-configuration">
@@ -70,17 +124,16 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
             label="Module Help Text"
             labelFor="moduleHelpText"
           >
-            <TextArea
-              id="moduleHelpText"
-              fill={true}
-              defaultValue={moduleHelpText}
-              onChange={e =>
-                props.setCourseConfiguration({
-                  ...props.courseConfiguration,
-                  moduleHelpText: e.target.value
-                })
-              }
-            />
+            <Tabs
+              selectedTabId={courseHelpTextSelectedTab}
+              onChange={onChangeTabs}
+              className="module-help-text-tabs"
+            >
+              <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
+              <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
+            </Tabs>
+            {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
+            {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
           </FormGroup>
         </div>
         {!isMobileBreakpoint && <Divider />}

@@ -6,14 +6,19 @@ import {
   HTMLSelect,
   InputGroup,
   Switch,
+  Tab,
+  Tabs,
+  Text,
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
+import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
 import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
+import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type DialogProps = {
@@ -35,6 +40,9 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     moduleHelpText: ''
   });
 
+  const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
+    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+
   const sourceChapterOptions = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }];
 
   const sourceVariantOptions = (chapter: number) =>
@@ -51,10 +59,26 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     // Validate that courseName is not an empty string
     if (courseConfig.courseName === '') {
       showWarningMessage('Course Name cannot be empty!');
+      return;
     }
     props.handleCreateCourse(courseConfig);
     props.onClose();
   };
+
+  const onChangeTabs = React.useCallback(
+    (
+      newTabId: CourseHelpTextEditorTab,
+      prevTabId: CourseHelpTextEditorTab,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
+        return;
+      }
+      setCourseHelpTextSelectedTab(newTabId);
+    },
+    [setCourseHelpTextSelectedTab]
+  );
+
   return (
     <Dialog
       className="create-course"
@@ -109,21 +133,39 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
         </FormGroup>
         <FormGroup
           helperText="The module help text will be used in the course help dialog."
-          label="Module Help Text"
-          labelInfo="(optional)"
           labelFor="moduleHelpText"
         >
-          <TextArea
-            id="moduleHelpText"
-            fill={true}
-            value={courseConfig.moduleHelpText}
-            onChange={e =>
-              setCourseConfig({
-                ...courseConfig,
-                moduleHelpText: e.target.value
-              })
-            }
-          />
+          <Text tagName="span">Module Help Text&nbsp;</Text>
+          <Text tagName="span" className="optional-text">
+            (optional)
+          </Text>
+          <Tabs
+            selectedTabId={courseHelpTextSelectedTab}
+            onChange={onChangeTabs}
+            className="module-help-text-tabs"
+          >
+            <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
+            <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
+          </Tabs>
+          {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
+            <TextArea
+              id="moduleHelpText"
+              className="input-textarea"
+              fill={true}
+              value={courseConfig.moduleHelpText}
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  moduleHelpText: e.target.value
+                })
+              }
+            />
+          )}
+          {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
+            <div className="input-markdown">
+              <Markdown content={courseConfig.moduleHelpText || ''} openLinksInNewWindow />
+            </div>
+          )}
         </FormGroup>
 
         <div className="boolean-container">
