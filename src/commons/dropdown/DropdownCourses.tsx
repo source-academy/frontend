@@ -2,6 +2,7 @@ import { Classes, Dialog, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { Role } from '../application/ApplicationTypes';
 import { UserCourse } from '../application/types/SessionTypes';
 
 type DialogProps = {
@@ -17,8 +18,8 @@ const DropdownCourses: React.FC<DialogProps> = props => {
 
   const options = courses.map(course => ({
     value: course.courseId,
-    label: course.courseName,
-    disabled: !course.viewable
+    label: course.courseName.concat(!course.viewable ? ' - disabled' : ''),
+    disabled: !course.viewable && course.role !== Role.Admin
   }));
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {

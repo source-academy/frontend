@@ -47,18 +47,21 @@ export const mockUser: User = {
       courseId: 1,
       courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
       courseShortName: `CS1101S`,
+      role: Role.Admin,
       viewable: true
     },
     {
       courseId: 2,
       courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
       courseShortName: `CS2040S`,
-      viewable: true
+      role: Role.Admin,
+      viewable: false
     },
     {
       courseId: 3,
       courseName: `CS2030S Programming Methodology II (AY21/22 Sem 1)`,
       courseShortName: `CS2030S`,
+      role: Role.Staff,
       viewable: false
     }
   ]

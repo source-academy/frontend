@@ -118,6 +118,7 @@ export type UserCourse = {
   courseId: number;
   courseName: string;
   courseShortName: string;
+  role: Role;
   viewable: boolean;
 };
 
