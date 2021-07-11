@@ -36,6 +36,7 @@ import { NotificationFilterFunction } from '../notificationBadge/NotificationBad
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
 import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
+import AssessmentNotFound from './AssessmentNotFound';
 import {
   AssessmentConfiguration,
   AssessmentOverview,
@@ -246,6 +247,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
+    if (!overview) {
+      return <AssessmentNotFound />;
+    }
     const assessmentWorkspaceProps: AssessmentWorkspaceOwnProps = {
       assessmentId,
       questionId,

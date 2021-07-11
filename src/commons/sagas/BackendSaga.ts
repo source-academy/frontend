@@ -163,29 +163,25 @@ function* BackendSaga(): SagaIterator {
         assessmentConfigurations: AssessmentConfiguration[] | null;
       } = yield call(getUser, tokens);
 
-      if (!user) {
-        return yield history.push('/');
+      if (user) {
+        yield put(actions.setUser(user));
       }
 
-      yield put(actions.setUser(user));
-
-      if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
-        return yield history.push('/welcome');
+      if (courseRegistration && courseConfiguration && assessmentConfigurations) {
+        yield put(actions.setCourseRegistration(courseRegistration));
+        yield put(actions.setCourseConfiguration(courseConfiguration));
+        yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+        yield put(
+          actions.updateSublanguage({
+            chapter: courseConfiguration.sourceChapter,
+            variant: courseConfiguration.sourceVariant,
+            displayName: styliseSublanguage(
+              courseConfiguration.sourceChapter,
+              courseConfiguration.sourceVariant
+            )
+          })
+        );
       }
-
-      yield put(actions.setCourseRegistration(courseRegistration));
-      yield put(actions.setCourseConfiguration(courseConfiguration));
-      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      yield put(
-        actions.updateSublanguage({
-          chapter: courseConfiguration.sourceChapter,
-          variant: courseConfiguration.sourceVariant,
-          displayName: styliseSublanguage(
-            courseConfiguration.sourceChapter,
-            courseConfiguration.sourceVariant
-          )
-        })
-      );
     };
 
   yield takeEvery(FETCH_USER_AND_COURSE, getUserAndCourse());
