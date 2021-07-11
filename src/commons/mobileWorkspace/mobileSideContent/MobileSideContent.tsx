@@ -15,13 +15,6 @@ import MobileControlBar from './MobileControlBar';
 export type MobileSideContentProps = DispatchProps & StateProps & MobileControlBarProps;
 
 type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
-
-  /**
-   * The onChange handler is necessary in the mobile workspace to set selectedTab state in the parent.
-   * This is to ensure the SideContentTab panels are set correctly during the transition between
-   * desktop and mobile workspaces.
-   */
   onChange: (
     newTabId: SideContentType,
     prevTabId: SideContentType,
@@ -34,7 +27,6 @@ type DispatchProps = {
 type StateProps = {
   animate?: boolean;
   selectedTabId: SideContentType;
-  defaultSelectedTabId?: SideContentType;
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
@@ -52,15 +44,9 @@ type OwnProps = {
 };
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
-  const { tabs, defaultSelectedTabId, selectedTabId, handleActiveTabChange, onChange } = props;
+  const { tabs, selectedTabId, onChange } = props;
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
   const isIOS = /iPhone|iPod/.test(navigator.platform);
-
-  React.useEffect(() => {
-    // Set initial sideContentActiveTab for this workspace
-    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Fetch debuggerContext from store
   const debuggerContext = useSelector(
@@ -207,7 +193,8 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       // Evaluate program upon pressing the 'Run' tab on mobile
       if (
         (prevTabId === SideContentType.substVisualizer ||
-          prevTabId === SideContentType.autograder) &&
+          prevTabId === SideContentType.autograder ||
+          prevTabId === SideContentType.testcases) &&
         newTabId === SideContentType.mobileEditorRun
       ) {
         props.handleEditorEval();
@@ -215,11 +202,6 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         props.handleEditorEval();
         props.handleShowRepl();
       } else {
-        /**
-         * Update the tab change in Redux store. It is nested in these conditionals
-         * to ensure that features such as the autograder work correctly.
-         */
-        handleActiveTabChange(newTabId);
         props.handleHideRepl();
       }
 
@@ -234,7 +216,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         props.disableRepl(false);
       }
     },
-    [handleActiveTabChange, onChange, props]
+    [onChange, props]
   );
 
   return (
@@ -244,7 +226,6 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         <Tabs
           id="mobile-side-content"
           onChange={changeTabsCallback}
-          defaultSelectedTabId={props.defaultSelectedTabId}
           renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
           selectedTabId={props.selectedTabId}
           className={classNames(Classes.DARK, 'mobile-side-content')}

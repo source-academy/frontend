@@ -69,7 +69,6 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -233,7 +232,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       (selectedTab === SideContentType.introduction ||
         selectedTab === SideContentType.remoteExecution)
     ) {
-      props.handleActiveTabChange(SideContentType.mobileEditor);
       setSelectedTab(SideContentType.mobileEditor);
     } else if (
       !isMobileBreakpoint &&
@@ -241,7 +239,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.introduction);
-      props.handleActiveTabChange(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
@@ -787,9 +784,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replProps: replProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
-      defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
@@ -812,9 +807,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           githubButtons
         ]
       },
-      defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',

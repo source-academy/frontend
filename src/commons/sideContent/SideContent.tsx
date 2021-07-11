@@ -12,13 +12,6 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
  * @property animate Set this to false to disable the movement
  * of the selected tab indicator. Default value: true.
  *
- * @property defaultSelectedTabId The id of a SideContentTab to be
- *  selected initially when the SideContent component is mounted.
- *
- * @property handleActiveTabChange A dispatch bound to the
- * UPDATE_ACTIVE_TAB action creator; updates the Redux store with
- * the id of the active side content tab in the current workspace.
- *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
  *
@@ -36,7 +29,7 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
 export type SideContentProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
+  // Optional due to uncontrolled tab component in EditingWorkspace
   onChange?: (
     newTabId: SideContentType,
     prevTabId: SideContentType,
@@ -46,22 +39,15 @@ type DispatchProps = {
 
 type StateProps = {
   animate?: boolean;
-  selectedTabId?: SideContentType;
-  defaultSelectedTabId?: SideContentType;
+  selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
 };
 
 const SideContent = (props: SideContentProps) => {
-  const { tabs, defaultSelectedTabId, handleActiveTabChange, onChange } = props;
+  const { tabs, onChange } = props;
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
-
-  React.useEffect(() => {
-    // Set initial sideContentActiveTab for this workspace
-    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Fetch debuggerContext from store
   const debuggerContext = useSelector(
@@ -146,7 +132,6 @@ const SideContent = (props: SideContentProps) => {
         }
       };
 
-      handleActiveTabChange(newTabId);
       if (onChange === undefined) {
         resetAlert(prevTabId);
       } else {
@@ -154,7 +139,7 @@ const SideContent = (props: SideContentProps) => {
         resetAlert(prevTabId);
       }
     },
-    [handleActiveTabChange, onChange]
+    [onChange]
   );
 
   return (
@@ -164,7 +149,6 @@ const SideContent = (props: SideContentProps) => {
           <Tabs
             id="side-content-tabs"
             onChange={changeTabsCallback}
-            defaultSelectedTabId={props.defaultSelectedTabId}
             renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
             selectedTabId={props.selectedTabId}
           >

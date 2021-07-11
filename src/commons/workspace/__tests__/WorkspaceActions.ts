@@ -2,7 +2,6 @@ import { createDefaultWorkspace, SourceLanguage } from '../../application/Applic
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
-import { SideContentType } from '../../sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -31,7 +30,6 @@ import {
   setEditorBreakpoint,
   toggleEditorAutorun,
   toggleUsingSubst,
-  updateActiveTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -65,7 +63,6 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -375,18 +372,6 @@ test('resetWorkspace generates correct action object with provided workspace', (
     payload: {
       workspaceLocation: assessmentWorkspace,
       workspaceOptions
-    }
-  });
-});
-
-test('updateActiveTab generates correct action object', () => {
-  const activeTab = SideContentType.questionOverview;
-  const action = updateActiveTab(activeTab, playgroundWorkspace);
-  expect(action).toEqual({
-    type: UPDATE_ACTIVE_TAB,
-    payload: {
-      activeTab,
-      workspaceLocation: playgroundWorkspace
     }
   });
 });
