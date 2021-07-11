@@ -36,6 +36,7 @@ test('NavigationBar renders correctly for student with course', () => {
         courseId: 1,
         courseName: 'CS1101S Programming Methodology (AY20/21 Sem 1)',
         courseShortName: 'CS1101S',
+        role: Role.Admin,
         viewable: true
       }
     ],

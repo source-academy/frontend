@@ -130,12 +130,14 @@ const mockUser: User = {
       courseId: 1,
       courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
       courseShortName: `CS1101S`,
+      role: Role.Admin,
       viewable: true
     },
     {
       courseId: 2,
       courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
       courseShortName: `CS2030S`,
+      role: Role.Staff,
       viewable: true
     }
   ]
