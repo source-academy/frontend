@@ -16,15 +16,11 @@ $sicp-content-lr-padding: 6em;
   color: $sicp-text-color;
   overflow: auto;
   background-color: $sicp-background-color;
-  font-size: 1.5em;
+  font-size: 16pt;
   line-height: 2;
 
-  @media only screen and (max-width: 768px) {
-    font-size: 1.2em;
-  }
-
   .bp3-non-ideal-state {
-    font-size: 1rem;
+    font-size: 13pt;
   }
 
   pre {
@@ -46,7 +42,7 @@ $sicp-content-lr-padding: 6em;
   }
 
   .bp3-code-block {
-    font-size: 0.9em;
+    font-size: 15pt;
     padding: 0 15px;
     margin: 0;
     box-shadow: none;
@@ -55,7 +51,11 @@ $sicp-content-lr-padding: 6em;
   }
 
   .katex {
-    font-size: 1em;
+    font-size: 15pt;
+  }
+
+  .sicp-text {
+    margin-bottom: 32px;
   }
 
   .sicp-content {
@@ -260,7 +260,8 @@ $sicp-content-lr-padding: 6em;
   }
 
   .sicp-footnote {
-    font-size: 0.8rem;
+    font-size: 13pt;
+    margin-bottom: 16px;
   }
 
   .sicp-figure {

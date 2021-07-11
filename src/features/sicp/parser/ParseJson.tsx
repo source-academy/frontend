@@ -279,7 +279,6 @@ export const processingFunctions = {
   TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <AnchorLink id={obj['id']} refs={refs} top={-3}>
       <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
-      <br />
     </AnchorLink>
   ),
 
