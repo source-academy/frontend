@@ -75,7 +75,7 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
         rowHeight={36}
         suppressCellSelection={true}
         suppressMovableColumns={true}
-        suppressPaginationPanel={true}
+        pagination
       />
     </div>
   );
@@ -88,6 +88,11 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
   const validateCsvInput = (data: any[]) => {
     const processed: UsernameRoleGroup[] = [...users];
     let hasInvalidInput = false;
+
+    if (data.length + users.length > 1000) {
+      setInvalidCsvMsg('Please limit each upload to 1000 entries!');
+      hasInvalidInput = true;
+    }
 
     for (const e of data) {
       // Incorrect number of columns

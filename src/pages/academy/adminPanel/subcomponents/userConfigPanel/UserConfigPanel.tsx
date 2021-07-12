@@ -96,7 +96,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
         rowHeight={36}
         suppressCellSelection={true}
         suppressMovableColumns={true}
-        suppressPaginationPanel={true}
+        pagination
       />
     </div>
   );

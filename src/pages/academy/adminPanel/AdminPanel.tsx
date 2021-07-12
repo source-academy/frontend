@@ -165,7 +165,8 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   const data = (
     <div className="admin-panel">
       <H1>Admin Panel</H1>
-      <Tabs id="admin-panel">
+      {/* renderActiveTabPanelOnly to handle large courses with many entries in ag-grid */}
+      <Tabs id="admin-panel" renderActiveTabPanelOnly>
         <Tab
           id="configuration"
           title="Configuration"
