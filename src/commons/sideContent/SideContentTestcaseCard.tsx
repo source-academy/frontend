@@ -5,9 +5,10 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import SideContentCanvasOutput from './SideContentCanvasOutput';
 
-type SideContentTestcaseCardProps = DispatchProps & StateProps;
+type SideContentTestcaseCardProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
@@ -16,6 +17,10 @@ type DispatchProps = {
 type StateProps = {
   index: number;
   testcase: Testcase;
+};
+
+type OwnProps = {
+  workspaceLocation: WorkspaceLocation;
 };
 
 const renderResult = (value: any) => {
@@ -38,7 +43,8 @@ const SideContentTestcaseCard: React.FunctionComponent<SideContentTestcaseCardPr
     return {
       correct: isEvaluated && isEqual,
       wrong: isEvaluated && !isEqual,
-      private: testcase.type === TestcaseTypes.private
+      // opaque and secret testcases will be greyed in the GradingWorkspace
+      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque
     };
   }, [testcase]);
 
@@ -46,11 +52,30 @@ const SideContentTestcaseCard: React.FunctionComponent<SideContentTestcaseCardPr
     handleTestcaseEval(index);
   }, [index, handleTestcaseEval]);
 
+  /**
+   * Note: There are 3 testcase types in the backend: public, opaque, secret
+   *
+   * Public testcases are always sent from the backend, and displayed for both
+   * students and staff/ admin in the AssessmentWorkspace and/ or GradingWorkspace.
+   *
+   * Opaque testcases are always sent from the backend, and are 'hidden' with a
+   * placeholder cell in the AssessmentWorkspace, but displayed in the
+   * GradingWorkspace albeit with grey CSS styling.
+   *
+   * Secret testcases are only sent from the backend when the grading endpoint is
+   * accessed (i.e. NOT sent in the AssessmentWorkspace). Thus they are only seen
+   * in the GradingWorkspace albeit with grey CSS styling, which is only accessible
+   * by staff/ admin.
+   *
+   * Extra info: The GitHubAssessmentWorkspace uses this testcase card component even
+   * though they only have public testcases (as of July 2021). Thus all testcases will
+   * be rendered in the GitHubAssessmentWorkspace for students.
+   */
   return (
     <div className={classNames('AutograderCard', extraClasses)}>
       <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE} onClick={handleRunTestcase}>
-        {testcase.type === TestcaseTypes.hidden ? (
-          // Render a placeholder cell in place of the actual testcase data for hidden testcases
+        {testcase.type === TestcaseTypes.opaque && props.workspaceLocation === 'assessment' ? (
+          // Render a placeholder cell in place of the actual testcase data for opaque testcases
           <Pre className="testcase-placeholder">Hidden testcase</Pre>
         ) : (
           <>

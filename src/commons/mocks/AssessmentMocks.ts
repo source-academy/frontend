@@ -716,13 +716,13 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         answer: `true`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
         score: 0,
         answer: `false`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
         score: 0,
         answer: `true`
@@ -781,7 +781,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         answer: `true`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__XOR(true, XOR(true, false));`,
         score: 0,
         answer: `false`
@@ -852,7 +852,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         answer: `true`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__NOR_AND(true, NOR_AND(false, true));`,
         score: 0,
         answer: `false`

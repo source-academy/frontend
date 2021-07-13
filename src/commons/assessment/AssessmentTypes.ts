@@ -32,9 +32,9 @@ export enum TestcaseTypes {
   // These are rendered in full by the Mission Autograder
   public = 'public',
   // These are rendered with a placeholder by the Autograder
-  hidden = 'hidden',
+  opaque = 'opaque',
   // These should only exist in the grading workspace for submissions
-  private = 'private'
+  secret = 'secret'
 }
 export type TestcaseType = keyof typeof TestcaseTypes;
 

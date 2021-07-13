@@ -864,8 +864,8 @@ export function* evalTestCode(
     yield put(actions.evalTestcaseSuccess(result.value, workspaceLocation, index));
   }
 
-  // If a hidden testcase was executed, remove its output from the REPL
-  if (type === TestcaseTypes.hidden) {
+  // If a opaque testcase was executed, remove its output from the REPL
+  if (type === TestcaseTypes.opaque) {
     yield put(actions.clearReplOutputLast(workspaceLocation));
   }
 }

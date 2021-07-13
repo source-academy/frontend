@@ -446,6 +446,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                     : []
                 }
                 handleTestcaseEval={props.handleTestcaseEval}
+                workspaceLocation="assessment"
               />
             ),
             id: SideContentType.autograder,

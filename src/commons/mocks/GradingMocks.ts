@@ -92,8 +92,8 @@ export const mockFetchGradingOverview = (
 export const mockTestcases: Testcase[] = [
   { type: TestcaseTypes.public, program: `remainder(12, 7);`, score: 1, answer: `5` },
   { type: TestcaseTypes.public, program: `remainder(6, 1);`, score: 2, answer: `0` },
-  { type: TestcaseTypes.private, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
-  { type: TestcaseTypes.private, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
+  { type: TestcaseTypes.opaque, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
+  { type: TestcaseTypes.opaque, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
 export const mockGrading: Grading = [
