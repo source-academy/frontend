@@ -1201,12 +1201,12 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blueprintjs/core@^3.45.0":
-  version "3.45.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.45.0.tgz#3b0a36aba9bcbf7a141f260f042ef1d0b564cdc4"
-  integrity sha512-oLknlh+jdvdat+3JrljKGAmtP7KJRKnUqWJOvcGHmAlE2nUZkwzI1jICd2HMncQrukIqQN5ORZK1tswus6BM+Q==
+"@blueprintjs/core@^3.45.0", "@blueprintjs/core@^3.46.0":
+  version "3.46.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.46.0.tgz#fde92406ed97d48c949d5fe5578e7880efdf7577"
+  integrity sha512-kcYrisJMz7jPIuTc9AwFAbHMmmP/BxM2CC3e8vLaLk5h+xtXVzRipx19GA6ysSdguYXOnCPETwM6421QLehCCw==
   dependencies:
-    "@blueprintjs/icons" "^3.26.1"
+    "@blueprintjs/icons" "^3.27.0"
     "@types/dom4" "^2.0.1"
     classnames "^2.2"
     dom4 "^2.1.5"
@@ -1229,10 +1229,10 @@
     react-lifecycles-compat "^3.0.4"
     tslib "~1.13.0"
 
-"@blueprintjs/icons@^3.26.1":
-  version "3.26.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.26.1.tgz#90cef070264c4c0b6ae0302663755abeb991aee5"
-  integrity sha512-qxAnqhzt5WqYuWN+7p3Pk7bOrhj56YXzD8n79Met8+VIQ14IpKnxr7YAYmNB5X/dVweqXpEk6tKyUjnDjBhulw==
+"@blueprintjs/icons@^3.26.1", "@blueprintjs/icons@^3.27.0":
+  version "3.27.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.27.0.tgz#f4c03e8bc2f9310f7eaefaab26dd91f65935da43"
+  integrity sha512-ItRioyrr2s70chclj5q38HS9omKOa15b3JZXv9JcMIFz+6w6rAcoAH7DA+5xIs27bFjax/SdAZp/eYXSw0+QpA==
   dependencies:
     classnames "^2.2"
     tslib "~1.13.0"
