@@ -138,18 +138,51 @@ function* BackendSaga(): SagaIterator {
     }
     yield put(actions.setTokens(tokens));
 
-    yield getUserAndCourse(tokens)();
+    const {
+      user,
+      courseRegistration,
+      courseConfiguration,
+      assessmentConfigurations
+    }: {
+      user: User | null;
+      courseRegistration: CourseRegistration | null;
+      courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
+    } = yield call(getUser, tokens);
+
+    if (user) {
+      yield put(actions.setUser(user));
+    }
+
+    if (courseRegistration && courseConfiguration && assessmentConfigurations) {
+      yield put(actions.setCourseRegistration(courseRegistration));
+      yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+      yield put(
+        actions.updateSublanguage({
+          chapter: courseConfiguration.sourceChapter,
+          variant: courseConfiguration.sourceVariant,
+          displayName: styliseSublanguage(
+            courseConfiguration.sourceChapter,
+            courseConfiguration.sourceVariant
+          )
+        })
+      );
+    }
     yield history.push('/academy');
   });
 
-  const getUserAndCourse = (tk?: Tokens) =>
-    function* (): any {
-      let tokens: Tokens;
-      if (tk) {
-        tokens = tk;
-      } else {
-        tokens = yield selectTokens();
-      }
+  yield takeEvery(
+    FETCH_USER_AND_COURSE,
+    function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
+      const tokens = yield selectTokens();
+
+      /**
+       * The updateSublanguage boolean is used to determine whether to update the sublanguage
+       * in the Playground context to match the latest course configuration. We do not want to
+       * update it when the user is accessing the Playground via a shared link.
+       */
+      const updateSublanguage: boolean = action.payload;
 
       const {
         user,
@@ -171,20 +204,21 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseRegistration(courseRegistration));
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-        yield put(
-          actions.updateSublanguage({
-            chapter: courseConfiguration.sourceChapter,
-            variant: courseConfiguration.sourceVariant,
-            displayName: styliseSublanguage(
-              courseConfiguration.sourceChapter,
-              courseConfiguration.sourceVariant
-            )
-          })
-        );
+        if (updateSublanguage) {
+          yield put(
+            actions.updateSublanguage({
+              chapter: courseConfiguration.sourceChapter,
+              variant: courseConfiguration.sourceVariant,
+              displayName: styliseSublanguage(
+                courseConfiguration.sourceChapter,
+                courseConfiguration.sourceVariant
+              )
+            })
+          );
+        }
       }
-    };
-
-  yield takeEvery(FETCH_USER_AND_COURSE, getUserAndCourse());
+    }
+  );
 
   yield takeEvery(FETCH_COURSE_CONFIG, function* () {
     const tokens: Tokens = yield selectTokens();
