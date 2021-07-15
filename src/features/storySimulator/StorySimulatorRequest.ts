@@ -24,14 +24,17 @@ const sendRequest =
         ...requestDetails
       };
 
-      return fetch(Constants.backendUrl + `/v2/${route}/` + requestPath, config);
+      return fetch(
+        Constants.backendUrl + `/v2/courses/${courseId()}/${route}/` + requestPath,
+        config
+      );
     } finally {
     }
   };
 
 const courseId = () => store.getState().session.courseId;
-export const sendAssetRequest = sendRequest(`courses/${courseId()}/admin/assets`);
-export const sendStoryRequest = sendRequest(`courses/${courseId()}/stories`);
+export const sendAssetRequest = sendRequest(`admin/assets`);
+export const sendStoryRequest = sendRequest(`stories`);
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();
