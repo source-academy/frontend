@@ -8,7 +8,7 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
-import { NOTIFY_PROGRAM_EVALUATED, SideContentType } from '../sideContent/SideContentTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -35,10 +35,10 @@ import {
   PROMPT_AUTOCOMPLETE,
   RESET_TESTCASE,
   RESET_WORKSPACE,
+  RUN_ALL_TESTCASES,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -100,9 +100,6 @@ export const externalLibrarySelect = (
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_EDITOR_AUTORUN, { workspaceLocation });
 
-export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: WorkspaceLocation) =>
-  action(UPDATE_ACTIVE_TAB, { activeTab, workspaceLocation });
-
 /**
  * Starts the process to clear the js-slang Context
  * at a specified workspace location.
@@ -162,6 +159,9 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) =>
 
 export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) =>
   action(EVAL_TESTCASE, { workspaceLocation, testcaseId });
+
+export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
+  action(RUN_ALL_TESTCASES, { workspaceLocation });
 
 export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });

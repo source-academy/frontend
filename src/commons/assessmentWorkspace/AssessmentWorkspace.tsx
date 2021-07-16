@@ -70,7 +70,6 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
@@ -90,6 +89,7 @@ export type DispatchProps = {
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  handleRunAllTestcases: () => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handleDebuggerPause: () => void;
@@ -132,7 +132,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const [sessionId, setSessionId] = React.useState('');
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
+  const [selectedTab, setSelectedTab] = React.useState(
+    props.assessment?.questions[props.questionId].grader !== undefined
+      ? SideContentType.grading
+      : SideContentType.questionOverview
+  );
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   React.useEffect(() => {
@@ -194,7 +198,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.questionOverview);
-      props.handleActiveTabChange(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
@@ -245,8 +248,22 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
   };
 
+  /**
+   * handleEval used in both the Run button, and during 'shift-enter' in AceEditor
+   *
+   * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
+   * Thus, we use a mutable ref to overcome the stale closure problem
+   */
+  const activeTab = React.useRef(selectedTab);
+  activeTab.current = selectedTab;
   const handleEval = () => {
     props.handleEditorEval();
+
+    // Run testcases when the autograder tab is selected
+    if (activeTab.current === SideContentType.autograder) {
+      props.handleRunAllTestcases();
+    }
+
     const input: Input = {
       time: Date.now(),
       type: 'keyboardCommand',
@@ -489,8 +506,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     return {
-      handleActiveTabChange: props.handleActiveTabChange,
-      defaultSelectedTabId: isGraded ? SideContentType.grading : selectedTab,
       selectedTabId: selectedTab,
       tabs,
       onChange: onChangeTabs,
@@ -743,7 +758,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           editorSessionId: '',
           editorValue: props.editorValue!,
           handleDeclarationNavigate: props.handleDeclarationNavigate,
-          handleEditorEval: props.handleEditorEval,
+          handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,
           handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
           breakpoints: props.breakpoints,

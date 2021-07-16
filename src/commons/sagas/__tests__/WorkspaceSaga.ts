@@ -28,7 +28,6 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
-import { SideContentType } from '../../sideContent/SideContentTypes';
 import { reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
@@ -53,6 +52,7 @@ import {
   EVAL_TESTCASE,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
+  RUN_ALL_TESTCASES,
   TOGGLE_EDITOR_AUTORUN,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
@@ -662,135 +662,6 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    // The above test is for an assessment without any editorTestcases
-    test('does not put evalTestcase (assessment has testcases and Autograder tab is inactive)', () => {
-      state = generateDefaultState(workspaceLocation, {
-        editorTestcases: mockTestcases.slice(0, 1),
-        sideContentActiveTab: 0
-      });
-
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false
-        })
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .not.call(showSuccessMessage, 'Running all testcases!', 2000)
-        .not.put(evalTestcase(workspaceLocation, 0))
-        .silentRun();
-    });
-
-    test('puts evalTestcase (assessment has testcases and Autograder tab is active)', () => {
-      const type = 'result';
-
-      state = generateDefaultState(workspaceLocation, {
-        editorTestcases: mockTestcases.slice(0, 2),
-        sideContentActiveTab: SideContentType.autograder
-      });
-
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false
-        })
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .call(showSuccessMessage, 'Running all testcases!', 2000)
-        .put(evalTestcase(workspaceLocation, 0))
-        .dispatch({
-          type: EVAL_TESTCASE_SUCCESS,
-          payload: { type, value, workspaceLocation, index: 0 }
-        })
-        .put(evalTestcase(workspaceLocation, 1))
-        .silentRun();
-    });
-
-    test('prematurely terminates if execution of one testcase results in an error', () => {
-      const type = 'error';
-      const mockErrors: SourceError[] = [
-        {
-          type: ErrorType.RUNTIME,
-          severity: ErrorSeverity.ERROR,
-          location: { start: { line: 1, column: 5 }, end: { line: 1, column: 5 } },
-          explain() {
-            return `Name func not declared.`;
-          },
-          elaborate() {
-            return `Name func not declared.`;
-          }
-        }
-      ];
-
-      state = generateDefaultState(workspaceLocation, {
-        editorTestcases: mockTestcases.slice(0, 2),
-        sideContentActiveTab: SideContentType.autograder
-      });
-
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false
-        })
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .call(showSuccessMessage, 'Running all testcases!', 2000)
-        .put(evalTestcase(workspaceLocation, 0))
-        .dispatch({
-          type: EVAL_TESTCASE_FAILURE,
-          payload: { type, mockErrors, workspaceLocation, index: 0 }
-        })
-        .not.put(evalTestcase(workspaceLocation, 1))
-        .silentRun();
-    });
-
-    test('puts evalTestcase (submission has testcases and Autograder tab is active)', () => {
-      const type = 'result';
-      workspaceLocation = 'grading';
-      state = generateDefaultState(workspaceLocation, {
-        editorTestcases: mockTestcases,
-        sideContentActiveTab: SideContentType.autograder
-      });
-
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false
-        })
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .call(showSuccessMessage, 'Running all testcases!', 2000)
-        .put(evalTestcase(workspaceLocation, 0))
-        .dispatch({
-          type: EVAL_TESTCASE_SUCCESS,
-          payload: { type, value, workspaceLocation, index: 0 }
-        })
-        .put(evalTestcase(workspaceLocation, 1))
-        .dispatch({
-          type: EVAL_TESTCASE_SUCCESS,
-          payload: { type, value, workspaceLocation, index: 0 }
-        })
-        .put(evalTestcase(workspaceLocation, 2))
-        .dispatch({
-          type: EVAL_TESTCASE_SUCCESS,
-          payload: { type, value, workspaceLocation, index: 0 }
-        })
-        .put(evalTestcase(workspaceLocation, 3))
-        .silentRun();
-    });
-
     test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
       return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
@@ -1102,6 +973,103 @@ describe('NAV_DECLARATION', () => {
         payload: { workspaceLocation, cursorPosition: pos }
       })
       .not.put(moveCursor(workspaceLocation, resultPos))
+      .silentRun();
+  });
+});
+
+describe('RUN_ALL_TESTCASES', () => {
+  let workspaceLocation: WorkspaceLocation;
+  let value: string;
+  let state: OverallState;
+
+  beforeEach(() => {
+    workspaceLocation = 'assessment';
+    value = 'test value';
+    state = generateDefaultState(workspaceLocation);
+  });
+
+  test('does not put evalTestcase when there are no testcases', () => {
+    state = generateDefaultState(workspaceLocation, {
+      editorTestcases: []
+    });
+
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .not.call.fn(showSuccessMessage)
+      .not.put.actionType(EVAL_TESTCASE)
+      .dispatch({
+        type: RUN_ALL_TESTCASES,
+        payload: { workspaceLocation }
+      })
+      .silentRun();
+  });
+
+  test('puts evalTestcase when there are testcases', () => {
+    const type = 'result';
+
+    state = generateDefaultState(workspaceLocation, {
+      editorTestcases: mockTestcases
+    });
+
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: RUN_ALL_TESTCASES,
+        payload: { workspaceLocation }
+      })
+      .call(showSuccessMessage, 'Running all testcases!', 2000)
+      .put(evalTestcase(workspaceLocation, 0))
+      .dispatch({
+        type: EVAL_TESTCASE_SUCCESS,
+        payload: { type, value, workspaceLocation, index: 0 }
+      })
+      .put(evalTestcase(workspaceLocation, 1))
+      .dispatch({
+        type: EVAL_TESTCASE_SUCCESS,
+        payload: { type, value, workspaceLocation, index: 0 }
+      })
+      .put(evalTestcase(workspaceLocation, 2))
+      .dispatch({
+        type: EVAL_TESTCASE_SUCCESS,
+        payload: { type, value, workspaceLocation, index: 0 }
+      })
+      .put(evalTestcase(workspaceLocation, 3))
+      .silentRun();
+  });
+
+  test('prematurely terminates if execution of one testcase results in an error', () => {
+    const type = 'error';
+    const mockErrors: SourceError[] = [
+      {
+        type: ErrorType.RUNTIME,
+        severity: ErrorSeverity.ERROR,
+        location: { start: { line: 1, column: 5 }, end: { line: 1, column: 5 } },
+        explain() {
+          return `Name func not declared.`;
+        },
+        elaborate() {
+          return `Name func not declared.`;
+        }
+      }
+    ];
+
+    state = generateDefaultState(workspaceLocation, {
+      editorTestcases: mockTestcases.slice(0, 2)
+    });
+
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: RUN_ALL_TESTCASES,
+        payload: { workspaceLocation }
+      })
+      .call(showSuccessMessage, 'Running all testcases!', 2000)
+      .put(evalTestcase(workspaceLocation, 0))
+      .dispatch({
+        type: EVAL_TESTCASE_FAILURE,
+        payload: { type, mockErrors, workspaceLocation, index: 0 }
+      })
+      .not.put(evalTestcase(workspaceLocation, 1))
       .silentRun();
   });
 });

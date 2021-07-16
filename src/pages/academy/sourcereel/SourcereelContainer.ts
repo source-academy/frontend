@@ -10,7 +10,6 @@ import {
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
-import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -27,7 +26,6 @@ import {
   setEditorBreakpoint,
   setEditorReadonly,
   toggleEditorAutorun,
-  updateActiveTab,
   updateEditorValue,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
@@ -84,7 +82,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
   replValue: state.workspaces.sourcereel.replValue,
   sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
-  sideContentActiveTab: state.workspaces.sourcereel.sideContentActiveTab,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   sourceVariant: state.workspaces.sourcereel.context.variant,
@@ -97,7 +94,6 @@ const location: WorkspaceLocation = 'sourcereel';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, 'default', location),
