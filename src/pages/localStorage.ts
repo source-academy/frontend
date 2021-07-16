@@ -42,7 +42,8 @@ export const saveState = (state: OverallState) => {
         refreshToken: state.session.refreshToken,
         role: state.session.role,
         name: state.session.name,
-        userId: state.session.userId
+        userId: state.session.userId,
+        githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,

@@ -22,13 +22,15 @@ export const SET_USER = 'SET_USER';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
 export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_OBJECT = 'SET_GITHUB_OCTOKIT_OBJECT';
+export const SET_GITHUB_ACCESS_TOKEN = 'SET_GITHUB_ACCESS_TOKEN';
 export const SUBMIT_ANSWER = 'SUBMIT_ANSWER';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
 export const SUBMIT_GRADING = 'SUBMIT_GRADING';
 export const SUBMIT_GRADING_AND_CONTINUE = 'SUBMIT_GRADING_AND_CONTINUE';
 export const REAUTOGRADE_SUBMISSION = 'REAUTOGRADE_SUBMISSION';
 export const REAUTOGRADE_ANSWER = 'REAUTOGRADE_ANSWER';
-export const REMOVE_GITHUB_OCTOKIT_OBJECT = 'REMOVE_GITHUB_OCTOKIT_OBJECT';
+export const REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN =
+  'REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN';
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
 export const UPDATE_HISTORY_HELPERS = 'UPDATE_HISTORY_HELPERS';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
@@ -64,6 +66,7 @@ export type SessionState = {
   readonly googleUser?: string;
   readonly githubAssessment?: MissionRepoData;
   readonly githubOctokitObject: { octokit: Octokit | undefined };
+  readonly githubAccessToken?: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
 };
