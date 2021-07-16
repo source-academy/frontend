@@ -17,6 +17,7 @@ import {
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -211,6 +212,20 @@ test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
   expect(result).toEqual({
     ...defaultSession,
     userCourseRegistrations: payload
+  });
+});
+
+test('SET_GITHUB_ACCESS_TOKEN works correctly', () => {
+  const token = 'githubAccessToken';
+  const action = {
+    type: SET_GITHUB_ACCESS_TOKEN,
+    payload: token
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    githubAccessToken: token
   });
 });
 

@@ -36,11 +36,12 @@ import {
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
-  REMOVE_GITHUB_OCTOKIT_OBJECT,
+  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
@@ -124,7 +125,11 @@ export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
 export const setGitHubOctokitObject = (authToken?: string) =>
   action(SET_GITHUB_OCTOKIT_OBJECT, generateOctokitInstance(authToken || ''));
 
-export const removeGitHubOctokitObject = () => action(REMOVE_GITHUB_OCTOKIT_OBJECT);
+export const setGitHubAccessToken = (authToken?: string) =>
+  action(SET_GITHUB_ACCESS_TOKEN, authToken);
+
+export const removeGitHubOctokitObjectAndAccessToken = () =>
+  action(REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN);
 
 export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {

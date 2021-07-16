@@ -8,12 +8,13 @@ import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
-  REMOVE_GITHUB_OCTOKIT_OBJECT,
+  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
   SessionState,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
@@ -43,6 +44,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         githubOctokitObject: { octokit: action.payload }
+      };
+    case SET_GITHUB_ACCESS_TOKEN:
+      return {
+        ...state,
+        githubAccessToken: action.payload
       };
     case SET_GOOGLE_USER:
       return {
@@ -132,10 +138,11 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         remoteExecutionSession: action.payload
       };
-    case REMOVE_GITHUB_OCTOKIT_OBJECT:
+    case REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN:
       return {
         ...state,
-        githubOctokitObject: { octokit: undefined }
+        githubOctokitObject: { octokit: undefined },
+        githubAccessToken: undefined
       };
     default:
       return state;
