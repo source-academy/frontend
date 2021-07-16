@@ -152,6 +152,12 @@ function handleHash(hash: string, props: PlaygroundProps) {
     props.handleEditorValueChange(program);
   }
 
+  const ext =
+    Object.values(ExternalLibraryName).find(v => v === qs.ext) || ExternalLibraryName.NONE;
+  if (ext) {
+    props.handleExternalSelect(ext, true);
+  }
+
   const chapter = stringParamToInt(qs.chap) || undefined;
   const variant: Variant =
     sourceLanguages.find(
@@ -159,12 +165,6 @@ function handleHash(hash: string, props: PlaygroundProps) {
     )?.variant ?? 'default';
   if (chapter) {
     props.handleChapterSelect(chapter, variant);
-  }
-
-  const ext =
-    Object.values(ExternalLibraryName).find(v => v === qs.ext) || ExternalLibraryName.NONE;
-  if (ext) {
-    props.handleExternalSelect(ext, true);
   }
 
   const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
