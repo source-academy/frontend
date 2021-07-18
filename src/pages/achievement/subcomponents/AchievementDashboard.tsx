@@ -22,7 +22,7 @@ export type DispatchProps = {
   getAchievements: () => void;
   getOwnGoals: () => void;
   getUsers: () => void;
-  updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
+  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
 
 export type StateProps = {

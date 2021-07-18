@@ -168,7 +168,7 @@ export type AchievementView = {
 
 export type AchievementUser = {
   name: string;
-  userId: number;
+  courseRegId: number;
   group: string;
 };
 

@@ -55,8 +55,8 @@ export const addEvent = (eventNames: EventType[]) => action(ADD_EVENT, eventName
 
 export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
 
-export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
-  action(UPDATE_GOAL_PROGRESS, { studentId, progress });
+export const updateGoalProgress = (studentCourseRegId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentCourseRegId, progress });
 
 /*
   Note: This updates the frontend Achievement Redux store.

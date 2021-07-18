@@ -195,9 +195,9 @@ export default function* AchievementSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.updateGoalProgress>): any {
       const tokens: Tokens = yield selectTokens();
 
-      const { studentId, progress } = action.payload;
+      const { studentCourseRegId, progress } = action.payload;
 
-      const resp = yield call(updateGoalProgress, studentId, progress, tokens);
+      const resp = yield call(updateGoalProgress, studentCourseRegId, progress, tokens);
 
       if (!resp) {
         return;

@@ -12,7 +12,7 @@ type AchievementManualEditorProps = {
   studio: string;
   users: AchievementUser[];
   getUsers: () => void;
-  updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
+  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
 
 const GoalSelect = Select.ofType<AchievementGoal>();
@@ -24,10 +24,13 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
   const { studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
-      ? [...props.users].sort((user1, user2) => user1.name.localeCompare(user2.name))
+      ? // The name can be null for users who have yet to log in. We push these to the back of the array.
+        [...props.users].sort((user1, user2) =>
+          user1.name ? user1.name.localeCompare(user2.name) : 1
+        )
       : props.users
           .filter(user => user.group === studio)
-          .sort((user1, user2) => user1.name.localeCompare(user2.name));
+          .sort((user1, user2) => (user1.name ? user1.name.localeCompare(user2.name) : 1));
 
   useEffect(getUsers, [getUsers]);
 
@@ -42,7 +45,7 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
 
   const UserSelect = Select.ofType<AchievementUser>();
   const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
-    <MenuItem key={user.userId} onClick={handleClick} text={user.name} />
+    <MenuItem key={user.courseRegId} onClick={handleClick} text={user.name} />
   );
 
   const updateGoal = () => {
@@ -53,7 +56,7 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
         targetCount: goal.targetCount,
         completed: count >= goal.targetCount
       };
-      updateGoalProgress(selectedUser.userId, progress);
+      updateGoalProgress(selectedUser.courseRegId, progress);
     }
   };
 

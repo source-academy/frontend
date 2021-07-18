@@ -298,7 +298,7 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
     (user: any) =>
       ({
         name: user.name,
-        userId: user.userId,
+        courseRegId: user.courseRegId,
         group: user.group
       } as AchievementUser)
   );
@@ -406,15 +406,15 @@ export const updateOwnGoalProgress = async (
 };
 
 /**
- * POST /courses/{courseId}/admin/users/{studentId}/goals/{goalUuid}/progress
+ * POST /courses/{courseId}/admin/goals/{goalUuid}/progress/{studentCourseRegId}
  */
 export const updateGoalProgress = async (
-  studentId: number,
+  studentCourseRegId: number,
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(
-    `${courseId()}/admin/users/${studentId}/goals/${progress.uuid}/progress`,
+    `${courseId()}/admin/goals/${progress.uuid}/progress/${studentCourseRegId}`,
     'POST',
     {
       ...tokens,
