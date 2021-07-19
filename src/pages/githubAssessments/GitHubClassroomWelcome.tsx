@@ -17,10 +17,8 @@ const GitHubClassroomWelcome: React.FC = () => {
                 </li>
                 <li>
                   If you are looking for a course to join, check{' '}
-                  <a href="https://github.com/source-academy/general/blob/master/learner/README.md">
-                    here
-                  </a>{' '}
-                  to find a course that suits your needs.
+                  <a href="https://about.sourceacademy.org/learner/README.html">here</a> to find a
+                  course that suits your needs.
                 </li>
               </UL>
             </div>
