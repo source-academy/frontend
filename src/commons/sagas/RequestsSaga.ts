@@ -144,7 +144,7 @@ export const getUser = async (
 };
 
 /**
- * GET /user/latest_viewed
+ * GET /user/latest_viewed_course
  */
 export const getLatestCourseRegistrationAndConfiguration = async (
   tokens: Tokens
@@ -153,7 +153,7 @@ export const getLatestCourseRegistrationAndConfiguration = async (
   courseConfiguration: CourseConfiguration | null;
   assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
-  const resp = await request('user/latest_viewed', 'GET', {
+  const resp = await request('user/latest_viewed_course', 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -169,13 +169,13 @@ export const getLatestCourseRegistrationAndConfiguration = async (
 };
 
 /**
- * PUT /user/latest_viewed
+ * PUT /user/latest_viewed_course
  */
 export const putLatestViewedCourse = async (
   tokens: Tokens,
   courseId: number
 ): Promise<Response | null> => {
-  const resp = await request(`user/latest_viewed`, 'PUT', {
+  const resp = await request(`user/latest_viewed_course`, 'PUT', {
     ...tokens,
     body: { courseId: courseId },
     noHeaderAccept: true,
@@ -406,7 +406,7 @@ export const updateOwnGoalProgress = async (
 };
 
 /**
- * POST /courses/{courseId}/admin/goals/{goalUuid}/progress/{studentCourseRegId}
+ * POST /courses/{courseId}/admin/users/{studentCourseRegId}/goals/{goalUuid}/progress
  */
 export const updateGoalProgress = async (
   studentCourseRegId: number,
@@ -414,7 +414,7 @@ export const updateGoalProgress = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(
-    `${courseId()}/admin/goals/${progress.uuid}/progress/${studentCourseRegId}`,
+    `${courseId()}/admin/users/${studentCourseRegId}/goals/${progress.uuid}/progress`,
     'POST',
     {
       ...tokens,
@@ -1084,15 +1084,14 @@ export const putUserRole = async (
 };
 
 /**
- * DELETE /courses/{courseId}/admin/users
+ * DELETE /courses/{courseId}/admin/users/{courseRegId}
  */
 export const removeUserCourseRegistration = async (
   tokens: Tokens,
   courseRegId: number
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/users`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}`, 'DELETE', {
     ...tokens,
-    body: { courseRegId },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
