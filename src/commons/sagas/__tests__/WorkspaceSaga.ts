@@ -28,7 +28,7 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
-import { reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
+import { InfiniteLoopErrorType, reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
@@ -64,6 +64,11 @@ function generateDefaultState(
 ): OverallState {
   return {
     ...defaultState,
+    session: {
+      ...defaultState.session,
+      experimentApproval: false,
+      experimentCoinflip: true
+    },
     workspaces: {
       ...defaultState.workspaces,
       [workspaceLocation]: {
@@ -130,7 +135,8 @@ describe('EVAL_EDITOR', () => {
               scheduler: 'preemptive',
               originalMaxExecTime: execTime,
               stepLimit: 1000,
-              useSubst: false
+              useSubst: false,
+              throwInfiniteLoops: true
             }
           ]
         })
@@ -148,7 +154,8 @@ describe('EVAL_EDITOR', () => {
               scheduler: 'preemptive',
               originalMaxExecTime: execTime,
               stepLimit: 1000,
-              useSubst: false
+              useSubst: false,
+              throwInfiniteLoops: true
             }
           ]
         })
@@ -212,7 +219,8 @@ describe('EVAL_REPL', () => {
           scheduler: 'preemptive',
           originalMaxExecTime: 1000,
           stepLimit: 1000,
-          useSubst: false
+          useSubst: false,
+          throwInfiniteLoops: true
         })
         .dispatch({
           type: EVAL_REPL,
@@ -641,7 +649,8 @@ describe('evalCode', () => {
       scheduler: 'preemptive',
       originalMaxExecTime: 1000,
       stepLimit: 1000,
-      useSubst: false
+      useSubst: false,
+      throwInfiniteLoops: true
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
@@ -656,7 +665,8 @@ describe('evalCode', () => {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
-          useSubst: false
+          useSubst: false,
+          throwInfiniteLoops: true
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
@@ -670,7 +680,8 @@ describe('evalCode', () => {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
-          useSubst: false
+          useSubst: false,
+          throwInfiniteLoops: true
         })
         .put(endDebuggerPause(workspaceLocation))
         .put(evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
@@ -684,7 +695,8 @@ describe('evalCode', () => {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
-          useSubst: false
+          useSubst: false,
+          throwInfiniteLoops: true
         })
         .put.like({ action: { type: EVAL_INTERPRETER_ERROR } })
         .silentRun();
@@ -707,17 +719,22 @@ describe('evalCode', () => {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
-          useSubst: false
+          useSubst: false,
+          throwInfiniteLoops: true
         })
         .put(evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();
     });
 
     test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
-      context = createContext(3);
-      const code1 = 'const test=[(x)=>x,2,3,[(x)=>x],5];function f(x){return f(x);}';
+      state = {
+        ...state,
+        session: { ...state.session, experimentApproval: true, experimentCoinflip: true }
+      };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const code1 = 'function f(x){f(x);}';
       const code2 = 'f(1);';
-      state = generateDefaultState(workspaceLocation, {});
 
       return runInContext(code1, context, {
         scheduler: 'preemptive',
@@ -728,11 +745,63 @@ describe('evalCode', () => {
           .withState(state)
           .call(
             reportInfiniteLoopError,
-            'source_protection_recursion',
-            'function is_list(xs) {\n  return is_null(xs) || is_pair(xs) && is_list(tail(xs));\n}\nfunction equal(xs, ys) {\n  return is_pair(xs) ? is_pair(ys) && equal(head(xs), head(ys)) && equal(tail(xs), tail(ys)) : is_null(xs) ? is_null(ys) : is_number(xs) ? is_number(ys) && xs === ys : is_boolean(xs) ? is_boolean(ys) && (xs && ys || !xs && !ys) : is_string(xs) ? is_string(ys) && xs === ys : is_undefined(xs) ? is_undefined(ys) : is_function(ys) && xs === ys;\n}\nfunction $length(xs, acc) {\n  return is_null(xs) ? acc : $length(tail(xs), acc + 1);\n}\nfunction length(xs) {\n  return $length(xs, 0);\n}\nfunction $map(f, xs, acc) {\n  return is_null(xs) ? reverse(acc) : $map(f, tail(xs), pair(f(head(xs)), acc));\n}\nfunction map(f, xs) {\n  return $map(f, xs, null);\n}\nfunction $build_list(i, fun, already_built) {\n  return i < 0 ? already_built : $build_list(i - 1, fun, pair(fun(i), already_built));\n}\nfunction build_list(fun, n) {\n  return $build_list(n - 1, fun, null);\n}\nfunction for_each(fun, xs) {\n  if (is_null(xs)) {\n    return true;\n  } else {\n    fun(head(xs));\n    return for_each(fun, tail(xs));\n  }\n}\nfunction $list_to_string(xs, cont) {\n  return is_null(xs) ? cont("null") : is_pair(xs) ? $list_to_string(head(xs), x => $list_to_string(tail(xs), y => cont("[" + x + "," + y + "]"))) : cont(stringify(xs));\n}\nfunction list_to_string(xs) {\n  return $list_to_string(xs, x => x);\n}\nfunction $reverse(original, reversed) {\n  return is_null(original) ? reversed : $reverse(tail(original), pair(head(original), reversed));\n}\nfunction reverse(xs) {\n  return $reverse(xs, null);\n}\nfunction $append(xs, ys, cont) {\n  return is_null(xs) ? cont(ys) : $append(tail(xs), ys, zs => cont(pair(head(xs), zs)));\n}\nfunction append(xs, ys) {\n  return $append(xs, ys, xs => xs);\n}\nfunction member(v, xs) {\n  return is_null(xs) ? null : v === head(xs) ? xs : member(v, tail(xs));\n}\nfunction $remove(v, xs, acc) {\n  return is_null(xs) ? append(reverse(acc), xs) : v === head(xs) ? append(reverse(acc), tail(xs)) : $remove(v, tail(xs), pair(head(xs), acc));\n}\nfunction remove(v, xs) {\n  return $remove(v, xs, null);\n}\nfunction $remove_all(v, xs, acc) {\n  return is_null(xs) ? append(reverse(acc), xs) : v === head(xs) ? $remove_all(v, tail(xs), acc) : $remove_all(v, tail(xs), pair(head(xs), acc));\n}\nfunction remove_all(v, xs) {\n  return $remove_all(v, xs, null);\n}\nfunction $filter(pred, xs, acc) {\n  return is_null(xs) ? reverse(acc) : pred(head(xs)) ? $filter(pred, tail(xs), pair(head(xs), acc)) : $filter(pred, tail(xs), acc);\n}\nfunction filter(pred, xs) {\n  return $filter(pred, xs, null);\n}\nfunction $enum_list(start, end, acc) {\n  return start > end ? reverse(acc) : $enum_list(start + 1, end, pair(start, acc));\n}\nfunction enum_list(start, end) {\n  return $enum_list(start, end, null);\n}\nfunction list_ref(xs, n) {\n  return n === 0 ? head(xs) : list_ref(tail(xs), n - 1);\n}\nfunction $accumulate(f, initial, xs, cont) {\n  return is_null(xs) ? cont(initial) : $accumulate(f, initial, tail(xs), x => cont(f(head(xs), x)));\n}\nfunction accumulate(f, initial, xs) {\n  return $accumulate(f, initial, xs, x => x);\n}\nfunction is_stream(xs) {\n  return is_null(xs) || is_pair(xs) && is_stream(stream_tail(xs));\n}\nfunction list_to_stream(xs) {\n  return is_null(xs) ? null : pair(head(xs), () => list_to_stream(tail(xs)));\n}\nfunction stream_to_list(xs) {\n  return is_null(xs) ? null : pair(head(xs), stream_to_list(stream_tail(xs)));\n}\nfunction stream_length(xs) {\n  return is_null(xs) ? 0 : 1 + stream_length(stream_tail(xs));\n}\nfunction stream_map(f, s) {\n  return is_null(s) ? null : pair(f(head(s)), () => stream_map(f, stream_tail(s)));\n}\nfunction build_stream(fun, n) {\n  function build(i) {\n    return i >= n ? null : pair(fun(i), () => build(i + 1));\n  }\n  return build(0);\n}\nfunction stream_for_each(fun, xs) {\n  if (is_null(xs)) {\n    return true;\n  } else {\n    fun(head(xs));\n    return stream_for_each(fun, stream_tail(xs));\n  }\n}\nfunction stream_reverse(xs) {\n  function rev(original, reversed) {\n    return is_null(original) ? reversed : rev(stream_tail(original), pair(head(original), () => reversed));\n  }\n  return rev(xs, null);\n}\nfunction stream_append(xs, ys) {\n  return is_null(xs) ? ys : pair(head(xs), () => stream_append(stream_tail(xs), ys));\n}\nfunction stream_member(x, s) {\n  return is_null(s) ? null : head(s) === x ? s : stream_member(x, stream_tail(s));\n}\nfunction stream_remove(v, xs) {\n  return is_null(xs) ? null : v === head(xs) ? stream_tail(xs) : pair(head(xs), () => stream_remove(v, stream_tail(xs)));\n}\nfunction stream_remove_all(v, xs) {\n  return is_null(xs) ? null : v === head(xs) ? stream_remove_all(v, stream_tail(xs)) : pair(head(xs), () => stream_remove_all(v, stream_tail(xs)));\n}\nfunction stream_filter(p, s) {\n  return is_null(s) ? null : p(head(s)) ? pair(head(s), () => stream_filter(p, stream_tail(s))) : stream_filter(p, stream_tail(s));\n}\nfunction enum_stream(start, end) {\n  return start > end ? null : pair(start, () => enum_stream(start + 1, end));\n}\nfunction integers_from(n) {\n  return pair(n, () => integers_from(n + 1));\n}\nfunction eval_stream(s, n) {\n  function es(s, n) {\n    return n === 1 ? list(head(s)) : pair(head(s), es(stream_tail(s), n - 1));\n  }\n  return n === 0 ? null : es(s, n);\n}\nfunction stream_ref(s, n) {\n  return n === 0 ? head(s) : stream_ref(stream_tail(s), n - 1);\n}\nconst test=[x => x,2,3,[x => x],5];\nfunction f(x) {\n  return f(x);\n}'
+            InfiniteLoopErrorType.NoBaseCase,
+            false,
+            'The function f has encountered an infinite loop. It has no base case.',
+            [code2, code1]
           )
           .silentRun();
       });
+    });
+
+    test('does not send correct data to sentry if approval is false', () => {
+      state = {
+        ...state,
+        session: { ...state.session, experimentApproval: false, experimentCoinflip: true }
+      };
+      context = createContext(3);
+      const theCode = 'function f(x){f(x);} f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .not.call(
+          reportInfiniteLoopError,
+          InfiniteLoopErrorType.NoBaseCase,
+          false,
+          'The function f has encountered an infinite loop. It has no base case.',
+          [theCode]
+        )
+        .silentRun();
+    });
+
+    test('shows infinite loop error if coinflip is true', () => {
+      state = { ...state, session: { ...state.session, experimentCoinflip: true } };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){f(x);} f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .silentRun()
+        .then(result => {
+          const lastError = thisContext.errors[thisContext.errors.length - 1];
+          expect(lastError.explain()).toContain('no base case');
+        });
+    });
+
+    test('does not show infinite loop error if coinflip is false', () => {
+      state = { ...state, session: { ...state.session, experimentCoinflip: false } };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){f(x);} f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .silentRun()
+        .then(result => {
+          const lastError = thisContext.errors[thisContext.errors.length - 1];
+          expect(lastError.explain()).not.toContain('no base case');
+        });
     });
   });
 
@@ -838,7 +907,8 @@ describe('evalTestCode', () => {
     value = 'another test value';
     options = {
       scheduler: 'preemptive',
-      originalMaxExecTime: 1000
+      originalMaxExecTime: 1000,
+      throwInfiniteLoops: true
     };
     index = 1;
     type = TestcaseTypes.public;

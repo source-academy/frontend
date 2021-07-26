@@ -716,6 +716,9 @@ export function* evalCode(
   const isNonDet: boolean = context.variant === 'non-det';
   const isLazy: boolean = context.variant === 'lazy';
   const isWasm: boolean = context.variant === 'wasm';
+  const throwInfiniteLoops: boolean = yield select(
+    (state: OverallState) => state.session.experimentCoinflip
+  );
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
@@ -726,6 +729,7 @@ export function* evalCode(
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
+            throwInfiniteLoops: throwInfiniteLoops,
             useSubst: substActiveAndCorrectChapter
           }),
 
@@ -776,13 +780,16 @@ export function* evalCode(
     context.errors = oldErrors;
     // for achievement event tracking
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
+
     // report infinite loops but only for 'vanilla'/default source
-    if (context.variant === 'default') {
-      const infiniteLoopData = getInfiniteLoopData(context, code);
+    if (context.variant === undefined || context.variant === 'default') {
+      const infiniteLoopData = getInfiniteLoopData(context);
       if (infiniteLoopData) {
-        events.push(EventType.INFINITE_LOOP);
-        const [error, code] = infiniteLoopData;
-        yield call(reportInfiniteLoopError, error, code);
+        const approval = yield select((state: OverallState) => state.session.experimentApproval);
+        if (approval) {
+          events.push(EventType.INFINITE_LOOP);
+          yield call(reportInfiniteLoopError, ...infiniteLoopData);
+        }
       }
     }
 
@@ -828,11 +835,14 @@ export function* evalTestCode(
   type: TestcaseType
 ) {
   yield put(actions.resetTestcase(workspaceLocation, index));
-
+  const throwInfiniteLoops: boolean = yield select(
+    (state: OverallState) => state.session.experimentCoinflip
+  );
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
       scheduler: 'preemptive',
-      originalMaxExecTime: execTime
+      originalMaxExecTime: execTime,
+      throwInfiniteLoops: throwInfiniteLoops
     }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
