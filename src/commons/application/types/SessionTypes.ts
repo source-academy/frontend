@@ -48,6 +48,8 @@ export type SessionState = {
   readonly accessToken?: string;
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
+  readonly experimentApproval: boolean;
+  readonly experimentCoinflip: boolean;
   readonly grade: number;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
