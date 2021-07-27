@@ -257,11 +257,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = React.useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
-    props.handleEditorEval();
-
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
       props.handleRunAllTestcases();
+    } else {
+      props.handleEditorEval();
     }
 
     const input: Input = {
