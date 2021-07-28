@@ -126,7 +126,11 @@ const handleSnippet = (obj: JsonType) => {
     return (
       <>
         {obj['body'] && <Pre>{obj['body']}</Pre>}
-        {obj['output'] && <Pre>{obj['output']}</Pre>}
+        {obj['output'] && (
+          <Pre>
+            <em>{obj['output']}</em>
+          </Pre>
+        )}
       </>
     );
   } else {
