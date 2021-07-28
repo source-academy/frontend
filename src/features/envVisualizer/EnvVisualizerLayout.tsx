@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, cloneDeepWith } from 'lodash';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
@@ -22,6 +22,20 @@ import {
   isPrimitiveData,
   isUnassigned
 } from './EnvVisualizerUtils';
+
+function customizer(value: any) {
+  if (value && value.head && value.name) {
+    const environment = cloneDeep(value);
+    const descriptors = Object.getOwnPropertyDescriptors(value.head);
+
+    for (const name in environment.head) {
+      if (!descriptors[name].writable) {
+        Object.defineProperty(environment.head, name, { writable: false });
+      }
+    }
+    return environment;
+  }
+}
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
@@ -49,7 +63,8 @@ export class Layout {
     Layout.values.clear();
     Layout.levels = [];
     Layout.key = 0;
-    Layout.environmentTree = cloneDeep(context.runtime.environmentTree as EnvTree);
+    // deep copy so that we don't mutate the context
+    Layout.environmentTree = cloneDeepWith(context.runtime.environmentTree as EnvTree, customizer);
     Layout.globalEnvNode = Layout.environmentTree.root;
 
     // remove program environment and merge bindings into global env
