@@ -63,7 +63,7 @@ export class Frame implements Visible, Hoverable {
       (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
 
     this.name = new Text(
-      String(frameNames.get(this.environment.name) || this.environment.name),
+      frameNames.get(this.environment.name) || this.environment.name,
       this.x,
       this.level.y,
       { maxWidth: this.width }
