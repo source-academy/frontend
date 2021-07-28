@@ -558,6 +558,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // Else evaluate its correctness - proceed iff the answer to the current question is correct
         const question: Question = props.assessment!.questions[questionId];
         if (question.type === QuestionTypes.mcq) {
+          // Note that 0 is a falsy value!
+          if (question.answer === null) {
+            return showWarningMessage('Please select an option!', 750);
+          }
+          // If the question is 'blocking', but there is no MCQ solution provided (i.e. assessment uploader's
+          // mistake), allow the student to proceed after selecting an option
+          if ((question as IMCQQuestion).solution === undefined) {
+            return deferredNavigate();
+          }
           if (question.answer !== (question as IMCQQuestion).solution) {
             return showWarningMessage('Your MCQ solution is incorrect!', 750);
           }

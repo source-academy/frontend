@@ -48,7 +48,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
       id="moduleHelpText"
       className="input-textarea"
       fill={true}
-      value={moduleHelpText}
+      value={moduleHelpText || ''}
       onChange={e =>
         props.setCourseConfiguration({
           ...props.courseConfiguration,

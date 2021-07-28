@@ -526,11 +526,21 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
 });
 
 describe('Test FETCH_COURSE_CONFIG action', () => {
+  const sublanguage: SourceLanguage = {
+    chapter: mockCourseConfiguration1.sourceChapter,
+    variant: mockCourseConfiguration1.sourceVariant,
+    displayName: styliseSublanguage(
+      mockCourseConfiguration1.sourceChapter,
+      mockCourseConfiguration1.sourceVariant
+    )
+  };
+
   test('when course config is obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
       .provide([[call(getCourseConfig, mockTokens), { config: mockCourseConfiguration1 }]])
       .put(setCourseConfiguration(mockCourseConfiguration1))
+      .put(updateSublanguage(sublanguage))
       .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();
   });
@@ -540,6 +550,7 @@ describe('Test FETCH_COURSE_CONFIG action', () => {
       .withState(mockStates)
       .provide([[call(getCourseConfig, mockTokens), { config: null }]])
       .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();
   });
