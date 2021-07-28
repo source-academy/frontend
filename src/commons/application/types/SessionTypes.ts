@@ -96,6 +96,8 @@ export type SessionState = {
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
+  readonly experimentApproval: boolean;
+  readonly experimentCoinflip: boolean;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly historyHelper: HistoryHelper;

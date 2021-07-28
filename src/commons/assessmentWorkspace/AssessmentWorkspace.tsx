@@ -772,6 +772,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? {
           editorSessionId: '',
           editorValue: props.editorValue!,
+          sourceChapter: question.library.chapter || 4,
+          sourceVariant: 'default' as Variant,
+          externalLibrary: question.library.external.name || 'NONE',
           handleDeclarationNavigate: props.handleDeclarationNavigate,
           handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,

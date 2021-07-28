@@ -43,10 +43,13 @@
     }
 
     p {
-      text-align: justify;
-      text-align-last: center;
       margin-right: 0.5%;
       margin-left: 0.5%;
+    }
+
+    p.description {
+      text-align: justify;
+      text-align-last: center;
     }
 
     span.dot {

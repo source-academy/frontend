@@ -12,7 +12,7 @@ class ContributorsDetails extends React.Component {
       <div className="outsideDetails">
         <Card className="contributorsDetails" elevation={Elevation.ONE}>
           <H3>The Team behind the Source Academy</H3>
-          <p>
+          <p className="description">
             The <i>Source Academy</i> is designed and developed by a team of students, most of who
             have used the system to learn the fundamentals of computing and enjoyed it. This page
             includes all developers who contributed to the Source Academy <i>Rook</i> (2022) and its

@@ -9,7 +9,9 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
     </SyntaxHighlighter>
   </Blueprint3.Card>
   <Component>
-    2
+    <em>
+      2
+    </em>
   </Component>
 </div>"
 `;
@@ -23,7 +25,9 @@ exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
     </SyntaxHighlighter>
   </Blueprint3.Card>
   <Component>
-    2
+    <em>
+      2
+    </em>
   </Component>
 </div>"
 `;
