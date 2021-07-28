@@ -123,7 +123,16 @@ const handleSnippet = (obj: JsonType) => {
   if (obj['latex']) {
     return <Pre>{handleLatex(obj['body']!)}</Pre>;
   } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
-    return <Pre>{obj['body']}</Pre>;
+    return (
+      <>
+        {obj['body'] && <Pre>{obj['body']}</Pre>}
+        {obj['output'] && (
+          <Pre>
+            <em>{obj['output']}</em>
+          </Pre>
+        )}
+      </>
+    );
   } else {
     if (!obj['body']) {
       return;
