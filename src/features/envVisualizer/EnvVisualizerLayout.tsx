@@ -30,6 +30,8 @@ function customizer(value: any) {
 
     for (const name in environment.head) {
       if (!descriptors[name].writable) {
+        // copy descriptors over to distinguish between constants and variables
+        // see #1866
         Object.defineProperty(environment.head, name, { writable: false });
       }
     }
