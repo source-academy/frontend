@@ -22,27 +22,7 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
   public render() {
     const { item } = this.props;
 
-    // TODO: Grade is no longer in use in AY20/21
-    // const isInvalidMission =
-    //   item.type !== AssessmentCategories.Mission || (item.maxGrade <= 0 && item.grade === 0);
     const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
-
-    // const missionDetail = (
-    //   <div className="grade-details">
-    //     <div className="title">Grade</div>
-    //     <div className="value">
-    //       {item.grade} / {item.maxGrade}
-    //     </div>
-    //     <ProgressBar
-    //       animate={false}
-    //       className={
-    //         'value-bar' + this.props.parseColour(this.props.getFrac(item.grade, item.maxGrade))
-    //       }
-    //       stripes={false}
-    //       value={this.props.getFrac(item.grade, item.maxGrade)}
-    //     />
-    //   </div>
-    // );
 
     const xpDetails = (
       <div className="xp-details">
@@ -74,8 +54,6 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
           icon={this.props.renderIcon(item.type)}
           title={item.title}
         >
-          {/* TODO: Grade is no longer in use in AY20/21 */}
-          {/* {isInvalidMission ? '' : missionDetail} */}
           {isInvalidXP ? '' : xpDetails}
         </Callout>
       </NavLink>

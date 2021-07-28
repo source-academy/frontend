@@ -26,7 +26,7 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
-  handleFetchAssessmentConfigs: () => void;
+  handleFetchCourseConfigs: () => void;
 };
 
 export type StateProps = {
@@ -197,9 +197,9 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   }
 
   private loadContent = () => {
-    // Always load AssessmentOverviews and AssessmentConfigs as course might have changed
+    // Always load AssessmentOverviews and CourseConfigs to get the latest values (just in case)
     this.props.handleAssessmentOverviewFetch();
-    this.props.handleFetchAssessmentConfigs();
+    this.props.handleFetchCourseConfigs();
   };
 
   /*

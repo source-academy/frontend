@@ -2,8 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  fetchAssessmentConfigs,
-  fetchAssessmentOverviews
+  fetchAssessmentOverviews,
+  fetchCourseConfig
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
@@ -27,7 +27,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
-      handleFetchAssessmentConfigs: fetchAssessmentConfigs
+      handleFetchCourseConfigs: fetchCourseConfig
     },
     dispatch
   );

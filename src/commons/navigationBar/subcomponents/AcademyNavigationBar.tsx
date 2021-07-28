@@ -107,7 +107,10 @@ export const icons: IconName[] = [
   IconNames.LIGHTBULB,
   IconNames.PREDICTIVE_ANALYSIS,
   IconNames.COMPARISON,
-  IconNames.MANUAL
+  IconNames.MANUAL,
+  IconNames.GRAPH,
+  IconNames.LAB_TEST,
+  IconNames.CALCULATOR
 ];
 
 export default AcademyNavigationBar;

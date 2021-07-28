@@ -40,8 +40,6 @@ export type StateProps = {
   enableGame?: boolean;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  // sourceChapter: number;
-  // sourceVariant: Variant;
   moduleHelpText?: string;
   assessmentConfigurations?: AssessmentConfiguration[];
   userCourseRegistrations?: AdminPanelCourseRegistration[];

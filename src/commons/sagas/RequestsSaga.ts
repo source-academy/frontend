@@ -347,47 +347,6 @@ export async function bulkUpdateGoals(
 }
 
 /**
- * POST /achievements/{achievement_uuid}
- *
- * Note: Deprecated. Achievement updates are now done using bulkUpdateAchievements
- */
-// export const editAchievement = async (
-//   achievement: AchievementItem,
-//   tokens: Tokens
-// ): Promise<Response | null> => {
-//   const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
-//     ...tokens,
-//     body: { achievement: achievement },
-//     noHeaderAccept: true,
-//     shouldAutoLogout: false,
-//     shouldRefresh: true
-//   });
-
-//   return resp;
-// };
-
-/**
- * POST /achievements/goals/{goalUuid}
- *
- * Note: Deprecated. Goal updates are now done using bulkUpdateGoals
- */
-// export const editGoal = async (
-//   definition: GoalDefinition,
-//   tokens: Tokens
-// ): Promise<Response | null> => {
-//   const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
-//     ...tokens,
-//     // Backendify call to be removed once UUID has been implemented
-//     body: { definition: backendifyGoalDefinition(definition) },
-//     noHeaderAccept: true,
-//     shouldAutoLogout: false,
-//     shouldRefresh: true
-//   });
-
-//   return resp;
-// };
-
-/**
  * POST /courses/{courseId}/self/goals/{goalUuid}/progress
  */
 export const updateOwnGoalProgress = async (

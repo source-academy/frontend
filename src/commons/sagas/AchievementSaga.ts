@@ -6,8 +6,6 @@ import {
   ADD_EVENT,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
-  // EDIT_ACHIEVEMENT,
-  // EDIT_GOAL,
   EventType,
   GET_ACHIEVEMENTS,
   GET_GOALS,
@@ -28,8 +26,6 @@ import Constants from '../utils/Constants';
 import {
   bulkUpdateAchievements,
   bulkUpdateGoals,
-  // editAchievement,
-  // editGoal,
   getAchievements,
   getAllUsers,
   getGoals,
@@ -78,33 +74,6 @@ export default function* AchievementSaga(): SagaIterator {
       }
     }
   );
-
-  // yield takeEvery(
-  //   EDIT_ACHIEVEMENT,
-  //   function* (action: ReturnType<typeof actions.editAchievement>): any {
-  //     const tokens: Tokens = yield selectTokens();
-
-  //     const achievement = action.payload;
-
-  //     const resp = yield call(editAchievement, achievement, tokens);
-
-  //     if (!resp) {
-  //       return;
-  //     }
-  //   }
-  // );
-
-  // yield takeEvery(EDIT_GOAL, function* (action: ReturnType<typeof actions.editGoal>): any {
-  //   const tokens: Tokens = yield selectTokens();
-
-  //   const definition = action.payload;
-
-  //   const resp = yield call(editGoal, definition, tokens);
-
-  //   if (!resp) {
-  //     return;
-  //   }
-  // });
 
   yield takeEvery(GET_ACHIEVEMENTS, function* (): any {
     const tokens: Tokens = yield selectTokens();

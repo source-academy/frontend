@@ -79,8 +79,6 @@ export type SessionState = {
   readonly group: string | null;
   readonly gameState: GameState;
   readonly courseId?: number;
-  readonly grade: number;
-  readonly maxGrade: number;
   readonly xp: number;
   readonly story: Story;
 
@@ -91,8 +89,6 @@ export type SessionState = {
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
-  readonly sourceChapter: number;
-  readonly sourceVariant: Variant;
   readonly moduleHelpText?: string;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
@@ -137,8 +133,6 @@ export type CourseRegistration = {
   group: string | null;
   gameState?: GameState;
   courseId: number;
-  grade: number;
-  maxGrade: number;
   xp: number;
   story?: Story;
 };

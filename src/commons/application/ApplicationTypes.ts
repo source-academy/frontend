@@ -291,15 +291,11 @@ export const defaultSession: SessionState = {
     completed_quests: [],
     collectibles: {}
   },
-  grade: 0,
-  maxGrade: 0,
   xp: 0,
   story: {
     story: '',
     playStory: false
   },
-  sourceChapter: Constants.defaultSourceChapter,
-  sourceVariant: Constants.defaultSourceVariant as Variant,
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   githubOctokitObject: { octokit: undefined },

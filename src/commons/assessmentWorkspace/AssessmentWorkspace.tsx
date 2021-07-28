@@ -541,7 +541,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     /**
      * Returns a nullary function that defers the navigation of the browser window, until the
-     * student's answer passes some checks - presently only used for assessments types with skippable = false
+     * student's answer passes some checks - presently only used for assessments types with blocking = true
      * (previously used for the 'Path' assessment type in SA Knight)
      */
     const onClickProgress = (deferredNavigate: () => void) => {

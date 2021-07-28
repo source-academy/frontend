@@ -152,8 +152,6 @@ const mockCourseRegistration1: CourseRegistration = {
     completed_quests: []
   } as GameState,
   courseId: 1,
-  grade: 1,
-  maxGrade: 10,
   xp: 1,
   story: {
     story: '',
@@ -182,8 +180,6 @@ const mockCourseRegistration2: CourseRegistration = {
     completed_quests: []
   } as GameState,
   courseId: 2,
-  grade: 1,
-  maxGrade: 10,
   xp: 1,
   story: {
     story: '',
@@ -533,7 +529,7 @@ describe('Test FETCH_COURSE_CONFIG action', () => {
   test('when course config is obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .provide([[call(getCourseConfig, mockTokens), mockCourseConfiguration1]])
+      .provide([[call(getCourseConfig, mockTokens), { config: mockCourseConfiguration1 }]])
       .put(setCourseConfiguration(mockCourseConfiguration1))
       .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();
@@ -542,7 +538,7 @@ describe('Test FETCH_COURSE_CONFIG action', () => {
   test('when course config is null', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
-      .provide([[call(getCourseConfig, mockTokens), null]])
+      .provide([[call(getCourseConfig, mockTokens), { config: null }]])
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();

@@ -24,8 +24,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   enableGame: state.session.enableGame,
   enableAchievements: state.session.enableAchievements,
   enableSourcecast: state.session.enableSourcecast,
-  sourceChapter: state.session.sourceChapter,
-  sourceVariant: state.session.sourceVariant,
   moduleHelpText: state.session.moduleHelpText,
   assessmentConfigurations: state.session.assessmentConfigurations,
   userCourseRegistrations: state.session.userCourseRegistrations

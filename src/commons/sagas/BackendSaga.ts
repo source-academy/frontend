@@ -222,9 +222,16 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(FETCH_COURSE_CONFIG, function* () {
     const tokens: Tokens = yield selectTokens();
-    const courseConfig: CourseConfiguration | null = yield call(getCourseConfig, tokens);
-    if (courseConfig) {
-      yield put(actions.setCourseConfiguration(courseConfig));
+    const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
+    if (config) {
+      yield put(actions.setCourseConfiguration(config));
+      yield put(
+        actions.updateSublanguage({
+          chapter: config.sourceChapter,
+          variant: config.sourceVariant,
+          displayName: styliseSublanguage(config.sourceChapter, config.sourceVariant)
+        })
+      );
     }
   });
 

@@ -74,8 +74,6 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     group: '1F',
     gameState: {} as GameState,
     courseId: 1,
-    grade: 0,
-    maxGrade: 10,
     xp: 0,
     story: {
       story: 'mission-1',
@@ -88,8 +86,6 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     group: '1F',
     gameState: {} as GameState,
     courseId: 2,
-    grade: 0,
-    maxGrade: 10,
     xp: 0,
     story: {
       story: 'mission-1',

@@ -28,7 +28,6 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
-  // FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -248,8 +247,6 @@ export const updateHasUnsavedChanges = (
     workspaceLocation,
     hasUnsavedChanges
   });
-
-// export const fetchSublanguage = () => action(FETCH_SUBLANGUAGE);
 
 export const changeSublanguage = (sublang: SourceLanguage) =>
   action(CHANGE_SUBLANGUAGE, { sublang });
