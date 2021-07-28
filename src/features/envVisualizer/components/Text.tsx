@@ -22,7 +22,7 @@ export const defaultOptions: TextOptions = {
   fontSize: Number(Config.FontSize), // in pixels. Default is 12
   fontStyle: Config.FontStyle.toString(), // can be normal, bold, or italic. Default is normal
   fontVariant: Config.FontVariant.toString(), // can be normal or small-caps. Default is normal
-  isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is true
+  isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
