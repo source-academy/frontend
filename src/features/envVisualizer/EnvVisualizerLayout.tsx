@@ -66,6 +66,7 @@ export class Layout {
       Config.CanvasMinHeight,
       lastLevel.y + lastLevel.height + Config.CanvasPaddingY
     );
+
     Layout.width = Math.max(
       Config.CanvasMinWidth,
       Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width), 0) +
@@ -152,12 +153,16 @@ export class Layout {
         return [c];
       }
     };
+
     let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
     let prevLevel: Level | null = null;
+    let currLevel: Level;
+
     while (frontier.length > 0) {
-      const currLevel: Level = new Level(prevLevel, frontier);
+      currLevel = new Level(prevLevel, frontier);
       this.levels.push(currLevel);
       const nextFrontier: EnvTreeNode[] = [];
+
       frontier.forEach(e => {
         e.children.forEach(c => {
           const nextChildren = getNextChildren(c as EnvTreeNode);
@@ -165,6 +170,7 @@ export class Layout {
           nextFrontier.push(...nextChildren);
         });
       });
+
       prevLevel = currLevel;
       frontier = nextFrontier;
     }
