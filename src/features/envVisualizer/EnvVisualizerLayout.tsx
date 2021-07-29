@@ -16,25 +16,27 @@ import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes'
 import {
   isArray,
   isEmptyEnvironment,
+  isEnvironment,
   isFn,
   isFunction,
   isGlobalFn,
+  isObject,
   isPrimitiveData,
   isUnassigned
 } from './EnvVisualizerUtils';
 
 function customizer(value: any) {
-  if (value && value.head && value.name) {
+  if (isObject(value) && isEnvironment(value)) {
     const environment = cloneDeep(value);
     const descriptors = Object.getOwnPropertyDescriptors(value.head);
-
     for (const name in environment.head) {
-      // copy descriptors over to distinguish between constants and variables
+      // copy descriptors over so we can distinguish between constants and variables
       // see #1866
       Object.defineProperty(environment.head, name, { writable: descriptors[name].writable });
     }
     return environment;
   }
+  return undefined;
 }
 
 /** this class encapsulates the logic for calculating the layout */
@@ -63,7 +65,7 @@ export class Layout {
     Layout.values.clear();
     Layout.levels = [];
     Layout.key = 0;
-    // deep copy so that we don't mutate the context
+    // deep copy so we don't mutate the context
     Layout.environmentTree = cloneDeepWith(context.runtime.environmentTree as EnvTree, customizer);
     Layout.globalEnvNode = Layout.environmentTree.root;
 

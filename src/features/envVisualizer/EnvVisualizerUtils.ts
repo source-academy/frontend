@@ -1,3 +1,4 @@
+import { Environment } from 'js-slang/dist/types';
 import { Node } from 'konva/types/Node';
 
 import { Value } from './components/values/Value';
@@ -11,6 +12,7 @@ import {
   ReferenceType
 } from './EnvVisualizerTypes';
 
+// TODO: can make use of lodash
 /** checks if `x` is an object */
 export function isObject(x: any): x is object {
   return x === Object(x);
@@ -19,6 +21,10 @@ export function isObject(x: any): x is object {
 /** checks if `object` is empty */
 export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
+}
+
+export function isEnvironment(object: Object): object is Environment {
+  return 'head' in object && 'tail' in object && 'name' in object;
 }
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
