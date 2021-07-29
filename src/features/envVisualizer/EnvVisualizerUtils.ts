@@ -26,14 +26,17 @@ export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
 }
 
-export function isEnvironment(value: any): value is Environment {
-  return isObject(value) && 'head' in value && 'tail' in value && 'name' in value;
+/** checks if `object` is `Environment` */
+export function isEnvironment(object: Object): object is Environment {
+  return 'head' in object && 'tail' in object && 'name' in object;
 }
 
+/** checks if `object` is `EnvTreeNode` */
 export function isEnvTreeNode(object: Object): object is EnvTreeNode {
   return 'parent' in object && 'children' in object;
 }
 
+/** checks if `object` is `EnvTree` */
 export function isEnvTree(object: Object): object is EnvTree {
   return 'root' in object;
 }
@@ -235,9 +238,13 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
   }
 }
 
-// TODO: move this function to EnvTree class
-// so we can invoke like so: environmentTree.deepCopy()
-export function deepCopyTree<T>(value: T): T {
+/**
+ * creates a deep clone of `EnvTree`
+ *
+ * TODO: move this function to EnvTree class
+ * so we can invoke like so: environmentTree.deepCopy()
+ */
+export function deepCopyTree(value: EnvTree): EnvTree {
   const clone = cloneDeep(value);
   copyOwnPropertyDescriptors(value, clone);
   return clone;
