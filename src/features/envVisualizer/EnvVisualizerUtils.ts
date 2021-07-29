@@ -224,7 +224,7 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
   if (isEnvTree(source) && isEnvTree(destination)) {
     copyOwnPropertyDescriptors(source.root, destination.root);
   } else if (isEnvTreeNode(source) && isEnvTreeNode(destination)) {
-    // recurse only children and environment
+    // recurse only on children and environment
     copyOwnPropertyDescriptors(source.children, destination.children);
     copyOwnPropertyDescriptors(source.environment, destination.environment);
   } else if (isArray(source) && isArray(destination)) {
