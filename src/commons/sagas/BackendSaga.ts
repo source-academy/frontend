@@ -138,6 +138,8 @@ function* BackendSaga(): SagaIterator {
     }
     yield put(actions.setTokens(tokens));
 
+    // Note: courseRegistration, courseConfiguration and assessmentConfigurations
+    // are either all null OR all not null
     const {
       user,
       courseRegistration,
@@ -150,8 +152,16 @@ function* BackendSaga(): SagaIterator {
       assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getUser, tokens);
 
-    if (user) {
-      yield put(actions.setUser(user));
+    if (!user) {
+      return;
+    }
+
+    yield put(actions.setUser(user));
+
+    // Handle case where user does not have a latest viewed course in the backend
+    // but is enrolled in some course (this happens occationally due to e.g. removal from a course)
+    if (courseConfiguration === null && user.courses.length > 0) {
+      yield put(actions.updateLatestViewedCourse(user.courses[0].courseId));
     }
 
     if (courseRegistration && courseConfiguration && assessmentConfigurations) {
@@ -196,8 +206,16 @@ function* BackendSaga(): SagaIterator {
         assessmentConfigurations: AssessmentConfiguration[] | null;
       } = yield call(getUser, tokens);
 
-      if (user) {
-        yield put(actions.setUser(user));
+      if (!user) {
+        return;
+      }
+
+      yield put(actions.setUser(user));
+
+      // Handle case where user does not have a latest viewed course in the backend
+      // but is enrolled in some course (this happens occationally due to e.g. removal from a course)
+      if (courseConfiguration === null && user.courses.length > 0) {
+        yield put(actions.updateLatestViewedCourse(user.courses[0].courseId));
       }
 
       if (courseRegistration && courseConfiguration && assessmentConfigurations) {

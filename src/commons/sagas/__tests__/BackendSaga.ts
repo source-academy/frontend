@@ -20,6 +20,7 @@ import {
   setUser,
   updateAssessment,
   updateAssessmentOverviews,
+  updateLatestViewedCourse,
   updateNotifications
 } from '../../application/actions/SessionActions';
 import {
@@ -292,6 +293,7 @@ describe('Test FETCH_AUTH action', () => {
       .put(setTokens(mockTokens))
       .call(getUser, mockTokens)
       .put(setUser(user))
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
       .put(setAssessmentConfigurations(assessmentConfigurations))
@@ -314,6 +316,7 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_TOKENS)
       .not.call.fn(getUser)
       .not.put.actionType(SET_USER)
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
@@ -322,7 +325,35 @@ describe('Test FETCH_AUTH action', () => {
       .silentRun();
   });
 
-  test('when user is obtained, but course registration, course configuration and assessmentConfigurations are null', () => {
+  test('when user is obtained (user has no courses), but course registration, course configuration and assessmentConfigurations are null', () => {
+    const userWithNoCourse = { ...user, courses: [] };
+    return expectSaga(BackendSaga)
+      .provide([
+        [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
+        [
+          call(getUser, mockTokens),
+          {
+            user: userWithNoCourse,
+            courseRegistration: null,
+            courseConfiguration: null,
+            assessmentConfigurations: null
+          }
+        ]
+      ])
+      .call(postAuth, code, providerId, clientId, redirectUrl)
+      .put(setTokens(mockTokens))
+      .call(getUser, mockTokens)
+      .put(setUser(userWithNoCourse))
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
+      .silentRun();
+  });
+
+  test('when user is obtained (user has courses), but course registration, course configuration and assessmentConfigurations are null', () => {
     return expectSaga(BackendSaga)
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
@@ -336,10 +367,12 @@ describe('Test FETCH_AUTH action', () => {
           }
         ]
       ])
+      .withState({ session: mockTokens }) // need to mock tokens for updateLatestViewedCourse call
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .put(setTokens(mockTokens))
       .call(getUser, mockTokens)
       .put(setUser(user))
+      .put(updateLatestViewedCourse(user.courses[0].courseId))
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
@@ -366,6 +399,7 @@ describe('Test FETCH_AUTH action', () => {
       .put(setTokens(mockTokens))
       .call(getUser, mockTokens)
       .not.put.actionType(SET_USER)
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
@@ -395,6 +429,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .withState({ session: mockTokens })
       .call(getUser, mockTokens)
       .put(setUser(user))
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
       .put(setAssessmentConfigurations(assessmentConfigurations))
@@ -414,6 +449,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .withState({ session: mockTokens })
       .call(getUser, mockTokens)
       .put(setUser(user))
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
       .put(setAssessmentConfigurations(assessmentConfigurations))
@@ -428,7 +464,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .silentRun();
   });
 
-  test('when updateSublanguage is true, and user is obtained, but course registration, course configuration and assessment configurations are null', () => {
+  test('when updateSublanguage is true, and user (with courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([
@@ -444,6 +480,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       ])
       .call(getUser, mockTokens)
       .put(setUser(user))
+      .put(updateLatestViewedCourse(user.courses[0].courseId))
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
@@ -452,7 +489,33 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .silentRun();
   });
 
-  test('when updateSublanguage is false, and user is obtained, but course registration, course configuration and assessment configurations are null', () => {
+  test('when updateSublanguage is true, and user (without courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
+    const userWithNoCourse = { ...user, courses: [] };
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([
+        [
+          call(getUser, mockTokens),
+          {
+            user: userWithNoCourse,
+            courseRegistration: null,
+            courseConfiguration: null,
+            assessmentConfigurations: null
+          }
+        ]
+      ])
+      .call(getUser, mockTokens)
+      .put(setUser(userWithNoCourse))
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.put.actionType(SET_COURSE_CONFIGURATION)
+      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_USER_AND_COURSE, payload: true })
+      .silentRun();
+  });
+
+  test('when updateSublanguage is false, and user (with courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([
@@ -468,6 +531,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       ])
       .call(getUser, mockTokens)
       .put(setUser(user))
+      .put(updateLatestViewedCourse(user.courses[0].courseId))
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
@@ -492,6 +556,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       ])
       .call(getUser, mockTokens)
       .not.put.actionType(SET_USER)
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
@@ -516,6 +581,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       ])
       .call(getUser, mockTokens)
       .not.put.actionType(SET_USER)
+      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
