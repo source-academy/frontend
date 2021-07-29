@@ -62,6 +62,7 @@ import {
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
+  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -99,6 +100,7 @@ import {
   postUnsubmit,
   putAssessmentConfigs,
   putCourseConfig,
+  putCourseResearchAgreement,
   putLatestViewedCourse,
   putNewUsers,
   putUserRole,
@@ -835,6 +837,26 @@ function* BackendSaga(): SagaIterator {
 
       yield put(actions.fetchAdminPanelCourseRegistrations());
       yield call(showSuccessMessage, 'Role updated!');
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_COURSE_RESEARCH_AGREEMENT,
+    function* (action: ReturnType<typeof actions.updateCourseResearchAgreement>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { agreedToResearch } = action.payload;
+
+      const resp: Response | null = yield call(
+        putCourseResearchAgreement,
+        tokens,
+        agreedToResearch
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.setCourseRegistration({ agreedToResearch }));
+      yield call(showSuccessMessage, 'Research preference saved!');
     }
   );
 

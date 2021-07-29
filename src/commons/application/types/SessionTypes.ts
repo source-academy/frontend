@@ -58,6 +58,7 @@ export const UPDATE_ASSESSMENT_CONFIGS = 'UPDATE_ASSESSMENT_CONFIGS';
 export const DELETE_ASSESSMENT_CONFIG = 'DELETE_ASSESSMENT_CONFIG';
 export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS';
 export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
+export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
 export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
@@ -94,10 +95,12 @@ export type SessionState = {
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
+  // For infinite loop research data collection
+  readonly agreedToResearch?: boolean | null;
+  readonly experimentCoinflip: boolean;
+
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
-  readonly experimentApproval: boolean;
-  readonly experimentCoinflip: boolean;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly historyHelper: HistoryHelper;
@@ -137,6 +140,7 @@ export type CourseRegistration = {
   courseId: number;
   xp: number;
   story?: Story;
+  agreedToResearch: boolean | null;
 };
 
 export type CourseConfiguration = {

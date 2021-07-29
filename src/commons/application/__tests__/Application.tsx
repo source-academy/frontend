@@ -24,7 +24,8 @@ const props: ApplicationProps = {
   handleGitHubLogOut: () => {},
   fetchUserAndCourse: () => {},
   updateLatestViewedCourse: () => {},
-  handleCreateCourse: () => {}
+  handleCreateCourse: () => {},
+  updateCourseResearchAgreement: () => {}
 };
 
 test('Application renders correctly', () => {

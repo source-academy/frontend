@@ -1,3 +1,4 @@
+import { Button, Classes, Dialog, H4, Intent } from '@blueprintjs/core';
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
@@ -31,6 +32,7 @@ export type DispatchProps = {
   fetchUserAndCourse: (updateSublanguage: boolean) => void;
   updateLatestViewedCourse: (courseId: number) => void;
   handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
+  updateCourseResearchAgreement: (agreedToResearch: boolean) => void;
 };
 
 export type StateProps = {
@@ -42,6 +44,7 @@ export type StateProps = {
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes?: AssessmentType[];
+  agreedToResearch?: boolean | null;
 };
 
 const Application: React.FC<ApplicationProps> = props => {
@@ -247,6 +250,49 @@ const Application: React.FC<ApplicationProps> = props => {
           </Switch>
         )}
       </div>
+
+      {/* agreedToResearch has a default value of undefined in the store.
+          It will take on null/true/false when the backend returns. */}
+      {props.agreedToResearch === null && (
+        <div className="research-prompt">
+          <Dialog
+            className={Classes.DARK}
+            title="Agreement to Participate in Educational Research"
+            canOutsideClickClose={false}
+            canEscapeKeyClose={false}
+            isCloseButtonShown={false}
+            isOpen
+          >
+            <div className={Classes.DIALOG_BODY}>
+              <H4>Welcome to your new Source Academy @ NUS course!</H4>
+              <div>
+                Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in
+                programming and the ideas behind programming, and to make these ideas universally
+                accessible.
+              </div>
+              <br />
+              <div>
+                This includes educational research! With your help, <b>anonymized</b> data and
+                programs may be collected solely for research purposes during your time in this
+                course.
+              </div>
+            </div>
+            <div className={Classes.DIALOG_FOOTER}>
+              <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                <Button
+                  text="I would like to opt out"
+                  onClick={() => props.updateCourseResearchAgreement(false)}
+                />
+                <Button
+                  text="I consent!"
+                  intent={Intent.SUCCESS}
+                  onClick={() => props.updateCourseResearchAgreement(true)}
+                />
+              </div>
+            </div>
+          </Dialog>
+        </div>
+      )}
     </div>
   );
 };
