@@ -1,5 +1,6 @@
 import { Environment } from 'js-slang/dist/types';
 import { Node } from 'konva/types/Node';
+import { cloneDeep } from 'lodash';
 
 import { Value } from './components/values/Value';
 import { Config } from './EnvVisualizerConfig';
@@ -200,4 +201,40 @@ export function getNonEmptyEnv(environment: Env): Env {
   } else {
     return environment;
   }
+}
+
+/**
+ * Given any objects, this function will find the underlying `Environment` objects
+ * and perform copying of property descriptors from source frames to destination frames.
+ * Property descriptors are important for us to distinguish between constants and variables.
+ */
+export function copyOwnPropertyDescriptors(source: any, destination: any) {
+  // TODO: use lodash cloneDeepWith customizer?
+  if (isFunction(source) || isPrimitiveData(source)) {
+    return;
+  }
+  if ('root' in source && 'root' in destination) {
+    // source is a tree
+    copyOwnPropertyDescriptors(source.root, destination.root);
+  } else if (isEnvTreeNode(source) && isEnvTreeNode(destination)) {
+    // recurse only children and environment
+    copyOwnPropertyDescriptors(source.children, destination.children);
+    copyOwnPropertyDescriptors(source.environment, destination.environment);
+  } else if (isArray(source) && isArray(destination)) {
+    // recurse on array items
+    source.forEach((item, i) => copyOwnPropertyDescriptors(item, destination[i]));
+  } else if (isEnvironment(source) && isEnvironment(destination)) {
+    // copy descriptors from source frame to destination frame
+    Object.defineProperties(destination.head, Object.getOwnPropertyDescriptors(source.head));
+    // recurse on tail
+    copyOwnPropertyDescriptors(source.tail, destination.tail);
+  }
+}
+
+// TODO: move this function to EnvTree class
+// so we can invoke like so: environmentTree.deepCopy()
+export function deepCopyTree<T>(value: T): T {
+  const clone = cloneDeep(value);
+  copyOwnPropertyDescriptors(value, clone);
+  return clone;
 }

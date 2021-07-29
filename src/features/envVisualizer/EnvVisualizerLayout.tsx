@@ -1,6 +1,5 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
@@ -14,10 +13,9 @@ import { Value } from './components/values/Value';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
+  deepCopyTree,
   isArray,
   isEmptyEnvironment,
-  isEnvironment,
-  isEnvTreeNode,
   isFn,
   isFunction,
   isGlobalFn,
@@ -52,7 +50,7 @@ export class Layout {
     Layout.levels = [];
     Layout.key = 0;
     // deep copy so we don't mutate the context
-    Layout.environmentTree = deepCopy(context.runtime.environmentTree as EnvTree);
+    Layout.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
 
     // remove program environment and merge bindings into global env
@@ -237,34 +235,4 @@ export class Layout {
       return layout;
     }
   }
-}
-
-function copyOwnPropertyDescriptors(source: any, destination: any) {
-  // TODO: use lodash cloneDeepWith?
-  if (isFunction(source) || isPrimitiveData(source)) {
-    return;
-  }
-  if ('root' in source && 'root' in destination) {
-    // source is a tree
-    copyOwnPropertyDescriptors(source.root, destination.root);
-  } else if (isEnvTreeNode(source) && isEnvTreeNode(destination)) {
-    // recurse only children and environment
-    copyOwnPropertyDescriptors(source.children, destination.children);
-    copyOwnPropertyDescriptors(source.environment, destination.environment);
-  } else if (isArray(source) && isArray(destination)) {
-    // recurse on array items
-    source.forEach((item, i) => copyOwnPropertyDescriptors(item, destination[i]));
-  } else if (isEnvironment(source) && isEnvironment(destination)) {
-    // copy descriptors from source frame to destination frame
-    Object.defineProperties(destination.head, Object.getOwnPropertyDescriptors(source.head));
-    // recurse on tail
-    copyOwnPropertyDescriptors(source.tail, destination.tail);
-  }
-}
-
-// TODO: move this function to EnvTree class
-function deepCopy<T>(value: T): T {
-  const clone = cloneDeep(value);
-  copyOwnPropertyDescriptors(value, clone);
-  return clone;
 }
