@@ -7,6 +7,7 @@ import {
   Data,
   EmptyObject,
   Env,
+  EnvTreeNode,
   FnTypes,
   PrimitiveTypes,
   ReferenceType
@@ -23,8 +24,12 @@ export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
 }
 
-export function isEnvironment(object: Object): object is Environment {
-  return 'head' in object && 'tail' in object && 'name' in object;
+export function isEnvironment(value: any): value is Environment {
+  return isObject(value) && 'head' in value && 'tail' in value && 'name' in value;
+}
+
+export function isEnvTreeNode(object: Object): object is EnvTreeNode {
+  return 'parent' in object && 'children' in object;
 }
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
