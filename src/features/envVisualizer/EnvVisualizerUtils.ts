@@ -114,7 +114,7 @@ export function getTextWidth(
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
 
-  if (!context) {
+  if (!context || !text) {
     return 0;
   }
 

@@ -47,7 +47,9 @@ export class Text implements Visible, Hoverable {
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
 
-    this.fullStr = this.partialStr = isStringIdentifiable ? JSON.stringify(data) : String(data);
+    this.fullStr = this.partialStr = isStringIdentifiable
+      ? JSON.stringify(data) || String(data)
+      : String(data);
     this.height = fontSize;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
