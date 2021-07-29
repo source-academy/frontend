@@ -13,6 +13,7 @@ export interface TextOptions {
   fontFamily: string;
   fontStyle: string;
   fontVariant: string;
+  isStringIdentifiable: boolean;
 }
 
 export const defaultOptions: TextOptions = {
@@ -20,7 +21,8 @@ export const defaultOptions: TextOptions = {
   fontFamily: Config.FontFamily.toString(), // default is Arial
   fontSize: Number(Config.FontSize), // in pixels. Default is 12
   fontStyle: Config.FontStyle.toString(), // can be normal, bold, or italic. Default is normal
-  fontVariant: Config.FontVariant.toString() // can be normal or small-caps. Default is normal
+  fontVariant: Config.FontVariant.toString(), // can be normal or small-caps. Default is normal
+  isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -35,28 +37,30 @@ export class Text implements Visible, Hoverable {
 
   constructor(
     /** text */
-    readonly str: string,
+    readonly data: any,
     readonly x: number,
     readonly y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
     this.options = { ...this.options, ...options };
-    const { fontSize, fontStyle, fontFamily, maxWidth } = this.options;
+
+    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
+
+    this.fullStr = this.data = isStringIdentifiable ? JSON.stringify(data) : String(data);
     this.height = fontSize;
-    this.fullStr = str;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    if (widthOf(str) > maxWidth) {
+    if (widthOf(this.data) > maxWidth) {
       let truncatedText = Config.Ellipsis.toString();
       let i = 0;
-      while (widthOf(str.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
-        truncatedText = str.substr(0, i++) + Config.Ellipsis.toString();
+      while (widthOf(this.data.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
+        truncatedText = this.data.substr(0, i++) + Config.Ellipsis.toString();
       }
       this.width = widthOf(truncatedText);
-      this.str = truncatedText;
+      this.data = truncatedText;
     } else {
-      this.width = Math.max(Config.TextMinWidth, widthOf(str));
+      this.width = Math.max(Config.TextMinWidth, widthOf(this.data));
     }
   }
 
@@ -90,7 +94,7 @@ export class Text implements Visible, Hoverable {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.str} {...props} />
+          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.data} {...props} />
         </KonvaLabel>
         <KonvaLabel
           x={this.x}
