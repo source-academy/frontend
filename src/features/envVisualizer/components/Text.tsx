@@ -63,6 +63,7 @@ export class Text implements Visible, Hoverable {
       this.partialStr = truncatedText;
     } else {
       this.width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
+
     }
   }
 
