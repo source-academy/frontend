@@ -8,6 +8,7 @@ import {
   Data,
   EmptyObject,
   Env,
+  EnvTree,
   EnvTreeNode,
   FnTypes,
   PrimitiveTypes,
@@ -31,6 +32,10 @@ export function isEnvironment(value: any): value is Environment {
 
 export function isEnvTreeNode(object: Object): object is EnvTreeNode {
   return 'parent' in object && 'children' in object;
+}
+
+export function isEnvTree(object: Object): object is EnvTree {
+  return 'root' in object;
 }
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
@@ -213,8 +218,7 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
   if (isFunction(source) || isPrimitiveData(source)) {
     return;
   }
-  if ('root' in source && 'root' in destination) {
-    // source is a tree
+  if (isEnvTree(source) && isEnvTree(destination)) {
     copyOwnPropertyDescriptors(source.root, destination.root);
   } else if (isEnvTreeNode(source) && isEnvTreeNode(destination)) {
     // recurse only children and environment
