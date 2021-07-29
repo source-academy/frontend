@@ -970,19 +970,22 @@ export const putAssessmentConfigs = async (
 };
 
 /**
- * DELETE /courses/{courseId}/admin/config/assessment_config
+ * DELETE /courses/{courseId}/admin/config/assessment_config/{assessmentConfigId}
  */
 export const removeAssessmentConfig = async (
   tokens: Tokens,
   assessmentConfig: AssessmentConfiguration
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/config/assessment_config`, 'DELETE', {
-    ...tokens,
-    body: { assessmentConfig },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `${courseId()}/admin/config/assessment_config/${assessmentConfig.assessmentConfigId}`,
+    'DELETE',
+    {
+      ...tokens,
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
 
   return resp;
 };
