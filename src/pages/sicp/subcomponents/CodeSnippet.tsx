@@ -101,7 +101,11 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           </SyntaxHighlighter>
         </Card>
       )}
-      {output && <Pre>{output}</Pre>}
+      {output && (
+        <Pre>
+          <em>{output}</em>
+        </Pre>
+      )}
     </div>
   );
 };

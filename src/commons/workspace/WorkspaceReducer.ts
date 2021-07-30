@@ -51,7 +51,6 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -585,14 +584,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
-    case UPDATE_ACTIVE_TAB:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentActiveTab: action.payload.activeTab
-        }
-      };
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,

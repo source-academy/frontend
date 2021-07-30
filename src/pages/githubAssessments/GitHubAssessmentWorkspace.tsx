@@ -86,7 +86,6 @@ import { GHAssessmentOverview } from './GitHubClassroom';
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
@@ -102,6 +101,7 @@ export type DispatchProps = {
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  handleRunAllTestcases: () => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleGitHubLogIn: () => void;
@@ -707,7 +707,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.questionOverview);
-      props.handleActiveTabChange(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
@@ -730,8 +729,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     setSelectedTab(newTabId);
   };
 
+  /**
+   * handleEval used in both the Run button, and during 'shift-enter' in AceEditor
+   *
+   * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
+   * Thus, we use a mutable ref to overcome the stale closure problem
+   */
+  const activeTab = React.useRef(selectedTab);
+  activeTab.current = selectedTab;
   const handleEval = () => {
     props.handleEditorEval();
+
+    // Run testcases when the GitHub testcases tab is selected
+    if (activeTab.current === SideContentType.testcases) {
+      props.handleRunAllTestcases();
+    }
   };
 
   const setTaskDescriptions = useCallback(
@@ -862,8 +874,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
 
     return {
-      handleActiveTabChange: props.handleActiveTabChange,
-      defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
       tabs,
       onChange: onChangeTabs,
@@ -983,6 +993,23 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const mobileSideContentProps: () => MobileSideContentProps = () => {
+    const onChangeTabs = (
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
+        return;
+      }
+
+      // Do nothing when clicking the mobile 'Run' tab while on the testcases tab.
+      if (
+        !(prevTabId === SideContentType.testcases && newTabId === SideContentType.mobileEditorRun)
+      ) {
+        setSelectedTab(newTabId);
+      }
+    };
+
     return {
       mobileControlBarProps: {
         ...controlBarProps()
@@ -1038,7 +1065,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     editorSessionId: '',
     editorValue: props.editorValue!,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
-    handleEditorEval: props.handleEditorEval,
+    handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
     breakpoints: props.breakpoints,

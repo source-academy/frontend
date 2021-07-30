@@ -16,15 +16,11 @@ $sicp-content-lr-padding: 6em;
   color: $sicp-text-color;
   overflow: auto;
   background-color: $sicp-background-color;
-  font-size: 1.5em;
+  font-size: 16pt;
   line-height: 2;
 
-  @media only screen and (max-width: 768px) {
-    font-size: 1.2em;
-  }
-
   .bp3-non-ideal-state {
-    font-size: 1rem;
+    font-size: 13pt;
   }
 
   pre {
@@ -41,21 +37,25 @@ $sicp-content-lr-padding: 6em;
 
   .bp3-code {
     color: $sicp-text-color;
-    background-color: $sicp-background-color;
+    background-color: inherit;
     box-shadow: none;
   }
 
   .bp3-code-block {
-    font-size: 0.9em;
-    padding: 0 15px;
-    margin: 0;
+    font-size: 14pt;
+    padding: 0;
+    margin: 10px 0;
     box-shadow: none;
     color: $sicp-text-color;
-    background-color: $sicp-background-color;
+    background-color: inherit;
   }
 
   .katex {
-    font-size: 1em;
+    font-size: 15pt;
+  }
+
+  .sicp-text {
+    margin-bottom: 32px;
   }
 
   .sicp-content {
@@ -64,6 +64,29 @@ $sicp-content-lr-padding: 6em;
     max-width: $sicp-max-width;
     height: fit-content;
     background-color: $sicp-background-color;
+
+    .sicp-anchor-link-container:hover > .sicp-anchor-link {
+      color: #cccccc;
+    }
+
+    .sicp-anchor-link {
+      position: relative;
+      display: block;
+      overflow: visible;
+      width: 16px;
+      height: 0px;
+      left: -22px;
+      color: transparent;
+    }
+
+    .sicp-anchor-link:hover {
+      color: $sicp-text-color;
+    }
+
+    .sicp-anchor-link:hover + div {
+      background-color: #dddddd;
+      border-radius: 5px;
+    }
 
     .sicp-navigation-buttons {
       margin: 25px 0;
@@ -87,7 +110,7 @@ $sicp-content-lr-padding: 6em;
     }
 
     @media only screen and (max-width: 768px) {
-      padding: 0 1.2em;
+      padding: 0 1.4em;
     }
   }
 
@@ -168,6 +191,7 @@ $sicp-content-lr-padding: 6em;
   .sicp-code-snippet {
     margin: 10px 0;
     line-height: 1;
+    width: 100%;
 
     .sicp-code-snippet-open {
       width: 100vw;
@@ -237,7 +261,8 @@ $sicp-content-lr-padding: 6em;
   }
 
   .sicp-footnote {
-    font-size: 0.8rem;
+    font-size: 13pt;
+    margin-bottom: 16px;
   }
 
   .sicp-figure {
@@ -271,6 +296,10 @@ $sicp-content-lr-padding: 6em;
         margin: 5px;
       }
     }
+  }
+
+  .sicp-reference {
+    margin-bottom: 1.5rem;
   }
 }
 

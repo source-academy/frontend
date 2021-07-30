@@ -4,7 +4,6 @@ import { ContestEntry, Library } from '../../assessment/AssessmentTypes';
 import { EditorProps } from '../../editor/Editor';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
-import { SideContentType } from '../../sideContent/SideContentTypes';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
 const MockEditor = (props: EditorProps) => <div id="mock-editor">{props.editorValue}</div>;
 // mock editor for testing update
@@ -27,7 +26,6 @@ const defaultProps: AssessmentWorkspaceProps = {
   breakpoints: [],
   highlightedLines: [],
   hasUnsavedChanges: false,
-  handleActiveTabChange: (activeTab: SideContentType) => {},
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -47,6 +45,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
   handleSideContentHeightChange: (heightChange: number) => {},
   handleTestcaseEval: (testcaseId: number) => {},
+  handleRunAllTestcases: () => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
   handleUpdateCurrentAssessmentId: (a: number, q: number) => {},
   handleDebuggerPause: () => {},

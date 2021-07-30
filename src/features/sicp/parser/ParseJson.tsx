@@ -1,5 +1,7 @@
-import { Blockquote, Code, H1, OL, Pre, UL } from '@blueprintjs/core';
+import { Blockquote, Code, H1, Icon, OL, Pre, UL } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
@@ -38,6 +40,32 @@ export type JsonType = {
   prependLength?: number;
 };
 
+type AnchorLinkType = {
+  children: React.ReactNode;
+  id: string | undefined;
+  refs: React.MutableRefObject<{}>;
+  top: number;
+};
+
+const AnchorLink: React.FC<AnchorLinkType> = props => {
+  const { refs, id, children, top } = props;
+  return (
+    <div className="sicp-anchor-link-container">
+      {id && (
+        <Link
+          className="sicp-anchor-link"
+          style={{ top: top }}
+          ref={ref => (refs.current[id] = ref)}
+          to={id}
+        >
+          <Icon icon={IconNames.LINK} />
+        </Link>
+      )}
+      {children}
+    </div>
+  );
+};
+
 const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
     <>
@@ -53,9 +81,9 @@ const handleFootnote = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
 
 const handleRef = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <a ref={ref => (refs.current[obj['id']!] = ref)} href={obj['href']}>
+    <Link ref={ref => (refs.current[obj['id']!] = ref)} to={obj['href']!}>
       {obj['body']}
-    </a>
+    </Link>
   );
 };
 
@@ -95,7 +123,16 @@ const handleSnippet = (obj: JsonType) => {
   if (obj['latex']) {
     return <Pre>{handleLatex(obj['body']!)}</Pre>;
   } else if (typeof obj['eval'] === 'boolean' && !obj['eval']) {
-    return <Pre>{obj['body']}</Pre>;
+    return (
+      <>
+        {obj['body'] && <Pre>{obj['body']}</Pre>}
+        {obj['output'] && (
+          <Pre>
+            <em>{obj['output']}</em>
+          </Pre>
+        )}
+      </>
+    );
   } else {
     if (!obj['body']) {
       return;
@@ -113,34 +150,29 @@ const handleSnippet = (obj: JsonType) => {
 };
 
 const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-  <div className="sicp-figure">
-    <div ref={ref => (refs.current[obj['id']!] = ref)} />
-    {handleImage(obj, refs)}
-    {obj['captionName'] && (
-      <h5 className="sicp-caption">
-        {obj['captionName']}
-        {parseArr(obj['captionBody']!, refs)}
-      </h5>
-    )}
-  </div>
+  <AnchorLink id={obj['id']} refs={refs} top={36}>
+    <div className="sicp-figure">
+      {obj['src'] && handleImage(obj, refs)}
+      {obj['snippet'] && processingFunctions['SNIPPET'](obj['snippet'], refs)}
+      {obj['table'] && processingFunctions['TABLE'](obj['table'], refs)}
+      {obj['captionName'] && (
+        <h5 className="sicp-caption">
+          {obj['captionName']}
+          {parseArr(obj['captionBody']!, refs)}
+        </h5>
+      )}
+    </div>
+  </AnchorLink>
 );
 
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
-  if (obj['src']) {
-    return (
-      <img
-        src={Constants.interactiveSicpDataUrl + obj['src']}
-        alt={obj['id']}
-        width={obj['scale'] || '100%'}
-      />
-    );
-  } else if (obj['snippet']) {
-    return processingFunctions['SNIPPET'](obj['snippet'], refs);
-  } else if (obj['table']) {
-    return processingFunctions['TABLE'](obj['table'], refs);
-  } else {
-    throw new ParseJsonError('Figure has no image');
-  }
+  return (
+    <img
+      src={Constants.interactiveSicpDataUrl + obj['src']}
+      alt={obj['id']}
+      width={obj['scale'] || '100%'}
+    />
+  );
 };
 
 const handleTR = (obj: JsonType, refs: React.MutableRefObject<{}>, index: integer) => {
@@ -153,28 +185,26 @@ const handleTD = (obj: JsonType, refs: React.MutableRefObject<{}>, index: intege
 
 const handleExercise = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div>
-      <div ref={ref => (refs.current[obj['id']!] = ref)} />
+    <AnchorLink id={obj['id']} refs={refs} top={5}>
       <SicpExercise
         title={obj['title']!}
         body={parseArr(obj['child']!, refs)}
         solution={obj['solution'] && parseArr(obj['solution'], refs)}
       />
-    </div>
+    </AnchorLink>
   );
 };
 
-const handleContainer = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
+const handleTitle = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
-    <div>
-      {obj['body'] && <H1>{obj['body']!}</H1>}
-      <div>{parseArr(obj['child']!, refs)}</div>
-    </div>
+    <AnchorLink id={obj['id']} refs={refs} top={6}>
+      <H1>{obj['body']!}</H1>
+    </AnchorLink>
   );
 };
 
 const handleReference = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
-  return <div>{parseArr(obj['child']!, refs)}</div>;
+  return <div className="sicp-reference">{parseArr(obj['child']!, refs)}</div>;
 };
 
 const handleText = (text: string) => {
@@ -192,8 +222,6 @@ export const processingFunctions = {
 
   BR: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => <br />,
 
-  CHAPTER: handleContainer,
-
   DISPLAYFOOTNOTE: handleFootnote,
 
   EM: (obj: JsonType, refs: React.MutableRefObject<{}>) => <em>{parseArr(obj['child']!, refs)}</em>,
@@ -205,7 +233,7 @@ export const processingFunctions = {
   FIGURE: handleFigure,
 
   FOOTNOTE_REF: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <sup>{handleRef(obj, refs)}</sup>
+    <sup ref={ref => (refs.current[obj['id']!] = ref)}>{handleRef(obj, refs)}</sup>
   ),
 
   JAVASCRIPTINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => (
@@ -214,13 +242,11 @@ export const processingFunctions = {
 
   LATEX: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
 
-  LATEXINLINE: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleLatex(obj['body']!),
-
   LI: (obj: JsonType, refs: React.MutableRefObject<{}>) => <li>{parseArr(obj['child']!, refs)}</li>,
 
-  LINK: handleRef,
-
-  LaTeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('LaTeX'),
+  LINK: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <a href={obj['href']}>{obj['body']}</a>
+  ),
 
   META: (obj: JsonType, _refs: React.MutableRefObject<{}>) => <em>{obj['body']}</em>,
 
@@ -230,21 +256,21 @@ export const processingFunctions = {
 
   REFERENCE: handleReference,
 
-  SECTION: handleContainer,
-
   SNIPPET: (obj: JsonType, _refs: React.MutableRefObject<{}>) => handleSnippet(obj),
 
   SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h2 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
-      {parseArr(obj['child']!, refs)}
-    </h2>
+    <AnchorLink id={obj['id']} refs={refs} top={2}>
+      <h2 className="bp3-heading">{parseArr(obj['child']!, refs)}</h2>
+    </AnchorLink>
   ),
 
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <h4 className="bp3-heading" ref={ref => (refs.current[obj['id']!] = ref)}>
-      <br />
-      {parseArr(obj['child']!, refs)}
-    </h4>
+    <AnchorLink id={obj['id']} refs={refs} top={16}>
+      <h4 className="bp3-heading">
+        <br />
+        {parseArr(obj['child']!, refs)}
+      </h4>
+    </AnchorLink>
   ),
 
   TABLE: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
@@ -254,20 +280,16 @@ export const processingFunctions = {
   ),
 
   TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
-    <>
-      <div className="sicp-text">
-        <div ref={ref => (refs.current[obj['id']!] = ref)} />
-        {parseArr(obj['child']!, refs)}
-      </div>
-      <br />
-    </>
+    <AnchorLink id={obj['id']} refs={refs} top={-3}>
+      <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
+    </AnchorLink>
   ),
+
+  TITLE: handleTitle,
 
   TT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <Code>{parseArr(obj['child']!, refs)}</Code>
   ),
-
-  TeX: (_obj: JsonType, _refs: React.MutableRefObject<{}>) => handleText('TeX'),
 
   UL: (obj: JsonType, refs: React.MutableRefObject<{}>) => <UL>{parseArr(obj['child']!, refs)}</UL>
 };

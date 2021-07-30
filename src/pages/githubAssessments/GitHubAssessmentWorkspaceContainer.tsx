@@ -5,7 +5,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { Position } from '../../commons/editor/EditorTypes';
-import { SideContentType } from '../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -19,8 +18,8 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  runAllTestcases,
   setEditorBreakpoint,
-  updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
@@ -56,8 +55,6 @@ const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: number) =>
@@ -77,6 +74,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
+      handleRunAllTestcases: () => runAllTestcases(workspaceLocation),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>

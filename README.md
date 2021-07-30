@@ -144,3 +144,10 @@ The regression tests are generated using `jest` and stored as snapshots in `src/
 $ yarn test --updateSnapshot
 ```
 and then typing `a` to update all snapshots.
+
+## License
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+All sources in this repository are licensed under the [Apache License Version 2][apache2].
+
+[apache2]: https://www.apache.org/licenses/LICENSE-2.0.txt

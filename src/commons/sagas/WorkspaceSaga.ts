@@ -65,6 +65,7 @@ import {
   PLAYGROUND_EXTERNAL_SELECT,
   PlaygroundWorkspaceState,
   PROMPT_AUTOCOMPLETE,
+  RUN_ALL_TESTCASES,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -553,6 +554,37 @@ export default function* WorkspaceSaga(): SagaIterator {
       }
     }
   );
+
+  yield takeEvery(
+    RUN_ALL_TESTCASES,
+    function* (action: ReturnType<typeof actions.runAllTestcases>) {
+      const { workspaceLocation } = action.payload;
+
+      const testcases: Testcase[] = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
+      );
+      // Avoid displaying message if there are no testcases
+      if (testcases.length > 0) {
+        // Display a message to the user
+        yield call(showSuccessMessage, `Running all testcases!`, 2000);
+        for (const idx of testcases.keys()) {
+          yield put(actions.evalTestcase(workspaceLocation, idx));
+          /** Run testcases synchronously - this blocks the generator until result of current
+           *  testcase is known and output to REPL; ensures that HANDLE_CONSOLE_LOG appends
+           *  consoleLogs(from display(...) calls) to the correct testcase result
+           */
+          const { success, error } = yield race({
+            success: take(EVAL_TESTCASE_SUCCESS),
+            error: take(EVAL_TESTCASE_FAILURE)
+          });
+          // Prematurely terminate if execution of current testcase returns an error
+          if (error || !success) {
+            return;
+          }
+        }
+      }
+    }
+  );
 }
 
 let lastDebuggerResult: any;
@@ -684,6 +716,9 @@ export function* evalCode(
   const isNonDet: boolean = context.variant === 'non-det';
   const isLazy: boolean = context.variant === 'lazy';
   const isWasm: boolean = context.variant === 'wasm';
+  const throwInfiniteLoops: boolean = yield select(
+    (state: OverallState) => state.session.experimentCoinflip
+  );
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
@@ -694,6 +729,7 @@ export function* evalCode(
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
+            throwInfiniteLoops: throwInfiniteLoops,
             useSubst: substActiveAndCorrectChapter
           }),
 
@@ -744,13 +780,16 @@ export function* evalCode(
     context.errors = oldErrors;
     // for achievement event tracking
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
+
     // report infinite loops but only for 'vanilla'/default source
-    if (context.variant === 'default') {
-      const infiniteLoopData = getInfiniteLoopData(context, code);
+    if (context.variant === undefined || context.variant === 'default') {
+      const infiniteLoopData = getInfiniteLoopData(context);
       if (infiniteLoopData) {
-        events.push(EventType.INFINITE_LOOP);
-        const [error, code] = infiniteLoopData;
-        yield call(reportInfiniteLoopError, error, code);
+        const approval = yield select((state: OverallState) => state.session.experimentApproval);
+        if (approval) {
+          events.push(EventType.INFINITE_LOOP);
+          yield call(reportInfiniteLoopError, ...infiniteLoopData);
+        }
       }
     }
 
@@ -785,53 +824,6 @@ export function* evalCode(
     }
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
-
-  /** If successful, then continue to run all testcases IFF evalCode was triggered from
-   *    EVAL_EDITOR (Run button) instead of EVAL_REPL (Eval button)
-   *  Retrieve the index of the active side-content tab
-   */
-  if (actionType === EVAL_EDITOR) {
-    const activeTab: SideContentType = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].sideContentActiveTab
-    );
-    /** If a student is attempting an assessment and has the autograder tab open OR
-     *    a grader is grading a submission and has the autograder tab open,
-     *    RUN all testcases of the current question through the interpreter
-     *  Each testcase runs in its own "sandbox" since the Context is cleared for each,
-     *    so side-effects from one testcase don't affect others
-     */
-    const runAllAutograderTestcases =
-      activeTab === SideContentType.autograder &&
-      (workspaceLocation === 'assessment' || workspaceLocation === 'grading');
-    const runAllGitHubAssessmentTestcases =
-      activeTab === SideContentType.testcases && workspaceLocation === 'githubAssessment';
-
-    if (runAllAutograderTestcases || runAllGitHubAssessmentTestcases) {
-      const testcases: Testcase[] = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
-      );
-      // Avoid displaying message if there are no testcases
-      if (testcases.length > 0) {
-        // Display a message to the user
-        yield call(showSuccessMessage, `Running all testcases!`, 2000);
-        for (const idx of testcases.keys()) {
-          yield put(actions.evalTestcase(workspaceLocation, idx));
-          /** Run testcases synchronously - this blocks the generator until result of current
-           *  testcase is known and output to REPL; ensures that HANDLE_CONSOLE_LOG appends
-           *  consoleLogs(from display(...) calls) to the correct testcase result
-           */
-          const { success, error } = yield race({
-            success: take(EVAL_TESTCASE_SUCCESS),
-            error: take(EVAL_TESTCASE_FAILURE)
-          });
-          // Prematurely terminate if execution of current testcase returns an error
-          if (error || !success) {
-            return;
-          }
-        }
-      }
-    }
-  }
 }
 
 export function* evalTestCode(
@@ -843,11 +835,14 @@ export function* evalTestCode(
   type: TestcaseType
 ) {
   yield put(actions.resetTestcase(workspaceLocation, index));
-
+  const throwInfiniteLoops: boolean = yield select(
+    (state: OverallState) => state.session.experimentCoinflip
+  );
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
       scheduler: 'preemptive',
-      originalMaxExecTime: execTime
+      originalMaxExecTime: execTime,
+      throwInfiniteLoops: throwInfiniteLoops
     }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,

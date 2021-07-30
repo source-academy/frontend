@@ -14,7 +14,9 @@ const mockChangedStoredState: SavedState = {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',
     role: undefined,
-    name: 'Jeff'
+    name: 'Jeff',
+    userId: 1,
+    githubAccessToken: 'githubAccessToken'
   },
   playgroundEditorValue: 'Nihao everybody',
   playgroundIsEditorAutorun: true,
@@ -30,7 +32,9 @@ const mockChangedState: OverallState = {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',
     role: undefined,
-    name: 'Jeff'
+    name: 'Jeff',
+    userId: 1,
+    githubAccessToken: 'githubAccessToken'
   },
   workspaces: {
     ...defaultState.workspaces,
@@ -62,10 +66,22 @@ describe('createStore() function', () => {
   });
   test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));
-    expect(createStore(history).getState()).toEqual({
+
+    /**
+     * Jest toEqual is unable to compare equality of functions (in the Octokit object).
+     * Thus we simply check that it is defined when loading storedState.
+     *
+     * See https://github.com/facebook/jest/issues/8166
+     */
+    const received = createStore(history).getState() as any;
+    const octokit = received.session.githubOctokitObject.octokit;
+    delete received.session.githubOctokitObject.octokit;
+
+    expect(received).toEqual({
       ...mockChangedState,
       router: defaultRouter
     });
+    expect(octokit).toBeDefined();
     localStorage.removeItem('storedState');
   });
 });

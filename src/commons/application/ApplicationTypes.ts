@@ -7,7 +7,6 @@ import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
@@ -221,7 +220,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   },
   replValue: '',
   sharedbConnected: false,
-  sideContentActiveTab: SideContentType.questionOverview,
   stepLimit: 1000,
   globals: [],
   isEditorAutorun: false,
@@ -289,6 +287,8 @@ export const defaultSession: SessionState = {
   accessToken: undefined,
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
+  experimentApproval: false, // TODO: get this from backend or sth
+  experimentCoinflip: Math.random() < 0.5,
   githubOctokitObject: { octokit: undefined },
   grade: 0,
   gradingOverviews: undefined,
