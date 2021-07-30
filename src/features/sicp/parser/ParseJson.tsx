@@ -152,7 +152,9 @@ const handleSnippet = (obj: JsonType) => {
 const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
   <AnchorLink id={obj['id']} refs={refs} top={36}>
     <div className="sicp-figure">
-      {handleImage(obj, refs)}
+      {obj['src'] && handleImage(obj, refs)}
+      {obj['snippet'] && processingFunctions['SNIPPET'](obj['snippet'], refs)}
+      {obj['table'] && processingFunctions['TABLE'](obj['table'], refs)}
       {obj['captionName'] && (
         <h5 className="sicp-caption">
           {obj['captionName']}
@@ -164,21 +166,13 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
 );
 
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
-  if (obj['src']) {
-    return (
-      <img
-        src={Constants.interactiveSicpDataUrl + obj['src']}
-        alt={obj['id']}
-        width={obj['scale'] || '100%'}
-      />
-    );
-  } else if (obj['snippet']) {
-    return processingFunctions['SNIPPET'](obj['snippet'], refs);
-  } else if (obj['table']) {
-    return processingFunctions['TABLE'](obj['table'], refs);
-  } else {
-    throw new ParseJsonError('Figure has no image');
-  }
+  return (
+    <img
+      src={Constants.interactiveSicpDataUrl + obj['src']}
+      alt={obj['id']}
+      width={obj['scale'] || '100%'}
+    />
+  );
 };
 
 const handleTR = (obj: JsonType, refs: React.MutableRefObject<{}>, index: integer) => {
