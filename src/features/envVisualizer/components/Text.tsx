@@ -4,7 +4,7 @@ import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-k
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
 import { getTextWidth } from '../EnvVisualizerUtils';
 
 export interface TextOptions {
@@ -30,14 +30,14 @@ export class Text implements Visible, Hoverable {
   readonly height: number;
   readonly width: number;
 
-  readonly fullStr: string;
+  readonly partialStr: string; // truncated string representation of data
+  readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
   private labelRef: RefObject<any> = React.createRef();
 
   constructor(
-    /** text */
-    readonly data: any,
+    readonly data: Data,
     readonly x: number,
     readonly y: number,
     /** additional options (for customization of text) */
@@ -47,20 +47,22 @@ export class Text implements Visible, Hoverable {
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
 
-    this.fullStr = this.data = isStringIdentifiable ? JSON.stringify(data) : String(data);
+    this.fullStr = this.partialStr = isStringIdentifiable
+      ? JSON.stringify(data) || String(data)
+      : String(data);
     this.height = fontSize;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    if (widthOf(this.data) > maxWidth) {
+    if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText = Config.Ellipsis.toString();
       let i = 0;
-      while (widthOf(this.data.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
-        truncatedText = this.data.substr(0, i++) + Config.Ellipsis.toString();
+      while (widthOf(this.partialStr.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
+        truncatedText = this.partialStr.substr(0, i++) + Config.Ellipsis.toString();
       }
       this.width = widthOf(truncatedText);
-      this.data = truncatedText;
+      this.partialStr = truncatedText;
     } else {
-      this.width = Math.max(Config.TextMinWidth, widthOf(this.data));
+      this.width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
 
@@ -94,7 +96,7 @@ export class Text implements Visible, Hoverable {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.data} {...props} />
+          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
         <KonvaLabel
           x={this.x}

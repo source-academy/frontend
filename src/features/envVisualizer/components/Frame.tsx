@@ -74,7 +74,7 @@ export class Frame implements Visible, Hoverable {
     let maxBindingWidth = 0;
     for (const [key, data] of Object.entries(this.environment.head)) {
       const bindingWidth =
-        Math.max(Config.TextMinWidth, getTextWidth(String(key + Config.VariableColon))) +
+        Math.max(Config.TextMinWidth, getTextWidth(key + Config.ConstantColon)) +
         Config.TextPaddingX +
         (isUnassigned(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
@@ -88,8 +88,11 @@ export class Frame implements Visible, Hoverable {
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
     let totalWidth = this.width;
-    for (const [key, data] of Object.entries(this.environment.head)) {
-      const currBinding: Binding = new Binding(String(key), data, this, prevBinding);
+
+    const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
+
+    for (const [key, data] of Object.entries(descriptors)) {
+      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
       this.bindings.push(currBinding);
       prevBinding = currBinding;
       totalWidth = Math.max(totalWidth, currBinding.width + Config.FramePaddingX);

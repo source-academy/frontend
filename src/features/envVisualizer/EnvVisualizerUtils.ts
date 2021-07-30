@@ -1,4 +1,6 @@
+import { Environment } from 'js-slang/dist/types';
 import { Node } from 'konva/types/Node';
+import { cloneDeep } from 'lodash';
 
 import { Value } from './components/values/Value';
 import { Config } from './EnvVisualizerConfig';
@@ -6,11 +8,14 @@ import {
   Data,
   EmptyObject,
   Env,
+  EnvTree,
+  EnvTreeNode,
   FnTypes,
   PrimitiveTypes,
   ReferenceType
 } from './EnvVisualizerTypes';
 
+// TODO: can make use of lodash
 /** checks if `x` is an object */
 export function isObject(x: any): x is object {
   return x === Object(x);
@@ -19,6 +24,21 @@ export function isObject(x: any): x is object {
 /** checks if `object` is empty */
 export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
+}
+
+/** checks if `object` is `Environment` */
+export function isEnvironment(object: Object): object is Environment {
+  return 'head' in object && 'tail' in object && 'name' in object;
+}
+
+/** checks if `object` is `EnvTreeNode` */
+export function isEnvTreeNode(object: Object): object is EnvTreeNode {
+  return 'parent' in object && 'children' in object;
+}
+
+/** checks if `object` is `EnvTree` */
+export function isEnvTree(object: Object): object is EnvTree {
+  return 'root' in object;
 }
 
 /** checks if `env` is empty (that is, head of env is an empty object) */
@@ -93,7 +113,11 @@ export function getTextWidth(
 ): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  if (!context) return 0;
+
+  if (!context || !text) {
+    return 0;
+  }
+
   context.font = font;
   const longestLine = text
     .split('\n')
@@ -185,4 +209,43 @@ export function getNonEmptyEnv(environment: Env): Env {
   } else {
     return environment;
   }
+}
+
+/**
+ * Given any objects, this function will find the underlying `Environment` objects
+ * and perform copying of property descriptors from source frames to destination frames.
+ * Property descriptors are important for us to distinguish between constants and variables.
+ */
+export function copyOwnPropertyDescriptors(source: any, destination: any) {
+  // TODO: use lodash cloneDeepWith customizer?
+  if (isFunction(source) || isPrimitiveData(source)) {
+    return;
+  }
+  if (isEnvTree(source) && isEnvTree(destination)) {
+    copyOwnPropertyDescriptors(source.root, destination.root);
+  } else if (isEnvTreeNode(source) && isEnvTreeNode(destination)) {
+    // recurse only on children and environment
+    copyOwnPropertyDescriptors(source.children, destination.children);
+    copyOwnPropertyDescriptors(source.environment, destination.environment);
+  } else if (isArray(source) && isArray(destination)) {
+    // recurse on array items
+    source.forEach((item, i) => copyOwnPropertyDescriptors(item, destination[i]));
+  } else if (isEnvironment(source) && isEnvironment(destination)) {
+    // copy descriptors from source frame to destination frame
+    Object.defineProperties(destination.head, Object.getOwnPropertyDescriptors(source.head));
+    // recurse on tail
+    copyOwnPropertyDescriptors(source.tail, destination.tail);
+  }
+}
+
+/**
+ * creates a deep clone of `EnvTree`
+ *
+ * TODO: move this function to EnvTree class
+ * so we can invoke like so: environmentTree.deepCopy()
+ */
+export function deepCopyTree(value: EnvTree): EnvTree {
+  const clone = cloneDeep(value);
+  copyOwnPropertyDescriptors(value, clone);
+  return clone;
 }
