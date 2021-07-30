@@ -247,7 +247,7 @@ export const getGoals = async (
   tokens: Tokens,
   studentId: number
 ): Promise<AchievementGoal[] | null> => {
-  const resp = await request(`${courseId()}/achievements/goals/${studentId}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/goals/${studentId}`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });

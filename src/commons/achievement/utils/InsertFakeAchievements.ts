@@ -1,7 +1,4 @@
-import {
-  cardBackgroundUrl,
-  coverImageUrl
-} from '../../../features/achievement/AchievementConstants';
+import { cardBackgroundUrl } from '../../../features/achievement/AchievementConstants';
 import { AchievementAbility, GoalType } from '../../../features/achievement/AchievementTypes';
 import { AssessmentOverview } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
@@ -69,7 +66,7 @@ function insertFakeAchievements(
       goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
       cardBackground: `${cardBackgroundUrl}/default.png`,
       view: {
-        coverImage: `${coverImageUrl}/default.png`,
+        coverImage: assessmentOverview.coverImage,
         description: assessmentOverview.shortSummary,
         completionText: `XP: ${assessmentOverview.xp} / ${assessmentOverview.maxXp}`
       }

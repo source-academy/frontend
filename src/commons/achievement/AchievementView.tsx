@@ -44,7 +44,8 @@ function AchievementView(props: AchievementViewProps) {
       <div
         className="cover"
         style={{
-          background: `url(${coverImage}) center/cover`
+          background: `rgba(0, 0, 0, 0.5) url(${coverImage}) center/cover`,
+          backgroundBlendMode: `darken`
         }}
       >
         <h1>{title.toUpperCase()}</h1>

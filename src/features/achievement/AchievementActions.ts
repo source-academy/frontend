@@ -31,7 +31,7 @@ export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_G
 
 export const getAchievements = () => action(GET_ACHIEVEMENTS);
 
-export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
+export const getGoals = (studentCourseRegId: number) => action(GET_GOALS, studentCourseRegId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
 

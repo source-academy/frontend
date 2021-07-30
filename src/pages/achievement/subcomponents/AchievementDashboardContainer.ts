@@ -6,6 +6,7 @@ import { fetchAssessmentOverviews } from '../../../commons/application/actions/S
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   getAchievements,
+  getGoals,
   getOwnGoals,
   getUsers,
   updateGoalProgress
@@ -26,6 +27,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       fetchAssessmentOverviews,
       getAchievements,
+      getGoals,
       getOwnGoals,
       getUsers,
       updateGoalProgress

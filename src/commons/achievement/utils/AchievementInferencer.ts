@@ -496,6 +496,15 @@ class AchievementInferencer {
   }
 
   /**
+   * Returns an array of achievementId sorted by position
+   */
+  public listAllSortedAchievementUuids() {
+    return this.getAllAchievements()
+      .sort((taskA, taskB) => taskA.position - taskB.position)
+      .map(sortedTask => sortedTask.uuid);
+  }
+
+  /**
    * Returns whether an achievement is completed or not.
    *
    * NOTE: It might be better (more efficient) to simply have a completed proporty on each achievement.

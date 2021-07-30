@@ -1,7 +1,9 @@
 import { MenuItem } from '@blueprintjs/core';
-import { ItemRenderer, MultiSelect } from '@blueprintjs/select';
+import { ItemPredicate, ItemRenderer, MultiSelect } from '@blueprintjs/select';
+import { without } from 'lodash';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
+import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 type EditablePrerequisiteUuidsProps = {
   changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
@@ -19,15 +21,16 @@ function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
   );
 
   const getUuid = (title: string) => inferencer.getUuidByTitle(title);
-  const getTitle = (uuid: string) => inferencer.getTitleByUuid(uuid);
 
-  const PrerequisiteSelect = MultiSelect.ofType<string>();
-  const prerequisiteRenderer: ItemRenderer<string> = (uuid, { handleClick }) => (
-    <MenuItem key={uuid} onClick={handleClick} text={getTitle(uuid)} />
+  const PrerequisiteSelect = MultiSelect.ofType<AchievementItem>();
+  const prerequisiteRenderer: ItemRenderer<AchievementItem> = (achievement, { handleClick }) => (
+    <MenuItem key={achievement.uuid} onClick={handleClick} text={achievement.title} />
   );
+  const prerequisitePredicate: ItemPredicate<AchievementItem> = (query, item) =>
+    item.title.toLowerCase().includes(query.toLowerCase());
 
   const selectedPrereqs = new Set(selectedUuids);
-  const availablePrereqs = new Set(availableUuids);
+  const availablePrereqs = new Set(without(availableUuids, ...selectedUuids));
 
   const selectPrereq = (selectUuid: string) => {
     selectedPrereqs.add(selectUuid);
@@ -46,12 +49,14 @@ function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
   return (
     <PrerequisiteSelect
       itemRenderer={prerequisiteRenderer}
-      items={[...availablePrereqs]}
+      items={[...availablePrereqs].map(uuid => inferencer.getAchievement(uuid))}
       noResults={<MenuItem disabled={true} text="No available achievement" />}
-      onItemSelect={selectPrereq}
-      selectedItems={[...selectedPrereqs]}
+      onItemSelect={achievement => selectPrereq(achievement.uuid)}
+      selectedItems={[...selectedPrereqs].map(uuid => inferencer.getAchievement(uuid))}
       tagInputProps={{ onRemove: title => removePrereq(getUuid(title!.toString())) }}
-      tagRenderer={getTitle}
+      tagRenderer={achievement => achievement.title}
+      itemPredicate={prerequisitePredicate}
+      resetOnSelect={true}
     />
   );
 }
