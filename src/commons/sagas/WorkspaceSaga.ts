@@ -40,7 +40,12 @@ import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentT
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
-import { getInfiniteLoopData, reportInfiniteLoopError } from '../utils/InfiniteLoopReporter';
+import {
+  getInfiniteLoopData,
+  isPotentialInfiniteLoop,
+  reportInfiniteLoopError,
+  reportPotentialInfiniteLoop
+} from '../utils/InfiniteLoopReporter';
 import {
   dumpDisplayBuffer,
   getBlockExtraMethodsString,
@@ -783,12 +788,16 @@ export function* evalCode(
 
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === undefined || context.variant === 'default') {
-      const infiniteLoopData = getInfiniteLoopData(context);
-      if (infiniteLoopData) {
-        const approval = yield select((state: OverallState) => state.session.experimentApproval);
-        if (approval) {
+      const approval = yield select((state: OverallState) => state.session.experimentApproval);
+      if (approval) {
+        const infiniteLoopData = getInfiniteLoopData(context);
+        const lastError = context.errors[context.errors.length - 1];
+        if (infiniteLoopData) {
           events.push(EventType.INFINITE_LOOP);
           yield call(reportInfiniteLoopError, ...infiniteLoopData);
+        } else if (isPotentialInfiniteLoop(lastError)) {
+          events.push(EventType.INFINITE_LOOP);
+          yield call(reportPotentialInfiniteLoop, lastError.explain(), context.previousCode);
         }
       }
     }
