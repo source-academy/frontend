@@ -187,7 +187,13 @@ class GameSoundManager {
       duration: fadeDuration
     });
 
-    setTimeout(() => sound.destroy(), fadeDuration * 2);
+    const befScene = this.getCurrentScene().scene.key;
+    setTimeout(() => {
+      const aftScene = this.getCurrentScene().scene.key;
+      if (this.getBaseSoundManager().game && befScene === aftScene) {
+        sound.destroy();
+      }
+    }, fadeDuration * 2);
   }
 
   /**
