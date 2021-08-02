@@ -187,13 +187,9 @@ class GameSoundManager {
       duration: fadeDuration
     });
 
-    const befScene = this.getCurrentScene().scene.key;
-    setTimeout(() => {
-      const aftScene = this.getCurrentScene().scene.key;
-      if (this.getBaseSoundManager().game && befScene === aftScene) {
-        sound.destroy();
-      }
-    }, fadeDuration * 2);
+    // TODO: fix `TypeError: Cannot read property 'disconnect' of null` error
+    // when user navigates away from game scene before fadeDuration * 2
+    setTimeout(() => sound.destroy(), fadeDuration * 2);
   }
 
   /**
