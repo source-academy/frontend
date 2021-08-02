@@ -44,6 +44,7 @@ The project requires some environment variables to be set to work properly. In t
 1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/backend).
 1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can just use the default value in development.
 1. `REACT_APP_SHAREDB_BACKEND_URL`: The base URL of the [ShareDB collaborative editor backend](https://github.com/source-academy/sharedb-ace-backend). The protocol must be HTTP or HTTPS (it will automatically be set to WS/WSS as appropriate). **Must end in a trailing `/`.**
+1. `REACT_APP_SICPJS_BACKEND_URL`: The base URL from which [SICP JS](https://github.com/source-academy/sicp) content is loaded.
 
 #### URL shortener configuration
 
