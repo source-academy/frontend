@@ -168,7 +168,7 @@ const handleFigure = (obj: JsonType, refs: React.MutableRefObject<{}>) => (
 const handleImage = (obj: JsonType, refs: React.MutableRefObject<{}>) => {
   return (
     <img
-      src={Constants.interactiveSicpDataUrl + obj['src']}
+      src={Constants.sicpBackendUrl + obj['src']}
       alt={obj['id']}
       width={obj['scale'] || '100%'}
     />
