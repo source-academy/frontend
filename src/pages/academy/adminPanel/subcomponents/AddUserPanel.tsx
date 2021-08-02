@@ -94,14 +94,14 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
       hasInvalidInput = true;
     }
 
-    for (const e of data) {
+    for (let i = 0; i < data.length; i++) {
       // Incorrect number of columns
-      if (!(e.data.length === 2 || e.data.length === 3)) {
+      if (!(data[i].data.length === 2 || data[i].data.length === 3)) {
         setInvalidCsvMsg(
           <>
             <div>
-              Invalid format! Please ensure that the username and role is specified for each row
-              entry!
+              Invalid format (line {i})! Please ensure that the username and role is specified for
+              each row entry!
             </div>
             <br />
             <div>
@@ -115,9 +115,9 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
         break;
       }
       // Invalid role specified
-      if (!Object.values(Role).includes(e.data[1])) {
+      if (!Object.values(Role).includes(data[i].data[1])) {
         setInvalidCsvMsg(
-          'Invalid role! Please ensure that the second column of each entry contains one of the following: admin, staff, student'
+          `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: admin, staff, student'`
         );
         hasInvalidInput = true;
         break;
