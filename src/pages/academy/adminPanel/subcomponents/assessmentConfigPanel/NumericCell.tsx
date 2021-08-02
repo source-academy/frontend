@@ -1,20 +1,16 @@
 import { NumericInput } from '@blueprintjs/core';
 import React from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
 type NumericCellProps = OwnProps;
 
 type OwnProps = {
   data: AssessmentConfiguration;
-  field: AssessmentConfigNumericField;
+  field: KeysOfType<AssessmentConfiguration, number>;
   rowIndex: number;
   setStateHandler: (index: number, value: number) => void;
 };
-
-export enum AssessmentConfigNumericField {
-  EARLY_XP = 'EARLY_XP',
-  HOURS_BEFORE_DECAY = 'HOURS_BEFORE_DECAY'
-}
 
 const NumericCell: React.FC<NumericCellProps> = props => {
   const { data } = props;
@@ -26,20 +22,13 @@ const NumericCell: React.FC<NumericCellProps> = props => {
     [props]
   );
 
-  return props.field === AssessmentConfigNumericField.EARLY_XP ? (
+  return (
     <NumericInput
-      value={data.earlySubmissionXp}
+      value={data[props.field]}
       min={0}
       clampValueOnBlur
       onValueChange={changeHandler}
     />
-  ) : props.field === AssessmentConfigNumericField.HOURS_BEFORE_DECAY ? (
-    <NumericInput
-      value={data.hoursBeforeEarlyXpDecay}
-      min={0}
-      clampValueOnBlur
-      onValueChange={changeHandler}
-    />
-  ) : null;
+  );
 };
 export default NumericCell;

@@ -6,9 +6,9 @@ import React from 'react';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
-import BooleanCell, { AssessmentConfigBooleanField } from './BooleanCell';
+import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
-import NumericCell, { AssessmentConfigNumericField } from './NumericCell';
+import NumericCell from './NumericCell';
 
 export type AssessmentConfigPanelProps = OwnProps;
 
@@ -108,7 +108,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
         setStateHandler: setIsManuallyGraded,
-        field: AssessmentConfigBooleanField.IS_MANUALLY_GRADED
+        field: 'isManuallyGraded'
       }
     },
     {
@@ -117,7 +117,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
         setStateHandler: setDisplayInDashboard,
-        field: AssessmentConfigBooleanField.DISPLAY_IN_DASHBOARD
+        field: 'displayInDashboard'
       }
     },
     {
@@ -126,7 +126,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       cellRendererFramework: NumericCell,
       cellRendererParams: {
         setStateHandler: setEarlyXp,
-        field: AssessmentConfigNumericField.EARLY_XP
+        field: 'earlySubmissionXp'
       }
     },
     {
@@ -135,7 +135,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       cellRendererFramework: NumericCell,
       cellRendererParams: {
         setStateHandler: setHoursBeforeDecay,
-        field: AssessmentConfigNumericField.HOURS_BEFORE_DECAY
+        field: 'hoursBeforeEarlyXpDecay'
       }
     },
     {
