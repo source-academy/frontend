@@ -91,10 +91,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     >
       <div className={Classes.DIALOG_BODY}>
         <div>
-          <b>
-            Create your own Source Academy course using the NUS deployment and manage your own
-            learners!
-          </b>
+          <b>Create your own Source Academy course and manage your own learners!</b>
         </div>
         <br />
         <FormGroup

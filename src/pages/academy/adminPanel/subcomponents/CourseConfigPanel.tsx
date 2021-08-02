@@ -85,7 +85,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
       <div className="inputs">
         <div className="text">
           <FormGroup
-            helperText="Please enter the course name that will be used for course selection"
+            helperText="Please enter the course name that will be used for course selection."
             inline={true}
             label="Course Name"
             labelFor="courseName"
@@ -102,7 +102,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
             />
           </FormGroup>
           <FormGroup
-            helperText="Usually the module code of the course. This will be displayed on the top left."
+            helperText="Please enter the course short name. This will be displayed on the top left."
             inline={true}
             label="Course Short Name"
             labelFor="courseShortName"

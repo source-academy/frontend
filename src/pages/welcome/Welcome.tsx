@@ -1,22 +1,20 @@
 import { Card, H2, UL } from '@blueprintjs/core';
-import { Links } from 'src/commons/utils/Constants';
+import { useSelector } from 'react-redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import Constants, { Links } from 'src/commons/utils/Constants';
 
-export type WelcomeProps = StateProps;
+const Welcome: React.FC = () => {
+  const name = useSelector((store: OverallState) => store.session.name);
 
-export type StateProps = {
-  name?: string;
-};
-
-const Welcome: React.FC<WelcomeProps> = props => {
   return (
     <div className="fullpage">
       <Card className="fullpage-content">
         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
           <div>
-            <H2>Welcome to Source Academy @ NUS</H2>
+            <H2>Welcome to {Constants.sourceAcademyDeploymentName}</H2>
             <div>
-              You have logged in as <strong>{props.name}</strong>. Source Academy @ NUS does not
-              have any course information for this account.
+              You have logged in as <strong>{name}</strong>. {Constants.sourceAcademyDeploymentName}{' '}
+              does not have any course information for this account.
             </div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <UL style={{ textAlign: 'left' }}>

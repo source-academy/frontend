@@ -8,6 +8,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
+const sourceAcademyDeploymentName = process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
@@ -103,6 +104,7 @@ export enum Links {
 const Constants = {
   sourceAcademyVersion,
   sourceAcademyEnvironment,
+  sourceAcademyDeploymentName,
   backendUrl,
   cadetLoggerUrl,
   useBackend,

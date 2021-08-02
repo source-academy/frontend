@@ -34,7 +34,7 @@ const DeleteRowCell: React.FC<DeleteRowCellProps> = props => {
       >
         <div className={Classes.DIALOG_BODY}>
           <p>
-            Are you sure you want to <b>delete</b> the assesment type <i>{props.data.type}</i>?
+            Are you sure you want to <b>delete</b> the assessment type <i>{props.data.type}</i>?
           </p>
           <p>
             <b>

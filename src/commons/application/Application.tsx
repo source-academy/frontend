@@ -14,7 +14,7 @@ import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
 import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
-import Welcome from '../../pages/welcome/WelcomeContainer';
+import Welcome from '../../pages/welcome/Welcome';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
