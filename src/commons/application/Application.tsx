@@ -28,7 +28,7 @@ export type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
-  fetchUserAndCourse: (updateSublanguage: boolean) => void;
+  fetchUserAndCourse: () => void;
   updateLatestViewedCourse: (courseId: number) => void;
   handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
@@ -55,17 +55,7 @@ const Application: React.FC<ApplicationProps> = props => {
   // if the user was previously logged in
   React.useEffect(() => {
     if (props.name) {
-      // Do not update the sublanguage in the Playground context to the fetched course configuration
-      // if it is a shared link with chapter
-      if (
-        props.location.pathname === '/playground' &&
-        props.location.hash &&
-        parseQuery(props.location.hash).chap
-      ) {
-        props.fetchUserAndCourse(false);
-      } else {
-        props.fetchUserAndCourse(true);
-      }
+      props.fetchUserAndCourse();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

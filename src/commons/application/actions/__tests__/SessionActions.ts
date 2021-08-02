@@ -108,11 +108,9 @@ test('fetchAuth generates correct action object', () => {
 });
 
 test('fetchUserAndCourse generates correct action object', () => {
-  const updateSublanguage: boolean = true;
-  const action = fetchUserAndCourse(updateSublanguage);
+  const action = fetchUserAndCourse();
   expect(action).toEqual({
-    type: FETCH_USER_AND_COURSE,
-    payload: updateSublanguage
+    type: FETCH_USER_AND_COURSE
   });
 });
 

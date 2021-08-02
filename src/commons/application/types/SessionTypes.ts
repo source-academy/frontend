@@ -89,6 +89,8 @@ export type SessionState = {
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
+  readonly sourceChapter?: number;
+  readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];

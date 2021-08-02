@@ -23,13 +23,7 @@ import {
   updateLatestViewedCourse,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import {
-  GameState,
-  Role,
-  SourceLanguage,
-  Story,
-  styliseSublanguage
-} from '../../application/ApplicationTypes';
+import { GameState, Role, SourceLanguage, Story } from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -79,11 +73,10 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateHasUnsavedChanges, updateSublanguage } from '../../workspace/WorkspaceActions';
+import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_SUBLANGUAGE,
   UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
@@ -278,15 +271,6 @@ describe('Test FETCH_AUTH action', () => {
   const courseRegistration = mockCourseRegistration1;
   const assessmentConfigurations = mockAssessmentConfigurations;
 
-  const sublanguage: SourceLanguage = {
-    chapter: mockCourseConfiguration1.sourceChapter,
-    variant: mockCourseConfiguration1.sourceVariant,
-    displayName: styliseSublanguage(
-      mockCourseConfiguration1.sourceChapter,
-      mockCourseConfiguration1.sourceVariant
-    )
-  };
-
   test('when tokens, user, course registration and course configuration are obtained', () => {
     return expectSaga(BackendSaga)
       .call(postAuth, code, providerId, clientId, redirectUrl)
@@ -297,7 +281,6 @@ describe('Test FETCH_AUTH action', () => {
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
       .put(setAssessmentConfigurations(assessmentConfigurations))
-      .put(updateSublanguage(sublanguage))
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [
@@ -320,7 +303,6 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
@@ -348,7 +330,6 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
@@ -376,7 +357,6 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
@@ -403,7 +383,6 @@ describe('Test FETCH_AUTH action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
@@ -415,16 +394,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
   const courseRegistration = mockCourseRegistration1;
   const assessmentConfigurations = mockAssessmentConfigurations;
 
-  const sublanguage: SourceLanguage = {
-    chapter: mockCourseConfiguration1.sourceChapter,
-    variant: mockCourseConfiguration1.sourceVariant,
-    displayName: styliseSublanguage(
-      mockCourseConfiguration1.sourceChapter,
-      mockCourseConfiguration1.sourceVariant
-    )
-  };
-
-  test('when updateSublanguage is true, and user, course registration and course configuration are obtained', () => {
+  test('when user, course registration and course configuration are obtained', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .call(getUser, mockTokens)
@@ -433,7 +403,6 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .put(setCourseRegistration(courseRegistration))
       .put(setCourseConfiguration(courseConfiguration))
       .put(setAssessmentConfigurations(assessmentConfigurations))
-      .put(updateSublanguage(sublanguage))
       .provide([
         [
           call(getUser, mockTokens),
@@ -444,27 +413,7 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .silentRun();
   });
 
-  test('when updateSublanguage is false, and user, course registration and course configuration are obtained', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: mockTokens })
-      .call(getUser, mockTokens)
-      .put(setUser(user))
-      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
-      .put(setCourseRegistration(courseRegistration))
-      .put(setCourseConfiguration(courseConfiguration))
-      .put(setAssessmentConfigurations(assessmentConfigurations))
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
-      .provide([
-        [
-          call(getUser, mockTokens),
-          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
-        ]
-      ])
-      .dispatch({ type: FETCH_USER_AND_COURSE, payload: false })
-      .silentRun();
-  });
-
-  test('when updateSublanguage is true, and user (with courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
+  test('when user (with courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([
@@ -484,12 +433,11 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_USER_AND_COURSE, payload: true })
       .silentRun();
   });
 
-  test('when updateSublanguage is true, and user (without courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
+  test('when user (without courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
     const userWithNoCourse = { ...user, courses: [] };
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -510,37 +458,11 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_USER_AND_COURSE, payload: true })
       .silentRun();
   });
 
-  test('when updateSublanguage is false, and user (with courses) is obtained, but course registration, course configuration and assessment configurations are null', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: mockTokens })
-      .provide([
-        [
-          call(getUser, mockTokens),
-          {
-            user,
-            courseRegistration: null,
-            courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
-      ])
-      .call(getUser, mockTokens)
-      .put(setUser(user))
-      .put(updateLatestViewedCourse(user.courses[0].courseId))
-      .not.put.actionType(SET_COURSE_REGISTRATION)
-      .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
-      .dispatch({ type: FETCH_USER_AND_COURSE, payload: false })
-      .silentRun();
-  });
-
-  test('when updateSublanguage is true, and user is null', () => {
+  test('when user is null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([
@@ -560,53 +482,17 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_USER_AND_COURSE, payload: true })
-      .silentRun();
-  });
-
-  test('when updateSublanguage is false, and user is null', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: mockTokens })
-      .provide([
-        [
-          call(getUser, mockTokens),
-          {
-            user: null,
-            courseRegistration: null,
-            courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
-      ])
-      .call(getUser, mockTokens)
-      .not.put.actionType(SET_USER)
-      .not.put.actionType(UPDATE_LATEST_VIEWED_COURSE)
-      .not.put.actionType(SET_COURSE_REGISTRATION)
-      .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
-      .dispatch({ type: FETCH_USER_AND_COURSE, payload: false })
       .silentRun();
   });
 });
 
 describe('Test FETCH_COURSE_CONFIG action', () => {
-  const sublanguage: SourceLanguage = {
-    chapter: mockCourseConfiguration1.sourceChapter,
-    variant: mockCourseConfiguration1.sourceVariant,
-    displayName: styliseSublanguage(
-      mockCourseConfiguration1.sourceChapter,
-      mockCourseConfiguration1.sourceVariant
-    )
-  };
-
   test('when course config is obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
       .provide([[call(getCourseConfig, mockTokens), { config: mockCourseConfiguration1 }]])
       .put(setCourseConfiguration(mockCourseConfiguration1))
-      .put(updateSublanguage(sublanguage))
       .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();
   });
@@ -616,7 +502,6 @@ describe('Test FETCH_COURSE_CONFIG action', () => {
       .withState(mockStates)
       .provide([[call(getCourseConfig, mockTokens), { config: null }]])
       .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: FETCH_COURSE_CONFIG })
       .silentRun();
   });
@@ -893,7 +778,6 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
       .put(
         setCourseConfiguration({ sourceChapter: sublang.chapter, sourceVariant: sublang.variant })
       )
-      .put(updateSublanguage(sublang))
       .provide([
         [
           call(putCourseConfig, mockTokens, { sourceChapter: 4, sourceVariant: 'gpu' }),
@@ -908,15 +792,6 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
 describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
   const courseId = 2;
 
-  const sublanguage: SourceLanguage = {
-    chapter: mockCourseConfiguration2.sourceChapter,
-    variant: mockCourseConfiguration2.sourceVariant,
-    displayName: styliseSublanguage(
-      mockCourseConfiguration2.sourceChapter,
-      mockCourseConfiguration2.sourceVariant
-    )
-  };
-
   test('when latest viewed course is changed', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
@@ -925,7 +800,6 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
       .put(setCourseRegistration(mockCourseRegistration2))
       .put(setCourseConfiguration(mockCourseConfiguration2))
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
-      .put(updateSublanguage(sublanguage))
       .provide([
         [call(putLatestViewedCourse, mockTokens, courseId), okResp],
         [
@@ -949,7 +823,6 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
       .not.call.fn(getLatestCourseRegistrationAndConfiguration)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: UPDATE_LATEST_VIEWED_COURSE, payload: { courseId } })
       .silentRun();
   });
@@ -968,7 +841,6 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
       .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.put.actionType(SET_COURSE_CONFIGURATION)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .dispatch({ type: UPDATE_LATEST_VIEWED_COURSE, payload: { courseId } })
       .silentRun();
   });
@@ -1096,14 +968,6 @@ describe('Test CREATE_COURSE action', () => {
     }
   ];
 
-  const sublanguage: SourceLanguage = {
-    chapter: mockCourseConfiguration1.sourceChapter,
-    variant: mockCourseConfiguration1.sourceVariant,
-    displayName: styliseSublanguage(
-      mockCourseConfiguration1.sourceChapter,
-      mockCourseConfiguration1.sourceVariant
-    )
-  };
   test('created successfully', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
@@ -1114,7 +978,6 @@ describe('Test CREATE_COURSE action', () => {
       .put(setCourseConfiguration(courseConfiguration))
       .call(putAssessmentConfigs, mockTokens, placeholderAssessmentConfig)
       .put(setAssessmentConfigurations(placeholderAssessmentConfig))
-      .put(updateSublanguage(sublanguage))
       .call.fn(showSuccessMessage)
       .provide([
         [call(postCreateCourse, mockTokens, courseConfig), okResp],
@@ -1135,7 +998,6 @@ describe('Test CREATE_COURSE action', () => {
       .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(putAssessmentConfigs)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
-      .not.put.actionType(UPDATE_SUBLANGUAGE)
       .not.call.fn(showSuccessMessage)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })

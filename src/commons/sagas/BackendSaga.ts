@@ -5,7 +5,7 @@ import { call, put, select } from 'redux-saga/effects';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { OverallState, Role, styliseSublanguage } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -168,16 +168,6 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      yield put(
-        actions.updateSublanguage({
-          chapter: courseConfiguration.sourceChapter,
-          variant: courseConfiguration.sourceVariant,
-          displayName: styliseSublanguage(
-            courseConfiguration.sourceChapter,
-            courseConfiguration.sourceVariant
-          )
-        })
-      );
     }
     yield history.push('/academy');
   });
@@ -186,13 +176,6 @@ function* BackendSaga(): SagaIterator {
     FETCH_USER_AND_COURSE,
     function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
       const tokens = yield selectTokens();
-
-      /**
-       * The updateSublanguage boolean is used to determine whether to update the sublanguage
-       * in the Playground context to match the latest course configuration. We do not want to
-       * update it when the user is accessing the Playground via a shared link.
-       */
-      const updateSublanguage: boolean = action.payload;
 
       const {
         user,
@@ -222,18 +205,6 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseRegistration(courseRegistration));
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-        if (updateSublanguage) {
-          yield put(
-            actions.updateSublanguage({
-              chapter: courseConfiguration.sourceChapter,
-              variant: courseConfiguration.sourceVariant,
-              displayName: styliseSublanguage(
-                courseConfiguration.sourceChapter,
-                courseConfiguration.sourceVariant
-              )
-            })
-          );
-        }
       }
     }
   );
@@ -243,13 +214,6 @@ function* BackendSaga(): SagaIterator {
     const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
     if (config) {
       yield put(actions.setCourseConfiguration(config));
-      yield put(
-        actions.updateSublanguage({
-          chapter: config.sourceChapter,
-          variant: config.sourceVariant,
-          displayName: styliseSublanguage(config.sourceChapter, config.sourceVariant)
-        })
-      );
     }
   });
 
@@ -619,7 +583,6 @@ function* BackendSaga(): SagaIterator {
           sourceVariant: sublang.variant
         })
       );
-      yield put(actions.updateSublanguage(sublang));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
@@ -653,16 +616,6 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      yield put(
-        actions.updateSublanguage({
-          chapter: courseConfiguration.sourceChapter,
-          variant: courseConfiguration.sourceVariant,
-          displayName: styliseSublanguage(
-            courseConfiguration.sourceChapter,
-            courseConfiguration.sourceVariant
-          )
-        })
-      );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
       yield history.push('/academy');
     }
@@ -792,16 +745,6 @@ function* BackendSaga(): SagaIterator {
       return yield handleResponseError(resp);
     }
     yield put(actions.setAssessmentConfigurations(placeholderAssessmentConfig));
-    yield put(
-      actions.updateSublanguage({
-        chapter: courseConfiguration.sourceChapter,
-        variant: courseConfiguration.sourceVariant,
-        displayName: styliseSublanguage(
-          courseConfiguration.sourceChapter,
-          courseConfiguration.sourceVariant
-        )
-      })
-    );
     yield call(showSuccessMessage, 'Successfully created your new course!');
     yield history.push('/academy');
   });

@@ -70,8 +70,7 @@ import {
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });
 
-export const fetchUserAndCourse = (updateSublanguage: boolean) =>
-  action(FETCH_USER_AND_COURSE, updateSublanguage);
+export const fetchUserAndCourse = () => action(FETCH_USER_AND_COURSE);
 
 export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 
