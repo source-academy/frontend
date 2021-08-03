@@ -1,3 +1,4 @@
+import GameActionConditionChecker from '../action/GameActionConditionChecker';
 import { DialogueLine, DialogueObject, PartName } from './GameDialogueTypes';
 
 /**
@@ -18,18 +19,27 @@ export default class DialogueGenerator {
   }
 
   /**
-   * @returns {DialogueLine} returns the dialgoueLine that is played next,
+   * @returns {Promise<DialogueLine>} returns the dialgoueLine that is played next,
    * based on what is dictated by the dialogueContent
    */
-  public generateNextLine(): DialogueLine {
+  public async generateNextLine(): Promise<DialogueLine> {
     const dialogueLine = this.dialogueContent.get(this.currPart)![this.currLineNum];
     if (!dialogueLine || !dialogueLine.line) {
       return { line: '' };
     }
 
     if (dialogueLine.goto) {
-      if (this.dialogueContent.get(dialogueLine.goto)) {
-        this.currPart = dialogueLine.goto;
+      let currPart = dialogueLine.goto.part;
+      if (dialogueLine.goto.condition) {
+        const conditionCheck = await GameActionConditionChecker.checkConditionSatisfied(
+          dialogueLine.goto.condition
+        );
+        if (!conditionCheck && dialogueLine.goto.altPart) {
+          currPart = dialogueLine.goto.altPart;
+        }
+      }
+      if (this.dialogueContent.get(currPart)) {
+        this.currPart = currPart;
         this.currLineNum = 0;
       } else {
         return { line: '' };

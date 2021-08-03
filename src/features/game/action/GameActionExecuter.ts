@@ -90,6 +90,9 @@ export default class GameActionExecuter {
       case GameActionType.NavigateToAssessment:
         await globalAPI.promptNavigateToAssessment(actionParams.assessmentId);
         return;
+      case GameActionType.UpdateAssessmentStatus:
+        await globalAPI.updateAssessmentState();
+        return;
       case GameActionType.Delay:
         await sleep(actionParams.duration);
         return;
@@ -115,6 +118,7 @@ export default class GameActionExecuter {
       case GameActionType.UpdateCharacter:
         return true;
       case GameActionType.NavigateToAssessment:
+      case GameActionType.UpdateAssessmentStatus:
       case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
       case GameActionType.StartAnimation:

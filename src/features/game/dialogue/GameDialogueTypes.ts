@@ -1,4 +1,4 @@
-import { IGameActionable } from '../action/GameActionTypes';
+import { ActionCondition, IGameActionable } from '../action/GameActionTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 /**
@@ -24,7 +24,11 @@ export type Choice = string;
 export type DialogueLine = IGameActionable & {
   line: string;
   speakerDetail?: SpeakerDetail | null;
-  goto?: PartName;
+  goto?: {
+    condition: ActionCondition | null;
+    part: PartName;
+    altPart: PartName | null;
+  };
   prompt?: Prompt;
 };
 

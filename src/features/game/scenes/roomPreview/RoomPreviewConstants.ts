@@ -1,4 +1,5 @@
 import FontAssets from '../../assets/FontAssets';
+import { screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export const roomDefaultCode = `
@@ -41,5 +42,6 @@ export const RoomConstants = {
   assessmentNumber: 'MYROOM',
   verifiedText: 'VERIFIED',
   tag: { width: 128, height: 50 },
-  hoverTagTextConfig: { x: 64, y: 0, oriX: 0.5, oriY: 0.55 }
+  hoverTagTextConfig: { x: 64, y: 0, oriX: 0.5, oriY: 0.55 },
+  refreshButton: { x: 0.95 * screenSize.x, y: 0.92 * screenSize.y }
 };
