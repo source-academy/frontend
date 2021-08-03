@@ -15,7 +15,7 @@ type DispatchProps = {
 
 type StateProps = {
   data: GradingOverview;
-  userId?: number;
+  courseRegId?: number;
   role?: Role;
 };
 
@@ -29,12 +29,13 @@ class GradingActionsCell extends React.Component<GradingActionsCellProps> {
   }
 
   public render() {
-    const isOwnSubmission = this.props.userId && this.props.userId === this.props.data.studentId;
+    const isOwnSubmission =
+      this.props.courseRegId && this.props.courseRegId === this.props.data.studentId;
     const canReautograde = isOwnSubmission || this.props.data.submissionStatus === 'submitted';
     const canUnsubmit =
       this.props.data.submissionStatus === 'submitted' &&
-      this.props.userId &&
-      (this.props.userId === this.props.data.groupLeaderId ||
+      this.props.courseRegId &&
+      (this.props.courseRegId === this.props.data.groupLeaderId ||
         isOwnSubmission ||
         this.props.role === Role.Admin);
 

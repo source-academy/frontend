@@ -6,10 +6,16 @@ import { store } from '../../../pages/createStore';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Assessment, { AssessmentProps } from '../Assessment';
-import { AssessmentCategories } from '../AssessmentTypes';
 
 const defaultProps: AssessmentProps = {
-  assessmentCategory: AssessmentCategories.Mission,
+  assessmentConfiguration: {
+    assessmentConfigId: 1,
+    type: 'Missions',
+    isManuallyGraded: true,
+    displayInDashboard: true,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
+  },
   assessmentOverviews: undefined,
   handleAcknowledgeNotifications: () => {},
   handleAssessmentOverviewFetch: () => {},

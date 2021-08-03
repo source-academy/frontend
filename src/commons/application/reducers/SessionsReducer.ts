@@ -10,6 +10,10 @@ import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
   SessionState,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  SET_ASSESSMENT_CONFIGURATIONS,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
@@ -54,13 +58,32 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_TOKENS:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken
+        ...action.payload
       };
     case SET_USER:
       return {
         ...state,
         ...action.payload
+      };
+    case SET_COURSE_CONFIGURATION:
+      return {
+        ...state,
+        ...action.payload
+      };
+    case SET_COURSE_REGISTRATION:
+      return {
+        ...state,
+        ...action.payload
+      };
+    case SET_ASSESSMENT_CONFIGURATIONS:
+      return {
+        ...state,
+        assessmentConfigurations: action.payload
+      };
+    case SET_ADMIN_PANEL_COURSE_REGISTRATIONS:
+      return {
+        ...state,
+        userCourseRegistrations: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;

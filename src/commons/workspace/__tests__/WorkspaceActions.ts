@@ -20,7 +20,6 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
-  fetchSublanguage,
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
@@ -54,7 +53,6 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
-  FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -435,13 +433,6 @@ test('moveCursor generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       cursorPosition
     }
-  });
-});
-
-test('fetchSublanguage generates correct action object', () => {
-  const action = fetchSublanguage();
-  expect(action).toEqual({
-    type: FETCH_SUBLANGUAGE
   });
 });
 

@@ -2,21 +2,21 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
+      <Route path=\\"/login\\" render={[Function (anonymous)]} />
+      <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/contributors\\" component={[function]} />
-      <Route path=\\"/sourcecast/:sourcecastId?\\" component={[Function: C] { displayName: 'withRouter(Connect(Sourcecast))', WrappedComponent: [Function: Sourcecast], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-      <Route path=\\"/githubassessments\\" component={[Function: component]} />
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
       <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
       <Route exact={true} path=\\"/sicpjs\\" render={[Function: redirectToSicp]} />
       <Route path=\\"/sicpjs/:section\\" component={[Function: Sicp]} />
+      <Route path=\\"/githubassessments\\" component={[Function: component]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
-      <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
-      <Route path=\\"/login\\" render={[Function (anonymous)]} />
-      <Route path=\\"/achievement\\" render={[Function: redirectToLogin]} />
+      <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />
+      <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToAcademy]} />
       <Route component={[Function: NotFound]} />
     </Switch>
@@ -26,7 +26,7 @@ exports[`Application renders correctly 1`] = `
 
 exports[`Application shows disabled when in disabled period 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" render={[Function (anonymous)]} />

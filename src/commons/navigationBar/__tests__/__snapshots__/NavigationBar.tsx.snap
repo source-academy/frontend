@@ -7,20 +7,8 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\">
         <Blueprint3.Icon icon=\\"symbol-diamond\\" />
         <Blueprint3.NavbarHeading style={{...}}>
-          Source Academy
+          Source Academy @ NUS
         </Blueprint3.NavbarHeading>
-      </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecast\\">
-        <Blueprint3.Icon icon=\\"music\\" />
-        <div className=\\"navbar-button-text\\">
-          Sourcecast
-        </div>
-      </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\">
-        <Blueprint3.Icon icon=\\"code\\" />
-        <div className=\\"navbar-button-text\\">
-          Playground
-        </div>
       </NavLink>
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
         <Blueprint3.Icon icon=\\"briefcase\\" />
@@ -28,19 +16,10 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
           Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/index\\">
-        <Blueprint3.Icon icon=\\"book\\" />
-        <div className=\\"navbar-button-text\\">
-          SICP JS
-        </div>
-      </NavLink>
     </Blueprint3.NavbarGroup>
     <Blueprint3.NavbarGroup align=\\"right\\">
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
         <Blueprint3.Icon icon=\\"heart\\" />
-        <div className=\\"navbar-button-text hidden-sm hidden-xs\\">
-          Contributors
-        </div>
       </NavLink>
       <div className=\\"visible-xs\\">
         <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
@@ -48,10 +27,13 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       <div className=\\"hidden-xs\\">
         <Blueprint3.NavbarDivider className=\\"default-divider\\" />
       </div>
-      <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
+      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={[undefined]} name={[undefined]} />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>
+    <Route path=\\"/playground\\" />
+    <Route path=\\"/sourcecast\\" />
+    <Route path=\\"/githubassessments\\" />
     <Route path=\\"/sicpjs/:section?\\">
       <SicpNavigationBar />
     </Route>
@@ -60,14 +42,14 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 </Fragment>"
 `;
 
-exports[`NavigationBar renders correctly with student role 1`] = `
+exports[`NavigationBar renders correctly for student with course 1`] = `
 "<Fragment>
   <Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
     <Blueprint3.NavbarGroup align=\\"left\\">
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\">
         <Blueprint3.Icon icon=\\"symbol-diamond\\" />
         <Blueprint3.NavbarHeading style={{...}}>
-          Source Academy
+          CS1101S
         </Blueprint3.NavbarHeading>
       </NavLink>
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecast\\">
@@ -94,40 +76,84 @@ exports[`NavigationBar renders correctly with student role 1`] = `
           SICP JS
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievement\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievements\\">
         <Blueprint3.Icon icon=\\"mountain\\" />
         <div className=\\"navbar-button-text\\">
-          Achievement
+          Achievements
         </div>
       </NavLink>
     </Blueprint3.NavbarGroup>
     <Blueprint3.NavbarGroup align=\\"right\\">
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
         <Blueprint3.Icon icon=\\"heart\\" />
-        <div className=\\"navbar-button-text hidden-sm hidden-xs\\">
-          Contributors
-        </div>
       </NavLink>
-      <Blueprint3.NavbarDivider className=\\"default-divider\\" />
-      <Blueprint3.Tooltip2 content=\\"Toggle Menu\\" placement=\\"bottom\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-        <Blueprint3.Button onClick={[Function: onClick]} icon=\\"compass\\" minimal={true} style={{...}} />
-      </Blueprint3.Tooltip2>
       <div className=\\"visible-xs\\">
         <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
       </div>
       <div className=\\"hidden-xs\\">
         <Blueprint3.NavbarDivider className=\\"default-divider\\" />
       </div>
-      <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
+      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={1} name=\\"Bob\\" />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
   <Switch>
+    <Route path=\\"/playground\\" />
+    <Route path=\\"/sourcecast\\" />
+    <Route path=\\"/githubassessments\\" />
     <Route path=\\"/sicpjs/:section?\\">
       <SicpNavigationBar />
     </Route>
     <Route>
-      <AcademyNavigationBar role=\\"student\\" />
+      <AcademyNavigationBar role=\\"student\\" assessmentTypes={{...}} />
     </Route>
+  </Switch>
+</Fragment>"
+`;
+
+exports[`NavigationBar renders correctly for student without course 1`] = `
+"<Fragment>
+  <Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
+    <Blueprint3.NavbarGroup align=\\"left\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\">
+        <Blueprint3.Icon icon=\\"symbol-diamond\\" />
+        <Blueprint3.NavbarHeading style={{...}}>
+          Source Academy @ NUS
+        </Blueprint3.NavbarHeading>
+      </NavLink>
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
+        <Blueprint3.Icon icon=\\"briefcase\\" />
+        <div className=\\"navbar-button-text\\">
+          Classroom
+        </div>
+      </NavLink>
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/index\\">
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text\\">
+          SICP JS
+        </div>
+      </NavLink>
+    </Blueprint3.NavbarGroup>
+    <Blueprint3.NavbarGroup align=\\"right\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
+        <Blueprint3.Icon icon=\\"heart\\" />
+      </NavLink>
+      <div className=\\"visible-xs\\">
+        <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
+      </div>
+      <div className=\\"hidden-xs\\">
+        <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+      </div>
+      <Dropdown handleLogOut={[Function: handleLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={[undefined]} name=\\"Bob\\" />
+    </Blueprint3.NavbarGroup>
+  </Blueprint3.Navbar>
+  <Switch>
+    <Route path=\\"/playground\\" />
+    <Route path=\\"/sourcecast\\" />
+    <Route path=\\"/githubassessments\\" />
+    <Route path=\\"/sicpjs/:section?\\">
+      <SicpNavigationBar />
+    </Route>
+    <Route />
   </Switch>
 </Fragment>"
 `;

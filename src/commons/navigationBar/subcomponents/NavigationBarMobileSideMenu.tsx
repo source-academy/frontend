@@ -3,17 +3,20 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import Constants from 'src/commons/utils/Constants';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
-import { Role } from '../../application/ApplicationTypes';
-import { AssessmentCategories } from '../../assessment/AssessmentTypes';
+import { AssessmentType } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
-import Constants from '../../utils/Constants';
-import { assessmentCategoryLink } from '../../utils/ParamParseHelper';
+import { icons } from './AcademyNavigationBar';
 
 type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 
 type DrawerProps = {
+  name?: string;
+  role?: Role;
   isOpen: boolean;
   onClose: () => void;
   handleGitHubLogIn: () => void;
@@ -21,7 +24,9 @@ type DrawerProps = {
 };
 
 type OwnProps = {
-  role?: Role;
+  enableAchievements?: boolean;
+  enableSourcecast?: boolean;
+  assessmentTypes?: AssessmentType[];
 };
 
 const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = props => (
@@ -32,10 +37,10 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     title=""
     className={Classes.DARK}
   >
-    {props.role && (
-      <>
+    {props.role ? (
+      props.assessmentTypes?.map((assessmentType, idx) => (
         <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Mission)}`}
+          to={`/academy/${assessmentTypeLink(assessmentType)}`}
           activeClassName={Classes.ACTIVE}
           className={classNames(
             'NavigationBar__link__mobile',
@@ -44,150 +49,21 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
             Classes.LARGE
           )}
           onClick={props.onClose}
+          key={assessmentType}
         >
-          <Icon icon={IconNames.FLAME} />
-          <div>Missions</div>
+          <Icon icon={icons[idx]} />
+          <div>{assessmentType}</div>
           <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
+            notificationFilter={filterNotificationsByType(assessmentType)}
             disableHover={true}
           />
         </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Sidequest)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.LIGHTBULB} />
-          <div>Quests</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Sidequest)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
-          <div>Paths</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Path)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Contest)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.COMPARISON} />
-          <div>Contests</div>
-          <NotificationBadgeContainer
-            notificationFilter={filterNotificationsByType(AssessmentCategories.Contest)}
-            disableHover={true}
-          />
-        </NavLink>
-
-        <NavLink
-          to={`/academy/${assessmentCategoryLink(AssessmentCategories.Practical)}`}
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
-          onClick={props.onClose}
-        >
-          <Icon icon={IconNames.MANUAL} />
-          <div>Others</div>
-        </NavLink>
-      </>
+      ))
+    ) : (
+      <></>
     )}
 
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link__mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/sourcecast"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.MUSIC} />
-      <div>Sourcecast</div>
-    </NavLink>
-
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link__mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/playground"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.CODE} />
-      <div>Playground</div>
-    </NavLink>
-
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link_mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/githubassessments"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.BRIEFCASE} />
-      <div className="navbar-button-text">Classroom</div>
-    </NavLink>
-
-    <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames(
-        'NavigationBar__link_mobile',
-        Classes.BUTTON,
-        Classes.MINIMAL,
-        Classes.LARGE
-      )}
-      to="/sicpjs/index"
-      onClick={props.onClose}
-    >
-      <Icon icon={IconNames.BOOK} />
-      <div className="navbar-button-text">SICP JS</div>
-    </NavLink>
-
-    {props.role && Constants.enableAchievements && (
+    {props.role && props.enableSourcecast && (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames(
@@ -196,11 +72,77 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
           Classes.MINIMAL,
           Classes.LARGE
         )}
-        to="/achievement"
+        to="/sourcecast"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.MUSIC} />
+        <div>Sourcecast</div>
+      </NavLink>
+    )}
+
+    {props.role && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link__mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/playground"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.CODE} />
+        <div>Playground</div>
+      </NavLink>
+    )}
+
+    {Constants.enableGitHubAssessments && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link_mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/githubassessments"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.BRIEFCASE} />
+        <div className="navbar-button-text">Classroom</div>
+      </NavLink>
+    )}
+    {props.name && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link_mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/sicpjs/index"
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text">SICP JS</div>
+      </NavLink>
+    )}
+    {props.role && props.enableAchievements && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link__mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to="/achievements"
         onClick={props.onClose}
       >
         <Icon icon={IconNames.MOUNTAIN} />
-        <div>Achievement</div>
+        <div>Achievements</div>
       </NavLink>
     )}
   </Drawer>

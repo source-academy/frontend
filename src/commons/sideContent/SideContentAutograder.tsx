@@ -5,10 +5,11 @@ import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from './SideContentTestcaseCard';
 
-export type SideContentAutograderProps = DispatchProps & StateProps;
+export type SideContentAutograderProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
@@ -19,11 +20,19 @@ type StateProps = {
   testcases: Testcase[];
 };
 
+type OwnProps = {
+  /**
+   * We need to know the workspace location to hide 'opaque' testcases
+   * in AssessmentsWorkspace, but show them in GradingWorkspace.
+   */
+  workspaceLocation: WorkspaceLocation;
+};
+
 const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps> = props => {
   const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
   const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-  const { testcases, autogradingResults, handleTestcaseEval } = props;
+  const { testcases, autogradingResults, handleTestcaseEval, workspaceLocation } = props;
 
   const testcaseCards = React.useMemo(
     () =>
@@ -36,13 +45,14 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
               index={index}
               testcase={testcase}
               handleTestcaseEval={handleTestcaseEval}
+              workspaceLocation={workspaceLocation}
             />
           ))}
         </div>
       ) : (
         <div className="noResults">There are no testcases provided for this question.</div>
       ),
-    [testcases, handleTestcaseEval]
+    [testcases, handleTestcaseEval, workspaceLocation]
   );
 
   const resultCards = React.useMemo(

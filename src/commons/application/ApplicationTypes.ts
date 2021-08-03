@@ -29,7 +29,6 @@ export type OverallState = {
 };
 
 export type ApplicationState = {
-  readonly title: string;
   readonly environment: ApplicationEnvironment;
 };
 
@@ -164,12 +163,14 @@ export const defaultAcademy: AcademyState = {
 };
 
 export const defaultApplication: ApplicationState = {
-  title: 'Cadet',
   environment: currentEnvironment()
 };
 
 export const defaultDashboard: DashboardState = {
-  gradingSummary: []
+  gradingSummary: {
+    cols: [],
+    rows: []
+  }
 };
 
 export const defaultAchievement: AchievementState = {
@@ -284,34 +285,28 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
 };
 
 export const defaultSession: SessionState = {
-  accessToken: undefined,
-  assessments: new Map<number, Assessment>(),
-  assessmentOverviews: undefined,
-  experimentApproval: false, // TODO: get this from backend or sth
-  experimentCoinflip: Math.random() < 0.5,
-  githubOctokitObject: { octokit: undefined },
-  grade: 0,
-  gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
+  courses: [],
   group: null,
-  historyHelper: {
-    lastAcademyLocations: [null, null],
-    lastGeneralLocations: [null, null]
-  },
-  maxGrade: 0,
-  maxXp: 0,
-  refreshToken: undefined,
-  role: undefined,
-  name: undefined,
-  story: {
-    story: '',
-    playStory: false
-  },
   gameState: {
     completed_quests: [],
     collectibles: {}
   },
   xp: 0,
+  story: {
+    story: '',
+    playStory: false
+  },
+  assessments: new Map<number, Assessment>(),
+  assessmentOverviews: undefined,
+  experimentApproval: false, // TODO: get this from backend or sth
+  experimentCoinflip: Math.random() < 0.5,
+  githubOctokitObject: { octokit: undefined },
+  gradingOverviews: undefined,
+  gradings: new Map<number, Grading>(),
+  historyHelper: {
+    lastAcademyLocations: [null, null],
+    lastGeneralLocations: [null, null]
+  },
   notifications: []
 };
 

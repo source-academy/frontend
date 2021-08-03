@@ -68,6 +68,7 @@
     "react-konva": "^17.0.2-4",
     "react-latex-next": "^2.0.0",
     "react-mde": "^11.5.0",
+    "react-papaparse": "^3.16.1",
     "react-redux": "^7.2.4",
     "react-responsive": "^8.2.0",
     "react-router": "^5.2.0",

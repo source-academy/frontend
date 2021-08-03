@@ -83,9 +83,8 @@ The frontend can be configured to disable itself (based on user's system time) d
 
 #### Other configuration
 
+1. `REACT_APP_DEPLOYMENT_NAME`: The name of the Source Academy deployment. This will be shown in the `/welcome` route. Defaults to 'Source Academy'.
 1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).
-1. `REACT_APP_ENABLE_GAME`: Whether to enable the game. Off by default.
-1. `REACT_APP_ENABLE_ACHIEVEMENTS`: Whether to enable the incentives/achievements system. Off by default.
 1. `REACT_APP_ENABLE_GITHUB_ASSESSMENTS`: Whether to enable the GitHub Assessments feature. Off by default.
 
 ## Development

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../commons/application/ApplicationTypes';
 import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer';
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
-import { AssessmentCategories, AssessmentCategory } from '../../commons/assessment/AssessmentTypes';
-import Constants from '../../commons/utils/Constants';
 import { HistoryHelper } from '../../commons/utils/HistoryHelper';
-import { assessmentCategoryLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
+import AdminPanel from './adminPanel/AdminPanelContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Game from './game/Game';
 import Grading from './grading/GradingContainer';
@@ -24,6 +24,8 @@ export type DispatchProps = {
 
 export type StateProps = {
   historyHelper: HistoryHelper;
+  enableGame?: boolean;
+  assessmentConfigurations?: AssessmentConfiguration[];
 };
 
 export type OwnProps = {
@@ -43,46 +45,28 @@ class Academy extends React.Component<AcademyProps> {
             <Route path="/academy/groundcontrol" component={GroundControl} key={0} />,
             <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} key={1} />,
             <Route path="/academy/sourcereel" component={Sourcereel} key={2} />,
-            <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />
+            <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />,
+            <Route path="/academy/dashboard" component={DashboardContainer} key={4} />
           ]
         : null;
     return (
       <div className="Academy">
         <Switch>
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Contest
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Contest)}
-          />
-          {Constants.enableGame && <Route path="/academy/game" component={Game} />}
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Mission
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Mission)}
-          />
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Path
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Path)}
-          />
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Sidequest
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Sidequest)}
-          />
-          <Route
-            path={`/academy/${assessmentCategoryLink(
-              AssessmentCategories.Practical
-            )}/${assessmentRegExp}`}
-            render={this.assessmentRenderFactory(AssessmentCategories.Practical)}
-          />
-          <Route path="/academy/dashboard" component={DashboardContainer} />
+          {this.props.assessmentConfigurations?.map(assessmentConfiguration => (
+            <Route
+              path={`/academy/${assessmentTypeLink(
+                assessmentConfiguration.type
+              )}/${assessmentRegExp}`}
+              render={this.assessmentRenderFactory(assessmentConfiguration)}
+              key={assessmentConfiguration.type}
+            />
+          ))}
+          {this.props.enableGame && <Route path="/academy/game" component={Game} />}
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
           {staffRoutes}
+          {this.props.role === 'admin' && (
+            <Route path="/academy/adminpanel" component={AdminPanel} />
+          )}
           <Route component={this.redirectTo404} />
         </Switch>
       </div>
@@ -90,8 +74,8 @@ class Academy extends React.Component<AcademyProps> {
   }
 
   private assessmentRenderFactory =
-    (cat: AssessmentCategory) => (routerProps: RouteComponentProps<any>) =>
-      <AssessmentContainer assessmentCategory={cat} />;
+    (assessmentConfiguration: AssessmentConfiguration) => (routerProps: RouteComponentProps<any>) =>
+      <AssessmentContainer assessmentConfiguration={assessmentConfiguration} />;
 
   /**
    * 1. If user is in /academy.*, redirect to game
@@ -104,7 +88,7 @@ class Academy extends React.Component<AcademyProps> {
     if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
       return () => <Redirect to={lastAcademy!} />;
     } else {
-      return Constants.enableGame ? this.redirectToGame : this.redirectToMissions;
+      return this.props.enableGame ? this.redirectToGame : this.redirectToAssessments;
     }
   };
 
@@ -112,7 +96,15 @@ class Academy extends React.Component<AcademyProps> {
 
   private redirectToGame = () => <Redirect to="/academy/game" />;
 
-  private redirectToMissions = () => <Redirect to="/academy/missions" />;
+  private redirectToAssessments = () => {
+    return this.props.assessmentConfigurations ? (
+      <Redirect
+        to={`/academy/${assessmentTypeLink(this.props.assessmentConfigurations[0].type)}`}
+      />
+    ) : (
+      this.redirectTo404()
+    );
+  };
 }
 
 export default Academy;

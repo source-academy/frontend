@@ -9,7 +9,8 @@ import {
   InputGroup,
   Intent,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
@@ -33,7 +34,6 @@ import {
   GradingOverviewWithNotifications
 } from '../../../features/grading/GradingTypes';
 import GradingActionsCell from './subcomponents/GradingActionsCell';
-import GradingGradeCell from './subcomponents/GradingGradeCell';
 import GradingStatusCell from './subcomponents/GradingStatusCell';
 import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
@@ -49,7 +49,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  userId?: number;
+  courseRegId?: number;
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
   role?: Role;
@@ -85,7 +85,7 @@ class Grading extends React.Component<GradingProps, State> {
         suppressSizeToFit: true
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
-      { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
+      { headerName: 'Category', field: 'assessmentType', maxWidth: 100 },
       { headerName: 'Student Name', field: 'studentName' },
       {
         headerName: 'Group',
@@ -114,24 +114,6 @@ class Grading extends React.Component<GradingProps, State> {
         maxWidth: 110
       },
       {
-        headerName: 'Grade',
-        field: '',
-        cellRendererFramework: this.GradingMarks,
-        maxWidth: 100,
-        cellStyle: (params: GradingNavLinkProps) => {
-          if (params.data.currentGrade < params.data.maxGrade) {
-            return { backgroundColor: Colors.RED5 };
-          }
-          return {};
-        },
-        comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-          if (nodeA && nodeB) {
-            return nodeA.data.currentGrade - nodeB.data.currentGrade;
-          }
-          return valueA - valueB;
-        }
-      },
-      {
         headerName: 'XP',
         field: '',
         cellRendererFramework: this.GradingExp,
@@ -150,7 +132,7 @@ class Grading extends React.Component<GradingProps, State> {
         field: '',
         cellRendererFramework: GradingActionsCell,
         cellRendererParams: {
-          userId: this.props.userId,
+          courseRegId: this.props.courseRegId,
           handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
           handleReautogradeSubmission: this.props.handleReautogradeSubmission,
           role: this.props.role
@@ -212,7 +194,7 @@ class Grading extends React.Component<GradingProps, State> {
       <NonIdealState
         className="Grading"
         description="Fetching submissions..."
-        icon={<Spinner size={Spinner.SIZE_LARGE} />}
+        icon={<Spinner size={SpinnerSize.LARGE} />}
       />
     );
 
@@ -333,11 +315,6 @@ class Grading extends React.Component<GradingProps, State> {
   /** Component to render in table - grading status */
   private GradingStatus = (props: GradingNavLinkProps) => {
     return <GradingStatusCell data={props.data} />;
-  };
-
-  /** Component to render in table - marks */
-  private GradingMarks = (props: GradingNavLinkProps) => {
-    return <GradingGradeCell data={props.data} />;
   };
 
   private NotificationBadgeCell = (props: GradingNavLinkProps) => {

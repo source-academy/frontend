@@ -1,22 +1,21 @@
+import { Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import Constants from 'src/commons/utils/Constants';
 
 import { OverallState } from '../../../../commons/application/ApplicationTypes';
-import {
-  changeSublanguage,
-  fetchSublanguage
-} from '../../../../commons/workspace/WorkspaceActions';
+import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
 import DefaultChapterSelect, { DispatchProps, StateProps } from './DefaultChapterSelect';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  sourceChapter: state.workspaces.playground.context.chapter,
-  sourceVariant: state.workspaces.playground.context.variant
+  // Temporarily load the defaults when the course configuration fetch has yet to return
+  sourceChapter: state.session.sourceChapter || Constants.defaultSourceChapter,
+  sourceVariant: state.session.sourceVariant || (Constants.defaultSourceVariant as Variant)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleFetchSublanguage: fetchSublanguage,
       handleUpdateSublanguage: changeSublanguage
     },
     dispatch

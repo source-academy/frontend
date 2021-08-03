@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import {
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentType,
   AssessmentWorkspaceParams
 } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -15,8 +16,13 @@ import Constants from '../../commons/utils/Constants';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
-export type MissionControlProps = DispatchProps & RouteComponentProps<AssessmentWorkspaceParams>;
+export type MissionControlProps = StateProps &
+  DispatchProps &
+  RouteComponentProps<AssessmentWorkspaceParams>;
 
+export type StateProps = {
+  assessmentTypes: AssessmentType[];
+};
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
 };
@@ -66,6 +72,7 @@ class MissionControl extends React.Component<MissionControlProps, State> {
             overview={this.state.editingOverview}
             updateEditingOverview={this.updateEditingOverview}
             listingPath="/mission-control"
+            assessmentTypes={this.props.assessmentTypes}
           />
         )}
       </>

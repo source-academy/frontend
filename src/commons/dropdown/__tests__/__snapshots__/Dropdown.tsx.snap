@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Dropdown correctly mounts Profile component when a user is logged in 1`] = `
+exports[`Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in 1`] = `
 "<Fragment>
   <Blueprint3.Popover2 content={{...}} inheritDarkTheme={false} placement=\\"bottom\\" boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} />
   </Blueprint3.Popover2>
   <DropdownAbout isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownHelp isOpen={false} onClose={[Function (anonymous)]} />
+  <DropdownCourses isOpen={false} onClose={[Function (anonymous)]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} courses={{...}} courseId={[undefined]} />
+  <DropdownCreateCourse isOpen={false} onClose={[Function (anonymous)]} handleCreateCourse={[Function: handleCreateCourse]} />
   <Connect(Profile) isOpen={false} onClose={[Function (anonymous)]} />
 </Fragment>"
 `;
 
-exports[`Dropdown does not mount Profile component when a user is not logged in 1`] = `
+exports[`Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in 1`] = `
 "<Fragment>
   <Blueprint3.Popover2 content={{...}} inheritDarkTheme={false} placement=\\"bottom\\" boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} />

@@ -926,8 +926,8 @@ describe('evalTestCode', () => {
         .silentRun();
     });
 
-    test('puts additional clearReplOutputLast for hidden testcases after finished status', () => {
-      type = TestcaseTypes.hidden;
+    test('puts additional clearReplOutputLast for opaque testcases after finished status', () => {
+      type = TestcaseTypes.opaque;
 
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
@@ -948,8 +948,8 @@ describe('evalTestCode', () => {
         .silentRun();
     });
 
-    test('puts additional clearReplOutputLast for hidden testcases after error status', () => {
-      type = TestcaseTypes.hidden;
+    test('puts additional clearReplOutputLast for opaque testcases after error status', () => {
+      type = TestcaseTypes.opaque;
 
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)

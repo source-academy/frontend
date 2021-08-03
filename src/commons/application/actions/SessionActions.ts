@@ -2,20 +2,34 @@ import { action } from 'typesafe-actions'; // EDITED
 
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Assessment, AssessmentOverview, ContestEntry } from '../../assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  ContestEntry
+} from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
+import { Role } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  AdminPanelCourseRegistration,
+  CourseRegistration,
+  DELETE_ASSESSMENT_CONFIG,
+  DELETE_USER_COURSE_REGISTRATION,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   LOGIN,
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
@@ -23,6 +37,10 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  SET_ASSESSMENT_CONFIGURATIONS,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
@@ -33,18 +51,28 @@ import {
   SUBMIT_ASSESSMENT,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
+  Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_COURSE_CONFIG,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
+  UPDATE_USER_ROLE,
+  UpdateCourseConfiguration,
   User
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });
+
+export const fetchUserAndCourse = () => action(FETCH_USER_AND_COURSE);
+
+export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 
 export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 
@@ -67,19 +95,26 @@ export const loginGitHub = () => action(LOGIN_GITHUB);
 
 export const logoutGitHub = () => action(LOGOUT_GITHUB);
 
-export const setTokens = ({
-  accessToken,
-  refreshToken
-}: {
-  accessToken: string;
-  refreshToken: string;
-}) =>
+export const setTokens = ({ accessToken, refreshToken }: Tokens) =>
   action(SET_TOKENS, {
     accessToken,
     refreshToken
   });
 
 export const setUser = (user: User) => action(SET_USER, user);
+
+export const setCourseConfiguration = (courseConfiguration: UpdateCourseConfiguration) =>
+  action(SET_COURSE_CONFIGURATION, courseConfiguration);
+
+export const setCourseRegistration = (courseRegistration: CourseRegistration) =>
+  action(SET_COURSE_REGISTRATION, courseRegistration);
+
+export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
+  action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
+
+export const setAdminPanelCourseRegistrations = (
+  courseRegistrations: AdminPanelCourseRegistration[]
+) => action(SET_ADMIN_PANEL_COURSE_REGISTRATIONS, courseRegistrations);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
@@ -106,14 +141,12 @@ export const submitAssessment = (id: number) => action(SUBMIT_ASSESSMENT, id);
 export const submitGrading = (
   submissionId: number,
   questionId: number,
-  gradeAdjustment: number = 0,
   xpAdjustment: number = 0,
   comments?: string
 ) =>
   action(SUBMIT_GRADING, {
     submissionId,
     questionId,
-    gradeAdjustment,
     xpAdjustment,
     comments
   });
@@ -121,14 +154,12 @@ export const submitGrading = (
 export const submitGradingAndContinue = (
   submissionId: number,
   questionId: number,
-  gradeAdjustment: number = 0,
   xpAdjustment: number = 0,
   comments?: string
 ) =>
   action(SUBMIT_GRADING_AND_CONTINUE, {
     submissionId,
     questionId,
-    gradeAdjustment,
     xpAdjustment,
     comments
   });
@@ -177,3 +208,26 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
+
+export const updateLatestViewedCourse = (courseId: number) =>
+  action(UPDATE_LATEST_VIEWED_COURSE, { courseId });
+
+export const updateCourseConfig = (courseConfiguration: UpdateCourseConfiguration) =>
+  action(UPDATE_COURSE_CONFIG, courseConfiguration);
+
+export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
+
+export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
+  action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);
+
+export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration) =>
+  action(DELETE_ASSESSMENT_CONFIG, assessmentConfig);
+
+export const fetchAdminPanelCourseRegistrations = () =>
+  action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
+
+export const updateUserRole = (courseRegId: number, role: Role) =>
+  action(UPDATE_USER_ROLE, { courseRegId, role });
+
+export const deleteUserCourseRegistration = (courseRegId: number) =>
+  action(DELETE_USER_COURSE_REGISTRATION, { courseRegId });

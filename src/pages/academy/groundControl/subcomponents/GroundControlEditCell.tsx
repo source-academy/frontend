@@ -29,8 +29,6 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
   const currentDateString = forOpenDate ? data.openAt : data.closeAt;
   const currentDate = moment(currentDateString, moment.ISO_8601, true);
 
-  console.log(data);
-
   const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
   const [newDate, setNewDate] = React.useState<moment.Moment | null>(currentDate);
 

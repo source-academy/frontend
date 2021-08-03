@@ -109,7 +109,6 @@ type State = {
   editingMode: string;
   hasUnsavedChanges: boolean;
   showResetTemplateOverlay: boolean;
-  originalMaxGrade: number;
   originalMaxXp: number;
 };
 
@@ -122,7 +121,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       editingMode: 'question',
       hasUnsavedChanges: false,
       showResetTemplateOverlay: false,
-      originalMaxGrade: 0,
       originalMaxXp: 0
     };
   }
@@ -136,8 +134,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     if (this.state.assessment) {
       this.resetWorkspaceValues();
       this.setState({
-        originalMaxGrade: this.getMaxMarks('maxGrade'),
-        originalMaxXp: this.getMaxMarks('maxXp')
+        originalMaxXp: this.getMaxXp()
       });
     }
   }
@@ -258,8 +255,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
                 assessment,
                 hasUnsavedChanges: false,
                 showResetTemplateOverlay: false,
-                originalMaxGrade: this.getMaxMarks('maxGrade'),
-                originalMaxXp: this.getMaxMarks('maxXp')
+                originalMaxXp: this.getMaxXp()
               });
               this.handleRefreshLibrary();
               this.resetWorkspaceValues();
@@ -364,24 +360,18 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     });
     storeLocalAssessment(assessment);
     // this.handleRefreshLibrary();
-    this.handleSaveGradeAndXp();
+    this.handleSaveXp();
   };
 
-  private handleSaveGradeAndXp = () => {
-    const curGrade = this.getMaxMarks('maxGrade');
-    const changeGrade = curGrade - this.state.originalMaxGrade;
-    const curXp = this.getMaxMarks('maxXp');
+  private handleSaveXp = () => {
+    const curXp = this.getMaxXp();
     const changeXp = curXp - this.state.originalMaxXp;
-    if (changeGrade !== 0 || changeXp !== 0) {
+    if (changeXp !== 0) {
       const overview = this.props.assessmentOverview;
-      if (changeGrade !== 0) {
-        overview.maxGrade = curGrade;
-      }
       if (changeXp !== 0) {
         overview.maxXp = curXp;
       }
       this.setState({
-        originalMaxGrade: curGrade,
         originalMaxXp: curXp
       });
       this.props.updateAssessmentOverview(overview);
@@ -389,13 +379,13 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     }
   };
 
-  private getMaxMarks = (field: string) => {
-    let result = 0;
+  private getMaxXp = () => {
+    let xp = 0;
     const questions = this.state.assessment!.questions;
     for (const question of questions) {
-      result += question[field];
+      xp += question.maxXp;
     }
-    return result as number;
+    return xp as number;
   };
   private updateEditAssessmentState = (assessmentVal: Assessment) => {
     this.setState({
@@ -549,7 +539,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     } else {
       tabs = [
         {
-          label: `${assessment!.category} Briefing`,
+          label: `${assessment!.type} Briefing`,
           iconName: IconNames.BRIEFCASE,
           body: (
             <TextAreaContent

@@ -210,7 +210,8 @@ class ContributorsDetails extends React.Component {
             </H5>
             <p>
               Below are all contributors to the{' '}
-              <a href={Links.githubOrg}>GitHub repositories of the Source Academy</a>.
+              <a href={Links.githubOrg}>GitHub repositories of the Source Academy</a>. Feel free to
+              join us!
             </p>
           </div>
         </Card>

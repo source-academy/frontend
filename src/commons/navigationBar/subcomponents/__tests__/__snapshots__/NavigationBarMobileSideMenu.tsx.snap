@@ -2,18 +2,17 @@
 
 exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 "<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast\\" onClick={[Function: onClose]}>
-    <Blueprint3.Icon icon=\\"music\\" />
-    <div>
-      Sourcecast
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"briefcase\\" />
+    <div className=\\"navbar-button-text\\">
+      Classroom
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
-    <Blueprint3.Icon icon=\\"code\\" />
-    <div>
-      Playground
-    </div>
-  </NavLink>
+</Blueprint3.Drawer>"
+`;
+
+exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course selected) 1`] = `
+"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
@@ -29,7 +28,7 @@ exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 </Blueprint3.Drawer>"
 `;
 
-exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
+exports[`NavigationBarMobileSideMenu renders correctly when logged in (with course selected) 1`] = `
 "<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
   <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"flame\\" />
@@ -59,17 +58,12 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
     </div>
     <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/academy/others\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"manual\\" />
     <div>
       Others
     </div>
-  </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast\\" onClick={[Function: onClose]}>
-    <Blueprint3.Icon icon=\\"music\\" />
-    <div>
-      Sourcecast
-    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
   <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"code\\" />
@@ -87,12 +81,6 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
     <Blueprint3.Icon icon=\\"book\\" />
     <div className=\\"navbar-button-text\\">
       SICP JS
-    </div>
-  </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/achievement\\" onClick={[Function: onClose]}>
-    <Blueprint3.Icon icon=\\"mountain\\" />
-    <div>
-      Achievement
     </div>
   </NavLink>
 </Blueprint3.Drawer>"

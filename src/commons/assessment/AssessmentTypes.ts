@@ -26,22 +26,15 @@ export enum GradingStatuses {
 }
 export type GradingStatus = keyof typeof GradingStatuses;
 
-export enum AssessmentCategories {
-  Contest = 'Contest',
-  Mission = 'Mission',
-  Path = 'Path',
-  Sidequest = 'Sidequest',
-  Practical = 'Practical'
-}
-export type AssessmentCategory = keyof typeof AssessmentCategories;
+export type AssessmentType = string;
 
 export enum TestcaseTypes {
   // These are rendered in full by the Mission Autograder
   public = 'public',
   // These are rendered with a placeholder by the Autograder
-  hidden = 'hidden',
+  opaque = 'opaque',
   // These should only exist in the grading workspace for submissions
-  private = 'private'
+  secret = 'secret'
 }
 export type TestcaseType = keyof typeof TestcaseTypes;
 
@@ -61,15 +54,13 @@ W* Used to display information regarding an assessment in the UI.
  *   the assessment opens
  */
 export type AssessmentOverview = {
-  category: AssessmentCategory;
+  type: AssessmentType;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
-  grade: number;
   gradingStatus: GradingStatus;
   id: number;
   isPublished?: boolean;
-  maxGrade: number;
   maxXp: number;
   number?: string; // For mission control
   openAt: string;
@@ -86,7 +77,7 @@ export type AssessmentOverview = {
  * Used when an assessment is being actively attempted/graded.
  */
 export type Assessment = {
-  category: AssessmentCategory;
+  type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
   id: number;
@@ -94,6 +85,15 @@ export type Assessment = {
   missionPDF: string;
   title: string;
   questions: Question[];
+};
+
+export type AssessmentConfiguration = {
+  assessmentConfigId: number;
+  type: AssessmentType;
+  isManuallyGraded: boolean;
+  displayInDashboard: boolean;
+  hoursBeforeEarlyXpDecay: number;
+  earlySubmissionXp: number;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
@@ -127,7 +127,6 @@ export type BaseQuestion = {
   comments?: string;
   content: string;
   editorValue?: string | null;
-  grade: number;
   gradedAt?: string;
   grader?: {
     name: string;
@@ -136,10 +135,12 @@ export type BaseQuestion = {
   graderLibrary?: Library; // For mission control
   id: number;
   library: Library;
-  maxGrade: number;
   maxXp: number;
   type: QuestionType;
   xp: number;
+  blocking?: boolean; // Determines whether the learner can progress to the next question without passing local testcases
+  // TODO: The blocking field is made optional now as the Question type is being shared with GitHub Assessments, which has not implemented
+  // the question-level blocking feature. Is to be made compulsory after this is implemented in GitHub Assessments
 };
 
 export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
@@ -222,12 +223,10 @@ export const normalLibrary = (): Library => {
 
 export const overviewTemplate = (): AssessmentOverview => {
   return {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 1,
     id: -1,
-    maxGrade: 0,
     maxXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
@@ -255,9 +254,8 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     testcasesPrivate: [],
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   };
 };
 
@@ -298,15 +296,14 @@ export const mcqTemplate = (): IMCQQuestion => {
     type: 'mcq',
     solution: 0,
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   };
 };
 
 export const assessmentTemplate = (): Assessment => {
   return {
-    category: 'Mission',
+    type: 'Missions',
     globalDeployment: normalLibrary(),
     graderDeployment: emptyLibrary(),
     id: -1,

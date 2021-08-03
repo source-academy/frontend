@@ -1,5 +1,5 @@
-import Constants from 'src/commons/utils/Constants';
-
+import Constants from '../../commons/utils/Constants';
+import { store } from '../../pages/createStore';
 import SourceAcademyGame from '../game/SourceAcademyGame';
 
 const sendRequest =
@@ -24,13 +24,17 @@ const sendRequest =
         ...requestDetails
       };
 
-      return fetch(Constants.backendUrl + `/v2/${route}/` + requestPath, config);
+      return fetch(
+        Constants.backendUrl + `/v2/courses/${courseId()}/${route}/` + requestPath,
+        config
+      );
     } finally {
     }
   };
 
-export const sendAssetRequest = sendRequest('admin/assets');
-export const sendStoryRequest = sendRequest('stories');
+const courseId = () => store.getState().session.courseId;
+export const sendAssetRequest = sendRequest(`admin/assets`);
+export const sendStoryRequest = sendRequest(`stories`);
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();

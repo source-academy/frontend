@@ -1,7 +1,8 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses
@@ -12,6 +13,10 @@ import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
   SessionState,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  SET_ASSESSMENT_CONFIGURATIONS,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
   SET_TOKENS,
   SET_USER,
@@ -54,21 +59,23 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
 });
 
 test('SET_USER works correctly', () => {
-  const story: Story = {
-    story: 'test story',
-    playStory: true
-  };
-  const gameState: GameState = {
-    collectibles: {},
-    completed_quests: []
-  };
   const payload = {
     name: 'test student',
     role: Role.Student,
-    group: '42D',
-    grade: 150,
-    story,
-    gameState
+    courses: [
+      {
+        courseId: 1,
+        courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        viewable: true
+      },
+      {
+        courseId: 2,
+        courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
+        courseShortName: `CS2030S`,
+        viewable: true
+      }
+    ]
   };
 
   const action = {
@@ -80,6 +87,131 @@ test('SET_USER works correctly', () => {
   expect(result).toEqual({
     ...defaultSession,
     ...payload
+  });
+});
+
+test('SET_COURSE_CONFIGURATION works correctly', () => {
+  const payload = {
+    courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+    courseShortName: `CS1101S`,
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default' as Variant,
+    moduleHelpText: 'Help text',
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  };
+  const action = {
+    type: SET_COURSE_CONFIGURATION,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    ...payload
+  });
+});
+
+test('SET_COURSE_REGISTRATION works correctly', () => {
+  const payload = {
+    role: Role.Student,
+    group: '42D',
+    gameState: {
+      collectibles: {},
+      completed_quests: []
+    } as GameState,
+    courseId: 1,
+    grade: 1,
+    maxGrade: 10,
+    xp: 1,
+    story: {
+      story: '',
+      playStory: false
+    } as Story
+  };
+  const action = {
+    type: SET_COURSE_REGISTRATION,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    ...payload
+  });
+});
+
+test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
+  const payload = [
+    {
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      buildHidden: false,
+      buildSolution: false,
+      isContest: false,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ];
+
+  const action = {
+    type: SET_ASSESSMENT_CONFIGURATIONS,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    assessmentConfigurations: payload
+  });
+});
+
+test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
+  const payload = [
+    {
+      courseRegId: 1,
+      courseId: 1,
+      name: 'Bob',
+      role: Role.Student
+    },
+    {
+      courseRegId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      role: Role.Staff
+    }
+  ];
+
+  const action = {
+    type: SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    payload
+  };
+  const result: SessionState = SessionsReducer(defaultSession, action);
+
+  expect(result).toEqual({
+    ...defaultSession,
+    userCourseRegistrations: payload
   });
 });
 
@@ -150,7 +282,7 @@ test('UPDATE_HISTORY_HELPERS works on academy location', () => {
 
 // Test Data for UPDATE_ASSESSMENT
 const assessmentTest1: Assessment = {
-  category: 'Mission',
+  type: 'Mission',
   globalDeployment: undefined,
   graderDeployment: undefined,
   id: 1,
@@ -161,7 +293,7 @@ const assessmentTest1: Assessment = {
 };
 
 const assessmentTest2: Assessment = {
-  category: 'Contest',
+  type: 'Contest',
   globalDeployment: undefined,
   graderDeployment: undefined,
   id: 1,
@@ -172,7 +304,7 @@ const assessmentTest2: Assessment = {
 };
 
 const assessmentTest3: Assessment = {
-  category: 'Path',
+  type: 'Path',
   globalDeployment: undefined,
   graderDeployment: undefined,
   id: 3,
@@ -231,12 +363,10 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
 // Test data for UPDATE_ASSESSMENT_OVERVIEWS
 const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     closeAt: 'test_string',
     coverImage: 'test_string',
-    grade: 0,
     id: 0,
-    maxGrade: 0,
     maxXp: 0,
     openAt: 'test_string',
     title: 'test_string',
@@ -250,13 +380,11 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
 
 const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Contest,
+    type: 'Contests',
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
-    grade: 1,
     id: 1,
-    maxGrade: 1,
     maxXp: 1,
     openAt: 'test_string_0',
     title: 'test_string_0',
@@ -310,8 +438,6 @@ const gradingTest1: Grading = [
       id: 234
     },
     grade: {
-      grade: 10,
-      gradeAdjustment: 0,
       xp: 100,
       xpAdjustment: 0,
       comments: 'Well done. Please try the quest!'
@@ -327,8 +453,6 @@ const gradingTest2: Grading = [
       id: 345
     },
     grade: {
-      grade: 30,
-      gradeAdjustment: 10,
       xp: 500,
       xpAdjustment: 20,
       comments: 'Good job! All the best for the finals.'
@@ -400,11 +524,7 @@ const gradingOverviewTest1: GradingOverview[] = [
   {
     assessmentId: 1,
     assessmentName: 'test assessment',
-    assessmentCategory: 'Contest',
-    initialGrade: 0,
-    gradeAdjustment: 0,
-    currentGrade: 10,
-    maxGrade: 20,
+    assessmentType: 'Contests',
     initialXp: 0,
     xpBonus: 100,
     xpAdjustment: 50,
@@ -425,11 +545,7 @@ const gradingOverviewTest2: GradingOverview[] = [
   {
     assessmentId: 2,
     assessmentName: 'another assessment',
-    assessmentCategory: 'Sidequest',
-    initialGrade: 5,
-    gradeAdjustment: 10,
-    currentGrade: 20,
-    maxGrade: 50,
+    assessmentType: 'Quests',
     initialXp: 20,
     xpBonus: 250,
     xpAdjustment: 100,

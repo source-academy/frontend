@@ -7,8 +7,6 @@ import {
   ADD_EVENT,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
-  EDIT_ACHIEVEMENT,
-  EDIT_GOAL,
   EventType,
   GET_ACHIEVEMENTS,
   GET_GOALS,
@@ -31,11 +29,6 @@ export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
 
 export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_GOALS, goals);
 
-export const editAchievement = (achievement: AchievementItem) =>
-  action(EDIT_ACHIEVEMENT, achievement);
-
-export const editGoal = (definition: GoalDefinition) => action(EDIT_GOAL, definition);
-
 export const getAchievements = () => action(GET_ACHIEVEMENTS);
 
 export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
@@ -55,8 +48,8 @@ export const addEvent = (eventNames: EventType[]) => action(ADD_EVENT, eventName
 
 export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
 
-export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
-  action(UPDATE_GOAL_PROGRESS, { studentId, progress });
+export const updateGoalProgress = (studentCourseRegId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentCourseRegId, progress });
 
 /*
   Note: This updates the frontend Achievement Redux store.

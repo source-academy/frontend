@@ -389,3 +389,123 @@
   overflow: hidden;
   resize: none;
 }
+
+.course-configuration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .inputs {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    max-width: 900px;
+    width: 100%;
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+
+      .#{$ns}-tab-list {
+        margin-left: 8px;
+      }
+
+      .input-textarea {
+        height: 100px;
+      }
+
+      .input-markdown {
+        padding: 10px;
+        height: 100px;
+        background-color: #f5f5f5;
+        border-radius: 3px;
+        box-shadow: 0 0 0 0 rgb(19 124 189 / 0%), 0 0 0 0 rgb(19 124 189 / 0%),
+          inset 0 0 0 1px rgb(16 22 26 / 15%), inset 0 1px 1px rgb(16 22 26 / 20%);
+        overflow: auto;
+        text-align: left;
+      }
+
+      div.input-markdown > div > * {
+        margin: 0;
+      }
+    }
+
+    .booleans {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: flex-start;
+    }
+  }
+}
+
+.assessment-configuration {
+  .#{$ns}-numeric-input {
+    .#{$ns}-input-group {
+      width: calc(100% - 30px);
+    }
+  }
+
+  .add-row-button {
+    margin-top: 10px;
+  }
+}
+
+.add-users {
+  h4 {
+    margin: 20px 0 10px 0;
+  }
+
+  .upload-container {
+    display: flex;
+    justify-content: center;
+
+    .upload-settings {
+      display: flex;
+      flex-flow: wrap;
+      justify-content: center;
+      // margin-top: 10px;
+
+      .file-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #bdc3c7;
+
+        .file-input-icon {
+          margin-left: 6px;
+        }
+      }
+
+      .html-select {
+        margin: 10px;
+        padding: 18px 10px 12px 10px;
+        border: 1px solid #bdc3c7;
+
+        .html-select-label {
+          display: flex;
+          justify-content: center;
+
+          .html-select-label-icon {
+            position: relative;
+            top: -5px;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+  .add-button {
+    margin-top: 10px;
+  }
+}
+
+.html-select-popover,
+.file-input-popover {
+  .#{$ns}-popover2-arrow {
+    margin-left: 3px;
+  }
+}

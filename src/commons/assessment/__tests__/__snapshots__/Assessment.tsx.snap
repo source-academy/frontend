@@ -4,7 +4,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}} assessmentOverviews={[undefined]} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -51,7 +51,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={true} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}} assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={true} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -126,13 +126,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -240,17 +233,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Grade: 0 / 0
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 0 / 200
+                                        Max XP: 200
                                       </h6>
                                     </Component>
                                   </div>
@@ -384,13 +370,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -420,10 +399,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/practicals/5/0\\">
+                                      <NavLink to=\\"/academy/others/5/0\\">
                                         <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" onClick={[Function: onClick]}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/others/5/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/others/5/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -500,13 +479,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -617,13 +589,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -736,13 +701,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -857,7 +815,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}} assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -904,7 +862,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}} assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -979,13 +937,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -1123,17 +1074,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Grade: 0 / 0
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 0 / 200
+                                        Max XP: 200
                                       </h6>
                                     </Component>
                                   </div>
@@ -1267,13 +1211,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
-                                  </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
@@ -1303,10 +1240,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/practicals/5/0\\">
+                                      <NavLink to=\\"/academy/others/5/0\\">
                                         <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" onClick={[Function: onClick]}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/others/5/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/others/5/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -1383,13 +1320,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -1500,13 +1430,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
@@ -1619,13 +1542,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
-                                  </div>
-                                  <div className=\\"listing-grade\\">
-                                    <Component>
-                                      <h6 className=\\"bp3-heading\\">
-                                        Max Grade: 3000
-                                      </h6>
-                                    </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>

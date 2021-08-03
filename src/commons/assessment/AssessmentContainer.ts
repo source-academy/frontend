@@ -13,7 +13,7 @@ import { AssessmentOverview } from './AssessmentTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   const categoryFilter = (overview: AssessmentOverview) =>
-    overview.category === props.assessmentCategory;
+    overview.type === props.assessmentConfiguration.type;
   const stateProps: StateProps = {
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)

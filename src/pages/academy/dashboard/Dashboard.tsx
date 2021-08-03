@@ -3,6 +3,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import { startCase } from 'lodash';
 import * as React from 'react';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -19,41 +20,11 @@ export type StateProps = {
 };
 
 class Dashboard extends React.Component<DashboardProps> {
-  private columnDefs: ColDef[];
   private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: DashboardProps) {
     super(props);
-
-    this.columnDefs = [
-      {
-        headerName: 'Group',
-        field: 'groupName',
-        width: 80,
-        sort: 'asc'
-      },
-      {
-        headerName: 'Avenger',
-        field: 'leaderName'
-      },
-      {
-        headerName: 'Ungraded Missions',
-        field: 'ungradedMissions'
-      },
-      {
-        headerName: 'Submitted Missions',
-        field: 'submittedMissions'
-      },
-      {
-        headerName: 'Ungraded Quests',
-        field: 'ungradedSidequests'
-      },
-      {
-        headerName: 'Submitted Quests',
-        field: 'submittedSidequests'
-      }
-    ];
 
     this.defaultColumnDefs = {
       filter: true,
@@ -62,27 +33,28 @@ class Dashboard extends React.Component<DashboardProps> {
     };
   }
 
-  public componentDidUpdate(prevProps: DashboardProps) {
-    if (this.gridApi && this.props.gradingSummary.length !== prevProps.gradingSummary.length) {
-      this.gridApi.setRowData(this.props.gradingSummary);
-    }
-  }
-
   public handleFetchGradingSummary = () => {
     this.props.handleFetchGradingSummary();
   };
 
   public render() {
+    const columnDefs = this.props.gradingSummary.cols.map(e => {
+      return {
+        headerName: startCase(e),
+        field: e
+      };
+    });
+
     const content = (
       <div className="Dashboard">
         <div className="Grid ag-grid-parent ag-theme-balham">
           <AgGridReact
             domLayout={'autoHeight'}
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
             onGridSizeChanged={this.resizeGrid}
-            rowData={this.props.gradingSummary}
+            rowData={this.props.gradingSummary.rows}
             rowHeight={30}
             suppressCellSelection={true}
             suppressMovableColumns={true}

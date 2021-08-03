@@ -18,10 +18,13 @@ window.matchMedia =
 
 const props: ApplicationProps = {
   ...mockRouterProps('/academy', {}),
-  title: 'Cadet',
+  courses: [],
   handleLogOut: () => {},
   handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {}
+  handleGitHubLogOut: () => {},
+  fetchUserAndCourse: () => {},
+  updateLatestViewedCourse: () => {},
+  handleCreateCourse: () => {}
 };
 
 test('Application renders correctly', () => {

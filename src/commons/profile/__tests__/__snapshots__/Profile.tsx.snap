@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Profile renders correctly when there are closed assessments 1`] = `
+exports[`Profile renders correctly when there are closed and graded, or closed and not manually graded assessments 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Profile name=\\"yeeet\\" role=\\"staff\\" assessmentOverviews={{...}} isOpen={true} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} onClose={[Function: onClose]}>
-      <Blueprint3.Drawer className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"30%\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
-        <Blueprint3.Overlay className=\\"bp3-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"30%\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false} onOpening={[Function (anonymous)]} onClosed={[Function (anonymous)]} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true}>
+    <Profile name=\\"yeeet\\" role=\\"staff\\" assessmentOverviews={{...}} assessmentTypes={{...}} isOpen={true} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} onClose={[Function: onClose]}>
+      <Blueprint3.Drawer className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
+        <Blueprint3.Overlay className=\\"bp3-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false} onOpening={[Function (anonymous)]} onClosed={[Function (anonymous)]} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true}>
           <Blueprint3.Portal className={[undefined]} container={{...}}>
             <Portal containerInfo={{...}}>
               <TransitionGroup appear={true} className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
@@ -64,37 +64,13 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                             </div>
                           </div>
                           <div className=\\"profile-progress\\">
-                            <div className=\\"profile-grade\\">
-                              <Blueprint3.Spinner className=\\"profile-spinner progress-steelblue\\" size={144} value={1}>
-                                <div className=\\"bp3-spinner bp3-no-spin profile-spinner progress-steelblue\\">
-                                  <div className=\\"bp3-spinner-animation\\">
-                                    <svg width={144} height={144} strokeWidth=\\"2.78\\" viewBox=\\"3.61 3.61 92.78 92.78\\">
-                                      <path className=\\"bp3-spinner-track\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" />
-                                      <path className=\\"bp3-spinner-head\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" pathLength={280} strokeDasharray=\\"280 280\\" strokeDashoffset={0} />
-                                    </svg>
-                                  </div>
-                                </div>
-                              </Blueprint3.Spinner>
-                              <div className=\\"type\\">
-                                Grade
-                              </div>
-                              <div className=\\"total-value\\">
-                                0.00
-                                 / 
-                                0.00
-                              </div>
-                              <div className=\\"percentage\\">
-                                100.00
-                                %
-                              </div>
-                            </div>
                             <div className=\\"profile-xp\\">
-                              <Blueprint3.Spinner className=\\"profile-spinner progress-deepskyblue\\" size={144} value={0.62}>
+                              <Blueprint3.Spinner className=\\"profile-spinner progress-deepskyblue\\" size={144} value={0.5}>
                                 <div className=\\"bp3-spinner bp3-no-spin profile-spinner progress-deepskyblue\\">
                                   <div className=\\"bp3-spinner-animation\\">
                                     <svg width={144} height={144} strokeWidth=\\"2.78\\" viewBox=\\"3.61 3.61 92.78 92.78\\">
                                       <path className=\\"bp3-spinner-track\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" />
-                                      <path className=\\"bp3-spinner-head\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" pathLength={280} strokeDasharray=\\"280 280\\" strokeDashoffset={106.4} />
+                                      <path className=\\"bp3-spinner-head\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" pathLength={280} strokeDasharray=\\"280 280\\" strokeDashoffset={140} />
                                     </svg>
                                   </div>
                                 </div>
@@ -103,120 +79,17 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                 XP
                               </div>
                               <div className=\\"total-value\\">
-                                1550
+                                250
                                  / 
-                                2500
+                                500
                               </div>
                               <div className=\\"percentage\\">
-                                62.00
+                                50.00
                                 %
                               </div>
                             </div>
                           </div>
                           <div className=\\"profile-callouts\\">
-                            <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]}>
-                              <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/academy/missions/4/0\\" activeClassName=\\"profile-summary-navlink\\">
-                                <Link aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} to={{...}} target=\\"_blank\\">
-                                  <LinkAnchor aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/missions/4/0\\" navigate={[Function: navigate]}>
-                                    <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/missions/4/0\\" onClick={[Function: onClick]}>
-                                      <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"flame\\" title=\\"A closed Mission\\">
-                                        <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
-                                          <Blueprint3.Icon icon=\\"flame\\" iconSize={20}>
-                                            <span icon=\\"flame\\" className=\\"bp3-icon bp3-icon-flame\\" title={[undefined]}>
-                                              <svg fill={[undefined]} data-icon=\\"flame\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
-                                                <desc>
-                                                  flame
-                                                </desc>
-                                                <path d=\\"M11.622 0c0 1.71.49 3.077 1.472 4.103C16.364 6.496 18 9.23 18 12.308c0 3.418-1.962 5.983-5.887 7.692 2.887-3 2.453-4.23-.49-8C8.5 13.5 9 14.5 9.5 16.5c-1.048 0-2 0-2.5-.5 0 .684 1.197 2.5 1.952 4-3.924-1.026-8.123-7.18-6.651-7.692.981-.342 2.126-.171 3.434.513C4.1 6.667 6.062 2.393 11.622 0z\\" fillRule=\\"evenodd\\" />
-                                              </svg>
-                                            </span>
-                                          </Blueprint3.Icon>
-                                          <Component>
-                                            <h4 className=\\"bp3-heading\\">
-                                              A closed Mission
-                                            </h4>
-                                          </Component>
-                                          <div className=\\"grade-details\\">
-                                            <div className=\\"title\\">
-                                              Grade
-                                            </div>
-                                            <div className=\\"value\\">
-                                              2700
-                                               / 
-                                              3000
-                                            </div>
-                                            <Blueprint3.ProgressBar animate={false} className=\\"value-bar progress-steelblue\\" stripes={false} value={0.9}>
-                                              <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes value-bar progress-steelblue\\">
-                                                <div className=\\"bp3-progress-meter\\" style={{...}} />
-                                              </div>
-                                            </Blueprint3.ProgressBar>
-                                          </div>
-                                          <div className=\\"xp-details\\">
-                                            <div className=\\"title\\">
-                                              XP
-                                            </div>
-                                            <div className=\\"value\\">
-                                              800
-                                               / 
-                                              1000
-                                            </div>
-                                            <Blueprint3.ProgressBar animate={false} className=\\"value-bar progress-steelblue\\" stripes={false} value={0.8}>
-                                              <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes value-bar progress-steelblue\\">
-                                                <div className=\\"bp3-progress-meter\\" style={{...}} />
-                                              </div>
-                                            </Blueprint3.ProgressBar>
-                                          </div>
-                                        </div>
-                                      </Blueprint3.Callout>
-                                    </a>
-                                  </LinkAnchor>
-                                </Link>
-                              </NavLink>
-                            </ProfileCard>
-                            <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]}>
-                              <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/academy/quests/5/0\\" activeClassName=\\"profile-summary-navlink\\">
-                                <Link aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} to={{...}} target=\\"_blank\\">
-                                  <LinkAnchor aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" navigate={[Function: navigate]}>
-                                    <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" onClick={[Function: onClick]}>
-                                      <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (not graded) Sidequest\\">
-                                        <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
-                                          <Blueprint3.Icon icon=\\"lightbulb\\" iconSize={20}>
-                                            <span icon=\\"lightbulb\\" className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
-                                              <svg fill={[undefined]} data-icon=\\"lightbulb\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
-                                                <desc>
-                                                  lightbulb
-                                                </desc>
-                                                <path d=\\"M6.33 13.39c0 .34.27.61.6.61h6.13c.33 0 .6-.27.6-.61C14.03 9.78 16 9.4 16 6.09 16 2.72 13.31 0 10 0S4 2.72 4 6.09c0 3.31 1.97 3.69 2.33 7.3zM13 15H7c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-1 3H8c-.55 0-1 .45-1 1s.45 1 1 1h4c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-                                              </svg>
-                                            </span>
-                                          </Blueprint3.Icon>
-                                          <Component>
-                                            <h4 className=\\"bp3-heading\\">
-                                              Closed (not graded) Sidequest
-                                            </h4>
-                                          </Component>
-                                          <div className=\\"xp-details\\">
-                                            <div className=\\"title\\">
-                                              XP
-                                            </div>
-                                            <div className=\\"value\\">
-                                              500
-                                               / 
-                                              1000
-                                            </div>
-                                            <Blueprint3.ProgressBar animate={false} className=\\"value-bar progress-deepskyblue\\" stripes={false} value={0.5}>
-                                              <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes value-bar progress-deepskyblue\\">
-                                                <div className=\\"bp3-progress-meter\\" style={{...}} />
-                                              </div>
-                                            </Blueprint3.ProgressBar>
-                                          </div>
-                                        </div>
-                                      </Blueprint3.Callout>
-                                    </a>
-                                  </LinkAnchor>
-                                </Link>
-                              </NavLink>
-                            </ProfileCard>
                             <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]}>
                               <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/academy/quests/5/0\\" activeClassName=\\"profile-summary-navlink\\">
                                 <Link aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} to={{...}} target=\\"_blank\\">
@@ -324,9 +197,9 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
 exports[`Profile renders correctly when there are no closed assessments 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Profile name=\\"yeet\\" role=\\"student\\" assessmentOverviews={{...}} isOpen={true} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} onClose={[Function: onClose]}>
-      <Blueprint3.Drawer className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"30%\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
-        <Blueprint3.Overlay className=\\"bp3-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"30%\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false} onOpening={[Function (anonymous)]} onClosed={[Function (anonymous)]} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true}>
+    <Profile name=\\"yeet\\" role=\\"student\\" assessmentOverviews={{...}} assessmentTypes={{...}} isOpen={true} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} onClose={[Function: onClose]}>
+      <Blueprint3.Drawer className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
+        <Blueprint3.Overlay className=\\"bp3-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false} onOpening={[Function (anonymous)]} onClosed={[Function (anonymous)]} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true}>
           <Blueprint3.Portal className={[undefined]} container={{...}}>
             <Portal containerInfo={{...}}>
               <TransitionGroup appear={true} className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>

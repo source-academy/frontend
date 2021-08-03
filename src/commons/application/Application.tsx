@@ -13,11 +13,14 @@ import MissionControlContainer from '../../pages/missionControl/MissionControlCo
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
-import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
+import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
+import Welcome from '../../pages/welcome/Welcome';
+import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role } from './ApplicationTypes';
+import { UpdateCourseConfiguration, UserCourse } from './types/SessionTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -25,12 +28,20 @@ export type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  fetchUserAndCourse: () => void;
+  updateLatestViewedCourse: (courseId: number) => void;
+  handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
 
 export type StateProps = {
   role?: Role;
-  title: string;
   name?: string;
+  courses: UserCourse[];
+  courseId?: number;
+  courseShortName?: string;
+  enableAchievements?: boolean;
+  enableSourcecast?: boolean;
+  assessmentTypes?: AssessmentType[];
 };
 
 const Application: React.FC<ApplicationProps> = props => {
@@ -39,6 +50,15 @@ const Application: React.FC<ApplicationProps> = props => {
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
   const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
   const browserDimensions = React.useRef({ height: 0, width: 0 });
+
+  // Effect to fetch the latest user info and course configurations from the backend on refresh,
+  // if the user was previously logged in
+  React.useEffect(() => {
+    if (props.name) {
+      props.fetchUserAndCourse();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     if (Constants.disablePeriods.length > 0) {
@@ -97,20 +117,74 @@ const Application: React.FC<ApplicationProps> = props => {
   }, [isPWA, isMobile]);
 
   const loginPath = <Route path="/login" render={toLogin(props)} key="login" />;
-  const fullPaths = Constants.playgroundOnly
-    ? null
-    : [
-        <Route path="/academy" render={toAcademy(props)} key={0} />,
+
+  const githubAssessmentsPaths = Constants.enableGitHubAssessments
+    ? [
         <Route
-          path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-          render={toIncubator}
-          key={1}
-        />,
-        loginPath
-      ];
-  if (!Constants.playgroundOnly && Constants.enableAchievements) {
-    fullPaths?.push(<Route path="/achievement" render={toAchievement(props)} key={2} />);
+          path="/githubassessments"
+          component={() => (
+            <GitHubClassroom
+              handleGitHubLogIn={props.handleGitHubLogIn}
+              handleGitHubLogOut={props.handleGitHubLogOut}
+            />
+          )}
+          key="githubAssessments"
+        />
+      ]
+    : [];
+
+  // Paths for the playground-only deployment
+  const playgroundOnlyPaths = [
+    <Route path="/playground" component={Playground} key="playground" />,
+    <Route path="/contributors" component={Contributors} key="contributors" />,
+    <Route path="/callback/github" component={GitHubCallback} key="githubCallback" />,
+    <Redirect
+      from="/interactive-sicp/:section?"
+      to="/sicpjs/:section?"
+      key="oldToNewSicpRedirect"
+    />,
+    <Route exact path="/sicpjs" render={redirectToSicp} key="sicpRedirect" />,
+    <Route path="/sicpjs/:section" component={Sicp} key="sicp" />,
+    ...githubAssessmentsPaths
+  ];
+
+  // Paths for the Source Academy @NUS deployment
+  const fullPaths = [
+    loginPath,
+    <Route
+      path="/playground"
+      render={ensureUserAndRoleAndRouteTo(props, <Playground />)}
+      key="authPlayground"
+    />,
+    ...playgroundOnlyPaths,
+    <Route path="/academy" render={toAcademy(props)} key="academy" />,
+    <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} key="welcome" />,
+    <Route
+      path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+      render={ensureUserAndRoleAndRouteTo(props, <MissionControlContainer />)}
+      key="mission-control"
+    />
+  ];
+
+  if (props.enableSourcecast) {
+    fullPaths.push(
+      <Route
+        path="/sourcecast/:sourcecastId?"
+        render={ensureUserAndRoleAndRouteTo(props, <Sourcecast />)}
+        key="sourcecast"
+      />
+    );
   }
+  if (props.enableAchievements) {
+    fullPaths.push(
+      <Route
+        path="/achievements"
+        render={ensureUserAndRoleAndRouteTo(props, <Achievement />)}
+        key="achievements"
+      />
+    );
+  }
+
   const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
   const renderDisabled = () => (
@@ -123,9 +197,16 @@ const Application: React.FC<ApplicationProps> = props => {
         handleLogOut={props.handleLogOut}
         handleGitHubLogIn={props.handleGitHubLogIn}
         handleGitHubLogOut={props.handleGitHubLogOut}
+        updateLatestViewedCourse={props.updateLatestViewedCourse}
+        handleCreateCourse={props.handleCreateCourse}
         role={props.role}
         name={props.name}
-        title={props.title}
+        courses={props.courses}
+        courseId={props.courseId}
+        courseShortName={props.courseShortName}
+        enableAchievements={props.enableAchievements}
+        enableSourcecast={props.enableSourcecast}
+        assessmentTypes={props.assessmentTypes}
       />
       <div className="Application__main">
         {disabled && (
@@ -141,32 +222,17 @@ const Application: React.FC<ApplicationProps> = props => {
             <Route render={renderDisabled} />
           </Switch>
         )}
-        {!disabled && (
+        {!disabled && Constants.playgroundOnly && (
           <Switch>
-            <Route path="/playground" component={Playground} />
-            <Route path="/contributors" component={Contributors} />
-            <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            {Constants.enableGitHubAssessments && (
-              <Route
-                path="/githubassessments"
-                component={() => (
-                  <GitHubClassroom
-                    handleGitHubLogIn={props.handleGitHubLogIn}
-                    handleGitHubLogOut={props.handleGitHubLogOut}
-                  />
-                )}
-              />
-            )}
-            <Route path="/callback/github" component={GitHubCallback} />
-            <Redirect from="/interactive-sicp/:section?" to="/sicpjs/:section?" />
-            <Route exact path="/sicpjs" render={redirectToSicp} />
-            <Route path="/sicpjs/:section" component={Sicp} />
+            {playgroundOnlyPaths}
+            <Route exact={true} path="/" render={redirectToPlayground} />
+            <Route component={NotFound} />
+          </Switch>
+        )}
+        {!disabled && !Constants.playgroundOnly && (
+          <Switch>
             {fullPaths}
-            <Route
-              exact={true}
-              path="/"
-              render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
-            />
+            <Route exact={true} path="/" render={redirectToAcademy} />
             <Route component={NotFound} />
           </Switch>
         )}
@@ -178,6 +244,7 @@ const Application: React.FC<ApplicationProps> = props => {
 const redirectToPlayground = () => <Redirect to="/playground" />;
 const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
+const redirectToWelcome = () => <Redirect to="/welcome" />;
 const redirectToSicp = () => <Redirect to="/sicpjs/index" />;
 
 /**
@@ -185,16 +252,30 @@ const redirectToSicp = () => <Redirect to="/sicpjs/index" />;
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = ({ role }: ApplicationProps) =>
-  role === undefined ? redirectToLogin : () => <Academy role={role} />;
+const toAcademy = ({ name, role }: ApplicationProps) =>
+  name === undefined
+    ? redirectToLogin
+    : role === undefined
+    ? redirectToWelcome
+    : () => <Academy role={role} />;
 
 /**
- * A user routes to /achievement,
- *  1. If the user is logged in, render the Achievement component
+ * Routes a user to the specified route,
+ *  1. If the user is logged in, render the specified component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAchievement = ({ role }: ApplicationProps) =>
-  role === undefined ? redirectToLogin : () => <Achievement />;
+const ensureUserAndRouteTo = ({ name }: ApplicationProps, to: JSX.Element) =>
+  name === undefined ? redirectToLogin : () => to;
+
+/**
+ * Routes a user to the specified route,
+ *  1. If the user is logged in and has a latest viewed course, render the
+ *     specified component
+ *  2. If the user is not logged in, redirect to /login
+ *  3. If the user is logged in, but does not have a course, redirect to /welcome
+ */
+const ensureUserAndRoleAndRouteTo = ({ name, role }: ApplicationProps, to: JSX.Element) =>
+  name === undefined ? redirectToLogin : role === undefined ? redirectToWelcome : () => to;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);
@@ -210,8 +291,6 @@ const toLogin = (props: ApplicationProps) => () => {
     />
   );
 };
-
-const toIncubator = () => <MissionControlContainer />;
 
 function computeDisabledState() {
   const now = moment();

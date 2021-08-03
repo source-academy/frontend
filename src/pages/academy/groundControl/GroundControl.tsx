@@ -7,7 +7,10 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import * as React from 'react';
 
-import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
+import {
+  AssessmentConfiguration,
+  AssessmentOverview
+} from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
@@ -20,13 +23,15 @@ export type GroundControlProps = DispatchProps & StateProps;
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
   handleDeleteAssessment: (id: number) => void;
-  handleUploadAssessment: (file: File, forceUpdate: boolean) => void;
+  handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
+  handleFetchCourseConfigs: () => void;
 };
 
 export type StateProps = {
   assessmentOverviews?: AssessmentOverview[];
+  assessmentConfigurations?: AssessmentConfiguration[];
 };
 
 type State = {
@@ -57,7 +62,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       },
       {
         headerName: 'Category',
-        field: 'category',
+        field: 'type',
         width: 100
       },
       {
@@ -151,7 +156,10 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     const dropzone = (
       <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
-        <Dropzone handleUploadAssessment={this.props.handleUploadAssessment} />
+        <Dropzone
+          handleUploadAssessment={this.props.handleUploadAssessment}
+          assessmentConfigurations={this.props.assessmentConfigurations}
+        />
       </Collapse>
     );
 
@@ -183,19 +191,15 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     return (
       <div>
-        <ContentDisplay
-          display={content}
-          loadContentDispatch={this.conditionallyFetchAssessmentOverviews}
-        />
+        <ContentDisplay display={content} loadContentDispatch={this.loadContent} />
       </div>
     );
   }
 
-  private conditionallyFetchAssessmentOverviews = () => {
-    if (!this.props.assessmentOverviews) {
-      // If assessment overviews are not loaded, fetch them
-      this.props.handleAssessmentOverviewFetch();
-    }
+  private loadContent = () => {
+    // Always load AssessmentOverviews and CourseConfigs to get the latest values (just in case)
+    this.props.handleAssessmentOverviewFetch();
+    this.props.handleFetchCourseConfigs();
   };
 
   /*

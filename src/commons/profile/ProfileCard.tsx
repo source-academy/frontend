@@ -3,12 +3,8 @@ import { IconName } from '@blueprintjs/icons';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import {
-  AssessmentCategories,
-  AssessmentCategory,
-  AssessmentOverview
-} from '../assessment/AssessmentTypes';
-import { assessmentCategoryLink } from '../utils/ParamParseHelper';
+import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
+import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 type ProfileCardProps = DispatchProps & StateProps;
 
@@ -19,33 +15,14 @@ type StateProps = {
 type DispatchProps = {
   getFrac: (num: number, den: number) => number;
   parseColour: (frac: number) => string;
-  renderIcon: (category: AssessmentCategory) => IconName;
+  renderIcon: (category: AssessmentType) => IconName;
 };
 
 class ProfileCard extends React.Component<ProfileCardProps, {}> {
   public render() {
     const { item } = this.props;
 
-    const isInvalidMission =
-      item.category !== AssessmentCategories.Mission || (item.maxGrade <= 0 && item.grade === 0);
     const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
-
-    const missionDetail = (
-      <div className="grade-details">
-        <div className="title">Grade</div>
-        <div className="value">
-          {item.grade} / {item.maxGrade}
-        </div>
-        <ProgressBar
-          animate={false}
-          className={
-            'value-bar' + this.props.parseColour(this.props.getFrac(item.grade, item.maxGrade))
-          }
-          stripes={false}
-          value={this.props.getFrac(item.grade, item.maxGrade)}
-        />
-      </div>
-    );
 
     const xpDetails = (
       <div className="xp-details">
@@ -68,16 +45,15 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
         className="profile-summary-navlink"
         key={`${item.title}-${item.id}`}
         target="_blank"
-        to={`/academy/${assessmentCategoryLink(item.category)}/${item.id}/0`}
+        to={`/academy/${assessmentTypeLink(item.type)}/${item.id}/0`}
         activeClassName="profile-summary-navlink"
       >
         <Callout
           className="profile-summary-callout"
           key={`${item.title}-${item.id}`}
-          icon={this.props.renderIcon(item.category)}
+          icon={this.props.renderIcon(item.type)}
           title={item.title}
         >
-          {isInvalidMission ? '' : missionDetail}
           {isInvalidXP ? '' : xpDetails}
         </Callout>
       </NavLink>

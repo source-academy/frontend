@@ -35,9 +35,10 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { assessmentCategoryLink, stringParamToInt } from '../utils/ParamParseHelper';
+import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
+import AssessmentNotFound from './AssessmentNotFound';
 import {
-  AssessmentCategory,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams,
@@ -56,7 +57,7 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  assessmentCategory: AssessmentCategory;
+  assessmentConfiguration: AssessmentConfiguration;
 };
 
 export type StateProps = {
@@ -132,7 +133,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/academy/${assessmentCategoryLink(overview.category)}/${overview.id.toString()}/${
+        to={`/academy/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
           Constants.defaultQuestionId
         }`}
       >
@@ -167,7 +168,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => {
-    const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
+    const showGrade =
+      overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>
@@ -186,13 +188,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
           </div>
           <div className={`col-xs-${String(12 - ratio)} listing-text`}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
-            <div className="listing-grade">
-              <H6>
-                {showGrade
-                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                  : `Max Grade: ${overview.maxGrade}`}
-              </H6>
-            </div>
             <div className="listing-xp">
               <H6>
                 {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}
@@ -252,13 +247,17 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
+    if (!overview) {
+      return <AssessmentNotFound />;
+    }
     const assessmentWorkspaceProps: AssessmentWorkspaceOwnProps = {
       assessmentId,
       questionId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
         !props.isStudent ||
-        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt))
+        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
+      assessmentConfiguration: props.assessmentConfiguration
     };
     return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
   }
@@ -328,7 +327,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Define the betcha dialog (in each card's menu)
   const submissionText = betchaAssessment ? (
     <p>
-      You are about to finalise your submission for the {betchaAssessment.category.toLowerCase()}{' '}
+      You are about to finalise your submission for the {betchaAssessment.type.toLowerCase()}{' '}
       <i>&quot;{betchaAssessment.title}&quot;</i>.
     </p>
   ) : (

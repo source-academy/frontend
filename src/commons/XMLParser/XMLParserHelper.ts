@@ -3,9 +3,9 @@ import { Builder } from 'xml2js';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentType,
   BaseQuestion,
   GradingStatuses,
   IMCQQuestion,
@@ -60,24 +60,18 @@ export const storeLocalAssessmentOverview = (overview: AssessmentOverview): void
 
 export const makeEntireAssessment = (result: any): [AssessmentOverview, Assessment] => {
   const assessmentArr = makeAssessment(result);
-  const overview = makeAssessmentOverview(result, assessmentArr[1], assessmentArr[2]);
+  const overview = makeAssessmentOverview(result, assessmentArr[1]);
   return [overview, assessmentArr[0]];
 };
 
-const makeAssessmentOverview = (
-  result: any,
-  maxGradeVal: number,
-  maxXpVal: number
-): AssessmentOverview => {
+const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOverview => {
   const task: XmlParseStrTask = result.CONTENT.TASK[0];
   const rawOverview: XmlParseStrOverview = task.$;
   return {
-    category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
+    type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
-    grade: 1,
     id: EDITING_ID,
-    maxGrade: maxGradeVal,
     maxXp: maxXpVal,
     number: rawOverview.number || '',
     openAt: rawOverview.startdate,
@@ -91,13 +85,13 @@ const makeAssessmentOverview = (
   };
 };
 
-const makeAssessment = (result: any): [Assessment, number, number] => {
+const makeAssessment = (result: any): [Assessment, number] => {
   const task: XmlParseStrTask = result.CONTENT.TASK[0];
   const rawOverview: XmlParseStrOverview = task.$;
   const questionArr = makeQuestions(task);
   return [
     {
-      category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
+      type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
       id: EDITING_ID,
       globalDeployment: makeLibrary(task.DEPLOYMENT),
       graderDeployment: makeLibrary(task.GRADERDEPLOYMENT),
@@ -106,8 +100,7 @@ const makeAssessment = (result: any): [Assessment, number, number] => {
       questions: questionArr[0],
       title: rawOverview.title
     },
-    questionArr[1],
-    questionArr[2]
+    questionArr[1]
   ];
 };
 
@@ -147,8 +140,7 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
   }
 };
 
-const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
-  let maxGrade = 0;
+const makeQuestions = (task: XmlParseStrTask): [Question[], number] => {
   let maxXp = 0;
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = [];
   task.PROBLEMS[0].PROBLEM.forEach((problem: XmlParseStrProblem, curId: number) => {
@@ -161,11 +153,8 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
       graderLibrary: makeLibrary(problem.GRADERDEPLOYMENT),
       type: problem.$.type,
       xp: 0,
-      grade: 0,
-      maxGrade: parseInt(problem.$.maxgrade, 10),
       maxXp: localMaxXp
     };
-    maxGrade += parseInt(problem.$.maxgrade, 10);
     maxXp += localMaxXp;
     if (question.type === 'programming') {
       questions.push(makeProgramming(problem as XmlParseStrPProblem, question));
@@ -174,7 +163,7 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
       questions.push(makeMCQ(problem as XmlParseStrCProblem, question));
     }
   });
-  return [questions, maxGrade, maxXp];
+  return [questions, maxXp];
 };
 
 const makeMCQ = (problem: XmlParseStrCProblem, question: BaseQuestion): IMCQQuestion => {
@@ -306,7 +295,7 @@ export const assessmentToXml = (
   const rawOverview: XmlParseStrOverview = {
     coverimage: overview.coverImage,
     duedate: overview.closeAt,
-    kind: overview.category.toLowerCase(),
+    kind: overview.type.toLowerCase(),
     number: overview.number || '',
     startdate: overview.openAt,
     story: overview.story,
@@ -331,8 +320,7 @@ export const assessmentToXml = (
   assessment.questions.forEach((question: Question) => {
     const problem = {
       $: {
-        type: question.type,
-        maxgrade: question.maxGrade
+        type: question.type
       },
       SNIPPET: {
         SOLUTION: question.answer

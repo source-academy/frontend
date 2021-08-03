@@ -7,8 +7,20 @@ const mockShortDefaultState: SavedState = {
   session: {
     accessToken: defaultState.session.accessToken,
     refreshToken: defaultState.session.refreshToken,
+    courseRegId: defaultState.session.courseRegId,
     role: defaultState.session.role,
-    name: defaultState.session.name
+    name: defaultState.session.name,
+    userId: defaultState.session.userId,
+    courses: defaultState.session.courses,
+    courseId: defaultState.session.courseId,
+    courseName: defaultState.session.courseName,
+    courseShortName: defaultState.session.courseShortName,
+    viewable: defaultState.session.viewable,
+    enableGame: defaultState.session.enableGame,
+    enableAchievements: defaultState.session.enableAchievements,
+    enableSourcecast: defaultState.session.enableSourcecast,
+    moduleHelpText: defaultState.session.moduleHelpText,
+    assessmentConfigurations: defaultState.session.assessmentConfigurations
   },
   achievements: defaultState.achievement.achievements,
   playgroundEditorValue: defaultState.workspaces.playground.editorValue,

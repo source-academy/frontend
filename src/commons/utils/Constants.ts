@@ -8,6 +8,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
+const sourceAcademyDeploymentName = process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
@@ -22,8 +23,6 @@ const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const sharedbBackendUrl = process.env.REACT_APP_SHAREDB_BACKEND_URL || '';
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
-const enableGame = isTest || isTrue(process.env.REACT_APP_ENABLE_GAME);
-const enableAchievements = isTest || isTrue(process.env.REACT_APP_ENABLE_ACHIEVEMENTS);
 const enableGitHubAssessments = isTest || isTrue(process.env.REACT_APP_ENABLE_GITHUB_ASSESSMENTS);
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -76,6 +75,9 @@ export enum Links {
   luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
   piazza = 'https://piazza.com/class/kas136yscf8605',
 
+  resourcesForEducators = 'https://about.sourceacademy.org/educator/README.html',
+  resourcesForLearners = 'https://about.sourceacademy.org/learner/README.html',
+
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
   sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
@@ -102,6 +104,7 @@ export enum Links {
 const Constants = {
   sourceAcademyVersion,
   sourceAcademyEnvironment,
+  sourceAcademyDeploymentName,
   backendUrl,
   cadetLoggerUrl,
   useBackend,
@@ -115,8 +118,6 @@ const Constants = {
   moduleBackendUrl,
   authProviders,
   playgroundOnly,
-  enableGame,
-  enableAchievements,
   enableGitHubAssessments,
   sentryDsn,
   googleClientId,

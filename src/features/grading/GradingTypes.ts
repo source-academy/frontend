@@ -1,5 +1,5 @@
 import {
-  AssessmentCategory,
+  AssessmentType,
   AutogradingResult,
   GradingStatus,
   MCQChoice,
@@ -15,11 +15,7 @@ import { Notification } from '../../commons/notificationBadge/NotificationBadgeT
 export type GradingOverview = {
   assessmentId: number;
   assessmentName: string;
-  assessmentCategory: AssessmentCategory;
-  initialGrade: number;
-  gradeAdjustment: number;
-  currentGrade: number;
-  maxGrade: number;
+  assessmentType: AssessmentType;
   initialXp: number;
   xpBonus: number;
   xpAdjustment: number;
@@ -57,8 +53,6 @@ export type GradingQuestion = {
     id: number;
   };
   grade: {
-    grade: number;
-    gradeAdjustment: number;
     xp: number;
     xpAdjustment: number;
     comments?: string;
@@ -88,7 +82,6 @@ type Answer = {
   testcases: Testcase[];
   solution: number | string | null;
   answer: string | number | null;
-  maxGrade: number;
   maxXp: number;
   solutionTemplate?: string;
   choices?: MCQChoice[];

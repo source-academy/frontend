@@ -2,10 +2,13 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { OverallState, Role, SourceLanguage } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
@@ -16,11 +19,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
-import {
-  CHANGE_SUBLANGUAGE,
-  FETCH_SUBLANGUAGE,
-  WorkspaceLocation
-} from '../../commons/workspace/WorkspaceTypes';
+import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
@@ -40,11 +39,20 @@ import {
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  AdminPanelCourseRegistration,
+  CourseConfiguration,
+  CourseRegistration,
+  DELETE_ASSESSMENT_CONFIG,
+  DELETE_USER_COURSE_REGISTRATION,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -52,6 +60,11 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
   UNSUBMIT_SUBMISSION,
+  UPDATE_ASSESSMENT_CONFIGS,
+  UPDATE_COURSE_CONFIG,
+  UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_USER_ROLE,
+  UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -62,25 +75,35 @@ import {
   deleteAssessment,
   deleteSourcecastEntry,
   getAssessment,
+  getAssessmentConfigs,
   getAssessmentOverviews,
+  getCourseConfig,
   getGrading,
   getGradingOverviews,
   getGradingSummary,
+  getLatestCourseRegistrationAndConfiguration,
   getNotifications,
   getSourcecastIndex,
-  getSublanguage,
   getUser,
+  getUserCourseRegistrations,
   handleResponseError,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
   postAuth,
+  postCreateCourse,
   postGrading,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
-  postSublanguage,
   postUnsubmit,
+  putAssessmentConfigs,
+  putCourseConfig,
+  putLatestViewedCourse,
+  putNewUsers,
+  putUserRole,
+  removeAssessmentConfig,
+  removeUserCourseRegistration,
   updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
@@ -113,15 +136,85 @@ function* BackendSaga(): SagaIterator {
     if (!tokens) {
       return yield history.push('/');
     }
+    yield put(actions.setTokens(tokens));
 
-    const user: User | null = yield call(getUser, tokens);
+    // Note: courseRegistration, courseConfiguration and assessmentConfigurations
+    // are either all null OR all not null
+    const {
+      user,
+      courseRegistration,
+      courseConfiguration,
+      assessmentConfigurations
+    }: {
+      user: User | null;
+      courseRegistration: CourseRegistration | null;
+      courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
+    } = yield call(getUser, tokens);
+
     if (!user) {
-      return yield history.push('/');
+      return;
     }
 
-    yield put(actions.setTokens(tokens));
     yield put(actions.setUser(user));
+
+    // Handle case where user does not have a latest viewed course in the backend
+    // but is enrolled in some course (this happens occationally due to e.g. removal from a course)
+    if (courseConfiguration === null && user.courses.length > 0) {
+      yield put(actions.updateLatestViewedCourse(user.courses[0].courseId));
+    }
+
+    if (courseRegistration && courseConfiguration && assessmentConfigurations) {
+      yield put(actions.setCourseRegistration(courseRegistration));
+      yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+    }
     yield history.push('/academy');
+  });
+
+  yield takeEvery(
+    FETCH_USER_AND_COURSE,
+    function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
+      const tokens = yield selectTokens();
+
+      const {
+        user,
+        courseRegistration,
+        courseConfiguration,
+        assessmentConfigurations
+      }: {
+        user: User | null;
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getUser, tokens);
+
+      if (!user) {
+        return;
+      }
+
+      yield put(actions.setUser(user));
+
+      // Handle case where user does not have a latest viewed course in the backend
+      // but is enrolled in some course (this happens occationally due to e.g. removal from a course)
+      if (courseConfiguration === null && user.courses.length > 0) {
+        yield put(actions.updateLatestViewedCourse(user.courses[0].courseId));
+      }
+
+      if (courseRegistration && courseConfiguration && assessmentConfigurations) {
+        yield put(actions.setCourseRegistration(courseRegistration));
+        yield put(actions.setCourseConfiguration(courseConfiguration));
+        yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+      }
+    }
+  );
+
+  yield takeEvery(FETCH_COURSE_CONFIG, function* () {
+    const tokens: Tokens = yield selectTokens();
+    const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
+    if (config) {
+      yield put(actions.setCourseConfiguration(config));
+    }
   });
 
   yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
@@ -276,13 +369,12 @@ function* BackendSaga(): SagaIterator {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
     }
 
-    const { submissionId, questionId, gradeAdjustment, xpAdjustment, comments } = action.payload;
+    const { submissionId, questionId, xpAdjustment, comments } = action.payload;
     const tokens: Tokens = yield selectTokens();
 
     const resp: Response | null = yield postGrading(
       submissionId,
       questionId,
-      gradeAdjustment,
       xpAdjustment,
       tokens,
       comments
@@ -300,9 +392,7 @@ function* BackendSaga(): SagaIterator {
     const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
-          gradeAdjustment,
           xpAdjustment,
-          grade: gradingQuestion.grade.grade,
           xp: gradingQuestion.grade.xp,
           comments
         };
@@ -474,38 +564,236 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    FETCH_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.fetchSublanguage>): any {
-      const sublang: SourceLanguage | null = yield call(getSublanguage);
-      if (!sublang) {
-        return yield call(
-          showWarningMessage,
-          `Failed to load default Source sublanguage for Playground!`
-        );
-      }
-
-      yield put(actions.updateSublanguage(sublang));
-    }
-  );
-
-  yield takeEvery(
     CHANGE_SUBLANGUAGE,
     function* (action: ReturnType<typeof actions.changeSublanguage>): any {
       const tokens: Tokens = yield selectTokens();
       const { sublang } = action.payload;
 
-      const resp: Response | null = yield call(
-        postSublanguage,
-        sublang.chapter,
-        sublang.variant,
-        tokens
-      );
+      const resp: Response | null = yield call(putCourseConfig, tokens, {
+        sourceChapter: sublang.chapter,
+        sourceVariant: sublang.variant
+      });
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
 
-      yield put(actions.updateSublanguage(sublang));
+      yield put(
+        actions.setCourseConfiguration({
+          sourceChapter: sublang.chapter,
+          sourceVariant: sublang.variant
+        })
+      );
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_LATEST_VIEWED_COURSE,
+    function* (action: ReturnType<typeof actions.updateLatestViewedCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { courseId } = action.payload;
+
+      const resp: Response | null = yield call(putLatestViewedCourse, tokens, courseId);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const {
+        courseRegistration,
+        courseConfiguration,
+        assessmentConfigurations
+      }: {
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
+
+      if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
+        yield call(showWarningMessage, `Failed to load course!`);
+        return yield history.push('/welcome');
+      }
+
+      yield put(actions.setCourseRegistration(courseRegistration));
+      yield put(actions.setCourseConfiguration(courseConfiguration));
+      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+      yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
+      yield history.push('/academy');
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_COURSE_CONFIG,
+    function* (action: ReturnType<typeof actions.updateCourseConfig>): any {
+      const tokens: Tokens = yield selectTokens();
+      const courseConfig: UpdateCourseConfiguration = action.payload;
+
+      const resp: Response | null = yield call(putCourseConfig, tokens, courseConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.setCourseConfiguration(courseConfig));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(FETCH_ASSESSMENT_CONFIGS, function* (): any {
+    const tokens: Tokens = yield selectTokens();
+
+    const assessmentConfigs: AssessmentConfiguration[] | null = yield call(
+      getAssessmentConfigs,
+      tokens
+    );
+
+    if (assessmentConfigs) {
+      yield put(actions.setAssessmentConfigurations(assessmentConfigs));
+    }
+  });
+
+  yield takeEvery(
+    UPDATE_ASSESSMENT_CONFIGS,
+    function* (action: ReturnType<typeof actions.updateAssessmentConfigs>): any {
+      const tokens: Tokens = yield selectTokens();
+      const assessmentConfigs: AssessmentConfiguration[] = action.payload;
+
+      const resp: Response | null = yield call(putAssessmentConfigs, tokens, assessmentConfigs);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.setAssessmentConfigurations(assessmentConfigs));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    DELETE_ASSESSMENT_CONFIG,
+    function* (action: ReturnType<typeof actions.deleteAssessmentConfig>): any {
+      const tokens: Tokens = yield selectTokens();
+      const assessmentConfig: AssessmentConfiguration = action.payload;
+
+      const resp: Response | null = yield call(removeAssessmentConfig, tokens, assessmentConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+    }
+  );
+
+  yield takeEvery(
+    FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    function* (action: ReturnType<typeof actions.fetchAdminPanelCourseRegistrations>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const courseRegistrations: AdminPanelCourseRegistration[] | null = yield call(
+        getUserCourseRegistrations,
+        tokens
+      );
+      if (courseRegistrations) {
+        yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
+      }
+    }
+  );
+
+  yield takeEvery(CREATE_COURSE, function* (action: ReturnType<typeof actions.createCourse>): any {
+    const tokens: Tokens = yield selectTokens();
+    const courseConfig: UpdateCourseConfiguration = action.payload;
+
+    const resp: Response | null = yield call(postCreateCourse, tokens, courseConfig);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    const {
+      user,
+      courseRegistration,
+      courseConfiguration
+    }: {
+      user: User | null;
+      courseRegistration: CourseRegistration | null;
+      courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
+    } = yield call(getUser, tokens);
+
+    if (!user || !courseRegistration || !courseConfiguration) {
+      return yield showWarningMessage('An error occurred. Please try again.');
+    }
+
+    // Set CourseRegistration first to ensure correct courseId when inserting the placeholder
+    // AssessmentConfigurations in new course
+    yield put(actions.setUser(user));
+    yield put(actions.setCourseRegistration(courseRegistration));
+    yield put(actions.setCourseConfiguration(courseConfiguration));
+
+    // Add a placeholder AssessmentConfig to ensure that the course has at least 1 AssessmentType
+    const placeholderAssessmentConfig = [
+      {
+        type: 'Missions',
+        assessmentConfigId: -1,
+        isManuallyGraded: true,
+        displayInDashboard: true,
+        hoursBeforeEarlyXpDecay: 0,
+        earlySubmissionXp: 0
+      }
+    ];
+
+    const resp1: Response | null = yield call(
+      putAssessmentConfigs,
+      tokens,
+      placeholderAssessmentConfig
+    );
+    if (!resp1 || !resp1.ok) {
+      return yield handleResponseError(resp);
+    }
+    yield put(actions.setAssessmentConfigurations(placeholderAssessmentConfig));
+    yield call(showSuccessMessage, 'Successfully created your new course!');
+    yield history.push('/academy');
+  });
+
+  yield takeEvery(
+    ADD_NEW_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
+
+      const resp: Response | null = yield call(putNewUsers, tokens, users, provider);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'Users added!');
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_USER_ROLE,
+    function* (action: ReturnType<typeof actions.updateUserRole>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { courseRegId, role }: { courseRegId: number; role: Role } = action.payload;
+
+      const resp: Response | null = yield call(putUserRole, tokens, courseRegId, role);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'Role updated!');
+    }
+  );
+
+  yield takeEvery(
+    DELETE_USER_COURSE_REGISTRATION,
+    function* (action: ReturnType<typeof actions.deleteUserCourseRegistration>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { courseRegId }: { courseRegId: number } = action.payload;
+
+      const resp: Response | null = yield call(removeUserCourseRegistration, tokens, courseRegId);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'User deleted!');
     }
   );
 
@@ -585,10 +873,14 @@ function* BackendSaga(): SagaIterator {
     UPLOAD_ASSESSMENT,
     function* (action: ReturnType<typeof actions.uploadAssessment>): any {
       const tokens: Tokens = yield selectTokens();
-      const file = action.payload.file;
-      const forceUpdate = action.payload.forceUpdate;
+      const { file, forceUpdate, assessmentConfigId } = action.payload;
 
-      const resp: Response | null = yield uploadAssessment(file, tokens, forceUpdate);
+      const resp: Response | null = yield uploadAssessment(
+        file,
+        tokens,
+        forceUpdate,
+        assessmentConfigId
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
