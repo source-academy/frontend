@@ -52,7 +52,7 @@ export default class DialogueManager {
   private async showNextLine(resolve: () => void) {
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
     const { line, speakerDetail, actionIds, prompt } =
-      this.getDialogueGenerator().generateNextLine();
+      await this.getDialogueGenerator().generateNextLine();
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);

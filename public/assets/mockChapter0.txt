@@ -4,8 +4,9 @@ objectives
     finish
 
 gameStartActions
-    show_dialogue(welcome) if userstate.assessments.301
-    show_dialogue(unwelcome) if !userstate.assessments.301
+    // replace 173 with assessment id
+    show_dialogue(welcome) if userstate.assessments.173
+    show_dialogue(unwelcome) if !userstate.assessments.173
 
 checkpointCompleteActions
     show_dialogue(done)
@@ -92,16 +93,27 @@ dialogues
             update_character(scottie, happy)
 
     unwelcome
+        1
         @scottie, sad
         You haven't finished assessment
-        Finish assessment 301 first and come back?
-            navigate_to_assessment(405)
-        Anyways, welcome.
-        @you
-        Can I still go to places?
-        @scottie, happy
-        Yes, you can remain here.
-            move_character(scottie, hallway, right)
+        Finish assessment 173 first and come back?
+            navigate_to_assessment(173)
+        goto 2 
+        2
+        @scottie
+        Have you finished the assignment?
+          prompt: Have you finished?
+              Yes -> goto 4
+              I don't want to -> goto 3
+        3
+        @scottie
+        OK
+        4
+        @scottie
+        Hmmm
+            update_assessment_status*()
+        Let me check
+        goto 2 if !userstate.assessments.173 else 3
 
     what, What should I do now, Scottie?
         @you
