@@ -258,13 +258,14 @@ const Application: React.FC<ApplicationProps> = props => {
               <div>
                 Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in
                 programming and the ideas behind programming, and to make these ideas universally
-                accessible.
+                accessible. This includes educational research!
               </div>
               <br />
               <div>
-                This includes educational research! With your help, <b>anonymized</b> data and
-                programs may be collected solely for research purposes during your time in this
-                course.
+                We collect programs that students run in Source Academy @ NUS and store them
+                anonymously for our research. You are free to opt out of this collection, with no
+                penalty for you whatsoever. Contact your course instructor if you have questions or
+                concerns about this research.
               </div>
             </div>
             <div className={Classes.DIALOG_FOOTER}>
