@@ -73,47 +73,6 @@ const runesLibrary = [
   'picture_mse'
 ];
 
-const curvesLibrary = [
-  'make_point',
-  'make_3D_point',
-  'make_color_point',
-  'make_3D_color_point',
-  'draw_connected',
-  'draw_connected_full_view',
-  'draw_connected_full_view_proportional',
-  'draw_points_on',
-  'draw_points_full_view_proportional',
-  'draw_3D_connected',
-  'draw_3D_connected_full_view',
-  'draw_3D_connected_full_view_proportional',
-  'draw_3D_points_on',
-  'draw_3D_points_full_view_proportional',
-  'x_of',
-  'y_of',
-  'z_of',
-  'r_of',
-  'g_of',
-  'b_of',
-  'unit_line',
-  'unit_line_at',
-  'unit_circle',
-  'connect_rigidly',
-  'connect_ends',
-  'put_in_standard_position',
-  'translate_curve',
-  'scale_proportional',
-  /** Contest functions */
-  'scale_curve',
-  'repeated',
-  'rotate_around_origin',
-  'arc', // used in GOSPERIZE
-  'invert', // used in DRAGONIZE
-  'alternative_unit_circle', // undocumented
-  'full_view_proportional', // undocumented
-  'squeeze_full_view', // undocumented
-  'squeeze_rectangular_portion' // undocumented
-];
-
 const soundsLibrary = [
   'make_sound',
   'get_wave',
@@ -190,15 +149,12 @@ const machineLearningLibrary = [
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryName.NONE, []],
   [ExternalLibraryName.RUNES, runesLibrary],
-  [ExternalLibraryName.CURVES, curvesLibrary],
+  [ExternalLibraryName.CURVES, []],
   [ExternalLibraryName.SOUNDS, soundsLibrary],
   [ExternalLibraryName.BINARYTREES, binaryTreesLibrary],
   [ExternalLibraryName.PIXNFLIX, videoLibrary],
   [ExternalLibraryName.MACHINELEARNING, machineLearningLibrary],
-  [
-    ExternalLibraryName.ALL,
-    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
-  ]
+  [ExternalLibraryName.ALL, runesLibrary.concat(soundsLibrary, binaryTreesLibrary, videoLibrary)]
 ];
 
 export const externalLibraries: Map<string, string[]> = new Map(libEntries);

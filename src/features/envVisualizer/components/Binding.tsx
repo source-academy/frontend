@@ -33,7 +33,8 @@ export class Binding implements Visible {
     /** frame this binding is in */
     readonly frame: Frame,
     /** previous binding (the binding above it) */
-    readonly prevBinding: Binding | null
+    readonly prevBinding: Binding | null,
+    readonly isConstant: boolean = false
   ) {
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
@@ -44,7 +45,7 @@ export class Binding implements Visible {
       this.y = this.frame.y + Config.FramePaddingY;
     }
 
-    this.keyString += Config.VariableColon;
+    this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
     const keyYOffset =

@@ -136,9 +136,9 @@ Array [
       },
     },
   },
-  "fn: ",
+  "fn:= ",
   [Function],
-  "x: ",
+  "x:= ",
   Array [
     "long string",
     Array [
@@ -162,7 +162,7 @@ Array [
     5,
     6,
   ],
-  "y: ",
+  "y:= ",
   Array [
     Array [
       [Function],
@@ -352,9 +352,9 @@ Array [
       },
     },
   },
-  "fn: ",
+  "fn:= ",
   [Function],
-  "x: ",
+  "x:= ",
   Array [
     1,
     Array [
@@ -366,7 +366,7 @@ Array [
     ],
     4,
   ],
-  "l: ",
+  "l:= ",
   Array [
     1,
     Array [
@@ -530,7 +530,7 @@ Array [
       },
     },
   },
-  "x1: ",
+  "x1:= ",
   Array [
     1,
     Array [
@@ -544,7 +544,7 @@ Array [
       ],
     ],
   ],
-  "x2: ",
+  "x2:= ",
   Array [
     3,
     Array [
@@ -706,7 +706,7 @@ Array [
       },
     },
   },
-  "e: ",
+  "e:= ",
   Array [
     Array [
       3,
@@ -735,12 +735,12 @@ Array [
       ],
     ],
   ],
-  "f: ",
+  "f:= ",
   Array [
     1,
     2,
   ],
-  "g: ",
+  "g:= ",
   Array [
     Array [
       [Function],
@@ -769,7 +769,7 @@ Array [
       ],
     ],
   ],
-  "y: ",
+  "y:= ",
   Array [
     Array [
       1,
@@ -866,9 +866,9 @@ Array [
   0,
   "y: ",
   10,
-  "f: ",
+  "f:= ",
   [Function],
-  "z: ",
+  "z:= ",
   [Function],
   Object {
     "callExpression": Object {
@@ -1101,7 +1101,7 @@ Array [
       },
     },
   },
-  "x: ",
+  "x:= ",
   Array [
     1,
     Array [
@@ -1188,7 +1188,7 @@ Array [
       },
     },
   },
-  "x: ",
+  "x:= ",
   Array [],
 ]
 `;
