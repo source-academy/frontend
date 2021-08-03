@@ -187,6 +187,8 @@ class GameSoundManager {
       duration: fadeDuration
     });
 
+    // TODO: fix `TypeError: Cannot read property 'disconnect' of null` error
+    // when user navigates away from game scene before fadeDuration * 2
     setTimeout(() => sound.destroy(), fadeDuration * 2);
   }
 

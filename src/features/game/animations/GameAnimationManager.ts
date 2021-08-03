@@ -67,7 +67,7 @@ export default class GameAnimationManager {
         GameGlobalAPI.getInstance().addItem(GameItemType.objects, currLoc, image.key);
         break;
       case AnimType.Background:
-        GameGlobalAPI.getInstance().renderBackgroundLayerContainer(image.path);
+        GameGlobalAPI.getInstance().renderBackgroundLayerContainer(image.key);
         break;
     }
   }
@@ -114,7 +114,9 @@ export default class GameAnimationManager {
    */
   public startAnimation(image: ImageAsset) {
     if (this.isSprite(image)) {
-      this.getAnimation(image).play(image.path);
+      const sprite = this.getAnimation(image);
+      sprite.play(image.path, false);
+      this.game.add.existing(sprite);
     }
   }
 
