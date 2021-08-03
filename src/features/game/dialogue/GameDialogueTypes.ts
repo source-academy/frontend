@@ -25,7 +25,7 @@ export type DialogueLine = IGameActionable & {
   line: string;
   speakerDetail?: SpeakerDetail | null;
   goto?: {
-    condition: ActionCondition | null;
+    conditions: ActionCondition[];
     part: PartName;
     altPart: PartName | null;
   };

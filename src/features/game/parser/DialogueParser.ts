@@ -97,8 +97,13 @@ export default class DialogueParser {
           const [conditionalsString, altPart] = postpend
             ? StringUtils.splitByChar(postpend, 'else')
             : [null, null];
+          const conditions = conditionalsString
+            ? StringUtils.splitByChar(conditionalsString, 'AND').map(condition =>
+                ConditionParser.parse(condition)
+              )
+            : [];
           dialogueLines[dialogueLines.length - 1].goto = {
-            condition: conditionalsString ? ConditionParser.parse(conditionalsString) : null,
+            conditions,
             part: gotoString.split(' ')[1],
             altPart: altPart
           };

@@ -29,16 +29,17 @@ export default class DialogueGenerator {
     }
 
     if (dialogueLine.goto) {
-      let currPart = dialogueLine.goto.part;
-      if (dialogueLine.goto.condition) {
-        const conditionCheck = await GameActionConditionChecker.checkConditionSatisfied(
-          dialogueLine.goto.condition
-        );
-        if (!conditionCheck && dialogueLine.goto.altPart) {
-          currPart = dialogueLine.goto.altPart;
-        }
+      let currPart: string | null = dialogueLine.goto.part;
+      const conditionCheck = await GameActionConditionChecker.checkAllConditionsSatisfied(
+        dialogueLine.goto.conditions
+      );
+      if (!conditionCheck) {
+        currPart = dialogueLine.goto.altPart;
       }
-      if (this.dialogueContent.get(currPart)) {
+
+      if (!currPart) {
+        this.currLineNum++;
+      } else if (this.dialogueContent.get(currPart)) {
         this.currPart = currPart;
         this.currLineNum = 0;
       } else {
