@@ -28,7 +28,11 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
-import { InfiniteLoopErrorType, reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
+import {
+  InfiniteLoopErrorType,
+  reportInfiniteLoopError,
+  reportPotentialInfiniteLoop
+} from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
@@ -802,6 +806,22 @@ describe('evalCode', () => {
           const lastError = thisContext.errors[thisContext.errors.length - 1];
           expect(lastError.explain()).not.toContain('no base case');
         });
+    });
+
+    test('undetected stack overflows sent to sentry', () => {
+      state = {
+        ...state,
+        session: { ...state.session, experimentApproval: true, experimentCoinflip: true }
+      };
+      context = createContext(3);
+      const theCode = 'function f(x){x<1?1:f(x-1)+f(x-2);} f(100000);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .call(reportPotentialInfiniteLoop, 'RangeError: Maximum call stack size exceeded', [
+          theCode
+        ])
+        .silentRun();
     });
   });
 
