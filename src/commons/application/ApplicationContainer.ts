@@ -8,6 +8,7 @@ import {
   fetchUserAndCourse,
   loginGitHub,
   logoutGitHub,
+  updateCourseResearchAgreement,
   updateLatestViewedCourse
 } from './actions/SessionActions';
 import Application, { DispatchProps, StateProps } from './Application';
@@ -28,7 +29,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   courseShortName: state.session.courseShortName,
   enableAchievements: state.session.enableAchievements,
   enableSourcecast: state.session.enableSourcecast,
-  assessmentTypes: state.session.assessmentConfigurations?.map(e => e.type)
+  assessmentTypes: state.session.assessmentConfigurations?.map(e => e.type),
+  agreedToResearch: state.session.agreedToResearch
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
@@ -39,7 +41,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleGitHubLogOut: logoutGitHub,
       fetchUserAndCourse: fetchUserAndCourse,
       updateLatestViewedCourse: updateLatestViewedCourse,
-      handleCreateCourse: createCourse
+      handleCreateCourse: createCourse,
+      updateCourseResearchAgreement: updateCourseResearchAgreement
     },
     dispatch
   );

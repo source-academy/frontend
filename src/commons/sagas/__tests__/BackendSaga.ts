@@ -50,6 +50,7 @@ import {
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_COURSE_CONFIG,
+  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -99,6 +100,7 @@ import {
   postReautogradeSubmission,
   putAssessmentConfigs,
   putCourseConfig,
+  putCourseResearchAgreement,
   putLatestViewedCourse,
   putNewUsers,
   putUserRole,
@@ -150,7 +152,8 @@ const mockCourseRegistration1: CourseRegistration = {
   story: {
     story: '',
     playStory: false
-  } as Story
+  } as Story,
+  agreedToResearch: null
 };
 
 const mockCourseConfiguration1: CourseConfiguration = {
@@ -178,7 +181,8 @@ const mockCourseRegistration2: CourseRegistration = {
   story: {
     story: '',
     playStory: false
-  } as Story
+  } as Story,
+  agreedToResearch: true
 };
 
 const mockCourseConfiguration2: CourseConfiguration = {
@@ -1098,6 +1102,32 @@ describe('Test UPDATE_USER_ROLE action', () => {
       .not.call.fn(showSuccessMessage)
       .provide([[call(putUserRole, mockTokens, courseRegId, role), errorResp]])
       .dispatch({ type: UPDATE_USER_ROLE, payload: { courseRegId, role } })
+      .silentRun();
+  });
+});
+
+describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
+  const agreedToResearch = true;
+
+  test('updated successfully', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(putCourseResearchAgreement, mockTokens, agreedToResearch)
+      .put(setCourseRegistration({ agreedToResearch }))
+      .call.fn(showSuccessMessage)
+      .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), okResp]])
+      .dispatch({ type: UPDATE_COURSE_RESEARCH_AGREEMENT, payload: { agreedToResearch } })
+      .silentRun();
+  });
+
+  test('update unsuccessful', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStates)
+      .call(putCourseResearchAgreement, mockTokens, agreedToResearch)
+      .not.put.actionType(SET_COURSE_REGISTRATION)
+      .not.call.fn(showSuccessMessage)
+      .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), errorResp]])
+      .dispatch({ type: UPDATE_COURSE_RESEARCH_AGREEMENT, payload: { agreedToResearch } })
       .silentRun();
   });
 });

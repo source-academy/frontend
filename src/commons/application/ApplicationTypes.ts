@@ -298,7 +298,7 @@ export const defaultSession: SessionState = {
   },
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
-  experimentApproval: false, // TODO: get this from backend or sth
+  agreedToResearch: undefined,
   experimentCoinflip: Math.random() < 0.5,
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,

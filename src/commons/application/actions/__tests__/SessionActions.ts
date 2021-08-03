@@ -38,6 +38,7 @@ import {
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_COURSE_CONFIG,
+  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
@@ -79,6 +80,7 @@ import {
   updateAssessmentConfigs,
   updateAssessmentOverviews,
   updateCourseConfig,
+  updateCourseResearchAgreement,
   updateGrading,
   updateGradingOverviews,
   updateHistoryHelpers,
@@ -256,7 +258,8 @@ test('setCourseRegistration generates correct action object', () => {
     story: {
       story: '',
       playStory: false
-    } as Story
+    } as Story,
+    agreedToResearch: true
   };
   const action = setCourseRegistration(courseRegistration);
   expect(action).toEqual({
@@ -715,6 +718,15 @@ test('updateUserRole generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_USER_ROLE,
     payload: { courseRegId, role }
+  });
+});
+
+test('updateCourseResearchAgreement generates correct action object', () => {
+  const agreedToResearch = true;
+  const action = updateCourseResearchAgreement(agreedToResearch);
+  expect(action).toEqual({
+    type: UPDATE_COURSE_RESEARCH_AGREEMENT,
+    payload: { agreedToResearch }
   });
 });
 

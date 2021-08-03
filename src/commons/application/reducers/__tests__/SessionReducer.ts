@@ -130,7 +130,8 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
     story: {
       story: '',
       playStory: false
-    } as Story
+    } as Story,
+    agreedToReseach: true
   };
   const action = {
     type: SET_COURSE_REGISTRATION,

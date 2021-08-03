@@ -785,7 +785,7 @@ export function* evalCode(
     if (context.variant === undefined || context.variant === 'default') {
       const infiniteLoopData = getInfiniteLoopData(context);
       if (infiniteLoopData) {
-        const approval = yield select((state: OverallState) => state.session.experimentApproval);
+        const approval = yield select((state: OverallState) => state.session.agreedToResearch);
         if (approval) {
           events.push(EventType.INFINITE_LOOP);
           yield call(reportInfiniteLoopError, ...infiniteLoopData);

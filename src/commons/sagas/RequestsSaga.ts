@@ -187,6 +187,24 @@ export const putLatestViewedCourse = async (
 };
 
 /**
+ * PUT /courses/{courseId}/user/research_agreement
+ */
+export const putCourseResearchAgreement = async (
+  tokens: Tokens,
+  agreedToResearch: boolean
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/user/research_agreement`, 'PUT', {
+    ...tokens,
+    body: { agreedToResearch },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
  * POST /config/create
  */
 export const postCreateCourse = async (
