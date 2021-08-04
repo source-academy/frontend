@@ -1,7 +1,7 @@
-import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
+import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { mandatory } from 'src/features/game/utils/GameUtils';
+import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import StringUtils from 'src/features/game/utils/StringUtils';
 
 import { loadImage } from '../../game/utils/LoaderUtils';
@@ -46,7 +46,7 @@ export default class SSObjectManager implements ICheckpointLoggable {
     const assetKeyOnLoad = await loadImage(
       this.getObjectPlacement(),
       objectAssetKey,
-      Constants.assetsFolder + shortPath
+      toS3Path(shortPath, true)
     );
     this.renderObject(assetKeyOnLoad);
   }

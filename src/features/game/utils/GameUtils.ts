@@ -1,3 +1,5 @@
+import { courseId } from 'src/features/storySimulator/StorySimulatorRequest';
+
 import { Constants } from '../commons/CommonConstants';
 
 /**
@@ -51,10 +53,12 @@ export function limitNumber(value: number, min: number, max: number) {
  * Appends the s3 file path to a short path name
  *
  * @param filename the short path of a filename
+ * @param courseCoded true iff asset is be course-specific
  * @returns {string} new path to file including full s3 link
  */
-export function toS3Path(fileName: string) {
-  return Constants.assetsFolder + fileName;
+export function toS3Path(fileName: string, courseCoded = false) {
+  const courseCode = courseCoded ? `/${courseId()}` : '';
+  return Constants.assetsFolder + courseCode + fileName;
 }
 
 /**

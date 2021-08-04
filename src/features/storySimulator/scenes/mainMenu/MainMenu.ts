@@ -33,8 +33,12 @@ class MainMenu extends Phaser.Scene {
     this.layerManager = new GameLayerManager(this);
 
     addLoadingScreen(this);
-    Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
-    Object.values(SSImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    Object.values(ImageAssets).forEach(asset =>
+      this.load.image(asset.key, toS3Path(asset.path, false))
+    );
+    Object.values(SSImageAssets).forEach(asset =>
+      this.load.image(asset.key, toS3Path(asset.path, false))
+    );
     Object.values(FontAssets).forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );

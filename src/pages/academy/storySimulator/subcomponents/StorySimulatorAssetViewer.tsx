@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 
 type AssetProps = {
   assetPath: string;
@@ -18,11 +19,11 @@ const AssetViewer = memo(({ assetPath }: AssetProps) => {
       <img
         alt="asset"
         crossOrigin={'anonymous'}
-        src={Constants.assetsFolder + displayAssetPath}
+        src={toS3Path(displayAssetPath, true)}
         width="150px"
         onError={e => {
           (e.target as any).onerror = null;
-          (e.target as any).src = Constants.assetsFolder + Constants.defaultAssetPath;
+          (e.target as any).src = toS3Path(Constants.defaultAssetPath, false);
         }}
       ></img>
     </>

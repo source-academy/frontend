@@ -17,7 +17,7 @@ import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
-import { mandatory } from '../../utils/GameUtils';
+import { mandatory, toS3Path } from '../../utils/GameUtils';
 import { loadImage, loadSound, loadSpritesheet } from '../../utils/LoaderUtils';
 import { resizeOverflow } from '../../utils/SpriteUtils';
 import { RoomConstants, roomDefaultCode } from './RoomPreviewConstants';
@@ -173,7 +173,7 @@ export default class RoomPreview extends Phaser.Scene {
         preloadImageMap: this.preloadImageMap,
         preloadSoundMap: this.preloadSoundMap,
         preloadSpritesheetMap: this.preloadSpritesheetMap,
-        remotePath: Constants.assetsFolder,
+        remotePath: toS3Path('', true),
         screenSize: screenSize,
         createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
       }
