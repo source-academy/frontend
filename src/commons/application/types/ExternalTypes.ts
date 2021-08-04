@@ -11,7 +11,6 @@ export type External = {
 export enum ExternalLibraryName {
   NONE = 'NONE',
   RUNES = 'RUNES',
-  CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
   BINARYTREES = 'BINARYTREES',
   PIXNFLIX = 'PIXNFLIX',
@@ -149,7 +148,6 @@ const machineLearningLibrary = [
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryName.NONE, []],
   [ExternalLibraryName.RUNES, runesLibrary],
-  [ExternalLibraryName.CURVES, []],
   [ExternalLibraryName.SOUNDS, soundsLibrary],
   [ExternalLibraryName.BINARYTREES, binaryTreesLibrary],
   [ExternalLibraryName.PIXNFLIX, videoLibrary],
