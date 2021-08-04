@@ -600,35 +600,6 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
         });
       });
   });
-
-  test('loads CURVES library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryName.CURVES;
-
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
-
-    return expectSaga(workspaceSaga)
-      .put.like({ action: endClearContext(library, workspaceLocation) })
-      .dispatch({
-        type: BEGIN_CLEAR_CONTEXT,
-        payload: { library, workspaceLocation, shouldInitLibrary: true }
-      })
-      .silentRun()
-      .then(() => {
-        expect(loadLib).toHaveBeenCalledWith('CURVES');
-        expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('curve');
-        globals.forEach(item => {
-          expect(window[item[0]]).toEqual(item[1]);
-        });
-      });
-  });
 });
 
 describe('evalCode', () => {

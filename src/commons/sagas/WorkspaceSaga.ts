@@ -506,10 +506,6 @@ export default function* WorkspaceSaga(): SagaIterator {
             (window as any).getReadyWebGLForCanvas('3d');
             (window as any).getReadyStringifyForRunes(stringify);
             break;
-          case ExternalLibraryName.CURVES:
-            (window as any).loadLib('CURVES');
-            (window as any).getReadyWebGLForCanvas('curve');
-            break;
           case ExternalLibraryName.MACHINELEARNING:
             (window as any).loadLib('MACHINELEARNING');
             break;

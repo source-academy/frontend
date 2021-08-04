@@ -290,11 +290,11 @@ export const mockRuneLibrary: Library = {
   globals: mockGlobals
 };
 
-const mockCurveLibrary: Library = {
+const mockBinaryTreeLibrary: Library = {
   chapter: 4,
   external: {
-    name: ExternalLibraryName.CURVES,
-    symbols: externalLibraries.get(ExternalLibraryName.CURVES)!
+    name: ExternalLibraryName.BINARYTREES,
+    symbols: externalLibraries.get(ExternalLibraryName.BINARYTREES)!
   },
   globals: mockGlobals
 };
@@ -399,7 +399,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   {
     answer: 3,
     content:
-      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
+      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the binary tree library! Option C has a null hint!',
     choices: [
       {
         content: '**Option** `A`',
@@ -419,7 +419,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 2,
-    library: mockCurveLibrary,
+    library: mockBinaryTreeLibrary,
     type: 'mcq',
     solution: 0,
     xp: 0,
@@ -429,7 +429,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   {
     answer: 3,
     content:
-      'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+      'This is the 4th question. Oddly enough, it is a graded MCQ question that uses the binary tree library!',
     choices: [
       {
         content: 'A',
@@ -449,7 +449,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 3,
-    library: mockCurveLibrary,
+    library: mockBinaryTreeLibrary,
     type: 'mcq',
     solution: null,
     xp: 0,
@@ -484,7 +484,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
   }`,
     content: 'You can see autograding results!!!',
     id: 0,
-    library: mockCurveLibrary,
+    library: mockRuneLibrary,
     prepend: '',
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
