@@ -21,6 +21,8 @@ export const backgroundUrl = `${achievementAssets}/view-background`;
 export const cardBackgroundUrl = `${achievementAssets}/card-background`;
 export const coverImageUrl = `${achievementAssets}/cover-image`;
 
+// Keeping these urls in as comments in case future changes want to use them
+
 export const getAbilityBackground = () => {
   return {
     background: `url(${backgroundUrl}/exploration.png) no-repeat center/cover`
@@ -79,7 +81,7 @@ export const getAbilityGlow = () => ({
   border: `1px solid ${getAbilityColor()}`,
   boxShadow: `0 0 10px ${getAbilityColor()}`
 });
-  /*
+/*
   ability === AchievementAbility.FLEX
     ? {
         border: `1px solid ${getAbilityColor(ability)}`,

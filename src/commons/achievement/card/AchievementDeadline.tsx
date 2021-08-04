@@ -15,9 +15,7 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
 
   // red deadline color for core achievements that are expiring in less than 2 days
   const deadlineColor =
-    deadline !== undefined &&
-    !isExpired(deadline) &&
-    timeFromExpired(deadline) <= twoDays
+    deadline !== undefined && !isExpired(deadline) && timeFromExpired(deadline) <= twoDays
       ? DeadlineColors.RED
       : DeadlineColors.BLACK;
 
