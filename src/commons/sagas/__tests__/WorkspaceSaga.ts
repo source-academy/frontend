@@ -70,7 +70,7 @@ function generateDefaultState(
     ...defaultState,
     session: {
       ...defaultState.session,
-      experimentApproval: false,
+      agreedToResearch: false,
       experimentCoinflip: true
     },
     workspaces: {
@@ -733,7 +733,7 @@ describe('evalCode', () => {
     test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
       state = {
         ...state,
-        session: { ...state.session, experimentApproval: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
       };
       const thisContext = createContext(3);
       context = thisContext;
@@ -761,7 +761,7 @@ describe('evalCode', () => {
     test('does not send correct data to sentry if approval is false', () => {
       state = {
         ...state,
-        session: { ...state.session, experimentApproval: false, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: false, experimentCoinflip: true }
       };
       context = createContext(3);
       const theCode = 'function f(x){f(x);} f(1);';
@@ -811,7 +811,7 @@ describe('evalCode', () => {
     test('undetected stack overflows sent to sentry', () => {
       state = {
         ...state,
-        session: { ...state.session, experimentApproval: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
       };
       context = createContext(3);
       const theCode = 'function f(x){x<1?1:f(x-1)+f(x-2);} f(100000);';

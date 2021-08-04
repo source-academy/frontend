@@ -78,7 +78,8 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     story: {
       story: 'mission-1',
       playStory: true
-    }
+    },
+    agreedToResearch: true
   },
   {
     courseRegId: 2,
@@ -90,7 +91,8 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     story: {
       story: 'mission-1',
       playStory: true
-    }
+    },
+    agreedToResearch: true
   }
 ];
 

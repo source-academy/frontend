@@ -788,7 +788,7 @@ export function* evalCode(
 
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === undefined || context.variant === 'default') {
-      const approval = yield select((state: OverallState) => state.session.experimentApproval);
+      const approval = yield select((state: OverallState) => state.session.agreedToResearch);
       if (approval) {
         const infiniteLoopData = getInfiniteLoopData(context);
         const lastError = context.errors[context.errors.length - 1];

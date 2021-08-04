@@ -57,6 +57,7 @@ import {
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_COURSE_CONFIG,
+  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
@@ -106,7 +107,7 @@ export const setUser = (user: User) => action(SET_USER, user);
 export const setCourseConfiguration = (courseConfiguration: UpdateCourseConfiguration) =>
   action(SET_COURSE_CONFIGURATION, courseConfiguration);
 
-export const setCourseRegistration = (courseRegistration: CourseRegistration) =>
+export const setCourseRegistration = (courseRegistration: Partial<CourseRegistration>) =>
   action(SET_COURSE_REGISTRATION, courseRegistration);
 
 export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
@@ -231,3 +232,6 @@ export const updateUserRole = (courseRegId: number, role: Role) =>
 
 export const deleteUserCourseRegistration = (courseRegId: number) =>
   action(DELETE_USER_COURSE_REGISTRATION, { courseRegId });
+
+export const updateCourseResearchAgreement = (agreedToResearch: boolean) =>
+  action(UPDATE_COURSE_RESEARCH_AGREEMENT, { agreedToResearch });

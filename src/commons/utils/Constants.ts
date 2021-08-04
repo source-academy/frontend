@@ -9,6 +9,7 @@ const isTest = process.env.NODE_ENV === 'test';
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
 const sourceAcademyDeploymentName = process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
+const showResearchPrompt = isTest || isTrue(process.env.REACT_APP_SHOW_RESEARCH_PROMPT);
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
@@ -105,6 +106,7 @@ const Constants = {
   sourceAcademyVersion,
   sourceAcademyEnvironment,
   sourceAcademyDeploymentName,
+  showResearchPrompt,
   backendUrl,
   cadetLoggerUrl,
   useBackend,
