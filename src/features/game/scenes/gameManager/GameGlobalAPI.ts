@@ -413,6 +413,10 @@ class GameGlobalAPI {
     }
   }
 
+  public async updateAssessmentState() {
+    await SourceAcademyGame.getInstance().getUserStateManager().loadAssessments();
+  }
+
   /////////////////////
   //   Characters    //
   /////////////////////
