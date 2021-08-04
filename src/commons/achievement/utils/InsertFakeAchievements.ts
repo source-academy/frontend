@@ -1,5 +1,5 @@
 import { cardBackgroundUrl } from '../../../features/achievement/AchievementConstants';
-import { AchievementAbility, GoalType } from '../../../features/achievement/AchievementTypes';
+import { GoalType } from '../../../features/achievement/AchievementTypes';
 import { AssessmentOverview } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
@@ -49,10 +49,6 @@ function insertFakeAchievements(
     inferencer.insertFakeAchievement({
       uuid: idString,
       title: assessmentOverview.title,
-      ability:
-        assessmentOverview.type === 'Missions' || assessmentOverview.type === 'Paths'
-          ? AchievementAbility.CORE
-          : AchievementAbility.EFFORT,
       xp:
         assessmentOverview.gradingStatus === 'graded'
           ? assessmentOverview.xp

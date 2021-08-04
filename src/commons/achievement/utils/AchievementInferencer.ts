@@ -3,7 +3,6 @@ import { v4 } from 'uuid';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   AchievementStatus,
@@ -86,7 +85,6 @@ class AchievementInferencer {
   private invalidAchievement: AchievementItem = {
     uuid: 'invalid',
     title: 'invalid',
-    ability: AchievementAbility.EXPLORATION,
     xp: 0,
     isVariableXp: false,
     deadline: undefined,

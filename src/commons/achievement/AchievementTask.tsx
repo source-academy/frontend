@@ -19,7 +19,7 @@ function AchievementTask(props: AchievementTaskProps) {
 
   const inferencer = useContext(AchievementContext);
   const prerequisiteUuids = [...inferencer.getImmediateChildren(uuid)];
-  const taskColor = getAbilityColor(inferencer.getAchievement(uuid).ability);
+  const taskColor = getAbilityColor();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);

@@ -3,7 +3,6 @@ import {
   coverImageUrl
 } from '../../../../features/achievement/AchievementConstants';
 import {
-  AchievementAbility,
   AchievementItem,
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';
@@ -17,7 +16,6 @@ export const viewTemplate: AchievementView = {
 export const achievementTemplate: AchievementItem = {
   uuid: '',
   title: 'Achievement Title Here',
-  ability: AchievementAbility.CORE,
   xp: 0,
   isVariableXp: false,
   isTask: false,

@@ -1,5 +1,4 @@
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   GoalDefinition,
@@ -38,7 +37,6 @@ export const frontendifyAchievementItem = (achievement: any) =>
   ({
     uuid: achievement.uuid || '',
     title: achievement.title || '',
-    ability: achievement.ability as AchievementAbility,
     xp: achievement.xp,
     isVariableXp: achievement.isVariableXp,
     deadline: achievement.deadline === null ? undefined : new Date(achievement.deadline),

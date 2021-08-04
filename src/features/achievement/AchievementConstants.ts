@@ -2,7 +2,7 @@ import React from 'react';
 
 import AchievementInferencer from '../../commons/achievement/utils/AchievementInferencer';
 import { Links } from '../../commons/utils/Constants';
-import { AchievementAbility, FilterStatus } from './AchievementTypes';
+import { FilterStatus } from './AchievementTypes';
 
 export const AchievementContext = React.createContext(new AchievementInferencer([], []));
 
@@ -21,7 +21,11 @@ export const backgroundUrl = `${achievementAssets}/view-background`;
 export const cardBackgroundUrl = `${achievementAssets}/card-background`;
 export const coverImageUrl = `${achievementAssets}/cover-image`;
 
-export const getAbilityBackground = (ability: AchievementAbility) => {
+export const getAbilityBackground = () => {
+  return {
+    background: `url(${backgroundUrl}/exploration.png) no-repeat center/cover`
+  };
+  /*
   switch (ability) {
     case AchievementAbility.CORE:
       return {
@@ -48,9 +52,12 @@ export const getAbilityBackground = (ability: AchievementAbility) => {
         background: ``
       };
   }
+  */
 };
 
-export const getAbilityColor = (ability: AchievementAbility) => {
+export const getAbilityColor = () => {
+  return '#9ce'; // blue
+  /*
   switch (ability) {
     case AchievementAbility.CORE:
       return '#fb0'; // gold
@@ -65,27 +72,33 @@ export const getAbilityColor = (ability: AchievementAbility) => {
     default:
       return '';
   }
+  */
 };
 
-export const getAbilityGlow = (ability: AchievementAbility) =>
+export const getAbilityGlow = () => ({
+  border: `1px solid ${getAbilityColor()}`,
+  boxShadow: `0 0 10px ${getAbilityColor()}`
+});
+  /*
   ability === AchievementAbility.FLEX
     ? {
         border: `1px solid ${getAbilityColor(ability)}`,
         boxShadow: `
-          0 0 10px #ff0,   /* yellow */
-          -1px 0 9px #f0f, /* magenta */
-          1px 0 9px #0ff   /* cyan */`
+          0 0 10px #ff0,   
+          -1px 0 9px #f0f, 
+          1px 0 9px #0ff`
       }
     : {
         border: `1px solid ${getAbilityColor(ability)}`,
         boxShadow: `0 0 10px ${getAbilityColor(ability)}`
       };
+  */
 
 export const getFilterColor = (globalStatus: FilterStatus, ownStatus: FilterStatus) =>
   globalStatus === ownStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
-// Make selected achievements + view and Flex achievements glow
-export const handleGlow = (uuid: string, focusUuid: string, ability: AchievementAbility) =>
-  ability === AchievementAbility.FLEX || uuid === focusUuid ? getAbilityGlow(ability) : undefined;
+// Make selected achievement + view glow
+export const handleGlow = (uuid: string, focusUuid: string) =>
+  uuid === focusUuid ? getAbilityGlow() : undefined;
 
 export const xpPerLevel = 1000;
