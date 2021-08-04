@@ -1,4 +1,4 @@
-import { courseId } from 'src/features/storySimulator/StorySimulatorRequest';
+import { assetsPrefix } from 'src/features/storySimulator/StorySimulatorRequest';
 
 import { Constants } from '../commons/CommonConstants';
 
@@ -57,8 +57,10 @@ export function limitNumber(value: number, min: number, max: number) {
  * @returns {string} new path to file including full s3 link
  */
 export function toS3Path(fileName: string, courseCoded = false) {
-  const courseCode = courseCoded ? `/${courseId()}` : '';
-  return Constants.assetsFolder + courseCode + fileName;
+  if (fileName.startsWith('/')) {
+    fileName = fileName.substr(1);
+  }
+  return Constants.assetsFolder + (courseCoded ? assetsPrefix() + fileName : fileName);
 }
 
 /**

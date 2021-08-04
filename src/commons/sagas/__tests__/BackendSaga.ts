@@ -165,7 +165,8 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableSourcecast: true,
   sourceChapter: 1,
   sourceVariant: 'default' as Variant,
-  moduleHelpText: 'Help text'
+  moduleHelpText: 'Help text',
+  assetsPrefix: ''
 };
 
 const mockCourseRegistration2: CourseRegistration = {
@@ -194,7 +195,8 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableSourcecast: true,
   sourceChapter: 4,
   sourceVariant: 'default' as Variant,
-  moduleHelpText: 'Help text'
+  moduleHelpText: 'Help text',
+  assetsPrefix: ''
 };
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
@@ -860,7 +862,8 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableSourcecast: false,
     sourceChapter: 4,
     sourceVariant: 'default',
-    moduleHelpText: 'Help'
+    moduleHelpText: 'Help',
+    assetsPrefix: ''
   };
 
   test('when course config is changed', () => {
