@@ -241,13 +241,13 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 };
 
 /**
- * GET /courses/{courseId}/achievements/goals/{studentId}
+ * GET /courses/{courseId}/admin/users/{studentCourseRegId}/goals
  */
 export const getGoals = async (
   tokens: Tokens,
-  studentId: number
+  studentCourseRegId: number
 ): Promise<AchievementGoal[] | null> => {
-  const resp = await request(`${courseId()}/admin/goals/${studentId}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/users/${studentCourseRegId}/goals`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
