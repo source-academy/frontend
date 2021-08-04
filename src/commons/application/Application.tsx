@@ -243,7 +243,7 @@ const Application: React.FC<ApplicationProps> = props => {
 
       {/* agreedToResearch has a default value of undefined in the store.
           It will take on null/true/false when the backend returns. */}
-      {props.agreedToResearch === null && (
+      {Constants.showResearchPrompt && props.agreedToResearch === null && (
         <div className="research-prompt">
           <Dialog
             className={Classes.DARK}
