@@ -18,6 +18,7 @@ import Welcome from '../../pages/welcome/Welcome';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
+import { history } from '../utils/HistoryHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role } from './ApplicationTypes';
 import { UpdateCourseConfiguration, UserCourse } from './types/SessionTypes';
@@ -194,7 +195,16 @@ const Application: React.FC<ApplicationProps> = props => {
   return (
     <div className="Application">
       <NavigationBar
-        handleLogOut={props.handleLogOut}
+        handleLogOut={() => {
+          props.handleLogOut();
+          /**
+           * Ensures that the user is redirected back to /login when logging
+           * out in /achievements or /sourcecast as these routes no longer exist.
+           * The other routes are ok due to `ensureUserAndRoleAndRouteTo` and
+           * `ensureUserAndRouteTo`
+           */
+          history.push('/login');
+        }}
         handleGitHubLogIn={props.handleGitHubLogIn}
         handleGitHubLogOut={props.handleGitHubLogOut}
         updateLatestViewedCourse={props.updateLatestViewedCourse}
