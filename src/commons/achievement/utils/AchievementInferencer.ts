@@ -3,7 +3,6 @@ import { v4 } from 'uuid';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   AchievementStatus,
@@ -86,7 +85,6 @@ class AchievementInferencer {
   private invalidAchievement: AchievementItem = {
     uuid: 'invalid',
     title: 'invalid',
-    ability: AchievementAbility.EXPLORATION,
     xp: 0,
     isVariableXp: false,
     deadline: undefined,
@@ -491,6 +489,15 @@ class AchievementInferencer {
   public listSortedReleasedTaskUuids() {
     return this.getAllReleasedAchievements()
       .filter(achievement => achievement.isTask || this.isCompleted(achievement))
+      .sort((taskA, taskB) => taskA.position - taskB.position)
+      .map(sortedTask => sortedTask.uuid);
+  }
+
+  /**
+   * Returns an array of achievementId sorted by position
+   */
+  public listAllSortedAchievementUuids() {
+    return this.getAllAchievements()
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .map(sortedTask => sortedTask.uuid);
   }

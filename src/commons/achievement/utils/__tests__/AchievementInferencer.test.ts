@@ -1,6 +1,5 @@
 import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   AchievementStatus,
@@ -15,7 +14,6 @@ import AchievementInferencer from '../AchievementInferencer';
 const testAchievement: AchievementItem = {
   uuid: '0',
   title: 'Test Achievement',
-  ability: AchievementAbility.CORE,
   xp: 100,
   isVariableXp: false,
   isTask: false,

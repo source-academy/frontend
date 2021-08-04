@@ -1,8 +1,5 @@
-import {
-  cardBackgroundUrl,
-  coverImageUrl
-} from '../../../features/achievement/AchievementConstants';
-import { AchievementAbility, GoalType } from '../../../features/achievement/AchievementTypes';
+import { cardBackgroundUrl } from '../../../features/achievement/AchievementConstants';
+import { GoalType } from '../../../features/achievement/AchievementTypes';
 import { AssessmentOverview } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
@@ -52,10 +49,6 @@ function insertFakeAchievements(
     inferencer.insertFakeAchievement({
       uuid: idString,
       title: assessmentOverview.title,
-      ability:
-        assessmentOverview.type === 'Missions' || assessmentOverview.type === 'Paths'
-          ? AchievementAbility.CORE
-          : AchievementAbility.EFFORT,
       xp:
         assessmentOverview.gradingStatus === 'graded'
           ? assessmentOverview.xp
@@ -69,7 +62,7 @@ function insertFakeAchievements(
       goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
       cardBackground: `${cardBackgroundUrl}/default.png`,
       view: {
-        coverImage: `${coverImageUrl}/default.png`,
+        coverImage: assessmentOverview.coverImage,
         description: assessmentOverview.shortSummary,
         completionText: `XP: ${assessmentOverview.xp} / ${assessmentOverview.maxXp}`
       }

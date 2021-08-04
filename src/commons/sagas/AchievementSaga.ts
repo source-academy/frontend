@@ -17,6 +17,7 @@ import {
   UPDATE_GOAL_PROGRESS,
   UPDATE_OWN_GOAL_PROGRESS
 } from '../../features/achievement/AchievementTypes';
+import { updateGoalProcessed } from '../achievement/AchievementManualEditor';
 import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
 import { OverallState } from '../application/ApplicationTypes';
@@ -88,9 +89,9 @@ export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(GET_GOALS, function* (action: ReturnType<typeof actions.getGoals>): any {
     const tokens: Tokens = yield selectTokens();
 
-    const studentId = action.payload;
+    const studentCourseRegId = action.payload;
 
-    const goals = yield call(getGoals, tokens, studentId);
+    const goals = yield call(getGoals, tokens, studentCourseRegId);
 
     if (goals) {
       yield put(actions.saveGoals(goals));
@@ -170,6 +171,10 @@ export default function* AchievementSaga(): SagaIterator {
 
       if (!resp) {
         return;
+      }
+      if (resp.ok) {
+        yield put(actions.getGoals(studentCourseRegId));
+        updateGoalProcessed();
       }
     }
   );

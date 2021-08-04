@@ -18,14 +18,6 @@ export const SAVE_USERS = 'SAVE_USERS';
 export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
 export const UPDATE_OWN_GOAL_PROGRESS = 'UPDATE_OWN_GOAL_PROGRESS';
 
-export enum AchievementAbility {
-  CORE = 'Core',
-  EFFORT = 'Effort',
-  EXPLORATION = 'Exploration',
-  COMMUNITY = 'Community',
-  FLEX = 'Flex'
-}
-
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline
@@ -44,7 +36,6 @@ export enum FilterStatus {
  *
  * @param {string} uuid unique uuid of the achievement item
  * @param {string} title title of the achievement
- * @param {AchievementAbility} ability ability of the achievement, string enum
  * @param {number} xp the xp gained when completing the achievement
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
@@ -58,7 +49,6 @@ export enum FilterStatus {
 export type AchievementItem = {
   uuid: string;
   title: string;
-  ability: AchievementAbility;
   xp: number;
   isVariableXp: boolean;
   deadline?: Date;

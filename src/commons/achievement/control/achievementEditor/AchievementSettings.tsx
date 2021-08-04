@@ -1,4 +1,4 @@
-import { Button, Dialog, EditableText } from '@blueprintjs/core';
+import { Button, Checkbox, Dialog, EditableText } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
@@ -58,9 +58,13 @@ function AchievementSettings(props: AchievementSettingsProps) {
           />
           <h3>Goals</h3>
           <EditableGoalUuids changeGoalUuids={changeGoalUuids} goalUuids={goalUuids} />
-          <Tooltip2 content="The rewarded XP will be equal to the sum of 'count' of goals">
-            <Button text={'Variable XP?'} active={isVariableXp} onClick={changeIsVariableXp} />
-          </Tooltip2>
+
+          <h3>Variable XP</h3>
+          <Checkbox
+            label={"The rewarded XP will be equal to the sum of 'count' of goals"}
+            checked={isVariableXp}
+            onChange={changeIsVariableXp}
+          />
         </div>
       </Dialog>
     </>
