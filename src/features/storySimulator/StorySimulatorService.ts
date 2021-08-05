@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { sendAssetRequest, sendStoryRequest } from './StorySimulatorRequest';
+import { sendAdminStoryRequest, sendAssetRequest, sendStoryRequest } from './StorySimulatorRequest';
 import { ChapterDetail } from './StorySimulatorTypes';
 
 /**
@@ -123,7 +123,7 @@ export async function fetchChapters(): Promise<ChapterDetail[]> {
  * @returns {Promise<string>} - Response
  */
 export async function updateChapterRequest(id: string, body: object) {
-  const response = await sendStoryRequest(
+  const response = await sendAdminStoryRequest(
     id,
     'POST',
     {
@@ -142,6 +142,6 @@ export async function updateChapterRequest(id: string, body: object) {
  * @returns {Promise<string>} - Response
  */
 export async function deleteChapterRequest(id: string) {
-  const response = await sendStoryRequest(id, 'DELETE');
+  const response = await sendAdminStoryRequest(id, 'DELETE');
   return response.status === 204 ? 'Chapter successfully deleted' : response.text();
 }
