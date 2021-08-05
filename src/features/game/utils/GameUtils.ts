@@ -53,7 +53,7 @@ export function limitNumber(value: number, min: number, max: number) {
  * Appends the s3 file path to a short path name
  *
  * @param filename the short path of a filename
- * @param courseCoded true iff asset is be course-specific
+ * @param courseCoded true iff file is course-specific
  * @returns {string} new path to file including full s3 link
  */
 export function toS3Path(fileName: string, courseCoded = false) {
