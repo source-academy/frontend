@@ -93,6 +93,7 @@ export type SessionState = {
   readonly sourceChapter?: number;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
+  readonly assetsPrefix?: string;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
@@ -155,6 +156,7 @@ export type CourseConfiguration = {
   sourceChapter: number;
   sourceVariant: Variant;
   moduleHelpText: string;
+  assetsPrefix: string;
 };
 
 export type AdminPanelCourseRegistration = {

@@ -46,7 +46,7 @@ class AwardParser {
       AwardParser.awardsMapping.set(id, {
         id,
         assetKey,
-        assetPath: toS3Path(assetPath),
+        assetPath: toS3Path(assetPath, true),
         title,
         description,
         completed: true

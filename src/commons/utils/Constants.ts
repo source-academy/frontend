@@ -79,7 +79,7 @@ export enum Links {
   resourcesForEducators = 'https://about.sourceacademy.org/educator/README.html',
   resourcesForLearners = 'https://about.sourceacademy.org/learner/README.html',
 
-  sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
+  sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/',
   sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',

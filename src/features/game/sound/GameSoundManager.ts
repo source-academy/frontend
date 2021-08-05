@@ -75,7 +75,7 @@ class GameSoundManager {
   public loadSounds(soundAssets: SoundAsset[]) {
     soundAssets.forEach(asset => {
       this.addSoundAsset(asset);
-      this.loadSound(asset.key, toS3Path(asset.path));
+      this.loadSound(asset.key, toS3Path(asset.path, true));
     });
   }
 
@@ -87,7 +87,7 @@ class GameSoundManager {
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
     Object.values(assetMap).forEach(asset => {
       this.addSoundAsset(asset);
-      this.loadSound(asset.key, toS3Path(asset.path));
+      this.loadSound(asset.key, toS3Path(asset.path, false));
     });
   }
 

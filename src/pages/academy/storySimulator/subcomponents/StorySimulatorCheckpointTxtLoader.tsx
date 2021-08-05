@@ -3,7 +3,7 @@ import 'ace-builds/webpack-resolver';
 import { Button, Tab, Tabs } from '@blueprintjs/core';
 import React from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';
-import { Constants } from 'src/features/game/commons/CommonConstants';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 
 type Props = {
   storageName: string;
@@ -30,7 +30,7 @@ function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
   async function changeChosenFilename(e: any) {
     const filename = e.target.value;
     setChosenFilename(filename);
-    const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`, {
+    const response = await fetch(toS3Path(`/stories/${filename}`, true), {
       headers: createHeadersWithCors()
     });
     const txt = await response.text();

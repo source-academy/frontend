@@ -1,6 +1,6 @@
-import { Constants } from '../commons/CommonConstants';
+import { toS3Path } from '../utils/GameUtils';
 
-export const toTxtPath = (path: string) => `${Constants.assetsFolder}/stories/${path}`;
+export const toTxtPath = (path: string) => toS3Path(`/stories/${path}`, true);
 
 const TextAssets = {
   defaultCheckpoint: { key: 'default-chap', path: toTxtPath('defaultCheckpoint.txt') },

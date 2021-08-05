@@ -79,7 +79,7 @@ class ChapterSelect extends Phaser.Scene {
     await Promise.all(
       this.getGameChapters().map(
         async chapterDetail =>
-          await loadImage(this, chapterDetail.imageUrl, toS3Path(chapterDetail.imageUrl))
+          await loadImage(this, chapterDetail.imageUrl, toS3Path(chapterDetail.imageUrl, true))
       )
     );
   }

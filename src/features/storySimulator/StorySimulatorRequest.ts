@@ -32,7 +32,8 @@ const sendRequest =
     }
   };
 
-const courseId = () => store.getState().session.courseId;
+export const courseId = () => store.getState().session.courseId;
+export const assetsPrefix = () => store.getState().session.assetsPrefix || '';
 export const sendAssetRequest = sendRequest(`admin/assets`);
 export const sendStoryRequest = sendRequest(`stories`);
 

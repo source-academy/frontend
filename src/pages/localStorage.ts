@@ -53,6 +53,7 @@ export const saveState = (state: OverallState) => {
         enableAchievements: state.session.enableAchievements,
         enableSourcecast: state.session.enableSourcecast,
         moduleHelpText: state.session.moduleHelpText,
+        assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,
         githubAccessToken: state.session.githubAccessToken
       },
