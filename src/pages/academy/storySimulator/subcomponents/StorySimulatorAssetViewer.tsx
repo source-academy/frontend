@@ -19,7 +19,7 @@ const AssetViewer = memo(({ assetPath }: AssetProps) => {
       <img
         alt="asset"
         crossOrigin={'anonymous'}
-        src={toS3Path(displayAssetPath, true)}
+        src={toS3Path(displayAssetPath, !!assetPath)}
         width="150px"
         onError={e => {
           (e.target as any).onerror = null;
