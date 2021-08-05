@@ -173,7 +173,7 @@ export default class RoomPreview extends Phaser.Scene {
         preloadImageMap: this.preloadImageMap,
         preloadSoundMap: this.preloadSoundMap,
         preloadSpritesheetMap: this.preloadSpritesheetMap,
-        remotePath: toS3Path('', true),
+        remotePath: (file: string) => toS3Path(file, true),
         screenSize: screenSize,
         createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
       }
