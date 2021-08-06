@@ -60,7 +60,6 @@ import {
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
   UPDATE_USER_ROLE,
@@ -170,8 +169,6 @@ export const reautogradeSubmission = (submissionId: number) =>
 
 export const reautogradeAnswer = (submissionId: number, questionId: number) =>
   action(REAUTOGRADE_ANSWER, { submissionId, questionId });
-
-export const updateHistoryHelpers = (loc: string) => action(UPDATE_HISTORY_HELPERS, loc);
 
 export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
   action(UPDATE_ASSESSMENT_OVERVIEWS, overviews);

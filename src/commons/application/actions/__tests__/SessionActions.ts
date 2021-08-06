@@ -41,7 +41,6 @@ import {
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
   UPDATE_USER_ROLE
@@ -83,7 +82,6 @@ import {
   updateCourseResearchAgreement,
   updateGrading,
   updateGradingOverviews,
-  updateHistoryHelpers,
   updateLatestViewedCourse,
   updateNotifications,
   updateUserRole
@@ -460,15 +458,6 @@ test('unsubmitSubmission generates correct action object', () => {
     payload: {
       submissionId
     }
-  });
-});
-
-test('updateHistoryHelpers generates correct action object', () => {
-  const loc = 'location';
-  const action = updateHistoryHelpers(loc);
-  expect(action).toEqual({
-    type: UPDATE_HISTORY_HELPERS,
-    payload: loc
   });
 });
 
