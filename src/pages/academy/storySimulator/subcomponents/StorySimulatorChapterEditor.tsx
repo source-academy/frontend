@@ -96,7 +96,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     }
     const response =
       parseInt(id) === createChapterIndex
-        ? await updateChapterRequest('', updatedChapter)
+        ? await updateChapterRequest('', { story: updatedChapter })
         : await updateChapterRequest(id, { story: updatedChapter });
 
     alert(response);

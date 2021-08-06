@@ -36,6 +36,7 @@ export const courseId = () => store.getState().session.courseId;
 export const assetsPrefix = () => store.getState().session.assetsPrefix || '';
 export const sendAssetRequest = sendRequest(`admin/assets`);
 export const sendStoryRequest = sendRequest(`stories`);
+export const sendAdminStoryRequest = sendRequest(`admin/stories`);
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();

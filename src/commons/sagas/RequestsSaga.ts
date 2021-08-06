@@ -815,7 +815,7 @@ export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData
 };
 
 /**
- * POST /courses/{courseId}/sourcecast
+ * POST /courses/{courseId}/admin/sourcecast
  */
 export const postSourcecast = async (
   title: string,
@@ -832,7 +832,7 @@ export const postSourcecast = async (
   formData.append('sourcecast[uid]', uid);
   formData.append('sourcecast[audio]', audio, filename);
   formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
-  const resp = await request(`${courseId()}/sourcecast`, 'POST', {
+  const resp = await request(`${courseId()}/admin/sourcecast`, 'POST', {
     ...tokens,
     body: formData,
     noContentType: true,
@@ -845,13 +845,13 @@ export const postSourcecast = async (
 };
 
 /**
- * DELETE /courses/{courseId}/sourcecast/{sourcecastId}
+ * DELETE /courses/{courseId}/admin/sourcecast/{sourcecastId}
  */
 export const deleteSourcecastEntry = async (
   id: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/sourcecast/${id}`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/sourcecast/${id}`, 'DELETE', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
