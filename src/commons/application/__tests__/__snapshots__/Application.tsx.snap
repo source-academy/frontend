@@ -5,7 +5,7 @@ exports[`Application renders correctly 1`] = `
   <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
-      <Route path=\\"/login\\" render={[Function (anonymous)]} />
+      <Route path=\\"/login\\" component={[Function: Login]} />
       <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/contributors\\" component={[function]} />
@@ -29,7 +29,7 @@ exports[`Application shows disabled when in disabled period 1`] = `
   <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
-      <Route path=\\"/login\\" render={[Function (anonymous)]} />
+      <Route path=\\"/login\\" component={[Function: Login]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
       <Route render={[Function: renderDisabled]} />

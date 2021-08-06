@@ -27,8 +27,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   courses: state.session.courses,
   courseId: state.session.courseId,
   courseShortName: state.session.courseShortName,
-  enableAchievements: state.session.enableAchievements,
-  enableSourcecast: state.session.enableSourcecast,
   assessmentTypes: state.session.assessmentConfigurations?.map(e => e.type),
   agreedToResearch: state.session.agreedToResearch
 });

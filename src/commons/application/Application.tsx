@@ -9,7 +9,7 @@ import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
 import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
-import Login from '../../pages/login/LoginContainer';
+import Login from '../../pages/login/Login';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
@@ -19,7 +19,6 @@ import Welcome from '../../pages/welcome/Welcome';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
-import { parseQuery } from '../utils/QueryHelper';
 import { Role } from './ApplicationTypes';
 import { UpdateCourseConfiguration, UserCourse } from './types/SessionTypes';
 
@@ -119,7 +118,7 @@ const Application: React.FC<ApplicationProps> = props => {
     };
   }, [isPWA, isMobile]);
 
-  const loginPath = <Route path="/login" render={toLogin(props)} key="login" />;
+  const loginPath = <Route path="/login" component={Login} key="login" />;
 
   const githubAssessmentsPaths = Constants.enableGitHubAssessments
     ? [
@@ -323,21 +322,6 @@ const ensureUserAndRouteTo = ({ name }: ApplicationProps, to: JSX.Element) =>
  */
 const ensureUserAndRoleAndRouteTo = ({ name, role }: ApplicationProps, to: JSX.Element) =>
   name === undefined ? redirectToLogin : role === undefined ? redirectToWelcome : () => to;
-
-const toLogin = (props: ApplicationProps) => () => {
-  const qstr = parseQuery(props.location.search);
-
-  return (
-    <Login
-      code={qstr.code}
-      providerId={qstr.provider}
-      providers={[...Constants.authProviders.entries()].map(([id, { name }]) => ({
-        id,
-        name
-      }))}
-    />
-  );
-};
 
 function computeDisabledState() {
   const now = moment();
