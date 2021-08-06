@@ -4,7 +4,6 @@ import { compressToUTF16 } from 'lz-string';
 import { defaultState, OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
-import { history } from '../../commons/utils/HistoryHelper';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
 
@@ -59,7 +58,7 @@ const defaultRouter = {
 describe('createStore() function', () => {
   test('has defaultState when initialised', () => {
     localStorage.removeItem('storedState');
-    expect(createStore(history).getState()).toEqual({
+    expect(createStore().getState()).toEqual({
       ...defaultState,
       router: defaultRouter
     });
@@ -73,7 +72,7 @@ describe('createStore() function', () => {
      *
      * See https://github.com/facebook/jest/issues/8166
      */
-    const received = createStore(history).getState() as any;
+    const received = createStore().getState() as any;
     const octokit = received.session.githubOctokitObject.octokit;
     delete received.session.githubOctokitObject.octokit;
 
