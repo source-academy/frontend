@@ -2107,15 +2107,10 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
 
-"@types/estree@0.0.45":
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.45.tgz#e9387572998e5ecdac221950dab3e8c3b16af884"
-  integrity sha512-jnqIUKDUqJbDIUxm0Uj7bnlMnRm1T/eZ9N+AVMqhPgzrba2GhGG5o/jCTwmdPK709nEZsGoMzXEDUjcXHa3W0g==
-
-"@types/estree@0.0.47":
-  version "0.0.47"
-  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.47.tgz#d7a51db20f0650efec24cd04994f523d93172ed4"
-  integrity sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==
+"@types/estree@0.0.50":
+  version "0.0.50"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.50.tgz#1e0caa9364d3fccd2931c3ed96fdbeaa5d4cca83"
+  integrity sha512-C6N5s2ZFtuZRj54k2/zyRhNDjJwwcViAM3Nbm8zjBpbqAdZ00mr0CFxvSKeO8Y/e03WVFLpQMdHYVfUd6SB+Hw==
 
 "@types/gapi.auth2@^0.0.54":
   version "0.0.54"
@@ -8193,13 +8188,13 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.13:
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.13.tgz#17c159f4c9cb9a295cf95eaf33c919316e81b6af"
-  integrity sha512-7w9cx6OeKj0z4hkUHjgxdB/TfGkkbdozA9gIYeVzy64RM8nNAZii+XvNS/5UqDToG8OpYc6SoIQJrQs5gbMH5g==
+js-slang@^0.5.14:
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.14.tgz#3654ab5db06fe434269b2f03cab4bd9f663c4d72"
+  integrity sha512-2/UZVQyMwFQpsHVA4i9bYl1q3GhleGF7RSYC0MTEJgxHNvHzln9Mpnpb8VtBMsf25vvKHynBUpdoGkQijpv5oA==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
-    "@types/estree" "0.0.47"
+    "@types/estree" "0.0.50"
     acorn "^8.0.3"
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
