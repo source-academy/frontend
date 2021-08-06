@@ -14,7 +14,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                     <Blueprint3.NonIdealState description=\\"Fetching assessment...\\" icon={{...}}>
                       <div className=\\"bp3-non-ideal-state\\">
                         <div className=\\"bp3-non-ideal-state-visual\\">
-                          <Blueprint3.Icon icon={{...}} iconSize={60}>
+                          <Blueprint3.Icon icon={{...}} size={60}>
                             <Blueprint3.Spinner>
                               <div className=\\"bp3-spinner\\">
                                 <div className=\\"bp3-spinner-animation\\">
@@ -92,7 +92,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -140,7 +140,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -198,7 +198,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -246,7 +246,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -308,7 +308,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -319,7 +319,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                   <Manager>
                                                     <Reference>
                                                       <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-                                                        <span className=\\"listing-title-tooltip bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <span aria-haspopup=\\"true\\" className=\\"listing-title-tooltip bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                           <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                                             <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
                                                               <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -383,7 +383,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -445,7 +445,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -493,7 +493,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -555,7 +555,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -603,7 +603,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -667,7 +667,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -715,7 +715,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -825,7 +825,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                     <Blueprint3.NonIdealState title=\\"There are no assessments.\\" icon=\\"flame\\">
                       <div className=\\"bp3-non-ideal-state\\">
                         <div className=\\"bp3-non-ideal-state-visual\\">
-                          <Blueprint3.Icon icon=\\"flame\\" iconSize={60}>
+                          <Blueprint3.Icon icon=\\"flame\\" size={60}>
                             <span icon=\\"flame\\" className=\\"bp3-icon bp3-icon-flame\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"flame\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
                                 <desc>
@@ -903,7 +903,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -951,7 +951,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1039,7 +1039,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1087,7 +1087,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1149,7 +1149,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1160,7 +1160,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                   <Manager>
                                                     <Reference>
                                                       <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-                                                        <span className=\\"listing-title-tooltip bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                                                        <span aria-haspopup=\\"true\\" className=\\"listing-title-tooltip bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                           <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                                             <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
                                                               <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -1224,7 +1224,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1286,7 +1286,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1334,7 +1334,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1396,7 +1396,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1444,7 +1444,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
@@ -1508,7 +1508,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
                                   <div className=\\"listing-header\\">
-                                    <Blueprint3.Text ellipsize={true} tagName=\\"div\\">
+                                    <Blueprint3.Text ellipsize={true}>
                                       <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
                                         <Component className=\\"listing-title\\">
                                           <h4 className=\\"bp3-heading listing-title\\">
@@ -1556,7 +1556,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
-                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false} tagName=\\"div\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\" ellipsize={false}>
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
                                           <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>

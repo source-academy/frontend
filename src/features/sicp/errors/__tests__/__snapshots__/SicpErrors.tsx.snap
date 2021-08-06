@@ -4,7 +4,7 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+      <Blueprint3.Icon icon=\\"error\\" size={60}>
         <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <desc>
@@ -36,7 +36,7 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+      <Blueprint3.Icon icon=\\"error\\" size={60}>
         <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <desc>
@@ -68,7 +68,7 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+      <Blueprint3.Icon icon=\\"error\\" size={60}>
         <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <desc>

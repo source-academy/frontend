@@ -26,7 +26,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                   <Manager>
                     <Reference>
                       <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-                        <span className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+                        <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                           <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
                             <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">

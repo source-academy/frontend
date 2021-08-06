@@ -8,12 +8,12 @@ exports[`Badge renders properly with notifications 1`] = `
     <Manager>
       <Reference>
         <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-          <span className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+          <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
             <Blueprint3.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
               <span disabled={[undefined]} className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                 <Blueprint3.Icon icon={[undefined]} />
                 <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
-                  <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+                  <span className=\\"bp3-fill bp3-text-overflow-ellipsis\\" title={[undefined]}>
                     4
                   </span>
                 </Blueprint3.Text>
@@ -37,12 +37,12 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`]
     <Manager>
       <Reference>
         <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-          <span className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+          <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
             <Blueprint3.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
               <span disabled={[undefined]} className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                 <Blueprint3.Icon icon={[undefined]} />
                 <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
-                  <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+                  <span className=\\"bp3-fill bp3-text-overflow-ellipsis\\" title={[undefined]}>
                     4
                   </span>
                 </Blueprint3.Text>
@@ -66,12 +66,12 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 2`]
     <Manager>
       <Reference>
         <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-          <span className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+          <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
             <Blueprint3.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
               <span disabled={[undefined]} className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                 <Blueprint3.Icon icon={[undefined]} />
                 <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
-                  <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+                  <span className=\\"bp3-fill bp3-text-overflow-ellipsis\\" title={[undefined]}>
                     4
                   </span>
                 </Blueprint3.Text>

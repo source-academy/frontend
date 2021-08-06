@@ -19,7 +19,7 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                     <Transition onEntering={[Function (anonymous)]} onEntered={[Function (anonymous)]} onExiting={[Function (anonymous)]} onExited={[Function (anonymous)]} timeout={300} addEndListener={[Function (anonymous)]} in={true} appear={true} enter={true} exit={true} onEnter={[Function (anonymous)]} onExit={[Function (anonymous)]} mountOnEnter={false} unmountOnExit={false}>
                       <div className=\\"bp3-drawer bp3-position-left profile bp3-overlay-content\\" style={{...}} tabIndex={0}>
                         <div className=\\"bp3-drawer-header\\">
-                          <Blueprint3.Icon icon=\\"user\\" iconSize={20}>
+                          <Blueprint3.Icon icon=\\"user\\" size={20}>
                             <span icon=\\"user\\" className=\\"bp3-icon bp3-icon-user\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"user\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                 <desc>
@@ -37,7 +37,7 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                           <Blueprint3.Button aria-label=\\"Close\\" className=\\"bp3-dialog-close-button\\" icon={{...}} minimal={true} onClick={[Function: onClose]}>
                             <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                               <Blueprint3.Icon icon={{...}}>
-                                <Blueprint3.Icon icon=\\"small-cross\\" iconSize={20}>
+                                <Blueprint3.Icon icon=\\"small-cross\\" size={20}>
                                   <span icon=\\"small-cross\\" className=\\"bp3-icon bp3-icon-small-cross\\" title={[undefined]}>
                                     <svg fill={[undefined]} data-icon=\\"small-cross\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                       <desc>
@@ -97,7 +97,7 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                                     <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" onClick={[Function: onClick]}>
                                       <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (fully graded) Sidequest\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
-                                          <Blueprint3.Icon icon=\\"lightbulb\\" iconSize={20}>
+                                          <Blueprint3.Icon icon=\\"lightbulb\\" size={20}>
                                             <span icon=\\"lightbulb\\" className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"lightbulb\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                                 <desc>
@@ -141,7 +141,7 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                                     <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" onClick={[Function: onClick]}>
                                       <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Ungraded assessment\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
-                                          <Blueprint3.Icon icon=\\"lightbulb\\" iconSize={20}>
+                                          <Blueprint3.Icon icon=\\"lightbulb\\" size={20}>
                                             <span icon=\\"lightbulb\\" className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"lightbulb\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                                 <desc>
@@ -213,7 +213,7 @@ exports[`Profile renders correctly when there are no closed assessments 1`] = `
                     <Transition onEntering={[Function (anonymous)]} onEntered={[Function (anonymous)]} onExiting={[Function (anonymous)]} onExited={[Function (anonymous)]} timeout={300} addEndListener={[Function (anonymous)]} in={true} appear={true} enter={true} exit={true} onEnter={[Function (anonymous)]} onExit={[Function (anonymous)]} mountOnEnter={false} unmountOnExit={false}>
                       <div className=\\"bp3-drawer bp3-position-left profile bp3-overlay-content\\" style={{...}} tabIndex={0}>
                         <div className=\\"bp3-drawer-header\\">
-                          <Blueprint3.Icon icon=\\"user\\" iconSize={20}>
+                          <Blueprint3.Icon icon=\\"user\\" size={20}>
                             <span icon=\\"user\\" className=\\"bp3-icon bp3-icon-user\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"user\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                 <desc>
@@ -231,7 +231,7 @@ exports[`Profile renders correctly when there are no closed assessments 1`] = `
                           <Blueprint3.Button aria-label=\\"Close\\" className=\\"bp3-dialog-close-button\\" icon={{...}} minimal={true} onClick={[Function: onClose]}>
                             <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                               <Blueprint3.Icon icon={{...}}>
-                                <Blueprint3.Icon icon=\\"small-cross\\" iconSize={20}>
+                                <Blueprint3.Icon icon=\\"small-cross\\" size={20}>
                                   <span icon=\\"small-cross\\" className=\\"bp3-icon bp3-icon-small-cross\\" title={[undefined]}>
                                     <svg fill={[undefined]} data-icon=\\"small-cross\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                       <desc>
