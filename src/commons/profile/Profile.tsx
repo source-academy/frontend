@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { Role } from '../application/ApplicationTypes';
 import {
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentType,
@@ -21,7 +22,7 @@ export type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
-  assessmentTypes?: AssessmentType[];
+  assessmentConfigurations?: AssessmentConfiguration[];
   courseId?: number;
 };
 
@@ -105,8 +106,10 @@ class Profile extends React.Component<ProfileProps, {}> {
             IconNames.COMPARISON,
             IconNames.MANUAL
           ];
-          if (this.props.assessmentTypes) {
-            const index = this.props.assessmentTypes.indexOf(assessmentType);
+          if (this.props.assessmentConfigurations) {
+            const index = this.props.assessmentConfigurations.findIndex(
+              c => c.type === assessmentType
+            );
 
             // For rendering hidden assessments not visible to the student
             // e.g. studio participation marks

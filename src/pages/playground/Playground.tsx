@@ -220,7 +220,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab]);
 
   const handlers = React.useMemo(
     () => ({

@@ -21,7 +21,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -45,10 +45,7 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = DispatchProps &
-  OwnProps &
-  RouteComponentProps<AssessmentWorkspaceParams> &
-  StateProps;
+export type AssessmentProps = DispatchProps & OwnProps & StateProps;
 
 export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
@@ -67,6 +64,7 @@ export type StateProps = {
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
+  const params = useParams<AssessmentWorkspaceParams>();
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
@@ -237,10 +235,14 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
-  const { assessmentOverviews, isStudent } = props;
-  const assessmentId: number | null = stringParamToInt(props.match.params.assessmentId);
-  const questionId: number =
-    stringParamToInt(props.match.params.questionId) || Constants.defaultQuestionId;
+  const { assessmentOverviews: assessmentOverviewsUnfiltered, isStudent } = props;
+  const assessmentOverviews = React.useMemo(
+    () =>
+      assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
+    [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
+  );
+  const assessmentId: number | null = stringParamToInt(params.assessmentId);
+  const questionId: number = stringParamToInt(params.questionId) || Constants.defaultQuestionId;
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
