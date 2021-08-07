@@ -315,7 +315,6 @@ export function* mockBackendSaga(): SagaIterator {
         })
       );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
-      yield history.push(`/courses/${courseId}`);
     }
   );
 

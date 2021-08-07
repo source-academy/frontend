@@ -624,7 +624,6 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
-      yield history.push(`/courses/${courseId}`);
     }
   );
 
