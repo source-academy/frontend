@@ -1,6 +1,7 @@
 import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { history } from 'src/commons/utils/HistoryHelper';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -980,16 +981,27 @@ describe('Test CREATE_COURSE action', () => {
       .withState(mockStates)
       .call(postCreateCourse, mockTokens, courseConfig)
       .call(getUser, mockTokens)
-      .put(setUser(user))
-      .put(setCourseRegistration(courseRegistration))
-      .put(setCourseConfiguration(courseConfiguration))
-      .call(putAssessmentConfigs, mockTokens, placeholderAssessmentConfig)
-      .put(setAssessmentConfigurations(placeholderAssessmentConfig))
+      .call(
+        putAssessmentConfigs,
+        mockTokens,
+        placeholderAssessmentConfig,
+        courseRegistration.courseId
+      )
+      .call([history, 'push'], `/courses/${courseRegistration.courseId}`)
       .call.fn(showSuccessMessage)
       .provide([
         [call(postCreateCourse, mockTokens, courseConfig), okResp],
         [call(getUser, mockTokens), { user, courseRegistration, courseConfiguration }],
-        [call(putAssessmentConfigs, mockTokens, placeholderAssessmentConfig), okResp]
+        [
+          call(
+            putAssessmentConfigs,
+            mockTokens,
+            placeholderAssessmentConfig,
+            courseRegistration.courseId
+          ),
+          okResp
+        ],
+        [call([history, 'push'], `/courses/${courseRegistration.courseId}`), undefined]
       ])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();
@@ -1006,6 +1018,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.call.fn(putAssessmentConfigs)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.call.fn(showSuccessMessage)
+      .not.call.fn(history.push)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();

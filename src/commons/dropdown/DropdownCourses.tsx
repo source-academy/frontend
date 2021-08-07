@@ -4,17 +4,17 @@ import * as React from 'react';
 
 import { Role } from '../application/ApplicationTypes';
 import { UserCourse } from '../application/types/SessionTypes';
+import { history } from '../utils/HistoryHelper';
 
 type DialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  updateLatestViewedCourse: (courseId: number) => void;
   courses: UserCourse[];
   courseId?: number;
 };
 
 const DropdownCourses: React.FC<DialogProps> = props => {
-  const { courses, updateLatestViewedCourse } = props;
+  const { courses } = props;
 
   const options = courses.map(course => ({
     value: course.courseId,
@@ -23,7 +23,7 @@ const DropdownCourses: React.FC<DialogProps> = props => {
   }));
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateLatestViewedCourse(parseInt(e.currentTarget.value, 10));
+    history.push(`/courses/${e.currentTarget.value}`);
     props.onClose();
   };
 

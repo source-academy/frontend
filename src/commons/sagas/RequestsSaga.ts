@@ -974,15 +974,22 @@ export const getAssessmentConfigs = async (
  */
 export const putAssessmentConfigs = async (
   tokens: Tokens,
-  assessmentConfigs: AssessmentConfiguration[]
+  assessmentConfigs: AssessmentConfiguration[],
+  overrideCourseId?: number
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/config/assessment_configs`, 'PUT', {
-    ...tokens,
-    body: { assessmentConfigs },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `${
+      overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
+    }/admin/config/assessment_configs`,
+    'PUT',
+    {
+      ...tokens,
+      body: { assessmentConfigs },
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
 
   return resp;
 };

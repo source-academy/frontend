@@ -17,13 +17,12 @@ window.matchMedia =
   };
 
 const props: ApplicationProps = {
-  ...mockRouterProps('/academy', {}),
+  ...mockRouterProps('/playground', {}),
   courses: [],
   handleLogOut: () => {},
   handleGitHubLogIn: () => {},
   handleGitHubLogOut: () => {},
   fetchUserAndCourse: () => {},
-  updateLatestViewedCourse: () => {},
   handleCreateCourse: () => {},
   updateCourseResearchAgreement: () => {}
 };

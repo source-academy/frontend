@@ -14,7 +14,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   gradingOverviews: state.session.gradingOverviews,
   courseRegId: state.session.courseRegId,
   notifications: state.session.notifications,
-  role: state.session.role
+  role: state.session.role,
+  courseId: state.session.courseId
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

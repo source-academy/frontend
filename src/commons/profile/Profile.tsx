@@ -22,6 +22,7 @@ export type StateProps = {
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
   assessmentTypes?: AssessmentType[];
+  courseId?: number;
 };
 
 type OwnProps = {
@@ -133,6 +134,7 @@ class Profile extends React.Component<ProfileProps, {}> {
                 getFrac={getFrac}
                 parseColour={parseColour}
                 renderIcon={renderIcon}
+                courseId={this.props.courseId}
               />
             );
           });

@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Academy from '../../pages/academy/Academy';
-import Achievement from '../../pages/achievement/AchievementContainer';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
 import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
@@ -14,7 +13,6 @@ import MissionControlContainer from '../../pages/missionControl/MissionControlCo
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
-import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
 import Welcome from '../../pages/welcome/Welcome';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
@@ -29,7 +27,6 @@ export type DispatchProps = {
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
   fetchUserAndCourse: () => void;
-  updateLatestViewedCourse: (courseId: number) => void;
   handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
   updateCourseResearchAgreement: (agreedToResearch: boolean) => void;
 };
@@ -132,7 +129,9 @@ const Application: React.FC<ApplicationProps> = props => {
       to="/sicpjs/:section?"
       key="oldToNewSicpRedirect"
     />,
-    <Route exact path="/sicpjs" render={redirectToSicp} key="sicpRedirect" />,
+    <Route exact path="/sicpjs" key="sicpRedirect">
+      <Redirect to="/sicpjs/index" />
+    </Route>,
     <Route path="/sicpjs/:section" component={Sicp} key="sicp" />,
     Constants.enableGitHubAssessments ? (
       <Route
@@ -156,7 +155,6 @@ const Application: React.FC<ApplicationProps> = props => {
         handleLogOut={props.handleLogOut}
         handleGitHubLogIn={props.handleGitHubLogIn}
         handleGitHubLogOut={props.handleGitHubLogOut}
-        updateLatestViewedCourse={props.updateLatestViewedCourse}
         handleCreateCourse={props.handleCreateCourse}
         role={props.role}
         name={props.name}
@@ -174,7 +172,7 @@ const Application: React.FC<ApplicationProps> = props => {
             {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
             {!isCourseLoaded && !Constants.playgroundOnly
               ? [
-                  <Route path="/academy" render={redirectToLogin} key={0} />,
+                  <Route path="/courses" render={redirectToLogin} key={0} />,
                   <Route exact={true} path="/" render={redirectToLogin} key={1} />
                 ]
               : []}
@@ -197,24 +195,38 @@ const Application: React.FC<ApplicationProps> = props => {
           <Switch>
             {loginPath}
             {commonPaths}
-            <Route path="/academy" render={toAcademy(props)} />
+            <Route path={'/courses/:courseId(\\d+)?'} render={toAcademy(props)} />
             <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} />
             <Route
               path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-              render={ensureUserAndRoleAndRouteTo(props, <MissionControlContainer />)}
+              component={MissionControlContainer}
             />
             <Route path="/playground" render={ensureUserAndRoleAndRouteTo(props, <Playground />)} />
-            <Route
+
+            {/* <Route
               path="/sourcecast/:sourcecastId?"
               render={ensureUserAndRoleAndRouteTo(props, <Sourcecast />)}
             />
             <Route
               path="/achievements"
               render={ensureUserAndRoleAndRouteTo(props, <Achievement />)}
+            /> */}
+            <Redirect
+              from="/"
+              exact={true}
+              to={props.courseId != null ? `/courses/${props.courseId}` : '/welcome'}
             />
-            <Route exact={true} path="/">
-              <Redirect to="/academy" />
-            </Route>
+            {props.courseId != null && [
+              <Redirect
+                from="/sourcecast/:splat?"
+                to={`/courses/${props.courseId}/sourcecast/:splat?`}
+              />,
+              <Redirect
+                from="/achievements/:splat?"
+                to={`/courses/${props.courseId}/achievements/:splat?`}
+              />,
+              <Redirect from="/academy/:splat?" to={`/courses/${props.courseId}/:splat?`} />
+            ]}
             <Route component={NotFound} />
           </Switch>
         )}
@@ -269,7 +281,6 @@ const Application: React.FC<ApplicationProps> = props => {
 
 const redirectToLogin = () => <Redirect to="/login" />;
 const redirectToWelcome = () => <Redirect to="/welcome" />;
-const redirectToSicp = () => <Redirect to="/sicpjs/index" />;
 
 /**
  * A user routes to /academy,

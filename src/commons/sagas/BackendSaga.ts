@@ -170,8 +170,8 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+      yield history.push(`/courses/${courseRegistration.courseId}`);
     }
-    yield history.push('/academy');
   });
 
   yield takeEvery(
@@ -411,8 +411,8 @@ function* BackendSaga(): SagaIterator {
     yield* sendGrade(action);
 
     const { submissionId } = action.payload;
-    const currentQuestion: number | undefined = yield select(
-      (state: OverallState) => state.workspaces.grading.currentQuestion
+    const [currentQuestion, courseId]: [number | undefined, number] = yield select(
+      (state: OverallState) => [state.workspaces.grading.currentQuestion, state.session.courseId!]
     );
 
     /**
@@ -423,7 +423,9 @@ function* BackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push(`/academy/grading/${submissionId}/${(currentQuestion || 0) + 1}`);
+    yield history.push(
+      `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
+    );
   };
 
   yield takeEvery(SUBMIT_GRADING, sendGrade);
@@ -540,7 +542,10 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     SAVE_SOURCECAST_DATA,
     function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
-      const role: Role = yield select((state: OverallState) => state.session.role!);
+      const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
+        state.session.role!,
+        state.session.courseId
+      ]);
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
       }
@@ -561,7 +566,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield history.push('/sourcecast');
+      yield history.push(`/courses/${courseId}/sourcecast`);
     }
   );
 
@@ -619,7 +624,7 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
-      yield history.push('/academy');
+      yield history.push(`/courses/${courseId}`);
     }
   );
 
@@ -720,13 +725,6 @@ function* BackendSaga(): SagaIterator {
       return yield showWarningMessage('An error occurred. Please try again.');
     }
 
-    // Set CourseRegistration first to ensure correct courseId when inserting the placeholder
-    // AssessmentConfigurations in new course
-    yield put(actions.setUser(user));
-    yield put(actions.setCourseRegistration(courseRegistration));
-    yield put(actions.setCourseConfiguration(courseConfiguration));
-
-    // Add a placeholder AssessmentConfig to ensure that the course has at least 1 AssessmentType
     const placeholderAssessmentConfig = [
       {
         type: 'Missions',
@@ -741,14 +739,15 @@ function* BackendSaga(): SagaIterator {
     const resp1: Response | null = yield call(
       putAssessmentConfigs,
       tokens,
-      placeholderAssessmentConfig
+      placeholderAssessmentConfig,
+      courseRegistration.courseId
     );
     if (!resp1 || !resp1.ok) {
       return yield handleResponseError(resp);
     }
-    yield put(actions.setAssessmentConfigurations(placeholderAssessmentConfig));
+
     yield call(showSuccessMessage, 'Successfully created your new course!');
-    yield history.push('/academy');
+    yield call([history, 'push'], `/courses/${courseRegistration.courseId}`);
   });
 
   yield takeEvery(

@@ -90,11 +90,11 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                             </div>
                           </div>
                           <div className=\\"profile-callouts\\">
-                            <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]}>
-                              <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/academy/quests/5/0\\" activeClassName=\\"profile-summary-navlink\\">
+                            <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]} courseId={[undefined]}>
+                              <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/courses/undefined/quests/5/0\\" activeClassName=\\"profile-summary-navlink\\">
                                 <Link aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} to={{...}} target=\\"_blank\\">
-                                  <LinkAnchor aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" navigate={[Function: navigate]}>
-                                    <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" onClick={[Function: onClick]}>
+                                  <LinkAnchor aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/courses/undefined/quests/5/0\\" navigate={[Function: navigate]}>
+                                    <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/courses/undefined/quests/5/0\\" onClick={[Function: onClick]}>
                                       <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (fully graded) Sidequest\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
                                           <Blueprint3.Icon icon=\\"lightbulb\\" size={20}>
@@ -134,11 +134,11 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                                 </Link>
                               </NavLink>
                             </ProfileCard>
-                            <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]}>
-                              <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/academy/quests/5/0\\" activeClassName=\\"profile-summary-navlink\\">
+                            <ProfileCard item={{...}} getFrac={[Function: getFrac]} parseColour={[Function: parseColour]} renderIcon={[Function: renderIcon]} courseId={[undefined]}>
+                              <NavLink className=\\"profile-summary-navlink\\" target=\\"_blank\\" to=\\"/courses/undefined/quests/5/0\\" activeClassName=\\"profile-summary-navlink\\">
                                 <Link aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} to={{...}} target=\\"_blank\\">
-                                  <LinkAnchor aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" navigate={[Function: navigate]}>
-                                    <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/academy/quests/5/0\\" onClick={[Function: onClick]}>
+                                  <LinkAnchor aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/courses/undefined/quests/5/0\\" navigate={[Function: navigate]}>
+                                    <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/courses/undefined/quests/5/0\\" onClick={[Function: onClick]}>
                                       <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Ungraded assessment\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
                                           <Blueprint3.Icon icon=\\"lightbulb\\" size={20}>

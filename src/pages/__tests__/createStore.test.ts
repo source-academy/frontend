@@ -45,23 +45,10 @@ const mockChangedState: OverallState = {
   }
 };
 
-const defaultRouter = {
-  action: 'POP',
-  location: {
-    hash: '',
-    pathname: '/',
-    query: {},
-    search: '',
-    state: undefined
-  }
-};
 describe('createStore() function', () => {
   test('has defaultState when initialised', () => {
     localStorage.removeItem('storedState');
-    expect(createStore().getState()).toEqual({
-      ...defaultState,
-      router: defaultRouter
-    });
+    expect(createStore().getState()).toEqual(defaultState);
   });
   test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));
@@ -76,10 +63,7 @@ describe('createStore() function', () => {
     const octokit = received.session.githubOctokitObject.octokit;
     delete received.session.githubOctokitObject.octokit;
 
-    expect(received).toEqual({
-      ...mockChangedState,
-      router: defaultRouter
-    });
+    expect(received).toEqual(mockChangedState);
     expect(octokit).toBeDefined();
     localStorage.removeItem('storedState');
   });

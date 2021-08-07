@@ -2,22 +2,23 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" component={[Function: Login]} />
-      <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
-      <Route path=\\"/playground\\" component={[Function: C] { displayName: 'withRouter(Connect(Playground))', WrappedComponent: [Function: Playground], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
       <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
-      <Route exact={true} path=\\"/sicpjs\\" render={[Function: redirectToSicp]} />
+      <Route exact={true} path=\\"/sicpjs\\">
+        <Redirect to=\\"/sicpjs/index\\" />
+      </Route>
       <Route path=\\"/sicpjs/:section\\" component={[Function: Sicp]} />
-      <Route path=\\"/githubassessments\\" component={[Function: component]} />
-      <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
+      <Route path=\\"/githubassessments\\" render={[Function: render]} />
+      <Route path=\\"/courses/:courseId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />
-      <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
-      <Route exact={true} path=\\"/\\" render={[Function: redirectToAcademy]} />
+      <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" component={[Function: C] { displayName: 'withRouter(Connect(MissionControl))', WrappedComponent: [Function: MissionControl], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
+      <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
+      <Redirect from=\\"/\\" exact={true} to=\\"/welcome\\" />
       <Route component={[Function: NotFound]} />
     </Switch>
   </div>
@@ -26,13 +27,15 @@ exports[`Application renders correctly 1`] = `
 
 exports[`Application shows disabled when in disabled period 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} updateLatestViewedCourse={[Function: updateLatestViewedCourse]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/login\\" component={[Function: Login]} />
-      <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
+      <Route path=\\"/courses\\" render={[Function: redirectToLogin]} />
       <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
-      <Route render={[Function: renderDisabled]} />
+      <Route>
+        <Disabled reason=\\"Testing\\" />
+      </Route>
     </Switch>
   </div>
 </div>"
