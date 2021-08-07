@@ -40,6 +40,7 @@ export type GameLocation = IGameActionable & {
 
 export enum GameItemType {
   navigation = 'navigation',
+  locations = 'locations',
   talkTopics = 'talkTopics',
   dialogues = 'dialogues',
   objects = 'objects',
