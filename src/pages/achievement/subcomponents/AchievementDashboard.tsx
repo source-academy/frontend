@@ -20,8 +20,9 @@ import {
 export type DispatchProps = {
   fetchAssessmentOverviews: () => void;
   getAchievements: () => void;
-  getGoals: (studentId: number) => void;
+  getGoals: (studentCourseRegId: number) => void;
   getOwnGoals: () => void;
+  getUserAssessmentOverviews: (studentCourseRegId: number) => void;
   getUsers: () => void;
   updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
@@ -33,6 +34,7 @@ export type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
+  achievementAssessmentOverviews: AssessmentOverview[];
   users: AchievementUser[];
 };
 
@@ -62,6 +64,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     getAchievements,
     getOwnGoals,
     getGoals,
+    getUserAssessmentOverviews,
     getUsers,
     updateGoalProgress,
     fetchAssessmentOverviews,
@@ -70,6 +73,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     name,
     role,
     assessmentOverviews,
+    achievementAssessmentOverviews,
     users
   } = props;
 
@@ -82,20 +86,28 @@ function Dashboard(props: DispatchProps & StateProps) {
    */
   useEffect(() => {
     selectedUser ? getGoals(selectedUser.courseRegId) : getOwnGoals();
+
+    selectedUser
+      ? getUserAssessmentOverviews(selectedUser.courseRegId)
+      : fetchAssessmentOverviews();
+
     getAchievements();
-  }, [selectedUser, getAchievements, getGoals, getOwnGoals]);
+  }, [
+    selectedUser,
+    getAchievements,
+    getGoals,
+    getOwnGoals,
+    getUserAssessmentOverviews,
+    fetchAssessmentOverviews
+  ]);
 
-  if (name && role && !assessmentOverviews) {
-    // If assessment overviews are not loaded, fetch them
-    fetchAssessmentOverviews();
-  }
+  const userAchievementOverviews = selectedUser
+    ? achievementAssessmentOverviews
+    : assessmentOverviews;
 
-  // one goal for submit, one goal for graded
-  if (role === Role.Student) {
-    assessmentOverviews?.forEach(assessmentOverview =>
-      insertFakeAchievements(assessmentOverview, inferencer)
-    );
-  }
+  userAchievementOverviews?.forEach(assessmentOverview =>
+    insertFakeAchievements(assessmentOverview, inferencer)
+  );
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
@@ -114,7 +126,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview
-          name={name || 'User'}
+          name={selectedUser ? selectedUser.name : name || 'User'}
           studio={role === Role.Student ? (group ? group : 'Student') : 'Staff'}
         />
         {role && role !== Role.Student && (

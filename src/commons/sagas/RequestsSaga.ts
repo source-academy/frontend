@@ -465,6 +465,36 @@ export const getAssessmentOverviews = async (
 };
 
 /**
+ * GET /courses/{courseId}/admin/assessments/{course_reg_id}
+ */
+export const getUserAssessmentOverviews = async (
+  courseRegId: number,
+  tokens: Tokens
+): Promise<AssessmentOverview[] | null> => {
+  const resp = await request(`${courseId()}/admin/assessments/${courseRegId}`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const assessmentOverviews = await resp.json();
+  return assessmentOverviews.map((overview: any) => {
+    overview.gradingStatus = computeGradingStatus(
+      overview.isManuallyGraded,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
+    delete overview.isManuallyGraded;
+    delete overview.gradedCount;
+    delete overview.questionCount;
+
+    return overview as AssessmentOverview;
+  });
+};
+
+/**
  * GET /courses/{courseId}/assessments/{assessmentId}
  * Note: if assessment is password-protected, a corresponding unlock request will be sent to
  * POST /courses/{courseId}/assessments/{assessmentId}/unlock
