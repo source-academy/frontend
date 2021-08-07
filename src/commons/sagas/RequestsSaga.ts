@@ -1052,16 +1052,16 @@ export const putNewUsers = async (
 };
 
 /**
- * PUT /courses/{courseId}/admin/users/role
+ * PUT /courses/{courseId}/admin/users/{courseRegId}/role
  */
 export const putUserRole = async (
   tokens: Tokens,
   courseRegId: number,
   role: Role
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/users/role`, 'PUT', {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}/role`, 'PUT', {
     ...tokens,
-    body: { courseRegId, role },
+    body: { role },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
