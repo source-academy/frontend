@@ -302,8 +302,8 @@ export function* mockBackendSaga(): SagaIterator {
 
       const courseConfiguration = { ...mockCourseConfigurations[idx] };
       yield put(actions.setCourseConfiguration(courseConfiguration));
-      yield put(actions.setCourseRegistration({ ...mockCourseRegistrations[idx] }));
       yield put(actions.setAssessmentConfigurations([...mockAssessmentConfigurations[idx]]));
+      yield put(actions.setCourseRegistration({ ...mockCourseRegistrations[idx] }));
       yield put(
         actions.updateSublanguage({
           chapter: courseConfiguration.sourceChapter,

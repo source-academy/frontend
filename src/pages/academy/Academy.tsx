@@ -92,7 +92,7 @@ const CourseSelectingAcademy: React.FC<{}> = () => {
     if (routeCourseId !== undefined && courseId !== routeCourseId) {
       dispatch(updateLatestViewedCourse(routeCourseId));
     }
-  });
+  }, [courseId, dispatch, routeCourseId]);
 
   return routeCourseId === courseId ? (
     <Academy />
