@@ -51,6 +51,7 @@ import {
   CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
   CLEAR_REPL_OUTPUT,
+  END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
@@ -170,6 +171,9 @@ describe('EVAL_EDITOR', () => {
         .dispatch({
           type: EVAL_EDITOR,
           payload: { workspaceLocation }
+        })
+        .dispatch({
+          type: END_CLEAR_CONTEXT
         })
         .silentRun()
     );
@@ -331,8 +335,9 @@ describe('EVAL_TESTCASE', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    const library = {
+    const library: Library = {
       chapter: context.chapter,
+      variant: 'default',
       external: {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
@@ -353,10 +358,10 @@ describe('EVAL_TESTCASE', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
-        // Should not interrupt execution, clear context or clear REPL
+        // Should interrupt execution and clear context but not clear REPL
         .not.put(beginInterruptExecution(workspaceLocation))
-        .not.put(beginClearContext(workspaceLocation, library, false))
-        .not.put(clearReplOutput(workspaceLocation))
+        .put(beginClearContext(workspaceLocation, library, false))
+        .not.put.actionType(CLEAR_REPL_OUTPUT)
         // Expect it to shard a new privileged context here and execute chunks in order
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
@@ -396,6 +401,9 @@ describe('EVAL_TESTCASE', () => {
         .dispatch({
           type: EVAL_TESTCASE,
           payload: { workspaceLocation, testcaseId }
+        })
+        .dispatch({
+          type: END_CLEAR_CONTEXT
         })
         .silentRun()
     );
