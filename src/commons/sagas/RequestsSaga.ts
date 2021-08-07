@@ -466,13 +466,13 @@ export const getAssessmentOverviews = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{course_reg_id}
+ * GET /courses/{courseId}/admin/users/{course_reg_id}/assessments
  */
 export const getUserAssessmentOverviews = async (
   courseRegId: number,
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
-  const resp = await request(`${courseId()}/admin/assessments/${courseRegId}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}/assessments`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
