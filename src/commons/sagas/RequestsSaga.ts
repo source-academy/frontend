@@ -28,6 +28,7 @@ import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/Sour
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
+  backendifyAchievementItem,
   backendifyGoalDefinition,
   frontendifyAchievementGoal,
   frontendifyAchievementItem
@@ -331,7 +332,7 @@ export async function bulkUpdateAchievements(
 ): Promise<Response | null> {
   const resp = await request(`${courseId()}/admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { achievements: achievements },
+    body: { achievements: achievements.map(achievement => backendifyAchievementItem(achievement)) },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

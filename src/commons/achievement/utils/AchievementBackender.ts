@@ -52,3 +52,9 @@ export const frontendifyAchievementItem = (achievement: any) =>
       description: achievement.view.description || ''
     }
   } as AchievementItem);
+
+export const backendifyAchievementItem = (achievement: AchievementItem) => ({
+  ...achievement,
+  deadline: achievement.deadline ? achievement.deadline : null,
+  release: achievement.release ? achievement.release : null
+});
