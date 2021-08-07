@@ -47,7 +47,7 @@ export async function loadData(): Promise<FullSaveState> {
   const resp = await fetch(`${Constants.backendUrl}/v2/user`, options);
   const message = await resp.text();
 
-  const json = JSON.parse(message).gameStates;
+  const json = JSON.parse(message).courseRegistration?.gameStates;
   return _.isEmpty(json) ? createEmptySaveState() : json;
 }
 
