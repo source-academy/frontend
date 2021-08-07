@@ -8,8 +8,7 @@ import {
   fetchUserAndCourse,
   loginGitHub,
   logoutGitHub,
-  updateCourseResearchAgreement,
-  updateLatestViewedCourse
+  updateCourseResearchAgreement
 } from './actions/SessionActions';
 import Application, { DispatchProps, StateProps } from './Application';
 import { OverallState } from './ApplicationTypes';
@@ -40,7 +39,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleGitHubLogIn: loginGitHub,
       handleGitHubLogOut: logoutGitHub,
       fetchUserAndCourse: fetchUserAndCourse,
-      updateLatestViewedCourse: updateLatestViewedCourse,
       handleCreateCourse: createCourse,
       updateCourseResearchAgreement: updateCourseResearchAgreement
     },

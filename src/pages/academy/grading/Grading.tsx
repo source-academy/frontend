@@ -53,6 +53,7 @@ export type StateProps = {
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
   role?: Role;
+  courseId?: number;
 };
 
 type State = {
@@ -132,6 +133,7 @@ class Grading extends React.Component<GradingProps, State> {
         field: '',
         cellRendererFramework: GradingActionsCell,
         cellRendererParams: {
+          courseId: this.props.courseId,
           courseRegId: this.props.courseRegId,
           handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
           handleReautogradeSubmission: this.props.handleReautogradeSubmission,

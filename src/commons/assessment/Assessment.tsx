@@ -63,6 +63,7 @@ export type OwnProps = {
 export type StateProps = {
   assessmentOverviews?: AssessmentOverview[];
   isStudent: boolean;
+  courseId?: number;
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
@@ -133,15 +134,13 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/academy/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
-          Constants.defaultQuestionId
-        }`}
+        to={`/courses/${props.courseId}/${assessmentTypeLink(
+          overview.type
+        )}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
       >
         <Button
           icon={icon}
           minimal={true}
-          // intentional: each listing renders its own version of onClick
-          // tslint:disable-next-line:jsx-no-lambda
           onClick={() =>
             props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
           }

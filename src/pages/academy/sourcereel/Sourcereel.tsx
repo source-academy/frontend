@@ -118,6 +118,7 @@ export type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   timeResumed: number;
+  courseId?: number;
 };
 
 type State = {
@@ -347,6 +348,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
                 <SourcecastTable
                   handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
                   sourcecastIndex={this.props.sourcecastIndex}
+                  courseId={this.props.courseId}
                 />
               </div>
             ),

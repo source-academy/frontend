@@ -1,3 +1,4 @@
+import { courseId } from '../../../storySimulator/StorySimulatorRequest';
 import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
@@ -408,7 +409,7 @@ class GameGlobalAPI {
       ['Yes', 'No']
     );
     if (response === 0) {
-      window.open(`/academy/missions/${assessmentId}/0`, 'blank');
+      window.open(`/courses/${courseId()}/missions/${assessmentId}/0`, 'blank');
       window.focus();
     }
   }

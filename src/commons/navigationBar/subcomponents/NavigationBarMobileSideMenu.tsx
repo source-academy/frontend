@@ -27,6 +27,7 @@ type OwnProps = {
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes?: AssessmentType[];
+  courseId?: number;
 };
 
 const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = props => (
@@ -40,7 +41,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     {props.role ? (
       props.assessmentTypes?.map((assessmentType, idx) => (
         <NavLink
-          to={`/academy/${assessmentTypeLink(assessmentType)}`}
+          to={`/courses/${props.courseId}/${assessmentTypeLink(assessmentType)}`}
           activeClassName={Classes.ACTIVE}
           className={classNames(
             'NavigationBar__link__mobile',
@@ -49,7 +50,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
             Classes.LARGE
           )}
           onClick={props.onClose}
-          key={assessmentType}
+          key={idx}
         >
           <Icon icon={icons[idx]} />
           <div>{assessmentType}</div>
@@ -72,7 +73,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
           Classes.MINIMAL,
           Classes.LARGE
         )}
-        to="/sourcecast"
+        to={`/courses/${props.courseId}/sourcecast`}
         onClick={props.onClose}
       >
         <Icon icon={IconNames.MUSIC} />
@@ -138,7 +139,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
           Classes.MINIMAL,
           Classes.LARGE
         )}
-        to="/achievements"
+        to={`/courses/${props.courseId}/achievements`}
         onClick={props.onClose}
       >
         <Icon icon={IconNames.MOUNTAIN} />
