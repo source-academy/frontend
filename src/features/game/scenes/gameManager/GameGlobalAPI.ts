@@ -1,4 +1,3 @@
-import { courseId } from '../../../storySimulator/StorySimulatorRequest';
 import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
@@ -18,7 +17,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
-import { mandatory } from '../../utils/GameUtils';
+import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
 /**
