@@ -1,4 +1,4 @@
-import { assetsPrefix } from 'src/features/storySimulator/StorySimulatorRequest';
+import { store } from 'src/pages/createStore';
 
 import { Constants } from '../commons/CommonConstants';
 
@@ -89,3 +89,6 @@ export function lastElement<T>(array: T[]): T {
   }
   return array[array.length - 1];
 }
+
+export const courseId = () => store.getState().session.courseId;
+export const assetsPrefix = () => store.getState().session.assetsPrefix || '';
