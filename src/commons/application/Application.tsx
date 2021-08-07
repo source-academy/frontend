@@ -220,12 +220,18 @@ const Application: React.FC<ApplicationProps> = props => {
               <Redirect
                 from="/sourcecast/:splat?"
                 to={`/courses/${props.courseId}/sourcecast/:splat?`}
+                key="legacy-sourcecast"
               />,
               <Redirect
                 from="/achievements/:splat?"
                 to={`/courses/${props.courseId}/achievements/:splat?`}
+                key="legacy-achievements"
               />,
-              <Redirect from="/academy/:splat?" to={`/courses/${props.courseId}/:splat?`} />
+              <Redirect
+                from="/academy/:splat?"
+                to={`/courses/${props.courseId}/:splat?`}
+                key="legacy-academy"
+              />
             ]}
             <Route component={NotFound} />
           </Switch>
