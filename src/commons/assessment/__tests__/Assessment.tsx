@@ -8,6 +8,7 @@ import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Assessment, { AssessmentProps } from '../Assessment';
 
 const defaultProps: AssessmentProps = {
+  courseId: 1,
   assessmentConfiguration: {
     assessmentConfigId: 1,
     type: 'Missions',

@@ -50,7 +50,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
             Classes.LARGE
           )}
           onClick={props.onClose}
-          key={assessmentType}
+          key={idx}
         >
           <Icon icon={icons[idx]} />
           <div>{assessmentType}</div>

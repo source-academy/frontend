@@ -170,8 +170,10 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      yield history.push(`/courses/${courseRegistration.courseId}`);
+      return yield history.push(`/courses/${courseRegistration.courseId}`);
     }
+
+    return yield history.push(`/welcome`);
   });
 
   yield takeEvery(
@@ -723,6 +725,16 @@ function* BackendSaga(): SagaIterator {
     if (!user || !courseRegistration || !courseConfiguration) {
       return yield showWarningMessage('An error occurred. Please try again.');
     }
+
+    /**
+     * setUser updates the Dropdown course selection menu with the updated courses
+     *
+     * Setting the role here handles an edge case where a user creates his first ever course.
+     * Without it, the history.push below would not work as the /courses routes will not be rendered
+     * (see Application.tsx)
+     */
+    yield put(actions.setUser(user));
+    yield put(actions.setCourseRegistration({ role: Role.Student }));
 
     const placeholderAssessmentConfig = [
       {

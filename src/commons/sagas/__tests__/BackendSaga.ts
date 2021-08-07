@@ -981,6 +981,8 @@ describe('Test CREATE_COURSE action', () => {
       .withState(mockStates)
       .call(postCreateCourse, mockTokens, courseConfig)
       .call(getUser, mockTokens)
+      .put(setUser(mockUser))
+      .put(setCourseRegistration({ role: Role.Student }))
       .call(
         putAssessmentConfigs,
         mockTokens,
@@ -1014,9 +1016,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.call.fn(getUser)
       .not.put.actionType(SET_USER)
       .not.put.actionType(SET_COURSE_REGISTRATION)
-      .not.put.actionType(SET_COURSE_CONFIGURATION)
       .not.call.fn(putAssessmentConfigs)
-      .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.call.fn(showSuccessMessage)
       .not.call.fn(history.push)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])

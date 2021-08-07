@@ -203,14 +203,6 @@ const Application: React.FC<ApplicationProps> = props => {
             />
             <Route path="/playground" render={ensureUserAndRoleAndRouteTo(props, <Playground />)} />
 
-            {/* <Route
-              path="/sourcecast/:sourcecastId?"
-              render={ensureUserAndRoleAndRouteTo(props, <Sourcecast />)}
-            />
-            <Route
-              path="/achievements"
-              render={ensureUserAndRoleAndRouteTo(props, <Achievement />)}
-            /> */}
             <Redirect
               from="/"
               exact={true}
