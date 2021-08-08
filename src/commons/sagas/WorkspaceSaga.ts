@@ -62,6 +62,7 @@ import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
+  END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_SILENT,
@@ -84,46 +85,17 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;
-    const [
-      prepend,
-      editorCode,
-      chapter,
-      execTime,
-      symbols,
-      externalLibraryName,
-      globals,
-      variant,
-      remoteExecutionSession
-    ]: [
+    const [prepend, editorCode, execTime, remoteExecutionSession]: [
       string,
       string,
       number,
-      number,
-      string[],
-      ExternalLibraryName,
-      Array<[string, any]>,
-      Variant,
       DeviceSession | undefined
     ] = yield select((state: OverallState) => [
       state.workspaces[workspaceLocation].editorPrepend,
       state.workspaces[workspaceLocation].editorValue!,
-      state.workspaces[workspaceLocation].context.chapter,
       state.workspaces[workspaceLocation].execTime,
-      state.workspaces[workspaceLocation].context.externalSymbols,
-      state.workspaces[workspaceLocation].externalLibrary,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].context.variant,
       state.session.remoteExecutionSession
     ]);
-    const library = {
-      chapter,
-      variant,
-      external: {
-        name: externalLibraryName,
-        symbols
-      },
-      globals
-    };
 
     yield put(actions.addEvent([EventType.RUN_CODE]));
 
@@ -132,8 +104,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     } else {
       // End any code that is running right now.
       yield put(actions.beginInterruptExecution(workspaceLocation));
-      // Clear the context, with the same chapter and externalSymbols as before.
-      yield put(actions.beginClearContext(workspaceLocation, library, false));
+      yield* clearContext(workspaceLocation);
       yield put(actions.clearReplOutput(workspaceLocation));
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
       let value = editorCode;
@@ -311,13 +282,11 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
-      // tslint:disable: no-shadowed-variable
       const prepend = state.workspaces[workspaceLocation].editorPrepend;
       const value = state.workspaces[workspaceLocation].editorValue!;
       const postpend = state.workspaces[workspaceLocation].editorPostpend;
       const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
       return [prepend, value, postpend, testcase] as [string, string, string, string];
-      // tslint:enable: no-shadowed-variable
     });
     const [prepend, value, postpend, testcase] = code;
     const type: TestcaseType = yield select(
@@ -327,8 +296,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => state.workspaces[workspaceLocation].execTime
     );
 
-    // Do not interrupt execution of other testcases (potential race condition)
-    // No need to clear the context, since a shard context will be used for testcase execution
+    yield* clearContext(workspaceLocation);
+
     // Do NOT clear the REPL output!
 
     /**
@@ -351,6 +320,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
     // Halt execution if the student's code in the editor results in an error
     if (context.errors.length) {
+      yield put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index));
       return;
     }
 
@@ -568,6 +538,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       if (testcases.length > 0) {
         // Display a message to the user
         yield call(showSuccessMessage, `Running all testcases!`, 2000);
+        yield put(actions.clearReplOutput(workspaceLocation));
         for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
           /** Run testcases synchronously - this blocks the generator until result of current
@@ -582,6 +553,10 @@ export default function* WorkspaceSaga(): SagaIterator {
           if (error || !success) {
             return;
           }
+
+          // break each testcase up into separate event loop iterations
+          // so that the UI updates
+          yield new Promise(resolve => setTimeout(resolve, 0));
         }
       }
     }
@@ -602,6 +577,37 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
   }
+}
+
+function* clearContext(workspaceLocation: WorkspaceLocation) {
+  const [chapter, symbols, externalLibraryName, globals, variant]: [
+    number,
+    string[],
+    ExternalLibraryName,
+    Array<[string, any]>,
+    Variant
+  ] = yield select((state: OverallState) => [
+    state.workspaces[workspaceLocation].context.chapter,
+    state.workspaces[workspaceLocation].context.externalSymbols,
+    state.workspaces[workspaceLocation].externalLibrary,
+    state.workspaces[workspaceLocation].globals,
+    state.workspaces[workspaceLocation].context.variant
+  ]);
+
+  const library = {
+    chapter,
+    variant,
+    external: {
+      name: externalLibraryName,
+      symbols
+    },
+    globals
+  };
+
+  // Clear the context, with the same chapter and externalSymbols as before.
+  yield put(actions.beginClearContext(workspaceLocation, library, false));
+  // Wait for the clearing to be done.
+  yield take(END_CLEAR_CONTEXT);
 }
 
 export function* blockExtraMethods(

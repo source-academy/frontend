@@ -7,7 +7,7 @@ export const playgroundQuestionId: number = -1;
 
 type PlaybackInitial = {
   chapter: number;
-  externalLibrary: ExternalLibraryName;
+  externalLibrary?: ExternalLibraryName;
   editorValue: string;
 };
 
