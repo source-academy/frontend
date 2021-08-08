@@ -1103,7 +1103,7 @@ describe('RUN_ALL_TESTCASES', () => {
         payload: { type, value, workspaceLocation, index: 0 }
       })
       .put(evalTestcase(workspaceLocation, 3))
-      .silentRun();
+      .silentRun(2000);
   });
 
   test('prematurely terminates if execution of one testcase results in an error', () => {
