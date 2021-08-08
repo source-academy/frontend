@@ -87,7 +87,7 @@ class GameStateManager {
    * @param gameItemType the type of item being watched
    */
   private getSubscriberForItemType(gameItemType: GameItemType) {
-    return mandatory(this.subscribers.get(gameItemType));
+    return this.subscribers.get(gameItemType);
   }
 
   ///////////////////////////////
@@ -227,10 +227,10 @@ class GameStateManager {
    * @param itemId item ID to be added
    */
   public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId) {
-    this.gameMap.getLocationAtId(locationId)[gameItemType].add(itemId);
+    this.gameMap.getLocationAtId(locationId)[gameItemType]?.add(itemId);
 
     this.isCurrentLocation(locationId)
-      ? this.getSubscriberForItemType(gameItemType).handleAdd(itemId)
+      ? this.getSubscriberForItemType(gameItemType)?.handleAdd(itemId)
       : this.addLocationNotif(locationId);
   }
 
@@ -245,10 +245,10 @@ class GameStateManager {
    * @param itemId item ID to be removed
    */
   public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: string) {
-    this.gameMap.getLocationAtId(locationId)[gameItemType].delete(itemId);
+    this.gameMap.getLocationAtId(locationId)[gameItemType]?.delete(itemId);
 
     this.isCurrentLocation(locationId)
-      ? this.getSubscriberForItemType(gameItemType).handleDelete(itemId)
+      ? this.getSubscriberForItemType(gameItemType)?.handleDelete(itemId)
       : this.addLocationNotif(locationId);
   }
 
@@ -267,7 +267,7 @@ class GameStateManager {
       if (!location.objects.has(id)) return;
 
       this.isCurrentLocation(locId)
-        ? this.getSubscriberForItemType(GameItemType.objects).handleMutate(id)
+        ? this.getSubscriberForItemType(GameItemType.objects)?.handleMutate(id)
         : this.addLocationNotif(locId);
     });
   }
@@ -287,7 +287,7 @@ class GameStateManager {
       if (!location.boundingBoxes.has(id)) return;
 
       this.isCurrentLocation(locId)
-        ? this.getSubscriberForItemType(GameItemType.boundingBoxes).handleMutate(id)
+        ? this.getSubscriberForItemType(GameItemType.boundingBoxes)?.handleMutate(id)
         : this.addLocationNotif(locId);
     });
   }
@@ -327,7 +327,7 @@ class GameStateManager {
       if (!location.characters.has(id)) return;
 
       this.isCurrentLocation(locId)
-        ? this.getSubscriberForItemType(GameItemType.characters).handleMutate(id)
+        ? this.getSubscriberForItemType(GameItemType.characters)?.handleMutate(id)
         : this.addLocationNotif(locId);
     });
   }
