@@ -4,13 +4,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 0 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "fn": [Function],
@@ -129,7 +129,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
@@ -210,13 +210,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 1 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "fn": [Function],
@@ -345,7 +345,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
@@ -436,13 +436,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 2 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "x1": Array [
@@ -523,7 +523,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
@@ -565,13 +565,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 3 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "e": Array [
@@ -699,7 +699,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
@@ -790,13 +790,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 4 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "f": [Function],
@@ -855,7 +855,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
@@ -998,7 +998,7 @@ Array [
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "pre-declared names": "...",
+            ":::pre-declared names::": Symbol(),
           },
           "name": "global",
           "tail": null,
@@ -1015,15 +1015,15 @@ exports[`EnvVisualizer calculates correct layout for code sample 5 1`] = `
 Array [
   Object {
     "head": Object {
+      ":::pre-declared names::": Symbol(),
       "accumulate": [Function],
       "pair": [Function],
-      "pre-declared names": "...",
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   "accumulate: ",
   [Function],
   "pair: ",
@@ -1092,9 +1092,9 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
+          ":::pre-declared names::": Symbol(),
           "accumulate": [Function],
           "pair": [Function],
-          "pre-declared names": "...",
         },
         "name": "global",
         "tail": null,
@@ -1119,13 +1119,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 6 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "x": Array [],
@@ -1181,7 +1181,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
