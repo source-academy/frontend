@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 
 import { Role } from '../../application/ApplicationTypes';
-import { AssessmentStatuses } from '../../assessment/AssessmentTypes';
+import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import Profile from '../Profile';
 
@@ -24,13 +24,28 @@ const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
     -- recommendation from https://reacttraining.com/react-router/web/guides/testing
 */
 
+const assessmentConfigurations: AssessmentConfiguration[] = [
+  'Missions',
+  'Quests',
+  'Paths',
+  'Contests',
+  'Others'
+].map((c, i) => ({
+  assessmentConfigId: i,
+  type: c,
+  isManuallyGraded: false,
+  displayInDashboard: false,
+  hoursBeforeEarlyXpDecay: 0,
+  earlySubmissionXp: 0
+}));
+
 test('Profile renders correctly when there are no closed assessments', () => {
   const props = {
     name: 'yeet',
     role: Role.Student,
     courseId: 1,
     assessmentOverviews: mockNoClosedAssessmentOverviews,
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+    assessmentConfigurations,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
@@ -59,7 +74,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
     role: Role.Staff,
     courseId: 1,
     assessmentOverviews: mockAssessmentOverviews,
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+    assessmentConfigurations,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
     onClose: () => {}

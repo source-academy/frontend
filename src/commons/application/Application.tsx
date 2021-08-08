@@ -14,7 +14,7 @@ import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
 import Welcome from '../../pages/welcome/Welcome';
-import { AssessmentType } from '../assessment/AssessmentTypes';
+import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { Role } from './ApplicationTypes';
@@ -39,7 +39,7 @@ export type StateProps = {
   courseShortName?: string;
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
-  assessmentTypes?: AssessmentType[];
+  assessmentConfigurations?: AssessmentConfiguration[];
   agreedToResearch?: boolean | null;
 };
 
@@ -163,7 +163,10 @@ const Application: React.FC<ApplicationProps> = props => {
         courseShortName={props.courseShortName}
         enableAchievements={props.enableAchievements}
         enableSourcecast={props.enableSourcecast}
-        assessmentTypes={props.assessmentTypes}
+        assessmentTypes={React.useMemo(
+          () => props.assessmentConfigurations?.map(c => c.type),
+          [props.assessmentConfigurations]
+        )}
       />
       <div className="Application__main">
         {isDisabledEffective && (
