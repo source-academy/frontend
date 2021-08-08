@@ -127,6 +127,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
+  courseId?: number;
 };
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
@@ -521,7 +522,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
    */
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/academy/${assessmentTypeLink(props.assessment!.type)}`;
+    const listingPath = `/courses/${props.courseId}/${assessmentTypeLink(props.assessment!.type)}`;
     const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
 

@@ -17,7 +17,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
-import { mandatory } from '../../utils/GameUtils';
+import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
 /**
@@ -408,7 +408,7 @@ class GameGlobalAPI {
       ['Yes', 'No']
     );
     if (response === 0) {
-      window.open(`/academy/missions/${assessmentId}/0`, 'blank');
+      window.open(`/courses/${courseId()}/missions/${assessmentId}/0`, 'blank');
       window.focus();
     }
   }

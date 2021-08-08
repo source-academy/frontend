@@ -24,6 +24,7 @@ type OwnProps = {
     playbackData: PlaybackData
   ) => void;
   sourcecastIndex: SourcecastData[] | null;
+  courseId?: number;
 };
 
 /**
@@ -89,6 +90,9 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           headerName: 'Share',
           field: 'uid',
           cellRendererFramework: SourceRecorderShareCell,
+          cellRendererParams: {
+            courseId: this.props.courseId
+          },
           minWidth: 80,
           suppressMovable: true,
           suppressMenu: true

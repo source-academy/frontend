@@ -28,6 +28,7 @@ export type GameLocation = IGameActionable & {
   id: LocationId;
   name: string;
   assetKey: AssetKey;
+  previewKey: AssetKey | null;
   modes: Set<GameMode>;
   navigation: Set<LocationId>;
   talkTopics: Set<ItemId>;
@@ -39,6 +40,7 @@ export type GameLocation = IGameActionable & {
 
 export enum GameItemType {
   navigation = 'navigation',
+  locations = 'locations',
   talkTopics = 'talkTopics',
   dialogues = 'dialogues',
   objects = 'objects',

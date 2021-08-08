@@ -67,7 +67,8 @@ export function* mockBackendSaga(): SagaIterator {
 
     yield put(actions.setTokens(tokens));
     yield mockGetUserAndCourse();
-    yield history.push('/academy');
+    const courseId: number = yield select((state: OverallState) => state.session.courseId!);
+    yield history.push(`/courses/${courseId}`);
   });
 
   const mockGetUserAndCourse = function* () {
@@ -236,18 +237,21 @@ export function* mockBackendSaga(): SagaIterator {
     const { submissionId } = action.payload;
     yield* sendGrade(action);
 
-    const currentQuestion = yield select(
-      (state: OverallState) => state.workspaces.grading.currentQuestion
-    );
+    const [currentQuestion, courseId] = yield select((state: OverallState) => [
+      state.workspaces.grading.currentQuestion,
+      state.session.courseId!
+    ]);
     /**
      * Move to next question for grading: this only works because the
      * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
      * used in the Grading Workspace
      *
      * If the questionId is out of bounds, the componentDidUpdate callback of
-     * GradingWorkspace will cause a redirect back to '/academy/grading'
+     * GradingWorkspace will cause a redirect back to '/courses/${courseId}/grading'
      */
-    yield history.push(`/academy/grading/${submissionId}/${(currentQuestion || 0) + 1}`);
+    yield history.push(
+      `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
+    );
   };
 
   yield takeEvery(SUBMIT_GRADING, sendGrade);
@@ -298,8 +302,8 @@ export function* mockBackendSaga(): SagaIterator {
 
       const courseConfiguration = { ...mockCourseConfigurations[idx] };
       yield put(actions.setCourseConfiguration(courseConfiguration));
-      yield put(actions.setCourseRegistration({ ...mockCourseRegistrations[idx] }));
       yield put(actions.setAssessmentConfigurations([...mockAssessmentConfigurations[idx]]));
+      yield put(actions.setCourseRegistration({ ...mockCourseRegistrations[idx] }));
       yield put(
         actions.updateSublanguage({
           chapter: courseConfiguration.sourceChapter,
@@ -311,7 +315,6 @@ export function* mockBackendSaga(): SagaIterator {
         })
       );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
-      yield history.push('/academy');
     }
   );
 

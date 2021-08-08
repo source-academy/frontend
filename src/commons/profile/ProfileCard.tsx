@@ -10,6 +10,7 @@ type ProfileCardProps = DispatchProps & StateProps;
 
 type StateProps = {
   item: AssessmentOverview;
+  courseId?: number;
 };
 
 type DispatchProps = {
@@ -45,7 +46,7 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
         className="profile-summary-navlink"
         key={`${item.title}-${item.id}`}
         target="_blank"
-        to={`/academy/${assessmentTypeLink(item.type)}/${item.id}/0`}
+        to={`/courses/${this.props.courseId}/${assessmentTypeLink(item.type)}/${item.id}/0`}
         activeClassName="profile-summary-navlink"
       >
         <Callout

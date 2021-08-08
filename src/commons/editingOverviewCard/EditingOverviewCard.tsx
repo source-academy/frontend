@@ -24,7 +24,6 @@ import controlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
-import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
@@ -34,7 +33,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  listingPath?: string;
+  listingPath: string;
   overview: AssessmentOverview;
   assessmentTypes: AssessmentType[];
 };
@@ -156,8 +155,16 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
                   : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            {this.makeOptionsButton()}
-            {makeOverviewCardButton(overview, this.props.listingPath)}
+            <Button icon={IconNames.WRENCH} minimal={true} onClick={this.toggleOptionsOverlay}>
+              Other Options
+            </Button>
+            <NavLink
+              to={`${this.props.listingPath}/${overview.id.toString()}/${
+                Constants.defaultQuestionId
+              }`}
+            >
+              {controlButton('Edit mission', IconNames.EDIT)}
+            </NavLink>
           </div>
         </div>
       </Card>
@@ -182,17 +189,9 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
       icon={IconNames.EXPORT}
       intent={Intent.DANGER}
       minimal={true}
-      // intentional: each menu renders own version of onClick
-      // tslint:disable-next-line:jsx-no-lambda
       onClick={this.handleExportXml}
     >
       Save as XML
-    </Button>
-  );
-
-  private makeOptionsButton = () => (
-    <Button icon={IconNames.WRENCH} minimal={true} onClick={this.toggleOptionsOverlay}>
-      Other Options
     </Button>
   );
 
@@ -267,16 +266,6 @@ const createPlaceholder = (str: string): string => {
   } else {
     return str;
   }
-};
-
-const makeOverviewCardButton = (overview: AssessmentOverview, listingPath: string | undefined) => {
-  const label: string = 'Edit mission';
-  listingPath = listingPath || '/academy/' + assessmentTypeLink(overview.type);
-  return (
-    <NavLink to={listingPath + `/${overview.id.toString()}/${Constants.defaultQuestionId}`}>
-      {controlButton(label, IconNames.EDIT)}
-    </NavLink>
-  );
 };
 
 const AssessmentTypeSelectComponent = Select.ofType<AssessmentType>();

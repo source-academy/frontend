@@ -59,7 +59,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
     storedSubmissionId: state.workspaces.grading.currentSubmission,
-    storedQuestionId: state.workspaces.grading.currentQuestion
+    storedQuestionId: state.workspaces.grading.currentQuestion,
+    courseId: state.session.courseId
   };
 };
 

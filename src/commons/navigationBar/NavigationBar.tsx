@@ -14,9 +14,10 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
+import { Location } from 'history';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
+import { match, NavLink, Route, Switch, useLocation } from 'react-router-dom';
 
 import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import { Role } from '../application/ApplicationTypes';
@@ -36,7 +37,6 @@ type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
-  updateLatestViewedCourse: (courseId: number) => void;
   handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
 
@@ -49,6 +49,19 @@ type StateProps = {
   enableAchievements?: boolean;
   enableSourcecast?: boolean;
   assessmentTypes?: AssessmentType[];
+};
+
+const matchSourcecastAchievement = /^\/courses\/\d+\/(sourcecast|achievements)/;
+const matchExceptSourcecastAchievement = (match: match | null, location: Location) => {
+  if (!match) {
+    return false;
+  }
+
+  if (matchSourcecastAchievement.test(location.pathname)) {
+    return false;
+  }
+
+  return true;
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
@@ -191,21 +204,20 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
       <NavLink
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/academy"
+        activeClassName={Classes.ACTIVE}
+        to={props.courseId == null ? '/welcome' : `/courses/${props.courseId}`}
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        {props.courseShortName && (
-          <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortName}</NavbarHeading>
-        )}
-        {!props.courseShortName && (
-          <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy @ NUS</NavbarHeading>
-        )}
+        <NavbarHeading style={{ paddingBottom: '0px' }}>
+          {props.courseShortName || 'Source Academy @ NUS'}
+        </NavbarHeading>
       </NavLink>
 
       {(props.role || Constants.enableGitHubAssessments) && (
         <NavigationBarMobileSideMenu
           name={props.name}
           role={props.role}
+          courseId={props.courseId}
           enableAchievements={props.enableAchievements}
           enableSourcecast={props.enableSourcecast}
           assessmentTypes={props.assessmentTypes}
@@ -223,7 +235,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavbarGroup>
         {props.assessmentTypes?.map((assessmentType, idx) => (
           <NavLink
-            to={`/academy/${assessmentTypeLink(assessmentType)}`}
+            to={`/courses/${props.courseId}/${assessmentTypeLink(assessmentType)}`}
             activeClassName={Classes.ACTIVE}
             className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
             key={assessmentType}
@@ -244,22 +256,25 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     <NavLink
       activeClassName={Classes.ACTIVE}
       className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      to="/academy"
+      to={props.courseId == null ? '/welcome' : `/courses/${props.courseId}`}
+      isActive={matchExceptSourcecastAchievement}
     >
       <Icon icon={IconNames.SYMBOL_DIAMOND} />
-      {props.courseShortName && (
-        <NavbarHeading style={{ paddingBottom: '0px' }}>{props.courseShortName}</NavbarHeading>
-      )}
-      {!props.courseShortName && (
-        <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy @ NUS</NavbarHeading>
-      )}
+      <NavbarHeading style={{ paddingBottom: '0px' }}>
+        {props.courseShortName || 'Source Academy @ NUS'}
+      </NavbarHeading>
     </NavLink>
   );
 
-  const enableDesktopPopoverIn = ['/playground', '/sourcecast'];
-  const enableDesktopPopover = enableDesktopPopoverIn.reduce((acc, x) => {
-    return acc || location.pathname.startsWith(x);
-  }, false);
+  const enableDesktopPopoverIn = [
+    '/playground',
+    '/sicpjs',
+    '/contributors',
+    `/courses/${props.courseId}/sourcecast`,
+    `/courses/${props.courseId}/achievements`
+  ];
+  const enableDesktopPopover =
+    props.courseId != null && !!enableDesktopPopoverIn.find(x => location.pathname.startsWith(x));
 
   // Handles the Source Academy @ NUS left desktop navbar group
   const desktopNavbarLeft = (
@@ -281,7 +296,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/sourcecast"
+          to={`/courses/${props.courseId}/sourcecast`}
         >
           <Icon icon={IconNames.MUSIC} />
           <div className="navbar-button-text">Sourcecast</div>
@@ -321,7 +336,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/achievements"
+          to={`/courses/${props.courseId}/achievements`}
         >
           <Icon icon={IconNames.MOUNTAIN} />
           <div className="navbar-button-text">Achievements</div>
@@ -349,7 +364,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
       <Dropdown
         handleLogOut={props.handleLogOut}
-        updateLatestViewedCourse={props.updateLatestViewedCourse}
         handleCreateCourse={props.handleCreateCourse}
         courses={props.courses}
         courseId={props.courseId}
@@ -371,14 +385,20 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
       <Switch>
         <Route path="/playground" />
-        <Route path="/sourcecast" />
         <Route path="/githubassessments" />
+        <Route path="/contributors" />
+        <Route path="/courses/:courseId/sourcecast" />
+        <Route path="/courses/:courseId/achievements" />
         <Route path="/sicpjs/:section?">
           <SicpNavigationBar />
         </Route>
         <Route>
           {!Constants.playgroundOnly && props.role && !isMobileBreakpoint && (
-            <AcademyNavigationBar role={props.role} assessmentTypes={props.assessmentTypes} />
+            <AcademyNavigationBar
+              role={props.role}
+              assessmentTypes={props.assessmentTypes}
+              courseId={props.courseId!}
+            />
           )}
         </Route>
       </Switch>

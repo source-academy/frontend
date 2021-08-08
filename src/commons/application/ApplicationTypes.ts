@@ -303,10 +303,6 @@ export const defaultSession: SessionState = {
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
-  historyHelper: {
-    lastAcademyLocations: [null, null],
-    lastGeneralLocations: [null, null]
-  },
   notifications: []
 };
 

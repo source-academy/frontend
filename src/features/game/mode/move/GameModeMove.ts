@@ -124,7 +124,7 @@ class GameModeMove implements IGameUI {
           await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Sequence);
           await GameGlobalAPI.getInstance().changeLocationTo(nav);
         },
-        onHover: () => previewLoc(location.assetKey),
+        onHover: () => previewLoc(location.previewKey || location.assetKey),
         onOut: () => previewDefault()
       };
     });

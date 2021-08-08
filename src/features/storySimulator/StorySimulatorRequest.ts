@@ -1,6 +1,6 @@
 import Constants from '../../commons/utils/Constants';
-import { store } from '../../pages/createStore';
 import SourceAcademyGame from '../game/SourceAcademyGame';
+import { courseId } from '../game/utils/GameUtils';
 
 const sendRequest =
   (route: string) =>
@@ -32,8 +32,6 @@ const sendRequest =
     }
   };
 
-export const courseId = () => store.getState().session.courseId;
-export const assetsPrefix = () => store.getState().session.assetsPrefix || '';
 export const sendAssetRequest = sendRequest(`admin/assets`);
 export const sendStoryRequest = sendRequest(`stories`);
 export const sendAdminStoryRequest = sendRequest(`admin/stories`);

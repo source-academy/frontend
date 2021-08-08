@@ -15,6 +15,7 @@ type DispatchProps = {
 
 type StateProps = {
   data: GradingOverview;
+  courseId?: number;
   courseRegId?: number;
   role?: Role;
 };
@@ -42,7 +43,7 @@ class GradingActionsCell extends React.Component<GradingActionsCellProps> {
     return (
       <>
         <AnchorButtonLink
-          to={`/academy/grading/${this.props.data.submissionId}`}
+          to={`/courses/${this.props.courseId}/grading/${this.props.data.submissionId}`}
           icon="annotation"
           minimal
           title="Grade"
