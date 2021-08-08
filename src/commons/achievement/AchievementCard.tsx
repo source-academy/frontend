@@ -65,7 +65,7 @@ function AchievementCard(props: AchievementCardProps) {
         <ProgressBar
           animate={false}
           className="progress"
-          intent={progressFrac === 1 ? 'success' : undefined}
+          intent={progressFrac === 1 ? 'success' : 'primary'}
           stripes={false}
           value={progressFrac}
         />

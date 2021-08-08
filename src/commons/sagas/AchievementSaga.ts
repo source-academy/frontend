@@ -10,6 +10,7 @@ import {
   GET_ACHIEVEMENTS,
   GET_GOALS,
   GET_OWN_GOALS,
+  GET_USER_ASSESSMENT_OVERVIEWS,
   GET_USERS,
   HANDLE_EVENT,
   REMOVE_ACHIEVEMENT,
@@ -31,6 +32,7 @@ import {
   getAllUsers,
   getGoals,
   getOwnGoals,
+  getUserAssessmentOverviews,
   removeAchievement,
   removeGoal,
   updateGoalProgress,
@@ -247,4 +249,17 @@ export default function* AchievementSaga(): SagaIterator {
       }
     }
   });
+
+  yield takeEvery(
+    GET_USER_ASSESSMENT_OVERVIEWS,
+    function* (action: ReturnType<typeof actions.getUserAssessmentOverviews>): any {
+      const tokens: Tokens = yield selectTokens();
+
+      const assessmentOverviews = yield call(getUserAssessmentOverviews, action.payload, tokens);
+
+      if (assessmentOverviews) {
+        yield put(actions.saveUserAssessmentOverviews(assessmentOverviews));
+      }
+    }
+  );
 }

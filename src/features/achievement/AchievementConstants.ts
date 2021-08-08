@@ -16,7 +16,7 @@ export enum FilterColors {
   WHITE = '#fff'
 }
 
-export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
+export const achievementAssets = `${Links.sourceAcademyAssets}achievement`;
 export const backgroundUrl = `${achievementAssets}/view-background`;
 export const cardBackgroundUrl = `${achievementAssets}/card-background`;
 export const coverImageUrl = `${achievementAssets}/cover-image`;

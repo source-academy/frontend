@@ -1,3 +1,4 @@
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { action } from 'typesafe-actions';
 
 import {
@@ -11,6 +12,7 @@ import {
   GET_ACHIEVEMENTS,
   GET_GOALS,
   GET_OWN_GOALS,
+  GET_USER_ASSESSMENT_OVERVIEWS,
   GET_USERS,
   GoalDefinition,
   GoalProgress,
@@ -19,6 +21,7 @@ import {
   REMOVE_GOAL,
   SAVE_ACHIEVEMENTS,
   SAVE_GOALS,
+  SAVE_USER_ASSESSMENT_OVERVIEWS,
   SAVE_USERS,
   UPDATE_GOAL_PROGRESS,
   UPDATE_OWN_GOAL_PROGRESS
@@ -34,6 +37,9 @@ export const getAchievements = () => action(GET_ACHIEVEMENTS);
 export const getGoals = (studentCourseRegId: number) => action(GET_GOALS, studentCourseRegId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
+
+export const getUserAssessmentOverviews = (studentCourseRegId: number) =>
+  action(GET_USER_ASSESSMENT_OVERVIEWS, studentCourseRegId);
 
 export const getUsers = () => action(GET_USERS);
 
@@ -69,3 +75,10 @@ export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals)
   Please refer to AchievementReducer to find out more. 
 */
 export const saveUsers = (users: AchievementUser[]) => action(SAVE_USERS, users);
+
+/*
+  Note: This updates the frontend Achievement Redux store.
+  Please refer to AchievementReducer to find out more. 
+*/
+export const saveUserAssessmentOverviews = (assessmentOverviews: AssessmentOverview[]) =>
+  action(SAVE_USER_ASSESSMENT_OVERVIEWS, assessmentOverviews);

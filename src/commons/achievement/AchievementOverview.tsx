@@ -5,11 +5,10 @@ import AchievementLevel from './overview/AchievementLevel';
 
 type AchievementOverviewProps = {
   name: string;
-  studio: string;
 };
 
 function AchievementOverview(props: AchievementOverviewProps) {
-  const { name, studio } = props;
+  const { name } = props;
 
   const inferencer = useContext(AchievementContext);
   const studentXp = inferencer.getTotalXp();
@@ -18,7 +17,6 @@ function AchievementOverview(props: AchievementOverviewProps) {
     <div className="achievement-overview">
       <AchievementLevel studentXp={studentXp} />
       <h3>{name}</h3>
-      <h3>{studio}</h3>
     </div>
   );
 }

@@ -330,6 +330,7 @@
       .no-view {
         align-items: center;
         background: rgba(0, 0, 0, 0.5);
+        text-shadow: black 1px 1px;
         color: white;
         display: flex;
         flex-direction: column;
@@ -340,6 +341,7 @@
       }
 
       .view {
+        text-shadow: black 1px 1px;
         color: white;
         display: flex;
         flex-direction: column;
