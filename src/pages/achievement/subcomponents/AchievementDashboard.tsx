@@ -101,11 +101,11 @@ function Dashboard(props: DispatchProps & StateProps) {
     fetchAssessmentOverviews
   ]);
 
-  const userAchievementOverviews = selectedUser
+  const userAssessmentOverviews = selectedUser
     ? achievementAssessmentOverviews
     : assessmentOverviews;
 
-  userAchievementOverviews?.forEach(assessmentOverview =>
+  userAssessmentOverviews?.forEach(assessmentOverview =>
     insertFakeAchievements(assessmentOverview, inferencer)
   );
 
