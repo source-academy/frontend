@@ -11,6 +11,7 @@ import { ArrayValue } from './values/ArrayValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
+import { UnassignedValue } from './values/UnassignedValue';
 import { Value } from './values/Value';
 
 /** a `binding` is a key-value pair in a frame */
@@ -72,7 +73,9 @@ export class Binding implements Visible {
       <React.Fragment key={Layout.key++}>
         {this.key.draw()}
         {isMainReference(this.value, this) ? this.value.draw() : null}
-        {this.value instanceof PrimitiveValue || Arrow.from(this.key).to(this.value).draw()}
+        {this.value instanceof PrimitiveValue ||
+          this.value instanceof UnassignedValue ||
+          Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
     );
   }

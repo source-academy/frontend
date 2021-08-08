@@ -9,6 +9,7 @@ import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
+import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
@@ -185,7 +186,7 @@ export class Layout {
    *  else, return the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
     if (isUnassigned(data)) {
-      return new PrimitiveValue(Config.UnassignedData.toString(), [reference]);
+      return new UnassignedValue([reference]);
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, [reference]);
     } else {
