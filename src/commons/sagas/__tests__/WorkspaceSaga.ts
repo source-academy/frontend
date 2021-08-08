@@ -1087,6 +1087,7 @@ describe('RUN_ALL_TESTCASES', () => {
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
+      .put(clearReplOutput(workspaceLocation))
       .put(evalTestcase(workspaceLocation, 0))
       .dispatch({
         type: EVAL_TESTCASE_SUCCESS,
