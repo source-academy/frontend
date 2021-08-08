@@ -138,7 +138,10 @@ export class Layout {
       }
     }
 
-    Layout.globalEnvNode.environment.head = { [Config.GlobalFrameDefaultText]: '...', ...newFrame };
+    Layout.globalEnvNode.environment.head = {
+      [Config.GlobalFrameDefaultText]: Symbol(),
+      ...newFrame
+    };
   }
 
   /** initializes levels */
