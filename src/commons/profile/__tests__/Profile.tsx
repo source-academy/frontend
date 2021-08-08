@@ -28,6 +28,7 @@ test('Profile renders correctly when there are no closed assessments', () => {
   const props = {
     name: 'yeet',
     role: Role.Student,
+    courseId: 1,
     assessmentOverviews: mockNoClosedAssessmentOverviews,
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
     isOpen: true,
@@ -56,6 +57,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
   const props = {
     name: 'yeeet',
     role: Role.Staff,
+    courseId: 1,
     assessmentOverviews: mockAssessmentOverviews,
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
     isOpen: true,

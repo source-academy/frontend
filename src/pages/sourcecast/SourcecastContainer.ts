@@ -75,7 +75,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
   sourceVariant: state.workspaces.sourcecast.context.variant,
-  uid: state.workspaces.sourcecast.uid
+  uid: state.workspaces.sourcecast.uid,
+  courseId: state.session.courseId
 });
 
 const location: WorkspaceLocation = 'sourcecast';

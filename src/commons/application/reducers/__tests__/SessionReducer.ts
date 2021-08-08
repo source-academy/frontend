@@ -8,7 +8,6 @@ import {
   GradingStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import { HistoryHelper } from '../../../utils/HistoryHelper';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
@@ -24,7 +23,6 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS,
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
@@ -228,57 +226,6 @@ test('SET_GITHUB_ACCESS_TOKEN works correctly', () => {
     ...defaultSession,
     githubAccessToken: token
   });
-});
-
-test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
-  const payload = '/playground';
-  const historyHelper: HistoryHelper = {
-    lastAcademyLocations: ['/academy/1', '/academy/2'],
-    lastGeneralLocations: ['/academy/1', '/academy/2']
-  };
-
-  const newDefaultSession = {
-    ...defaultSession,
-    historyHelper
-  };
-  const action = {
-    type: UPDATE_HISTORY_HELPERS,
-    payload
-  };
-  const resultHistory: HistoryHelper = SessionsReducer(newDefaultSession, action).historyHelper;
-
-  expect(resultHistory.lastGeneralLocations).toEqual([
-    historyHelper.lastGeneralLocations[1],
-    payload
-  ]);
-  expect(resultHistory.lastAcademyLocations).toEqual(historyHelper.lastAcademyLocations);
-});
-
-test('UPDATE_HISTORY_HELPERS works on academy location', () => {
-  const payload = '/academy/3';
-  const historyHelper: HistoryHelper = {
-    lastAcademyLocations: ['/academy/1', '/academy/2'],
-    lastGeneralLocations: ['/academy/1', '/academy/2']
-  };
-
-  const newDefaultSession: SessionState = {
-    ...defaultSession,
-    historyHelper
-  };
-  const action = {
-    type: UPDATE_HISTORY_HELPERS,
-    payload
-  };
-  const resultHistory: HistoryHelper = SessionsReducer(newDefaultSession, action).historyHelper;
-
-  expect(resultHistory.lastGeneralLocations).toEqual([
-    historyHelper.lastAcademyLocations[1],
-    payload
-  ]);
-  expect(resultHistory.lastAcademyLocations).toEqual([
-    historyHelper.lastAcademyLocations[1],
-    payload
-  ]);
 });
 
 // Test Data for UPDATE_ASSESSMENT

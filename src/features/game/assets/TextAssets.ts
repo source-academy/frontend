@@ -9,11 +9,11 @@ const TextAssets = {
 };
 
 export const MockTextAssets = {
-  defaultCheckpoint: { key: 'mock-default-chap', path: '../assets/mockDefaultCheckpoint.txt' },
-  awardsMapping: { key: 'mock-awards-mapping', path: '../assets/mockAwardsMapping.txt' },
+  defaultCheckpoint: { key: 'mock-default-chap', path: '../../assets/mockDefaultCheckpoint.txt' },
+  awardsMapping: { key: 'mock-awards-mapping', path: '../../assets/mockAwardsMapping.txt' },
   roomPreviewMapping: {
     key: 'mock-room-prev-mapping',
-    path: '../assets/mockRoomPreviewMapping.txt'
+    path: '../../assets/mockRoomPreviewMapping.txt'
   }
 };
 

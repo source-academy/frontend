@@ -1,13 +1,20 @@
+import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
+import classNames from 'classnames';
 import * as React from 'react';
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
-import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
 
-import { Role } from '../../commons/application/ApplicationTypes';
-import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer';
+import {
+  fetchNotifications,
+  updateLatestViewedCourse
+} from '../../commons/application/actions/SessionActions';
+import { OverallState } from '../../commons/application/ApplicationTypes';
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
-import { HistoryHelper } from '../../commons/utils/HistoryHelper';
+import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
+import Achievement from '../../pages/achievement/AchievementContainer';
+import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
+import NotFound from '../notFound/NotFound';
 import AdminPanel from './adminPanel/AdminPanelContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Game from './game/Game';
@@ -16,95 +23,89 @@ import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
 
-type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
+const Academy: React.FC<{}> = () => {
+  const { path, url } = useRouteMatch();
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
 
-export type DispatchProps = {
-  handleFetchNotifications: () => void;
+  const { assessmentConfigurations, enableGame, role } = useSelector((state: OverallState) => ({
+    assessmentConfigurations: state.session.assessmentConfigurations,
+    enableGame: state.session.enableGame,
+    role: state.session.role
+  }));
+
+  const staffRoutes =
+    role !== 'student'
+      ? [
+          <Route path={`${path}/groundcontrol`} component={GroundControl} key={0} />,
+          <Route path={`${path}/grading/${gradingRegExp}`} component={Grading} key={1} />,
+          <Route path={`${path}/sourcereel`} component={Sourcereel} key={2} />,
+          <Route path={`${path}/storysimulator`} component={StorySimulator} key={3} />,
+          <Route path={`${path}/dashboard`} component={DashboardContainer} key={4} />
+        ]
+      : null;
+  return (
+    <div className="Academy">
+      <Switch>
+        {assessmentConfigurations?.map(assessmentConfiguration => (
+          <Route
+            path={`${path}/${assessmentTypeLink(assessmentConfiguration.type)}/${assessmentRegExp}`}
+            key={assessmentConfiguration.type}
+          >
+            <AssessmentContainer assessmentConfiguration={assessmentConfiguration} />
+          </Route>
+        ))}
+        {enableGame && <Route path={`${path}/game`} component={Game} />}
+        <Route path={`${path}/sourcecast/:sourcecastId?`} component={Sourcecast} />
+        <Route path={`${path}/achievements`} component={Achievement} />
+        <Route exact={true} path={path}>
+          <Redirect
+            push={false}
+            to={
+              enableGame
+                ? `${url}/game`
+                : assessmentConfigurations && assessmentConfigurations.length > 0
+                ? `${url}/${assessmentTypeLink(assessmentConfigurations[0].type)}`
+                : role === 'admin'
+                ? `${url}/adminpanel`
+                : '/404'
+            }
+          />
+        </Route>
+        {staffRoutes}
+        {role === 'admin' && <Route path={`${path}/adminpanel`} component={AdminPanel} />}
+        <Route component={NotFound} />
+      </Switch>
+    </div>
+  );
 };
 
-export type StateProps = {
-  historyHelper: HistoryHelper;
-  enableGame?: boolean;
-  assessmentConfigurations?: AssessmentConfiguration[];
-};
+const CourseSelectingAcademy: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+  const courseId = useSelector<OverallState>(state => state.session.courseId);
+  const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
+  const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
-export type OwnProps = {
-  role: Role;
-};
-
-class Academy extends React.Component<AcademyProps> {
-  public componentDidMount() {
-    /* TODO: REPLACE WITH LONG POLLING METHOD */
-    this.props.handleFetchNotifications();
-  }
-
-  public render() {
-    const staffRoutes =
-      this.props.role !== 'student'
-        ? [
-            <Route path="/academy/groundcontrol" component={GroundControl} key={0} />,
-            <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} key={1} />,
-            <Route path="/academy/sourcereel" component={Sourcereel} key={2} />,
-            <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />,
-            <Route path="/academy/dashboard" component={DashboardContainer} key={4} />
-          ]
-        : null;
-    return (
-      <div className="Academy">
-        <Switch>
-          {this.props.assessmentConfigurations?.map(assessmentConfiguration => (
-            <Route
-              path={`/academy/${assessmentTypeLink(
-                assessmentConfiguration.type
-              )}/${assessmentRegExp}`}
-              render={this.assessmentRenderFactory(assessmentConfiguration)}
-              key={assessmentConfiguration.type}
-            />
-          ))}
-          {this.props.enableGame && <Route path="/academy/game" component={Game} />}
-          <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
-          {staffRoutes}
-          {this.props.role === 'admin' && (
-            <Route path="/academy/adminpanel" component={AdminPanel} />
-          )}
-          <Route component={this.redirectTo404} />
-        </Switch>
-      </div>
-    );
-  }
-
-  private assessmentRenderFactory =
-    (assessmentConfiguration: AssessmentConfiguration) => (routerProps: RouteComponentProps<any>) =>
-      <AssessmentContainer assessmentConfiguration={assessmentConfiguration} />;
-
-  /**
-   * 1. If user is in /academy.*, redirect to game
-   * 2. If not, redirect to the last /academy.* route the user was in
-   * See ../../commons/utils/HistoryHelper.ts for more details
-   */
-  private dynamicRedirect = (props: StateProps) => {
-    const clickedFrom = props.historyHelper.lastGeneralLocations[0];
-    const lastAcademy = props.historyHelper.lastAcademyLocations[0];
-    if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
-      return () => <Redirect to={lastAcademy!} />;
-    } else {
-      return this.props.enableGame ? this.redirectToGame : this.redirectToAssessments;
+  React.useEffect(() => {
+    if (routeCourseId !== undefined && courseId !== routeCourseId) {
+      dispatch(updateLatestViewedCourse(routeCourseId));
     }
-  };
+  }, [courseId, dispatch, routeCourseId]);
 
-  private redirectTo404 = () => <Redirect to="/404" />;
+  return routeCourseId === courseId ? (
+    <Academy />
+  ) : (
+    <div className={classNames('Academy-switching-courses', Classes.DARK)}>
+      <Card className={Classes.ELEVATION_4}>
+        <NonIdealState
+          description="Switching courses..."
+          icon={<Spinner size={SpinnerSize.LARGE} />}
+        />
+      </Card>
+    </div>
+  );
+};
 
-  private redirectToGame = () => <Redirect to="/academy/game" />;
-
-  private redirectToAssessments = () => {
-    return this.props.assessmentConfigurations ? (
-      <Redirect
-        to={`/academy/${assessmentTypeLink(this.props.assessmentConfigurations[0].type)}`}
-      />
-    ) : (
-      this.redirectTo404()
-    );
-  };
-}
-
-export default Academy;
+export default CourseSelectingAcademy;

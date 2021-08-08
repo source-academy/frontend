@@ -10,7 +10,6 @@ import {
   AssessmentOverview
 } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
 export const FETCH_AUTH = 'FETCH_AUTH';
@@ -43,7 +42,6 @@ export const REAUTOGRADE_ANSWER = 'REAUTOGRADE_ANSWER';
 export const REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN =
   'REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN';
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
-export const UPDATE_HISTORY_HELPERS = 'UPDATE_HISTORY_HELPERS';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
 export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
 export const UPDATE_GRADING_OVERVIEWS = 'UPDATE_GRADING_OVERVIEWS';
@@ -106,7 +104,6 @@ export type SessionState = {
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
-  readonly historyHelper: HistoryHelper;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubAssessment?: MissionRepoData;

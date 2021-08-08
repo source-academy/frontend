@@ -1,6 +1,7 @@
-import { Redirect, Route, Switch } from 'react-router';
+import { Route, Switch } from 'react-router';
 
 import { Role } from '../../commons/application/ApplicationTypes';
+import NotFound from '../notFound/NotFound';
 import AchievementControl from './control/AchievementControlContainer';
 import AchievementDashboard from './subcomponents/AchievementDashboardContainer';
 
@@ -12,19 +13,24 @@ export type StateProps = {
 
 export type AchievementProps = DispatchProps & StateProps;
 
-const redirectTo404 = () => <Redirect to="/404" />;
-
 function Achievement(props: AchievementProps) {
   const { role } = props;
 
   const toAchievementControl =
-    role === Role.Admin || role === Role.Staff ? AchievementControl : redirectTo404;
+    role === Role.Admin || role === Role.Staff ? AchievementControl : NotFound;
 
   return (
     <Switch>
-      <Route exact={true} path="/achievements" component={AchievementDashboard}></Route>
-      <Route path="/achievements/control" component={toAchievementControl}></Route>
-      <Route component={redirectTo404} />
+      <Route
+        exact={true}
+        path="/courses/:courseId/achievements"
+        component={AchievementDashboard}
+      ></Route>
+      <Route
+        path="/courses/:courseId/achievements/control"
+        component={toAchievementControl}
+      ></Route>
+      <Route component={NotFound} />
     </Switch>
   );
 }

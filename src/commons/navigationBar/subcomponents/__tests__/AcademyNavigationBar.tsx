@@ -7,27 +7,28 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   const props = {
     role: Role.Student,
     notifications: [],
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+    courseId: 0
   };
   const tree = shallow(<AcademyNavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/grading' }).exists())
   ).toHaveLength(0);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/groundcontrol' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/groundcontrol' }).exists())
   ).toHaveLength(0);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/sourcereel' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/sourcereel' }).exists())
   ).toHaveLength(0);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/storysimulator' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/storysimulator' }).exists())
   ).toHaveLength(0);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/dashboard' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/dashboard' }).exists())
   ).toHaveLength(0);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/adminpanel' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/adminpanel' }).exists())
   ).toHaveLength(0);
 });
 
@@ -35,27 +36,28 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and G
   const props = {
     role: Role.Staff,
     notifications: [],
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+    courseId: 0
   };
   const tree = shallow(<AcademyNavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/grading' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/groundcontrol' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/groundcontrol' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/sourcereel' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/sourcereel' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/storysimulator' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/storysimulator' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/dashboard' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/dashboard' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/adminpanel' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/adminpanel' }).exists())
   ).toHaveLength(0);
 });
 
@@ -63,26 +65,27 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   const props = {
     role: Role.Admin,
     notifications: [],
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+    courseId: 0
   };
   const tree = shallow(<AcademyNavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/grading' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/groundcontrol' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/groundcontrol' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/sourcereel' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/sourcereel' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/storysimulator' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/storysimulator' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/dashboard' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/dashboard' }).exists())
   ).toHaveLength(1);
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/adminpanel' }).exists())
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/adminpanel' }).exists())
   ).toHaveLength(1);
 });
