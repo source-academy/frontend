@@ -89,6 +89,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedSubmissionId?: number;
   storedQuestionId?: number;
+  courseId?: number;
 };
 
 type State = {
@@ -156,7 +157,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
      * if that question exists
      */
     if (this.props.grading[questionId] === undefined) {
-      history.push('/academy/grading');
+      history.push(`/courses/${this.props.courseId}/grading`);
     } else {
       this.checkWorkspaceReset(this.props);
     }
@@ -386,7 +387,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
 
   /** Pre-condition: Grading has been loaded */
   private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/academy/grading`;
+    const listingPath = `/courses/${this.props.courseId}/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
     const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
 

@@ -1,10 +1,10 @@
 import 'src/styles/index.scss';
 
 import * as Sentry from '@sentry/browser';
-import { ConnectedRouter } from 'connected-react-router';
 import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { history } from 'src/commons/utils/HistoryHelper';
@@ -36,9 +36,9 @@ console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
 render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <Router history={history}>
       <ApplicationContainer />
-    </ConnectedRouter>
+    </Router>
   </Provider>,
   rootContainer
 );

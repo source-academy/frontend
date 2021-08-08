@@ -30,35 +30,35 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course
 
 exports[`NavigationBarMobileSideMenu renders correctly when logged in (with course selected) 1`] = `
 "<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp3-dark\\" canOutsideClickClose={true} shouldReturnFocusOnClose={true} style={{...}} vertical={false}>
-  <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"flame\\" />
     <div>
       Missions
     </div>
     <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"lightbulb\\" />
     <div>
       Quests
     </div>
     <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"predictive-analysis\\" />
     <div>
       Paths
     </div>
     <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"comparison\\" />
     <div>
       Contests
     </div>
     <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/academy/others\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/others\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"manual\\" />
     <div>
       Others

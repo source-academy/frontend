@@ -15,7 +15,6 @@ type DropdownProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleLogOut: () => void;
-  updateLatestViewedCourse: (courseId: number) => void;
   handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
 
@@ -61,7 +60,6 @@ class Dropdown extends React.Component<DropdownProps, State> {
           <DropdownCourses
             isOpen={this.state.isMyCoursesOpen}
             onClose={this.toggleMyCoursesOpen}
-            updateLatestViewedCourse={this.props.updateLatestViewedCourse}
             courses={this.props.courses}
             courseId={this.props.courseId}
           />
@@ -81,13 +79,14 @@ class Dropdown extends React.Component<DropdownProps, State> {
   }
 
   private menu(props: DropdownProps) {
-    const profile = this.props.name ? (
-      <MenuItem
-        icon={IconNames.USER}
-        onClick={this.toggleProfileOpen}
-        text={titleCase(this.props.name)}
-      />
-    ) : null;
+    const profile =
+      this.props.name && this.props.courseId != null ? (
+        <MenuItem
+          icon={IconNames.USER}
+          onClick={this.toggleProfileOpen}
+          text={titleCase(this.props.name)}
+        />
+      ) : null;
 
     const myCourses = this.props.name ? (
       <MenuItem icon={IconNames.PROPERTIES} onClick={this.toggleMyCoursesOpen} text="My Courses" />

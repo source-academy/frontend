@@ -6,7 +6,7 @@ import NavigationBar from '../NavigationBar';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
-    pathname: 'localhost:8000/academy/game'
+    pathname: 'localhost:8000/courses/1/game'
   })
 }));
 

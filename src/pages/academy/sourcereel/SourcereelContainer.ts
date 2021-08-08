@@ -86,7 +86,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   sourceVariant: state.workspaces.sourcereel.context.variant,
   timeElapsedBeforePause: state.workspaces.sourcereel.timeElapsedBeforePause,
-  timeResumed: state.workspaces.sourcereel.timeResumed
+  timeResumed: state.workspaces.sourcereel.timeResumed,
+  courseId: state.session.courseId
 });
 
 const location: WorkspaceLocation = 'sourcereel';

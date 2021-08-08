@@ -85,10 +85,12 @@ function Dashboard(props: DispatchProps & StateProps) {
     getAchievements();
   }, [selectedUser, getAchievements, getGoals, getOwnGoals]);
 
-  if (name && role && !assessmentOverviews) {
-    // If assessment overviews are not loaded, fetch them
-    fetchAssessmentOverviews();
-  }
+  useEffect(() => {
+    if (name && role && !assessmentOverviews) {
+      // If assessment overviews are not loaded, fetch them
+      fetchAssessmentOverviews();
+    }
+  }, [assessmentOverviews, fetchAssessmentOverviews, name, role]);
 
   // one goal for submit, one goal for graded
   if (role === Role.Student) {

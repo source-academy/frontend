@@ -108,6 +108,7 @@ export type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   uid: string | null;
+  courseId?: number;
 };
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
@@ -248,6 +249,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
           <SourceRecorderTable
             handleSetSourcecastData={props.handleSetSourcecastData}
             sourcecastIndex={props.sourcecastIndex}
+            courseId={props.courseId}
           />
         </div>
       ),

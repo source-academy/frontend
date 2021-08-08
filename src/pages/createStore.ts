@@ -1,21 +1,18 @@
-import { routerMiddleware } from 'connected-react-router';
-import { History } from 'history';
 import { throttle } from 'lodash';
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { generateOctokitInstance } from 'src/commons/utils/GitHubPersistenceHelper';
 
 import { defaultState } from '../commons/application/ApplicationTypes';
 import createRootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
-import { history as appHistory } from '../commons/utils/HistoryHelper';
+import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
-export const store = createStore(appHistory);
+export const store = createStore();
 
-export function createStore(history: History) {
+export function createStore() {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [sagaMiddleware, routerMiddleware(history)];
+  const middleware = [sagaMiddleware];
 
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
@@ -28,7 +25,7 @@ export function createStore(history: History) {
 
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
-  const createdStore = _createStore(createRootReducer(history), initialStore as any, enhancers);
+  const createdStore = _createStore(createRootReducer(), initialStore as any, enhancers);
   sagaMiddleware.run(MainSaga);
 
   createdStore.subscribe(
