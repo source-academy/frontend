@@ -86,6 +86,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
 const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
   {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
@@ -104,6 +105,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
 const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
@@ -131,6 +133,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 2,
@@ -146,6 +149,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 3,
@@ -161,6 +165,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Paths',
+    isManuallyGraded: true,
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 6,
@@ -176,6 +181,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Others',
+    isManuallyGraded: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 5,
@@ -195,6 +201,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
 const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 4,
@@ -210,6 +217,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 5,
@@ -225,6 +233,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 5,
@@ -240,6 +249,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   },
   {
     type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 5,

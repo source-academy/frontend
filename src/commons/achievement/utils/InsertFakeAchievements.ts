@@ -16,7 +16,6 @@ function insertFakeAchievements(
     return;
   }
   const idString = assessmentOverview.id.toString();
-  const gradingExcluded = assessmentOverview.gradingStatus === 'excluded';
 
   if (!inferencer.hasAchievement(idString)) {
     // Goal for assessment submission
@@ -35,7 +34,7 @@ function insertFakeAchievements(
     );
 
     // goal for assessment grading
-    if (!gradingExcluded) {
+    if (assessmentOverview.isManuallyGraded) {
       inferencer.insertFakeGoalDefinition(
         {
           uuid: idString + '1',
@@ -64,7 +63,9 @@ function insertFakeAchievements(
       isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
       position: -1, // always appears on top
       prerequisiteUuids: [],
-      goalUuids: gradingExcluded ? [idString + '0'] : [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
+      goalUuids: !assessmentOverview.isManuallyGraded
+        ? [idString + '0']
+        : [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
       cardBackground: `${cardBackgroundUrl}/default.png`,
       view: {
         coverImage: assessmentOverview.coverImage,

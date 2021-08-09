@@ -55,6 +55,7 @@ W* Used to display information regarding an assessment in the UI.
  */
 export type AssessmentOverview = {
   type: AssessmentType;
+  isManuallyGraded: boolean;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
@@ -224,6 +225,7 @@ export const normalLibrary = (): Library => {
 export const overviewTemplate = (): AssessmentOverview => {
   return {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
