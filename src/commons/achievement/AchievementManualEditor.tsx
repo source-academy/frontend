@@ -101,7 +101,7 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
       >
         <Button
           outlined={true}
-          text={selectedUser ? selectedUser.name : 'No User Selected'}
+          text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
           color="White"
         />
       </UserSelect>

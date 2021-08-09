@@ -314,12 +314,12 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
   const users = await resp.json();
 
   return users.map(
-    (user: any) =>
-      ({
-        name: user.name,
-        courseRegId: user.courseRegId,
-        group: user.group
-      } as AchievementUser)
+    (user: any): AchievementUser => ({
+      name: user.name,
+      courseRegId: user.courseRegId,
+      group: user.group,
+      username: user.username
+    })
   );
 };
 
