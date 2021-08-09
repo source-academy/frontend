@@ -25,13 +25,18 @@ export class UnassignedValue extends Value {
     if (mainReference instanceof Binding) {
       this.x = mainReference.x + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
       this.y = mainReference.y;
-      this.text = new Text('', this.x, this.y, { isStringIdentifiable: false });
+      this.text = new Text(Config.UnassignedData.toString(), this.x, this.y, {
+        isStringIdentifiable: false
+      });
     } else {
       const maxWidth = mainReference.width;
       const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
       this.x = mainReference.x + (mainReference.width - textWidth) / 2;
       this.y = mainReference.y + (mainReference.height - Config.FontSize) / 2;
-      this.text = new Text('', this.x, this.y, { maxWidth: maxWidth, isStringIdentifiable: false });
+      this.text = new Text(Config.UnassignedData.toString(), this.x, this.y, {
+        maxWidth: maxWidth,
+        isStringIdentifiable: false
+      });
     }
 
     this.width = this.text.width;
