@@ -1192,9 +1192,13 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
       .call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
+      .call(getAssessmentConfigs, mockTokens)
       .put(setAssessmentConfigurations(mockAssessmentConfigurations))
       .call.fn(showSuccessMessage)
-      .provide([[call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp]])
+      .provide([
+        [call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp],
+        [call(getAssessmentConfigs, mockTokens), mockAssessmentConfigurations]
+      ])
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
       .silentRun();
   });
@@ -1204,6 +1208,7 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
       .provide([[call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations), errorResp]])
       .withState(mockStates)
       .call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations)
+      .not.call(getAssessmentConfigs)
       .not.put.actionType(SET_ASSESSMENT_CONFIGURATIONS)
       .not.call.fn(showSuccessMessage)
       .dispatch({ type: UPDATE_ASSESSMENT_CONFIGS, payload: mockAssessmentConfigurations })
