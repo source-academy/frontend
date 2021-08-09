@@ -225,9 +225,11 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
 
   return (
     <div className="assessment-configuration">
-      <H2>Assessment Configuration</H2>
+      <div className="assessment-configuration-header-container">
+        <H2>Assessment Configuration</H2>
+        <Button text="Add Row" onClick={addRowHandler} className="add-row-button" />
+      </div>
       {grid}
-      <Button text="Add Row" onClick={addRowHandler} className="add-row-button" />
     </div>
   );
 };
