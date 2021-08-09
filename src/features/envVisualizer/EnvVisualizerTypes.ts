@@ -41,8 +41,11 @@ export interface Visible extends Drawable {
   height: number;
 }
 
+/** unassigned is internally represented as a symbol */
+export type UnassignedData = symbol;
+
 /** types of primitives in JS Slang  */
-export type PrimitiveTypes = number | string | symbol | null | undefined;
+export type PrimitiveTypes = number | string | null | undefined;
 
 /** types of functions in JS Slang */
 export type FnTypes = {
@@ -59,7 +62,7 @@ export type FnTypes = {
 };
 
 /** the types of data in the JS Slang context */
-export type Data = PrimitiveTypes | FnTypes | (() => any) | Data[];
+export type Data = PrimitiveTypes | FnTypes | (() => any) | UnassignedData | Data[];
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment | null;
