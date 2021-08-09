@@ -465,6 +465,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
   const overviews: AssessmentOverview[] = [
     {
       type: 'Missions',
+      isManuallyGraded: true,
       closeAt: 'test_string',
       coverImage: 'test_string',
       id: 0,

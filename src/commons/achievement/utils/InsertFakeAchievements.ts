@@ -16,6 +16,7 @@ function insertFakeAchievements(
     return;
   }
   const idString = assessmentOverview.id.toString();
+
   if (!inferencer.hasAchievement(idString)) {
     // Goal for assessment submission
     inferencer.insertFakeGoalDefinition(
@@ -31,26 +32,29 @@ function insertFakeAchievements(
       },
       assessmentOverview.status === 'submitted'
     );
-    // Goal for assessment grading
-    inferencer.insertFakeGoalDefinition(
-      {
-        uuid: idString + '1',
-        text: `Graded ${assessmentOverview.title}`,
-        achievementUuids: [idString],
-        meta: {
-          type: GoalType.ASSESSMENT,
-          assessmentNumber: assessmentOverview.id,
-          requiredCompletionFrac: 0
-        }
-      },
-      assessmentOverview.gradingStatus === 'graded'
-    );
+
+    // goal for assessment grading
+    if (assessmentOverview.isManuallyGraded) {
+      inferencer.insertFakeGoalDefinition(
+        {
+          uuid: idString + '1',
+          text: `Graded ${assessmentOverview.title}`,
+          achievementUuids: [idString],
+          meta: {
+            type: GoalType.ASSESSMENT,
+            assessmentNumber: assessmentOverview.id,
+            requiredCompletionFrac: 0
+          }
+        },
+        assessmentOverview.gradingStatus === 'graded'
+      );
+    }
     // Would like a goal for early submission, but that seems to be hard to get from the overview
     inferencer.insertFakeAchievement({
       uuid: idString,
       title: assessmentOverview.title,
       xp:
-        assessmentOverview.gradingStatus === 'graded'
+        assessmentOverview.gradingStatus === 'graded' || !assessmentOverview.isManuallyGraded
           ? assessmentOverview.xp
           : assessmentOverview.maxXp,
       isVariableXp: false,
@@ -59,7 +63,9 @@ function insertFakeAchievements(
       isTask: assessmentOverview.isPublished === undefined ? true : assessmentOverview.isPublished,
       position: -1, // always appears on top
       prerequisiteUuids: [],
-      goalUuids: [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
+      goalUuids: !assessmentOverview.isManuallyGraded
+        ? [idString + '0']
+        : [idString + '0', idString + '1'], // need to create a mock completed goal to reference to be considered complete
       cardBackground: `${cardBackgroundUrl}/default.png`,
       view: {
         coverImage: assessmentOverview.coverImage,
