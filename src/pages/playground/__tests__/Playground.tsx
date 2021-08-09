@@ -3,7 +3,6 @@ import { Variant } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import Playground, { PlaygroundProps } from '../Playground';
@@ -23,7 +22,6 @@ const baseProps = {
   sideContentHeight: 40,
   playgroundSourceChapter: 2,
   playgroundSourceVariant: 'default' as Variant,
-  externalLibraryName: ExternalLibraryName.NONE,
   output: [],
   replValue: '',
   sharedbConnected: false,
@@ -43,7 +41,6 @@ const baseProps = {
   handleEditorValueChange: () => {},
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleFetchSublanguage: () => {},
   handleGenerateLz: () => {},
   handleShortenURL: () => {},
