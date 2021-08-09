@@ -161,7 +161,8 @@ export type AchievementView = {
 };
 
 export type AchievementUser = {
-  name: string;
+  name?: string;
+  username: string;
   courseRegId: number;
   group: string;
 };

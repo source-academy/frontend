@@ -28,10 +28,10 @@ const goalPredicate: ItemPredicate<AchievementGoal> = (query, item) =>
 
 const UserSelect = Select.ofType<AchievementUser>();
 const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
-  <MenuItem key={user.courseRegId} onClick={handleClick} text={user.name} />
+  <MenuItem key={user.courseRegId} onClick={handleClick} text={user.name || user.username} />
 );
 const userPredicate: ItemPredicate<AchievementUser> = (query, item) =>
-  item.name.toLowerCase().includes(query.toLowerCase());
+  (item.name || item.username).toLowerCase().includes(query.toLowerCase());
 
 export function updateGoalProcessed() {
   showSuccessMessage('Goal updated');
@@ -42,12 +42,24 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
   const users =
     studio === 'Staff'
       ? // The name can be null for users who have yet to log in. We push these to the back of the array.
-        [...props.users].sort((user1, user2) =>
-          user1.name ? user1.name.localeCompare(user2.name) : 1
+        [...props.users].sort(
+          (user1, user2) =>
+            user1.name != null && user2.name != null
+              ? user1.name.localeCompare(user2.name)
+              : user1.name == null
+              ? 1 // user1.name is null, user1 > user2
+              : -1 // user2.name is null, user1 < user2
         )
       : props.users
           .filter(user => user.group === studio)
-          .sort((user1, user2) => (user1.name ? user1.name.localeCompare(user2.name) : 1));
+          .sort(
+            (user1, user2) =>
+              user1.name != null && user2.name != null
+                ? user1.name.localeCompare(user2.name)
+                : user1.name == null
+                ? 1 // user1.name is null, user1 > user2
+                : -1 // user2.name is null, user1 < user2
+          );
 
   useEffect(getUsers, [getUsers]);
 
