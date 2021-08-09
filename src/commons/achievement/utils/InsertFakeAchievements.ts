@@ -54,7 +54,7 @@ function insertFakeAchievements(
       uuid: idString,
       title: assessmentOverview.title,
       xp:
-        assessmentOverview.gradingStatus === 'graded'
+        assessmentOverview.gradingStatus === 'graded' || !assessmentOverview.isManuallyGraded
           ? assessmentOverview.xp
           : assessmentOverview.maxXp,
       isVariableXp: false,
