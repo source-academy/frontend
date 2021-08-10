@@ -39,6 +39,8 @@ function AchievementView(props: AchievementViewProps) {
   const prereqGoals = inferencer.listPrerequisiteGoals(focusUuid);
   const status = inferencer.getStatus(focusUuid);
 
+  const descriptionParagraphs = description.split('\n');
+
   return (
     <div className="view" style={{ ...getAbilityGlow(), ...getAbilityBackground() }}>
       <div
@@ -51,7 +53,7 @@ function AchievementView(props: AchievementViewProps) {
         <h1>{title.toUpperCase()}</h1>
         {deadline && <p>{`Deadline: ${prettifyDate(deadline)}`}</p>}
         <span className="description">
-          <p>{description}</p>
+          {descriptionParagraphs.map(para => <p>{para}<br /></p>)}
         </span>
       </div>
       <AchievementViewGoal goals={goals} />
