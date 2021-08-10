@@ -457,7 +457,6 @@ export const getAssessmentOverviews = async (
       overview.gradedCount,
       overview.questionCount
     );
-    delete overview.isManuallyGraded;
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -487,7 +486,6 @@ export const getUserAssessmentOverviews = async (
       overview.gradedCount,
       overview.questionCount
     );
-    delete overview.isManuallyGraded;
     delete overview.gradedCount;
     delete overview.questionCount;
 

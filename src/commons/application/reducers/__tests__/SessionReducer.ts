@@ -312,6 +312,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
 const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: 'test_string',
     coverImage: 'test_string',
     id: 0,
@@ -329,6 +330,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
 const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
     type: 'Contests',
+    isManuallyGraded: true,
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
