@@ -11,7 +11,12 @@ function AchievementViewCompletion(props: AchievementViewCompletionProps) {
   return (
     <div className="completion">
       <h1>{`AWARDED ${awardedXp}XP`}</h1>
-      {paragraphs.map(para => <p>{para}<br /></p>)}
+      {paragraphs.map(para => (
+        <p>
+          {para}
+          <br />
+        </p>
+      ))}
     </div>
   );
 }
