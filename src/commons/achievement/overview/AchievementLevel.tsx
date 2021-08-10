@@ -15,7 +15,8 @@ function AchievementLevel(props: AchievementLevelProps) {
   const displayMilestone = () => setShowMilestone(true);
   const hideMilestone = () => setShowMilestone(false);
 
-  const level = Math.floor(studentXp / xpPerLevel) + 1;
+  // start at level 0
+  const level = Math.floor(studentXp / xpPerLevel);
   const progress = studentXp % xpPerLevel;
   const progressFrac = progress / xpPerLevel;
 
