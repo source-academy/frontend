@@ -18,9 +18,9 @@ function AchievementMilestone(props: AchievementMilestoneProps) {
       <div className="details">
         <div className="level-badge">
           <span className="level-icon" />
-          <p>41</p>
+          <p>37+</p>
         </div>
-        <p className="description">Earn extra 1 MC from CS1010R</p>
+        <p className="description">Counts towards CS1010R</p>
       </div>
       <div className="footer">
         <p>Total XP: {studentXp}</p>
