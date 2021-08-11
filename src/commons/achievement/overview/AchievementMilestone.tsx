@@ -2,7 +2,6 @@ type AchievementMilestoneProps = {
   studentXp: number;
 };
 
-
 // 36k XP = Level 37
 function AchievementMilestone(props: AchievementMilestoneProps) {
   const { studentXp } = props;
