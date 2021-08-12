@@ -30,7 +30,7 @@ export const frontendifyAchievementGoal = (goal: any) =>
       : goal.meta) as GoalMeta,
     count: goal.count,
     targetCount: goal.targetCount,
-    completed: goal.completed
+    completed: goal.count >= goal.targetCount
   } as AchievementGoal);
 
 export const frontendifyAchievementItem = (achievement: any) =>
