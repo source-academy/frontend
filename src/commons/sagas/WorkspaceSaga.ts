@@ -831,6 +831,8 @@ export function* evalCode(
     lastNonDetResult = result;
   }
 
+  dumpDisplayBuffer();
+
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
