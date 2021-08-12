@@ -2369,10 +2369,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.16":
-  version "17.0.16"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.16.tgz#056f40c45645761527baeb7d89d842a6abdf285a"
-  integrity sha512-3kCUiOOlQTwUUvjNFkbBTWMTxdTGybz/PfjCw9JmaRGcEDBQh+nGMg7/E9P2rklhJuYVd25IYLNcvqgSPCPksg==
+"@types/react@*", "@types/react@^17.0.17":
+  version "17.0.17"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.17.tgz#1772d3d5425128e0635a716f49ef57c2955df055"
+  integrity sha512-nrfi7I13cAmrd0wje8czYpf5SFbryczCtPzFc6ijqvdjKcyA3tCvGxwchOUlxb2ucBPuJ9Y3oUqKrRqZvrz0lw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -8137,10 +8137,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.14.tgz#3654ab5db06fe434269b2f03cab4bd9f663c4d72"
-  integrity sha512-2/UZVQyMwFQpsHVA4i9bYl1q3GhleGF7RSYC0MTEJgxHNvHzln9Mpnpb8VtBMsf25vvKHynBUpdoGkQijpv5oA==
+js-slang@^0.5.15:
+  version "0.5.15"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.15.tgz#fda868f5dcae188232e4438e0ed5348dad83efb8"
+  integrity sha512-1V6snCkQK2V6H+fNfPAEjpqkbwknpRTWAGuuUgCIq3Eeqy7de/cs+VKof8hQDC1e9EN6yY8bb0jvftzwWQMHGg==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.50"
