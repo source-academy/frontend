@@ -790,16 +790,24 @@ export function* evalCode(
 
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === undefined || context.variant === 'default') {
-      const approval = yield select((state: OverallState) => state.session.agreedToResearch);
+      const [approval, coinflip] = yield select((state: OverallState) => [
+        state.session.agreedToResearch,
+        state.session.experimentCoinflip
+      ]);
       if (approval) {
         const infiniteLoopData = getInfiniteLoopData(context);
         const lastError = context.errors[context.errors.length - 1];
         if (infiniteLoopData) {
           events.push(EventType.INFINITE_LOOP);
-          yield call(reportInfiniteLoopError, ...infiniteLoopData);
+          yield call(reportInfiniteLoopError, coinflip, ...infiniteLoopData);
         } else if (isPotentialInfiniteLoop(lastError)) {
           events.push(EventType.INFINITE_LOOP);
-          yield call(reportPotentialInfiniteLoop, lastError.explain(), context.previousCode);
+          yield call(
+            reportPotentialInfiniteLoop,
+            coinflip,
+            lastError.explain(),
+            context.previousCode
+          );
         }
       }
     }
