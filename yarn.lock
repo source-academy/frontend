@@ -2225,10 +2225,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^26.0.24":
-  version "26.0.24"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.24.tgz#943d11976b16739185913a1936e0de0c4a7d595a"
-  integrity sha512-E/X5Vib8BWqZNRlDxj9vYXhsDwPYbPINqKF9BsnSoon4RQ0D9moEuLD8txgyypFLH7J4+Lho9Nr/c8H0Fi+17w==
+"@types/jest@^27.0.0":
+  version "27.0.0"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-27.0.0.tgz#f1c28f741371739c7cd0e8edb5ed8e67acfa6c35"
+  integrity sha512-IlpQZVpxufe+3qPaAqEoSPHVSxnJh1cf0BqqWHJeKiAUbwnHdmNzjP3ZCWSZSTbmAGXQPNk9QmM3Bif0pR54rg==
   dependencies:
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
@@ -8137,10 +8137,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.14.tgz#3654ab5db06fe434269b2f03cab4bd9f663c4d72"
-  integrity sha512-2/UZVQyMwFQpsHVA4i9bYl1q3GhleGF7RSYC0MTEJgxHNvHzln9Mpnpb8VtBMsf25vvKHynBUpdoGkQijpv5oA==
+js-slang@^0.5.15:
+  version "0.5.15"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.15.tgz#fda868f5dcae188232e4438e0ed5348dad83efb8"
+  integrity sha512-1V6snCkQK2V6H+fNfPAEjpqkbwknpRTWAGuuUgCIq3Eeqy7de/cs+VKof8hQDC1e9EN6yY8bb0jvftzwWQMHGg==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.50"
