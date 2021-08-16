@@ -26,6 +26,7 @@ import {
   CLEAR_REPL_OUTPUT_LAST,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
+  EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
   MOVE_CURSOR,
@@ -34,7 +35,6 @@ import {
   PROMPT_AUTOCOMPLETE,
   RESET_TESTCASE,
   RESET_WORKSPACE,
-  RUN_ALL_TESTCASES,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
@@ -160,7 +160,7 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
   action(EVAL_TESTCASE, { workspaceLocation, testcaseId });
 
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
-  action(RUN_ALL_TESTCASES, { workspaceLocation });
+  action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
 export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
