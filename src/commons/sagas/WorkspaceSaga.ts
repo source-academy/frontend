@@ -19,7 +19,7 @@ import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select, take } from 'redux-saga/effects';
+import { call, delay, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import { EventType } from '../../features/achievement/AchievementTypes';
@@ -32,8 +32,6 @@ import {
   BEGIN_INTERRUPT_EXECUTION,
   DEBUG_RESET,
   DEBUG_RESUME,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS,
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
@@ -64,6 +62,7 @@ import {
   CHAPTER_SELECT,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
+  EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_SILENT,
   EVAL_TESTCASE,
@@ -71,13 +70,12 @@ import {
   PLAYGROUND_EXTERNAL_SELECT,
   PlaygroundWorkspaceState,
   PROMPT_AUTOCOMPLETE,
-  RUN_ALL_TESTCASES,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_EDITOR_BREAKPOINTS,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
+import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './SafeEffects';
 
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
@@ -85,62 +83,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;
-    const [prepend, editorCode, execTime, remoteExecutionSession]: [
-      string,
-      string,
-      number,
-      DeviceSession | undefined
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].editorPrepend,
-      state.workspaces[workspaceLocation].editorValue!,
-      state.workspaces[workspaceLocation].execTime,
-      state.session.remoteExecutionSession
-    ]);
-
-    yield put(actions.addEvent([EventType.RUN_CODE]));
-
-    if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-      yield put(actions.remoteExecRun(editorCode));
-    } else {
-      // End any code that is running right now.
-      yield put(actions.beginInterruptExecution(workspaceLocation));
-      yield* clearContext(workspaceLocation);
-      yield put(actions.clearReplOutput(workspaceLocation));
-      context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-      let value = editorCode;
-      // Check for initial syntax errors. If there are errors, we continue with
-      // eval and let it print the error messages.
-      parse(value, context);
-      if (!context.errors.length) {
-        // Otherwise we step through the breakpoints one by one and check them.
-        const exploded = editorCode.split('\n');
-        for (const b in breakpoints) {
-          if (typeof b !== 'string') {
-            continue;
-          }
-
-          const index: number = +b;
-          context.errors = [];
-          exploded[index] = 'debugger;' + exploded[index];
-          value = exploded.join('\n');
-          parse(value, context);
-          if (context.errors.length) {
-            const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
-            yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
-          }
-        }
-      }
-
-      // Evaluate the prepend silently with a privileged context, if it exists
-      if (prepend.length) {
-        const elevatedContext = makeElevatedContext(context);
-        yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
-        // Block use of methods from privileged context
-        yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
-      }
-
-      yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
-    }
+    yield* evalEditor(workspaceLocation);
   });
 
   yield takeEvery(
@@ -281,59 +224,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.addEvent([EventType.RUN_TESTCASE]));
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
-    const code: string = yield select((state: OverallState) => {
-      const prepend = state.workspaces[workspaceLocation].editorPrepend;
-      const value = state.workspaces[workspaceLocation].editorValue!;
-      const postpend = state.workspaces[workspaceLocation].editorPostpend;
-      const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
-      return [prepend, value, postpend, testcase] as [string, string, string, string];
-    });
-    const [prepend, value, postpend, testcase] = code;
-    const type: TestcaseType = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases[index].type
-    );
-    const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime
-    );
-
-    yield* clearContext(workspaceLocation);
-
-    // Do NOT clear the REPL output!
-
-    /**
-     *  Shard a new privileged context elevated to use Source chapter 4 for testcases - enables
-     *  grader programs in postpend to run as expected without raising interpreter errors
-     *  But, do not persist this context to the workspace state - this prevent students from using
-     *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
-     */
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-
-    // Execute prepend silently in privileged context
-    const elevatedContext = makeElevatedContext(context);
-    yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
-
-    // Block use of methods from privileged context using a randomly generated blocking key
-    // Then execute student program silently in the original workspace context
-    const blockKey = String(random(1048576, 68719476736));
-    yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_SILENT);
-
-    // Halt execution if the student's code in the editor results in an error
-    if (context.errors.length) {
-      yield put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index));
-      return;
-    }
-
-    // Execute postpend silently back in privileged context, if it exists
-    if (postpend) {
-      // TODO: consider doing a swap. If the user has modified any of the variables,
-      // i.e. reusing any of the "reserved" names, prevent it from being accessed in the REPL.
-      yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-      yield call(evalCode, postpend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
-      yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-    }
-    // Finally execute the testcase function call in the privileged context
-    yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
+    yield* runTestCase(workspaceLocation, index);
   });
 
   yield takeEvery(CHAPTER_SELECT, function* (action: ReturnType<typeof actions.chapterSelect>) {
@@ -526,10 +417,12 @@ export default function* WorkspaceSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(
-    RUN_ALL_TESTCASES,
+  yield takeLeading(
+    EVAL_EDITOR_AND_TESTCASES,
     function* (action: ReturnType<typeof actions.runAllTestcases>) {
       const { workspaceLocation } = action.payload;
+
+      yield call(evalEditor, workspaceLocation);
 
       const testcases: Testcase[] = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
@@ -538,25 +431,16 @@ export default function* WorkspaceSaga(): SagaIterator {
       if (testcases.length > 0) {
         // Display a message to the user
         yield call(showSuccessMessage, `Running all testcases!`, 2000);
-        yield put(actions.clearReplOutput(workspaceLocation));
         for (const idx of testcases.keys()) {
-          yield put(actions.evalTestcase(workspaceLocation, idx));
-          /** Run testcases synchronously - this blocks the generator until result of current
-           *  testcase is known and output to REPL; ensures that HANDLE_CONSOLE_LOG appends
-           *  consoleLogs(from display(...) calls) to the correct testcase result
-           */
-          const { success, error } = yield race({
-            success: take(EVAL_TESTCASE_SUCCESS),
-            error: take(EVAL_TESTCASE_FAILURE)
-          });
-          // Prematurely terminate if execution of current testcase returns an error
-          if (error || !success) {
-            return;
-          }
-
           // break each testcase up into separate event loop iterations
           // so that the UI updates
           yield new Promise(resolve => setTimeout(resolve, 0));
+
+          const programSucceeded: boolean = yield call(runTestCase, workspaceLocation, idx);
+          // Prematurely terminate if execution of the program failed (not the testcase)
+          if (!programSucceeded) {
+            return;
+          }
         }
       }
     }
@@ -608,6 +492,132 @@ function* clearContext(workspaceLocation: WorkspaceLocation) {
   yield put(actions.beginClearContext(workspaceLocation, library, false));
   // Wait for the clearing to be done.
   yield take(END_CLEAR_CONTEXT);
+}
+
+export function* evalEditor(
+  workspaceLocation: WorkspaceLocation
+): Generator<StrictEffect, void, any> {
+  const [prepend, editorCode, execTime, remoteExecutionSession]: [
+    string,
+    string,
+    number,
+    DeviceSession | undefined
+  ] = yield select((state: OverallState) => [
+    state.workspaces[workspaceLocation].editorPrepend,
+    state.workspaces[workspaceLocation].editorValue!,
+    state.workspaces[workspaceLocation].execTime,
+    state.session.remoteExecutionSession
+  ]);
+
+  yield put(actions.addEvent([EventType.RUN_CODE]));
+
+  if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
+    yield put(actions.remoteExecRun(editorCode));
+  } else {
+    // End any code that is running right now.
+    yield put(actions.beginInterruptExecution(workspaceLocation));
+    yield* clearContext(workspaceLocation);
+    yield put(actions.clearReplOutput(workspaceLocation));
+    const context = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].context
+    );
+    let value = editorCode;
+    // Check for initial syntax errors. If there are errors, we continue with
+    // eval and let it print the error messages.
+    parse(value, context);
+    if (!context.errors.length) {
+      // Otherwise we step through the breakpoints one by one and check them.
+      const exploded = editorCode.split('\n');
+      for (const b in breakpoints) {
+        if (typeof b !== 'string') {
+          continue;
+        }
+
+        const index: number = +b;
+        context.errors = [];
+        exploded[index] = 'debugger;' + exploded[index];
+        value = exploded.join('\n');
+        parse(value, context);
+        if (context.errors.length) {
+          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
+          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
+        }
+      }
+    }
+
+    // Evaluate the prepend silently with a privileged context, if it exists
+    if (prepend.length) {
+      const elevatedContext = makeElevatedContext(context);
+      yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+      // Block use of methods from privileged context
+      yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
+    }
+
+    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
+  }
+}
+
+export function* runTestCase(
+  workspaceLocation: WorkspaceLocation,
+  index: number
+): Generator<StrictEffect, boolean, any> {
+  const [prepend, value, postpend, testcase]: [string, string, string, string] = yield select(
+    (state: OverallState) => {
+      const prepend = state.workspaces[workspaceLocation].editorPrepend;
+      const value = state.workspaces[workspaceLocation].editorValue!;
+      const postpend = state.workspaces[workspaceLocation].editorPostpend;
+      const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
+      return [prepend, value, postpend, testcase] as [string, string, string, string];
+    }
+  );
+  const type: TestcaseType = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases[index].type
+  );
+  const execTime: number = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].execTime
+  );
+
+  yield* clearContext(workspaceLocation);
+
+  // Do NOT clear the REPL output!
+
+  /**
+   *  Shard a new privileged context elevated to use Source chapter 4 for testcases - enables
+   *  grader programs in postpend to run as expected without raising interpreter errors
+   *  But, do not persist this context to the workspace state - this prevent students from using
+   *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
+   */
+  const context: Context<any> = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].context
+  );
+
+  // Execute prepend silently in privileged context
+  const elevatedContext = makeElevatedContext(context);
+  yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+
+  // Block use of methods from privileged context using a randomly generated blocking key
+  // Then execute student program silently in the original workspace context
+  const blockKey = String(random(1048576, 68719476736));
+  yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
+  yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_SILENT);
+
+  // Halt execution if the student's code in the editor results in an error
+  if (context.errors.length) {
+    yield put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index));
+    return false;
+  }
+
+  // Execute postpend silently back in privileged context, if it exists
+  if (postpend) {
+    // TODO: consider doing a swap. If the user has modified any of the variables,
+    // i.e. reusing any of the "reserved" names, prevent it from being accessed in the REPL.
+    yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
+    yield call(evalCode, postpend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+    yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
+  }
+  // Finally execute the testcase function call in the privileged context
+  yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
+  return true;
 }
 
 export function* blockExtraMethods(
