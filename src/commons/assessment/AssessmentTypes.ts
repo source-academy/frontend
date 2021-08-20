@@ -112,7 +112,7 @@ export interface IProgrammingQuestion extends BaseQuestion {
 export interface IMCQQuestion extends BaseQuestion {
   answer: number | null;
   choices: MCQChoice[];
-  solution: number | null;
+  solution?: number;
   type: 'mcq';
 }
 

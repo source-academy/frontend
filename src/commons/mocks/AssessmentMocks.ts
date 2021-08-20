@@ -461,7 +461,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     id: 3,
     library: mockBinaryTreeLibrary,
     type: 'mcq',
-    solution: null,
+    solution: undefined,
     xp: 0,
     maxXp: 2,
     blocking: false
