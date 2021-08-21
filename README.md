@@ -31,7 +31,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
 6. Point your browser to `http://localhost:8000` to see your local Source Academy.
 
-In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. For this edition, there is no need for "Setting up your environment".
+In this edition, you will only see the Playground with all its tools, but no login options or homework submission features.
 
 ### Installation of Source Academy @ NUS (access [latest production version here](https://sourceacademy.nus.edu.sg))
 
