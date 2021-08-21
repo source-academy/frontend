@@ -400,6 +400,15 @@
             }
           }
 
+          .goal-progress {
+            width: 100%;
+            padding-right: 2.5em;
+
+            .progress {
+              margin-top: 5px;
+            }
+          }
+
           p {
             margin: 0;
             padding: 0;

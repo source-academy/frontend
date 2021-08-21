@@ -53,8 +53,8 @@ function AchievementView(props: AchievementViewProps) {
         <h1>{title.toUpperCase()}</h1>
         {deadline && <p>{`Deadline: ${prettifyDate(deadline)}`}</p>}
         <span className="description">
-          {descriptionParagraphs.map(para => (
-            <p>
+          {descriptionParagraphs.map((para, idx) => (
+            <p key={idx}>
               {para}
               <br />
             </p>

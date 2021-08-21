@@ -1,4 +1,4 @@
-import { H2 } from '@blueprintjs/core';
+import { Button, H2 } from '@blueprintjs/core';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
@@ -27,15 +27,9 @@ type OwnProps = {
 const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   const gridApi = React.useRef<GridApi>();
 
-  const userCourseRegistrations = props.userCourseRegistrations?.map(e => {
-    if (!e.name) {
-      return {
-        ...e,
-        name: '(user has yet to log in)'
-      };
-    }
-    return e;
-  });
+  const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
+    !e.name ? { ...e, name: '(user has yet to log in)' } : e
+  );
 
   const columnDefs = [
     {
@@ -102,8 +96,22 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   );
 
   return (
-    <div>
-      <H2>Users</H2>
+    <div className="users-configuration">
+      <div className="users-header-container">
+        <H2>Users</H2>
+        <Button
+          text="Export as CSV"
+          className="export-csv-button"
+          onClick={() => {
+            if (gridApi.current) {
+              gridApi.current.exportDataAsCsv({
+                fileName: `SA Users (${new Date().toISOString()}).csv`,
+                columnKeys: ['name', 'username', 'group', 'role']
+              });
+            }
+          }}
+        />
+      </div>
       {grid}
     </div>
   );

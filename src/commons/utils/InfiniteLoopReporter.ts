@@ -11,6 +11,7 @@ import {
  * single issue in Sentry.
  */
 function reportInfiniteLoopError(
+  coinflip: boolean,
   errorType: InfiniteLoopErrorType,
   isStream: boolean,
   message: string,
@@ -20,8 +21,9 @@ function reportInfiniteLoopError(
     scope.clearBreadcrumbs();
     scope.setLevel(Sentry.Severity.Info);
     scope.setTag('error-type', InfiniteLoopErrorType[errorType]);
+    scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('is-stream', isStream ? 'yes' : 'no');
-    scope.setTag('message', message);
+    scope.setExtra('message', message);
     scope.setExtra('code', JSON.stringify(code));
     scope.setFingerprint(['INFINITE_LOOP_LOGGING_FINGERPRINT_2022']);
     const err = new Error('Infinite Loop');
@@ -40,12 +42,13 @@ function reportInfiniteLoopError(
  * @param {string} message - the error's message
  * @param {string} code - code to be sent along with the error
  */
-function reportPotentialInfiniteLoop(message: string, code: string[]) {
+function reportPotentialInfiniteLoop(coinflip: boolean, message: string, code: string[]) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
     scope.setLevel(Sentry.Severity.Info);
+    scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('error-type', 'Undetected');
-    scope.setTag('message', message);
+    scope.setExtra('message', message);
     scope.setExtra('code', JSON.stringify(code));
     scope.setFingerprint(['INFINITE_LOOP_LOGGING_FINGERPRINT_2022']);
     const err = new Error('Infinite Loop');

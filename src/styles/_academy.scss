@@ -467,6 +467,18 @@
   }
 }
 
+.users-configuration {
+  .users-header-container {
+    position: relative;
+
+    .export-csv-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
 .add-users {
   h4 {
     margin: 20px 0 10px 0;

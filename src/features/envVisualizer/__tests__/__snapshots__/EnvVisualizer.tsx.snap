@@ -881,23 +881,6 @@ Array [
       ],
       "callee": Node {
         "end": 97,
-        "inferredType": Object {
-          "kind": "function",
-          "parameterTypes": Array [
-            Object {
-              "kind": "primitive",
-              "name": "number",
-            },
-          ],
-          "returnType": Object {
-            "kind": "function",
-            "parameterTypes": Array [],
-            "returnType": Object {
-              "kind": "primitive",
-              "name": "number",
-            },
-          },
-        },
         "loc": SourceLocation {
           "end": Position {
             "column": 15,
@@ -910,18 +893,9 @@ Array [
         },
         "name": "f",
         "start": 96,
-        "typability": "Typed",
         "type": "Identifier",
       },
       "end": 101,
-      "inferredType": Object {
-        "kind": "function",
-        "parameterTypes": Array [],
-        "returnType": Object {
-          "kind": "primitive",
-          "name": "number",
-        },
-      },
       "loc": SourceLocation {
         "end": Position {
           "column": 19,
@@ -933,7 +907,6 @@ Array [
         },
       },
       "start": 96,
-      "typability": "Typed",
       "type": "CallExpression",
     },
     "head": Object {

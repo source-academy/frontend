@@ -528,15 +528,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     const onClickPrevious = () => {
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-      if (isMobileBreakpoint) {
-        setSelectedTab(SideContentType.questionOverview);
-      }
+      setSelectedTab(SideContentType.questionOverview);
     };
     const onClickNext = () => {
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-      if (isMobileBreakpoint) {
-        setSelectedTab(SideContentType.questionOverview);
-      }
+      setSelectedTab(SideContentType.questionOverview);
     };
     const onClickReturn = () => history.push(listingPath);
 

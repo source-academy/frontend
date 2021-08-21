@@ -200,7 +200,9 @@ class Grading extends React.Component<GradingProps, State> {
       />
     );
 
-    const data = this.sortSubmissionsByNotifications();
+    const data = this.sortSubmissionsByNotifications().map(e =>
+      !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
+    );
 
     const controls = (
       <div className="grading-controls">
