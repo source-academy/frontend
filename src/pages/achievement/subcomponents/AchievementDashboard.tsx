@@ -105,9 +105,9 @@ function Dashboard(props: DispatchProps & StateProps) {
     ? achievementAssessmentOverviews
     : assessmentOverviews;
 
-  userAssessmentOverviews?.forEach(assessmentOverview =>
-    insertFakeAchievements(assessmentOverview, inferencer)
-  );
+  // unify this into a single function that takes in the overviews[] and the inferencer
+  // make sure it inserts an achievement for each type
+  userAssessmentOverviews && insertFakeAchievements(userAssessmentOverviews, inferencer);
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
