@@ -21,8 +21,15 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 1. Install a stable version of NodeJS. The active LTS or current version should work fine.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
-4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
-5. Point your browser to `http://localhost:8000` to see your local Source Academy.
+4. Copy the `.env.example` file as `.env` and set the following variables:
+ 
+   - `REACT_APP_USE_BACKEND=FALSE`
+   - `REACT_APP_PLAYGROUND_ONLY=TRUE`
+
+   You may want to refer to [_Setting up your environment_](#setting-up-your-environment) below for more configuration options, if you wish to set up e.g. the GitHub or Google Drive integrations.
+   
+5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+6. Point your browser to `http://localhost:8000` to see your local Source Academy.
 
 In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. For this edition, there is no need for "Setting up your environment".
 
