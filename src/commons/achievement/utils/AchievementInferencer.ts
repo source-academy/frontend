@@ -719,10 +719,7 @@ class AchievementInferencer {
   public listAvailablePrerequisiteUuids(uuid: string) {
     return this.getAllAchievementUuids().filter(
       target =>
-        target !== uuid &&
-        !this.isDescendant(uuid, target) &&
-        !this.isDescendant(target, uuid) &&
-        this.nodeList.get(target)?.parents.size === 0
+        target !== uuid && !this.isDescendant(uuid, target) && !this.isDescendant(target, uuid)
     );
   }
 
