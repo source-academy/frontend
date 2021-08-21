@@ -1,7 +1,10 @@
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import {
+  AssessmentConfiguration,
+  AssessmentOverview
+} from 'src/commons/assessment/AssessmentTypes';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -18,6 +21,7 @@ import {
 } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
+  fetchAssessmentConfigs: () => void;
   fetchAssessmentOverviews: () => void;
   getAchievements: () => void;
   getGoals: (studentCourseRegId: number) => void;
@@ -33,6 +37,7 @@ export type StateProps = {
   id?: number;
   name?: string;
   role?: Role;
+  assessmentConfigs?: AssessmentConfiguration[];
   assessmentOverviews?: AssessmentOverview[];
   achievementAssessmentOverviews: AssessmentOverview[];
   users: AchievementUser[];
@@ -67,11 +72,13 @@ function Dashboard(props: DispatchProps & StateProps) {
     getUserAssessmentOverviews,
     getUsers,
     updateGoalProgress,
+    fetchAssessmentConfigs,
     fetchAssessmentOverviews,
     group,
     inferencer,
     name,
     role,
+    assessmentConfigs,
     assessmentOverviews,
     achievementAssessmentOverviews,
     users
@@ -92,12 +99,14 @@ function Dashboard(props: DispatchProps & StateProps) {
       : fetchAssessmentOverviews();
 
     getAchievements();
+    fetchAssessmentConfigs();
   }, [
     selectedUser,
     getAchievements,
     getGoals,
     getOwnGoals,
     getUserAssessmentOverviews,
+    fetchAssessmentConfigs,
     fetchAssessmentOverviews
   ]);
 
@@ -105,9 +114,10 @@ function Dashboard(props: DispatchProps & StateProps) {
     ? achievementAssessmentOverviews
     : assessmentOverviews;
 
-  // unify this into a single function that takes in the overviews[] and the inferencer
-  // make sure it inserts an achievement for each type
-  userAssessmentOverviews && insertFakeAchievements(userAssessmentOverviews, inferencer);
+  // inserts assessment achievements for each assessment retrieved
+  userAssessmentOverviews &&
+    assessmentConfigs &&
+    insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;

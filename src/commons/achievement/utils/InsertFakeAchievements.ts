@@ -5,12 +5,13 @@ import {
   coverImageUrl
 } from '../../../features/achievement/AchievementConstants';
 import { GoalType } from '../../../features/achievement/AchievementTypes';
-import { AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { AssessmentConfiguration, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
 
 function insertFakeAchievements(
   assessmentOverviews: AssessmentOverview[],
+  assessmentConfigs: AssessmentConfiguration[],
   inferencer: AchievementInferencer
 ) {
   const sortedOverviews = [...assessmentOverviews].sort((overview1, overview2) =>
@@ -18,10 +19,9 @@ function insertFakeAchievements(
   );
   const length = assessmentOverviews.length;
 
-  const completedMissionUuids: string[] = [];
-  const completedQuestUuids: string[] = [];
-  const completedPathUuids: string[] = [];
-  const completedContestUuids: string[] = [];
+  const assessmentTypes = assessmentConfigs.map(config => config.type);
+
+  const categorisedUuids: string[][] = assessmentTypes.map(_ => []);
 
   sortedOverviews.forEach((assessmentOverview, idx) => {
     // Reduce clutter for achievements that cannot be earned at that point
@@ -93,107 +93,39 @@ function insertFakeAchievements(
 
       // if completed, add the uuid into the appropriate array
       if (assessmentOverview.gradingStatus === 'graded' || !assessmentOverview.isManuallyGraded) {
-        switch (assessmentOverview.type) {
-          case 'Missions':
-            completedMissionUuids.push(idString);
-            break;
-          case 'Quests':
-            completedQuestUuids.push(idString);
-            break;
-          case 'Path':
-            completedPathUuids.push(idString);
-            break;
-          case 'Contests':
-            completedContestUuids.push(idString);
-            break;
-          default:
-            break;
-        }
+        assessmentTypes.forEach((type, idx) => {
+          if (type === assessmentOverview.type) {
+            categorisedUuids[idx].push(idString);
+          }
+        });
       }
     }
   });
 
   // the dropdowns appear below the incomplete assessments, in the order missions, quests, path, contests
   // will not appear if there are no completed assessments of that type
-  completedMissionUuids.length > 0 &&
-    inferencer.insertFakeAchievement({
-      uuid: '000',
-      title: 'Completed Missions',
-      xp: 0,
-      isVariableXp: false,
-      deadline: undefined,
-      release: undefined,
-      isTask: true,
-      position: -4,
-      prerequisiteUuids: completedMissionUuids,
-      goalUuids: [],
-      cardBackground: `${cardBackgroundUrl}/default.png`,
-      view: {
-        coverImage: `${coverImageUrl}/default.png`,
-        description: 'Your completed missions are listed here!',
-        completionText: ''
-      }
-    });
-
-  completedQuestUuids.length > 0 &&
-    inferencer.insertFakeAchievement({
-      uuid: '001',
-      title: 'Completed Quests',
-      xp: 0,
-      isVariableXp: false,
-      deadline: undefined,
-      release: undefined,
-      isTask: true,
-      position: -3,
-      prerequisiteUuids: completedQuestUuids,
-      goalUuids: [],
-      cardBackground: `${cardBackgroundUrl}/default.png`,
-      view: {
-        coverImage: `${coverImageUrl}/default.png`,
-        description: 'Your completed quests are listed here!',
-        completionText: ''
-      }
-    });
-
-  completedPathUuids.length > 0 &&
-    inferencer.insertFakeAchievement({
-      uuid: '002',
-      title: 'Completed Paths',
-      xp: 0,
-      isVariableXp: false,
-      deadline: undefined,
-      release: undefined,
-      isTask: true,
-      position: -2,
-      prerequisiteUuids: completedPathUuids,
-      goalUuids: [],
-      cardBackground: `${cardBackgroundUrl}/default.png`,
-      view: {
-        coverImage: `${coverImageUrl}/default.png`,
-        description: 'Your completed paths are listed here!',
-        completionText: ''
-      }
-    });
-
-  completedContestUuids.length > 0 &&
-    inferencer.insertFakeAchievement({
-      uuid: '003',
-      title: 'Completed Contests',
-      xp: 0,
-      isVariableXp: false,
-      deadline: undefined,
-      release: undefined,
-      isTask: true,
-      position: -1,
-      prerequisiteUuids: completedMissionUuids,
-      goalUuids: [],
-      cardBackground: `${cardBackgroundUrl}/default.png`,
-      view: {
-        coverImage: `${coverImageUrl}/default.png`,
-        description: 'Your completed contests are listed here!',
-        completionText: ''
-      }
-    });
+  categorisedUuids.forEach((uuids, idx) => {
+    const assessmentType = assessmentTypes[idx];
+    uuids.length > 0 &&
+      inferencer.insertFakeAchievement({
+        uuid: assessmentType,
+        title: 'Completed ' + assessmentType,
+        xp: 0,
+        isVariableXp: false,
+        deadline: undefined,
+        release: undefined,
+        isTask: true,
+        position: -1 - idx, // negative number to ensure that they stay on top
+        prerequisiteUuids: uuids,
+        goalUuids: [],
+        cardBackground: `${cardBackgroundUrl}/default.png`,
+        view: {
+          coverImage: `${coverImageUrl}/default.png`,
+          description: 'Your completed ' + assessmentType + ' are listed here!',
+          completionText: ''
+        }
+      });
+  });
 }
 
 export default insertFakeAchievements;

@@ -2,7 +2,10 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
+import {
+  fetchAssessmentConfigs,
+  fetchAssessmentOverviews
+} from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   getAchievements,
@@ -21,12 +24,14 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   role: state.session.role,
   assessmentOverviews: state.session.assessmentOverviews,
   achievementAssessmentOverviews: state.achievement.assessmentOverviews,
-  users: state.achievement.users
+  users: state.achievement.users,
+  assessmentConfigs: state.session.assessmentConfigurations
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
+      fetchAssessmentConfigs,
       fetchAssessmentOverviews,
       getAchievements,
       getGoals,
