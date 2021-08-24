@@ -21,7 +21,6 @@ import {
 } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  fetchAssessmentConfigs: () => void;
   fetchAssessmentOverviews: () => void;
   getAchievements: () => void;
   getGoals: (studentCourseRegId: number) => void;
@@ -72,7 +71,6 @@ function Dashboard(props: DispatchProps & StateProps) {
     getUserAssessmentOverviews,
     getUsers,
     updateGoalProgress,
-    fetchAssessmentConfigs,
     fetchAssessmentOverviews,
     group,
     inferencer,
@@ -99,14 +97,12 @@ function Dashboard(props: DispatchProps & StateProps) {
       : fetchAssessmentOverviews();
 
     getAchievements();
-    fetchAssessmentConfigs();
   }, [
     selectedUser,
     getAchievements,
     getGoals,
     getOwnGoals,
     getUserAssessmentOverviews,
-    fetchAssessmentConfigs,
     fetchAssessmentOverviews
   ]);
 
@@ -115,6 +111,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     : assessmentOverviews;
 
   // inserts assessment achievements for each assessment retrieved
+  // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
   userAssessmentOverviews &&
     assessmentConfigs &&
     insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
