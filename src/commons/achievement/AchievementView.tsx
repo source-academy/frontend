@@ -37,7 +37,7 @@ function AchievementView(props: AchievementViewProps) {
   const goals = inferencer.listGoals(focusUuid);
   const status = inferencer.getStatus(focusUuid);
 
-  const descriptionParagraphs = description.split('\n');
+  const descriptionParagraphs = description ? description.split('\n') : [''];
 
   return (
     <div className="view" style={{ ...getAbilityGlow(), ...getAbilityBackground() }}>
