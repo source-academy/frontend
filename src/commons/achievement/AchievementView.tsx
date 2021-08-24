@@ -21,7 +21,6 @@ function AchievementView(props: AchievementViewProps) {
 
   const inferencer = useContext(AchievementContext);
 
-  // NOTE: was originally isNaN, not sure how this should change for uuid
   if (focusUuid === '') {
     return (
       <div className="no-view">
@@ -36,7 +35,6 @@ function AchievementView(props: AchievementViewProps) {
   const { coverImage, completionText, description } = view;
   const awardedXp = inferencer.getAchievementXp(focusUuid);
   const goals = inferencer.listGoals(focusUuid);
-  const prereqGoals = inferencer.listPrerequisiteGoals(focusUuid);
   const status = inferencer.getStatus(focusUuid);
 
   const descriptionParagraphs = description ? description.split('\n') : [''];
@@ -62,12 +60,6 @@ function AchievementView(props: AchievementViewProps) {
         </span>
       </div>
       <AchievementViewGoal goals={goals} />
-      {prereqGoals.length > 0 && (
-        <>
-          <hr />
-          <AchievementViewGoal goals={prereqGoals} />
-        </>
-      )}
       {status === AchievementStatus.COMPLETED && (
         <>
           <hr />

@@ -14,8 +14,12 @@ type EditablePrerequisiteUuidsProps = {
 function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
   const { changePrerequisiteUuids, uuid, prerequisiteUuids } = props;
 
+  const enablePrerequisites = false;
+
   const inferencer = useContext(AchievementContext);
-  const availableUuids = inferencer.listAvailablePrerequisiteUuids(uuid);
+  const availableUuids: string[] = enablePrerequisites
+    ? inferencer.listAvailablePrerequisiteUuids(uuid)
+    : [];
   const selectedUuids = prerequisiteUuids.filter(
     uuid => !inferencer.isInvalidAchievement(inferencer.getAchievement(uuid))
   );
