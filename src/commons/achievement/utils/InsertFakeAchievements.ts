@@ -9,6 +9,13 @@ import { AssessmentConfiguration, AssessmentOverview } from '../../assessment/As
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
 
+function assessmentCompleted(assessmentOverview: AssessmentOverview): boolean {
+  return (
+    assessmentOverview.gradingStatus === 'graded' ||
+    (!assessmentOverview.isManuallyGraded && assessmentOverview.status === 'submitted')
+  );
+}
+
 function insertFakeAchievements(
   assessmentOverviews: AssessmentOverview[],
   assessmentConfigs: AssessmentConfiguration[],
@@ -69,10 +76,9 @@ function insertFakeAchievements(
       inferencer.insertFakeAchievement({
         uuid: idString,
         title: assessmentOverview.title,
-        xp:
-          assessmentOverview.gradingStatus === 'graded' || !assessmentOverview.isManuallyGraded
-            ? assessmentOverview.xp
-            : assessmentOverview.maxXp,
+        xp: assessmentCompleted(assessmentOverview)
+          ? assessmentOverview.xp
+          : assessmentOverview.maxXp,
         isVariableXp: false,
         deadline: new Date(assessmentOverview.closeAt),
         release: new Date(assessmentOverview.openAt),
@@ -92,7 +98,7 @@ function insertFakeAchievements(
       });
 
       // if completed, add the uuid into the appropriate array
-      if (assessmentOverview.gradingStatus === 'graded' || !assessmentOverview.isManuallyGraded) {
+      if (assessmentCompleted(assessmentOverview)) {
         assessmentTypes.forEach((type, idx) => {
           if (type === assessmentOverview.type) {
             categorisedUuids[idx].push(idString);
