@@ -7,6 +7,7 @@ import {
   AssessmentOverview,
   ContestEntry,
   GradingStatus,
+  IContestVotingQuestion,
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes
@@ -538,6 +539,12 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       question.postpend = question.postpend || '';
       question.testcases = question.testcases || [];
       q = question;
+    }
+
+    if (q.type === QuestionTypes.voting) {
+      const question = q as IContestVotingQuestion;
+      question.prepend = question.prepend || '';
+      question.postpend = question.postpend || '';
     }
 
     // If the backend returns :nil (null) for grader, then the question is not graded

@@ -118,6 +118,8 @@ export interface IMCQQuestion extends BaseQuestion {
 
 export interface IContestVotingQuestion extends BaseQuestion {
   answer: ContestEntry[];
+  prepend: string;
+  postpend: string;
   contestEntries: ContestEntry[];
   contestLeaderboard: ContestEntry[];
   type: 'voting';
