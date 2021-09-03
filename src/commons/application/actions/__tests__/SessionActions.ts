@@ -41,6 +41,7 @@ import {
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
+  UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
   UPDATE_USER_ROLE
@@ -82,6 +83,7 @@ import {
   updateCourseResearchAgreement,
   updateGrading,
   updateGradingOverviews,
+  updateInfiniteLoopEncountered,
   updateLatestViewedCourse,
   updateNotifications,
   updateUserRole
@@ -717,6 +719,13 @@ test('updateCourseResearchAgreement generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_COURSE_RESEARCH_AGREEMENT,
     payload: { agreedToResearch }
+  });
+});
+
+test('updateInfiniteLoopEncountered generates correct action object', () => {
+  const action = updateInfiniteLoopEncountered();
+  expect(action).toEqual({
+    type: UPDATE_INFINITE_LOOP_ENCOUNTERED
   });
 });
 
