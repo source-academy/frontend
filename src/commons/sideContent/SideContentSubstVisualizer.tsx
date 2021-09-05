@@ -99,7 +99,6 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
           PREVIOUS_STEP: () => {},
           LAST_STEP: () => {}
         };
-    // console.log(this.props.content);
 
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
@@ -183,7 +182,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
 
     const diffMarkers = [] as any[];
     if (redex.length > 0) {
-      const mainprog = redexed.split('$');
+      const mainprog = redexed.split('$redex');
       let text = mainprog[0];
       let front = text.split('\n');
 
@@ -221,7 +220,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     const pathified = this.props.content[contIndex];
     const redexed = pathified.code;
     const redex = pathified.redex;
-    const split = pathified.code.split('$');
+    const split = pathified.code.split('$redex');
     if (split.length > 1) {
       let text = split[0];
       for (let i = 1; i < split.length; i++) {
