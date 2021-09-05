@@ -41,6 +41,7 @@ export enum FilterStatus {
  * @param {string} uuid unique uuid of the achievement item
  * @param {string} title title of the achievement
  * @param {number} xp the xp gained when completing the achievement
+ * @param {boolean} isVariableXp the xp gained from the achievement is the sum of its goal counts
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task

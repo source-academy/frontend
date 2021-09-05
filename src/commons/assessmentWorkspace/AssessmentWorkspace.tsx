@@ -328,6 +328,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       }
     }
 
+    if (question.type === QuestionTypes.voting) {
+      const questionData = question as IContestVotingQuestion;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
+    }
+
     props.handleEditorUpdateBreakpoints([]);
     props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     props.handleResetWorkspace({

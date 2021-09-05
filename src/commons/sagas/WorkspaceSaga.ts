@@ -9,6 +9,7 @@ import {
   runInContext
 } from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
+import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
@@ -463,7 +464,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   }
 }
 
-function* clearContext(workspaceLocation: WorkspaceLocation) {
+function* clearContext(workspaceLocation: WorkspaceLocation, program: string) {
   const [chapter, symbols, externalLibraryName, globals, variant]: [
     number,
     string[],
@@ -492,6 +493,11 @@ function* clearContext(workspaceLocation: WorkspaceLocation) {
   yield put(actions.beginClearContext(workspaceLocation, library, false));
   // Wait for the clearing to be done.
   yield take(END_CLEAR_CONTEXT);
+
+  const context: Context = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].context
+  );
+  defineSymbol(context, '__PROGRAM__', program);
 }
 
 export function* evalEditor(
@@ -516,7 +522,7 @@ export function* evalEditor(
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
-    yield* clearContext(workspaceLocation);
+    yield* clearContext(workspaceLocation, editorCode);
     yield put(actions.clearReplOutput(workspaceLocation));
     const context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context
@@ -577,7 +583,7 @@ export function* runTestCase(
     (state: OverallState) => state.workspaces[workspaceLocation].execTime
   );
 
-  yield* clearContext(workspaceLocation);
+  yield* clearContext(workspaceLocation, value);
 
   // Do NOT clear the REPL output!
 

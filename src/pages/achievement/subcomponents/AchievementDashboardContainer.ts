@@ -21,7 +21,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   role: state.session.role,
   assessmentOverviews: state.session.assessmentOverviews,
   achievementAssessmentOverviews: state.achievement.assessmentOverviews,
-  users: state.achievement.users
+  users: state.achievement.users,
+  assessmentConfigs: state.session.assessmentConfigurations
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
