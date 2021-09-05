@@ -82,6 +82,14 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     ModeSelector(2);
   }
 
+  componentDidUpdate(prevProps: StateProps, prevState: State) {
+    if (prevProps.content !== this.props.content) {
+      this.setState((state: State) => {
+        return { value: 1 };
+      });
+    }
+  }
+
   public render() {
     const lastStepValue = this.props.content.length;
     // 'content' property is initialised to '[]' by Playground component
@@ -265,8 +273,6 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     const previousFunctionCall = this.getPreviousFunctionCall(value);
     if (previousFunctionCall !== null) {
       this.sliderShift(previousFunctionCall);
-    } else {
-      this.sliderShift(value);
     }
   };
 
@@ -274,8 +280,6 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     const nextFunctionCall = this.getNextFunctionCall(value);
     if (nextFunctionCall !== null) {
       this.sliderShift(nextFunctionCall);
-    } else {
-      this.sliderShift(value);
     }
   };
 
