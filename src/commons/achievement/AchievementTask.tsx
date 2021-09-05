@@ -28,8 +28,9 @@ function AchievementTask(props: AchievementTaskProps) {
    * Checks whether the AchievementItem (can be a task or prereq) should be rendered
    * based on the achievement dashboard filterStatus.
    */
-  const shouldRender = (uuid: string): boolean => {
+  const isInFilter = (uuid: string): boolean => {
     const status = inferencer.getStatus(uuid);
+
     switch (filterStatus) {
       case FilterStatus.ALL:
         return true;
@@ -43,6 +44,16 @@ function AchievementTask(props: AchievementTaskProps) {
   };
 
   /**
+   * Checks whether the AchievementItem (can be a task or prereq) should be rendered
+   * based on the achievement dashboard filterStatus and whether it is a prereq.
+   */
+  const shouldRender = (uuid: string): boolean => {
+    const isPrerequisite = inferencer.isPrerequisite(uuid);
+
+    return !isPrerequisite && isInFilter(uuid);
+  };
+
+  /**
    * Checks whether the AchievementItem has any prerequisite that
    * should be rendered based on the achievement dashboard filterStatus.
    *
@@ -52,7 +63,7 @@ function AchievementTask(props: AchievementTaskProps) {
   const shouldRenderPrerequisites = (uuid: string) => {
     const children = [...inferencer.getImmediateChildren(uuid)];
     return children.reduce((canRender, prerequisite) => {
-      return canRender || shouldRender(prerequisite);
+      return canRender || isInFilter(prerequisite);
     }, false);
   };
 
@@ -70,7 +81,7 @@ function AchievementTask(props: AchievementTaskProps) {
             uuid={uuid}
             focusState={focusState}
             isDropdownOpen={isDropdownOpen}
-            shouldRender={shouldRender(uuid)}
+            shouldRender={isInFilter(uuid)}
             toggleDropdown={toggleDropdown}
           />
           <Collapse isOpen={isDropdownOpen} keepChildrenMounted={true}>
@@ -87,7 +98,7 @@ function AchievementTask(props: AchievementTaskProps) {
                   <AchievementCard
                     uuid={prerequisiteUuid}
                     focusState={focusState}
-                    shouldRender={shouldRender(prerequisiteUuid)}
+                    shouldRender={isInFilter(prerequisiteUuid)}
                   />
                 </div>
               ))}

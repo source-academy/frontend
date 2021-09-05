@@ -23,6 +23,7 @@ import { isExpired, isReleased } from './DateHelper';
  * @param {AchievementStatus} status the achievement status
  * @param {Set<string>} children a set of immediate prerequisites uuid
  * @param {Set<string>} descendant a set of all descendant prerequisites uuid (including immediate prerequisites)
+ * @param {Set<string>} parents a set of all immediate parent uuid
  */
 class AchievementNode {
   public achievement: AchievementItem;
@@ -32,6 +33,7 @@ class AchievementNode {
   public status: AchievementStatus;
   public children: Set<string>;
   public descendant: Set<string>;
+  public parents: Set<string>;
 
   constructor(achievement: AchievementItem) {
     const { deadline, prerequisiteUuids } = achievement;
@@ -43,6 +45,7 @@ class AchievementNode {
     this.status = AchievementStatus.ACTIVE;
     this.children = new Set(prerequisiteUuids);
     this.descendant = new Set(prerequisiteUuids);
+    this.parents = new Set();
   }
 }
 
@@ -145,6 +148,16 @@ class AchievementInferencer {
    */
   public hasAchievement(uuid: string) {
     return this.nodeList.has(uuid);
+  }
+
+  /**
+   * Returns true if the achievement is a prerequisite of another achievement
+   *
+   * @param uuid Achievement uuid
+   */
+  public isPrerequisite(uuid: string) {
+    const node = this.nodeList.get(uuid);
+    return node ? node.parents.size > 0 : false;
   }
 
   /**
@@ -509,13 +522,22 @@ class AchievementInferencer {
    */
   public isCompleted(achievement: AchievementItem) {
     const goalLength = achievement.goalUuids.length;
-    // an achievement with no goals should not be considered complete
-    if (goalLength === 0) {
+    const prereqLength = achievement.prerequisiteUuids.length;
+
+    // an achievement with no goals and prerequisites should not be considered complete
+    if (goalLength === 0 && prereqLength === 0) {
       return false;
     }
+
     // if any of the goals are not complete, return false
     for (let i = 0; i < goalLength; i++) {
       if (!this.getGoal(achievement.goalUuids[i]).completed) {
+        return false;
+      }
+    }
+    // if any of the prereqs are not complete, return false
+    for (let i = 0; i < prereqLength; i++) {
+      if (!this.isCompleted(this.getAchievement(achievement.prerequisiteUuids[i]))) {
         return false;
       }
     }
@@ -673,6 +695,23 @@ class AchievementInferencer {
   }
 
   /**
+   * Returns the total XP of the achievement and all its descendants
+   *
+   * @param uuid Achievement uuid
+   */
+  public getDescendantXp(uuid: string) {
+    let totalXp = this.getAchievementXp(uuid);
+
+    this.getDescendants(uuid).forEach(descendantUuid => {
+      if (this.isCompleted(this.getAchievement(descendantUuid))) {
+        totalXp += this.getAchievementXp(descendantUuid);
+      }
+    });
+
+    return totalXp;
+  }
+
+  /**
    * Returns a list of achievementUuid that may be a prerequisite of the achievement
    *
    * @param uuid Achievement Uuid
@@ -697,6 +736,7 @@ class AchievementInferencer {
       node.achievement.prerequisiteUuids = uniq(node.achievement.prerequisiteUuids);
       node.achievement.goalUuids = uniq(node.achievement.goalUuids);
 
+      this.generateParentReference(node);
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
       this.generateXp(node);
@@ -737,6 +777,18 @@ class AchievementInferencer {
     const goalList = new Map<string, AchievementGoal>();
     goals.forEach(goal => goalList.set(goal.uuid, cloneDeep(goal)));
     return goalList;
+  }
+
+  /**
+   * Mark immediate children's parent as this node
+   *
+   * @param node The AchievementNode
+   */
+  private generateParentReference(node: AchievementNode) {
+    // Mark immediate childeren
+    for (const childUuid of node.children) {
+      this.nodeList.get(childUuid)?.parents.add(node.achievement.uuid);
+    }
   }
 
   /**
@@ -847,25 +899,19 @@ class AchievementInferencer {
    * @param node the AchievementNode
    */
   private generateStatus(node: AchievementNode) {
-    let prereqsCompleted = true;
-    // iterate through all prerequisites. If any are not complete, then prereqs not complete.
-    node.descendant.forEach(uuid => {
-      prereqsCompleted = prereqsCompleted && this.isCompleted(this.getAchievement(uuid));
-    });
-
+    // checks if the achievement's goals and prereqs are complete
     const achievementCompleted = this.isCompleted(node.achievement);
 
     const hasReleased = isReleased(node.achievement.release);
     const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
-    node.status =
-      achievementCompleted && prereqsCompleted
-        ? AchievementStatus.COMPLETED
-        : hasReleased
-        ? hasUnexpiredDeadline
-          ? AchievementStatus.ACTIVE
-          : AchievementStatus.EXPIRED
-        : AchievementStatus.UNRELEASED;
+    node.status = achievementCompleted
+      ? AchievementStatus.COMPLETED
+      : hasReleased
+      ? hasUnexpiredDeadline
+        ? AchievementStatus.ACTIVE
+        : AchievementStatus.EXPIRED
+      : AchievementStatus.UNRELEASED;
   }
 
   /**
@@ -880,6 +926,7 @@ class AchievementInferencer {
     let newPosition = 1;
     this.getAllAchievements()
       .filter(achievement => achievement.isTask)
+      .filter(achievement => achievement.position >= 0) // force negative position tasks to show up on top
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .forEach(sortedTask => (sortedTask.position = newPosition++));
     this.getAllAchievements()
