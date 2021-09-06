@@ -112,7 +112,7 @@ export const SessionsReducer: Reducer<SessionState> = (
     case UPDATE_INFINITE_LOOP_ENCOUNTERED:
       return {
         ...state,
-        hadPreviousInfiniteLoop: true
+        hadPreviousInfiniteLoop: action.payload.hadPreviousInfiniteLoop
       };
     case UPDATE_NOTIFICATIONS:
       return {

@@ -723,9 +723,10 @@ test('updateCourseResearchAgreement generates correct action object', () => {
 });
 
 test('updateInfiniteLoopEncountered generates correct action object', () => {
-  const action = updateInfiniteLoopEncountered();
+  const action = updateInfiniteLoopEncountered(true);
   expect(action).toEqual({
-    type: UPDATE_INFINITE_LOOP_ENCOUNTERED
+    type: UPDATE_INFINITE_LOOP_ENCOUNTERED,
+    payload: { hadPreviousInfiniteLoop: true }
   });
 });
 

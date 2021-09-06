@@ -803,11 +803,11 @@ describe('evalCode', () => {
 
       return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
         .withState(state)
-        .put(updateInfiniteLoopEncountered())
+        .put(updateInfiniteLoopEncountered(true))
         .silentRun();
     });
 
-    test('reports non error code to sentry after infinite loop', () => {
+    test('reports non error code to sentry after infinite loop and resets flag', () => {
       state = {
         ...state,
         session: {
@@ -824,6 +824,7 @@ describe('evalCode', () => {
       return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .call(reportNonErrorProgram, defaultSessionId, [theCode])
+        .put(updateInfiniteLoopEncountered(false))
         .silentRun();
     });
 

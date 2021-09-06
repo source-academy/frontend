@@ -544,7 +544,8 @@ test('UPDATE_INFINITE_LOOP_ENCOUNTERED works correctly in updating had infinite 
     hadPreviousInfiniteLoop: false
   };
   const action = {
-    type: UPDATE_INFINITE_LOOP_ENCOUNTERED
+    type: UPDATE_INFINITE_LOOP_ENCOUNTERED,
+    payload: { hadPreviousInfiniteLoop: true }
   };
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 

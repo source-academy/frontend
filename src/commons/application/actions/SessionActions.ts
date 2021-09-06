@@ -234,4 +234,5 @@ export const deleteUserCourseRegistration = (courseRegId: number) =>
 export const updateCourseResearchAgreement = (agreedToResearch: boolean) =>
   action(UPDATE_COURSE_RESEARCH_AGREEMENT, { agreedToResearch });
 
-export const updateInfiniteLoopEncountered = () => action(UPDATE_INFINITE_LOOP_ENCOUNTERED);
+export const updateInfiniteLoopEncountered = (hadPreviousInfiniteLoop: boolean) =>
+  action(UPDATE_INFINITE_LOOP_ENCOUNTERED, { hadPreviousInfiniteLoop });

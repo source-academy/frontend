@@ -817,7 +817,7 @@ export function* evalCode(
         const lastError = context.errors[context.errors.length - 1];
         if (infiniteLoopData) {
           events.push(EventType.INFINITE_LOOP);
-          yield put(actions.updateInfiniteLoopEncountered());
+          yield put(actions.updateInfiniteLoopEncountered(true));
           yield call(reportInfiniteLoopError, sessionId, coinflip, ...infiniteLoopData);
         } else if (isPotentialInfiniteLoop(lastError)) {
           events.push(EventType.INFINITE_LOOP);
@@ -858,6 +858,7 @@ export function* evalCode(
     ]);
     if (approval && previousInfiniteLoop) {
       yield call(reportNonErrorProgram, sessionId, context.previousCode);
+      yield put(actions.updateInfiniteLoopEncountered(false));
     }
   }
 
