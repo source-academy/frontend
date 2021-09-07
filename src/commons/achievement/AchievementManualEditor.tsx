@@ -31,7 +31,10 @@ const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
   <MenuItem key={user.courseRegId} onClick={handleClick} text={user.name || user.username} />
 );
 const userPredicate: ItemPredicate<AchievementUser> = (query, item) =>
-  (item.name || item.username || item.group).toLowerCase().includes(query.toLowerCase());
+  [item.name, item.username, item.group].reduce(
+    (acc: boolean, x) => (x ? acc || x.toLowerCase().includes(query.toLowerCase()) : acc),
+    false
+  );
 
 export function updateGoalProcessed() {
   showSuccessMessage('Goal updated');
