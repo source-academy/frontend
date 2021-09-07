@@ -167,6 +167,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                       ? this.props.maxXp - this.props.initialXp
                       : undefined
                   }
+                  stepSize={50}
+                  minorStepSize={25}
+                  majorStepSize={100}
                 />
               </div>
             </div>
