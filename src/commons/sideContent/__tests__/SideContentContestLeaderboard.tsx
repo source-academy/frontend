@@ -8,19 +8,19 @@ const mockLeaderboardEntries = [
   {
     submission_id: 1,
     answer: { code: "display('hello world')" },
-    score: 100,
+    relative_score: 100,
     student_name: 'student_1'
   },
   {
     submission_id: 2,
     answer: { code: 'function test() { return 1; }' },
-    score: 90,
+    relative_score: 90,
     student_name: 'student_2'
   },
   {
     submission_id: 3,
     answer: { code: 'function test() { return 1; }' },
-    score: 80,
+    relative_score: 80,
     student_name: 'student_3'
   }
 ];
