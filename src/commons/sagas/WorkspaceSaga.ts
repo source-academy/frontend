@@ -43,6 +43,7 @@ import {
   getInfiniteLoopData,
   isPotentialInfiniteLoop,
   reportInfiniteLoopError,
+  reportNonErrorProgram,
   reportPotentialInfiniteLoop
 } from '../utils/InfiniteLoopReporter';
 import {
@@ -806,20 +807,23 @@ export function* evalCode(
 
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === undefined || context.variant === 'default') {
-      const [approval, coinflip] = yield select((state: OverallState) => [
+      const [approval, coinflip, sessionId] = yield select((state: OverallState) => [
         state.session.agreedToResearch,
-        state.session.experimentCoinflip
+        state.session.experimentCoinflip,
+        state.session.sessionId
       ]);
       if (approval) {
         const infiniteLoopData = getInfiniteLoopData(context);
         const lastError = context.errors[context.errors.length - 1];
         if (infiniteLoopData) {
           events.push(EventType.INFINITE_LOOP);
-          yield call(reportInfiniteLoopError, coinflip, ...infiniteLoopData);
+          yield put(actions.updateInfiniteLoopEncountered());
+          yield call(reportInfiniteLoopError, sessionId, coinflip, ...infiniteLoopData);
         } else if (isPotentialInfiniteLoop(lastError)) {
           events.push(EventType.INFINITE_LOOP);
           yield call(
             reportPotentialInfiniteLoop,
+            sessionId,
             coinflip,
             lastError.explain(),
             context.previousCode
@@ -845,6 +849,16 @@ export function* evalCode(
       result.value = undefined;
     }
     lastNonDetResult = result;
+  } else if (context.variant === undefined || context.variant === 'default') {
+    // Finished execution with no errors
+    const [approval, sessionId, previousInfiniteLoop] = yield select((state: OverallState) => [
+      state.session.agreedToResearch,
+      state.session.sessionId,
+      state.session.hadPreviousInfiniteLoop
+    ]);
+    if (approval && previousInfiniteLoop) {
+      yield call(reportNonErrorProgram, sessionId, context.previousCode);
+    }
   }
 
   dumpDisplayBuffer();

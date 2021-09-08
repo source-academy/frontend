@@ -301,6 +301,8 @@ export const defaultSession: SessionState = {
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
   experimentCoinflip: Math.random() < 0.5,
+  hadPreviousInfiniteLoop: false,
+  sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
