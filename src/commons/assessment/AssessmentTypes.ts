@@ -173,7 +173,7 @@ export type ContestEntry = {
   submission_id: number;
   answer: ContestEntryCodeAnswer; //contest entry program to be input into editor
   score?: number;
-  relative_score?: number;
+  final_score?: number;
   student_name?: string;
 };
 
