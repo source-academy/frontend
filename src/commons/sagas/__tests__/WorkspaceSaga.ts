@@ -3,6 +3,7 @@ import createContext from 'js-slang/dist/createContext';
 import { Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { updateInfiniteLoopEncountered } from 'src/commons/application/actions/SessionActions';
 
 import {
   beginInterruptExecution,
@@ -26,7 +27,11 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
-import { InfiniteLoopErrorType, reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
+import {
+  InfiniteLoopErrorType,
+  reportInfiniteLoopError,
+  reportNonErrorProgram
+} from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
@@ -65,7 +70,8 @@ function generateDefaultState(
     session: {
       ...defaultState.session,
       agreedToResearch: false,
-      experimentCoinflip: true
+      experimentCoinflip: true,
+      sessionId: 10
     },
     workspaces: {
       ...defaultState.workspaces,
@@ -613,6 +619,7 @@ describe('evalCode', () => {
   let options: Partial<IOptions>;
   let lastDebuggerResult: Result;
   let state: OverallState;
+  let defaultSessionId: number;
 
   beforeEach(() => {
     workspaceLocation = 'assessment';
@@ -630,6 +637,7 @@ describe('evalCode', () => {
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
+    defaultSessionId = state.session.sessionId;
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
@@ -721,6 +729,7 @@ describe('evalCode', () => {
           .withState(state)
           .call(
             reportInfiniteLoopError,
+            defaultSessionId,
             true,
             InfiniteLoopErrorType.NoBaseCase,
             false,
@@ -743,6 +752,7 @@ describe('evalCode', () => {
         .withState(state)
         .not.call(
           reportInfiniteLoopError,
+          defaultSessionId,
           true,
           InfiniteLoopErrorType.NoBaseCase,
           false,
@@ -780,6 +790,56 @@ describe('evalCode', () => {
           const lastError = thisContext.errors[thisContext.errors.length - 1];
           expect(lastError.explain()).not.toContain('no base case');
         });
+    });
+
+    test('infinite loops call updateInfiniteLoopEncountered', () => {
+      state = {
+        ...state,
+        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+      };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){f(x);}f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .put(updateInfiniteLoopEncountered())
+        .silentRun();
+    });
+
+    test('reports non error code to sentry after infinite loop', () => {
+      state = {
+        ...state,
+        session: {
+          ...state.session,
+          hadPreviousInfiniteLoop: true,
+          agreedToResearch: true,
+          experimentCoinflip: true
+        }
+      };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){return 1;}f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .call(reportNonErrorProgram, defaultSessionId, [theCode])
+        .silentRun();
+    });
+
+    test('does not report non error code before infinite loop', () => {
+      state = {
+        ...state,
+        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+      };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){return 1;}f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .not.call(reportNonErrorProgram, defaultSessionId, [theCode])
+        .silentRun();
     });
   });
 
