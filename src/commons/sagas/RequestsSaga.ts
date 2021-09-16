@@ -1301,14 +1301,26 @@ export const request = async (
       return resp;
     }
 
-    if (!resp || !resp.ok) {
-      throw new Error('API call failed or got non-OK response');
+    if (!resp.ok) {
+      showWarningMessage(
+        opts.errorMessage
+          ? opts.errorMessage
+          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
+              resp.status === 401 || resp.status === 403
+                ? '; try logging in again, after manually saving any work.'
+                : ''
+            }`
+      );
+      return null;
     }
 
     return resp;
   } catch (e) {
-    store.dispatch(actions.logOut());
-    showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
+    showWarningMessage(
+      opts.errorMessage
+        ? opts.errorMessage
+        : 'Error while communicating with backend; check your network?'
+    );
 
     return null;
   }
