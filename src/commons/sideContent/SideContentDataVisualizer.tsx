@@ -155,7 +155,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
               The data visualizer uses box-and-pointer diagrams, as introduced in{' '}
               <a href={Links.textbookChapter2_2} rel="noopener noreferrer" target="_blank">
                 <i>
-                  Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter
+                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
                   2, Section 2
                 </i>
               </a>
