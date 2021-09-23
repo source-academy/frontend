@@ -13,7 +13,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
      
     <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
       <i>
-        Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 3, Section 2
+        Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
       </i>
     </a>
     .
