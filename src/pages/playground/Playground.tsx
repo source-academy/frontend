@@ -179,6 +179,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const usingRemoteExecution =
     useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
+  // this is still used by remote execution (EV3)
+  // specifically, for the editor Ctrl+B to work
+  const externalLibraryName = useSelector(
+    (state: OverallState) => state.workspaces.playground.externalLibrary
+  );
 
   React.useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
@@ -668,7 +673,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: props.playgroundSourceChapter,
-    externalLibraryName: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
+    externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
     editorValue: props.editorValue,
     editorSessionId: props.editorSessionId,
