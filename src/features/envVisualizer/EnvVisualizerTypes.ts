@@ -45,7 +45,7 @@ export interface Visible extends Drawable {
 export type UnassignedData = symbol;
 
 /** types of primitives in JS Slang  */
-export type PrimitiveTypes = number | string | null | undefined;
+export type PrimitiveTypes = number | string | boolean | null | undefined;
 
 /** types of functions in JS Slang */
 export type FnTypes = {
