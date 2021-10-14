@@ -50,6 +50,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleReplValueChange: (newValue: string) => {},
   handleSendReplInputToOutput: (code: string) => {},
   handleResetWorkspace: () => {},
+  handleChangeExecTime: () => {},
   handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
   handleSideContentHeightChange: (heightChange: number) => {},
   handleTestcaseEval: (testcaseId: number) => {},
