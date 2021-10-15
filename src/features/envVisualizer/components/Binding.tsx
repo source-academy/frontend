@@ -86,7 +86,7 @@ export class Binding implements Visible {
     return (
       <React.Fragment key={Layout.key++}>
         {!this.isDummyBinding() && this.key.draw()}
-        {isMainReference(this.value, this) ? this.value.draw() : null}
+        {isMainReference(this.value, this) && this.value.draw()}
         {this.isDummyBinding() ||
           this.value instanceof PrimitiveValue ||
           this.value instanceof UnassignedValue ||
