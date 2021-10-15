@@ -61,8 +61,6 @@ export class Layout {
     // initialize levels and frames
     Layout.initializeLevels();
 
-    console.log(Layout.environmentTree);
-
     // calculate height and width by considering lowest and widest level
     const lastLevel = Layout.levels[Layout.levels.length - 1];
     Layout.height = Math.max(
