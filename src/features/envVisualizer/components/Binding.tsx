@@ -65,15 +65,30 @@ export class Binding implements Visible {
           ? this.value.tooltipWidth
           : 0)
       : this.key.width;
+
     this.height = Math.max(this.key.height, this.value.height);
+
+    if (this.isDummyBinding() && !isMainReference(this.value, this)) {
+      // hide if this is not the main dummy binding
+      if (this.prevBinding) {
+        this.y = this.prevBinding.y;
+        this.height = this.prevBinding.width;
+        this.height = this.prevBinding.height;
+      }
+    }
+  }
+
+  isDummyBinding(): boolean {
+    return !isNaN(parseInt(this.keyString));
   }
 
   draw(): React.ReactNode {
     return (
       <React.Fragment key={Layout.key++}>
-        {this.key.draw()}
+        {!this.isDummyBinding() && this.key.draw()}
         {isMainReference(this.value, this) ? this.value.draw() : null}
-        {this.value instanceof PrimitiveValue ||
+        {this.isDummyBinding() ||
+          this.value instanceof PrimitiveValue ||
           this.value instanceof UnassignedValue ||
           Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
