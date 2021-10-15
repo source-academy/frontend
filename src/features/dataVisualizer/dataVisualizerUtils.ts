@@ -11,9 +11,7 @@ export function toText(data: Data, full: boolean = false): string | undefined {
     return '' + data;
   } else {
     const type = typeof data;
-    if ((type === 'function' || type === 'object') && data !== null) {
-      return undefined;
-    } else if (type === 'string') {
+    if (type === 'string') {
       const dataString = data + '';
       const str = dataString.substring(0, Config.MaxTextLength);
       return `"${str}${dataString.length > Config.MaxTextLength ? '...' : ''}"`;
