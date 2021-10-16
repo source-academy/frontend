@@ -69,10 +69,9 @@ export class Binding implements Visible {
     this.height = Math.max(this.key.height, this.value.height);
 
     if (this.isDummyBinding() && !isMainReference(this.value, this)) {
-      // hide if this is not the main dummy binding
       if (this.prevBinding) {
         this.y = this.prevBinding.y;
-        this.height = this.prevBinding.width;
+        this.width = this.prevBinding.width;
         this.height = this.prevBinding.height;
       }
     }
@@ -85,7 +84,7 @@ export class Binding implements Visible {
   draw(): React.ReactNode {
     return (
       <React.Fragment key={Layout.key++}>
-        {!this.isDummyBinding() && this.key.draw()}
+        {this.isDummyBinding() || this.key.draw()}
         {isMainReference(this.value, this) && this.value.draw()}
         {this.isDummyBinding() ||
           this.value instanceof PrimitiveValue ||
