@@ -2,9 +2,8 @@ import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 
-
 type AchievementUuidCopierProps = {
-  uuid: string
+  uuid: string;
 };
 
 function AchievmenetUuidCopier(props: AchievementUuidCopierProps) {
