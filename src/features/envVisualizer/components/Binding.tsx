@@ -69,6 +69,7 @@ export class Binding implements Visible {
     this.height = Math.max(this.key.height, this.value.height);
 
     if (this.isDummyBinding() && !isMainReference(this.value, this)) {
+      // TODO: handle case where this is the first dummy in frame
       if (this.prevBinding) {
         this.y = this.prevBinding.y;
         this.width = this.prevBinding.width;
@@ -77,6 +78,7 @@ export class Binding implements Visible {
     }
   }
 
+  // TODO: create a dummyBinding subclass to extract the logic
   isDummyBinding(): boolean {
     return !isNaN(parseInt(this.keyString));
   }
