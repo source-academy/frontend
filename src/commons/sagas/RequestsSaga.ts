@@ -1,13 +1,13 @@
 import { call } from 'redux-saga/effects';
 
-import { SourceLanguage, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategory,
+  AssessmentConfiguration,
   AssessmentOverview,
   ContestEntry,
   GradingStatus,
+  IContestVotingQuestion,
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes
@@ -26,13 +26,23 @@ import {
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
+  backendifyAchievementItem,
   backendifyGoalDefinition,
   frontendifyAchievementGoal,
   frontendifyAchievementItem
 } from '../achievement/utils/AchievementBackender';
-import { Tokens, User } from '../application/types/SessionTypes';
+import { Role } from '../application/ApplicationTypes';
+import {
+  AdminPanelCourseRegistration,
+  CourseConfiguration,
+  CourseRegistration,
+  Tokens,
+  UpdateCourseConfiguration,
+  User
+} from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
@@ -111,25 +121,132 @@ const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
 /**
  * GET /user
  */
-export const getUser = async (tokens: Tokens): Promise<User | null> => {
+export const getUser = async (
+  tokens: Tokens
+): Promise<{
+  user: User | null;
+  courseRegistration: CourseRegistration | null;
+  courseConfiguration: CourseConfiguration | null;
+  assessmentConfigurations: AssessmentConfiguration[] | null;
+}> => {
   const resp = await request('user', 'GET', {
     ...tokens,
     shouldRefresh: true
   });
   if (!resp || !resp.ok) {
-    return null;
+    return {
+      user: null,
+      courseRegistration: null,
+      courseConfiguration: null,
+      assessmentConfigurations: null
+    };
   }
 
   return await resp.json();
 };
 
 /**
- * GET /achievements
+ * GET /user/latest_viewed_course
+ */
+export const getLatestCourseRegistrationAndConfiguration = async (
+  tokens: Tokens
+): Promise<{
+  courseRegistration: CourseRegistration | null;
+  courseConfiguration: CourseConfiguration | null;
+  assessmentConfigurations: AssessmentConfiguration[] | null;
+}> => {
+  const resp = await request('user/latest_viewed_course', 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return {
+      courseRegistration: null,
+      courseConfiguration: null,
+      assessmentConfigurations: null
+    };
+  }
+
+  return await resp.json();
+};
+
+/**
+ * PUT /user/latest_viewed_course
+ */
+export const putLatestViewedCourse = async (
+  tokens: Tokens,
+  courseId: number
+): Promise<Response | null> => {
+  const resp = await request(`user/latest_viewed_course`, 'PUT', {
+    ...tokens,
+    body: { courseId: courseId },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * PUT /courses/{courseId}/user/research_agreement
+ */
+export const putCourseResearchAgreement = async (
+  tokens: Tokens,
+  agreedToResearch: boolean
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/user/research_agreement`, 'PUT', {
+    ...tokens,
+    body: { agreedToResearch },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /config/create
+ */
+export const postCreateCourse = async (
+  tokens: Tokens,
+  courseConfig: UpdateCourseConfiguration
+): Promise<Response | null> => {
+  const resp = await request(`config/create`, 'POST', {
+    ...tokens,
+    body: { ...courseConfig },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * GET /courses/{courseId}/config
+ */
+export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfiguration | null> => {
+  const resp = await request(`${courseId()}/config`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return resp.json();
+};
+
+/**
+ * GET /courses/{courseId}/achievements
  *
  * Will be updated after a separate db for student progress is ready
  */
 export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[] | null> => {
-  const resp = await request('achievements', 'GET', {
+  const resp = await request(`${courseId()}/achievements`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -144,13 +261,13 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 };
 
 /**
- * GET /achievements/goals/{studentId}
+ * GET /courses/{courseId}/admin/users/{studentCourseRegId}/goals
  */
 export const getGoals = async (
   tokens: Tokens,
-  studentId: number
+  studentCourseRegId: number
 ): Promise<AchievementGoal[] | null> => {
-  const resp = await request(`achievements/goals/${studentId}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/users/${studentCourseRegId}/goals`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -165,10 +282,10 @@ export const getGoals = async (
 };
 
 /**
- * GET /self/goals
+ * GET /courses/{courseId}/self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
-  const resp = await request('self/goals', 'GET', {
+  const resp = await request(`${courseId()}/self/goals`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -183,10 +300,10 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 };
 
 /**
- * GET /admin/users
+ * GET /courses/{courseId}/admin/users
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
-  const resp = await request('admin/users', 'GET', {
+  const resp = await request(`${courseId()}/admin/users`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -198,25 +315,25 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
   const users = await resp.json();
 
   return users.map(
-    (user: any) =>
-      ({
-        name: user.name,
-        userId: user.userId,
-        group: user.group
-      } as AchievementUser)
+    (user: any): AchievementUser => ({
+      name: user.name,
+      courseRegId: user.courseRegId,
+      group: user.group,
+      username: user.username
+    })
   );
 };
 
 /**
- * PUT /admin/achievements
+ * PUT /courses/{courseId}/admin/achievements
  */
 export async function bulkUpdateAchievements(
   achievements: AchievementItem[],
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`admin/achievements`, 'PUT', {
+  const resp = await request(`${courseId()}/admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { achievements: achievements },
+    body: { achievements: achievements.map(achievement => backendifyAchievementItem(achievement)) },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -228,13 +345,13 @@ export async function bulkUpdateAchievements(
 }
 
 /**
- * PUT /admin/goals
+ * PUT /courses/{courseId}/admin/goals
  */
 export async function bulkUpdateGoals(
   goals: GoalDefinition[],
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`admin/goals`, 'PUT', {
+  const resp = await request(`${courseId()}/admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
     body: {
       goals: goals.map(goal => backendifyGoalDefinition(goal))
@@ -250,50 +367,13 @@ export async function bulkUpdateGoals(
 }
 
 /**
- * POST /achievements/{achievement_uuid}
- */
-export const editAchievement = async (
-  achievement: AchievementItem,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
-    ...tokens,
-    body: { achievement: achievement },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-};
-
-/**
- * POST /achievements/goals/{goalUuid}
- */
-export const editGoal = async (
-  definition: GoalDefinition,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
-    ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { definition: backendifyGoalDefinition(definition) },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-};
-
-/**
- * POST /self/goals/{goalUuid}/progress
+ * POST /courses/{courseId}/self/goals/{goalUuid}/progress
  */
 export const updateOwnGoalProgress = async (
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`self/goals/${progress.uuid}/progress`, 'POST', {
+  const resp = await request(`${courseId()}/self/goals/${progress.uuid}/progress`, 'POST', {
     ...tokens,
     body: { progress: progress },
     noHeaderAccept: true,
@@ -305,29 +385,33 @@ export const updateOwnGoalProgress = async (
 };
 
 /**
- * POST /admin/users/{studentId}/goals/{goalUuid}/progress
+ * POST /courses/{courseId}/admin/users/{studentCourseRegId}/goals/{goalUuid}/progress
  */
 export const updateGoalProgress = async (
-  studentId: number,
+  studentCourseRegId: number,
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/users/${studentId}/goals/${progress.uuid}/progress`, 'POST', {
-    ...tokens,
-    body: { progress: progress },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `${courseId()}/admin/users/${studentCourseRegId}/goals/${progress.uuid}/progress`,
+    'POST',
+    {
+      ...tokens,
+      body: { progress: progress },
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
 
   return resp;
 };
 
 /**
- * DELETE /admin/achievements/{achievementUuid}
+ * DELETE /courses/{courseId}/admin/achievements/{achievementUuid}
  */
 export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`admin/achievements/${uuid}`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/achievements/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
     noHeaderAccept: true,
@@ -339,10 +423,10 @@ export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<R
 };
 
 /**
- * DELETE /admin/goals/{goalUuid}
+ * DELETE /courses/{courseId}/admin/goals/{goalUuid}
  */
 export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`admin/goals/${uuid}`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/goals/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
     noHeaderAccept: true,
@@ -354,12 +438,12 @@ export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response
 };
 
 /**
- * GET /assessments
+ * GET /courses/{courseId}/assessments
  */
 export const getAssessmentOverviews = async (
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
-  const resp = await request('assessments', 'GET', {
+  const resp = await request(`${courseId()}/assessments`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -368,15 +452,8 @@ export const getAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    /**
-     * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-     *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
-     */
-    overview.category = capitalise(overview.type);
-    delete overview.type;
-
     overview.gradingStatus = computeGradingStatus(
-      overview.category,
+      overview.isManuallyGraded,
       overview.status,
       overview.gradedCount,
       overview.questionCount
@@ -389,12 +466,41 @@ export const getAssessmentOverviews = async (
 };
 
 /**
- * GET /assessments/{assessmentId}
+ * GET /courses/{courseId}/admin/users/{course_reg_id}/assessments
+ */
+export const getUserAssessmentOverviews = async (
+  courseRegId: number,
+  tokens: Tokens
+): Promise<AssessmentOverview[] | null> => {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}/assessments`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const assessmentOverviews = await resp.json();
+  return assessmentOverviews.map((overview: any) => {
+    overview.gradingStatus = computeGradingStatus(
+      overview.isManuallyGraded,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
+    delete overview.gradedCount;
+    delete overview.questionCount;
+
+    return overview as AssessmentOverview;
+  });
+};
+
+/**
+ * GET /courses/{courseId}/assessments/{assessmentId}
  * Note: if assessment is password-protected, a corresponding unlock request will be sent to
- * POST /assessments/{assessmentId}/unlock
+ * POST /courses/{courseId}/assessments/{assessmentId}/unlock
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
-  let resp = await request(`assessments/${id}`, 'GET', {
+  let resp = await request(`${courseId()}/assessments/${id}`, 'GET', {
     ...tokens,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -409,7 +515,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`assessments/${id}/unlock`, 'POST', {
+    resp = await request(`${courseId()}/assessments/${id}/unlock`, 'POST', {
       ...tokens,
       body: {
         password: input
@@ -424,10 +530,6 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
   }
 
   const assessment = (await resp.json()) as Assessment;
-  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest' | 'contestvoting'
-  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest' | 'ContestVoting'
-  assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
-  delete (assessment as any).type;
 
   assessment.questions = assessment.questions.map(q => {
     if (q.type === QuestionTypes.programming) {
@@ -437,6 +539,12 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       question.postpend = question.postpend || '';
       question.testcases = question.testcases || [];
       q = question;
+    }
+
+    if (q.type === QuestionTypes.voting) {
+      const question = q as IContestVotingQuestion;
+      question.prepend = question.prepend || '';
+      question.postpend = question.postpend || '';
     }
 
     // If the backend returns :nil (null) for grader, then the question is not graded
@@ -462,14 +570,14 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 };
 
 /**
- * POST /assessments/question/{questionId}/answer
+ * POST /courses/{courseId}/assessments/question/{questionId}/answer
  */
 export const postAnswer = async (
   id: number,
   answer: string | number | ContestEntry[],
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`assessments/question/${id}/answer`, 'POST', {
+  const resp = await request(`${courseId()}/assessments/question/${id}/answer`, 'POST', {
     ...tokens,
     body: typeof answer == 'object' ? { answer: answer } : { answer: `${answer}` },
     noHeaderAccept: true,
@@ -480,10 +588,10 @@ export const postAnswer = async (
 };
 
 /**
- * POST /assessments/{assessmentId}/submit
+ * POST /courses/{courseId}/assessments/{assessmentId}/submit
  */
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`assessments/${id}/submit`, 'POST', {
+  const resp = await request(`${courseId()}/assessments/${id}/submit`, 'POST', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false, // 400 if some questions unattempted
@@ -494,13 +602,13 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 };
 
 /*
- * GET /admin/grading
+ * GET /courses/{courseId}/admin/grading
  */
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean
 ): Promise<GradingOverview[] | null> => {
-  const resp = await request(`admin/grading?group=${group}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/grading?group=${group}`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -513,18 +621,14 @@ export const getGradingOverviews = async (
       const gradingOverview: GradingOverview = {
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
-        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
+        assessmentType: overview.assessment.type,
         studentId: overview.student.id,
         studentName: overview.student.name,
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.student.groupName,
         groupLeaderId: overview.student.groupLeaderId,
-        // Grade
-        initialGrade: overview.grade,
-        gradeAdjustment: overview.adjustment,
-        currentGrade: overview.grade + overview.adjustment,
-        maxGrade: overview.assessment.maxGrade,
+        // Grading Status
         gradingStatus: 'none',
         questionCount: overview.assessment.questionCount,
         gradedCount: overview.gradedCount,
@@ -536,7 +640,7 @@ export const getGradingOverviews = async (
         xpBonus: overview.xpBonus
       };
       gradingOverview.gradingStatus = computeGradingStatus(
-        gradingOverview.assessmentCategory,
+        overview.assessment.isManuallyGraded,
         gradingOverview.submissionStatus,
         gradingOverview.gradedCount,
         gradingOverview.questionCount
@@ -551,10 +655,10 @@ export const getGradingOverviews = async (
 };
 
 /**
- * GET /admin/grading/{submissionId}
+ * GET /courses/{courseId}/admin/grading/{submissionId}
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
-  const resp = await request(`admin/grading/${submissionId}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -580,14 +684,11 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
         postpend: question.postpend || '',
         testcases: question.testcases || [],
         type: question.type as QuestionType,
-        maxGrade: question.maxGrade,
         maxXp: question.maxXp
       },
       student,
       grade: {
-        grade: grade.grade,
         xp: grade.xp,
-        gradeAdjustment: grade.adjustment,
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
       }
@@ -605,21 +706,19 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 };
 
 /**
- * POST /admin/grading/{submissionId}/{questionId}
+ * POST /courses/{courseId}/admin/grading/{submissionId}/{questionId}
  */
 export const postGrading = async (
   submissionId: number,
   questionId: number,
-  gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens,
   comments?: string
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/${questionId}`, 'POST', {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/${questionId}`, 'POST', {
     ...tokens,
     body: {
       grading: {
-        adjustment: gradeAdjustment,
         xpAdjustment,
         comments
       }
@@ -633,13 +732,13 @@ export const postGrading = async (
 };
 
 /**
- * POST /admin/grading/{submissionId}/autograde
+ * POST /courses/{courseId}/admin/grading/{submissionId}/autograde
  */
 export const postReautogradeSubmission = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/autograde`, 'POST', {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/autograde`, 'POST', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -650,31 +749,35 @@ export const postReautogradeSubmission = async (
 };
 
 /**
- * POST /admin/grading/{submissionId}/{questionId}/autograde
+ * POST /courses/{courseId}/admin/grading/{submissionId}/{questionId}/autograde
  */
 export const postReautogradeAnswer = async (
   submissionId: number,
   questionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/${questionId}/autograde`, 'POST', {
-    ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `${courseId()}/admin/grading/${submissionId}/${questionId}/autograde`,
+    'POST',
+    {
+      ...tokens,
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
 
   return resp;
 };
 
 /**
- * POST /admin/grading/{submissionId}/unsubmit
+ * POST /courses/{courseId}/admin/grading/{submissionId}/unsubmit
  */
 export const postUnsubmit = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/grading/${submissionId}/unsubmit`, 'POST', {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/unsubmit`, 'POST', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -685,10 +788,10 @@ export const postUnsubmit = async (
 };
 
 /**
- * GET /notifications
+ * GET /courses/{courseId}/notifications
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
-  const resp: Response | null = await request('notifications', 'GET', {
+  const resp: Response | null = await request(`${courseId()}/notifications`, 'GET', {
     ...tokens,
     shouldAutoLogout: false
   });
@@ -706,9 +809,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
       id: notification.id,
       type: notification.type,
       assessment_id: notification.assessment_id || undefined,
-      assessment_type: notification.assessment
-        ? capitalise(notification.assessment.type)
-        : undefined,
+      assessment_type: notification.assessment ? notification.assessment.type : undefined,
       assessment_title: notification.assessment ? notification.assessment.title : undefined,
       submission_id: notification.submission_id || undefined
     } as Notification;
@@ -718,13 +819,13 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
 };
 
 /**
- * POST /notifications/acknowledge
+ * POST /courses/{courseId}/notifications/acknowledge
  */
 export const postAcknowledgeNotifications = async (
   tokens: Tokens,
   ids: number[]
 ): Promise<Response | null> => {
-  const resp: Response | null = await request('notifications/acknowledge', 'POST', {
+  const resp: Response | null = await request(`${courseId()}/notifications/acknowledge`, 'POST', {
     ...tokens,
     body: { notificationIds: ids },
     shouldAutoLogout: false
@@ -734,10 +835,10 @@ export const postAcknowledgeNotifications = async (
 };
 
 /**
- * GET /sourcecast
+ * GET /courses/{courseId}/sourcecast
  */
 export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
-  const resp = await request('sourcecast', 'GET', {
+  const resp = await request(`${courseId()}/sourcecast`, 'GET', {
     ...tokens,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -750,7 +851,7 @@ export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData
 };
 
 /**
- * POST /sourcecast
+ * POST /courses/{courseId}/admin/sourcecast
  */
 export const postSourcecast = async (
   title: string,
@@ -767,7 +868,7 @@ export const postSourcecast = async (
   formData.append('sourcecast[uid]', uid);
   formData.append('sourcecast[audio]', audio, filename);
   formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
-  const resp = await request(`sourcecast`, 'POST', {
+  const resp = await request(`${courseId()}/admin/sourcecast`, 'POST', {
     ...tokens,
     body: formData,
     noContentType: true,
@@ -780,13 +881,13 @@ export const postSourcecast = async (
 };
 
 /**
- * DELETE /sourcecast/{sourcecastId}
+ * DELETE /courses/{courseId}/admin/sourcecast/{sourcecastId}
  */
 export const deleteSourcecastEntry = async (
   id: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`sourcecast/${id}`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/sourcecast/${id}`, 'DELETE', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -797,14 +898,14 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
- * POST /admin/assessments/{assessmentId}
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}
  */
 export const updateAssessment = async (
   id: number,
   body: { openAt?: string; closeAt?: string; isPublished?: boolean },
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`admin/assessments/${id}`, 'POST', {
+  const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {
     ...tokens,
     body: body,
     noHeaderAccept: true,
@@ -816,10 +917,10 @@ export const updateAssessment = async (
 };
 
 /**
- * DELETE /admin/assessments/{assessmentId}
+ * DELETE /courses/{courseId}/admin/assessments/{assessmentId}
  */
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
-  const resp = await request(`admin/assessments/${id}`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/assessments/${id}`, 'DELETE', {
     ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -830,17 +931,19 @@ export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Resp
 };
 
 /**
- * POST /admin/assessments
+ * POST /courses/{courseId}/admin/assessments
  */
 export const uploadAssessment = async (
   file: File,
   tokens: Tokens,
-  forceUpdate: boolean
+  forceUpdate: boolean,
+  assessmentConfigId: number
 ): Promise<Response | null> => {
   const formData = new FormData();
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
-  const resp = await request(`admin/assessments`, 'POST', {
+  formData.append('assessmentConfigId', String(assessmentConfigId));
+  const resp = await request(`${courseId()}/admin/assessments`, 'POST', {
     ...tokens,
     body: formData,
     noContentType: true,
@@ -853,10 +956,10 @@ export const uploadAssessment = async (
 };
 
 /**
- * GET /admin/grading/summary
+ * GET /courses/{courseId}/admin/grading/summary
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
-  const resp = await request('admin/grading/summary', 'GET', {
+  const resp = await request(`${courseId()}/admin/grading/summary`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -868,37 +971,150 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 };
 
 /**
- * GET /settings/sublanguage
+ * PUT /courses/{courseId}/admin/config
  */
-export const getSublanguage = async (): Promise<SourceLanguage | null> => {
-  const resp = await request('settings/sublanguage', 'GET', {
+export const putCourseConfig = async (
+  tokens: Tokens,
+  courseConfig: UpdateCourseConfiguration
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/config`, 'PUT', {
+    ...tokens,
+    body: courseConfig,
     noHeaderAccept: true,
     shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * GET /courses/{courseId}/admin/config/assessment_configs
+ */
+export const getAssessmentConfigs = async (
+  tokens: Tokens
+): Promise<AssessmentConfiguration[] | null> => {
+  const resp = await request(`${courseId()}/admin/config/assessment_configs`, 'GET', {
+    ...tokens,
     shouldRefresh: true
   });
   if (!resp || !resp.ok) {
     return null;
   }
 
-  const sublang = (await resp.json()).sublanguage;
-
-  return {
-    ...sublang,
-    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
-  };
+  return await resp.json();
 };
 
 /**
- * PUT /admin/settings/sublanguage
+ * PUT /courses/{courseId}/admin/config/assessment_configs
  */
-export const postSublanguage = async (
-  chapter: number,
-  variant: string,
-  tokens: Tokens
+export const putAssessmentConfigs = async (
+  tokens: Tokens,
+  assessmentConfigs: AssessmentConfiguration[],
+  overrideCourseId?: number
 ): Promise<Response | null> => {
-  const resp = await request(`admin/settings/sublanguage`, 'PUT', {
+  const resp = await request(
+    `${
+      overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
+    }/admin/config/assessment_configs`,
+    'PUT',
+    {
+      ...tokens,
+      body: { assessmentConfigs },
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
+
+  return resp;
+};
+
+/**
+ * DELETE /courses/{courseId}/admin/config/assessment_config/{assessmentConfigId}
+ */
+export const removeAssessmentConfig = async (
+  tokens: Tokens,
+  assessmentConfig: AssessmentConfiguration
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/config/assessment_config/${assessmentConfig.assessmentConfigId}`,
+    'DELETE',
+    {
+      ...tokens,
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
+
+  return resp;
+};
+
+/**
+ * GET /courses/{courseId}/admin/users
+ */
+export const getUserCourseRegistrations = async (
+  tokens: Tokens
+): Promise<AdminPanelCourseRegistration[] | null> => {
+  const resp = await request(`${courseId()}/admin/users`, 'GET', {
     ...tokens,
-    body: { chapter, variant },
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+/**
+ * PUT /courses/{courseId}/admin/users
+ */
+export const putNewUsers = async (
+  tokens: Tokens,
+  users: UsernameRoleGroup[],
+  provider: string
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/users`, 'PUT', {
+    ...tokens,
+    body: { users, provider },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * PUT /courses/{courseId}/admin/users/{courseRegId}/role
+ */
+export const putUserRole = async (
+  tokens: Tokens,
+  courseRegId: number,
+  role: Role
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}/role`, 'PUT', {
+    ...tokens,
+    body: { role },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+/**
+ * DELETE /courses/{courseId}/admin/users/{courseRegId}
+ */
+export const removeUserCourseRegistration = async (
+  tokens: Tokens,
+  courseRegId: number
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}`, 'DELETE', {
+    ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -911,7 +1127,7 @@ export const postSublanguage = async (
  * GET /devices
  */
 export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
-  const resp = await request('devices', 'GET', {
+  const resp = await request(`devices`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -942,7 +1158,7 @@ export async function getDeviceWSEndpoint(
  */
 export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens): Promise<Device> {
   tokens = fillTokens(tokens);
-  const resp = await request('devices', 'POST', {
+  const resp = await request(`devices`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true,
@@ -1023,7 +1239,6 @@ function fillTokens(tokens?: Tokens): Tokens {
 
 function getTokensFromStore(): Tokens | undefined {
   const { accessToken, refreshToken } = store.getState().session;
-
   return accessToken && refreshToken ? { accessToken, refreshToken } : undefined;
 }
 
@@ -1086,14 +1301,26 @@ export const request = async (
       return resp;
     }
 
-    if (!resp || !resp.ok) {
-      throw new Error('API call failed or got non-OK response');
+    if (!resp.ok) {
+      showWarningMessage(
+        opts.errorMessage
+          ? opts.errorMessage
+          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
+              resp.status === 401 || resp.status === 403
+                ? '; try logging in again, after manually saving any work.'
+                : ''
+            }`
+      );
+      return null;
     }
 
     return resp;
   } catch (e) {
-    store.dispatch(actions.logOut());
-    showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
+    showWarningMessage(
+      opts.errorMessage
+        ? opts.errorMessage
+        : 'Error while communicating with backend; check your network?'
+    );
 
     return null;
   }
@@ -1123,18 +1350,29 @@ export function* handleResponseError(resp: Response | null): any {
   yield call(showWarningMessage, respText);
 }
 
-const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
-
 const computeGradingStatus = (
-  category: AssessmentCategory,
+  isManuallyGraded: boolean,
   submissionStatus: any,
   numGraded: number,
   numQuestions: number
 ): GradingStatus =>
-  ['Mission', 'Sidequest', 'Practical'].includes(category) && submissionStatus === 'submitted'
+  // isGraded refers to whether the assessment type is graded or not, as specified in
+  // the respective assessment configuration
+  isManuallyGraded && submissionStatus === 'submitted'
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
       ? 'graded'
       : 'grading'
     : 'excluded';
+
+const courseId: () => string = () => {
+  const id = store.getState().session.courseId;
+  if (id) {
+    return `courses/${id}`;
+  } else {
+    // TODO: Rewrite this logic
+    showWarningMessage(`No course selected!`, 1000);
+    throw new Error(`No course selected`);
+  }
+};

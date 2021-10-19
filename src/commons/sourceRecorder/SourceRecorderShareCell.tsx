@@ -10,6 +10,7 @@ type SourceRecorderShareCellProps = StateProps;
 
 type StateProps = {
   data: SourcecastData;
+  courseId?: number;
 };
 
 type State = {
@@ -23,7 +24,7 @@ class SourceRecorderShareCell extends React.Component<SourceRecorderShareCellPro
     super(props);
     this.shareInputElem = React.createRef();
     this.selectShareInputText = this.selectShareInputText.bind(this);
-    const url = `${window.location.protocol}//${window.location.host}/sourcecast/${props.data.uid}`;
+    const url = `${window.location.protocol}//${window.location.host}/courses/${props.courseId}/sourcecast/${props.data.uid}`;
     this.state = {
       shareURL: url
     };

@@ -12,7 +12,7 @@ $achievement-assets: 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.
   Fixes height behaviour of nested flexboxes in the code editor and REPL,
   specifically:
   - On Firefox, fixes the REPL's height exceeding that of its parent container
-    (https://github.com/source-academy/cadet-frontend/issues/987)
+    (https://github.com/source-academy/frontend/issues/987)
   - On Chrome, fixes dead space at the bottom of the code editor when the REPL
     flexbox overflows
 */

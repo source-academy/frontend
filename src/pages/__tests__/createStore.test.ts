@@ -4,7 +4,6 @@ import { compressToUTF16 } from 'lz-string';
 import { defaultState, OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
-import { history } from '../../commons/utils/HistoryHelper';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
 
@@ -14,7 +13,9 @@ const mockChangedStoredState: SavedState = {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',
     role: undefined,
-    name: 'Jeff'
+    name: 'Jeff',
+    userId: 1,
+    githubAccessToken: 'githubAccessToken'
   },
   playgroundEditorValue: 'Nihao everybody',
   playgroundIsEditorAutorun: true,
@@ -30,7 +31,9 @@ const mockChangedState: OverallState = {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',
     role: undefined,
-    name: 'Jeff'
+    name: 'Jeff',
+    userId: 1,
+    githubAccessToken: 'githubAccessToken'
   },
   workspaces: {
     ...defaultState.workspaces,
@@ -42,30 +45,26 @@ const mockChangedState: OverallState = {
   }
 };
 
-const defaultRouter = {
-  action: 'POP',
-  location: {
-    hash: '',
-    pathname: '/',
-    query: {},
-    search: '',
-    state: undefined
-  }
-};
 describe('createStore() function', () => {
   test('has defaultState when initialised', () => {
     localStorage.removeItem('storedState');
-    expect(createStore(history).getState()).toEqual({
-      ...defaultState,
-      router: defaultRouter
-    });
+    expect(createStore().getState()).toEqual(defaultState);
   });
   test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));
-    expect(createStore(history).getState()).toEqual({
-      ...mockChangedState,
-      router: defaultRouter
-    });
+
+    /**
+     * Jest toEqual is unable to compare equality of functions (in the Octokit object).
+     * Thus we simply check that it is defined when loading storedState.
+     *
+     * See https://github.com/facebook/jest/issues/8166
+     */
+    const received = createStore().getState() as any;
+    const octokit = received.session.githubOctokitObject.octokit;
+    delete received.session.githubOctokitObject.octokit;
+
+    expect(received).toEqual(mockChangedState);
+    expect(octokit).toBeDefined();
     localStorage.removeItem('storedState');
   });
 });

@@ -16,7 +16,7 @@ import {
   HANDLE_CONSOLE_LOG
 } from '../types/InterpreterTypes';
 
-export const handleConsoleLog = (logString: string, workspaceLocation: WorkspaceLocation) =>
+export const handleConsoleLog = (workspaceLocation: WorkspaceLocation, ...logString: string[]) =>
   action(HANDLE_CONSOLE_LOG, { logString, workspaceLocation });
 
 export const evalInterpreterSuccess = (value: Value, workspaceLocation: WorkspaceLocation) =>

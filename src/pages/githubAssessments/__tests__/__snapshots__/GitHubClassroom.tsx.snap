@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GitHubClassroom renders correctly 1`] = `
+"<div className=\\"Academy\\" style={{...}}>
+  <GitHubAssessmentsNavigationBar changeCourseHandler={[Function (anonymous)]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} octokit={{...}} courses={[undefined]} selectedCourse=\\"\\" types={[undefined]} assessmentTypeOverviews={[undefined]} />
+  <Switch>
+    <Route path=\\"/githubassessments/login\\" render={[Function: render]} />
+    <Route path=\\"/githubassessments/welcome\\" component={[Function: component]} />
+    <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
+    <Route render={[Function: redirectToLogin]} />
+  </Switch>
+</div>"
+`;

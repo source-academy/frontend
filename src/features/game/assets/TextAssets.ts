@@ -1,6 +1,6 @@
-import { Constants } from '../commons/CommonConstants';
+import { toS3Path } from '../utils/GameUtils';
 
-export const toTxtPath = (path: string) => `${Constants.assetsFolder}/stories/${path}`;
+export const toTxtPath = (path: string) => toS3Path(`/stories/${path}`, true);
 
 const TextAssets = {
   defaultCheckpoint: { key: 'default-chap', path: toTxtPath('defaultCheckpoint.txt') },
@@ -9,11 +9,11 @@ const TextAssets = {
 };
 
 export const MockTextAssets = {
-  defaultCheckpoint: { key: 'mock-default-chap', path: '../assets/mockDefaultCheckpoint.txt' },
-  awardsMapping: { key: 'mock-awards-mapping', path: '../assets/mockAwardsMapping.txt' },
+  defaultCheckpoint: { key: 'mock-default-chap', path: '../../assets/mockDefaultCheckpoint.txt' },
+  awardsMapping: { key: 'mock-awards-mapping', path: '../../assets/mockAwardsMapping.txt' },
   roomPreviewMapping: {
     key: 'mock-room-prev-mapping',
-    path: '../assets/mockRoomPreviewMapping.txt'
+    path: '../../assets/mockRoomPreviewMapping.txt'
   }
 };
 

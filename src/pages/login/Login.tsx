@@ -6,34 +6,36 @@ import {
   H4,
   Icon,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router';
 
-export type LoginProps = DispatchProps & OwnProps;
+import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
+import Constants from '../../commons/utils/Constants';
+import { parseQuery } from '../../commons/utils/QueryHelper';
 
-export type DispatchProps = {
-  handleFetchAuth: (code: string, providerId?: string) => void;
-  handleLogin: (providerId: string) => void;
-};
+const providers = [...Constants.authProviders.entries()].map(([id, { name }]) => ({
+  id,
+  name
+}));
 
-export type OwnProps = {
-  providers: Array<{ id: string; name: string }>;
-  code?: string;
-  providerId?: string;
-};
+const Login: React.FunctionComponent<{}> = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { code, provider: providerId } = parseQuery(location.search);
 
-const Login: React.FunctionComponent<LoginProps> = props => {
-  const { code, providerId, handleFetchAuth } = props;
+  const handleLogin = React.useCallback(providerId => dispatch(login(providerId)), [dispatch]);
 
   React.useEffect(() => {
     if (code) {
-      handleFetchAuth(code, providerId);
+      dispatch(fetchAuth(code, providerId));
     }
-  }, [code, providerId, handleFetchAuth]);
+  }, [code, providerId, dispatch]);
 
   if (code) {
     return (
@@ -42,7 +44,7 @@ const Login: React.FunctionComponent<LoginProps> = props => {
           <div className="login-body">
             <NonIdealState
               description="Logging In..."
-              icon={<Spinner size={Spinner.SIZE_LARGE} />}
+              icon={<Spinner size={SpinnerSize.LARGE} />}
             />
           </div>
         </Card>
@@ -61,10 +63,9 @@ const Login: React.FunctionComponent<LoginProps> = props => {
         </div>
         <div className="login-body">
           <ButtonGroup fill={true} vertical={true}>
-            {props.providers.map(({ id, name }) => (
-              <LoginButton handleClick={props.handleLogin} name={name} id={id} key={id} />
+            {providers.map(({ id, name }) => (
+              <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
             ))}
-            {playgroundButton}
           </ButtonGroup>
         </div>
       </Card>
@@ -91,13 +92,5 @@ const LoginButton = ({
     </Button>
   );
 };
-
-const playgroundButton = (
-  <NavLink to="/playground">
-    <Button className={Classes.LARGE} rightIcon={IconNames.CODE}>
-      Try out the playground
-    </Button>
-  </NavLink>
-);
 
 export default Login;

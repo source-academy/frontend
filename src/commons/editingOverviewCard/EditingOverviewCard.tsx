@@ -19,16 +19,11 @@ import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import {
-  AssessmentCategories,
-  AssessmentCategory,
-  AssessmentOverview
-} from '../assessment/AssessmentTypes';
+import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
-import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
@@ -38,8 +33,9 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  listingPath?: string;
+  listingPath: string;
   overview: AssessmentOverview;
+  assessmentTypes: AssessmentType[];
 };
 
 type State = {
@@ -132,9 +128,6 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
 
         <div className="col-xs-9 listing-text">
           {this.makeEditingOverviewCardTitle(overview, overview.title)}
-          <div className="row listing-grade">
-            <H6> {`Max Grade: ${overview.maxGrade}`} </H6>
-          </div>
           <div className="row listing-xp">
             <H6> {`Max XP: ${overview.maxXp}`} </H6>
           </div>
@@ -162,8 +155,16 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
                   : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            {this.makeOptionsButton()}
-            {makeOverviewCardButton(overview, this.props.listingPath)}
+            <Button icon={IconNames.WRENCH} minimal={true} onClick={this.toggleOptionsOverlay}>
+              Other Options
+            </Button>
+            <NavLink
+              to={`${this.props.listingPath}/${overview.id.toString()}/${
+                Constants.defaultQuestionId
+              }`}
+            >
+              {controlButton('Edit mission', IconNames.EDIT)}
+            </NavLink>
           </div>
         </div>
       </Card>
@@ -188,21 +189,13 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
       icon={IconNames.EXPORT}
       intent={Intent.DANGER}
       minimal={true}
-      // intentional: each menu renders own version of onClick
-      // tslint:disable-next-line:jsx-no-lambda
       onClick={this.handleExportXml}
     >
       Save as XML
     </Button>
   );
 
-  private makeOptionsButton = () => (
-    <Button icon={IconNames.WRENCH} minimal={true} onClick={this.toggleOptionsOverlay}>
-      Other Options
-    </Button>
-  );
-
-  private saveCategory = (i: AssessmentCategory, e: any) => {
+  private saveCategory = (i: AssessmentType, e: any) => {
     const overview = {
       ...this.props.overview,
       category: i
@@ -222,8 +215,8 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
       title="Other options"
     >
       <div className={Classes.DIALOG_BODY}>
-        <H3>Category</H3>
-        {categorySelect(this.props.overview.category, this.saveCategory)}
+        <H3>Assessment Type</H3>
+        {this.assessmentTypeSelect(this.props.overview.type, this.saveCategory)}
         <H3>Number</H3>
         <div onClick={this.toggleEditField('number')}>
           {this.state.editingOverviewField === 'number'
@@ -246,6 +239,25 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
       </div>
     </Dialog>
   );
+
+  private assessmentTypeSelect = (
+    assessmentType: AssessmentType,
+    handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {}
+  ) => (
+    <AssessmentTypeSelectComponent
+      className={Classes.MINIMAL}
+      items={this.props.assessmentTypes}
+      onItemSelect={handleSelect}
+      itemRenderer={assessmentTypeRenderer}
+      filterable={false}
+    >
+      <Button
+        className={Classes.MINIMAL}
+        text={assessmentType}
+        rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+      />
+    </AssessmentTypeSelectComponent>
+  );
 }
 
 const createPlaceholder = (str: string): string => {
@@ -256,45 +268,9 @@ const createPlaceholder = (str: string): string => {
   }
 };
 
-const makeOverviewCardButton = (overview: AssessmentOverview, listingPath: string | undefined) => {
-  const label: string = 'Edit mission';
-  listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category);
-  return (
-    <NavLink to={listingPath + `/${overview.id.toString()}/${Constants.defaultQuestionId}`}>
-      {controlButton(label, IconNames.EDIT)}
-    </NavLink>
-  );
-};
+const AssessmentTypeSelectComponent = Select.ofType<AssessmentType>();
 
-const assessmentCategoriesArr = [
-  AssessmentCategories.Mission,
-  AssessmentCategories.Path,
-  AssessmentCategories.Sidequest,
-  AssessmentCategories.Contest
-];
-
-const categorySelect = (
-  category: AssessmentCategory,
-  handleSelect = (i: AssessmentCategory, e?: React.SyntheticEvent<HTMLElement>) => {}
-) => (
-  <CategorySelectComponent
-    className={Classes.MINIMAL}
-    items={assessmentCategoriesArr}
-    onItemSelect={handleSelect}
-    itemRenderer={categoryRenderer}
-    filterable={false}
-  >
-    <Button
-      className={Classes.MINIMAL}
-      text={category}
-      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-    />
-  </CategorySelectComponent>
-);
-
-const CategorySelectComponent = Select.ofType<AssessmentCategory>();
-
-const categoryRenderer: ItemRenderer<AssessmentCategory> = (
-  category,
+const assessmentTypeRenderer: ItemRenderer<AssessmentType> = (
+  assessmentType,
   { handleClick, modifiers, query }
-) => <MenuItem active={false} key={category} onClick={handleClick} text={category} />;
+) => <MenuItem active={false} key={assessmentType} onClick={handleClick} text={assessmentType} />;

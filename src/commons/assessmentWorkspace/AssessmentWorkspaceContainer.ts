@@ -11,7 +11,6 @@ import { fetchAssessment, submitAnswer } from '../application/actions/SessionAct
 import { OverallState } from '../application/ApplicationTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -26,9 +25,9 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   resetWorkspace,
+  runAllTestcases,
   sendReplInputToOutput,
   setEditorBreakpoint,
-  updateActiveTab,
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
@@ -39,6 +38,7 @@ import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './Asse
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
+    courseId: state.session.courseId,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
     editorPrepend: state.workspaces.assessment.editorPrepend,
@@ -67,8 +67,6 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
       handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
@@ -94,6 +92,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
+      handleRunAllTestcases: () => runAllTestcases(workspaceLocation),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,

@@ -38,9 +38,6 @@ export class GradingTab extends React.Component<GradingTabProps, {}> {
 
   private gradingTab = () => (
     <div>
-      Max Grade:
-      {this.textareaContent(this.props.path.concat(['maxGrade']))}
-      <br />
       Max Xp:
       {this.textareaContent(this.props.path.concat(['maxXp']))}
     </div>

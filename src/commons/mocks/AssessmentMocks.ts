@@ -1,7 +1,7 @@
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategories,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses,
@@ -12,14 +12,84 @@ import {
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
+export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
+  [
+    {
+      assessmentConfigId: 1,
+      type: 'Missions',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 2,
+      type: 'Quests',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 3,
+      type: 'Paths',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 4,
+      type: 'Contests',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 5,
+      type: 'Others',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ],
+  [
+    {
+      assessmentConfigId: 1,
+      type: 'Mission Impossible',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 2,
+      type: 'Data Structures',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 3,
+      type: 'Algorithm Frenzy',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ]
+];
+
 const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 1,
     id: 1,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
@@ -34,12 +104,11 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
 
 const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 2,
     id: 1,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
@@ -63,12 +132,11 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
-    grade: 3,
     id: 2,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
@@ -80,12 +148,11 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-    grade: 4,
     id: 3,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Sidequest',
@@ -97,12 +164,11 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Path,
+    type: 'Paths',
+    isManuallyGraded: true,
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
-    grade: 0,
     id: 6,
-    maxGrade: 0,
     maxXp: 200,
     openAt: '2018-01-01T00:00:00.000Z',
     title: 'Basic logic gates',
@@ -114,12 +180,11 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.excluded
   },
   {
-    category: AssessmentCategories.Practical,
+    type: 'Others',
+    isManuallyGraded: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-    grade: 4,
     id: 5,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Practical',
@@ -135,12 +200,11 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
 
 const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 2700,
     id: 4,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
@@ -152,12 +216,11 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.grading
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 1950,
     id: 5,
-    maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
@@ -169,12 +232,11 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 300,
     id: 5,
-    maxGrade: 700,
     maxXp: 500,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
@@ -186,12 +248,11 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     gradingStatus: GradingStatuses.graded
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
+    isManuallyGraded: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 0,
     id: 5,
-    maxGrade: 0,
     maxXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
@@ -239,11 +300,11 @@ export const mockRuneLibrary: Library = {
   globals: mockGlobals
 };
 
-const mockCurveLibrary: Library = {
+const mockBinaryTreeLibrary: Library = {
   chapter: 4,
   external: {
-    name: ExternalLibraryName.CURVES,
-    symbols: externalLibraries.get(ExternalLibraryName.CURVES)!
+    name: ExternalLibraryName.BINARYTREES,
+    symbols: externalLibraries.get(ExternalLibraryName.BINARYTREES)!
   },
   globals: mockGlobals
 };
@@ -300,9 +361,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   `,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -343,14 +403,13 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     answer: 3,
     content:
-      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
+      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the binary tree library! Option C has a null hint!',
     choices: [
       {
         content: '**Option** `A`',
@@ -370,18 +429,17 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 2,
-    library: mockCurveLibrary,
+    library: mockBinaryTreeLibrary,
     type: 'mcq',
     solution: 0,
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     answer: 3,
     content:
-      'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+      'This is the 4th question. Oddly enough, it is a graded MCQ question that uses the binary tree library!',
     choices: [
       {
         content: 'A',
@@ -401,13 +459,12 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 3,
-    library: mockCurveLibrary,
+    library: mockBinaryTreeLibrary,
     type: 'mcq',
-    solution: null,
+    solution: undefined,
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -421,9 +478,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    blocking: false
   }
 ];
 
@@ -438,7 +494,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
   }`,
     content: 'You can see autograding results!!!',
     id: 0,
-    library: mockCurveLibrary,
+    library: mockRuneLibrary,
     prepend: '',
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
@@ -471,9 +527,8 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2,
+    blocking: false,
     comments: `Good job. You are awarded the full marks!
   
   ----
@@ -544,9 +599,8 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
-    grade: 0,
-    maxGrade: 2,
     maxXp: 2,
+    blocking: false,
     comments: `You open the Report Card, not knowing what to expect...
   
       ## WOW!
@@ -612,9 +666,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     type: 'mcq',
     solution: 1,
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -673,13 +726,13 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         answer: `true`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
         score: 0,
         answer: `false`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
         score: 0,
         answer: `true`
@@ -690,9 +743,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -739,7 +791,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         answer: `true`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__XOR(true, XOR(true, false));`,
         score: 0,
         answer: `false`
@@ -750,9 +802,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   },
   {
     autogradingResults: [],
@@ -811,7 +862,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         answer: `true`
       },
       {
-        type: TestcaseTypes.hidden,
+        type: TestcaseTypes.opaque,
         program: `__NOR_AND(true, NOR_AND(false, true));`,
         score: 0,
         answer: `false`
@@ -822,9 +873,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   }`,
     type: 'programming',
     xp: 0,
-    grade: 0,
-    maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
+    blocking: false
   }
 ];
 
@@ -833,11 +883,11 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     id: 0,
     type: 'voting',
     content: 'Sample Contest Voting Question',
-    grade: 0,
-    maxGrade: 0,
     xp: 0,
     maxXp: 0,
     answer: [],
+    prepend: '',
+    postpend: '',
     contestEntries: [
       {
         submission_id: 1,
@@ -860,7 +910,8 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         answer: { code: 'function leaderboard_test() { return true; }' }
       }
     ],
-    library: mockRuneLibrary
+    library: mockRuneLibrary,
+    blocking: false
   }
 ];
 
@@ -869,7 +920,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
  */
 export const mockAssessments: Assessment[] = [
   {
-    category: 'Mission',
+    type: 'Missions',
     id: 1,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -878,7 +929,7 @@ export const mockAssessments: Assessment[] = [
     title: 'An Odessey to Runes'
   },
   {
-    category: 'Mission',
+    type: 'Missions',
     id: 2,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -887,7 +938,7 @@ export const mockAssessments: Assessment[] = [
     title: 'The Secret to Streams'
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     id: 3,
     longSummary: `###This is the sidequest briefing.
   
@@ -913,7 +964,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A sample Sidequest'
   },
   {
-    category: AssessmentCategories.Mission,
+    type: 'Missions',
     id: 4,
     longSummary:
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -922,7 +973,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A Closed Mission'
   },
   {
-    category: AssessmentCategories.Sidequest,
+    type: 'Quests',
     id: 5,
     longSummary:
       'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
@@ -931,7 +982,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A Closed Sidequest'
   },
   {
-    category: AssessmentCategories.Path,
+    type: 'Paths',
     id: 6,
     longSummary: `### Basic logic gates
   
@@ -944,7 +995,7 @@ export const mockAssessments: Assessment[] = [
   },
   // mock assessment used for testing contest voting assessments
   {
-    category: AssessmentCategories.Practical,
+    type: 'Others',
     id: 7,
     title: 'A sample contest voting assessment',
     longSummary: 'Vote for your favourite contest entries here!',

@@ -9,7 +9,8 @@ export type GitHubMissionSaveDialogResolution = {
 
 export type GitHubMissionSaveDialogProps = {
   repoName: string;
-  changedFiles: string[];
+  filesToChangeOrCreate: string[];
+  filesToDelete: string[];
   resolveDialog: (arg: GitHubMissionSaveDialogResolution) => void;
 };
 
@@ -28,8 +29,15 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
       </div>
       <div className={classNames('githubDialogBody', Classes.DIALOG_BODY)}>
         <div>
-          <h4>You are about to create or edit the following files:</h4>
-          {props.changedFiles.map(filepath => (
+          {props.filesToChangeOrCreate.length > 0 && (
+            <h4>You are about to create or edit the following files:</h4>
+          )}
+          {props.filesToChangeOrCreate.map(filepath => (
+            <li key={filepath}>{filepath}</li>
+          ))}
+
+          {props.filesToDelete.length > 0 && <h4>You are about to delete the following files:</h4>}
+          {props.filesToDelete.map(filepath => (
             <li key={filepath}>{filepath}</li>
           ))}
         </div>

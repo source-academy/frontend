@@ -211,12 +211,6 @@ test('Performing creating save leads to appropriate function being called', asyn
     }
   );
 
-  const checkIfUserAgreesToPerformCreatingSaveMock = jest.spyOn(
-    GitHubUtils,
-    'checkIfUserAgreesToPerformCreatingSave'
-  );
-  checkIfUserAgreesToPerformCreatingSaveMock.mockImplementation(async () => true);
-
   const performCreatingSaveMock = jest.spyOn(GitHubUtils, 'performCreatingSave');
   performCreatingSaveMock.mockImplementation(
     async (

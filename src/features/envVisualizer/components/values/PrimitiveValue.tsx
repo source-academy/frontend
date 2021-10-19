@@ -32,7 +32,7 @@ export class PrimitiveValue extends Value {
     if (mainReference instanceof Binding) {
       this.x = mainReference.x + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
       this.y = mainReference.y;
-      this.text = new Text(String(this.data), this.x, this.y);
+      this.text = new Text(this.data, this.x, this.y, { isStringIdentifiable: true });
     } else {
       const maxWidth = mainReference.width;
       const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
@@ -40,7 +40,7 @@ export class PrimitiveValue extends Value {
       this.y = mainReference.y + (mainReference.height - Config.FontSize) / 2;
       this.text = isNull(this.data)
         ? new ArrayNullUnit([mainReference])
-        : new Text(String(this.data), this.x, this.y, { maxWidth: maxWidth });
+        : new Text(this.data, this.x, this.y, { maxWidth: maxWidth, isStringIdentifiable: true });
     }
 
     this.width = this.text.width;

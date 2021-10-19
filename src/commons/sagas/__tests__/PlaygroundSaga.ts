@@ -13,10 +13,12 @@ import {
   OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
+import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
 describe('Playground saga tests', () => {
+  Constants.urlShortenerBase = 'http://url-shortener.com/';
   const errMsg = 'Something went wrong trying to create the link.';
 
   test('puts changeQueryString action with undefined argument when passed the default value', () => {
@@ -76,7 +78,7 @@ describe('Playground saga tests', () => {
       .silentRun();
   });
 
-  test('puts updateShortURL with correct params when shorten request is succesful', () => {
+  test('puts updateShortURL with correct params when shorten request is successful', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: OverallState = {
       ...defaultState,
@@ -128,7 +130,7 @@ describe('Playground saga tests', () => {
       .silentRun();
   });
 
-  test('puts updateShortURL with correct params when shorten request with keyword is succesful', () => {
+  test('puts updateShortURL with correct params when shorten request with keyword is successful', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: OverallState = {
       ...defaultState,

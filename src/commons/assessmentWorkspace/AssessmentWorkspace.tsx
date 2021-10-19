@@ -27,7 +27,7 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
-  AssessmentCategories,
+  AssessmentConfiguration,
   AutogradingResult,
   ContestEntry,
   IContestVotingQuestion,
@@ -63,14 +63,13 @@ import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { assessmentCategoryLink } from '../utils/ParamParseHelper';
+import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
@@ -90,6 +89,7 @@ export type DispatchProps = {
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  handleRunAllTestcases: () => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handleDebuggerPause: () => void;
@@ -103,6 +103,7 @@ export type OwnProps = {
   questionId: number;
   notAttempted: boolean;
   canSave: boolean;
+  assessmentConfiguration: AssessmentConfiguration;
 };
 
 export type StateProps = {
@@ -126,13 +127,18 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
+  courseId?: number;
 };
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
   const [sessionId, setSessionId] = React.useState('');
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
+  const [selectedTab, setSelectedTab] = React.useState(
+    props.assessment?.questions[props.questionId].grader !== undefined
+      ? SideContentType.grading
+      : SideContentType.questionOverview
+  );
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
 
   React.useEffect(() => {
@@ -194,7 +200,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.questionOverview);
-      props.handleActiveTabChange(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
@@ -245,8 +250,22 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
   };
 
+  /**
+   * handleEval used in both the Run button, and during 'shift-enter' in AceEditor
+   *
+   * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
+   * Thus, we use a mutable ref to overcome the stale closure problem
+   */
+  const activeTab = React.useRef(selectedTab);
+  activeTab.current = selectedTab;
   const handleEval = () => {
-    props.handleEditorEval();
+    // Run testcases when the autograder tab is selected
+    if (activeTab.current === SideContentType.autograder) {
+      props.handleRunAllTestcases();
+    } else {
+      props.handleEditorEval();
+    }
+
     const input: Input = {
       time: Date.now(),
       type: 'keyboardCommand',
@@ -307,6 +326,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           })
         );
       }
+    }
+
+    if (question.type === QuestionTypes.voting) {
+      const questionData = question as IContestVotingQuestion;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
     }
 
     props.handleEditorUpdateBreakpoints([]);
@@ -407,7 +432,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             toSpawn: () => true
           },
           {
-            label: `${props.assessment!.category} Briefing`,
+            label: `Briefing`,
             iconName: IconNames.BRIEFCASE,
             body: (
               <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
@@ -416,15 +441,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             toSpawn: () => true
           },
           {
-            label: `${props.assessment!.category} Autograder`,
+            label: `Autograder`,
             iconName: IconNames.AIRPLANE,
             body: (
               <SideContentAutograder
                 testcases={props.editorTestcases}
                 autogradingResults={
-                  isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
+                  // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
+                  isGraded || !props.assessmentConfiguration.isManuallyGraded
+                    ? props.autogradingResults
+                    : []
                 }
                 handleTestcaseEval={props.handleTestcaseEval}
+                workspaceLocation="assessment"
               />
             ),
             id: SideContentType.autograder,
@@ -441,8 +470,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             graderName={props.assessment!.questions[questionId].grader!.name}
             gradedAt={props.assessment!.questions[questionId].gradedAt!}
             xp={props.assessment!.questions[questionId].xp}
-            grade={props.assessment!.questions[questionId].grade}
-            maxGrade={props.assessment!.questions[questionId].maxGrade}
             maxXp={props.assessment!.questions[questionId].maxXp}
             comments={props.assessment!.questions[questionId].comments}
           />
@@ -489,8 +516,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     return {
-      handleActiveTabChange: props.handleActiveTabChange,
-      defaultSelectedTabId: isGraded ? SideContentType.grading : selectedTab,
       selectedTabId: selectedTab,
       tabs,
       onChange: onChangeTabs,
@@ -503,26 +528,25 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
    */
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/academy/${assessmentCategoryLink(props.assessment!.category)}`;
+    const listingPath = `/courses/${props.courseId}/${assessmentTypeLink(props.assessment!.type)}`;
     const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
 
     const onClickPrevious = () => {
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-      if (isMobileBreakpoint) {
-        setSelectedTab(SideContentType.questionOverview);
-      }
+      setSelectedTab(SideContentType.questionOverview);
     };
     const onClickNext = () => {
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-      if (isMobileBreakpoint) {
-        setSelectedTab(SideContentType.questionOverview);
-      }
+      setSelectedTab(SideContentType.questionOverview);
     };
     const onClickReturn = () => history.push(listingPath);
 
-    // Returns a nullary function that defers the navigation of the browser window, until the
-    // student's answer passes some checks - presently only used for Paths
+    /**
+     * Returns a nullary function that defers the navigation of the browser window, until the
+     * student's answer passes some checks - presently only used for assessments types with blocking = true
+     * (previously used for the 'Path' assessment type in SA Knight)
+     */
     const onClickProgress = (deferredNavigate: () => void) => {
       return () => {
         // Perform question blocking - determine the highest question number previously accessed
@@ -537,6 +561,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // Else evaluate its correctness - proceed iff the answer to the current question is correct
         const question: Question = props.assessment!.questions[questionId];
         if (question.type === QuestionTypes.mcq) {
+          // Note that 0 is a falsy value!
+          if (question.answer === null) {
+            return showWarningMessage('Please select an option!', 750);
+          }
+          // If the question is 'blocking', but there is no MCQ solution provided (i.e. assessment uploader's
+          // mistake), allow the student to proceed after selecting an option
+          if ((question as IMCQQuestion).solution === undefined) {
+            return deferredNavigate();
+          }
           if (question.answer !== (question as IMCQQuestion).solution) {
             return showWarningMessage('Your MCQ solution is incorrect!', 750);
           }
@@ -562,12 +595,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessment!.category === AssessmentCategories.Path
+          props.assessment!.questions[questionId].blocking
             ? onClickProgress(onClickNext)
             : onClickNext
         }
         onClickReturn={
-          props.assessment!.category === AssessmentCategories.Path
+          props.assessment!.questions[questionId].blocking
             ? onClickProgress(onClickReturn)
             : onClickReturn
         }
@@ -742,8 +775,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? {
           editorSessionId: '',
           editorValue: props.editorValue!,
+          sourceChapter: question.library.chapter || 4,
+          sourceVariant: 'default' as Variant,
+          externalLibrary: question.library.external.name || 'NONE',
           handleDeclarationNavigate: props.handleDeclarationNavigate,
-          handleEditorEval: props.handleEditorEval,
+          handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,
           handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
           breakpoints: props.breakpoints,

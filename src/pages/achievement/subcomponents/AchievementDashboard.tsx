@@ -1,7 +1,10 @@
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import {
+  AssessmentConfiguration,
+  AssessmentOverview
+} from 'src/commons/assessment/AssessmentTypes';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -20,9 +23,11 @@ import {
 export type DispatchProps = {
   fetchAssessmentOverviews: () => void;
   getAchievements: () => void;
+  getGoals: (studentCourseRegId: number) => void;
   getOwnGoals: () => void;
+  getUserAssessmentOverviews: (studentCourseRegId: number) => void;
   getUsers: () => void;
-  updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
+  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
 
 export type StateProps = {
@@ -31,7 +36,9 @@ export type StateProps = {
   id?: number;
   name?: string;
   role?: Role;
+  assessmentConfigs?: AssessmentConfiguration[];
   assessmentOverviews?: AssessmentOverview[];
+  achievementAssessmentOverviews: AssessmentOverview[];
   users: AchievementUser[];
 };
 
@@ -60,6 +67,8 @@ function Dashboard(props: DispatchProps & StateProps) {
   const {
     getAchievements,
     getOwnGoals,
+    getGoals,
+    getUserAssessmentOverviews,
     getUsers,
     updateGoalProgress,
     fetchAssessmentOverviews,
@@ -67,27 +76,45 @@ function Dashboard(props: DispatchProps & StateProps) {
     inferencer,
     name,
     role,
+    assessmentConfigs,
     assessmentOverviews,
+    achievementAssessmentOverviews,
     users
   } = props;
+
+  // default nothing selected
+  const userIdState = useState<AchievementUser | undefined>(undefined);
+  const [selectedUser] = userIdState;
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    getOwnGoals();
+    selectedUser ? getGoals(selectedUser.courseRegId) : getOwnGoals();
+
+    selectedUser
+      ? getUserAssessmentOverviews(selectedUser.courseRegId)
+      : fetchAssessmentOverviews();
+
     getAchievements();
-  }, [getAchievements, getOwnGoals]);
+  }, [
+    selectedUser,
+    getAchievements,
+    getGoals,
+    getOwnGoals,
+    getUserAssessmentOverviews,
+    fetchAssessmentOverviews
+  ]);
 
-  if (name && role && !assessmentOverviews) {
-    // If assessment overviews are not loaded, fetch them
-    fetchAssessmentOverviews();
-  }
+  const userAssessmentOverviews = selectedUser
+    ? achievementAssessmentOverviews
+    : assessmentOverviews;
 
-  // one goal for submit, one goal for graded
-  assessmentOverviews?.forEach(assessmentOverview =>
-    insertFakeAchievements(assessmentOverview, inferencer)
-  );
+  // inserts assessment achievements for each assessment retrieved
+  // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
+  userAssessmentOverviews &&
+    assessmentConfigs &&
+    insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
@@ -99,12 +126,19 @@ function Dashboard(props: DispatchProps & StateProps) {
   const focusState = useState<string>('');
   const [focusUuid] = focusState;
 
+  const hiddenState = useState<boolean>(false);
+  const [seeHidden] = hiddenState;
+
   return (
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
-        <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
+        <AchievementOverview
+          name={selectedUser ? selectedUser.name || selectedUser.username : name || 'User'}
+        />
         {role && role !== Role.Student && (
           <AchievementManualEditor
+            userState={userIdState}
+            hiddenState={hiddenState}
             studio={group || 'Staff'}
             users={users}
             getUsers={getUsers}
@@ -133,7 +167,9 @@ function Dashboard(props: DispatchProps & StateProps) {
 
           <ul className="task-container">
             {generateAchievementTasks(
-              inferencer.listSortedReleasedTaskUuids(),
+              role === Role.Student || !seeHidden
+                ? inferencer.listSortedReleasedTaskUuids()
+                : inferencer.listAllSortedAchievementUuids(),
               filterStatus,
               focusState
             )}

@@ -8,19 +8,38 @@ test('NavigationBarMobileSideMenu renders "Not logged in" correctly', () => {
     isOpen: true,
     onClose: () => {},
     handleGitHubLogIn: () => {},
-    handleGitHubLogOut: () => {}
+    handleGitHubLogOut: () => {},
+    assessmentTypes: [],
+    courseId: 1
   };
   const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
   expect(tree.debug()).toMatchSnapshot();
 });
 
-test('NavigationBarMobileSideMenu renders correctly with student role', () => {
+test('NavigationBarMobileSideMenu renders correctly when logged in (no course selected)', () => {
   const props = {
     isOpen: true,
     onClose: () => {},
+    name: 'Avenger',
+    handleGitHubLogIn: () => {},
+    handleGitHubLogOut: () => {},
+    assessmentTypes: [],
+    courseId: 1
+  };
+  const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
+  expect(tree.debug()).toMatchSnapshot();
+});
+
+test('NavigationBarMobileSideMenu renders correctly when logged in (with course selected)', () => {
+  const props = {
+    isOpen: true,
+    onClose: () => {},
+    name: 'Avenger',
     role: Role.Student,
     handleGitHubLogIn: () => {},
-    handleGitHubLogOut: () => {}
+    handleGitHubLogOut: () => {},
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
+    courseId: 1
   };
   const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
   expect(tree.debug()).toMatchSnapshot();

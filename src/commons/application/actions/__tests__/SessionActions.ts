@@ -1,18 +1,31 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  DELETE_ASSESSMENT_CONFIG,
+  DELETE_USER_COURSE_REGISTRATION,
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
+  FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_AND_COURSE,
   LOGIN,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  SET_ASSESSMENT_CONFIGURATIONS,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_TOKENS,
   SET_USER,
@@ -22,23 +35,39 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_COURSE_CONFIG,
+  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_INFINITE_LOOP_ENCOUNTERED,
+  UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_NOTIFICATIONS,
+  UPDATE_USER_ROLE
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
+  deleteAssessmentConfig,
+  deleteUserCourseRegistration,
+  fetchAdminPanelCourseRegistrations,
   fetchAssessment,
+  fetchAssessmentConfigs,
   fetchAssessmentOverviews,
   fetchAuth,
+  fetchCourseConfig,
   fetchGrading,
   fetchGradingOverviews,
   fetchNotifications,
+  fetchUserAndCourse,
   login,
   reautogradeAnswer,
   reautogradeSubmission,
+  setAdminPanelCourseRegistrations,
+  setAssessmentConfigurations,
+  setCourseConfiguration,
+  setCourseRegistration,
+  setGitHubAccessToken,
   setGitHubOctokitObject,
   setTokens,
   setUser,
@@ -48,11 +77,16 @@ import {
   submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
+  updateAssessmentConfigs,
   updateAssessmentOverviews,
+  updateCourseConfig,
+  updateCourseResearchAgreement,
   updateGrading,
   updateGradingOverviews,
-  updateHistoryHelpers,
-  updateNotifications
+  updateInfiniteLoopEncountered,
+  updateLatestViewedCourse,
+  updateNotifications,
+  updateUserRole
 } from '../SessionActions';
 
 test('acknowledgeNotifications generates correct action object', () => {
@@ -72,6 +106,20 @@ test('fetchAuth generates correct action object', () => {
   expect(action).toEqual({
     type: FETCH_AUTH,
     payload: { code }
+  });
+});
+
+test('fetchUserAndCourse generates correct action object', () => {
+  const action = fetchUserAndCourse();
+  expect(action).toEqual({
+    type: FETCH_USER_AND_COURSE
+  });
+});
+
+test('fetchCourseConfig generates correct action object', () => {
+  const action = fetchCourseConfig();
+  expect(action).toEqual({
+    type: FETCH_COURSE_CONFIG
   });
 });
 
@@ -150,16 +198,131 @@ test('setUser generates correct action object', () => {
   const user = {
     userId: 123,
     name: 'test student',
-    role: 'student' as Role,
-    group: '42D',
-    grade: 150,
-    story: {} as Story,
-    gameState: {} as GameState
+    courses: [
+      {
+        courseId: 1,
+        courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Admin,
+        viewable: true
+      },
+      {
+        courseId: 2,
+        courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
+        courseShortName: `CS2030S`,
+        role: Role.Staff,
+        viewable: true
+      }
+    ]
   };
   const action = setUser(user);
   expect(action).toEqual({
     type: SET_USER,
     payload: user
+  });
+});
+
+test('setCourseConfiguration generates correct action object', () => {
+  const courseConfig = {
+    courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+    courseShortName: `CS1101S`,
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default' as Variant,
+    moduleHelpText: 'Help text',
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  };
+  const action = setCourseConfiguration(courseConfig);
+  expect(action).toEqual({
+    type: SET_COURSE_CONFIGURATION,
+    payload: courseConfig
+  });
+});
+
+test('setCourseRegistration generates correct action object', () => {
+  const courseRegistration = {
+    courseRegId: 1,
+    role: Role.Student,
+    group: '42D',
+    gameState: {
+      collectibles: {},
+      completed_quests: []
+    } as GameState,
+    courseId: 1,
+    grade: 1,
+    maxGrade: 10,
+    xp: 1,
+    story: {
+      story: '',
+      playStory: false
+    } as Story,
+    agreedToResearch: true
+  };
+  const action = setCourseRegistration(courseRegistration);
+  expect(action).toEqual({
+    type: SET_COURSE_REGISTRATION,
+    payload: courseRegistration
+  });
+});
+
+test('setAssessmentConfigurations generates correct action object', () => {
+  const assesmentConfigurations = [
+    {
+      assessmentConfigId: 1,
+      type: 'Mission1',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 2,
+      type: 'Mission2',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 3,
+      type: 'Mission3',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ];
+  const action = setAssessmentConfigurations(assesmentConfigurations);
+  expect(action).toEqual({
+    type: SET_ASSESSMENT_CONFIGURATIONS,
+    payload: assesmentConfigurations
+  });
+});
+
+test('setAdminPanelCourseRegistrations generates correct action object', async () => {
+  const userCourseRegistrations = [
+    {
+      courseRegId: 1,
+      courseId: 1,
+      name: 'Bob',
+      username: 'test/bob123',
+      role: Role.Student
+    },
+    {
+      courseRegId: 2,
+      courseId: 1,
+      name: 'Avenger',
+      username: 'test/avenger456',
+      role: Role.Staff
+    }
+  ];
+  const action = setAdminPanelCourseRegistrations(userCourseRegistrations);
+  expect(action).toEqual({
+    type: SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    payload: userCourseRegistrations
   });
 });
 
@@ -171,6 +334,15 @@ test('setGitHubOctokitInstance generates correct action object', async () => {
   const authObject = (await action.payload.auth()) as any;
   expect(authObject.token).toBe('testAuthToken12345');
   expect(authObject.tokenType).toBe('oauth');
+});
+
+test('setGitHubAccessToken generates correct action object', () => {
+  const authToken = 'testAuthToken12345';
+  const action = setGitHubAccessToken(authToken);
+  expect(action).toEqual({
+    type: SET_GITHUB_ACCESS_TOKEN,
+    payload: authToken
+  });
 });
 
 test('submitAnswer generates correct action object', () => {
@@ -205,7 +377,6 @@ test('submitGrading generates correct action object with default values', () => 
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment: 0,
       xpAdjustment: 0,
       comments: undefined
     }
@@ -222,7 +393,6 @@ test('submitGradingAndContinue generates correct action object with default valu
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment: 0,
       xpAdjustment: 0,
       comments: undefined
     }
@@ -232,16 +402,14 @@ test('submitGradingAndContinue generates correct action object with default valu
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
-  const gradeAdjustment = 10;
   const xpAdjustment = 100;
   const comments = 'my comment';
-  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, comments);
+  const action = submitGrading(submissionId, questionId, xpAdjustment, comments);
   expect(action).toEqual({
     type: SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment,
       xpAdjustment,
       comments
     }
@@ -251,22 +419,14 @@ test('submitGrading generates correct action object', () => {
 test('submitGradingAndContinue generates correct action object', () => {
   const submissionId = 4;
   const questionId = 7;
-  const gradeAdjustment = 90;
   const xpAdjustment = 55;
   const comments = 'another comment';
-  const action = submitGradingAndContinue(
-    submissionId,
-    questionId,
-    gradeAdjustment,
-    xpAdjustment,
-    comments
-  );
+  const action = submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments);
   expect(action).toEqual({
     type: SUBMIT_GRADING_AND_CONTINUE,
     payload: {
       submissionId,
       questionId,
-      gradeAdjustment,
       xpAdjustment,
       comments
     }
@@ -303,24 +463,14 @@ test('unsubmitSubmission generates correct action object', () => {
   });
 });
 
-test('updateHistoryHelpers generates correct action object', () => {
-  const loc = 'location';
-  const action = updateHistoryHelpers(loc);
-  expect(action).toEqual({
-    type: UPDATE_HISTORY_HELPERS,
-    payload: loc
-  });
-});
-
 test('updateAssessmentOverviews generates correct action object', () => {
   const overviews: AssessmentOverview[] = [
     {
-      category: 'Mission',
+      type: 'Missions',
+      isManuallyGraded: true,
       closeAt: 'test_string',
       coverImage: 'test_string',
-      grade: 0,
       id: 0,
-      maxGrade: 0,
       maxXp: 0,
       openAt: 'test_string',
       title: 'test_string',
@@ -340,7 +490,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
 
 test('updateAssessment generates correct action object', () => {
   const assessment: Assessment = {
-    category: 'Mission',
+    type: 'Missions',
     globalDeployment: undefined,
     graderDeployment: undefined,
     id: 1,
@@ -362,11 +512,7 @@ test('updateGradingOverviews generates correct action object', () => {
     {
       assessmentId: 1,
       assessmentName: 'test assessment',
-      assessmentCategory: 'Contest',
-      initialGrade: 0,
-      gradeAdjustment: 0,
-      currentGrade: 10,
-      maxGrade: 20,
+      assessmentType: 'Contests',
       initialXp: 0,
       xpBonus: 100,
       xpAdjustment: 50,
@@ -400,8 +546,6 @@ test('updateGrading generates correct action object', () => {
         id: 234
       },
       grade: {
-        grade: 10,
-        gradeAdjustment: 0,
         xp: 100,
         xpAdjustment: 0,
         comments: 'Well done.',
@@ -447,5 +591,149 @@ test('updateNotifications generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_NOTIFICATIONS,
     payload: notifications
+  });
+});
+
+test('updateLatestViewedCourse generates correct action object', () => {
+  const courseId = 2;
+  const action = updateLatestViewedCourse(courseId);
+  expect(action).toEqual({
+    type: UPDATE_LATEST_VIEWED_COURSE,
+    payload: { courseId }
+  });
+});
+
+test('updateCourseConfig generates correct action object', () => {
+  const courseConfig = {
+    courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
+    courseShortName: `CS1101S`,
+    viewable: true,
+    enableGame: true,
+    enableAchievements: true,
+    enableSourcecast: true,
+    sourceChapter: 1,
+    sourceVariant: 'default' as Variant,
+    moduleHelpText: 'Help text',
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+  };
+  const action = updateCourseConfig(courseConfig);
+  expect(action).toEqual({
+    type: UPDATE_COURSE_CONFIG,
+    payload: courseConfig
+  });
+});
+
+test('fetchAssessmentConfig generates correct action object', () => {
+  const action = fetchAssessmentConfigs();
+  expect(action).toEqual({
+    type: FETCH_ASSESSMENT_CONFIGS
+  });
+});
+
+test('updateAssessmentTypes generates correct action object', () => {
+  const assessmentConfigs = [
+    {
+      assessmentConfigId: 1,
+      type: 'Missions',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 2,
+      type: 'Quests',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 3,
+      type: 'Paths',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 4,
+      type: 'Contests',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    },
+    {
+      assessmentConfigId: 5,
+      type: 'Others',
+      isManuallyGraded: true,
+      displayInDashboard: true,
+      hoursBeforeEarlyXpDecay: 48,
+      earlySubmissionXp: 200
+    }
+  ];
+  const action = updateAssessmentConfigs(assessmentConfigs);
+  expect(action).toEqual({
+    type: UPDATE_ASSESSMENT_CONFIGS,
+    payload: assessmentConfigs
+  });
+});
+
+test('deleteAssessmentConfig generates correct action object', () => {
+  const assessmentConfig = {
+    assessmentConfigId: 1,
+    type: 'Mission1',
+    isManuallyGraded: true,
+    displayInDashboard: true,
+    hoursBeforeEarlyXpDecay: 48,
+    earlySubmissionXp: 200
+  };
+  const action = deleteAssessmentConfig(assessmentConfig);
+  expect(action).toEqual({
+    type: DELETE_ASSESSMENT_CONFIG,
+    payload: assessmentConfig
+  });
+});
+
+test('fetchAdminPanelCourseRegistrations generates correct action object', () => {
+  const action = fetchAdminPanelCourseRegistrations();
+  expect(action).toEqual({
+    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS
+  });
+});
+
+test('updateUserRole generates correct action object', () => {
+  const courseRegId = 1;
+  const role = Role.Staff;
+  const action = updateUserRole(courseRegId, role);
+  expect(action).toEqual({
+    type: UPDATE_USER_ROLE,
+    payload: { courseRegId, role }
+  });
+});
+
+test('updateCourseResearchAgreement generates correct action object', () => {
+  const agreedToResearch = true;
+  const action = updateCourseResearchAgreement(agreedToResearch);
+  expect(action).toEqual({
+    type: UPDATE_COURSE_RESEARCH_AGREEMENT,
+    payload: { agreedToResearch }
+  });
+});
+
+test('updateInfiniteLoopEncountered generates correct action object', () => {
+  const action = updateInfiniteLoopEncountered();
+  expect(action).toEqual({
+    type: UPDATE_INFINITE_LOOP_ENCOUNTERED
+  });
+});
+
+test('deleteUserCourseRegistration generates correct action object', () => {
+  const courseRegId = 1;
+  const action = deleteUserCourseRegistration(courseRegId);
+  expect(action).toEqual({
+    type: DELETE_USER_COURSE_REGISTRATION,
+    payload: { courseRegId }
   });
 });

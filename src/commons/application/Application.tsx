@@ -1,23 +1,24 @@
+import { Button, Classes, Dialog, H4, Intent } from '@blueprintjs/core';
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
-import Academy from '../../pages/academy/AcademyContainer';
-import Achievement from '../../pages/achievement/AchievementContainer';
+import Academy from '../../pages/academy/Academy';
 import Contributors from '../../pages/contributors/Contributors';
 import Disabled from '../../pages/disabled/Disabled';
-import GitHubAssessmentWorkspaceContainer from '../../pages/githubAssessments/GitHubAssessmentWorkspaceContainer';
-import GitHubMissionListing from '../../pages/githubAssessments/GitHubMissionListing';
+import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
-import Login from '../../pages/login/LoginContainer';
+import Login from '../../pages/login/Login';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
-import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
+import Sicp from '../../pages/sicp/Sicp';
+import Welcome from '../../pages/welcome/Welcome';
+import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
-import { parseQuery } from '../utils/QueryHelper';
 import { Role } from './ApplicationTypes';
+import { UpdateCourseConfiguration, UserCourse } from './types/SessionTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -25,13 +26,24 @@ export type DispatchProps = {
   handleLogOut: () => void;
   handleGitHubLogIn: () => void;
   handleGitHubLogOut: () => void;
+  fetchUserAndCourse: () => void;
+  handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
+  updateCourseResearchAgreement: (agreedToResearch: boolean) => void;
 };
 
 export type StateProps = {
   role?: Role;
-  title: string;
   name?: string;
+  courses: UserCourse[];
+  courseId?: number;
+  courseShortName?: string;
+  enableAchievements?: boolean;
+  enableSourcecast?: boolean;
+  assessmentConfigurations?: AssessmentConfiguration[];
+  agreedToResearch?: boolean | null;
 };
+
+const loginPath = <Route path="/login" component={Login} key="login" />;
 
 const Application: React.FC<ApplicationProps> = props => {
   const intervalId = React.useRef<number | undefined>(undefined);
@@ -39,6 +51,18 @@ const Application: React.FC<ApplicationProps> = props => {
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
   const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
   const browserDimensions = React.useRef({ height: 0, width: 0 });
+
+  const isLoggedIn = typeof props.name === 'string';
+  const isCourseLoaded = isLoggedIn && typeof props.role === 'string';
+
+  // Effect to fetch the latest user info and course configurations from the backend on refresh,
+  // if the user was previously logged in
+  React.useEffect(() => {
+    if (props.name) {
+      props.fetchUserAndCourse();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     if (Constants.disablePeriods.length > 0) {
@@ -96,26 +120,34 @@ const Application: React.FC<ApplicationProps> = props => {
     };
   }, [isPWA, isMobile]);
 
-  const loginPath = <Route path="/login" render={toLogin(props)} key="login" />;
-  const fullPaths = Constants.playgroundOnly
-    ? null
-    : [
-        <Route path="/academy" render={toAcademy(props)} key={0} />,
-        <Route
-          path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-          render={toIncubator}
-          key={1}
-        />,
-        loginPath
-      ];
-  if (!Constants.playgroundOnly && Constants.enableAchievements) {
-    fullPaths?.push(<Route path="/achievement" render={toAchievement(props)} key={2} />);
-  }
-  const disabled = !['staff', 'admin'].includes(props.role!) && isDisabled;
+  // Paths common to both deployments
+  const commonPaths = [
+    <Route path="/contributors" component={Contributors} key="contributors" />,
+    <Route path="/callback/github" component={GitHubCallback} key="githubCallback" />,
+    <Redirect
+      from="/interactive-sicp/:section?"
+      to="/sicpjs/:section?"
+      key="oldToNewSicpRedirect"
+    />,
+    <Route exact path="/sicpjs" key="sicpRedirect">
+      <Redirect to="/sicpjs/index" />
+    </Route>,
+    <Route path="/sicpjs/:section" component={Sicp} key="sicp" />,
+    Constants.enableGitHubAssessments ? (
+      <Route
+        path="/githubassessments"
+        render={() => (
+          <GitHubClassroom
+            handleGitHubLogIn={props.handleGitHubLogIn}
+            handleGitHubLogOut={props.handleGitHubLogOut}
+          />
+        )}
+        key="githubAssessments"
+      />
+    ) : null
+  ];
 
-  const renderDisabled = () => (
-    <Disabled reason={typeof isDisabled === 'string' ? isDisabled : undefined} />
-  );
+  const isDisabledEffective = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
   return (
     <div className="Application">
@@ -123,97 +155,159 @@ const Application: React.FC<ApplicationProps> = props => {
         handleLogOut={props.handleLogOut}
         handleGitHubLogIn={props.handleGitHubLogIn}
         handleGitHubLogOut={props.handleGitHubLogOut}
+        handleCreateCourse={props.handleCreateCourse}
         role={props.role}
         name={props.name}
-        title={props.title}
+        courses={props.courses}
+        courseId={props.courseId}
+        courseShortName={props.courseShortName}
+        enableAchievements={props.enableAchievements}
+        enableSourcecast={props.enableSourcecast}
+        assessmentTypes={React.useMemo(
+          () => props.assessmentConfigurations?.map(c => c.type),
+          [props.assessmentConfigurations]
+        )}
       />
       <div className="Application__main">
-        {disabled && (
+        {isDisabledEffective && (
           <Switch>
             {!Constants.playgroundOnly && loginPath}
             {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
-            {!props.role && !Constants.playgroundOnly
+            {!isCourseLoaded && !Constants.playgroundOnly
               ? [
-                  <Route path="/academy" render={redirectToLogin} key={0} />,
+                  <Route path="/courses" render={redirectToLogin} key={0} />,
                   <Route exact={true} path="/" render={redirectToLogin} key={1} />
                 ]
               : []}
-            <Route render={renderDisabled} />
+            <Route>
+              <Disabled reason={typeof isDisabled === 'string' ? isDisabled : undefined} />
+            </Route>
           </Switch>
         )}
-        {!disabled && (
+        {!isDisabledEffective && Constants.playgroundOnly && (
           <Switch>
+            {commonPaths}
             <Route path="/playground" component={Playground} />
-            <Route path="/contributors" component={Contributors} />
-            <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
-            {Constants.enableGitHubAssessments && (
-              <Route
-                path="/githubassessments/missions"
-                component={() => (
-                  <GitHubMissionListing
-                    handleGitHubLogIn={props.handleGitHubLogIn}
-                    handleGitHubLogOut={props.handleGitHubLogOut}
-                  />
-                )}
-              />
-            )}
-            {Constants.enableGitHubAssessments && (
-              <Route
-                path="/githubassessments/editor"
-                component={GitHubAssessmentWorkspaceContainer}
-              />
-            )}
-            <Route path="/callback/github" component={GitHubCallback} />
-            {fullPaths}
+            <Route exact={true} path="/">
+              <Redirect to="/playground" />
+            </Route>
+            <Route component={NotFound} />
+          </Switch>
+        )}
+        {!isDisabledEffective && !Constants.playgroundOnly && (
+          <Switch>
+            {loginPath}
+            {commonPaths}
+            <Route path={'/courses/:courseId(\\d+)?'} render={toAcademy(props)} />
+            <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} />
             <Route
-              exact={true}
-              path="/"
-              render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
+              path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+              component={MissionControlContainer}
             />
+            <Route path="/playground" render={ensureUserAndRoleAndRouteTo(props, <Playground />)} />
+
+            <Redirect
+              from="/"
+              exact={true}
+              to={props.courseId != null ? `/courses/${props.courseId}` : '/welcome'}
+            />
+            {props.courseId != null && [
+              <Redirect
+                from="/sourcecast/:splat?"
+                to={`/courses/${props.courseId}/sourcecast/:splat?`}
+                key="legacy-sourcecast"
+              />,
+              <Redirect
+                from="/achievements/:splat?"
+                to={`/courses/${props.courseId}/achievements/:splat?`}
+                key="legacy-achievements"
+              />,
+              <Redirect
+                from="/academy/:splat?"
+                to={`/courses/${props.courseId}/:splat?`}
+                key="legacy-academy"
+              />
+            ]}
             <Route component={NotFound} />
           </Switch>
         )}
       </div>
+
+      {/* agreedToResearch has a default value of undefined in the store.
+          It will take on null/true/false when the backend returns. */}
+      {Constants.showResearchPrompt && props.agreedToResearch === null && (
+        <div className="research-prompt">
+          <Dialog
+            className={Classes.DARK}
+            title="Agreement to Participate in Educational Research"
+            canOutsideClickClose={false}
+            canEscapeKeyClose={false}
+            isCloseButtonShown={false}
+            isOpen
+          >
+            <div className={Classes.DIALOG_BODY}>
+              <H4>Welcome to your new Source Academy @ NUS course!</H4>
+              <div>
+                Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in
+                programming and the ideas behind programming, and to make these ideas universally
+                accessible. This includes educational research!
+              </div>
+              <br />
+              <div>
+                We collect programs that students run in Source Academy @ NUS and store them
+                anonymously for our research. You are free to opt out of this collection, with no
+                penalty for you whatsoever. Contact your course instructor if you have questions or
+                concerns about this research.
+              </div>
+            </div>
+            <div className={Classes.DIALOG_FOOTER}>
+              <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                <Button
+                  text="I would like to opt out"
+                  onClick={() => props.updateCourseResearchAgreement(false)}
+                />
+                <Button
+                  text="I consent!"
+                  intent={Intent.SUCCESS}
+                  onClick={() => props.updateCourseResearchAgreement(true)}
+                />
+              </div>
+            </div>
+          </Dialog>
+        </div>
+      )}
     </div>
   );
 };
 
-const redirectToPlayground = () => <Redirect to="/playground" />;
-const redirectToAcademy = () => <Redirect to="/academy" />;
 const redirectToLogin = () => <Redirect to="/login" />;
+const redirectToWelcome = () => <Redirect to="/welcome" />;
 
 /**
  * A user routes to /academy,
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = ({ role }: ApplicationProps) =>
-  role === undefined ? redirectToLogin : () => <Academy role={role} />;
+const toAcademy = ({ name, role }: ApplicationProps) =>
+  name === undefined ? redirectToLogin : role === undefined ? redirectToWelcome : () => <Academy />;
 
 /**
- * A user routes to /achievement,
- *  1. If the user is logged in, render the Achievement component
+ * Routes a user to the specified route,
+ *  1. If the user is logged in, render the specified component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAchievement = ({ role }: ApplicationProps) =>
-  role === undefined ? redirectToLogin : () => <Achievement />;
+const ensureUserAndRouteTo = ({ name }: ApplicationProps, to: JSX.Element) =>
+  name === undefined ? redirectToLogin : () => to;
 
-const toLogin = (props: ApplicationProps) => () => {
-  const qstr = parseQuery(props.location.search);
-
-  return (
-    <Login
-      code={qstr.code}
-      providerId={qstr.provider}
-      providers={[...Constants.authProviders.entries()].map(([id, { name }]) => ({
-        id,
-        name
-      }))}
-    />
-  );
-};
-
-const toIncubator = () => <MissionControlContainer />;
+/**
+ * Routes a user to the specified route,
+ *  1. If the user is logged in and has a latest viewed course, render the
+ *     specified component
+ *  2. If the user is not logged in, redirect to /login
+ *  3. If the user is logged in, but does not have a course, redirect to /welcome
+ */
+const ensureUserAndRoleAndRouteTo = ({ name, role }: ApplicationProps, to: JSX.Element) =>
+  name === undefined ? redirectToLogin : role === undefined ? redirectToWelcome : () => to;
 
 function computeDisabledState() {
   const now = moment();

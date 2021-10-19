@@ -7,7 +7,7 @@ type AchievementXpProps = {
 };
 
 const stringifyXp = (xp: number, isBonus: boolean) => {
-  return (isBonus ? '+' : '') + xp + ' XP';
+  return (isBonus ? 'Total ' : '') + xp + ' XP';
 };
 
 function AchievementXp(props: AchievementXpProps) {

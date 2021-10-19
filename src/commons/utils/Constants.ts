@@ -8,6 +8,8 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
+const sourceAcademyDeploymentName = process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
+const showResearchPrompt = isTest || isTrue(process.env.REACT_APP_SHOW_RESEARCH_PROMPT);
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
@@ -17,13 +19,11 @@ const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;
-const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
+const urlShortenerBase = process.env.REACT_APP_URL_SHORTENER_BASE;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const sharedbBackendUrl = process.env.REACT_APP_SHAREDB_BACKEND_URL || '';
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
-const enableGame = isTest || isTrue(process.env.REACT_APP_ENABLE_GAME);
-const enableAchievements = isTest || isTrue(process.env.REACT_APP_ENABLE_ACHIEVEMENTS);
 const enableGitHubAssessments = isTest || isTrue(process.env.REACT_APP_ENABLE_GITHUB_ASSESSMENTS);
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -31,6 +31,8 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
+const sicpBackendUrl =
+  process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -67,39 +69,44 @@ if (!isTest) {
 }
 
 export enum Links {
-  githubIssues = 'https://github.com/source-academy/cadet-frontend/issues',
+  githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
 
   moduleDetails = 'https://www.comp.nus.edu.sg/~cs1101s',
   luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
   piazza = 'https://piazza.com/class/kas136yscf8605',
 
-  sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
-  sourceDocs = 'https://source-academy.github.io/source/',
+  resourcesForEducators = 'https://about.sourceacademy.org/educator/README.html',
+  resourcesForLearners = 'https://about.sourceacademy.org/learner/README.html',
+
+  sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/',
+  sourceDocs = 'https://docs.sourceacademy.org/',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
-  textbook = 'https://source-academy.github.io/sicp/',
-  textbookChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
-  textbookChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
-
+  textbook = 'https://sourceacademy.org/sicpjs/',
+  playground = 'https://sourceacademy.org/playground',
+  textbookChapter2_2 = 'https://sourceacademy.org/sicpjs/2.2',
+  textbookChapter3_2 = 'https://sourceacademy.org/sicpjs/3.2',
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
-  sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
+  sourceHotkeys = 'https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  source_1 = 'https://source-academy.github.io/source/source_1/',
-  source_1_Lazy = 'https://source-academy.github.io/source/source_1_lazy/',
-  source_1_Wasm = 'https://source-academy.github.io/source/source_1_wasm/',
-  source_2 = 'https://source-academy.github.io/source/source_2/',
-  source_2_Lazy = 'https://source-academy.github.io/source/source_2_lazy/',
-  source_3 = 'https://source-academy.github.io/source/source_3/',
-  source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
-  source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
-  source_4 = 'https://source-academy.github.io/source/source_4/',
-  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/'
+  source_1 = 'https://docs.sourceacademy.org/source_1/',
+  source_1_Lazy = 'https://docs.sourceacademy.org/source_1_lazy/',
+  source_1_Wasm = 'https://docs.sourceacademy.org/source_1_wasm/',
+  source_2 = 'https://docs.sourceacademy.org/source_2/',
+  source_2_Lazy = 'https://docs.sourceacademy.org/source_2_lazy/',
+  source_3 = 'https://docs.sourceacademy.org/source_3/',
+  source_3_Concurrent = 'https://docs.sourceacademy.org/source_3_concurrent/',
+  source_3_Nondet = 'https://docs.sourceacademy.org/source_3_non-det/',
+  source_4 = 'https://docs.sourceacademy.org/source_4/',
+  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/'
 }
 
 const Constants = {
   sourceAcademyVersion,
   sourceAcademyEnvironment,
+  sourceAcademyDeploymentName,
+  showResearchPrompt,
   backendUrl,
   cadetLoggerUrl,
   useBackend,
@@ -108,13 +115,11 @@ const Constants = {
   defaultQuestionId,
   maxBrowseIndex,
   mobileBreakpoint,
-  urlShortener,
+  urlShortenerBase,
   urlShortenerSignature,
   moduleBackendUrl,
   authProviders,
   playgroundOnly,
-  enableGame,
-  enableAchievements,
   enableGitHubAssessments,
   sentryDsn,
   googleClientId,
@@ -124,7 +129,8 @@ const Constants = {
   githubOAuthProxyUrl,
   sharedbBackendUrl,
   disablePeriods,
-  cadetLoggerInterval
+  cadetLoggerInterval,
+  sicpBackendUrl: sicpBackendUrl
 };
 
 export default Constants;

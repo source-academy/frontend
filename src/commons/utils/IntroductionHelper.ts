@@ -6,7 +6,7 @@ const MAIN_INTRODUCTION = `
 Welcome to the Source Academy playground!
 
 The language [_Source_](${Links.sourceDocs}) is the official language of the textbook [_Structure and
-Interpretation of Computer Programs, JavaScript Adaptation_](${Links.textbook}). `;
+Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}). `;
 
 const HOTKEYS_INTRODUCTION = `
 

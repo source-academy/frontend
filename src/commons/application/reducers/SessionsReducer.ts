@@ -8,8 +8,13 @@ import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
-  REMOVE_GITHUB_OCTOKIT_OBJECT,
+  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
   SessionState,
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  SET_ASSESSMENT_CONFIGURATIONS,
+  SET_COURSE_CONFIGURATION,
+  SET_COURSE_REGISTRATION,
+  SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
@@ -19,7 +24,7 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS,
+  UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_NOTIFICATIONS
 } from '../types/SessionTypes';
 
@@ -40,6 +45,11 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         githubOctokitObject: { octokit: action.payload }
       };
+    case SET_GITHUB_ACCESS_TOKEN:
+      return {
+        ...state,
+        githubAccessToken: action.payload
+      };
     case SET_GOOGLE_USER:
       return {
         ...state,
@@ -48,27 +58,32 @@ export const SessionsReducer: Reducer<SessionState> = (
     case SET_TOKENS:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken
+        ...action.payload
       };
     case SET_USER:
       return {
         ...state,
         ...action.payload
       };
-    case UPDATE_HISTORY_HELPERS:
-      const helper = state.historyHelper;
-      const isAcademy = isAcademyRe.exec(action.payload) != null;
-      const newAcademyLocations = isAcademy
-        ? [helper.lastAcademyLocations[1], action.payload]
-        : [...helper.lastAcademyLocations];
-      const newGeneralLocations = [helper.lastGeneralLocations[1], action.payload];
+    case SET_COURSE_CONFIGURATION:
       return {
         ...state,
-        historyHelper: {
-          lastAcademyLocations: newAcademyLocations,
-          lastGeneralLocations: newGeneralLocations
-        }
+        ...action.payload
+      };
+    case SET_COURSE_REGISTRATION:
+      return {
+        ...state,
+        ...action.payload
+      };
+    case SET_ASSESSMENT_CONFIGURATIONS:
+      return {
+        ...state,
+        assessmentConfigurations: action.payload
+      };
+    case SET_ADMIN_PANEL_COURSE_REGISTRATIONS:
+      return {
+        ...state,
+        userCourseRegistrations: action.payload
       };
     case UPDATE_ASSESSMENT:
       const newAssessments = new Map(state.assessments);
@@ -94,6 +109,11 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         gradingOverviews: action.payload
       };
+    case UPDATE_INFINITE_LOOP_ENCOUNTERED:
+      return {
+        ...state,
+        hadPreviousInfiniteLoop: true
+      };
     case UPDATE_NOTIFICATIONS:
       return {
         ...state,
@@ -109,14 +129,13 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         remoteExecutionSession: action.payload
       };
-    case REMOVE_GITHUB_OCTOKIT_OBJECT:
+    case REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN:
       return {
         ...state,
-        githubOctokitObject: { octokit: undefined }
+        githubOctokitObject: { octokit: undefined },
+        githubAccessToken: undefined
       };
     default:
       return state;
   }
 };
-
-export const isAcademyRe = new RegExp('^/academy.*', 'i');

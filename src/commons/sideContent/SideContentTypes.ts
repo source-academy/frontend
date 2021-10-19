@@ -23,14 +23,15 @@ export enum SideContentType {
   envVisualizer = 'env_visualizer',
   grading = 'grading',
   introduction = 'introduction',
-  inspector = 'inspector',
   module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
+  missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
+  testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   videoDisplay = 'video_display'
 }

@@ -15,13 +15,11 @@ import {
   logoutGoogle
 } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   setEditorSessionId,
   setSharedbConnected
 } from '../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../commons/editor/EditorTypes';
-import { SideContentType } from '../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -34,14 +32,12 @@ import {
   clearReplOutput,
   evalEditor,
   evalRepl,
-  externalLibrarySelect,
-  fetchSublanguage,
   navigateToDeclaration,
   promptAutocomplete,
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
-  updateActiveTab,
+  toggleUsingSubst,
   updateEditorValue,
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
@@ -60,7 +56,6 @@ import {
 import {
   generateLzString,
   shortenURL,
-  toggleUsingSubst,
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import Playground, { DispatchProps, StateProps } from './Playground';
@@ -83,11 +78,12 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   shortURL: state.playground.shortURL,
   replValue: state.workspaces.playground.replValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
-  sourceChapter: state.workspaces.playground.context.chapter,
-  sourceVariant: state.workspaces.playground.context.variant,
+  playgroundSourceChapter: state.workspaces.playground.context.chapter,
+  playgroundSourceVariant: state.workspaces.playground.context.variant,
+  courseSourceChapter: state.session.sourceChapter,
+  courseSourceVariant: state.session.sourceVariant,
   sharedbConnected: state.workspaces.playground.sharedbConnected,
-  externalLibraryName: state.workspaces.playground.externalLibrary,
-  usingSubst: state.playground.usingSubst,
+  usingSubst: state.workspaces.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitObject: state.session.githubOctokitObject,
@@ -99,8 +95,6 @@ const workspaceLocation: WorkspaceLocation = 'playground';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) =>
@@ -110,7 +104,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
-      handleFetchSublanguage: fetchSublanguage,
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
@@ -122,8 +115,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
@@ -135,11 +126,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
-      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
+      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
-      handleFetchChapter: fetchSublanguage,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handlePersistenceOpenPicker: persistenceOpenPicker,

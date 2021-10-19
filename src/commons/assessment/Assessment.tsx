@@ -21,7 +21,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -35,19 +35,17 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { assessmentCategoryLink, stringParamToInt } from '../utils/ParamParseHelper';
+import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
+import AssessmentNotFound from './AssessmentNotFound';
 import {
-  AssessmentCategory,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams,
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = DispatchProps &
-  OwnProps &
-  RouteComponentProps<AssessmentWorkspaceParams> &
-  StateProps;
+export type AssessmentProps = DispatchProps & OwnProps & StateProps;
 
 export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
@@ -56,15 +54,17 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  assessmentCategory: AssessmentCategory;
+  assessmentConfiguration: AssessmentConfiguration;
 };
 
 export type StateProps = {
   assessmentOverviews?: AssessmentOverview[];
   isStudent: boolean;
+  courseId?: number;
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
+  const params = useParams<AssessmentWorkspaceParams>();
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
@@ -132,15 +132,13 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/academy/${assessmentCategoryLink(overview.category)}/${overview.id.toString()}/${
-          Constants.defaultQuestionId
-        }`}
+        to={`/courses/${props.courseId}/${assessmentTypeLink(
+          overview.type
+        )}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
       >
         <Button
           icon={icon}
           minimal={true}
-          // intentional: each listing renders its own version of onClick
-          // tslint:disable-next-line:jsx-no-lambda
           onClick={() =>
             props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
           }
@@ -167,7 +165,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => {
-    const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
+    const showGrade =
+      overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>
@@ -186,13 +185,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
           </div>
           <div className={`col-xs-${String(12 - ratio)} listing-text`}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
-            <div className="listing-grade">
-              <H6>
-                {showGrade
-                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                  : `Max Grade: ${overview.maxGrade}`}
-              </H6>
-            </div>
             <div className="listing-xp">
               <H6>
                 {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}
@@ -243,22 +235,30 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
-  const { assessmentOverviews, isStudent } = props;
-  const assessmentId: number | null = stringParamToInt(props.match.params.assessmentId);
-  const questionId: number =
-    stringParamToInt(props.match.params.questionId) || Constants.defaultQuestionId;
+  const { assessmentOverviews: assessmentOverviewsUnfiltered, isStudent } = props;
+  const assessmentOverviews = React.useMemo(
+    () =>
+      assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
+    [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
+  );
+  const assessmentId: number | null = stringParamToInt(params.assessmentId);
+  const questionId: number = stringParamToInt(params.questionId) || Constants.defaultQuestionId;
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
+    if (!overview) {
+      return <AssessmentNotFound />;
+    }
     const assessmentWorkspaceProps: AssessmentWorkspaceOwnProps = {
       assessmentId,
       questionId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
         !props.isStudent ||
-        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt))
+        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
+      assessmentConfiguration: props.assessmentConfiguration
     };
     return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
   }
@@ -328,7 +328,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Define the betcha dialog (in each card's menu)
   const submissionText = betchaAssessment ? (
     <p>
-      You are about to finalise your submission for the {betchaAssessment.category.toLowerCase()}{' '}
+      You are about to finalise your submission for the {betchaAssessment.type.toLowerCase()}{' '}
       <i>&quot;{betchaAssessment.title}&quot;</i>.
     </p>
   ) : (

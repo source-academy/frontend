@@ -1,6 +1,6 @@
-import Constants from 'src/commons/utils/Constants';
-
+import Constants from '../../commons/utils/Constants';
 import SourceAcademyGame from '../game/SourceAcademyGame';
+import { courseId } from '../game/utils/GameUtils';
 
 const sendRequest =
   (route: string) =>
@@ -24,13 +24,17 @@ const sendRequest =
         ...requestDetails
       };
 
-      return fetch(Constants.backendUrl + `/v2/${route}/` + requestPath, config);
+      return fetch(
+        Constants.backendUrl + `/v2/courses/${courseId()}/${route}/` + requestPath,
+        config
+      );
     } finally {
     }
   };
 
-export const sendAssetRequest = sendRequest('admin/assets');
-export const sendStoryRequest = sendRequest('stories');
+export const sendAssetRequest = sendRequest(`admin/assets`);
+export const sendStoryRequest = sendRequest(`stories`);
+export const sendAdminStoryRequest = sendRequest(`admin/stories`);
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();

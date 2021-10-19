@@ -76,3 +76,27 @@ a.NavigationBar__link__mobile {
     font-weight: 250;
   }
 }
+
+.desktop-navbar-popover {
+  .#{$ns}-popover2-arrow-fill {
+    fill: $cadet-color-5 !important;
+  }
+
+  .#{$ns}-popover2-content {
+    background: $cadet-color-5 !important;
+    padding: 0;
+
+    .#{$ns}-navbar {
+      background: $cadet-color-5;
+      box-shadow: none;
+
+      .#{$ns}-button {
+        color: $cadet-color-1;
+
+        .navbar-button-text {
+          margin-left: 0.25rem;
+        }
+      }
+    }
+  }
+}

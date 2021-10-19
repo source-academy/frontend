@@ -1,22 +1,19 @@
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
+import { Role } from '../application/ApplicationTypes';
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockRuneLibrary } from './AssessmentMocks';
-import { mockFetchRole, Role, Roles } from './UserMocks';
+import { mockFetchRole } from './UserMocks';
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
-    gradeAdjustment: 0,
     xpAdjustment: 0,
-    assessmentCategory: 'Mission',
+    assessmentType: 'Missions',
     assessmentId: 0,
     assessmentName: 'Mission 0 ',
-    currentGrade: 69,
     currentXp: 69,
     xpBonus: 10,
-    initialGrade: 69,
     initialXp: 69,
-    maxGrade: 100,
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
@@ -28,17 +25,13 @@ export const mockGradingOverviews: GradingOverview[] = [
     gradedCount: 6
   },
   {
-    gradeAdjustment: -2,
     xpAdjustment: -2,
-    assessmentCategory: 'Mission',
+    assessmentType: 'Missions',
     assessmentId: 1,
     assessmentName: 'Mission 1',
-    currentGrade: -2,
     currentXp: -2,
     xpBonus: 12,
-    initialGrade: 0,
     initialXp: 0,
-    maxGrade: 400,
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
@@ -50,17 +43,13 @@ export const mockGradingOverviews: GradingOverview[] = [
     gradedCount: 2
   },
   {
-    gradeAdjustment: 4,
     xpAdjustment: 4,
-    assessmentCategory: 'Mission',
+    assessmentType: 'Missions',
     assessmentId: 0,
     assessmentName: 'Mission 0',
-    currentGrade: 1000,
     currentXp: 1000,
     xpBonus: 12,
-    initialGrade: 996,
     initialXp: 996,
-    maxGrade: 1000,
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
@@ -85,7 +74,7 @@ export const mockFetchGradingOverview = (
   group: boolean
 ): GradingOverview[] | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
     return null;
@@ -103,8 +92,8 @@ export const mockFetchGradingOverview = (
 export const mockTestcases: Testcase[] = [
   { type: TestcaseTypes.public, program: `remainder(12, 7);`, score: 1, answer: `5` },
   { type: TestcaseTypes.public, program: `remainder(6, 1);`, score: 2, answer: `0` },
-  { type: TestcaseTypes.private, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
-  { type: TestcaseTypes.private, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
+  { type: TestcaseTypes.opaque, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
+  { type: TestcaseTypes.opaque, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
 export const mockGrading: Grading = [
@@ -132,7 +121,6 @@ function remainder(n, d) {
   return n % d;
 }`,
       type: 'programming',
-      maxGrade: 1000,
       maxXp: 1000,
       grader: {
         name: 'avenger',
@@ -140,7 +128,6 @@ function remainder(n, d) {
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1,
       autogradingResults: [
         {
           resultType: 'pass'
@@ -182,12 +169,11 @@ function remainder(n, d) {
             }
           ]
         }
-      ]
+      ],
+      blocking: false
     },
     grade: {
-      gradeAdjustment: 0,
       xpAdjustment: 0,
-      grade: 0,
       xp: 0,
       comments: `Good job. You are awarded the full marks!
 
@@ -237,7 +223,6 @@ _italics_
       solutionTemplate: '1st question mock solution template',
       solution: null,
       type: 'programming',
-      maxGrade: 200,
       maxXp: 200,
       grader: {
         name: 'avenger',
@@ -245,7 +230,6 @@ _italics_
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1,
       autogradingResults: [
         {
           resultType: 'pass'
@@ -270,12 +254,11 @@ _italics_
             }
           ]
         }
-      ]
+      ],
+      blocking: false
     },
     grade: {
-      gradeAdjustment: 0,
       xpAdjustment: 0,
-      grade: 100,
       xp: 100,
       comments: `You open the Report Card, not knowing what to expect...
 
@@ -349,7 +332,6 @@ New message from **Avenger**!
       id: 2,
       library: mockRuneLibrary,
       type: 'mcq',
-      maxGrade: 100,
       maxXp: 100,
       grader: {
         name: 'avenger',
@@ -357,7 +339,6 @@ New message from **Avenger**!
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1,
       autogradingResults: [
         {
           resultType: 'pass'
@@ -382,12 +363,11 @@ New message from **Avenger**!
             }
           ]
         }
-      ]
+      ],
+      blocking: false
     },
     grade: {
-      gradeAdjustment: 0,
       xpAdjustment: 0,
-      grade: 50,
       xp: 50
     },
     student: {
@@ -405,7 +385,7 @@ New message from **Avenger**!
  */
 export const mockFetchGrading = (accessToken: string, submissionId: number): Grading | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
     return null;
@@ -414,29 +394,39 @@ export const mockFetchGrading = (accessToken: string, submissionId: number): Gra
   }
 };
 
-export const mockGradingSummary: GradingSummary = [
-  {
-    leaderName: 'John',
-    groupName: 'Mock Group 1',
-    ungradedMissions: 123,
-    submittedMissions: 200,
-    ungradedSidequests: 100,
-    submittedSidequests: 117
-  },
-  {
-    leaderName: 'Molly',
-    groupName: 'Mock Group 2',
-    ungradedMissions: 1232,
-    submittedMissions: 205430,
-    ungradedSidequests: 345,
-    submittedSidequests: 11547
-  },
-  {
-    leaderName: 'Lenny',
-    groupName: 'Mock Group 3',
-    ungradedMissions: 1532,
-    submittedMissions: 22200,
-    ungradedSidequests: 134500,
-    submittedSidequests: 6777
-  }
-];
+export const mockGradingSummary: GradingSummary = {
+  cols: [
+    'group',
+    'avenger',
+    'ungradedMissions',
+    'submittedMissions',
+    'ungradedQuests',
+    'submittedQuests'
+  ],
+  rows: [
+    {
+      group: 'Mock Group 1',
+      avenger: 'John',
+      ungradedMissions: 123,
+      submittedMissions: 200,
+      ungradedQuests: 100,
+      submittedQuests: 117
+    },
+    {
+      group: 'Mock Group 2',
+      avenger: 'Molly',
+      ungradedMissions: 1232,
+      submittedMissions: 205430,
+      ungradedQuests: 345,
+      submittedQuests: 11547
+    },
+    {
+      group: 'Mock Group 3',
+      avenger: 'Lenny',
+      ungradedMissions: 1532,
+      submittedMissions: 22200,
+      ungradedQuests: 134500,
+      submittedQuests: 6777
+    }
+  ]
+};
