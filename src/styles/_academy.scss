@@ -456,8 +456,26 @@
     }
   }
 
-  .add-row-button {
-    margin-top: 10px;
+  .assessment-configuration-header-container {
+    position: relative;
+
+    .add-row-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+.users-configuration {
+  .users-header-container {
+    position: relative;
+
+    .export-csv-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 }
 

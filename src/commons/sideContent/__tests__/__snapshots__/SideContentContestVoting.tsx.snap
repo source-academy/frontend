@@ -2,7 +2,7 @@
 
 exports[`SideContentContestVotingContainer matches snapshot 1`] = `
 "<SideContentContestVotingContainer handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
-  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}}>
+  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}} minScore={9} maxScore={10}>
     <div className=\\"ContestEntryVoting\\">
       <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
         <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: onClick]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
@@ -70,7 +70,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                   </Blueprint3.Icon>
                 </div>
                 <div className=\\"header-entryrank\\">
-                  Rank
+                  Score
                   <Blueprint3.Icon icon=\\"caret-down\\">
                     <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                       <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -83,7 +83,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                   </Blueprint3.Icon>
                 </div>
               </div>
-              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} minScore={9} maxScore={10}>
                 <div className=\\"ContestEntryCard\\">
                   <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                     <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
@@ -94,12 +94,12 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                       </Component>
                       <Component className=\\"contestentry-rank\\">
                         <pre className=\\"bp3-code-block contestentry-rank\\">
-                          <Blueprint3.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter rank for entry 1\\" min={1} max={2} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
+                          <Blueprint3.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter score for entry 1\\" min={9} max={10} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
                             <Blueprint3.ControlGroup className=\\"bp3-numeric-input\\" fill={true}>
                               <div className=\\"bp3-control-group bp3-fill bp3-numeric-input\\">
-                                <Blueprint3.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 1\\" min={1} max={2} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
+                                <Blueprint3.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
                                   <div className=\\"bp3-input-group\\">
-                                    <input type=\\"text\\" autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 1\\" min={1} max={2} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} />
+                                    <input type=\\"text\\" autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} />
                                   </div>
                                 </Blueprint3.InputGroup>
                                 <Blueprint3.ButtonGroup className=\\"bp3-fixed\\" vertical={true}>
@@ -145,7 +145,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                   </Blueprint3.Card>
                 </div>
               </SideContentContestEntryCard>
-              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} maxRank={2}>
+              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} minScore={9} maxScore={10}>
                 <div className=\\"ContestEntryCard\\">
                   <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                     <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function: onClick]}>
@@ -156,12 +156,12 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                       </Component>
                       <Component className=\\"contestentry-rank\\">
                         <pre className=\\"bp3-code-block contestentry-rank\\">
-                          <Blueprint3.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter rank for entry 2\\" min={1} max={2} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
+                          <Blueprint3.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter score for entry 2\\" min={9} max={10} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
                             <Blueprint3.ControlGroup className=\\"bp3-numeric-input\\" fill={true}>
                               <div className=\\"bp3-control-group bp3-fill bp3-numeric-input\\">
-                                <Blueprint3.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 2\\" min={1} max={2} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
+                                <Blueprint3.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
                                   <div className=\\"bp3-input-group\\">
-                                    <input type=\\"text\\" autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter rank for entry 2\\" min={1} max={2} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} />
+                                    <input type=\\"text\\" autoComplete=\\"off\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} />
                                   </div>
                                 </Blueprint3.InputGroup>
                                 <Blueprint3.ButtonGroup className=\\"bp3-fixed\\" vertical={true}>

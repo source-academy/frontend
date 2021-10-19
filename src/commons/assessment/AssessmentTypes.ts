@@ -55,6 +55,7 @@ W* Used to display information regarding an assessment in the UI.
  */
 export type AssessmentOverview = {
   type: AssessmentType;
+  isManuallyGraded: boolean;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
@@ -111,12 +112,14 @@ export interface IProgrammingQuestion extends BaseQuestion {
 export interface IMCQQuestion extends BaseQuestion {
   answer: number | null;
   choices: MCQChoice[];
-  solution: number | null;
+  solution?: number;
   type: 'mcq';
 }
 
 export interface IContestVotingQuestion extends BaseQuestion {
   answer: ContestEntry[];
+  prepend: string;
+  postpend: string;
   contestEntries: ContestEntry[];
   contestLeaderboard: ContestEntry[];
   type: 'voting';
@@ -169,8 +172,8 @@ export type Testcase = {
 export type ContestEntry = {
   submission_id: number;
   answer: ContestEntryCodeAnswer; //contest entry program to be input into editor
-  rank?: number;
   score?: number;
+  final_score?: number;
   student_name?: string;
 };
 
@@ -224,6 +227,7 @@ export const normalLibrary = (): Library => {
 export const overviewTemplate = (): AssessmentOverview => {
   return {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,

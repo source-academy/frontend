@@ -7,6 +7,7 @@ import {
   AssessmentOverview,
   ContestEntry,
   GradingStatus,
+  IContestVotingQuestion,
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes
@@ -28,6 +29,7 @@ import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/Sour
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
+  backendifyAchievementItem,
   backendifyGoalDefinition,
   frontendifyAchievementGoal,
   frontendifyAchievementItem
@@ -313,12 +315,12 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
   const users = await resp.json();
 
   return users.map(
-    (user: any) =>
-      ({
-        name: user.name,
-        courseRegId: user.courseRegId,
-        group: user.group
-      } as AchievementUser)
+    (user: any): AchievementUser => ({
+      name: user.name,
+      courseRegId: user.courseRegId,
+      group: user.group,
+      username: user.username
+    })
   );
 };
 
@@ -331,7 +333,7 @@ export async function bulkUpdateAchievements(
 ): Promise<Response | null> {
   const resp = await request(`${courseId()}/admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { achievements: achievements },
+    body: { achievements: achievements.map(achievement => backendifyAchievementItem(achievement)) },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -456,7 +458,35 @@ export const getAssessmentOverviews = async (
       overview.gradedCount,
       overview.questionCount
     );
-    delete overview.isManuallyGraded;
+    delete overview.gradedCount;
+    delete overview.questionCount;
+
+    return overview as AssessmentOverview;
+  });
+};
+
+/**
+ * GET /courses/{courseId}/admin/users/{course_reg_id}/assessments
+ */
+export const getUserAssessmentOverviews = async (
+  courseRegId: number,
+  tokens: Tokens
+): Promise<AssessmentOverview[] | null> => {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}/assessments`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const assessmentOverviews = await resp.json();
+  return assessmentOverviews.map((overview: any) => {
+    overview.gradingStatus = computeGradingStatus(
+      overview.isManuallyGraded,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -509,6 +539,12 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       question.postpend = question.postpend || '';
       question.testcases = question.testcases || [];
       q = question;
+    }
+
+    if (q.type === QuestionTypes.voting) {
+      const question = q as IContestVotingQuestion;
+      question.prepend = question.prepend || '';
+      question.postpend = question.postpend || '';
     }
 
     // If the backend returns :nil (null) for grader, then the question is not graded
@@ -1265,14 +1301,26 @@ export const request = async (
       return resp;
     }
 
-    if (!resp || !resp.ok) {
-      throw new Error('API call failed or got non-OK response');
+    if (!resp.ok) {
+      showWarningMessage(
+        opts.errorMessage
+          ? opts.errorMessage
+          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
+              resp.status === 401 || resp.status === 403
+                ? '; try logging in again, after manually saving any work.'
+                : ''
+            }`
+      );
+      return null;
     }
 
     return resp;
   } catch (e) {
-    store.dispatch(actions.logOut());
-    showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
+    showWarningMessage(
+      opts.errorMessage
+        ? opts.errorMessage
+        : 'Error while communicating with backend; check your network?'
+    );
 
     return null;
   }

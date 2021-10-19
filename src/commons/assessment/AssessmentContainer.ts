@@ -1,5 +1,4 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
@@ -9,21 +8,12 @@ import {
 } from '../application/actions/SessionActions';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import Assessment, { DispatchProps, OwnProps, StateProps } from './Assessment';
-import { AssessmentOverview } from './AssessmentTypes';
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
-  const categoryFilter = (overview: AssessmentOverview) =>
-    overview.type === props.assessmentConfiguration.type;
-  const stateProps: StateProps = {
-    assessmentOverviews: state.session.assessmentOverviews
-      ? state.session.assessmentOverviews.filter(categoryFilter)
-      : undefined,
-    isStudent: state.session.role ? state.session.role === Role.Student : true,
-    courseId: state.session.courseId
-  };
-  return stateProps;
-};
-
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => ({
+  assessmentOverviews: state.session.assessmentOverviews,
+  isStudent: state.session.role ? state.session.role === Role.Student : true,
+  courseId: state.session.courseId
+});
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
@@ -34,6 +24,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const AssessmentContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Assessment));
+const AssessmentContainer = connect(mapStateToProps, mapDispatchToProps)(Assessment);
 
 export default AssessmentContainer;

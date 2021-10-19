@@ -15,7 +15,6 @@ import {
   logoutGoogle
 } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   setEditorSessionId,
   setSharedbConnected
@@ -33,7 +32,6 @@ import {
   clearReplOutput,
   evalEditor,
   evalRepl,
-  externalLibrarySelect,
   navigateToDeclaration,
   promptAutocomplete,
   sendReplInputToOutput,
@@ -85,7 +83,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   courseSourceChapter: state.session.sourceChapter,
   courseSourceVariant: state.session.sourceVariant,
   sharedbConnected: state.workspaces.playground.sharedbConnected,
-  externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.workspaces.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
@@ -118,8 +115,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),

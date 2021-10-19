@@ -8,6 +8,7 @@ import {
   getAchievements,
   getGoals,
   getOwnGoals,
+  getUserAssessmentOverviews,
   getUsers,
   updateGoalProgress
 } from '../../../features/achievement/AchievementActions';
@@ -19,7 +20,9 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   name: state.session.name,
   role: state.session.role,
   assessmentOverviews: state.session.assessmentOverviews,
-  users: state.achievement.users
+  achievementAssessmentOverviews: state.achievement.assessmentOverviews,
+  users: state.achievement.users,
+  assessmentConfigs: state.session.assessmentConfigurations
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
@@ -29,6 +32,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       getAchievements,
       getGoals,
       getOwnGoals,
+      getUserAssessmentOverviews,
       getUsers,
       updateGoalProgress
     },

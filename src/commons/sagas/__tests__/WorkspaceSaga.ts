@@ -1,8 +1,9 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { ErrorSeverity, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
+import { Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { updateInfiniteLoopEncountered } from 'src/commons/application/actions/SessionActions';
 
 import {
   beginInterruptExecution,
@@ -21,9 +22,7 @@ import {
   BEGIN_INTERRUPT_EXECUTION,
   DEBUG_RESET,
   DEBUG_RESUME,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS
+  EVAL_INTERPRETER_ERROR
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
@@ -31,7 +30,7 @@ import { mockTestcases } from '../../mocks/GradingMocks';
 import {
   InfiniteLoopErrorType,
   reportInfiniteLoopError,
-  reportPotentialInfiniteLoop
+  reportNonErrorProgram
 } from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
@@ -41,7 +40,6 @@ import {
   clearReplOutput,
   clearReplOutputLast,
   endClearContext,
-  evalTestcase,
   highlightEditorLine,
   moveCursor,
   sendReplInputToOutput
@@ -51,16 +49,17 @@ import {
   CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
   CLEAR_REPL_OUTPUT,
+  END_CLEAR_CONTEXT,
   EVAL_EDITOR,
+  EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
-  RUN_ALL_TESTCASES,
   TOGGLE_EDITOR_AUTORUN,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
-import workspaceSaga, { evalCode, evalTestCode } from '../WorkspaceSaga';
+import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from '../WorkspaceSaga';
 
 function generateDefaultState(
   workspaceLocation: WorkspaceLocation,
@@ -71,7 +70,8 @@ function generateDefaultState(
     session: {
       ...defaultState.session,
       agreedToResearch: false,
-      experimentCoinflip: true
+      experimentCoinflip: true,
+      sessionId: 10
     },
     workspaces: {
       ...defaultState.workspaces,
@@ -170,6 +170,9 @@ describe('EVAL_EDITOR', () => {
         .dispatch({
           type: EVAL_EDITOR,
           payload: { workspaceLocation }
+        })
+        .dispatch({
+          type: END_CLEAR_CONTEXT
         })
         .silentRun()
     );
@@ -331,8 +334,9 @@ describe('EVAL_TESTCASE', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    const library = {
+    const library: Library = {
       chapter: context.chapter,
+      variant: 'default',
       external: {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
@@ -353,10 +357,10 @@ describe('EVAL_TESTCASE', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
-        // Should not interrupt execution, clear context or clear REPL
+        // Should interrupt execution and clear context but not clear REPL
         .not.put(beginInterruptExecution(workspaceLocation))
-        .not.put(beginClearContext(workspaceLocation, library, false))
-        .not.put(clearReplOutput(workspaceLocation))
+        .put(beginClearContext(workspaceLocation, library, false))
+        .not.put.actionType(CLEAR_REPL_OUTPUT)
         // Expect it to shard a new privileged context here and execute chunks in order
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
@@ -396,6 +400,9 @@ describe('EVAL_TESTCASE', () => {
         .dispatch({
           type: EVAL_TESTCASE,
           payload: { workspaceLocation, testcaseId }
+        })
+        .dispatch({
+          type: END_CLEAR_CONTEXT
         })
         .silentRun()
     );
@@ -612,6 +619,7 @@ describe('evalCode', () => {
   let options: Partial<IOptions>;
   let lastDebuggerResult: Result;
   let state: OverallState;
+  let defaultSessionId: number;
 
   beforeEach(() => {
     workspaceLocation = 'assessment';
@@ -629,6 +637,7 @@ describe('evalCode', () => {
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
+    defaultSessionId = state.session.sessionId;
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
@@ -720,6 +729,8 @@ describe('evalCode', () => {
           .withState(state)
           .call(
             reportInfiniteLoopError,
+            defaultSessionId,
+            true,
             InfiniteLoopErrorType.NoBaseCase,
             false,
             'The function f has encountered an infinite loop. It has no base case.',
@@ -741,6 +752,8 @@ describe('evalCode', () => {
         .withState(state)
         .not.call(
           reportInfiniteLoopError,
+          defaultSessionId,
+          true,
           InfiniteLoopErrorType.NoBaseCase,
           false,
           'The function f has encountered an infinite loop. It has no base case.',
@@ -779,19 +792,53 @@ describe('evalCode', () => {
         });
     });
 
-    test('undetected stack overflows sent to sentry', () => {
+    test('infinite loops call updateInfiniteLoopEncountered', () => {
       state = {
         ...state,
         session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
       };
-      context = createContext(3);
-      const theCode = 'function f(x){x<1?1:f(x-1)+f(x-2);} f(100000);';
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){f(x);}f(1);';
 
       return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
         .withState(state)
-        .call(reportPotentialInfiniteLoop, 'RangeError: Maximum call stack size exceeded', [
-          theCode
-        ])
+        .put(updateInfiniteLoopEncountered())
+        .silentRun();
+    });
+
+    test('reports non error code to sentry after infinite loop', () => {
+      state = {
+        ...state,
+        session: {
+          ...state.session,
+          hadPreviousInfiniteLoop: true,
+          agreedToResearch: true,
+          experimentCoinflip: true
+        }
+      };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){return 1;}f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .call(reportNonErrorProgram, defaultSessionId, [theCode])
+        .silentRun();
+    });
+
+    test('does not report non error code before infinite loop', () => {
+      state = {
+        ...state,
+        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+      };
+      const thisContext = createContext(3);
+      context = thisContext;
+      const theCode = 'function f(x){return 1;}f(1);';
+
+      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .not.call(reportNonErrorProgram, defaultSessionId, [theCode])
         .silentRun();
     });
   });
@@ -1038,36 +1085,33 @@ describe('NAV_DECLARATION', () => {
   });
 });
 
-describe('RUN_ALL_TESTCASES', () => {
+describe('EVAL_EDITOR_AND_TESTCASES', () => {
   let workspaceLocation: WorkspaceLocation;
-  let value: string;
   let state: OverallState;
 
   beforeEach(() => {
     workspaceLocation = 'assessment';
-    value = 'test value';
     state = generateDefaultState(workspaceLocation);
   });
 
-  test('does not put evalTestcase when there are no testcases', () => {
+  test('does not call runTestCase when there are no testcases', () => {
     state = generateDefaultState(workspaceLocation, {
       editorTestcases: []
     });
 
     return expectSaga(workspaceSaga)
       .withState(state)
+      .call.fn(evalEditor)
       .not.call.fn(showSuccessMessage)
-      .not.put.actionType(EVAL_TESTCASE)
+      .not.call.fn(runTestCase)
       .dispatch({
-        type: RUN_ALL_TESTCASES,
+        type: EVAL_EDITOR_AND_TESTCASES,
         payload: { workspaceLocation }
       })
       .silentRun();
   });
 
-  test('puts evalTestcase when there are testcases', () => {
-    const type = 'result';
-
+  test('calls runTestCase when there are testcases', () => {
     state = generateDefaultState(workspaceLocation, {
       editorTestcases: mockTestcases
     });
@@ -1075,45 +1119,25 @@ describe('RUN_ALL_TESTCASES', () => {
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
-        type: RUN_ALL_TESTCASES,
+        type: EVAL_EDITOR_AND_TESTCASES,
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
-      .put(evalTestcase(workspaceLocation, 0))
-      .dispatch({
-        type: EVAL_TESTCASE_SUCCESS,
-        payload: { type, value, workspaceLocation, index: 0 }
-      })
-      .put(evalTestcase(workspaceLocation, 1))
-      .dispatch({
-        type: EVAL_TESTCASE_SUCCESS,
-        payload: { type, value, workspaceLocation, index: 0 }
-      })
-      .put(evalTestcase(workspaceLocation, 2))
-      .dispatch({
-        type: EVAL_TESTCASE_SUCCESS,
-        payload: { type, value, workspaceLocation, index: 0 }
-      })
-      .put(evalTestcase(workspaceLocation, 3))
-      .silentRun();
+      .call.fn(evalEditor)
+      .call(runTestCase, workspaceLocation, 0)
+      .call(runTestCase, workspaceLocation, 1)
+      .call(runTestCase, workspaceLocation, 2)
+      .call(runTestCase, workspaceLocation, 3)
+      .provide([
+        [call(runTestCase, workspaceLocation, 0), true],
+        [call(runTestCase, workspaceLocation, 1), true],
+        [call(runTestCase, workspaceLocation, 2), true],
+        [call(runTestCase, workspaceLocation, 3), true]
+      ])
+      .silentRun(2000);
   });
 
   test('prematurely terminates if execution of one testcase results in an error', () => {
-    const type = 'error';
-    const mockErrors: SourceError[] = [
-      {
-        type: ErrorType.RUNTIME,
-        severity: ErrorSeverity.ERROR,
-        location: { start: { line: 1, column: 5 }, end: { line: 1, column: 5 } },
-        explain() {
-          return `Name func not declared.`;
-        },
-        elaborate() {
-          return `Name func not declared.`;
-        }
-      }
-    ];
-
     state = generateDefaultState(workspaceLocation, {
       editorTestcases: mockTestcases.slice(0, 2)
     });
@@ -1121,16 +1145,16 @@ describe('RUN_ALL_TESTCASES', () => {
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
-        type: RUN_ALL_TESTCASES,
+        type: EVAL_EDITOR_AND_TESTCASES,
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
-      .put(evalTestcase(workspaceLocation, 0))
-      .dispatch({
-        type: EVAL_TESTCASE_FAILURE,
-        payload: { type, mockErrors, workspaceLocation, index: 0 }
-      })
-      .not.put(evalTestcase(workspaceLocation, 1))
-      .silentRun();
+      .call.fn(evalEditor)
+      .call(runTestCase, workspaceLocation, 0)
+      .not.call(runTestCase, workspaceLocation, 1)
+      .not.call(runTestCase, workspaceLocation, 2)
+      .not.call(runTestCase, workspaceLocation, 3)
+      .provide([[call(runTestCase, workspaceLocation, 0), false]])
+      .silentRun(2000);
   });
 });

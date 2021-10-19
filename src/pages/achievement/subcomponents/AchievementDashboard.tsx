@@ -1,7 +1,10 @@
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import {
+  AssessmentConfiguration,
+  AssessmentOverview
+} from 'src/commons/assessment/AssessmentTypes';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -20,8 +23,9 @@ import {
 export type DispatchProps = {
   fetchAssessmentOverviews: () => void;
   getAchievements: () => void;
-  getGoals: (studentId: number) => void;
+  getGoals: (studentCourseRegId: number) => void;
   getOwnGoals: () => void;
+  getUserAssessmentOverviews: (studentCourseRegId: number) => void;
   getUsers: () => void;
   updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
@@ -32,7 +36,9 @@ export type StateProps = {
   id?: number;
   name?: string;
   role?: Role;
+  assessmentConfigs?: AssessmentConfiguration[];
   assessmentOverviews?: AssessmentOverview[];
+  achievementAssessmentOverviews: AssessmentOverview[];
   users: AchievementUser[];
 };
 
@@ -62,6 +68,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     getAchievements,
     getOwnGoals,
     getGoals,
+    getUserAssessmentOverviews,
     getUsers,
     updateGoalProgress,
     fetchAssessmentOverviews,
@@ -69,7 +76,9 @@ function Dashboard(props: DispatchProps & StateProps) {
     inferencer,
     name,
     role,
+    assessmentConfigs,
     assessmentOverviews,
+    achievementAssessmentOverviews,
     users
   } = props;
 
@@ -82,22 +91,30 @@ function Dashboard(props: DispatchProps & StateProps) {
    */
   useEffect(() => {
     selectedUser ? getGoals(selectedUser.courseRegId) : getOwnGoals();
+
+    selectedUser
+      ? getUserAssessmentOverviews(selectedUser.courseRegId)
+      : fetchAssessmentOverviews();
+
     getAchievements();
-  }, [selectedUser, getAchievements, getGoals, getOwnGoals]);
+  }, [
+    selectedUser,
+    getAchievements,
+    getGoals,
+    getOwnGoals,
+    getUserAssessmentOverviews,
+    fetchAssessmentOverviews
+  ]);
 
-  useEffect(() => {
-    if (name && role && !assessmentOverviews) {
-      // If assessment overviews are not loaded, fetch them
-      fetchAssessmentOverviews();
-    }
-  }, [assessmentOverviews, fetchAssessmentOverviews, name, role]);
+  const userAssessmentOverviews = selectedUser
+    ? achievementAssessmentOverviews
+    : assessmentOverviews;
 
-  // one goal for submit, one goal for graded
-  if (role === Role.Student) {
-    assessmentOverviews?.forEach(assessmentOverview =>
-      insertFakeAchievements(assessmentOverview, inferencer)
-    );
-  }
+  // inserts assessment achievements for each assessment retrieved
+  // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
+  userAssessmentOverviews &&
+    assessmentConfigs &&
+    insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
@@ -116,8 +133,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview
-          name={name || 'User'}
-          studio={role === Role.Student ? (group ? group : 'Student') : 'Staff'}
+          name={selectedUser ? selectedUser.name || selectedUser.username : name || 'User'}
         />
         {role && role !== Role.Student && (
           <AchievementManualEditor

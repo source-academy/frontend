@@ -30,7 +30,7 @@ export const frontendifyAchievementGoal = (goal: any) =>
       : goal.meta) as GoalMeta,
     count: goal.count,
     targetCount: goal.targetCount,
-    completed: goal.completed
+    completed: goal.count >= goal.targetCount
   } as AchievementGoal);
 
 export const frontendifyAchievementItem = (achievement: any) =>
@@ -52,3 +52,9 @@ export const frontendifyAchievementItem = (achievement: any) =>
       description: achievement.view.description || ''
     }
   } as AchievementItem);
+
+export const backendifyAchievementItem = (achievement: AchievementItem) => ({
+  ...achievement,
+  deadline: achievement.deadline ? achievement.deadline : null,
+  release: achievement.release ? achievement.release : null
+});

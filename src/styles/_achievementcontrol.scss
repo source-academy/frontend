@@ -76,6 +76,7 @@
 
       .no-view {
         align-items: center;
+        text-shadow: black 1px 1px;
         color: white;
         display: flex;
         flex-direction: column;
@@ -83,6 +84,7 @@
       }
 
       .view {
+        text-shadow: black 1px 1px;
         color: white;
         display: flex;
         flex-direction: column;

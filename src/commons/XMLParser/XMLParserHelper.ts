@@ -69,6 +69,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
   const rawOverview: XmlParseStrOverview = task.$;
   return {
     type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
+    isManuallyGraded: true, // TODO: This is temporarily hardcoded to true. To be redone when overhauling MissionControl
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     id: EDITING_ID,

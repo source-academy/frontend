@@ -1,7 +1,7 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
 
 import {
@@ -30,11 +30,14 @@ const Academy: React.FC<{}> = () => {
     dispatch(fetchNotifications());
   }, [dispatch]);
 
-  const { assessmentConfigurations, enableGame, role } = useSelector((state: OverallState) => ({
-    assessmentConfigurations: state.session.assessmentConfigurations,
-    enableGame: state.session.enableGame,
-    role: state.session.role
-  }));
+  const { assessmentConfigurations, enableGame, role } = useSelector(
+    (state: OverallState) => ({
+      assessmentConfigurations: state.session.assessmentConfigurations,
+      enableGame: state.session.enableGame,
+      role: state.session.role
+    }),
+    shallowEqual
+  );
 
   const staffRoutes =
     role !== 'student'

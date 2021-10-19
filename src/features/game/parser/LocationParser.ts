@@ -65,12 +65,13 @@ export default class LocationParser {
         location.talkTopics = new Set(talkTopics);
         break;
       case 'preview':
-        const [previewKey] = configValues;
-        if (previewKey) {
+        const [previewPath] = configValues;
+        if (previewPath) {
+          const previewKey = '/preview' + previewPath;
           Parser.checkpoint.map.addMapAsset(previewKey, {
             type: AssetType.Image,
             key: location.id + 'Preview',
-            path: previewKey
+            path: previewPath
           });
           location.previewKey = previewKey;
         }

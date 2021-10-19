@@ -175,6 +175,7 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
               <AssessmentConfigPanel {...assessmentConfigPanelProps} />
               <Button
                 text="Save"
+                style={{ marginTop: '15px' }}
                 intent={
                   hasChangesCourseConfig || hasChangesAssessmentConfig
                     ? Intent.WARNING

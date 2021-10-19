@@ -669,7 +669,14 @@ function* BackendSaga(): SagaIterator {
         return yield handleResponseError(resp);
       }
 
-      yield put(actions.setAssessmentConfigurations(assessmentConfigs));
+      const updatedAssessmentConfigs: AssessmentConfiguration[] | null = yield call(
+        getAssessmentConfigs,
+        tokens
+      );
+
+      if (updatedAssessmentConfigs) {
+        yield put(actions.setAssessmentConfigurations(updatedAssessmentConfigs));
+      }
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );

@@ -259,11 +259,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = React.useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
-    props.handleEditorEval();
-
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
       props.handleRunAllTestcases();
+    } else {
+      props.handleEditorEval();
     }
 
     const input: Input = {
@@ -326,6 +326,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           })
         );
       }
+    }
+
+    if (question.type === QuestionTypes.voting) {
+      const questionData = question as IContestVotingQuestion;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
     }
 
     props.handleEditorUpdateBreakpoints([]);
@@ -528,15 +534,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     const onClickPrevious = () => {
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-      if (isMobileBreakpoint) {
-        setSelectedTab(SideContentType.questionOverview);
-      }
+      setSelectedTab(SideContentType.questionOverview);
     };
     const onClickNext = () => {
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-      if (isMobileBreakpoint) {
-        setSelectedTab(SideContentType.questionOverview);
-      }
+      setSelectedTab(SideContentType.questionOverview);
     };
     const onClickReturn = () => history.push(listingPath);
 

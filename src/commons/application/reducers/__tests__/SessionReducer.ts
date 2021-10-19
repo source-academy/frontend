@@ -23,6 +23,7 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
+  UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
@@ -312,6 +313,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
 const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
     type: 'Missions',
+    isManuallyGraded: true,
     closeAt: 'test_string',
     coverImage: 'test_string',
     id: 0,
@@ -329,6 +331,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
 const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
     type: 'Contests',
+    isManuallyGraded: true,
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
@@ -533,6 +536,19 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
+});
+
+test('UPDATE_INFINITE_LOOP_ENCOUNTERED works correctly in updating had infinite loop flag', () => {
+  const newDefaultSession = {
+    ...defaultSession,
+    hadPreviousInfiniteLoop: false
+  };
+  const action = {
+    type: UPDATE_INFINITE_LOOP_ENCOUNTERED
+  };
+  const result: SessionState = SessionsReducer(newDefaultSession, action);
+
+  expect(result.hadPreviousInfiniteLoop).toEqual(true);
 });
 
 test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
