@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import arrayMove from 'array-move';
+import arrayMoveImmutable from 'array-move';
 import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
