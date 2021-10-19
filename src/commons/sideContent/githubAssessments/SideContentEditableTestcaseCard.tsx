@@ -43,6 +43,7 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
       deleteTestcase
     } = props;
 
+    // TODO (Refactor): testcase type seems unused in GitHub Assessments
     const extraClasses = React.useMemo(() => {
       const isEvaluated = testcase.result !== undefined || testcase.errors;
       const isEqual = stringify(testcase.result) === testcase.answer;
@@ -50,7 +51,7 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<SideContentEditab
       return {
         correct: isEvaluated && isEqual,
         wrong: isEvaluated && !isEqual,
-        private: testcase.type === TestcaseTypes.private
+        secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque
       };
     }, [testcase]);
 

@@ -40,9 +40,22 @@ export const saveState = (state: OverallState) => {
       session: {
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken,
+        courseRegId: state.session.courseRegId,
         role: state.session.role,
         name: state.session.name,
-        userId: state.session.userId
+        userId: state.session.userId,
+        courses: state.session.courses,
+        courseId: state.session.courseId,
+        courseName: state.session.courseName,
+        courseShortName: state.session.courseShortName,
+        viewable: state.session.viewable,
+        enableGame: state.session.enableGame,
+        enableAchievements: state.session.enableAchievements,
+        enableSourcecast: state.session.enableSourcecast,
+        moduleHelpText: state.session.moduleHelpText,
+        assetsPrefix: state.session.assetsPrefix,
+        assessmentConfigurations: state.session.assessmentConfigurations,
+        githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,

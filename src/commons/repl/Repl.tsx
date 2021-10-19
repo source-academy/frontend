@@ -78,7 +78,7 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       if (props.usingSubst && props.output.value instanceof Array) {
         return (
           <Card>
-            <Pre className="logOutput">Check out the substituter tab!</Pre>
+            <Pre className="logOutput">Check out the Stepper tab!</Pre>
           </Card>
         );
       } else if (props.output.consoleLogs.length === 0) {

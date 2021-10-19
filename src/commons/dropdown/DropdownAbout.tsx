@@ -26,7 +26,7 @@ const DropdownAbout: React.SFC<DialogProps> = props => (
           in their web browser, using sublanguages of JavaScript called{' '}
           <a href={Links.sourceDocs}>Source</a>, designed for the textbook{' '}
           <a href={Links.textbook}>
-            Structure and Interpretation of Computer Programs, JavaScript Adaptation
+            Structure and Interpretation of Computer Programs, JavaScript Edition
           </a>
           .
         </p>

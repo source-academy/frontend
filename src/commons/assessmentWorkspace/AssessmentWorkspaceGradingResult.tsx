@@ -10,8 +10,6 @@ type StateProps = {
   graderName: string;
   gradedAt: string;
   xp: number;
-  grade: number;
-  maxGrade: number;
   maxXp: number;
   comments?: string;
 };
@@ -26,15 +24,6 @@ class AssessmentWorkspaceGradingResult extends React.Component<
         <div className="grading-result-table">
           <HTMLTable>
             <tbody>
-              <tr>
-                <th>Grade:</th>
-                <td>
-                  <Text>
-                    {this.props.grade} / {this.props.maxGrade}
-                  </Text>
-                </td>
-              </tr>
-
               <tr>
                 <th>XP:</th>
                 <td>

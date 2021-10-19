@@ -3,6 +3,5 @@
 exports[`initial state should match a snapshot 1`] = `
 Object {
   "environment": "test",
-  "title": "Cadet",
 }
 `;

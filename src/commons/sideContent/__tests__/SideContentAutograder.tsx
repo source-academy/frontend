@@ -38,30 +38,32 @@ const publicTestcaseCardClasses = [
   'AutograderCard wrong'
 ];
 
-// The four hidden testcases have statuses: (none), correct, incorrect and error
-const mockHiddenTestcases: Testcase[] = [
+// The four opaque testcases have statuses: (none), correct, incorrect and error
+const mockOpaqueTestcases: Testcase[] = [
   { program: `add(3, 0);`, score: 1, answer: `3` },
   { program: `add(5, 2);`, score: 1, answer: `7`, result: 7 },
   { program: `add(-6, 6);`, score: 2, answer: `0`, result: 12 },
   { program: `add(-4, -7);`, score: 3, answer: `-11`, errors: mockErrors }
 ].map(proto => {
-  return { ...proto, type: TestcaseTypes.hidden };
+  return { ...proto, type: TestcaseTypes.opaque };
 });
 
-const hiddenTestcaseCardClasses = publicTestcaseCardClasses.slice(1);
+const opaqueTestcaseCardClasses = publicTestcaseCardClasses
+  .slice(1)
+  .map(classes => `${classes} secret`);
 
 // The five testcases have statuses: correct, (none), correct, incorrect and error
-const mockPrivateTestcases: Testcase[] = [
+const mockSecretTestcases: Testcase[] = [
   { program: `"lorem";`, score: 0, answer: `"lorem"`, result: `lorem` },
   { program: `is_prime(2);`, score: 1, answer: `true` },
   { program: `is_prime(3);`, score: 1, answer: `true`, result: true },
   { program: `is_prime(4);`, score: 2, answer: `false`, result: true },
   { program: `is_prime(5);`, score: 3, answer: `true`, errors: mockErrors }
 ].map(proto => {
-  return { ...proto, type: TestcaseTypes.private };
+  return { ...proto, type: TestcaseTypes.secret };
 });
 
-const privateTestcaseCardClasses = publicTestcaseCardClasses.map(classes => `${classes} private`);
+const secretTestcaseCardClasses = publicTestcaseCardClasses.map(classes => `${classes} secret`);
 
 const mockAutogradingResults: AutogradingResult[] = mockGrading[0].question.autogradingResults;
 
@@ -89,6 +91,7 @@ test('Autograder renders placeholders correctly when testcases and results are e
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: [],
+    workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
@@ -108,6 +111,7 @@ test('Autograder renders public testcases with different statuses correctly', ()
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockPublicTestcases,
+    workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
@@ -144,10 +148,11 @@ test('Autograder renders public testcases with different statuses correctly', ()
   ]);
 });
 
-test('Autograder renders hidden testcases with different statuses correctly', () => {
+test('Autograder renders opaque testcases with different statuses correctly in AssessmentWorkspace', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
-    testcases: mockHiddenTestcases,
+    testcases: mockOpaqueTestcases,
+    workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
@@ -160,17 +165,47 @@ test('Autograder renders hidden testcases with different statuses correctly', ()
   //    Correct CSS styling applied to each Card (by className)
   const cards = tree.find('.AutograderCard');
   expect(cards).toHaveLength(4);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(hiddenTestcaseCardClasses);
+  expect(cards.map(node => node.getDOMNode().className)).toEqual(opaqueTestcaseCardClasses);
   cards.forEach(card => {
     const placeholder = card.find('.testcase-placeholder').hostNodes().getDOMNode();
     expect(placeholder.textContent).toEqual('Hidden testcase');
   });
 });
 
-test('Autograder renders private testcases with different statuses correctly', () => {
+test('Autograder renders opaque testcases with different statuses correctly in GradingWorkspace', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
-    testcases: mockPrivateTestcases,
+    testcases: mockOpaqueTestcases,
+    workspaceLocation: 'grading',
+    handleTestcaseEval: (testcaseId: number) => {}
+  };
+  const app = <SideContentAutograder {...props} />;
+  const tree = mount(app);
+  expect(tree.debug()).toMatchSnapshot();
+  // No autograder result Card components should be rendered
+  expect(tree.find('.ResultCard')).toHaveLength(0);
+  // Expect each of the four testcases to have:
+  //    A placeholder cell rendered in place of the actual testcase data
+  //    Correct CSS styling applied to each Card (by className)
+  const cards = tree.find('.AutograderCard');
+  expect(cards).toHaveLength(4);
+  expect(cards.map(node => node.getDOMNode().className)).toEqual(opaqueTestcaseCardClasses);
+  const resultCells = cards.map(card => {
+    return card.find('.testcase-actual').hostNodes().getDOMNode();
+  });
+  expect(resultCells.map(node => node.textContent)).toEqual([
+    'No Answer',
+    '7',
+    '12',
+    'Line 3: Name a not declared.'
+  ]);
+});
+
+test('Autograder renders secret testcases with different statuses correctly', () => {
+  const props: SideContentAutograderProps = {
+    autogradingResults: [],
+    testcases: mockSecretTestcases,
+    workspaceLocation: 'grading',
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
@@ -186,7 +221,7 @@ test('Autograder renders private testcases with different statuses correctly', (
   //    Correct CSS styling applied to each Card (by className)
   const cards = tree.find('.AutograderCard');
   expect(cards).toHaveLength(5);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(privateTestcaseCardClasses);
+  expect(cards.map(node => node.getDOMNode().className)).toEqual(secretTestcaseCardClasses);
   const resultCells = cards.map(card => {
     return card.find('.testcase-actual').hostNodes().getDOMNode();
   });
@@ -205,6 +240,7 @@ test('Autograder renders autograder results with different statuses correctly', 
   const props: SideContentAutograderProps = {
     autogradingResults: mockAutogradingResults,
     testcases: [],
+    workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;

@@ -4,10 +4,10 @@
   "3": { "next": "3.1", "prev": "2.5.3" },
   "4": { "next": "4.1", "prev": "3.5.5" },
   "5": { "next": "5.1", "prev": "4.4.4" },
-  "foreword": { "next": "prefaces03", "prev": "index" },
-  "prefaces03": { "next": "prefaces84", "prev": "foreword" },
-  "prefaces84": { "next": "prefaces96", "prev": "prefaces03" },
-  "prefaces96": { "next": "acknowledgements", "prev": "prefaces84" },
+  "foreword02": { "next": "foreword84", "prev": "index" },
+  "foreword84": { "next": "prefaces03", "prev": "foreword02" },
+  "prefaces03": { "next": "prefaces96", "prev": "foreword84" },
+  "prefaces96": { "next": "acknowledgements", "prev": "prefaces03" },
   "acknowledgements": { "next": "1", "prev": "prefaces96" },
   "1.1": { "next": "1.1.1", "prev": "1" },
   "1.1.1": { "next": "1.1.2", "prev": "1.1" },
@@ -127,5 +127,5 @@
   "5.5.7": { "next": "references", "prev": "5.5.6" },
   "references": { "next": "making-of", "prev": "5.5.7" },
   "making-of": { "prev": "references" },
-  "index": { "next": "foreword" }
+  "index": { "next": "foreword02" }
 }

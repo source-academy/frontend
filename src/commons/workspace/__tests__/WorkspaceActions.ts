@@ -2,7 +2,6 @@ import { createDefaultWorkspace, SourceLanguage } from '../../application/Applic
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
-import { SideContentType } from '../../sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -21,7 +20,6 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
-  fetchSublanguage,
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
@@ -31,7 +29,6 @@ import {
   setEditorBreakpoint,
   toggleEditorAutorun,
   toggleUsingSubst,
-  updateActiveTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -56,7 +53,6 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
-  FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -65,7 +61,6 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -379,18 +374,6 @@ test('resetWorkspace generates correct action object with provided workspace', (
   });
 });
 
-test('updateActiveTab generates correct action object', () => {
-  const activeTab = SideContentType.questionOverview;
-  const action = updateActiveTab(activeTab, playgroundWorkspace);
-  expect(action).toEqual({
-    type: UPDATE_ACTIVE_TAB,
-    payload: {
-      activeTab,
-      workspaceLocation: playgroundWorkspace
-    }
-  });
-});
-
 test('updateCurrentAssessmentId generates correct action object', () => {
   const assessmentId = 2;
   const questionId = 4;
@@ -450,13 +433,6 @@ test('moveCursor generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       cursorPosition
     }
-  });
-});
-
-test('fetchSublanguage generates correct action object', () => {
-  const action = fetchSublanguage();
-  expect(action).toEqual({
-    type: FETCH_SUBLANGUAGE
   });
 });
 

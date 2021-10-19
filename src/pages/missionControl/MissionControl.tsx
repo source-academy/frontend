@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import {
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentType,
   AssessmentWorkspaceParams
 } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -15,16 +16,18 @@ import Constants from '../../commons/utils/Constants';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
-export type MissionControlProps = DispatchProps & RouteComponentProps<AssessmentWorkspaceParams>;
+export type MissionControlProps = StateProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
-export type DispatchProps = {
-  handleAssessmentOverviewFetch: () => void;
+export type StateProps = {
+  assessmentTypes: AssessmentType[];
 };
 
 type State = {
   editOverview: string;
   editingOverview: AssessmentOverview | null;
 };
+
+const nullFunction = () => {};
 
 class MissionControl extends React.Component<MissionControlProps, State> {
   public constructor(props: MissionControlProps) {
@@ -66,6 +69,7 @@ class MissionControl extends React.Component<MissionControlProps, State> {
             overview={this.state.editingOverview}
             updateEditingOverview={this.updateEditingOverview}
             listingPath="/mission-control"
+            assessmentTypes={this.props.assessmentTypes}
           />
         )}
       </>
@@ -74,10 +78,7 @@ class MissionControl extends React.Component<MissionControlProps, State> {
     // Finally, render the ContentDisplay.
     return (
       <div className="Assessment Academy">
-        <ContentDisplay
-          display={display}
-          loadContentDispatch={this.props.handleAssessmentOverviewFetch}
-        />
+        <ContentDisplay display={display} loadContentDispatch={nullFunction} />
       </div>
     );
   }

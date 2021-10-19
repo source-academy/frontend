@@ -21,7 +21,6 @@ import {
   setSharedbConnected
 } from '../../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../../commons/editor/EditorTypes';
-import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -35,17 +34,14 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchSublanguage,
   navigateToDeclaration,
   promptAutocomplete,
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
   toggleUsingSubst,
-  updateActiveTab,
   updateEditorValue,
-  updateReplValue,
-  updateWorkspace
+  updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
@@ -84,8 +80,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   shortURL: state.playground.shortURL,
   replValue: state.workspaces.sicp.replValue,
   sideContentHeight: state.workspaces.sicp.sideContentHeight,
-  sourceChapter: state.workspaces.sicp.context.chapter,
-  sourceVariant: state.workspaces.sicp.context.variant,
+  playgroundSourceChapter: state.workspaces.sicp.context.chapter,
+  playgroundSourceVariant: state.workspaces.sicp.context.variant,
   sharedbConnected: state.workspaces.sicp.sharedbConnected,
   externalLibraryName: state.workspaces.sicp.externalLibrary,
   usingSubst: state.workspaces.sicp.usingSubst,
@@ -100,8 +96,6 @@ const workspaceLocation: WorkspaceLocation = 'sicp';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) =>
@@ -111,7 +105,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
-      handleFetchSublanguage: fetchSublanguage,
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
@@ -122,10 +115,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleGenerateLz: generateLzString,
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
-      handleUpdatePrepend: (s: string) =>
-        updateWorkspace(workspaceLocation, {
-          editorPrepend: s
-        }),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
@@ -144,7 +133,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
-      handleFetchChapter: fetchSublanguage,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handlePersistenceOpenPicker: persistenceOpenPicker,

@@ -75,7 +75,7 @@ class GameSoundManager {
   public loadSounds(soundAssets: SoundAsset[]) {
     soundAssets.forEach(asset => {
       this.addSoundAsset(asset);
-      this.loadSound(asset.key, toS3Path(asset.path));
+      this.loadSound(asset.key, toS3Path(asset.path, true));
     });
   }
 
@@ -87,7 +87,7 @@ class GameSoundManager {
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
     Object.values(assetMap).forEach(asset => {
       this.addSoundAsset(asset);
-      this.loadSound(asset.key, toS3Path(asset.path));
+      this.loadSound(asset.key, toS3Path(asset.path, false));
     });
   }
 
@@ -187,6 +187,8 @@ class GameSoundManager {
       duration: fadeDuration
     });
 
+    // TODO: fix `TypeError: Cannot read property 'disconnect' of null` error
+    // when user navigates away from game scene before fadeDuration * 2
     setTimeout(() => sound.destroy(), fadeDuration * 2);
   }
 

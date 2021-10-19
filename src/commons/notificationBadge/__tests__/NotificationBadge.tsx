@@ -1,6 +1,5 @@
 import { mount } from 'enzyme';
 
-import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadge from '../NotificationBadge';
 import {
   filterNotificationsByAssessment,
@@ -14,28 +13,28 @@ const notifications: Notification[] = [
     id: 1,
     type: 'new',
     assessment_id: 1,
-    assessment_type: 'Mission',
+    assessment_type: 'Missions',
     assessment_title: 'The Secret to Streams'
   },
   {
     id: 2,
     type: 'graded',
     assessment_id: 1,
-    assessment_type: 'Mission',
+    assessment_type: 'Missions',
     assessment_title: 'The Secret to Streams'
   },
   {
     id: 3,
     type: 'autograded',
     assessment_id: 1,
-    assessment_type: 'Mission',
+    assessment_type: 'Missions',
     assessment_title: 'The Secret to Streams'
   },
   {
     id: 4,
     type: 'unsubmitted',
     assessment_id: 1,
-    assessment_type: 'Mission',
+    assessment_type: 'Missions',
     assessment_title: 'The Secret to Streams'
   }
 ];
@@ -93,7 +92,7 @@ describe('Badge with filter,', () => {
       <NotificationBadge
         notifications={notifications}
         handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
+        notificationFilter={filterNotificationsByType('Missions')}
       />
     );
     expect(tree.debug()).toMatchSnapshot();

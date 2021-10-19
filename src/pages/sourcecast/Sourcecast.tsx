@@ -43,7 +43,6 @@ export type SourcecastProps = DispatchProps &
   RouteComponentProps<{ sourcecastId: string }>;
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number) => void;
@@ -104,12 +103,12 @@ export type StateProps = {
   playbackData: PlaybackData;
   playbackStatus: PlaybackStatus;
   replValue: string;
-  sideContentActiveTab: SideContentType;
   sideContentHeight?: number;
   sourcecastIndex: SourcecastData[] | null;
   sourceChapter: number;
   sourceVariant: Variant;
   uid: string | null;
+  courseId?: number;
 };
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
@@ -118,7 +117,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
    * which contains the ag-grid table of available Sourcecasts. This is intentional
-   * to avoid an ag-grid console warning. For more info, see issue #1152 in cadet-frontend.
+   * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
 
@@ -155,7 +154,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
     switch (inputToApply.type) {
       case 'activeTabChange':
-        props.handleActiveTabChange(inputToApply.data);
+        setSelectedTab(inputToApply.data);
         break;
       case 'chapterSelect':
         props.handleChapterSelect(inputToApply.data);
@@ -181,7 +180,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.introduction);
-      props.handleActiveTabChange(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
@@ -251,6 +249,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
           <SourceRecorderTable
             handleSetSourcecastData={props.handleSetSourcecastData}
             sourcecastIndex={props.sourcecastIndex}
+            courseId={props.courseId}
           />
         </div>
       ),
@@ -315,9 +314,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     replProps: replProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
-      handleActiveTabChange: props.handleActiveTabChange,
-      // selectedTabId: props.sideContentActiveTab,
-      selectedTabId: selectedTab, // track selectedTab in this component instead of Redux store
+      selectedTabId: selectedTab,
       onChange: onChangeTabs,
       tabs: tabs,
       workspaceLocation: 'sourcecast'
@@ -336,9 +333,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       mobileControlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
-      defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: tabs,
       workspaceLocation: 'sourcecast',

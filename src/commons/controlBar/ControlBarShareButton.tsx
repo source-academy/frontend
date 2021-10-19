@@ -40,12 +40,6 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
   }
 
   public render() {
-    let url = '';
-    const { urlShortener } = Constants;
-    if (urlShortener) {
-      url = urlShortener.split('/').slice(0, -1).join('/') + '/';
-    }
-
     const shareButtonPopoverContent =
       this.props.queryString === undefined ? (
         <Text>
@@ -66,7 +60,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
           {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
             !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
               <div>
-                {url}&nbsp;
+                {Constants.urlShortenerBase}&nbsp;
                 <input
                   placeholder={'custom string (optional)'}
                   onChange={this.handleChange}

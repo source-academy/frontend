@@ -6,14 +6,12 @@ import { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {
-  AchievementAbility,
   AchievementItem,
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
-import EditableAbility from './EditableAbility';
 import {
   EditableCardAction as Action,
   EditableCardActionType as ActionType,
@@ -50,14 +48,6 @@ const reducer = (state: State, action: Action) => {
       return {
         ...state,
         isDirty: false
-      };
-    case ActionType.CHANGE_ABILITY:
-      return {
-        editableAchievement: {
-          ...state.editableAchievement,
-          ability: action.payload
-        },
-        isDirty: true
       };
     case ActionType.CHANGE_CARD_BACKGROUND:
       return {
@@ -155,7 +145,7 @@ function EditableCard(props: EditableCardProps) {
   const [state, dispatch] = useReducer(reducer, achievementClone, init);
   const [isNew, setIsNew] = useState<boolean>(isNewAchievement);
   const { editableAchievement, isDirty } = state;
-  const { ability, cardBackground, deadline, release, title, view, xp } = editableAchievement;
+  const { cardBackground, deadline, release, title, view, xp } = editableAchievement;
 
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
@@ -180,9 +170,6 @@ function EditableCard(props: EditableCardProps) {
     removeCard(uuid);
     requestPublish();
   };
-
-  const changeAbility = (ability: AchievementAbility) =>
-    dispatch({ type: ActionType.CHANGE_ABILITY, payload: ability });
 
   const changeCardBackground = (cardBackground: string) =>
     dispatch({ type: ActionType.CHANGE_CARD_BACKGROUND, payload: cardBackground });
@@ -245,7 +232,6 @@ function EditableCard(props: EditableCardProps) {
           </Tooltip2>
         </div>
         <div className="details">
-          <EditableAbility ability={ability} changeAbility={changeAbility} />
           <EditableDate changeDate={changeRelease} date={release} type="Release" />
           <EditableDate changeDate={changeDeadline} date={deadline} type="Deadline" />
         </div>

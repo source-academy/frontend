@@ -118,6 +118,7 @@ const SideContentTestcaseEditor: React.FunctionComponent<SideContentTestcaseEdit
               index={index}
               testcase={testcase}
               handleTestcaseEval={handleTestcaseEval}
+              workspaceLocation="githubAssessment"
             />
           );
         }

@@ -5,7 +5,8 @@ import {
   ForkEffect,
   HelperWorkerParameters,
   takeEvery,
-  takeLatest
+  takeLatest,
+  takeLeading
 } from 'redux-saga/effects';
 
 // it's not possible to abstract the two functions into HOF over takeEvery and takeLatest
@@ -71,4 +72,26 @@ export function safeTakeLatest<P extends ActionPattern, Fn extends (...args: any
     }
   }
   return takeLatest<P, typeof wrappedWorker>(pattern, wrappedWorker, ...args);
+}
+
+export function safeTakeLeading<P extends ActionPattern, A extends ActionMatchingPattern<P>>(
+  pattern: P,
+  worker: (action: A) => any
+): ForkEffect<never>;
+export function safeTakeLeading<P extends ActionPattern, Fn extends (...args: any[]) => any>(
+  pattern: P,
+  worker: Fn,
+  ...args: HelperWorkerParameters<ActionMatchingPattern<P>, Fn>
+): ForkEffect<never> {
+  function* wrappedWorker(...args: HelperWorkerParameters<ActionMatchingPattern<P>, Fn>) {
+    try {
+      const result = worker(...args);
+      if (isIterator(result)) {
+        yield* result;
+      }
+    } catch (error) {
+      handleUncaughtError(error);
+    }
+  }
+  return takeLeading<P, typeof wrappedWorker>(pattern, wrappedWorker, ...args);
 }

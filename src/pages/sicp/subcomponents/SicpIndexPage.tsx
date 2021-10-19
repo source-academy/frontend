@@ -31,7 +31,7 @@ const authors = (
 const bookTitle = (
   <div>
     <H1>Structure and Interpretation of Computer Programs</H1>
-    <H2>— JavaScript Adaptation</H2>
+    <H2>— JavaScript Edition</H2>
   </div>
 );
 

@@ -1,3 +1,4 @@
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { action } from 'typesafe-actions';
 
 import {
@@ -7,12 +8,11 @@ import {
   ADD_EVENT,
   BULK_UPDATE_ACHIEVEMENTS,
   BULK_UPDATE_GOALS,
-  EDIT_ACHIEVEMENT,
-  EDIT_GOAL,
   EventType,
   GET_ACHIEVEMENTS,
   GET_GOALS,
   GET_OWN_GOALS,
+  GET_USER_ASSESSMENT_OVERVIEWS,
   GET_USERS,
   GoalDefinition,
   GoalProgress,
@@ -21,6 +21,7 @@ import {
   REMOVE_GOAL,
   SAVE_ACHIEVEMENTS,
   SAVE_GOALS,
+  SAVE_USER_ASSESSMENT_OVERVIEWS,
   SAVE_USERS,
   UPDATE_GOAL_PROGRESS,
   UPDATE_OWN_GOAL_PROGRESS
@@ -31,16 +32,14 @@ export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
 
 export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_GOALS, goals);
 
-export const editAchievement = (achievement: AchievementItem) =>
-  action(EDIT_ACHIEVEMENT, achievement);
-
-export const editGoal = (definition: GoalDefinition) => action(EDIT_GOAL, definition);
-
 export const getAchievements = () => action(GET_ACHIEVEMENTS);
 
-export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
+export const getGoals = (studentCourseRegId: number) => action(GET_GOALS, studentCourseRegId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
+
+export const getUserAssessmentOverviews = (studentCourseRegId: number) =>
+  action(GET_USER_ASSESSMENT_OVERVIEWS, studentCourseRegId);
 
 export const getUsers = () => action(GET_USERS);
 
@@ -55,8 +54,8 @@ export const addEvent = (eventNames: EventType[]) => action(ADD_EVENT, eventName
 
 export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
 
-export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
-  action(UPDATE_GOAL_PROGRESS, { studentId, progress });
+export const updateGoalProgress = (studentCourseRegId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentCourseRegId, progress });
 
 /*
   Note: This updates the frontend Achievement Redux store.
@@ -76,3 +75,10 @@ export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals)
   Please refer to AchievementReducer to find out more. 
 */
 export const saveUsers = (users: AchievementUser[]) => action(SAVE_USERS, users);
+
+/*
+  Note: This updates the frontend Achievement Redux store.
+  Please refer to AchievementReducer to find out more. 
+*/
+export const saveUserAssessmentOverviews = (assessmentOverviews: AssessmentOverview[]) =>
+  action(SAVE_USER_ASSESSMENT_OVERVIEWS, assessmentOverviews);

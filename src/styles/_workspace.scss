@@ -958,7 +958,7 @@ $code-color-error: #ff4444;
       }
     }
 
-    &.private > .#{$ns}-card {
+    &.secret > .#{$ns}-card {
       background-color: rgba(192, 192, 192, 0.2);
     }
 
@@ -1085,11 +1085,11 @@ $code-color-error: #ff4444;
       animation: 4s wrong;
     }
 
-    &.correct.private > .#{$ns}-card {
+    &.correct.secret > .#{$ns}-card {
       animation: 4s correct, 4s private-revert 4s forwards;
     }
 
-    &.wrong.private > .#{$ns}-card {
+    &.wrong.secret > .#{$ns}-card {
       animation: 4s wrong, 4s private-revert 4s forwards;
     }
   }
@@ -1164,11 +1164,11 @@ $code-color-error: #ff4444;
       animation: 4s wrong;
     }
 
-    &.correct.private > .#{$ns}-card {
+    &.correct.secret > .#{$ns}-card {
       animation: 4s correct, 4s private-revert 4s forwards;
     }
 
-    &.wrong.private > .#{$ns}-card {
+    &.wrong.secret > .#{$ns}-card {
       animation: 4s wrong, 4s private-revert 4s forwards;
     }
   }

@@ -15,8 +15,10 @@ type DispatchProps = {
 type StateProps = {
   canSave: boolean;
   isValid: boolean;
-  handleVotingSubmissionChange: (entryId: number, rank: number) => void;
+  handleVotingSubmissionChange: (entryId: number, score: number) => void;
   contestEntries: ContestEntry[];
+  minScore: number;
+  maxScore: number;
 };
 
 /*
@@ -32,12 +34,8 @@ const columnHeader = (colClass: string, colTitle: string) => (
 const contestEntryHeader = (
   <div className="contestentries-header">
     {columnHeader('header-entryid', 'Entry Id')}
-    {columnHeader('header-entryrank', 'Rank')}
+    {columnHeader('header-entryrank', 'Score')}
   </div>
-);
-
-const contestEntryTooltipContent = (numOfEntries: number) => (
-  <span>Rank your favourite contest entries from 1 (best) to {numOfEntries} (worst)!</span>
 );
 
 /**
@@ -51,7 +49,9 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     canSave,
     isValid,
     handleContestEntryClick,
-    handleVotingSubmissionChange
+    handleVotingSubmissionChange,
+    maxScore,
+    minScore
   } = props;
   const [showContestEntries, setShowContestEntries] = useState<boolean>(true);
 
@@ -69,7 +69,8 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
               handleContestEntryClick={handleContestEntryClick}
               handleVotingSubmissionChange={handleVotingSubmissionChange}
               contestEntry={contestEntry}
-              maxRank={contestEntries.length}
+              minScore={minScore}
+              maxScore={maxScore}
             />
           ))
         ) : (
@@ -78,7 +79,15 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
       </div>
     ),
     // determines when to re-render
-    [isValid, canSave, contestEntries, handleContestEntryClick, handleVotingSubmissionChange]
+    [
+      isValid,
+      canSave,
+      contestEntries,
+      handleContestEntryClick,
+      handleVotingSubmissionChange,
+      maxScore,
+      minScore
+    ]
   );
 
   return (
@@ -90,7 +99,13 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         onClick={() => setShowContestEntries(!showContestEntries)}
       >
         <span>Contest Voting</span>
-        <Tooltip2 content={contestEntryTooltipContent(contestEntries.length)}>
+        <Tooltip2
+          content={
+            <span>
+              Score your favourite contest entries from {minScore} (worst) to {maxScore} (best)!
+            </span>
+          }
+        >
           <Icon icon={IconNames.HELP} />
         </Tooltip2>
       </Button>

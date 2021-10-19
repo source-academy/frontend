@@ -11,6 +11,7 @@ import { ArrayValue } from './values/ArrayValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
+import { UnassignedValue } from './values/UnassignedValue';
 import { Value } from './values/Value';
 
 /** a `binding` is a key-value pair in a frame */
@@ -33,7 +34,8 @@ export class Binding implements Visible {
     /** frame this binding is in */
     readonly frame: Frame,
     /** previous binding (the binding above it) */
-    readonly prevBinding: Binding | null
+    readonly prevBinding: Binding | null,
+    readonly isConstant: boolean = false
   ) {
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
@@ -44,7 +46,7 @@ export class Binding implements Visible {
       this.y = this.frame.y + Config.FramePaddingY;
     }
 
-    this.keyString += Config.VariableColon;
+    this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
     const keyYOffset =
@@ -71,7 +73,9 @@ export class Binding implements Visible {
       <React.Fragment key={Layout.key++}>
         {this.key.draw()}
         {isMainReference(this.value, this) ? this.value.draw() : null}
-        {this.value instanceof PrimitiveValue || Arrow.from(this.key).to(this.value).draw()}
+        {this.value instanceof PrimitiveValue ||
+          this.value instanceof UnassignedValue ||
+          Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
     );
   }

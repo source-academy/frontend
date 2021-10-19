@@ -13,10 +13,12 @@ import {
   OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
+import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
 describe('Playground saga tests', () => {
+  Constants.urlShortenerBase = 'http://url-shortener.com/';
   const errMsg = 'Something went wrong trying to create the link.';
 
   test('puts changeQueryString action with undefined argument when passed the default value', () => {

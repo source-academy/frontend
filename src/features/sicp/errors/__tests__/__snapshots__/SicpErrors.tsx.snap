@@ -4,7 +4,7 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+      <Blueprint3.Icon icon=\\"error\\" size={60}>
         <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <desc>
@@ -23,8 +23,8 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
     <div>
       We could not find the page you were looking for. Please check the URL again. If you believe the URL is correct, kindly let us know by filing an issue at
        
-      <a href=\\"https://github.com/source-academy/cadet-frontend\\">
-        https://github.com/source-academy/cadet-frontend
+      <a href=\\"https://github.com/source-academy/frontend\\">
+        https://github.com/source-academy/frontend
       </a>
       .
     </div>
@@ -36,7 +36,7 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+      <Blueprint3.Icon icon=\\"error\\" size={60}>
         <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <desc>
@@ -55,8 +55,8 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
     <div>
       Something unexpected went wrong trying to load this page. Please try refreshing the page. If the issue persists, kindly let us know by filing an issue at
        
-      <a href=\\"https://github.com/source-academy/cadet-frontend\\">
-        https://github.com/source-academy/cadet-frontend
+      <a href=\\"https://github.com/source-academy/frontend\\">
+        https://github.com/source-academy/frontend
       </a>
       .
     </div>
@@ -68,7 +68,7 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" iconSize={60}>
+      <Blueprint3.Icon icon=\\"error\\" size={60}>
         <span icon=\\"error\\" className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <desc>
@@ -87,8 +87,8 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
     <div>
       An error occured while loading the page. Kindly let us know by filing an issue at
        
-      <a href=\\"https://github.com/source-academy/cadet-frontend\\">
-        https://github.com/source-academy/cadet-frontend
+      <a href=\\"https://github.com/source-academy/frontend\\">
+        https://github.com/source-academy/frontend
       </a>
        
       and we will get it fixed as soon as possible.

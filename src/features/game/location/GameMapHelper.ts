@@ -8,6 +8,7 @@ export function createEmptyLocation(): GameLocation {
     id: '',
     name: '',
     assetKey: '',
+    previewKey: null,
     modes: new Set([]),
     navigation: new Set([]),
     talkTopics: new Set([]),

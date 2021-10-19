@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
+import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
@@ -17,16 +18,12 @@ import {
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
-import {
-  externalLibraries,
-  ExternalLibraryName
-} from '../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
-import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -39,11 +36,9 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import Constants, { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
@@ -63,14 +58,11 @@ export type PlaygroundProps = OwnProps & DispatchProps & StateProps & RouteCompo
 export type OwnProps = {
   isSicpEditor?: boolean;
   initialEditorValueHash?: string;
-  initialPrependHash?: string | undefined;
-  initialFullProgramHash?: string;
-
+  prependLength?: number;
   handleCloseEditor?: () => void;
 };
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -82,12 +74,10 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFetchSublanguage: () => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -100,7 +90,6 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
-  handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handlePersistenceOpenPicker: () => void;
   handlePersistenceSaveFile: () => void;
@@ -133,11 +122,12 @@ export type StateProps = {
   shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
-  sourceChapter: number;
-  sourceVariant: Variant;
+  playgroundSourceChapter: number;
+  playgroundSourceVariant: Variant;
+  courseSourceChapter?: number;
+  courseSourceVariant?: Variant;
   stepLimit: number;
   sharedbConnected: boolean;
-  externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
@@ -165,12 +155,6 @@ function handleHash(hash: string, props: PlaygroundProps) {
     props.handleChapterSelect(chapter, variant);
   }
 
-  const ext =
-    Object.values(ExternalLibraryName).find(v => v === qs.ext) || ExternalLibraryName.NONE;
-  if (ext) {
-    props.handleExternalSelect(ext, true);
-  }
-
   const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
   if (execTime) {
     props.handleChangeExecTime(execTime);
@@ -178,7 +162,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const { isSicpEditor, initialPrependHash, handleUpdatePrepend } = props;
+  const { isSicpEditor } = props;
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -189,61 +173,40 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       editorValue: propsRef.current.editorValue,
-      externalLibrary: propsRef.current.externalLibraryName,
-      chapter: propsRef.current.sourceChapter
+      chapter: propsRef.current.playgroundSourceChapter
     })
   );
 
   const usingRemoteExecution =
     useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
-
-  React.useEffect(() => {
-    // Fixes some errors with runes and curves (see PR #1420)
-    propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
-
-    // Only fetch default Playground sublanguage when not loaded via a share link
-    if (!propsRef.current.location.hash) {
-      propsRef.current.handleFetchSublanguage();
-    }
-  }, []);
+  // this is still used by remote execution (EV3)
+  // specifically, for the editor Ctrl+B to work
+  const externalLibraryName = useSelector(
+    (state: OverallState) => state.workspaces.playground.externalLibrary
+  );
 
   React.useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
         editorValue: propsRef.current.editorValue,
-        externalLibrary: propsRef.current.externalLibraryName,
-        chapter: propsRef.current.sourceChapter
+        chapter: propsRef.current.playgroundSourceChapter
       })
     );
   }, [props.editorSessionId]);
-  React.useEffect(() => {
-    if (!usingRemoteExecution && !externalLibraries.has(props.externalLibraryName)) {
-      propsRef.current.handleExternalSelect(ExternalLibraryName.NONE, true);
-    }
-  }, [usingRemoteExecution, props.externalLibraryName]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
 
   React.useEffect(() => {
     if (!hash) {
+      // If not a accessing via shared link, use the Source chapter and variant in the current course
+      if (props.courseSourceChapter && props.courseSourceVariant) {
+        propsRef.current.handleChapterSelect(props.courseSourceChapter, props.courseSourceVariant);
+      }
       return;
     }
     handleHash(hash, propsRef.current);
-  }, [hash]);
-
-  // Add prepend if exists.
-  React.useEffect(() => {
-    if (!initialPrependHash || !handleUpdatePrepend) {
-      return;
-    }
-
-    const prepend = decompressFromEncodedURIComponent(initialPrependHash);
-
-    if (prepend) {
-      handleUpdatePrepend(prepend);
-    }
-  }, [handleUpdatePrepend, initialPrependHash]);
+  }, [hash, props.courseSourceChapter, props.courseSourceVariant]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -254,7 +217,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       (selectedTab === SideContentType.introduction ||
         selectedTab === SideContentType.remoteExecution)
     ) {
-      props.handleActiveTabChange(SideContentType.mobileEditor);
       setSelectedTab(SideContentType.mobileEditor);
     } else if (
       !isMobileBreakpoint &&
@@ -262,9 +224,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.introduction);
-      props.handleActiveTabChange(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab]);
 
   const handlers = React.useMemo(
     () => ({
@@ -288,7 +249,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         return;
       }
 
-      const { handleUsingSubst, handleReplOutputClear, sourceChapter } = propsRef.current;
+      const { handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } = propsRef.current;
 
       /**
        * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
@@ -299,7 +260,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           newTabId === SideContentType.mobileEditorRun
         )
       ) {
-        if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
+        if (playgroundSourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
           handleUsingSubst(true);
         }
 
@@ -395,13 +356,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
-        sourceChapter={props.sourceChapter}
-        sourceVariant={props.sourceVariant}
+        sourceChapter={props.playgroundSourceChapter}
+        sourceVariant={props.playgroundSourceVariant}
         key="chapter"
         disabled={usingRemoteExecution}
       />
     ),
-    [chapterSelectHandler, props.sourceChapter, props.sourceVariant, usingRemoteExecution]
+    [
+      chapterSelectHandler,
+      props.playgroundSourceChapter,
+      props.playgroundSourceVariant,
+      usingRemoteExecution
+    ]
   );
 
   const clearButton = React.useMemo(
@@ -510,36 +476,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [props.handleChangeStepLimit, props.stepLimit]
   );
 
-  const { handleExternalSelect, externalLibraryName, handleEditorValueChange } = props;
-
-  const handleExternalSelectAndRecord = React.useCallback(
-    (name: ExternalLibraryName) => {
-      handleExternalSelect(name);
-
-      const input: Input = {
-        time: Date.now(),
-        type: 'externalLibrarySelect',
-        data: name
-      };
-
-      pushLog(input);
-    },
-    [handleExternalSelect, pushLog]
-  );
-
-  const externalLibrarySelect = React.useMemo(
-    () => (
-      <ControlBarExternalLibrarySelect
-        externalLibraryName={externalLibraryName}
-        handleExternalSelect={({ name }: { name: ExternalLibraryName }, e: any) =>
-          handleExternalSelectAndRecord(name)
-        }
-        key="external_library"
-        disabled={usingRemoteExecution}
-      />
-    ),
-    [externalLibraryName, handleExternalSelectAndRecord, usingRemoteExecution]
-  );
+  const { handleEditorValueChange } = props;
 
   // No point memoing this, it uses props.editorValue
   const sessionButtons = (
@@ -554,7 +491,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const shareButton = React.useMemo(() => {
     const queryString = isSicpEditor
-      ? Links.playground + '#' + props.initialFullProgramHash
+      ? Links.playground + '#' + props.initialEditorValueHash
       : props.queryString;
     return (
       <ControlBarShareButton
@@ -572,7 +509,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleGenerateLz,
     props.handleShortenURL,
     props.handleUpdateShortURL,
-    props.initialFullProgramHash,
+    props.initialEditorValueHash,
     props.queryString,
     props.shortURL
   ]);
@@ -583,51 +520,37 @@ const Playground: React.FC<PlaygroundProps> = props => {
       iconName: IconNames.HOME,
       body: (
         <Markdown
-          content={generateSourceIntroduction(props.sourceChapter, props.sourceVariant)}
+          content={generateSourceIntroduction(
+            props.playgroundSourceChapter,
+            props.playgroundSourceVariant
+          )}
           openLinksInNewWindow={true}
         />
       ),
       id: SideContentType.introduction,
       toSpawn: () => true
     }),
-    [props.sourceChapter, props.sourceVariant]
+    [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    // Conditional logic for tab rendering
-    if (
-      props.externalLibraryName === ExternalLibraryName.PIXNFLIX ||
-      props.externalLibraryName === ExternalLibraryName.ALL
-    ) {
-      // Enable video tab only when 'PIX&FLIX' is selected
-      tabs.push({
-        label: 'Video Display',
-        iconName: IconNames.MOBILE_VIDEO,
-        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-        toSpawn: () => true
-      });
-    }
-    if (props.externalLibraryName === ExternalLibraryName.MACHINELEARNING) {
-      // Enable Face API Display only when 'MACHINELEARNING' is selected
-      tabs.push(FaceapiDisplayTab);
-    }
-    if (props.sourceChapter >= 2 && !usingRemoteExecution) {
+    if (props.playgroundSourceChapter >= 2 && !usingRemoteExecution) {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(dataVisualizerTab);
     }
     if (
-      props.sourceChapter >= 3 &&
-      props.sourceVariant !== 'concurrent' &&
-      props.sourceVariant !== 'non-det' &&
+      props.playgroundSourceChapter >= 3 &&
+      props.playgroundSourceVariant !== 'concurrent' &&
+      props.playgroundSourceVariant !== 'non-det' &&
       !usingRemoteExecution
     ) {
       // Enable Env Visualizer for Source Chapter 3 and above
       tabs.push(envVisualizerTab);
     }
 
-    if (props.sourceChapter <= 2 && props.sourceVariant === 'default') {
+    if (props.playgroundSourceChapter <= 2 && props.playgroundSourceVariant === 'default') {
       // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push({
         label: 'Stepper',
@@ -646,17 +569,27 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [
     isSicpEditor,
     playgroundIntroductionTab,
-    props.externalLibraryName,
-    props.handleSendReplInputToOutput,
     props.output,
-    props.sourceChapter,
-    props.sourceVariant,
+    props.playgroundSourceChapter,
+    props.playgroundSourceVariant,
     usingRemoteExecution
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(
     x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
+  );
+
+  const onLoadMethod = React.useCallback(
+    (editor: Ace.Editor) => {
+      const addFold = () => {
+        editor.getSession().addFold('    ', new Range(1, 0, props.prependLength!, 0));
+        editor.renderer.off('afterRender', addFold);
+      };
+
+      editor.renderer.on('afterRender', addFold);
+    },
+    [props.prependLength]
   );
 
   const onChangeMethod = React.useCallback(
@@ -710,7 +643,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
       if (numberOfBreakpoints > 0) {
         setHasBreakpoints(true);
-        if (propsRef.current.sourceChapter <= 2) {
+        if (propsRef.current.playgroundSourceChapter <= 2) {
           /**
            * There are breakpoints set on Source Chapter 2, so we set the
            * Redux state for the editor to evaluate to the substituter
@@ -732,15 +665,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.sourceVariant === 'concurrent' || usingRemoteExecution;
+  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
-    sourceChapter: props.sourceChapter,
-    externalLibraryName: props.externalLibraryName,
-    sourceVariant: props.sourceVariant,
+    onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
+    sourceChapter: props.playgroundSourceChapter,
+    externalLibraryName,
+    sourceVariant: props.playgroundSourceVariant,
     editorValue: props.editorValue,
     editorSessionId: props.editorSessionId,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
@@ -757,9 +691,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const replProps = {
-    sourceChapter: props.sourceChapter,
-    sourceVariant: props.sourceVariant,
-    externalLibrary: props.externalLibraryName,
+    sourceChapter: props.playgroundSourceChapter,
+    sourceVariant: props.playgroundSourceVariant,
+    externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     output: props.output,
     replValue: props.replValue,
     handleBrowseHistoryDown: props.handleBrowseHistoryDown,
@@ -779,7 +713,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         autorunButtons,
         shareButton,
         chapterSelect,
-        props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
@@ -795,9 +728,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replProps: replProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
-      defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
@@ -813,16 +744,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons
         ]
       },
-      defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
-      handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs: mobileTabs,
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
@@ -848,13 +776,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer,
-  toSpawn: () => true
-};
-
-const FaceapiDisplayTab: SideContentTab = {
-  label: 'Face API Display',
-  iconName: IconNames.MUGSHOT,
-  body: <SideContentFaceapiDisplay />,
   toSpawn: () => true
 };
 

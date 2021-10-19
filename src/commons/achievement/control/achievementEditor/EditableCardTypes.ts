@@ -1,11 +1,6 @@
-import {
-  AchievementAbility,
-  AchievementItem,
-  AchievementView
-} from 'src/features/achievement/AchievementTypes';
+import { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
 
 export enum EditableCardActionType {
-  CHANGE_ABILITY = 'CHANGE_ABILITY',
   CHANGE_CARD_BACKGROUND = 'CHANGE_CARD_BACKGROUND',
   CHANGE_DEADLINE = 'CHANGE_DEADLINE',
   CHANGE_GOAL_UUIDS = 'CHANGE_GOAL_UUIDS',
@@ -22,10 +17,6 @@ export enum EditableCardActionType {
 }
 
 export type EditableCardAction =
-  | {
-      type: EditableCardActionType.CHANGE_ABILITY;
-      payload: AchievementAbility;
-    }
   | {
       type: EditableCardActionType.CHANGE_CARD_BACKGROUND;
       payload: string;

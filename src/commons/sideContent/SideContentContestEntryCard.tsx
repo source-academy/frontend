@@ -16,7 +16,8 @@ type StateProps = {
   isValid: boolean;
   contestEntry: ContestEntry;
   entryNumber: number;
-  maxRank: number;
+  minScore: number;
+  maxScore: number;
 };
 
 /**
@@ -33,7 +34,8 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
       handleVotingSubmissionChange,
       contestEntry,
       entryNumber,
-      maxRank
+      minScore,
+      maxScore
     } = props;
 
     return (
@@ -49,13 +51,13 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
           <Pre className="contestentry-rank">
             <NumericInput
               disabled={!canSave}
-              value={contestEntry.rank}
-              onValueChange={(rank: number) =>
-                handleVotingSubmissionChange(contestEntry.submission_id, rank)
+              value={contestEntry.score}
+              onValueChange={(score: number) =>
+                handleVotingSubmissionChange(contestEntry.submission_id, score)
               }
-              placeholder={`Enter rank for entry ${entryNumber}`}
-              min={1}
-              max={maxRank}
+              placeholder={`Enter score for entry ${entryNumber}`}
+              min={minScore}
+              max={maxScore}
               allowNumericCharactersOnly
               fill
               minorStepSize={null} // limits input to integers

@@ -1,5 +1,6 @@
 import { mount } from 'enzyme';
 import lzString from 'lz-string';
+import { BrowserRouter } from 'react-router-dom';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
 import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
@@ -7,27 +8,27 @@ import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } fro
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];
 const listTags = ['OL', 'UL'];
-const symbolTags = ['BR', 'LaTeX', 'TeX'];
+const symbolTags = ['BR'];
 const stylingTags = ['B', 'EM', 'JAVASCRIPTINLINE', 'TT', 'META'];
-const latexTags = ['LATEX', 'LATEXINLINE'];
 const linkTags = ['LINK', 'REF', 'FOOTNOTE_REF'];
 
 const epigraphTag = 'EPIGRAPH';
 const tableTag = 'TABLE';
 const exerciseTag = 'EXERCISE';
-const sectionTag = 'SECTION';
+const titleTag = 'TITLE';
 const snippetTag = 'SNIPPET';
 const figureTag = 'FIGURE';
 const displayFootnoteTag = 'DISPLAYFOOTNOTE';
 const referenceTag = 'REFERENCE';
 const textTag = '#text';
+const latexTag = 'LATEX';
 const unknownTag = 'unknown';
 
 jest.mock('src/commons/utils/Constants', () => ({
   Links: {
     sourceDocs: ''
   },
-  interactiveSicpDataUrl: 'https://source-academy.github.io/sicp/'
+  sicpBackendUrl: 'https://source-academy.github.io/sicp/'
 }));
 
 jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => (props: CodeSnippetProps) => {
@@ -55,7 +56,7 @@ const processTag = (tag: string, obj: JsonType) => {
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = mount(processTag(tag, obj));
+    const tree = mount(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
 
     expect(tree.debug()).toMatchSnapshot();
   });
@@ -75,11 +76,9 @@ describe('Parse heading', () => {
   tags.forEach(x => testTagSuccessful(obj, x));
 });
 
-describe('Parse section', () => {
-  const tag = sectionTag;
-  const text = { tag: 'TEXT', child: [mockData['text'], mockData['text']] };
-  const content = [text, text];
-  const obj = { body: 'Title', child: content };
+describe('Parse title', () => {
+  const tag = titleTag;
+  const obj = { body: 'Title' };
 
   testTagSuccessful(obj, tag);
 });
@@ -155,16 +154,13 @@ describe('Parse exercise', () => {
 
 describe('Parse snippet', () => {
   const tag = snippetTag;
-  const body = '1 + 1;';
+  const body = 'const a = 1;\na+1;';
   const output = '2';
-  const prependString = 'const a = 1;';
-  const withoutPrepend = lzString.compressToEncodedURIComponent(body);
-  const program = lzString.compressToEncodedURIComponent(prependString + '\n' + body);
-  const prepend = lzString.compressToEncodedURIComponent(prependString);
+  const program = lzString.compressToEncodedURIComponent(body);
 
   const base = {
     id: 'id',
-    withoutPrepend: withoutPrepend,
+    program: program,
     body: body
   };
 
@@ -184,8 +180,7 @@ describe('Parse snippet', () => {
   const objWithPrepend = objWithText(
     {
       ...base,
-      program: program,
-      prepend: prepend
+      prependLength: 1
     },
     'with prepend'
   );
@@ -291,13 +286,16 @@ describe('Parse footnote', () => {
 });
 
 describe('Parse latex', () => {
-  const tag = latexTags;
-  const math = '$test$';
-  const obj = {
-    body: math
+  const tag = latexTag;
+  const inline = {
+    body: '$test$'
+  };
+  const block = {
+    body: '\\[test\\]'
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag, ''));
+  testTagSuccessful(inline, tag, 'inline');
+  testTagSuccessful(block, tag, 'block');
 });
 
 describe('Parse links', () => {
@@ -310,7 +308,9 @@ describe('Parse links', () => {
     href: href
   };
 
-  tag.forEach(tag => testTagSuccessful(obj, tag));
+  tag.forEach(tag => {
+    testTagSuccessful(obj, tag);
+  });
 });
 
 describe('Parse reference', () => {

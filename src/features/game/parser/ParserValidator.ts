@@ -102,6 +102,8 @@ export default class ParserValidator {
   public assertItemType(gameItemType: GameItemType, itemId: ItemId, actionType?: string) {
     if (gameItemType === GameItemType.talkTopics) {
       gameItemType = GameItemType.dialogues;
+    } else if (gameItemType === GameItemType.navigation) {
+      gameItemType = GameItemType.locations;
     }
     if (!this.gameItemAsserts.get(gameItemType)) {
       this.gameItemAsserts.set(gameItemType, []);

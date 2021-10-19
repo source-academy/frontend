@@ -22,9 +22,9 @@ function AchievementCard(props: AchievementCardProps) {
 
   const [focusUuid, setFocusUuid] = focusState;
 
-  const { ability, cardBackground, title } = inferencer.getAchievement(uuid);
+  const { cardBackground, title } = inferencer.getAchievement(uuid);
   const displayDeadline = inferencer.getDisplayDeadline(uuid);
-  const displayXp = inferencer.getAchievementXp(uuid);
+  const displayXp = inferencer.getDescendantXp(uuid);
   const progressFrac = inferencer.getProgressFrac(uuid);
   const status = inferencer.getStatus(uuid);
 
@@ -38,7 +38,7 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={() => setFocusUuid(uuid)}
       onClickCapture={toggleDropdown}
       style={{
-        ...handleGlow(uuid, focusUuid, ability),
+        ...handleGlow(uuid, focusUuid),
         opacity: shouldRender ? '100%' : '20%',
         background: `url(${cardBackground}) center/cover`
       }}
@@ -58,17 +58,14 @@ function AchievementCard(props: AchievementCardProps) {
         </div>
 
         <div className="details">
-          <div className="ability">
-            <p>{ability}</p>
-          </div>
-          <AchievementDeadline ability={ability} deadline={displayDeadline} />
+          <AchievementDeadline deadline={displayDeadline} />
           <AchievementXp isBonus={hasDropdown} xp={displayXp} />
         </div>
 
         <ProgressBar
           animate={false}
           className="progress"
-          intent={progressFrac === 1 ? 'success' : undefined}
+          intent={progressFrac === 1 ? 'success' : 'primary'}
           stripes={false}
           value={progressFrac}
         />

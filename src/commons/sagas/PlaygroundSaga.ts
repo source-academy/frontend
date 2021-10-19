@@ -50,7 +50,7 @@ export default function* PlaygroundSaga(): SagaIterator {
     if (resp.status !== 'success') {
       yield call(showSuccessMessage, resp.message);
     }
-    yield put(updateShortURL(resp.shorturl));
+    yield put(updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   });
 }
 
@@ -110,7 +110,7 @@ export async function shortenURLRequest(
     }, new FormData())
   };
 
-  const resp = await fetch(Constants.urlShortener!, fetchOpts);
+  const resp = await fetch(`${Constants.urlShortenerBase}yourls-api.php`, fetchOpts);
   if (!resp || !resp.ok) {
     return null;
   }

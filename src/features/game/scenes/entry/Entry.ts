@@ -52,7 +52,7 @@ class Entry extends Phaser.Scene {
    * and load all the necessary assets.
    */
   private async preloadAwards() {
-    const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
+    const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key) || '';
     const awardsMapping = AwardParser.parse(awardsMappingTxt);
     SourceAcademyGame.getInstance().setAwardsMapping(awardsMapping);
     await Promise.all(
@@ -67,7 +67,7 @@ class Entry extends Phaser.Scene {
    * and load all the necessary assets.
    */
   private async preloadRoomPreviewBackgrounds() {
-    const roomPreviewMappingTxt = this.cache.text.get(TextAssets.roomPreviewMapping.key);
+    const roomPreviewMappingTxt = this.cache.text.get(TextAssets.roomPreviewMapping.key) || '';
     const roomPreviewMapping = RoomPreviewParser.parse(roomPreviewMappingTxt);
     SourceAcademyGame.getInstance().setRoomPreviewMapping(roomPreviewMapping);
     await Promise.all(
@@ -82,7 +82,9 @@ class Entry extends Phaser.Scene {
    */
   private preloadAssets() {
     SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
-    Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    Object.values(ImageAssets).forEach(asset =>
+      this.load.image(asset.key, toS3Path(asset.path, false))
+    );
     Object.values(FontAssets).forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );

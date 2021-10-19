@@ -31,7 +31,7 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
             The environment model diagram follows a notation introduced in{' '}
             <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
               <i>
-                Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 3,
+                Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
                 Section 2
               </i>
             </a>

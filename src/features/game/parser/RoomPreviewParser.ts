@@ -22,7 +22,7 @@ class RoomPreviewParser {
     const assetParagraphs = StringUtils.splitToParagraph(assetLines);
 
     assetParagraphs.forEach(([assesmentId, assetPath]: [string, string[]]) => {
-      RoomPreviewParser.backgroundMapping.set(assesmentId, toS3Path(assetPath[0]));
+      RoomPreviewParser.backgroundMapping.set(assesmentId, toS3Path(assetPath[0], true));
     });
     return RoomPreviewParser.backgroundMapping;
   }

@@ -1,3 +1,4 @@
+import { AssetType } from '../assets/AssetsTypes';
 import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
@@ -62,6 +63,18 @@ export default class LocationParser {
         const talkTopics = configValues;
         Parser.validator.assertItemTypes(GameItemType.dialogues, talkTopics);
         location.talkTopics = new Set(talkTopics);
+        break;
+      case 'preview':
+        const [previewPath] = configValues;
+        if (previewPath) {
+          const previewKey = '/preview' + previewPath;
+          Parser.checkpoint.map.addMapAsset(previewKey, {
+            type: AssetType.Image,
+            key: location.id + 'Preview',
+            path: previewPath
+          });
+          location.previewKey = previewKey;
+        }
         break;
       default:
         throw new Error(`Invalid config key "${key}" specified under location "${location.id}"`);

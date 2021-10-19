@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 
 import { Role } from '../../application/ApplicationTypes';
-import { AssessmentStatuses } from '../../assessment/AssessmentTypes';
+import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import Profile from '../Profile';
 
@@ -24,11 +24,28 @@ const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
     -- recommendation from https://reacttraining.com/react-router/web/guides/testing
 */
 
+const assessmentConfigurations: AssessmentConfiguration[] = [
+  'Missions',
+  'Quests',
+  'Paths',
+  'Contests',
+  'Others'
+].map((c, i) => ({
+  assessmentConfigId: i,
+  type: c,
+  isManuallyGraded: false,
+  displayInDashboard: false,
+  hoursBeforeEarlyXpDecay: 0,
+  earlySubmissionXp: 0
+}));
+
 test('Profile renders correctly when there are no closed assessments', () => {
   const props = {
     name: 'yeet',
     role: Role.Student,
+    courseId: 1,
     assessmentOverviews: mockNoClosedAssessmentOverviews,
+    assessmentConfigurations,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
@@ -50,11 +67,14 @@ test('Profile renders correctly when there are no closed assessments', () => {
   expect(tree.find('.profile-callouts').hostNodes().exists()).toEqual(false);
 });
 
-test('Profile renders correctly when there are closed assessments', () => {
+test('Profile renders correctly when there are closed and graded, or closed and not manually graded assessments', () => {
+  // Only closed and graded, and closed and not manually graded assessments will be rendered in the Profile
   const props = {
     name: 'yeeet',
     role: Role.Staff,
+    courseId: 1,
     assessmentOverviews: mockAssessmentOverviews,
+    assessmentConfigurations,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
@@ -70,16 +90,18 @@ test('Profile renders correctly when there are closed assessments', () => {
 
   // Expect the correct number of each of the other HTML elements to be rendered
   ['.profile-spinner', '.type', '.total-value', '.percentage'].forEach(className => {
-    expect(tree.find(className).hostNodes()).toHaveLength(2);
+    expect(tree.find(className).hostNodes()).toHaveLength(1);
   });
 
-  const numClosedAssessments =
-    mockAssessmentOverviews.length - mockNoClosedAssessmentOverviews.length;
-  expect(tree.find('.profile-summary-navlink').hostNodes()).toHaveLength(numClosedAssessments);
-  expect(tree.find('.profile-summary-callout').hostNodes()).toHaveLength(numClosedAssessments);
-  expect(tree.find('.grade-details').hostNodes()).toHaveLength(1);
-  expect(tree.find('.xp-details').hostNodes()).toHaveLength(4);
+  const numProfileCards = mockAssessmentOverviews.filter(
+    item =>
+      item.status === AssessmentStatuses.submitted &&
+      (item.gradingStatus === 'graded' || item.gradingStatus === 'excluded')
+  ).length;
+  expect(tree.find('.profile-summary-navlink').hostNodes()).toHaveLength(numProfileCards);
+  expect(tree.find('.profile-summary-callout').hostNodes()).toHaveLength(numProfileCards);
+  expect(tree.find('.xp-details').hostNodes()).toHaveLength(numProfileCards);
   ['.title', '.value', '.value-bar'].forEach(className => {
-    expect(tree.find(className).hostNodes()).toHaveLength(5);
+    expect(tree.find(className).hostNodes()).toHaveLength(numProfileCards);
   });
 });

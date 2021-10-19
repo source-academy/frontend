@@ -1,8 +1,8 @@
-# Cadet Frontend
+# Source Academy Frontend
 
-[![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
-[![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
-[![License](https://img.shields.io/github/license/source-academy/cadet-frontend)](https://github.com/source-academy/cadet-frontend/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/source-academy/frontend.svg?branch=master)](https://travis-ci.org/source-academy/frontend)
+[![Coverage Status](https://coveralls.io/repos/github/source-academy/frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/frontend?branch=master)
+[![License](https://img.shields.io/github/license/source-academy/frontend)](https://github.com/source-academy/frontend/blob/master/LICENSE)
 
 The Source Academy (<https://sourceacademy.org/>) is an immersive online experiential environment for learning programming. It is developed by a community of learners (also called "Source Academy") who use the book [Structure and Interpretation of Computer Programs, JavaScript Adaptation](https://sourceacademy.org/sicpjs) (SICP JS). This repository houses the sources for the frontend of the Source Academy, written in ReactJS with Redux.
 
@@ -21,10 +21,17 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 1. Install a stable version of NodeJS. The active LTS or current version should work fine.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
-4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
-5. Point your browser to `http://localhost:8000` to see your local Source Academy.
+4. Copy the `.env.example` file as `.env` and set the following variables:
+ 
+   - `REACT_APP_USE_BACKEND=FALSE`
+   - `REACT_APP_PLAYGROUND_ONLY=TRUE`
 
-In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. For this edition, there is no need for "Setting up your environment".
+   You may want to refer to [_Setting up your environment_](#setting-up-your-environment) below for more configuration options, if you wish to set up e.g. the GitHub or Google Drive integrations.
+   
+5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+6. Point your browser to `http://localhost:8000` to see your local Source Academy.
+
+In this edition, you will only see the Playground with all its tools, but no login options or homework submission features.
 
 ### Installation of Source Academy @ NUS (access [latest production version here](https://sourceacademy.nus.edu.sg))
 
@@ -41,9 +48,10 @@ The project requires some environment variables to be set to work properly. In t
 #### Backend configuration
 
 1. `REACT_APP_BACKEND_URL`: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
-1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
+1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/backend).
 1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can just use the default value in development.
 1. `REACT_APP_SHAREDB_BACKEND_URL`: The base URL of the [ShareDB collaborative editor backend](https://github.com/source-academy/sharedb-ace-backend). The protocol must be HTTP or HTTPS (it will automatically be set to WS/WSS as appropriate). **Must end in a trailing `/`.**
+1. `REACT_APP_SICPJS_BACKEND_URL`: The base URL from which [SICP JS](https://github.com/source-academy/sicp) content is loaded.
 
 #### URL shortener configuration
 
@@ -70,7 +78,7 @@ The following properties are used for the Playground Google Drive integration. Y
 1. `REACT_APP_GOOGLE_API_KEY`: The Picker API key issued by Google.
 1. `REACT_APP_GOOGLE_APP_ID`: The project ID of the Google API project.
 
-See [here](https://github.com/source-academy/cadet-frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
+See [here](https://github.com/source-academy/frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
 
 #### Disable periods
 
@@ -82,10 +90,10 @@ The frontend can be configured to disable itself (based on user's system time) d
 
 #### Other configuration
 
+1. `REACT_APP_DEPLOYMENT_NAME`: The name of the Source Academy deployment. This will be shown in the `/welcome` route. Defaults to 'Source Academy'.
 1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).
-1. `REACT_APP_ENABLE_GAME`: Whether to enable the game. Off by default.
-1. `REACT_APP_ENABLE_ACHIEVEMENTS`: Whether to enable the incentives/achievements system. Off by default.
 1. `REACT_APP_ENABLE_GITHUB_ASSESSMENTS`: Whether to enable the GitHub Assessments feature. Off by default.
+1. `REACT_APP_SHOW_RESEARCH_PROMPT`: Whether to show the educational research consent prompt to users. This is mainly for instructors using their own deployment of Source Academy @ NUS to disable this prompt.
 
 ## Development
 
@@ -98,7 +106,7 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 ### Running your own js-slang
 
-See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
+See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the frontend.
 
 ### Contribution Guidelines
 
@@ -118,11 +126,11 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
-See also the [this standard in the wiki](https://github.com/source-academy/cadet-frontend/wiki/Coding-Standard).
+See also the [this standard in the wiki](https://github.com/source-academy/frontend/wiki/Coding-Standard).
 
 ## Projects
 
-For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/cadet-frontend/wiki).
+For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/frontend/wiki).
 
 ## Build and deployment
 
@@ -137,10 +145,17 @@ There are a few additional environment variables that are used when building and
 
 ## Testing
 
-`cadet-frontend` comes with an extensive test suite. To run the tests after you made your modifications, run 
-`yarn test`. Regression tests are run automatically when you want to push changes to this repository. 
-The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`.  After modifying `cadet-frontend`, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:  
+The frontend comes with an extensive test suite. To run the tests after you made your modifications, run
+`yarn test`. Regression tests are run automatically when you want to push changes to this repository.
+The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`.  After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
 ``` {.}
 $ yarn test --updateSnapshot
 ```
 and then typing `a` to update all snapshots.
+
+## License
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+All sources in this repository are licensed under the [Apache License Version 2][apache2].
+
+[apache2]: https://www.apache.org/licenses/LICENSE-2.0.txt

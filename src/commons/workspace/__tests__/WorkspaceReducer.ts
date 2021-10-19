@@ -26,7 +26,6 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_SHAREDB_CONNECTED
 } from '../../collabEditing/CollabEditingTypes';
-import { SideContentType } from '../../sideContent/SideContentTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
 import { WorkspaceReducer } from '../WorkspaceReducer';
@@ -50,7 +49,6 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -1288,25 +1286,6 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           isEditorAutorun: false
-        }
-      });
-    });
-  });
-});
-
-describe('UPDATE_ACTIVE_TAB', () => {
-  test('writes correct value of sideContentActiveTab', () => {
-    const activeTab = SideContentType.questionOverview;
-    const actions = generateActions(UPDATE_ACTIVE_TAB, { activeTab });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sideContentActiveTab: activeTab
         }
       });
     });

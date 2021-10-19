@@ -11,7 +11,6 @@ import {
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';
-import { SideContentType } from '../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -28,7 +27,6 @@ import {
   setEditorBreakpoint,
   setEditorReadonly,
   toggleEditorAutorun,
-  updateActiveTab,
   updateEditorValue,
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
@@ -73,12 +71,12 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   playbackData: state.workspaces.sourcecast.playbackData,
   playbackStatus: state.workspaces.sourcecast.playbackStatus,
   replValue: state.workspaces.sourcecast.replValue,
-  sideContentActiveTab: state.workspaces.sourcecast.sideContentActiveTab,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
   sourceVariant: state.workspaces.sourcecast.context.variant,
-  uid: state.workspaces.sourcecast.uid
+  uid: state.workspaces.sourcecast.uid,
+  courseId: state.session.courseId
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -86,7 +84,6 @@ const location: WorkspaceLocation = 'sourcecast';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, 'default', location),

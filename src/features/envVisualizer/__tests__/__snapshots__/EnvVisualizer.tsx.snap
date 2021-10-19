@@ -4,13 +4,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 0 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "fn": [Function],
@@ -81,6 +81,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -118,16 +129,16 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
       },
     },
   },
-  "fn: ",
+  "fn:= ",
   [Function],
-  "x: ",
+  "x:= ",
   Array [
     "long string",
     Array [
@@ -151,7 +162,7 @@ Array [
     5,
     6,
   ],
-  "y: ",
+  "y:= ",
   Array [
     Array [
       [Function],
@@ -199,13 +210,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 1 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "fn": [Function],
@@ -286,6 +297,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -323,16 +345,16 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
       },
     },
   },
-  "fn: ",
+  "fn:= ",
   [Function],
-  "x: ",
+  "x:= ",
   Array [
     1,
     Array [
@@ -344,7 +366,7 @@ Array [
     ],
     4,
   ],
-  "l: ",
+  "l:= ",
   Array [
     1,
     Array [
@@ -414,13 +436,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 2 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "x1": Array [
@@ -453,6 +475,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -490,14 +523,14 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
       },
     },
   },
-  "x1: ",
+  "x1:= ",
   Array [
     1,
     Array [
@@ -511,7 +544,7 @@ Array [
       ],
     ],
   ],
-  "x2: ",
+  "x2:= ",
   Array [
     3,
     Array [
@@ -532,13 +565,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 3 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "e": Array [
@@ -618,6 +651,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -655,14 +699,14 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
       },
     },
   },
-  "e: ",
+  "e:= ",
   Array [
     Array [
       3,
@@ -691,12 +735,12 @@ Array [
       ],
     ],
   ],
-  "f: ",
+  "f:= ",
   Array [
     1,
     2,
   ],
-  "g: ",
+  "g:= ",
   Array [
     Array [
       [Function],
@@ -725,7 +769,7 @@ Array [
       ],
     ],
   ],
-  "y: ",
+  "y:= ",
   Array [
     Array [
       1,
@@ -746,13 +790,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 4 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "f": [Function],
@@ -763,6 +807,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -800,7 +855,7 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
@@ -811,9 +866,9 @@ Array [
   0,
   "y: ",
   10,
-  "f: ",
+  "f:= ",
   [Function],
-  "z: ",
+  "z:= ",
   [Function],
   Object {
     "callExpression": Object {
@@ -826,23 +881,6 @@ Array [
       ],
       "callee": Node {
         "end": 97,
-        "inferredType": Object {
-          "kind": "function",
-          "parameterTypes": Array [
-            Object {
-              "kind": "primitive",
-              "name": "number",
-            },
-          ],
-          "returnType": Object {
-            "kind": "function",
-            "parameterTypes": Array [],
-            "returnType": Object {
-              "kind": "primitive",
-              "name": "number",
-            },
-          },
-        },
         "loc": SourceLocation {
           "end": Position {
             "column": 15,
@@ -855,18 +893,9 @@ Array [
         },
         "name": "f",
         "start": 96,
-        "typability": "Typed",
         "type": "Identifier",
       },
       "end": 101,
-      "inferredType": Object {
-        "kind": "function",
-        "parameterTypes": Array [],
-        "returnType": Object {
-          "kind": "primitive",
-          "name": "number",
-        },
-      },
       "loc": SourceLocation {
         "end": Position {
           "column": 19,
@@ -878,7 +907,6 @@ Array [
         },
       },
       "start": 96,
-      "typability": "Typed",
       "type": "CallExpression",
     },
     "head": Object {
@@ -895,6 +923,17 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
           "accumulate": [Function],
           "append": [Function],
           "build_list": [Function],
@@ -932,7 +971,7 @@ Array [
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "pre-declared names": "...",
+            ":::pre-declared names::": Symbol(),
           },
           "name": "global",
           "tail": null,
@@ -949,15 +988,15 @@ exports[`EnvVisualizer calculates correct layout for code sample 5 1`] = `
 Array [
   Object {
     "head": Object {
+      ":::pre-declared names::": Symbol(),
       "accumulate": [Function],
       "pair": [Function],
-      "pre-declared names": "...",
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   "accumulate: ",
   [Function],
   "pair: ",
@@ -978,6 +1017,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -1015,16 +1065,16 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
+          ":::pre-declared names::": Symbol(),
           "accumulate": [Function],
           "pair": [Function],
-          "pre-declared names": "...",
         },
         "name": "global",
         "tail": null,
       },
     },
   },
-  "x: ",
+  "x:= ",
   Array [
     1,
     Array [
@@ -1042,13 +1092,13 @@ exports[`EnvVisualizer calculates correct layout for code sample 6 1`] = `
 Array [
   Object {
     "head": Object {
-      "pre-declared names": "...",
+      ":::pre-declared names::": Symbol(),
     },
     "name": "global",
     "tail": null,
   },
-  "pre-declared names: ",
-  "...",
+  ":::pre-declared names::: ",
+  Symbol(),
   Object {
     "head": Object {
       "x": Array [],
@@ -1056,6 +1106,17 @@ Array [
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
         "accumulate": [Function],
         "append": [Function],
         "build_list": [Function],
@@ -1093,14 +1154,14 @@ Array [
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "pre-declared names": "...",
+          ":::pre-declared names::": Symbol(),
         },
         "name": "global",
         "tail": null,
       },
     },
   },
-  "x: ",
+  "x:= ",
   Array [],
 ]
 `;
