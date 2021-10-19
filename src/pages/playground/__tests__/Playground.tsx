@@ -3,10 +3,8 @@ import { Variant } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
-import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {
@@ -22,9 +20,8 @@ const baseProps = {
   editorWidth: '50%',
   isEditorAutorun: false,
   sideContentHeight: 40,
-  sourceChapter: 2,
-  sourceVariant: 'default' as Variant,
-  externalLibraryName: ExternalLibraryName.NONE,
+  playgroundSourceChapter: 2,
+  playgroundSourceVariant: 'default' as Variant,
   output: [],
   replValue: '',
   sharedbConnected: false,
@@ -33,7 +30,6 @@ const baseProps = {
   persistenceFile: undefined,
   githubOctokitObject: { octokit: undefined },
   githubSaveInfo: { repoName: '', filePath: '' },
-  handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
@@ -45,7 +41,6 @@ const baseProps = {
   handleEditorValueChange: () => {},
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleFetchSublanguage: () => {},
   handleGenerateLz: () => {},
   handleShortenURL: () => {},

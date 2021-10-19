@@ -132,10 +132,10 @@ class GameManager extends Phaser.Scene {
   private loadImage(image: ImageAsset, assetKey: AssetKey) {
     switch (image.type) {
       case AssetType.Image:
-        this.load.image(assetKey, toS3Path(image.path));
+        this.load.image(assetKey, toS3Path(image.path, true));
         break;
       case AssetType.Sprite:
-        this.load.spritesheet(assetKey, toS3Path(image.path), image.config);
+        this.load.spritesheet(assetKey, toS3Path(image.path, true), image.config);
         break;
       default:
         break;

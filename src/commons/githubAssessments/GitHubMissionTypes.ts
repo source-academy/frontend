@@ -1,3 +1,5 @@
+import { Testcase } from '../assessment/AssessmentTypes';
+
 /**
  * Represents a single task for a mission hosted in a GitHub repository.
  */
@@ -6,21 +8,16 @@ export type TaskData = {
   taskDescription: string;
   starterCode: string;
   savedCode: string;
+  testPrepend: string;
+  testPostpend: string;
+  testCases: Testcase[];
 };
 
 /**
  * An code representation of a GitHub-hosted mission's '.metadata' file.
  */
 export type MissionMetadata = {
-  coverImage: string;
-  kind: string;
-  number: string;
-  title: string;
   sourceVersion: number;
-  dueDate: Date;
-
-  reading: string;
-  webSummary: string;
 };
 
 /**

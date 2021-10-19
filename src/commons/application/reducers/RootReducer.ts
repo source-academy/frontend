@@ -1,5 +1,3 @@
-import { connectRouter } from 'connected-react-router';
-import { History } from 'history';
 import { combineReducers } from 'redux';
 
 import { AcademyReducer as academy } from '../../../features/academy/AcademyReducer';
@@ -10,9 +8,8 @@ import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer
 import { ApplicationReducer as application } from '../ApplicationReducer';
 import { SessionsReducer as session } from './SessionsReducer';
 
-const createRootReducer = (history: History) =>
+const createRootReducer = () =>
   combineReducers({
-    router: connectRouter(history),
     academy,
     achievement,
     application,

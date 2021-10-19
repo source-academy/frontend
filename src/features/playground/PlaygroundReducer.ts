@@ -7,7 +7,6 @@ import {
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PlaygroundState,
-  TOGGLE_USING_SUBST,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
 
@@ -20,11 +19,6 @@ export const PlaygroundReducer: Reducer<PlaygroundState> = (
       return {
         ...state,
         queryString: action.payload
-      };
-    case TOGGLE_USING_SUBST:
-      return {
-        ...state,
-        usingSubst: action.payload
       };
     case UPDATE_SHORT_URL:
       return {

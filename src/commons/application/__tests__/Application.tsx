@@ -17,11 +17,14 @@ window.matchMedia =
   };
 
 const props: ApplicationProps = {
-  ...mockRouterProps('/academy', {}),
-  title: 'Cadet',
+  ...mockRouterProps('/playground', {}),
+  courses: [],
   handleLogOut: () => {},
   handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {}
+  handleGitHubLogOut: () => {},
+  fetchUserAndCourse: () => {},
+  handleCreateCourse: () => {},
+  updateCourseResearchAgreement: () => {}
 };
 
 test('Application renders correctly', () => {

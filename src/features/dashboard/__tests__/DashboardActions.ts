@@ -13,16 +13,26 @@ test('fetchGroupGradingSummary generates correct action object', () => {
 });
 
 test('updateGroupGradingSummary generates correct action object', () => {
-  const overviews: GradingSummary = [
-    {
-      leaderName: 'Billy',
-      groupName: 'Test Group 1',
-      ungradedMissions: 12,
-      ungradedSidequests: 34,
-      submittedMissions: 56,
-      submittedSidequests: 78
-    }
-  ];
+  const overviews: GradingSummary = {
+    cols: [
+      'group',
+      'avenger',
+      'ungradedMissions',
+      'submittedMissions',
+      'ungradedQuests',
+      'submittedQuests'
+    ],
+    rows: [
+      {
+        group: 'Mock Group 1',
+        avenger: 'John',
+        ungradedMissions: 123,
+        submittedMissions: 200,
+        ungradedQuests: 100,
+        submittedQuests: 117
+      }
+    ]
+  };
   const action = updateGroupGradingSummary(overviews);
   expect(action).toEqual({
     type: UPDATE_GROUP_GRADING_SUMMARY,

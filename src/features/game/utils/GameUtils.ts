@@ -1,3 +1,5 @@
+import { store } from 'src/pages/createStore';
+
 import { Constants } from '../commons/CommonConstants';
 
 /**
@@ -51,10 +53,14 @@ export function limitNumber(value: number, min: number, max: number) {
  * Appends the s3 file path to a short path name
  *
  * @param filename the short path of a filename
+ * @param courseCoded true iff file is course-specific
  * @returns {string} new path to file including full s3 link
  */
-export function toS3Path(fileName: string) {
-  return Constants.assetsFolder + fileName;
+export function toS3Path(fileName: string, courseCoded = false) {
+  if (fileName.startsWith('/')) {
+    fileName = fileName.substr(1);
+  }
+  return Constants.assetsFolder + (courseCoded ? assetsPrefix() + fileName : fileName);
 }
 
 /**
@@ -83,3 +89,6 @@ export function lastElement<T>(array: T[]): T {
   }
   return array[array.length - 1];
 }
+
+export const courseId = () => store.getState().session.courseId;
+export const assetsPrefix = () => store.getState().session.assetsPrefix || '';

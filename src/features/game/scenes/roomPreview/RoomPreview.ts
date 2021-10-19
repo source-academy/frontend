@@ -4,7 +4,9 @@ import { createContext } from 'src/commons/utils/JsSlangHelper';
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
+import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
+import CommonTextHover from '../../commons/CommonTextHover';
 import { ItemId } from '../../commons/CommonTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
@@ -14,10 +16,11 @@ import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { mandatory } from '../../utils/GameUtils';
+import { createButton } from '../../utils/ButtonUtils';
+import { mandatory, toS3Path } from '../../utils/GameUtils';
 import { loadImage, loadSound, loadSpritesheet } from '../../utils/LoaderUtils';
 import { resizeOverflow } from '../../utils/SpriteUtils';
-import { roomDefaultCode } from './RoomPreviewConstants';
+import { RoomConstants, roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
 /**
@@ -108,6 +111,30 @@ export default class RoomPreview extends Phaser.Scene {
       })
     );
 
+    const roomRefreshHover = new CommonTextHover(
+      this,
+      RoomConstants.refreshButton.x - 200,
+      RoomConstants.refreshButton.y - 30,
+      'Refresh Room'
+    );
+
+    const backButton = new CommonBackButton(this, () => {
+      this.getLayerManager().clearAllLayers();
+      this.scene.start('MainMenu');
+    });
+
+    const refreshButton = createButton(this, {
+      assetKey: ImageAssets.chapterRepeatButton.key,
+      onUp: async () => {
+        await SourceAcademyGame.getInstance().loadRoomCode();
+        this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
+        this.getLayerManager().clearAllLayers();
+        this.scene.restart();
+      },
+      onHover: () => roomRefreshHover.setVisible(true),
+      onOut: () => roomRefreshHover.setVisible(false)
+    }).setPosition(RoomConstants.refreshButton.x, RoomConstants.refreshButton.y);
+
     // Execute create
     await this.eval(`create();`);
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(Constants.nullInteractionId);
@@ -122,6 +149,9 @@ export default class RoomPreview extends Phaser.Scene {
 
     // Add verified tag
     this.getLayerManager().addToLayer(Layer.UI, this.getVerifCont());
+    this.getLayerManager().addToLayer(Layer.UI, backButton);
+    this.getLayerManager().addToLayer(Layer.UI, refreshButton);
+    this.getLayerManager().addToLayer(Layer.UI, roomRefreshHover);
   }
 
   public update() {
@@ -133,20 +163,20 @@ export default class RoomPreview extends Phaser.Scene {
      * Hence, we replace the scope instead of appending
      * new one each time.
      */
-    this.context!.nativeStorage.globals = this.context!.nativeStorage.globals!.previousScope;
     this.eval(`update();`);
   }
 
   public createContext() {
     this.context = createContext(4, [], 'playground', 'default', {
-      scene: this,
-      phaser: Phaser,
-      preloadImageMap: this.preloadImageMap,
-      preloadSoundMap: this.preloadSoundMap,
-      preloadSpritesheetMap: this.preloadSpritesheetMap,
-      remotePath: Constants.assetsFolder,
-      screenSize: screenSize,
-      createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
+      game: {
+        scene: this,
+        preloadImageMap: this.preloadImageMap,
+        preloadSoundMap: this.preloadSoundMap,
+        preloadSpritesheetMap: this.preloadSpritesheetMap,
+        remotePath: (file: string) => toS3Path(file, true),
+        screenSize: screenSize,
+        createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
+      }
     });
   }
 

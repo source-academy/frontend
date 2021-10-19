@@ -23,6 +23,7 @@ type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
+  disableScrolling?: boolean;
 };
 
 type OwnProps = {
@@ -36,7 +37,7 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
   const execBrowseHistoryUp: () => void = props.handleBrowseHistoryUp;
   const execEvaluate = () => {
     props.handleReplEval();
-    if (replInputBottom.current) {
+    if (replInputBottom.current && !props.disableScrolling) {
       /**
        * Ensures the REPL AceEditor input is always in view even after multiple REPL eval calls.
        * This feature is disabled in the mobile workspace as it interferes with the UX of the DraggableRepl.
@@ -46,7 +47,7 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
   };
 
   React.useEffect(() => {
-    if (!replInputBottom.current) {
+    if (!replInputBottom.current || props.disableScrolling) {
       return;
     }
     if (replInputBottom.current.clientWidth >= window.innerWidth - 50) {

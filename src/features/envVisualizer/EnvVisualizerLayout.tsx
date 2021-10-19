@@ -1,6 +1,5 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { Layer, Stage } from 'react-konva';
@@ -10,10 +9,12 @@ import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
+import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
+  deepCopyTree,
   isArray,
   isEmptyEnvironment,
   isFn,
@@ -49,7 +50,8 @@ export class Layout {
     Layout.values.clear();
     Layout.levels = [];
     Layout.key = 0;
-    Layout.environmentTree = cloneDeep(context.runtime.environmentTree as EnvTree);
+    // deep copy so we don't mutate the context
+    Layout.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
 
     // remove program environment and merge bindings into global env
@@ -65,6 +67,7 @@ export class Layout {
       Config.CanvasMinHeight,
       lastLevel.y + lastLevel.height + Config.CanvasPaddingY
     );
+
     Layout.width = Math.max(
       Config.CanvasMinWidth,
       Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width), 0) +
@@ -135,7 +138,10 @@ export class Layout {
       }
     }
 
-    Layout.globalEnvNode.environment.head = { [Config.GlobalFrameDefaultText]: '...', ...newFrame };
+    Layout.globalEnvNode.environment.head = {
+      [Config.GlobalFrameDefaultText]: Symbol(),
+      ...newFrame
+    };
   }
 
   /** initializes levels */
@@ -151,12 +157,16 @@ export class Layout {
         return [c];
       }
     };
+
     let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
     let prevLevel: Level | null = null;
+    let currLevel: Level;
+
     while (frontier.length > 0) {
-      const currLevel: Level = new Level(prevLevel, frontier);
+      currLevel = new Level(prevLevel, frontier);
       this.levels.push(currLevel);
       const nextFrontier: EnvTreeNode[] = [];
+
       frontier.forEach(e => {
         e.children.forEach(c => {
           const nextChildren = getNextChildren(c as EnvTreeNode);
@@ -164,6 +174,7 @@ export class Layout {
           nextFrontier.push(...nextChildren);
         });
       });
+
       prevLevel = currLevel;
       frontier = nextFrontier;
     }
@@ -178,7 +189,7 @@ export class Layout {
    *  else, return the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
     if (isUnassigned(data)) {
-      return new PrimitiveValue(Config.UnassignedData.toString(), [reference]);
+      return new UnassignedValue([reference]);
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, [reference]);
     } else {

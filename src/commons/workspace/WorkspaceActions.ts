@@ -8,7 +8,7 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
-import { NOTIFY_PROGRAM_EVALUATED, SideContentType } from '../sideContent/SideContentTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -26,9 +26,9 @@ import {
   CLEAR_REPL_OUTPUT_LAST,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
+  EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
-  FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -37,7 +37,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
-  UPDATE_ACTIVE_TAB,
+  TOGGLE_USING_SUBST,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -99,9 +99,6 @@ export const externalLibrarySelect = (
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_EDITOR_AUTORUN, { workspaceLocation });
 
-export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: WorkspaceLocation) =>
-  action(UPDATE_ACTIVE_TAB, { activeTab, workspaceLocation });
-
 /**
  * Starts the process to clear the js-slang Context
  * at a specified workspace location.
@@ -161,6 +158,9 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) =>
 
 export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) =>
   action(EVAL_TESTCASE, { workspaceLocation, testcaseId });
+
+export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
+  action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
 export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
@@ -248,8 +248,6 @@ export const updateHasUnsavedChanges = (
     hasUnsavedChanges
   });
 
-export const fetchSublanguage = () => action(FETCH_SUBLANGUAGE);
-
 export const changeSublanguage = (sublang: SourceLanguage) =>
   action(CHANGE_SUBLANGUAGE, { sublang });
 
@@ -283,3 +281,6 @@ export const notifyProgramEvaluated = (
     context,
     workspaceLocation
   });
+
+export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });

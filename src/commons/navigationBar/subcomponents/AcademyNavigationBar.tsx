@@ -1,119 +1,76 @@
 import { Alignment, Classes, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
-import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
-import { assessmentCategoryLink } from '../../utils/ParamParseHelper';
 
 type OwnProps = {
+  courseId: number;
   role: Role;
+  assessmentTypes?: AssessmentType[];
 };
 
 const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
-      <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Mission)}`}
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      >
-        <Icon icon={IconNames.FLAME} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Missions</div>
-        <NotificationBadgeContainer
-          notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
-          disableHover={true}
-        />
-      </NavLink>
-
-      <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Sidequest)}`}
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      >
-        <Icon icon={IconNames.LIGHTBULB} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Quests</div>
-        <NotificationBadgeContainer
-          notificationFilter={filterNotificationsByType(AssessmentCategories.Sidequest)}
-          disableHover={true}
-        />
-      </NavLink>
-
-      <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}`}
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      >
-        <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Paths</div>
-        <NotificationBadgeContainer
-          notificationFilter={filterNotificationsByType(AssessmentCategories.Path)}
-          disableHover={true}
-        />
-      </NavLink>
-
-      <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Contest)}`}
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      >
-        <Icon icon={IconNames.COMPARISON} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Contests</div>
-        <NotificationBadgeContainer
-          notificationFilter={filterNotificationsByType(AssessmentCategories.Contest)}
-          disableHover={true}
-        />
-      </NavLink>
-
-      <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Practical)}`}
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      >
-        <Icon icon={IconNames.MANUAL} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Others</div>
-      </NavLink>
+      {props.assessmentTypes?.map((assessmentType, idx) => (
+        <NavLink
+          to={`/courses/${props.courseId}/${assessmentTypeLink(assessmentType)}`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          key={idx}
+        >
+          <Icon icon={icons[idx]} />
+          <div className="navbar-button-text hidden-xs hidden-sm">{assessmentType}</div>
+          <NotificationBadgeContainer
+            notificationFilter={filterNotificationsByType(assessmentType)}
+            disableHover={true}
+          />
+        </NavLink>
+      ))}
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
         <NavLink
-          to={'/academy/groundcontrol'}
+          to={`/courses/${props.courseId}/groundcontrol`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
-          <Icon icon="satellite" />
+          <Icon icon={IconNames.SATELLITE} />
           <div className="navbar-button-text hidden-xs hidden-sm">Ground Control</div>
         </NavLink>
 
         <NavLink
-          to={'/academy/dashboard'}
+          to={`/courses/${props.courseId}/dashboard`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
-          <Icon icon="globe" />
+          <Icon icon={IconNames.GLOBE} />
           <div className="navbar-button-text hidden-xs hidden-sm">Dashboard</div>
         </NavLink>
 
         <NavLink
-          to={'/academy/sourcereel'}
+          to={`/courses/${props.courseId}/sourcereel`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.MOBILE_VIDEO} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Sourcereel</div>
+          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Sourcereel</div>
         </NavLink>
 
         <NavLink
-          to={'/academy/grading'}
+          to={`/courses/${props.courseId}/grading`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.ENDORSED} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Grading</div>
+          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Grading</div>
           <NotificationBadgeContainer
             notificationFilter={filterNotificationsByType('Grading')}
             disableHover={true}
@@ -121,16 +78,40 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
         </NavLink>
 
         <NavLink
-          to={'/academy/storysimulator'}
+          to={`/courses/${props.courseId}/storysimulator`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.CROWN} />
           <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Story Simulator</div>
         </NavLink>
+
+        {props.role === Role.Admin && (
+          <NavLink
+            to={`/courses/${props.courseId}/adminpanel`}
+            activeClassName={Classes.ACTIVE}
+            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          >
+            <Icon icon={IconNames.SETTINGS} />
+            <div className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg">
+              Admin Panel
+            </div>
+          </NavLink>
+        )}
       </NavbarGroup>
     ) : null}
   </Navbar>
 );
+
+export const icons: IconName[] = [
+  IconNames.FLAME,
+  IconNames.LIGHTBULB,
+  IconNames.PREDICTIVE_ANALYSIS,
+  IconNames.COMPARISON,
+  IconNames.MANUAL,
+  IconNames.GRAPH,
+  IconNames.LAB_TEST,
+  IconNames.CALCULATOR
+];
 
 export default AcademyNavigationBar;

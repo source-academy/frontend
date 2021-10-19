@@ -1,5 +1,4 @@
 import {
-  AchievementAbility,
   AchievementGoal,
   AchievementItem,
   GoalType
@@ -10,7 +9,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '0',
     title: 'Rune Master',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     isTask: true,
@@ -30,7 +28,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '1',
     title: 'Beyond the Second Dimension',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     deadline: new Date(2020, 7, 6, 12, 30, 0),
@@ -51,7 +48,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '2',
     title: 'Colorful Carpet',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     deadline: new Date(2020, 7, 8, 9, 0, 0),
@@ -72,7 +68,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '3',
     title: '',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     isTask: false,
@@ -89,7 +84,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '4',
     title: 'Curve Wizard',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     deadline: new Date(2020, 8, 15, 0, 0, 0),
@@ -110,7 +104,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '5',
     title: 'Curve Introduction',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     deadline: new Date(2020, 7, 28, 0, 0, 0),
@@ -131,7 +124,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '6',
     title: 'Curve Manipulation',
-    ability: AchievementAbility.CORE,
     xp: 100,
     isVariableXp: false,
     deadline: new Date(2020, 8, 5, 0, 0, 0),
@@ -152,7 +144,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '21',
     title: 'The Source-rer',
-    ability: AchievementAbility.EFFORT,
     xp: 100,
     isVariableXp: false,
     deadline: new Date(2020, 7, 21, 0, 0, 0),
@@ -173,7 +164,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '8',
     title: 'Power of Friendship',
-    ability: AchievementAbility.COMMUNITY,
     xp: 100,
     isVariableXp: false,
     isTask: true,
@@ -193,7 +183,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '9',
     title: 'Piazza Guru',
-    ability: AchievementAbility.COMMUNITY,
     xp: 100,
     isVariableXp: false,
     isTask: false,
@@ -213,7 +202,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '16',
     title: "That's the Spirit",
-    ability: AchievementAbility.EXPLORATION,
     xp: 100,
     isVariableXp: false,
     isTask: true,
@@ -233,7 +221,6 @@ export const mockAchievements: AchievementItem[] = [
   {
     uuid: '13',
     title: 'Kool Kidz',
-    ability: AchievementAbility.FLEX,
     xp: 100,
     isVariableXp: false,
     isTask: true,

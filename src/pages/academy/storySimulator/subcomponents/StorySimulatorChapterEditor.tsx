@@ -96,7 +96,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     }
     const response =
       parseInt(id) === createChapterIndex
-        ? await updateChapterRequest('', updatedChapter)
+        ? await updateChapterRequest('', { story: updatedChapter })
         : await updateChapterRequest(id, { story: updatedChapter });
 
     alert(response);
@@ -137,7 +137,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
       />
       <h4>
         Image url: <input className="bp3-input" type="text" {...imageUrlProps} />
-        <Button onClick={(_: any) => window.open(toS3Path(imageUrl))}>View</Button>
+        <Button onClick={(_: any) => window.open(toS3Path(imageUrl, true))}>View</Button>
       </h4>
       <b>Checkpoint Txt Files</b>
       <SortableList items={chosenFiles} onSortEnd={onSortEnd} />

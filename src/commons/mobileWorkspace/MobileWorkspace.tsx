@@ -196,6 +196,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
+  const inAssessmentWorkspace =
+    props.mobileSideContentProps.workspaceLocation === 'assessment' ||
+    props.mobileSideContentProps.workspaceLocation === 'githubAssessment';
+
   return (
     <div className="workspace mobile-workspace">
       {props.hasUnsavedChanges ? (
@@ -205,7 +209,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       ) : null}
 
       {/* Render the top ControlBar when it is the Assessment Workspace */}
-      {props.mobileSideContentProps.workspaceLocation === 'assessment' && (
+      {inAssessmentWorkspace && (
         <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
       )}
 

@@ -1,5 +1,5 @@
-import { changeQueryString, generateLzString, toggleUsingSubst } from '../PlaygroundActions';
-import { CHANGE_QUERY_STRING, GENERATE_LZ_STRING, TOGGLE_USING_SUBST } from '../PlaygroundTypes';
+import { changeQueryString, generateLzString } from '../PlaygroundActions';
+import { CHANGE_QUERY_STRING, GENERATE_LZ_STRING } from '../PlaygroundTypes';
 
 test('generateLzString generates correct action object', () => {
   const action = generateLzString();
@@ -14,13 +14,5 @@ test('changeQueryString generates correct action object', () => {
   expect(action).toEqual({
     type: CHANGE_QUERY_STRING,
     payload: queryString
-  });
-});
-
-test('toggleUsingSubst generates correct action object', () => {
-  const action = toggleUsingSubst(true);
-  expect(action).toEqual({
-    type: TOGGLE_USING_SUBST,
-    payload: true
   });
 });

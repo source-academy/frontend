@@ -158,31 +158,6 @@ shaders['copy-fragment-shader'] = [
   '}'
 ].join('\n')
 
-shaders['curve-vertex-shader'] = [
-  'attribute vec3 a_position;',
-  'attribute vec4 a_color;',
-  'uniform mat4 u_transformMatrix;',
-  'uniform mat4 u_projectionMatrix;',
-
-  'varying lowp vec4 v_color;',
-
-  'void main() {',
-  '    gl_PointSize = 2.0;',
-  '    gl_Position = u_projectionMatrix * u_transformMatrix * vec4(a_position, 1);',
-  '    v_color = a_color;',
-  '}'
-].join('\n')
-
-shaders['curve-fragment-shader'] = [
-  'precision mediump float;',
-
-  'varying lowp vec4 v_color;',
-
-  'void main() {',
-  '    gl_FragColor = v_color;',
-  '}'
-].join('\n')
-
 //-------------------------Constants-------------------------
 var antialias = 4 // common
 var halfEyeDistance = 0.03 // rune 3d only
@@ -319,51 +294,8 @@ function getReadyWebGLForCanvas(mode) {
       initRuneBuffer(vertices, indices)
       initRune3d()
     }
-
-    if (mode === 'curve') {
-      initCurveAttributes(curShaderProgram)
-    }
   }
 }
-
-// Appears to be unused
-
-// function getReadyWebGL(mode, name, horiz, vert, aa_off) {
-//   // mode can be "2d", "3d" or "curve"
-//   // Create <canvas> element
-//   var canvas = open_viewport(name, horiz, vert, aa_off)
-
-//   // Get the rendering context for WebGL
-//   gl = initWebGL(canvas)
-//   if (gl) {
-//     gl.clearColor(1.0, 1.0, 1.0, 1.0) // Set clear color to white, fully opaque
-//     gl.enable(gl.DEPTH_TEST) // Enable depth testing
-//     gl.depthFunc(gl.LEQUAL) // Near things obscure far things
-//     // Clear the color as well as the depth buffer.
-//     clear_viewport()
-
-//     //TODO: Revise this, it seems unnecessary
-//     // Align the drawable canvas in the middle
-//     gl.viewport((canvas.width - canvas.height) / 2, 0, canvas.height, canvas.height)
-
-//     // setup a GLSL program i.e. vertex and fragment shader
-//     if (!(normalShaderProgram = initShader(mode))) {
-//       return
-//     }
-//     curShaderProgram = normalShaderProgram
-//     gl.useProgram(curShaderProgram)
-
-//     // rune-specific operations
-//     if (mode === '2d' || mode === '3d') {
-//         initRuneCommon()
-//         initRune3d()
-//     }
-
-//     if (mode === 'curve') {
-//       initCurveAttributes(curShaderProgram)
-//     }
-//   }
-// }
 
 function initWebGL(canvas) {
   var gl = null
@@ -781,72 +713,6 @@ function copy_viewport_webGL(src) {
 function copy_viewport(src, dest) {
   dest.getContext('2d').clearRect(0, 0, dest.width, dest.height)
   dest.getContext('2d').drawImage(src, 0, 0, dest.width, dest.height) // auto scaling
-}
-
-//------------------------Curve functions------------------------
-function initCurveAttributes(shaderProgram) {
-  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'a_position')
-  gl.enableVertexAttribArray(vertexPositionAttribute)
-  colorAttribute = gl.getAttribLocation(shaderProgram, 'a_color')
-  gl.enableVertexAttribArray(colorAttribute)
-  u_transformMatrix = gl.getUniformLocation(shaderProgram, 'u_transformMatrix')
-  u_projectionMatrix = gl.getUniformLocation(shaderProgram, 'u_projectionMatrix')
-}
-
-function drawCurve(drawMode, curveObject, space) {
-  var curvePosArray = curveObject.curvePos
-  var curveColorArray = curveObject.color
-  var magicNum = 60000
-  var itemSize = space === '2D'? 2 : 3
-  var colorSize = 4
-
-  if (space == '3D') {
-    var drawCubeArray = curveObject.drawCube
-    vertexBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(drawCubeArray), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0)
-
-    var colors = []
-    for (var i = 0; i < 16; i++) {
-      colors.push(0.6, 0.6, 0.6, 0)
-    }
-    colorBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(colorAttribute, 4, gl.FLOAT, false, 0, 0)
-
-    gl.drawArrays(gl.LINE_STRIP, 0, drawCubeArray.length / itemSize)
-    gl.deleteBuffer(vertexBuffer)
-  }
-  
-  for (var i = 0; i <= curvePosArray.length / magicNum / itemSize; i++) {
-    // since webGL only supports 16bits buffer, i.e. the no. of
-    // points in the buffer must be lower than 65535, so I take
-    // 60000 as the "magic number"
-
-    // vertices
-    var subArray = curvePosArray.slice(i * magicNum * itemSize, (i + 1) * magicNum * itemSize)
-    vertexBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(subArray), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(vertexPositionAttribute, itemSize, gl.FLOAT, false, 0, 0)
-
-    // colors
-    var colors = curveColorArray.slice(i * magicNum * colorSize, (i + 1) * magicNum * colorSize)
-    colorBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(colorAttribute, colorSize, gl.FLOAT, false, 0, 0)
-    
-    if (drawMode == 'lines') {
-      gl.drawArrays(gl.LINE_STRIP, 0, subArray.length / itemSize)
-    } else {
-      gl.drawArrays(gl.POINTS, 0, subArray.length / itemSize)
-    }
-
-    gl.deleteBuffer(vertexBuffer)
-  }
 }
 
 function ShapeDrawn(canvas) {

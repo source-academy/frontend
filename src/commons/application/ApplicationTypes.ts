@@ -7,7 +7,6 @@ import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
@@ -30,7 +29,6 @@ export type OverallState = {
 };
 
 export type ApplicationState = {
-  readonly title: string;
   readonly environment: ApplicationEnvironment;
 };
 
@@ -165,22 +163,24 @@ export const defaultAcademy: AcademyState = {
 };
 
 export const defaultApplication: ApplicationState = {
-  title: 'Cadet',
   environment: currentEnvironment()
 };
 
 export const defaultDashboard: DashboardState = {
-  gradingSummary: []
+  gradingSummary: {
+    cols: [],
+    rows: []
+  }
 };
 
 export const defaultAchievement: AchievementState = {
   achievements: [],
   goals: [],
-  users: []
+  users: [],
+  assessmentOverviews: []
 };
 
 export const defaultPlayground: PlaygroundState = {
-  usingSubst: false,
   githubSaveInfo: { repoName: '', filePath: '' }
 };
 
@@ -222,7 +222,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   },
   replValue: '',
   sharedbConnected: false,
-  sideContentActiveTab: SideContentType.questionOverview,
   stepLimit: 1000,
   globals: [],
   isEditorAutorun: false,
@@ -276,6 +275,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     timeElapsedBeforePause: 0,
     timeResumed: 0
   },
+  sicp: {
+    ...createDefaultWorkspace('sicp'),
+    usingSubst: false
+  },
   githubAssessment: {
     ...createDefaultWorkspace('githubAssessment'),
     hasUnsavedChanges: false
@@ -283,32 +286,26 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
 };
 
 export const defaultSession: SessionState = {
-  accessToken: undefined,
-  assessments: new Map<number, Assessment>(),
-  assessmentOverviews: undefined,
-  githubOctokitObject: { octokit: undefined },
-  grade: 0,
-  gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
+  courses: [],
   group: null,
-  historyHelper: {
-    lastAcademyLocations: [null, null],
-    lastGeneralLocations: [null, null]
-  },
-  maxGrade: 0,
-  maxXp: 0,
-  refreshToken: undefined,
-  role: undefined,
-  name: undefined,
-  story: {
-    story: '',
-    playStory: false
-  },
   gameState: {
     completed_quests: [],
     collectibles: {}
   },
   xp: 0,
+  story: {
+    story: '',
+    playStory: false
+  },
+  assessments: new Map<number, Assessment>(),
+  assessmentOverviews: undefined,
+  agreedToResearch: undefined,
+  experimentCoinflip: Math.random() < 0.5,
+  hadPreviousInfiniteLoop: false,
+  sessionId: Date.now(),
+  githubOctokitObject: { octokit: undefined },
+  gradingOverviews: undefined,
+  gradings: new Map<number, Grading>(),
   notifications: []
 };
 

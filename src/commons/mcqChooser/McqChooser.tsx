@@ -72,11 +72,11 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
   private getButtonIntent = (
     currentOption: number,
     chosenOption: number | null,
-    solution: number | null
+    solution?: number
   ): Intent => {
     const active = currentOption === chosenOption;
-    const correctOptionSelected = active && solution !== null && currentOption === solution;
-    if (solution === null) {
+    const correctOptionSelected = active && solution !== undefined && currentOption === solution;
+    if (solution === undefined) {
       return Intent.NONE;
     } else if (active && correctOptionSelected) {
       return Intent.SUCCESS;

@@ -1,5 +1,8 @@
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+
 import { BooleanExpression } from './ExpressionTypes';
 
+export const ADD_EVENT = 'ADD_EVENT';
 export const BULK_UPDATE_ACHIEVEMENTS = 'BULK_UPDATE_ACHIEVEMENTS';
 export const BULK_UPDATE_GOALS = 'BULK_UPDATE_GOALS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
@@ -8,22 +11,16 @@ export const HANDLE_EVENT = 'HANDLE_EVENT';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const GET_GOALS = 'GET_GOALS';
 export const GET_OWN_GOALS = 'GET_OWN_GOALS';
+export const GET_USER_ASSESSMENT_OVERVIEWS = 'GET_USER_ASSESSMENT_OVERVIEWS';
 export const GET_USERS = 'GET_USERS';
 export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
 export const REMOVE_GOAL = 'REMOVE_GOAL';
 export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const SAVE_GOALS = 'SAVE_GOALS';
+export const SAVE_USER_ASSESSMENT_OVERVIEWS = 'SAVE_USER_ASSESSMENT_OVERVIEWS';
 export const SAVE_USERS = 'SAVE_USERS';
 export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
 export const UPDATE_OWN_GOAL_PROGRESS = 'UPDATE_OWN_GOAL_PROGRESS';
-
-export enum AchievementAbility {
-  CORE = 'Core',
-  EFFORT = 'Effort',
-  EXPLORATION = 'Exploration',
-  COMMUNITY = 'Community',
-  FLEX = 'Flex'
-}
 
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
@@ -43,8 +40,8 @@ export enum FilterStatus {
  *
  * @param {string} uuid unique uuid of the achievement item
  * @param {string} title title of the achievement
- * @param {AchievementAbility} ability ability of the achievement, string enum
  * @param {number} xp the xp gained when completing the achievement
+ * @param {boolean} isVariableXp the xp gained from the achievement is the sum of its goal counts
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task
@@ -57,7 +54,6 @@ export enum FilterStatus {
 export type AchievementItem = {
   uuid: string;
   title: string;
-  ability: AchievementAbility;
   xp: number;
   isVariableXp: boolean;
   deadline?: Date;
@@ -166,8 +162,9 @@ export type AchievementView = {
 };
 
 export type AchievementUser = {
-  name: string;
-  userId: number;
+  name?: string;
+  username: string;
+  courseRegId: number;
   group: string;
 };
 
@@ -175,4 +172,5 @@ export type AchievementState = {
   achievements: AchievementItem[];
   goals: AchievementGoal[];
   users: AchievementUser[];
+  assessmentOverviews: AssessmentOverview[];
 };

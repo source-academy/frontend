@@ -36,7 +36,6 @@ import GradingEditor from './GradingEditorContainer';
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type DispatchProps = {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
@@ -55,6 +54,7 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
+  handleRunAllTestcases: () => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -89,9 +89,24 @@ export type StateProps = {
   sideContentHeight?: number;
   storedSubmissionId?: number;
   storedQuestionId?: number;
+  courseId?: number;
 };
 
-class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
+type State = {
+  selectedTab: SideContentType;
+};
+
+class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
+  public constructor(props: GradingWorkspaceProps) {
+    super(props);
+
+    this.state = {
+      selectedTab: SideContentType.grading
+    };
+
+    this.handleEval = this.handleEval.bind(this);
+  }
+
   /**
    * After mounting (either an older copy of the grading
    * or a loading screen), try to fetch a newer grading.
@@ -142,7 +157,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
      * if that question exists
      */
     if (this.props.grading[questionId] === undefined) {
-      history.push('/academy/grading');
+      history.push(`/courses/${this.props.courseId}/grading`);
     } else {
       this.checkWorkspaceReset(this.props);
     }
@@ -174,7 +189,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               editorSessionId: '',
               editorValue: this.props.editorValue!,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
+              handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               breakpoints: this.props.breakpoints,
               highlightedLines: this.props.highlightedLines,
@@ -284,9 +299,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             solution={props.grading![questionId].question.solution}
             questionId={props.grading![questionId].question.id}
             submissionId={props.submissionId}
-            initialGrade={props.grading![questionId].grade.grade}
-            gradeAdjustment={props.grading![questionId].grade.gradeAdjustment}
-            maxGrade={props.grading![questionId].question.maxGrade}
             initialXp={props.grading![questionId].grade.xp}
             xpAdjustment={props.grading![questionId].grade.xpAdjustment}
             maxXp={props.grading![questionId].question.maxXp}
@@ -322,6 +334,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
+            workspaceLocation="grading"
           />
         ),
         id: SideContentType.autograder,
@@ -355,7 +368,16 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     }
 
     const sideContentProps: SideContentProps = {
-      handleActiveTabChange: props.handleActiveTabChange,
+      onChange: (
+        newTabId: SideContentType,
+        prevTabId: SideContentType,
+        event: React.MouseEvent<HTMLElement>
+      ) => {
+        if (newTabId === prevTabId) {
+          return;
+        }
+        this.setState({ selectedTab: newTabId });
+      },
       tabs,
       workspaceLocation: 'grading'
     };
@@ -365,7 +387,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
   /** Pre-condition: Grading has been loaded */
   private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/academy/grading`;
+    const listingPath = `/courses/${this.props.courseId}/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
     const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
 
@@ -396,9 +418,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
-    const runButton = (
-      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
-    );
+    const runButton = <ControlBarRunButton handleEditorEval={this.handleEval} key="run" />;
 
     return {
       editorButtons: [runButton],
@@ -423,6 +443,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     );
 
     return [evalButton, clearButton];
+  }
+
+  private handleEval() {
+    this.props.handleEditorEval();
+
+    // Run testcases when the autograder tab is selected
+    if (this.state.selectedTab === SideContentType.autograder) {
+      this.props.handleRunAllTestcases();
+    }
   }
 }
 

@@ -5,7 +5,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { Position } from '../../commons/editor/EditorTypes';
-import { SideContentType } from '../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -19,13 +18,14 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  runAllTestcases,
   setEditorBreakpoint,
-  updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateWorkspace
 } from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {
@@ -55,8 +55,6 @@ const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: number) =>
@@ -76,8 +74,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
+      handleRunAllTestcases: () => runAllTestcases(workspaceLocation),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
+        updateWorkspace(workspaceLocation, options),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handleGitHubLogIn: loginGitHub,

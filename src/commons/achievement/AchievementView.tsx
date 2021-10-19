@@ -21,7 +21,6 @@ function AchievementView(props: AchievementViewProps) {
 
   const inferencer = useContext(AchievementContext);
 
-  // NOTE: was originally isNaN, not sure how this should change for uuid
   if (focusUuid === '') {
     return (
       <div className="no-view">
@@ -32,34 +31,35 @@ function AchievementView(props: AchievementViewProps) {
   }
 
   const achievement = inferencer.getAchievement(focusUuid);
-  const { ability, deadline, title, view } = achievement;
+  const { deadline, title, view } = achievement;
   const { coverImage, completionText, description } = view;
   const awardedXp = inferencer.getAchievementXp(focusUuid);
   const goals = inferencer.listGoals(focusUuid);
-  const prereqGoals = inferencer.listPrerequisiteGoals(focusUuid);
   const status = inferencer.getStatus(focusUuid);
 
+  const descriptionParagraphs = description ? description.split('\n') : [''];
+
   return (
-    <div className="view" style={{ ...getAbilityGlow(ability), ...getAbilityBackground(ability) }}>
+    <div className="view" style={{ ...getAbilityGlow(), ...getAbilityBackground() }}>
       <div
         className="cover"
         style={{
-          background: `url(${coverImage}) center/cover`
+          background: `rgba(0, 0, 0, 0.5) url(${coverImage}) center/cover`,
+          backgroundBlendMode: `darken`
         }}
       >
         <h1>{title.toUpperCase()}</h1>
         {deadline && <p>{`Deadline: ${prettifyDate(deadline)}`}</p>}
         <span className="description">
-          <p>{description}</p>
+          {descriptionParagraphs.map((para, idx) => (
+            <p key={idx}>
+              {para}
+              <br />
+            </p>
+          ))}
         </span>
       </div>
       <AchievementViewGoal goals={goals} />
-      {prereqGoals.length > 0 && (
-        <>
-          <hr />
-          <AchievementViewGoal goals={prereqGoals} />
-        </>
-      )}
       {status === AchievementStatus.COMPLETED && (
         <>
           <hr />
