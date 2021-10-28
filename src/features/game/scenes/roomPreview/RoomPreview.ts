@@ -120,6 +120,7 @@ export default class RoomPreview extends Phaser.Scene {
 
     const backButton = new CommonBackButton(this, () => {
       this.getLayerManager().clearAllLayers();
+      this.sound.stopAll();
       this.scene.start('MainMenu');
     });
 
@@ -129,6 +130,7 @@ export default class RoomPreview extends Phaser.Scene {
         await SourceAcademyGame.getInstance().loadRoomCode();
         this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
         this.getLayerManager().clearAllLayers();
+        this.sound.stopAll();
         this.scene.restart();
       },
       onHover: () => roomRefreshHover.setVisible(true),
