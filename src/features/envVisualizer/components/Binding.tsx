@@ -88,12 +88,14 @@ export class Binding implements Visible {
   draw(): React.ReactNode {
     return (
       <React.Fragment key={Layout.key++}>
-        {this.isDummyBinding ? null : this.key.draw()}
+        {this.isDummyBinding
+          ? null // key can be omitted since value is anonymous
+          : this.key.draw()}
         {isMainReference(this.value, this) && this.value.draw()}
         {this.isDummyBinding ||
         this.value instanceof PrimitiveValue ||
         this.value instanceof UnassignedValue
-          ? null
+          ? null // arrow can be omitted since value is unreferenced
           : Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
     );
