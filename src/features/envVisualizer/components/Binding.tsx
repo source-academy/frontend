@@ -42,6 +42,7 @@ export class Binding implements Visible {
     readonly prevBinding: Binding | null,
     readonly isConstant: boolean = false
   ) {
+    // dummy key is an integral unique id
     this.isDummyBinding = !isNaN(parseInt(this.keyString));
 
     // derive the coordinates from the binding above it
@@ -89,14 +90,14 @@ export class Binding implements Visible {
     return (
       <React.Fragment key={Layout.key++}>
         {this.isDummyBinding
-          ? null // key can be omitted since value is anonymous
+          ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {isMainReference(this.value, this) && this.value.draw()}
         {this.isDummyBinding ||
         this.value instanceof PrimitiveValue ||
         this.value instanceof UnassignedValue
-          ? null // arrow can be omitted since value is unreferenced
+          ? null // omit the arrow since value is unreferenced
           : Arrow.from(this.key).to(this.value).draw()}
+        {isMainReference(this.value, this) ? this.value.draw() : null}
       </React.Fragment>
     );
   }
