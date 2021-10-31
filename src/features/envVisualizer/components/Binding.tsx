@@ -82,7 +82,6 @@ export class Binding implements Visible {
         this.width = this.prevBinding.width;
         this.height = this.prevBinding.height;
       }
-      // TODO: handle case where this is the first dummy in frame
     }
   }
 
