@@ -132,8 +132,8 @@ codeSamples.forEach((code, idx) => {
       });
     });
 
-    environmentsToTest.forEach(testItem => {
-      expect(testItem).toMatchSnapshot({
+    environmentsToTest.forEach(environment => {
+      expect(environment).toMatchSnapshot({
         id: expect.any(String)
       });
     });
