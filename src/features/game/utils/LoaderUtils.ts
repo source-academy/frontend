@@ -62,8 +62,7 @@ export const loadSound = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: As
     if (scene.sound.get(assetKey) !== null) {
       resolve(assetKey);
     } else {
-      scene.load.audio(assetKey, assetPath);
-      scene.load.once(`filecomplete-sound-${assetKey}`, resolve);
+      scene.load.audio(assetKey, assetPath).on('filecomplete', resolve);
       scene.load.start();
     }
   });
