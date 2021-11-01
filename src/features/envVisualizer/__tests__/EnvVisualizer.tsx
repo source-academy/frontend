@@ -2,6 +2,7 @@ import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
 
 import { Layout } from '../EnvVisualizerLayout';
+import { Env } from '../EnvVisualizerTypes';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -120,9 +121,10 @@ codeSamples.forEach((code, idx) => {
     Layout.setContext(context);
 
     const toTest: any[] = [];
+    const environmentsToTest: Env[] = [];
     Layout.levels.forEach(({ frames }) => {
       frames.forEach(({ environment, bindings }) => {
-        toTest.push(environment);
+        environmentsToTest.push(environment);
         bindings.forEach(({ keyString, data }) => {
           toTest.push(keyString);
           toTest.push(data);
@@ -130,6 +132,11 @@ codeSamples.forEach((code, idx) => {
       });
     });
 
+    environmentsToTest.forEach(environment => {
+      expect(environment).toMatchSnapshot({
+        id: expect.any(String)
+      });
+    });
     expect(toTest).toMatchSnapshot();
   });
 });
