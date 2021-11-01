@@ -101,9 +101,14 @@ export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
 }
 
-/** checks if `reference` is the main reference of the `value` */
+/** checks if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
   return value.referencedBy[0] === reference;
+}
+
+/** checks if `value` is a `number` */
+export function isNumeric(value: string) {
+  return /^-?\d+$/.test(value);
 }
 
 /**
