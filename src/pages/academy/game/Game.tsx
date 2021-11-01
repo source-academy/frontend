@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { getAchievements, getGoals } from 'src/features/achievement/AchievementActions';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
@@ -10,13 +11,20 @@ import SourceAcademyGame, {
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
+  const dispatch = useDispatch();
 
-  // TODO: Replace with actual achievements and goals
-  // const achievements = useSelector((state: OverallState) => state.achievement.achievements);
-  // const goals = useSelector((state: OverallState) => state.achievement.goals);
+  const achievements = useSelector((state: OverallState) => state.achievement.achievements);
+  const goals = useSelector((state: OverallState) => state.achievement.goals);
 
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);
+
+  React.useEffect(() => {
+    if (session.courseRegId) {
+      dispatch(getAchievements());
+      dispatch(getGoals(session.courseRegId));
+    }
+  }, [session.courseRegId, dispatch]);
 
   React.useEffect(() => {
     const game = createSourceAcademyGame();
@@ -34,16 +42,15 @@ function Game() {
       role: session.role,
       name: session.name
     } as AccountInfo);
-    // TODO see above
-    SourceAcademyGame.getInstance().setAchievements([]);
-    SourceAcademyGame.getInstance().setGoals([]);
+    SourceAcademyGame.getInstance().setAchievements(achievements);
+    SourceAcademyGame.getInstance().setGoals(goals);
 
     if (process.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
       SourceAcademyGame.getInstance().toggleUsingMock(true);
     }
-  }, [session]);
+  }, [session, achievements, goals]);
 
   return (
     <>
