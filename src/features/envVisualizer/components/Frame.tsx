@@ -6,7 +6,9 @@ import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
 import {
+  getNonEmptyEnv,
   getTextWidth,
+  isDummyKey,
   isPrimitiveData,
   isUnassigned,
   setHoveredStyle,
@@ -90,8 +92,24 @@ export class Frame implements Visible, Hoverable {
     let totalWidth = this.width;
 
     const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
+    const entries = [];
+    const dummyEntries = [];
+    for (const entry of Object.entries(descriptors)) {
+      if (isDummyKey(entry[0])) {
+        const actualEnv = getNonEmptyEnv(entry[1].value.environment);
+        if (
+          this.environment.id === Config.GlobalEnvId ||
+          (actualEnv && actualEnv.id === this.environment.id)
+        ) {
+          dummyEntries.push(entry);
+        }
+      } else {
+        entries.push(entry);
+      }
+    }
+    entries.push(...dummyEntries);
 
-    for (const [key, data] of Object.entries(descriptors)) {
+    for (const [key, data] of entries) {
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
       this.bindings.push(currBinding);
       prevBinding = currBinding;
