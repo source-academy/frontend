@@ -11,7 +11,7 @@ export function toText(data: Data, full: boolean = false): string | undefined {
     return '' + data;
   } else {
     const type = typeof data;
-    if (type === 'function' || type === 'object') {
+    if ((type === 'function' || type === 'object') && data !== null) {
       return undefined;
     } else if (type === 'string') {
       const dataString = data + '';
