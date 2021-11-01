@@ -1,9 +1,6 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
-import { getAwardProp } from '../awards/GameAwardsHelper';
-import { AwardProperty } from '../awards/GameAwardsTypes';
-import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -87,6 +84,7 @@ export default class GameUserStateManager {
    * Fetches achievements of the student;
    */
   public async loadAchievements() {
+    const awardsMapping = SourceAcademyGame.getInstance().getAwardsMapping();
     const achievements = SourceAcademyGame.getInstance().getAchievements();
     const goals = SourceAcademyGame.getInstance().getGoals();
 
@@ -100,25 +98,14 @@ export default class GameUserStateManager {
         (result, goalUuid) => result && goalMapping.get(goalUuid)!.completed,
         true
       );
-      const awardProp = getAwardProp(achievementUuid);
+      const awardProp = awardsMapping.get(achievementUuid);
 
-      let newAwardProp: AwardProperty;
-      if (!awardProp) {
-        // If there is no mapping, we create one from available information
-        newAwardProp = {
-          id: achievementUuid,
-          assetKey: Constants.nullInteractionId,
-          assetPath: Constants.nullInteractionId,
-          title: achievement.title,
-          description: achievement.view.description,
-          completed: isCompleted
-        };
-      } else {
+      if (awardProp) {
         // If there is mapping, we update the complete attribute
-        newAwardProp = { ...awardProp, completed: isCompleted };
+        const newAwardProp = { ...awardProp, completed: isCompleted };
+        SourceAcademyGame.getInstance().addAwardMapping(newAwardProp.assetKey, newAwardProp);
+        this.achievements.add(newAwardProp.assetKey);
       }
-      SourceAcademyGame.getInstance().addAwardMapping(achievementUuid, newAwardProp);
-      this.achievements.add(achievementUuid);
     });
   }
 
