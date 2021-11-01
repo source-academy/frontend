@@ -8,7 +8,7 @@ import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
 import {
   getNonEmptyEnv,
   getTextWidth,
-  isNumeric,
+  isDummyKey,
   isPrimitiveData,
   isUnassigned,
   setHoveredStyle,
@@ -95,8 +95,12 @@ export class Frame implements Visible, Hoverable {
     const entries = [];
     const dummyEntries = [];
     for (const entry of Object.entries(descriptors)) {
-      if (isNumeric(entry[0])) {
-        if (getNonEmptyEnv(entry[1].value.environment)?.id === this.environment.id) {
+      if (isDummyKey(entry[0])) {
+        const actualEnv = getNonEmptyEnv(entry[1].value.environment);
+        if (
+          this.environment.id === Config.GlobalEnvId ||
+          (actualEnv && actualEnv.id === this.environment.id)
+        ) {
           dummyEntries.push(entry);
         }
       } else {
@@ -104,6 +108,7 @@ export class Frame implements Visible, Hoverable {
       }
     }
     entries.push(...dummyEntries);
+
     for (const [key, data] of entries) {
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
       this.bindings.push(currBinding);

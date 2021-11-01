@@ -49,7 +49,8 @@ export enum Config {
   Ellipsis = '…',
 
   UnassignedData = '',
-  GlobalFrameDefaultText = ':::pre-declared names::'
+  GlobalFrameDefaultText = ':::pre-declared names::',
+  GlobalEnvId = '-1'
 }
 
 export const ShapeDefaultProps = {
