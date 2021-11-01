@@ -120,6 +120,7 @@ export default class RoomPreview extends Phaser.Scene {
 
     const backButton = new CommonBackButton(this, () => {
       this.getLayerManager().clearAllLayers();
+      this.sound.stopAll();
       this.scene.start('MainMenu');
     });
 
@@ -129,6 +130,7 @@ export default class RoomPreview extends Phaser.Scene {
         await SourceAcademyGame.getInstance().loadRoomCode();
         this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
         this.getLayerManager().clearAllLayers();
+        this.sound.stopAll();
         this.scene.restart();
       },
       onHover: () => roomRefreshHover.setVisible(true),
@@ -243,12 +245,15 @@ export default class RoomPreview extends Phaser.Scene {
   private createAward(x: number, y: number, awardKey: ItemId) {
     const achievements = this.getUserStateManager().getAchievements();
     const collectibles = this.getUserStateManager().getCollectibles();
-    if (achievements.includes(awardKey) || collectibles.includes(awardKey)) {
-      const awardProp = getAwardProp(awardKey);
-      const award = new Phaser.GameObjects.Sprite(this, x, y, awardProp.assetKey);
-      return this.attachVerificationTag(award);
-    }
-    return new Phaser.GameObjects.Sprite(this, x, y, ImageAssets.cookies.key);
+    const defaultAward = new Phaser.GameObjects.Sprite(this, x, y, ImageAssets.cookies.key);
+
+    if (!achievements.includes(awardKey) && !collectibles.includes(awardKey)) return defaultAward;
+
+    const awardProp = getAwardProp(awardKey);
+    if (!awardProp.completed) return defaultAward;
+
+    const award = new Phaser.GameObjects.Sprite(this, x, y, awardProp.assetKey);
+    return this.attachVerificationTag(award);
   }
 
   /**
