@@ -1,25 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer calculates correct layout for code sample 0 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
   },
-  ":::pre-declared names::: ",
-  Symbol(),
-  Object {
-    "head": Object {
-      "fn": [Function],
-      "x": Array [
-        "long string",
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 0 2`] = `
+Object {
+  "head": Object {
+    "3": [Function],
+    "4": [Function],
+    "5": [Function],
+    "6": [Function],
+    "7": [Function],
+    "8": [Function],
+    "9": [Function],
+    "fn": [Function],
+    "x": Array [
+      "long string",
+      Array [
+        [Function],
+        [Function],
+      ],
+      Array [
+        1,
         Array [
-          [Function],
-          [Function],
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
         ],
+      ],
+      [Function],
+      5,
+      6,
+    ],
+    "y": Array [
+      Array [
+        [Function],
+        [Function],
+      ],
+      Array [
         Array [
           1,
           Array [
@@ -33,18 +64,9 @@ Array [
             ],
           ],
         ],
-        [Function],
-        5,
-        6,
-      ],
-      "y": Array [
         Array [
           [Function],
-          [Function],
-        ],
-        Array [
           Array [
-            1,
             Array [
               Array [
                 2,
@@ -55,87 +77,82 @@ Array [
                 null,
               ],
             ],
-          ],
-          Array [
-            [Function],
             Array [
-              Array [
-                Array [
-                  2,
-                  3,
-                ],
-                Array [
-                  [Function],
-                  null,
-                ],
-              ],
-              Array [
-                [Function],
-                null,
-              ],
+              [Function],
+              null,
             ],
           ],
         ],
       ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
     },
+    "id": "1",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_list": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
+        ":::pre-declared names::": Symbol(),
       },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-        },
-        "name": "global",
-        "tail": null,
-      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 0 3`] = `
+Array [
+  ":::pre-declared names::: ",
+  Symbol(),
   "fn:= ",
   [Function],
   "x:= ",
@@ -203,41 +220,90 @@ Array [
       ],
     ],
   ],
+  "3:= ",
+  [Function],
+  "4:= ",
+  [Function],
+  "5:= ",
+  [Function],
+  "6:= ",
+  [Function],
+  "7:= ",
+  [Function],
+  "8:= ",
+  [Function],
+  "9:= ",
+  [Function],
 ]
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 1 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
   },
-  ":::pre-declared names::: ",
-  Symbol(),
-  Object {
-    "head": Object {
-      "fn": [Function],
-      "l": Array [
-        1,
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 1 2`] = `
+Object {
+  "head": Object {
+    "12": [Function],
+    "13": [Function],
+    "14": [Function],
+    "15": [Function],
+    "fn": [Function],
+    "l": Array [
+      1,
+      Array [
         Array [
           Array [
+            1,
             Array [
-              1,
+              2,
               Array [
-                2,
+                3,
                 Array [
-                  3,
-                  Array [
-                    [Function],
-                    null,
-                  ],
+                  [Function],
+                  null,
                 ],
               ],
             ],
+          ],
+          Array [
             Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            Array [
+              Array [
+                1,
+                Array [
+                  1,
+                  2,
+                ],
+                [Function],
+                4,
+                5,
+              ],
+              Array [
+                4,
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              1,
               Array [
                 Array [
                   1,
@@ -245,113 +311,92 @@ Array [
                 ],
                 3,
               ],
-              Array [
-                Array [
-                  1,
-                  Array [
-                    1,
-                    2,
-                  ],
-                  [Function],
-                  4,
-                  5,
-                ],
-                Array [
-                  4,
-                  null,
-                ],
-              ],
+              4,
             ],
-          ],
-          Array [
-            [Function],
-            Array [
-              Array [
-                1,
-                Array [
-                  Array [
-                    1,
-                    2,
-                  ],
-                  3,
-                ],
-                4,
-              ],
-              null,
-            ],
+            null,
           ],
         ],
       ],
-      "x": Array [
-        1,
+    ],
+    "x": Array [
+      1,
+      Array [
         Array [
-          Array [
-            1,
-            2,
-          ],
-          3,
+          1,
+          2,
         ],
-        4,
+        3,
       ],
+      4,
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
     },
+    "id": "10",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_list": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
+        ":::pre-declared names::": Symbol(),
       },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-        },
-        "name": "global",
-        "tail": null,
-      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 1 3`] = `
+Array [
+  ":::pre-declared names::: ",
+  Symbol(),
   "fn:= ",
   [Function],
   "x:= ",
@@ -429,107 +474,125 @@ Array [
       ],
     ],
   ],
+  "12:= ",
+  [Function],
+  "13:= ",
+  [Function],
+  "14:= ",
+  [Function],
+  "15:= ",
+  [Function],
 ]
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 2 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
   },
-  ":::pre-declared names::: ",
-  Symbol(),
-  Object {
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 2 2`] = `
+Object {
+  "head": Object {
+    "x1": Array [
+      1,
+      Array [
+        2,
+        Array [
+          3,
+          Array [
+            [Circular],
+            null,
+          ],
+        ],
+      ],
+    ],
+    "x2": Array [
+      3,
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            [Circular],
+          ],
+        ],
+        null,
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
     "head": Object {
-      "x1": Array [
-        1,
-        Array [
-          2,
-          Array [
-            3,
-            Array [
-              [Circular],
-              null,
-            ],
-          ],
-        ],
-      ],
-      "x2": Array [
-        3,
-        Array [
-          Array [
-            1,
-            Array [
-              2,
-              [Circular],
-            ],
-          ],
-          null,
-        ],
-      ],
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
     },
+    "id": "16",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_list": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
+        ":::pre-declared names::": Symbol(),
       },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-        },
-        "name": "global",
-        "tail": null,
-      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 2 3`] = `
+Array [
+  ":::pre-declared names::: ",
+  Symbol(),
   "x1:= ",
   Array [
     1,
@@ -562,150 +625,162 @@ Array [
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 3 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
   },
-  ":::pre-declared names::: ",
-  Symbol(),
-  Object {
-    "head": Object {
-      "e": Array [
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 3 2`] = `
+Object {
+  "head": Object {
+    "20": [Function],
+    "21": [Function],
+    "e": Array [
+      Array [
+        3,
         Array [
-          3,
+          4,
           Array [
-            4,
-            Array [
-              5,
-              null,
-            ],
-          ],
-        ],
-        Array [
-          2,
-          Array [
-            Array [
-              3,
-              Array [
-                4,
-                Array [
-                  5,
-                  null,
-                ],
-              ],
-            ],
+            5,
             null,
           ],
         ],
       ],
-      "f": Array [
+      Array [
+        2,
+        Array [
+          Array [
+            3,
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+    ],
+    "f": Array [
+      1,
+      2,
+    ],
+    "g": Array [
+      Array [
+        [Function],
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            [Function],
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+    ],
+    "y": Array [
+      Array [
         1,
         2,
       ],
-      "g": Array [
-        Array [
-          [Function],
-          Array [
-            4,
-            Array [
-              5,
-              null,
-            ],
-          ],
-        ],
-        Array [
-          2,
-          Array [
-            Array [
-              [Function],
-              Array [
-                4,
-                Array [
-                  5,
-                  null,
-                ],
-              ],
-            ],
-            null,
-          ],
-        ],
-      ],
-      "y": Array [
+      Array [
+        [Function],
         Array [
           1,
           2,
         ],
-        Array [
-          [Function],
-          Array [
-            1,
-            2,
-          ],
-        ],
       ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
     },
+    "id": "18",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_list": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
+        ":::pre-declared names::": Symbol(),
       },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-        },
-        "name": "global",
-        "tail": null,
-      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 3 3`] = `
+Array [
+  ":::pre-declared names::: ",
+  Symbol(),
   "e:= ",
   Array [
     Array [
@@ -783,27 +858,153 @@ Array [
       ],
     ],
   ],
+  "20:= ",
+  [Function],
+  "21:= ",
+  [Function],
 ]
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 4 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
   },
-  ":::pre-declared names::: ",
-  Symbol(),
-  Object {
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 4 2`] = `
+Object {
+  "head": Object {
+    "24": [Function],
+    "28": [Function],
+    "f": [Function],
+    "x": 0,
+    "y": 10,
+    "z": [Function],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
     "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "22",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 4 3`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 11,
+      },
+    ],
+    "callee": Node {
+      "end": 97,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 15,
+          "line": 7,
+        },
+        "start": Position {
+          "column": 14,
+          "line": 7,
+        },
+      },
+      "name": "f",
+      "start": 96,
+      "type": "Identifier",
+    },
+    "end": 101,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 19,
+        "line": 7,
+      },
+      "start": Position {
+        "column": 14,
+        "line": 7,
+      },
+    },
+    "start": 96,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "27": [Function],
+    "x": 11,
+  },
+  "id": Any<String>,
+  "name": "f",
+  "tail": Object {
+    "head": Object {
+      "24": [Function],
+      "28": [Function],
       "f": [Function],
       "x": 0,
       "y": 10,
       "z": [Function],
     },
+    "id": "23",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -852,16 +1053,25 @@ Array [
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
+      "id": "22",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
           ":::pre-declared names::": Symbol(),
         },
+        "id": "-1",
         "name": "global",
         "tail": null,
       },
     },
   },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 4 4`] = `
+Array [
+  ":::pre-declared names::: ",
+  Symbol(),
   "x: ",
   0,
   "y: ",
@@ -870,210 +1080,116 @@ Array [
   [Function],
   "z:= ",
   [Function],
-  Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": 11,
-        },
-      ],
-      "callee": Node {
-        "end": 97,
-        "loc": SourceLocation {
-          "end": Position {
-            "column": 15,
-            "line": 7,
-          },
-          "start": Position {
-            "column": 14,
-            "line": 7,
-          },
-        },
-        "name": "f",
-        "start": 96,
-        "type": "Identifier",
-      },
-      "end": 101,
-      "loc": SourceLocation {
-        "end": Position {
-          "column": 19,
-          "line": 7,
-        },
-        "start": Position {
-          "column": 14,
-          "line": 7,
-        },
-      },
-      "start": 96,
-      "type": "CallExpression",
-    },
-    "head": Object {
-      "x": 11,
-    },
-    "name": "f",
-    "tail": Object {
-      "head": Object {
-        "f": [Function],
-        "x": 0,
-        "y": 10,
-        "z": [Function],
-      },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
-          "integers_from": [Function],
-          "is_list": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
-        },
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            ":::pre-declared names::": Symbol(),
-          },
-          "name": "global",
-          "tail": null,
-        },
-      },
-    },
-  },
+  "24:= ",
+  [Function],
   "x: ",
   11,
+  "27:= ",
+  [Function],
 ]
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 5 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-      "accumulate": [Function],
-      "pair": [Function],
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+    "accumulate": [Function],
+    "pair": [Function],
   },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 5 2`] = `
+Object {
+  "head": Object {
+    "31": [Function],
+    "x": Array [
+      1,
+      Array [
+        [Function],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "29",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+        "accumulate": [Function],
+        "pair": [Function],
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 5 3`] = `
+Array [
   ":::pre-declared names::: ",
   Symbol(),
   "accumulate: ",
   [Function],
   "pair: ",
   [Function],
-  Object {
-    "head": Object {
-      "x": Array [
-        1,
-        Array [
-          [Function],
-          Array [
-            [Function],
-            null,
-          ],
-        ],
-      ],
-    },
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_list": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
-      },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-          "accumulate": [Function],
-          "pair": [Function],
-        },
-        "name": "global",
-        "tail": null,
-      },
-    },
-  },
   "x:= ",
   Array [
     1,
@@ -1089,78 +1205,88 @@ Array [
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 6 1`] = `
-Array [
-  Object {
-    "head": Object {
-      ":::pre-declared names::": Symbol(),
-    },
-    "name": "global",
-    "tail": null,
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
   },
-  ":::pre-declared names::: ",
-  Symbol(),
-  Object {
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 6 2`] = `
+Object {
+  "head": Object {
+    "x": Array [],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
     "head": Object {
-      "x": Array [],
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_list": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
     },
+    "id": "32",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_list": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
+        ":::pre-declared names::": Symbol(),
       },
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-        },
-        "name": "global",
-        "tail": null,
-      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 6 3`] = `
+Array [
+  ":::pre-declared names::: ",
+  Symbol(),
   "x:= ",
   Array [],
 ]
