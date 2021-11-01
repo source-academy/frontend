@@ -16,99 +16,108 @@ import {
 } from './EnvVisualizerTypes';
 
 // TODO: can make use of lodash
-/** checks if `x` is an object */
+/** Returns `true` if `x` is an object */
 export function isObject(x: any): x is object {
   return x === Object(x);
 }
 
-/** checks if `object` is empty */
+/** Returns `true` if `object` is empty */
 export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
 }
 
-/** checks if `object` is `Environment` */
+/** Returns `true` if `object` is `Environment` */
 export function isEnvironment(object: Object): object is Environment {
   return 'head' in object && 'tail' in object && 'name' in object;
 }
 
-/** checks if `object` is `EnvTreeNode` */
+/** Returns `true` if `object` is `EnvTreeNode` */
 export function isEnvTreeNode(object: Object): object is EnvTreeNode {
   return 'parent' in object && 'children' in object;
 }
 
-/** checks if `object` is `EnvTree` */
+/** Returns `true` if `object` is `EnvTree` */
 export function isEnvTree(object: Object): object is EnvTree {
   return 'root' in object;
 }
 
-/** checks if `env` is empty (that is, head of env is an empty object) */
+/** Returns `true` if `env` is empty (that is, head of env is an empty object) */
 export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject } {
   return env === null || isEmptyObject(env.head);
 }
 
-/** checks if `data` is a Javascript array */
+/** Returns `true` if `data` is a Javascript array */
 export function isArray(data: Data): data is Data[] {
   return Array.isArray(data);
 }
 
-/** checks if `x` is a Javascript function */
+/** Returns `true` if `x` is a Javascript function */
 export function isFunction(x: any): x is () => any {
   return x && {}.toString.call(x) === '[object Function]';
 }
 
-/** checks if `data` is a JS Slang function */
+/** Returns `true` if `data` is a JS Slang function */
 export function isFn(data: Data): data is FnTypes {
   return isFunction(data) && 'environment' in data && 'functionName' in data;
 }
 
-/** checks if `x` is a JS Slang function in the global frame */
+/** Returns `true` if `x` is a JS Slang function in the global frame */
 export function isGlobalFn(x: any): x is () => any {
   return isFunction(x) && !isFn(x);
 }
 
-/** checks if `data` is null */
+/** Returns `true` if `data` is null */
 export function isNull(data: Data): data is null {
   return data === null;
 }
 
-/** checks if `data` is undefined */
+/** Returns `true` if `data` is undefined */
 export function isUndefined(data: Data): data is undefined {
   return data === undefined;
 }
 
-/** checks if `data` is a string */
+/** Returns `true` if `data` is a string */
 export function isString(data: Data): data is string {
   return typeof data === 'string';
 }
 
-/** checks if `data` is a number */
+/** Returns `true` if `data` is a number */
 export function isNumber(data: Data): data is number {
   return typeof data === 'number';
 }
 
-/** checks if `data` is a symbol */
+/** Returns `true` if `data` is a symbol */
 export function isUnassigned(data: Data): data is symbol {
   return typeof data === 'symbol';
 }
 
-/** checks if `data` is a boolean */
+/** Returns `true` if `data` is a boolean */
 export function isBoolean(data: Data): data is boolean {
   return typeof data === 'boolean';
 }
 
-/** checks if `data` is a primitive, defined as a null | data | number */
+/** Returns `true` if `data` is a primitive, defined as a null | data | number */
 export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
 }
 
-/** checks if `reference` is the main reference of `value` */
+/** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
   return value.referencedBy[0] === reference;
 }
 
 /** checks if `value` is a `number` */
+/** Returns `true` if `value` is a `number` */
 export function isNumeric(value: string) {
   return /^-?\d+$/.test(value);
+}
+
+/**
+ * Returns `true` if `key` is a dummy key.
+ * dummy key is an integral unique id.
+ */
+export function isDummyKey(key: string) {
+  return isNumeric(key);
 }
 
 /**
@@ -142,7 +151,7 @@ export function getTextWidth(
   return metrics.width;
 }
 
-/** get the parameter string of the given function */
+/** Returns the parameter string of the given function */
 export function getParamsText(data: () => any): string {
   if (isFn(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
@@ -152,7 +161,7 @@ export function getParamsText(data: () => any): string {
   }
 }
 
-/** get the body string of the given function */
+/** Returns the body string of the given function */
 export function getBodyText(data: () => any): string {
   const fnString = data.toString();
   if (isFn(data)) {
@@ -168,7 +177,7 @@ export function getBodyText(data: () => any): string {
   }
 }
 
-/** update the styles of a Konva node and its children on hover, and then redraw the layer */
+/** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
 export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
@@ -192,7 +201,7 @@ export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
   target.getLayer()?.draw();
 }
 
-/** update the styles of a Konva node and its children on unhover, and then redraw the layer */
+/** Updates the styles of a Konva node and its children on unhover, and then redraw the layer */
 export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'default');
@@ -210,7 +219,7 @@ export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void 
   target.getLayer()?.draw();
 }
 
-/** extract the non-empty tail environment from the given environment */
+/** Extracts the non-empty tail environment from the given environment */
 export function getNonEmptyEnv(environment: Env): Env {
   if (environment === null) {
     return null;
@@ -222,12 +231,11 @@ export function getNonEmptyEnv(environment: Env): Env {
 }
 
 /**
- * Given any objects, this function will find the underlying `Environment` objects
- * and perform copying of property descriptors from source frames to destination frames.
- * Property descriptors are important for us to distinguish between constants and variables.
+ * Finds the underlying `Environment` objects and copies property descriptors
+ * from source frames to destination frames. Property descriptors are important for us
+ * to distinguish between constants and variables.
  */
 export function copyOwnPropertyDescriptors(source: any, destination: any) {
-  // TODO: use lodash cloneDeepWith customizer?
   if (isFunction(source) || isPrimitiveData(source)) {
     return;
   }
@@ -249,7 +257,7 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
 }
 
 /**
- * creates a deep clone of `EnvTree`
+ * Creates a deep clone of `EnvTree`
  *
  * TODO: move this function to EnvTree class
  * so we can invoke like so: environmentTree.deepCopy()
