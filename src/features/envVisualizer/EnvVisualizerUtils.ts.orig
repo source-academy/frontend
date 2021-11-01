@@ -101,17 +101,25 @@ export function isPrimitiveData(data: Data): data is PrimitiveTypes {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
 }
 
+<<<<<<< HEAD
 /** Returns `true` if `reference` is the main reference of `value` */
+=======
+/** checks if `reference` is the main reference of `value` */
+>>>>>>> cb4fe713174a0d270aafd3a050f1de0e29300b8f
 export function isMainReference(value: Value, reference: ReferenceType) {
   return value.referencedBy[0] === reference;
 }
 
-/** checks if `value` is a `number` */
+<<<<<<< HEAD
 /** Returns `true` if `value` is a `number` */
+=======
+/** checks if `value` is a `number` */
+>>>>>>> cb4fe713174a0d270aafd3a050f1de0e29300b8f
 export function isNumeric(value: string) {
   return /^-?\d+$/.test(value);
 }
 
+<<<<<<< HEAD
 /**
  * Returns `true` if `key` is a dummy key.
  * dummy key is an integral unique id.
@@ -120,6 +128,8 @@ export function isDummyKey(key: string) {
   return isNumeric(key);
 }
 
+=======
+>>>>>>> cb4fe713174a0d270aafd3a050f1de0e29300b8f
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
  *
