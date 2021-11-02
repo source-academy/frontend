@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
-import { isMainReference } from '../EnvVisualizerUtils';
+import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
@@ -42,8 +42,7 @@ export class Binding implements Visible {
     readonly prevBinding: Binding | null,
     readonly isConstant: boolean = false
   ) {
-    // dummy key is an integral unique id
-    this.isDummyBinding = !isNaN(parseInt(this.keyString));
+    this.isDummyBinding = isDummyKey(this.keyString);
 
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
@@ -91,10 +90,10 @@ export class Binding implements Visible {
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {this.isDummyBinding ||
+        {this.isDummyBinding || // value is unreferenced in dummy binding
         this.value instanceof PrimitiveValue ||
         this.value instanceof UnassignedValue
-          ? null // omit the arrow since value is unreferenced
+          ? null
           : Arrow.from(this.key).to(this.value).draw()}
         {isMainReference(this.value, this) ? this.value.draw() : null}
       </React.Fragment>
