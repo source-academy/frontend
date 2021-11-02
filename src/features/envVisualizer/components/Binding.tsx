@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
-import { isMainReference } from '../EnvVisualizerUtils';
+import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
@@ -25,6 +25,11 @@ export class Binding implements Visible {
   readonly value: Value;
   /** key of this binding */
   readonly key: Text;
+  /**
+   * `true` if this is a dummy binding
+   * i.e. the value is anonymous
+   */
+  readonly isDummyBinding: boolean = false;
 
   constructor(
     /** the key of this binding */
@@ -37,6 +42,8 @@ export class Binding implements Visible {
     readonly prevBinding: Binding | null,
     readonly isConstant: boolean = false
   ) {
+    this.isDummyBinding = isDummyKey(this.keyString);
+
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
       this.x = this.prevBinding.x;
@@ -65,17 +72,30 @@ export class Binding implements Visible {
           ? this.value.tooltipWidth
           : 0)
       : this.key.width;
+
     this.height = Math.max(this.key.height, this.value.height);
+
+    if (this.isDummyBinding && !isMainReference(this.value, this)) {
+      if (this.prevBinding) {
+        this.y = this.prevBinding.y;
+        this.width = this.prevBinding.width;
+        this.height = this.prevBinding.height;
+      }
+    }
   }
 
   draw(): React.ReactNode {
     return (
       <React.Fragment key={Layout.key++}>
-        {this.key.draw()}
+        {this.isDummyBinding
+          ? null // omit the key since value is anonymous
+          : this.key.draw()}
+        {this.isDummyBinding || // value is unreferenced in dummy binding
+        this.value instanceof PrimitiveValue ||
+        this.value instanceof UnassignedValue
+          ? null
+          : Arrow.from(this.key).to(this.value).draw()}
         {isMainReference(this.value, this) ? this.value.draw() : null}
-        {this.value instanceof PrimitiveValue ||
-          this.value instanceof UnassignedValue ||
-          Arrow.from(this.key).to(this.value).draw()}
       </React.Fragment>
     );
   }

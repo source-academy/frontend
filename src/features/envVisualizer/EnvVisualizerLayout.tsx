@@ -16,6 +16,7 @@ import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes'
 import {
   deepCopyTree,
   isArray,
+  isDummyKey,
   isEmptyEnvironment,
   isFn,
   isFunction,
@@ -89,13 +90,14 @@ export class Layout {
     };
 
     // update globalEnvNode children
-    if (programEnvNode.children) globalEnvNode.resetChildren(programEnvNode.children);
+    if (programEnvNode.children) {
+      globalEnvNode.resetChildren(programEnvNode.children);
+    }
 
     // go through new bindings and update functions to be global functions
     // by removing extra props such as functionName
     for (const value of Object.values(globalEnvNode.environment.head)) {
       if (isFn(value)) {
-        // HACKY?
         delete (value as { functionName?: string }).functionName;
       }
     }
@@ -113,7 +115,9 @@ export class Layout {
           findGlobalFnReferencesInData(data);
         }
       }
-      if (envNode.children) envNode.children.forEach(findGlobalFnReferences);
+      if (envNode.children) {
+        envNode.children.forEach(findGlobalFnReferences);
+      }
     };
 
     const findGlobalFnReferencesInData = (data: Data[]): void => {
@@ -133,7 +137,7 @@ export class Layout {
 
     const newFrame: Frame = {};
     for (const [key, data] of Object.entries(Layout.globalEnvNode.environment.head)) {
-      if (referencedGlobalFns.has(data)) {
+      if (referencedGlobalFns.has(data) || isDummyKey(key)) {
         newFrame[key] = data;
       }
     }
