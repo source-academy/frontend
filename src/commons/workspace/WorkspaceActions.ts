@@ -65,7 +65,7 @@ export const changeEditorHeight = (height: number, workspaceLocation: WorkspaceL
 export const changeEditorWidth = (widthChange: string, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
 
-export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLocation) =>
+export const changeExecTime = (execTime: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_EXEC_TIME, { execTime, workspaceLocation });
 
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>

@@ -151,6 +151,7 @@ export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuest
 export type Library = {
   chapter: number;
   variant?: Variant;
+  execTimeMs?: number;
   external: ExternalLibrary;
   globals: Array<{
     0: string;
