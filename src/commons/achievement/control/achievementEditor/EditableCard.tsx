@@ -12,6 +12,7 @@ import {
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
+import AchievementUuidCopier from './AchievementUuidCopier';
 import {
   EditableCardAction as Action,
   EditableCardActionType as ActionType,
@@ -234,6 +235,7 @@ function EditableCard(props: EditableCardProps) {
         <div className="details">
           <EditableDate changeDate={changeRelease} date={release} type="Release" />
           <EditableDate changeDate={changeDeadline} date={deadline} type="Deadline" />
+          <AchievementUuidCopier uuid={uuid} />
         </div>
       </div>
 
