@@ -13,7 +13,7 @@ export const castLibrary = (lib: any): Library => ({
     symbols: lib.external.symbols
   },
   execTimeMs: lib.execTimeMs,
-  variant: lib.variant,
+  variant: lib.variant || 'default',
   /** globals are passed as an object, mapping symbol name -> value */
   globals: Object.entries(lib.globals as object).map(entry => {
     /** The value that is passed is evaluated into an actual JS value */
