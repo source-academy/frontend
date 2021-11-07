@@ -538,6 +538,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       question.prepend = question.prepend || '';
       question.postpend = question.postpend || '';
       question.testcases = question.testcases || [];
+      question.library.variant = question.library.variant || 'default';
       q = question;
     }
 
