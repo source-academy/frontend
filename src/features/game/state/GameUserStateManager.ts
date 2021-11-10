@@ -95,8 +95,7 @@ export default class GameUserStateManager {
     achievements.forEach(achievement => {
       const achievementUuid = achievement.uuid.toString();
       const isCompleted = achievement.goalUuids.reduce(
-        (result, goalUuid) =>
-          result && !!goalMapping.get(goalUuid) && goalMapping.get(goalUuid)!.completed,
+        (result, goalUuid) => result && !!goalMapping.get(goalUuid)?.completed,
         true
       );
       const awardProp = awardsMapping.get(achievementUuid);
