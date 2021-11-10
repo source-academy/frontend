@@ -20,8 +20,8 @@ function Game() {
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
-      dispatch(getAchievements());
-      dispatch(getOwnGoals());
+    dispatch(getAchievements());
+    dispatch(getOwnGoals());
   }, [dispatch]);
 
   React.useEffect(() => {
