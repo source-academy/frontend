@@ -45,8 +45,8 @@ const licenses = (
     <div>
       <p>
         This work is licensed under a{' '}
-        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
-          Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+        <a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="nofollow">
+          Creative Commons Attribution-ShareAlike 4.0 International License
         </a>
         .
       </p>
@@ -78,7 +78,7 @@ const licenses = (
     </div>
     <div>
       <p>
-        The final version of this work will be published by The MIT Press under a{' '}
+        A print version of this work is published by The MIT Press under a{' '}
         <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
           Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
         </a>
