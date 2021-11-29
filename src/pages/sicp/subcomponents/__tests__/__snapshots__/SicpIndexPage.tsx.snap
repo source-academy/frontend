@@ -113,13 +113,13 @@ exports[`Sicp index page 1`] = `
                   </Blueprint3.Collapse>
                 </li>
               </Blueprint3.TreeNode>
-              <Blueprint3.TreeNode id={3} hasCaret={false} label=\\"Prefaces to Structure and Interpretation of Computer Programs\\" nodeData=\\"prefaces96\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
+              <Blueprint3.TreeNode id={3} hasCaret={false} label=\\"Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984\\" nodeData=\\"prefaces96\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
                 <li className=\\"bp3-tree-node\\">
                   <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <span className=\\"bp3-tree-node-caret-none\\" />
                     <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
                     <span className=\\"bp3-tree-node-label\\">
-                      Prefaces to Structure and Interpretation of Computer Programs
+                      Prefaces to Structure and Interpretation of Computer Programs, 1996 &amp; 1984
                     </span>
                   </div>
                   <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
