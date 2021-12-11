@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { getAchievements, getGoals } from 'src/features/achievement/AchievementActions';
+import { getAchievements, getOwnGoals } from 'src/features/achievement/AchievementActions';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
@@ -20,11 +20,9 @@ function Game() {
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
-    if (session.courseRegId) {
-      dispatch(getAchievements());
-      dispatch(getGoals(session.courseRegId));
-    }
-  }, [session.courseRegId, dispatch]);
+    dispatch(getAchievements());
+    dispatch(getOwnGoals());
+  }, [dispatch]);
 
   React.useEffect(() => {
     const game = createSourceAcademyGame();

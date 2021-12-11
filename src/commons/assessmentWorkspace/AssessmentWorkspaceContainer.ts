@@ -17,6 +17,7 @@ import {
   browseReplHistoryUp,
   changeEditorHeight,
   changeEditorWidth,
+  changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
   evalEditor,
@@ -88,6 +89,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
+      handleChangeExecTime: (execTimeMs: number) => changeExecTime(execTimeMs, workspaceLocation),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),

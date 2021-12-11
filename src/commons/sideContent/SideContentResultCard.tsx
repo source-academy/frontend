@@ -18,9 +18,11 @@ const buildErrorString = (errors: AutogradingError[]) =>
         case 'timeout':
           return '[TIMEOUT] Submission exceeded time limit for this test case.';
         case 'syntax':
-          return `[SYNTAX] Line ${error.line}: Error: ${error.errorExplanation}`;
+          return `[SYNTAX] Line ${error.line}: ${error.errorExplanation}`;
+        case 'runtime':
+          return `[RUNTIME] Line ${error.line}: ${error.errorExplanation}`;
         case 'systemError':
-          return `[RUNTIME] ${error.errorMessage}`;
+          return `[SYSTEM] ${error.errorMessage}`;
         default:
           return `[UNKNOWN] Autograder error: type ${error.errorType}`;
       }

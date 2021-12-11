@@ -228,7 +228,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                     </Component>
                     <Component className=\\"result-actual\\">
                       <pre className=\\"bp3-code-block result-actual\\">
-                        [RUNTIME] Cannot read property &#39;getUniformLocation&#39; of null
+                        [SYSTEM] Cannot read property &#39;getUniformLocation&#39; of null
                       </pre>
                     </Component>
                   </div>
@@ -254,7 +254,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                       <pre className=\\"bp3-code-block result-actual\\">
                         [TIMEOUT] Submission exceeded time limit for this test case.
                         
-                        [SYNTAX] Line 2: Error: Missing semicolon at the end of statement
+                        [SYNTAX] Line 2: Missing semicolon at the end of statement
                       </pre>
                     </Component>
                   </div>
