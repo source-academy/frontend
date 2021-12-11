@@ -6,11 +6,8 @@ exports[`Autograder renders autograder results with different statuses correctly
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-              <desc>
-                caret-down
-              </desc>
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
           </span>
@@ -27,11 +24,8 @@ exports[`Autograder renders autograder results with different statuses correctly
                     <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                       <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                         <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} aria-hidden={true} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                             <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                              <desc>
-                                help
-                              </desc>
                               <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
                             </svg>
                           </span>
@@ -40,7 +34,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                     </Blueprint3.ResizeSensor2>
                   </Reference>
                   <Popper innerRef={[Function (anonymous)]} placement=\\"left\\" strategy=\\"absolute\\" modifiers={{...}}>
-                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} shouldReturnFocusOnClose={true} />
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
@@ -63,11 +57,8 @@ exports[`Autograder renders autograder results with different statuses correctly
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
-            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                <desc>
-                  caret-down
-                </desc>
                 <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
@@ -88,11 +79,8 @@ exports[`Autograder renders autograder results with different statuses correctly
                 <div className=\\"header-sn\\">
                   S/N
                   <Blueprint3.Icon icon=\\"caret-down\\">
-                    <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                       <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                        <desc>
-                          caret-down
-                        </desc>
                         <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                       </svg>
                     </span>
@@ -101,11 +89,8 @@ exports[`Autograder renders autograder results with different statuses correctly
                 <div className=\\"header-status\\">
                   Testcase status
                   <Blueprint3.Icon icon=\\"caret-down\\">
-                    <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                       <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                        <desc>
-                          caret-down
-                        </desc>
                         <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                       </svg>
                     </span>
@@ -115,11 +100,8 @@ exports[`Autograder renders autograder results with different statuses correctly
               <div className=\\"header-expected\\">
                 Expected result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -128,11 +110,8 @@ exports[`Autograder renders autograder results with different statuses correctly
               <div className=\\"header-actual\\">
                 Actual result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -275,11 +254,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-              <desc>
-                caret-down
-              </desc>
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
           </span>
@@ -296,11 +272,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                     <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                       <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                         <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} aria-hidden={true} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                             <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                              <desc>
-                                help
-                              </desc>
                               <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
                             </svg>
                           </span>
@@ -309,7 +282,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                     </Blueprint3.ResizeSensor2>
                   </Reference>
                   <Popper innerRef={[Function (anonymous)]} placement=\\"left\\" strategy=\\"absolute\\" modifiers={{...}}>
-                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} shouldReturnFocusOnClose={true} />
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
@@ -327,11 +300,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
               <div className=\\"header-fn\\">
                 Testcase
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -340,11 +310,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
               <div className=\\"header-expected\\">
                 Expected result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -353,11 +320,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
               <div className=\\"header-actual\\">
                 Actual result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -424,11 +388,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
-            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                <desc>
-                  caret-down
-                </desc>
                 <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
@@ -459,11 +420,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-              <desc>
-                caret-down
-              </desc>
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
           </span>
@@ -480,11 +438,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                     <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                       <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                         <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} aria-hidden={true} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                             <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                              <desc>
-                                help
-                              </desc>
                               <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
                             </svg>
                           </span>
@@ -493,7 +448,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                     </Blueprint3.ResizeSensor2>
                   </Reference>
                   <Popper innerRef={[Function (anonymous)]} placement=\\"left\\" strategy=\\"absolute\\" modifiers={{...}}>
-                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} shouldReturnFocusOnClose={true} />
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
@@ -511,11 +466,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
               <div className=\\"header-fn\\">
                 Testcase
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -524,11 +476,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
               <div className=\\"header-expected\\">
                 Expected result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -537,11 +486,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
               <div className=\\"header-actual\\">
                 Actual result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -648,11 +594,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
-            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                <desc>
-                  caret-down
-                </desc>
                 <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
@@ -709,11 +652,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-              <desc>
-                caret-down
-              </desc>
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
           </span>
@@ -730,11 +670,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                     <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                       <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                         <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} aria-hidden={true} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                             <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                              <desc>
-                                help
-                              </desc>
                               <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
                             </svg>
                           </span>
@@ -743,7 +680,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                     </Blueprint3.ResizeSensor2>
                   </Reference>
                   <Popper innerRef={[Function (anonymous)]} placement=\\"left\\" strategy=\\"absolute\\" modifiers={{...}}>
-                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} shouldReturnFocusOnClose={true} />
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
@@ -761,11 +698,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
               <div className=\\"header-fn\\">
                 Testcase
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -774,11 +708,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
               <div className=\\"header-expected\\">
                 Expected result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -787,11 +718,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
               <div className=\\"header-actual\\">
                 Actual result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -921,11 +849,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
-            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                <desc>
-                  caret-down
-                </desc>
                 <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
@@ -956,11 +881,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-              <desc>
-                caret-down
-              </desc>
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
           </span>
@@ -977,11 +899,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
                     <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                       <span aria-haspopup=\\"true\\" className=\\"bp3-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                         <Blueprint3.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
+                          <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} aria-hidden={true} className=\\"bp3-icon bp3-icon-help\\" title={[undefined]}>
                             <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                              <desc>
-                                help
-                              </desc>
                               <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
                             </svg>
                           </span>
@@ -990,7 +909,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
                     </Blueprint3.ResizeSensor2>
                   </Reference>
                   <Popper innerRef={[Function (anonymous)]} placement=\\"left\\" strategy=\\"absolute\\" modifiers={{...}}>
-                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} shouldReturnFocusOnClose={true} />
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
@@ -1008,11 +927,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
               <div className=\\"header-fn\\">
                 Testcase
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -1021,11 +937,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
               <div className=\\"header-expected\\">
                 Expected result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -1034,11 +947,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
               <div className=\\"header-actual\\">
                 Actual result
                 <Blueprint3.Icon icon=\\"caret-down\\">
-                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                      <desc>
-                        caret-down
-                      </desc>
                       <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                     </svg>
                   </span>
@@ -1168,11 +1078,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
-            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                <desc>
-                  caret-down
-                </desc>
                 <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
