@@ -18,15 +18,16 @@ export type ControlBarGitHubMobileLoginButtonProps = {
  *
  * @param props Component properties
  */
-export const ControlBarGitHubMobileLoginButton: React.FC<ControlBarGitHubMobileLoginButtonProps> =
-  props => {
-    const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-    const isLoggedIn =
-      useSelector((store: OverallState) => store.session.githubOctokitObject).octokit !== undefined;
+export const ControlBarGitHubMobileLoginButton: React.FC<
+  ControlBarGitHubMobileLoginButtonProps
+> = props => {
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isLoggedIn =
+    useSelector((store: OverallState) => store.session.githubOctokitObject).octokit !== undefined;
 
-    const loginButton = isLoggedIn
-      ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
-      : controlButton('Log In', IconNames.GIT_BRANCH, props.onClickLogIn);
+  const loginButton = isLoggedIn
+    ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
+    : controlButton('Log In', IconNames.GIT_BRANCH, props.onClickLogIn);
 
-    return <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>;
-  };
+  return <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>;
+};
