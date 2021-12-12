@@ -20,15 +20,8 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
       <div className={Classes.DARK}>
         {this.state.visualization || (
           <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-            The environmental visualizer generates the environmental model diagram based on
-            breakpoints set in the editor.
-            <br />
-            <br />
-            It is activated by clicking on the gutter of the editor (where all the line numbers are,
-            on the left) to set a breakpoint, and then running the program.
-            <br />
-            <br />
-            The environment model diagram follows a notation introduced in{' '}
+            The environment model visualizer generates environment model diagrams following a
+            notation introduced in{' '}
             <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
               <i>
                 Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
@@ -36,6 +29,13 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
               </i>
             </a>
             .
+            <br />
+            <br />
+            It is activated by setting breakpoints before you run the program. You can set a
+            breakpoint by clicking on the gutter of the editor (where all the line numbers are, on
+            the left). When the program runs into a breakpoint, the visualizer displays the state of
+            the environments before the statement is evaluated, which starts in the line in which
+            you set the breakpoint. Every breakpoint must be at the beginning of a statement.
           </p>
         )}
       </div>
