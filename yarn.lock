@@ -2364,10 +2364,10 @@
     "@types/react" "*"
     "@types/react-router" "*"
 
-"@types/react-router-redux@^5.0.19":
-  version "5.0.19"
-  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-5.0.19.tgz#f0326f6b892a2ad2d364d2ca200b46441e2adbba"
-  integrity sha512-ZyT0r4W65ZqnpL0WLuX0WkZXBS5nCrZym2DKT840PS0haGxFMMYKvwt9jjkURE5cgOfwzbSSay34dNnEspMO6w==
+"@types/react-router-redux@^5.0.20":
+  version "5.0.20"
+  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-5.0.20.tgz#087824d9e68acaf140c6d3f87b93c44999819af3"
+  integrity sha512-2TFSRXk1dvEbG5jfbkyU8HB6Ezhbql582S4AsMa2mo59DFZD6VszXd6DLhT6gY1tWj4H/AkLh334rrtf20uH0Q==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
