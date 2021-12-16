@@ -4,7 +4,7 @@ exports[`Badge does not render with no notifications 1`] = `"<NotificationBadge 
 
 exports[`Badge renders properly with notifications 1`] = `
 "<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]}>
-  <Blueprint3.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+  <Blueprint3.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Manager>
       <Reference>
         <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
@@ -24,7 +24,7 @@ exports[`Badge renders properly with notifications 1`] = `
         </Blueprint3.ResizeSensor2>
       </Reference>
       <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
-        <Blueprint3.Overlay autoFocus={true} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+        <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
       </Popper>
     </Manager>
   </Blueprint3.Popover2>
@@ -33,7 +33,7 @@ exports[`Badge renders properly with notifications 1`] = `
 
 exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`] = `
 "<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} notificationFilter={[Function (anonymous)]}>
-  <Blueprint3.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+  <Blueprint3.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Manager>
       <Reference>
         <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
@@ -53,7 +53,7 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`]
         </Blueprint3.ResizeSensor2>
       </Reference>
       <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
-        <Blueprint3.Overlay autoFocus={true} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+        <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
       </Popper>
     </Manager>
   </Blueprint3.Popover2>
@@ -62,7 +62,7 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`]
 
 exports[`Badge with filter, filterNotificationsByAssessment renders properly 2`] = `
 "<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} notificationFilter={[Function (anonymous)]}>
-  <Blueprint3.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+  <Blueprint3.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Manager>
       <Reference>
         <Blueprint3.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
@@ -82,7 +82,7 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 2`]
         </Blueprint3.ResizeSensor2>
       </Reference>
       <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
-        <Blueprint3.Overlay autoFocus={true} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} lazy={true} />
+        <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp3-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
       </Popper>
     </Manager>
   </Blueprint3.Popover2>
