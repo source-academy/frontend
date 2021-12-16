@@ -9,10 +9,12 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 ## Features
 
 - Playground to write and test programs
-- Built-in Debugger and Visualizer to interact with your programs
-- Missions/Quests/Contests to solve challenging problems while learning about programming fundamentals
+- Built-in stepper, data visualizer, and environment visualizer to debug your programs
+- Assessments (Missions/Quests/Contests) to solve challenging problems while learning about programming fundamentals
 - Sessions for collaborative programming
-- Grading System to test your programs and marking
+- Integration with Google Drive and Github
+- Graphic-novel-style game to provide context for themed assessments
+- Grading System to grade and comment on submitted assessments
 
 ## Getting Started
 
