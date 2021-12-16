@@ -267,13 +267,13 @@ test('Autograder renders autograder results with different statuses correctly', 
     ['1', 'PASS', '', ''],
     ['2', 'FAIL', '8', '5'],
     ['3', 'ERROR', '', '[UNKNOWN] Autograder error: type dummyErrorType'],
-    ['4', 'ERROR', '', "[RUNTIME] Cannot read property 'getUniformLocation' of null"],
+    ['4', 'ERROR', '', "[SYSTEM] Cannot read property 'getUniformLocation' of null"],
     [
       '5',
       'ERROR',
       '',
       '[TIMEOUT] Submission exceeded time limit for this test case.\n\n' +
-        '[SYNTAX] Line 2: Error: Missing semicolon at the end of statement'
+        '[SYNTAX] Line 2: Missing semicolon at the end of statement'
     ]
   ]);
 });

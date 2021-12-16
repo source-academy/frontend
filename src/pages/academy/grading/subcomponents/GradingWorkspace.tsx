@@ -5,7 +5,10 @@ import * as React from 'react';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
 
-import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';
+import {
+  defaultWorkspaceManager,
+  InterpreterOutput
+} from '../../../../commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -52,6 +55,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleChangeExecTime: (execTimeMs: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   handleRunAllTestcases: () => void;
@@ -198,7 +202,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false,
               sourceChapter: question?.library?.chapter || 4,
-              sourceVariant: 'default',
+              sourceVariant: question?.library?.variant ?? ('default' as const),
               externalLibraryName: question?.library?.external?.name || 'NONE'
             }
           : undefined,
@@ -221,7 +225,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         output: this.props.output,
         replValue: this.props.replValue,
         sourceChapter: question?.library?.chapter || 4,
-        sourceVariant: 'default',
+        sourceVariant: question?.library?.variant ?? ('default' as const),
         externalLibrary: question?.library?.external?.name || 'NONE',
         replButtons: this.replButtons()
       }
@@ -277,6 +281,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       editorPostpend,
       editorTestcases
     });
+    props.handleChangeExecTime(
+      question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime
+    );
     props.handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {

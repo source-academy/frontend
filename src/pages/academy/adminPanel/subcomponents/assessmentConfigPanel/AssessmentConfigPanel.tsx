@@ -164,7 +164,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       const rowNeedsToMove = movingNode !== overNode;
       if (rowNeedsToMove) {
         const movingData = movingNode.data;
-        const overData = overNode.data;
+        const overData = overNode?.data;
         const fromIndex = indexOfObject(assessmentConfig.current, movingData);
         const toIndex = indexOfObject(assessmentConfig.current, overData);
 
