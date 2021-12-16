@@ -16,6 +16,7 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "strict": true,
+    "useUnknownInCatchVariables": false,
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
