@@ -98,8 +98,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChangeExecTime: (execTime: number) =>
-        changeExecTime(execTime.toString(), workspaceLocation),
+      handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),
       handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, workspaceLocation),
       handleChapterSelect: (chapter: number, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),

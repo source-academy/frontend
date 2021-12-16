@@ -50,7 +50,9 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
-              Gokul Rajiv
+              Gokul Rajiv,
+              <br />
+              Lee Hyung Woon
               <br />
               <strong>(Game)</strong>
             </p>

@@ -58,7 +58,7 @@ test('Opening folder for first time causes child files to be loaded', async () =
   await screen.findByText('Select a File');
 
   act(() => {
-    fireEvent.click(screen.getByText('chevron-right'));
+    fireEvent.click(screen.getByText('Expand group'));
   });
 
   await waitFor(() => expect(screen.getAllByText('TestFolder').length).toBe(2));
@@ -87,7 +87,7 @@ test('Closing folder hides child files', async () => {
 
   await screen.findByText('Select a File');
 
-  const dropdownCaret = screen.getByText('chevron-right');
+  const dropdownCaret = screen.getByText('Expand group');
 
   // Open the folder for the first time, now there should be 2 TestFolders
   act(() => {
@@ -129,7 +129,7 @@ test('Opening folder for second time does not cause child files to be loaded', a
 
   await screen.findByText('Select a File');
 
-  const dropdownCaret = screen.getByText('chevron-right');
+  const dropdownCaret = screen.getByText('Expand group');
 
   // Open the folder, there should be 2 TestFolders in the render
   act(() => {

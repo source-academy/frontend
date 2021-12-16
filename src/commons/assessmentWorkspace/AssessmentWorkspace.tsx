@@ -23,7 +23,7 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import { defaultWorkspaceManager, InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
@@ -86,6 +86,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleChangeExecTime: (execTimeMs: number) => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -343,6 +344,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       editorPostpend,
       editorTestcases
     });
+    props.handleChangeExecTime(
+      question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime
+    );
     props.handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
@@ -644,7 +648,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
         sourceChapter={props.assessment!.questions[questionId].library.chapter}
-        sourceVariant={Constants.defaultSourceVariant as Variant}
+        sourceVariant={
+          props.assessment!.questions[questionId].library.variant ??
+          (Constants.defaultSourceVariant as Variant)
+        }
         disabled={true}
         key="chapter"
       />
@@ -776,7 +783,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           editorSessionId: '',
           editorValue: props.editorValue!,
           sourceChapter: question.library.chapter || 4,
-          sourceVariant: 'default' as Variant,
+          sourceVariant: question.library.variant ?? ('default' as const),
           externalLibrary: question.library.external.name || 'NONE',
           handleDeclarationNavigate: props.handleDeclarationNavigate,
           handleEditorEval: handleEval,
@@ -806,7 +813,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     output: props.output,
     replValue: props.replValue,
     sourceChapter: question?.library?.chapter || 4,
-    sourceVariant: 'default' as Variant,
+    sourceVariant: question.library.variant ?? ('default' as const),
     externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons()
   };

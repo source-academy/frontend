@@ -133,8 +133,9 @@ export default function* WorkspaceSaga(): SagaIterator {
       }));
 
       let chapterName = context.chapter.toString();
-      if (context.variant !== 'default') {
-        chapterName += '_' + context.variant;
+      const variant = context.variant ?? 'default';
+      if (variant !== 'default') {
+        chapterName += '_' + variant;
       }
 
       const builtinSuggestions = Documentation.builtins[chapterName] || [];
