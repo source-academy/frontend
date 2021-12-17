@@ -66,7 +66,6 @@
     "react-papaparse": "^3.18.1",
     "react-redux": "^7.2.6",
     "react-responsive": "^9.0.0-beta.5",
-    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-simple-keyboard": "^3.4.13",
     "react-sortable-hoc": "^2.0.0",
