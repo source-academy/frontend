@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import { NATIVE_JS_UPDATE_SESSION } from 'src/features/nativeJS/NativeJSTypes';
 
 import {
   REMOTE_EXEC_UPDATE_DEVICES,
@@ -134,6 +135,11 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         githubOctokitObject: { octokit: undefined },
         githubAccessToken: undefined
+      };
+    case NATIVE_JS_UPDATE_SESSION:
+      return {
+        ...state,
+        nativeJsSession: action.payload
       };
     default:
       return state;

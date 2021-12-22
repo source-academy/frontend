@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { Variant } from 'js-slang/dist/types';
+import { NativeJSEvalSession } from 'src/features/nativeJS/NativeJSTypes';
 
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
@@ -114,6 +115,7 @@ export type SessionState = {
   readonly githubAccessToken?: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
+  readonly nativeJsSession?: NativeJSEvalSession;
 };
 
 export type Tokens = {
