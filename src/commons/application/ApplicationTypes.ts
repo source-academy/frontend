@@ -118,10 +118,25 @@ const variantDisplay: Map<Variant, string> = new Map([
   ['gpu', 'GPU']
 ]);
 
+export const isNativeJSChapter = (chapterNumber: SourceLanguage['chapter']) => {
+  return chapterNumber === -1;
+};
+
+// We will treat chapter === -1 as native JS for now
+// This is because we want to separate it from being a Source sub-language
+// and not to introduce unnecessary new types to handle "other" languages (for now)
+export const nativeJSLanguage: SourceLanguage = {
+  chapter: -1,
+  variant: 'default',
+  displayName: 'Native Javascript'
+};
+
 export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
-  return `Source \xa7${chapter}${
-    variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
-  }`;
+  return isNativeJSChapter(chapter)
+    ? nativeJSLanguage.displayName
+    : `Source \xa7${chapter}${
+        variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
+      }`;
 };
 
 const sublanguages: { chapter: number; variant: Variant }[] = [
