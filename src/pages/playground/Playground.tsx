@@ -15,6 +15,7 @@ import { RouteComponentProps } from 'react-router';
 
 import {
   InterpreterOutput,
+  isNativeJSLang,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -536,6 +537,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
+    // (TEMP) Remove tabs for nativeJS under support is integrated
+    if (isNativeJSLang(props.playgroundSourceChapter)) {
+      return tabs;
+    }
+
     if (props.playgroundSourceChapter >= 2 && !usingRemoteExecution) {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(dataVisualizerTab);
@@ -665,7 +671,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
+  const replDisabled =
+    props.playgroundSourceVariant === 'concurrent' ||
+    usingRemoteExecution ||
+    isNativeJSLang(props.playgroundSourceChapter);
 
   const editorProps = {
     onChange: onChangeMethod,
