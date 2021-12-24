@@ -15,6 +15,7 @@ import { RouteComponentProps } from 'react-router';
 
 import {
   InterpreterOutput,
+  isNativeJSChapter,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -550,8 +551,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(envVisualizerTab);
     }
 
-    if (props.playgroundSourceChapter <= 2 && props.playgroundSourceVariant === 'default') {
-      // Enable Subst Visualizer only for default Source 1 & 2
+    if ( !isNativeJSChapter(props.playgroundSourceChapter) && props.playgroundSourceChapter <= 2 && props.playgroundSourceVariant === 'default') {
+      // Enable Subst Visualizer only for default Source 1 & 2, excluding NativeJS
       tabs.push({
         label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
@@ -665,7 +666,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
+  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution || isNativeJSChapter(props.playgroundSourceChapter);
 
   const editorProps = {
     onChange: onChangeMethod,
