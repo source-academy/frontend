@@ -23,7 +23,7 @@ export function* nativeJsSaga(): SagaIterator {
     const { workspace, program }: NativeJSEvalPayload = action.payload;
 
     // Notify workspace & clear REPL
-    yield put(actions.updateWorkspace(workspace, { isRunning: true }));
+    yield put(actions.updateWorkspace(workspace, { isRunning: true, }));
     yield put(actions.clearReplOutput(workspace));
     const context: Context = yield select(
       (state: OverallState) => state.workspaces[workspace].context
