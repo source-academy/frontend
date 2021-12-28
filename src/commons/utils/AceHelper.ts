@@ -1,7 +1,9 @@
+import { isNativeJSLang } from './../application/ApplicationTypes';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Variant } from 'js-slang/dist/types';
 
 import { Documentation } from '../documentation/Documentation';
+import { HighlightRulesSelector_native } from '../nativeJS/NativeJSHighlight';
 
 /**
  * This _modifies global state_ and defines a new Ace mode globally, if it does not already exist.
@@ -18,7 +20,16 @@ export const selectMode = (chapter: number, variant: Variant, library: string) =
     return;
   }
 
-  HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
+  if (isNativeJSLang(chapter)) {
+    HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
+  } else {
+    HighlightRulesSelector_native(
+      chapter,
+      variant,
+      library,
+      Documentation.externalLibraries[library]
+    );
+  }
   ModeSelector(chapter, variant, library);
 };
 

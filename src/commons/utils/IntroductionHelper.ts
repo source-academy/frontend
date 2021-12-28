@@ -17,7 +17,9 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 `;
 
 const NATIVEJS_INTRODUCTION =
-  MAIN_INTRODUCTION + 'You have chosen the Native Javascript Language.' + HOTKEYS_INTRODUCTION;
+  MAIN_INTRODUCTION +
+  `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
+  HOTKEYS_INTRODUCTION;
 
 const generateSourceDocsLink = (sourceType: string) => {
   switch (sourceType) {
@@ -42,7 +44,7 @@ const generateSourceDocsLink = (sourceType: string) => {
     case '4 gpu':
       return `You have chosen the sublanguage [_Source ${CHAP}4 GPU_](${Links.source_4_Gpu}).`;
     case '-1 default':
-      return `You have chosen the Native Javascript language.`;
+      return `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).`;
     default:
       return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
   }

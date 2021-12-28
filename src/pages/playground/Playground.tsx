@@ -310,9 +310,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isDebugging={props.isDebugging}
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
+        sourceChapter={props.playgroundSourceChapter}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        pauseDisabled={usingRemoteExecution}
+        // Disable pause for NativeJS, because: one cannot stop `eval()`
+        pauseDisabled={
+          usingRemoteExecution ||
+          (!(props.playgroundSourceChapter === undefined) &&
+            isNativeJSLang(props.playgroundSourceChapter))
+        }
       />
     ),
     [
@@ -325,6 +331,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.isDebugging,
       props.isEditorAutorun,
       props.isRunning,
+      props.playgroundSourceChapter,
       usingRemoteExecution
     ]
   );
@@ -725,7 +732,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
+        usingRemoteExecution || isNativeJSLang(props.playgroundSourceChapter)
+          ? null
+          : props.usingSubst
+          ? stepperStepLimit
+          : executionTime
       ]
     },
     editorProps: editorProps,

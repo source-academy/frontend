@@ -2,8 +2,10 @@ import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useMediaQuery } from 'react-responsive';
 
+import { isNativeJSLang } from '../application/ApplicationTypes';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
+import ControlBarRecoveryInfoIcon from './ControlBarRecoveryInfoIcon';
 import { ControlBarRunButton } from './ControlBarRunButton';
 
 type ControlBarAutorunButtonProps = DispatchProps & StateProps;
@@ -24,6 +26,7 @@ type StateProps = {
   key: string;
   autorunDisabled?: boolean;
   pauseDisabled?: boolean;
+  sourceChapter?: number;
 };
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
@@ -31,7 +34,9 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
 
   return isMobileBreakpoint ? (
     <>
-      {props.isRunning && controlButton('Stop', IconNames.STOP, props.handleInterruptEval)}
+      {props.isRunning &&
+        !(props.sourceChapter && isNativeJSLang(props.sourceChapter)) &&
+        controlButton('Stop', IconNames.STOP, props.handleInterruptEval)}
       {(!props.pauseDisabled &&
         props.isRunning &&
         !props.isDebugging &&
@@ -53,8 +58,11 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
         </div>
       )}
       {(props.isEditorAutorun && controlButton('Auto', IconNames.AUTOMATIC_UPDATES)) ||
-        (props.isRunning && controlButton('Stop', IconNames.STOP, props.handleInterruptEval)) ||
-        (!props.isDebugging && (
+        // Disable `Stop` Button for NativeJS
+        (props.isRunning &&
+          !(props.sourceChapter && isNativeJSLang(props.sourceChapter)) &&
+          controlButton('Stop', IconNames.STOP, props.handleInterruptEval)) ||
+        (!props.isDebugging && !props.isRunning && (
           <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />
         ))}
       {(!props.pauseDisabled &&
@@ -66,6 +74,10 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
           controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume))}
       {props.isDebugging &&
         controlButton('Stop Debugger', IconNames.STOP, props.handleDebuggerReset)}
+      {props.sourceChapter &&
+        isNativeJSLang(props.sourceChapter) &&
+        props.isRunning &&
+        ControlBarRecoveryInfoIcon()}
     </>
   );
 }
