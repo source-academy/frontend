@@ -128,7 +128,7 @@ export const isNativeJSLang = (chapterNumber: SourceLanguage['chapter']): boolea
 export const nativeJSLanguage: SourceLanguage = {
   chapter: -1,
   variant: 'default',
-  displayName: 'Native Javascript'
+  displayName: 'full JavaScript'
 };
 
 export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {

@@ -1,4 +1,4 @@
-import { Button, Classes, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
+import { Button, Classes, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/types';
@@ -40,13 +40,11 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
     const nativeJSChoice = renderItem(nativeJSLanguage, 0);
     return (
       <Menu ulRef={itemsParentRef}>
-        <MenuDivider title="Source" />
         {defaultChoices}
+        {nativeJSChoice}
         <MenuItem key="variant-menu" text="Variants" icon="cog">
           {variantChoices}
         </MenuItem>
-        <MenuDivider title="Others" />
-        {nativeJSChoice}
       </Menu>
     );
   };
