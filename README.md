@@ -20,7 +20,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
 
-1. Install a stable version of NodeJS. The active LTS or current version should work fine.
+1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
 4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
@@ -32,7 +32,7 @@ If you wish to set up the GitHub or Google Drive integrations, copy the `.env.ex
 
 ### Installation of Source Academy @ NUS (access [latest production version here](https://sourceacademy.nus.edu.sg))
 
-1. Install a stable version of NodeJS. The active LTS or current version should work fine.
+1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
