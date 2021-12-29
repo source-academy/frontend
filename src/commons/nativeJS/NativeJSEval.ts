@@ -5,6 +5,6 @@ export async function evalNativeJSProgram(program: string): Promise<NativeJSEval
     // eslint-disable-next-line no-eval
     return { status: 'finished', message: eval(program) };
   } catch (error) {
-    return { status: 'error', message: error.message };
+    return { status: 'error', message: error };
   }
 }
