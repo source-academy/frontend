@@ -1,5 +1,5 @@
 import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/types/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import {
   Circle,

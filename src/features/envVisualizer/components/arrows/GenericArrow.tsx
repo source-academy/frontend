@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/types/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';

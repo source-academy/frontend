@@ -45,7 +45,7 @@ const cracoConfig = (module.exports = {
   jest: {
     configure: jestConfig => {
       jestConfig.transformIgnorePatterns = [
-        '[/\\\\]node_modules[/\\\\](?!(@ion-phaser[/\\\\]react[/\\\\])).*\\.(js|jsx|ts|tsx)$',
+        '[/\\\\]node_modules[/\\\\](?!(@ion-phaser[/\\\\]react[/\\\\]|konva[/\\\\.*]|react-konva[/\\\\.*])).*\\.(js|jsx|ts|tsx)$',
         '^.+\\.module\\.(css|sass|scss)$'
       ];
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';

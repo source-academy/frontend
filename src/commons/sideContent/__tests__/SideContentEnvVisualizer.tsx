@@ -9,9 +9,7 @@ import SideContentEnvVisualizer from '../SideContentEnvVisualizer';
  * This is to fix some weird bug with Jest and Konva
  * See https://github.com/konvajs/konva/issues/200
  */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Konva = require('konva-node');
-Konva.isBrowser = false;
+// Konva.isBrowser = false;
 
 test('EnvVisualizer component renders correctly', () => {
   const app = <SideContentEnvVisualizer />;

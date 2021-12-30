@@ -1,5 +1,7 @@
 import { Environment } from 'js-slang/dist/types';
-import { Node } from 'konva/types/Node';
+import { Group } from 'konva/lib/Group';
+import { Node } from 'konva/lib/Node';
+import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
 import { Value } from './components/values/Value';
@@ -182,7 +184,8 @@ export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
 
-  const nodes = Array.from(target.children);
+  const nodes: (Group | Shape | Node)[] =
+    target instanceof Group ? Array.from(target.children || []) : [];
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
@@ -202,12 +205,14 @@ export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
 }
 
 /** Updates the styles of a Konva node and its children on unhover, and then redraw the layer */
-export function setUnhoveredStyle(target: Node, unhoveredAttrs: any = {}): void {
+export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'default');
 
-  const nodes = Array.from(target.children);
+  const nodes: (Group | Shape | Node)[] =
+    target instanceof Group ? Array.from(target.children || []) : [];
   nodes.push(target);
+
   nodes.forEach(node => {
     node.setAttrs({
       stroke: node.attrs.stroke ? Config.SA_WHITE.toString() : node.attrs.stroke,
