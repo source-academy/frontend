@@ -12,6 +12,7 @@ import { store } from 'src/pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { evalNativeJSProgram } from '../nativeJS/NativeJSEval';
 import { actions } from '../utils/ActionsHelper';
+import { runWrapper } from '../utils/RunWrapper';
 
 const dummyLocation = {
   start: { line: 0, column: 0 },
@@ -23,18 +24,18 @@ export function* nativeJsSaga(): SagaIterator {
     const { workspace, program }: NativeJSEvalPayload = action.payload;
 
     // Notify workspace & clear REPL
-    yield put(actions.updateWorkspace(workspace, { isRunning: true, }));
+    yield put(actions.updateWorkspace(workspace, { isRunning: true }));
     yield put(actions.clearReplOutput(workspace));
     const context: Context = yield select(
       (state: OverallState) => state.workspaces[workspace].context
     );
     context.errors = [];
 
-    async function evalWrapper() {
-      await new Promise(r => setTimeout(r, 0));
-      return call(evalNativeJSProgram, program);
-    }
-    const result: NativeJSEvalResult = yield (yield evalWrapper()) as Promise<NativeJSEvalResult>;
+    const result: NativeJSEvalResult = yield (yield call(
+      runWrapper,
+      evalNativeJSProgram,
+      program
+    )) as Promise<NativeJSEvalResult>;
 
     switch (result.status) {
       case 'finished':
