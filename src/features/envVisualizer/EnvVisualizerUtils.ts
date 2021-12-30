@@ -180,7 +180,7 @@ export function getBodyText(data: () => any): string {
 }
 
 /** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
-export function setHoveredStyle(target: Node, hoveredAttrs: any = {}): void {
+export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): void {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
 
