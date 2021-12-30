@@ -22,7 +22,7 @@ const ChromeEvalErrorLocator = {
 //            evalNativeJSProgram@http://localhost:8000/static/js/main.chunk.js:31925:16`
 const FireFoxEvalErrorLocator = {
   regex: /eval:(\d+):(\d+)/gm,
-  browser: BrowserType.Chrome
+  browser: BrowserType.FireFox
 };
 
 const EVAL_ERROR_LOCATORS: EvalErrorLocator[] = [ChromeEvalErrorLocator, FireFoxEvalErrorLocator];
