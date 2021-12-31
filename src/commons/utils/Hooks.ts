@@ -27,7 +27,7 @@ import React from 'react';
 // The following hook is from
 // https://github.com/jaredLunde/react-hook/blob/master/packages/merged-ref/src/index.tsx
 export const useMergedRef =
-  <T extends any>(...refs: React.Ref<T>[]): React.RefCallback<T> =>
+  <T>(...refs: React.Ref<T>[]): React.RefCallback<T> =>
   (element: T) =>
     refs.forEach(ref => {
       if (typeof ref === 'function') ref(element);
