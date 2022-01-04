@@ -13,12 +13,16 @@ type DispatchProps = {
 type StateProps = {
   key: string;
   color?: string;
+  className?: string;
 };
 
 export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
   return (
     <Tooltip2 content="...or press shift-enter in the editor" placement={Position.TOP}>
-      {controlButton('Run', IconNames.PLAY, props.handleEditorEval, { iconColor: props.color })}
+      {controlButton('Run', IconNames.PLAY, props.handleEditorEval, {
+        iconColor: props.color,
+        className: props.className
+      })}
     </Tooltip2>
   );
 }

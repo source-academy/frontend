@@ -34,6 +34,7 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
         handleEditorEval={props.handleEditorEval}
         // Neon Green: #39FF14
         color={props.isRunning ? '#39FF14' : undefined}
+        className={props.isRunning ? 'WaitingCursor' : undefined}
         key="run"
       />
     );
