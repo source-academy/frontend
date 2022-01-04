@@ -233,10 +233,6 @@ export function HighlightRulesSelector_native(
             regex: /that\b/
           },
           {
-            token: ['variable.language'],
-            regex: /\.{3}|--+|\+\++|\^|(==|!=)[^=]|[$%&*+\-~\/^]=+|[^&]*&[^&]|[^\|]*\|[^\|]/
-          },
-          {
             token: keywordMapper,
             regex: identifierRegex
           },
@@ -251,7 +247,7 @@ export function HighlightRulesSelector_native(
           },
           {
             token: 'keyword.operator',
-            regex: /===|=|!==|<+=?|>+=?|!|&&|\|\||[%*+-\/]/,
+            regex: /--|\+\+|\.{3}|===|==|=|!=|!==|<+=?|>+=?|!|&&|\|\||\?:|[!$%&*+\-~\/^]=?/,
             next: 'start'
           },
           {
