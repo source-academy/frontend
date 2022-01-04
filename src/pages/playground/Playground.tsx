@@ -12,6 +12,7 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import ControlBarRecoveryInfoIcon from 'src/commons/controlBar/ControlBarRecoveryInfoIcon';
 
 import {
   InterpreterOutput,
@@ -522,6 +523,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.shortURL
   ]);
 
+  const recoveryInfoButton = React.useMemo(() => {
+    return props.isRunning && isNativeJSLang(props.playgroundSourceChapter) ? (
+      <ControlBarRecoveryInfoIcon />
+    ) : (
+      <></>
+    );
+  }, [props.isRunning, props.playgroundSourceChapter]);
+
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Introduction',
@@ -736,7 +745,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           ? null
           : props.usingSubst
           ? stepperStepLimit
-          : executionTime
+          : executionTime,
+        recoveryInfoButton
       ]
     },
     editorProps: editorProps,

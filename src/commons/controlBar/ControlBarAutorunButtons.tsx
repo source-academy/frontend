@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { isNativeJSLang } from '../application/ApplicationTypes';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
-import ControlBarRecoveryInfoIcon from './ControlBarRecoveryInfoIcon';
+import { ControlBarDummyRunButton } from './ControlBarDummyRunButton';
 import { ControlBarRunButton } from './ControlBarRunButton';
 
 type ControlBarAutorunButtonProps = DispatchProps & StateProps;
@@ -31,11 +31,12 @@ type StateProps = {
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isNativeJS = props.sourceChapter && isNativeJSLang(props.sourceChapter);
 
   return isMobileBreakpoint ? (
     <>
       {props.isRunning &&
-        !(props.sourceChapter && isNativeJSLang(props.sourceChapter)) &&
+        !isNativeJS &&
         controlButton('Stop', IconNames.STOP, props.handleInterruptEval)}
       {(!props.pauseDisabled &&
         props.isRunning &&
@@ -58,13 +59,19 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
         </div>
       )}
       {(props.isEditorAutorun && controlButton('Auto', IconNames.AUTOMATIC_UPDATES)) ||
-        // Disable `Stop` Button for NativeJS
+        // Temp: disable `Stop` button for NativeJS for consistency with `Source` languages:
+        // disabled `Stop`/`Pause` + allowed UI re-rendering === enabled `Stop`/`Pause` + disallowed UI re-rendering
+        //               ^NativeJS                                      ^Source languages
         (props.isRunning &&
-          !(props.sourceChapter && isNativeJSLang(props.sourceChapter)) &&
+          !isNativeJS &&
           controlButton('Stop', IconNames.STOP, props.handleInterruptEval)) ||
         (!props.isDebugging && !props.isRunning && (
           <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />
         ))}
+      {
+        // Temp: add a placeholder for NativeJS, to prevent flickering
+        props.isRunning && isNativeJS && <ControlBarDummyRunButton />
+      }
       {(!props.pauseDisabled &&
         props.isRunning &&
         !props.isDebugging &&
@@ -74,10 +81,6 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
           controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume))}
       {props.isDebugging &&
         controlButton('Stop Debugger', IconNames.STOP, props.handleDebuggerReset)}
-      {props.sourceChapter &&
-        isNativeJSLang(props.sourceChapter) &&
-        props.isRunning &&
-        ControlBarRecoveryInfoIcon()}
     </>
   );
 }
