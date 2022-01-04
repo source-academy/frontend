@@ -16,7 +16,6 @@ export function* nativeJsSaga(): SagaIterator {
   yield takeEvery(NATIVE_JS_RUN, function* (action: ReturnType<typeof actions.nativeJSRun>) {
     const { workspace, program }: NativeJSEvalPayload = action.payload;
     // Notify workspace & clear REPL
-    yield put(actions.updateWorkspace(workspace, { isRunning: true }));
     yield put(actions.clearReplOutput(workspace));
     const context: Context = yield select(
       (state: OverallState) => state.workspaces[workspace].context

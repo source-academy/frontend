@@ -1,4 +1,4 @@
-import { isNativeJSLang } from '../application/ApplicationTypes';
+import { isNativeJSChapter } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const CHAP = '\xa7';
@@ -55,7 +55,7 @@ const generateIntroductionText = (sourceType: string) => {
 };
 
 export const generateSourceIntroduction = (sourceChapter: number, sourceVariant: string) => {
-  return isNativeJSLang(sourceChapter)
+  return isNativeJSChapter(sourceChapter)
     ? NATIVEJS_INTRODUCTION
     : generateIntroductionText(`${sourceChapter} ${sourceVariant}`);
 };

@@ -118,7 +118,7 @@ const variantDisplay: Map<Variant, string> = new Map([
   ['gpu', 'GPU']
 ]);
 
-export const isNativeJSLang = (chapterNumber: SourceLanguage['chapter']): boolean => {
+export const isNativeJSChapter = (chapterNumber: SourceLanguage['chapter']): boolean => {
   return chapterNumber === nativeJSLanguage.chapter;
 };
 
@@ -132,7 +132,7 @@ export const nativeJSLanguage: SourceLanguage = {
 };
 
 export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
-  return isNativeJSLang(chapter)
+  return isNativeJSChapter(chapter)
     ? nativeJSLanguage.displayName
     : `Source \xa7${chapter}${
         variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''

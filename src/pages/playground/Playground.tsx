@@ -12,11 +12,10 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import ControlBarRecoveryInfoIcon from 'src/commons/controlBar/ControlBarRecoveryInfoIcon';
 
 import {
   InterpreterOutput,
-  isNativeJSLang,
+  isNativeJSChapter,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -318,7 +317,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         pauseDisabled={
           usingRemoteExecution ||
           (!(props.playgroundSourceChapter === undefined) &&
-            isNativeJSLang(props.playgroundSourceChapter))
+            isNativeJSChapter(props.playgroundSourceChapter))
         }
       />
     ),
@@ -523,14 +522,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.shortURL
   ]);
 
-  const recoveryInfoButton = React.useMemo(() => {
-    return props.isRunning && isNativeJSLang(props.playgroundSourceChapter) ? (
-      <ControlBarRecoveryInfoIcon />
-    ) : (
-      <></>
-    );
-  }, [props.isRunning, props.playgroundSourceChapter]);
-
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Introduction',
@@ -553,8 +544,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    // (TEMP) Remove tabs for nativeJS under support is integrated
-    if (isNativeJSLang(props.playgroundSourceChapter)) {
+    // (TEMP) Remove tabs for nativeJS until support is integrated
+    if (isNativeJSChapter(props.playgroundSourceChapter)) {
       return tabs;
     }
 
@@ -690,7 +681,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const replDisabled =
     props.playgroundSourceVariant === 'concurrent' ||
     usingRemoteExecution ||
-    isNativeJSLang(props.playgroundSourceChapter);
+    isNativeJSChapter(props.playgroundSourceChapter);
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -741,12 +732,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || isNativeJSLang(props.playgroundSourceChapter)
+        usingRemoteExecution || isNativeJSChapter(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
-          : executionTime,
-        recoveryInfoButton
+          : executionTime
       ]
     },
     editorProps: editorProps,

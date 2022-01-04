@@ -26,7 +26,11 @@ import * as Sourceror from 'sourceror';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { isNativeJSLang, OverallState, styliseSublanguage } from '../application/ApplicationTypes';
+import {
+  isNativeJSChapter,
+  OverallState,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -525,7 +529,7 @@ export function* evalEditor(
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     yield put(actions.remoteExecRun(editorCode));
-  } else if (isNativeJSLang(context.chapter)) {
+  } else if (isNativeJSChapter(context.chapter)) {
     yield put(actions.nativeJSRun({ workspace: workspaceLocation, program: editorCode }));
   } else {
     // End any code that is running right now.
