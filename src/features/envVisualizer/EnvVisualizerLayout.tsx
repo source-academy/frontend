@@ -1,8 +1,7 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
 import React from 'react';
-import { Rect } from 'react-konva';
-import { Layer, Stage } from 'react-konva';
+import { Layer, Rect, Stage } from 'react-konva';
 
 import { Level } from './components/Level';
 import { ArrayValue } from './components/values/ArrayValue';

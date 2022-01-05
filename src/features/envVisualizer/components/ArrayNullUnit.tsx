@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/types/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
