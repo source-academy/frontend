@@ -3,7 +3,7 @@ import {
   EnvTreeNode as EnvironmentTreeNode
 } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/types/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
