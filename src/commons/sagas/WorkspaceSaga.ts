@@ -39,6 +39,7 @@ import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentT
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
+import DisplayBufferService from '../utils/DisplayBufferService';
 import {
   getInfiniteLoopData,
   isPotentialInfiniteLoop,
@@ -47,7 +48,6 @@ import {
   reportPotentialInfiniteLoop
 } from '../utils/InfiniteLoopReporter';
 import {
-  dumpDisplayBuffer,
   getBlockExtraMethodsString,
   getDifferenceInMethods,
   getRestoreExtraMethodsString,
@@ -502,6 +502,12 @@ function* clearContext(workspaceLocation: WorkspaceLocation, program: string) {
   defineSymbol(context, '__PROGRAM__', program);
 }
 
+export function* dumpDisplayBuffer(
+  workspaceLocation: WorkspaceLocation
+): Generator<StrictEffect, void, any> {
+  yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+}
+
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
@@ -794,7 +800,7 @@ export function* evalCode(
     result.status !== 'finished' &&
     result.status !== 'suspended-non-det'
   ) {
-    dumpDisplayBuffer();
+    yield* dumpDisplayBuffer(workspaceLocation);
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
 
     // we need to parse again, but preserve the errors in context
@@ -862,7 +868,7 @@ export function* evalCode(
     }
   }
 
-  dumpDisplayBuffer();
+  yield* dumpDisplayBuffer(workspaceLocation);
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
@@ -905,7 +911,7 @@ export function* evalTestCode(
 
   if (interrupted) {
     interrupt(context);
-    dumpDisplayBuffer();
+    yield* dumpDisplayBuffer(workspaceLocation);
     // Redundancy, added ensure that interruption results in an error.
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.endInterruptExecution(workspaceLocation));
@@ -913,7 +919,7 @@ export function* evalTestCode(
     return;
   }
 
-  dumpDisplayBuffer();
+  yield* dumpDisplayBuffer(workspaceLocation);
   /** result.status here is either 'error' or 'finished'; 'suspended' is not possible
    *  since debugger is presently disabled in assessment and grading environments
    */
