@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Arrow as KonvaArrow } from 'react-konva';
+import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
@@ -12,7 +12,6 @@ export class GenericArrow implements Visible, Hoverable {
   readonly y: number;
   height: number = 0;
   width: number = 0;
-  points: number[] = [];
   from: Visible;
   target: Visible | undefined;
 
@@ -63,25 +62,58 @@ export class GenericArrow implements Visible, Hoverable {
     });
   };
 
+  // Calculate the control point position given length of line segment
+  clamp = (length: number) => Math.sign(length) * Math.min(Math.abs(length / 2),  Math.max(0.01, Number(Config.ArrowCornerRadius)))
+
   draw() {
-    const points = this.calculateSteps().reduce<Array<number>>(
-      (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
+    let path = "";
+    // direction of the latest line segment
+    let direction: [number, number] = [0, 0];
+    const point = this.calculateSteps().reduce<[number, number]>(
+      (oldPoint, step, index) => {
+        const newPoint: [number, number] = step(...oldPoint);
+        // Starting point
+        if (index === 0) {
+          path += `M ${newPoint[0]} ${newPoint[1]} `;
+        } else {
+          direction = [newPoint[0] - oldPoint[0], newPoint[1] - oldPoint[1]]
+          // diagonal line
+          if (direction[0] * direction[1] !== 0) {
+            path += `L ${newPoint[0]} ${newPoint[1]} `
+          } else {
+            // calculate relative position of bezier control point from previous point
+            direction = [this.clamp(direction[0]), this.clamp(direction[1])];
+            path += `C ${oldPoint[0]} ${oldPoint[1]} ${oldPoint[0]} ${oldPoint[1]} ${oldPoint[0] + direction[0]} ${oldPoint[1] + direction[1]} `
+            // plot slightly before next point so it can be curved
+            path += `L ${newPoint[0] - direction[0]} ${newPoint[1] - direction[1]} `
+          }
+        }
+        return newPoint
+      },
       [this.from.x, this.from.y]
     );
-    points.splice(0, 2);
-
+    path += `L ${point[0]} ${point[1]} `
     return (
-      <KonvaArrow
-        {...ShapeDefaultProps}
-        points={points}
-        fill={Config.SA_WHITE.toString()}
-        stroke={Config.SA_WHITE.toString()}
-        strokeWidth={Number(Config.ArrowStrokeWidth)}
-        hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
-        key={Layout.key++}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-      />
+      <KonvaGroup onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} key={Layout.key++}>
+        <KonvaPath
+          {...ShapeDefaultProps}
+          stroke={Config.SA_WHITE.toString()}
+          strokeWidth={Number(Config.ArrowStrokeWidth)}
+          hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
+          data={path}
+          key={Layout.key++}
+        />
+        <KonvaArrow
+          {...ShapeDefaultProps}
+          points={[point[0] - direction[0], point[1] - direction[1], ...point]}
+          fill={Config.SA_WHITE.toString()}
+          stroke={Config.SA_WHITE.toString()}
+          strokeWidth={Number(Config.ArrowStrokeWidth)}
+          hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
+          pointerWidth={Number(Config.ArrowHeadSize)}
+          key={Layout.key++}
+        />
+      </KonvaGroup>
     );
   }
 }
