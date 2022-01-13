@@ -41,9 +41,9 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
+import { showNativeJSDisclaimer } from '../nativeJS/NativeJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
-import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import {
   getInfiniteLoopData,
   isPotentialInfiniteLoop,
@@ -251,38 +251,29 @@ export default function* WorkspaceSaga(): SagaIterator {
       state.workspaces[workspaceLocation].externalLibrary
     ]);
 
-    if (newChapter !== oldChapter || newVariant !== oldVariant) {
-      // When full JavaScript is chosen, put on a disclaimer
-      if (
-        !isNativeJSChapter(newChapter) ||
-        (yield call(showSimpleConfirmDialog, {
-          icon: 'warning-sign',
-          title: 'You are entering danger zone!',
-          contents:
-            '"full JavaScript" allows you to run any JavaScript code beyond Source. Note that malignant programs might stole your tokens. Are you sure to proceed?',
-          positiveIntent: 'danger',
-          positiveLabel: 'At my own risk!',
-          negativeLabel: 'Keep me safe then.'
-        }))
-      ) {
-        const library = {
-          chapter: newChapter,
-          variant: newVariant,
-          external: {
-            name: externalLibraryName,
-            symbols
-          },
-          globals
-        };
-        yield put(actions.beginClearContext(workspaceLocation, library, false));
-        yield put(actions.clearReplOutput(workspaceLocation));
-        yield put(actions.debuggerReset(workspaceLocation));
-        yield call(
-          showSuccessMessage,
-          `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
-          1000
-        );
-      }
+    const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant
+    const changeChapter: boolean = isNativeJSChapter(newChapter)
+      ? chapterChanged && (yield call(showNativeJSDisclaimer))
+      : chapterChanged;
+
+    if (changeChapter) {
+      const library = {
+        chapter: newChapter,
+        variant: newVariant,
+        external: {
+          name: externalLibraryName,
+          symbols
+        },
+        globals
+      };
+      yield put(actions.beginClearContext(workspaceLocation, library, false));
+      yield put(actions.clearReplOutput(workspaceLocation));
+      yield put(actions.debuggerReset(workspaceLocation));
+      yield call(
+        showSuccessMessage,
+        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
+        1000
+      );
     }
   });
 
