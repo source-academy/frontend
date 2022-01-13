@@ -63,10 +63,12 @@ export class GenericArrow implements Visible, Hoverable {
   };
 
   // Calculate the control point position given length of line segment
-  clamp = (length: number) => Math.sign(length) * Math.min(Math.abs(length / 2),  Math.max(0.01, Number(Config.ArrowCornerRadius)))
+  clamp = (length: number) =>
+    Math.sign(length) *
+    Math.min(Math.abs(length / 2), Math.max(0.01, Number(Config.ArrowCornerRadius)));
 
   draw() {
-    let path = "";
+    let path = '';
     // direction of the latest line segment
     let direction: [number, number] = [0, 0];
     const point = this.calculateSteps().reduce<[number, number]>(
@@ -76,25 +78,31 @@ export class GenericArrow implements Visible, Hoverable {
         if (index === 0) {
           path += `M ${newPoint[0]} ${newPoint[1]} `;
         } else {
-          direction = [newPoint[0] - oldPoint[0], newPoint[1] - oldPoint[1]]
+          direction = [newPoint[0] - oldPoint[0], newPoint[1] - oldPoint[1]];
           // diagonal line
           if (direction[0] * direction[1] !== 0) {
-            path += `L ${newPoint[0]} ${newPoint[1]} `
+            path += `L ${newPoint[0]} ${newPoint[1]} `;
           } else {
             // calculate relative position of bezier control point from previous point
             direction = [this.clamp(direction[0]), this.clamp(direction[1])];
-            path += `C ${oldPoint[0]} ${oldPoint[1]} ${oldPoint[0]} ${oldPoint[1]} ${oldPoint[0] + direction[0]} ${oldPoint[1] + direction[1]} `
+            path += `C ${oldPoint[0]} ${oldPoint[1]} ${oldPoint[0]} ${oldPoint[1]} ${
+              oldPoint[0] + direction[0]
+            } ${oldPoint[1] + direction[1]} `;
             // plot slightly before next point so it can be curved
-            path += `L ${newPoint[0] - direction[0]} ${newPoint[1] - direction[1]} `
+            path += `L ${newPoint[0] - direction[0]} ${newPoint[1] - direction[1]} `;
           }
         }
-        return newPoint
+        return newPoint;
       },
       [this.from.x, this.from.y]
     );
-    path += `L ${point[0]} ${point[1]} `
+    path += `L ${point[0]} ${point[1]} `;
     return (
-      <KonvaGroup onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} key={Layout.key++}>
+      <KonvaGroup
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        key={Layout.key++}
+      >
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={Config.SA_WHITE.toString()}
