@@ -6,7 +6,7 @@ const DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   title: 'You are switching to a unsafe feature!',
   contents: (
     <p>
-      <code>full Javascript</code> allows you to run arbitrary JS code beyond source.
+      <code>full JavaScript</code> allows you to run arbitrary JS code beyond source.
       <br />
       <br />
       This might pose a security concern if you are not careful and fully aware of what program you
@@ -21,7 +21,7 @@ const DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   negativeLabel: 'Cancel'
 };
 
-const ULR_LOAD_INFO: string =
+const URL_LOAD_INFO: string =
   'For security concerns, users are not allowed to load full JavaScript code from shared links';
 
 export function showNativeJSDisclaimer(): Promise<boolean> {
@@ -29,5 +29,5 @@ export function showNativeJSDisclaimer(): Promise<boolean> {
 }
 
 export function showNativeJSWarningOnUrlLoad(): void {
-  showWarningMessage(ULR_LOAD_INFO);
+  showWarningMessage(URL_LOAD_INFO);
 }

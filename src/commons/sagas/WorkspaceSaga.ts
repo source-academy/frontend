@@ -252,11 +252,11 @@ export default function* WorkspaceSaga(): SagaIterator {
     ]);
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const changeChapter: boolean = isNativeJSChapter(newChapter)
+    const toChangeChapter: boolean = isNativeJSChapter(newChapter)
       ? chapterChanged && (yield call(showNativeJSDisclaimer))
       : chapterChanged;
 
-    if (changeChapter) {
+    if (toChangeChapter) {
       const library = {
         chapter: newChapter,
         variant: newVariant,
