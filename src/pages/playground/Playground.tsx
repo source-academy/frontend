@@ -12,7 +12,7 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showNativeJSWarningOnUrlLoad } from 'src/commons/nativeJS/NativeJSUtils';
 
 import {
   InterpreterOutput,
@@ -139,12 +139,12 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-function handleHash(hash: string, props: PlaygroundProps) {
+export function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
   if (chapter && isNativeJSChapter(chapter)) {
-    showWarningMessage(`Users are not allowed to load full JavaScript code from shared links.`);
+    showNativeJSWarningOnUrlLoad();
   } else {
     const programLz = qs.lz ?? qs.prgrm;
     const program = programLz && decompressFromEncodedURIComponent(programLz);

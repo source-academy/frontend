@@ -1,4 +1,5 @@
 import { showSimpleConfirmDialog, SimpleConfirmDialogProps } from '../utils/DialogHelper';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 
 const DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   icon: 'warning-sign',
@@ -20,6 +21,13 @@ const DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   negativeLabel: 'Cancel'
 };
 
+const ULR_LOAD_INFO: string =
+  'For security concerns, users are not allowed to load full JavaScript code from shared links';
+
 export function showNativeJSDisclaimer(): Promise<boolean> {
   return showSimpleConfirmDialog(DISCLAIMER_DIALOG_PROPS);
+}
+
+export function showNativeJSWarningOnUrlLoad(): void {
+  showWarningMessage(ULR_LOAD_INFO);
 }
