@@ -10,6 +10,7 @@ import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';
 import DropdownHelp from './DropdownHelp';
+import DropdownSettings from './DropdownSettings';
 
 type DropdownProps = DispatchProps & StateProps;
 
@@ -25,6 +26,7 @@ type StateProps = {
 };
 
 type State = {
+  isSettingsOpen: boolean;
   isAboutOpen: boolean;
   isHelpOpen: boolean;
   isProfileOpen: boolean;
@@ -36,6 +38,7 @@ class Dropdown extends React.Component<DropdownProps, State> {
   constructor(props: DropdownProps) {
     super(props);
     this.state = {
+      isSettingsOpen: false,
       isAboutOpen: false,
       isHelpOpen: false,
       isProfileOpen: false,
@@ -54,6 +57,7 @@ class Dropdown extends React.Component<DropdownProps, State> {
         >
           {controlButton('', IconNames.CARET_DOWN)}
         </Popover2>
+        <DropdownSettings isOpen={this.state.isSettingsOpen} onClose={this.toggleSettingsOpen} />
         <DropdownAbout isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
         <DropdownHelp isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
         {this.props.name ? (
@@ -105,12 +109,17 @@ class Dropdown extends React.Component<DropdownProps, State> {
         {profile}
         {myCourses}
         {createCourse}
+        <MenuItem icon={IconNames.COG} onClick={this.toggleSettingsOpen} text="Settings" />
         <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="About" />
         <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
         {logout}
       </Menu>
     );
   }
+
+  private toggleSettingsOpen = () => {
+    this.setState({ ...this.state, isSettingsOpen: !this.state.isSettingsOpen });
+  };
 
   private toggleAboutOpen = () => {
     this.setState({ ...this.state, isAboutOpen: !this.state.isAboutOpen });
