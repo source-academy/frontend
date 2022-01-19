@@ -35,6 +35,7 @@ const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
+const workspaceSettingsLocalStorageKey = 'workspace-settings';
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -133,7 +134,8 @@ const Constants = {
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval,
-  sicpBackendUrl: sicpBackendUrl
+  sicpBackendUrl: sicpBackendUrl,
+  workspaceSettingsLocalStorageKey
 };
 
 export default Constants;
