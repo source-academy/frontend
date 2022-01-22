@@ -5,6 +5,7 @@ exports[`Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateC
   <Blueprint3.Popover2 content={{...}} inheritDarkTheme={false} placement=\\"bottom\\" boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} />
   </Blueprint3.Popover2>
+  <DropdownSettings isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownAbout isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownHelp isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownCourses isOpen={false} onClose={[Function (anonymous)]} courses={{...}} courseId={[undefined]} />
@@ -18,6 +19,7 @@ exports[`Dropdown does not mount Profile, DropdownCourses and DropdownCreateCour
   <Blueprint3.Popover2 content={{...}} inheritDarkTheme={false} placement=\\"bottom\\" boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} />
   </Blueprint3.Popover2>
+  <DropdownSettings isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownAbout isOpen={false} onClose={[Function (anonymous)]} />
   <DropdownHelp isOpen={false} onClose={[Function (anonymous)]} />
 </Fragment>"
