@@ -93,7 +93,7 @@ const SicpIndexPage: React.FC = () => {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
-        <img src="http://source-academy.github.io/sicp/sicp.png" alt="SICP" />
+        <img src="http://source-academy.github.io/sicp/sicpjs.png" alt="SICP" />
         <div className="sicp-cover-text">
           {bookTitle}
           {authors}
