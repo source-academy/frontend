@@ -74,6 +74,7 @@ if (!isTest) {
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
+  about = 'https://about.sourceacademy.org',
 
   moduleDetails = 'https://www.comp.nus.edu.sg/~cs1101s',
   luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
