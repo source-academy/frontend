@@ -31,12 +31,11 @@ const DropdownHelp: React.SFC<DialogProps> = props => {
           <>
             <p>
               We recommend recent updates of the browsers <b>Google Chrome</b>,{' '}
-              <b>Microsoft Edge</b>, or <b>Mozilla Firefox</b> to visit
-	      the Source Academy.
+              <b>Microsoft Edge</b>, or <b>Mozilla Firefox</b> to visit the Source Academy.
             </p>
-	    <p>
-	      If you encounter issues with the Source Academy
-              using these browsers, please use the issue system of the{' '}
+            <p>
+              If you encounter issues with the Source Academy using these browsers, please use the
+              issue system of the{' '}
               <a href={Links.githubIssues}>Source Academy frontend repository on GitHub</a>.
             </p>
           </>
