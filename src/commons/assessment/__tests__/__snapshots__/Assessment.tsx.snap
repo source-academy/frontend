@@ -143,7 +143,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </svg>
                                           </span>
                                         </Blueprint3.Icon>
-                                        Opens at: 18th June, 13:24
+                                        Opens at: 18th June, 01:24
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\" />
@@ -240,7 +240,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </svg>
                                           </span>
                                         </Blueprint3.Icon>
-                                        Due: 18th June, 13:24
+                                        Due: 18th June, 01:24
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
@@ -343,7 +343,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </svg>
                                           </span>
                                         </Blueprint3.Icon>
-                                        Due: 18th June, 13:24
+                                        Due: 18th June, 01:24
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
@@ -561,7 +561,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </svg>
                                           </span>
                                         </Blueprint3.Icon>
-                                        Opens at: 18th June, 13:24
+                                        Opens at: 18th June, 01:24
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
@@ -685,7 +685,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </svg>
                                           </span>
                                         </Blueprint3.Icon>
-                                        Due: 18th June, 13:24
+                                        Due: 18th June, 01:24
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
@@ -788,7 +788,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </svg>
                                           </span>
                                         </Blueprint3.Icon>
-                                        Due: 18th June, 13:24
+                                        Due: 18th June, 01:24
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
