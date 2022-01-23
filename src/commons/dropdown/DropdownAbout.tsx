@@ -33,8 +33,7 @@ const DropdownAbout: React.SFC<DialogProps> = props => (
         <p>
           The Source Academy is available under the Apache License 2.0 at the GitHub organisation{' '}
           <a href={Links.githubOrg}>source-academy</a>. More information and resources are available
-          at the{' '}
-          <a href={Links.about}>about pages</a> of the Source Academy.
+          at the <a href={Links.about}>about pages</a> of the Source Academy.
         </p>
       </div>
     </div>
