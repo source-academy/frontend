@@ -103,7 +103,8 @@ export enum Links {
   source_3_Concurrent = 'https://docs.sourceacademy.org/source_3_concurrent/',
   source_3_Nondet = 'https://docs.sourceacademy.org/source_3_non-det/',
   source_4 = 'https://docs.sourceacademy.org/source_4/',
-  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/'
+  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/',
+  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/'
 }
 
 const Constants = {
