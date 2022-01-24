@@ -35,6 +35,7 @@ const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
+const workspaceSettingsLocalStorageKey = 'workspace-settings';
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -73,6 +74,7 @@ if (!isTest) {
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
+  about = 'https://about.sourceacademy.org',
 
   moduleDetails = 'https://www.comp.nus.edu.sg/~cs1101s',
   luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
@@ -101,7 +103,8 @@ export enum Links {
   source_3_Concurrent = 'https://docs.sourceacademy.org/source_3_concurrent/',
   source_3_Nondet = 'https://docs.sourceacademy.org/source_3_non-det/',
   source_4 = 'https://docs.sourceacademy.org/source_4/',
-  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/'
+  source_4_Gpu = 'https://docs.sourceacademy.org/source_4_gpu/',
+  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/'
 }
 
 const Constants = {
@@ -132,7 +135,8 @@ const Constants = {
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval,
-  sicpBackendUrl: sicpBackendUrl
+  sicpBackendUrl: sicpBackendUrl,
+  workspaceSettingsLocalStorageKey
 };
 
 export default Constants;

@@ -78,7 +78,14 @@ const licenses = (
     </div>
     <div>
       <p>
-        A print version of this work is published by The MIT Press under a{' '}
+        A
+        <a
+          href="https://mitpress.mit.edu/books/structure-and-interpretation-computer-programs-1"
+          rel="nofollow"
+        >
+          print version of this work
+        </a>
+        is published by The MIT Press under a{' '}
         <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
           Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
         </a>
@@ -93,7 +100,7 @@ const SicpIndexPage: React.FC = () => {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
-        <img src="http://source-academy.github.io/sicp/sicp.png" alt="SICP" />
+        <img src="http://source-academy.github.io/sicp/sicpjs.png" alt="SICP" />
         <div className="sicp-cover-text">
           {bookTitle}
           {authors}

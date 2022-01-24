@@ -1,42 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Application renders correctly 1`] = `
-"<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
-  <div className=\\"Application__main\\">
-    <Switch>
-      <Route path=\\"/login\\" component={[Function: Login]} />
-      <Route path=\\"/contributors\\" component={[function]} />
-      <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
-      <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
-      <Route exact={true} path=\\"/sicpjs\\">
-        <Redirect to=\\"/sicpjs/index\\" />
-      </Route>
-      <Route path=\\"/sicpjs/:section\\" component={[Function: Sicp]} />
-      <Route path=\\"/githubassessments\\" render={[Function: render]} />
-      <Route path=\\"/courses/:courseId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
-      <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />
-      <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" component={[Function: C] { displayName: 'withRouter(Connect(MissionControl))', WrappedComponent: [Function: MissionControl], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-      <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
-      <Redirect from=\\"/\\" exact={true} to=\\"/welcome\\" />
-      <Route component={[Function: NotFound]} />
-    </Switch>
+"<ContextProvider value={{...}}>
+  <div className=\\"Application\\">
+    <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
+    <div className=\\"Application__main\\">
+      <Switch>
+        <Route path=\\"/login\\" component={[Function: Login]} />
+        <Route path=\\"/contributors\\" component={[function]} />
+        <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
+        <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
+        <Route exact={true} path=\\"/sicpjs\\">
+          <Redirect to=\\"/sicpjs/index\\" />
+        </Route>
+        <Route path=\\"/sicpjs/:section\\" component={[Function: Sicp]} />
+        <Route path=\\"/githubassessments\\" render={[Function: render]} />
+        <Route path=\\"/courses/:courseId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
+        <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />
+        <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" component={[Function: C] { displayName: 'withRouter(Connect(MissionControl))', WrappedComponent: [Function: MissionControl], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
+        <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
+        <Redirect from=\\"/\\" exact={true} to=\\"/welcome\\" />
+        <Route component={[Function: NotFound]} />
+      </Switch>
+    </div>
   </div>
-</div>"
+</ContextProvider>"
 `;
 
 exports[`Application shows disabled when in disabled period 1`] = `
-"<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
-  <div className=\\"Application__main\\">
-    <Switch>
-      <Route path=\\"/login\\" component={[Function: Login]} />
-      <Route path=\\"/courses\\" render={[Function: redirectToLogin]} />
-      <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
-      <Route>
-        <Disabled reason=\\"Testing\\" />
-      </Route>
-    </Switch>
+"<ContextProvider value={{...}}>
+  <div className=\\"Application\\">
+    <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
+    <div className=\\"Application__main\\">
+      <Switch>
+        <Route path=\\"/login\\" component={[Function: Login]} />
+        <Route path=\\"/courses\\" render={[Function: redirectToLogin]} />
+        <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
+        <Route>
+          <Disabled reason=\\"Testing\\" />
+        </Route>
+      </Switch>
+    </div>
   </div>
-</div>"
+</ContextProvider>"
 `;
