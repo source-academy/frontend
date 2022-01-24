@@ -84,9 +84,11 @@ export class GenericArrow implements Visible, Hoverable {
         const dx2 = xc - xb;
         const dy1 = yb - ya;
         const dy2 = yc - yb;
-        const br = Math.min(Config.ArrowCornerRadius,
+        const br = Math.min(
+          Config.ArrowCornerRadius,
           Math.max(Math.abs(dx1), Math.abs(dy1)) / 2,
-          Math.max(Math.abs(dx2), Math.abs(dy2)) / 2);
+          Math.max(Math.abs(dx2), Math.abs(dy2)) / 2
+        );
         const x1 = xb - br * Math.sign(dx1);
         const y1 = yb - br * Math.sign(dy1);
         const x2 = xb + br * Math.sign(dx2);
