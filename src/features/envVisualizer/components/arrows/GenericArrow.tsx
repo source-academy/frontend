@@ -13,7 +13,6 @@ export class GenericArrow implements Visible, Hoverable {
   height: number = 0;
   width: number = 0;
   points: number[] = [];
-  cornerRadius: number = 40;
   from: Visible;
   target: Visible | undefined;
 
@@ -69,7 +68,7 @@ export class GenericArrow implements Visible, Hoverable {
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
       [this.from.x, this.from.y]
     );
-    points.splice(0, 2); 
+    points.splice(0, 2);
 
     let path = '';
     // starting point
@@ -80,31 +79,26 @@ export class GenericArrow implements Visible, Hoverable {
     } else {
       let n = 0;
       while (n < points.length - 4) {
-        const dx1 = (points[n + 2] - points[n + 0]);
-        const dy1 = (points[n + 3] - points[n + 1]);
-        const br1 = Math.min(this.cornerRadius, Math.max(Math.abs(dx1 / 2), Math.abs(dy1 / 2)));
-  
-        const dx2 = (points[n + 2 + 2] - points[n + 0 + 2]);
-        const dy2 = (points[n + 3 + 2] - points[n + 1 + 2]);
-        const br2 = Math.min(this.cornerRadius, Math.max(Math.abs(dx2 / 2), Math.abs(dy2 / 2)));
-  
-        const br = Math.min(br1, br2);
-  
-        const x1 = points[n + 0] + (Math.abs(dx1) - br) * Math.sign(dx1);
-        const y1 = points[n + 1] + (Math.abs(dy1) - br) * Math.sign(dy1);
-  
-        path += `L ${x1} ${y1} `;
-        n += 2;
-        const x2 = points[n + 0] + br * Math.sign(dx2);
-        const y2 = points[n + 1] + br * Math.sign(dy2);
+        const [xa, ya, xb, yb, xc, yc] = points.slice(n, n + 6);
+        const dx1 = xb - xa;
+        const dx2 = xc - xb;
+        const dy1 = yb - ya;
+        const dy2 = yc - yb;
+        const br = Math.min(Config.ArrowCornerRadius,
+          Math.max(Math.abs(dx1), Math.abs(dy1)) / 2,
+          Math.max(Math.abs(dx2), Math.abs(dy2)) / 2);
+        const x1 = xb - br * Math.sign(dx1);
+        const y1 = yb - br * Math.sign(dy1);
+        const x2 = xb + br * Math.sign(dx2);
+        const y2 = yb + br * Math.sign(dy2);
 
         // draw quadratic curves over corners
-        path += `Q ${points[n + 0]} ${points[n + 1]} ${x2} ${y2}`;
+        path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2}`;
+        n += 2;
       }
     }
     // end path
     path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
-
     return (
       <KonvaGroup
         key={Layout.key++}
@@ -116,18 +110,18 @@ export class GenericArrow implements Visible, Hoverable {
           stroke={Config.SA_WHITE.toString()}
           strokeWidth={Number(Config.ArrowStrokeWidth)}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
-          data = {path}
+          data={path}
           key={Layout.key++}
-        /> 
+        />
         <KonvaArrow
           {...ShapeDefaultProps}
-          points={points}
+          points={points.slice(points.length - 4)}
           fill={Config.SA_WHITE.toString()}
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
           key={Layout.key++}
-          />
-        </KonvaGroup>
+        />
+      </KonvaGroup>
     );
   }
 }
