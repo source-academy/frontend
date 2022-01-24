@@ -12,6 +12,8 @@ export class GenericArrow implements Visible, Hoverable {
   readonly y: number;
   height: number = 0;
   width: number = 0;
+  points: number[] = [];
+  cornerRadius: number = 40;
   from: Visible;
   target: Visible | undefined;
 
@@ -62,66 +64,70 @@ export class GenericArrow implements Visible, Hoverable {
     });
   };
 
-  // Calculate the control point position given length of line segment
-  clamp = (length: number) =>
-    Math.sign(length) *
-    Math.min(Math.abs(length / 2), Math.max(0.01, Number(Config.ArrowCornerRadius)));
-
   draw() {
-    let path = '';
-    // direction of the latest line segment
-    let direction: [number, number] = [0, 0];
-    const point = this.calculateSteps().reduce<[number, number]>(
-      (oldPoint, step, index) => {
-        const newPoint: [number, number] = step(...oldPoint);
-        // Starting point
-        if (index === 0) {
-          path += `M ${newPoint[0]} ${newPoint[1]} `;
-        } else {
-          direction = [newPoint[0] - oldPoint[0], newPoint[1] - oldPoint[1]];
-          // diagonal line
-          if (direction[0] * direction[1] !== 0) {
-            path += `L ${newPoint[0]} ${newPoint[1]} `;
-          } else {
-            // calculate relative position of bezier control point from previous point
-            direction = [this.clamp(direction[0]), this.clamp(direction[1])];
-            path += `C ${oldPoint[0]} ${oldPoint[1]} ${oldPoint[0]} ${oldPoint[1]} ${
-              oldPoint[0] + direction[0]
-            } ${oldPoint[1] + direction[1]} `;
-            // plot slightly before next point so it can be curved
-            path += `L ${newPoint[0] - direction[0]} ${newPoint[1] - direction[1]} `;
-          }
-        }
-        return newPoint;
-      },
+    const points = this.calculateSteps().reduce<Array<number>>(
+      (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
       [this.from.x, this.from.y]
     );
-    path += `L ${point[0]} ${point[1]} `;
+    points.splice(0, 2); 
+
+    let path = '';
+    // starting point
+    path += `M ${points[0]} ${points[1]} `;
+    if (points.length === 4) {
+      // end the path if the line only has starting and ending coordinates
+      path += `L ${points[2]} ${points[3]} `;
+    } else {
+      let n = 0;
+      while (n < points.length - 4) {
+        const dx1 = (points[n + 2] - points[n + 0]);
+        const dy1 = (points[n + 3] - points[n + 1]);
+        const br1 = Math.min(this.cornerRadius, Math.max(Math.abs(dx1 / 2), Math.abs(dy1 / 2)));
+  
+        const dx2 = (points[n + 2 + 2] - points[n + 0 + 2]);
+        const dy2 = (points[n + 3 + 2] - points[n + 1 + 2]);
+        const br2 = Math.min(this.cornerRadius, Math.max(Math.abs(dx2 / 2), Math.abs(dy2 / 2)));
+  
+        const br = Math.min(br1, br2);
+  
+        const x1 = points[n + 0] + (Math.abs(dx1) - br) * Math.sign(dx1);
+        const y1 = points[n + 1] + (Math.abs(dy1) - br) * Math.sign(dy1);
+  
+        path += `L ${x1} ${y1} `;
+        n += 2;
+        const x2 = points[n + 0] + br * Math.sign(dx2);
+        const y2 = points[n + 1] + br * Math.sign(dy2);
+
+        // draw quadratic curves over corners
+        path += `Q ${points[n + 0]} ${points[n + 1]} ${x2} ${y2}`;
+      }
+    }
+    // end path
+    path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
+
     return (
       <KonvaGroup
+        key={Layout.key++}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        key={Layout.key++}
       >
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={Config.SA_WHITE.toString()}
           strokeWidth={Number(Config.ArrowStrokeWidth)}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
-          data={path}
+          data = {path}
           key={Layout.key++}
-        />
+        /> 
         <KonvaArrow
           {...ShapeDefaultProps}
-          points={[point[0] - direction[0], point[1] - direction[1], ...point]}
+          points={points}
           fill={Config.SA_WHITE.toString()}
-          stroke={Config.SA_WHITE.toString()}
-          strokeWidth={Number(Config.ArrowStrokeWidth)}
-          hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
+          strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
           key={Layout.key++}
-        />
-      </KonvaGroup>
+          />
+        </KonvaGroup>
     );
   }
 }
