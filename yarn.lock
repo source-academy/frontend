@@ -11109,10 +11109,10 @@ react-mde@^11.5.0:
   resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-11.5.0.tgz#3e81a505071aa80287fb23a1c0ce5e8b34c82055"
   integrity sha512-CH/VK6d+tpVjJ8rTXfh1dDt6GWedTgCU0668p8toqhAc3vy0Lu872O2RKYDSpkUrlbHI08fjUPTl++nExp6gag==
 
-react-papaparse@^3.18.1:
-  version "3.18.1"
-  resolved "https://registry.yarnpkg.com/react-papaparse/-/react-papaparse-3.18.1.tgz#169b9d3903a02913a418830b52f36bab3b9e0a7c"
-  integrity sha512-GvYRoJmlhlK+ZHqCacuKPVw3b26qkUZ6OgQo2iZOWepHpUfw7+cIGY1hxucDGXjMgBa7yly7XTVhX4az/KC2Lw==
+react-papaparse@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-papaparse/-/react-papaparse-4.0.1.tgz#962f26f3587e56511ae3bf9467099d579b323b36"
+  integrity sha512-nD5Wuk520hkAi/2w6i0/9p9dTDRkVtAg7Cb/DqXneuBCkAlTbCnS9RvL+TmS5pbYUdBD3jtNG44oJslcC2pVYw==
   dependencies:
     "@types/papaparse" "^5.3.1"
     papaparse "^5.3.1"
