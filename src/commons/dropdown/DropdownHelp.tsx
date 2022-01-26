@@ -29,31 +29,15 @@ const DropdownHelp: React.SFC<DialogProps> = props => {
           <Markdown content={moduleHelpText} openLinksInNewWindow />
         ) : (
           <>
-            <p>Please use the following resources when you encounter issues with this system.</p>
             <p>
-              As of August 2020, we recommend the browsers <b>Google Chrome</b> or{' '}
-              <b>Microsoft Edge</b>, Version 83 or higher, or <b>Mozilla Firefox</b>, Version 78 or
-              higher, to visit the Source Academy. If you encounter issues with the Source Academy
-              using these browsers, please use the following resources.
+              We recommend recent updates of the browsers <b>Google Chrome</b>,{' '}
+              <b>Microsoft Edge</b>, or <b>Mozilla Firefox</b> to visit the Source Academy.
             </p>
-            <ul>
-              <li>
-                For critical technical issues that seriously affect your learning experience, email
-                the Technical Services of the NUS School of Computing at{' '}
-                <a href={Links.techSVC}>{new URL(Links.techSVC).pathname}</a> or call{' '}
-                {Links.techSVCNumber}.
-              </li>
-              <li>
-                For non-critical technical issues, such as enhancement suggestions, please use the
-                issue system of the{' '}
-                <a href={Links.githubIssues}>Source Academy repositories on GitHub</a>.
-              </li>
-              <li>
-                For issues related to the content of missions, quests, paths and contests, use the
-                respective forum at <a href={Links.piazza}>Piazza</a>, or approach your Avenger,
-                Reflection instructor or lecturer.
-              </li>
-            </ul>
+            <p>
+              If you encounter issues with the Source Academy using these browsers, please use the
+              issue system of the{' '}
+              <a href={Links.githubIssues}>Source Academy frontend repository on GitHub</a>.
+            </p>
           </>
         )}
       </div>

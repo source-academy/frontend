@@ -17,6 +17,8 @@ import Welcome from '../../pages/welcome/Welcome';
 import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
+import { useLocalStorageState } from '../utils/Hooks';
+import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import { Role } from './ApplicationTypes';
 import { UpdateCourseConfiguration, UserCourse } from './types/SessionTypes';
 
@@ -51,6 +53,11 @@ const Application: React.FC<ApplicationProps> = props => {
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
   const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
   const browserDimensions = React.useRef({ height: 0, width: 0 });
+
+  const [workspaceSettings, setWorkspaceSettings] = useLocalStorageState(
+    Constants.workspaceSettingsLocalStorageKey,
+    defaultWorkspaceSettings
+  );
 
   const isLoggedIn = typeof props.name === 'string';
   const isCourseLoaded = isLoggedIn && typeof props.role === 'string';
@@ -150,133 +157,138 @@ const Application: React.FC<ApplicationProps> = props => {
   const isDisabledEffective = !['staff', 'admin'].includes(props.role!) && isDisabled;
 
   return (
-    <div className="Application">
-      <NavigationBar
-        handleLogOut={props.handleLogOut}
-        handleGitHubLogIn={props.handleGitHubLogIn}
-        handleGitHubLogOut={props.handleGitHubLogOut}
-        handleCreateCourse={props.handleCreateCourse}
-        role={props.role}
-        name={props.name}
-        courses={props.courses}
-        courseId={props.courseId}
-        courseShortName={props.courseShortName}
-        enableAchievements={props.enableAchievements}
-        enableSourcecast={props.enableSourcecast}
-        assessmentTypes={React.useMemo(
-          () => props.assessmentConfigurations?.map(c => c.type),
-          [props.assessmentConfigurations]
-        )}
-      />
-      <div className="Application__main">
-        {isDisabledEffective && (
-          <Switch>
-            {!Constants.playgroundOnly && loginPath}
-            {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
-            {!isCourseLoaded && !Constants.playgroundOnly
-              ? [
-                  <Route path="/courses" render={redirectToLogin} key={0} />,
-                  <Route exact={true} path="/" render={redirectToLogin} key={1} />
-                ]
-              : []}
-            <Route>
-              <Disabled reason={typeof isDisabled === 'string' ? isDisabled : undefined} />
-            </Route>
-          </Switch>
-        )}
-        {!isDisabledEffective && Constants.playgroundOnly && (
-          <Switch>
-            {commonPaths}
-            <Route path="/playground" component={Playground} />
-            <Route exact={true} path="/">
-              <Redirect to="/playground" />
-            </Route>
-            <Route component={NotFound} />
-          </Switch>
-        )}
-        {!isDisabledEffective && !Constants.playgroundOnly && (
-          <Switch>
-            {loginPath}
-            {commonPaths}
-            <Route path={'/courses/:courseId(\\d+)?'} render={toAcademy(props)} />
-            <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} />
-            <Route
-              path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-              component={MissionControlContainer}
-            />
-            <Route path="/playground" render={ensureUserAndRoleAndRouteTo(props, <Playground />)} />
-
-            <Redirect
-              from="/"
-              exact={true}
-              to={props.courseId != null ? `/courses/${props.courseId}` : '/welcome'}
-            />
-            {props.courseId != null && [
-              <Redirect
-                from="/sourcecast/:splat?"
-                to={`/courses/${props.courseId}/sourcecast/:splat?`}
-                key="legacy-sourcecast"
-              />,
-              <Redirect
-                from="/achievements/:splat?"
-                to={`/courses/${props.courseId}/achievements/:splat?`}
-                key="legacy-achievements"
-              />,
-              <Redirect
-                from="/academy/:splat?"
-                to={`/courses/${props.courseId}/:splat?`}
-                key="legacy-academy"
+    <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
+      <div className="Application">
+        <NavigationBar
+          handleLogOut={props.handleLogOut}
+          handleGitHubLogIn={props.handleGitHubLogIn}
+          handleGitHubLogOut={props.handleGitHubLogOut}
+          handleCreateCourse={props.handleCreateCourse}
+          role={props.role}
+          name={props.name}
+          courses={props.courses}
+          courseId={props.courseId}
+          courseShortName={props.courseShortName}
+          enableAchievements={props.enableAchievements}
+          enableSourcecast={props.enableSourcecast}
+          assessmentTypes={React.useMemo(
+            () => props.assessmentConfigurations?.map(c => c.type),
+            [props.assessmentConfigurations]
+          )}
+        />
+        <div className="Application__main">
+          {isDisabledEffective && (
+            <Switch>
+              {!Constants.playgroundOnly && loginPath}
+              {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
+              {!isCourseLoaded && !Constants.playgroundOnly
+                ? [
+                    <Route path="/courses" render={redirectToLogin} key={0} />,
+                    <Route exact={true} path="/" render={redirectToLogin} key={1} />
+                  ]
+                : []}
+              <Route>
+                <Disabled reason={typeof isDisabled === 'string' ? isDisabled : undefined} />
+              </Route>
+            </Switch>
+          )}
+          {!isDisabledEffective && Constants.playgroundOnly && (
+            <Switch>
+              {commonPaths}
+              <Route path="/playground" component={Playground} />
+              <Route exact={true} path="/">
+                <Redirect to="/playground" />
+              </Route>
+              <Route component={NotFound} />
+            </Switch>
+          )}
+          {!isDisabledEffective && !Constants.playgroundOnly && (
+            <Switch>
+              {loginPath}
+              {commonPaths}
+              <Route path={'/courses/:courseId(\\d+)?'} render={toAcademy(props)} />
+              <Route path="/welcome" render={ensureUserAndRouteTo(props, <Welcome />)} />
+              <Route
+                path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+                component={MissionControlContainer}
               />
-            ]}
-            <Route component={NotFound} />
-          </Switch>
+              <Route
+                path="/playground"
+                render={ensureUserAndRoleAndRouteTo(props, <Playground />)}
+              />
+
+              <Redirect
+                from="/"
+                exact={true}
+                to={props.courseId != null ? `/courses/${props.courseId}` : '/welcome'}
+              />
+              {props.courseId != null && [
+                <Redirect
+                  from="/sourcecast/:splat?"
+                  to={`/courses/${props.courseId}/sourcecast/:splat?`}
+                  key="legacy-sourcecast"
+                />,
+                <Redirect
+                  from="/achievements/:splat?"
+                  to={`/courses/${props.courseId}/achievements/:splat?`}
+                  key="legacy-achievements"
+                />,
+                <Redirect
+                  from="/academy/:splat?"
+                  to={`/courses/${props.courseId}/:splat?`}
+                  key="legacy-academy"
+                />
+              ]}
+              <Route component={NotFound} />
+            </Switch>
+          )}
+        </div>
+
+        {/* agreedToResearch has a default value of undefined in the store.
+            It will take on null/true/false when the backend returns. */}
+        {Constants.showResearchPrompt && props.agreedToResearch === null && (
+          <div className="research-prompt">
+            <Dialog
+              className={Classes.DARK}
+              title="Agreement to Participate in Educational Research"
+              canOutsideClickClose={false}
+              canEscapeKeyClose={false}
+              isCloseButtonShown={false}
+              isOpen
+            >
+              <div className={Classes.DIALOG_BODY}>
+                <H4>Welcome to your new Source Academy @ NUS course!</H4>
+                <div>
+                  Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in
+                  programming and the ideas behind programming, and to make these ideas universally
+                  accessible. This includes educational research!
+                </div>
+                <br />
+                <div>
+                  We collect programs that students run in Source Academy @ NUS and store them
+                  anonymously for our research. You are free to opt out of this collection, with no
+                  penalty for you whatsoever. Contact your course instructor if you have questions
+                  or concerns about this research.
+                </div>
+              </div>
+              <div className={Classes.DIALOG_FOOTER}>
+                <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                  <Button
+                    text="I would like to opt out"
+                    onClick={() => props.updateCourseResearchAgreement(false)}
+                  />
+                  <Button
+                    text="I consent!"
+                    intent={Intent.SUCCESS}
+                    onClick={() => props.updateCourseResearchAgreement(true)}
+                  />
+                </div>
+              </div>
+            </Dialog>
+          </div>
         )}
       </div>
-
-      {/* agreedToResearch has a default value of undefined in the store.
-          It will take on null/true/false when the backend returns. */}
-      {Constants.showResearchPrompt && props.agreedToResearch === null && (
-        <div className="research-prompt">
-          <Dialog
-            className={Classes.DARK}
-            title="Agreement to Participate in Educational Research"
-            canOutsideClickClose={false}
-            canEscapeKeyClose={false}
-            isCloseButtonShown={false}
-            isOpen
-          >
-            <div className={Classes.DIALOG_BODY}>
-              <H4>Welcome to your new Source Academy @ NUS course!</H4>
-              <div>
-                Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in
-                programming and the ideas behind programming, and to make these ideas universally
-                accessible. This includes educational research!
-              </div>
-              <br />
-              <div>
-                We collect programs that students run in Source Academy @ NUS and store them
-                anonymously for our research. You are free to opt out of this collection, with no
-                penalty for you whatsoever. Contact your course instructor if you have questions or
-                concerns about this research.
-              </div>
-            </div>
-            <div className={Classes.DIALOG_FOOTER}>
-              <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                <Button
-                  text="I would like to opt out"
-                  onClick={() => props.updateCourseResearchAgreement(false)}
-                />
-                <Button
-                  text="I consent!"
-                  intent={Intent.SUCCESS}
-                  onClick={() => props.updateCourseResearchAgreement(true)}
-                />
-              </div>
-            </div>
-          </Dialog>
-        </div>
-      )}
-    </div>
+    </WorkspaceSettingsContext.Provider>
   );
 };
 

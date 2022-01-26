@@ -23,6 +23,7 @@ import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
 import { getModeString, selectMode } from '../utils/AceHelper';
+import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -65,6 +66,10 @@ type StateProps = {
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
+};
+
+type LocalStateProps = {
+  editorBinding: EditorBinding;
 };
 
 type OnEvent = {
@@ -192,7 +197,10 @@ const handlers = {
 };
 
 const EditorBase = React.memo(
-  React.forwardRef<AceEditor, EditorProps>(function EditorBase(props, forwardedRef) {
+  React.forwardRef<AceEditor, EditorProps & LocalStateProps>(function EditorBase(
+    props,
+    forwardedRef
+  ) {
     const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
 
     // Refs for things that technically shouldn't change... but just in case.
@@ -297,7 +305,8 @@ const EditorBase = React.memo(
         enableBasicAutocompletion: true,
         enableLiveAutocompletion: true,
         fontFamily: "'Inconsolata', 'Consolas', monospace"
-      }
+      },
+      keyboardHandler: props.editorBinding
     };
 
     // Hooks must not change after an editor is instantiated, so to prevent that
@@ -381,8 +390,17 @@ const EditorBase = React.memo(
 // don't create a new list every render.
 const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
 
-const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => (
-  <EditorBase {...props} hooks={hooks} ref={ref} />
-));
+const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => {
+  const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
+
+  return (
+    <EditorBase
+      {...props}
+      editorBinding={workspaceSettings.editorBinding}
+      hooks={hooks}
+      ref={ref}
+    />
+  );
+});
 
 export default Editor;

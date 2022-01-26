@@ -15,6 +15,7 @@ import { RouteComponentProps } from 'react-router';
 
 import {
   InterpreterOutput,
+  isNativeJSChapter,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -309,9 +310,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isDebugging={props.isDebugging}
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
+        sourceChapter={props.playgroundSourceChapter}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        pauseDisabled={usingRemoteExecution}
+        // Disable pause for NativeJS, because: one cannot stop `eval()`
+        pauseDisabled={
+          usingRemoteExecution ||
+          (!(props.playgroundSourceChapter === undefined) &&
+            isNativeJSChapter(props.playgroundSourceChapter))
+        }
       />
     ),
     [
@@ -324,6 +331,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.isDebugging,
       props.isEditorAutorun,
       props.isRunning,
+      props.playgroundSourceChapter,
       usingRemoteExecution
     ]
   );
@@ -536,6 +544,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
+    // (TEMP) Remove tabs for nativeJS until support is integrated
+    if (isNativeJSChapter(props.playgroundSourceChapter)) {
+      return tabs;
+    }
+
     if (props.playgroundSourceChapter >= 2 && !usingRemoteExecution) {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(dataVisualizerTab);
@@ -665,7 +678,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
+  const replDisabled =
+    props.playgroundSourceVariant === 'concurrent' ||
+    usingRemoteExecution ||
+    isNativeJSChapter(props.playgroundSourceChapter);
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -716,7 +732,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
+        usingRemoteExecution || isNativeJSChapter(props.playgroundSourceChapter)
+          ? null
+          : props.usingSubst
+          ? stepperStepLimit
+          : executionTime
       ]
     },
     editorProps: editorProps,
