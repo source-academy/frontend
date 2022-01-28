@@ -16,6 +16,7 @@ import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
+import GameLogManager from '../../log/GameLogManager';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -60,6 +61,7 @@ class GameManager extends Phaser.Scene {
   private inputManager?: GameInputManager;
   private escapeManager?: GameEscapeManager;
   private awardManager?: GameAwardsManager;
+  private logManager?: GameLogManager;
 
   constructor() {
     super('GameManager');
@@ -89,6 +91,7 @@ class GameManager extends Phaser.Scene {
     this.popUpManager = new GamePopUpManager();
     this.escapeManager = new GameEscapeManager(this);
     this.awardManager = new GameAwardsManager(this);
+    this.logManager = new GameLogManager(this);
   }
 
   //////////////////////
@@ -250,6 +253,17 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
+    this.getInputManager().registerKeyboardListener(
+      Phaser.Input.Keyboard.KeyCodes.CTRL,
+      'up',
+      async () => {
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Log)) {
+          await this.getPhaseManager().popPhase();
+        } else {
+          await this.getPhaseManager().pushPhase(GamePhaseType.Log);
+        }
+      }
+    );
   }
 
   /**
@@ -349,6 +363,7 @@ class GameManager extends Phaser.Scene {
   public getPopupManager = () => mandatory(this.popUpManager);
   public getEscapeManager = () => mandatory(this.escapeManager);
   public getAwardManager = () => mandatory(this.awardManager);
+  public getLogManager = () => mandatory(this.logManager);
 }
 
 export default GameManager;
