@@ -35,7 +35,7 @@ class GameLogManager implements IGameUI {
     )
       .setDisplaySize(screenSize.x, screenSize.y)
       .setInteractive({ pixelPerfect: true });
-      logContainer.add(logBg);
+    logContainer.add(logBg);
 
     return logContainer;
   }
