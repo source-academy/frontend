@@ -9,18 +9,26 @@ import { Hoverable, ReferenceType, Visible } from '../EnvVisualizerTypes';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
+  x: number;
+  y: number;
   readonly height: number;
   readonly width: number;
+  arrayUnit: ReferenceType;
+  referencedBy: ReferenceType[];
 
-  constructor(readonly referencedBy: ReferenceType[]) {
-    const arrayUnit = referencedBy[0];
-    this.x = arrayUnit.x;
-    this.y = arrayUnit.y;
-    this.height = arrayUnit.height;
-    this.width = arrayUnit.width;
+  constructor(referencedBy: ReferenceType[]) {
+    this.referencedBy = referencedBy;
+    this.arrayUnit = referencedBy[0];
+    this.x = this.arrayUnit.x;
+    this.y = this.arrayUnit.y;
+    this.height = this.arrayUnit.height;
+    this.width = this.arrayUnit.width;
   }
+
+  updatePosition = () => {
+    this.x = this.arrayUnit.x;
+    this.y = this.arrayUnit.y;
+  };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredStyle(currentTarget);

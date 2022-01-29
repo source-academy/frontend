@@ -27,16 +27,16 @@ import { Value } from './Value';
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */
 export class FnValue extends Value implements Hoverable {
-  readonly x: number;
-  readonly y: number;
+  x: number;
+  y: number;
   readonly height: number;
   readonly width: number;
-  /** name of this function */
+  centerX: number;
+  readonly tooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly tooltipWidth: number;
-  readonly centerX: number;
 
+  /** name of this function */
   readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;
@@ -86,6 +86,25 @@ export class FnValue extends Value implements Hoverable {
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
+  }
+  updatePosition(): void {
+    const mainReference = this.referencedBy[0];
+    if (mainReference instanceof Binding) {
+      this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
+      this.y = mainReference.y;
+      this.centerX = this.x + this.radius * 2;
+    } else {
+      if (mainReference.isLastUnit) {
+        this.x = mainReference.x + Config.DataUnitWidth * 2;
+        this.y = mainReference.y + Config.DataUnitHeight / 2 - this.radius;
+      } else {
+        this.x = mainReference.x;
+        this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
+      }
+      this.centerX = this.x + Config.DataUnitWidth / 2;
+      this.x = this.centerX - this.radius * 2;
+    }
+    this.y += this.radius;
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {

@@ -4,6 +4,7 @@ import {
 } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
+import React from 'react';
 
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
@@ -39,6 +40,8 @@ export interface Visible extends Drawable {
 
   /** height */
   height: number;
+
+  ref?: React.RefObject<any>;
 }
 
 /** unassigned is internally represented as a symbol */

@@ -1,9 +1,10 @@
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
-import { Level } from './components/Level';
+import { Grid } from './components/Grid';
+// import { Level } from './components/Level';
 import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
@@ -38,17 +39,21 @@ export class Layout {
   /** the global environment */
   static globalEnvNode: EnvTreeNode;
   /** array of levels, which themselves are arrays of frames */
-  static levels: Level[];
+  // static levels: Level[];
+  /** grid of frames */
+  static grid: Grid;
   /** memoized values */
   static values = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
+  stageRef: RefObject<any> = React.createRef();
+  static stageRef: React.Ref<any>;
 
   /** processes the runtime context from JS Slang */
   static setContext(context: Context): void {
     // clear/initialize data and value arrays
     Layout.values.clear();
-    Layout.levels = [];
+    // Layout.levels = [];
     Layout.key = 0;
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
@@ -59,20 +64,11 @@ export class Layout {
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
     // initialize levels and frames
-    Layout.initializeLevels();
+    Layout.initializeGrid();
 
     // calculate height and width by considering lowest and widest level
-    const lastLevel = Layout.levels[Layout.levels.length - 1];
-    Layout.height = Math.max(
-      Config.CanvasMinHeight,
-      lastLevel.y + lastLevel.height + Config.CanvasPaddingY
-    );
-
-    Layout.width = Math.max(
-      Config.CanvasMinWidth,
-      Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width), 0) +
-        Config.CanvasPaddingX * 2
-    );
+    Layout.height = Math.max(Config.CanvasMinHeight, this.grid.height + Config.CanvasPaddingY);
+    Layout.width = Math.max(Config.CanvasMinWidth, this.grid.width + Config.CanvasPaddingX * 2);
   }
 
   /** remove program environment containing predefined functions */
@@ -147,8 +143,8 @@ export class Layout {
     };
   }
 
-  /** initializes levels */
-  private static initializeLevels(): void {
+  /** initializes grid */
+  private static initializeGrid(): void {
     const getNextChildren = (c: EnvTreeNode): EnvTreeNode[] => {
       if (isEmptyEnvironment(c.environment)) {
         const nextChildren: EnvTreeNode[] = [];
@@ -161,13 +157,12 @@ export class Layout {
       }
     };
 
-    let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
-    let prevLevel: Level | null = null;
-    let currLevel: Level;
+    const frontiers: EnvTreeNode[][] = [];
+    let frontier = [Layout.globalEnvNode];
 
     while (frontier.length > 0) {
-      currLevel = new Level(prevLevel, frontier);
-      this.levels.push(currLevel);
+      frontiers.push(frontier);
+
       const nextFrontier: EnvTreeNode[] = [];
 
       frontier.forEach(e => {
@@ -178,8 +173,12 @@ export class Layout {
         });
       });
 
-      prevLevel = currLevel;
       frontier = nextFrontier;
+    }
+    if (this.grid === undefined) {
+      this.grid = new Grid(frontiers);
+    } else {
+      this.grid.update(frontiers);
     }
   }
 
@@ -227,7 +226,7 @@ export class Layout {
     } else {
       const layout = (
         <div className={'sa-env-visualizer'}>
-          <Stage width={Layout.width} height={Layout.height}>
+          <Stage width={Layout.width} height={Layout.height} ref={this.stageRef}>
             <Layer>
               <Rect
                 {...ShapeDefaultProps}
@@ -239,7 +238,8 @@ export class Layout {
                 key={Layout.key++}
                 listening={false}
               />
-              {Layout.levels.map(level => level.draw())}
+              {/* {Layout.levels.map(level => level.draw())} */}
+              {Layout.grid.draw()}
             </Layer>
           </Stage>
         </div>

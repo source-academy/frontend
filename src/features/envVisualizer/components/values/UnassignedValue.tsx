@@ -10,8 +10,8 @@ import { Value } from './Value';
 
 /** this class encapsulates an unassigned value in Source, internally represented as a symbol */
 export class UnassignedValue extends Value {
-  readonly x: number;
-  readonly y: number;
+  x: number;
+  y: number;
   readonly height: number;
   readonly width: number;
   readonly data: UnassignedData = Symbol();
@@ -41,6 +41,20 @@ export class UnassignedValue extends Value {
 
     this.width = this.text.width;
     this.height = this.text.height;
+  }
+
+  updatePosition(): void {
+    const mainReference = this.referencedBy[0];
+    if (mainReference instanceof Binding) {
+      this.x = mainReference.x + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this.y = mainReference.y;
+    } else {
+      const maxWidth = mainReference.width;
+      const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
+      this.x = mainReference.x + (mainReference.width - textWidth) / 2;
+      this.y = mainReference.y + (mainReference.height - Config.FontSize) / 2;
+    }
+    this.text.updatePosition(this.x, this.y);
   }
 
   draw(): React.ReactNode {

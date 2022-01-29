@@ -12,8 +12,8 @@ import { Value } from './Value';
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
 export class ArrayValue extends Value {
-  readonly x: number;
-  readonly y: number;
+  x: number;
+  y: number;
   readonly width: number;
   readonly height: number;
 
@@ -61,9 +61,9 @@ export class ArrayValue extends Value {
       this.width = Math.max(
         this.width,
         unit.value.width +
-          (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
-            ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
-            : i * Config.DataUnitWidth)
+        (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
+          ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
+          : i * Config.DataUnitWidth)
       );
 
       // update the height
@@ -77,9 +77,29 @@ export class ArrayValue extends Value {
       this.units = [unit, ...this.units];
     }
   }
+  updatePosition(): void {
+    const mainReference = this.referencedBy[0];
+    if (mainReference instanceof Binding) {
+      this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
+      this.y = mainReference.y;
+    } else {
+      if (mainReference.isLastUnit) {
+        this.x = mainReference.x + Config.DataUnitWidth * 2;
+        this.y = mainReference.y;
+      } else {
+        this.x = mainReference.x;
+        this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
+      }
+    }
+    this.units.forEach(unit => {
+      unit.updatePosition();
+    });
+  }
 
   draw(): React.ReactNode {
-    if (this.isDrawn) return null;
+    if (this.isDrawn) {
+      return null;
+    }
     this.isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>

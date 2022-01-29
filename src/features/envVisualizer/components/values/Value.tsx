@@ -8,14 +8,15 @@ export abstract class Value implements Visible {
   addReference(newReference: ReferenceType): void {
     this.referencedBy.push(newReference);
   }
+  abstract updatePosition(): void;
 
   /** references to this value */
   abstract readonly referencedBy: ReferenceType[];
   /** the underlying data of this value */
   abstract readonly data: Data;
   /** coordinates and dimensions */
-  abstract readonly x: number;
-  abstract readonly y: number;
+  abstract x: number;
+  abstract y: number;
   abstract readonly height: number;
   abstract readonly width: number;
 }

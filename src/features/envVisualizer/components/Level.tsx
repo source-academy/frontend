@@ -1,4 +1,5 @@
-import React from 'react';
+// import { KonvaEventObject } from 'konva/lib/Node';
+import React, { RefObject } from 'react';
 import { Rect } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
@@ -9,44 +10,60 @@ import { Frame } from './Frame';
 /** this class encapsulates a level of frames to be drawn with the same y values */
 export class Level implements Visible {
   readonly x: number;
-  readonly y: number;
-  readonly height: number;
-  readonly width: number;
+  y: number;
+  height: number = 0;
+  width: number;
+  static maxXcoord: number = 0;
+  static maxYcoord: number = 0;
+  lastXcoord: number;
+  readonly yCoord: number;
+  ref: RefObject<any> = React.createRef();
 
   /** all the frames in this level */
   readonly frames: Frame[] = [];
 
   constructor(
     /** the level of this */
-    readonly parentLevel: Level | null,
-    /** the environment tree nodes contained in this level */
-    readonly envTreeNodes: EnvTreeNode[]
+    readonly parentLevel: Level | null
   ) {
     this.x = Config.CanvasPaddingX;
-    this.y = Config.CanvasPaddingY;
+    this.y = 0;
+    this.lastXcoord = -1;
+    this.yCoord = Level.maxYcoord++;
+    this.width = 0;
     this.parentLevel && (this.y += this.parentLevel.height + this.parentLevel.y);
-    let prevFrame: Frame | null = null;
-    envTreeNodes.forEach(e => {
-      e.level = this;
-      const newFrame = new Frame(e, prevFrame);
-      e.frame = newFrame;
-      this.frames.push(newFrame);
-      prevFrame = newFrame;
-    });
-
-    // get the max height of all the frames in this level
-    this.height = this.frames.reduce<number>(
-      (maxHeight, frame) => Math.max(maxHeight, frame.totalHeight),
-      0
-    );
-    const lastFrame = this.frames[this.frames.length - 1];
-    // derive the width of this level from the last frame
-    this.width = lastFrame.x + lastFrame.totalWidth - this.x + Config.LevelPaddingX;
   }
+
+  addFrame = (node: EnvTreeNode) => {
+    const coordinate: number = Math.max(Level.maxXcoord, this.lastXcoord + 1);
+    this.lastXcoord = coordinate;
+    Level.maxXcoord = coordinate;
+    node.level = this;
+    if (this.frames[coordinate] !== undefined) {
+      this.frames[coordinate].update(node);
+    } else {
+      this.frames[coordinate] = new Frame(node, coordinate, this.yCoord);
+      node.frame = this.frames[coordinate];
+    }
+    this.width = Frame.cumWidths[Frame.cumWidths.length - 1];
+  };
+
+  setY = (y: number) => {
+    this.y = y;
+    this.frames.forEach(frame => {
+      frame.updatePosition(frame.x, y);
+    });
+  };
+
+  static reset = () => {
+    Level.maxXcoord = 0;
+    Level.maxYcoord = 0;
+  };
 
   draw(): React.ReactNode {
     return (
       <React.Fragment key={Layout.key++}>
+        {/* <Group key={Layout.key++} ref={this.ref} draggable={true}> */}
         <Rect
           {...ShapeDefaultProps}
           x={this.x}
@@ -57,6 +74,7 @@ export class Level implements Visible {
           listening={false}
         />
         {this.frames.map(frame => frame.draw())}
+        {/* </Group> */}
       </React.Fragment>
     );
   }

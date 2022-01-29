@@ -14,8 +14,8 @@ import { Value } from './values/Value';
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */
 export class ArrayUnit implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
+  x: number;
+  y: number;
   readonly height: number;
   readonly width: number;
   readonly value: Value;
@@ -29,14 +29,17 @@ export class ArrayUnit implements Visible, Hoverable {
   /** check if the value is already drawn */
   private isDrawn: boolean = false;
 
+  parent: ArrayValue;
+
   constructor(
     /** index of this unit in its parent */
     readonly idx: number,
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
-    readonly parent: ArrayValue
+    parent: ArrayValue
   ) {
+    this.parent = parent;
     this.x = this.parent.x + this.idx * Config.DataUnitWidth;
     this.y = this.parent.y;
     this.height = Config.DataUnitHeight;
@@ -46,6 +49,12 @@ export class ArrayUnit implements Visible, Hoverable {
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.referencedBy.length > 1;
   }
+
+  updatePosition = () => {
+    this.x = this.parent.x + this.idx * Config.DataUnitWidth;
+    this.y = this.parent.y;
+    this.value.updatePosition();
+  };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredStyle(currentTarget);

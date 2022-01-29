@@ -15,7 +15,6 @@ export class ArrowFromArrayUnit extends GenericArrow {
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
-
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       steps.push((x, y) => [from.x < to.x ? to.x : to.centerX, to.y]);
     } else if (to instanceof ArrayValue) {

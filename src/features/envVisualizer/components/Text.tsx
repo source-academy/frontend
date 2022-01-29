@@ -1,6 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
-import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
+import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
@@ -34,15 +34,19 @@ export class Text implements Visible, Hoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  private labelRef: RefObject<any> = React.createRef();
+  ref: RefObject<any> = React.createRef();
+  x: number;
+  y: number;
 
   constructor(
     readonly data: Data,
-    readonly x: number,
-    readonly y: number,
+    x: number,
+    y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
+    this.x = x;
+    this.y = y;
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
@@ -65,19 +69,23 @@ export class Text implements Visible, Hoverable {
       this.width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
+  updatePosition = (x: number, y: number) => {
+    this.x = x;
+    this.y = y;
+  };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     const container = currentTarget.getStage()?.container();
     container && (container.style.cursor = 'pointer');
-    this.labelRef.current.moveToTop();
-    this.labelRef.current.show();
+    this.ref.current.moveToTop();
+    this.ref.current.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     const container = currentTarget.getStage()?.container();
     container && (container.style.cursor = 'default');
-    this.labelRef.current.hide();
+    this.ref.current.hide();
     currentTarget.getLayer()?.draw();
   };
 
@@ -89,7 +97,7 @@ export class Text implements Visible, Hoverable {
       fill: Config.SA_WHITE.toString()
     };
     return (
-      <React.Fragment key={Layout.key++}>
+      <Group key={Layout.key++}>
         <KonvaLabel
           x={this.x}
           y={this.y}
@@ -101,7 +109,7 @@ export class Text implements Visible, Hoverable {
         <KonvaLabel
           x={this.x}
           y={this.y}
-          ref={this.labelRef}
+          ref={this.ref}
           visible={false}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -109,7 +117,7 @@ export class Text implements Visible, Hoverable {
           <KonvaTag {...ShapeDefaultProps} fill={'black'} opacity={0.5} />
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
         </KonvaLabel>
-      </React.Fragment>
+      </Group>
     );
   }
 }
