@@ -542,7 +542,7 @@ export function* evalEditor(
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     yield put(actions.remoteExecRun(editorCode));
   } else if (isNativeJSChapter(context.chapter)) {
-    yield put(actions.nativeJSRun({ workspace: workspaceLocation, program: editorCode }));
+    yield put(actions.nativeJSRun({ workspaceLocation: workspaceLocation, code: editorCode }));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
