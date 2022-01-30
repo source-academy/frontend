@@ -41,6 +41,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
+import { showNativeJSDisclaimer } from '../nativeJS/NativeJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import {
@@ -250,7 +251,12 @@ export default function* WorkspaceSaga(): SagaIterator {
       state.workspaces[workspaceLocation].externalLibrary
     ]);
 
-    if (newChapter !== oldChapter || newVariant !== oldVariant) {
+    const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
+    const toChangeChapter: boolean = isNativeJSChapter(newChapter)
+      ? chapterChanged && (yield call(showNativeJSDisclaimer))
+      : chapterChanged;
+
+    if (toChangeChapter) {
       const library = {
         chapter: newChapter,
         variant: newVariant,

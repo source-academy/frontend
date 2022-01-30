@@ -12,6 +12,7 @@ import {
   styliseSublanguage,
   variantLanguages
 } from '../application/ApplicationTypes';
+import Constants from '../utils/Constants';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
@@ -41,7 +42,7 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
     return (
       <Menu ulRef={itemsParentRef}>
         {defaultChoices}
-        {nativeJSChoice}
+        {Constants.playgroundOnly && nativeJSChoice}
         <MenuItem key="variant-menu" text="Variants" icon="cog">
           {variantChoices}
         </MenuItem>
