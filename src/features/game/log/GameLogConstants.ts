@@ -15,7 +15,7 @@ export const logTextStyle: BitmapFontStyle = {
 };
 
 const LogConstants = {
-  headerTextConfig: {x: screenSize.x * 0.44, y: screenCenter.y * 0.25, oriX: 0.0, oriY: 0.5 }
+  headerTextConfig: { x: screenSize.x * 0.44, y: screenCenter.y * 0.25, oriX: 0.0, oriY: 0.5 }
 };
 
 export default LogConstants;

@@ -10,7 +10,7 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import LogConstants, {
-  headerTextStyle,
+  headerTextStyle
   // logTextStyle
 } from './GameLogConstants';
 
@@ -52,12 +52,7 @@ class GameLogManager implements IGameUI {
     const settings = ['Cadet Log'];
     logContainer.add(
       settings.map((setting, index) =>
-        createBitmapText(
-          this.scene,
-          setting,
-          LogConstants.headerTextConfig,
-          headerTextStyle
-        )
+        createBitmapText(this.scene, setting, LogConstants.headerTextConfig, headerTextStyle)
       )
     );
 
@@ -70,7 +65,7 @@ class GameLogManager implements IGameUI {
    * Usually only called by the phase manager when 'Dialogue Log'
    * phase is pushed.
    */
-   public async activateUI(): Promise<void> {
+  public async activateUI(): Promise<void> {
     this.uiContainer = this.createUIContainer();
     this.scene.getLayerManager().addToLayer(Layer.Log, this.uiContainer);
     this.getSoundManager().playSound(SoundAssets.menuEnter.key);
@@ -88,7 +83,7 @@ class GameLogManager implements IGameUI {
    * Usually only called by the phase manager when 'Dialogue Log'
    * phase is transitioned out.
    */
-   public async deactivateUI(): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     if (this.uiContainer) {
       this.uiContainer.setPosition(0, 0);
       this.scene.getLayerManager().clearSeveralLayers([Layer.Log]);
