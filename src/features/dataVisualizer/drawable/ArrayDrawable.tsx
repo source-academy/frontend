@@ -51,7 +51,7 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
       <Group x={this.props.x} y={this.props.y}>
         {/* Outer rectangle */}
         <Rect
-          width={Config.BoxWidth * this.props.nodes.length}
+          width={Math.max(Config.BoxWidth * this.props.nodes.length, Config.BoxMinWidth)}
           height={Config.BoxHeight}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
