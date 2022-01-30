@@ -28,32 +28,30 @@ type StateProps = {
 };
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
-  const showRunButton = () =>
-    !props.isDebugging && (
-      <ControlBarRunButton
-        handleEditorEval={props.handleEditorEval}
-        // Neon Green: #39FF14
-        color={props.isRunning ? '#39FF14' : undefined}
-        className={props.isRunning ? 'WaitingCursor' : undefined}
-        key="run"
-      />
-    );
+  const showRunButton = !props.isDebugging && (
+    <ControlBarRunButton
+      handleEditorEval={props.handleEditorEval}
+      // Neon Green: #39FF14
+      color={props.isRunning ? '#39FF14' : undefined}
+      className={props.isRunning ? 'WaitingCursor' : undefined}
+      key="run"
+    />
+  );
 
-  const showAutoRunIndicator = () =>
+  const showAutoRunIndicator =
     props.isEditorAutorun && controlButton('Auto', IconNames.AUTOMATIC_UPDATES);
 
   // stop button does not do anything due to the blocking nature of eval methods (e.g. runInContext)
   // to prevent "flickering", we will just disable Stop Button for now
-  const showStopButton = () =>
-    false && controlButton('Stop', IconNames.STOP, props.handleInterruptEval);
+  const showStopButton = false && controlButton('Stop', IconNames.STOP, props.handleInterruptEval);
 
-  const showDebuggerPause = () =>
+  const showDebuggerPause =
     !props.pauseDisabled &&
     props.isRunning &&
     !props.isDebugging &&
     controlButton('Pause', IconNames.STOP, props.handleDebuggerPause);
 
-  const showDebuggerResume = () =>
+  const showDebuggerResume =
     !props.isRunning &&
     props.isDebugging &&
     controlButton('Resume', IconNames.CHEVRON_RIGHT, props.handleDebuggerResume);
@@ -65,9 +63,9 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
 
   return isMobileBreakpoint ? (
     <>
-      {showStopButton()}
-      {showDebuggerPause()}
-      {showDebuggerResume()}
+      {showStopButton}
+      {showDebuggerPause}
+      {showDebuggerResume}
       {showDebuggerReset('Stop')}
     </>
   ) : (
@@ -81,9 +79,9 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
           />
         </div>
       )}
-      {showAutoRunIndicator() || showStopButton() || showRunButton()}
-      {showDebuggerPause()}
-      {showDebuggerResume()}
+      {showAutoRunIndicator || showStopButton || showRunButton}
+      {showDebuggerPause}
+      {showDebuggerResume}
       {showDebuggerReset('Stop Debugger')}
     </>
   );
