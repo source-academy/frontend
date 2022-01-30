@@ -59,17 +59,18 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
           preventDefault={false}
         />
         {/* Vertical lines in the box */}
-        {Array.from(Array(this.props.nodes.length - 1), (e, i) => {
-          return (
-            <Line
-              key={'line' + i}
-              points={[Config.BoxWidth * (i + 1), 0, Config.BoxWidth * (i + 1), Config.BoxHeight]}
-              strokeWidth={Config.StrokeWidth}
-              stroke={Config.Stroke}
-              preventDefault={false}
-            />
-          );
-        })}
+        {this.props.nodes.length > 1 &&
+          Array.from(Array(this.props.nodes.length - 1), (e, i) => {
+            return (
+              <Line
+                key={'line' + i}
+                points={[Config.BoxWidth * (i + 1), 0, Config.BoxWidth * (i + 1), Config.BoxHeight]}
+                strokeWidth={Config.StrokeWidth}
+                stroke={Config.Stroke}
+                preventDefault={false}
+              />
+            );
+          })}
         {this.props.nodes.map(
           (child, index) => child instanceof DataTreeNode && createChildText(child, index)
         )}
