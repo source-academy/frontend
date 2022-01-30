@@ -2,13 +2,12 @@
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
 import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { difference, keys, throttle } from 'lodash';
+import { difference, keys } from 'lodash';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
-import { handleConsoleLog } from '../application/actions/InterpreterActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import DisplayBufferService from './DisplayBufferService';
 
 /**
  * This file contains wrappers for certain functions
@@ -33,23 +32,6 @@ function display(value: Value, str: string, workspaceLocation: any) {
   return value;
 }
 
-// throttle for performance
-
-let buffer: string[] = [];
-let currWorkspaceLocation: WorkspaceLocation = 'playground'; // Hardcode, doesn't matter what it is.
-export const dumpDisplayBuffer = () => {
-  if (buffer.length === 0) {
-    return;
-  }
-  // TODO in 2019: fix this hack.
-  // Not yet fixed in 2021 :D
-  if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
-    (window as any).__REDUX_STORE__.dispatch(handleConsoleLog(currWorkspaceLocation, ...buffer));
-  }
-  buffer = [];
-};
-const dumpBufferThrottled = throttle(dumpDisplayBuffer, 100);
-
 /**
  * Function that takes a value and displays it in the interpreter.
  * The value is displayed however native JS would convert it to a string.
@@ -63,12 +45,8 @@ const dumpBufferThrottled = throttle(dumpDisplayBuffer, 100);
  */
 function rawDisplay(value: Value, str: string, workspaceLocation: any) {
   const output = (str === undefined ? '' : str + ' ') + String(value);
-  if (currWorkspaceLocation !== workspaceLocation) {
-    dumpDisplayBuffer(); // Force clear to keep message ordering in different workspaces.
-    currWorkspaceLocation = workspaceLocation;
-  }
-  buffer.push(output);
-  dumpBufferThrottled();
+  DisplayBufferService.push(output, workspaceLocation);
+
   return value;
 }
 
