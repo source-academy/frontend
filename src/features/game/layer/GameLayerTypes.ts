@@ -27,8 +27,8 @@ export const defaultLayerSequence = [
   Layer.PopUp,
   Layer.Dialogue,
   Layer.SpeakerBox,
-  Layer.UI,
   Layer.Effects,
+  Layer.UI,
   Layer.Log,
   Layer.Escape
 ];
