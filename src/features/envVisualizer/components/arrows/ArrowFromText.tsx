@@ -14,12 +14,12 @@ export class ArrowFromText extends GenericArrow {
 
     if (to.x < from.x) {
       if (to instanceof ArrayValue) {
-        steps.push((x, y) => [x + Config.TextMargin, y]);
+        steps.push((x, y) => [x + Config.TextMargin + (3/2) * Config.FrameMarginX, y]);
         steps.push((x, y) => [x, to.y - Config.DataUnitHeight / 3]);
         steps.push((x, y) => [to.x + Config.DataUnitWidth / 2, y]);
         steps.push((x, y) => [x, to.y]);
       } else {
-        steps.push((x, y) => [x + Config.TextMargin, y]);
+        steps.push((x, y) => [x + Config.TextMargin + (3/2) * Config.FrameMarginX, y]);
         steps.push((x, y) => [x, y - from.height / 2 - Config.TextMargin]);
         steps.push((x, y) => [to.x + to.width + Config.ArrowHeadSize, y]);
         steps.push((x, y) => [x, to.y]);
