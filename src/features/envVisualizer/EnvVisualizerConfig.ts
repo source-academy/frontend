@@ -36,10 +36,11 @@ export enum Config {
 
   HoveredColor = '#32CD32',
 
-  ArrowHeadSize = 15,
+  ArrowHeadSize = 10,
   ArrowStrokeWidth = 1,
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
+  ArrowCornerRadius = 40,
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',

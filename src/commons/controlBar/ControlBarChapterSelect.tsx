@@ -42,7 +42,7 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
     return (
       <Menu ulRef={itemsParentRef}>
         {defaultChoices}
-        {Constants.playgroundOnly && nativeJSChoice}
+        {nativeJSChoice}
         <MenuItem key="variant-menu" text="Variants" icon="cog">
           {variantChoices}
         </MenuItem>
