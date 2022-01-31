@@ -12,6 +12,7 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { showNativeJSWarningOnUrlLoad } from 'src/commons/nativeJS/NativeJSUtils';
 
 import {
   InterpreterOutput,
@@ -138,27 +139,30 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-function handleHash(hash: string, props: PlaygroundProps) {
+export function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
-  const programLz = qs.lz ?? qs.prgrm;
-  const program = programLz && decompressFromEncodedURIComponent(programLz);
-  if (program) {
-    props.handleEditorValueChange(program);
-  }
-
   const chapter = stringParamToInt(qs.chap) || undefined;
-  const variant: Variant =
-    sourceLanguages.find(
-      language => language.chapter === chapter && language.variant === qs.variant
-    )?.variant ?? 'default';
-  if (chapter) {
-    props.handleChapterSelect(chapter, variant);
-  }
+  if (chapter && isNativeJSChapter(chapter)) {
+    showNativeJSWarningOnUrlLoad();
+  } else {
+    const programLz = qs.lz ?? qs.prgrm;
+    const program = programLz && decompressFromEncodedURIComponent(programLz);
+    if (program) {
+      props.handleEditorValueChange(program);
+    }
+    const variant: Variant =
+      sourceLanguages.find(
+        language => language.chapter === chapter && language.variant === qs.variant
+      )?.variant ?? 'default';
+    if (chapter) {
+      props.handleChapterSelect(chapter, variant);
+    }
 
-  const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
-  if (execTime) {
-    props.handleChangeExecTime(execTime);
+    const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
+    if (execTime) {
+      props.handleChangeExecTime(execTime);
+    }
   }
 }
 
@@ -727,7 +731,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        shareButton,
+        isNativeJSChapter(props.playgroundSourceChapter) ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
@@ -764,7 +768,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          shareButton,
+          isNativeJSChapter(props.playgroundSourceChapter) ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons

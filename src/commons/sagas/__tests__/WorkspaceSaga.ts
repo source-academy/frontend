@@ -3,7 +3,9 @@ import createContext from 'js-slang/dist/createContext';
 import { Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import * as matchers from 'redux-saga-test-plan/matchers';
 import { updateInfiniteLoopEncountered } from 'src/commons/application/actions/SessionActions';
+import * as nativeJSUtils from 'src/commons/nativeJS/NativeJSUtils';
 
 import {
   beginInterruptExecution,
@@ -15,7 +17,7 @@ import {
   evalTestcaseFailure,
   evalTestcaseSuccess
 } from '../../application/actions/InterpreterActions';
-import { defaultState, OverallState } from '../../application/ApplicationTypes';
+import { defaultState, nativeJSLanguage, OverallState } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -468,6 +470,59 @@ describe('CHAPTER_SELECT', () => {
         payload: { chapter: newChapter, variant: newVariant, workspaceLocation }
       })
       .silentRun();
+  });
+
+  describe('show disclaimer when fullJS is chosen', () => {
+    test('correct actions when user proceeds', () => {
+      const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
+      const library: Library = {
+        chapter: nativeJSLanguage.chapter,
+        variant: nativeJSLanguage.variant,
+        external: {
+          name: 'NONE' as ExternalLibraryName,
+          symbols: context.externalSymbols
+        },
+        globals
+      };
+
+      return expectSaga(workspaceSaga)
+        .provide([[matchers.call.fn(nativeJSUtils.showNativeJSDisclaimer), true]])
+        .withState(newDefaultState)
+        .call(nativeJSUtils.showNativeJSDisclaimer)
+        .put(beginClearContext(workspaceLocation, library, false))
+        .put(clearReplOutput(workspaceLocation))
+        .call(showSuccessMessage, `Switched to full JavaScript`, 1000)
+        .dispatch({
+          type: CHAPTER_SELECT,
+          payload: {
+            chapter: nativeJSLanguage.chapter,
+            variant: nativeJSLanguage.variant,
+            workspaceLocation
+          }
+        })
+        .silentRun();
+    });
+
+    test('correct actions when user cancels', () => {
+      const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
+
+      return expectSaga(workspaceSaga)
+        .provide([[matchers.call.fn(nativeJSUtils.showNativeJSDisclaimer), false]])
+        .withState(newDefaultState)
+        .call(nativeJSUtils.showNativeJSDisclaimer)
+        .not.put.actionType(BEGIN_CLEAR_CONTEXT)
+        .not.put.actionType(CLEAR_REPL_OUTPUT)
+        .not.call.fn(showSuccessMessage)
+        .dispatch({
+          type: CHAPTER_SELECT,
+          payload: {
+            chapter: nativeJSLanguage.chapter,
+            variant: nativeJSLanguage.variant,
+            workspaceLocation
+          }
+        })
+        .silentRun();
+    });
   });
 });
 
