@@ -5,7 +5,7 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
-import Playground, { PlaygroundProps } from '../Playground';
+import Playground, { handleHash, PlaygroundProps } from '../Playground';
 
 const baseProps = {
   editorValue: '',
@@ -104,4 +104,25 @@ test('Playground with link renders correctly', () => {
   );
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
+});
+
+describe('handleHash', () => {
+  test('disables loading hash with fullJS chapter in URL params', () => {
+    const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
+
+    const mockHandleEditorValueChanged = jest.fn();
+    const mockHandleChapterSelect = jest.fn();
+    const mockHandleChangeExecTime = jest.fn();
+
+    handleHash(testHash, {
+      ...playgroundLinkProps, // dummy props (will not be used)
+      handleEditorValueChange: mockHandleEditorValueChanged,
+      handleChapterSelect: mockHandleChapterSelect,
+      handleChangeExecTime: mockHandleChangeExecTime
+    });
+
+    expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
+    expect(mockHandleChapterSelect).not.toHaveBeenCalled();
+    expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
+  });
 });
