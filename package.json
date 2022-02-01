@@ -30,7 +30,7 @@
     "@blueprintjs/popover2": "^0.12.9",
     "@blueprintjs/select": "^3.18.11",
     "@octokit/rest": "^18.12.0",
-    "@sentry/browser": "^6.16.1",
+    "@sentry/browser": "^6.17.3",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.0.1",
     "@testing-library/user-event": "^13.5.0",
