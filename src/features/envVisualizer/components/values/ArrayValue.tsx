@@ -61,9 +61,9 @@ export class ArrayValue extends Value {
       this.width = Math.max(
         this.width,
         unit.value.width +
-        (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
-          ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
-          : i * Config.DataUnitWidth)
+          (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
+            ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
+            : i * Config.DataUnitWidth)
       );
 
       // update the height

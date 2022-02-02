@@ -87,8 +87,8 @@ export class Frame implements Visible, Hoverable {
         (isUnassigned(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
           : isPrimitiveData(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
-          : 0);
+            ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
+            : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this.width = maxBindingWidth + Config.FramePaddingX * 2;
@@ -172,8 +172,8 @@ export class Frame implements Visible, Hoverable {
         (isUnassigned(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
           : isPrimitiveData(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
-          : 0);
+            ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
+            : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this.width = maxBindingWidth + Config.FramePaddingX * 2;
@@ -240,7 +240,7 @@ export class Frame implements Visible, Hoverable {
   draw(): React.ReactNode {
     return (
       <Group key={Layout.key++} ref={this.ref}>
-      {/* <React.Fragment key={Layout.key++}> */}
+        {/* <React.Fragment key={Layout.key++}> */}
         {this.name.draw()}
         {this.bindings.map(binding => binding.draw())}
         <Rect
@@ -256,7 +256,7 @@ export class Frame implements Visible, Hoverable {
           key={Layout.key++}
         />
         {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
-        </Group>
+      </Group>
       // </React.Fragment>
     );
   }

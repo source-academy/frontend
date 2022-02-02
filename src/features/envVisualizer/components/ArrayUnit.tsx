@@ -53,7 +53,7 @@ export class ArrayUnit implements Visible, Hoverable {
   updatePosition = () => {
     this.x = this.parent.x + this.idx * Config.DataUnitWidth;
     this.y = this.parent.y;
-    this.value.updatePosition();
+    this.value instanceof PrimitiveValue && this.value.updatePosition();
   };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
