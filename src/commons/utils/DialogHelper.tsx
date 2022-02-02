@@ -75,7 +75,7 @@ export function showConfirmDialog<T>(
   }));
 }
 
-export function showSimpleConfirmDialog(props: {
+export interface SimpleConfirmDialogProps {
   icon?: IconName;
   title?: string;
   contents?: React.ReactNode;
@@ -83,7 +83,9 @@ export function showSimpleConfirmDialog(props: {
   positiveIntent?: Intent;
   negativeLabel?: string;
   props?: Partial<ConfirmDialogProps<boolean>>;
-}): Promise<boolean> {
+}
+
+export function showSimpleConfirmDialog(props: SimpleConfirmDialogProps): Promise<boolean> {
   return showConfirmDialog<boolean>({
     title: props.title,
     contents: props.contents,
