@@ -91,7 +91,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/estree": "0.0.50",
     "@types/gapi": "^0.0.41",
-    "@types/gapi.auth2": "^0.0.55",
+    "@types/gapi.auth2": "^0.0.56",
     "@types/gapi.client": "^1.0.5",
     "@types/gapi.client.drive": "^3.0.13",
     "@types/google.picker": "^0.0.39",
