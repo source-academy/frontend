@@ -35,7 +35,7 @@
     "@sourceacademy/sling-client": "^0.0.1",
     "@testing-library/user-event": "^13.5.0",
     "@types/react-syntax-highlighter": "^13.5.2",
-    "@types/uuid": "^8.3.3",
+    "@types/uuid": "^8.3.4",
     "ace-builds": "^1.4.13",
     "acorn": "^8.6.0",
     "ag-grid-community": "^26.2.1",
