@@ -60,20 +60,22 @@ export class Binding implements Visible {
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
-    this.keyYOffset =
-      this.value instanceof ArrayValue
-        ? (Config.DataUnitHeight - Config.FontSize) / 2
-        : (this.value.height - Config.FontSize) / 2;
+    // this.keyYOffset =
+    //   this.value instanceof ArrayValue
+    //     ? (Config.DataUnitHeight - Config.FontSize) / 2
+    //     : (this.value.height - Config.FontSize) / 2;
+    this.keyYOffset = (this.value.height - Config.FontSize) / 2;
 
     this.key = new Text(this.keyString, this.x, this.offsetY + this.keyYOffset);
 
     // derive the width from the right bound of the value
-    this.width = isMainReference(this.value, this)
-      ? this.value.x + this.value.width - this.x
-      : // + (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-        //   ? this.value.tooltipWidth
-        //   : 0)
-        this.key.width;
+    this.width =
+      !(this.value instanceof ArrayValue) && isMainReference(this.value, this)
+        ? this.value.x + this.value.width - this.x
+        : // + (this.value instanceof FnValue || this.value instanceof GlobalFnValue
+          //   ? this.value.tooltipWidth
+          //   : 0)
+          this.key.width;
 
     this.height = Math.max(this.key.height, this.value.height);
 
@@ -105,9 +107,13 @@ export class Binding implements Visible {
         {this.isDummyBinding || // value is unreferenced in dummy binding
         this.value instanceof PrimitiveValue ||
         this.value instanceof UnassignedValue
-          ? null
+          ? // || this.value instanceof ArrayValue // Draw Arrays afterwards
+            null
           : Arrow.from(this.key).to(this.value).draw()}
-        {isMainReference(this.value, this) ? this.value.draw() : null}
+        {
+          //!(this.value instanceof ArrayValue) &&
+          isMainReference(this.value, this) ? this.value.draw() : null
+        }
       </React.Fragment>
     );
   }

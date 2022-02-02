@@ -1,6 +1,6 @@
 // import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
-import { Rect } from 'react-konva';
+import { Group, Rect } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
@@ -62,8 +62,8 @@ export class Level implements Visible {
 
   draw(): React.ReactNode {
     return (
-      <React.Fragment key={Layout.key++}>
-        {/* <Group key={Layout.key++} ref={this.ref} draggable={true}> */}
+      // <React.Fragment key={Layout.key++}>
+      <Group key={Layout.key++} ref={this.ref} draggable={false}>
         <Rect
           {...ShapeDefaultProps}
           x={this.x}
@@ -73,9 +73,9 @@ export class Level implements Visible {
           key={Layout.key++}
           listening={false}
         />
-        {this.frames.map(frame => frame.draw())}
-        {/* </Group> */}
-      </React.Fragment>
+        {this.frames.reverse().map(frame => frame.draw())}
+      </Group>
+      // {/* </React.Fragment> */}
     );
   }
 }

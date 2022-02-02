@@ -91,6 +91,8 @@ export class Grid implements Visible {
   };
 
   draw(): React.ReactNode {
+    // const tmp = Layout.values.entries();
+    // debugger;
     return (
       <Group key={Layout.key++}>
         <Rect

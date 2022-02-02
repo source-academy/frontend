@@ -18,6 +18,7 @@ import { Arrow } from './arrows/Arrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
+import { ArrayValue } from './values/ArrayValue';
 
 const frameNames = new Map([
   ['global', 'Global'],
@@ -87,8 +88,8 @@ export class Frame implements Visible, Hoverable {
         (isUnassigned(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
           : isPrimitiveData(data)
-            ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
-            : 0);
+          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
+          : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this.width = maxBindingWidth + Config.FramePaddingX * 2;
@@ -172,8 +173,8 @@ export class Frame implements Visible, Hoverable {
         (isUnassigned(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
           : isPrimitiveData(data)
-            ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
-            : 0);
+          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
+          : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this.width = maxBindingWidth + Config.FramePaddingX * 2;
@@ -241,8 +242,9 @@ export class Frame implements Visible, Hoverable {
     return (
       <Group key={Layout.key++} ref={this.ref}>
         {/* <React.Fragment key={Layout.key++}> */}
+        {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
+        {this.bindings.map(binding => !(binding.data instanceof ArrayValue) && binding.draw())}
         {this.name.draw()}
-        {this.bindings.map(binding => binding.draw())}
         <Rect
           {...ShapeDefaultProps}
           x={this.x}
@@ -255,7 +257,6 @@ export class Frame implements Visible, Hoverable {
           onMouseLeave={this.onMouseLeave}
           key={Layout.key++}
         />
-        {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
       </Group>
       // </React.Fragment>
     );
