@@ -9,11 +9,7 @@ import { GamePhaseType } from '../phase/GamePhaseTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import LogConstants, {
-  headerTextStyle,
-  LogMocks,
-  logTextStyle
-} from './GameLogConstants';
+import LogConstants, { headerTextStyle, LogMocks, logTextStyle } from './GameLogConstants';
 
 /**
  * Manager in charge of rendering and destroying the dialogue log in a scene
@@ -52,15 +48,20 @@ class GameLogManager implements IGameUI {
     // Log header
     const header = ['Cadet Log'];
     logContainer.add(
-      header.map((text) =>
+      header.map(text =>
         createBitmapText(this.scene, text, LogConstants.headerTextConfig, headerTextStyle)
       )
     );
 
-    const textLog = LogMocks
+    const textLog = LogMocks;
     logContainer.add(
-      textLog.map((text, index) => 
-        createBitmapText(this.scene, text.speakerDetail?.speakerId + ": " + text.line, { ...LogConstants.logTextConfig, y: screenCenter.y * (0.4 + index * 0.1)}, logTextStyle)
+      textLog.map((text, index) =>
+        createBitmapText(
+          this.scene,
+          text.speakerDetail?.speakerId + ': ' + text.line,
+          { ...LogConstants.logTextConfig, y: screenCenter.y * (0.4 + index * 0.1) },
+          logTextStyle
+        )
       )
     );
 
