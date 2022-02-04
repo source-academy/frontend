@@ -10,8 +10,9 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import LogConstants, {
-  headerTextStyle
-  // logTextStyle
+  headerTextStyle,
+  LogMocks,
+  logTextStyle
 } from './GameLogConstants';
 
 /**
@@ -46,13 +47,20 @@ class GameLogManager implements IGameUI {
     )
       .setDisplaySize(screenSize.x, screenSize.y)
       .setInteractive({ pixelPerfect: true });
-    logContainer.add(logBg);
+    logContainer.add([logBg]);
 
     // Log header
-    const settings = ['Cadet Log'];
+    const header = ['Cadet Log'];
     logContainer.add(
-      settings.map((setting, index) =>
-        createBitmapText(this.scene, setting, LogConstants.headerTextConfig, headerTextStyle)
+      header.map((text) =>
+        createBitmapText(this.scene, text, LogConstants.headerTextConfig, headerTextStyle)
+      )
+    );
+
+    const textLog = LogMocks
+    logContainer.add(
+      textLog.map((text, index) => 
+        createBitmapText(this.scene, text.speakerDetail?.speakerId + ": " + text.line, { ...LogConstants.logTextConfig, y: screenCenter.y * (0.4 + index * 0.1)}, logTextStyle)
       )
     );
 
