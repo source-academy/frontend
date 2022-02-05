@@ -3,20 +3,20 @@ import { fullJSRunner } from 'js-slang/dist/runner/fullJSRunner';
 import { Error, Finished } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { NATIVE_JS_RUN, NativeJSEvalPayload } from 'src/features/nativeJS/NativeJSTypes';
+import { FULL_JS_RUN, FullJSEvalPayload } from 'src/features/fullJS/FullJSTypes';
 
+import {
+  evalInterpreterError,
+  evalInterpreterSuccess
+} from '../application/actions/InterpreterActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
 import { runWrapper } from '../utils/RunHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
-import {
-  evalInterpreterError,
-  evalInterpreterSuccess
-} from './../application/actions/InterpreterActions';
 
-export function* nativeJsSaga(): SagaIterator {
-  yield takeEvery(NATIVE_JS_RUN, function* (action: ReturnType<typeof actions.nativeJSRun>) {
-    const { workspaceLocation, code }: NativeJSEvalPayload = action.payload;
+export function* fullJSSaga(): SagaIterator {
+  yield takeEvery(FULL_JS_RUN, function* (action: ReturnType<typeof actions.fullJSRun>) {
+    const { workspaceLocation, code }: FullJSEvalPayload = action.payload;
     // Notify workspace & clear REPL
     yield put(actions.clearReplOutput(workspaceLocation));
     const context: Context = yield select(
@@ -36,4 +36,4 @@ export function* nativeJsSaga(): SagaIterator {
   });
 }
 
-export default nativeJsSaga;
+export default fullJSSaga;

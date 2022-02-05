@@ -12,6 +12,7 @@ import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
+import { isFullJSChapter } from 'js-slang/dist/runner/fullJSRunner';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
@@ -26,11 +27,7 @@ import * as Sourceror from 'sourceror';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import {
-  isNativeJSChapter,
-  OverallState,
-  styliseSublanguage
-} from '../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -41,7 +38,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
-import { showNativeJSDisclaimer } from '../nativeJS/NativeJSUtils';
+import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -252,8 +249,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     ]);
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean = isNativeJSChapter(newChapter)
-      ? chapterChanged && (yield call(showNativeJSDisclaimer))
+    const toChangeChapter: boolean = isFullJSChapter(newChapter)
+      ? chapterChanged && (yield call(showFullJSDisclaimer))
       : chapterChanged;
 
     if (toChangeChapter) {
@@ -541,8 +538,8 @@ export function* evalEditor(
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     yield put(actions.remoteExecRun(editorCode));
-  } else if (isNativeJSChapter(context.chapter)) {
-    yield put(actions.nativeJSRun({ workspaceLocation: workspaceLocation, code: editorCode }));
+  } else if (isFullJSChapter(context.chapter)) {
+    yield put(actions.fullJSRun({ workspaceLocation: workspaceLocation, code: editorCode }));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));

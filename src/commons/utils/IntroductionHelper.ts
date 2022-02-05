@@ -1,4 +1,5 @@
-import { isNativeJSChapter } from '../application/ApplicationTypes';
+import { isFullJSChapter } from 'js-slang/dist/runner/fullJSRunner';
+
 import { Links } from './Constants';
 
 const CHAP = '\xa7';
@@ -16,7 +17,7 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
 
-const NATIVEJS_INTRODUCTION =
+const FULLJS_INTRODUCTION =
   MAIN_INTRODUCTION +
   `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
   '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab.' +
@@ -56,7 +57,7 @@ const generateIntroductionText = (sourceType: string) => {
 };
 
 export const generateSourceIntroduction = (sourceChapter: number, sourceVariant: string) => {
-  return isNativeJSChapter(sourceChapter)
-    ? NATIVEJS_INTRODUCTION
+  return isFullJSChapter(sourceChapter)
+    ? FULLJS_INTRODUCTION
     : generateIntroductionText(`${sourceChapter} ${sourceVariant}`);
 };

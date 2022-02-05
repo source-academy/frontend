@@ -34,7 +34,7 @@ function display(value: Value, str: string, workspaceLocation: any) {
 
 /**
  * Function that takes a value and displays it in the interpreter.
- * The value is displayed however native JS would convert it to a string.
+ * The value is displayed however full JS would convert it to a string.
  * e.g. [1, 2, 3] would be displayed as 1,2,3.
  * An action is dispatched using the redux store reference
  * within the global window object.

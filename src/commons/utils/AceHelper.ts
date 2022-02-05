@@ -1,9 +1,9 @@
+import { SelectFullJSHighlightRules } from 'js-slang/dist/editors/ace/modes/fullJS';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import { isFullJSChapter } from 'js-slang/dist/runner/fullJSRunner';
 import { Variant } from 'js-slang/dist/types';
 
 import { Documentation } from '../documentation/Documentation';
-import { HighlightRulesSelector_native } from '../nativeJS/NativeJSHighlight';
-import { isNativeJSChapter } from './../application/ApplicationTypes';
 
 /**
  * This _modifies global state_ and defines a new Ace mode globally, if it does not already exist.
@@ -20,15 +20,10 @@ export const selectMode = (chapter: number, variant: Variant, library: string) =
     return;
   }
 
-  if (!isNativeJSChapter(chapter)) {
+  if (!isFullJSChapter(chapter)) {
     HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
   } else {
-    HighlightRulesSelector_native(
-      chapter,
-      variant,
-      library,
-      Documentation.externalLibraries[library]
-    );
+    SelectFullJSHighlightRules();
   }
   ModeSelector(chapter, variant, library);
 };
