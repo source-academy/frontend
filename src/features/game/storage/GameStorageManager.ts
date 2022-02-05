@@ -3,12 +3,11 @@ import { DialogueLine } from '../dialogue/GameDialogueTypes';
 
 /**
  * Class for keeping track of all dialogue and actions shown to the player, in sequence.
- * 
+ *
  * The storage is local to the instance, and should be reset when a user completes the
  * current checkpoint.
  */
 export default class GameStorageManager {
-
   // Storage for all dialogues to be stored
   private storage?: Array<DialogueLine>;
 
@@ -27,13 +26,13 @@ export default class GameStorageManager {
   }
 
   public getStorage(): Array<DialogueLine> {
-      if (this.storage === undefined) {
-          return new Array<DialogueLine>();
-      }
-      return this.storage;
+    if (this.storage === undefined) {
+      return new Array<DialogueLine>();
+    }
+    return this.storage;
   }
 
   public clearStorage() {
-      this.storage = new Array<DialogueLine>();
+    this.storage = new Array<DialogueLine>();
   }
 }

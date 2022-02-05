@@ -66,7 +66,7 @@ class GameLogManager implements IGameUI {
       )
     );
 
-    // this.scene.input.on(Phaser.Input.Events.GAMEOBJECT_WHEEL, 
+    // this.scene.input.on(Phaser.Input.Events.GAMEOBJECT_WHEEL,
     //     (pointer: Phaser.Input.Pointer, gameObjects: any, deltaX: any, deltaY: any, deltaZ: any) => {
     //       console.log("Test");
     //     logContainer.position += deltaY * 0.5;
