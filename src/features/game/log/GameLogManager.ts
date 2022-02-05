@@ -6,10 +6,11 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import LogConstants, { headerTextStyle, LogMocks, logTextStyle } from './GameLogConstants';
+import LogConstants, { headerTextStyle, logTextStyle } from './GameLogConstants';
 
 /**
  * Manager in charge of rendering and destroying the dialogue log in a scene
@@ -53,7 +54,7 @@ class GameLogManager implements IGameUI {
       )
     );
 
-    const textLog = LogMocks;
+    const textLog = GameGlobalAPI.getInstance().getDialogueStorage();
     logContainer.add(
       textLog.map((text, index) =>
         createBitmapText(
@@ -64,6 +65,12 @@ class GameLogManager implements IGameUI {
         )
       )
     );
+
+    // this.scene.input.on(Phaser.Input.Events.GAMEOBJECT_WHEEL, 
+    //     (pointer: Phaser.Input.Pointer, gameObjects: any, deltaX: any, deltaY: any, deltaZ: any) => {
+    //       console.log("Test");
+    //     logContainer.position += deltaY * 0.5;
+    // });
 
     return logContainer;
   }
@@ -76,6 +83,7 @@ class GameLogManager implements IGameUI {
    */
   public async activateUI(): Promise<void> {
     this.uiContainer = this.createUIContainer();
+    this.uiContainer.setInteractive();
     this.scene.getLayerManager().addToLayer(Layer.Log, this.uiContainer);
     this.getSoundManager().playSound(SoundAssets.menuEnter.key);
     this.uiContainer.setPosition(0, 0);

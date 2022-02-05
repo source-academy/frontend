@@ -8,7 +8,6 @@ import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
-import DialogueStorage from './GameDialogueStorage';
 
 /**
  * Given a dialogue Id, this manager renders the correct dialogue.
@@ -19,7 +18,6 @@ export default class DialogueManager {
   private speakerRenderer?: DialogueSpeakerRenderer;
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
-  private dialogueStorage?: DialogueStorage;
 
   /**
    * @param dialogueId the dialogue Id of the dialogue you want to play
@@ -31,7 +29,6 @@ export default class DialogueManager {
 
     this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
-    this.dialogueStorage = new DialogueStorage();
     this.speakerRenderer = new DialogueSpeakerRenderer();
 
     GameGlobalAPI.getInstance().addToLayer(
@@ -59,7 +56,9 @@ export default class DialogueManager {
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
-    this.getDialogueStorage().storeLine(lineWithName, speakerDetail);
+
+    // Store the current line into the storage
+    GameGlobalAPI.getInstance().storeDialogueLine(lineWithName, speakerDetail);
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
@@ -79,7 +78,6 @@ export default class DialogueManager {
 
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
   private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
-  private getDialogueStorage = () => this.dialogueStorage as DialogueStorage;
   private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
 
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;

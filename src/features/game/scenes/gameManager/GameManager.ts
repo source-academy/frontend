@@ -23,6 +23,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
+import GameStorageManager from '../../storage/GameStorageManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
@@ -62,6 +63,7 @@ class GameManager extends Phaser.Scene {
   private escapeManager?: GameEscapeManager;
   private awardManager?: GameAwardsManager;
   private logManager?: GameLogManager;
+  private storageManager?: GameStorageManager;
 
   constructor() {
     super('GameManager');
@@ -92,6 +94,7 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager(this);
     this.awardManager = new GameAwardsManager(this);
     this.logManager = new GameLogManager(this);
+    this.storageManager = new GameStorageManager();
   }
 
   //////////////////////
@@ -323,7 +326,11 @@ class GameManager extends Phaser.Scene {
     this.tweens.add(fadeIn([blackScreen(this).setAlpha(0)], Constants.fadeDuration));
     await sleep(Constants.fadeDuration);
 
+    // Clean up all layers & current storage
     this.cleanUp();
+    this.storageManager?.clearStorage();
+
+    // Start the next Checkpoint
     this.scene.start('CheckpointTransition');
   }
 
@@ -364,6 +371,7 @@ class GameManager extends Phaser.Scene {
   public getEscapeManager = () => mandatory(this.escapeManager);
   public getAwardManager = () => mandatory(this.awardManager);
   public getLogManager = () => mandatory(this.logManager);
+  public getStorageManager = () => mandatory(this.storageManager);
 }
 
 export default GameManager;

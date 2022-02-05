@@ -2,7 +2,7 @@ import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { Character } from '../../character/GameCharacterTypes';
+import { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
 import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
@@ -254,6 +254,18 @@ class GameGlobalAPI {
 
   public async showDialogueInSamePhase(dialogueId: ItemId) {
     await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
+  }
+
+  /////////////////////
+  //   Storage      //
+  /////////////////////
+
+  public storeDialogueLine(newLine: string, newSpeakerDetail?: SpeakerDetail | null) {
+    this.getGameManager().getStorageManager().storeLine(newLine, newSpeakerDetail);
+  }
+
+  public getDialogueStorage() {
+    return this.getGameManager().getStorageManager().getStorage();
   }
 
   /////////////////////
