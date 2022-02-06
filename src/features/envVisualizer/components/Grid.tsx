@@ -70,10 +70,14 @@ export class Grid implements Visible {
     nodes.forEach(node => {
       this.levels[node[0]].addFrame(node[1]);
     });
+
+    // Layout.values.forEach((v, d, m) => {debugger;})
+
     const cumHeights = Frame.heights.reduce(
       (res, b) => [...res, res[res.length - 1] + b + Config.FrameMarginY],
       [0]
     );
+
     this.levels.forEach((level, i) => {
       level.setY(cumHeights[i]);
     });
