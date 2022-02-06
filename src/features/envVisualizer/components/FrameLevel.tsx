@@ -66,7 +66,7 @@ export class FrameLevel extends Level {
   draw(): React.ReactNode {
     return (
       // <React.Fragment key={Layout.key++}>
-      <Group key={Layout.key++} ref={this.ref} draggable={true}>
+      <Group key={Layout.key++} ref={this.ref}>
         <Rect
           {...ShapeDefaultProps}
           x={this.x}

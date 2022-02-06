@@ -4,9 +4,11 @@ import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { Data, ReferenceType } from '../../EnvVisualizerTypes';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
+import { ArrayLevel } from '../ArrayLevel';
 import { ArrayUnit } from '../ArrayUnit';
+import { Arrow } from '../arrows/Arrow';
 import { Binding } from '../Binding';
-import { PrimitiveValue } from './PrimitiveValue';
+// import { PrimitiveValue } from './PrimitiveValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
@@ -22,6 +24,7 @@ export class ArrayValue extends Value {
 
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
+  level: ArrayLevel | undefined;
 
   constructor(
     /** underlying values this array contains */
@@ -57,22 +60,22 @@ export class ArrayValue extends Value {
       // update the dimensions, so that children array values can derive their coordinates
       // from these intermediate dimensions
 
-      // update the width
-      this.width = Math.max(
-        this.width,
-        unit.value.width +
-          (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
-            ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
-            : i * Config.DataUnitWidth)
-      );
+      // // update the width
+      // this.width = Math.max(
+      //   this.width,
+      //   unit.value.width +
+      //     (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
+      //       ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
+      //       : i * Config.DataUnitWidth)
+      // );
 
-      // update the height
-      this.height = Math.max(
-        this.height,
-        unit.value instanceof PrimitiveValue || unit.isMainReference
-          ? Config.DataUnitHeight
-          : unit.value.y + unit.value.height - unit.y
-      );
+      // // update the height
+      // this.height = Math.max(
+      //   this.height,
+      //   unit.value instanceof PrimitiveValue || unit.isMainReference
+      //     ? Config.DataUnitHeight
+      //     : unit.value.y + unit.value.height - unit.y
+      // );
 
       this.units = [unit, ...this.units];
     }
@@ -105,6 +108,7 @@ export class ArrayValue extends Value {
     this.isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>
+        {this.referencedBy.map(x => x instanceof Binding && Arrow.from(x.key).to(this).draw())}
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
           : new ArrayEmptyUnit(this).draw()}

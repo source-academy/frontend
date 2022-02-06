@@ -45,6 +45,7 @@ export class Grid implements Visible {
       if (isArray) {
         let bindings = v.referencedBy.filter(r => r instanceof Binding) as Binding[];
         let p: ArrayUnit = v.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
+        const hasFrame = bindings.length > 0;
         while (bindings.length === 0) {
           bindings = p.parent.referencedBy.filter(r => r instanceof Binding) as Binding[];
           p = p.parent.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
@@ -53,7 +54,6 @@ export class Grid implements Visible {
         const [yCoordSum, xCoordSum, count] = bindings.reduce(
           (acc, binding) => {
             const [yCoordSum, xCoordSum, count] = acc;
-
             return [yCoordSum + binding.frame.yCoord, xCoordSum + binding.frame.xCoord, count + 1];
           },
           [0, 0, 0]
@@ -64,8 +64,14 @@ export class Grid implements Visible {
         debugger;
         this.arrayLevels[Math.floor(meanY)].addArray(
           v,
-          Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
-            Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX)
+          hasFrame
+            ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
+                Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX)
+            : Math.max(
+                v.referencedBy.reduce((acc, ref) => acc + ref.x, 0) / v.referencedBy.length,
+                v.referencedBy[0].x
+              )
+          // : v.referencedBy[0].x
         );
       }
     });

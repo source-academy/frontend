@@ -12,8 +12,9 @@ import { ArrayValue } from './values/ArrayValue';
 export class ArrayLevel extends Level {
   readonly x: number;
   y: number;
-  height: number = Config.DataUnitHeight;
+  height: number = 0;
   width: number;
+  position: [x: number, y: number][][] = [[]];
 
   ref: RefObject<any> = React.createRef();
 
@@ -32,17 +33,35 @@ export class ArrayLevel extends Level {
 
   addArray = (array: ArrayValue, x: number) => {
     x = x || 0;
-    array.updatePosition({ x, y: this.y });
+    let level = 0;
+    positions: for (const positions of this.position) {
+      for (const position of positions) {
+        if (position[0] <= x + array.width && position[1] >= x) {
+          level++;
+          continue positions;
+        } else {
+          continue;
+        }
+      }
+      break;
+    }
+
+    this.position[level] = this.position[level] || [];
+    this.position[level].push([x, x + array.width]);
+    this.position[level].sort((a, b) => a[0] - b[0]);
+    // Provide DataUnitHeight space between array layers.
+    const curY = this.y + level * Config.DataUnitHeight + (level + 1) * Config.DataUnitHeight;
+    array.updatePosition({ x, y: curY });
+    this.height = Math.max(this.height, curY + (Config.DataUnitHeight + Config.DataUnitHeight));
     this.arrays.push(array);
-    debugger;
     this.width = Math.max(this.width, x + array.width);
   };
 
   setY = (y: number) => {
-    this.y = y;
     this.arrays.forEach(array => {
-      return array.updatePosition({ x: array.x, y });
+      return array.updatePosition({ x: array.x, y: array.y - this.y + y });
     });
+    this.y = y;
   };
 
   static reset = () => {};
@@ -50,7 +69,7 @@ export class ArrayLevel extends Level {
   draw(): React.ReactNode {
     return (
       // <React.Fragment key={Layout.key++}>
-      <Group key={Layout.key++} ref={this.ref} draggable={true}>
+      <Group key={Layout.key++} ref={this.ref}>
         <Rect
           {...ShapeDefaultProps}
           x={this.x}

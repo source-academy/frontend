@@ -67,7 +67,7 @@ export class Frame implements Visible, Hoverable {
     this.parentFrame = envTreeNode.parent?.frame;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
-    this.x = xCoord === 0 ? 0 : Frame.cumWidths[xCoord]; // ?? Frame.cumWidths[xCoord] + Config.FrameMinWidth;
+    this.x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord]; // ?? Frame.cumWidths[xCoord] + Config.FrameMinWidth;
     // derive the x coordinate from the left sibling frame
     // (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
 
