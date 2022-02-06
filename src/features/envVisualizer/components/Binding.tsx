@@ -70,14 +70,14 @@ export class Binding implements Visible {
       !(this.value instanceof ArrayValue) && isMainReference(this.value, this)
         ? this.value.x + this.value.width - this.x
         : // + (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-        //   ? this.value.tooltipWidth
-        //   : 0)
-        this.key.width;
+          //   ? this.value.tooltipWidth
+          //   : 0)
+          this.key.width;
 
-    this.height = Math.max(this.key.height,
-      (this.value instanceof ArrayValue)
-        ? Config.DataUnitHeight - Config.FontSize
-        : this.value.height);
+    this.height = Math.max(
+      this.key.height,
+      this.value instanceof ArrayValue ? Config.DataUnitHeight - Config.FontSize : this.value.height
+    );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {
       if (this.prevBinding) {
@@ -105,15 +105,14 @@ export class Binding implements Visible {
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.isDummyBinding || // value is unreferenced in dummy binding
-          this.value instanceof PrimitiveValue ||
-          this.value instanceof UnassignedValue
-          ? // || this.value instanceof ArrayValue // Draw Arrays afterwards
-          null
+        this.value instanceof PrimitiveValue ||
+        this.value instanceof UnassignedValue ||
+        this.value instanceof ArrayValue // Draw Arrays afterwards
+          ? null
           : Arrow.from(this.key).to(this.value).draw()}
-        {
-          //!(this.value instanceof ArrayValue) &&
-          isMainReference(this.value, this) ? this.value.draw() : null
-        }
+        {!(this.value instanceof ArrayValue) && isMainReference(this.value, this)
+          ? this.value.draw()
+          : null}
       </React.Fragment>
     );
   }

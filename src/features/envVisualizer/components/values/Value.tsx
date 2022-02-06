@@ -8,7 +8,7 @@ export abstract class Value implements Visible {
   addReference(newReference: ReferenceType): void {
     this.referencedBy.push(newReference);
   }
-  abstract updatePosition(): void;
+  abstract updatePosition(pos?: { x: number; y: number }): void;
 
   /** references to this value */
   abstract readonly referencedBy: ReferenceType[];

@@ -122,7 +122,7 @@ codeSamples.forEach((code, idx) => {
 
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];
-    Layout.grid.levels.forEach(({ frames }) => {
+    Layout.grid.frameLevels.forEach(({ frames }) => {
       frames.forEach(({ environment, bindings }) => {
         environmentsToTest.push(environment);
         bindings.forEach(({ keyString, data }) => {

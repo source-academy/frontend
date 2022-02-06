@@ -77,20 +77,22 @@ export class ArrayValue extends Value {
       this.units = [unit, ...this.units];
     }
   }
-  updatePosition(): void {
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
-      this.y = mainReference.y;
-    } else {
-      if (mainReference.isLastUnit) {
-        this.x = mainReference.x + Config.DataUnitWidth * 2;
-        this.y = mainReference.y;
-      } else {
-        this.x = mainReference.x;
-        this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
-      }
-    }
+  updatePosition(pos: { x: number; y: number } = { x: -1, y: -1 }): void {
+    // const mainReference = this.referencedBy[0];
+    // if (mainReference instanceof Binding) {
+    //   this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
+    //   this.y = mainReference.y;
+    // } else {
+    //   if (mainReference.isLastUnit) {
+    //     this.x = mainReference.x + Config.DataUnitWidth * 2;
+    //     this.y = mainReference.y;
+    //   } else {
+    //     this.x = mainReference.x;
+    //     this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
+    //   }
+    // }
+    this.x = pos.x > 0 ? pos.x : this.x;
+    this.y = pos.y > 0 ? pos.y : this.y;
     this.units.forEach(unit => {
       unit.updatePosition();
     });
