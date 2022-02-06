@@ -88,7 +88,7 @@ export class FnValue extends Value implements Hoverable {
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
   }
   updatePosition(): void {
-    const mainReference = this.referencedBy[0];
+    const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
       this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
       this.y = mainReference.y;

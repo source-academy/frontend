@@ -8,6 +8,8 @@ import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
 
@@ -95,7 +97,7 @@ export class ArrayUnit implements Visible, Hoverable {
           onMouseLeave={this.onMouseLeave}
           cornerRadius={cornerRadius}
         />
-        {this.value.draw()}
+        {!(this.value instanceof FnValue || GlobalFnValue) && this.value.draw()}
         {this.value instanceof PrimitiveValue || Arrow.from(this).to(this.value).draw()}
       </React.Fragment>
     );

@@ -4,6 +4,9 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
+import { Binding } from './components/Binding';
+import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import { Config } from './EnvVisualizerConfig';
 import {
@@ -105,7 +108,9 @@ export function isPrimitiveData(data: Data): data is PrimitiveTypes {
 
 /** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
-  return value.referencedBy[0] === reference;
+  return value instanceof FnValue || value instanceof GlobalFnValue
+    ? value.referencedBy.find(x => x instanceof Binding) === reference
+    : value.referencedBy[0] === reference;
 }
 
 /** checks if `value` is a `number` */
