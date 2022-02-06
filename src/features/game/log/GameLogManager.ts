@@ -4,8 +4,8 @@ import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
-import { Layer } from '../layer/GameLayerTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
+// import { Layer } from '../layer/GameLayerTypes';
+// import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
@@ -26,7 +26,7 @@ class GameLogManager implements IGameUI {
    */
   public constructor(scene: IBaseScene) {
     this.scene = scene;
-    this.scene.getPhaseManager().addPhaseToMap(GamePhaseType.Log, this);
+    // this.scene.getPhaseManager().addPhaseToMap(GamePhaseType.Log, this);
   }
 
   /**
@@ -84,7 +84,7 @@ class GameLogManager implements IGameUI {
   public async activateUI(): Promise<void> {
     this.uiContainer = this.createUIContainer();
     this.uiContainer.setInteractive();
-    this.scene.getLayerManager().addToLayer(Layer.Log, this.uiContainer);
+    // this.scene.getLayerManager().addToLayer(Layer.Log, this.uiContainer);
     this.getSoundManager().playSound(SoundAssets.menuEnter.key);
     this.uiContainer.setPosition(0, 0);
     this.scene.tweens.add({
@@ -103,7 +103,7 @@ class GameLogManager implements IGameUI {
   public async deactivateUI(): Promise<void> {
     if (this.uiContainer) {
       this.uiContainer.setPosition(0, 0);
-      this.scene.getLayerManager().clearSeveralLayers([Layer.Log]);
+      // this.scene.getLayerManager().clearSeveralLayers([Layer.Log]);
       this.getSoundManager().playSound(SoundAssets.menuExit.key);
 
       this.scene.tweens.add({

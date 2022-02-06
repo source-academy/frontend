@@ -12,7 +12,7 @@ export enum Layer {
   Escape,
   Selector,
   Collectibles,
-  Log
+  Dashboard
 }
 
 // Back to Front
@@ -28,7 +28,7 @@ export const defaultLayerSequence = [
   Layer.Dialogue,
   Layer.SpeakerBox,
   Layer.Effects,
-  Layer.UI,
-  Layer.Log,
-  Layer.Escape
+  Layer.Dashboard,
+  Layer.Escape,
+  Layer.UI
 ];

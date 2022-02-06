@@ -8,6 +8,7 @@ import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
 import { AssetKey } from '../../commons/CommonTypes';
+import GameDashboardManager from '../../dashboard/DashboardManager';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -24,6 +25,7 @@ import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
 import GameStorageManager from '../../storage/GameStorageManager';
+import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
@@ -64,6 +66,8 @@ class GameManager extends Phaser.Scene {
   private awardManager?: GameAwardsManager;
   private logManager?: GameLogManager;
   private storageManager?: GameStorageManager;
+  private dashboardManager?: GameDashboardManager;
+  private toolbarManager?: GameToolbarManager;
 
   constructor() {
     super('GameManager');
@@ -95,6 +99,8 @@ class GameManager extends Phaser.Scene {
     this.awardManager = new GameAwardsManager(this);
     this.logManager = new GameLogManager(this);
     this.storageManager = new GameStorageManager();
+    this.dashboardManager = new GameDashboardManager(this);
+    this.toolbarManager = new GameToolbarManager(this);
   }
 
   //////////////////////
@@ -172,6 +178,9 @@ class GameManager extends Phaser.Scene {
    */
   private async renderLocation(locationId: LocationId, startAction: boolean) {
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
+
+    // Render the toolbar in every location
+    this.getToolbarManager().renderToolbarContainer();
 
     // Play the BGM attached to the location
     await GameGlobalAPI.getInstance().playBgMusic(gameLocation.bgmKey);
@@ -260,10 +269,10 @@ class GameManager extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.CTRL,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Log)) {
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
           await this.getPhaseManager().popPhase();
         } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.Log);
+          await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
         }
       }
     );
@@ -372,6 +381,8 @@ class GameManager extends Phaser.Scene {
   public getAwardManager = () => mandatory(this.awardManager);
   public getLogManager = () => mandatory(this.logManager);
   public getStorageManager = () => mandatory(this.storageManager);
+  public getDashboardManager = () => mandatory(this.dashboardManager);
+  public getToolbarManager = () => mandatory(this.toolbarManager);
 }
 
 export default GameManager;

@@ -7,5 +7,5 @@ export enum GamePhaseType {
   None = 'None',
   Sequence = 'Sequence',
   AwardMenu = 'AwardMenu',
-  Log = 'Log'
+  Dashboard = 'Dashboard'
 }
