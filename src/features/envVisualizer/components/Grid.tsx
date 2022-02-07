@@ -12,12 +12,57 @@ import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';
 
-/** this class encapsulates a grid of frames to be drawn */
+/**
+ * Grid class encapsulates a grid of frames to be drawn.
+ * Grid contains alternating layers of ArrayLevel and FrameLevel.
+ */
 export class Grid implements Visible {
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+
+  /** list of all levels */
+  frameLevels: FrameLevel[];
+  arrayLevels: ArrayLevel[];
+  levels: Level[];
+  widths: number[];
+  heights: number[];
+  frameArrows: any;
+
+  constructor(
+    /** the environment tree nodes */
+    readonly envTreeNodes: EnvTreeNode[][]
+  ) {
+    Frame.reset();
+    FrameLevel.reset();
+    ArrayLevel.reset();
+    this.x = Config.CanvasPaddingX;
+    this.y = Config.CanvasPaddingY;
+    this.frameLevels = [];
+    this.arrayLevels = [];
+    this.levels = [];
+    this.widths = [];
+    this.heights = [];
+    this.height = 0;
+    // const lastFrame = this.frames[this.frames.length - 1];
+    // derive the width of this level from the last frame
+    // this.width = lastFrame.x + lastFrame.totalWidth - this.x + Config.LevelPaddingX;
+    this.width = 0;
+    this.update(envTreeNodes);
+  }
+
+  destroy = () => {
+    this.frameLevels.forEach(l => l.ref.current.destroyChildren());
+  };
+
+  /**
+   * Processes updates to Layout.environmentTree.
+   * @param envTreeNodes an array of different arrays of EnvTreeNodes corresponding to a single level.
+   */
   update(envTreeNodes: EnvTreeNode[][]) {
     Frame.reset();
     FrameLevel.reset();
-    this.maxCoordinate = 0;
     this.frameLevels = [];
     this.arrayLevels = [];
     this.levels = [];
@@ -61,7 +106,6 @@ export class Grid implements Visible {
         const meanY =
           ((yCoordSum / count) * (this.frameLevels.length - 1)) / this.frameLevels.length;
         const meanX = xCoordSum / count;
-        debugger;
         this.arrayLevels[Math.floor(meanY)].addArray(
           v,
           hasFrame
@@ -71,7 +115,6 @@ export class Grid implements Visible {
                 v.referencedBy.reduce((acc, ref) => acc + ref.x, 0) / v.referencedBy.length,
                 v.referencedBy[0].x
               )
-          // : v.referencedBy[0].x
         );
       }
     });
@@ -86,66 +129,20 @@ export class Grid implements Visible {
       },
       [0]
     );
-    debugger;
     this.levels.forEach((level, i) => {
       level.setY(cumHeights[i]);
     });
 
-    // get the max height of all the frames in this level
-    // this.height = Frame.heights.reduce((a, b) => a + b + Config.FrameMarginY);
-    // const lastFrame = this.frames[this.frames.length - 1];
+    // get the cumulative height of all the array and frame levels
     this.height = cumHeights[cumHeights.length - 1];
-    // derive the width of this level from the last frame
-    // this.width = lastFrame.x + lastFrame.totalWidth - this.x + Config.LevelPaddingX;
+    // get the maximum width of all the array and frame levels
     this.width = Math.max(
       this.frameLevels.reduce<number>((a, b) => Math.max(a, b.width), 0),
       this.arrayLevels.reduce<number>((a, b) => Math.max(a, b.width), 0)
     );
   }
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-
-  /** list of all levels */
-  frameLevels: FrameLevel[];
-  arrayLevels: ArrayLevel[];
-  levels: Level[];
-  maxCoordinate: number;
-  widths: number[];
-  heights: number[];
-  frameArrows: any;
-
-  constructor(
-    /** the environment tree nodes */
-    readonly envTreeNodes: EnvTreeNode[][]
-  ) {
-    Frame.reset();
-    FrameLevel.reset();
-    ArrayLevel.reset();
-    this.x = Config.CanvasPaddingX;
-    this.y = Config.CanvasPaddingY;
-    this.maxCoordinate = 0;
-    this.frameLevels = [];
-    this.arrayLevels = [];
-    this.levels = [];
-    this.widths = [];
-    this.heights = [];
-    this.height = 0;
-    // const lastFrame = this.frames[this.frames.length - 1];
-    // derive the width of this level from the last frame
-    // this.width = lastFrame.x + lastFrame.totalWidth - this.x + Config.LevelPaddingX;
-    this.width = 0;
-    this.update(envTreeNodes);
-  }
-
-  destroy = () => {
-    this.frameLevels.forEach(l => l.ref.current.destroyChildren());
-  };
 
   draw(): React.ReactNode {
-    // const tmp = Layout.values.entries();
-    // debugger;
     return (
       <Group key={Layout.key++}>
         <Rect

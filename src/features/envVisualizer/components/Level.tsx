@@ -1,4 +1,3 @@
-// import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
 import { Visible } from '../EnvVisualizerTypes';

@@ -1,4 +1,3 @@
-// import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -37,6 +36,10 @@ export class FrameLevel extends Level {
     this.yCoord = FrameLevel.maxYcoord++;
   }
 
+  /**
+   * Insert the next frame into this FrameLevel.
+   * @param node
+   */
   addFrame = (node: EnvTreeNode) => {
     const coordinate: number = Math.max(FrameLevel.maxXcoord, this.lastXcoord + 1);
     this.lastXcoord = coordinate;
@@ -51,6 +54,10 @@ export class FrameLevel extends Level {
     this.width = Frame.cumWidths[Frame.cumWidths.length - 1];
   };
 
+  /**
+   * set y-position of frame level, and updates y-position of all frames in level
+   * @param y target y-coordinate
+   */
   setY = (y: number) => {
     this.y = y;
     this.frames.forEach(frame => {
@@ -65,7 +72,6 @@ export class FrameLevel extends Level {
 
   draw(): React.ReactNode {
     return (
-      // <React.Fragment key={Layout.key++}>
       <Group key={Layout.key++} ref={this.ref}>
         <Rect
           {...ShapeDefaultProps}
@@ -78,7 +84,6 @@ export class FrameLevel extends Level {
         />
         {this.frames.reverse().map(frame => frame.draw())}
       </Group>
-      // {/* </React.Fragment> */}
     );
   }
 }

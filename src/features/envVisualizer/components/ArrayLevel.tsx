@@ -8,7 +8,7 @@ import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';
 
-/** this class encapsulates a level of frames to be drawn with the same y values */
+/** this class encapsulates a level of arrays to be drawn between two frame levels */
 export class ArrayLevel extends Level {
   readonly x: number;
   y: number;
@@ -31,6 +31,11 @@ export class ArrayLevel extends Level {
     this.width = 0;
   }
 
+  /**
+   * Inserts array into ArrayLevel. Handles overlaps
+   * @param array
+   * @param x desired x-position of array
+   */
   addArray = (array: ArrayValue, x: number) => {
     x = x || 0;
     let level = 0;
@@ -49,10 +54,10 @@ export class ArrayLevel extends Level {
     this.position[level] = this.position[level] || [];
     this.position[level].push([x, x + array.width]);
     this.position[level].sort((a, b) => a[0] - b[0]);
-    // Provide DataUnitHeight space between array layers.
-    const curY = this.y + level * Config.DataUnitHeight + (level + 1) * Config.DataUnitHeight;
+    const arrayMargin = Config.DataUnitHeight;
+    const curY = this.y + level * Config.DataUnitHeight + (level + 1) * arrayMargin;
     array.updatePosition({ x, y: curY });
-    this.height = Math.max(this.height, curY + (Config.DataUnitHeight + Config.DataUnitHeight));
+    this.height = Math.max(this.height, curY + (Config.DataUnitHeight + arrayMargin));
     this.arrays.push(array);
     this.width = Math.max(this.width, x + array.width);
   };
@@ -68,7 +73,6 @@ export class ArrayLevel extends Level {
 
   draw(): React.ReactNode {
     return (
-      // <React.Fragment key={Layout.key++}>
       <Group key={Layout.key++} ref={this.ref}>
         <Rect
           {...ShapeDefaultProps}
@@ -81,7 +85,6 @@ export class ArrayLevel extends Level {
         />
         {this.arrays.map(array => array.draw())}
       </Group>
-      // {/* </React.Fragment> */}
     );
   }
 }

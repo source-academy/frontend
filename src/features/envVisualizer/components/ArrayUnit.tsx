@@ -97,7 +97,8 @@ export class ArrayUnit implements Visible, Hoverable {
           onMouseLeave={this.onMouseLeave}
           cornerRadius={cornerRadius}
         />
-        {!(this.value instanceof FnValue || GlobalFnValue) && this.value.draw()}
+        {!(this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
+          this.value.draw()}
         {this.value instanceof PrimitiveValue || Arrow.from(this).to(this.value).draw()}
       </React.Fragment>
     );

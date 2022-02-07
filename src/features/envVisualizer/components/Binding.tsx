@@ -65,14 +65,11 @@ export class Binding implements Visible {
         : (this.value.height - Config.FontSize) / 2;
     this.key = new Text(this.keyString, this.x, this.offsetY + this.keyYOffset);
 
-    // derive the width from the right bound of the value
+    // derive the width from the right bound of the value (either no extra space or width of function object.)
     this.width =
       !(this.value instanceof ArrayValue) && isMainReference(this.value, this)
         ? this.value.x + this.value.width - this.x
-        : // + (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-          //   ? this.value.tooltipWidth
-          //   : 0)
-          this.key.width;
+        : this.key.width;
 
     this.height = Math.max(
       this.key.height,
@@ -89,6 +86,11 @@ export class Binding implements Visible {
     this.y = this.offsetY;
   }
 
+  /**
+   * update absolute position of binding and its value.
+   * @param x Target x-position
+   * @param y Target y-position
+   */
   updatePosition = (x: number, y: number) => {
     this.x = x + Config.FramePaddingX;
     this.y = y + this.offsetY;

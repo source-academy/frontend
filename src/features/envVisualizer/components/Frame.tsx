@@ -140,6 +140,11 @@ export class Frame implements Visible, Hoverable {
     );
   }
 
+  /**
+   * update absolute position of frame and its bindings.
+   * @param x Target x-position
+   * @param y Target y-position
+   */
   updatePosition = (x: number, y: number) => {
     this.x = x;
     this.y = y + this.offsetY;
