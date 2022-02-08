@@ -94,7 +94,7 @@ export function createChapter(
     onOut: () => chapterRepeatHover.setVisible(false)
   })
     .setPosition(chapConstants.resetButton.xOffset, chapConstants.resetButton.yOffset)
-    .setScale(0.65);
+    .setScale(chapConstants.buttons.scale);
 
   const lastCheckpointPlayed = SourceAcademyGame.getInstance()
     .getSaveManager()
@@ -107,7 +107,7 @@ export function createChapter(
     onOut: () => chapterContinueHover.setVisible(false)
   })
     .setPosition(chapConstants.playButton.xOffset, chapConstants.playButton.yOffset)
-    .setScale(0.65);
+    .setScale(chapConstants.buttons.scale);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
@@ -162,8 +162,8 @@ function getCoorByChapter(chapterNum: number) {
   const row = Math.floor(chapterNum / chapConstants.grid.chapPerRow);
   const col = chapterNum % chapConstants.grid.chapPerRow;
 
-  const centreCol = chapConstants.grid.chapPerRow / 2 - 0.5;
-  const centreRow = chapConstants.grid.chapPerCol / 2 - 0.5;
+  const centreCol = (chapConstants.grid.chapPerRow - 1) / 2;
+  const centreRow = (chapConstants.grid.chapPerCol - 1) / 2;
 
   let x = page * screenSize.x + screenCenter.x;
   x += (col - centreCol) * (chapConstants.imageRect.width + chapConstants.grid.chapGapX);

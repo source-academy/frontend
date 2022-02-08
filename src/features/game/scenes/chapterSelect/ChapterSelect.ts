@@ -126,6 +126,10 @@ class ChapterSelect extends Phaser.Scene {
       this.getGameChapters().length - 1
     );
     this.targetPage = Math.floor(latestChapter / chapConstants.grid.chapPerPage);
+    if (this.targetPage < 0) {
+      // Only happens when this.getGameChapters().length === 0
+      this.targetPage = 0;
+    }
     this.pageNumberText.setText(`${this.targetPage + 1} / ${this.numPages()}`);
 
     const border = new Phaser.GameObjects.Image(
@@ -175,13 +179,14 @@ class ChapterSelect extends Phaser.Scene {
     return chaptersContainer;
   }
 
-  public getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
+  private getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
 
   /**
    * Returns the number of pages of chapters
    */
   private numPages() {
-    return Math.ceil(this.getGameChapters().length / chapConstants.grid.chapPerPage);
+    const pages = Math.ceil(this.getGameChapters().length / chapConstants.grid.chapPerPage);
+    return Math.max(pages, 1); // Always have at least 1 page, even when 0 chapters
   }
 
   /**

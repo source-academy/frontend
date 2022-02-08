@@ -32,6 +32,7 @@ const chapPerCol = 3;
 
 const chapConstants = {
   arrow: { xOffset: 875 },
+  buttons: { scale: 0.65 },
   resetButton: { xOffset: 135, yOffset: 85 },
   playButton: { xOffset: 55, yOffset: 85 },
   frame: { xOffset: 15 * imageScaleX, yOffset: -10 * imageScaleY },
