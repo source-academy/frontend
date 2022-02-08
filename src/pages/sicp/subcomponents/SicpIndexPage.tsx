@@ -78,14 +78,13 @@ const licenses = (
     </div>
     <div>
       <p>
-        A
         <a
           href="https://mitpress.mit.edu/books/structure-and-interpretation-computer-programs-1"
           rel="nofollow"
         >
-          print version of this work
+          Print and Kindle versions of this work{' '}
         </a>
-        is published by The MIT Press under a{' '}
+        are published by The MIT Press under a{' '}
         <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
           Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
         </a>

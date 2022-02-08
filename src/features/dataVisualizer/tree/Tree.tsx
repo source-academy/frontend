@@ -266,7 +266,8 @@ class TreeDrawer {
           childrenWidths.length > 0 ? childrenWidths.reduce((x, y) => x + y + Config.DistanceX) : 0;
         const nodeWidth = Math.max(
           node.children.length * Config.BoxWidth + Config.StrokeWidth,
-          childrenWidth
+          childrenWidth,
+          Config.BoxMinWidth + Config.StrokeWidth
         );
         this.nodeWidths.set(node, nodeWidth);
         return nodeWidth;
