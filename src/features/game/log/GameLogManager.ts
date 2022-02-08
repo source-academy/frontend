@@ -56,10 +56,10 @@ class GameLogManager implements IGameUI {
 
     const textLog = GameGlobalAPI.getInstance().getDialogueStorage();
     logContainer.add(
-      textLog.map((text, index) =>
+      textLog.map((text, index) => 
         createBitmapText(
           this.scene,
-          text.speakerDetail?.speakerId + ': ' + text.line,
+          text.speaker + ': ' + text.line,
           { ...LogConstants.logTextConfig, y: screenCenter.y * (0.4 + index * 0.1) },
           logTextStyle
         )

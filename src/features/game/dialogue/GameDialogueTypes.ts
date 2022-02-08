@@ -32,6 +32,17 @@ export type DialogueLine = IGameActionable & {
   prompt?: Prompt;
 };
 
+/**
+ * @typedef DialogueSpeakerLine - a dialogue with only speaker and line, used with
+ * dialogue logs
+ * @param speaker - the speaker name for this line
+ * @param line - the spoken text for this line
+ */
+export type DialogueSpeakerLine = {
+  speaker: string;
+  line: string;
+}
+
 export type Dialogue = {
   title: string;
   content: DialogueObject;
