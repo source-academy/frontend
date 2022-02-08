@@ -1,5 +1,5 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
@@ -9,7 +9,8 @@ import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { loadImage } from '../../utils/LoaderUtils';
-import chapConstants from './ChapterSelectConstants';
+import { createBitmapText } from '../../utils/TextUtils';
+import chapConstants, { pageNumberStyle } from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 
 /**
@@ -19,20 +20,18 @@ import { createChapter } from './ChapterSelectHelper';
 class ChapterSelect extends Phaser.Scene {
   public layerManager?: GameLayerManager;
 
-  private chapterContainer: Phaser.GameObjects.Container | undefined;
+  private chaptersContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
-  private autoScrolling: boolean;
-  private isScrollLeft: boolean;
-  private isScrollRight: boolean;
+  private pageNumberText: Phaser.GameObjects.BitmapText | undefined;
+  private targetPage: number;
 
   constructor() {
     super('ChapterSelect');
 
-    this.chapterContainer = undefined;
+    this.chaptersContainer = undefined;
     this.backButtonContainer = undefined;
-    this.autoScrolling = true;
-    this.isScrollLeft = false;
-    this.isScrollRight = false;
+    this.pageNumberText = undefined;
+    this.targetPage = 0; // First page is page 0 (but is displayed as page 1)
   }
 
   public preload() {
@@ -45,24 +44,21 @@ class ChapterSelect extends Phaser.Scene {
     await this.preloadChapterAssets();
     this.renderBackground();
     this.renderChapters();
-    this.autoScroll();
   }
 
   public update() {
-    if (!this.chapterContainer || this.autoScrolling) return;
+    if (!this.chaptersContainer) return;
 
-    // Scroll the chapter select if button is currently clicked/held down
-    let newXPos = this.chapterContainer.x;
-    if (this.isScrollRight) {
-      newXPos -= chapConstants.scrollSpeed;
-    } else if (this.isScrollLeft) {
-      newXPos += chapConstants.scrollSpeed;
+    const targetX = -this.targetPage * screenSize.x;
+    if (this.chaptersContainer.x > targetX) {
+      // Scroll right
+      const newXPos = this.chaptersContainer.x - chapConstants.scrollSpeed;
+      this.chaptersContainer.x = Math.max(newXPos, targetX);
+    } else if (targetX > this.chaptersContainer.x) {
+      // Scroll left
+      const newXPos = this.chaptersContainer.x + chapConstants.scrollSpeed;
+      this.chaptersContainer.x = Math.min(newXPos, targetX);
     }
-    this.chapterContainer.x = limitNumber(
-      newXPos,
-      -chapConstants.imageDist * (this.getGameChapters().length - 1),
-      0
-    );
   }
 
   /**
@@ -108,14 +104,33 @@ class ChapterSelect extends Phaser.Scene {
 
   /**
    * Render all the chapter selections and UI elements
-   * (the gray frame, the left and right arrow, and back button.)
+   * (the gray frame, the left and right arrow, back button, page number)
    */
   private renderChapters() {
     this.backButtonContainer = new CommonBackButton(this, () => {
       this.cleanUp();
       this.scene.start('MainMenu');
     });
-    this.chapterContainer = this.createChapterContainer();
+    this.chaptersContainer = this.createChaptersContainer();
+
+    this.pageNumberText = createBitmapText(
+      this,
+      `1 / ${this.numPages()}`,
+      chapConstants.pageNumberTextConfig,
+      pageNumberStyle
+    );
+
+    // Prepare to autoscroll to smallest incomplete chapter
+    const latestChapter = Math.min(
+      SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapterNum() + 1,
+      this.getGameChapters().length - 1
+    );
+    this.targetPage = Math.floor(latestChapter / chapConstants.grid.chapPerPage);
+    if (this.targetPage < 0) {
+      // Only happens when this.getGameChapters().length === 0
+      this.targetPage = 0;
+    }
+    this.pageNumberText.setText(`${this.targetPage + 1} / ${this.numPages()}`);
 
     const border = new Phaser.GameObjects.Image(
       this,
@@ -126,22 +141,19 @@ class ChapterSelect extends Phaser.Scene {
 
     const leftArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
-      onDown: () => (this.isScrollLeft = true),
-      onUp: () => (this.isScrollLeft = false),
-      onOut: () => (this.isScrollLeft = false)
+      onUp: () => this.scrollPrevPage()
     }).setPosition(screenCenter.x - chapConstants.arrow.xOffset, screenCenter.y);
 
     const rightArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
-      onDown: () => (this.isScrollRight = true),
-      onUp: () => (this.isScrollRight = false),
-      onOut: () => (this.isScrollRight = false)
+      onUp: () => this.scrollNextPage()
     })
       .setPosition(screenCenter.x + chapConstants.arrow.xOffset, screenCenter.y)
       .setScale(-1, 1);
 
-    this.getLayerManager().addToLayer(Layer.UI, this.chapterContainer);
+    this.getLayerManager().addToLayer(Layer.UI, this.chaptersContainer);
     this.getLayerManager().addToLayer(Layer.UI, this.backButtonContainer);
+    this.getLayerManager().addToLayer(Layer.UI, this.pageNumberText);
     this.getLayerManager().addToLayer(Layer.UI, border);
     this.getLayerManager().addToLayer(Layer.UI, leftArrow);
     this.getLayerManager().addToLayer(Layer.UI, rightArrow);
@@ -152,53 +164,48 @@ class ChapterSelect extends Phaser.Scene {
    * attach it with the necessary information (user progress).
    *
    * The information will be used/mutated depending on whether
-   * the user decide tocontinue or reset the progress.
+   * the user decides to continue or reset the progress.
    */
-  private createChapterContainer() {
-    const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    chapterContainer.add(
-      this.getGameChapters().map((chapterDetail, chapterIndex) => {
-        return createChapter(this, chapterDetail, chapterIndex);
-      })
-    );
-    return chapterContainer;
+  private createChaptersContainer() {
+    const chaptersContainer = new Phaser.GameObjects.Container(this, 0, 0);
+    chaptersContainer
+      .add(
+        this.getGameChapters().map((chapterDetail, chapterIndex) => {
+          return createChapter(this, chapterDetail, chapterIndex);
+        })
+      )
+      .sort('depth')
+      .reverse(); // Ensures hover text correctly render over other objects in container
+    return chaptersContainer;
+  }
+
+  private getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
+
+  /**
+   * Returns the number of pages of chapters
+   */
+  private numPages() {
+    const pages = Math.ceil(this.getGameChapters().length / chapConstants.grid.chapPerPage);
+    return Math.max(pages, 1); // Always have at least 1 page, even when 0 chapters
   }
 
   /**
-   * Auto scroll to the largest (not latest!) completed chapter.
-   * The chapter will be scrolled until it is at the middle of the screen.
+   * Scroll the screen to the previous page of chapters
    */
-  private async autoScroll() {
-    const chapterIdx = Math.min(
-      SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapterNum() + 1,
-      this.getGameChapters().length - 1
-    );
-
-    await this.scrollToIndex(chapterIdx);
-    this.autoScrolling = false;
+  private scrollPrevPage() {
+    this.targetPage = Math.max(this.targetPage - 1, 0);
+    this.pageNumberText?.setText(`${this.targetPage + 1} / ${this.numPages()}`);
   }
-
-  public getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
 
   /**
-   * Scroll the screen to a chapter index, so that its chapter selection
-   * is at the middle of the screen.
-   *
-   * @param id index of chapter
+   * Scroll the screen to the next page of chapters
    */
-  private async scrollToIndex(id: number) {
-    if (!this.chapterContainer) return;
-    const xTarget = -id * chapConstants.imageDist;
-
-    const scrollDuration = 800;
-    this.tweens.add({
-      targets: this.chapterContainer,
-      x: xTarget,
-      ease: 'Power2',
-      duration: scrollDuration
-    });
-    await sleep(scrollDuration);
+  private scrollNextPage() {
+    const numPages = this.numPages();
+    this.targetPage = Math.min(this.targetPage + 1, numPages - 1);
+    this.pageNumberText?.setText(`${this.targetPage + 1} / ${numPages}`);
   }
+
   public getLayerManager = () => mandatory(this.layerManager);
 }
 
