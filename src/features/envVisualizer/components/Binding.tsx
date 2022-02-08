@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import { Group } from 'react-konva';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
@@ -9,8 +8,8 @@ import { Arrow } from './arrows/Arrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
-// import { FnValue } from './values/FnValue';
-// import { GlobalFnValue } from './values/GlobalFnValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { UnassignedValue } from './values/UnassignedValue';
 import { Value } from './values/Value';
@@ -60,9 +59,10 @@ export class Binding implements Visible {
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
     this.keyYOffset =
-      this.value instanceof ArrayValue
-        ? (Config.DataUnitHeight - Config.FontSize) / 2
-        : (this.value.height - Config.FontSize) / 2;
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
+      isMainReference(this.value, this)
+        ? (this.value.height - Config.FontSize) / 2
+        : 0;
     this.key = new Text(this.keyString, this.x, this.offsetY + this.keyYOffset);
 
     // derive the width from the right bound of the value (either no extra space or width of function object.)
@@ -73,7 +73,10 @@ export class Binding implements Visible {
 
     this.height = Math.max(
       this.key.height,
-      this.value instanceof ArrayValue ? Config.DataUnitHeight - Config.FontSize : this.value.height
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
+        isMainReference(this.value, this)
+        ? this.value.height
+        : 0
     );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {

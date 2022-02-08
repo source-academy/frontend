@@ -77,7 +77,7 @@ export class Frame implements Visible, Hoverable {
       this.level.y,
       { maxWidth: this.width }
     );
-    this.offsetY = this.name.height + Config.TextPaddingY / 2;
+    this.offsetY = this.name.height + Config.TextPaddingY / 3;
     this.y = this.level.y + this.offsetY;
     // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
     let maxBindingWidth = 0;
@@ -129,7 +129,7 @@ export class Frame implements Visible, Hoverable {
       ? prevBinding.y + prevBinding.height + Config.FramePaddingY - this.y
       : Config.FramePaddingY * 2;
     this.totalHeight = this.height + this.name.height + Config.TextPaddingY / 2;
-    const nextX = Frame.cumWidths[xCoord] + this.totalWidth + Config.CanvasPaddingX;
+    const nextX = Frame.cumWidths[xCoord] + this.totalWidth + Config.FrameMarginX;
     Frame.cumWidths[xCoord + 1] =
       Frame.cumWidths[xCoord + 1] === undefined
         ? nextX
@@ -157,17 +157,7 @@ export class Frame implements Visible, Hoverable {
   update = (envTreeNode: EnvTreeNode) => {
     this.level = envTreeNode.level as Level;
     this.environment = envTreeNode.environment;
-    // this.x = xCoord === 0 ? 0 : Frame.cumWidths[xCoord]; // ?? Frame.cumWidths[xCoord] + Config.FrameMinWidth;
-    // derive the x coordinate from the left sibling frame
-    // (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
-
-    // this.name = new Text(
-    //   frameNames.get(this.environment.name) || this.environment.name,
-    //   this.x,
-    //   this.level.y,
-    //   { maxWidth: this.width }
-    // );
-    this.offsetY = this.name.height + Config.TextPaddingY / 2;
+    this.offsetY = this.name.height + Config.TextPaddingY / 3;
     this.y = this.level.y + this.offsetY;
     // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
     let maxBindingWidth = 0;
@@ -219,14 +209,14 @@ export class Frame implements Visible, Hoverable {
       ? prevBinding.y + prevBinding.height + Config.FramePaddingY - this.y
       : Config.FramePaddingY * 2;
     this.totalHeight = this.height + this.name.height + Config.TextPaddingY / 2;
-    const nextX = Frame.cumWidths[this.xCoord] + this.totalWidth + Config.CanvasPaddingX;
+    const nextX = Frame.cumWidths[this.xCoord] + this.totalWidth + Config.FrameMarginX;
     Frame.cumWidths[this.xCoord + 1] =
       Frame.cumWidths[this.xCoord + 1] === undefined
         ? nextX
         : Math.max(Frame.cumWidths[this.xCoord + 1], nextX);
     Frame.heights[this.yCoord] = Math.max(
       Frame.heights[this.yCoord] || 0,
-      this.totalHeight + Config.CanvasPaddingY
+      this.totalHeight + Config.FrameMarginY
     );
   };
 

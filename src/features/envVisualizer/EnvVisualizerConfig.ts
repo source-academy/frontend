@@ -11,8 +11,8 @@ export enum Config {
   FrameMinWidth = 100,
   FramePaddingX = 20,
   FramePaddingY = 30,
-  FrameMarginX = 30,
-  FrameMarginY = 10,
+  FrameMarginX = 40,
+  FrameMarginY = 40,
   FrameCornerRadius = 3,
 
   FnRadius = 15,
