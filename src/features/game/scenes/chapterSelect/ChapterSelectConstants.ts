@@ -10,36 +10,55 @@ export const chapterIndexStyle: BitmapFontStyle = {
 
 export const chapterTitleStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
-  size: 35,
+  size: 30,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-const marginX = 0;
-const marginY = 100;
-const imageRectWidth = 500;
+export const pageNumberStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 25,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
+
+// These are the original chapter preview image and frame dimensions
+const originalImageRectWidth = 500;
+const originalImageRectHeight = 700;
+// Use these to change the size of each chapter's image and frame
+const imageScaleX = 0.8;
+const imageScaleY = 0.4;
+
+const chapPerRow = 3;
+const chapPerCol = 3;
 
 const chapConstants = {
   arrow: { xOffset: 875 },
-  button: { xOffset: 100, yOffset: 200 },
-  frame: { xOffset: 15, yOffset: -10 },
-  scrollSpeed: 20,
-  indexTextConfig: { x: 0, y: -160, oriX: 0.5, oriY: 0.5 },
-  titleTextConfig: { x: 0, y: -100, oriX: 0.5, oriY: 0.5 },
-  maskRect: {
-    x: -screenCenter.x + marginX,
-    y: -screenCenter.y + marginY,
-    width: screenSize.x - marginX * 2,
-    height: screenSize.y - marginY * 2
-  },
+  buttons: { scale: 0.65 },
+  resetButton: { xOffset: 135, yOffset: 85 },
+  playButton: { xOffset: 55, yOffset: 85 },
+  frame: { xOffset: 15 * imageScaleX, yOffset: -10 * imageScaleY },
+  scrollSpeed: 100,
+  indexTextConfig: { x: 0, y: -110, oriX: 0.5, oriY: 0.5 },
+  titleTextConfig: { x: 0, y: -50, oriX: 0.5, oriY: 0.5 },
+  pageNumberTextConfig: { x: screenCenter.x, y: screenSize.y - 30, oriX: 0.5, oriY: 0.5 },
   imageRect: {
-    width: imageRectWidth,
-    height: 700
+    width: originalImageRectWidth * imageScaleX,
+    height: originalImageRectHeight * imageScaleY
   },
-  imageDist: imageRectWidth + 150,
+  imageScale: {
+    x: imageScaleX,
+    y: imageScaleY
+  },
   chapComplete: {
-    y: 20,
-    height: 60,
+    y: 10,
+    height: 30,
     text: 'Chapter Completed'
+  },
+  grid: {
+    chapPerRow,
+    chapPerCol,
+    chapPerPage: chapPerRow * chapPerCol,
+    chapGapX: 50,
+    chapGapY: 50
   }
 };
 
