@@ -41,7 +41,7 @@ export type DialogueLine = IGameActionable & {
 export type DialogueSpeakerLine = {
   speaker: string;
   line: string;
-}
+};
 
 export type Dialogue = {
   title: string;

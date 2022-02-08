@@ -30,12 +30,12 @@ export default class GameStorageManager {
   private getSpeakerName(speakerDetail: SpeakerDetail | null) {
     const speakerId = speakerDetail?.speakerId;
     return !speakerId
-      ? ""
+      ? ''
       : speakerId === 'you'
-        ? this.getUsername()
-        : speakerId === 'narrator'
-          ? "Narrator"
-          : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
+      ? this.getUsername()
+      : speakerId === 'narrator'
+      ? 'Narrator'
+      : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
   }
 
   public getStorage(): Array<DialogueSpeakerLine> {
