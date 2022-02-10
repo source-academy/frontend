@@ -1,4 +1,4 @@
-import { screenCenter } from '../../../game/commons/CommonConstants';
+import { screenCenter, screenSize } from '../../../game/commons/CommonConstants';
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import CommonTextHover from '../../commons/CommonTextHover';
@@ -48,7 +48,7 @@ export function createChapter(
     chapConstants.frame.xOffset,
     chapConstants.frame.yOffset,
     ImageAssets.chapterSelectFrame.key
-  ).setScale(0.99);
+  ).setScale(0.99 * chapConstants.imageScale.x, 0.99 * chapConstants.imageScale.y);
 
   // Chapter completed rectangle
   const chapCompleteRect = new Phaser.GameObjects.Rectangle(
@@ -75,14 +75,14 @@ export function createChapter(
   // Chapter Action Popup
   const chapterRepeatHover = new CommonTextHover(
     scene,
-    chapConstants.button.xOffset + 10,
-    chapConstants.button.yOffset - 50,
+    chapConstants.resetButton.xOffset + 8,
+    chapConstants.resetButton.yOffset - 20,
     'Reset progress'
   );
   const chapterContinueHover = new CommonTextHover(
     scene,
-    -chapConstants.button.xOffset + 10,
-    chapConstants.button.yOffset - 50,
+    chapConstants.playButton.xOffset + 8,
+    chapConstants.playButton.yOffset - 20,
     'Play/Continue'
   );
 
@@ -92,7 +92,9 @@ export function createChapter(
     onUp: async () => await callGameManagerOnTxtLoad(false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
     onOut: () => chapterRepeatHover.setVisible(false)
-  }).setPosition(chapConstants.button.xOffset, chapConstants.button.yOffset);
+  })
+    .setPosition(chapConstants.resetButton.xOffset, chapConstants.resetButton.yOffset)
+    .setScale(chapConstants.buttons.scale);
 
   const lastCheckpointPlayed = SourceAcademyGame.getInstance()
     .getSaveManager()
@@ -103,7 +105,9 @@ export function createChapter(
     onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointPlayed),
     onHover: () => chapterContinueHover.setVisible(true),
     onOut: () => chapterContinueHover.setVisible(false)
-  }).setPosition(-chapConstants.button.xOffset, chapConstants.button.yOffset);
+  })
+    .setPosition(chapConstants.playButton.xOffset, chapConstants.playButton.yOffset)
+    .setScale(chapConstants.buttons.scale);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
@@ -152,8 +156,19 @@ export function createChapter(
   return chapterContainer;
 }
 
-export function getCoorByChapter(chapterNum: number) {
-  const x = screenCenter.x + chapConstants.imageDist * chapterNum;
-  const y = screenCenter.y;
+function getCoorByChapter(chapterNum: number) {
+  const page = Math.floor(chapterNum / chapConstants.grid.chapPerPage);
+  chapterNum %= chapConstants.grid.chapPerPage;
+  const row = Math.floor(chapterNum / chapConstants.grid.chapPerRow);
+  const col = chapterNum % chapConstants.grid.chapPerRow;
+
+  const centreCol = (chapConstants.grid.chapPerRow - 1) / 2;
+  const centreRow = (chapConstants.grid.chapPerCol - 1) / 2;
+
+  let x = page * screenSize.x + screenCenter.x;
+  x += (col - centreCol) * (chapConstants.imageRect.width + chapConstants.grid.chapGapX);
+  let y = screenCenter.y;
+  y += (row - centreRow) * (chapConstants.imageRect.height + chapConstants.grid.chapGapY);
+
   return [x, y];
 }
