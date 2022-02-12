@@ -134,6 +134,7 @@ export class GenericArrow implements Visible, Hoverable {
           fill={Config.SA_WHITE.toString()}
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
+          pointerLength={Number(Config.ArrowHeadSize)}
           key={Layout.key++}
         />
       </KonvaGroup>

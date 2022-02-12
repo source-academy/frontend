@@ -26,7 +26,7 @@ export enum Config {
   DataHitStrokeWidth = 5,
 
   TextPaddingX = 10,
-  TextPaddingY = 30,
+  TextPaddingY = 20,
   TextMargin = 5,
   TextMinWidth = 30,
   FontFamily = 'monospace, monospace',
@@ -41,6 +41,7 @@ export enum Config {
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
   ArrowCornerRadius = 40,
+  ArrowMinHeight = 100,
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',

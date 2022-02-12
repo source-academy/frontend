@@ -23,21 +23,20 @@ export class ArrowFromArrayUnit extends GenericArrow {
         if (Math.abs(from.x() - to.x()) > Config.DataUnitWidth * 2) {
           steps.push((x, y) => [x, y - Config.DataUnitHeight]);
           steps.push((x, y) => [to.x() + Config.DataUnitWidth / 2, y]);
-          steps.push((x, y) => [x, to.y() - Config.DataUnitHeight / 2]);
-          steps.push((x, y) => [x, y + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [x, to.y()]);
         } else {
           steps.push((x, y) => [to.x(), y]);
           steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
         }
       } else {
-        steps.push((x, y) => [to.x() + Config.DataUnitWidth / 2, y]);
-        steps.push((x, y) => [x, to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0)]);
+        steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
+        steps.push((x, y) => [x, to.y() + (from.y() > to.y() ? Config.DataUnitHeight / 2 : 0)]);
+        steps.push((x, y) => [to.x(), y]);
       }
     } else {
       steps.push((x, y) => [to.x(), y]);
       steps.push((x, y) => [x, to.y()]);
     }
-
     return steps;
   }
 }
