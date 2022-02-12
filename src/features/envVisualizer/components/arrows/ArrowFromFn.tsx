@@ -11,12 +11,12 @@ export class ArrowFromFn extends GenericArrow {
 
     const steps: StepsArray = [(x, y) => [x + Config.FnRadius * 3, y]];
 
-    if (to.y < from.y && from.y < to.y + to.height) {
+    if (to.y() < from.y() && from.y() < to.y() + to.height()) {
       steps.push((x, y) => [x, y - Config.FnRadius * 2]);
-      steps.push((x, y) => [to.x + (from.x < to.x ? 0 : to.width), y]);
+      steps.push((x, y) => [to.x() + (from.x() < to.x() ? 0 : to.width()), y]);
     } else {
-      steps.push((x, y) => [to.x + to.width / 2, y]);
-      steps.push((x, y) => [x, to.y + (to.y < from.y ? to.height : 0)]);
+      steps.push((x, y) => [to.x() + to.width() / 2, y]);
+      steps.push((x, y) => [x, to.y() + (to.y() < from.y() ? to.height() : 0)]);
     }
 
     return steps;

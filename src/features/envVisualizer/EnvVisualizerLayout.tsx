@@ -38,16 +38,13 @@ export class Layout {
   static environmentTree: EnvTree;
   /** the global environment */
   static globalEnvNode: EnvTreeNode;
-  /** array of levels, which themselves are arrays of frames */
-  // static levels: Level[];
   /** grid of frames */
   static grid: Grid;
   /** memoized values */
   static values = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
-  stageRef: RefObject<any> = React.createRef();
-  static stageRef: React.Ref<any>;
+  static stageRef: RefObject<any> = React.createRef();
 
   /** processes the runtime context from JS Slang */
   static setContext(context: Context): void {
@@ -67,8 +64,8 @@ export class Layout {
     Layout.initializeGrid();
 
     // calculate height and width by considering lowest and widest level
-    Layout.height = Math.max(Config.CanvasMinHeight, this.grid.height + Config.CanvasPaddingY);
-    Layout.width = Math.max(Config.CanvasMinWidth, this.grid.width + Config.CanvasPaddingX * 2);
+    Layout.height = Math.max(Config.CanvasMinHeight, this.grid.height() + Config.CanvasPaddingY);
+    Layout.width = Math.max(Config.CanvasMinWidth, this.grid.width() + Config.CanvasPaddingX * 2);
   }
 
   /** remove program environment containing predefined functions */
@@ -238,7 +235,6 @@ export class Layout {
                 key={Layout.key++}
                 listening={false}
               />
-              {/* {Layout.levels.map(level => level.draw())} */}
               {Layout.grid.draw()}
             </Layer>
           </Stage>

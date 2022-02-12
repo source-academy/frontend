@@ -31,14 +31,16 @@ const frameNames = new Map([
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame implements Visible, Hoverable {
-  x: number;
-  y: number;
-  height: number;
-  width: number = Config.FrameMinWidth;
+  private _x: number;
+  private _y: number;
+  private _height: number;
+  private _width: number = Config.FrameMinWidth;
+
   /** total height = frame height + frame title height */
   totalHeight: number;
   /** width of this frame + max width of the bound values */
   totalWidth: number;
+  totalHoveredWidth: number;
 
   /** the bindings this frame contains */
   readonly bindings: Binding[] = [];
@@ -50,6 +52,7 @@ export class Frame implements Visible, Hoverable {
   environment: Env;
   /** the parent/enclosing frame of this frame (the frame above it) */
   readonly parentFrame: Frame | undefined;
+  static maxX: number = Config.CanvasPaddingX.valueOf();
   static cumWidths: number[] = [Config.CanvasPaddingX.valueOf()];
   static heights: number[] = [Config.CanvasPaddingY.valueOf()];
   offsetY: number;
@@ -67,18 +70,19 @@ export class Frame implements Visible, Hoverable {
     this.parentFrame = envTreeNode.parent?.frame;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
-    this.x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord]; // ?? Frame.cumWidths[xCoord] + Config.FrameMinWidth;
+    this._x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord]; // ?? Frame.cumWidths[xCoord] + Config.FrameMinWidth;
     // derive the x coordinate from the left sibling frame
     // (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
 
     this.name = new Text(
-      frameNames.get(this.environment.name) || this.environment.name,
-      this.x,
-      this.level.y,
-      { maxWidth: this.width }
+      frameNames.get(this.environment.name) || this.environment.name, // + envTreeNode.environment.id,
+      this.x(),
+      this.level.y(),
+      { maxWidth: this.width() }
     );
-    this.offsetY = this.name.height + Config.TextPaddingY / 3;
-    this.y = this.level.y + this.offsetY;
+    this.offsetY = this.name.height() + Config.TextPaddingY / 3;
+    this._y = this.level.y() + this.offsetY;
+
     // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
     let maxBindingWidth = 0;
     for (const [key, data] of Object.entries(this.environment.head)) {
@@ -92,11 +96,12 @@ export class Frame implements Visible, Hoverable {
           : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
-    this.width = maxBindingWidth + Config.FramePaddingX * 2;
+    this._width = maxBindingWidth + Config.FramePaddingX * 2;
 
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
-    let totalWidth = this.width;
+    let totalWidth = this.width();
+    let totalHoveredWidth = totalWidth;
 
     const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
     const entries = [];
@@ -120,24 +125,47 @@ export class Frame implements Visible, Hoverable {
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
       this.bindings.push(currBinding);
       prevBinding = currBinding;
-      totalWidth = Math.max(totalWidth, currBinding.width + Config.FramePaddingX);
+      totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
+      totalHoveredWidth = Math.max(
+        totalHoveredWidth,
+        currBinding.hoveredWidth() + Config.FramePaddingX
+      );
     }
     this.totalWidth = totalWidth;
+    this.totalHoveredWidth = totalHoveredWidth;
 
     // derive the height of the frame from the the position of the last binding
-    this.height = prevBinding
-      ? prevBinding.y + prevBinding.height + Config.FramePaddingY - this.y
+    this._height = prevBinding
+      ? prevBinding.y() + prevBinding.height() + Config.FramePaddingY - this.y()
       : Config.FramePaddingY * 2;
-    this.totalHeight = this.height + this.name.height + Config.TextPaddingY / 2;
+    this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
     const nextX = Frame.cumWidths[xCoord] + this.totalWidth + Config.FrameMarginX;
     Frame.cumWidths[xCoord + 1] =
       Frame.cumWidths[xCoord + 1] === undefined
         ? nextX
         : Math.max(Frame.cumWidths[xCoord + 1], nextX);
+    Frame.maxX = Math.max(
+      Frame.maxX,
+      Frame.cumWidths[xCoord] + this.totalHoveredWidth,
+      Frame.cumWidths[Frame.cumWidths.length - 1]
+    );
     Frame.heights[yCoord] = Math.max(
       Frame.heights[yCoord] || 0,
       this.totalHeight + Config.CanvasPaddingY
     );
+  }
+
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
   }
 
   /**
@@ -146,19 +174,19 @@ export class Frame implements Visible, Hoverable {
    * @param y Target y-position
    */
   updatePosition = (x: number, y: number) => {
-    this.x = x;
-    this.y = y + this.offsetY;
-    this.name.updatePosition(this.x, y);
+    this._x = x;
+    this._y = y + this.offsetY;
+    this.name.updatePosition(this.x(), y);
     this.bindings.forEach(binding => {
-      binding.updatePosition(this.x, y);
+      binding.updatePosition(this.x(), y);
     });
   };
 
   update = (envTreeNode: EnvTreeNode) => {
     this.level = envTreeNode.level as Level;
     this.environment = envTreeNode.environment;
-    this.offsetY = this.name.height + Config.TextPaddingY / 3;
-    this.y = this.level.y + this.offsetY;
+    this.offsetY = this.name.height() + Config.TextPaddingY / 3;
+    this._y = this.level.y() + this.offsetY;
     // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
     let maxBindingWidth = 0;
     for (const [key, data] of Object.entries(this.environment.head)) {
@@ -172,11 +200,11 @@ export class Frame implements Visible, Hoverable {
           : 0);
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
-    this.width = maxBindingWidth + Config.FramePaddingX * 2;
+    this._width = maxBindingWidth + Config.FramePaddingX * 2;
 
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
-    let totalWidth = this.width;
+    let totalWidth = this.width();
 
     const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
     const entries = [];
@@ -200,15 +228,15 @@ export class Frame implements Visible, Hoverable {
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
       this.bindings.push(currBinding);
       prevBinding = currBinding;
-      totalWidth = Math.max(totalWidth, currBinding.width + Config.FramePaddingX);
+      totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
     }
     this.totalWidth = totalWidth;
 
     // derive the height of the frame from the the position of the last binding
-    this.height = prevBinding
-      ? prevBinding.y + prevBinding.height + Config.FramePaddingY - this.y
+    this._height = prevBinding
+      ? prevBinding.y() + prevBinding.height() + Config.FramePaddingY - this.y()
       : Config.FramePaddingY * 2;
-    this.totalHeight = this.height + this.name.height + Config.TextPaddingY / 2;
+    this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
     const nextX = Frame.cumWidths[this.xCoord] + this.totalWidth + Config.FrameMarginX;
     Frame.cumWidths[this.xCoord + 1] =
       Frame.cumWidths[this.xCoord + 1] === undefined
@@ -221,6 +249,7 @@ export class Frame implements Visible, Hoverable {
   };
 
   static reset = () => {
+    Frame.maxX = Config.CanvasPaddingX.valueOf();
     Frame.cumWidths = [Config.CanvasPaddingX.valueOf()];
     Frame.heights = [Config.CanvasPaddingY.valueOf()];
   };
@@ -242,10 +271,10 @@ export class Frame implements Visible, Hoverable {
         {this.name.draw()}
         <Rect
           {...ShapeDefaultProps}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
+          x={this.x()}
+          y={this.y()}
+          width={this.width()}
+          height={this.height()}
           stroke={Config.SA_WHITE.toString()}
           cornerRadius={Number(Config.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}

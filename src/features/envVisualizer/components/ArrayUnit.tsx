@@ -16,10 +16,10 @@ import { Value } from './values/Value';
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */
 export class ArrayUnit implements Visible, Hoverable {
-  x: number;
-  y: number;
-  readonly height: number;
-  readonly width: number;
+  private _x: number;
+  private _y: number;
+  private _height: number;
+  private _width: number;
   readonly value: Value;
 
   /** check if this is the first unit in the array */
@@ -42,19 +42,32 @@ export class ArrayUnit implements Visible, Hoverable {
     parent: ArrayValue
   ) {
     this.parent = parent;
-    this.x = this.parent.x + this.idx * Config.DataUnitWidth;
-    this.y = this.parent.y;
-    this.height = Config.DataUnitHeight;
-    this.width = Config.DataUnitWidth;
+    this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
+    this._y = this.parent.y();
+    this._height = Config.DataUnitHeight;
+    this._width = Config.DataUnitWidth;
     this.isFirstUnit = this.idx === 0;
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.referencedBy.length > 1;
   }
 
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
+  }
+
   updatePosition = () => {
-    this.x = this.parent.x + this.idx * Config.DataUnitWidth;
-    this.y = this.parent.y;
+    this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
+    this._y = this.parent.y();
     this.value instanceof PrimitiveValue && this.value.updatePosition();
   };
 
@@ -86,10 +99,10 @@ export class ArrayUnit implements Visible, Hoverable {
       <React.Fragment key={Layout.key++}>
         <RoundedRect
           key={Layout.key++}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
+          x={this.x()}
+          y={this.y()}
+          width={this.width()}
+          height={this.height()}
           stroke={Config.SA_WHITE.toString()}
           hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
           fillEnabled={false}

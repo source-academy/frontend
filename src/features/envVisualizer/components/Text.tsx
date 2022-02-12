@@ -27,16 +27,16 @@ export const defaultOptions: TextOptions = {
 
 /** this class encapsulates a string to be drawn onto the canvas */
 export class Text implements Visible, Hoverable {
-  readonly height: number;
-  readonly width: number;
+  private _height: number;
+  private _width: number;
 
   readonly partialStr: string; // truncated string representation of data
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
   ref: RefObject<any> = React.createRef();
-  x: number;
-  y: number;
+  private _x: number;
+  private _y: number;
 
   constructor(
     readonly data: Data,
@@ -45,8 +45,8 @@ export class Text implements Visible, Hoverable {
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
@@ -54,7 +54,7 @@ export class Text implements Visible, Hoverable {
     this.fullStr = this.partialStr = isStringIdentifiable
       ? JSON.stringify(data) || String(data)
       : String(data);
-    this.height = fontSize;
+    this._height = fontSize;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
@@ -63,15 +63,27 @@ export class Text implements Visible, Hoverable {
       while (widthOf(this.partialStr.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
         truncatedText = this.partialStr.substr(0, i++) + Config.Ellipsis.toString();
       }
-      this.width = widthOf(truncatedText);
+      this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
     } else {
-      this.width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
+      this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
+  }
   updatePosition = (x: number, y: number) => {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
   };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -99,16 +111,16 @@ export class Text implements Visible, Hoverable {
     return (
       <Group key={Layout.key++}>
         <KonvaLabel
-          x={this.x}
-          y={this.y}
+          x={this.x()}
+          y={this.y()}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
         <KonvaLabel
-          x={this.x}
-          y={this.y}
+          x={this._x}
+          y={this._y}
           ref={this.ref}
           visible={false}
           onMouseEnter={this.onMouseEnter}

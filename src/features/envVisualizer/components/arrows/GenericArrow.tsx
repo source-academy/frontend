@@ -8,24 +8,37 @@ import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
-  height: number = 0;
-  width: number = 0;
+  private _x: number;
+  private _y: number;
+  private _height: number = 0;
+  private _width: number = 0;
   points: number[] = [];
   from: Visible;
   target: Visible | undefined;
 
   constructor(from: Visible) {
     this.from = from;
-    this.x = from.x;
-    this.y = from.y;
+    this._x = from.x();
+    this._y = from.y();
+  }
+
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
   }
 
   to(to: Visible) {
     this.target = to;
-    this.width = Math.abs(to.x - this.from.x);
-    this.height = Math.abs(to.y - this.from.y);
+    this._width = Math.abs(to.x() - this.from.x());
+    this._height = Math.abs(to.y() - this.from.y());
     return this;
   }
 
@@ -48,7 +61,7 @@ export class GenericArrow implements Visible, Hoverable {
   protected calculateSteps(): StepsArray {
     const to = this.target;
     if (!to) return [];
-    return [(x, y) => [to.x, to.y]];
+    return [(x, y) => [to.x(), to.y()]];
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -66,7 +79,7 @@ export class GenericArrow implements Visible, Hoverable {
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
-      [this.from.x, this.from.y]
+      [this.from.x(), this.from.y()]
     );
     points.splice(0, 2);
 

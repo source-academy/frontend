@@ -25,10 +25,10 @@ import { Value } from './Value';
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
 export class GlobalFnValue extends Value implements Hoverable {
-  x: number;
-  y: number;
-  readonly height: number;
-  readonly width: number;
+  private _x: number;
+  private _y: number;
+  private _height: number;
+  private _width: number;
   centerX: number;
   readonly tooltipWidth: number;
   readonly radius: number = Config.FnRadius;
@@ -52,48 +52,60 @@ export class GlobalFnValue extends Value implements Hoverable {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
-      this.y = mainReference.y;
-      this.centerX = this.x + this.radius * 2;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
+      this._y = mainReference.y();
+      this.centerX = this._x + this.radius * 2;
     } else {
       if (mainReference.isLastUnit) {
-        this.x = mainReference.x + Config.DataUnitWidth * 2;
-        this.y = mainReference.y + Config.DataUnitHeight / 2 - this.radius;
+        this._x = mainReference.x() + Config.DataUnitWidth * 2;
+        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
       } else {
-        this.x = mainReference.x;
-        this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
+        this._x = mainReference.x();
+        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
       }
-      this.centerX = this.x + Config.DataUnitWidth / 2;
-      this.x = this.centerX - this.radius * 2;
+      this.centerX = this._x + Config.DataUnitWidth / 2;
+      this._x = this.centerX - this.radius * 2;
     }
-    this.y += this.radius;
+    this._y += this.radius;
 
-    this.width = this.radius * 4;
-    this.height = this.radius * 2;
+    this._width = this.radius * 4;
+    this._height = this.radius * 2;
 
     this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
   }
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
+  }
   updatePosition(): void {
     const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
-      this.y = mainReference.y;
-      this.centerX = this.x + this.radius * 2;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
+      this._y = mainReference.y();
+      this.centerX = this._x + this.radius * 2;
     } else {
       if (mainReference.isLastUnit) {
-        this.x = mainReference.x + Config.DataUnitWidth * 2;
-        this.y = mainReference.y + Config.DataUnitHeight / 2 - this.radius;
+        this._x = mainReference.x() + Config.DataUnitWidth * 2;
+        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
       } else {
-        this.x = mainReference.x;
-        this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
+        this._x = mainReference.x();
+        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
       }
-      this.centerX = this.x + Config.DataUnitWidth / 2;
-      this.x = this.centerX - this.radius * 2;
+      this.centerX = this._x + Config.DataUnitWidth / 2;
+      this._x = this.centerX - this.radius * 2;
     }
-    this.y += this.radius;
+    this._y += this.radius;
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -114,7 +126,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
-            y={this.y}
+            y={this.y()}
             radius={this.radius}
             stroke={Config.SA_WHITE.toString()}
           />
@@ -122,7 +134,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
-            y={this.y}
+            y={this.y()}
             radius={this.innerRadius}
             fill={Config.SA_WHITE.toString()}
           />
@@ -130,7 +142,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX + this.radius}
-            y={this.y}
+            y={this.y()}
             radius={this.radius}
             stroke={Config.SA_WHITE.toString()}
           />
@@ -138,14 +150,14 @@ export class GlobalFnValue extends Value implements Hoverable {
             {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX + this.radius}
-            y={this.y}
+            y={this.y()}
             radius={this.innerRadius}
             fill={Config.SA_WHITE.toString()}
           />
         </Group>
         <KonvaLabel
-          x={this.x + this.width + Config.TextPaddingX}
-          y={this.y - Config.TextPaddingY}
+          x={this.x() + this.width() + Config.TextPaddingX}
+          y={this.y() - Config.TextPaddingY}
           visible={false}
           ref={this.labelRef}
         >

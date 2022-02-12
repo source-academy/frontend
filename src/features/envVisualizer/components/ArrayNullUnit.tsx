@@ -9,25 +9,38 @@ import { Hoverable, ReferenceType, Visible } from '../EnvVisualizerTypes';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit implements Visible, Hoverable {
-  x: number;
-  y: number;
-  readonly height: number;
-  readonly width: number;
+  private _x: number;
+  private _y: number;
+  private _height: number;
+  private _width: number;
   arrayUnit: ReferenceType;
   referencedBy: ReferenceType[];
 
   constructor(referencedBy: ReferenceType[]) {
     this.referencedBy = referencedBy;
     this.arrayUnit = referencedBy[0];
-    this.x = this.arrayUnit.x;
-    this.y = this.arrayUnit.y;
-    this.height = this.arrayUnit.height;
-    this.width = this.arrayUnit.width;
+    this._x = this.arrayUnit.x();
+    this._y = this.arrayUnit.y();
+    this._height = this.arrayUnit.height();
+    this._width = this.arrayUnit.width();
+  }
+
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
   }
 
   updatePosition = () => {
-    this.x = this.arrayUnit.x;
-    this.y = this.arrayUnit.y;
+    this._x = this.arrayUnit.x();
+    this._y = this.arrayUnit.y();
   };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -43,7 +56,7 @@ export class ArrayNullUnit implements Visible, Hoverable {
       <KonvaLine
         {...ShapeDefaultProps}
         key={Layout.key++}
-        points={[this.x, this.y + this.height, this.x + this.width, this.y]}
+        points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
         stroke={Config.SA_WHITE.toString()}
         hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
         onMouseEnter={this.onMouseEnter}

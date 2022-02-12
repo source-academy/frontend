@@ -16,11 +16,13 @@ import { Value } from './values/Value';
 
 /** a `binding` is a key-value pair in a frame */
 export class Binding implements Visible {
-  x: number;
-  y: number;
+  private _x: number;
+  private _y: number;
   readonly offsetY: number;
-  readonly width: number;
-  readonly height: number;
+  private _width: number;
+  /** The maximum width of binding when hovered or clicked (takes tooltip into consideration) */
+  private _hoveredWidth: number;
+  private _height: number;
 
   /** value associated with this binding */
   readonly value: Value;
@@ -48,56 +50,75 @@ export class Binding implements Visible {
 
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
-      this.x = this.prevBinding.x;
-      this.offsetY = this.prevBinding.offsetY + this.prevBinding.height + Config.TextPaddingY;
+      this._x = this.prevBinding.x();
+      this.offsetY = this.prevBinding.offsetY + this.prevBinding.height() + Config.TextPaddingY;
     } else {
-      this.x = this.frame.x + Config.FramePaddingX;
-      this.offsetY = this.frame.y + Config.FramePaddingY;
+      this._x = this.frame.x() + Config.FramePaddingX;
+      this.offsetY = this.frame.y() + Config.FramePaddingY;
     }
-    this.y = this.offsetY;
+    this._y = this.offsetY;
 
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
     this.keyYOffset =
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
       isMainReference(this.value, this)
-        ? (this.value.height - Config.FontSize) / 2
+        ? (this.value.height() - Config.FontSize) / 2
         : 0;
-    this.key = new Text(this.keyString, this.x, this.offsetY + this.keyYOffset);
+    this.key = new Text(this.keyString, this.x(), this.offsetY + this.keyYOffset);
 
     // derive the width from the right bound of the value (either no extra space or width of function object.)
-    this.width =
+    this._width =
       !(this.value instanceof ArrayValue) && isMainReference(this.value, this)
-        ? this.value.x + this.value.width - this.x
-        : this.key.width;
+        ? this.value.x() + this.value.width() - this.x()
+        : this.key.width();
+    this._hoveredWidth =
+      this._width +
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue
+        ? this.value.tooltipWidth
+        : 0);
 
-    this.height = Math.max(
-      this.key.height,
+    this._height = Math.max(
+      this.key.height(),
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
         isMainReference(this.value, this)
-        ? this.value.height
+        ? this.value.height()
         : 0
     );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {
       if (this.prevBinding) {
         this.offsetY = this.prevBinding.offsetY;
-        this.width = this.prevBinding.width;
-        this.height = this.prevBinding.height;
+        this._width = this.prevBinding.width();
+        this._height = this.prevBinding.height();
       }
     }
-    this.y = this.offsetY;
+    this._y = this.offsetY;
   }
-
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
+  }
+  hoveredWidth(): number {
+    return this._hoveredWidth;
+  }
   /**
    * update absolute position of binding and its value.
    * @param x Target x-position
    * @param y Target y-position
    */
   updatePosition = (x: number, y: number) => {
-    this.x = x + Config.FramePaddingX;
-    this.y = y + this.offsetY;
-    this.key.updatePosition(this.x, this.y + this.keyYOffset);
+    this._x = x + Config.FramePaddingX;
+    this._y = y + this.offsetY;
+    this.key.updatePosition(this.x(), this.y() + this.keyYOffset);
     if (isMainReference(this.value, this)) {
       this.value.updatePosition();
     }

@@ -94,6 +94,7 @@ export function visualizeEnv({ context }: { context: Context }) {
   try {
     EnvVisualizer.drawEnv(context);
   } catch (err) {
+    console.log(err);
     throw new Error('Env visualizer is not enabled');
   }
 }

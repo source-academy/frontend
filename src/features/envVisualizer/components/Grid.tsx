@@ -17,39 +17,46 @@ import { ArrayValue } from './values/ArrayValue';
  * Grid contains alternating layers of ArrayLevel and FrameLevel.
  */
 export class Grid implements Visible {
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-
+  private _x: number;
+  private _y: number;
+  private _height: number;
+  private _width: number;
   /** list of all levels */
   frameLevels: FrameLevel[];
   arrayLevels: ArrayLevel[];
   levels: Level[];
   widths: number[];
   heights: number[];
-  frameArrows: any;
 
   constructor(
     /** the environment tree nodes */
     readonly envTreeNodes: EnvTreeNode[][]
   ) {
-    Frame.reset();
-    FrameLevel.reset();
-    ArrayLevel.reset();
-    this.x = Config.CanvasPaddingX;
-    this.y = Config.CanvasPaddingY;
+    this._x = Config.CanvasPaddingX;
+    this._y = Config.CanvasPaddingY;
     this.frameLevels = [];
     this.arrayLevels = [];
     this.levels = [];
     this.widths = [];
     this.heights = [];
-    this.height = 0;
+    this._height = 0;
     // const lastFrame = this.frames[this.frames.length - 1];
     // derive the width of this level from the last frame
     // this.width = lastFrame.x + lastFrame.totalWidth - this.x + Config.LevelPaddingX;
-    this.width = 0;
+    this._width = 0;
     this.update(envTreeNodes);
+  }
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
   }
 
   destroy = () => {
@@ -63,6 +70,7 @@ export class Grid implements Visible {
   update(envTreeNodes: EnvTreeNode[][]) {
     Frame.reset();
     FrameLevel.reset();
+    ArrayLevel.reset();
     this.frameLevels = [];
     this.arrayLevels = [];
     this.levels = [];
@@ -112,8 +120,8 @@ export class Grid implements Visible {
             ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
                 Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX)
             : Math.max(
-                v.referencedBy.reduce((acc, ref) => acc + ref.x, 0) / v.referencedBy.length,
-                v.referencedBy[0].x
+                v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
+                v.referencedBy[0].x()
               )
         );
       }
@@ -124,7 +132,7 @@ export class Grid implements Visible {
         const height =
           i % 2 === 0
             ? Frame.heights[Math.floor(i / 2)]
-            : this.arrayLevels[Math.floor((i - 1) / 2)].height;
+            : this.arrayLevels[Math.floor((i - 1) / 2)].height();
         return [...res, res[res.length - 1] + height + Config.FrameMarginY];
       },
       [0]
@@ -134,11 +142,11 @@ export class Grid implements Visible {
     });
 
     // get the cumulative height of all the array and frame levels
-    this.height = cumHeights[cumHeights.length - 1];
+    this._height = cumHeights[cumHeights.length - 1];
     // get the maximum width of all the array and frame levels
-    this.width = Math.max(
-      this.frameLevels.reduce<number>((a, b) => Math.max(a, b.width), 0),
-      this.arrayLevels.reduce<number>((a, b) => Math.max(a, b.width), 0)
+    this._width = Math.max(
+      this.frameLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0),
+      this.arrayLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0)
     );
   }
 
@@ -147,15 +155,15 @@ export class Grid implements Visible {
       <Group key={Layout.key++}>
         <Rect
           {...ShapeDefaultProps}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
+          x={this.x()}
+          y={this.y()}
+          width={this.width()}
+          height={this.height()}
           key={Layout.key++}
           listening={false}
         />
-        {this.arrayLevels.map(level => level.draw())}
-        {this.frameLevels.map(level => level.draw())}
+        {this.arrayLevels.reverse().map(level => level.draw())}
+        {this.frameLevels.reverse().map(level => level.draw())}
       </Group>
     );
   }

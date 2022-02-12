@@ -4,7 +4,7 @@ import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
-import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
+import { ArrowFromArrayUnit } from './ArrowFromArrayUnitV0';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';
 import { ArrowFromText } from './ArrowFromText';

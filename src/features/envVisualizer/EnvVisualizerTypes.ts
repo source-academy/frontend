@@ -30,16 +30,16 @@ export interface Hoverable {
 /** this interface defines coordinates and dimensions */
 export interface Visible extends Drawable {
   /** x coordinate of top-left corner */
-  x: number;
+  x(): number;
 
   /** y coordinate of top-left corner */
-  y: number;
+  y(): number;
 
   /** width */
-  width: number;
+  width(): number;
 
   /** height */
-  height: number;
+  height(): number;
 
   ref?: React.RefObject<any>;
 }
