@@ -19,7 +19,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       steps.push((x, y) => [from.x() < to.x() ? to.x() : to.centerX, to.y()]);
     } else if (to instanceof ArrayValue) {
-      if((to as ArrayValue).level !== (from as ArrayUnit).parent.level){
+      if ((to as ArrayValue).level !== (from as ArrayUnit).parent.level) {
         if (from.y() === to.y()) {
           if (Math.abs(from.x() - to.x()) > Config.DataUnitWidth * 2) {
             steps.push((x, y) => [x, y - Config.DataUnitHeight]);
@@ -34,7 +34,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
           steps.push((x, y) => [x, to.y() + (from.y() > to.y() ? Config.DataUnitHeight / 2 : 0)]);
           steps.push((x, y) => [to.x(), y]);
         }
-      }else{
+      } else {
         if (from.y() === to.y()) {
           if (Math.abs(from.x() - to.x()) > Config.DataUnitWidth * 2) {
             steps.push((x, y) => [x, y - Config.DataUnitHeight]);
@@ -53,7 +53,6 @@ export class ArrowFromArrayUnit extends GenericArrow {
           ]);
         }
       }
-      
     } else {
       steps.push((x, y) => [to.x(), to.y()]);
     }

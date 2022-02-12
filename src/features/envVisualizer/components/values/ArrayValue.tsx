@@ -93,7 +93,7 @@ export class ArrayValue extends Value {
     return this._width;
   }
 
-  setLevel(arrLevel : ArrayLevel): void {
+  setLevel(arrLevel: ArrayLevel): void {
     this.level = arrLevel;
   }
 
