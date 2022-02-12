@@ -70,6 +70,7 @@ export class ArrayLevel extends Level {
     const arrayMargin = Config.DataUnitHeight;
     const curY = this._y + level * Config.DataUnitHeight + (level + 1) * arrayMargin;
     array.updatePosition({ x, y: curY });
+    array.setLevel(this);
     this._height = Math.max(this._height, curY + (Config.DataUnitHeight + arrayMargin));
     this.arrays.push(array);
     this._width = Math.max(this._width, x + array.width());

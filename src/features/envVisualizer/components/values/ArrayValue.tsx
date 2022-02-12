@@ -92,6 +92,11 @@ export class ArrayValue extends Value {
   width(): number {
     return this._width;
   }
+
+  setLevel(arrLevel : ArrayLevel): void {
+    this.level = arrLevel;
+  }
+
   updatePosition(pos: { x: number; y: number } = { x: -1, y: -1 }): void {
     // const mainReference = this.referencedBy[0];
     // if (mainReference instanceof Binding) {
