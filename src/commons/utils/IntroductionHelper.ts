@@ -1,4 +1,4 @@
-import { isFullJSChapter } from 'js-slang/dist/runner/fullJSRunner';
+import { isFullJSChapter } from 'js-slang/dist/runner/utils';
 
 import { Links } from './Constants';
 

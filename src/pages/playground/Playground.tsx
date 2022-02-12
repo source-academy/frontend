@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
-import { isFullJSChapter } from 'js-slang/dist/runner/fullJSRunner';
+import { isFullJSChapter } from 'js-slang/dist/runner/utils';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';

@@ -12,7 +12,7 @@ import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
-import { isFullJSChapter } from 'js-slang/dist/runner/fullJSRunner';
+import { isFullJSChapter } from 'js-slang/dist/runner/utils';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
