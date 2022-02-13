@@ -100,7 +100,10 @@ export class FnValue extends Value implements Hoverable {
     return this._width;
   }
   updatePosition(): void {
-    const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
+    const mainReference =
+      this.referencedBy.find(
+        x => x instanceof Binding && (x as Binding).frame.envTreeNode === this.enclosingEnvNode
+      ) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
       this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
       this._y = mainReference.y();

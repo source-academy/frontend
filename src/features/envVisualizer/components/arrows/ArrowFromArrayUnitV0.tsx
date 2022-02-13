@@ -1,6 +1,7 @@
 import { Config } from '../../EnvVisualizerConfig';
-import { StepsArray } from '../../EnvVisualizerTypes';
+import { StepsArray, Visible } from '../../EnvVisualizerTypes';
 import { ArrayUnit } from '../ArrayUnit';
+import { Frame } from '../Frame';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
@@ -8,8 +9,16 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class ArrowFromArrayUnit extends GenericArrow {
+  private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: Visible) {
+    steps.push((x, y) => [
+      x,
+      y +
+        (to.y() >= from.y() ? 1 : -1) * Config.DataUnitHeight -
+        (Math.sign(to.x() - from.x()) * Config.DataUnitHeight) / 12
+    ]);
+  }
   protected calculateSteps() {
-    const from = this.from;
+    const from = this.from as ArrayUnit;
     const to = this.target;
     if (!to) return [];
 
@@ -17,38 +26,76 @@ export class ArrowFromArrayUnit extends GenericArrow {
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
-      steps.push((x, y) => [from.x() < to.x() ? to.x() : to.centerX, to.y()]);
+      ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
+      steps.push((x, y) => [
+        Frame.cumWidths[Frame.cumWidths.findIndex(v => v > to.x())] -
+          (Config.FramePaddingX * 2) / 3,
+        y
+      ]);
+      // steps.push((x, y) => [to.centerX + Config.FnRadius * 3, y]);
+      steps.push((x, y) => [x, to.y()]);
+      steps.push((x, y) => [to.centerX + Config.FnRadius * 2, y]);
     } else if (to instanceof ArrayValue) {
-      if ((to as ArrayValue).level !== (from as ArrayUnit).parent.level) {
-        if (from.y() === to.y()) {
-          if (Math.abs(from.x() - to.x()) > Config.DataUnitWidth * 2) {
-            steps.push((x, y) => [x, y - Config.DataUnitHeight]);
-            steps.push((x, y) => [to.x() + Config.DataUnitWidth / 2, y]);
-            steps.push((x, y) => [x, to.y()]);
-          } else {
-            steps.push((x, y) => [to.x(), y]);
-            steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
-          }
+      if ((to as ArrayValue).level !== from.parent.level) {
+        ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
+        // Frame avoidance
+        steps.push((x, y) => [
+          Frame.cumWidths[Frame.cumWidths.findIndex(v => v > x) - 1] - Config.FramePaddingX,
+          y
+        ]);
+        if (from.x() > to.x() + to.width()) {
+          // moves left horzontally 1/3 of array height below/above other arrays
+          steps.push((x, y) => [
+            x,
+            to.y() + (1 / 2 - (4 / 6) * Math.sign(to.y() - from.y())) * Config.DataUnitHeight
+          ]);
+          // point to right of array
+          steps.push((x, y) => [
+            to.x() + to.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+            y
+          ]);
+          steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [to.x() + to.units.length * Config.DataUnitWidth, y]);
         } else {
+          // moves right horzontally 1/3 of array height below/above other arrays
+          steps.push((x, y) => [
+            x,
+            to.y() + (1 / 2 - (5 / 6) * Math.sign(to.y() - from.y())) * Config.DataUnitHeight
+          ]);
+          // point to left of array
           steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
-          steps.push((x, y) => [x, to.y() + (from.y() > to.y() ? Config.DataUnitHeight / 2 : 0)]);
+          steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
           steps.push((x, y) => [to.x(), y]);
         }
       } else {
         if (from.y() === to.y()) {
-          if (Math.abs(from.x() - to.x()) > Config.DataUnitWidth * 2) {
-            steps.push((x, y) => [x, y - Config.DataUnitHeight]);
-            steps.push((x, y) => [
-              to.x() + Config.DataUnitWidth / 2,
-              to.y() - Config.DataUnitHeight / 2
-            ]);
-            steps.push((x, y) => [x, y + Config.DataUnitHeight / 2]);
+          // same vertical position
+          if (from.parent === to) {
+            steps.push((x, y) => [x, y - (Config.DataUnitHeight * 3) / 4]);
+            steps.push((x, y) => [x + Config.DataUnitHeight / 3, y]);
+            steps.push((x, y) => [x, y + Config.DataUnitHeight / 4]);
           } else {
-            steps.push((x, y) => [to.x(), to.y() + Config.DataUnitHeight / 2]);
+            ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
+            if (from.x() > to.x() + to.units.length * Config.DataUnitWidth) {
+              steps.push((x, y) => [
+                to.x() + to.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+                y
+              ]);
+              steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+              steps.push((x, y) => [x - Config.DataUnitWidth / 2, y]);
+            } else {
+              steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
+              steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+              steps.push((x, y) => [x + Config.DataUnitWidth / 2, y]);
+            }
           }
         } else {
           steps.push((x, y) => [
-            to.x() + Config.DataUnitWidth / 2,
+            from.x() <= to.x()
+              ? to.x() + Config.DataUnitWidth / 3
+              : from.x() > to.x() + to.units.length * Config.DataUnitWidth
+              ? to.x() + Math.max(to.units.length, 1 / 3) * Config.DataUnitWidth
+              : to.x() + Config.DataUnitWidth / 2,
             to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0)
           ]);
         }
@@ -56,7 +103,6 @@ export class ArrowFromArrayUnit extends GenericArrow {
     } else {
       steps.push((x, y) => [to.x(), to.y()]);
     }
-
     return steps;
   }
 }

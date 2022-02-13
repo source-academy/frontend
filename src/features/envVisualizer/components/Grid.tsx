@@ -118,7 +118,8 @@ export class Grid implements Visible {
           v,
           hasFrame
             ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
-                Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX)
+                Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
+                Config.FrameMarginX // reduce collision of array with frame arrows
             : Math.max(
                 v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
                 v.referencedBy[0].x()
@@ -133,7 +134,7 @@ export class Grid implements Visible {
           i % 2 === 0
             ? Frame.heights[Math.floor(i / 2)]
             : this.arrayLevels[Math.floor((i - 1) / 2)].height();
-        return [...res, res[res.length - 1] + height + Config.FrameMarginY];
+        return [...res, res[res.length - 1] + height + Config.FramePaddingY / 2];
       },
       [0]
     );

@@ -82,77 +82,14 @@ export class Frame implements Visible, Hoverable {
     );
     this.offsetY = this.name.height() + Config.TextPaddingY / 3;
     this._y = this.level.y() + this.offsetY;
-
-    // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
-    let maxBindingWidth = 0;
-    for (const [key, data] of Object.entries(this.environment.head)) {
-      const bindingWidth =
-        Math.max(Config.TextMinWidth, getTextWidth(key + Config.ConstantColon)) +
-        Config.TextPaddingX +
-        (isUnassigned(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
-          : isPrimitiveData(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
-          : 0);
-      maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
-    }
-    this._width = maxBindingWidth + Config.FramePaddingX * 2;
-
-    // initializes bindings (keys + values)
-    let prevBinding: Binding | null = null;
-    let totalWidth = this.width();
-    let totalHoveredWidth = totalWidth;
-
-    const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
-    const entries = [];
-    const dummyEntries = [];
-    for (const entry of Object.entries(descriptors)) {
-      if (isDummyKey(entry[0])) {
-        const actualEnv = getNonEmptyEnv(entry[1].value.environment);
-        if (
-          this.environment.id === Config.GlobalEnvId ||
-          (actualEnv && actualEnv.id === this.environment.id)
-        ) {
-          dummyEntries.push(entry);
-        }
-      } else {
-        entries.push(entry);
-      }
-    }
-    entries.push(...dummyEntries);
-
-    for (const [key, data] of entries) {
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
-      this.bindings.push(currBinding);
-      prevBinding = currBinding;
-      totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
-      totalHoveredWidth = Math.max(
-        totalHoveredWidth,
-        currBinding.hoveredWidth() + Config.FramePaddingX
-      );
-    }
-    this.totalWidth = totalWidth;
-    this.totalHoveredWidth = totalHoveredWidth;
+    this._width = Config.FramePaddingX * 2;
+    this.totalWidth = this.width();
+    this.totalHoveredWidth = this.totalWidth;
 
     // derive the height of the frame from the the position of the last binding
-    this._height = prevBinding
-      ? prevBinding.y() + prevBinding.height() + Config.FramePaddingY - this.y()
-      : Config.FramePaddingY * 2;
+    this._height = Config.FramePaddingY * 2;
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
-    const nextX = Frame.cumWidths[xCoord] + this.totalWidth + Config.FrameMarginX;
-    Frame.cumWidths[xCoord + 1] =
-      Frame.cumWidths[xCoord + 1] === undefined
-        ? nextX
-        : Math.max(Frame.cumWidths[xCoord + 1], nextX);
-    Frame.maxX = Math.max(
-      Frame.maxX,
-      Frame.cumWidths[xCoord] + this.totalHoveredWidth,
-      Frame.cumWidths[Frame.cumWidths.length - 1]
-    );
-    Frame.heights[yCoord] = Math.max(
-      Frame.heights[yCoord] || 0,
-      this.totalHeight + Config.CanvasPaddingY
-    );
+    this.update(envTreeNode);
   }
 
   x(): number {
@@ -204,7 +141,8 @@ export class Frame implements Visible, Hoverable {
 
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
-    let totalWidth = this.width();
+    let totalWidth = this._width;
+    this.totalHoveredWidth = totalWidth;
 
     const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
     const entries = [];
@@ -226,10 +164,17 @@ export class Frame implements Visible, Hoverable {
 
     for (const [key, data] of entries) {
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
-      this.bindings.push(currBinding);
-      prevBinding = currBinding;
-      totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
+      if (this.bindings.findIndex(v => v.value === currBinding.value) === -1) {
+        this.bindings.push(currBinding);
+        prevBinding = currBinding;
+        totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
+        this.totalHoveredWidth = Math.max(
+          this.totalHoveredWidth,
+          currBinding.hoveredWidth() + Config.FramePaddingX
+        );
+      }
     }
+
     this.totalWidth = totalWidth;
 
     // derive the height of the frame from the the position of the last binding
@@ -242,6 +187,11 @@ export class Frame implements Visible, Hoverable {
       Frame.cumWidths[this.xCoord + 1] === undefined
         ? nextX
         : Math.max(Frame.cumWidths[this.xCoord + 1], nextX);
+    Frame.maxX = Math.max(
+      Frame.maxX,
+      Frame.cumWidths[this.xCoord] + this.totalHoveredWidth,
+      Frame.cumWidths[Frame.cumWidths.length - 1]
+    );
     Frame.heights[this.yCoord] = Math.max(
       Frame.heights[this.yCoord] || 0,
       this.totalHeight + Config.FrameMarginY

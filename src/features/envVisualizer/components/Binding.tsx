@@ -23,6 +23,7 @@ export class Binding implements Visible {
   /** The maximum width of binding when hovered or clicked (takes tooltip into consideration) */
   private _hoveredWidth: number;
   private _height: number;
+  readonly isMainReference: boolean;
 
   /** value associated with this binding */
   readonly value: Value;
@@ -60,16 +61,20 @@ export class Binding implements Visible {
 
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
+    this.isMainReference = isMainReference(this.value, this);
+    if (this.isMainReference) {
+      // Moves the function object next to the correct frame
+      this.value.updatePosition();
+    }
     this.keyYOffset =
-      (this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
-      isMainReference(this.value, this)
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue) && this.isMainReference
         ? (this.value.height() - Config.FontSize) / 2
         : 0;
     this.key = new Text(this.keyString, this.x(), this.offsetY + this.keyYOffset);
 
     // derive the width from the right bound of the value (either no extra space or width of function object.)
     this._width =
-      !(this.value instanceof ArrayValue) && isMainReference(this.value, this)
+      !(this.value instanceof ArrayValue) && this.isMainReference
         ? this.value.x() + this.value.width() - this.x()
         : this.key.width();
     this._hoveredWidth =
@@ -77,16 +82,14 @@ export class Binding implements Visible {
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue
         ? this.value.tooltipWidth
         : 0);
-
     this._height = Math.max(
       this.key.height(),
-      (this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
-        isMainReference(this.value, this)
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue) && this.isMainReference
         ? this.value.height()
         : 0
     );
 
-    if (this.isDummyBinding && !isMainReference(this.value, this)) {
+    if (this.isDummyBinding && !this.isMainReference) {
       if (this.prevBinding) {
         this.offsetY = this.prevBinding.offsetY;
         this._width = this.prevBinding.width();
@@ -136,9 +139,7 @@ export class Binding implements Visible {
         this.value instanceof ArrayValue // Draw Arrays afterwards
           ? null
           : Arrow.from(this.key).to(this.value).draw()}
-        {!(this.value instanceof ArrayValue) && isMainReference(this.value, this)
-          ? this.value.draw()
-          : null}
+        {!(this.value instanceof ArrayValue) && this.isMainReference ? this.value.draw() : null}
       </React.Fragment>
     );
   }

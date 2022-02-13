@@ -108,9 +108,18 @@ export function isPrimitiveData(data: Data): data is PrimitiveTypes {
 
 /** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
-  return value instanceof FnValue || value instanceof GlobalFnValue
-    ? value.referencedBy.find(x => x instanceof Binding) === reference
-    : value.referencedBy[0] === reference;
+  if (value instanceof FnValue) {
+    // chooses the frame of the enclosing environment, not necessarily the first in referencedBy.
+    return (
+      reference instanceof Binding &&
+      value.enclosingEnvNode === (reference as Binding).frame.envTreeNode &&
+      value.referencedBy.findIndex(x => x instanceof Binding && x === reference) !== -1
+    );
+  } else if (value instanceof GlobalFnValue) {
+    return value.referencedBy.find(x => x instanceof Binding) === reference;
+  } else {
+    return value.referencedBy[0] === reference;
+  }
 }
 
 /** checks if `value` is a `number` */
