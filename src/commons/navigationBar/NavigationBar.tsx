@@ -132,7 +132,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
                 Classes.MINIMAL,
                 Classes.LARGE
               )}
-              to="/sicpjs/index"
+              to={`/sicpjs/`}
               onClick={() => setMobileSideMenuOpen(false)}
             >
               <Icon icon={IconNames.BOOK} />
@@ -162,7 +162,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to="/sicpjs/index"
+          to={`/sicpjs/`}
         >
           <Icon icon={IconNames.BOOK} />
           <div>SICP JS</div>
@@ -182,7 +182,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sicpjs/index"
+        to={`/sicpjs/`}
       >
         <Icon icon={IconNames.BOOK} />
         <div>SICP JS</div>
@@ -326,7 +326,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/sicpjs/index"
+          to={`/sicpjs/`}
         >
           <Icon icon={IconNames.BOOK} />
           <div className="navbar-button-text">SICP JS</div>

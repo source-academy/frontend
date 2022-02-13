@@ -6,9 +6,16 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useHistory, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
+import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
+import {
+  readSicpSectionLocalStorage,
+  setSicpSectionLocalStorage,
+  SICP_CACHE_KEY,
+  SICP_INDEX
+} from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
@@ -29,7 +36,7 @@ const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner /
 
 const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = React.useState(<></>);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
   const parentRef = React.useRef<HTMLDivElement>(null);
@@ -50,14 +57,24 @@ const Sicp: React.FC<SicpProps> = props => {
     });
   };
 
-  // Fetch json data
+  // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
-    setLoading(true);
-
-    if (section === 'index') {
-      setLoading(false);
+    if (!section) {
+      /**
+       * Handles rerouting to the latest viewed section when clicking from
+       * the main application navbar. history.replace is used to allow the
+       * user to still use the browser back button to navigate the app.
+       */
+      history.replace(`/sicpjs/${readSicpSectionLocalStorage()}`);
       return;
     }
+
+    if (section === SICP_INDEX) {
+      setSicpSectionLocalStorage(SICP_INDEX);
+      return;
+    }
+
+    setLoading(true);
 
     fetch(baseUrl + section + extension)
       .then(response => {
@@ -70,7 +87,7 @@ const Sicp: React.FC<SicpProps> = props => {
         try {
           const newData = parseArr(myJson, refs); // Might throw error
           setData(newData);
-          setLoading(false);
+          setSicpSectionLocalStorage(section); // Sets local storage if valid page
         } catch (error) {
           throw new ParseJsonError(error.message);
         }
@@ -87,10 +104,12 @@ const Sicp: React.FC<SicpProps> = props => {
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
         }
-
+        setLocalStorage(SICP_CACHE_KEY, SICP_INDEX); // Prevents caching invalid page
+      })
+      .finally(() => {
         setLoading(false);
       });
-  }, [section]);
+  }, [section, history]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -115,16 +134,18 @@ const Sicp: React.FC<SicpProps> = props => {
     dispatch(resetWorkspace('sicp'));
     dispatch(toggleUsingSubst(false, 'sicp'));
   };
-  const handleNavigation = (sect: string | undefined) => {
+  const handleNavigation = (sect: string) => {
     history.push('/sicpjs/' + sect);
   };
 
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
       {getPrev(section) && (
-        <Button onClick={() => handleNavigation(getPrev(section))}>Previous</Button>
+        <Button onClick={() => handleNavigation(getPrev(section)!)}>Previous</Button>
       )}
-      {getNext(section) && <Button onClick={() => handleNavigation(getNext(section))}>Next</Button>}
+      {getNext(section) && (
+        <Button onClick={() => handleNavigation(getNext(section)!)}>Next</Button>
+      )}
     </div>
   );
 
