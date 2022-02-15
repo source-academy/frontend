@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
@@ -29,6 +30,7 @@ export const defaultOptions: TextOptions = {
 export class Text implements Visible, Hoverable {
   private _height: number;
   private _width: number;
+  private _hoveredWidth: number;
 
   readonly partialStr: string; // truncated string representation of data
   readonly fullStr: string; // full string representation of data
@@ -57,7 +59,8 @@ export class Text implements Visible, Hoverable {
     this._height = fontSize;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    if (widthOf(this.partialStr) > maxWidth) {
+    this._hoveredWidth = widthOf(this.partialStr);
+    if (this._hoveredWidth > maxWidth) {
       let truncatedText = Config.Ellipsis.toString();
       let i = 0;
       while (widthOf(this.partialStr.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
@@ -81,12 +84,16 @@ export class Text implements Visible, Hoverable {
   width(): number {
     return this._width;
   }
+  hoveredWidth(): number {
+    return this._hoveredWidth;
+  }
   updatePosition = (x: number, y: number) => {
     this._x = x;
     this._y = y;
   };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (EnvVisualizer.getPrintableMode()) return;
     const container = currentTarget.getStage()?.container();
     container && (container.style.cursor = 'pointer');
     this.ref.current.moveToTop();
@@ -95,6 +102,7 @@ export class Text implements Visible, Hoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (EnvVisualizer.getPrintableMode()) return;
     const container = currentTarget.getStage()?.container();
     container && (container.style.cursor = 'default');
     this.ref.current.hide();
@@ -106,7 +114,9 @@ export class Text implements Visible, Hoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: Config.SA_WHITE.toString()
+      fill: EnvVisualizer.getPrintableMode()
+        ? Config.SA_BLUE.toString()
+        : Config.SA_WHITE.toString()
     };
     return (
       <Group key={Layout.key++}>
@@ -122,11 +132,15 @@ export class Text implements Visible, Hoverable {
           x={this._x}
           y={this._y}
           ref={this.ref}
-          visible={false}
+          visible={EnvVisualizer.getPrintableMode() ? true : false}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaTag {...ShapeDefaultProps} fill={'black'} opacity={0.5} />
+          <KonvaTag
+            {...ShapeDefaultProps}
+            fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}
+            opacity={0.5}
+          />
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
         </KonvaLabel>
       </Group>

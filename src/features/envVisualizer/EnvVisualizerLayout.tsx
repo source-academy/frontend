@@ -4,13 +4,13 @@ import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { Grid } from './components/Grid';
-// import { Level } from './components/Level';
 import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
+import EnvVisualizer from './EnvVisualizer';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
@@ -223,6 +223,14 @@ export class Layout {
     } else {
       const layout = (
         <div className={'sa-env-visualizer'}>
+          <div style={{ width: 200 }}>
+            <input
+              type="checkbox"
+              id="sa-env-visualizer-toggle-printable"
+              onChange={EnvVisualizer.togglePrintableMode}
+            />
+            <label> Printable Mode</label>
+          </div>
           <Stage width={Layout.width} height={Layout.height} ref={this.stageRef}>
             <Layer>
               <Rect
@@ -231,7 +239,11 @@ export class Layout {
                 y={0}
                 width={Layout.width}
                 height={Layout.height}
-                fill={Config.SA_BLUE.toString()}
+                fill={
+                  EnvVisualizer.getPrintableMode()
+                    ? Config.PRINT_BACKGROUND.toString()
+                    : Config.SA_BLUE.toString()
+                }
                 key={Layout.key++}
                 listening={false}
               />

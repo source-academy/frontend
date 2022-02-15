@@ -9,6 +9,7 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
+import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
@@ -123,12 +124,14 @@ export class FnValue extends Value implements Hoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (EnvVisualizer.getPrintableMode()) return;
     this.labelRef.current.moveToTop();
     this.labelRef.current.show();
     setHoveredStyle(currentTarget);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (EnvVisualizer.getPrintableMode()) return;
     this.labelRef.current.hide();
     setUnhoveredStyle(currentTarget);
   };
@@ -143,7 +146,11 @@ export class FnValue extends Value implements Hoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={Config.SA_WHITE.toString()}
+            stroke={
+              EnvVisualizer.getPrintableMode()
+                ? Config.SA_BLUE.toString()
+                : Config.SA_WHITE.toString()
+            }
           />
           <Circle
             {...ShapeDefaultProps}
@@ -151,7 +158,11 @@ export class FnValue extends Value implements Hoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={Config.SA_WHITE.toString()}
+            fill={
+              EnvVisualizer.getPrintableMode()
+                ? Config.SA_BLUE.toString()
+                : Config.SA_WHITE.toString()
+            }
           />
           <Circle
             {...ShapeDefaultProps}
@@ -159,7 +170,11 @@ export class FnValue extends Value implements Hoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={Config.SA_WHITE.toString()}
+            stroke={
+              EnvVisualizer.getPrintableMode()
+                ? Config.SA_BLUE.toString()
+                : Config.SA_WHITE.toString()
+            }
           />
           <Circle
             {...ShapeDefaultProps}
@@ -167,22 +182,34 @@ export class FnValue extends Value implements Hoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={Config.SA_WHITE.toString()}
+            fill={
+              EnvVisualizer.getPrintableMode()
+                ? Config.SA_BLUE.toString()
+                : Config.SA_WHITE.toString()
+            }
           />
         </Group>
         <KonvaLabel
           x={this.x() + this.width() + Config.TextPaddingX}
           y={this.y() - Config.TextPaddingY}
-          visible={false}
+          visible={EnvVisualizer.getPrintableMode() ? true : false}
           ref={this.labelRef}
         >
-          <KonvaTag fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
+          <KonvaTag
+            stroke="black"
+            fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}
+            opacity={Number(Config.FnTooltipOpacity)}
+          />
           <KonvaText
             text={this.tooltip}
             fontFamily={Config.FontFamily.toString()}
             fontSize={Number(Config.FontSize)}
             fontStyle={Config.FontStyle.toString()}
-            fill={Config.SA_WHITE.toString()}
+            fill={
+              EnvVisualizer.getPrintableMode()
+                ? Config.SA_BLUE.toString()
+                : Config.SA_WHITE.toString()
+            }
             padding={5}
           />
         </KonvaLabel>

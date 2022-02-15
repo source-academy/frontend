@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Rect } from 'react-konva';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
@@ -54,7 +55,9 @@ export class ArrayEmptyUnit implements Visible, Hoverable {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={Config.SA_WHITE.toString()}
+        stroke={
+          EnvVisualizer.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+        }
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       />

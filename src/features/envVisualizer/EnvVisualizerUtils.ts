@@ -8,6 +8,7 @@ import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
+import EnvVisualizer from './EnvVisualizer';
 import { Config } from './EnvVisualizerConfig';
 import {
   Data,
@@ -229,8 +230,16 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
 
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.SA_WHITE.toString() : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.SA_WHITE.toString() : node.attrs.fill,
+      stroke: node.attrs.stroke
+        ? EnvVisualizer.getPrintableMode()
+          ? Config.SA_BLUE.toString()
+          : Config.SA_WHITE.toString()
+        : node.attrs.stroke,
+      fill: node.attrs.fill
+        ? EnvVisualizer.getPrintableMode()
+          ? Config.SA_BLUE.toString()
+          : Config.SA_WHITE.toString()
+        : node.attrs.fill,
       ...unhoveredAttrs
     });
   });

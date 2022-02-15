@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
@@ -153,7 +154,7 @@ export class Frame implements Visible, Hoverable {
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
     let totalWidth = this._width;
-    this.totalHoveredWidth = totalWidth;
+    this.totalHoveredWidth = Math.max(totalWidth, this.name.hoveredWidth());
 
     const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
     const entries = [];
@@ -186,7 +187,11 @@ export class Frame implements Visible, Hoverable {
       }
     }
 
-    this.totalWidth = totalWidth;
+    if (EnvVisualizer.getPrintableMode()) {
+      this.totalWidth = this.totalHoveredWidth;
+    } else {
+      this.totalWidth = totalWidth;
+    }
 
     // derive the height of the frame from the the position of the last binding
     this._height = prevBinding
@@ -235,7 +240,11 @@ export class Frame implements Visible, Hoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={Config.SA_WHITE.toString()}
+          stroke={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
           cornerRadius={Number(Config.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}

@@ -9,6 +9,15 @@ type SetVis = (vis: React.ReactNode) => void;
 export default class EnvVisualizer {
   /** callback function to update the visualization state in the SideContentEnvVis component */
   private static setVis: SetVis;
+  private static printableMode: boolean = false;
+  private static context: Context;
+  public static togglePrintableMode(): void {
+    EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
+    EnvVisualizer.drawEnv(EnvVisualizer.context);
+  }
+  public static getPrintableMode(): boolean {
+    return EnvVisualizer.printableMode;
+  }
 
   /** SideContentEnvVis initializes this onMount with the callback function */
   static init(setVis: SetVis) {
@@ -18,6 +27,7 @@ export default class EnvVisualizer {
   /** updates the visualization state in the SideContentEnvVis component based on
    * the JS Slang context passed in */
   static drawEnv(context: Context) {
+    EnvVisualizer.context = context;
     if (!this.setVis) throw new Error('env visualizer not initialized');
 
     Layout.setContext(context);

@@ -1,6 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
+import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { Hoverable, StepsArray, Visible } from '../../EnvVisualizerTypes';
@@ -15,6 +16,7 @@ export class GenericArrow implements Visible, Hoverable {
   points: number[] = [];
   from: Visible;
   target: Visible | undefined;
+  private selected: boolean = false;
 
   constructor(from: Visible) {
     this.from = from;
@@ -70,10 +72,24 @@ export class GenericArrow implements Visible, Hoverable {
     });
   };
 
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.selected = !this.selected;
+    if (!this.selected) {
+      setUnhoveredStyle(currentTarget, {
+        strokeWidth: Number(Config.ArrowStrokeWidth)
+      });
+    }
+  };
+
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget, {
-      strokeWidth: Number(Config.ArrowStrokeWidth)
-    });
+    if (!this.selected) {
+      setUnhoveredStyle(currentTarget, {
+        strokeWidth: Number(Config.ArrowStrokeWidth)
+      });
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
   };
 
   draw() {
@@ -119,10 +135,15 @@ export class GenericArrow implements Visible, Hoverable {
         key={Layout.key++}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
+        onClick={this.onClick}
       >
         <KonvaPath
           {...ShapeDefaultProps}
-          stroke={Config.SA_WHITE.toString()}
+          stroke={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
           strokeWidth={Number(Config.ArrowStrokeWidth)}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
@@ -131,7 +152,11 @@ export class GenericArrow implements Visible, Hoverable {
         <KonvaArrow
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
-          fill={Config.SA_WHITE.toString()}
+          fill={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
           pointerLength={Number(Config.ArrowHeadSize)}

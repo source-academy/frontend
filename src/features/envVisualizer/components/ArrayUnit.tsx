@@ -1,6 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
@@ -103,7 +104,11 @@ export class ArrayUnit implements Visible, Hoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={Config.SA_WHITE.toString()}
+          stroke={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
           hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
           fillEnabled={false}
           onMouseEnter={this.onMouseEnter}

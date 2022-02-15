@@ -45,6 +45,7 @@ export enum Config {
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',
+  PRINT_BACKGROUND = '#fafafa',
 
   ConstantColon = ':= ',
   VariableColon = ': ',

@@ -151,7 +151,7 @@ export class Grid implements Visible {
             : this.arrayLevels[Math.floor((i - 1) / 2)].height();
         return [...res, res[res.length - 1] + height + Config.FramePaddingY / 2];
       },
-      [0]
+      [Config.CanvasPaddingY.valueOf()]
     );
     this.levels.forEach((level, i) => {
       level.setY(cumHeights[i]);
