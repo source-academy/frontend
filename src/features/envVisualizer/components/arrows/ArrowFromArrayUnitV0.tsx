@@ -10,10 +10,13 @@ import { GenericArrow } from './GenericArrow';
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class ArrowFromArrayUnit extends GenericArrow {
   private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: Visible) {
+    // Move up if target above source or to the right with same vertical position.
+    // Moves up slightly more if target is to the right.
     steps.push((x, y) => [
       x,
       y +
-        (to.y() >= from.y() ? 1 : -1) * Config.DataUnitHeight -
+        (to.y() > from.y() || (to.y() === from.y() && to.x() <= from.x()) ? 1 : -1) *
+          Config.DataUnitHeight -
         (Math.sign(to.x() - from.x()) * Config.DataUnitHeight) / 12
     ]);
   }
@@ -28,21 +31,16 @@ export class ArrowFromArrayUnit extends GenericArrow {
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [
-        Frame.cumWidths[Frame.cumWidths.findIndex(v => v > to.x())] -
-          (Config.FramePaddingX * 2) / 3,
+        Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1] - (Config.FramePaddingX * 2) / 3,
         y
       ]);
-      // steps.push((x, y) => [to.centerX + Config.FnRadius * 3, y]);
       steps.push((x, y) => [x, to.y()]);
       steps.push((x, y) => [to.centerX + Config.FnRadius * 2, y]);
     } else if (to instanceof ArrayValue) {
       if ((to as ArrayValue).level !== from.parent.level) {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
         // Frame avoidance
-        steps.push((x, y) => [
-          Frame.cumWidths[Frame.cumWidths.findIndex(v => v > x) - 1] - Config.FramePaddingX,
-          y
-        ]);
+        steps.push((x, y) => [Frame.cumWidths[Frame.lastXCoordBelow(x)] - Config.FramePaddingX, y]);
         if (from.x() > to.x() + to.width()) {
           // moves left horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [

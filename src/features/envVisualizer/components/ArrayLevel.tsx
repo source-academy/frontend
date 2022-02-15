@@ -17,6 +17,8 @@ export class ArrayLevel extends Level {
   position: [x: number, y: number][][] = [[]];
 
   ref: RefObject<any> = React.createRef();
+  // Prevent new arrays from being placed above existing arrays in the array level
+  private _rowCount: number = 0;
 
   /** all the frames in this level */
   readonly arrays: ArrayValue[] = [];
@@ -29,6 +31,7 @@ export class ArrayLevel extends Level {
     this._x = Config.CanvasPaddingX;
     this._y = 0;
     this._width = 0;
+    this._rowCount = 0;
   }
 
   x(): number {
@@ -52,9 +55,11 @@ export class ArrayLevel extends Level {
   addArray = (array: ArrayValue, x: number) => {
     x = x || 0;
     let level = 0;
+
+    // Determine the highest allowed y-position for new array
     positions: for (const positions of this.position) {
       for (const position of positions) {
-        if (position[0] <= x + array.width() && position[1] >= x) {
+        if ((position[0] <= x + array.width() && position[1] >= x) || level < this._rowCount) {
           level++;
           continue positions;
         } else {
@@ -63,7 +68,7 @@ export class ArrayLevel extends Level {
       }
       break;
     }
-
+    this._rowCount = Math.max(this._rowCount, level);
     this.position[level] = this.position[level] || [];
     this.position[level].push([x, x + array.width()]);
     this.position[level].sort((a, b) => a[0] - b[0]);

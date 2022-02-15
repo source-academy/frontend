@@ -11,6 +11,8 @@ import { Frame } from './Frame';
 import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 
 /**
  * Grid class encapsulates a grid of frames to be drawn.
@@ -40,9 +42,6 @@ export class Grid implements Visible {
     this.widths = [];
     this.heights = [];
     this._height = 0;
-    // const lastFrame = this.frames[this.frames.length - 1];
-    // derive the width of this level from the last frame
-    // this.width = lastFrame.x + lastFrame.totalWidth - this.x + Config.LevelPaddingX;
     this._width = 0;
     this.update(envTreeNodes);
   }
@@ -103,13 +102,28 @@ export class Grid implements Visible {
           bindings = p.parent.referencedBy.filter(r => r instanceof Binding) as Binding[];
           p = p.parent.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
         }
+        const references = v.units
+          .filter(x => x.value instanceof FnValue || x.value instanceof GlobalFnValue)
+          .map(x => x.value as FnValue);
 
-        const [yCoordSum, xCoordSum, count] = bindings.reduce(
+        let [yCoordSum, xCoordSum, count] = bindings.reduce(
           (acc, binding) => {
             const [yCoordSum, xCoordSum, count] = acc;
             return [yCoordSum + binding.frame.yCoord, xCoordSum + binding.frame.xCoord, count + 1];
           },
           [0, 0, 0]
+        );
+        // Move array closer to fn objects they are pointing to
+        [yCoordSum, xCoordSum, count] = references.reduce(
+          (acc, ref) => {
+            const [yCoordSum, xCoordSum, count] = acc;
+            return [
+              yCoordSum + (ref?.enclosingEnvNode?.frame?.yCoord || 0),
+              xCoordSum + (ref?.enclosingEnvNode?.frame?.xCoord || 0),
+              count + (ref.enclosingEnvNode === undefined ? 0 : 1)
+            ];
+          },
+          [yCoordSum, xCoordSum, count]
         );
         const meanY =
           ((yCoordSum / count) * (this.frameLevels.length - 1)) / this.frameLevels.length;
@@ -120,10 +134,11 @@ export class Grid implements Visible {
             ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
                 Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
                 Config.FrameMarginX // reduce collision of array with frame arrows
-            : Math.max(
+            : Math.min(
                 v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
                 v.referencedBy[0].x()
-              )
+              ) +
+                Config.DataUnitWidth * 3
         );
       }
     });

@@ -70,12 +70,10 @@ export class Frame implements Visible, Hoverable {
     this.parentFrame = envTreeNode.parent?.frame;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
-    this._x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord]; // ?? Frame.cumWidths[xCoord] + Config.FrameMinWidth;
-    // derive the x coordinate from the left sibling frame
-    // (this.x += this.leftSiblingFrame.x + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
+    this._x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord];
 
     this.name = new Text(
-      frameNames.get(this.environment.name) || this.environment.name, // + envTreeNode.environment.id,
+      frameNames.get(this.environment.name) || this.environment.name,
       this.x(),
       this.level.y(),
       { maxWidth: this.width() }
@@ -85,8 +83,6 @@ export class Frame implements Visible, Hoverable {
     this._width = Config.FramePaddingX * 2;
     this.totalWidth = this.width();
     this.totalHoveredWidth = this.totalWidth;
-
-    // derive the height of the frame from the the position of the last binding
     this._height = Config.FramePaddingY * 2;
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
     this.update(envTreeNode);
@@ -103,6 +99,21 @@ export class Frame implements Visible, Hoverable {
   }
   width(): number {
     return this._width;
+  }
+
+  /**
+   * Find the frame x-coordinate given a x-position.
+   * @param x absolute position
+   * @returns Largest x-coordinate smaller than or equal to a given x position.
+   */
+  static lastXCoordBelow(x: number) {
+    let l = Frame.cumWidths.length;
+    while (l--) {
+      if (Frame.cumWidths[l] <= x) {
+        return l;
+      }
+    }
+    return 0;
   }
 
   /**
@@ -124,7 +135,7 @@ export class Frame implements Visible, Hoverable {
     this.environment = envTreeNode.environment;
     this.offsetY = this.name.height() + Config.TextPaddingY / 3;
     this._y = this.level.y() + this.offsetY;
-    // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
+    // width of the frame = max width of the bindings in the frame + frame padding * 2
     let maxBindingWidth = 0;
     for (const [key, data] of Object.entries(this.environment.head)) {
       const bindingWidth =
@@ -215,7 +226,6 @@ export class Frame implements Visible, Hoverable {
   draw(): React.ReactNode {
     return (
       <Group key={Layout.key++} ref={this.ref}>
-        {/* <React.Fragment key={Layout.key++}> */}
         {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
         {this.bindings.map(binding => !(binding.data instanceof ArrayValue) && binding.draw())}
         {this.name.draw()}
@@ -232,7 +242,6 @@ export class Frame implements Visible, Hoverable {
           key={Layout.key++}
         />
       </Group>
-      // </React.Fragment>
     );
   }
 }
