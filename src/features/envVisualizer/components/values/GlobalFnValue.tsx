@@ -53,7 +53,7 @@ export class GlobalFnValue extends Value implements Hoverable {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -92,7 +92,7 @@ export class GlobalFnValue extends Value implements Hoverable {
   updatePosition(): void {
     const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
