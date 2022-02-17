@@ -1,7 +1,9 @@
-import React from 'react';
+ import { ModuleContext } from 'js-slang';
+ import React from 'react';
 
+//import { ArrayUnit } from 'src/features/envVisualizer/components/ArrayUnit';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { Modules, ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
+import { /*Modules, */ ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
   WorkspaceLocation,
@@ -37,10 +39,17 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
  */
 export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
   // Get module side contents from DebuggerContext
-  const rawModuleTabs = debuggerContext.context?.modules as Modules[] | undefined;
-  if (rawModuleTabs == null) return [];
+  const rawModuleContexts = debuggerContext.context?.modules as Map<string, ModuleContext> | undefined;
+  if (rawModuleContexts == null) return []
+
   // Pass React into functions
-  const unprocessedTabs: ModuleSideContent[] = rawModuleTabs.map((tab: any) => tab(React));
+  const unprocessedTabs: ModuleSideContent[] = [];
+  for (const moduleContext of rawModuleContexts.values()) {
+    for (const tab of moduleContext.tabs) {
+      unprocessedTabs.push(tab(React))
+    }
+  }
+
   // Initialize module side contents to convert to SideContentTab type
   const moduleTabs: SideContentTab[] = unprocessedTabs.map((sideContent: ModuleSideContent) => ({
     ...sideContent,
