@@ -1,3 +1,5 @@
+import { Quest } from '../quest/GameQuestTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import StringUtils from '../utils/StringUtils';
 
 /**
@@ -23,9 +25,13 @@ export default class QuestsParser {
    */
   public static parse(questDetails: string[]) {
     questDetails.forEach(questDetail => {
-      const [objective, desc] = StringUtils.splitByChar(questDetail, ',');
-      console.log(objective);
-      console.log(desc);
+      const [objectiveId, title, desc] = StringUtils.splitByChar(questDetail, ',');
+      const newQuest: Quest = {
+        objectiveId: objectiveId,
+        title: title,
+        description: desc
+      }
+      GameGlobalAPI.getInstance().storeQuest(newQuest);
     });
   }
 }

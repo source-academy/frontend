@@ -1,5 +1,6 @@
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { DialogueSpeakerLine } from '../dialogue/GameDialogueTypes';
+import { Quest } from '../quest/GameQuestTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 
@@ -11,20 +12,30 @@ import SourceAcademyGame from '../SourceAcademyGame';
  */
 export default class GameStorageManager {
   // Storage for all dialogues to be stored
-  private storage?: Array<DialogueSpeakerLine>;
+  private dialogueStorage?: Array<DialogueSpeakerLine>;
+
+  // Storage for all quests to be stored
+  private questStorage?: Array<Quest>;
 
   // Method to be called when a dialogue needs to be stored in the current storage instance
   public storeLine(newLine: string, newSpeakerDetail?: SpeakerDetail | null) {
     if (newSpeakerDetail === undefined) return;
 
-    if (this.storage === undefined) {
-      this.storage = new Array<DialogueSpeakerLine>();
+    if (this.dialogueStorage === undefined) {
+      this.dialogueStorage = new Array<DialogueSpeakerLine>();
     }
     const newDialogue = {
       speaker: this.getSpeakerName(newSpeakerDetail),
       line: newLine
     };
-    this.storage.push(newDialogue);
+    this.dialogueStorage.push(newDialogue);
+  }
+
+  public storeQuest(newQuest: Quest) {
+    if (this.questStorage === undefined) {
+      this.questStorage = new Array<Quest>();
+    }
+    this.questStorage.push(newQuest);
   }
 
   private getSpeakerName(speakerDetail: SpeakerDetail | null) {
@@ -38,15 +49,24 @@ export default class GameStorageManager {
       : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
   }
 
-  public getStorage(): Array<DialogueSpeakerLine> {
-    if (this.storage === undefined) {
+  public getDialogueStorage(): Array<DialogueSpeakerLine> {
+    if (this.dialogueStorage === undefined) {
       return new Array<DialogueSpeakerLine>();
     }
-    return this.storage;
+    return this.dialogueStorage;
   }
 
+  public getQuestStorage(): Array<Quest> {
+    if (this.questStorage === undefined) {
+      return new Array<Quest>();
+    }
+    return this.questStorage;
+  }
+
+  // Called at the end of the chapter, when transitioning to the next checkpoint
   public clearStorage() {
-    this.storage = new Array<DialogueSpeakerLine>();
+    this.dialogueStorage = new Array<DialogueSpeakerLine>();
+    this.questStorage = new Array<Quest>();
   }
 
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;

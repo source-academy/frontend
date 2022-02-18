@@ -14,6 +14,7 @@ import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/Ga
 import { GameMode } from '../../mode/GameModeTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import { Quest } from '../../quest/GameQuestTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
@@ -264,8 +265,16 @@ class GameGlobalAPI {
     this.getGameManager().getStorageManager().storeLine(newLine, newSpeakerDetail);
   }
 
+  public storeQuest(quest: Quest) {
+    this.getGameManager().getStorageManager().storeQuest(quest);
+  }
+
   public getDialogueStorage() {
-    return this.getGameManager().getStorageManager().getStorage();
+    return this.getGameManager().getStorageManager().getDialogueStorage();
+  }
+
+  public getQuestStorage() {
+    return this.getGameManager().getStorageManager().getQuestStorage();
   }
 
   /////////////////////
