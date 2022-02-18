@@ -30,7 +30,7 @@ export default class QuestsParser {
         objectiveId: objectiveId,
         title: title,
         description: desc
-      }
+      };
       GameGlobalAPI.getInstance().storeQuest(newQuest);
     });
   }
