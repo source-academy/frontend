@@ -35,6 +35,7 @@ export class FnValue extends Value implements Hoverable {
   private _isDrawn: boolean = false;
   centerX: number;
   readonly tooltipWidth: number;
+  readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
 
@@ -42,7 +43,9 @@ export class FnValue extends Value implements Hoverable {
   readonly fnName: string;
   readonly paramsText: string;
   readonly bodyText: string;
+  readonly exportBodyText: string;
   readonly tooltip: string;
+  readonly exportTooltip: string;
 
   /** the parent/enclosing environment of this fn value */
   readonly enclosingEnvNode: EnvTreeNode;
@@ -86,8 +89,18 @@ export class FnValue extends Value implements Hoverable {
 
     this.paramsText = `params: (${getParamsText(this.data)})`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
+    this.exportBodyText =
+      (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
+        .split('\n')
+        .slice(0, 2)
+        .join('\n') + ' ...';
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
+    this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
+    this.exportTooltipWidth = Math.max(
+      getTextWidth(this.paramsText),
+      getTextWidth(this.exportBodyText)
+    );
   }
   x(): number {
     return this._x;
@@ -197,30 +210,41 @@ export class FnValue extends Value implements Hoverable {
             }
           />
         </Group>
-        <KonvaLabel
-          x={this.x() + this.width() + Config.TextPaddingX * 2}
-          y={this.y() - Config.TextPaddingY}
-          visible={EnvVisualizer.getPrintableMode() ? true : false}
-          ref={this.labelRef}
-        >
-          <KonvaTag
-            stroke="black"
-            fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}
-            opacity={Number(Config.FnTooltipOpacity)}
-          />
-          <KonvaText
-            text={this.tooltip}
-            fontFamily={Config.FontFamily.toString()}
-            fontSize={Number(Config.FontSize)}
-            fontStyle={Config.FontStyle.toString()}
-            fill={
-              EnvVisualizer.getPrintableMode()
-                ? Config.SA_BLUE.toString()
-                : Config.SA_WHITE.toString()
-            }
-            padding={5}
-          />
-        </KonvaLabel>
+        {EnvVisualizer.getPrintableMode() ? (
+          <KonvaLabel
+            x={this.x() + this.width() + Config.TextPaddingX * 2}
+            y={this.y() - Config.TextPaddingY}
+            visible={true}
+            ref={this.labelRef}
+          >
+            <KonvaTag stroke="black" fill={'white'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaText
+              text={this.exportTooltip}
+              fontFamily={Config.FontFamily.toString()}
+              fontSize={Number(Config.FontSize)}
+              fontStyle={Config.FontStyle.toString()}
+              fill={Config.SA_BLUE.toString()}
+              padding={5}
+            />
+          </KonvaLabel>
+        ) : (
+          <KonvaLabel
+            x={this.x() + this.width() + Config.TextPaddingX * 2}
+            y={this.y() - Config.TextPaddingY}
+            visible={false}
+            ref={this.labelRef}
+          >
+            <KonvaTag stroke="black" fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaText
+              text={this.tooltip}
+              fontFamily={Config.FontFamily.toString()}
+              fontSize={Number(Config.FontSize)}
+              fontStyle={Config.FontStyle.toString()}
+              fill={Config.SA_WHITE.toString()}
+              padding={5}
+            />
+          </KonvaLabel>
+        )}
         {this.enclosingEnvNode.frame && Arrow.from(this).to(this.enclosingEnvNode.frame).draw()}
       </React.Fragment>
     );
