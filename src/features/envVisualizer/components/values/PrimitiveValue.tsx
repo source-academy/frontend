@@ -15,6 +15,7 @@ export class PrimitiveValue extends Value {
   private _y: number;
   private _height: number;
   private _width: number;
+  private _isDrawn: boolean = false;
 
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;
@@ -62,7 +63,13 @@ export class PrimitiveValue extends Value {
   width(): number {
     return this._width;
   }
-
+  isDrawn(): boolean {
+    return this._isDrawn;
+  }
+  reset(): void {
+    this._isDrawn = false;
+    this.referencedBy.length = 0;
+  }
   updatePosition = () => {
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
@@ -80,6 +87,7 @@ export class PrimitiveValue extends Value {
   };
 
   draw(): React.ReactNode {
+    this._isDrawn = true;
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }
 }

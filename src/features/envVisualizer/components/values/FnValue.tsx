@@ -32,6 +32,7 @@ export class FnValue extends Value implements Hoverable {
   private _y: number;
   private _height: number;
   private _width: number;
+  private _isDrawn: boolean = false;
   centerX: number;
   readonly tooltipWidth: number;
   readonly radius: number = Config.FnRadius;
@@ -100,6 +101,9 @@ export class FnValue extends Value implements Hoverable {
   width(): number {
     return this._width;
   }
+  isDrawn(): boolean {
+    return this._isDrawn;
+  }
   updatePosition(): void {
     const mainReference =
       this.referencedBy.find(
@@ -122,7 +126,10 @@ export class FnValue extends Value implements Hoverable {
     }
     this._y += this.radius;
   }
-
+  reset(): void {
+    this._isDrawn = false;
+    this.referencedBy.length = 0;
+  }
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
     this.labelRef.current.moveToTop();
@@ -137,6 +144,7 @@ export class FnValue extends Value implements Hoverable {
   };
 
   draw(): React.ReactNode {
+    this._isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -190,7 +198,7 @@ export class FnValue extends Value implements Hoverable {
           />
         </Group>
         <KonvaLabel
-          x={this.x() + this.width() + Config.TextPaddingX}
+          x={this.x() + this.width() + Config.TextPaddingX * 2}
           y={this.y() - Config.TextPaddingY}
           visible={EnvVisualizer.getPrintableMode() ? true : false}
           ref={this.labelRef}

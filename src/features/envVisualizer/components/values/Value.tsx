@@ -9,6 +9,8 @@ export abstract class Value implements Visible {
   abstract y(): number;
   abstract height(): number;
   abstract width(): number;
+  abstract isDrawn(): boolean;
+  abstract reset(): void;
   ref?: RefObject<any> | undefined;
   /** draw logic */
   abstract draw(): React.ReactNode;
@@ -19,7 +21,7 @@ export abstract class Value implements Visible {
   abstract updatePosition(pos?: { x: number; y: number }): void;
 
   /** references to this value */
-  abstract readonly referencedBy: ReferenceType[];
+  abstract referencedBy: ReferenceType[];
   /** the underlying data of this value */
   abstract readonly data: Data;
 }

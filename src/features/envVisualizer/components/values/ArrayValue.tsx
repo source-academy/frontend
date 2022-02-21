@@ -1,4 +1,5 @@
 import React from 'react';
+import { Group } from 'react-konva';
 
 import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
@@ -20,7 +21,7 @@ export class ArrayValue extends Value {
   private _height: number;
 
   /** check if the value is already drawn */
-  private isDrawn: boolean = false;
+  private _isDrawn: boolean = false;
 
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
@@ -92,25 +93,20 @@ export class ArrayValue extends Value {
   width(): number {
     return this._width;
   }
+  isDrawn(): boolean {
+    return this._isDrawn;
+  }
+  reset(): void {
+    this._isDrawn = false;
+    this.units.map(x => x.reset());
+    this.referencedBy.length = 0;
+  }
 
   setLevel(arrLevel: ArrayLevel): void {
     this.level = arrLevel;
   }
 
   updatePosition(pos: { x: number; y: number } = { x: -1, y: -1 }): void {
-    // const mainReference = this.referencedBy[0];
-    // if (mainReference instanceof Binding) {
-    //   this.x = mainReference.frame.x + mainReference.frame.width + Config.FrameMarginX;
-    //   this.y = mainReference.y;
-    // } else {
-    //   if (mainReference.isLastUnit) {
-    //     this.x = mainReference.x + Config.DataUnitWidth * 2;
-    //     this.y = mainReference.y;
-    //   } else {
-    //     this.x = mainReference.x;
-    //     this.y = mainReference.y + mainReference.parent.height + Config.DataUnitHeight;
-    //   }
-    // }
     this._x = pos.x > 0 ? pos.x : this._x;
     this._y = pos.y > 0 ? pos.y : this._y;
     this.units.forEach(unit => {
@@ -118,18 +114,19 @@ export class ArrayValue extends Value {
     });
   }
 
+
   draw(): React.ReactNode {
-    if (this.isDrawn) {
+    if (this.isDrawn()) {
       return null;
     }
-    this.isDrawn = true;
+    this._isDrawn = true;
     return (
-      <React.Fragment key={Layout.key++}>
+      <Group key={Layout.key++}>
         {this.referencedBy.map(x => x instanceof Binding && Arrow.from(x.key).to(this).draw())}
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
           : new ArrayEmptyUnit(this).draw()}
-      </React.Fragment>
+      </Group>
     );
   }
 }

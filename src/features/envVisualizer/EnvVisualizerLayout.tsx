@@ -42,6 +42,7 @@ export class Layout {
   static grid: Grid;
   /** memoized values */
   static values = new Map<Data, Value>();
+  static oldValues = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
@@ -49,6 +50,10 @@ export class Layout {
   /** processes the runtime context from JS Slang */
   static setContext(context: Context): void {
     // clear/initialize data and value arrays
+    Layout.values.forEach((v, d) => {
+      v.reset();
+      Layout.oldValues.set(d, v);
+    });
     Layout.values.clear();
     // Layout.levels = [];
     Layout.key = 0;
@@ -217,19 +222,31 @@ export class Layout {
     }
   }
 
+  static exportImage = () => {
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = this.stageRef.current.toDataURL();
+    a.download = 'diagram.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
       const layout = (
         <div className={'sa-env-visualizer'}>
-          <div style={{ width: 200 }}>
+          <div style={{ width: 800 }}>
             <input
               type="checkbox"
               id="sa-env-visualizer-toggle-printable"
+              checked={EnvVisualizer.getPrintableMode()}
               onChange={EnvVisualizer.togglePrintableMode}
             />
-            <label> Printable Mode</label>
+            <label onClick={EnvVisualizer.togglePrintableMode}> Printable Mode</label>
+            <div id="buttons"><button id="save" onClick={this.exportImage}>Save as image</button></div>
           </div>
           <Stage width={Layout.width} height={Layout.height} ref={this.stageRef}>
             <Layer>

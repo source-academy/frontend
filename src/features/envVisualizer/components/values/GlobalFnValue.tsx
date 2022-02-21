@@ -30,6 +30,7 @@ export class GlobalFnValue extends Value implements Hoverable {
   private _y: number;
   private _height: number;
   private _width: number;
+  private _isDrawn: boolean = false;
   centerX: number;
   readonly tooltipWidth: number;
   readonly radius: number = Config.FnRadius;
@@ -75,7 +76,7 @@ export class GlobalFnValue extends Value implements Hoverable {
     this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
-    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
+    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) + Config.TextPaddingX;
   }
   x(): number {
     return this._x;
@@ -89,6 +90,10 @@ export class GlobalFnValue extends Value implements Hoverable {
   width(): number {
     return this._width;
   }
+  isDrawn(): boolean {
+    return this._isDrawn;
+  }
+
   updatePosition(): void {
     const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
@@ -120,8 +125,12 @@ export class GlobalFnValue extends Value implements Hoverable {
     this.labelRef.current.hide();
     setUnhoveredStyle(currentTarget);
   };
+  reset(): void {
+    this._isDrawn = false;
+  }
 
   draw(): React.ReactNode {
+    this._isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

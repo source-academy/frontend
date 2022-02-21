@@ -140,6 +140,7 @@ export class Binding implements Visible {
           ? null
           : Arrow.from(this.key).to(this.value).draw()}
         {!(this.value instanceof ArrayValue) && this.isMainReference ? this.value.draw() : null}
+        {/* {!(this.value instanceof ArrayValue) && this.value.draw()} */}
       </React.Fragment>
     );
   }

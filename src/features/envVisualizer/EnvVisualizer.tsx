@@ -24,6 +24,10 @@ export default class EnvVisualizer {
     this.setVis = setVis;
   }
 
+  static clear() {
+    Layout.values.clear();
+  }
+
   /** updates the visualization state in the SideContentEnvVis component based on
    * the JS Slang context passed in */
   static drawEnv(context: Context) {

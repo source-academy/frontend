@@ -17,7 +17,7 @@ export enum Config {
 
   FnRadius = 15,
   FnInnerRadius = 3,
-  FnTooltipOpacity = 0.7,
+  FnTooltipOpacity = 0.6,
 
   DataMinWidth = 20,
   DataUnitWidth = 40,
