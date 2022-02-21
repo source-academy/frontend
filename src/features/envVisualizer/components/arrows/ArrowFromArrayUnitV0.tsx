@@ -1,7 +1,9 @@
 import { Config } from '../../EnvVisualizerConfig';
 import { StepsArray, Visible } from '../../EnvVisualizerTypes';
 import { ArrayUnit } from '../ArrayUnit';
+import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
+import { Grid } from '../Grid';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
@@ -33,12 +35,23 @@ export class ArrowFromArrayUnit extends GenericArrow {
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [
-        Math.max(
-          to.centerX + Config.FnRadius * 3,
-          Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1] -
-            (2 / 3) * Config.FramePaddingX -
-            15 * offset
+        ArrowLane.getVerticalLane(to, Frame.cumWidths[Frame.lastXCoordBelow(x) + 1]).getPosition(
+          to
         ),
+        y
+      ]);
+      steps.push((x, y) => [
+        x,
+        ArrowLane.getHorizontalLane(
+          to,
+          Grid.cumHeights[Grid.lastYCoordBelow(to.y()) - 1]
+        ).getPosition(to)
+      ]);
+      steps.push((x, y) => [
+        ArrowLane.getVerticalLane(
+          to,
+          Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1]
+        ).getPosition(to),
         y
       ]);
       steps.push((x, y) => [x, to.y()]);
@@ -47,7 +60,13 @@ export class ArrowFromArrayUnit extends GenericArrow {
       if ((to as ArrayValue).level !== from.parent.level) {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
         // Frame avoidance
-        steps.push((x, y) => [Frame.cumWidths[Frame.lastXCoordBelow(x)] - Config.FramePaddingX, y]);
+        steps.push((x, y) => [
+          ArrowLane.getVerticalLane(to, Frame.cumWidths[Frame.lastXCoordBelow(x) + 1]).getPosition(
+            to
+          ),
+          y
+        ]);
+
         if (from.x() > to.x() + to.width()) {
           // moves left horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [
@@ -99,6 +118,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
             }
           }
         } else {
+          // same array level but different y position, draw straight arrows.
           steps.push((x, y) => [
             from.x() <= to.x()
               ? to.x() + Config.DataUnitWidth / 3
@@ -110,6 +130,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
         }
       }
     } else {
+      // this shouldn't happen.
       steps.push((x, y) => [to.x(), to.y()]);
     }
     return steps;

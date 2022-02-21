@@ -6,6 +6,7 @@ import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode, Visible } from '../EnvVisualizerTypes';
 import { ArrayLevel } from './ArrayLevel';
 import { ArrayUnit } from './ArrayUnit';
+import { ArrowLane } from './ArrowLane';
 import { Binding } from './Binding';
 import { Frame } from './Frame';
 import { FrameLevel } from './FrameLevel';
@@ -28,7 +29,7 @@ export class Grid implements Visible {
   arrayLevels: ArrayLevel[];
   levels: Level[];
   widths: number[];
-  heights: number[];
+  static cumHeights: number[];
 
   constructor(
     /** the environment tree nodes */
@@ -40,7 +41,7 @@ export class Grid implements Visible {
     this.arrayLevels = [];
     this.levels = [];
     this.widths = [];
-    this.heights = [];
+    Grid.cumHeights = [];
     this._height = 0;
     this._width = 0;
     this.update(envTreeNodes);
@@ -69,7 +70,8 @@ export class Grid implements Visible {
   update(envTreeNodes: EnvTreeNode[][]) {
     Frame.reset();
     FrameLevel.reset();
-    ArrayLevel.reset();
+    ArrowLane.reset();
+    this.arrayLevels.forEach(x => x.reset());
     this.frameLevels = [];
     this.arrayLevels = [];
     this.levels = [];
@@ -87,7 +89,7 @@ export class Grid implements Visible {
 
     nodes.sort((a, b) => parseInt(a[1].environment.id) - parseInt(b[1].environment.id));
     this.widths = [];
-    this.heights = [];
+    Grid.cumHeights = [];
     nodes.forEach(node => {
       this.frameLevels[node[0]].addFrame(node[1]);
     });
@@ -133,7 +135,7 @@ export class Grid implements Visible {
           hasFrame
             ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
                 Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
-                Config.FrameMarginX // reduce collision of array with frame arrows
+                Config.FrameMarginX * 1.5 // reduce collision of array with frame arrows
             : Math.min(
                 v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
                 v.referencedBy[0].x()
@@ -143,27 +145,43 @@ export class Grid implements Visible {
       }
     });
 
-    const cumHeights = this.levels.reduce(
+    Grid.cumHeights = this.levels.reduce(
       (res, b, i) => {
         const height =
           i % 2 === 0
             ? Frame.heights[Math.floor(i / 2)]
             : this.arrayLevels[Math.floor((i - 1) / 2)].height();
-        return [...res, res[res.length - 1] + height + Config.FramePaddingY / 2];
+        return [...res, res[res.length - 1] + height + Config.FrameMarginY / 2];
       },
-      [Config.CanvasPaddingY.valueOf()]
+      [Config.FrameMarginY.valueOf()]
     );
     this.levels.forEach((level, i) => {
-      level.setY(cumHeights[i]);
+      level.setY(Grid.cumHeights[i]);
     });
 
     // get the cumulative height of all the array and frame levels
-    this._height = cumHeights[cumHeights.length - 1];
+    this._height = Grid.cumHeights[Grid.cumHeights.length - 1];
     // get the maximum width of all the array and frame levels
     this._width = Math.max(
       this.frameLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0),
       this.arrayLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0)
     );
+  }
+
+  /**
+   * Find the Grid y-coordinate given a x-position.
+   * @param x absolute position
+   * @returns Largest x-coordinate smaller than or equal to a given x position.
+   */
+  static lastYCoordBelow(y: number) {
+    console.log(Grid.cumHeights);
+    let l = Grid.cumHeights.length;
+    while (l--) {
+      if (Grid.cumHeights[l] <= y) {
+        return l;
+      }
+    }
+    return 0;
   }
 
   draw(): React.ReactNode {

@@ -1,5 +1,6 @@
 import { Config } from '../../EnvVisualizerConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
+import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
@@ -12,7 +13,7 @@ export class ArrowFromFrame extends GenericArrow {
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
 
     if (to instanceof Frame) {
-      steps.push((x, y) => [x, y - Config.FrameMarginY]);
+      steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
       steps.push((x, y) => [to.x() + Config.FramePaddingX, y]);
     }
 

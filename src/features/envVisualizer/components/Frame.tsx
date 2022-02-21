@@ -154,6 +154,7 @@ export class Frame implements Visible, Hoverable {
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
     let totalWidth = this._width;
+    let exportWidth = this._width;
     this.totalHoveredWidth = Math.max(totalWidth, this.name.hoveredWidth());
 
     const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
@@ -180,6 +181,7 @@ export class Frame implements Visible, Hoverable {
         this.bindings.push(currBinding);
         prevBinding = currBinding;
         totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
+        exportWidth = Math.max(exportWidth, currBinding.exportWidth() + Config.FramePaddingX);
         this.totalHoveredWidth = Math.max(
           this.totalHoveredWidth,
           currBinding.hoveredWidth() + Config.FramePaddingX
@@ -188,7 +190,7 @@ export class Frame implements Visible, Hoverable {
     }
 
     if (EnvVisualizer.getPrintableMode()) {
-      this.totalWidth = this.totalHoveredWidth;
+      this.totalWidth = exportWidth;
     } else {
       this.totalWidth = totalWidth;
     }
@@ -198,7 +200,8 @@ export class Frame implements Visible, Hoverable {
       ? prevBinding.y() + prevBinding.height() + Config.FramePaddingY - this.y()
       : Config.FramePaddingY * 2;
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
-    const nextX = Frame.cumWidths[this.xCoord] + this.totalWidth + Config.FrameMarginX;
+    const nextX =
+      Frame.cumWidths[this.xCoord] + this.totalWidth + Config.FrameMarginX + Config.FnRadius;
     Frame.cumWidths[this.xCoord + 1] =
       Frame.cumWidths[this.xCoord + 1] === undefined
         ? nextX

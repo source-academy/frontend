@@ -1,5 +1,6 @@
 import React from 'react';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
@@ -111,7 +112,20 @@ export class Binding implements Visible {
     return this._width;
   }
   hoveredWidth(): number {
-    return this._hoveredWidth;
+    return EnvVisualizer.getPrintableMode()
+      ? this._hoveredWidth
+      : this._width +
+          (this.value instanceof FnValue || this.value instanceof GlobalFnValue
+            ? this.value.exportTooltipWidth
+            : 0);
+  }
+  exportWidth(): number {
+    return (
+      this._width +
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue
+        ? this.value.exportTooltipWidth
+        : 0)
+    );
   }
   /**
    * update absolute position of binding and its value.
