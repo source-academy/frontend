@@ -82,7 +82,7 @@ export class ArrayUnit implements Visible, Hoverable {
 
   reset = () => {
     this.isDrawn = false;
-  }
+  };
 
   draw(): React.ReactNode {
     if (this.isDrawn) return null;

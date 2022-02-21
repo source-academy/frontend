@@ -223,8 +223,8 @@ export class Layout {
   }
 
   static exportImage = () => {
-    const a = document.createElement("a");
-    a.style.display = "none";
+    const a = document.createElement('a');
+    a.style.display = 'none';
     a.href = this.stageRef.current.toDataURL();
     a.download = 'diagram.png';
     document.body.appendChild(a);
@@ -246,7 +246,11 @@ export class Layout {
               onChange={EnvVisualizer.togglePrintableMode}
             />
             <label onClick={EnvVisualizer.togglePrintableMode}> Printable Mode</label>
-            <div id="buttons"><button id="save" onClick={this.exportImage}>Save as image</button></div>
+            <div id="buttons">
+              <button id="save" onClick={this.exportImage}>
+                Save as image
+              </button>
+            </div>
           </div>
           <Stage width={Layout.width} height={Layout.height} ref={this.stageRef}>
             <Layer>

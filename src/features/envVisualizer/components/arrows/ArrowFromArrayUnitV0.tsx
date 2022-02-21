@@ -33,9 +33,12 @@ export class ArrowFromArrayUnit extends GenericArrow {
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [
-        Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1] -
-          (2 / 3) * Config.FramePaddingX -
-          15 * offset,
+        Math.max(
+          to.centerX + Config.FnRadius * 3,
+          Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1] -
+            (2 / 3) * Config.FramePaddingX -
+            15 * offset
+        ),
         y
       ]);
       steps.push((x, y) => [x, to.y()]);

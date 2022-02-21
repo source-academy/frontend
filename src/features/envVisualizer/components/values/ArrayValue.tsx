@@ -114,7 +114,6 @@ export class ArrayValue extends Value {
     });
   }
 
-
   draw(): React.ReactNode {
     if (this.isDrawn()) {
       return null;

@@ -76,7 +76,8 @@ export class GlobalFnValue extends Value implements Hoverable {
     this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
-    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) + Config.TextPaddingX;
+    this.tooltipWidth =
+      Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) + Config.TextPaddingX;
   }
   x(): number {
     return this._x;
@@ -184,7 +185,7 @@ export class GlobalFnValue extends Value implements Hoverable {
           />
         </Group>
         <KonvaLabel
-          x={this.x() + this.width() + Config.TextPaddingX}
+          x={this.x() + this.width() + Config.TextPaddingX * 2}
           y={this.y() - Config.TextPaddingY}
           visible={EnvVisualizer.getPrintableMode() ? true : false}
           ref={this.labelRef}
