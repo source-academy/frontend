@@ -12,11 +12,12 @@ export class ArrowFromArrayUnit extends GenericArrow {
   private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: Visible) {
     // Move up if target above source or to the right with same vertical position.
     // Moves up slightly more if target is to the right.
+    const offset = to.y() / to.x() + to.x() / to.y();
     steps.push((x, y) => [
       x,
       y +
         (to.y() > from.y() || (to.y() === from.y() && to.x() <= from.x()) ? 1 : -1) *
-          Config.DataUnitHeight -
+          (Config.DataUnitHeight - 2 * offset) -
         (Math.sign(to.x() - from.x()) * Config.DataUnitHeight) / 12
     ]);
   }
@@ -28,10 +29,13 @@ export class ArrowFromArrayUnit extends GenericArrow {
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
+    const offset = to.y() / to.x() + to.x() / to.y();
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [
-        Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1] - (Config.FramePaddingX * 2) / 3,
+        Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1] -
+          (2 / 3) * Config.FramePaddingX -
+          15 * offset,
         y
       ]);
       steps.push((x, y) => [x, to.y()]);
@@ -45,7 +49,9 @@ export class ArrowFromArrayUnit extends GenericArrow {
           // moves left horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [
             x,
-            to.y() + (1 / 2 - (4 / 6) * Math.sign(to.y() - from.y())) * Config.DataUnitHeight
+            to.y() +
+              (1 / 2 - (4 / 6) * Math.sign(to.y() - from.y())) *
+                (Config.DataUnitHeight + 3 * offset)
           ]);
           // point to right of array
           steps.push((x, y) => [
@@ -58,7 +64,9 @@ export class ArrowFromArrayUnit extends GenericArrow {
           // moves right horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [
             x,
-            to.y() + (1 / 2 - (5 / 6) * Math.sign(to.y() - from.y())) * Config.DataUnitHeight
+            to.y() +
+              (1 / 2 - (5 / 6) * Math.sign(to.y() - from.y())) *
+                (Config.DataUnitHeight + 3 * offset)
           ]);
           // point to left of array
           steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
