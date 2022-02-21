@@ -19,7 +19,7 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course
       Classroom
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sicpjs/index\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sicpjs/\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"book\\" />
     <div className=\\"navbar-button-text\\">
       SICP JS
@@ -77,7 +77,7 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (with cour
       Classroom
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sicpjs/index\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link_mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sicpjs/\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"book\\" />
     <div className=\\"navbar-button-text\\">
       SICP JS

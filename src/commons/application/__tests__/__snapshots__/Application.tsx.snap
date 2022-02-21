@@ -10,10 +10,7 @@ exports[`Application renders correctly 1`] = `
         <Route path=\\"/contributors\\" component={[function]} />
         <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
         <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
-        <Route exact={true} path=\\"/sicpjs\\">
-          <Redirect to=\\"/sicpjs/index\\" />
-        </Route>
-        <Route path=\\"/sicpjs/:section\\" component={[Function: Sicp]} />
+        <Route path=\\"/sicpjs/:section?\\" component={[Function: Sicp]} />
         <Route path=\\"/githubassessments\\" render={[Function: render]} />
         <Route path=\\"/courses/:courseId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
         <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />

@@ -72,7 +72,7 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
           Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/index\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/\\">
         <Blueprint3.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
@@ -130,7 +130,7 @@ exports[`NavigationBar renders correctly for student without course 1`] = `
           Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/index\\">
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/\\">
         <Blueprint3.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
