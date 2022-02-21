@@ -12,7 +12,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
   private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: Visible) {
     // Move up if target above source or to the right with same vertical position.
     // Moves up slightly more if target is to the right.
-    const offset = to.y() / to.x() + to.x() / to.y();
+    const offset = to.y() / (to.x() + 1) + to.x() / (to.y() + 1);
     steps.push((x, y) => [
       x,
       y +
@@ -29,7 +29,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
-    const offset = to.y() / to.x() + to.x() / to.y();
+    const offset = to.y() / (to.x() + 1) + to.x() / (to.y() + 1);
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [

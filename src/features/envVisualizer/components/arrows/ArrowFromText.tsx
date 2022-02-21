@@ -14,8 +14,8 @@ export class ArrowFromText extends GenericArrow {
     const to = this.target;
     if (!to) return [];
 
-    const offset = to.y() / to.x() + to.x() / to.y();
-    const offsetX = from.x() / to.x();
+    const offset = to.y() / (to.x() + 1) + to.x() / (to.y() + 1);
+    const offsetX = from.x() / (to.x() + 1);
     const steps: StepsArray = [(x, y) => [x + from.width(), y + from.height() / 2]];
     if (to instanceof ArrayValue) {
       if (to.x() < from.x()) {
@@ -23,7 +23,10 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [x + Config.TextMargin, y]);
         steps.push((x, y) => [x, y - from.height() - Config.TextMargin - offset]);
         steps.push((x, y) => [
-          Frame.cumWidths[Frame.lastXCoordBelow(x)] - 2 * offsetX * Config.FramePaddingX,
+          Math.max(
+            Frame.cumWidths[Frame.lastXCoordBelow(x)] - 2 * offsetX * Config.FramePaddingX,
+            to.x() + to.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2
+          ),
           y
         ]);
         // move to 1/6 height of array below / above arrays before moving left.
@@ -40,10 +43,23 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [to.x() + to.units.length * Config.DataUnitWidth, y]);
       } else {
         // move to left of frame to the right.
-        steps.push((x, y) => [
-          Frame.cumWidths[Frame.lastXCoordBelow(x) + 1] - 4 * offsetX * Config.FramePaddingX,
-          y
-        ]);
+        if (to.y() > from.y()) {
+          steps.push((x, y) => [
+            Math.max(
+              Frame.cumWidths[Frame.lastXCoordBelow(x) + 1] - 4 * offsetX * Config.FramePaddingX,
+              x + 2 * Config.TextMargin
+            ),
+            y
+          ]);
+        } else {
+          steps.push((x, y) => [
+            Math.min(
+              Frame.cumWidths[Frame.lastXCoordBelow(x) + 1] - 4 * offsetX * Config.FramePaddingX,
+              to.x() - Config.DataUnitWidth / 2
+            ),
+            y
+          ]);
+        }
         // move to 1/3 height of array below / above arrays before moving right
         steps.push((x, y) => [
           x,
@@ -60,9 +76,12 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [x + Config.TextMargin, y]);
         steps.push((x, y) => [x, y - from.height() - Config.TextMargin - offset]);
         steps.push((x, y) => [
-          Frame.cumWidths[Frame.cumWidths.findIndex(v => v > to.x())] -
-            (2 / 3) * Config.FramePaddingX -
-            15 * offset,
+          Math.max(
+            Frame.cumWidths[Frame.cumWidths.findIndex(v => v > to.x())] -
+              (2 / 3) * Config.FramePaddingX -
+              15 * offset,
+            to.x() + to.width() + Config.FramePaddingX
+          ),
           y
         ]);
         steps.push((x, y) => [x, to.y()]);
@@ -73,7 +92,10 @@ export class ArrowFromText extends GenericArrow {
           steps.push((x, y) => [x, to.y()]);
         } else {
           steps.push((x, y) => [
-            Frame.cumWidths[Frame.lastXCoordBelow(x) + 1] - 15 * offsetX * Config.FramePaddingX,
+            Math.max(
+              Frame.cumWidths[Frame.lastXCoordBelow(x) + 1] - 4 * offsetX * Config.FramePaddingX,
+              x + 2 * Config.TextMargin
+            ),
             y
           ]);
           const fnReference = to.referencedBy[0];
@@ -95,9 +117,12 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [x + Config.TextMargin, y]);
         steps.push((x, y) => [x, y - from.height() - Config.TextMargin - offset]);
         steps.push((x, y) => [
-          Frame.cumWidths[Frame.cumWidths.findIndex(v => v > to.x())] -
-            (2 / 3) * Config.FramePaddingX -
-            15 * offset,
+          Math.max(
+            Frame.cumWidths[Frame.cumWidths.findIndex(v => v > to.x())] -
+              (2 / 3) * Config.FramePaddingX -
+              15 * offset,
+            to.x() + Config.FramePaddingX
+          ),
           y
         ]);
         steps.push((x, y) => [x, to.y()]);
