@@ -1,3 +1,4 @@
+import { Button, Checkbox, FormGroup } from '@blueprintjs/core';
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
@@ -238,19 +239,22 @@ export class Layout {
     } else {
       const layout = (
         <div className={'sa-env-visualizer'}>
-          <div style={{ width: 800 }}>
-            <input
-              type="checkbox"
-              id="sa-env-visualizer-toggle-printable"
-              checked={EnvVisualizer.getPrintableMode()}
-              onChange={EnvVisualizer.togglePrintableMode}
-            />
-            <label onClick={EnvVisualizer.togglePrintableMode}> Printable Mode</label>
-            <div id="buttons">
-              <button id="save" onClick={this.exportImage}>
-                Save as image
-              </button>
-            </div>
+          <div style={{ width: 400 }}>
+            <FormGroup>
+              <Checkbox
+                checked={EnvVisualizer.getPrintableMode()}
+                label="Printable Mode"
+                onChange={EnvVisualizer.togglePrintableMode}
+                large={true}
+              />
+              <Button
+                outlined={true}
+                text="Save"
+                color="White"
+                onClick={this.exportImage}
+                large={true}
+              />
+            </FormGroup>
           </div>
           <Stage width={Layout.width} height={Layout.height} ref={this.stageRef}>
             <Layer>
