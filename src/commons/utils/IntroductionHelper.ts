@@ -1,5 +1,4 @@
-import { isFullJSChapter } from 'js-slang/dist/runner/utils';
-
+import { isFullJSChapter } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const CHAP = '\xa7';

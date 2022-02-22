@@ -5,7 +5,6 @@ import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
 import BackendSaga from './BackendSaga';
-import FullJsSaga from './FullJsSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
 import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
@@ -22,5 +21,4 @@ export default function* MainSaga(): SagaIterator {
   yield fork(PersistenceSaga);
   yield fork(GitHubPersistenceSaga);
   yield fork(RemoteExecutionSaga);
-  yield fork(FullJsSaga);
 }

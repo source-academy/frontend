@@ -12,7 +12,6 @@ import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
-import { isFullJSChapter } from 'js-slang/dist/runner/utils';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
@@ -27,7 +26,7 @@ import * as Sourceror from 'sourceror';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
+import { isFullJSChapter, OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -538,8 +537,6 @@ export function* evalEditor(
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     yield put(actions.remoteExecRun(editorCode));
-  } else if (isFullJSChapter(context.chapter)) {
-    yield put(actions.fullJSRun({ workspaceLocation: workspaceLocation, code: editorCode }));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
@@ -548,7 +545,9 @@ export function* evalEditor(
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
-    parse(value, context);
+    if (!isFullJSChapter(context.chapter)) {
+      parse(value, context);
+    }
     if (!context.errors.length) {
       // Otherwise we step through the breakpoints one by one and check them.
       const exploded = editorCode.split('\n');
@@ -561,7 +560,9 @@ export function* evalEditor(
         context.errors = [];
         exploded[index] = 'debugger;' + exploded[index];
         value = exploded.join('\n');
-        parse(value, context);
+        if (!isFullJSChapter(context.chapter)) {
+          parse(value, context);
+        }
         if (context.errors.length) {
           const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
           yield put(actions.sendReplInputToOutput(msg, workspaceLocation));

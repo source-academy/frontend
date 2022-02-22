@@ -1,4 +1,3 @@
-import { isFullJSChapter } from 'js-slang/dist/runner/utils';
 import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
@@ -126,6 +125,10 @@ export const fullJSLanguage: SourceLanguage = {
   chapter: -1,
   variant: 'default',
   displayName: 'full JavaScript'
+};
+
+export const isFullJSChapter = (chapter: number) => {
+  return chapter === -1;
 };
 
 export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
