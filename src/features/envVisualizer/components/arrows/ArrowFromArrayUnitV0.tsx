@@ -113,7 +113,9 @@ export class ArrowFromArrayUnit extends GenericArrow {
             ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
             if (from.x() > to.x() + to.units.length * Config.DataUnitWidth) {
               steps.push((x, y) => [
-                to.x() + to.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+                to.x() +
+                  Math.max(Config.DataMinWidth, to.units.length * Config.DataUnitWidth) +
+                  Config.DataUnitWidth / 2,
                 y
               ]);
               steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
