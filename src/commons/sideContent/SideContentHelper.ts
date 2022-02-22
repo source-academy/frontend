@@ -1,4 +1,3 @@
- import { ModuleContext } from 'js-slang';
  import React from 'react';
 
 //import { ArrayUnit } from 'src/features/envVisualizer/components/ArrayUnit';
@@ -38,9 +37,16 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
  * @param debuggerContext - DebuggerContext object from redux store
  */
 export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
-  // Get module side contents from DebuggerContext
-  const rawModuleContexts = debuggerContext.context?.modules as Map<string, ModuleContext> | undefined;
-  if (rawModuleContexts == null) return []
+  // Check if js-slang's context object is null
+  if (debuggerContext.context == null) {
+    return [];
+  }
+
+  // Get module contexts
+  const rawModuleContexts = debuggerContext.context.moduleContexts;
+  if (rawModuleContexts == null) {
+    return [];
+  }
 
   // Pass React into functions
   const unprocessedTabs: ModuleSideContent[] = [];
