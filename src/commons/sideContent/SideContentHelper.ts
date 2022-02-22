@@ -1,8 +1,7 @@
- import React from 'react';
+import React from 'react';
 
-//import { ArrayUnit } from 'src/features/envVisualizer/components/ArrayUnit';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { /*Modules, */ ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
+import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
   WorkspaceLocation,
@@ -52,7 +51,7 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
   const unprocessedTabs: ModuleSideContent[] = [];
   for (const moduleContext of rawModuleContexts.values()) {
     for (const tab of moduleContext.tabs) {
-      unprocessedTabs.push(tab(React))
+      unprocessedTabs.push(tab(React));
     }
   }
 
