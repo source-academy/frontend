@@ -11,9 +11,14 @@ export class ArrowFromFrame extends GenericArrow {
     if (!to) return [];
 
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
-
+    const differentiateByParentFrame = false;
     if (to instanceof Frame) {
-      steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
+      // To differentiate frames pointing to different parent frames
+      if (differentiateByParentFrame) {
+        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
+      } else {
+        steps.push((x, y) => [x, y - Config.FrameMarginY]);
+      }
       steps.push((x, y) => [to.x() + Config.FramePaddingX, y]);
     }
 

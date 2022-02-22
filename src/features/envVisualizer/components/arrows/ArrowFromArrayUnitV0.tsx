@@ -4,6 +4,7 @@ import { ArrayUnit } from '../ArrayUnit';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { Grid } from '../Grid';
+// import { Grid } from '../Grid';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
@@ -35,9 +36,10 @@ export class ArrowFromArrayUnit extends GenericArrow {
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [
-        ArrowLane.getVerticalLane(to, Frame.cumWidths[Frame.lastXCoordBelow(x) + 1]).getPosition(
-          to
-        ),
+        ArrowLane.getVerticalLane(
+          to,
+          Frame.cumWidths[Frame.lastXCoordBelow(x) + (to.x() < x ? 0 : 1)]
+        ).getPosition(to),
         y
       ]);
       steps.push((x, y) => [
@@ -61,12 +63,12 @@ export class ArrowFromArrayUnit extends GenericArrow {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
         // Frame avoidance
         steps.push((x, y) => [
-          ArrowLane.getVerticalLane(to, Frame.cumWidths[Frame.lastXCoordBelow(x) + 1]).getPosition(
-            to
-          ),
+          ArrowLane.getVerticalLane(
+            to,
+            Frame.cumWidths[Frame.lastXCoordBelow(x) + (to.x() < x ? 0 : 1)]
+          ).getPosition(to),
           y
         ]);
-
         if (from.x() > to.x() + to.width()) {
           // moves left horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [
@@ -77,11 +79,16 @@ export class ArrowFromArrayUnit extends GenericArrow {
           ]);
           // point to right of array
           steps.push((x, y) => [
-            to.x() + to.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+            to.x() +
+              Math.max(Config.DataMinWidth, to.units.length * Config.DataUnitWidth) +
+              Config.DataUnitWidth / 2,
             y
           ]);
           steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
-          steps.push((x, y) => [to.x() + to.units.length * Config.DataUnitWidth, y]);
+          steps.push((x, y) => [
+            to.x() + Math.max(Config.DataMinWidth, to.units.length * Config.DataUnitWidth),
+            y
+          ]);
         } else {
           // moves right horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [

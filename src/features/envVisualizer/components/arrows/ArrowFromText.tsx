@@ -24,7 +24,10 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [ArrowLane.getVerticalLane(to, x).getPosition(to), y]);
         steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
         steps.push((x, y) => [
-          to.x() + to.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+          to.x() +
+            to.units.length * Config.DataUnitWidth +
+            Config.DataUnitWidth / 2 +
+            ((to.y() - (to?.level?.y() || to.y())) / Config.DataUnitHeight) * 3,
           y
         ]);
         steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
@@ -33,7 +36,12 @@ export class ArrowFromText extends GenericArrow {
         // move to left of frame to the right.
         steps.push((x, y) => [ArrowLane.getVerticalLane(to, x).getPosition(to), y]);
         steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
-        steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
+        steps.push((x, y) => [
+          to.x() -
+            Config.DataUnitWidth / 2 -
+            ((to.y() - (to?.level?.y() || to.y())) / Config.DataUnitHeight) * 3,
+          y
+        ]);
         steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
         steps.push((x, y) => [to.x(), y]);
       }

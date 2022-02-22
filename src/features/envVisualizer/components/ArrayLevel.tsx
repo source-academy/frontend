@@ -4,7 +4,6 @@ import { Group, Rect } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { ArrowLane } from './ArrowLane';
 import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';
@@ -15,7 +14,6 @@ export class ArrayLevel extends Level {
   private _y: number;
   private _height: number = 0;
   private _width: number;
-  private arrowLanes: ArrowLane[] = [];
   position: [x: number, y: number][][] = [[]];
 
   ref: RefObject<any> = React.createRef();
@@ -48,14 +46,8 @@ export class ArrayLevel extends Level {
   width(): number {
     return this._width;
   }
-  getArrayLane = (y: number) => {
-    debugger;
-    console.log(Math.floor(((y - this.y()) / Config.DataUnitHeight) * 2), this.arrowLanes);
-    const sublevel: number = Math.floor((y - this.y()) / (Config.DataUnitHeight * 2)) + 1;
-    if (this.arrowLanes[sublevel] === undefined) {
-      this.arrowLanes[sublevel] = new ArrowLane(sublevel, false);
-    }
-    return this.arrowLanes[Math.floor((y - this.y()) / (Config.DataUnitHeight * 2) + 1)];
+  getNumLanes = (): number => {
+    return this._rowCount;
   };
 
   /**
@@ -81,7 +73,6 @@ export class ArrayLevel extends Level {
     }
     this._rowCount = Math.max(this._rowCount, level);
     this.position[level] = this.position[level] || [];
-    this.arrowLanes[level] = this.arrowLanes[level] || [];
     this.position[level].push([x, x + array.width()]);
     this.position[level].sort((a, b) => a[0] - b[0]);
     const arrayMargin = Config.DataUnitHeight;
@@ -100,9 +91,7 @@ export class ArrayLevel extends Level {
     this._y = y;
   };
 
-  reset = () => {
-    this.arrowLanes = [];
-  };
+  reset = () => {};
 
   draw(): React.ReactNode {
     return (

@@ -174,7 +174,6 @@ export class Grid implements Visible {
    * @returns Largest x-coordinate smaller than or equal to a given x position.
    */
   static lastYCoordBelow(y: number) {
-    console.log(Grid.cumHeights);
     let l = Grid.cumHeights.length;
     while (l--) {
       if (Grid.cumHeights[l] <= y) {

@@ -61,23 +61,6 @@ export class ArrayValue extends Value {
       // update the dimensions, so that children array values can derive their coordinates
       // from these intermediate dimensions
 
-      // // update the width
-      // this.width = Math.max(
-      //   this.width,
-      //   unit.value.width +
-      //     (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
-      //       ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
-      //       : i * Config.DataUnitWidth)
-      // );
-
-      // // update the height
-      // this.height = Math.max(
-      //   this.height,
-      //   unit.value instanceof PrimitiveValue || unit.isMainReference
-      //     ? Config.DataUnitHeight
-      //     : unit.value.y + unit.value.height - unit.y
-      // );
-
       this.units = [unit, ...this.units];
     }
   }
