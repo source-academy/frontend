@@ -8144,10 +8144,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.25:
-  version "0.5.25"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.25.tgz#b25d8275bc425f9d17156dda4d07f4de1884c420"
-  integrity sha512-lxLxXxauqG91XYERY0p/ANjmUf02LuRCvzmekWhaypR27XsEsmPxllMJycllZ2oGZR8pJVFkiLSgihXyP3c/Jw==
+js-slang@^0.5.26:
+  version "0.5.26"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.26.tgz#f04de6be91c22a3fceec127ee1df73c955ead338"
+  integrity sha512-Ec2tx4Fqyo3Jcqi9rjJAz/xli3S/XvcZsQjivLJgVyHslVWVOXlD7tXRAzflyDCfVCuqkKPEHeWqNz9Whm8NzQ==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.50"
@@ -8155,6 +8155,7 @@ js-slang@^0.5.25:
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
     astring "^1.4.3"
+    eslint-plugin-simple-import-sort "^7.0.0"
     gpu.js "^2.10.4"
     lodash "^4.17.20"
     node-getopt "^0.3.2"
