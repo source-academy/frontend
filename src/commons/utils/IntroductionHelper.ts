@@ -19,7 +19,7 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 const FULLJS_INTRODUCTION =
   MAIN_INTRODUCTION +
   `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
-  '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab.' +
+  '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab. Note that you need to open the browser console (typically by pressing `F12`) before using breakpoints.' +
   HOTKEYS_INTRODUCTION;
 
 const generateSourceDocsLink = (sourceType: string) => {
