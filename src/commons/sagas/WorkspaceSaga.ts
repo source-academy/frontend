@@ -58,7 +58,6 @@ import {
   visualizeEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
-import { runWrapper } from '../utils/RunHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
@@ -762,13 +761,19 @@ export function* evalCode(
   const throwInfiniteLoops: boolean = yield select(
     (state: OverallState) => state.session.experimentCoinflip
   );
+
+  // Handles `console.log` statements in fullJS
+  const detachConsole: () => void = isFullJSChapter(context.chapter)
+    ? DisplayBufferService.attachConsole(workspaceLocation)
+    : () => {};
+
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
-        : call(runWrapper, runInContext, code, context, {
+        : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
@@ -783,6 +788,8 @@ export function* evalCode(
     interrupted: take(BEGIN_INTERRUPT_EXECUTION),
     paused: take(BEGIN_DEBUG_PAUSE)
   });
+
+  detachConsole();
 
   if (interrupted) {
     interrupt(context);
