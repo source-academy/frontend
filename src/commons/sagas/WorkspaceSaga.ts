@@ -58,6 +58,7 @@ import {
   visualizeEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { runWrapper } from '../utils/RunHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
@@ -767,7 +768,7 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
-        : call(runInContext, code, context, {
+        : call(runWrapper, runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
