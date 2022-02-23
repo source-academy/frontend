@@ -8144,10 +8144,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.26:
-  version "0.5.26"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.26.tgz#f04de6be91c22a3fceec127ee1df73c955ead338"
-  integrity sha512-Ec2tx4Fqyo3Jcqi9rjJAz/xli3S/XvcZsQjivLJgVyHslVWVOXlD7tXRAzflyDCfVCuqkKPEHeWqNz9Whm8NzQ==
+js-slang@^0.5.28:
+  version "0.5.28"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.28.tgz#218b33b9a84f079ee65d4355eeeba17dde61e44b"
+  integrity sha512-uifMg+7CB61rp9I6Ko2kK1AT7SKCH1LCdqX2lszsMbNOwpjogOB0lsV9FETIwrtirse8IsBPoB577D3pMSO+Fw==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.50"
