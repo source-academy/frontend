@@ -22,7 +22,13 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [x + Config.TextMargin, y]);
         steps.push((x, y) => [x, y - from.height() - Config.TextMargin]);
         steps.push((x, y) => [ArrowLane.getVerticalLane(to, x).getPosition(to), y]);
-        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
+        steps.push((x, y) => [
+          x,
+          ArrowLane.getHorizontalLane(
+            to,
+            Grid.cumHeights[Grid.lastYCoordBelow(to.y()) - (to.y() > y ? 1 : 0)]
+          ).getPosition(to)
+        ]);
         steps.push((x, y) => [
           to.x() +
             to.units.length * Config.DataUnitWidth +
@@ -35,7 +41,13 @@ export class ArrowFromText extends GenericArrow {
       } else {
         // move to left of frame to the right.
         steps.push((x, y) => [ArrowLane.getVerticalLane(to, from.x()).getPosition(to), y]);
-        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
+        steps.push((x, y) => [
+          x,
+          ArrowLane.getHorizontalLane(
+            to,
+            Grid.cumHeights[Grid.lastYCoordBelow(to.y()) - (to.y() > y ? 1 : 0)]
+          ).getPosition(to)
+        ]);
 
         // Point to nearer side of array to lane.
         if (to.x() < Frame.cumWidths[Frame.lastXCoordBelow(from.x()) + 1]) {
