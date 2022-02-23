@@ -1,12 +1,12 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
-import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Hoverable, ReferenceType, Visible } from '../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit implements Visible, Hoverable {
