@@ -12,7 +12,7 @@ export enum Config {
   FramePaddingX = 20,
   FramePaddingY = 30,
   FrameMarginX = 60,
-  FrameMarginY = 40,
+  FrameMarginY = 80,
   FrameCornerRadius = 3,
 
   FnRadius = 15,
@@ -42,7 +42,8 @@ export enum Config {
   ArrowHoveredStrokeWidth = 2,
   ArrowCornerRadius = 40,
   ArrowMinHeight = 100,
-  ArrowNumLanes = 7,
+  ArrowNumLanes = 8,
+  FrameArrowStrokeWidth = 2,
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',

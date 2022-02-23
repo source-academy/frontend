@@ -11,7 +11,7 @@ export class ArrowFromFrame extends GenericArrow {
     if (!to) return [];
 
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
-    const differentiateByParentFrame = false;
+    const differentiateByParentFrame = true;
     if (to instanceof Frame) {
       // To differentiate frames pointing to different parent frames
       if (differentiateByParentFrame) {
@@ -24,5 +24,8 @@ export class ArrowFromFrame extends GenericArrow {
 
     steps.push((x, y) => [to.x() + Config.FramePaddingX, to.y() + to.height()]);
     return steps;
+  }
+  protected getStrokeWidth(): number {
+    return Number(Config.FrameArrowStrokeWidth);
   }
 }

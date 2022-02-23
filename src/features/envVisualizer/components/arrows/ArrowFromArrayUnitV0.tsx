@@ -46,7 +46,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
         x,
         ArrowLane.getHorizontalLane(
           to,
-          Grid.cumHeights[Grid.lastYCoordBelow(to.y()) - 1]
+          Grid.cumHeights[Grid.lastYCoordBelow(to.y()) - (to.y() > y ? 1 : 0)]
         ).getPosition(to)
       ]);
       steps.push((x, y) => [

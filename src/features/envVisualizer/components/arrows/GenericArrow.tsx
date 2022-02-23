@@ -66,6 +66,10 @@ export class GenericArrow implements Visible, Hoverable {
     return [(x, y) => [to.x(), to.y()]];
   }
 
+  protected getStrokeWidth() {
+    return Number(Config.ArrowStrokeWidth);
+  }
+
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredStyle(currentTarget, {
       strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
@@ -76,7 +80,7 @@ export class GenericArrow implements Visible, Hoverable {
     this.selected = !this.selected;
     if (!this.selected) {
       setUnhoveredStyle(currentTarget, {
-        strokeWidth: Number(Config.ArrowStrokeWidth)
+        strokeWidth: this.getStrokeWidth()
       });
     }
   };
@@ -84,7 +88,7 @@ export class GenericArrow implements Visible, Hoverable {
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (!this.selected) {
       setUnhoveredStyle(currentTarget, {
-        strokeWidth: Number(Config.ArrowStrokeWidth)
+        strokeWidth: this.getStrokeWidth()
       });
     } else {
       const container = currentTarget.getStage()?.container();
@@ -144,7 +148,7 @@ export class GenericArrow implements Visible, Hoverable {
               ? Config.SA_BLUE.toString()
               : Config.SA_WHITE.toString()
           }
-          strokeWidth={Number(Config.ArrowStrokeWidth)}
+          strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
           key={Layout.key++}

@@ -62,7 +62,9 @@ export class ArrayLevel extends Level {
     // Determine the highest allowed y-position for new array
     positions: for (const positions of this.position) {
       for (const position of positions) {
-        if ((position[0] <= x + array.width() && position[1] >= x) || level < this._rowCount) {
+        // Prevent new arrays from being created above existing arrays in level
+        // if ((position[0] <= x + array.width() && position[1] >= x) || level < this._rowCount) {
+        if (position[0] <= x + array.width() && position[1] >= x) {
           level++;
           continue positions;
         } else {

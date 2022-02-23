@@ -34,16 +34,30 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [to.x() + to.units.length * Config.DataUnitWidth, y]);
       } else {
         // move to left of frame to the right.
-        steps.push((x, y) => [ArrowLane.getVerticalLane(to, x).getPosition(to), y]);
+        steps.push((x, y) => [ArrowLane.getVerticalLane(to, from.x()).getPosition(to), y]);
         steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
-        steps.push((x, y) => [
-          to.x() -
-            Config.DataUnitWidth / 2 -
-            ((to.y() - (to?.level?.y() || to.y())) / Config.DataUnitHeight) * 3,
-          y
-        ]);
-        steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
-        steps.push((x, y) => [to.x(), y]);
+
+        // Point to nearer side of array to lane.
+        if (to.x() < Frame.cumWidths[Frame.lastXCoordBelow(from.x()) + 1]) {
+          steps.push((x, y) => [
+            to.x() +
+              to.units.length * Config.DataUnitWidth +
+              Config.DataUnitWidth / 2 +
+              ((to.y() - (to?.level?.y() || to.y())) / Config.DataUnitHeight) * 3,
+            y
+          ]);
+          steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [to.x() + to.units.length * Config.DataUnitWidth, y]);
+        } else {
+          steps.push((x, y) => [
+            to.x() -
+              Config.DataUnitWidth / 2 -
+              ((to.y() - (to?.level?.y() || to.y())) / Config.DataUnitHeight) * 3,
+            y
+          ]);
+          steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [to.x(), y]);
+        }
       }
     } else if (to instanceof FnValue || to instanceof GlobalFnValue) {
       if (to.x() < from.x()) {
