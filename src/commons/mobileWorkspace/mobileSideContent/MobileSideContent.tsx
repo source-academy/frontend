@@ -30,6 +30,8 @@ type StateProps = {
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
+  width?: number;
+  height?: number;
 };
 
 type MobileControlBarProps = {
@@ -76,13 +78,20 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
    */
   const renderedPanels = () => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
-    const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+    const renderPanel = (
+      tab: SideContentTab,
+      workspaceLocation?: WorkspaceLocation,
+      width?: number,
+      height?: number
+    ) => {
       const tabBody: JSX.Element = workspaceLocation
         ? {
             ...tab.body,
             props: {
               ...tab.body.props,
-              workspaceLocation
+              workspaceLocation,
+              width,
+              height
             }
           }
         : tab.body;
@@ -119,7 +128,12 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
   };
 
   const renderedTabs = React.useMemo(() => {
-    const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+    const renderTab = (
+      tab: SideContentTab,
+      workspaceLocation?: WorkspaceLocation,
+      width?: number,
+      height?: number
+    ) => {
       const iconSize = 20;
       const tabId = tab.id === undefined ? tab.label : tab.id;
       const tabTitle: JSX.Element = (
@@ -149,8 +163,10 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       );
     };
 
-    return dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
-  }, [dynamicTabs, props.workspaceLocation, isIOS]);
+    return dynamicTabs.map(tab =>
+      renderTab(tab, props.workspaceLocation, props.width, props.height)
+    );
+  }, [dynamicTabs, props.workspaceLocation, props.width, props.height, isIOS]);
 
   const changeTabsCallback = React.useCallback(
     (

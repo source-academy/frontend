@@ -162,6 +162,7 @@ export class FnValue extends Value implements Hoverable {
     }
   };
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (EnvVisualizer.getPrintableMode()) return;
     this.selected = !this.selected;
     if (!this.selected) {
       this.labelRef.current.hide();

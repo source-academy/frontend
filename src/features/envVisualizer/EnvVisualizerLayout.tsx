@@ -2,7 +2,7 @@ import { Button, Checkbox, FormGroup } from '@blueprintjs/core';
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
-import { Layer, Rect, Stage } from 'react-konva';
+import { Layer, Stage } from 'react-konva';
 
 import { Grid } from './components/Grid';
 import { ArrayValue } from './components/values/ArrayValue';
@@ -12,7 +12,7 @@ import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
+import { Config } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
   deepCopyTree,
@@ -32,6 +32,10 @@ export class Layout {
   static height: number;
   /** the width of the stage */
   static width: number;
+  /** the visible height of the stage */
+  static visibleHeight: number = window.innerHeight;
+  /** the visible width of the stage */
+  static visibleWidth: number = window.innerWidth;
   /** the unique key assigned to each node */
   static key: number = 0;
 
@@ -47,6 +51,14 @@ export class Layout {
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
+
+  static updateDimensions(width: number, height: number) {
+    Layout.visibleWidth = width;
+    Layout.stageRef.current.width(width);
+    Layout.visibleHeight = height;
+    Layout.stageRef.current.height(height);
+    EnvVisualizer.redraw();
+  }
 
   /** processes the runtime context from JS Slang */
   static setContext(context: Context): void {
@@ -256,25 +268,59 @@ export class Layout {
               />
             </FormGroup>
           </div>
-          <Stage width={Layout.width} height={Layout.height} ref={this.stageRef}>
-            <Layer>
-              <Rect
-                {...ShapeDefaultProps}
-                x={0}
-                y={0}
-                width={Layout.width}
-                height={Layout.height}
-                fill={
-                  EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString()
-                }
-                key={Layout.key++}
-                listening={false}
-              />
-              {Layout.grid.draw()}
-            </Layer>
-          </Stage>
+          <div
+            id="scroll-container"
+            onScroll={e => {
+              const dx = e.currentTarget.scrollLeft;
+              const dy = e.currentTarget.scrollTop;
+              this.stageRef.current.container().style.transform =
+                'translate(' + dx + 'px, ' + dy + 'px)';
+              this.stageRef.current.x(-dx);
+              this.stageRef.current.y(-dy);
+            }}
+            style={{
+              width: Layout.visibleWidth,
+              height: Layout.visibleHeight,
+              overflow: 'auto',
+              margin: '10px'
+            }}
+          >
+            <div
+              id="large-container"
+              style={{
+                width: Layout.width,
+                height: Layout.height,
+                overflow: 'hidden',
+                backgroundColor: EnvVisualizer.getPrintableMode()
+                  ? Config.PRINT_BACKGROUND.toString()
+                  : Config.SA_BLUE.toString()
+              }}
+            >
+              <Stage
+                width={EnvVisualizer.getPrintableMode() ? Layout.width : Layout.visibleWidth}
+                height={EnvVisualizer.getPrintableMode() ? Layout.height : Layout.visibleHeight}
+                ref={this.stageRef}
+              >
+                <Layer>
+                  {/* <Rect
+                    {...ShapeDefaultProps}
+                    x={0}
+                    y={0}
+                    width={Layout.width}
+                    height={Layout.height}
+                    fill={
+                      EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString()
+                    }
+                    key={Layout.key++}
+                    listening={false}
+                  /> */}
+                  {Layout.grid.draw()}
+                </Layer>
+              </Stage>
+            </div>
+          </div>
         </div>
       );
       Layout.prevLayout = layout;

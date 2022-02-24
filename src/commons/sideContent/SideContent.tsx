@@ -43,6 +43,8 @@ type StateProps = {
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
+  width?: number;
+  height?: number;
 };
 
 const SideContent = (props: SideContentProps) => {
@@ -74,7 +76,12 @@ const SideContent = (props: SideContentProps) => {
       : 'side-content-tooltip';
 
   const renderedTabs = React.useMemo(() => {
-    const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+    const renderTab = (
+      tab: SideContentTab,
+      workspaceLocation?: WorkspaceLocation,
+      width?: number,
+      height?: number
+    ) => {
       const iconSize = 20;
       const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
       const tabTitle: JSX.Element = (
@@ -90,7 +97,9 @@ const SideContent = (props: SideContentProps) => {
             ...tab.body,
             props: {
               ...tab.body.props,
-              workspaceLocation
+              workspaceLocation,
+              width,
+              height
             }
           }
         : tab.body;
@@ -108,8 +117,10 @@ const SideContent = (props: SideContentProps) => {
       );
     };
 
-    return dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
-  }, [dynamicTabs, props.workspaceLocation]);
+    return dynamicTabs.map(tab =>
+      renderTab(tab, props.workspaceLocation, props.width, props.height)
+    );
+  }, [dynamicTabs, props.workspaceLocation, props.width, props.height]);
 
   const changeTabsCallback = React.useCallback(
     (

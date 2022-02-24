@@ -8,11 +8,25 @@ type State = {
   visualization: React.ReactNode;
 };
 
-class SideContentEnvVisualizer extends React.Component<{}, State> {
+class SideContentEnvVisualizer extends React.Component<{ width?: number; height?: number }, State> {
   constructor(props: any) {
     super(props);
     this.state = { visualization: null };
-    EnvVisualizer.init(visualization => this.setState({ visualization }));
+    EnvVisualizer.init(
+      visualization => this.setState({ visualization }),
+      props.width,
+      props.height
+    );
+  }
+
+  componentDidUpdate(prevProps: { width?: number; height?: number }) {
+    if (
+      (prevProps.width !== this.props.width || prevProps.height !== this.props.height) &&
+      this.props.width &&
+      this.props.height
+    ) {
+      EnvVisualizer.updateDimensions(this.props.width, this.props.height);
+    }
   }
 
   public render() {

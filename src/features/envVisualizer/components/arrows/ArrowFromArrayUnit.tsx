@@ -14,12 +14,11 @@ export class ArrowFromArrayUnit extends GenericArrow {
   private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: Visible) {
     // Move up if target above source or to the right with same vertical position.
     // Moves up slightly more if target is to the right.
-    const offset = to.y() / (to.x() + 1) + to.x() / (to.y() + 1);
     steps.push((x, y) => [
       x,
       y +
         (to.y() > from.y() || (to.y() === from.y() && to.x() <= from.x()) ? 1 : -1) *
-          (Config.DataUnitHeight - 2 * offset) -
+          Config.DataUnitHeight -
         (Math.sign(to.x() - from.x()) * Config.DataUnitHeight) / 12
     ]);
   }
