@@ -1,14 +1,14 @@
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
-import GameQuest from '../quest/GameQuest';
+import GameTask from '../task/GameTask';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 import ParserValidator, { GameEntityType } from './ParserValidator';
-import QuestsParser from './QuestsParser';
+import TasksParser from './TasksParser';
 
 /**
  * This class converts a checkpoint txt file into a Checkpoint
@@ -37,7 +37,7 @@ class Parser {
       map: new GameMap(),
       startingLoc: '',
       objectives: new GameObjective(),
-      quests: new GameQuest()
+      tasks: new GameTask()
     };
 
     Parser.validator = new ParserValidator();
@@ -91,9 +91,9 @@ class Parser {
       case 'dialogues':
         DialoguesParser.parse(body);
         break;
-      
-      case 'quests':
-        QuestsParser.parse(body);
+
+      case 'tasks':
+        TasksParser.parse(body);
         break;
       default:
         return false;

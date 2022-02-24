@@ -1,5 +1,5 @@
 export enum DashboardPage {
   Log = 'Log',
-  Quests = 'Quests',
+  Tasks = 'Tasks',
   Achievements = 'Achievements'
 }

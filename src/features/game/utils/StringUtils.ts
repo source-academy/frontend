@@ -8,10 +8,10 @@ export default class StringUtils {
    * Example input:
    * ["objectives",
    * "    talkToHartin"
-   * "    completeQuest"]
+   * "    completeTask"]
    *
    * Example output:
-   * [ ["objectives"], ["talkToHartin", "completeQuest"] ]
+   * [ ["objectives"], ["talkToHartin", "completeTask"] ]
    *
    * @param lines raw text strings
    * @returns {Array<[string, string[]]>} several parargraphs that have
