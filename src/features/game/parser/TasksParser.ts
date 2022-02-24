@@ -31,7 +31,8 @@ export default class TasksParser {
       const newTask: Task = {
         taskId: taskId,
         title: title,
-        description: desc
+        description: desc,
+        visible: false
       };
       tasks.push(newTask);
     });

@@ -33,7 +33,7 @@ class GameLogManager {
       return logContainer;
     }
 
-    console.log(GameGlobalAPI.getInstance().getAllTaskData());
+    console.log(GameGlobalAPI.getInstance().getAllVisibleTaskData());
 
     // Scrollable Text
     const bitmapText = createBitmapText(

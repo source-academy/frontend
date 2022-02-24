@@ -7,6 +7,7 @@ export enum GameActionType {
   ObtainCollectible = 'ObtainCollectible',
   CompleteObjective = 'CompleteObjective',
   CompleteTask = 'CompleteTask',
+  ShowTask = 'ShowTask',
   PreviewLocation = 'PreviewLocation',
   AddItem = 'AddItem',
   RemoveItem = 'RemoveItem',

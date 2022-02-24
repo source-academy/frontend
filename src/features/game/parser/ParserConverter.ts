@@ -41,6 +41,7 @@ const stringToActionTypeMap = {
   obtain_collectible: GameActionType.ObtainCollectible,
   complete_objective: GameActionType.CompleteObjective,
   complete_task: GameActionType.CompleteTask,
+  show_task: GameActionType.ShowTask,
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
   change_background: GameActionType.ChangeBackground,

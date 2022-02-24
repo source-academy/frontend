@@ -70,7 +70,10 @@ class GameStateManager {
 
     this.getSaveManager()
       .getCompletedTasks()
-      .forEach(task => this.checkpointTask.setTask(task, true));
+      .forEach(task => {
+        this.checkpointTask.setTask(task, true);
+        this.checkpointTask.showTask(task);
+      });
 
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
@@ -440,8 +443,17 @@ class GameStateManager {
     this.checkpointTask.setTask(key, true);
   }
 
-  public getAllTaskData(): Array<[Task, boolean]> {
-    return this.checkpointTask.getAllTaskData();
+  /**
+   * Indicate that a task should be shown to the user.
+   *
+   * @param key task id
+   */
+  public showTask(key: string): void {
+    this.checkpointTask.showTask(key);
+  }
+
+  public getAllVisibleTaskData(): Array<[Task, boolean]> {
+    return this.checkpointTask.getAllVisibleTaskData();
   }
 
   ///////////////////////////////

@@ -202,8 +202,12 @@ class GameGlobalAPI {
     this.getGameManager().getStateManager().completeTask(key);
   }
 
-  public getAllTaskData(): Array<[Task, boolean]> {
-    return this.getGameManager().getStateManager().getAllTaskData();
+  public showTask(key: string): void {
+    this.getGameManager().getStateManager().showTask(key);
+  }
+
+  public getAllVisibleTaskData(): Array<[Task, boolean]> {
+    return this.getGameManager().getStateManager().getAllVisibleTaskData();
   }
 
   /////////////////////
