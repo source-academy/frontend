@@ -1,7 +1,6 @@
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
-import GameQuest from '../quest/GameQuest';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import DialoguesParser from './DialogueParser';
@@ -36,8 +35,7 @@ class Parser {
     Parser.checkpoint = {
       map: new GameMap(),
       startingLoc: '',
-      objectives: new GameObjective(),
-      quests: new GameQuest()
+      objectives: new GameObjective()
     };
 
     Parser.validator = new ParserValidator();

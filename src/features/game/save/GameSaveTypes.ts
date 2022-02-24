@@ -15,7 +15,6 @@ export type FullSaveState = {
  * @prop {string} currentLocation - location of student during save
  * @prop {string} currentPhase - phase student is in during last save
  *
- * @prop {string[]} completedQuests - list of quests that have been completed by player
  * @prop {string[]} completedObjectives - list of objectives that have been completed by player
  * @prop {string[]} triggeredInteractions - list of itemIds that have been triggered by player
  * @prop {string[]} triggeredActions - list of actions that have been triggered by player
@@ -26,7 +25,6 @@ export type GameSaveState = {
   currentPhase: string;
   chapterNewlyCompleted: boolean;
 
-  completedQuests: string[];
   completedObjectives: string[];
   triggeredInteractions: string[];
   triggeredStateChangeActions: string[];

@@ -1,6 +1,5 @@
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
-import GameQuest from '../quest/GameQuest';
 
 /**
  * Encapsulates information about a checkpoint
@@ -13,7 +12,6 @@ export type GameCheckpoint = {
   map: GameMap;
   startingLoc: string;
   objectives: GameObjective;
-  quests: GameQuest;
 };
 
 /**

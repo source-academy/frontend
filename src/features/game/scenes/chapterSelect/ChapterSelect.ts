@@ -179,7 +179,7 @@ class ChapterSelect extends Phaser.Scene {
     return chaptersContainer;
   }
 
-  public getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
+  private getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
 
   /**
    * Returns the number of pages of chapters

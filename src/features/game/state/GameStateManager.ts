@@ -6,7 +6,6 @@ import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import GameQuest from '../quest/GameQuest';
 import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -30,7 +29,6 @@ class GameStateManager {
   // Game State
   private gameMap: GameMap;
   private checkpointObjective: GameObjective;
-  private checkpointQuest: GameQuest;
   private chapterNewlyCompleted: boolean;
 
   // Triggered Interactions
@@ -43,7 +41,6 @@ class GameStateManager {
 
     this.gameMap = gameCheckpoint.map;
     this.checkpointObjective = gameCheckpoint.objectives;
-    this.checkpointQuest = gameCheckpoint.quests;
     this.chapterNewlyCompleted = false;
 
     this.updatedLocations = new Set(this.gameMap.getLocationIds());
@@ -396,15 +393,6 @@ class GameStateManager {
    */
   public getCompletedObjectives(): ItemId[] {
     return convertMapToArray(this.checkpointObjective.getObjectives());
-  }
-
-  /**
-   * Gets array of all quests that have been completed.
-   *
-   * @returns {ItemId[]}
-   */
-  public getCompletedQuests(): ItemId[] {
-    return convertMapToArray(this.checkpointQuest.getQuests());
   }
 
   /**
