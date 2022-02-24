@@ -17,8 +17,7 @@ import { DashboardPage } from './DashboardTypes';
 /**
  * Manager for the dashboard.
  *
- * Here, the dialogue log, quest log and achievements are
- * available for browsing.
+ * Here, the dialogue log and quest log are available for browsing.
  */
 class GameDashboardManager implements IGameUI {
   private scene: IBaseScene;
@@ -26,11 +25,14 @@ class GameDashboardManager implements IGameUI {
   private pageMask: Phaser.Display.Masks.GeometryMask;
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private pageChosenContainer: Phaser.GameObjects.Container | undefined;
+  private pageUIContainers: Map<DashboardPage, Phaser.GameObjects.Container>;
   private currActivePage: DashboardPage;
 
   constructor(scene: IBaseScene) {
     this.scene = scene;
     this.pageMask = this.createPageMask();
+    // Used to store each page's UI so they only get created once each time dashboard is opened.
+    this.pageUIContainers = new Map();
     this.currActivePage = DashboardPage.Log;
     this.scene.getPhaseManager().addPhaseToMap(GamePhaseType.Dashboard, this);
   }
@@ -41,7 +43,7 @@ class GameDashboardManager implements IGameUI {
   private createPageMask() {
     const shape = new Phaser.GameObjects.Graphics(this.scene);
     // This is the rectangle of the background image
-    const { x, y, width, height } = DashboardConstants.pageMask;
+    const { x, y, width, height } = DashboardConstants.pageArea;
     shape.fillRect(x, y, width, height);
     return shape.createGeometryMask();
   }
@@ -59,13 +61,25 @@ class GameDashboardManager implements IGameUI {
     if (this.uiContainer) {
       if (this.pageChosenContainer) this.pageChosenContainer.destroy();
 
-      // Update page
-      this.getPageManager(this.currActivePage)?.destroyUIContainer();
+      // Hide current page
+      const currPageUIContainer = this.pageUIContainers.get(this.currActivePage);
+      // Only time currPageUIContainer does not exist here is when
+      // the dashboard is opened and the first page is set.
+      if (currPageUIContainer) {
+        currPageUIContainer.setVisible(false);
+      }
+
+      // Show selected page
       this.currActivePage = page;
-      const pageUIContainer = this.getPageManager(this.currActivePage)?.getUIContainer();
-      if (pageUIContainer) {
-        pageUIContainer.setMask(this.pageMask);
-        this.scene.getLayerManager().addToLayer(Layer.Dashboard, pageUIContainer);
+      let newPageUIContainer = this.pageUIContainers.get(this.currActivePage);
+      if (!newPageUIContainer) {
+        // First time opening this page, UI container not created yet
+        newPageUIContainer = this.getPageManager(this.currActivePage).createUIContainer();
+        newPageUIContainer.setMask(this.pageMask);
+        this.pageUIContainers.set(this.currActivePage, newPageUIContainer);
+        this.uiContainer.add(newPageUIContainer);
+      } else {
+        newPageUIContainer.setVisible(true);
       }
 
       // Set chosen page banner
@@ -168,10 +182,12 @@ class GameDashboardManager implements IGameUI {
     switch (page) {
       case DashboardPage.Log:
         return gameManager.getLogManager();
-      case DashboardPage.Quests:
-        return;
-      case DashboardPage.Achievements:
-        return;
+      // case DashboardPage.Quests:
+      //   return;
+      default:
+        return {
+          createUIContainer: () => new Phaser.GameObjects.Container(this.scene)
+        };
     }
   }
 
@@ -190,9 +206,10 @@ class GameDashboardManager implements IGameUI {
     this.setPage(this.currActivePage);
 
     this.uiContainer.setPosition(screenCenter.x, -screenSize.y);
+    this.pageMask.geometryMask.setPosition(screenCenter.x, -screenSize.y);
 
     this.scene.tweens.add({
-      targets: this.uiContainer,
+      targets: [this.uiContainer, this.pageMask.geometryMask],
       ...entryTweenProps,
       y: screenCenter.y
     });
@@ -206,14 +223,14 @@ class GameDashboardManager implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     if (this.uiContainer) {
-      // Deactive UI of current page
-      this.getPageManager(this.currActivePage)?.destroyUIContainer();
+      // Reload page UIs next time dashboard is opened
+      this.pageUIContainers.clear();
 
       this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
       this.getSoundManager().playSound(SoundAssets.menuExit.key);
 
       this.scene.tweens.add({
-        targets: this.uiContainer,
+        targets: [this.uiContainer, this.pageMask.geometryMask],
         ...exitTweenProps
       });
 
