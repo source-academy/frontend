@@ -44,6 +44,7 @@ export enum Config {
   ArrowMinHeight = 100,
   ArrowNumLanes = 6,
   FrameArrowStrokeWidth = 2,
+  MaxExportWidth = 30000,
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',

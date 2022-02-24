@@ -240,15 +240,23 @@ export class Layout {
   static exportImage = () => {
     Layout.stageRef.current?.y(0);
     Layout.stageRef.current?.x(0);
-    Layout.stageRef.current?.width(Layout.width);
-    Layout.stageRef.current?.height(Layout.height);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = this.stageRef.current.toDataURL();
-    a.download = 'diagram.png';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    for (let i = 0; i < Math.ceil(Layout.width / Config.MaxExportWidth); i = i + 1) {
+      Layout.stageRef.current?.width(
+        Math.min(Layout.width - i * Config.MaxExportWidth, Config.MaxExportWidth)
+      );
+      Layout.stageRef.current?.height(Layout.height);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = this.stageRef.current.toDataURL({
+        x: i * Config.MaxExportWidth,
+        y: 0,
+        mimeType: 'image/jpeg'
+      });
+      a.download = `diagram_${i}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
     Layout.stageRef.current?.width(Layout.visibleWidth);
     Layout.stageRef.current?.height(Layout.visibleHeight);
   };
@@ -269,7 +277,11 @@ export class Layout {
               />
               <Button
                 outlined={true}
-                text="Save"
+                text={`Save ${
+                  Layout.width > Config.MaxExportWidth
+                    ? Math.ceil(Layout.width / Config.MaxExportWidth) + ' images'
+                    : 'Image'
+                }`}
                 color="White"
                 onClick={this.exportImage}
                 large={true}
