@@ -11,8 +11,8 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
-import DashboardConstants, { pageBannerTextStyle } from './DashboardConstants';
-import { DashboardPage } from './DashboardTypes';
+import DashboardConstants, { pageBannerTextStyle } from './GameDashboardConstants';
+import { DashboardPage } from './GameDashboardTypes';
 
 /**
  * Manager for the dashboard.
@@ -51,9 +51,9 @@ class GameDashboardManager implements IGameUI {
   /**
    * Change the current page in view to a new page.
    *
-   * Internally, destroy and replace the containers to reflect
-   * the new page; also sets up the blue outline that denotes
-   * that the page is chosen.
+   * Internally, create a container for each page when the page is first
+   * opened or retrieve the container from cache if opened before;
+   * also sets up the blue outline that denotes that the page is chosen.
    *
    * @param page new page
    */
