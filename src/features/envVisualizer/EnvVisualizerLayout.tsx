@@ -2,7 +2,7 @@ import { Button, Checkbox, FormGroup } from '@blueprintjs/core';
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
-import { Layer, Stage } from 'react-konva';
+import { Layer, Rect, Stage } from 'react-konva';
 
 import { Grid } from './components/Grid';
 import { ArrayValue } from './components/values/ArrayValue';
@@ -12,7 +12,7 @@ import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { Config } from './EnvVisualizerConfig';
+import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
 import {
   deepCopyTree,
@@ -54,10 +54,12 @@ export class Layout {
 
   static updateDimensions(width: number, height: number) {
     Layout.visibleWidth = width;
-    Layout.stageRef.current.width(width);
     Layout.visibleHeight = height;
-    Layout.stageRef.current.height(height);
-    EnvVisualizer.redraw();
+    if (Layout.stageRef.current !== null) {
+      Layout.stageRef.current.width(width);
+      Layout.stageRef.current.height(height);
+      EnvVisualizer.redraw();
+    }
   }
 
   /** processes the runtime context from JS Slang */
@@ -236,6 +238,10 @@ export class Layout {
   }
 
   static exportImage = () => {
+    Layout.stageRef.current?.y(0);
+    Layout.stageRef.current?.x(0);
+    Layout.stageRef.current?.width(Layout.width);
+    Layout.stageRef.current?.height(Layout.height);
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = this.stageRef.current.toDataURL();
@@ -243,6 +249,8 @@ export class Layout {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    Layout.stageRef.current?.width(Layout.visibleWidth);
+    Layout.stageRef.current?.height(Layout.visibleHeight);
   };
 
   static draw(): React.ReactNode {
@@ -296,13 +304,9 @@ export class Layout {
                   : Config.SA_BLUE.toString()
               }}
             >
-              <Stage
-                width={EnvVisualizer.getPrintableMode() ? Layout.width : Layout.visibleWidth}
-                height={EnvVisualizer.getPrintableMode() ? Layout.height : Layout.visibleHeight}
-                ref={this.stageRef}
-              >
+              <Stage width={Layout.visibleWidth} height={Layout.visibleHeight} ref={this.stageRef}>
                 <Layer>
-                  {/* <Rect
+                  <Rect
                     {...ShapeDefaultProps}
                     x={0}
                     y={0}
@@ -315,7 +319,7 @@ export class Layout {
                     }
                     key={Layout.key++}
                     listening={false}
-                  /> */}
+                  />
                   {Layout.grid.draw()}
                 </Layer>
               </Stage>

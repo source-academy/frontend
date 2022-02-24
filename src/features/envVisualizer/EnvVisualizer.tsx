@@ -13,7 +13,7 @@ export default class EnvVisualizer {
   private static context: Context;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
-    EnvVisualizer.drawEnv(EnvVisualizer.context);
+    EnvVisualizer.redraw();
   }
   public static getPrintableMode(): boolean {
     return EnvVisualizer.printableMode;
