@@ -202,6 +202,10 @@ class GameGlobalAPI {
     this.getGameManager().getStateManager().completeTask(key);
   }
 
+  public getAllTaskData(): Array<[Task, boolean]> {
+    return this.getGameManager().getStateManager().getAllTaskData();
+  }
+
   /////////////////////
   //   User State    //
   /////////////////////
@@ -285,16 +289,8 @@ class GameGlobalAPI {
     this.getGameManager().getStorageManager().storeLine(newLine, newSpeakerDetail);
   }
 
-  public storeTask(task: Task) {
-    this.getGameManager().getStorageManager().storeTask(task);
-  }
-
   public getDialogueStorage() {
     return this.getGameManager().getStorageManager().getDialogueStorage();
-  }
-
-  public getTaskStorage() {
-    return this.getGameManager().getStorageManager().getTaskStorage();
   }
 
   /////////////////////

@@ -9,13 +9,13 @@ import { Task } from './GameTaskTypes';
  */
 class GameTask {
   private task: Map<string, boolean>;
-  private taskData: Map<string, [string, string]>;
+  private taskDetail: Map<string, [string, string]>;
   private totalNumOfTasks: number;
   private numOfCompletedTasks: number;
 
   constructor() {
     this.task = new Map<string, boolean>();
-    this.taskData = new Map<string, [string, string]>();
+    this.taskDetail = new Map<string, [string, string]>();
     this.totalNumOfTasks = 0;
     this.numOfCompletedTasks = 0;
   }
@@ -45,7 +45,7 @@ class GameTask {
   public addTask(task: Task): void {
     const key = task.taskId;
     this.task.set(key, false);
-    this.taskData.set(key, [task.title, task.description]);
+    this.taskDetail.set(key, [task.title, task.description]);
     this.totalNumOfTasks++;
   }
 
@@ -81,8 +81,8 @@ class GameTask {
    *
    * @param key key of the task
    */
-  public getTaskData(key: string): [string, string] | undefined {
-    return this.taskData.get(key);
+  public getTaskDetail(key: string): [string, string] | undefined {
+    return this.taskDetail.get(key);
   }
 
   /**
@@ -93,10 +93,23 @@ class GameTask {
   }
 
   /**
-   * Returns all the task data.
+   * Returns all the task data, including the task id, title, description, and the state.
    */
-  public getAllTaskData() {
-    return this.taskData;
+  public getAllTaskData(): Array<[Task, boolean]> {
+    const allTask: Array<[Task, boolean]> = new Array<[Task, boolean]>();
+    for (const key of this.task.keys()) {
+      const taskState = this.getTaskState(key);
+      const taskDetail = this.getTaskDetail(key);
+      if (taskState !== undefined && taskDetail !== undefined) {
+        const taskData: Task = {
+          taskId: key,
+          title: taskDetail[0],
+          description: taskDetail[1]
+        };
+        allTask.push([taskData, taskState]);
+      }
+    }
+    return allTask;
   }
 
   /**
@@ -105,9 +118,9 @@ class GameTask {
    * @param task map of keys (task ids) to values (boolean)
    * @param taskData map of keys (task ids) to values (task title, task description)
    */
-  public setTasks(task: Map<string, boolean>, taskData: Map<string, [string, string]>) {
+  public setTasks(task: Map<string, boolean>, taskDetail: Map<string, [string, string]>) {
     this.task = task;
-    this.taskData = taskData;
+    this.taskDetail = taskDetail;
   }
 }
 
