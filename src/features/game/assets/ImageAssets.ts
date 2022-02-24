@@ -70,6 +70,21 @@ const ImageAssets: AssetMap<ImageAsset> = {
     key: 'chapter-continue',
     path: '/ui/chapterContinue.png'
   },
+  StarGold: {
+    type: AssetType.Image,
+    key: 'StarGold',
+    path: '/ui/StarGold.png'
+  },
+  StarSilver: {
+    type: AssetType.Image,
+    key: 'StarSilver',
+    path: '/ui/StarSilver.png'
+  },
+  StarBronze: {
+    type: AssetType.Image,
+    key: 'StarBronze',
+    path: '/ui/StarBronze.png'
+  },
   chapterSelectFrame: {
     type: AssetType.Image,
     key: 'chapter-select-frame',
