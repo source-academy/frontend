@@ -1,24 +1,21 @@
-//import ChapterSelect from '../scenes/chapterSelect/ChapterSelect';
-//import chapConstants, { chapterIndexStyle, chapterTitleStyle } from './ChapterSelectConstants';
-//import GameLayerManager from '../../layer/GameLayerManager';
-import SourceAcademyGame from '../SourceAcademyGame';
+import { Task } from './GameTaskTypes';
 
 /**
- * The class encapsulates data on all the tasks ids
- * that players CAN complete and keeps track of which
- * tasks have already been completed.
+ * The class encapsulates data on all the task ids
+ * that players can optionally complete, and keeps track of
+ * which tasks have already been completed.
  *
  * One of the components of game checkpoint.
  */
 class GameTask {
   private task: Map<string, boolean>;
-  private description: string;
+  private taskData: Map<string, [string, string]>;
   private totalNumOfTasks: number;
   private numOfCompletedTasks: number;
 
   constructor() {
     this.task = new Map<string, boolean>();
-    this.description = '';
+    this.taskData = new Map<string, [string, string]>();
     this.totalNumOfTasks = 0;
     this.numOfCompletedTasks = 0;
   }
@@ -28,13 +25,12 @@ class GameTask {
    *
    * @param key key of the task
    * @param value boolean value to set to
-   * @param desc description of the task
    *
    */
-  public setTask(key: string, value: boolean, desc: string): void {
+  public setTask(key: string, value: boolean): void {
     const prevState = this.task.get(key);
     this.task.set(key, value);
-    this.description = desc;
+
     // Handle repeated calls
     if (prevState !== undefined && prevState !== value) {
       this.numOfCompletedTasks++;
@@ -44,28 +40,22 @@ class GameTask {
   /**
    * Add a task tied to the given string.
    *
-   * @param key key of the task
-   * @param desc description of the task
+   * @param task the task containing the task id (key) and task data
    */
-  public addTask(key: string, desc: string): void {
+  public addTask(task: Task): void {
+    const key = task.taskId;
     this.task.set(key, false);
-    this.description = desc;
+    this.taskData.set(key, [task.title, task.description]);
     this.totalNumOfTasks++;
   }
 
   /**
    * Add multiple tasks.
    *
-   * @param keys task keys
-   * @param descriptions task descriptions
+   * @param tasks the task containing the task ids (keys) and task data
    */
-  public addTasks(keys: string[], descriptions: string[]): void {
-    //keys.forEach(key => this.addTask(key));
-    let i: number = 0;
-    while (i < keys.length) {
-      this.addTask(keys[i], descriptions[i]);
-      i++;
-    }
+  public addTasks(tasks: Task[]): void {
+    tasks.forEach(task => this.addTask(task));
   }
 
   /**
@@ -86,34 +76,38 @@ class GameTask {
   }
 
   /**
+   * Retrieve the data of a specific task.
+   * If task is not present, will return undefined instead.
+   *
+   * @param key key of the task
+   */
+  public getTaskData(key: string): [string, string] | undefined {
+    return this.taskData.get(key);
+  }
+
+  /**
    * Returns all the tasks.
    */
-  public getTasks() {
+  public getAllTasks() {
     return this.task;
   }
 
-  /** Returns description of a task*/
-  public getDescription(key: string): string | '' {
-    return this.description;
-  }
-
-  /** Returns tasks so far */
-  public getTasksSoFar(index: number): string[] | null {
-    const tasksSoFar = SourceAcademyGame.getInstance()
-      .getSaveManager()
-      .getChapterSaveState(index).completedTasks;
-    return tasksSoFar;
+  /**
+   * Returns all the task data.
+   */
+  public getAllTaskData() {
+    return this.taskData;
   }
 
   /**
    * Set the task to the given parameter directly.
    *
-   * @param task map of task keys(string) to its value (boolean)
-   * @param desc description of the task
+   * @param task map of keys (task ids) to values (boolean)
+   * @param taskData map of keys (task ids) to values (task title, task description)
    */
-  public setTasks(task: Map<string, boolean>, desc: string) {
+  public setTasks(task: Map<string, boolean>, taskData: Map<string, [string, string]>) {
     this.task = task;
-    this.description = desc;
+    this.taskData = taskData;
   }
 }
 

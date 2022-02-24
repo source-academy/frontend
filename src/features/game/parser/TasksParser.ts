@@ -1,6 +1,6 @@
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Task } from '../task/GameTaskTypes';
 import StringUtils from '../utils/StringUtils';
+import Parser from './Parser';
 
 /**
  * This class parses the "tasks" paragraphs,
@@ -10,28 +10,31 @@ import StringUtils from '../utils/StringUtils';
 export default class TasksParser {
   /**
    * This function parses the strings and creates each task
-   * based on two parameters:
+   * based on three parameters:
    *
-   * (1) The specified objective tied to the task
-   * (2) The task description
+   * (1) The specified task id
+   * (2) The title of the task
+   * (3) The description of the task
    *
    * E.g.
    *
    * tasks
-   *     talkedToScottie, Talk to Scottie - your best friend.
-   *     checkedScreen, Check the monitor in your room for further instructions.
+   *     taskTalkToScottie, Talk to Scottie, Have a chat with your best friend, Scottie!
+   *     taskCheckScreen, Check the monitor, Go to your room and check for further instructions!
    *
    * @param taskDetails the CSV lines containing descriptions about the tasks
    */
   public static parse(taskDetails: string[]) {
+    const tasks: Task[] = [];
     taskDetails.forEach(taskDetail => {
-      const [objectiveId, title, desc] = StringUtils.splitByChar(taskDetail, ',');
+      const [taskId, title, desc] = StringUtils.splitByChar(taskDetail, ',');
       const newTask: Task = {
-        objectiveId: objectiveId,
+        taskId: taskId,
         title: title,
         description: desc
       };
-      GameGlobalAPI.getInstance().storeTask(newTask);
+      tasks.push(newTask);
     });
+    Parser.checkpoint.tasks.addTasks(tasks);
   }
 }

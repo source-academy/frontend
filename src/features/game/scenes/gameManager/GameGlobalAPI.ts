@@ -166,8 +166,8 @@ class GameGlobalAPI {
   //  Game Objective //
   /////////////////////
 
-  public isAllComplete(): boolean {
-    return this.getGameManager().getStateManager().isAllComplete();
+  public areAllObjectivesComplete(): boolean {
+    return this.getGameManager().getStateManager().areAllObjectivesComplete();
   }
 
   public isObjectiveComplete(key: string): boolean {
@@ -180,6 +180,26 @@ class GameGlobalAPI {
 
   public completeObjective(key: string): void {
     this.getGameManager().getStateManager().completeObjective(key);
+  }
+
+  /////////////////////
+  //  Game Task      //
+  /////////////////////
+
+  public areAllTasksComplete(): boolean {
+    return this.getGameManager().getStateManager().areAllTasksComplete();
+  }
+
+  public isTaskComplete(key: string): boolean {
+    return this.getGameManager().getStateManager().isTaskComplete(key);
+  }
+
+  public areTasksComplete(keys: string[]): boolean {
+    return this.getGameManager().getStateManager().areTasksComplete(keys);
+  }
+
+  public completeTask(key: string): void {
+    this.getGameManager().getStateManager().completeTask(key);
   }
 
   /////////////////////

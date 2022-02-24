@@ -80,6 +80,11 @@ export default class ActionParser {
         Parser.validator.assertEntityType(GameEntityType.objectives, actionParams[0], actionType);
         break;
 
+      case GameActionType.CompleteTask:
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertEntityType(GameEntityType.tasks, actionParams[0], actionType);
+        break;
+
       case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
         actionParamObj.id = actionParams[0];

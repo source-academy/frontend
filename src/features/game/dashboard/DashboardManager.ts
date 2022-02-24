@@ -16,7 +16,7 @@ import { DashboardPage } from './DashboardTypes';
 /**
  * Manager for the dashboard.
  *
- * Here, the dialogue log, quest log and achievements are
+ * Here, the dialogue log, task log and achievements are
  * available for browsing.
  */
 class GameDashboardManager implements IGameUI {
@@ -126,7 +126,7 @@ class GameDashboardManager implements IGameUI {
   /**
    * Format the button information to a UI container, complete with
    * styling and functionality. This button represent the page option button,
-   * whether it is 'log', 'quests' or 'achievements'.
+   * whether it is 'log', 'tasks' or 'achievements'.
    *
    * @param text text to be displayed on the button
    * @param xPos x position of the button

@@ -1,5 +1,5 @@
 export type Task = {
-  objectiveId: string;
+  taskId: string;
   title: string;
   description: string;
 };

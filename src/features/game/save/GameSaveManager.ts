@@ -146,6 +146,7 @@ export default class GameSaveManager {
   public getTriggeredStateChangeActions = () => this.getGameSaveState().triggeredStateChangeActions;
   public getTriggeredInteractions = () => this.getGameSaveState().triggeredInteractions;
   public getCompletedObjectives = () => this.getGameSaveState().completedObjectives;
+  public getCompletedTasks = () => this.getGameSaveState().completedTasks || []; // This is to allow previously saved mock chapters on SA to run...
   public getLoadedPhase = () => this.getGameSaveState().currentPhase;
   public getChapterNewlyCompleted = () => this.getGameSaveState().chapterNewlyCompleted;
 

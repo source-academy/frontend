@@ -40,6 +40,7 @@ const stringToActionTypeMap = {
   update_character: GameActionType.UpdateCharacter,
   obtain_collectible: GameActionType.ObtainCollectible,
   complete_objective: GameActionType.CompleteObjective,
+  complete_task: GameActionType.CompleteTask,
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
   change_background: GameActionType.ChangeBackground,

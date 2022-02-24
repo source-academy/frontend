@@ -79,6 +79,9 @@ class Parser {
       case 'objectives':
         Parser.checkpoint.objectives.addObjectives(body);
         break;
+      case 'tasks':
+        TasksParser.parse(body);
+        break;
       case 'locations':
         LocationsParser.parse(body);
         break;
@@ -90,10 +93,6 @@ class Parser {
         break;
       case 'dialogues':
         DialoguesParser.parse(body);
-        break;
-
-      case 'tasks':
-        TasksParser.parse(body);
         break;
       default:
         return false;

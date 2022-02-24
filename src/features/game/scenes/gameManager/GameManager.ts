@@ -309,7 +309,7 @@ class GameManager extends Phaser.Scene {
     return (
       !this.hasTransitioned &&
       newPhase !== GamePhaseType.Sequence &&
-      GameGlobalAPI.getInstance().isAllComplete() &&
+      GameGlobalAPI.getInstance().areAllObjectivesComplete() &&
       !this.getStateManager().getChapterNewlyCompleted()
     );
   }

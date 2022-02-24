@@ -67,6 +67,10 @@ class GameStateManager {
       .getCompletedObjectives()
       .forEach(objective => this.checkpointObjective.setObjective(objective, true));
 
+    this.getSaveManager()
+      .getCompletedTasks()
+      .forEach(task => this.checkpointTask.setTask(task, true));
+
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
 
@@ -343,13 +347,13 @@ class GameStateManager {
    * Checks whether all the checkpoint objectives has been completed.
    * @returns {boolean}
    */
-  public isAllComplete(): boolean {
+  public areAllObjectivesComplete(): boolean {
     return this.checkpointObjective.isAllComplete();
   }
 
   /**
    * Checks whether a specific objective has been completed.
-   * If the objective does not exist, this method still return true.
+   * If the objective does not exist, this method still returns true.
    *
    * @param key objective name
    * @returns {boolean}
@@ -386,6 +390,56 @@ class GameStateManager {
   }
 
   ///////////////////////////////
+  //    Chapter Tasks          //
+  ///////////////////////////////
+
+  /**
+   * Checks whether all the checkpoint tasks has been completed.
+   * @returns {boolean}
+   */
+  public areAllTasksComplete(): boolean {
+    return this.checkpointObjective.isAllComplete();
+  }
+
+  /**
+   * Checks whether a specific task has been completed.
+   * If the task does not exist, this method still returns true.
+   *
+   * @param key task id
+   * @returns {boolean}
+   */
+  public isTaskComplete(key: string): boolean {
+    const isComplete = this.checkpointTask.getTaskState(key);
+    if (isComplete === undefined || isComplete) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Check whether the tasks are complete or not.
+   * All specified tasks must be complete for this method
+   * to return true.
+   *
+   * @param keys task ids
+   * @returns {boolean}
+   */
+  public areTasksComplete(keys: string[]): boolean {
+    let result = true;
+    keys.forEach(key => (result = result && this.isTaskComplete(key)));
+    return result;
+  }
+
+  /**
+   * Record that a task has been completed.
+   *
+   * @param key task id
+   */
+  public completeTask(key: string): void {
+    this.checkpointTask.setTask(key, true);
+  }
+
+  ///////////////////////////////
   //          Saving           //
   ///////////////////////////////
 
@@ -404,7 +458,7 @@ class GameStateManager {
    * @returns {ItemId[]}
    */
   public getCompletedTasks(): ItemId[] {
-    return convertMapToArray(this.checkpointTask.getTasks());
+    return convertMapToArray(this.checkpointTask.getAllTasks());
   }
 
   /**

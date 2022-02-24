@@ -118,12 +118,6 @@ export function createChapter(
     .getSaveManager()
     .getChapterSaveState(index).lastCheckpointPlayed;
 
-  //const objectivesFinished = SourceAcademyGame.getInstance()
-  //  .getSaveManager()
-  //  .getChapterSaveState(index).completedObjectives;
-  //const numOfObjectivesFinished = objectivesFinished.length;
-  //const allObjectivesDone = //check if the objectives you wish to complete are in array (give string representation)
-
   const chapterDetails = SourceAcademyGame.getInstance().getGameChapters();
   const isComplete = () => lastCheckpointPlayed >= chapterDetails[index].filenames.length - 1;
 

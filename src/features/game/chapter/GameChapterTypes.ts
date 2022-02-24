@@ -8,6 +8,7 @@ import GameTask from '../task/GameTask';
  * @prop {GameMap} map - set of locations and items that players can interact with in the checkpoint.
  * @prop {string} startingLoc - the location where player begins when he starts playing the checkpoints.
  * @prop {GameObjective} objectives - Objective object that stores all the objective ids and their state of completion during the game
+ * @prop {GameTask} tasks - Task object that stores all the task ids, corresponding titles, descriptions, and their state of completion during the game
  */
 export type GameCheckpoint = {
   map: GameMap;
