@@ -58,7 +58,11 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
-              Thomas Tan
+              Shen Yi Hong,
+              <br />
+              Zhan Jie,
+              <br />
+	      Thomas Tan
               <br />
               <strong>(Source)</strong>
             </p>
