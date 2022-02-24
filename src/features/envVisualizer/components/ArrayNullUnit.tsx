@@ -1,21 +1,20 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Line as KonvaLine } from 'react-konva';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Hoverable, ReferenceType, Visible } from '../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
+import { ReferenceType, Visible } from '../EnvVisualizerTypes';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
-export class ArrayNullUnit implements Visible, Hoverable {
+export class ArrayNullUnit implements Visible {
   private _x: number;
   private _y: number;
   private _height: number;
   private _width: number;
   arrayUnit: ReferenceType;
   referencedBy: ReferenceType[];
+  ref: RefObject<any> = React.createRef();
 
   constructor(referencedBy: ReferenceType[]) {
     this.referencedBy = referencedBy;
@@ -44,14 +43,6 @@ export class ArrayNullUnit implements Visible, Hoverable {
     this._y = this.arrayUnit.y();
   };
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
-  };
-
   draw(): React.ReactNode {
     return (
       <KonvaLine
@@ -62,8 +53,7 @@ export class ArrayNullUnit implements Visible, Hoverable {
           EnvVisualizer.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
         }
         hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        ref={this.ref}
       />
     );
   }

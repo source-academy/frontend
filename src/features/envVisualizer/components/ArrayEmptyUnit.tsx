@@ -1,16 +1,14 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Rect } from 'react-konva';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
+import { Data, Visible } from '../EnvVisualizerTypes';
 import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
-export class ArrayEmptyUnit implements Visible, Hoverable {
+export class ArrayEmptyUnit implements Visible {
   readonly _x: number;
   readonly _y: number;
   readonly _height: number;
@@ -36,15 +34,7 @@ export class ArrayEmptyUnit implements Visible, Hoverable {
   width(): number {
     return this._width;
   }
-  ref?: React.RefObject<any> | undefined;
-
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
-  };
+  ref: RefObject<any> = React.createRef();
 
   draw(): React.ReactNode {
     return (
@@ -58,8 +48,7 @@ export class ArrayEmptyUnit implements Visible, Hoverable {
         stroke={
           EnvVisualizer.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
         }
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        ref={this.ref}
       />
     );
   }

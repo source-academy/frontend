@@ -1,20 +1,27 @@
-import React from 'react';
+import { KonvaEventObject } from 'konva/lib/Node';
+import { Path } from 'konva/lib/shapes/Path';
+import React, { RefObject } from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { Data, ReferenceType } from '../../EnvVisualizerTypes';
+import { Data, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayLevel } from '../ArrayLevel';
+import { ArrayNullUnit } from '../ArrayNullUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Arrow } from '../arrows/Arrow';
+import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
+import { FnValue } from './FnValue';
+import { GlobalFnValue } from './GlobalFnValue';
 // import { PrimitiveValue } from './PrimitiveValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
-export class ArrayValue extends Value {
+export class ArrayValue extends Value implements Hoverable {
   private _x: number;
   private _y: number;
   private _width: number;
@@ -22,10 +29,14 @@ export class ArrayValue extends Value {
 
   /** check if the value is already drawn */
   private _isDrawn: boolean = false;
+  private selected: boolean = false;
 
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
   level: ArrayLevel | undefined;
+  private arrows: GenericArrow[] = [];
+  // private childrenArrows: GenericArrow[] = [];
+  ref: RefObject<any> = React.createRef();
 
   constructor(
     /** underlying values this array contains */
@@ -79,10 +90,14 @@ export class ArrayValue extends Value {
   isDrawn(): boolean {
     return this._isDrawn;
   }
+  isSelected(): boolean {
+    return this.selected;
+  }
   reset(): void {
     this._isDrawn = false;
     this.units.map(x => x.reset());
     this.referencedBy.length = 0;
+    this.arrows = [];
   }
 
   setLevel(arrLevel: ArrayLevel): void {
@@ -97,14 +112,90 @@ export class ArrayValue extends Value {
     });
   }
 
+  addArrow = (arrow: GenericArrow) => {
+    this.arrows.push(arrow);
+  };
+
+  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.units.forEach(u => {
+      setHoveredStyle(u.ref.current);
+      if (
+        u.value instanceof ArrayValue ||
+        u.value instanceof FnValue ||
+        u.value instanceof GlobalFnValue ||
+        u.value instanceof ArrayNullUnit
+      ) {
+        setHoveredStyle(u.value.ref?.current);
+      }
+    });
+    this.arrows.forEach(u => {
+      setHoveredStyle(u.ref.current);
+    });
+  };
+
+  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (!this.selected) {
+      this.units.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
+        if (
+          u.value instanceof ArrayValue ||
+          u.value instanceof FnValue ||
+          u.value instanceof GlobalFnValue ||
+          u.value instanceof ArrayNullUnit
+        ) {
+          setUnhoveredStyle(u.value.ref?.current);
+        }
+        this.arrows.forEach(u => {
+          setUnhoveredStyle(u.ref.current);
+        });
+      });
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
+  };
+
+  onClick = ({ target, currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (target instanceof Path) {
+      return; // handled by GenericArrow.
+    }
+    this.selected = !this.selected;
+    if (!this.selected) {
+      this.units.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
+        if (
+          u.value instanceof ArrayValue ||
+          u.value instanceof FnValue ||
+          u.value instanceof GlobalFnValue ||
+          u.value instanceof ArrayNullUnit
+        ) {
+          setUnhoveredStyle(u.value.ref?.current);
+        }
+      });
+      this.arrows.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
+      });
+    }
+  };
+
   draw(): React.ReactNode {
     if (this.isDrawn()) {
       return null;
     }
     this._isDrawn = true;
+    // this.arrows = this.referencedBy.map(x => x instanceof Binding && Arrow.from(x.key).to(this));
+    this.arrows = this.referencedBy
+      .filter(x => x instanceof Binding)
+      .map(x => x instanceof Binding && Arrow.from(x.key).to(this)) as GenericArrow[];
     return (
-      <Group key={Layout.key++}>
-        {this.referencedBy.map(x => x instanceof Binding && Arrow.from(x.key).to(this).draw())}
+      <Group
+        key={Layout.key++}
+        ref={this.ref}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onClick={this.onClick}
+      >
+        {this.arrows.map(arrow => arrow.draw())}
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
           : new ArrayEmptyUnit(this).draw()}

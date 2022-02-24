@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Shape } from 'react-konva';
 
 import { ShapeDefaultProps } from '../../EnvVisualizerConfig';
@@ -13,11 +13,20 @@ interface Props {
   stroke: string;
   fillEnabled: boolean;
   hitStrokeWidth: number;
-  onMouseEnter: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
-  onMouseLeave: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
+  forwardRef: RefObject<any>;
+  onMouseEnter?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
+  onMouseLeave?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
 }
 
-export const RoundedRect: React.FC<Props> = ({ x, y, width, height, cornerRadius, ...props }) => {
+export const RoundedRect: React.FC<Props> = ({
+  x,
+  y,
+  width,
+  height,
+  cornerRadius,
+  forwardRef,
+  ...props
+}) => {
   return (
     <Shape
       sceneFunc={(context, shape) => {
@@ -37,6 +46,7 @@ export const RoundedRect: React.FC<Props> = ({ x, y, width, height, cornerRadius
         context.fillStrokeShape(shape);
       }}
       {...ShapeDefaultProps}
+      ref={forwardRef}
       {...props}
     />
   );

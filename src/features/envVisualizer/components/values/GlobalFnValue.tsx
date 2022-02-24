@@ -43,6 +43,7 @@ export class GlobalFnValue extends Value implements Hoverable {
   readonly tooltip: string;
   readonly exportTooltip: string;
 
+  readonly ref: RefObject<any> = React.createRef();
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
@@ -147,7 +148,7 @@ export class GlobalFnValue extends Value implements Hoverable {
     this._isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>
-        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}

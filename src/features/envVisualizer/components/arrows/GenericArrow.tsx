@@ -1,4 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import React from 'react';
+import { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import EnvVisualizer from '../../EnvVisualizer';
@@ -6,6 +8,8 @@ import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { Hoverable, StepsArray, Visible } from '../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
+import { ArrayUnit } from '../ArrayUnit';
+import { ArrayValue } from '../values/ArrayValue';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow implements Visible, Hoverable {
@@ -17,6 +21,7 @@ export class GenericArrow implements Visible, Hoverable {
   from: Visible;
   target: Visible | undefined;
   private selected: boolean = false;
+  ref: RefObject<any> = React.createRef();
 
   constructor(from: Visible) {
     this.from = from;
@@ -79,17 +84,35 @@ export class GenericArrow implements Visible, Hoverable {
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     this.selected = !this.selected;
     if (!this.selected) {
-      setUnhoveredStyle(currentTarget, {
-        strokeWidth: this.getStrokeWidth()
-      });
+      if (
+        !(this.from instanceof ArrayUnit && this.from.parent.isSelected()) &&
+        !(this.target instanceof ArrayValue && this.target.isSelected())
+      ) {
+        setUnhoveredStyle(currentTarget, {
+          strokeWidth: this.getStrokeWidth()
+        });
+      } else {
+        setHoveredStyle(currentTarget, {
+          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
+        });
+      }
     }
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (!this.selected) {
-      setUnhoveredStyle(currentTarget, {
-        strokeWidth: this.getStrokeWidth()
-      });
+      if (
+        !(this.from instanceof ArrayUnit && this.from.parent.isSelected()) &&
+        !(this.target instanceof ArrayValue && this.target.isSelected())
+      ) {
+        setUnhoveredStyle(currentTarget, {
+          strokeWidth: this.getStrokeWidth()
+        });
+      } else {
+        setHoveredStyle(currentTarget, {
+          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
+        });
+      }
     } else {
       const container = currentTarget.getStage()?.container();
       container && (container.style.cursor = 'default');
@@ -140,6 +163,7 @@ export class GenericArrow implements Visible, Hoverable {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
+        ref={this.ref}
       >
         <KonvaPath
           {...ShapeDefaultProps}
