@@ -6,6 +6,7 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
@@ -22,14 +23,27 @@ import { DashboardPage } from './DashboardTypes';
 class GameDashboardManager implements IGameUI {
   private scene: IBaseScene;
 
+  private pageMask: Phaser.Display.Masks.GeometryMask;
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private pageChosenContainer: Phaser.GameObjects.Container | undefined;
   private currActivePage: DashboardPage;
 
   constructor(scene: IBaseScene) {
     this.scene = scene;
+    this.pageMask = this.createPageMask();
     this.currActivePage = DashboardPage.Log;
     this.scene.getPhaseManager().addPhaseToMap(GamePhaseType.Dashboard, this);
+  }
+
+  /**
+   * Creates the GeometryMask through which each page's UI can be seen.
+   */
+  private createPageMask() {
+    const shape = new Phaser.GameObjects.Graphics(this.scene);
+    // This is the rectangle of the background image
+    const { x, y, width, height } = DashboardConstants.pageMask;
+    shape.fillRect(x, y, width, height);
+    return shape.createGeometryMask();
   }
 
   /**
@@ -45,8 +59,14 @@ class GameDashboardManager implements IGameUI {
     if (this.uiContainer) {
       if (this.pageChosenContainer) this.pageChosenContainer.destroy();
 
-      // Update
+      // Update page
+      this.getPageManager(this.currActivePage)?.destroyUIContainer();
       this.currActivePage = page;
+      const pageUIContainer = this.getPageManager(this.currActivePage)?.getUIContainer();
+      if (pageUIContainer) {
+        pageUIContainer.setMask(this.pageMask);
+        this.scene.getLayerManager().addToLayer(Layer.Dashboard, pageUIContainer);
+      }
 
       // Set chosen page banner
       const bannerPos = this.getPageOptPositions();
@@ -143,6 +163,18 @@ class GameDashboardManager implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  private getPageManager(page: DashboardPage) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    switch (page) {
+      case DashboardPage.Log:
+        return gameManager.getLogManager();
+      case DashboardPage.Quests:
+        return;
+      case DashboardPage.Achievements:
+        return;
+    }
+  }
+
   /**
    * Activate the 'Dashboard' UI.
    *
@@ -174,6 +206,9 @@ class GameDashboardManager implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     if (this.uiContainer) {
+      // Deactive UI of current page
+      this.getPageManager(this.currActivePage)?.destroyUIContainer();
+
       this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
       this.getSoundManager().playSound(SoundAssets.menuExit.key);
 
