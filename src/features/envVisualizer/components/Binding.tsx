@@ -6,6 +6,7 @@ import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
 import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
@@ -36,6 +37,10 @@ export class Binding implements Visible {
    */
   readonly isDummyBinding: boolean = false;
   keyYOffset: number;
+  private arrow: GenericArrow | undefined = undefined;
+  public getArrow = (): GenericArrow | undefined => {
+    return this.arrow;
+  };
 
   constructor(
     /** the key of this binding */
@@ -142,17 +147,22 @@ export class Binding implements Visible {
   };
 
   draw(): React.ReactNode {
+    if (
+      !(
+        this.isDummyBinding || // value is unreferenced in dummy binding
+        this.value instanceof PrimitiveValue ||
+        this.value instanceof UnassignedValue ||
+        this.value instanceof ArrayValue
+      )
+    ) {
+      this.arrow = Arrow.from(this.key).to(this.value);
+    }
     return (
       <React.Fragment key={Layout.key++}>
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {this.isDummyBinding || // value is unreferenced in dummy binding
-        this.value instanceof PrimitiveValue ||
-        this.value instanceof UnassignedValue ||
-        this.value instanceof ArrayValue // Draw Arrays afterwards
-          ? null
-          : Arrow.from(this.key).to(this.value).draw()}
+        {this.arrow && this.arrow.draw()}
         {!(this.value instanceof ArrayValue) && this.isMainReference ? this.value.draw() : null}
         {/* {!(this.value instanceof ArrayValue) && this.value.draw()} */}
       </React.Fragment>

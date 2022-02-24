@@ -46,6 +46,7 @@ export class FnValue extends Value implements Hoverable {
   readonly exportBodyText: string;
   readonly tooltip: string;
   readonly exportTooltip: string;
+  private selected: boolean = false;
 
   /** the parent/enclosing environment of this fn value */
   readonly enclosingEnvNode: EnvTreeNode;
@@ -146,22 +147,41 @@ export class FnValue extends Value implements Hoverable {
   }
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
-    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
     setHoveredStyle(currentTarget);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
-    this.labelRef.current.hide();
-    setUnhoveredStyle(currentTarget);
+    if (!this.selected) {
+      this.labelRef.current.hide();
+      setUnhoveredStyle(currentTarget);
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
+  };
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.selected = !this.selected;
+    if (!this.selected) {
+      this.labelRef.current.hide();
+      setUnhoveredStyle(currentTarget);
+    } else {
+      this.labelRef.current.show();
+      setHoveredStyle(currentTarget);
+    }
   };
 
   draw(): React.ReactNode {
     this._isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>
-        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
+        <Group
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          onClick={this.onClick}
+          ref={this.ref}
+        >
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}

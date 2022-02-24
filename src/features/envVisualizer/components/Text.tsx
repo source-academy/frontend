@@ -119,13 +119,8 @@ export class Text implements Visible, Hoverable {
         : Config.SA_WHITE.toString()
     };
     return (
-      <Group key={Layout.key++}>
-        <KonvaLabel
-          x={this.x()}
-          y={this.y()}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
+      <Group key={Layout.key++} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <KonvaLabel x={this.x()} y={this.y()}>
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
         <KonvaLabel
@@ -133,8 +128,6 @@ export class Text implements Visible, Hoverable {
           y={this._y}
           ref={this.ref}
           visible={EnvVisualizer.getPrintableMode() ? true : false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
         >
           <KonvaTag
             {...ShapeDefaultProps}

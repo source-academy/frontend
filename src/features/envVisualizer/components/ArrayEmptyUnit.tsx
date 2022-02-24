@@ -9,12 +9,14 @@ import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
 export class ArrayEmptyUnit implements Visible {
-  readonly _x: number;
-  readonly _y: number;
+  private _x: number;
+  private _y: number;
   readonly _height: number;
   readonly _width: number;
+  readonly value: null = null;
 
   readonly data: Data = [];
+  ref: RefObject<any> = React.createRef();
 
   constructor(readonly parent: ArrayValue) {
     this._x = this.parent.x();
@@ -34,7 +36,11 @@ export class ArrayEmptyUnit implements Visible {
   width(): number {
     return this._width;
   }
-  ref: RefObject<any> = React.createRef();
+  updatePosition = () => {
+    this._x = this.parent.x();
+    this._y = this.parent.y();
+  };
+  reset(): void {}
 
   draw(): React.ReactNode {
     return (

@@ -58,6 +58,7 @@ export class Frame implements Visible, Hoverable {
   static heights: number[] = [Config.CanvasPaddingY.valueOf()];
   offsetY: number;
   ref: RefObject<any> = React.createRef();
+  private selected: boolean = false;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -225,10 +226,37 @@ export class Frame implements Visible, Hoverable {
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredStyle(currentTarget);
+    this.bindings.forEach(x => {
+      const arrow = x.getArrow();
+      arrow && setHoveredStyle(arrow.ref.current);
+    });
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
+    if (!this.selected) {
+      setUnhoveredStyle(currentTarget);
+      this.bindings.forEach(x => {
+        const arrow = x.getArrow();
+        arrow && setUnhoveredStyle(arrow.ref.current);
+      });
+    }
+  };
+
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.selected = !this.selected;
+    if (!this.selected) {
+      setUnhoveredStyle(currentTarget);
+      this.bindings.forEach(x => {
+        const arrow = x.getArrow();
+        arrow && setUnhoveredStyle(arrow.ref.current);
+      });
+    } else {
+      setHoveredStyle(currentTarget);
+      this.bindings.forEach(x => {
+        const arrow = x.getArrow();
+        arrow && setHoveredStyle(arrow.ref.current);
+      });
+    }
   };
 
   draw(): React.ReactNode {
@@ -249,9 +277,10 @@ export class Frame implements Visible, Hoverable {
               : Config.SA_WHITE.toString()
           }
           cornerRadius={Number(Config.FrameCornerRadius)}
+          key={Layout.key++}
+          onClick={this.onClick}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
-          key={Layout.key++}
         />
       </Group>
     );

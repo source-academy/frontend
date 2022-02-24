@@ -33,6 +33,7 @@ export class ArrayValue extends Value implements Hoverable {
 
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
+  private emptyUnit: ArrayEmptyUnit | undefined = undefined;
   level: ArrayLevel | undefined;
   private arrows: GenericArrow[] = [];
   // private childrenArrows: GenericArrow[] = [];
@@ -128,6 +129,7 @@ export class ArrayValue extends Value implements Hoverable {
         setHoveredStyle(u.value.ref?.current);
       }
     });
+    this.emptyUnit && setHoveredStyle(this.emptyUnit.ref.current);
     this.arrows.forEach(u => {
       setHoveredStyle(u.ref.current);
     });
@@ -145,9 +147,10 @@ export class ArrayValue extends Value implements Hoverable {
         ) {
           setUnhoveredStyle(u.value.ref?.current);
         }
-        this.arrows.forEach(u => {
-          setUnhoveredStyle(u.ref.current);
-        });
+      });
+      this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
+      this.arrows.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
       });
     } else {
       const container = currentTarget.getStage()?.container();
@@ -155,7 +158,7 @@ export class ArrayValue extends Value implements Hoverable {
     }
   };
 
-  onClick = ({ target, currentTarget }: KonvaEventObject<MouseEvent>) => {
+  onClick = ({ target }: KonvaEventObject<MouseEvent>) => {
     if (target instanceof Path) {
       return; // handled by GenericArrow.
     }
@@ -172,6 +175,7 @@ export class ArrayValue extends Value implements Hoverable {
           setUnhoveredStyle(u.value.ref?.current);
         }
       });
+      this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
       this.arrows.forEach(u => {
         setUnhoveredStyle(u.ref.current);
       });
@@ -183,22 +187,23 @@ export class ArrayValue extends Value implements Hoverable {
       return null;
     }
     this._isDrawn = true;
-    // this.arrows = this.referencedBy.map(x => x instanceof Binding && Arrow.from(x.key).to(this));
     this.arrows = this.referencedBy
       .filter(x => x instanceof Binding)
       .map(x => x instanceof Binding && Arrow.from(x.key).to(this)) as GenericArrow[];
+    if (this.units.length === 0) {
+      this.emptyUnit = new ArrayEmptyUnit(this);
+    }
     return (
       <Group
         key={Layout.key++}
         ref={this.ref}
+        onClick={this.onClick}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        onClick={this.onClick}
       >
         {this.arrows.map(arrow => arrow.draw())}
-        {this.units.length > 0
-          ? this.units.map(unit => unit.draw())
-          : new ArrayEmptyUnit(this).draw()}
+        {this.units.length > 0 && this.units.map(unit => unit.draw())}
+        {this.emptyUnit && this.emptyUnit.draw()}
       </Group>
     );
   }

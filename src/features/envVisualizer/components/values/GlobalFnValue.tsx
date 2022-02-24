@@ -42,6 +42,7 @@ export class GlobalFnValue extends Value implements Hoverable {
   readonly exportBodyText: string;
   readonly tooltip: string;
   readonly exportTooltip: string;
+  private selected: boolean = false;
 
   readonly ref: RefObject<any> = React.createRef();
   readonly labelRef: RefObject<any> = React.createRef();
@@ -137,9 +138,25 @@ export class GlobalFnValue extends Value implements Hoverable {
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
-    this.labelRef.current.hide();
-    setUnhoveredStyle(currentTarget);
+    if (!this.selected) {
+      this.labelRef.current.hide();
+      setUnhoveredStyle(currentTarget);
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
   };
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.selected = !this.selected;
+    if (!this.selected) {
+      this.labelRef.current.hide();
+      setUnhoveredStyle(currentTarget);
+    } else {
+      this.labelRef.current.show();
+      setHoveredStyle(currentTarget);
+    }
+  };
+
   reset(): void {
     this._isDrawn = false;
   }
@@ -148,7 +165,12 @@ export class GlobalFnValue extends Value implements Hoverable {
     this._isDrawn = true;
     return (
       <React.Fragment key={Layout.key++}>
-        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
+        <Group
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          onClick={this.onClick}
+          ref={this.ref}
+        >
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}

@@ -54,6 +54,7 @@ export class ArrayNullUnit implements Visible {
         }
         hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
         ref={this.ref}
+        listening={false}
       />
     );
   }

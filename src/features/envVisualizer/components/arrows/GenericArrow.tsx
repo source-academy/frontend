@@ -160,10 +160,10 @@ export class GenericArrow implements Visible, Hoverable {
     return (
       <KonvaGroup
         key={Layout.key++}
+        ref={this.ref}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
-        ref={this.ref}
       >
         <KonvaPath
           {...ShapeDefaultProps}

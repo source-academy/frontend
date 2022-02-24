@@ -1,11 +1,9 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
@@ -74,33 +72,6 @@ export class ArrayUnit implements Visible {
     this.value instanceof PrimitiveValue && this.value.updatePosition();
   };
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-    if (
-      this.value instanceof ArrayValue ||
-      this.value instanceof FnValue ||
-      this.value instanceof GlobalFnValue
-    ) {
-      setHoveredStyle(this.value.ref?.current);
-    }
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (!this.parent.isSelected()) {
-      setUnhoveredStyle(currentTarget);
-      if (
-        this.value instanceof ArrayValue ||
-        this.value instanceof FnValue ||
-        this.value instanceof GlobalFnValue
-      ) {
-        setUnhoveredStyle(this.value.ref?.current);
-      }
-    } else {
-      const container = currentTarget.getStage()?.container();
-      container && (container.style.cursor = 'default');
-    }
-  };
-
   reset = () => {
     this.isDrawn = false;
   };
@@ -145,8 +116,6 @@ export class ArrayUnit implements Visible {
           hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
           fillEnabled={false}
           forwardRef={this.ref}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
           cornerRadius={cornerRadius}
         />
         {!(this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
