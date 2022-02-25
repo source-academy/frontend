@@ -24,10 +24,10 @@ const DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
 const URL_LOAD_INFO: string =
   'For security concerns, users are not allowed to load full JavaScript code from shared links';
 
-export function showNativeJSDisclaimer(): Promise<boolean> {
+export function showFullJSDisclaimer(): Promise<boolean> {
   return showSimpleConfirmDialog(DISCLAIMER_DIALOG_PROPS);
 }
 
-export function showNativeJSWarningOnUrlLoad(): void {
+export function showFullJSWarningOnUrlLoad(): void {
   showWarningMessage(URL_LOAD_INFO);
 }

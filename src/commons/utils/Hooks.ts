@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
+
 // The following section is licensed under the following terms:
 //
 // MIT License
@@ -89,13 +91,10 @@ export function useLocalStorageState<T>(
   key: string,
   defaultValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = React.useState<T>(() => {
-    const localStorageValue = window.localStorage.getItem(key);
-    return localStorageValue ? JSON.parse(localStorageValue) : defaultValue;
-  });
+  const [value, setValue] = React.useState<T>(readLocalStorage(key, defaultValue));
 
   React.useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    setLocalStorage(key, value);
   }, [key, value]);
 
   return [value, setValue];

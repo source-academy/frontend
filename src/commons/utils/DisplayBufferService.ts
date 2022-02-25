@@ -15,16 +15,13 @@ class BufferService {
     return bufferCopy;
   }
 
-  public push(log: string, workspaceLocation?: WorkspaceLocation): void {
-    if (workspaceLocation) {
-      this.handleWorkspaceChange(workspaceLocation);
-    }
-
+  public push(log: string, workspaceLocation: WorkspaceLocation): void {
+    this.handleWorkspaceChange(workspaceLocation);
     this.buffer.push(log);
   }
 
-  public attachConsole(): () => void {
-    const bufferCallback = (log: string) => this.push(log);
+  public attachConsole(workspaceLocation: WorkspaceLocation): () => void {
+    const bufferCallback = (log: string) => this.push(log, workspaceLocation);
     const defaultConsole = {};
     Object.entries(consoleOverloads).forEach(([method, overload]) => {
       defaultConsole[method] = console[method];
