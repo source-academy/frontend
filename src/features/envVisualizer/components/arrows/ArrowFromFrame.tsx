@@ -1,5 +1,8 @@
+import { KonvaEventObject } from 'konva/lib/Node';
+
 import { Config } from '../../EnvVisualizerConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
@@ -28,4 +31,34 @@ export class ArrowFromFrame extends GenericArrow {
   protected getStrokeWidth(): number {
     return Number(Config.FrameArrowStrokeWidth);
   }
+
+  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    setHoveredStyle(currentTarget, {
+      strokeWidth: Number(Config.FrameArrowStrokeWidth)
+    });
+  };
+
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    this.selected = !this.selected;
+    if (!this.selected) {
+      if (!(this.from instanceof Frame && this.from.isSelected())) {
+        setUnhoveredStyle(currentTarget, {
+          strokeWidth: this.getStrokeWidth()
+        });
+      }
+    }
+  };
+
+  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (!this.selected) {
+      if (!(this.from instanceof Frame && this.from.isSelected())) {
+        setUnhoveredStyle(currentTarget, {
+          strokeWidth: this.getStrokeWidth()
+        });
+      }
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
+  };
 }

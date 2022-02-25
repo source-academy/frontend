@@ -51,13 +51,14 @@ export class Layout {
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
+  static readonly invisiblePadding: number = 500;
 
   static updateDimensions(width: number, height: number) {
     Layout.visibleWidth = width;
     Layout.visibleHeight = height;
     if (Layout.stageRef.current !== null) {
-      Layout.stageRef.current.width(width);
-      Layout.stageRef.current.height(height);
+      Layout.stageRef.current.width(width + Layout.invisiblePadding * 2);
+      Layout.stageRef.current.height(height + Layout.invisiblePadding * 2);
       EnvVisualizer.redraw();
     }
   }
@@ -291,8 +292,8 @@ export class Layout {
           <div
             id="scroll-container"
             onScroll={e => {
-              const dx = e.currentTarget.scrollLeft;
-              const dy = e.currentTarget.scrollTop;
+              const dx = e.currentTarget.scrollLeft - Layout.invisiblePadding;
+              const dy = e.currentTarget.scrollTop - Layout.invisiblePadding;
               this.stageRef.current.container().style.transform =
                 'translate(' + dx + 'px, ' + dy + 'px)';
               this.stageRef.current.x(-dx);
@@ -316,7 +317,11 @@ export class Layout {
                   : Config.SA_BLUE.toString()
               }}
             >
-              <Stage width={Layout.visibleWidth} height={Layout.visibleHeight} ref={this.stageRef}>
+              <Stage
+                width={Layout.visibleWidth + Layout.invisiblePadding * 2}
+                height={Layout.visibleHeight + Layout.invisiblePadding * 2}
+                ref={this.stageRef}
+              >
                 <Layer>
                   <Rect
                     {...ShapeDefaultProps}

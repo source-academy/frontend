@@ -20,7 +20,7 @@ export class GenericArrow implements Visible, Hoverable {
   points: number[] = [];
   from: Visible;
   target: Visible | undefined;
-  private selected: boolean = false;
+  protected selected: boolean = false;
   ref: RefObject<any> = React.createRef();
 
   constructor(from: Visible) {

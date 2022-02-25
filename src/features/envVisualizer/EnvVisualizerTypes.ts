@@ -4,7 +4,7 @@ import {
 } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
@@ -19,6 +19,7 @@ export interface Drawable {
 
 /** this interface defines a Hoverable object */
 export interface Hoverable {
+  ref: RefObject<any>;
   onMouseEnter: (e: KonvaEventObject<MouseEvent>) => void;
   onMouseLeave: (e: KonvaEventObject<MouseEvent>) => void;
 }

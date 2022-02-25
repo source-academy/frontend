@@ -1,4 +1,3 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -16,6 +15,7 @@ import {
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -59,6 +59,8 @@ export class Frame implements Visible, Hoverable {
   offsetY: number;
   ref: RefObject<any> = React.createRef();
   private selected: boolean = false;
+  /** set of values to highlight when frame is over. */
+  private values: Hoverable[] = [];
 
   constructor(
     /** environment tree node that contains this frame */
@@ -118,6 +120,12 @@ export class Frame implements Visible, Hoverable {
     return 0;
   }
 
+  trackObjects(value: Hoverable): boolean {
+    const exists: boolean = this.values.includes(value);
+    !exists && this.values.push(value);
+    return !exists;
+  }
+
   /**
    * update absolute position of frame and its bindings.
    * @param x Target x-position
@@ -151,6 +159,7 @@ export class Frame implements Visible, Hoverable {
       maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
     }
     this._width = maxBindingWidth + Config.FramePaddingX * 2;
+    this.values = [];
 
     // initializes bindings (keys + values)
     let prevBinding: Binding | null = null;
@@ -224,45 +233,69 @@ export class Frame implements Visible, Hoverable {
     Frame.heights = [Config.CanvasPaddingY.valueOf()];
   };
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
+  isSelected = () => {
+    return this.selected;
+  };
+
+  onMouseEnter = () => {
+    setHoveredStyle(this.ref.current);
     this.bindings.forEach(x => {
       const arrow = x.getArrow();
       arrow && setHoveredStyle(arrow.ref.current);
     });
+    this.values.forEach(x => {
+      x && setHoveredStyle(x.ref.current);
+    });
   };
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+  onMouseLeave = () => {
     if (!this.selected) {
-      setUnhoveredStyle(currentTarget);
+      setUnhoveredStyle(this.ref.current);
       this.bindings.forEach(x => {
         const arrow = x.getArrow();
         arrow && setUnhoveredStyle(arrow.ref.current);
+      });
+      this.values.forEach(x => {
+        x && setUnhoveredStyle(x.ref.current);
       });
     }
   };
 
-  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+  /**
+   * Highlights frame and
+   */
+  onClick = () => {
     this.selected = !this.selected;
     if (!this.selected) {
-      setUnhoveredStyle(currentTarget);
+      setUnhoveredStyle(this.ref.current);
       this.bindings.forEach(x => {
         const arrow = x.getArrow();
         arrow && setUnhoveredStyle(arrow.ref.current);
       });
+      this.values.forEach(x => {
+        x && setUnhoveredStyle(x.ref.current);
+      });
     } else {
-      setHoveredStyle(currentTarget);
+      setHoveredStyle(this.ref.current);
       this.bindings.forEach(x => {
         const arrow = x.getArrow();
         arrow && setHoveredStyle(arrow.ref.current);
+      });
+      this.values.forEach(x => {
+        x && setHoveredStyle(x.ref.current);
       });
     }
   };
 
   draw(): React.ReactNode {
+    let arrowToParentFrame: GenericArrow | undefined = undefined;
+    if (this.parentFrame !== undefined) {
+      arrowToParentFrame = Arrow.from(this).to(this.parentFrame);
+      this.trackObjects(arrowToParentFrame);
+    }
     return (
       <Group key={Layout.key++} ref={this.ref}>
-        {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
+        {arrowToParentFrame && arrowToParentFrame.draw()}
         {this.bindings.map(binding => !(binding.data instanceof ArrayValue) && binding.draw())}
         {this.name.draw()}
         <Rect

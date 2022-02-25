@@ -1,7 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Path } from 'konva/lib/shapes/Path';
 import React, { RefObject } from 'react';
-import { Group } from 'react-konva';
+import { Group, Rect } from 'react-konva';
 
 import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
@@ -187,9 +187,12 @@ export class ArrayValue extends Value implements Hoverable {
       return null;
     }
     this._isDrawn = true;
-    this.arrows = this.referencedBy
-      .filter(x => x instanceof Binding)
-      .map(x => x instanceof Binding && Arrow.from(x.key).to(this)) as GenericArrow[];
+    this.arrows = (this.referencedBy.filter(x => x instanceof Binding) as Binding[]).map(x => {
+      const arrow: GenericArrow = Arrow.from(x.key).to(this);
+      x.frame.trackObjects(this);
+      x.frame.trackObjects(arrow);
+      return arrow;
+    }) as GenericArrow[];
     if (this.units.length === 0) {
       this.emptyUnit = new ArrayEmptyUnit(this);
     }
@@ -204,6 +207,7 @@ export class ArrayValue extends Value implements Hoverable {
         {this.arrows.map(arrow => arrow.draw())}
         {this.units.length > 0 && this.units.map(unit => unit.draw())}
         {this.emptyUnit && this.emptyUnit.draw()}
+        <Rect width={this.width()} height={this.height()} />
       </Group>
     );
   }
