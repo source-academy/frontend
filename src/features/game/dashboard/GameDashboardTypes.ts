@@ -1,4 +1,8 @@
 export enum DashboardPage {
   Log = 'Log',
-  Quests = 'Quests'
+  Tasks = 'Tasks'
+}
+
+export interface DashboardPageManager {
+  createUIContainer: () => Phaser.GameObjects.Container;
 }

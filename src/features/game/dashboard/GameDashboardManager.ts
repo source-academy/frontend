@@ -12,13 +12,12 @@ import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import DashboardConstants, { pageBannerTextStyle } from './GameDashboardConstants';
-import { DashboardPage } from './GameDashboardTypes';
+import { DashboardPage, DashboardPageManager } from './GameDashboardTypes';
 
 /**
  * Manager for the dashboard.
  *
- * Here, the dialogue log, task log and achievements are
- * available for browsing.
+ * Here, the dialogue log and task log are available for browsing.
  */
 class GameDashboardManager implements IGameUI {
   private scene: IBaseScene;
@@ -161,7 +160,7 @@ class GameDashboardManager implements IGameUI {
   /**
    * Format the button information to a UI container, complete with
    * styling and functionality. This button represent the page option button,
-   * whether it is 'log', 'tasks' or 'achievements'.
+   * whether it is 'log' or 'tasks'
    *
    * @param text text to be displayed on the button
    * @param xPos x position of the button
@@ -178,13 +177,13 @@ class GameDashboardManager implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
-  private getPageManager(page: DashboardPage) {
+  private getPageManager(page: DashboardPage): DashboardPageManager {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     switch (page) {
       case DashboardPage.Log:
         return gameManager.getLogManager();
-      // case DashboardPage.Quests:
-      //   return;
+      case DashboardPage.Tasks:
+        return gameManager.getTaskLogManager();
       default:
         return {
           createUIContainer: () => new Phaser.GameObjects.Container(this.scene)

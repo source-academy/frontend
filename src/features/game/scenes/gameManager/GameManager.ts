@@ -25,6 +25,7 @@ import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
 import GameStorageManager from '../../storage/GameStorageManager';
+import GameTaskLogManager from '../../task/GameTaskLogManager';
 import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
@@ -68,6 +69,7 @@ class GameManager extends Phaser.Scene {
   private storageManager?: GameStorageManager;
   private dashboardManager?: GameDashboardManager;
   private toolbarManager?: GameToolbarManager;
+  private taskLogManager?: GameTaskLogManager;
 
   constructor() {
     super('GameManager');
@@ -101,6 +103,7 @@ class GameManager extends Phaser.Scene {
     this.storageManager = new GameStorageManager();
     this.dashboardManager = new GameDashboardManager(this);
     this.toolbarManager = new GameToolbarManager(this);
+    this.taskLogManager = new GameTaskLogManager(this);
   }
 
   //////////////////////
@@ -383,6 +386,7 @@ class GameManager extends Phaser.Scene {
   public getStorageManager = () => mandatory(this.storageManager);
   public getDashboardManager = () => mandatory(this.dashboardManager);
   public getToolbarManager = () => mandatory(this.toolbarManager);
+  public getTaskLogManager = () => mandatory(this.taskLogManager);
 }
 
 export default GameManager;

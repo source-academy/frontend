@@ -1,5 +1,6 @@
 import { IBaseScene } from '../commons/CommonTypes';
 import DashboardConstants from '../dashboard/GameDashboardConstants';
+import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { limitNumber } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
@@ -8,7 +9,7 @@ import LogConstants, { logTextStyle } from './GameLogConstants';
 /**
  * Manager in charge of creating the game log
  */
-class GameLogManager {
+class GameLogManager implements DashboardPageManager {
   private scene: IBaseScene;
 
   /**
@@ -32,8 +33,6 @@ class GameLogManager {
       // No text to show
       return logContainer;
     }
-
-    console.log(GameGlobalAPI.getInstance().getAllVisibleTaskData());
 
     // Scrollable Text
     const bitmapText = createBitmapText(
