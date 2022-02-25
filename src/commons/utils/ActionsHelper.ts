@@ -9,7 +9,6 @@ import * as AcademyActions from '../../features/academy/AcademyActions';
 import * as AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
-import * as NativeJSActions from '../../features/nativeJS/NativeJSActions';
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
@@ -31,7 +30,6 @@ export const actions = {
   ...WorkspaceActions,
   ...GroundControlActions,
   ...AcademyActions,
-  ...NativeJSActions,
   ...PersistenceActions,
   ...RemoteExecutionActions
 };

@@ -5,7 +5,7 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { updateInfiniteLoopEncountered } from 'src/commons/application/actions/SessionActions';
-import * as nativeJSUtils from 'src/commons/nativeJS/NativeJSUtils';
+import * as fullJSUtils from 'src/commons/fullJS/FullJSUtils';
 
 import {
   beginInterruptExecution,
@@ -17,7 +17,7 @@ import {
   evalTestcaseFailure,
   evalTestcaseSuccess
 } from '../../application/actions/InterpreterActions';
-import { defaultState, nativeJSLanguage, OverallState } from '../../application/ApplicationTypes';
+import { defaultState, fullJSLanguage, OverallState } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -476,8 +476,8 @@ describe('CHAPTER_SELECT', () => {
     test('correct actions when user proceeds', () => {
       const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
       const library: Library = {
-        chapter: nativeJSLanguage.chapter,
-        variant: nativeJSLanguage.variant,
+        chapter: fullJSLanguage.chapter,
+        variant: fullJSLanguage.variant,
         external: {
           name: 'NONE' as ExternalLibraryName,
           symbols: context.externalSymbols
@@ -486,17 +486,17 @@ describe('CHAPTER_SELECT', () => {
       };
 
       return expectSaga(workspaceSaga)
-        .provide([[matchers.call.fn(nativeJSUtils.showNativeJSDisclaimer), true]])
+        .provide([[matchers.call.fn(fullJSUtils.showFullJSDisclaimer), true]])
         .withState(newDefaultState)
-        .call(nativeJSUtils.showNativeJSDisclaimer)
+        .call(fullJSUtils.showFullJSDisclaimer)
         .put(beginClearContext(workspaceLocation, library, false))
         .put(clearReplOutput(workspaceLocation))
         .call(showSuccessMessage, `Switched to full JavaScript`, 1000)
         .dispatch({
           type: CHAPTER_SELECT,
           payload: {
-            chapter: nativeJSLanguage.chapter,
-            variant: nativeJSLanguage.variant,
+            chapter: fullJSLanguage.chapter,
+            variant: fullJSLanguage.variant,
             workspaceLocation
           }
         })
@@ -507,17 +507,17 @@ describe('CHAPTER_SELECT', () => {
       const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
 
       return expectSaga(workspaceSaga)
-        .provide([[matchers.call.fn(nativeJSUtils.showNativeJSDisclaimer), false]])
+        .provide([[matchers.call.fn(fullJSUtils.showFullJSDisclaimer), false]])
         .withState(newDefaultState)
-        .call(nativeJSUtils.showNativeJSDisclaimer)
+        .call(fullJSUtils.showFullJSDisclaimer)
         .not.put.actionType(BEGIN_CLEAR_CONTEXT)
         .not.put.actionType(CLEAR_REPL_OUTPUT)
         .not.call.fn(showSuccessMessage)
         .dispatch({
           type: CHAPTER_SELECT,
           payload: {
-            chapter: nativeJSLanguage.chapter,
-            variant: nativeJSLanguage.variant,
+            chapter: fullJSLanguage.chapter,
+            variant: fullJSLanguage.variant,
             workspaceLocation
           }
         })
