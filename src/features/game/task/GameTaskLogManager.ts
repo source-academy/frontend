@@ -4,7 +4,7 @@ import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { limitNumber } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import TaskConstants, { taskTextStyle } from './GameTaskLogConstants';
+import TaskLogConstants, { taskTextStyle } from './GameTaskLogConstants';
 
 /**
  * Manager in charge of creating the task log
@@ -23,92 +23,102 @@ class GameTaskLogManager implements DashboardPageManager {
 
   /**
    * Creates the container that encapsulates the 'Task Log' UI,
-   * i.e. the scrollable text and the scrollbar
+   * i.e. the scrollable text, the check marks and the scrollbar
    */
   public createUIContainer() {
     const taskLogContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
 
-    // Scrollable Text
+    // Scrollable Text and Check Marks
     const tasksData = GameGlobalAPI.getInstance().getAllVisibleTaskData();
-    let textDisplayed;
+    const taskListContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+    let totalTextHeight = 0;
+
     if (tasksData.length === 0) {
       // No tasks to show
-      textDisplayed = 'No tasks available.';
+      const message = createBitmapText(
+        this.scene,
+        'No tasks available.',
+        TaskLogConstants.taskTextConfig,
+        taskTextStyle
+      ).setMaxWidth(TaskLogConstants.textMaxWidth);
+      taskListContainer.add(message);
+      totalTextHeight = message.height;
     } else {
-      const completedTasks = tasksData
-        .filter(([_, taskIsDone]) => taskIsDone)
-        .map(([task, _]) => task);
-      const incompleteTasks = tasksData
-        .filter(([_, taskIsDone]) => !taskIsDone)
-        .map(([task, _]) => task);
-      const textsArray = [];
-      if (completedTasks.length !== 0) {
-        textsArray.push('Completed Tasks:\n');
-        textsArray.push(
-          completedTasks.map(task => `${task.title}\n${task.description}`).join('\n\n')
-        );
-        if (incompleteTasks.length !== 0) {
-          // Line break between sections
-          textsArray.push('\n');
+      for (let i = 0; i < tasksData.length; i++) {
+        const task = tasksData[i][0];
+        const taskIsDone = tasksData[i][1];
+
+        if (i !== 0) {
+          // One line break between tasks
+          totalTextHeight += 215 / 6;
         }
+
+        if (taskIsDone) {
+          // Show a check mark next to completed tasks
+          const checkMark = new Phaser.GameObjects.Image(
+            this.scene,
+            TaskLogConstants.checkMark.x,
+            TaskLogConstants.checkMark.y + totalTextHeight,
+            TaskLogConstants.checkMark.imageUrl
+          );
+          taskListContainer.add(checkMark);
+        }
+
+        const taskText = createBitmapText(
+          this.scene,
+          `${task.title}\n${task.description}`,
+          {
+            ...TaskLogConstants.taskTextConfig,
+            y: TaskLogConstants.taskTextConfig.y + totalTextHeight
+          },
+          taskTextStyle
+        ).setMaxWidth(TaskLogConstants.textMaxWidth);
+
+        taskListContainer.add(taskText);
+        totalTextHeight += taskText.height;
       }
-      if (incompleteTasks.length !== 0) {
-        textsArray.push('New Tasks:\n');
-        textsArray.push(
-          incompleteTasks.map(task => `${task.title}\n${task.description}`).join('\n\n')
-        );
-      }
-      textDisplayed = textsArray.join('\n');
     }
 
-    const bitmapText = createBitmapText(
-      this.scene,
-      textDisplayed,
-      TaskConstants.taskTextConfig,
-      taskTextStyle
-    ).setMaxWidth(TaskConstants.textMaxWidth);
-
-    const textMinY =
-      TaskConstants.taskTextConfig.y - Math.max(bitmapText.height - TaskConstants.logHeight, 0);
-    bitmapText.y = textMinY; // Show most recent text on screen first
-    taskLogContainer.add(bitmapText);
+    const taskListContainerMinY = -Math.max(totalTextHeight - TaskLogConstants.logHeight, 0);
+    taskListContainer.y = taskListContainerMinY; // Show newest tasks on screen first
+    taskLogContainer.add(taskListContainer);
 
     // Scrollbar
     const scrollbarTrack = new Phaser.GameObjects.Rectangle(
       this.scene,
-      TaskConstants.scrollbarTrack.x,
-      TaskConstants.scrollbarTrack.y,
-      TaskConstants.scrollbarTrack.width,
-      TaskConstants.scrollbarTrack.height,
-      TaskConstants.scrollbarTrack.color
+      TaskLogConstants.scrollbarTrack.x,
+      TaskLogConstants.scrollbarTrack.y,
+      TaskLogConstants.scrollbarTrack.width,
+      TaskLogConstants.scrollbarTrack.height,
+      TaskLogConstants.scrollbarTrack.color
     );
 
     const scrollbarThumbHeight = Math.max(
-      (TaskConstants.logHeight / bitmapText.height) * TaskConstants.scrollbarTrack.height,
-      TaskConstants.scrollbarThumb.width * 4 // Limit how small thumb can be
+      (TaskLogConstants.logHeight / totalTextHeight) * TaskLogConstants.scrollbarTrack.height,
+      TaskLogConstants.scrollbarThumb.width * 4 // Limit how small thumb can be
     );
     const scrollbarThumbMaxY =
-      TaskConstants.scrollbarTrack.y +
-      TaskConstants.scrollbarTrack.height / 2 -
+      TaskLogConstants.scrollbarTrack.y +
+      TaskLogConstants.scrollbarTrack.height / 2 -
       scrollbarThumbHeight / 2;
     // The total distance the thumb can move
-    const thumbRange = TaskConstants.scrollbarTrack.height - scrollbarThumbHeight;
+    const thumbRange = TaskLogConstants.scrollbarTrack.height - scrollbarThumbHeight;
     // The ratio between how far the thumb moves to how far the text scrolls
-    const thumbTextScrollRatio = thumbRange / (TaskConstants.taskTextConfig.y - textMinY);
+    const thumbTextScrollRatio = thumbRange / -taskListContainerMinY;
 
     const scrollbarThumb = new Phaser.GameObjects.Rectangle(
       this.scene,
-      TaskConstants.scrollbarThumb.x,
+      TaskLogConstants.scrollbarThumb.x,
       scrollbarThumbMaxY,
-      TaskConstants.scrollbarThumb.width,
+      TaskLogConstants.scrollbarThumb.width,
       scrollbarThumbHeight,
-      TaskConstants.scrollbarThumb.color
+      TaskLogConstants.scrollbarThumb.color
     );
 
     taskLogContainer.add(scrollbarTrack);
     taskLogContainer.add(scrollbarThumb);
 
-    if (bitmapText.height <= TaskConstants.logHeight) {
+    if (totalTextHeight <= TaskLogConstants.logHeight) {
       // Hide scrollbar if all text fits on screen
       scrollbarTrack.setVisible(false);
       scrollbarThumb.setVisible(false);
@@ -127,12 +137,13 @@ class GameTaskLogManager implements DashboardPageManager {
     scrollZone.on(
       'wheel',
       (pointer: Phaser.Input.Pointer, deltaX: number, deltaY: number, deltaZ: number) => {
-        bitmapText.y = limitNumber(
-          bitmapText.y - deltaY * TaskConstants.scrollSpeed,
-          textMinY,
-          TaskConstants.taskTextConfig.y
+        taskListContainer.y = limitNumber(
+          taskListContainer.y - deltaY * TaskLogConstants.scrollSpeed,
+          taskListContainerMinY,
+          0
         );
-        scrollbarThumb.y = scrollbarThumbMaxY - (bitmapText.y - textMinY) * thumbTextScrollRatio;
+        scrollbarThumb.y =
+          scrollbarThumbMaxY - (taskListContainer.y - taskListContainerMinY) * thumbTextScrollRatio;
       }
     );
     taskLogContainer.add(scrollZone);
