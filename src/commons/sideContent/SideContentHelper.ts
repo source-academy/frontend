@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { Modules, ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
+import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
   WorkspaceLocation,
@@ -36,11 +36,25 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
  * @param debuggerContext - DebuggerContext object from redux store
  */
 export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
-  // Get module side contents from DebuggerContext
-  const rawModuleTabs = debuggerContext.context?.modules as Modules[] | undefined;
-  if (rawModuleTabs == null) return [];
+  // Check if js-slang's context object is null
+  if (debuggerContext.context == null) {
+    return [];
+  }
+
+  // Get module contexts
+  const rawModuleContexts = debuggerContext.context.moduleContexts;
+  if (rawModuleContexts == null) {
+    return [];
+  }
+
   // Pass React into functions
-  const unprocessedTabs: ModuleSideContent[] = rawModuleTabs.map((tab: any) => tab(React));
+  const unprocessedTabs: ModuleSideContent[] = [];
+  for (const moduleContext of rawModuleContexts.values()) {
+    for (const tab of moduleContext.tabs) {
+      unprocessedTabs.push(tab(React));
+    }
+  }
+
   // Initialize module side contents to convert to SideContentTab type
   const moduleTabs: SideContentTab[] = unprocessedTabs.map((sideContent: ModuleSideContent) => ({
     ...sideContent,
