@@ -30,7 +30,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
-    const offset = to.y() / (to.x() + 1) + to.x() / (to.y() + 1);
+    const offset = to.y() / Math.max(to.x(), 1) + to.x() / Math.max(to.y(), 1);
     if (to instanceof FnValue || to instanceof GlobalFnValue) {
       ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
       steps.push((x, y) => [
