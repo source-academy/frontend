@@ -682,10 +682,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled =
-    props.playgroundSourceVariant === 'concurrent' ||
-    usingRemoteExecution ||
-    isFullJSChapter(props.playgroundSourceChapter);
+  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
