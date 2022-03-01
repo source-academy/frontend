@@ -531,10 +531,6 @@ export function* evalEditor(
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
-  const context = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].context
-  );
-
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     yield put(actions.remoteExecRun(editorCode));
   } else {
@@ -542,6 +538,9 @@ export function* evalEditor(
     yield put(actions.beginInterruptExecution(workspaceLocation));
     yield* clearContext(workspaceLocation, editorCode);
     yield put(actions.clearReplOutput(workspaceLocation));
+    const context = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].context
+    );
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
