@@ -8150,10 +8150,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.29:
-  version "0.5.29"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.29.tgz#ea71558796df0f209df014513cf6f21e8ba7d71c"
-  integrity sha512-XIczjL7L2uy+886pmUPK7kEYKxOLFWRL8EkpKv+r37cYnFScsNr3kDVY8BWSXhONEHX99p3mEw7Oz9p7NDb4zw==
+js-slang@^0.5.30:
+  version "0.5.30"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.30.tgz#b6f276639f95d66e2822eea3c25d9427d6a2adfe"
+  integrity sha512-1NqPUFDuFSroGwwMCvM4tnIicnpfudHvsUFANu8XvK5q91kOb8vQy0wWVDBhtvNq10uSUc6fdtIK0Gb26FDBNw==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.50"
@@ -11116,10 +11116,10 @@ react-mde@^11.5.0:
   resolved "https://registry.npmjs.org/react-mde/-/react-mde-11.5.0.tgz"
   integrity sha512-CH/VK6d+tpVjJ8rTXfh1dDt6GWedTgCU0668p8toqhAc3vy0Lu872O2RKYDSpkUrlbHI08fjUPTl++nExp6gag==
 
-react-papaparse@^3.18.1:
-  version "3.18.1"
-  resolved "https://registry.npmjs.org/react-papaparse/-/react-papaparse-3.18.1.tgz"
-  integrity sha512-GvYRoJmlhlK+ZHqCacuKPVw3b26qkUZ6OgQo2iZOWepHpUfw7+cIGY1hxucDGXjMgBa7yly7XTVhX4az/KC2Lw==
+react-papaparse@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-papaparse/-/react-papaparse-4.0.2.tgz#d00ca0acad3b86c40ad7a800b357ab3680ec029f"
+  integrity sha512-epMdLfJgDcD7tpau897HiRY8vU2Zr6+MCnxo1di1lA+xpri8L/hQAy7ehSBTCVMvUt/O9LgB5Wx3VT9R6Bg2lg==
   dependencies:
     "@types/papaparse" "^5.3.1"
     papaparse "^5.3.1"
