@@ -11293,10 +11293,10 @@ react-shallow-renderer@^16.13.1:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0"
 
-react-simple-keyboard@^3.4.46:
-  version "3.4.46"
-  resolved "https://registry.npmjs.org/react-simple-keyboard/-/react-simple-keyboard-3.4.46.tgz"
-  integrity sha512-dqdBaVUpRZsrSta5bRI80PuOk/yVCKFjCWpi1/A0X+HGczrrV1/X7TLKDxqGj/9A55Hascwv+xCHaW0DKZ+ikw==
+react-simple-keyboard@^3.4.71:
+  version "3.4.71"
+  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-3.4.71.tgz#63f66bc857b791a8394638b0fbe25e1bca9fd82f"
+  integrity sha512-YkYJaoqPQ8n4XlBgu4zbG0yWX8CXjOf4nCuurTJkSM2Y31S36jGJD7vcYNBtIg6uWg6RoFOj1FJ/adxcsGw+wQ==
 
 react-sortable-hoc@^2.0.0:
   version "2.0.0"
