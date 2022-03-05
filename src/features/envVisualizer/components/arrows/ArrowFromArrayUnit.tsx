@@ -23,122 +23,122 @@ export class ArrowFromArrayUnit extends GenericArrow {
     ]);
   }
   protected calculateSteps() {
-    const from = this.from as ArrayUnit;
-    const to = this.target;
-    if (!to) return [];
+    const source = this.source as ArrayUnit;
+    const target = this.target;
+    if (!target) return [];
 
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
-    const offset = to.y() / Math.max(to.x(), 1) + to.x() / Math.max(to.y(), 1);
-    if (to instanceof FnValue || to instanceof GlobalFnValue) {
-      ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
+    const offset = target.y() / Math.max(target.x(), 1) + target.x() / Math.max(target.y(), 1);
+    if (target instanceof FnValue || target instanceof GlobalFnValue) {
+      ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
       steps.push((x, y) => [
         ArrowLane.getVerticalLane(
-          to,
-          Frame.cumWidths[Frame.lastXCoordBelow(x) + (to.x() < x ? 0 : 1)]
-        ).getPosition(to),
+          target,
+          Frame.cumWidths[Frame.lastXCoordBelow(x) + (target.x() < x ? 0 : 1)]
+        ).getPosition(target),
         y
       ]);
       steps.push((x, y) => [
         x,
         ArrowLane.getHorizontalLane(
-          to,
-          Grid.cumHeights[Grid.lastYCoordBelow(to.y()) - (to.y() > y ? 1 : 0)]
-        ).getPosition(to)
+          target,
+          Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
+        ).getPosition(target)
       ]);
       steps.push((x, y) => [
         ArrowLane.getVerticalLane(
-          to,
-          Frame.cumWidths[Frame.lastXCoordBelow(to.x()) + 1]
-        ).getPosition(to),
+          target,
+          Frame.cumWidths[Frame.lastXCoordBelow(target.x()) + 1]
+        ).getPosition(target),
         y
       ]);
-      steps.push((x, y) => [x, to.y()]);
-      steps.push((x, y) => [to.centerX + Config.FnRadius * 2, y]);
-    } else if (to instanceof ArrayValue) {
-      if ((to as ArrayValue).level !== from.parent.level) {
-        ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
+      steps.push((x, y) => [x, target.y()]);
+      steps.push((x, y) => [target.centerX + Config.FnRadius * 2, y]);
+    } else if (target instanceof ArrayValue) {
+      if ((target as ArrayValue).level !== source.parent.level) {
+        ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
         // Frame avoidance
         steps.push((x, y) => [
           ArrowLane.getVerticalLane(
-            to,
-            Frame.cumWidths[Frame.lastXCoordBelow(x) + (to.x() < x ? 0 : 1)]
-          ).getPosition(to),
+            target,
+            Frame.cumWidths[Frame.lastXCoordBelow(x) + (target.x() < x ? 0 : 1)]
+          ).getPosition(target),
           y
         ]);
-        if (from.x() > to.x() + to.width()) {
+        if (source.x() > target.x() + target.width()) {
           // moves left horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [
             x,
-            to.y() +
-              (1 / 2 - (4 / 6) * Math.sign(to.y() - from.y())) *
+            target.y() +
+              (1 / 2 - (4 / 6) * Math.sign(target.y() - source.y())) *
                 (Config.DataUnitHeight + 3 * offset)
           ]);
           // point to right of array
           steps.push((x, y) => [
-            to.x() +
-              Math.max(Config.DataMinWidth, to.units.length * Config.DataUnitWidth) +
+            target.x() +
+              Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
               Config.DataUnitWidth / 2,
             y
           ]);
-          steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
           steps.push((x, y) => [
-            to.x() + Math.max(Config.DataMinWidth, to.units.length * Config.DataUnitWidth),
+            target.x() + Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth),
             y
           ]);
         } else {
           // moves right horzontally 1/3 of array height below/above other arrays
           steps.push((x, y) => [
             x,
-            to.y() +
-              (1 / 2 - (5 / 6) * Math.sign(to.y() - from.y())) *
+            target.y() +
+              (1 / 2 - (5 / 6) * Math.sign(target.y() - source.y())) *
                 (Config.DataUnitHeight + 3 * offset)
           ]);
           // point to left of array
-          steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
-          steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
-          steps.push((x, y) => [to.x(), y]);
+          steps.push((x, y) => [target.x() - Config.DataUnitWidth / 2, y]);
+          steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [target.x(), y]);
         }
       } else {
-        if (from.y() === to.y()) {
+        if (source.y() === target.y()) {
           // same vertical position
-          if (from.parent === to) {
+          if (source.parent === target) {
             steps.push((x, y) => [x, y - (Config.DataUnitHeight * 3) / 4]);
             steps.push((x, y) => [x + Config.DataUnitHeight / 3, y]);
             steps.push((x, y) => [x, y + Config.DataUnitHeight / 4]);
           } else {
-            ArrowFromArrayUnit.emergeFromTopOrBottom(steps, from, to);
-            if (from.x() > to.x() + to.units.length * Config.DataUnitWidth) {
+            ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
+            if (source.x() > target.x() + target.units.length * Config.DataUnitWidth) {
               steps.push((x, y) => [
-                to.x() +
-                  Math.max(Config.DataMinWidth, to.units.length * Config.DataUnitWidth) +
+                target.x() +
+                  Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
                   Config.DataUnitWidth / 2,
                 y
               ]);
-              steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+              steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
               steps.push((x, y) => [x - Config.DataUnitWidth / 2, y]);
             } else {
-              steps.push((x, y) => [to.x() - Config.DataUnitWidth / 2, y]);
-              steps.push((x, y) => [x, to.y() + Config.DataUnitHeight / 2]);
+              steps.push((x, y) => [target.x() - Config.DataUnitWidth / 2, y]);
+              steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
               steps.push((x, y) => [x + Config.DataUnitWidth / 2, y]);
             }
           }
         } else {
           // same array level but different y position, draw straight arrows.
           steps.push((x, y) => [
-            from.x() <= to.x()
-              ? to.x() + Config.DataUnitWidth / 3
-              : from.x() > to.x() + to.units.length * Config.DataUnitWidth
-              ? to.x() + Math.max(to.units.length, 1 / 3) * Config.DataUnitWidth
-              : to.x() + Config.DataUnitWidth / 2,
-            to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0)
+            source.x() <= target.x()
+              ? target.x() + Config.DataUnitWidth / 3
+              : source.x() > target.x() + target.units.length * Config.DataUnitWidth
+              ? target.x() + Math.max(target.units.length, 1 / 3) * Config.DataUnitWidth
+              : target.x() + Config.DataUnitWidth / 2,
+            target.y() + (source.y() > target.y() ? Config.DataUnitHeight : 0)
           ]);
         }
       }
     } else {
       // this shouldn't happen.
-      steps.push((x, y) => [to.x(), to.y()]);
+      steps.push((x, y) => [target.x(), target.y()]);
     }
     return steps;
   }

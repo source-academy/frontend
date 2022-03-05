@@ -35,8 +35,8 @@ export class ArrayValue extends Value implements Hoverable {
   units: ArrayUnit[] = [];
   private emptyUnit: ArrayEmptyUnit | undefined = undefined;
   level: ArrayLevel | undefined;
-  private arrows: GenericArrow[] = [];
-  // private childrenArrows: GenericArrow[] = [];
+  private arrows: Arrow[] = [];
+  // private childrenArrows: Arrow[] = [];
   ref: RefObject<any> = React.createRef();
 
   constructor(
@@ -113,7 +113,7 @@ export class ArrayValue extends Value implements Hoverable {
     });
   }
 
-  addArrow = (arrow: GenericArrow) => {
+  addArrow = (arrow: Arrow) => {
     this.arrows.push(arrow);
   };
 
@@ -188,7 +188,7 @@ export class ArrayValue extends Value implements Hoverable {
     }
     this._isDrawn = true;
     this.arrows = (this.referencedBy.filter(x => x instanceof Binding) as Binding[]).map(x => {
-      const arrow: GenericArrow = Arrow.from(x.key).to(this);
+      const arrow: Arrow = Arrow.from(x.key).to(this);
       x.frame.trackObjects(this);
       x.frame.trackObjects(arrow);
       return arrow;

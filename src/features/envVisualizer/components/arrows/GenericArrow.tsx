@@ -6,27 +6,37 @@ import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'rea
 import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { Hoverable, StepsArray, Visible } from '../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
+import { StepsArray, Visible } from '../../EnvVisualizerTypes';
+import {
+  setHoveredCursor,
+  setHoveredStyle,
+  setUnhoveredCursor,
+  setUnhoveredStyle
+} from '../../EnvVisualizerUtils';
 import { ArrayUnit } from '../ArrayUnit';
+import { Frame } from '../Frame';
 import { ArrayValue } from '../values/ArrayValue';
+import { Arrow } from './Arrow';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow implements Visible, Hoverable {
+export class GenericArrow implements Arrow {
   private _x: number;
   private _y: number;
   private _height: number = 0;
   private _width: number = 0;
   points: number[] = [];
-  from: Visible;
+  source: Visible;
   target: Visible | undefined;
-  protected selected: boolean = false;
   ref: RefObject<any> = React.createRef();
+  protected selected: boolean = false;
 
-  constructor(from: Visible) {
-    this.from = from;
-    this._x = from.x();
-    this._y = from.y();
+  constructor(source: Visible) {
+    this.source = source;
+    this._x = source.x();
+    this._y = source.y();
+  }
+  from(from: Visible) {
+    throw new Error('Method not implemented.');
   }
 
   x(): number {
@@ -42,11 +52,15 @@ export class GenericArrow implements Visible, Hoverable {
     return this._width;
   }
 
-  to(to: Visible) {
-    this.target = to;
-    this._width = Math.abs(to.x() - this.from.x());
-    this._height = Math.abs(to.y() - this.from.y());
+  to(target: Visible) {
+    this.target = target;
+    this._width = Math.abs(target.x() - this.source.x());
+    this._height = Math.abs(target.y() - this.source.y());
     return this;
+  }
+
+  isSelected(): boolean {
+    return this.selected;
   }
 
   /**
@@ -71,25 +85,26 @@ export class GenericArrow implements Visible, Hoverable {
     return [(x, y) => [to.x(), to.y()]];
   }
 
-  protected getStrokeWidth() {
+  static getStrokeWidth(): number {
     return Number(Config.ArrowStrokeWidth);
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget, {
+  onMouseEnter(e: KonvaEventObject<MouseEvent>) {
+    setHoveredCursor(e.target);
+    setHoveredStyle(e.currentTarget, {
       strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
     });
-  };
+  }
 
-  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+  onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
     this.selected = !this.selected;
     if (!this.selected) {
       if (
-        !(this.from instanceof ArrayUnit && this.from.parent.isSelected()) &&
+        !(this.source instanceof ArrayUnit && this.source.parent.isSelected()) &&
         !(this.target instanceof ArrayValue && this.target.isSelected())
       ) {
         setUnhoveredStyle(currentTarget, {
-          strokeWidth: this.getStrokeWidth()
+          strokeWidth: GenericArrow.getStrokeWidth()
         });
       } else {
         setHoveredStyle(currentTarget, {
@@ -97,32 +112,31 @@ export class GenericArrow implements Visible, Hoverable {
         });
       }
     }
-  };
+  }
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+  onMouseLeave(e: KonvaEventObject<MouseEvent>) {
+    setUnhoveredCursor(e.target);
     if (!this.selected) {
       if (
-        !(this.from instanceof ArrayUnit && this.from.parent.isSelected()) &&
-        !(this.target instanceof ArrayValue && this.target.isSelected())
+        (this.source instanceof ArrayUnit && this.source.parent.isSelected()) ||
+        (this.source instanceof Frame && this.source.isSelected()) ||
+        (this.target instanceof ArrayValue && this.target.isSelected())
       ) {
-        setUnhoveredStyle(currentTarget, {
-          strokeWidth: this.getStrokeWidth()
-        });
-      } else {
-        setHoveredStyle(currentTarget, {
+        setHoveredStyle(e.currentTarget, {
           strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
         });
+      } else {
+        setUnhoveredStyle(e.currentTarget, {
+          strokeWidth: GenericArrow.getStrokeWidth()
+        });
       }
-    } else {
-      const container = currentTarget.getStage()?.container();
-      container && (container.style.cursor = 'default');
     }
-  };
+  }
 
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
-      [this.from.x(), this.from.y()]
+      [this.source.x(), this.source.y()]
     );
     points.splice(0, 2);
 
@@ -172,7 +186,7 @@ export class GenericArrow implements Visible, Hoverable {
               ? Config.SA_BLUE.toString()
               : Config.SA_WHITE.toString()
           }
-          strokeWidth={this.getStrokeWidth()}
+          strokeWidth={GenericArrow.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
           key={Layout.key++}

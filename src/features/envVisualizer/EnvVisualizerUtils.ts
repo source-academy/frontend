@@ -194,11 +194,18 @@ export function getBodyText(data: () => any): string {
   }
 }
 
-/** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
-export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): void {
+export function setHoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
+}
 
+export function setUnhoveredCursor(target: Node | Group) {
+  const container = target.getStage()?.container();
+  container && (container.style.cursor = 'default');
+}
+
+/** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
+export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): void {
   const nodes: (Group | Shape | Node)[] =
     target instanceof Group ? Array.from(target.children || []) : [];
   nodes.push(target);
@@ -221,9 +228,6 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
 
 /** Updates the styles of a Konva node and its children on unhover, and then redraw the layer */
 export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}): void {
-  const container = target.getStage()?.container();
-  container && (container.style.cursor = 'default');
-
   const nodes: (Group | Shape | Node)[] =
     target instanceof Group ? Array.from(target.children || []) : [];
   nodes.push(target);

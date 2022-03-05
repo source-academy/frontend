@@ -1,3 +1,4 @@
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -11,11 +12,12 @@ import {
   isDummyKey,
   isPrimitiveData,
   isUnassigned,
+  setHoveredCursor,
   setHoveredStyle,
+  setUnhoveredCursor,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
-import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -58,9 +60,9 @@ export class Frame implements Visible, Hoverable {
   static heights: number[] = [Config.CanvasPaddingY.valueOf()];
   offsetY: number;
   ref: RefObject<any> = React.createRef();
-  private selected: boolean = false;
   /** set of values to highlight when frame is over. */
   private values: Hoverable[] = [];
+  private selected: boolean = false;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -238,6 +240,7 @@ export class Frame implements Visible, Hoverable {
   };
 
   onMouseEnter = () => {
+    setHoveredCursor(this.ref.current);
     setHoveredStyle(this.ref.current);
     this.bindings.forEach(x => {
       const arrow = x.getArrow();
@@ -249,11 +252,12 @@ export class Frame implements Visible, Hoverable {
   };
 
   onMouseLeave = () => {
+    setUnhoveredCursor(this.ref.current);
     if (!this.selected) {
       setUnhoveredStyle(this.ref.current);
       this.bindings.forEach(x => {
         const arrow = x.getArrow();
-        arrow && setUnhoveredStyle(arrow.ref.current);
+        arrow && !arrow.isSelected() && setUnhoveredStyle(arrow.ref.current);
       });
       this.values.forEach(x => {
         x && setUnhoveredStyle(x.ref.current);
@@ -264,13 +268,13 @@ export class Frame implements Visible, Hoverable {
   /**
    * Highlights frame and
    */
-  onClick = () => {
+  onClick = (e: KonvaEventObject<MouseEvent>) => {
     this.selected = !this.selected;
     if (!this.selected) {
       setUnhoveredStyle(this.ref.current);
       this.bindings.forEach(x => {
         const arrow = x.getArrow();
-        arrow && setUnhoveredStyle(arrow.ref.current);
+        arrow && !arrow.isSelected() && setUnhoveredStyle(arrow.ref.current);
       });
       this.values.forEach(x => {
         x && setUnhoveredStyle(x.ref.current);
@@ -288,7 +292,7 @@ export class Frame implements Visible, Hoverable {
   };
 
   draw(): React.ReactNode {
-    let arrowToParentFrame: GenericArrow | undefined = undefined;
+    let arrowToParentFrame: Arrow | undefined = undefined;
     if (this.parentFrame !== undefined) {
       arrowToParentFrame = Arrow.from(this).to(this.parentFrame);
       this.trackObjects(arrowToParentFrame);

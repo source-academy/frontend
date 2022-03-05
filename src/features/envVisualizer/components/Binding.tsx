@@ -6,7 +6,6 @@ import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
 import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
-import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
@@ -37,8 +36,8 @@ export class Binding implements Visible {
    */
   readonly isDummyBinding: boolean = false;
   keyYOffset: number;
-  private arrow: GenericArrow | undefined = undefined;
-  public getArrow = (): GenericArrow | undefined => {
+  private arrow: Arrow | undefined = undefined;
+  public getArrow = (): Arrow | undefined => {
     return this.arrow;
   };
 

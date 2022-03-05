@@ -6,7 +6,7 @@ import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
-import { getTextWidth } from '../EnvVisualizerUtils';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
 
 export interface TextOptions {
   maxWidth: number;
@@ -94,8 +94,7 @@ export class Text implements Visible, Hoverable {
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'pointer');
+    setHoveredCursor(currentTarget);
     this.ref.current.moveToTop();
     this.ref.current.show();
     currentTarget.getLayer()?.draw();
@@ -103,8 +102,7 @@ export class Text implements Visible, Hoverable {
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'default');
+    setUnhoveredCursor(currentTarget);
     this.ref.current.hide();
     currentTarget.getLayer()?.draw();
   };

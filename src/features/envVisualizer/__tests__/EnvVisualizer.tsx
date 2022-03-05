@@ -123,8 +123,10 @@ codeSamples.forEach((code, idx) => {
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];
     Layout.grid.frameLevels.forEach(({ frames }) => {
-      frames.forEach(({ environment, bindings }) => {
+      frames.forEach(({ environment, bindings, xCoord, yCoord }) => {
         environmentsToTest.push(environment);
+        toTest.push(xCoord);
+        toTest.push(yCoord);
         bindings.forEach(({ keyString, data }) => {
           toTest.push(keyString);
           toTest.push(data);

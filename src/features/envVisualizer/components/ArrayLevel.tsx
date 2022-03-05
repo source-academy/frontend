@@ -75,7 +75,7 @@ export class ArrayLevel extends Level {
     }
     this._rowCount = Math.max(this._rowCount, level);
     this.position[level] = this.position[level] || [];
-    this.position[level].push([x, x + array.width()]);
+    this.position[level].push([x, x + array.width() + Config.DataUnitWidth / 2]);
     this.position[level].sort((a, b) => a[0] - b[0]);
     const arrayMargin = Config.DataUnitHeight;
     const curY = this._y + level * Config.DataUnitHeight + (level + 1) * arrayMargin;

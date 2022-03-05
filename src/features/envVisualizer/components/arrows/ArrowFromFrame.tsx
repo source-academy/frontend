@@ -10,55 +10,43 @@ import { GenericArrow } from './GenericArrow';
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class ArrowFromFrame extends GenericArrow {
   protected calculateSteps() {
-    const to = this.target;
-    if (!to) return [];
+    const target = this.target;
+    if (!target) return [];
 
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
     const differentiateByParentFrame = true;
-    if (to instanceof Frame) {
+    if (target instanceof Frame) {
       // To differentiate frames pointing to different parent frames
       if (differentiateByParentFrame) {
-        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(to, y).getPosition(to)]);
+        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
       } else {
         steps.push((x, y) => [x, y - Config.FrameMarginY]);
       }
-      steps.push((x, y) => [to.x() + Config.FramePaddingX, y]);
+      steps.push((x, y) => [target.x() + Config.FramePaddingX, y]);
     }
 
-    steps.push((x, y) => [to.x() + Config.FramePaddingX, to.y() + to.height()]);
+    steps.push((x, y) => [target.x() + Config.FramePaddingX, target.y() + target.height()]);
     return steps;
   }
-  protected getStrokeWidth(): number {
+  static getStrokeWidth(): number {
     return Number(Config.FrameArrowStrokeWidth);
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget, {
-      strokeWidth: Number(Config.FrameArrowStrokeWidth)
+  onMouseEnter(e: KonvaEventObject<MouseEvent>) {
+    super.onMouseEnter(e);
+    setHoveredStyle(e.currentTarget, {
+      strokeWidth: Number(Config.FrameArrowHoveredStrokeWidth)
     });
-  };
+  }
 
-  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    this.selected = !this.selected;
+  onMouseLeave(e: KonvaEventObject<MouseEvent>) {
+    super.onMouseLeave(e);
     if (!this.selected) {
-      if (!(this.from instanceof Frame && this.from.isSelected())) {
-        setUnhoveredStyle(currentTarget, {
-          strokeWidth: this.getStrokeWidth()
+      if (!(this.source instanceof Frame && this.source.isSelected())) {
+        setUnhoveredStyle(e.currentTarget, {
+          strokeWidth: ArrowFromFrame.getStrokeWidth()
         });
       }
     }
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (!this.selected) {
-      if (!(this.from instanceof Frame && this.from.isSelected())) {
-        setUnhoveredStyle(currentTarget, {
-          strokeWidth: this.getStrokeWidth()
-        });
-      }
-    } else {
-      const container = currentTarget.getStage()?.container();
-      container && (container.style.cursor = 'default');
-    }
-  };
+  }
 }

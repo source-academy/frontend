@@ -5,7 +5,6 @@ import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
 import { Arrow } from './arrows/Arrow';
-import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { FnValue } from './values/FnValue';
@@ -91,7 +90,7 @@ export class ArrayUnit implements Visible {
       cornerRadius.upperLeft = cornerRadius.lowerLeft = Number(Config.DataCornerRadius);
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Number(Config.DataCornerRadius);
-    let arrow: GenericArrow | undefined = undefined;
+    let arrow: Arrow | undefined = undefined;
     if (!(this.value instanceof PrimitiveValue)) {
       arrow = Arrow.from(this).to(this.value);
       this.parent.addArrow(arrow);

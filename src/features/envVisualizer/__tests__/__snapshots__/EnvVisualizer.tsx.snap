@@ -150,8 +150,12 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 0 3`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
+  0,
+  1,
   "fn:= ",
   [Function],
   "x:= ",
@@ -387,8 +391,12 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 1 3`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
+  0,
+  1,
   "fn:= ",
   [Function],
   "x:= ",
@@ -576,8 +584,12 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 2 3`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
+  0,
+  1,
   "x1:= ",
   Array [
     1,
@@ -763,8 +775,12 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 3 3`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
+  0,
+  1,
   "e:= ",
   Array [
     Array [
@@ -1052,8 +1068,12 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 4 4`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
+  0,
+  1,
   "x: ",
   0,
   "y: ",
@@ -1062,6 +1082,8 @@ Array [
   [Function],
   "z:= ",
   [Function],
+  0,
+  2,
   "x: ",
   11,
   "27:= ",
@@ -1163,12 +1185,16 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 5 3`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
   "accumulate: ",
   [Function],
   "pair: ",
   [Function],
+  0,
+  1,
   "x:= ",
   Array [
     1,
@@ -1263,8 +1289,12 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 6 3`] = `
 Array [
+  0,
+  0,
   ":::pre-declared names::: ",
   Symbol(),
+  0,
+  1,
   "x:= ",
   Array [],
 ]

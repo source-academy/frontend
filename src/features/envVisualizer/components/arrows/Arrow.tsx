@@ -1,4 +1,7 @@
-import { Visible } from '../../EnvVisualizerTypes';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { RefObject } from 'react';
+
+import { Hoverable, Visible } from '../../EnvVisualizerTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
@@ -11,15 +14,32 @@ import { ArrowFromText } from './ArrowFromText';
 import { GenericArrow } from './GenericArrow';
 
 /** this class contains a factory method for an arrow to be drawn between 2 points */
-export class Arrow {
+export abstract class Arrow implements Visible, Hoverable {
+  abstract draw: (key?: number) => React.ReactNode;
+  abstract onMouseEnter(e: KonvaEventObject<MouseEvent>): void;
+  abstract onMouseLeave(e: KonvaEventObject<MouseEvent>): void;
+  abstract onClick(e: KonvaEventObject<MouseEvent>): void;
+  abstract source: Visible;
+  abstract target: Visible | undefined;
+  abstract ref: RefObject<any>;
+  abstract x(): number;
+  abstract y(): number;
+  abstract height(): number;
+  abstract width(): number;
+  abstract isSelected(): boolean;
+
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
-  static from(from: Visible) {
-    if (from instanceof Frame) return new ArrowFromFrame(from);
-    if (from instanceof FnValue || from instanceof GlobalFnValue) return new ArrowFromFn(from);
-    if (from instanceof Text) return new ArrowFromText(from);
-    if (from instanceof ArrayUnit) return new ArrowFromArrayUnit(from);
+  public static from(source: Visible): Arrow {
+    if (source instanceof Frame) return new ArrowFromFrame(source);
+    if (source instanceof FnValue || source instanceof GlobalFnValue)
+      return new ArrowFromFn(source);
+    if (source instanceof Text) return new ArrowFromText(source);
+    if (source instanceof ArrayUnit) return new ArrowFromArrayUnit(source);
 
     // else return a generic arrow
-    return new GenericArrow(from);
+    return new GenericArrow(source);
   }
+
+  /** setter for target of arrow. */
+  abstract to(to: Visible): Arrow;
 }

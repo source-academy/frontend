@@ -51,6 +51,7 @@ export class Layout {
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
+  // buffer for faster rendering of diagram when scrolling
   static readonly invisiblePadding: number = 500;
 
   static updateDimensions(width: number, height: number) {
@@ -238,6 +239,9 @@ export class Layout {
     }
   }
 
+  /**
+   * Scrolls diagram to top left, and saves the diagram as multiple images of width < MaxExportWidth.
+   */
   static exportImage = () => {
     Layout.stageRef.current?.y(0);
     Layout.stageRef.current?.x(0);

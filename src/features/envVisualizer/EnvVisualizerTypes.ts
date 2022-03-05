@@ -20,8 +20,8 @@ export interface Drawable {
 /** this interface defines a Hoverable object */
 export interface Hoverable {
   ref: RefObject<any>;
-  onMouseEnter: (e: KonvaEventObject<MouseEvent>) => void;
-  onMouseLeave: (e: KonvaEventObject<MouseEvent>) => void;
+  onMouseEnter(e: KonvaEventObject<MouseEvent>): void;
+  onMouseLeave(e: KonvaEventObject<MouseEvent>): void;
 }
 
 // export interface Clickable {
