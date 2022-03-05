@@ -84,13 +84,10 @@ export class FnValue extends Value implements Hoverable {
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.enclosingEnvNode =
-      this.data.environment === undefined
-        ? Layout.globalEnvNode
-        : (Layout.environmentTree.getTreeNode(
-            getNonEmptyEnv(this.data.environment) as Environment
-          ) as EnvTreeNode);
-    this.fnName = this.data.functionName ?? '';
+    this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
+      getNonEmptyEnv(this.data.environment) as Environment
+    ) as EnvTreeNode;
+    this.fnName = this.data.functionName;
 
     this.paramsText = `params: (${getParamsText(this.data)})`;
     this.bodyText = `body: ${getBodyText(this.data)}`;

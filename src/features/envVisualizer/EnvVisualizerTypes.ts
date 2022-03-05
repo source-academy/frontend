@@ -57,12 +57,12 @@ export type FnTypes = {
   (): any;
 
   /** the enclosing environment */
-  environment?: Environment;
+  environment: Environment;
 
   /** string representation of the function */
-  functionName?: string;
+  functionName: string;
 
-  node?: any;
+  node: any;
 };
 
 /** the types of data in the JS Slang context */
