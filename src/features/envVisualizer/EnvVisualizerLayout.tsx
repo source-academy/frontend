@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormGroup } from '@blueprintjs/core';
+import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
 import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
@@ -273,25 +273,26 @@ export class Layout {
       const layout = (
         <div className={'sa-env-visualizer'}>
           <div style={{ width: 400 }}>
-            <FormGroup>
-              <Checkbox
-                checked={EnvVisualizer.getPrintableMode()}
-                label="Printable Mode"
-                onChange={EnvVisualizer.togglePrintableMode}
-                large={true}
-              />
+            <ButtonGroup vertical={false}>
+              <Button large={true} outlined={true} onClick={EnvVisualizer.togglePrintableMode}>
+                <Checkbox
+                  checked={EnvVisualizer.getPrintableMode()}
+                  label="Printable Mode"
+                  large={true}
+                  onChange={EnvVisualizer.togglePrintableMode}
+                />
+              </Button>
               <Button
                 outlined={true}
                 text={`Save ${
                   Layout.width > Config.MaxExportWidth
                     ? Math.ceil(Layout.width / Config.MaxExportWidth) + ' images'
-                    : 'Image'
+                    : 'image'
                 }`}
-                color="White"
-                onClick={this.exportImage}
                 large={true}
+                onClick={this.exportImage}
               />
-            </FormGroup>
+            </ButtonGroup>
           </div>
           <div
             id="scroll-container"
