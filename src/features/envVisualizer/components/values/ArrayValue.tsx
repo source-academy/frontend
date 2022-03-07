@@ -35,7 +35,7 @@ export class ArrayValue extends Value implements Hoverable {
   units: ArrayUnit[] = [];
   private emptyUnit: ArrayEmptyUnit | undefined = undefined;
   level: ArrayLevel | undefined;
-  private arrows: Arrow[] = [];
+  private _arrows: Arrow[] = [];
   // private childrenArrows: Arrow[] = [];
   ref: RefObject<any> = React.createRef();
 
@@ -94,11 +94,14 @@ export class ArrayValue extends Value implements Hoverable {
   isSelected(): boolean {
     return this.selected;
   }
+  arrows(): Arrow[] {
+    return this._arrows;
+  }
   reset(): void {
     this._isDrawn = false;
     this.units.map(x => x.reset());
     this.referencedBy.length = 0;
-    this.arrows = [];
+    this._arrows = [];
   }
 
   setLevel(arrLevel: ArrayLevel): void {
@@ -114,7 +117,7 @@ export class ArrayValue extends Value implements Hoverable {
   }
 
   addArrow = (arrow: Arrow) => {
-    this.arrows.push(arrow);
+    this._arrows.push(arrow);
   };
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -130,7 +133,7 @@ export class ArrayValue extends Value implements Hoverable {
       }
     });
     this.emptyUnit && setHoveredStyle(this.emptyUnit.ref.current);
-    this.arrows.forEach(u => {
+    this._arrows.forEach(u => {
       setHoveredStyle(u.ref.current);
     });
   };
@@ -149,7 +152,7 @@ export class ArrayValue extends Value implements Hoverable {
         }
       });
       this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
-      this.arrows.forEach(u => {
+      this._arrows.forEach(u => {
         setUnhoveredStyle(u.ref.current);
       });
     } else {
@@ -176,7 +179,7 @@ export class ArrayValue extends Value implements Hoverable {
         }
       });
       this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
-      this.arrows.forEach(u => {
+      this._arrows.forEach(u => {
         setUnhoveredStyle(u.ref.current);
       });
     }
@@ -187,7 +190,7 @@ export class ArrayValue extends Value implements Hoverable {
       return null;
     }
     this._isDrawn = true;
-    this.arrows = (this.referencedBy.filter(x => x instanceof Binding) as Binding[]).map(x => {
+    this._arrows = (this.referencedBy.filter(x => x instanceof Binding) as Binding[]).map(x => {
       const arrow: Arrow = Arrow.from(x.key).to(this);
       x.frame.trackObjects(this);
       x.frame.trackObjects(arrow);
@@ -204,7 +207,7 @@ export class ArrayValue extends Value implements Hoverable {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
-        {this.arrows.map(arrow => arrow.draw())}
+        {this._arrows.map(arrow => arrow.draw())}
         {this.units.length > 0 && this.units.map(unit => unit.draw())}
         {this.emptyUnit && this.emptyUnit.draw()}
         <Rect width={this.width()} height={this.height()} />

@@ -47,6 +47,7 @@ export class FnValue extends Value implements Hoverable {
   readonly tooltip: string;
   readonly exportTooltip: string;
   private selected: boolean = false;
+  private _arrow: Arrow | undefined;
 
   /** the parent/enclosing environment of this fn value */
   readonly enclosingEnvNode: EnvTreeNode;
@@ -119,6 +120,9 @@ export class FnValue extends Value implements Hoverable {
   isDrawn(): boolean {
     return this._isDrawn;
   }
+  arrow(): Arrow | undefined {
+    return this._arrow;
+  }
   updatePosition(): void {
     const mainReference =
       this.referencedBy.find(
@@ -175,6 +179,7 @@ export class FnValue extends Value implements Hoverable {
 
   draw(): React.ReactNode {
     this._isDrawn = true;
+    this._arrow = this.enclosingEnvNode.frame && Arrow.from(this).to(this.enclosingEnvNode.frame);
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -267,7 +272,7 @@ export class FnValue extends Value implements Hoverable {
             />
           </KonvaLabel>
         )}
-        {this.enclosingEnvNode.frame && Arrow.from(this).to(this.enclosingEnvNode.frame).draw()}
+        {this._arrow?.draw()}
       </React.Fragment>
     );
   }

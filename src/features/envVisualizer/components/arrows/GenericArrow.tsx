@@ -29,6 +29,7 @@ export class GenericArrow implements Arrow {
   target: Visible | undefined;
   ref: RefObject<any> = React.createRef();
   protected selected: boolean = false;
+  private _path: string = '';
 
   constructor(source: Visible) {
     this.source = source;
@@ -133,6 +134,10 @@ export class GenericArrow implements Arrow {
     }
   }
 
+  path() {
+    return this._path;
+  }
+
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
@@ -165,12 +170,13 @@ export class GenericArrow implements Arrow {
         const y2 = yb + br * Math.sign(dy2);
 
         // draw quadratic curves over corners
-        path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2}`;
+        path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2} `;
         n += 2;
       }
     }
     // end path
     path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
+    this._path = path;
     return (
       <KonvaGroup
         key={Layout.key++}

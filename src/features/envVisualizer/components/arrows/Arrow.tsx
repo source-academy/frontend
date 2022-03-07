@@ -27,6 +27,7 @@ export abstract class Arrow implements Visible, Hoverable {
   abstract height(): number;
   abstract width(): number;
   abstract isSelected(): boolean;
+  abstract path(): string;
 
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
   public static from(source: Visible): Arrow {

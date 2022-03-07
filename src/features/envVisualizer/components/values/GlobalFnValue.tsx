@@ -36,6 +36,7 @@ export class GlobalFnValue extends Value implements Hoverable {
   readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
+  private _arrow: Arrow | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
@@ -109,6 +110,9 @@ export class GlobalFnValue extends Value implements Hoverable {
   isDrawn(): boolean {
     return this._isDrawn;
   }
+  arrow(): Arrow | undefined {
+    return this._arrow;
+  }
 
   updatePosition(): void {
     const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
@@ -164,6 +168,7 @@ export class GlobalFnValue extends Value implements Hoverable {
 
   draw(): React.ReactNode {
     this._isDrawn = true;
+    this._arrow = Layout.globalEnvNode.frame && Arrow.from(this).to(Layout.globalEnvNode.frame);
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -256,7 +261,7 @@ export class GlobalFnValue extends Value implements Hoverable {
             />
           </KonvaLabel>
         )}
-        {Layout.globalEnvNode.frame && Arrow.from(this).to(Layout.globalEnvNode.frame).draw()}
+        {this._arrow?.draw()}
       </React.Fragment>
     );
   }
