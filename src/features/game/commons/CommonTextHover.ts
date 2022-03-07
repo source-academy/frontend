@@ -70,6 +70,7 @@ class CommonTextHover extends Phaser.GameObjects.Container {
       .setAlpha(0.8);
 
     this.add([hoverTextBg, hoverText]);
+    this.setDepth(1); // Render hover text over other objects
     this.setVisible(false);
   }
 }

@@ -12,11 +12,11 @@ import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { showNativeJSWarningOnUrlLoad } from 'src/commons/nativeJS/NativeJSUtils';
+import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 
 import {
   InterpreterOutput,
-  isNativeJSChapter,
+  isFullJSChapter,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -143,8 +143,8 @@ export function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
-  if (chapter && isNativeJSChapter(chapter)) {
-    showNativeJSWarningOnUrlLoad();
+  if (chapter && isFullJSChapter(chapter)) {
+    showFullJSWarningOnUrlLoad();
   } else {
     const programLz = qs.lz ?? qs.prgrm;
     const program = programLz && decompressFromEncodedURIComponent(programLz);
@@ -317,11 +317,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={props.playgroundSourceChapter}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        // Disable pause for NativeJS, because: one cannot stop `eval()`
+        // Disable pause for FullJS, because: one cannot stop `eval()`
         pauseDisabled={
           usingRemoteExecution ||
           (!(props.playgroundSourceChapter === undefined) &&
-            isNativeJSChapter(props.playgroundSourceChapter))
+            isFullJSChapter(props.playgroundSourceChapter))
         }
       />
     ),
@@ -548,8 +548,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    // (TEMP) Remove tabs for nativeJS until support is integrated
-    if (isNativeJSChapter(props.playgroundSourceChapter)) {
+    // (TEMP) Remove tabs for fullJS until support is integrated
+    if (isFullJSChapter(props.playgroundSourceChapter)) {
       return tabs;
     }
 
@@ -682,10 +682,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled =
-    props.playgroundSourceVariant === 'concurrent' ||
-    usingRemoteExecution ||
-    isNativeJSChapter(props.playgroundSourceChapter);
+  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -731,12 +728,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        isNativeJSChapter(props.playgroundSourceChapter) ? null : shareButton,
+        isFullJSChapter(props.playgroundSourceChapter) ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || isNativeJSChapter(props.playgroundSourceChapter)
+        usingRemoteExecution || isFullJSChapter(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
@@ -770,7 +767,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          isNativeJSChapter(props.playgroundSourceChapter) ? null : shareButton,
+          isFullJSChapter(props.playgroundSourceChapter) ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons

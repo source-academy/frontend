@@ -16,7 +16,7 @@ import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';
-import { CSVReader } from 'react-papaparse';
+import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
 import Constants from '../../../../commons/utils/Constants';
@@ -37,6 +37,7 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
   const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
   const gridApi = React.useRef<GridApi>();
+  const { CSVReader } = useCSVReader();
 
   const columnDefs = [
     {
@@ -83,20 +84,33 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
   const htmlSelectOptions = [...Constants.authProviders.entries()].map(([id, _]) => id);
   const [provider, setProvider] = React.useState(htmlSelectOptions[0]);
 
-  const csvRef = React.useRef<CSVReader>(null);
+  const validateCsvInput = (results: any) => {
+    const { data, errors }: { data: string[][]; errors: any[] } = results;
 
-  const validateCsvInput = (data: any[]) => {
+    // react-papaparse upload errors
+    if (!!errors.length) {
+      setInvalidCsvMsg(
+        'Error detected while uploading the CSV file! Please recheck the file and try again.'
+      );
+      return;
+    }
+
+    /**
+     * Begin CSV validation.
+     *
+     * Terminate early if validation errors are encountered, and do not add to existing
+     * valid uploaded entries in the table
+     */
     const processed: UsernameRoleGroup[] = [...users];
-    let hasInvalidInput = false;
 
     if (data.length + users.length > 1000) {
       setInvalidCsvMsg('Please limit each upload to 1000 entries!');
-      hasInvalidInput = true;
+      return;
     }
 
     for (let i = 0; i < data.length; i++) {
       // Incorrect number of columns
-      if (!(data[i].data.length === 2 || data[i].data.length === 3)) {
+      if (!(data[i].length === 2 || data[i].length === 3)) {
         setInvalidCsvMsg(
           <>
             <div>
@@ -111,36 +125,34 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
             <div>(please hover over the question mark above for more details)</div>
           </>
         );
-        hasInvalidInput = true;
-        break;
+        return;
       }
       // Invalid role specified
-      if (!Object.values(Role).includes(data[i].data[1])) {
+      if (!Object.values(Role).includes(data[i][1] as Role)) {
         setInvalidCsvMsg(
-          `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: admin, staff, student'`
+          `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: 'admin, staff, student'`
         );
-        hasInvalidInput = true;
-        break;
+        return;
       }
     }
 
-    if (!hasInvalidInput) {
-      data.forEach(e => {
-        processed.push({
-          username: e.data[0],
-          role: e.data[1],
-          group: e.data[2]
-        });
+    data.forEach(e => {
+      processed.push({
+        username: e[0],
+        role: e[1] as Role,
+        group: e[2]
       });
+    });
 
-      // Check for duplicate usernames in data
-      if (uniqBy(processed, val => val.username).length !== processed.length) {
-        setInvalidCsvMsg('There are duplicate usernames in the uploaded CSV(s)!');
-      } else {
-        setUsers(processed);
-        setInvalidCsvMsg('');
-      }
+    // Check for duplicate usernames in data
+    if (uniqBy(processed, val => val.username).length !== processed.length) {
+      setInvalidCsvMsg('There are duplicate usernames in the uploaded CSV(s)!');
+      return;
     }
+
+    // No validation errors
+    setUsers(processed);
+    setInvalidCsvMsg('');
   };
 
   const submitHandler = () => {
@@ -159,24 +171,15 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
           <div className="upload-settings">
             <div className="file-input">
               <CSVReader
-                ref={csvRef}
-                onFileLoad={data => validateCsvInput(data)}
-                noClick
-                noDrag
-                noProgressBar
+                onUploadAccepted={(results: any) => validateCsvInput(results)}
                 config={{
                   delimiter: ',',
                   skipEmptyLines: true
                 }}
               >
-                {({ file }: { file: any }) => (
+                {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps }: any) => (
                   <>
-                    <FileInput
-                      text="Upload CSV"
-                      onClick={e => {
-                        if (csvRef.current) csvRef.current?.open(e);
-                      }}
-                    />
+                    <FileInput text="Upload CSV" inputProps={getRootProps()} />
                     <Popover2
                       content={
                         <div>

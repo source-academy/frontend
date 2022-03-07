@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import {
   defaultLanguages,
-  nativeJSLanguage,
+  fullJSLanguage,
   SourceLanguage,
   sourceLanguages,
   styliseSublanguage,
@@ -38,11 +38,11 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   }) => {
     const defaultChoices = defaultLanguages.map(renderItem);
     const variantChoices = variantLanguages.map(renderItem);
-    const nativeJSChoice = renderItem(nativeJSLanguage, 0);
+    const fullJSChoice = renderItem(fullJSLanguage, 0);
     return (
       <Menu ulRef={itemsParentRef}>
         {defaultChoices}
-        {Constants.playgroundOnly && nativeJSChoice}
+        {Constants.playgroundOnly && fullJSChoice}
         <MenuItem key="variant-menu" text="Variants" icon="cog">
           {variantChoices}
         </MenuItem>

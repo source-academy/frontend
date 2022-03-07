@@ -27,11 +27,7 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import {
-  isNativeJSChapter,
-  OverallState,
-  styliseSublanguage
-} from '../application/ApplicationTypes';
+import { isFullJSChapter, OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -42,7 +38,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
-import { showNativeJSDisclaimer } from '../nativeJS/NativeJSUtils';
+import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -253,8 +249,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     ]);
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean = isNativeJSChapter(newChapter)
-      ? chapterChanged && (yield call(showNativeJSDisclaimer))
+    const toChangeChapter: boolean = isFullJSChapter(newChapter)
+      ? chapterChanged && (yield call(showFullJSDisclaimer))
       : chapterChanged;
 
     if (toChangeChapter) {
@@ -537,23 +533,22 @@ export function* evalEditor(
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
-  const context = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].context
-  );
-
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     yield put(actions.remoteExecRun(editorCode));
-  } else if (isNativeJSChapter(context.chapter)) {
-    yield put(actions.nativeJSRun({ workspace: workspaceLocation, program: editorCode }));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
     yield* clearContext(workspaceLocation, editorCode);
     yield put(actions.clearReplOutput(workspaceLocation));
+    const context = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].context
+    );
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
-    parse(value, context);
+    if (!isFullJSChapter(context.chapter)) {
+      parse(value, context);
+    }
     if (!context.errors.length) {
       // Otherwise we step through the breakpoints one by one and check them.
       const exploded = editorCode.split('\n');
@@ -566,7 +561,9 @@ export function* evalEditor(
         context.errors = [];
         exploded[index] = 'debugger;' + exploded[index];
         value = exploded.join('\n');
-        parse(value, context);
+        if (!isFullJSChapter(context.chapter)) {
+          parse(value, context);
+        }
         if (context.errors.length) {
           const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
           yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
@@ -765,6 +762,12 @@ export function* evalCode(
   const throwInfiniteLoops: boolean = yield select(
     (state: OverallState) => state.session.experimentCoinflip
   );
+
+  // Handles `console.log` statements in fullJS
+  const detachConsole: () => void = isFullJSChapter(context.chapter)
+    ? DisplayBufferService.attachConsole(workspaceLocation)
+    : () => {};
+
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
@@ -786,6 +789,8 @@ export function* evalCode(
     interrupted: take(BEGIN_INTERRUPT_EXECUTION),
     paused: take(BEGIN_DEBUG_PAUSE)
   });
+
+  detachConsole();
 
   if (interrupted) {
     interrupt(context);

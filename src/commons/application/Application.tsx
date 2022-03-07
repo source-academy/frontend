@@ -136,10 +136,7 @@ const Application: React.FC<ApplicationProps> = props => {
       to="/sicpjs/:section?"
       key="oldToNewSicpRedirect"
     />,
-    <Route exact path="/sicpjs" key="sicpRedirect">
-      <Redirect to="/sicpjs/index" />
-    </Route>,
-    <Route path="/sicpjs/:section" component={Sicp} key="sicp" />,
+    <Route path="/sicpjs/:section?" component={Sicp} key="sicp" />,
     Constants.enableGitHubAssessments ? (
       <Route
         path="/githubassessments"
