@@ -120,6 +120,9 @@ export class FnValue extends Value implements Hoverable {
   isDrawn(): boolean {
     return this._isDrawn;
   }
+  isSelected(): boolean {
+    return this.selected;
+  }
   arrow(): Arrow | undefined {
     return this._arrow;
   }
@@ -183,9 +186,9 @@ export class FnValue extends Value implements Hoverable {
     return (
       <React.Fragment key={Layout.key++}>
         <Group
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          onClick={this.onClick}
+          onMouseEnter={e => this.onMouseEnter(e)}
+          onMouseLeave={e => this.onMouseLeave(e)}
+          onClick={e => this.onClick(e)}
           ref={this.ref}
         >
           <Circle

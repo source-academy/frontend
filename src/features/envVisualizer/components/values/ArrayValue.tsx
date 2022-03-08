@@ -29,14 +29,13 @@ export class ArrayValue extends Value implements Hoverable {
 
   /** check if the value is already drawn */
   private _isDrawn: boolean = false;
-  private selected: boolean = false;
-
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
   private emptyUnit: ArrayEmptyUnit | undefined = undefined;
   level: ArrayLevel | undefined;
   private _arrows: Arrow[] = [];
   // private childrenArrows: Arrow[] = [];
+  private selected: boolean = false;
   ref: RefObject<any> = React.createRef();
 
   constructor(
@@ -139,7 +138,7 @@ export class ArrayValue extends Value implements Hoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (!this.selected) {
+    if (!this.isSelected()) {
       this.units.forEach(u => {
         setUnhoveredStyle(u.ref.current);
         if (
@@ -179,8 +178,8 @@ export class ArrayValue extends Value implements Hoverable {
         }
       });
       this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
-      this._arrows.forEach(u => {
-        setUnhoveredStyle(u.ref.current);
+      this._arrows.forEach(arrow => {
+        !arrow.isSelected && setUnhoveredStyle(arrow.ref.current);
       });
     }
   };

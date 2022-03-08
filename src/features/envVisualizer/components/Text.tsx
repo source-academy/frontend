@@ -7,6 +7,7 @@ import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
 import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
+import { Frame } from './Frame';
 
 export interface TextOptions {
   maxWidth: number;
@@ -39,16 +40,19 @@ export class Text implements Visible, Hoverable {
   ref: RefObject<any> = React.createRef();
   private _x: number;
   private _y: number;
+  readonly frame?: Frame;
 
   constructor(
     readonly data: Data,
     x: number,
     y: number,
     /** additional options (for customization of text) */
-    options: Partial<TextOptions> = {}
+    options: Partial<TextOptions> = {},
+    frame?: Frame
   ) {
     this._x = x;
     this._y = y;
+    this.frame = frame;
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;

@@ -274,12 +274,22 @@ export class Layout {
         <div className={'sa-env-visualizer'}>
           <div style={{ width: 400 }}>
             <ButtonGroup vertical={false}>
-              <Button large={true} outlined={true} onClick={EnvVisualizer.togglePrintableMode}>
+              <Button
+                large={true}
+                outlined={true}
+                onClick={() => {
+                  EnvVisualizer.togglePrintableMode();
+                  EnvVisualizer.redraw();
+                }}
+              >
                 <Checkbox
                   checked={EnvVisualizer.getPrintableMode()}
                   label="Printable Mode"
                   large={true}
-                  onChange={EnvVisualizer.togglePrintableMode}
+                  onChange={() => {
+                    EnvVisualizer.togglePrintableMode();
+                    EnvVisualizer.redraw();
+                  }}
                 />
               </Button>
               <Button

@@ -8,6 +8,7 @@ import { Frame } from '../components/Frame';
 import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
+import EnvVisualizer from '../EnvVisualizer';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env } from '../EnvVisualizerTypes';
 
@@ -117,7 +118,8 @@ const codeSamples = [
         }
         return n === 0 ? null : es(s, n);
     }
-    eval_stream(integers_from(1), 3);`
+    eval_stream(integers_from(1), 2);
+    let x = 1;`
   //   `
   //     let x = null;
   //     for (let i = 0; i < 5; i = i + 1) {
@@ -163,49 +165,54 @@ codeSamples.forEach((code, idx) => {
       });
     });
     expect(toTest).toMatchSnapshot();
-    Layout.draw();
-    Layout.values.forEach(v => {
-      if (v instanceof GlobalFnValue || v instanceof FnValue) {
-        const arrow = v.arrow();
-        expect(arrow).toBeDefined();
-        expect(arrow?.target).toBeDefined();
-        const path = arrow!.path().match(/[^ ]+/g) ?? [];
-        expect(path.length).toEqual(14);
-        expect(path[1]).toEqual(path[4]); // move up
-        expect(path[8]).toEqual(path[10]); // move left
-        expect(Frame.lastXCoordBelow(v.x())).toEqual(Frame.lastXCoordBelow(arrow!.target!.x())); // target
-      } else if (v instanceof ArrayValue) {
-        v.arrows().forEach(arrow => {
+    const checkLayout = () => {
+      Layout.draw();
+      Layout.values.forEach(v => {
+        if (v instanceof GlobalFnValue || v instanceof FnValue) {
+          const arrow = v.arrow();
           expect(arrow).toBeDefined();
           expect(arrow?.target).toBeDefined();
-          if (
-            arrow instanceof ArrowFromArrayUnit &&
-            arrow.target instanceof ArrayValue &&
-            arrow.source instanceof ArrayUnit
-          ) {
-            const sourceArray = arrow.source.parent as ArrayValue;
-            const targetArray = arrow.target as ArrayValue;
-            if (sourceArray.level === targetArray.level) {
-              // for arrows within same array level
-              const path = arrow!.path().match(/[^ ]+/g) ?? [];
-              expect(parseFloat(path[1])).toEqual(arrow.source.x() + Config.DataUnitWidth / 2);
-              expect(parseFloat(path[2])).toEqual(arrow.source.y() + Config.DataUnitHeight / 2);
-              if (sourceArray.data === targetArray.data) {
-                expect(path.length).toEqual(22); // up, right, down.
-                expect(path[1]).toEqual(path[4]);
-                expect(path[17]).toEqual(path[20]);
-                expect(parseFloat(path[20]) - parseFloat(path[1])).toBeCloseTo(
-                  Config.DataUnitWidth / 3
-                );
-              } else if (sourceArray.y() === targetArray.y()) {
-                expect(path.length).toEqual(30); // up, horizontal, down, horizontal
-              } else {
-                expect(path.length).toEqual(9); // straight line to target.
+          const path = arrow!.path().match(/[^ ]+/g) ?? [];
+          expect(path.length).toEqual(14);
+          expect(path[1]).toEqual(path[4]); // move up
+          expect(path[8]).toEqual(path[10]); // move left
+          expect(Frame.lastXCoordBelow(v.x())).toEqual(Frame.lastXCoordBelow(arrow!.target!.x())); // target
+        } else if (v instanceof ArrayValue) {
+          v.arrows().forEach(arrow => {
+            expect(arrow).toBeDefined();
+            expect(arrow?.target).toBeDefined();
+            if (
+              arrow instanceof ArrowFromArrayUnit &&
+              arrow.target instanceof ArrayValue &&
+              arrow.source instanceof ArrayUnit
+            ) {
+              const sourceArray = arrow.source.parent as ArrayValue;
+              const targetArray = arrow.target as ArrayValue;
+              if (sourceArray.level === targetArray.level) {
+                // for arrows within same array level
+                const path = arrow!.path().match(/[^ ]+/g) ?? [];
+                expect(parseFloat(path[1])).toEqual(arrow.source.x() + Config.DataUnitWidth / 2);
+                expect(parseFloat(path[2])).toEqual(arrow.source.y() + Config.DataUnitHeight / 2);
+                if (sourceArray.data === targetArray.data) {
+                  expect(path.length).toEqual(22); // up, right, down.
+                  expect(path[1]).toEqual(path[4]);
+                  expect(path[17]).toEqual(path[20]);
+                  expect(parseFloat(path[20]) - parseFloat(path[1])).toBeCloseTo(
+                    Config.DataUnitWidth / 3
+                  );
+                } else if (sourceArray.y() === targetArray.y()) {
+                  expect(path.length).toEqual(30); // up, horizontal, down, horizontal
+                } else {
+                  expect(path.length).toEqual(9); // straight line to target.
+                }
               }
             }
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    };
+    checkLayout();
+    EnvVisualizer.togglePrintableMode();
+    checkLayout();
   });
 });

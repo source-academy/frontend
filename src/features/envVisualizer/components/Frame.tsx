@@ -315,9 +315,9 @@ export class Frame implements Visible, Hoverable {
           }
           cornerRadius={Number(Config.FrameCornerRadius)}
           key={Layout.key++}
-          onClick={this.onClick}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
+          onClick={e => this.onClick(e)}
+          onMouseEnter={() => this.onMouseEnter()}
+          onMouseLeave={() => this.onMouseLeave()}
         />
       </Group>
     );

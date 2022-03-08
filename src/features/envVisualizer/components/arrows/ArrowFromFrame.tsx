@@ -28,8 +28,16 @@ export class ArrowFromFrame extends GenericArrow {
     steps.push((x, y) => [target.x() + Config.FramePaddingX, target.y() + target.height()]);
     return steps;
   }
+
   static getStrokeWidth(): number {
     return Number(Config.FrameArrowStrokeWidth);
+  }
+
+  onClick(e: KonvaEventObject<MouseEvent>) {
+    super.onClick(e);
+    setHoveredStyle(e.currentTarget, {
+      strokeWidth: Number(Config.FrameArrowHoveredStrokeWidth)
+    });
   }
 
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
@@ -41,12 +49,14 @@ export class ArrowFromFrame extends GenericArrow {
 
   onMouseLeave(e: KonvaEventObject<MouseEvent>) {
     super.onMouseLeave(e);
-    if (!this.selected) {
-      if (!(this.source instanceof Frame && this.source.isSelected())) {
-        setUnhoveredStyle(e.currentTarget, {
-          strokeWidth: ArrowFromFrame.getStrokeWidth()
-        });
-      }
+    if (this.isSelected() || (this.source as Frame).isSelected()) {
+      setHoveredStyle(e.currentTarget, {
+        strokeWidth: Number(Config.FrameArrowStrokeWidth)
+      });
+    } else {
+      setUnhoveredStyle(e.currentTarget, {
+        strokeWidth: Number(Config.FrameArrowStrokeWidth)
+      });
     }
   }
 }

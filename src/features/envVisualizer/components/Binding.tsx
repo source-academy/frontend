@@ -75,7 +75,7 @@ export class Binding implements Visible {
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue) && this.isMainReference
         ? (this.value.height() - Config.FontSize) / 2
         : 0;
-    this.key = new Text(this.keyString, this.x(), this.offsetY + this.keyYOffset);
+    this.key = new Text(this.keyString, this.x(), this.offsetY + this.keyYOffset, {}, frame);
 
     // derive the width from the right bound of the value (either no extra space or width of function object.)
     this._width =

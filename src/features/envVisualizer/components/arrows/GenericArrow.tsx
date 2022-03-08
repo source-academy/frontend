@@ -15,6 +15,7 @@ import {
 } from '../../EnvVisualizerUtils';
 import { ArrayUnit } from '../ArrayUnit';
 import { Frame } from '../Frame';
+import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';
 import { Arrow } from './Arrow';
 
@@ -28,8 +29,8 @@ export class GenericArrow implements Arrow {
   source: Visible;
   target: Visible | undefined;
   ref: RefObject<any> = React.createRef();
-  protected selected: boolean = false;
   private _path: string = '';
+  private selected: boolean = false;
 
   constructor(source: Visible) {
     this.source = source;
@@ -59,11 +60,9 @@ export class GenericArrow implements Arrow {
     this._height = Math.abs(target.y() - this.source.y());
     return this;
   }
-
   isSelected(): boolean {
     return this.selected;
   }
-
   /**
    * Calculates the steps that this arrows takes.
    * The arrow is decomposed into numerous straight line segments, each of which we
@@ -102,7 +101,9 @@ export class GenericArrow implements Arrow {
     if (!this.selected) {
       if (
         !(this.source instanceof ArrayUnit && this.source.parent.isSelected()) &&
-        !(this.target instanceof ArrayValue && this.target.isSelected())
+        !(this.target instanceof ArrayValue && this.target.isSelected()) &&
+        !(this.source instanceof Text && this.source.frame?.isSelected()) &&
+        !(this.source instanceof Frame && this.source.isSelected())
       ) {
         setUnhoveredStyle(currentTarget, {
           strokeWidth: GenericArrow.getStrokeWidth()
@@ -117,11 +118,12 @@ export class GenericArrow implements Arrow {
 
   onMouseLeave(e: KonvaEventObject<MouseEvent>) {
     setUnhoveredCursor(e.target);
-    if (!this.selected) {
+    if (!this.isSelected()) {
       if (
         (this.source instanceof ArrayUnit && this.source.parent.isSelected()) ||
-        (this.source instanceof Frame && this.source.isSelected()) ||
-        (this.target instanceof ArrayValue && this.target.isSelected())
+        (this.source instanceof Text && this.source.frame?.isSelected()) ||
+        (this.target instanceof ArrayValue && this.target.isSelected()) ||
+        (this.target instanceof Frame && this.target.isSelected())
       ) {
         setHoveredStyle(e.currentTarget, {
           strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
@@ -181,9 +183,9 @@ export class GenericArrow implements Arrow {
       <KonvaGroup
         key={Layout.key++}
         ref={this.ref}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.onClick}
+        onMouseEnter={e => this.onMouseEnter(e)}
+        onMouseLeave={e => this.onMouseLeave(e)}
+        onClick={e => this.onClick(e)}
       >
         <KonvaPath
           {...ShapeDefaultProps}
