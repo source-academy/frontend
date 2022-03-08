@@ -118,9 +118,9 @@ export class GenericArrow implements Arrow {
     if (!this.isSelected()) {
       if (
         (this.source instanceof ArrayUnit && this.source.parent.isSelected()) ||
-        (this.source instanceof Text && this.source.frame?.isSelected()) ||
         (this.target instanceof ArrayValue && this.target.isSelected()) ||
-        (this.target instanceof Frame && this.target.isSelected())
+        (this.source instanceof Text && this.source.frame?.isSelected()) ||
+        (this.source instanceof Frame && this.source.isSelected())
       ) {
         setHoveredStyle(e.currentTarget, {
           strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
