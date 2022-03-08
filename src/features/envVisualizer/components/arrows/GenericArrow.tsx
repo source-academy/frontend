@@ -21,14 +21,14 @@ import { Arrow } from './Arrow';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow implements Arrow {
-  private _x: number;
-  private _y: number;
-  private _height: number = 0;
-  private _width: number = 0;
   points: number[] = [];
   source: Visible;
   target: Visible | undefined;
   ref: RefObject<any> = React.createRef();
+  private _x: number;
+  private _y: number;
+  private _height: number = 0;
+  private _width: number = 0;
   private _path: string = '';
   private selected: boolean = false;
 
@@ -40,7 +40,6 @@ export class GenericArrow implements Arrow {
   from(from: Visible) {
     throw new Error('Method not implemented.');
   }
-
   x(): number {
     return this._x;
   }
@@ -53,7 +52,9 @@ export class GenericArrow implements Arrow {
   width(): number {
     return this._width;
   }
-
+  path() {
+    return this._path;
+  }
   to(target: Visible) {
     this.target = target;
     this._width = Math.abs(target.x() - this.source.x());
@@ -84,18 +85,15 @@ export class GenericArrow implements Arrow {
     if (!to) return [];
     return [(x, y) => [to.x(), to.y()]];
   }
-
   static getStrokeWidth(): number {
     return Number(Config.ArrowStrokeWidth);
   }
-
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
     setHoveredCursor(e.target);
     setHoveredStyle(e.currentTarget, {
       strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
     });
   }
-
   onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
     this.selected = !this.selected;
     if (!this.selected) {
@@ -115,7 +113,6 @@ export class GenericArrow implements Arrow {
       }
     }
   }
-
   onMouseLeave(e: KonvaEventObject<MouseEvent>) {
     setUnhoveredCursor(e.target);
     if (!this.isSelected()) {
@@ -135,11 +132,6 @@ export class GenericArrow implements Arrow {
       }
     }
   }
-
-  path() {
-    return this._path;
-  }
-
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],

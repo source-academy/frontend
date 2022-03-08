@@ -45,11 +45,11 @@ export enum Config {
   ArrowNumLanes = 6,
   FrameArrowStrokeWidth = 2,
   FrameArrowHoveredStrokeWidth = 2.5,
-  MaxExportWidth = 30000,
+  MaxExportWidth = 25000,
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',
-  PRINT_BACKGROUND = '#fafafa',
+  PRINT_BACKGROUND = 'white',
 
   ConstantColon = ':= ',
   VariableColon = ': ',

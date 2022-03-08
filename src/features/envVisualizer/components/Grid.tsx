@@ -170,7 +170,7 @@ export class Grid implements Visible {
 
   /**
    * Find the Grid y-coordinate given a x-position.
-   * @param x absolute position
+   * @param y absolute position
    * @returns Largest x-coordinate smaller than or equal to a given x position.
    */
   static lastYCoordBelow(y: number) {
