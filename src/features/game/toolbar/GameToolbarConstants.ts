@@ -13,7 +13,7 @@ export type ToolbarButtonConfig = {
 const buttonConfigs: ToolbarButtonConfig[] = [
   {
     // Escape menu button
-    assetKey: ImageAssets.diamond.key,
+    assetKey: ImageAssets.gear.key,
     onUp: async () => {
       const globalAPI = GameGlobalAPI.getInstance();
       if (globalAPI.isCurrentPhase(GamePhaseType.EscapeMenu)) {
@@ -27,7 +27,7 @@ const buttonConfigs: ToolbarButtonConfig[] = [
   },
   {
     // Dashboard button
-    assetKey: ImageAssets.diamond.key,
+    assetKey: ImageAssets.journal.key,
     onUp: async () => {
       const globalAPI = GameGlobalAPI.getInstance();
       if (globalAPI.isCurrentPhase(GamePhaseType.Dashboard)) {
@@ -42,8 +42,8 @@ const buttonConfigs: ToolbarButtonConfig[] = [
 ];
 
 const ToolbarConstants = {
-  firstButton: { x: screenSize.x - 35, y: 35 },
-  xOffset: 60,
+  firstButton: { x: screenSize.x - 37, y: 37 },
+  xOffset: 64,
   buttonConfigs
 };
 

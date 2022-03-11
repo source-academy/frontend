@@ -56,8 +56,9 @@ const ImageAssets: AssetMap<ImageAsset> = {
   // Awards Hall
   awardsBackground: { type: AssetType.Image, key: 'award-hall-bg', path: '/ui/awardsHall.png' },
 
-  // Dialogue Log
-  logBackground: { type: AssetType.Image, key: 'log-bg', path: '/ui/log.png' },
+  // Toolbar
+  gear: { type: AssetType.Image, key: 'gear', path: '/ui/settings.png' },
+  journal: { type: AssetType.Image, key: 'journal', path: '/ui/journal.png' },
 
   // Chapter Select
   chapterRepeatButton: {

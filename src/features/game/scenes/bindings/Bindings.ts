@@ -96,10 +96,6 @@ class Bindings extends Phaser.Scene {
       },
       {
         key: 'Tab',
-        text: 'Awards Menu'
-      },
-      {
-        key: 'Ctrl',
         text: 'Dashboard'
       }
     ];

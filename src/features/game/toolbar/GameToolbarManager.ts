@@ -51,7 +51,7 @@ class GameToolbarManager {
    * @param buttonConfig config details of the button
    */
   private createToolbarButton(xPos: number, yPos: number, buttonConfig: ToolbarButtonConfig) {
-    return createButton(this.scene, buttonConfig).setPosition(xPos, yPos).setScale(0.1, 0.1);
+    return createButton(this.scene, buttonConfig).setPosition(xPos, yPos);
   }
 
   /**

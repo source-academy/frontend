@@ -12,7 +12,8 @@ export enum Layer {
   Escape,
   Selector,
   Collectibles,
-  Dashboard
+  Dashboard,
+  WorkerMessage
 }
 
 // Back to Front
@@ -30,5 +31,6 @@ export const defaultLayerSequence = [
   Layer.Effects,
   Layer.Dashboard,
   Layer.Escape,
-  Layer.UI
+  Layer.UI,
+  Layer.WorkerMessage
 ];

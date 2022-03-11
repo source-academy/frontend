@@ -252,6 +252,8 @@ class GameManager extends Phaser.Scene {
       async () => {
         if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
           await this.getPhaseManager().popPhase();
+        } else if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
+          await this.getPhaseManager().swapPhase(GamePhaseType.EscapeMenu);
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
         }
@@ -261,19 +263,10 @@ class GameManager extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.TAB,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
-          await this.getPhaseManager().popPhase();
-        } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.AwardMenu);
-        }
-      }
-    );
-    this.getInputManager().registerKeyboardListener(
-      Phaser.Input.Keyboard.KeyCodes.CTRL,
-      'up',
-      async () => {
         if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
           await this.getPhaseManager().popPhase();
+        } else if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await this.getPhaseManager().swapPhase(GamePhaseType.Dashboard);
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
         }

@@ -48,11 +48,6 @@ class GameTaskLogManager implements DashboardPageManager {
         const task = tasksData[i][0];
         const taskIsDone = tasksData[i][1];
 
-        if (i !== 0) {
-          // One line break between tasks
-          totalTextHeight += 215 / 6;
-        }
-
         if (taskIsDone) {
           // Show a check mark next to completed tasks
           const checkMark = new Phaser.GameObjects.Image(
@@ -64,9 +59,9 @@ class GameTaskLogManager implements DashboardPageManager {
           taskListContainer.add(checkMark);
         }
 
-        const taskText = createBitmapText(
+        const taskTitle = createBitmapText(
           this.scene,
-          `${task.title}\n${task.description}`,
+          task.title,
           {
             ...TaskLogConstants.taskTextConfig,
             y: TaskLogConstants.taskTextConfig.y + totalTextHeight
@@ -74,8 +69,35 @@ class GameTaskLogManager implements DashboardPageManager {
           taskTextStyle
         ).setMaxWidth(TaskLogConstants.textMaxWidth);
 
-        taskListContainer.add(taskText);
-        totalTextHeight += taskText.height;
+        // Underline the task title using a stretched underscore
+        // (Note: this will not underline subsequent lines if title longer than 1 line)
+        const underline = createBitmapText(
+          this.scene,
+          '_',
+          {
+            ...TaskLogConstants.taskTextConfig,
+            y: TaskLogConstants.taskTextConfig.y + totalTextHeight
+          },
+          taskTextStyle
+        );
+        underline.setScale(taskTitle.width / underline.width, 1);
+
+        taskListContainer.add(taskTitle);
+        taskListContainer.add(underline);
+        totalTextHeight += taskTitle.height;
+
+        const taskDescription = createBitmapText(
+          this.scene,
+          task.description + (i < tasksData.length - 1 ? '\n ' : ''), // Line break between tasks
+          {
+            ...TaskLogConstants.taskTextConfig,
+            y: TaskLogConstants.taskTextConfig.y + totalTextHeight
+          },
+          taskTextStyle
+        ).setMaxWidth(TaskLogConstants.textMaxWidth);
+
+        taskListContainer.add(taskDescription);
+        totalTextHeight += taskDescription.height;
       }
     }
 

@@ -204,6 +204,7 @@ class GameGlobalAPI {
 
   public showTask(key: string): void {
     this.getGameManager().getStateManager().showTask(key);
+    displayMiniMessage(this.getGameManager(), 'New task added');
   }
 
   public getAllVisibleTaskData(): Array<[Task, boolean]> {
