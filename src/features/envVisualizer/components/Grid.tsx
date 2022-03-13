@@ -151,7 +151,7 @@ export class Grid implements Visible {
           i % 2 === 0
             ? Frame.heights[Math.floor(i / 2)]
             : this.arrayLevels[Math.floor((i - 1) / 2)].height();
-        return [...res, res[res.length - 1] + height + Config.FrameMarginY / 2];
+        return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY / 2 : 0)];
       },
       [Config.FrameMarginY.valueOf()]
     );

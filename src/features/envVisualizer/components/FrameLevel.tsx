@@ -12,7 +12,6 @@ import { Level } from './Level';
 export class FrameLevel extends Level {
   private _x: number;
   private _y: number;
-  private _height: number = 0;
   private _width: number;
   static maxXcoord: number = 0;
   static maxYcoord: number = 0;
@@ -30,7 +29,6 @@ export class FrameLevel extends Level {
     super(parentLevel);
     this._x = Config.CanvasPaddingX;
     this._y = 0;
-    this._height = 0;
     this._width = 0;
     this.lastXcoord = -1;
     this.yCoord = FrameLevel.maxYcoord++;
@@ -42,7 +40,7 @@ export class FrameLevel extends Level {
     return this._y;
   }
   height(): number {
-    return this._height;
+    return Frame.heights[this.yCoord];
   }
   width(): number {
     return this._width;

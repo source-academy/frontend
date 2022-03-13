@@ -225,7 +225,7 @@ export class Frame implements Visible, Hoverable {
     );
     Frame.heights[this.yCoord] = Math.max(
       Frame.heights[this.yCoord] || 0,
-      this.totalHeight + Config.FrameMarginY
+      this.totalHeight + Config.FrameMarginY / 2
     );
   };
 

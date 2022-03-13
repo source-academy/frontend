@@ -29,7 +29,7 @@ export class ArrowFromFrame extends GenericArrow {
     return steps;
   }
 
-  static getStrokeWidth(): number {
+  getStrokeWidth(): number {
     return Number(Config.FrameArrowStrokeWidth);
   }
 

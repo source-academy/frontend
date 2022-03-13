@@ -85,7 +85,7 @@ export class GenericArrow implements Arrow {
     if (!to) return [];
     return [(x, y) => [to.x(), to.y()]];
   }
-  static getStrokeWidth(): number {
+  getStrokeWidth(): number {
     return Number(Config.ArrowStrokeWidth);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
@@ -104,7 +104,7 @@ export class GenericArrow implements Arrow {
         !(this.source instanceof Frame && this.source.isSelected())
       ) {
         setUnhoveredStyle(currentTarget, {
-          strokeWidth: GenericArrow.getStrokeWidth()
+          strokeWidth: this.getStrokeWidth()
         });
       } else {
         setHoveredStyle(currentTarget, {
@@ -127,7 +127,7 @@ export class GenericArrow implements Arrow {
         });
       } else {
         setUnhoveredStyle(e.currentTarget, {
-          strokeWidth: GenericArrow.getStrokeWidth()
+          strokeWidth: this.getStrokeWidth()
         });
       }
     }
@@ -186,7 +186,7 @@ export class GenericArrow implements Arrow {
               ? Config.SA_BLUE.toString()
               : Config.SA_WHITE.toString()
           }
-          strokeWidth={GenericArrow.getStrokeWidth()}
+          strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
           key={Layout.key++}
