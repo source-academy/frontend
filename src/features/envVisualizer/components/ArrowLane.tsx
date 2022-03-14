@@ -63,15 +63,15 @@ export class ArrowLane {
       if (this.isVertical) {
         return (
           Frame.cumWidths[this.id] -
-          Config.FrameMarginX * 0.8 +
-          Config.FnRadius * 1.5 +
-          ((lane + 0.5) / Config.ArrowNumLanes) * Config.FrameMarginX * 0.8
+          Config.FrameMarginX * 0.9 +
+          Config.FnRadius +
+          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginX * 0.8
         );
       } else {
         return (
           Grid.cumHeights[this.id] -
           Config.FrameMarginY * 0.95 +
-          ((lane + 0.5) / Config.ArrowNumLanes) * Config.FrameMarginY * 0.5
+          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.5
         );
       }
     }

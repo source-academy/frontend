@@ -3,7 +3,6 @@ import { StepsArray, Visible } from '../../EnvVisualizerTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
-import { Grid } from '../Grid';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
@@ -40,13 +39,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
         ).getPosition(target),
         y
       ]);
-      steps.push((x, y) => [
-        x,
-        ArrowLane.getHorizontalLane(
-          target,
-          Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
-        ).getPosition(target)
-      ]);
+      steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
       steps.push((x, y) => [
         ArrowLane.getVerticalLane(
           target,

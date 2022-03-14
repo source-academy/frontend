@@ -170,7 +170,13 @@ export class GenericArrow implements Arrow {
     path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
     this._path = path;
     return (
-      <KonvaGroup key={Layout.key++} ref={this.ref}>
+      <KonvaGroup
+        key={Layout.key++}
+        ref={this.ref}
+        onMouseEnter={e => this.onMouseEnter(e)}
+        onMouseLeave={e => this.onMouseLeave(e)}
+        onClick={e => this.onClick(e)}
+      >
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={
@@ -181,9 +187,6 @@ export class GenericArrow implements Arrow {
           strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
-          onMouseEnter={e => this.onMouseEnter(e)}
-          onMouseLeave={e => this.onMouseLeave(e)}
-          onClick={e => this.onClick(e)}
           key={Layout.key++}
         />
         <KonvaArrow
