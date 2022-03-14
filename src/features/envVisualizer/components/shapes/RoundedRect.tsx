@@ -16,6 +16,7 @@ interface Props {
   forwardRef: RefObject<any>;
   onMouseEnter?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
   onMouseLeave?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
+  onClick?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
 }
 
 export const RoundedRect: React.FC<Props> = ({

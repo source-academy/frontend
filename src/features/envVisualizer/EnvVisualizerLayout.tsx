@@ -52,7 +52,7 @@ export class Layout {
   static prevLayout: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
-  static readonly invisiblePadding: number = 500;
+  static readonly invisiblePadding: number = 300;
 
   static updateDimensions(width: number, height: number) {
     Layout.visibleWidth = width;

@@ -1,22 +1,17 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Path } from 'konva/lib/shapes/Path';
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { Data, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
+import { setUnhoveredStyle } from '../../EnvVisualizerUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayLevel } from '../ArrayLevel';
-import { ArrayNullUnit } from '../ArrayNullUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Arrow } from '../arrows/Arrow';
 import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
-import { FnValue } from './FnValue';
-import { GlobalFnValue } from './GlobalFnValue';
-// import { PrimitiveValue } from './PrimitiveValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
@@ -75,6 +70,8 @@ export class ArrayValue extends Value implements Hoverable {
       this.units = [unit, ...this.units];
     }
   }
+  onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
+  onMouseLeave(e: KonvaEventObject<MouseEvent>): void {}
   x(): number {
     return this._x;
   }
@@ -103,6 +100,16 @@ export class ArrayValue extends Value implements Hoverable {
     this._arrows = [];
   }
 
+  onClick = () => {
+    this.selected = !this.selected;
+    if (!this.selected) {
+      this.units.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
+      });
+      this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
+    }
+  };
+
   setLevel(arrLevel: ArrayLevel): void {
     this.level = arrLevel;
   }
@@ -117,71 +124,6 @@ export class ArrayValue extends Value implements Hoverable {
 
   addArrow = (arrow: Arrow) => {
     this._arrows.push(arrow);
-  };
-
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    this.units.forEach(u => {
-      setHoveredStyle(u.ref.current);
-      if (
-        u.value instanceof ArrayValue ||
-        u.value instanceof FnValue ||
-        u.value instanceof GlobalFnValue ||
-        u.value instanceof ArrayNullUnit
-      ) {
-        setHoveredStyle(u.value.ref?.current);
-      }
-    });
-    this.emptyUnit && setHoveredStyle(this.emptyUnit.ref.current);
-    this._arrows.forEach(u => {
-      setHoveredStyle(u.ref.current);
-    });
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (!this.isSelected()) {
-      this.units.forEach(u => {
-        setUnhoveredStyle(u.ref.current);
-        if (
-          u.value instanceof ArrayValue ||
-          u.value instanceof FnValue ||
-          u.value instanceof GlobalFnValue ||
-          u.value instanceof ArrayNullUnit
-        ) {
-          setUnhoveredStyle(u.value.ref?.current);
-        }
-      });
-      this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
-      this._arrows.forEach(u => {
-        setUnhoveredStyle(u.ref.current);
-      });
-    } else {
-      const container = currentTarget.getStage()?.container();
-      container && (container.style.cursor = 'default');
-    }
-  };
-
-  onClick = ({ target }: KonvaEventObject<MouseEvent>) => {
-    if (target instanceof Path) {
-      return; // handled by GenericArrow.
-    }
-    this.selected = !this.selected;
-    if (!this.selected) {
-      this.units.forEach(u => {
-        setUnhoveredStyle(u.ref.current);
-        if (
-          u.value instanceof ArrayValue ||
-          u.value instanceof FnValue ||
-          u.value instanceof GlobalFnValue ||
-          u.value instanceof ArrayNullUnit
-        ) {
-          setUnhoveredStyle(u.value.ref?.current);
-        }
-      });
-      this.emptyUnit && setUnhoveredStyle(this.emptyUnit.ref.current);
-      this._arrows.forEach(arrow => {
-        !arrow.isSelected && setUnhoveredStyle(arrow.ref.current);
-      });
-    }
   };
 
   draw(): React.ReactNode {
@@ -202,9 +144,9 @@ export class ArrayValue extends Value implements Hoverable {
       <Group
         key={Layout.key++}
         ref={this.ref}
-        onClick={this.onClick}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        // onClick={this.onClick}
+        // onMouseEnter={this.onMouseEnter}
+        // onMouseLeave={this.onMouseLeave}
       >
         {this._arrows.map(arrow => arrow.draw())}
         {this.units.length > 0 && this.units.map(unit => unit.draw())}

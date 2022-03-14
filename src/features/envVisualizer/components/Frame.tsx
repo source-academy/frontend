@@ -223,10 +223,7 @@ export class Frame implements Visible, Hoverable {
       Frame.cumWidths[this.xCoord] + this.totalHoveredWidth,
       Frame.cumWidths[Frame.cumWidths.length - 1]
     );
-    Frame.heights[this.yCoord] = Math.max(
-      Frame.heights[this.yCoord] || 0,
-      this.totalHeight + Config.FrameMarginY / 2
-    );
+    Frame.heights[this.yCoord] = Math.max(Frame.heights[this.yCoord] || 0, this.totalHeight);
   };
 
   static reset = () => {

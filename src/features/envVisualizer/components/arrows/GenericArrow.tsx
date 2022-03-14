@@ -13,10 +13,8 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle
 } from '../../EnvVisualizerUtils';
-import { ArrayUnit } from '../ArrayUnit';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
-import { ArrayValue } from '../values/ArrayValue';
 import { Arrow } from './Arrow';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
@@ -96,10 +94,10 @@ export class GenericArrow implements Arrow {
   }
   onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
     this.selected = !this.selected;
-    if (!this.selected) {
+    if (!this.isSelected()) {
       if (
-        !(this.source instanceof ArrayUnit && this.source.parent.isSelected()) &&
-        !(this.target instanceof ArrayValue && this.target.isSelected()) &&
+        // !(this.source instanceof ArrayUnit && this.source.parent.isSelected()) &&
+        // !(this.target instanceof ArrayValue && this.target.isSelected()) &&
         !(this.source instanceof Text && this.source.frame?.isSelected()) &&
         !(this.source instanceof Frame && this.source.isSelected())
       ) {
@@ -117,8 +115,8 @@ export class GenericArrow implements Arrow {
     setUnhoveredCursor(e.target);
     if (!this.isSelected()) {
       if (
-        (this.source instanceof ArrayUnit && this.source.parent.isSelected()) ||
-        (this.target instanceof ArrayValue && this.target.isSelected()) ||
+        // (this.source instanceof ArrayUnit && this.source.parent.isSelected()) ||
+        // (this.target instanceof ArrayValue && this.target.isSelected()) ||
         (this.source instanceof Text && this.source.frame?.isSelected()) ||
         (this.source instanceof Frame && this.source.isSelected())
       ) {
@@ -172,13 +170,7 @@ export class GenericArrow implements Arrow {
     path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
     this._path = path;
     return (
-      <KonvaGroup
-        key={Layout.key++}
-        ref={this.ref}
-        onMouseEnter={e => this.onMouseEnter(e)}
-        onMouseLeave={e => this.onMouseLeave(e)}
-        onClick={e => this.onClick(e)}
-      >
+      <KonvaGroup key={Layout.key++} ref={this.ref}>
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={
@@ -189,6 +181,9 @@ export class GenericArrow implements Arrow {
           strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
+          onMouseEnter={e => this.onMouseEnter(e)}
+          onMouseLeave={e => this.onMouseLeave(e)}
+          onClick={e => this.onClick(e)}
           key={Layout.key++}
         />
         <KonvaArrow

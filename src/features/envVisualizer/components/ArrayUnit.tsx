@@ -1,9 +1,11 @@
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, Visible } from '../EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
@@ -75,6 +77,27 @@ export class ArrayUnit implements Visible {
     this.isDrawn = false;
   };
 
+  onMouseEnter = () => {
+    this.parent.units.forEach(u => {
+      setHoveredStyle(u.ref.current);
+    });
+  };
+
+  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (!this.parent.isSelected()) {
+      this.parent.units.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
+      });
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
+  };
+
+  onClick = () => {
+    this.parent.onClick();
+  };
+
   draw(): React.ReactNode {
     if (this.isDrawn) return null;
     this.isDrawn = true;
@@ -116,6 +139,9 @@ export class ArrayUnit implements Visible {
           fillEnabled={false}
           forwardRef={this.ref}
           cornerRadius={cornerRadius}
+          onClick={this.onClick}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
         />
         {!(this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
           this.value.draw()}
