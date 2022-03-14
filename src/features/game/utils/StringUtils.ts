@@ -111,6 +111,22 @@ export default class StringUtils {
   }
 
   /**
+   * Split using separator such that there will be n substrings in the result.
+   * After splitting, trim each entry to get rid of whitespaces.
+   *
+   * @param line line to be split
+   * @param sep separator to be used
+   * @param n delimiter for the split
+   * @param {Array<string>}
+   */
+  public static splitByNChar(line: string, sep: string, n: integer): string[] {
+    const arr = line.split(sep);
+    const substrings = arr.slice(0, n - 1);
+    substrings.push(arr.slice(n - 1).join(sep));
+    return substrings.map((phrase: string) => phrase.trim());
+  }
+
+  /**
    * Splits text into string array and removes
    * lines with only newlines.
    *

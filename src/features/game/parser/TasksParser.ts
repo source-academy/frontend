@@ -27,7 +27,8 @@ export default class TasksParser {
   public static parse(taskDetails: string[]) {
     const tasks: Task[] = [];
     taskDetails.forEach(taskDetail => {
-      const [taskId, title, desc] = StringUtils.splitByChar(taskDetail, ',');
+      const [taskId, title, desc] = StringUtils.splitByNChar(taskDetail, ',', 3);
+      console.log(desc);
       const newTask: Task = {
         taskId: taskId,
         title: title,
