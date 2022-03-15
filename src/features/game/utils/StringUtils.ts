@@ -70,14 +70,14 @@ export default class StringUtils {
    * Split using separator, but limit number of separators to split with.
    * After splitting, trim each entry to get rid of whitespaces.
    *
-   * Example input: splitByChar("whatHappened, What Happened, Scottie?\n", ",", 1)
+   * Example input: splitWithLimit("whatHappened, What Happened, Scottie?\n", ",", 1)
    * Example output: ["whatHappened", "What Happened, Scottie?"]
    * Explanation: This splits the string only using the first 1 comma then trims whitespaces
    *
    * @param line line to be split
    * @param sep separator to be used
    * @param limit limit the number of separators to split the string, undefined if use all separators
-   * @param {Array<string>}
+   * @returns {Array<string>}
    */
   public static splitWithLimit(line: string, sep: string, limit: number): string[] {
     if (limit >= 0) {
