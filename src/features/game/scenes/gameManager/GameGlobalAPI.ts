@@ -200,6 +200,7 @@ class GameGlobalAPI {
 
   public completeTask(key: string): void {
     this.getGameManager().getStateManager().completeTask(key);
+    displayMiniMessage(this.getGameManager(), 'Task completed!');
   }
 
   public showTask(key: string): void {
