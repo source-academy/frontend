@@ -550,7 +550,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     // (TEMP) Remove tabs for fullJS until support is integrated
     if (isFullJSChapter(props.playgroundSourceChapter)) {
-      return tabs;
+      return [...tabs, dataVisualizerTab];
     }
 
     if (props.playgroundSourceChapter >= 2 && !usingRemoteExecution) {
