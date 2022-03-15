@@ -64,6 +64,7 @@ const stringToActionTypeMap = {
 
 const stringToGameStateStorageMap = {
   checklist: GameStateStorage.ChecklistState,
+  tasklist: GameStateStorage.TasklistState,
   userstate: GameStateStorage.UserState
 };
 
