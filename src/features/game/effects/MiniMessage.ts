@@ -18,6 +18,29 @@ const messageStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_RIGHT
 };
 
+let messageDisplaying = false; // Whether a message is currently on screen
+const messageQueue: [IBaseScene, string][] = []; // A queue of messages waiting to be displayed
+
+/**
+ * A function to display a message on the top right side of the screen.
+ * The message will be tweened to enter from the right side of the screen,
+ * displayed for a duration, before tweened out. The message will not be
+ * shown immediately if there is another message currently being displayed
+ * and/or other messages are waiting to be displayed
+ *
+ * @param scene scene to attach this message to
+ * @param text text to be written
+ */
+export function displayMiniMessage(scene: IBaseScene, text: string) {
+  if (messageDisplaying) {
+    // Message currently on screen, store message and display later
+    messageQueue.push([scene, text]);
+  } else {
+    messageDisplaying = true;
+    displayMiniMessageHelper(scene, text);
+  }
+}
+
 /**
  * A function to display a message on the top right side of the screen.
  * The message will be tweened to enter from the right side of the screen,
@@ -26,7 +49,7 @@ const messageStyle: BitmapFontStyle = {
  * @param scene scene to attach this message to
  * @param text text to be written
  */
-export async function displayMiniMessage(scene: IBaseScene, text: string) {
+async function displayMiniMessageHelper(scene: IBaseScene, text: string) {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
   const messageBg = new Phaser.GameObjects.Sprite(
     scene,
@@ -60,4 +83,12 @@ export async function displayMiniMessage(scene: IBaseScene, text: string) {
 
   await sleep(rightSideExitTweenProps.duration);
   fadeAndDestroy(scene, container, { fadeDuration: Constants.fadeDuration });
+
+  // Display next message in queue if any
+  if (messageQueue.length > 0) {
+    const [scene, text] = messageQueue.shift()!;
+    displayMiniMessageHelper(scene, text);
+  } else {
+    messageDisplaying = false;
+  }
 }
