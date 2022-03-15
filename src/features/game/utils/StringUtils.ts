@@ -76,27 +76,17 @@ export default class StringUtils {
    *
    * @param line line to be split
    * @param sep separator to be used
-   * @param limit the number of separators to split the string, undefined if use all separators
+   * @param limit limit the number of separators to split the string, undefined if use all separators
    * @param {Array<string>}
    */
   public static splitWithLimit(line: string, sep: string, limit: number): string[] {
-    let lines = [];
-    if (limit) {
-      let currWord = '';
-      for (let i = 0; i < line.length; i++) {
-        const letter = line[i];
-        if (letter === sep && lines.length < limit) {
-          lines.push(currWord);
-          currWord = '';
-        } else {
-          currWord += letter;
-        }
-      }
-      lines.push(currWord);
-    } else {
-      lines = line.split(sep);
+    if (limit >= 0) {
+      const lines = line.split(sep);
+      const substrings = lines.slice(0, limit);
+      substrings.push(lines.slice(limit).join(sep));
+      return substrings.map((phrase: string) => phrase.trim());
     }
-    return lines.map((phrase: string) => phrase.trim());
+    return StringUtils.splitByChar(line, sep);
   }
 
   /**
@@ -108,22 +98,6 @@ export default class StringUtils {
    */
   public static splitByChar(line: string, sep: string): string[] {
     return line.split(sep).map((phrase: string) => phrase.trim());
-  }
-
-  /**
-   * Split using separator such that there will be n substrings in the result.
-   * After splitting, trim each entry to get rid of whitespaces.
-   *
-   * @param line line to be split
-   * @param sep separator to be used
-   * @param n delimiter for the split
-   * @param {Array<string>}
-   */
-  public static splitByNChar(line: string, sep: string, n: integer): string[] {
-    const arr = line.split(sep);
-    const substrings = arr.slice(0, n - 1);
-    substrings.push(arr.slice(n - 1).join(sep));
-    return substrings.map((phrase: string) => phrase.trim());
   }
 
   /**
