@@ -223,7 +223,7 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   // target.moveToTop();
   // TODO: likewise, re-implement Layout.tsx to
   // achieve setHoveredStyle by manipulating the state.
-  target.getLayer()?.draw();
+  // target.getLayer()?.draw();
 }
 
 /** Updates the styles of a Konva node and its children on unhover, and then redraw the layer */
@@ -248,7 +248,7 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
     });
   });
 
-  target.getLayer()?.draw();
+  // target.getLayer()?.draw();
 }
 
 /** Extracts the non-empty tail environment from the given environment */

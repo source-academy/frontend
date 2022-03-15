@@ -257,7 +257,9 @@ export class Frame implements Visible, Hoverable {
         arrow && !arrow.isSelected() && setUnhoveredStyle(arrow.ref.current);
       });
       this.values.forEach(x => {
-        x && setUnhoveredStyle(x.ref.current);
+        if (!(x instanceof ArrayValue) || !x.isSelected()) {
+          x && setUnhoveredStyle(x.ref.current);
+        }
       });
     }
   };
@@ -274,7 +276,9 @@ export class Frame implements Visible, Hoverable {
         arrow && !arrow.isSelected() && setUnhoveredStyle(arrow.ref.current);
       });
       this.values.forEach(x => {
-        x && setUnhoveredStyle(x.ref.current);
+        if (!(x instanceof ArrayValue) || !x.isSelected()) {
+          x && setUnhoveredStyle(x.ref.current);
+        }
       });
     } else {
       setHoveredStyle(this.ref.current);

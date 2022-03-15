@@ -36,6 +36,10 @@ export class Layout {
   static visibleHeight: number = window.innerHeight;
   /** the visible width of the stage */
   static visibleWidth: number = window.innerWidth;
+  /** total width of stage */
+  static stageHeight: number = window.innerHeight;
+  /** the visible width of the stage */
+  static stageWidth: number = window.innerWidth;
   /** the unique key assigned to each node */
   static key: number = 0;
 
@@ -50,17 +54,34 @@ export class Layout {
   static oldValues = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
+  static currentDark: React.ReactNode;
+  static currentLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
-  static readonly invisiblePadding: number = 300;
+  static invisiblePaddingVertical: number = 300;
+  static invisiblePaddingHorizontal: number = 300;
+  static scrollContainerRef: RefObject<any> = React.createRef();
 
   static updateDimensions(width: number, height: number) {
     Layout.visibleWidth = width;
     Layout.visibleHeight = height;
-    if (Layout.stageRef.current !== null) {
-      Layout.stageRef.current.width(width + Layout.invisiblePadding * 2);
-      Layout.stageRef.current.height(height + Layout.invisiblePadding * 2);
+    if (
+      Layout.stageRef.current !== null &&
+      (window.innerWidth > Layout.stageWidth || window.innerHeight > Layout.stageHeight)
+    ) {
+      Layout.stageWidth = window.innerWidth;
+      Layout.stageHeight = window.innerHeight;
+      Layout.stageRef.current.width(Layout.stageWidth);
+      Layout.stageRef.current.height(Layout.stageHeight);
       EnvVisualizer.redraw();
+    }
+    Layout.invisiblePaddingVertical = (Layout.stageHeight - Layout.visibleHeight) / 2;
+    Layout.invisiblePaddingHorizontal = (Layout.stageWidth - Layout.visibleWidth) / 2;
+
+    const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
+    if (container) {
+      container.style.width = `${Layout.visibleWidth}px`;
+      container.style.height = `${Layout.visibleHeight}px`;
     }
   }
 
@@ -306,9 +327,10 @@ export class Layout {
           </div>
           <div
             id="scroll-container"
+            ref={Layout.scrollContainerRef}
             onScroll={e => {
-              const dx = e.currentTarget.scrollLeft - Layout.invisiblePadding;
-              const dy = e.currentTarget.scrollTop - Layout.invisiblePadding;
+              const dx = e.currentTarget.scrollLeft - Layout.invisiblePaddingHorizontal;
+              const dy = e.currentTarget.scrollTop - Layout.invisiblePaddingVertical;
               this.stageRef.current.container().style.transform =
                 'translate(' + dx + 'px, ' + dy + 'px)';
               this.stageRef.current.x(-dx);
@@ -332,11 +354,7 @@ export class Layout {
                   : Config.SA_BLUE.toString()
               }}
             >
-              <Stage
-                width={Layout.visibleWidth + Layout.invisiblePadding * 2}
-                height={Layout.visibleHeight + Layout.invisiblePadding * 2}
-                ref={this.stageRef}
-              >
+              <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
                 <Layer>
                   <Rect
                     {...ShapeDefaultProps}
@@ -360,6 +378,11 @@ export class Layout {
         </div>
       );
       Layout.prevLayout = layout;
+      if (EnvVisualizer.getPrintableMode()) {
+        Layout.currentLight = layout;
+      } else {
+        Layout.currentDark = layout;
+      }
       return layout;
     }
   }

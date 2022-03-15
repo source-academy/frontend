@@ -130,13 +130,21 @@ export class Text implements Visible, Hoverable {
           y={this._y}
           ref={this.ref}
           visible={EnvVisualizer.getPrintableMode() ? true : false}
+          listening={false}
         >
           <KonvaTag
             {...ShapeDefaultProps}
             fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}
             opacity={0.5}
+            listening={false}
           />
-          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
+          <KonvaText
+            {...ShapeDefaultProps}
+            key={Layout.key++}
+            text={this.fullStr}
+            {...props}
+            listening={false}
+          />
         </KonvaLabel>
       </Group>
     );

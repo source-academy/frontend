@@ -33,6 +33,8 @@ export default class EnvVisualizer {
    * the JS Slang context passed in */
   static drawEnv(context: Context) {
     EnvVisualizer.context = context;
+    Layout.currentDark = undefined;
+    Layout.currentLight = undefined;
     if (!this.setVis) throw new Error('env visualizer not initialized');
 
     Layout.setContext(context);
@@ -44,7 +46,16 @@ export default class EnvVisualizer {
   }
 
   static redraw() {
-    EnvVisualizer.drawEnv(EnvVisualizer.context);
+    console.log(Layout.currentDark, Layout.currentLight);
+    if (EnvVisualizer.getPrintableMode() && Layout.currentLight !== undefined) {
+      this.setVis(Layout.currentLight);
+    } else if (!EnvVisualizer.getPrintableMode() && Layout.currentDark !== undefined) {
+      this.setVis(Layout.currentDark);
+    } else {
+      Layout.setContext(EnvVisualizer.context);
+      this.setVis(Layout.draw());
+    }
+    Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
   static updateDimensions(width: number, height: number) {
