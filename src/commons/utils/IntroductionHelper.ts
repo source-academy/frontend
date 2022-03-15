@@ -1,7 +1,7 @@
-import { isFullJSChapter } from '../application/ApplicationTypes';
-import { Links } from './Constants';
+import { Variant } from 'js-slang/dist/types';
 
-const CHAP = '\xa7';
+import { isFullJSChapter, styliseSublanguage, sublanguages } from '../application/ApplicationTypes';
+import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
 Welcome to the Source Academy playground!
@@ -16,47 +16,38 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
 
-const FULLJS_INTRODUCTION =
-  MAIN_INTRODUCTION +
-  `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
-  '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab. Note that you need to open the browser console (typically by pressing `F12`) before using breakpoints.' +
-  HOTKEYS_INTRODUCTION;
-
-const generateSourceDocsLink = (sourceType: string) => {
-  switch (sourceType) {
-    case '1 default':
-      return `You have chosen the sublanguage [_Source ${CHAP}1_](${Links.source_1}).`;
-    case '1 wasm':
-      return `You have chosen the sublanguage [_Source ${CHAP}1 WebAssembly_](${Links.source_1_Wasm}).`;
-    case '1 lazy':
-      return `You have chosen the sublanguage [_Source ${CHAP}1 Lazy_](${Links.source_1_Lazy}).`;
-    case '2 default':
-      return `You have chosen the sublanguage [_Source ${CHAP}2_](${Links.source_2}).`;
-    case '2 lazy':
-      return `You have chosen the sublanguage [_Source ${CHAP}2 Lazy_](${Links.source_2_Lazy}).`;
-    case '3 default':
-      return `You have chosen the sublanguage [_Source ${CHAP}3_](${Links.source_3}).`;
-    case '3 non-det':
-      return `You have chosen the sublanguage [_Source ${CHAP}3 Non-Det_](${Links.source_3_Nondet}).`;
-    case '3 concurrent':
-      return `You have chosen the sublanguage [_Source ${CHAP}3 Concurrent_](${Links.source_3_Concurrent}).`;
-    case '4 default':
-      return `You have chosen the sublanguage [_Source ${CHAP}4_](${Links.source_4}).`;
-    case '4 gpu':
-      return `You have chosen the sublanguage [_Source ${CHAP}4 GPU_](${Links.source_4_Gpu}).`;
-    case '-1 default':
-      return `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).`;
-    default:
-      return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
+const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) => {
+  // `.includes` and `.find` are not used here since we are dealing with reference types
+  if (
+    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant).length === 0
+  ) {
+    return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
   }
+
+  if (isFullJSChapter(sourceChapter)) {
+    return (
+      `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
+      '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab. ' +
+      'Note that you need to open the browser console (typically by pressing `F12`) before using breakpoints.'
+    );
+  }
+
+  const sourceDocsLink: string = `${Links.sourceDocs}source_${sourceChapter}${
+    sourceVariant !== 'default' ? `_${sourceVariant}` : ''
+  }/`;
+
+  return `You have chosen the sublanguage [_${styliseSublanguage(
+    sourceChapter,
+    sourceVariant
+  )}_](${sourceDocsLink}).`;
 };
 
-const generateIntroductionText = (sourceType: string) => {
-  return MAIN_INTRODUCTION + generateSourceDocsLink(sourceType) + HOTKEYS_INTRODUCTION;
+const generateIntroductionText = (sourceChapter: number, sourceVariant: Variant) => {
+  return (
+    MAIN_INTRODUCTION + generateSourceDocsLink(sourceChapter, sourceVariant) + HOTKEYS_INTRODUCTION
+  );
 };
 
-export const generateSourceIntroduction = (sourceChapter: number, sourceVariant: string) => {
-  return isFullJSChapter(sourceChapter)
-    ? FULLJS_INTRODUCTION
-    : generateIntroductionText(`${sourceChapter} ${sourceVariant}`);
+export const generateSourceIntroduction = (sourceChapter: number, sourceVariant: Variant) => {
+  return generateIntroductionText(sourceChapter, sourceVariant);
 };

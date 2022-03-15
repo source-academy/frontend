@@ -140,7 +140,7 @@ export const styliseSublanguage = (chapter: number, variant: Variant = 'default'
       }`;
 };
 
-const sublanguages: { chapter: number; variant: Variant }[] = [
+export const sublanguages: { chapter: number; variant: Variant }[] = [
   { chapter: 1, variant: 'default' },
   { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },
