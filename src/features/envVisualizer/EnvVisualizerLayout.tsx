@@ -69,6 +69,8 @@ export class Layout {
       Layout.stageRef.current !== null &&
       (window.innerWidth > Layout.stageWidth || window.innerHeight > Layout.stageHeight)
     ) {
+      Layout.currentLight = undefined;
+      Layout.currentDark = undefined;
       Layout.stageWidth = window.innerWidth;
       Layout.stageHeight = window.innerHeight;
       Layout.stageRef.current.width(Layout.stageWidth);

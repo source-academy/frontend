@@ -46,7 +46,6 @@ export default class EnvVisualizer {
   }
 
   static redraw() {
-    console.log(Layout.currentDark, Layout.currentLight);
     if (EnvVisualizer.getPrintableMode() && Layout.currentLight !== undefined) {
       this.setVis(Layout.currentLight);
     } else if (!EnvVisualizer.getPrintableMode() && Layout.currentDark !== undefined) {
