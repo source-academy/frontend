@@ -19,7 +19,8 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) => {
   // `.includes` and `.find` are not used here since we are dealing with reference types
   if (
-    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant).length === 0
+    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
+      .length === 0
   ) {
     return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
   }
