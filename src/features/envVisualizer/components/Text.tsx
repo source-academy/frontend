@@ -125,13 +125,7 @@ export class Text implements Visible, Hoverable {
         <KonvaLabel x={this.x()} y={this.y()}>
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
-        <KonvaLabel
-          x={this._x}
-          y={this._y}
-          ref={this.ref}
-          visible={EnvVisualizer.getPrintableMode() ? true : false}
-          listening={false}
-        >
+        <KonvaLabel x={this._x} y={this._y} ref={this.ref} visible={false} listening={false}>
           <KonvaTag
             {...ShapeDefaultProps}
             fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}

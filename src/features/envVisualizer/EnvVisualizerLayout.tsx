@@ -71,8 +71,8 @@ export class Layout {
     ) {
       Layout.currentLight = undefined;
       Layout.currentDark = undefined;
-      Layout.stageWidth = window.innerWidth;
-      Layout.stageHeight = window.innerHeight;
+      Layout.stageWidth = Math.min(Layout.width, window.innerWidth);
+      Layout.stageHeight = Math.min(Layout.height, window.innerHeight);
       Layout.stageRef.current.width(Layout.stageWidth);
       Layout.stageRef.current.height(Layout.stageHeight);
       EnvVisualizer.redraw();
@@ -269,24 +269,30 @@ export class Layout {
     Layout.stageRef.current?.y(0);
     Layout.stageRef.current?.x(0);
     for (let i = 0; i < Math.ceil(Layout.width / Config.MaxExportWidth); i = i + 1) {
-      Layout.stageRef.current?.width(
-        Math.min(Layout.width - i * Config.MaxExportWidth, Config.MaxExportWidth)
-      );
-      Layout.stageRef.current?.height(Layout.height);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = this.stageRef.current.toDataURL({
-        x: i * Config.MaxExportWidth,
-        y: 0,
-        mimeType: 'image/jpeg'
-      });
-      a.download = `diagram_${i}.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      for (let j = 0; j < Math.ceil(Layout.height / Config.MaxExportHeight); j = j + 1) {
+        Layout.stageRef.current?.width(
+          Math.min(Layout.width - i * Config.MaxExportWidth, Config.MaxExportWidth)
+        );
+        Layout.stageRef.current?.height(
+          Math.min(Layout.height - j * Config.MaxExportHeight, Config.MaxExportHeight)
+        );
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = this.stageRef.current.toDataURL({
+          x: i * Config.MaxExportWidth,
+          y: j * Config.MaxExportHeight,
+          mimeType: 'image/jpeg'
+        });
+        a.download = `diagram_${i}_${j}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     }
-    Layout.stageRef.current?.width(Layout.visibleWidth);
-    Layout.stageRef.current?.height(Layout.visibleHeight);
+    Layout.stageRef.current?.width(Layout.stageWidth);
+    Layout.stageRef.current?.height(Layout.stageHeight);
+    Layout.stageRef.current?.y(Layout.invisiblePaddingVertical);
+    Layout.stageRef.current?.x(Layout.invisiblePaddingHorizontal);
   };
 
   static draw(): React.ReactNode {
@@ -318,8 +324,10 @@ export class Layout {
               <Button
                 outlined={true}
                 text={`Save ${
-                  Layout.width > Config.MaxExportWidth
-                    ? Math.ceil(Layout.width / Config.MaxExportWidth) + ' images'
+                  Layout.width > Config.MaxExportWidth || Layout.height > Config.MaxExportHeight
+                    ? Math.ceil(Layout.width / Config.MaxExportWidth) *
+                        Math.ceil(Layout.height / Config.MaxExportHeight) +
+                      ' images'
                     : 'image'
                 }`}
                 large={true}
