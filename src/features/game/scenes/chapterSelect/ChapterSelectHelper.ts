@@ -118,8 +118,8 @@ export function createChapter(
     .getSaveManager()
     .getChapterSaveState(index).lastCheckpointPlayed;
 
-  const chapterDetails = SourceAcademyGame.getInstance().getGameChapters();
-  const isComplete = () => lastCheckpointPlayed >= chapterDetails[index].filenames.length - 1;
+  //const chapterDetails = SourceAcademyGame.getInstance().getGameChapters();
+  //const isComplete = () => lastCheckpointPlayed >= chapterDetails[index].filenames.length - 1;
 
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
@@ -155,7 +155,7 @@ export function createChapter(
   })
     .setScale(0.05)
     .setPosition(chapConstants.starBronze.xOffset, chapConstants.starBronze.yOffset)
-    .setVisible(isComplete());
+    .setVisible(false);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
