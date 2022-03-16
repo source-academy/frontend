@@ -155,7 +155,7 @@ export function createChapter(
   })
     .setScale(0.05)
     .setPosition(chapConstants.starBronze.xOffset, chapConstants.starBronze.yOffset)
-    .setVisible(isComplete());
+    .setVisible(false);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
