@@ -189,7 +189,13 @@ export class Frame implements Visible, Hoverable {
 
     for (const [key, data] of entries) {
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
-      if (this.bindings.findIndex(v => v.value === currBinding.value) === -1) {
+      if (
+        this.bindings.findIndex(
+          v =>
+            v.value === currBinding.value &&
+            (currBinding.isDummyBinding || v.keyString === currBinding.keyString)
+        ) === -1
+      ) {
         this.bindings.push(currBinding);
         prevBinding = currBinding;
         totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
