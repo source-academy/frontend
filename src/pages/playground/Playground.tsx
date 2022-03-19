@@ -567,7 +567,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(envVisualizerTab);
     }
 
-    if (props.playgroundSourceChapter <= 2 && props.playgroundSourceVariant === 'default') {
+    if (
+      props.playgroundSourceChapter <= 2 &&
+      (props.playgroundSourceVariant === 'default' || props.playgroundSourceVariant === 'native')
+    ) {
       // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push({
         label: 'Stepper',
