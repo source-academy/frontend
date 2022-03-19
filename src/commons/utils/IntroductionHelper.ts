@@ -17,14 +17,6 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 `;
 
 const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) => {
-  // `.includes` and `.find` are not used here since we are dealing with reference types
-  if (
-    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
-      .length === 0
-  ) {
-    return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
-  }
-
   if (isFullJSChapter(sourceChapter)) {
     return (
       `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
@@ -33,8 +25,16 @@ const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) =
     );
   }
 
+  // `.includes` and `.find` are not used here since we are dealing with reference types
+  if (
+    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
+      .length === 0
+  ) {
+    return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
+  }
+
   const sourceDocsLink: string = `${Links.sourceDocs}source_${sourceChapter}${
-    sourceVariant !== 'default' ? `_${sourceVariant}` : ''
+    sourceVariant !== 'default' && sourceVariant !== 'native' ? `_${sourceVariant}` : ''
   }/`;
 
   return `You have chosen the sublanguage [_${styliseSublanguage(
