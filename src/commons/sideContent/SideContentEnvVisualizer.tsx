@@ -1,31 +1,91 @@
 import { Classes } from '@blueprintjs/core';
+import { debounce } from 'lodash';
 import * as React from 'react';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
-import { Links } from '../utils/Constants';
+import Constants, { Links } from '../utils/Constants';
 
 type State = {
   visualization: React.ReactNode;
+  height: number;
+  width: number;
 };
 
-class SideContentEnvVisualizer extends React.Component<{ width?: number; height?: number }, State> {
+class SideContentEnvVisualizer extends React.Component<
+  { editorWidth?: string; sideContentHeight?: number },
+  State
+> {
   constructor(props: any) {
     super(props);
-    this.state = { visualization: null };
+    this.state = {
+      visualization: null,
+      width: this.calculateWidth(props.editorWidth),
+      height: this.calculateHeight(props.sideContentHeight)
+    };
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
-      props.width,
-      props.height
+      this.state.width,
+      this.state.height
     );
   }
 
-  componentDidUpdate(prevProps: { width?: number; height?: number }) {
+  private calculateWidth(editorWidth?: string) {
+    const horizontalPadding = 50;
+    const maxWidth = 2000;
+    let width;
+    if (editorWidth === undefined) {
+      width = window.innerWidth - horizontalPadding;
+    } else {
+      width = Math.min(
+        maxWidth,
+        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding
+      );
+    }
+    return Math.min(width, maxWidth);
+  }
+
+  private calculateHeight(sideContentHeight?: number) {
+    const topOffset = 120;
+    const verticalPadding = 150;
+    const maxHeight = 1200;
+    let height;
+    if (window.innerWidth < Constants.mobileBreakpoint) {
+      height = Math.min(window.innerHeight - 150, window.innerHeight - topOffset - verticalPadding);
+    } else if (sideContentHeight === undefined) {
+      height = Math.min(window.innerHeight - 350, window.innerHeight - topOffset - verticalPadding);
+    } else {
+      height = sideContentHeight - verticalPadding;
+    }
+    return Math.min(height, maxHeight);
+  }
+
+  handleResize = debounce(() => {
+    const newWidth = this.calculateWidth(this.props.editorWidth);
+    const newHeight = this.calculateHeight(this.props.sideContentHeight);
+    if (newWidth !== this.state.width || newHeight !== this.state.height) {
+      this.setState({
+        height: newHeight,
+        width: newWidth
+      });
+      EnvVisualizer.updateDimensions(newWidth, newHeight);
+    }
+  }, 400);
+
+  componentDidMount() {
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
+  }
+  componentWillUnmount() {
+    this.handleResize.cancel();
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  componentDidUpdate(prevProps: { editorWidth?: string; sideContentHeight?: number }) {
     if (
-      (prevProps.width !== this.props.width || prevProps.height !== this.props.height) &&
-      this.props.width &&
-      this.props.height
+      prevProps.sideContentHeight !== this.props.sideContentHeight ||
+      prevProps.editorWidth !== this.props.editorWidth
     ) {
-      EnvVisualizer.updateDimensions(this.props.width, this.props.height);
+      this.handleResize();
     }
   }
 

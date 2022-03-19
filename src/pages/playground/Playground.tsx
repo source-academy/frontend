@@ -753,8 +753,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       onChange: onChangeTabs,
       tabs,
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      width: (window.innerWidth * (100 - parseFloat(props.editorWidth))) / 100,
-      height: props.sideContentHeight || window.innerHeight
+      sideContentHeight: props.sideContentHeight,
+      editorWidth: props.editorWidth
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -777,9 +777,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       onChange: onChangeTabs,
       tabs: mobileTabs,
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      handleEditorEval: props.handleEditorEval,
-      width: window.innerWidth,
-      height: props.sideContentHeight || window.innerHeight
+      handleEditorEval: props.handleEditorEval
     }
   };
 

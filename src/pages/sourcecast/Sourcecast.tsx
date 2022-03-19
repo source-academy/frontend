@@ -318,8 +318,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       onChange: onChangeTabs,
       tabs: tabs,
       workspaceLocation: 'sourcecast',
-      width: (window.innerWidth * (100 - parseFloat(props.editorWidth))) / 100,
-      height: props.sideContentHeight || window.innerHeight
+      sideContentHeight: props.sideContentHeight,
+      editorWidth: props.editorWidth
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
@@ -339,9 +339,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       onChange: onChangeTabs,
       tabs: tabs,
       workspaceLocation: 'sourcecast',
-      handleEditorEval: props.handleEditorEval,
-      width: window.innerWidth,
-      height: props.sideContentHeight || window.innerHeight
+      handleEditorEval: props.handleEditorEval
     }
   };
 

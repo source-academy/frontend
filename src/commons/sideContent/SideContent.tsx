@@ -43,8 +43,8 @@ type StateProps = {
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
-  width?: number;
-  height?: number;
+  editorWidth?: string;
+  sideContentHeight?: number;
 };
 
 const SideContent = (props: SideContentProps) => {
@@ -79,8 +79,8 @@ const SideContent = (props: SideContentProps) => {
     const renderTab = (
       tab: SideContentTab,
       workspaceLocation?: WorkspaceLocation,
-      width?: number,
-      height?: number
+      editorWidth?: string,
+      sideContentHeight?: number
     ) => {
       const iconSize = 20;
       const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
@@ -98,8 +98,8 @@ const SideContent = (props: SideContentProps) => {
             props: {
               ...tab.body.props,
               workspaceLocation,
-              width,
-              height
+              editorWidth,
+              sideContentHeight
             }
           }
         : tab.body;
@@ -118,9 +118,9 @@ const SideContent = (props: SideContentProps) => {
     };
 
     return dynamicTabs.map(tab =>
-      renderTab(tab, props.workspaceLocation, props.width, props.height)
+      renderTab(tab, props.workspaceLocation, props.editorWidth, props.sideContentHeight)
     );
-  }, [dynamicTabs, props.workspaceLocation, props.width, props.height]);
+  }, [dynamicTabs, props.workspaceLocation, props.editorWidth, props.sideContentHeight]);
 
   const changeTabsCallback = React.useCallback(
     (

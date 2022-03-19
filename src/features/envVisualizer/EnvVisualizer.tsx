@@ -20,8 +20,8 @@ export default class EnvVisualizer {
 
   /** SideContentEnvVis initializes this onMount with the callback function */
   static init(setVis: SetVis, width: number, height: number) {
-    Layout.visibleHeight = Math.max(isNaN(height) ? window.innerHeight - 200 : height - 200, 200);
-    Layout.visibleWidth = Math.max(isNaN(width) ? window.innerWidth - 50 : width - 50, 200);
+    Layout.visibleHeight = height;
+    Layout.visibleWidth = width;
     this.setVis = setVis;
   }
 
@@ -59,8 +59,6 @@ export default class EnvVisualizer {
 
   static updateDimensions(width: number, height: number) {
     if (Layout.stageRef != null && width !== null && height !== null) {
-      height = Math.max(isNaN(height) ? window.innerHeight - 200 : height - 200, 200);
-      width = Math.max(isNaN(width) ? window.innerWidth - 50 : width - 50, 200);
       Layout.updateDimensions(width, height);
     }
   }

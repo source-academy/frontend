@@ -27,7 +27,7 @@ import {
 } from './EnvVisualizerUtils';
 
 /** this class encapsulates the logic for calculating the layout */
-export class Layout {
+export class Layout extends React.Component {
   /** the height of the stage */
   static height: number;
   /** the width of the stage */
@@ -36,9 +36,9 @@ export class Layout {
   static visibleHeight: number = window.innerHeight;
   /** the visible width of the stage */
   static visibleWidth: number = window.innerWidth;
-  /** total width of stage */
+  /** total height of stage */
   static stageHeight: number = window.innerHeight;
-  /** the visible width of the stage */
+  /** total width of stage */
   static stageWidth: number = window.innerWidth;
   /** the unique key assigned to each node */
   static key: number = 0;
@@ -51,7 +51,6 @@ export class Layout {
   static grid: Grid;
   /** memoized values */
   static values = new Map<Data, Value>();
-  static oldValues = new Map<Data, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -92,10 +91,8 @@ export class Layout {
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
-      Layout.oldValues.set(d, v);
     });
     Layout.values.clear();
-    // Layout.levels = [];
     Layout.key = 0;
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
@@ -295,6 +292,16 @@ export class Layout {
     Layout.stageRef.current?.x(Layout.invisiblePaddingHorizontal);
   };
 
+  private static saveButtonText(): String {
+    return `Save ${
+      Layout.width > Config.MaxExportWidth || Layout.height > Config.MaxExportHeight
+        ? Math.ceil(Layout.width / Config.MaxExportWidth) *
+            Math.ceil(Layout.height / Config.MaxExportHeight) +
+          ' images'
+        : 'image'
+    }`;
+  }
+
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
@@ -314,7 +321,7 @@ export class Layout {
                 <Checkbox
                   checked={EnvVisualizer.getPrintableMode()}
                   label="Printable Mode"
-                  large={true}
+                  style={{ marginBottom: '0px' }}
                   onChange={() => {
                     EnvVisualizer.togglePrintableMode();
                     EnvVisualizer.redraw();
@@ -323,13 +330,7 @@ export class Layout {
               </Button>
               <Button
                 outlined={true}
-                text={`Save ${
-                  Layout.width > Config.MaxExportWidth || Layout.height > Config.MaxExportHeight
-                    ? Math.ceil(Layout.width / Config.MaxExportWidth) *
-                        Math.ceil(Layout.height / Config.MaxExportHeight) +
-                      ' images'
-                    : 'image'
-                }`}
+                text={Layout.saveButtonText()}
                 large={true}
                 onClick={this.exportImage}
               />
@@ -393,6 +394,7 @@ export class Layout {
       } else {
         Layout.currentDark = layout;
       }
+
       return layout;
     }
   }
