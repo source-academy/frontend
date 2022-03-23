@@ -63,8 +63,7 @@ export class ArrayLevel extends Level {
     positions: for (const positions of this.position) {
       for (const position of positions) {
         // Prevent new arrays from being created above existing arrays in level
-        // if ((position[0] <= x + array.width() && position[1] >= x) || level < this._rowCount) {
-        if (position[0] <= x + array.width() && position[1] >= x) {
+        if ((position[0] <= x + array.width() && position[1] >= x) || level < this._rowCount) {
           level++;
           continue positions;
         } else {
