@@ -1,7 +1,7 @@
 import { SpeakerDetail } from '../character/GameCharacterTypes';
-import { DialogueSpeakerLine } from '../dialogue/GameDialogueTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
+import { DialogueSpeakerLine } from './GameDialogueTypes';
 
 /**
  * Class for keeping track of all dialogue and actions shown to the player, in sequence.
@@ -9,15 +9,15 @@ import SourceAcademyGame from '../SourceAcademyGame';
  * The storage is local to the instance, and should be reset when a user completes the
  * current checkpoint.
  */
-export default class GameStorageManager {
+export default class GameDialogueStorageManager {
   // Storage for all dialogues to be stored
   private dialogueStorage?: Array<DialogueSpeakerLine>;
 
   // Method to be called when a dialogue needs to be stored in the current storage instance
   public storeLine(newLine: string, newSpeakerDetail?: SpeakerDetail | null) {
-    if (newSpeakerDetail === undefined) return;
+    if (!newSpeakerDetail) return;
 
-    if (this.dialogueStorage === undefined) {
+    if (!this.dialogueStorage) {
       this.dialogueStorage = new Array<DialogueSpeakerLine>();
     }
     const newDialogue = {
@@ -39,14 +39,14 @@ export default class GameStorageManager {
   }
 
   public getDialogueStorage(): Array<DialogueSpeakerLine> {
-    if (this.dialogueStorage === undefined) {
+    if (!this.dialogueStorage) {
       return new Array<DialogueSpeakerLine>();
     }
     return this.dialogueStorage;
   }
 
   // Called at the end of the chapter, when transitioning to the next checkpoint
-  public clearStorage() {
+  public clearDialogueStorage() {
     this.dialogueStorage = new Array<DialogueSpeakerLine>();
   }
 

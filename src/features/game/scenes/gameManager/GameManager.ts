@@ -10,6 +10,7 @@ import { Constants } from '../../commons/CommonConstants';
 import { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
+import GameDialogueStorageManager from '../../dialogue/GameDialogueStorageManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
@@ -24,7 +25,6 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
-import GameStorageManager from '../../storage/GameStorageManager';
 import GameTaskLogManager from '../../task/GameTaskLogManager';
 import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
@@ -66,7 +66,7 @@ class GameManager extends Phaser.Scene {
   private escapeManager?: GameEscapeManager;
   private awardManager?: GameAwardsManager;
   private logManager?: GameLogManager;
-  private storageManager?: GameStorageManager;
+  private dialogueStorageManager?: GameDialogueStorageManager;
   private dashboardManager?: GameDashboardManager;
   private toolbarManager?: GameToolbarManager;
   private taskLogManager?: GameTaskLogManager;
@@ -100,7 +100,7 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager(this);
     this.awardManager = new GameAwardsManager(this);
     this.logManager = new GameLogManager(this);
-    this.storageManager = new GameStorageManager();
+    this.dialogueStorageManager = new GameDialogueStorageManager();
     this.dashboardManager = new GameDashboardManager(this);
     this.toolbarManager = new GameToolbarManager(this);
     this.taskLogManager = new GameTaskLogManager(this);
@@ -280,6 +280,7 @@ class GameManager extends Phaser.Scene {
   public cleanUp() {
     this.getInputManager().clearListeners();
     this.getLayerManager().clearAllLayers();
+    this.getDialogueStorageManager().clearDialogueStorage();
   }
 
   /**
@@ -333,7 +334,6 @@ class GameManager extends Phaser.Scene {
 
     // Clean up all layers & current storage
     this.cleanUp();
-    this.storageManager?.clearStorage();
 
     // Start the next Checkpoint
     this.scene.start('CheckpointTransition');
@@ -376,7 +376,7 @@ class GameManager extends Phaser.Scene {
   public getEscapeManager = () => mandatory(this.escapeManager);
   public getAwardManager = () => mandatory(this.awardManager);
   public getLogManager = () => mandatory(this.logManager);
-  public getStorageManager = () => mandatory(this.storageManager);
+  public getDialogueStorageManager = () => mandatory(this.dialogueStorageManager);
   public getDashboardManager = () => mandatory(this.dashboardManager);
   public getToolbarManager = () => mandatory(this.toolbarManager);
   public getTaskLogManager = () => mandatory(this.taskLogManager);

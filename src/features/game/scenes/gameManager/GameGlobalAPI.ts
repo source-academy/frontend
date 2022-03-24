@@ -288,11 +288,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public storeDialogueLine(newLine: string, newSpeakerDetail?: SpeakerDetail | null) {
-    this.getGameManager().getStorageManager().storeLine(newLine, newSpeakerDetail);
+    this.getGameManager().getDialogueStorageManager().storeLine(newLine, newSpeakerDetail);
   }
 
   public getDialogueStorage() {
-    return this.getGameManager().getStorageManager().getDialogueStorage();
+    return this.getGameManager().getDialogueStorageManager().getDialogueStorage();
   }
 
   /////////////////////
