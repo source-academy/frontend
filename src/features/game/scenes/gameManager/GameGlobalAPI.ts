@@ -186,10 +186,6 @@ class GameGlobalAPI {
   //  Game Task      //
   /////////////////////
 
-  public areAllTasksComplete(): boolean {
-    return this.getGameManager().getStateManager().areAllTasksComplete();
-  }
-
   public isTaskComplete(key: string): boolean {
     return this.getGameManager().getStateManager().isTaskComplete(key);
   }

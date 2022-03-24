@@ -85,24 +85,6 @@ export function createChapter(
     chapConstants.playButton.yOffset - 20,
     'Play/Continue'
   );
-  const chapterStarGoldHover = new CommonTextHover(
-    scene,
-    chapConstants.starGold.xOffset,
-    chapConstants.starGold.yOffset,
-    'Are you Steve Jobs in disguise?!'
-  );
-  const chapterStarSilverHover = new CommonTextHover(
-    scene,
-    chapConstants.starSilver.xOffset,
-    chapConstants.starSilver.yOffset,
-    'See Silver Awards'
-  );
-  const chapterStarBronzeHover = new CommonTextHover(
-    scene,
-    chapConstants.starBronze.xOffset,
-    chapConstants.starBronze.yOffset,
-    'See Bronze Awards'
-  );
 
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
@@ -118,9 +100,6 @@ export function createChapter(
     .getSaveManager()
     .getChapterSaveState(index).lastCheckpointPlayed;
 
-  //const chapterDetails = SourceAcademyGame.getInstance().getGameChapters();
-  //const isComplete = () => lastCheckpointPlayed >= chapterDetails[index].filenames.length - 1;
-
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
     onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointPlayed),
@@ -129,33 +108,6 @@ export function createChapter(
   })
     .setPosition(chapConstants.playButton.xOffset, chapConstants.playButton.yOffset)
     .setScale(chapConstants.buttons.scale);
-
-  const starGold = createButton(scene, {
-    assetKey: ImageAssets.StarGold.key,
-    onHover: () => chapterStarGoldHover.setVisible(true),
-    onOut: () => chapterStarGoldHover.setVisible(false)
-  })
-    .setScale(0.05)
-    .setPosition(chapConstants.starGold.xOffset, chapConstants.starGold.yOffset)
-    .setVisible(false);
-
-  const starSilver = createButton(scene, {
-    assetKey: ImageAssets.StarSilver.key,
-    onHover: () => chapterStarSilverHover.setVisible(true),
-    onOut: () => chapterStarSilverHover.setVisible(false)
-  })
-    .setScale(0.05)
-    .setPosition(chapConstants.starSilver.xOffset, chapConstants.starSilver.yOffset)
-    .setVisible(false);
-
-  const starBronze = createButton(scene, {
-    assetKey: ImageAssets.StarBronze.key,
-    onHover: () => chapterStarBronzeHover.setVisible(true),
-    onOut: () => chapterStarBronzeHover.setVisible(false)
-  })
-    .setScale(0.05)
-    .setPosition(chapConstants.starBronze.xOffset, chapConstants.starBronze.yOffset)
-    .setVisible(false);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
@@ -194,12 +146,6 @@ export function createChapter(
     chapCompleteText,
     chapterRepeat,
     chapterContinue,
-    starGold,
-    starSilver,
-    starBronze,
-    chapterStarGoldHover,
-    chapterStarSilverHover,
-    chapterStarBronzeHover,
     chapterRepeatHover,
     chapterContinueHover,
     chapterIndexText,

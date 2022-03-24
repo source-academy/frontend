@@ -398,14 +398,6 @@ class GameStateManager {
   ///////////////////////////////
 
   /**
-   * Checks whether all the checkpoint tasks has been completed.
-   * @returns {boolean}
-   */
-  public areAllTasksComplete(): boolean {
-    return this.checkpointObjective.isAllComplete();
-  }
-
-  /**
    * Checks whether a specific task has been completed.
    * If the task does not exist, this method still returns true.
    *
