@@ -115,7 +115,8 @@ const variantDisplay: Map<Variant, string> = new Map([
   ['non-det', 'Non-Det'],
   ['concurrent', 'Concurrent'],
   ['lazy', 'Lazy'],
-  ['gpu', 'GPU']
+  ['gpu', 'GPU'],
+  ['native', 'Native']
 ]);
 
 // We will treat chapter === -1 as full JS for now
@@ -139,17 +140,21 @@ export const styliseSublanguage = (chapter: number, variant: Variant = 'default'
       }`;
 };
 
-const sublanguages: { chapter: number; variant: Variant }[] = [
+export const sublanguages: { chapter: number; variant: Variant }[] = [
   { chapter: 1, variant: 'default' },
   { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },
+  { chapter: 1, variant: 'native' },
   { chapter: 2, variant: 'default' },
   { chapter: 2, variant: 'lazy' },
+  { chapter: 2, variant: 'native' },
   { chapter: 3, variant: 'default' },
   { chapter: 3, variant: 'concurrent' },
   { chapter: 3, variant: 'non-det' },
+  { chapter: 3, variant: 'native' },
   { chapter: 4, variant: 'default' },
-  { chapter: 4, variant: 'gpu' }
+  { chapter: 4, variant: 'gpu' },
+  { chapter: 4, variant: 'native' }
 ];
 
 export const sourceLanguages = sublanguages.map(sublang => {
