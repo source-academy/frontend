@@ -18,8 +18,21 @@ const messageStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_RIGHT
 };
 
-let messageDisplaying = false; // Whether a message is currently on screen
-const messageQueue: [IBaseScene, string][] = []; // A queue of messages waiting to be displayed
+/**
+ * Generates a closure containing a promise chain of message displaying calls
+ * and a function to enqueue more messages to show.
+ *
+ * @returns a function to display a message
+ */
+const makeMiniMessageDisplayer = () => {
+  let displayMessagesPromise = Promise.resolve();
+  const displayMiniMessage = (scene: IBaseScene, text: string) => {
+    displayMessagesPromise = displayMessagesPromise.then(() =>
+      displayMiniMessageHelper(scene, text)
+    );
+  };
+  return displayMiniMessage;
+};
 
 /**
  * A function to display a message on the top right side of the screen.
@@ -31,15 +44,7 @@ const messageQueue: [IBaseScene, string][] = []; // A queue of messages waiting 
  * @param scene scene to attach this message to
  * @param text text to be written
  */
-export function displayMiniMessage(scene: IBaseScene, text: string) {
-  if (messageDisplaying) {
-    // Message currently on screen, store message and display later
-    messageQueue.push([scene, text]);
-  } else {
-    messageDisplaying = true;
-    displayMiniMessageHelper(scene, text);
-  }
-}
+export const displayMiniMessage = makeMiniMessageDisplayer();
 
 /**
  * A function to display a message on the top right side of the screen.
@@ -83,12 +88,4 @@ async function displayMiniMessageHelper(scene: IBaseScene, text: string) {
 
   await sleep(rightSideExitTweenProps.duration);
   fadeAndDestroy(scene, container, { fadeDuration: Constants.fadeDuration });
-
-  // Display next message in queue if any
-  if (messageQueue.length > 0) {
-    const [scene, text] = messageQueue.shift()!;
-    displayMiniMessageHelper(scene, text);
-  } else {
-    messageDisplaying = false;
-  }
 }
