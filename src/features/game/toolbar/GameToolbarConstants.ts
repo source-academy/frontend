@@ -1,12 +1,11 @@
 import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
-import { AssetKey } from '../commons/CommonTypes';
+import { AssetKey, IBaseScene } from '../commons/CommonTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 
 export type ToolbarButtonConfig = {
   assetKey: AssetKey;
-  onUp: () => void;
+  onUp: (scene: IBaseScene) => () => void;
 };
 
 // From rightmost to leftmost
@@ -14,28 +13,28 @@ const buttonConfigs: ToolbarButtonConfig[] = [
   {
     // Escape menu button
     assetKey: ImageAssets.gear.key,
-    onUp: async () => {
-      const globalAPI = GameGlobalAPI.getInstance();
-      if (globalAPI.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-        await globalAPI.popPhase();
-      } else if (globalAPI.isCurrentPhase(GamePhaseType.Dashboard)) {
-        await globalAPI.swapPhase(GamePhaseType.EscapeMenu);
+    onUp: scene => async () => {
+      const phaseManager = scene.getPhaseManager();
+      if (phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        await phaseManager.popPhase();
+      } else if (phaseManager.isCurrentPhase(GamePhaseType.Dashboard)) {
+        await phaseManager.swapPhase(GamePhaseType.EscapeMenu);
       } else {
-        await globalAPI.pushPhase(GamePhaseType.EscapeMenu);
+        await phaseManager.pushPhase(GamePhaseType.EscapeMenu);
       }
     }
   },
   {
     // Dashboard button
     assetKey: ImageAssets.journal.key,
-    onUp: async () => {
-      const globalAPI = GameGlobalAPI.getInstance();
-      if (globalAPI.isCurrentPhase(GamePhaseType.Dashboard)) {
-        await globalAPI.popPhase();
-      } else if (globalAPI.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-        await globalAPI.swapPhase(GamePhaseType.Dashboard);
+    onUp: scene => async () => {
+      const phaseManager = scene.getPhaseManager();
+      if (phaseManager.isCurrentPhase(GamePhaseType.Dashboard)) {
+        await phaseManager.popPhase();
+      } else if (phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        await phaseManager.swapPhase(GamePhaseType.Dashboard);
       } else {
-        await globalAPI.pushPhase(GamePhaseType.Dashboard);
+        await phaseManager.pushPhase(GamePhaseType.Dashboard);
       }
     }
   }

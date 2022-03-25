@@ -6,7 +6,6 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
@@ -21,19 +20,23 @@ import { DashboardPage, DashboardPageManager } from './GameDashboardTypes';
  */
 class GameDashboardManager implements IGameUI {
   private scene: IBaseScene;
+  private pages: DashboardPage[];
+  private pageManagers: DashboardPageManager[];
 
   private pageMask: Phaser.Display.Masks.GeometryMask;
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private pageChosenContainer: Phaser.GameObjects.Container | undefined;
-  private pageUIContainers: Map<DashboardPage, Phaser.GameObjects.Container>;
-  private currActivePage: DashboardPage;
+  private pageUIContainers: Phaser.GameObjects.Container[];
+  private currPageIndex: number;
 
-  constructor(scene: IBaseScene) {
+  constructor(scene: IBaseScene, pages: DashboardPage[], pageManagers: DashboardPageManager[]) {
     this.scene = scene;
+    this.pages = pages;
+    this.pageManagers = pageManagers;
     this.pageMask = this.createPageMask();
     // Used to store each page's UI so they only get created once each time dashboard is opened.
-    this.pageUIContainers = new Map();
-    this.currActivePage = DashboardPage.Log;
+    this.pageUIContainers = new Array(pages.length);
+    this.currPageIndex = 0; // Use first page as starting page
     this.scene.getPhaseManager().addPhaseToMap(GamePhaseType.Dashboard, this);
   }
 
@@ -55,14 +58,14 @@ class GameDashboardManager implements IGameUI {
    * opened or retrieve the container from cache if opened before;
    * also sets up the blue outline that denotes that the page is chosen.
    *
-   * @param page new page
+   * @param pageIndex new page
    */
-  private setPage(page: DashboardPage) {
+  private setPage(pageIndex: number) {
     if (this.uiContainer) {
       if (this.pageChosenContainer) this.pageChosenContainer.destroy();
 
       // Hide current page
-      const currPageUIContainer = this.pageUIContainers.get(this.currActivePage);
+      const currPageUIContainer = this.pageUIContainers[this.currPageIndex];
       // Only time currPageUIContainer does not exist here is when
       // the dashboard is opened and the first page is set.
       if (currPageUIContainer) {
@@ -70,13 +73,13 @@ class GameDashboardManager implements IGameUI {
       }
 
       // Show selected page
-      this.currActivePage = page;
-      let newPageUIContainer = this.pageUIContainers.get(this.currActivePage);
+      this.currPageIndex = pageIndex;
+      let newPageUIContainer = this.pageUIContainers[this.currPageIndex];
       if (!newPageUIContainer) {
         // First time opening this page, UI container not created yet
-        newPageUIContainer = this.getPageManager(this.currActivePage).createUIContainer();
+        newPageUIContainer = this.pageManagers[this.currPageIndex].createUIContainer();
         newPageUIContainer.setMask(this.pageMask);
-        this.pageUIContainers.set(this.currActivePage, newPageUIContainer);
+        this.pageUIContainers[this.currPageIndex] = newPageUIContainer;
         this.uiContainer.add(newPageUIContainer);
       } else {
         newPageUIContainer.setVisible(true);
@@ -84,7 +87,7 @@ class GameDashboardManager implements IGameUI {
 
       // Set chosen page banner
       const bannerPos = this.getPageOptPositions();
-      const chosenIdx = Object.keys(DashboardPage).findIndex(pg => pg === (page as string));
+      const chosenIdx = this.currPageIndex;
       const bannerChosen = new Phaser.GameObjects.Sprite(
         this.scene,
         bannerPos[chosenIdx][0],
@@ -117,10 +120,10 @@ class GameDashboardManager implements IGameUI {
     dashboardContainer.add([blackUnderlay, dashboardBg]);
 
     // Add options
-    const pageOptButtons = Object.keys(DashboardPage).map(page => {
+    const pageOptButtons = this.pages.map((page, pageIndex) => {
       return {
         text: page,
-        callback: () => this.setPage(page as DashboardPage)
+        callback: () => this.setPage(pageIndex)
       };
     });
     const pageOptButtonPositions = this.getPageOptPositions();
@@ -178,30 +181,6 @@ class GameDashboardManager implements IGameUI {
   }
 
   /**
-   * Get the page manager associated with the given page.
-   *
-   * @param page the dashboard page
-   * @returns the page manager that handles the given page
-   */
-  private getPageManager(page: DashboardPage): DashboardPageManager {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    switch (page) {
-      case DashboardPage.Log:
-        return gameManager.getLogManager();
-      case DashboardPage.Tasks:
-        return gameManager.getTaskLogManager();
-      case DashboardPage.Collectibles:
-        return gameManager.getCollectibleManager();
-      case DashboardPage.Achievements:
-        return gameManager.getAchievementManager();
-      default:
-        return {
-          createUIContainer: () => new Phaser.GameObjects.Container(this.scene)
-        };
-    }
-  }
-
-  /**
    * Activate the 'Dashboard' UI.
    *
    * Usually only called by the phase manager when 'Dashboard' phase is
@@ -213,7 +192,7 @@ class GameDashboardManager implements IGameUI {
     this.getSoundManager().playSound(SoundAssets.menuEnter.key);
 
     // Set initial page
-    this.setPage(this.currActivePage);
+    this.setPage(this.currPageIndex);
 
     this.uiContainer.setPosition(screenCenter.x, -screenSize.y);
     this.pageMask.geometryMask.setPosition(screenCenter.x, -screenSize.y);
@@ -234,7 +213,7 @@ class GameDashboardManager implements IGameUI {
   public async deactivateUI(): Promise<void> {
     if (this.uiContainer) {
       // Reload page UIs next time dashboard is opened
-      this.pageUIContainers.clear();
+      this.pageUIContainers = new Array(this.pages.length);
 
       this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
       this.getSoundManager().playSound(SoundAssets.menuExit.key);

@@ -1,5 +1,3 @@
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-
 import { IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { createButton } from '../utils/ButtonUtils';
@@ -51,7 +49,10 @@ class GameToolbarManager {
    * @param buttonConfig config details of the button
    */
   private createToolbarButton(xPos: number, yPos: number, buttonConfig: ToolbarButtonConfig) {
-    return createButton(this.scene, buttonConfig).setPosition(xPos, yPos);
+    return createButton(this.scene, {
+      assetKey: buttonConfig.assetKey,
+      onUp: buttonConfig.onUp(this.scene)
+    }).setPosition(xPos, yPos);
   }
 
   /**
@@ -61,7 +62,7 @@ class GameToolbarManager {
    */
   public async renderToolbarContainer(): Promise<void> {
     this.uiContainer = this.createUIContainer();
-    GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
+    this.scene.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
   }
 }
 
