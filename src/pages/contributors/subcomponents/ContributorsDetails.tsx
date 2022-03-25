@@ -68,6 +68,14 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
+              Bryan Loh,
+              <br />
+              Marcus Tang
+              <br />
+              <strong>(Modules)</strong>
+            </p>
+            {dot}
+            <p>
               Martin Henz,
               <br />
               Boyd Anderson,
