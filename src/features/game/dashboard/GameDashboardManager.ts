@@ -177,6 +177,12 @@ class GameDashboardManager implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Get the page manager associated with the given page.
+   *
+   * @param page the dashboard page
+   * @returns the page manager that handles the given page
+   */
   private getPageManager(page: DashboardPage): DashboardPageManager {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     switch (page) {
@@ -184,6 +190,10 @@ class GameDashboardManager implements IGameUI {
         return gameManager.getLogManager();
       case DashboardPage.Tasks:
         return gameManager.getTaskLogManager();
+      case DashboardPage.Collectibles:
+        return gameManager.getCollectibleManager();
+      case DashboardPage.Achievements:
+        return gameManager.getAchievementManager();
       default:
         return {
           createUIContainer: () => new Phaser.GameObjects.Container(this.scene)

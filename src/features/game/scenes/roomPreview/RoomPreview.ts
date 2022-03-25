@@ -43,7 +43,8 @@ export default class RoomPreview extends Phaser.Scene {
   private inputManager?: GameInputManager;
   private phaseManager?: GamePhaseManager;
   private escapeManager?: GameEscapeManager;
-  private awardManager?: GameAwardsManager;
+  private collectibleManager?: GameAwardsManager;
+  private achievementManager?: GameAwardsManager;
 
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
@@ -329,7 +330,14 @@ export default class RoomPreview extends Phaser.Scene {
     this.inputManager = new GameInputManager(this);
     this.phaseManager = new GamePhaseManager(createCMRGamePhases(), this.inputManager);
     this.escapeManager = new GameEscapeManager(this);
-    this.awardManager = new GameAwardsManager(this);
+    this.collectibleManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+    );
+    this.achievementManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+    );
   }
 
   private getVerifCont = () => mandatory(this.verifCont);
@@ -339,5 +347,6 @@ export default class RoomPreview extends Phaser.Scene {
   public getLayerManager = () => mandatory(this.layerManager);
   public getPhaseManager = () => mandatory(this.phaseManager);
   public getEscapeManager = () => mandatory(this.escapeManager);
-  public getAwardManager = () => mandatory(this.awardManager);
+  public getCollectibleManager = () => mandatory(this.collectibleManager);
+  public getAchievementManager = () => mandatory(this.achievementManager);
 }
