@@ -17,7 +17,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
-import { Task } from '../../task/GameTaskTypes';
+import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
@@ -204,7 +204,7 @@ class GameGlobalAPI {
     displayMiniMessage(this.getGameManager(), 'New task added');
   }
 
-  public getAllVisibleTaskData(): Array<[Task, boolean]> {
+  public getAllVisibleTaskData(): Array<[TaskDetail, boolean]> {
     return this.getGameManager().getStateManager().getAllVisibleTaskData();
   }
 

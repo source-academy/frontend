@@ -37,7 +37,7 @@ class GameLogManager implements DashboardPageManager {
     // Scrollable Text
     const bitmapText = createBitmapText(
       this.scene,
-      textLog.map(text => `${text.speaker}:\n${text.line}`).join('\n\n'),
+      textLog.join('\n\n'),
       LogConstants.logTextConfig,
       logTextStyle
     ).setMaxWidth(LogConstants.textMaxWidth);

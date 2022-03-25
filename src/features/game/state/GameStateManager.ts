@@ -10,7 +10,7 @@ import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import GameTask from '../task/GameTask';
-import { Task } from '../task/GameTaskTypes';
+import { TaskDetail } from '../task/GameTaskTypes';
 import { mandatory } from '../utils/GameUtils';
 import { StateObserver } from './GameStateTypes';
 
@@ -444,7 +444,7 @@ class GameStateManager {
     this.checkpointTask.showTask(key);
   }
 
-  public getAllVisibleTaskData(): Array<[Task, boolean]> {
+  public getAllVisibleTaskData(): Array<[TaskDetail, boolean]> {
     return this.checkpointTask.getAllVisibleTaskData();
   }
 

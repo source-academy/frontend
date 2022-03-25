@@ -33,12 +33,12 @@ export type DialogueLine = IGameActionable & {
 };
 
 /**
- * @typedef DialogueSpeakerLine - a dialogue with only speaker and line, used with
- * dialogue logs
- * @param speaker - the speaker name for this line
+ * @typedef DialogueStorageLine - dialogue line containing only the speaker name and the line itself.
+ * This is primarily used for storing minimal information in the dialogue storage.
+ * @param speaker - the name of the speaker
  * @param line - the spoken text for this line
  */
-export type DialogueSpeakerLine = {
+export type DialogueStorageLine = {
   speaker: string;
   line: string;
 };

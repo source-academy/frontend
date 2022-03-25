@@ -1,4 +1,4 @@
-import { Task } from './GameTaskTypes';
+import { TaskDetail } from './GameTaskTypes';
 
 /**
  * The class encapsulates data on all the task ids
@@ -8,16 +8,12 @@ import { Task } from './GameTaskTypes';
  * One of the components of game checkpoint.
  */
 class GameTask {
-  private task: Map<string, boolean>;
-  private taskDetail: Map<string, Task>;
-  private totalNumOfTasks: number;
-  private numOfCompletedTasks: number;
+  private tasks: Map<string, boolean>;
+  private taskDetails: Map<string, TaskDetail>;
 
   constructor() {
-    this.task = new Map<string, boolean>();
-    this.taskDetail = new Map<string, Task>();
-    this.totalNumOfTasks = 0;
-    this.numOfCompletedTasks = 0;
+    this.tasks = new Map<string, boolean>();
+    this.taskDetails = new Map<string, TaskDetail>();
   }
 
   /**
@@ -28,13 +24,7 @@ class GameTask {
    *
    */
   public setTask(key: string, value: boolean): void {
-    const prevState = this.task.get(key);
-    this.task.set(key, value);
-
-    // Handle repeated calls
-    if (prevState !== undefined && prevState !== value) {
-      this.numOfCompletedTasks++;
-    }
+    this.tasks.set(key, value);
   }
 
   /**
@@ -43,44 +33,36 @@ class GameTask {
    * @param key key of the task
    */
   public showTask(key: string): void {
-    const prevDetail = this.taskDetail.get(key);
+    const prevDetail = this.taskDetails.get(key);
 
     // Handle repeated calls
     if (prevDetail !== undefined) {
-      const newDetail: Task = {
+      const newDetail: TaskDetail = {
         ...prevDetail,
         visible: true
       };
-      this.taskDetail.set(key, newDetail);
+      this.taskDetails.set(key, newDetail);
     }
   }
 
   /**
    * Add a task tied to the given string.
    *
-   * @param task the task containing the task id (key) and task data
+   * @param task the new task containing the task id (key) and task data
    */
-  public addTask(task: Task): void {
-    const key = task.taskId;
-    this.task.set(key, false);
-    this.taskDetail.set(key, task);
-    this.totalNumOfTasks++;
+  public addTask(newTask: TaskDetail): void {
+    const key = newTask.taskId;
+    this.tasks.set(key, false);
+    this.taskDetails.set(key, newTask);
   }
 
   /**
    * Add multiple tasks.
    *
-   * @param tasks the task containing the task ids (keys) and task data
+   * @param newTasks an array of tasks, each containing a task id (key) and task detail
    */
-  public addTasks(tasks: Task[]): void {
-    tasks.forEach(task => this.addTask(task));
-  }
-
-  /**
-   * Check whether all the tasks are complete.
-   */
-  public isAllComplete(): boolean {
-    return this.numOfCompletedTasks >= this.totalNumOfTasks;
+  public addTasks(newTasks: TaskDetail[]): void {
+    newTasks.forEach(task => this.addTask(task));
   }
 
   /**
@@ -90,7 +72,7 @@ class GameTask {
    * @param key key of the task
    */
   public getTaskState(key: string): boolean | undefined {
-    return this.task.get(key);
+    return this.tasks.get(key);
   }
 
   /**
@@ -99,23 +81,23 @@ class GameTask {
    *
    * @param key key of the task
    */
-  public getTaskDetail(key: string): Task | undefined {
-    return this.taskDetail.get(key);
+  public getTaskDetail(key: string): TaskDetail | undefined {
+    return this.taskDetails.get(key);
   }
 
   /**
    * Returns all the tasks.
    */
   public getAllTasks() {
-    return this.task;
+    return this.tasks;
   }
 
   /**
    * Returns all the task data, including the task id, title, description, and the state.
    */
-  public getAllVisibleTaskData(): Array<[Task, boolean]> {
-    const allVisibleTask: Array<[Task, boolean]> = new Array<[Task, boolean]>();
-    for (const key of this.task.keys()) {
+  public getAllVisibleTaskData(): Array<[TaskDetail, boolean]> {
+    const allVisibleTask: Array<[TaskDetail, boolean]> = new Array<[TaskDetail, boolean]>();
+    for (const key of this.tasks.keys()) {
       const taskState = this.getTaskState(key);
       const taskDetail = this.getTaskDetail(key);
       if (taskState !== undefined && taskDetail !== undefined && taskDetail.visible) {

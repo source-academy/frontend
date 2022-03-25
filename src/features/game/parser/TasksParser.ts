@@ -1,4 +1,4 @@
-import { Task } from '../task/GameTaskTypes';
+import { TaskDetail } from '../task/GameTaskTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
 
@@ -25,10 +25,10 @@ export default class TasksParser {
    * @param taskDetails the CSV lines containing descriptions about the tasks
    */
   public static parse(taskDetails: string[]) {
-    const tasks: Task[] = [];
+    const tasks: TaskDetail[] = [];
     taskDetails.forEach(taskDetail => {
       const [taskId, title, desc] = StringUtils.splitWithLimit(taskDetail, ',', 2);
-      const newTask: Task = {
+      const newTask: TaskDetail = {
         taskId: taskId,
         title: title,
         description: desc,
