@@ -32,7 +32,7 @@ export class ArrayValue extends Value implements Hoverable {
   // private childrenArrows: Arrow[] = [];
   private selected: boolean = false;
   ref: RefObject<any> = React.createRef();
-  cluster: ArrayValue | undefined = undefined;
+  parentArray: ArrayValue | undefined = undefined;
   arrayLevelY: number = -1;
 
   constructor(
@@ -50,7 +50,7 @@ export class ArrayValue extends Value implements Hoverable {
       this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
       this._y = mainReference.y();
     } else {
-      this.cluster = mainReference.parent.cluster;
+      this.parentArray = mainReference.parent;
       if (mainReference.isLastUnit) {
         this._x = mainReference.x() + Config.DataUnitWidth * 2;
         this._y = mainReference.y();
@@ -113,8 +113,9 @@ export class ArrayValue extends Value implements Hoverable {
     }
   };
 
-  setLevel(arrLevel: ArrayLevel): void {
+  setLevel(arrLevel: ArrayLevel, level: number): void {
     this.level = arrLevel;
+    this.arrayLevelY = level;
   }
 
   updatePosition(pos: { x: number; y: number } = { x: -1, y: -1 }): void {

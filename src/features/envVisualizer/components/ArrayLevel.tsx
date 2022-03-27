@@ -58,12 +58,13 @@ export class ArrayLevel extends Level {
   addArray = (array: ArrayValue, x: number) => {
     x = x || 0;
     // set highest allowed y-position to highest existing y-position in group of arrays connected to array.
-    let level = array.cluster?.arrayLevelY ?? 0;
+
+    let level = array.parentArray?.arrayLevelY ?? 0;
     // Determine the highest allowed y-position for new array
-    positions: for (const positions of this.position) {
+    positions: for (const positions of this.position.slice(level)) {
       for (const position of positions) {
         // Prevent new arrays from being created above existing arrays in level
-        if (position[0] < x + array.width() && position[1] > x) {
+        if (position[0] < x + array.width() + Config.DataMinWidth && position[1] > x) {
           level++;
           continue positions;
         } else {
@@ -79,7 +80,7 @@ export class ArrayLevel extends Level {
     const arrayMargin = Config.DataUnitHeight;
     const curY = this._y + level * Config.DataUnitHeight + (level + 1) * arrayMargin;
     array.updatePosition({ x, y: curY });
-    array.setLevel(this);
+    array.setLevel(this, level);
     this._height = Math.max(this._height, curY + (Config.DataUnitHeight + arrayMargin));
     this.arrays.push(array);
     this._width = Math.max(this._width, x + array.width());

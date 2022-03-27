@@ -16,9 +16,9 @@ export class ArrowFromArrayUnit extends GenericArrow {
     steps.push((x, y) => [
       x,
       y +
-      (to.y() > from.y() || (to.y() === from.y() && to.x() <= from.x()) ? 1 : -1) *
-      Config.DataUnitHeight -
-      (Math.sign(to.x() - from.x()) * Config.DataUnitHeight) / 12
+        (to.y() > from.y() || (to.y() === from.y() && to.x() <= from.x()) ? 1 : -1) *
+          Config.DataUnitHeight -
+        (Math.sign(to.x() - from.x()) * Config.DataUnitHeight) / 12
     ]);
   }
   protected calculateSteps() {
@@ -56,8 +56,8 @@ export class ArrowFromArrayUnit extends GenericArrow {
         if (source.x() > target.x() + target.width()) {
           steps.push((x, y) => [
             target.x() +
-            Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
-            Config.DataMinWidth,
+              Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
+              Config.DataMinWidth,
             target.y() + Config.DataUnitHeight / 2
           ]);
           steps.push((x, y) => [x - Config.DataMinWidth, y]);
@@ -73,7 +73,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
             steps.push((x, y) => [x, y + Config.DataUnitHeight / 4]);
           } else if (
             source.isLastUnit &&
-            target.x() - source.x() <= Config.DataUnitWidth * 2 &&
+            target.x() - source.x() <= Config.DataUnitWidth * 3 &&
             target.x() > source.x()
           ) {
             steps.push((x, y) => [target.x(), target.y() + Config.DataUnitHeight / 2]);
@@ -82,8 +82,8 @@ export class ArrowFromArrayUnit extends GenericArrow {
             if (source.x() > target.x() + target.units.length * Config.DataUnitWidth) {
               steps.push((x, y) => [
                 target.x() +
-                Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
-                Config.DataUnitWidth / 2,
+                  Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
+                  Config.DataUnitWidth / 2,
                 y
               ]);
               steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
@@ -100,8 +100,8 @@ export class ArrowFromArrayUnit extends GenericArrow {
             source.x() <= target.x()
               ? target.x() + Config.DataUnitWidth / 3
               : source.x() > target.x() + target.units.length * Config.DataUnitWidth
-                ? target.x() + Math.max(target.units.length, 1 / 3) * Config.DataUnitWidth
-                : target.x() + Config.DataUnitWidth / 2,
+              ? target.x() + Math.max(target.units.length, 1 / 3) * Config.DataUnitWidth
+              : target.x() + Config.DataUnitWidth / 2,
             target.y() + (source.y() > target.y() ? Config.DataUnitHeight : 0)
           ]);
         }

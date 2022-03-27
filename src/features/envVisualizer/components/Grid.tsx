@@ -140,8 +140,8 @@ export class Grid implements Visible {
                 v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
                 v.referencedBy[0].x()
               ) +
-                (v.referencedBy[0] instanceof ArrayUnit
-                  ? v.referencedBy[0].parent.width() + Config.DataMinWidth
+                (v.referencedBy[0] instanceof ArrayUnit && v.referencedBy[0].isLastUnit
+                  ? v.referencedBy[0].parent.width()
                   : 0)
         );
       }
