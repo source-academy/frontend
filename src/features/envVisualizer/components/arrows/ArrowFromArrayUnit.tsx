@@ -29,26 +29,18 @@ export class ArrowFromArrayUnit extends GenericArrow {
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
-    const offset = target.y() / Math.max(target.x(), 1) + target.x() / Math.max(target.y(), 1);
     if (target instanceof FnValue || target instanceof GlobalFnValue) {
-      ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
-      steps.push((x, y) => [
-        ArrowLane.getVerticalLane(
-          target,
-          Frame.cumWidths[Frame.lastXCoordBelow(x) + (target.x() < x ? 0 : 1)]
-        ).getPosition(target),
-        y
-      ]);
-      steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
-      steps.push((x, y) => [
-        ArrowLane.getVerticalLane(
-          target,
-          Frame.cumWidths[Frame.lastXCoordBelow(target.x()) + 1]
-        ).getPosition(target),
-        y
-      ]);
-      steps.push((x, y) => [x, target.y()]);
-      steps.push((x, y) => [target.centerX + Config.FnRadius * 2, y]);
+      if (
+        Math.abs(target.y() - source.y()) <
+        Config.DataUnitHeight + Math.abs(target.x() - source.x()) / 8
+      ) {
+        ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
+        steps.push((x, y) => [target.centerX + Config.FnRadius * 2 + Config.FnRadius, y]);
+        steps.push((x, y) => [x, target.y()]);
+        steps.push((x, y) => [x - Config.FnRadius, y]);
+      } else {
+        steps.push((x, y) => [target.centerX + Config.FnRadius * 2, target.y()]);
+      }
     } else if (target instanceof ArrayValue) {
       if ((target as ArrayValue).level !== source.parent.level) {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
@@ -60,38 +52,20 @@ export class ArrowFromArrayUnit extends GenericArrow {
           ).getPosition(target),
           y
         ]);
+        steps.push((x, y) => [
+          x,
+          ArrowLane.getHorizontalLane(target, target.y()).getPosition(target)
+        ]);
         if (source.x() > target.x() + target.width()) {
-          // moves left horzontally 1/3 of array height below/above other arrays
-          steps.push((x, y) => [
-            x,
-            target.y() +
-              (1 / 2 - (4 / 6) * Math.sign(target.y() - source.y())) *
-                (Config.DataUnitHeight + 3 * offset)
-          ]);
-          // point to right of array
           steps.push((x, y) => [
             target.x() +
               Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
-              Config.DataUnitWidth / 2,
-            y
+              Config.DataMinWidth,
+            target.y() + Config.DataUnitHeight / 2
           ]);
-          steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
-          steps.push((x, y) => [
-            target.x() + Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth),
-            y
-          ]);
+          steps.push((x, y) => [x - Config.DataMinWidth, y]);
         } else {
-          // moves right horzontally 1/3 of array height below/above other arrays
-          steps.push((x, y) => [
-            x,
-            target.y() +
-              (1 / 2 - (5 / 6) * Math.sign(target.y() - source.y())) *
-                (Config.DataUnitHeight + 3 * offset)
-          ]);
-          // point to left of array
-          steps.push((x, y) => [target.x() - Config.DataUnitWidth / 2, y]);
-          steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
-          steps.push((x, y) => [target.x(), y]);
+          steps.push((x, y) => [target.x(), target.y() + Config.DataUnitHeight / 2]);
         }
       } else {
         if (source.y() === target.y()) {
@@ -100,6 +74,12 @@ export class ArrowFromArrayUnit extends GenericArrow {
             steps.push((x, y) => [x, y - (Config.DataUnitHeight * 3) / 4]);
             steps.push((x, y) => [x + Config.DataUnitHeight / 3, y]);
             steps.push((x, y) => [x, y + Config.DataUnitHeight / 4]);
+          } else if (
+            source.isLastUnit &&
+            target.x() - source.x() <= Config.DataUnitWidth * 2 &&
+            target.x() > source.x()
+          ) {
+            steps.push((x, y) => [target.x(), target.y() + Config.DataUnitHeight / 2]);
           } else {
             ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
             if (source.x() > target.x() + target.units.length * Config.DataUnitWidth) {

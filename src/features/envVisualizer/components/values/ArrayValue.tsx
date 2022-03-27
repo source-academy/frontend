@@ -32,6 +32,8 @@ export class ArrayValue extends Value implements Hoverable {
   // private childrenArrows: Arrow[] = [];
   private selected: boolean = false;
   ref: RefObject<any> = React.createRef();
+  cluster: ArrayValue | undefined = undefined;
+  arrayLevelY: number = -1;
 
   constructor(
     /** underlying values this array contains */
@@ -48,6 +50,7 @@ export class ArrayValue extends Value implements Hoverable {
       this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
       this._y = mainReference.y();
     } else {
+      this.cluster = mainReference.parent.cluster;
       if (mainReference.isLastUnit) {
         this._x = mainReference.x() + Config.DataUnitWidth * 2;
         this._y = mainReference.y();

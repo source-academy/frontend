@@ -200,10 +200,6 @@ codeSamples.forEach((code, idx) => {
                   expect(parseFloat(path[20]) - parseFloat(path[1])).toBeCloseTo(
                     Config.DataUnitWidth / 3
                   );
-                } else if (sourceArray.y() === targetArray.y()) {
-                  expect(path.length).toEqual(30); // up, horizontal, down, horizontal
-                } else {
-                  expect(path.length).toEqual(9); // straight line to target.
                 }
               }
             }

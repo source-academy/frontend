@@ -17,61 +17,63 @@ export class ArrowFromText extends GenericArrow {
 
     const steps: StepsArray = [(x, y) => [x + source.width(), y + source.height() / 2]];
     if (target instanceof ArrayValue) {
-      if (target.x() < source.x()) {
-        // move to the left of current frame above the binding.
-        steps.push((x, y) => [x + Config.TextMargin, y]);
-        steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
-        steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+      // Case where there's a single column of frames, so arrays are beside frames.
+      if (Frame.maxXCoord <= 0) {
+        // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
         steps.push((x, y) => [
-          x,
-          ArrowLane.getHorizontalLane(
-            target,
-            Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
-          ).getPosition(target)
+          target.x() - Config.DataMinWidth,
+          target.y() + Config.DataUnitHeight / 2
         ]);
-        steps.push((x, y) => [
-          target.x() +
-            target.units.length * Config.DataUnitWidth +
-            Config.DataUnitWidth / 2 +
-            ((target.y() - (target?.level?.y() || target.y())) / Config.DataUnitHeight) * 3,
-          y
-        ]);
-        steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
-        steps.push((x, y) => [target.x() + target.units.length * Config.DataUnitWidth, y]);
+        steps.push((x, y) => [x + Config.DataMinWidth, y]);
       } else {
-        // move to left of frame to the right.
-        steps.push((x, y) => [
-          ArrowLane.getVerticalLane(target, source.x()).getPosition(target),
-          y
-        ]);
-        steps.push((x, y) => [
-          x,
-          ArrowLane.getHorizontalLane(
-            target,
-            Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
-          ).getPosition(target)
-        ]);
-
-        // Point to nearer side of array to lane.
-        if (target.x() < Frame.cumWidths[Frame.lastXCoordBelow(source.x()) + 1]) {
+        if (target.x() < source.x()) {
+          // move to the left of current frame above the binding.
+          steps.push((x, y) => [x + Config.TextMargin, y]);
+          steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
+          steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
           steps.push((x, y) => [
-            target.x() +
-              target.units.length * Config.DataUnitWidth +
-              Config.DataUnitWidth / 2 +
-              ((target.y() - (target?.level?.y() || target.y())) / Config.DataUnitHeight) * 3,
-            y
+            x,
+            ArrowLane.getHorizontalLane(
+              target,
+              Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
+            ).getPosition(target)
           ]);
-          steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
+          steps.push((x, y) => [
+            target.x() + target.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+            target.y() + Config.DataUnitHeight / 2
+          ]);
           steps.push((x, y) => [target.x() + target.units.length * Config.DataUnitWidth, y]);
         } else {
+          // move to left of frame to the right.
           steps.push((x, y) => [
-            target.x() -
-              Config.DataUnitWidth / 2 -
-              ((target.y() - (target?.level?.y() || target.y())) / Config.DataUnitHeight) * 3,
+            ArrowLane.getVerticalLane(
+              target,
+              Frame.cumWidths[Frame.lastXCoordBelow(x)]
+            ).getPosition(target),
             y
           ]);
-          steps.push((x, y) => [x, target.y() + Config.DataUnitHeight / 2]);
-          steps.push((x, y) => [target.x(), y]);
+          steps.push((x, y) => [
+            x,
+            ArrowLane.getHorizontalLane(
+              target,
+              Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
+            ).getPosition(target)
+          ]);
+
+          // Point to nearer side of array to lane.
+          if (target.x() < Frame.cumWidths[Frame.lastXCoordBelow(source.x()) + 1]) {
+            steps.push((x, y) => [
+              target.x() + target.units.length * Config.DataUnitWidth + Config.DataUnitWidth / 2,
+              target.y() + Config.DataUnitHeight / 2
+            ]);
+            steps.push((x, y) => [target.x() + target.units.length * Config.DataUnitWidth, y]);
+          } else {
+            steps.push((x, y) => [
+              target.x() - Config.DataUnitWidth / 2,
+              target.y() + Config.DataUnitHeight / 2
+            ]);
+            steps.push((x, y) => [target.x(), y]);
+          }
         }
       }
     } else if (target instanceof FnValue || target instanceof GlobalFnValue) {

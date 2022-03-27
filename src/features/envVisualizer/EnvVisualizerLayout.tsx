@@ -265,31 +265,46 @@ export class Layout extends React.Component {
   static exportImage = () => {
     Layout.stageRef.current?.y(0);
     Layout.stageRef.current?.x(0);
-    for (let i = 0; i < Math.ceil(Layout.width / Config.MaxExportWidth); i = i + 1) {
-      for (let j = 0; j < Math.ceil(Layout.height / Config.MaxExportHeight); j = j + 1) {
+    const horizontalImages = Math.ceil(Layout.width / Config.MaxExportWidth);
+    const verticalImages = Math.ceil(Layout.height / Config.MaxExportHeight);
+    const download_images = () => {
+      const download_next = (n: number) => {
+        if (n >= horizontalImages * verticalImages) {
+          Layout.stageRef.current?.width(Layout.stageWidth);
+          Layout.stageRef.current?.height(Layout.stageHeight);
+          Layout.stageRef.current?.y(Layout.invisiblePaddingVertical);
+          Layout.stageRef.current?.x(Layout.invisiblePaddingHorizontal);
+          EnvVisualizer.redraw();
+          return;
+        }
+        const x = n % horizontalImages;
+        const y = Math.floor(n / horizontalImages);
         Layout.stageRef.current?.width(
-          Math.min(Layout.width - i * Config.MaxExportWidth, Config.MaxExportWidth)
+          Math.min(Layout.width - x * Config.MaxExportWidth, Config.MaxExportWidth)
         );
         Layout.stageRef.current?.height(
-          Math.min(Layout.height - j * Config.MaxExportHeight, Config.MaxExportHeight)
+          Math.min(Layout.height - y * Config.MaxExportHeight, Config.MaxExportHeight)
         );
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = this.stageRef.current.toDataURL({
-          x: i * Config.MaxExportWidth,
-          y: j * Config.MaxExportHeight,
+          x: x * Config.MaxExportWidth,
+          y: y * Config.MaxExportHeight,
           mimeType: 'image/jpeg'
         });
-        a.download = `diagram_${i}_${j}.jpg`;
+
+        a.download = `diagram_${x}_${y}.jpg`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-      }
-    }
-    Layout.stageRef.current?.width(Layout.stageWidth);
-    Layout.stageRef.current?.height(Layout.stageHeight);
-    Layout.stageRef.current?.y(Layout.invisiblePaddingVertical);
-    Layout.stageRef.current?.x(Layout.invisiblePaddingHorizontal);
+        setTimeout(function () {
+          download_next(n + 1);
+        }, 1000);
+      };
+      // Initiate the first download.
+      download_next(0);
+    };
+    download_images();
   };
 
   private static saveButtonText(): String {

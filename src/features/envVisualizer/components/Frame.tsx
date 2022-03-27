@@ -55,6 +55,7 @@ export class Frame implements Visible, Hoverable {
   environment: Env;
   /** the parent/enclosing frame of this frame (the frame above it) */
   readonly parentFrame: Frame | undefined;
+  static maxXCoord: number = -1;
   static maxX: number = Config.CanvasPaddingX.valueOf();
   static cumWidths: number[] = [Config.CanvasPaddingX.valueOf()];
   static heights: number[] = [Config.CanvasPaddingY.valueOf()];
@@ -76,6 +77,7 @@ export class Frame implements Visible, Hoverable {
     this.parentFrame = envTreeNode.parent?.frame;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
+    Frame.maxXCoord = Math.max(xCoord, Frame.maxXCoord);
     this._x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord];
 
     this.name = new Text(
@@ -234,6 +236,7 @@ export class Frame implements Visible, Hoverable {
 
   static reset = () => {
     Frame.maxX = Config.CanvasPaddingX.valueOf();
+    Frame.maxXCoord = -1;
     Frame.cumWidths = [Config.CanvasPaddingX.valueOf()];
     Frame.heights = [Config.CanvasPaddingY.valueOf()];
   };

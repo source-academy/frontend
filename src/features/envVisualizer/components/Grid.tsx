@@ -140,24 +140,49 @@ export class Grid implements Visible {
                 v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
                 v.referencedBy[0].x()
               ) +
-                Config.DataUnitWidth * 3
+                (v.referencedBy[0] instanceof ArrayUnit
+                  ? v.referencedBy[0].parent.width() + Config.DataMinWidth
+                  : 0)
         );
       }
     });
-
-    Grid.cumHeights = this.levels.reduce(
-      (res, b, i) => {
-        const height =
-          i % 2 === 0
-            ? Frame.heights[Math.floor(i / 2)]
-            : this.arrayLevels[Math.floor((i - 1) / 2)].height();
-        return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY : 0)];
-      },
-      [Config.FrameMarginY.valueOf()]
-    );
-    this.levels.forEach((level, i) => {
-      level.setY(Grid.cumHeights[i]);
-    });
+    // Put the array levels and frame levels at same vertical position.
+    // Requires all array's x-position to be at the right of all frames and its fn values.
+    if (Frame.maxXCoord <= 0) {
+      Grid.cumHeights = this.levels.reduce(
+        (res, b, i) => {
+          const height =
+            i === 0
+              ? Frame.heights[0]
+              : i % 2 === 0
+              ? Math.max(
+                  Frame.heights[Math.floor(i / 2)],
+                  this.arrayLevels[Math.floor((i - 1) / 2)].height()
+                )
+              : 0;
+          return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY : 0)];
+        },
+        [Config.FrameMarginY.valueOf()]
+      );
+      this.levels.forEach((level, i) => {
+        level.setY(Grid.cumHeights[i]);
+      });
+    } else {
+      // All array levels will be separate from the frame levels.
+      Grid.cumHeights = this.levels.reduce(
+        (res, b, i) => {
+          const height =
+            i % 2 === 0
+              ? Frame.heights[Math.floor(i / 2)]
+              : this.arrayLevels[Math.floor((i - 1) / 2)].height();
+          return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY : 0)];
+        },
+        [Config.FrameMarginY.valueOf()]
+      );
+      this.levels.forEach((level, i) => {
+        level.setY(Grid.cumHeights[i]);
+      });
+    }
 
     // get the cumulative height of all the array and frame levels
     this._height = Grid.cumHeights[Grid.cumHeights.length - 1];
