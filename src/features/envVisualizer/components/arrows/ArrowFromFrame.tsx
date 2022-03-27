@@ -18,7 +18,10 @@ export class ArrowFromFrame extends GenericArrow {
     if (target instanceof Frame) {
       // To differentiate frames pointing to different parent frames
       if (differentiateByParentFrame) {
-        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
+        steps.push((x, y) => [
+          x,
+          ArrowLane.getHorizontalLaneAfterSource(target, y).getPosition(target)
+        ]);
       } else {
         steps.push((x, y) => [x, y - Config.FrameMarginY]);
       }

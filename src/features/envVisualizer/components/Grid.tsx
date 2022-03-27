@@ -78,12 +78,13 @@ export class Grid implements Visible {
     const nodes: Array<[number, EnvTreeNode]> = envTreeNodes.reduce((result, nodes, i) => {
       if (i === 0) {
         this.frameLevels[i] = new FrameLevel(null);
+        this.arrayLevels[i] = new ArrayLevel(this.frameLevels[i]);
       } else {
-        this.arrayLevels[i - 1] = new ArrayLevel(this.frameLevels[i - 1]);
-        this.levels.push(this.arrayLevels[i - 1]);
         this.frameLevels[i] = new FrameLevel(this.arrayLevels[i - 1]);
+        this.arrayLevels[i] = new ArrayLevel(this.frameLevels[i]);
       }
       this.levels.push(this.frameLevels[i]);
+      this.levels.push(this.arrayLevels[i]);
       return [...result, ...nodes.map<[number, EnvTreeNode]>(node => [i, node])];
     }, new Array<[number, EnvTreeNode]>());
 
@@ -130,7 +131,7 @@ export class Grid implements Visible {
         const meanY =
           ((yCoordSum / count) * (this.frameLevels.length - 1)) / this.frameLevels.length;
         const meanX = xCoordSum / count;
-        this.arrayLevels[Math.floor(meanY)].addArray(
+        this.arrayLevels[Math.floor(meanY) + 1].addArray(
           v,
           hasFrame
             ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
@@ -141,7 +142,7 @@ export class Grid implements Visible {
                 v.referencedBy[0].x()
               ) +
                 (v.referencedBy[0] instanceof ArrayUnit && v.referencedBy[0].isLastUnit
-                  ? v.referencedBy[0].parent.width()
+                  ? Config.DataUnitWidth * 2
                   : 0)
         );
       }
@@ -152,14 +153,12 @@ export class Grid implements Visible {
       Grid.cumHeights = this.levels.reduce(
         (res, b, i) => {
           const height =
-            i === 0
-              ? Frame.heights[0]
-              : i % 2 === 0
-              ? Math.max(
+            i % 2 === 0
+              ? 0
+              : Math.max(
                   Frame.heights[Math.floor(i / 2)],
                   this.arrayLevels[Math.floor((i - 1) / 2)].height()
-                )
-              : 0;
+                );
           return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY : 0)];
         },
         [Config.FrameMarginY.valueOf()]

@@ -33,9 +33,9 @@ export class ArrowFromText extends GenericArrow {
           steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
           steps.push((x, y) => [
             x,
-            ArrowLane.getHorizontalLane(
+            ArrowLane.getHorizontalLaneBeforeTarget(
               target,
-              Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
+              Grid.cumHeights[Grid.lastYCoordBelow(target.y()) + (target.y() > y ? 0 : 1)]
             ).getPosition(target)
           ]);
           steps.push((x, y) => [
@@ -54,9 +54,9 @@ export class ArrowFromText extends GenericArrow {
           ]);
           steps.push((x, y) => [
             x,
-            ArrowLane.getHorizontalLane(
+            ArrowLane.getHorizontalLaneBeforeTarget(
               target,
-              Grid.cumHeights[Grid.lastYCoordBelow(target.y()) - (target.y() > y ? 1 : 0)]
+              Grid.cumHeights[Grid.lastYCoordBelow(target.y()) + (target.y() > y ? 0 : 1)]
             ).getPosition(target)
           ]);
 
@@ -92,7 +92,10 @@ export class ArrowFromText extends GenericArrow {
         } else {
           // vertical lane, horizontal lane, vertical lane,
           steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-          steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
+          steps.push((x, y) => [
+            x,
+            ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
+          ]);
           steps.push((x, y) => [
             ArrowLane.getVerticalLane(
               target,
@@ -112,7 +115,10 @@ export class ArrowFromText extends GenericArrow {
           steps.push((x, y) => [x, target.y()]);
         } else {
           steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-          steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
+          steps.push((x, y) => [
+            x,
+            ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
+          ]);
           steps.push((x, y) => [
             ArrowLane.getVerticalLane(
               target,
@@ -132,7 +138,10 @@ export class ArrowFromText extends GenericArrow {
 
         // vertical lane, horizontal lane, vertical lane,
         steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
+        steps.push((x, y) => [
+          x,
+          ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
+        ]);
         steps.push((x, y) => [
           ArrowLane.getVerticalLane(
             target,
@@ -144,7 +153,10 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [target.x(), y]);
       } else {
         steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-        steps.push((x, y) => [x, ArrowLane.getHorizontalLane(target, y).getPosition(target)]);
+        steps.push((x, y) => [
+          x,
+          ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
+        ]);
         steps.push((x, y) => [
           ArrowLane.getVerticalLane(
             target,

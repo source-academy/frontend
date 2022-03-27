@@ -33,7 +33,15 @@ export class ArrowLane {
     return ArrowLane.verticalLanes[xCoord];
   };
 
-  static getHorizontalLane = (target: Visible, currentY: number): ArrowLane => {
+  static getHorizontalLaneBeforeTarget = (target: Visible, currentY: number): ArrowLane => {
+    const yCoord = Grid.lastYCoordBelow(target.y()) + (currentY > target.y() ? 1 : 0);
+    if (ArrowLane.horizontalLanes[yCoord] === undefined) {
+      ArrowLane.horizontalLanes[yCoord] = new ArrowLane(yCoord, false);
+    }
+    return ArrowLane.horizontalLanes[yCoord];
+  };
+
+  static getHorizontalLaneAfterSource = (target: Visible, currentY: number): ArrowLane => {
     const yCoord = Grid.lastYCoordBelow(currentY) + (currentY > target.y() ? 0 : 1);
     if (ArrowLane.horizontalLanes[yCoord] === undefined) {
       ArrowLane.horizontalLanes[yCoord] = new ArrowLane(yCoord, false);

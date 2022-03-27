@@ -51,7 +51,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
         ]);
         steps.push((x, y) => [
           x,
-          ArrowLane.getHorizontalLane(target, target.y()).getPosition(target)
+          ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
         ]);
         if (source.x() > target.x() + target.width()) {
           steps.push((x, y) => [
