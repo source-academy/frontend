@@ -68,6 +68,9 @@ export class ArrayLevel extends Level {
         if (position[0] < x + array.width() && position[1] > x) {
           level++;
           continue positions;
+        } else if (level < this._rowCount) {
+          Math.abs(x - this._lastX) < Config.DataGroupMaxDist ? level++ : (this._rowCount = 0);
+          continue positions;
         } else {
           continue;
         }
