@@ -15,7 +15,6 @@ export class ArrayLevel extends Level {
   private _height: number = 0;
   private _width: number;
   position: [x: number, y: number][][] = [[]];
-  private _lastX: number = NaN;
 
   ref: RefObject<any> = React.createRef();
   // Prevent new arrays from being placed above existing arrays in the array level
@@ -58,7 +57,6 @@ export class ArrayLevel extends Level {
    */
   addArray = (array: ArrayValue, x: number) => {
     x = x || 0;
-    this._lastX = this._lastX || x;
     // set highest allowed y-position to highest existing y-position in group of arrays connected to array.
     let level = array.cluster?.arrayLevelY ?? 0;
     // Determine the highest allowed y-position for new array
@@ -67,9 +65,6 @@ export class ArrayLevel extends Level {
         // Prevent new arrays from being created above existing arrays in level
         if (position[0] < x + array.width() && position[1] > x) {
           level++;
-          continue positions;
-        } else if (level < this._rowCount) {
-          Math.abs(x - this._lastX) < Config.DataGroupMaxDist ? level++ : (this._rowCount = 0);
           continue positions;
         } else {
           continue;
@@ -88,7 +83,6 @@ export class ArrayLevel extends Level {
     this._height = Math.max(this._height, curY + (Config.DataUnitHeight + arrayMargin));
     this.arrays.push(array);
     this._width = Math.max(this._width, x + array.width());
-    this._lastX = x;
   };
 
   setY = (y: number) => {
