@@ -100,7 +100,7 @@ export class Grid implements Visible {
       if (isArray) {
         let bindings = v.referencedBy.filter(r => r instanceof Binding) as Binding[];
         let p: ArrayUnit = v.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
-        const hasFrame = bindings.length > 0;
+        const belongsToFrame = v.referencedBy[0] instanceof Binding;
         while (bindings.length === 0) {
           bindings = p.parent.referencedBy.filter(r => r instanceof Binding) as Binding[];
           p = p.parent.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
@@ -128,23 +128,23 @@ export class Grid implements Visible {
           },
           [yCoordSum, xCoordSum, count]
         );
-        const meanY =
-          ((yCoordSum / count) * (this.frameLevels.length - 1)) / this.frameLevels.length;
         const meanX = xCoordSum / count;
-        this.arrayLevels[Math.floor(meanY) + 1].addArray(
-          v,
-          hasFrame
-            ? Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
-                Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
-                Config.FrameMarginX * 1.5 // reduce collision of array with frame arrows
-            : Math.min(
-                v.referencedBy.reduce((acc, ref) => acc + ref.x(), 0) / v.referencedBy.length,
-                v.referencedBy[0].x()
-              ) +
-                (v.referencedBy[0] instanceof ArrayUnit && v.referencedBy[0].isLastUnit
-                  ? Config.DataUnitWidth * 2
-                  : 0)
-        );
+        if (belongsToFrame) {
+          const y = (v.referencedBy[0] as Binding).frame.yCoord;
+          const x =
+            Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
+            Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
+            Config.FrameMarginX * 0.5;
+          this.arrayLevels[Math.floor(y)].addArray(v, x);
+        } else if (v.referencedBy[0] instanceof ArrayUnit) {
+          const y = v.referencedBy[0].parent.level?.parentLevel?.yCoord ?? 0;
+          const x =
+            v.referencedBy[0].x() +
+            (v.referencedBy[0] instanceof ArrayUnit && v.referencedBy[0].isLastUnit
+              ? Config.DataUnitWidth * 2
+              : 0);
+          this.arrayLevels[Math.floor(y)].addArray(v, x);
+        }
       }
     });
     // Put the array levels and frame levels at same vertical position.
@@ -156,10 +156,14 @@ export class Grid implements Visible {
             i % 2 === 0
               ? 0
               : Math.max(
-                  Frame.heights[Math.floor(i / 2)],
-                  this.arrayLevels[Math.floor((i - 1) / 2)].height()
+                  Frame.heights[Math.floor(i / 2)] +
+                    (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY : 0),
+                  this.arrayLevels[Math.floor((i - 1) / 2)].height() +
+                    (this.arrayLevels[Math.floor((i - 1) / 2)].height() > 0
+                      ? Config.FrameMarginY
+                      : 0)
                 );
-          return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY : 0)];
+          return [...res, res[res.length - 1] + height];
         },
         [Config.FrameMarginY.valueOf()]
       );
@@ -172,9 +176,10 @@ export class Grid implements Visible {
         (res, b, i) => {
           const height =
             i % 2 === 0
-              ? Frame.heights[Math.floor(i / 2)]
-              : this.arrayLevels[Math.floor((i - 1) / 2)].height();
-          return [...res, res[res.length - 1] + height + (height > 0 ? Config.FrameMarginY : 0)];
+              ? Frame.heights[Math.floor(i / 2)] +
+                (this.arrayLevels[Math.floor(i / 2)].height() > 0 ? Config.FrameMarginY : 0)
+              : this.arrayLevels[Math.floor((i - 1) / 2)].height() + Config.FrameMarginY;
+          return [...res, res[res.length - 1] + height];
         },
         [Config.FrameMarginY.valueOf()]
       );
