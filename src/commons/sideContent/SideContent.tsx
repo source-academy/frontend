@@ -58,7 +58,7 @@ const SideContent = (props: SideContentProps) => {
     (async () => {
       const moduleTabs = await getModuleTabs(debuggerContext || ({} as DebuggerContext));
       setDynamicTabs(tabs.concat(moduleTabs));
-    })()
+    })();
   }, [tabs, debuggerContext]);
 
   /**
