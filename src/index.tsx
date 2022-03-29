@@ -13,6 +13,8 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+import { setTabsStaticURL } from './commons/sideContent/SideContentHelper';
+
 if (Constants.sentryDsn) {
   Sentry.init({
     dsn: Constants.sentryDsn,
@@ -32,6 +34,7 @@ console.log(
 );
 
 setModulesStaticURL(Constants.moduleBackendUrl);
+setTabsStaticURL(Constants.moduleBackendUrl);
 console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
 render(
