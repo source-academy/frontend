@@ -195,10 +195,11 @@ export default class RoomPreview extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        if (
+          this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu) ||
+          this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)
+        ) {
           await this.getPhaseManager().popPhase();
-        } else if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
-          await this.getPhaseManager().swapPhase(GamePhaseType.EscapeMenu);
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
         }
