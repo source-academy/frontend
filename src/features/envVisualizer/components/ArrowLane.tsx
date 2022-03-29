@@ -59,8 +59,8 @@ export class ArrowLane {
       const lane: number = index % Config.ArrowNumLanes;
       return (
         Grid.cumHeights[this.id] -
-        Config.FrameMarginY * 0.3 +
-        (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.3
+        Config.FrameMarginY * 0.4 +
+        (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.4
       );
     } else {
       let index = this.objects.indexOf(target instanceof Value ? target.data : target);
@@ -78,8 +78,8 @@ export class ArrowLane {
       } else {
         return (
           Grid.cumHeights[this.id] -
-          Config.FrameMarginY * 0.9 +
-          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.5
+          Config.FrameMarginY * 0.95 +
+          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.55
         );
       }
     }

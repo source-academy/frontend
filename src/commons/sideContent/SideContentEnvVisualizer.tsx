@@ -31,7 +31,7 @@ class SideContentEnvVisualizer extends React.Component<
 
   private calculateWidth(editorWidth?: string) {
     const horizontalPadding = 50;
-    const maxWidth = 2000;
+    const maxWidth = 5000;
     let width;
     if (editorWidth === undefined) {
       width = window.innerWidth - horizontalPadding;
@@ -45,14 +45,13 @@ class SideContentEnvVisualizer extends React.Component<
   }
 
   private calculateHeight(sideContentHeight?: number) {
-    const topOffset = 120;
     const verticalPadding = 150;
-    const maxHeight = 1200;
+    const maxHeight = 5000;
     let height;
     if (window.innerWidth < Constants.mobileBreakpoint) {
-      height = Math.min(window.innerHeight - 150, window.innerHeight - topOffset - verticalPadding);
+      height = Math.min(window.innerHeight - 150, window.innerHeight - verticalPadding);
     } else if (sideContentHeight === undefined) {
-      height = Math.min(window.innerHeight - 350, window.innerHeight - topOffset - verticalPadding);
+      height = Math.min(window.innerHeight - 350, window.innerHeight - verticalPadding);
     } else {
       height = sideContentHeight - verticalPadding;
     }
@@ -69,7 +68,7 @@ class SideContentEnvVisualizer extends React.Component<
       });
       EnvVisualizer.updateDimensions(newWidth, newHeight);
     }
-  }, 400);
+  }, 300);
 
   componentDidMount() {
     this.handleResize();

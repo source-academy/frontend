@@ -31,7 +31,8 @@ export class ArrowFromText extends GenericArrow {
           steps.push((x, y) => [x + Config.TextMargin, y]);
           steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
           steps.push((x, y) => [source.x() - Config.TextMargin - Config.TextPaddingX, y]);
-          // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(source), y]);
+          // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+          // steps.push((x, y) => [x, ArrowLane.getHorizontalLaneAfterSource(target, y).getPosition(target)]);
           steps.push((x, y) => [
             target.x() +
               Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
@@ -40,6 +41,9 @@ export class ArrowFromText extends GenericArrow {
           ]);
           steps.push((x, y) => [x - Config.DataMinWidth, y - yOffset]);
         } else if (source.x() < target.x()) {
+          steps.push((x, y) => [x + Config.TextMargin + Config.TextPaddingX, y]);
+          // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+          // steps.push((x, y) => [x, ArrowLane.getHorizontalLaneAfterSource(target, y).getPosition(target)]);
           steps.push((x, y) => [
             target.x() - Config.DataMinWidth,
             target.y() + Config.DataUnitHeight / 2 + yOffset

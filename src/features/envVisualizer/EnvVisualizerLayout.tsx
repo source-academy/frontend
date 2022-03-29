@@ -66,7 +66,8 @@ export class Layout extends React.Component {
     Layout.visibleHeight = height;
     if (
       Layout.stageRef.current !== null &&
-      (window.innerWidth > Layout.stageWidth || window.innerHeight > Layout.stageHeight)
+      (Math.min(Layout.width, window.innerWidth) > Layout.stageWidth ||
+        Math.min(Layout.height, window.innerHeight) > Layout.stageHeight)
     ) {
       Layout.currentLight = undefined;
       Layout.currentDark = undefined;
@@ -76,8 +77,14 @@ export class Layout extends React.Component {
       Layout.stageRef.current.height(Layout.stageHeight);
       EnvVisualizer.redraw();
     }
-    Layout.invisiblePaddingVertical = (Layout.stageHeight - Layout.visibleHeight) / 2;
-    Layout.invisiblePaddingHorizontal = (Layout.stageWidth - Layout.visibleWidth) / 2;
+    if (Layout.stageHeight > Layout.visibleHeight) {
+    }
+    Layout.invisiblePaddingVertical =
+      Layout.stageHeight > Layout.visibleHeight
+        ? (Layout.stageHeight - Layout.visibleHeight) / 2
+        : 0;
+    Layout.invisiblePaddingHorizontal =
+      Layout.stageWidth > Layout.visibleWidth ? (Layout.stageWidth - Layout.visibleWidth) / 2 : 0;
 
     const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
     if (container) {
@@ -323,34 +330,6 @@ export class Layout extends React.Component {
     } else {
       const layout = (
         <div className={'sa-env-visualizer'}>
-          <div style={{ width: 400 }}>
-            <ButtonGroup vertical={false}>
-              <Button
-                large={true}
-                outlined={true}
-                onClick={() => {
-                  EnvVisualizer.togglePrintableMode();
-                  EnvVisualizer.redraw();
-                }}
-              >
-                <Checkbox
-                  checked={EnvVisualizer.getPrintableMode()}
-                  label="Printable Mode"
-                  style={{ marginBottom: '0px' }}
-                  onChange={() => {
-                    EnvVisualizer.togglePrintableMode();
-                    EnvVisualizer.redraw();
-                  }}
-                />
-              </Button>
-              <Button
-                outlined={true}
-                text={Layout.saveButtonText()}
-                large={true}
-                onClick={this.exportImage}
-              />
-            </ButtonGroup>
-          </div>
           <div
             id="scroll-container"
             ref={Layout.scrollContainerRef}
@@ -380,6 +359,60 @@ export class Layout extends React.Component {
                   : Config.SA_BLUE.toString()
               }}
             >
+              <div style={{ right: 40, position: 'absolute', display: 'flex', alignSelf: 'right' }}>
+                <ButtonGroup vertical>
+                  <Button
+                    large={true}
+                    outlined={true}
+                    onClick={() => {
+                      EnvVisualizer.togglePrintableMode();
+                      EnvVisualizer.redraw();
+                    }}
+                    style={{
+                      backgroundColor: EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString(),
+                      opacity: 0.8,
+                      borderColor: EnvVisualizer.getPrintableMode()
+                        ? Config.SA_BLUE.toString()
+                        : Config.PRINT_BACKGROUND.toString()
+                    }}
+                  >
+                    <Checkbox
+                      checked={EnvVisualizer.getPrintableMode()}
+                      label="Printable"
+                      style={{
+                        marginBottom: '0px',
+                        color: EnvVisualizer.getPrintableMode()
+                          ? Config.SA_BLUE.toString()
+                          : Config.PRINT_BACKGROUND.toString()
+                      }}
+                      onChange={() => {
+                        EnvVisualizer.togglePrintableMode();
+                        EnvVisualizer.redraw();
+                      }}
+                    />
+                  </Button>
+                  <Button
+                    outlined={true}
+                    text={Layout.saveButtonText()}
+                    large={true}
+                    onClick={this.exportImage}
+                    style={{
+                      color: EnvVisualizer.getPrintableMode()
+                        ? Config.SA_BLUE.toString()
+                        : Config.PRINT_BACKGROUND.toString(),
+                      backgroundColor: EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString(),
+                      opacity: 0.8,
+                      borderColor: EnvVisualizer.getPrintableMode()
+                        ? Config.SA_BLUE.toString()
+                        : Config.PRINT_BACKGROUND.toString()
+                    }}
+                  />
+                </ButtonGroup>
+              </div>
               <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
                 <Layer>
                   <Rect
