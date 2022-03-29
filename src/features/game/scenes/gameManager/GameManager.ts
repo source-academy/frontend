@@ -250,8 +250,10 @@ class GameManager extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)
-        || this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
+        if (
+          this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu) ||
+          this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)
+        ) {
           await this.getPhaseManager().popPhase();
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
