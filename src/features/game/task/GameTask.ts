@@ -96,18 +96,18 @@ class GameTask {
   /**
    * Returns all the tasks.
    */
-  public getAllTasks() {
+  public getAllTasks():Map<string, boolean> {
     return this.tasks;
   }
 
   /**
    * Returns all incomplete tasks.
    */
-  public getAllIncompleteTasks() {
-    const incompleteTasks: Map<string, boolean> = new Map<string, boolean>();
+  public getAllIncompleteTasks(): Array<string> {
+    const incompleteTasks: Array<string> = new Array<string>();
     for (const key of this.tasks.keys()) {
       if (!this.tasks.get(key) && this.taskDetails.get(key)?.visible) {
-        incompleteTasks.set(key, true);
+        incompleteTasks.push(key);
       }
     }
     return incompleteTasks;

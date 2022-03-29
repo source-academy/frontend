@@ -475,7 +475,7 @@ class GameStateManager {
    * @returns {ItemId[]}
    */
   public getIncompleteTasks(): ItemId[] {
-    return convertMapToArray(this.checkpointTask.getAllIncompleteTasks());
+    return this.checkpointTask.getAllIncompleteTasks();
   }
 
   /**
