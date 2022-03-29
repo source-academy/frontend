@@ -9,7 +9,7 @@ import { OverallState } from '../../application/ApplicationTypes';
 import { ControlBarProps } from '../../controlBar/ControlBar';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
 import { DebuggerContext, WorkspaceLocation } from '../../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './../../sideContent/SideContentHelper';
+import { getModuleTabs } from './../../sideContent/SideContentHelper';
 import MobileControlBar from './MobileControlBar';
 
 export type MobileSideContentProps = DispatchProps & StateProps & MobileControlBarProps;
@@ -59,9 +59,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     const copy = [...tabs];
     const runTab = copy.pop();
 
-    const allActiveTabs = copy.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
-    allActiveTabs.push(runTab!);
-    setDynamicTabs(allActiveTabs);
+    (async () => {
+      const moduleTabs = await getModuleTabs(debuggerContext || ({} as DebuggerContext));
+      moduleTabs.push(runTab!);
+      setDynamicTabs(moduleTabs);
+    })();
   }, [tabs, debuggerContext]);
 
   /**

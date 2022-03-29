@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './SideContentHelper';
+import { getModuleTabs } from './SideContentHelper';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -55,8 +55,10 @@ const SideContent = (props: SideContentProps) => {
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
   React.useEffect(() => {
-    const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
-    setDynamicTabs(allActiveTabs);
+    (async () => {
+      const moduleTabs = await getModuleTabs(debuggerContext || ({} as DebuggerContext));
+      setDynamicTabs(tabs.concat(moduleTabs));
+    })()
   }, [tabs, debuggerContext]);
 
   /**
