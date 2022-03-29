@@ -96,7 +96,7 @@ class GameTask {
   /**
    * Returns all the tasks.
    */
-  public getAllTasks():Map<string, boolean> {
+  public getAllTasks(): Map<string, boolean> {
     return this.tasks;
   }
 
