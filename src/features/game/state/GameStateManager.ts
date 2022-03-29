@@ -75,6 +75,13 @@ class GameStateManager {
         this.checkpointTask.showTask(task);
       });
 
+    this.getSaveManager()
+      .getIncompleteTasks()
+      .forEach(task => {
+        this.checkpointTask.setTask(task, false);
+        this.checkpointTask.showTask(task);
+      });
+
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
 
@@ -468,6 +475,16 @@ class GameStateManager {
    */
   public getCompletedTasks(): ItemId[] {
     return convertMapToArray(this.checkpointTask.getAllTasks());
+  }
+
+  /**
+   * Gets array of all tasks that have been displayed but yet to be completed.
+   *
+   * @returns {ItemId[]}
+   */
+  public getIncompleteTasks(): ItemId[] {
+    console.log(convertMapToArray(this.checkpointTask.getAllIncompleteTasks()));
+    return convertMapToArray(this.checkpointTask.getAllIncompleteTasks());
   }
 
   /**

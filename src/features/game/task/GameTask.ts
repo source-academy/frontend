@@ -93,6 +93,19 @@ class GameTask {
   }
 
   /**
+   * Returns all incomplete tasks.
+   */
+  public getAllIncompleteTasks() {
+    const incompleteTasks: Map<string, boolean> = new Map<string, boolean>();
+    for (const key of this.tasks.keys()) {
+      if (!this.tasks.get(key) && this.taskDetails.get(key)?.visible) {
+        incompleteTasks.set(key, true);
+      }
+    }
+    return incompleteTasks;
+  }
+
+  /**
    * Returns all the task data, including the task id, title, description, and the state.
    */
   public getAllVisibleTaskData(): Array<[TaskDetail, boolean]> {
