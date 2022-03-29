@@ -29,6 +29,8 @@ export class GenericArrow implements Arrow {
   private _width: number = 0;
   private _path: string = '';
   private selected: boolean = false;
+  readonly unhovered_opacity: number = 0.8;
+  readonly hovered_opacity: number = 1;
 
   constructor(source: Visible) {
     this.source = source;
@@ -91,6 +93,7 @@ export class GenericArrow implements Arrow {
     setHoveredStyle(e.currentTarget, {
       strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
     });
+    this.ref.current.opacity = this.unhovered_opacity;
   }
   onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
     this.selected = !this.selected;
@@ -104,10 +107,12 @@ export class GenericArrow implements Arrow {
         setUnhoveredStyle(currentTarget, {
           strokeWidth: this.getStrokeWidth()
         });
+        this.ref.current.opacity = this.unhovered_opacity;
       } else {
         setHoveredStyle(currentTarget, {
-          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
+          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
         });
+        this.ref.current.opacity = this.hovered_opacity;
       }
     }
   }
@@ -121,12 +126,14 @@ export class GenericArrow implements Arrow {
         (this.source instanceof Frame && this.source.isSelected())
       ) {
         setHoveredStyle(e.currentTarget, {
-          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * 0.5
+          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
         });
+        this.ref.current.opacity = this.hovered_opacity;
       } else {
         setUnhoveredStyle(e.currentTarget, {
           strokeWidth: this.getStrokeWidth()
         });
+        this.ref.current.opacity = this.unhovered_opacity;
       }
     }
   }
@@ -174,6 +181,7 @@ export class GenericArrow implements Arrow {
         onMouseEnter={e => this.onMouseEnter(e)}
         onMouseLeave={e => this.onMouseLeave(e)}
         onClick={e => this.onClick(e)}
+        opacity={this.unhovered_opacity}
       >
         <KonvaPath
           {...ShapeDefaultProps}

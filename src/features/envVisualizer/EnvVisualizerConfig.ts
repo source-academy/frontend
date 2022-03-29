@@ -12,7 +12,7 @@ export enum Config {
   FramePaddingX = 20,
   FramePaddingY = 30,
   FrameMarginX = 60,
-  FrameMarginY = 60,
+  FrameMarginY = 70,
   FrameCornerRadius = 3,
 
   FnRadius = 15,
@@ -43,7 +43,7 @@ export enum Config {
   ArrowHoveredStrokeWidth = 2,
   ArrowCornerRadius = 10,
   ArrowMinHeight = 100,
-  ArrowNumLanes = 6,
+  ArrowNumLanes = 5,
   FrameArrowStrokeWidth = 2,
   FrameArrowHoveredStrokeWidth = 2.5,
   MaxExportWidth = 20000,

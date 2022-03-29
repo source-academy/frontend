@@ -128,13 +128,18 @@ export class Grid implements Visible {
           },
           [yCoordSum, xCoordSum, count]
         );
-        const meanX = xCoordSum / count;
         if (belongsToFrame) {
           const y = (v.referencedBy[0] as Binding).frame.yCoord;
+          // array close to first declaration
           const x =
-            Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
-            Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
-            Config.FrameMarginX * 0.5;
+            Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
+            0.6 * Config.FrameMarginX;
+          // array at horizontal mean of bindings
+          // const meanX = (xCoordSum / count);
+          // const x =
+          //   Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
+          //   Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
+          //   0.6 * Config.FrameMarginX;
           this.arrayLevels[Math.floor(y)].addArray(v, x);
         } else if (v.referencedBy[0] instanceof ArrayUnit) {
           const y = v.referencedBy[0].parent.level?.parentLevel?.yCoord ?? 0;
@@ -149,44 +154,40 @@ export class Grid implements Visible {
     });
     // Put the array levels and frame levels at same vertical position.
     // Requires all array's x-position to be at the right of all frames and its fn values.
-    if (Frame.maxXCoord <= 0) {
-      Grid.cumHeights = this.levels.reduce(
-        (res, b, i) => {
-          const height =
-            i % 2 === 0
+    Grid.cumHeights = this.levels.reduce(
+      (res, b, i) => {
+        let height;
+        if (i % 2 === 0) {
+          const arrayLevel = this.arrayLevels[Math.floor(i / 2)] as ArrayLevel;
+          height =
+            Frame.cumWidths[(b as FrameLevel).lastXcoord + 1] <= arrayLevel.minX()
               ? 0
-              : Math.max(
-                  Frame.heights[Math.floor(i / 2)] +
-                    (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY : 0),
-                  this.arrayLevels[Math.floor((i - 1) / 2)].height() +
-                    (this.arrayLevels[Math.floor((i - 1) / 2)].height() > 0
-                      ? Config.FrameMarginY
-                      : 0)
-                );
-          return [...res, res[res.length - 1] + height];
-        },
-        [Config.FrameMarginY.valueOf()]
-      );
-      this.levels.forEach((level, i) => {
-        level.setY(Grid.cumHeights[i]);
-      });
-    } else {
-      // All array levels will be separate from the frame levels.
-      Grid.cumHeights = this.levels.reduce(
-        (res, b, i) => {
-          const height =
-            i % 2 === 0
-              ? Frame.heights[Math.floor(i / 2)] +
-                (this.arrayLevels[Math.floor(i / 2)].height() > 0 ? Config.FrameMarginY : 0)
-              : this.arrayLevels[Math.floor((i - 1) / 2)].height() + Config.FrameMarginY;
-          return [...res, res[res.length - 1] + height];
-        },
-        [Config.FrameMarginY.valueOf()]
-      );
-      this.levels.forEach((level, i) => {
-        level.setY(Grid.cumHeights[i]);
-      });
-    }
+              : Frame.heights[Math.floor(i / 2)] +
+                (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY : 0);
+        } else {
+          const frameLevel = this.frameLevels[Math.floor(i / 2)] as FrameLevel;
+          height =
+            Frame.heights[Math.floor(i / 2)] +
+            (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY : 0);
+          if ((b as ArrayLevel).count() > 0) {
+            if (Frame.cumWidths[frameLevel.lastXcoord + 1] <= (b as ArrayLevel).minX()) {
+              height = Math.max(
+                height,
+                this.arrayLevels[Math.floor((i - 1) / 2)].height() +
+                  (this.arrayLevels[Math.floor((i - 1) / 2)].height() > 0 ? Config.FrameMarginY : 0)
+              );
+            } else {
+              height = this.arrayLevels[Math.floor((i - 1) / 2)].height() + Config.FrameMarginY;
+            }
+          }
+        }
+        return [...res, res[res.length - 1] + height];
+      },
+      [Config.FrameMarginY.valueOf()]
+    );
+    this.levels.forEach((level, i) => {
+      level.setY(Grid.cumHeights[i]);
+    });
 
     // get the cumulative height of all the array and frame levels
     this._height = Grid.cumHeights[Grid.cumHeights.length - 1];

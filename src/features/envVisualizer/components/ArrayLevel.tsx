@@ -14,6 +14,8 @@ export class ArrayLevel extends Level {
   private _y: number;
   private _height: number = 0;
   private _width: number;
+  private _minX: number = Infinity;
+  private _count: number = 0;
   position: [x: number, y: number][][] = [[]];
 
   ref: RefObject<any> = React.createRef();
@@ -36,6 +38,12 @@ export class ArrayLevel extends Level {
 
   x(): number {
     return this._x;
+  }
+  minX(): number {
+    return this._minX;
+  }
+  count(): number {
+    return this._count;
   }
   y(): number {
     return this._y;
@@ -73,6 +81,8 @@ export class ArrayLevel extends Level {
       }
       break;
     }
+    this._minX = Math.min(x, this._minX);
+    this._count++;
     this._rowCount = Math.max(this._rowCount, level);
     this.position[level] = this.position[level] || [];
     this.position[level].push([x, x + array.width() + Config.DataUnitWidth / 2]);
@@ -81,7 +91,7 @@ export class ArrayLevel extends Level {
     const curY = this._y + level * Config.DataUnitHeight + (level + 1) * arrayMargin;
     array.updatePosition({ x, y: curY });
     array.setLevel(this, level);
-    this._height = Math.max(this._height, curY + (Config.DataUnitHeight + arrayMargin));
+    this._height = Math.max(this._height, curY + arrayMargin);
     this.arrays.push(array);
     this._width = Math.max(this._width, x + array.width());
   };
@@ -93,7 +103,10 @@ export class ArrayLevel extends Level {
     this._y = y;
   };
 
-  reset = () => {};
+  reset = () => {
+    this._minX = Infinity;
+    this._count = 0;
+  };
 
   draw(): React.ReactNode {
     return (

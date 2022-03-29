@@ -40,7 +40,7 @@ export class FrameLevel extends Level {
     return this._y;
   }
   height(): number {
-    return Frame.heights[this.yCoord];
+    return Frame.heights[this.yCoord] + Config.FrameMarginY;
   }
   width(): number {
     return this._width;
@@ -51,7 +51,10 @@ export class FrameLevel extends Level {
    * @param node
    */
   addFrame = (node: EnvTreeNode) => {
-    const coordinate: number = Math.max(FrameLevel.maxXcoord, this.lastXcoord + 1);
+    // const coordinate: number = this.lastXcoord + 1;
+    // const coordinate: number = Math.max(FrameLevel.maxXcoord, this.lastXcoord + 1);
+    // array not at left of immediate parent frame.
+    const coordinate: number = Math.max(this.lastXcoord + 1, node.parent?.frame?.xCoord ?? 0);
     this.lastXcoord = coordinate;
     FrameLevel.maxXcoord = coordinate;
     node.level = this;
