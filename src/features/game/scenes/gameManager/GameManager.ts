@@ -9,6 +9,7 @@ import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
 import { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
+import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
 import GameDialogueStorageManager from '../../dialogue/GameDialogueStorageManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
@@ -64,12 +65,13 @@ class GameManager extends Phaser.Scene {
   private animationManager?: GameAnimationManager;
   private inputManager?: GameInputManager;
   private escapeManager?: GameEscapeManager;
-  private awardManager?: GameAwardsManager;
+  private collectibleManager?: GameAwardsManager;
+  private achievementManager?: GameAwardsManager;
   private logManager?: GameLogManager;
   private dialogueStorageManager?: GameDialogueStorageManager;
-  private dashboardManager?: GameDashboardManager;
   private toolbarManager?: GameToolbarManager;
   private taskLogManager?: GameTaskLogManager;
+  private dashboardManager?: GameDashboardManager;
 
   constructor() {
     super('GameManager');
@@ -98,12 +100,28 @@ class GameManager extends Phaser.Scene {
     this.animationManager = new GameAnimationManager();
     this.popUpManager = new GamePopUpManager();
     this.escapeManager = new GameEscapeManager(this);
-    this.awardManager = new GameAwardsManager(this);
+    this.collectibleManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+    );
+    this.achievementManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+    );
     this.logManager = new GameLogManager(this);
     this.dialogueStorageManager = new GameDialogueStorageManager();
-    this.dashboardManager = new GameDashboardManager(this);
     this.toolbarManager = new GameToolbarManager(this);
     this.taskLogManager = new GameTaskLogManager(this);
+    this.dashboardManager = new GameDashboardManager(
+      this,
+      [
+        DashboardPage.Log,
+        DashboardPage.Tasks,
+        DashboardPage.Collectibles,
+        DashboardPage.Achievements
+      ],
+      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
+    );
   }
 
   //////////////////////
@@ -243,7 +261,7 @@ class GameManager extends Phaser.Scene {
   }
 
   /**
-   * Bind escape menu and awards menu to keyboard triggers.
+   * Bind escape menu and dashboard to keyboard triggers.
    */
   private bindKeyboardTriggers() {
     this.getInputManager().registerKeyboardListener(
@@ -375,12 +393,13 @@ class GameManager extends Phaser.Scene {
   public getAnimationManager = () => mandatory(this.animationManager);
   public getPopupManager = () => mandatory(this.popUpManager);
   public getEscapeManager = () => mandatory(this.escapeManager);
-  public getAwardManager = () => mandatory(this.awardManager);
+  public getCollectibleManager = () => mandatory(this.collectibleManager);
+  public getAchievementManager = () => mandatory(this.achievementManager);
   public getLogManager = () => mandatory(this.logManager);
   public getDialogueStorageManager = () => mandatory(this.dialogueStorageManager);
-  public getDashboardManager = () => mandatory(this.dashboardManager);
   public getToolbarManager = () => mandatory(this.toolbarManager);
   public getTaskLogManager = () => mandatory(this.taskLogManager);
+  public getDashboardManager = () => mandatory(this.dashboardManager);
 }
 
 export default GameManager;
