@@ -370,11 +370,7 @@ class GameStateManager {
    * @returns {boolean}
    */
   public isObjectiveComplete(key: string): boolean {
-    const isComplete = this.checkpointObjective.getObjectiveState(key);
-    if (isComplete === undefined || isComplete) {
-      return true;
-    }
-    return false;
+    return this.checkpointObjective.getObjectiveState(key);
   }
 
   /**
@@ -412,11 +408,7 @@ class GameStateManager {
    * @returns {boolean}
    */
   public isTaskComplete(key: string): boolean {
-    const isComplete = this.checkpointTask.getTaskState(key);
-    if (isComplete === undefined || isComplete) {
-      return true;
-    }
-    return false;
+    return this.checkpointTask.getTaskState(key);
   }
 
   /**
@@ -483,7 +475,6 @@ class GameStateManager {
    * @returns {ItemId[]}
    */
   public getIncompleteTasks(): ItemId[] {
-    console.log(convertMapToArray(this.checkpointTask.getAllIncompleteTasks()));
     return convertMapToArray(this.checkpointTask.getAllIncompleteTasks());
   }
 

@@ -71,8 +71,12 @@ class GameTask {
    *
    * @param key key of the task
    */
-  public getTaskState(key: string): boolean | undefined {
-    return this.tasks.get(key);
+  public getTaskState(key: string): boolean {
+    const taskState = this.tasks.get(key);
+    if (taskState === undefined) {
+      throw new Error(`Cannot find task with the given task id "${key}"`);
+    }
+    return taskState;
   }
 
   /**
@@ -81,8 +85,12 @@ class GameTask {
    *
    * @param key key of the task
    */
-  public getTaskDetail(key: string): TaskDetail | undefined {
-    return this.taskDetails.get(key);
+  public getTaskDetail(key: string): TaskDetail {
+    const taskDetail = this.taskDetails.get(key);
+    if (taskDetail === undefined) {
+      throw new Error(`Cannot find task with the given task id "${key}"`);
+    }
+    return taskDetail;
   }
 
   /**
