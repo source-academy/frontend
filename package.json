@@ -36,7 +36,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/react-syntax-highlighter": "^13.5.2",
     "@types/uuid": "^8.3.4",
-    "ace-builds": "^1.4.13",
+    "ace-builds": "^1.4.14",
     "acorn": "^8.6.0",
     "ag-grid-community": "^26.2.1",
     "ag-grid-react": "^26.2.0",
