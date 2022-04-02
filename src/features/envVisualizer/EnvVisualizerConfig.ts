@@ -21,6 +21,8 @@ export enum Config {
 
   DataMinWidth = 20,
   DataUnitWidth = 40,
+  DataUnitPaddingY = 40,
+  DataUnitPaddingX = 50,
   DataUnitHeight = 40,
   DataCornerRadius = 3,
   DataHitStrokeWidth = 5,
@@ -41,6 +43,7 @@ export enum Config {
   ArrowStrokeWidth = 1,
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
+  ArrowUnhoveredOpacity = 0.8,
   ArrowCornerRadius = 10,
   ArrowMinHeight = 100,
   ArrowNumLanes = 5,

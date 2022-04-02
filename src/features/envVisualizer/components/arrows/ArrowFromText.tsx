@@ -18,7 +18,10 @@ export class ArrowFromText extends GenericArrow {
     const steps: StepsArray = [(x, y) => [x + source.width(), y + source.height() / 2]];
     if (target instanceof ArrayValue) {
       // Case where there's a single column of frames, so arrays are beside frames.
-      const yOffset = (source.y() >= target.y() ? 0.5 : -0.5) * Config.DataUnitHeight;
+      const yOffset =
+        source.x() < target.x() && target.x() - source.x() < 500
+          ? 0
+          : (source.y() >= target.y() ? 0.5 : -0.5) * Config.DataUnitHeight;
       if (Frame.maxXCoord <= 0) {
         // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
         steps.push((x, y) => [

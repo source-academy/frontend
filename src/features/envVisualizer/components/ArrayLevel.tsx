@@ -7,6 +7,7 @@ import { Layout } from '../EnvVisualizerLayout';
 import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';
+import { Value } from './values/Value';
 
 /** this class encapsulates a level of arrays to be drawn between two frame levels */
 export class ArrayLevel extends Level {
@@ -68,11 +69,24 @@ export class ArrayLevel extends Level {
     // set highest allowed y-position to highest existing y-position in group of arrays connected to array.
 
     let level = array.parentArray?.arrayLevelY ?? 0;
+    let width = 0;
+    let tail: Value = array;
+    const visitedTail: Value[] = [];
+    while (tail instanceof ArrayValue) {
+      if (visitedTail.includes(tail)) {
+        break;
+      }
+      visitedTail.push(tail);
+      width += Config.DataUnitPaddingX + tail.units.length * Config.DataUnitWidth;
+      if (tail.units.length > 0 && tail.units[tail.units.length - 1] instanceof ArrayValue) {
+        tail = tail.units[tail.units.length - 1].value;
+      }
+    }
     // Determine the highest allowed y-position for new array
     positions: for (const positions of this.position.slice(level)) {
       for (const position of positions) {
         // Prevent new arrays from being created above existing arrays in level
-        if (position[0] < x + array.width() + Config.DataMinWidth && position[1] > x) {
+        if (position[0] < x + width + Config.DataMinWidth && position[1] > x) {
           level++;
           continue positions;
         } else {
@@ -87,7 +101,7 @@ export class ArrayLevel extends Level {
     this.position[level] = this.position[level] || [];
     this.position[level].push([x, x + array.width() + Config.DataUnitWidth / 2]);
     this.position[level].sort((a, b) => a[0] - b[0]);
-    const arrayMargin = Config.DataUnitHeight;
+    const arrayMargin = Config.DataUnitPaddingY;
     const curY = this._y + level * Config.DataUnitHeight + (level + 1) * arrayMargin;
     array.updatePosition({ x, y: curY });
     array.setLevel(this, level);

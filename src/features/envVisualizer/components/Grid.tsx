@@ -94,10 +94,8 @@ export class Grid implements Visible {
     nodes.forEach(node => {
       this.frameLevels[node[0]].addFrame(node[1]);
     });
-
     Layout.values.forEach((v, d, m) => {
-      const isArray = v instanceof ArrayValue;
-      if (isArray) {
+      if (v instanceof ArrayValue) {
         let bindings = v.referencedBy.filter(r => r instanceof Binding) as Binding[];
         let p: ArrayUnit = v.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
         const belongsToFrame = v.referencedBy[0] instanceof Binding;
@@ -130,10 +128,10 @@ export class Grid implements Visible {
         );
         if (belongsToFrame) {
           const y = (v.referencedBy[0] as Binding).frame.yCoord;
-          // array close to first declaration
+          // array close to first declaration, aligned to the frame to its right for clarity.
           const x =
             Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
-            0.6 * Config.FrameMarginX;
+            0.8 * Config.FrameMarginX;
           // array at horizontal mean of bindings
           // const meanX = (xCoordSum / count);
           // const x =
@@ -146,7 +144,7 @@ export class Grid implements Visible {
           const x =
             v.referencedBy[0].x() +
             (v.referencedBy[0] instanceof ArrayUnit && v.referencedBy[0].isLastUnit
-              ? Config.DataUnitWidth * 2
+              ? Config.DataUnitWidth + Config.DataUnitPaddingX
               : 0);
           this.arrayLevels[Math.floor(y)].addArray(v, x);
         }

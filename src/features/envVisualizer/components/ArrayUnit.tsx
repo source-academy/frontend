@@ -34,6 +34,7 @@ export class ArrayUnit implements Visible {
   ref: RefObject<any> = React.createRef();
 
   parent: ArrayValue;
+  arrow: Arrow | undefined = undefined;
 
   constructor(
     /** index of this unit in its parent */
@@ -113,12 +114,11 @@ export class ArrayUnit implements Visible {
       cornerRadius.upperLeft = cornerRadius.lowerLeft = Number(Config.DataCornerRadius);
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Number(Config.DataCornerRadius);
-    let arrow: Arrow | undefined = undefined;
     if (!(this.value instanceof PrimitiveValue)) {
-      arrow = Arrow.from(this).to(this.value);
-      this.parent.addArrow(arrow);
+      this.arrow = Arrow.from(this).to(this.value);
+      this.parent.addArrow(this.arrow);
       if (this.value instanceof ArrayValue) {
-        this.value.addArrow(arrow);
+        this.value.addArrow(this.arrow);
       }
     }
 
@@ -145,7 +145,7 @@ export class ArrayUnit implements Visible {
         />
         {!(this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
           this.value.draw()}
-        {arrow && arrow.draw()}
+        {this.arrow && this.arrow.draw()}
       </React.Fragment>
     );
   }

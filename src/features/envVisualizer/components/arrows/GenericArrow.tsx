@@ -29,7 +29,7 @@ export class GenericArrow implements Arrow {
   private _width: number = 0;
   private _path: string = '';
   private selected: boolean = false;
-  readonly unhovered_opacity: number = 0.8;
+  readonly unhovered_opacity: number = Config.ArrowUnhoveredOpacity;
   readonly hovered_opacity: number = 1;
 
   constructor(source: Visible) {
@@ -154,10 +154,10 @@ export class GenericArrow implements Arrow {
       let n = 0;
       while (n < points.length - 4) {
         const [xa, ya, xb, yb, xc, yc] = points.slice(n, n + 6);
-        const dx1 = xb - xa;
-        const dx2 = xc - xb;
-        const dy1 = yb - ya;
-        const dy2 = yc - yb;
+        const dx1 = (xb - xa) / 2;
+        const dx2 = (xc - xb) / 2;
+        const dy1 = (yb - ya) / 2;
+        const dy2 = (yc - yb) / 2;
         const r1 = Math.sqrt(Math.pow(dx1, 2) + Math.pow(dy1, 2)) / 2;
         const r2 = Math.sqrt(Math.pow(dx2, 2) + Math.pow(dy2, 2)) / 2;
         const br = Math.min(Config.ArrowCornerRadius, r1, r2);
