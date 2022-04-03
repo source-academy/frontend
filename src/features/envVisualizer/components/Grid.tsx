@@ -161,7 +161,7 @@ export class Grid implements Visible {
             Frame.cumWidths[(b as FrameLevel).lastXcoord + 1] <= arrayLevel.minX()
               ? 0
               : Frame.heights[Math.floor(i / 2)] +
-                (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY : 0);
+                (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY / 2 : 0);
         } else {
           const frameLevel = this.frameLevels[Math.floor(i / 2)] as FrameLevel;
           height =

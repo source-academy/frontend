@@ -28,7 +28,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
     if (target instanceof FnValue || target instanceof GlobalFnValue) {
-      if (Math.abs(target.y() - source.y()) < Config.DataUnitHeight) {
+      if (Math.abs(target.y() - source.y()) < Config.DataUnitHeight * 2) {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
         steps.push((x, y) => [target.centerX + Config.FnRadius * 2 + Config.FnRadius, target.y()]);
         steps.push((x, y) => [x - Config.FnRadius, y]);

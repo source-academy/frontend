@@ -78,7 +78,7 @@ export class ArrayLevel extends Level {
       }
       visitedTail.push(tail);
       width += Config.DataUnitPaddingX + tail.units.length * Config.DataUnitWidth;
-      if (tail.units.length > 0 && tail.units[tail.units.length - 1] instanceof ArrayValue) {
+      if (tail.units.length > 0 && tail.units[tail.units.length - 1].value instanceof ArrayValue) {
         tail = tail.units[tail.units.length - 1].value;
       }
     }
