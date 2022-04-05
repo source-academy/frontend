@@ -1,7 +1,7 @@
 import { Constants } from '../commons/CommonConstants';
 import { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
-import { GamePhaseType } from './GamePhaseTypes';
+import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
 
 /**
  * State machine in charge of keeping track
@@ -164,6 +164,15 @@ export default class GamePhaseManager {
    */
   public isCurrentPhase(phase: GamePhaseType): boolean {
     return this.getCurrentPhase() === phase;
+  }
+
+  /**
+   * Checks whether the current phase is a terminal phase.
+   *
+   * @returns {boolean}
+   */
+  public isCurrentPhaseTerminal(): boolean {
+    return Object.values(GameTerminalPhaseType).includes(this.getCurrentPhase());
   }
 
   /**
