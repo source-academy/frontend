@@ -17,7 +17,7 @@ const buttonConfigs: ToolbarButtonConfig[] = [
       const phaseManager = scene.getPhaseManager();
       if (phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
         await phaseManager.popPhase();
-      } else if (phaseManager.isCurrentPhase(GamePhaseType.Dashboard)) {
+      } else if (phaseManager.isCurrentPhaseTerminal()) {
         await phaseManager.swapPhase(GamePhaseType.EscapeMenu);
       } else {
         await phaseManager.pushPhase(GamePhaseType.EscapeMenu);
@@ -31,7 +31,7 @@ const buttonConfigs: ToolbarButtonConfig[] = [
       const phaseManager = scene.getPhaseManager();
       if (phaseManager.isCurrentPhase(GamePhaseType.Dashboard)) {
         await phaseManager.popPhase();
-      } else if (phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
+      } else if (phaseManager.isCurrentPhaseTerminal()) {
         await phaseManager.swapPhase(GamePhaseType.Dashboard);
       } else {
         await phaseManager.pushPhase(GamePhaseType.Dashboard);
