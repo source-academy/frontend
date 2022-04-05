@@ -4,6 +4,13 @@ import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
+import { Level as CompactLevel } from './compactComponents/Level';
+import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
+import { FnValue as CompactFnValue } from './compactComponents/values/FnValue';
+import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
+import { PrimitiveValue as CompactPrimitiveValue } from './compactComponents/values/PrimitiveValue';
+import { UnassignedValue as CompactUnassignedValue } from './compactComponents/values/UnassignedValue';
+import { Value as CompactValue } from './compactComponents/values/Value';
 import { Grid } from './components/Grid';
 import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
@@ -13,7 +20,13 @@ import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
-import { Data, EnvTree, EnvTreeNode, ReferenceType } from './EnvVisualizerTypes';
+import {
+  CompactReferenceType,
+  Data,
+  EnvTree,
+  EnvTreeNode,
+  ReferenceType
+} from './EnvVisualizerTypes';
 import {
   deepCopyTree,
   isArray,
@@ -29,9 +42,13 @@ import {
 /** this class encapsulates the logic for calculating the layout */
 export class Layout extends React.Component {
   /** the height of the stage */
-  static height: number;
-  /** the width of the stage */
-  static width: number;
+  static nonCompactHeight: number;
+  /** the width of the non-compact stage */
+  static nonCompactWidth: number;
+  /** the width of the compact stage */
+  static compactWidth: number;
+  /** the height of the compact stage */
+  static compactHeight: number;
   /** the visible height of the stage */
   static visibleHeight: number = window.innerHeight;
   /** the visible width of the stage */
@@ -49,12 +66,17 @@ export class Layout extends React.Component {
   static globalEnvNode: EnvTreeNode;
   /** grid of frames */
   static grid: Grid;
+  static compactLevels: CompactLevel[] = [];
+
   /** memoized values */
   static values = new Map<Data, Value>();
+  static compactValues = new Map<Data, CompactValue>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
   static currentLight: React.ReactNode;
+  static currentCompactDark: React.ReactNode;
+  static currentCompactLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -66,13 +88,15 @@ export class Layout extends React.Component {
     Layout.visibleHeight = height;
     if (
       Layout.stageRef.current !== null &&
-      (Math.min(Layout.width, window.innerWidth) > Layout.stageWidth ||
-        Math.min(Layout.height, window.innerHeight) > Layout.stageHeight)
+      (Math.min(Layout.width(), window.innerWidth) > Layout.stageWidth ||
+        Math.min(Layout.height(), window.innerHeight) > Layout.stageHeight)
     ) {
       Layout.currentLight = undefined;
       Layout.currentDark = undefined;
-      Layout.stageWidth = Math.min(Layout.width, window.innerWidth);
-      Layout.stageHeight = Math.min(Layout.height, window.innerHeight);
+      Layout.currentCompactLight = undefined;
+      Layout.currentCompactDark = undefined;
+      Layout.stageWidth = Math.min(Layout.width(), window.innerWidth);
+      Layout.stageHeight = Math.min(Layout.height(), window.innerHeight);
       Layout.stageRef.current.width(Layout.stageWidth);
       Layout.stageRef.current.height(Layout.stageHeight);
       EnvVisualizer.redraw();
@@ -100,6 +124,10 @@ export class Layout extends React.Component {
       v.reset();
     });
     Layout.values.clear();
+    Layout.compactValues.forEach((v, d) => {
+      v.reset();
+    });
+    Layout.compactValues.clear();
     Layout.key = 0;
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
@@ -113,8 +141,31 @@ export class Layout extends React.Component {
     Layout.initializeGrid();
 
     // calculate height and width by considering lowest and widest level
-    Layout.height = Math.max(Config.CanvasMinHeight, this.grid.height() + Config.CanvasPaddingY);
-    Layout.width = Math.max(Config.CanvasMinWidth, this.grid.width() + Config.CanvasPaddingX * 2);
+    if (EnvVisualizer.getCompactLayout()) {
+      const lastLevel = Layout.compactLevels[Layout.compactLevels.length - 1];
+      Layout.compactHeight = Math.max(
+        Config.CanvasMinHeight,
+        lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY
+      );
+
+      Layout.compactWidth = Math.max(
+        Config.CanvasMinWidth,
+        Layout.compactLevels.reduce<number>(
+          (maxWidth, level) => Math.max(maxWidth, level.width()),
+          0
+        ) +
+          Config.CanvasPaddingX * 2
+      );
+    } else {
+      Layout.nonCompactHeight = Math.max(
+        Config.CanvasMinHeight,
+        this.grid.height() + Config.CanvasPaddingY
+      );
+      Layout.nonCompactWidth = Math.max(
+        Config.CanvasMinWidth,
+        this.grid.width() + Config.CanvasPaddingX * 2
+      );
+    }
   }
 
   /** remove program environment containing predefined functions */
@@ -189,6 +240,14 @@ export class Layout extends React.Component {
     };
   }
 
+  public static width(): number {
+    return EnvVisualizer.getCompactLayout() ? Layout.compactWidth : Layout.nonCompactWidth;
+  }
+
+  public static height(): number {
+    return EnvVisualizer.getCompactLayout() ? Layout.compactHeight : Layout.nonCompactHeight;
+  }
+
   /** initializes grid */
   private static initializeGrid(): void {
     const getNextChildren = (c: EnvTreeNode): EnvTreeNode[] => {
@@ -203,28 +262,52 @@ export class Layout extends React.Component {
       }
     };
 
-    const frontiers: EnvTreeNode[][] = [];
-    let frontier = [Layout.globalEnvNode];
+    if (EnvVisualizer.getCompactLayout()) {
+      this.compactLevels = [];
+      let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
+      let prevLevel: CompactLevel | null = null;
+      let currLevel: CompactLevel;
 
-    while (frontier.length > 0) {
-      frontiers.push(frontier);
+      while (frontier.length > 0) {
+        currLevel = new CompactLevel(prevLevel, frontier);
+        this.compactLevels.push(currLevel);
+        const nextFrontier: EnvTreeNode[] = [];
 
-      const nextFrontier: EnvTreeNode[] = [];
-
-      frontier.forEach(e => {
-        e.children.forEach(c => {
-          const nextChildren = getNextChildren(c as EnvTreeNode);
-          nextChildren.forEach(c => (c.parent = e));
-          nextFrontier.push(...nextChildren);
+        frontier.forEach(e => {
+          e.children.forEach(c => {
+            const nextChildren = getNextChildren(c as EnvTreeNode);
+            nextChildren.forEach(c => (c.parent = e));
+            nextFrontier.push(...nextChildren);
+          });
         });
-      });
 
-      frontier = nextFrontier;
-    }
-    if (this.grid === undefined) {
-      this.grid = new Grid(frontiers);
+        prevLevel = currLevel;
+        frontier = nextFrontier;
+      }
     } else {
-      this.grid.update(frontiers);
+      const frontiers: EnvTreeNode[][] = [];
+      let frontier = [Layout.globalEnvNode];
+
+      while (frontier.length > 0) {
+        frontiers.push(frontier);
+
+        const nextFrontier: EnvTreeNode[] = [];
+
+        frontier.forEach(e => {
+          e.children.forEach(c => {
+            const nextChildren = getNextChildren(c as EnvTreeNode);
+            nextChildren.forEach(c => (c.parent = e));
+            nextFrontier.push(...nextChildren);
+          });
+        });
+
+        frontier = nextFrontier;
+      }
+      if (this.grid === undefined) {
+        this.grid = new Grid(frontiers);
+      } else {
+        this.grid.update(frontiers);
+      }
     }
   }
 
@@ -266,14 +349,52 @@ export class Layout extends React.Component {
     }
   }
 
+  /** memoize `Value` (used to detect circular references in non-primitive `Value`) */
+  static memoizeCompactValue(value: CompactValue): void {
+    Layout.compactValues.set(value.data, value);
+  }
+
+  /** create an instance of the corresponding `Value` if it doesn't already exists,
+   *  else, return the existing value */
+  static createCompactValue(data: Data, reference: CompactReferenceType): CompactValue {
+    if (isUnassigned(data)) {
+      return new CompactUnassignedValue([reference]);
+    } else if (isPrimitiveData(data)) {
+      return new CompactPrimitiveValue(data, [reference]);
+    } else {
+      // try to find if this value is already created
+      const existingValue = Layout.compactValues.get(data);
+      if (existingValue) {
+        existingValue.addReference(reference);
+        return existingValue;
+      }
+
+      // else create a new one
+      let newValue: CompactValue = new CompactPrimitiveValue(null, [reference]);
+      if (isArray(data)) {
+        newValue = new CompactArrayValue(data, [reference]);
+      } else if (isFunction(data)) {
+        if (isFn(data)) {
+          // normal JS Slang function
+          newValue = new CompactFnValue(data, [reference]);
+        } else {
+          // function from the global env (has no extra props such as env, fnName)
+          newValue = new CompactGlobalFnValue(data, [reference]);
+        }
+      }
+
+      return newValue;
+    }
+  }
+
   /**
    * Scrolls diagram to top left, and saves the diagram as multiple images of width < MaxExportWidth.
    */
   static exportImage = () => {
     Layout.stageRef.current?.y(0);
     Layout.stageRef.current?.x(0);
-    const horizontalImages = Math.ceil(Layout.width / Config.MaxExportWidth);
-    const verticalImages = Math.ceil(Layout.height / Config.MaxExportHeight);
+    const horizontalImages = Math.ceil(Layout.width() / Config.MaxExportWidth);
+    const verticalImages = Math.ceil(Layout.height() / Config.MaxExportHeight);
     const download_images = () => {
       const download_next = (n: number) => {
         if (n >= horizontalImages * verticalImages) {
@@ -287,10 +408,10 @@ export class Layout extends React.Component {
         const x = n % horizontalImages;
         const y = Math.floor(n / horizontalImages);
         Layout.stageRef.current?.width(
-          Math.min(Layout.width - x * Config.MaxExportWidth, Config.MaxExportWidth)
+          Math.min(Layout.width() - x * Config.MaxExportWidth, Config.MaxExportWidth)
         );
         Layout.stageRef.current?.height(
-          Math.min(Layout.height - y * Config.MaxExportHeight, Config.MaxExportHeight)
+          Math.min(Layout.height() - y * Config.MaxExportHeight, Config.MaxExportHeight)
         );
         const a = document.createElement('a');
         a.style.display = 'none';
@@ -316,9 +437,9 @@ export class Layout extends React.Component {
 
   private static saveButtonText(): String {
     return `Save ${
-      Layout.width > Config.MaxExportWidth || Layout.height > Config.MaxExportHeight
-        ? Math.ceil(Layout.width / Config.MaxExportWidth) *
-            Math.ceil(Layout.height / Config.MaxExportHeight) +
+      Layout.width() > Config.MaxExportWidth || Layout.height() > Config.MaxExportHeight
+        ? Math.ceil(Layout.width() / Config.MaxExportWidth) *
+            Math.ceil(Layout.height() / Config.MaxExportHeight) +
           ' images'
         : 'image'
     }`;
@@ -351,8 +472,8 @@ export class Layout extends React.Component {
             <div
               id="large-container"
               style={{
-                width: Layout.width,
-                height: Layout.height,
+                width: Layout.width(),
+                height: Layout.height(),
                 overflow: 'hidden',
                 backgroundColor: EnvVisualizer.getPrintableMode()
                   ? Config.PRINT_BACKGROUND.toString()
@@ -364,10 +485,34 @@ export class Layout extends React.Component {
                   <Button
                     large={true}
                     outlined={true}
-                    onClick={() => {
-                      EnvVisualizer.togglePrintableMode();
-                      EnvVisualizer.redraw();
+                    style={{
+                      backgroundColor: EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString(),
+                      opacity: 0.8,
+                      borderColor: EnvVisualizer.getPrintableMode()
+                        ? Config.SA_BLUE.toString()
+                        : Config.PRINT_BACKGROUND.toString()
                     }}
+                  >
+                    <Checkbox
+                      checked={EnvVisualizer.getCompactLayout()}
+                      label="Compact"
+                      style={{
+                        marginBottom: '0px',
+                        color: EnvVisualizer.getPrintableMode()
+                          ? Config.SA_BLUE.toString()
+                          : Config.PRINT_BACKGROUND.toString()
+                      }}
+                      onChange={() => {
+                        EnvVisualizer.toggleCompactLayout();
+                        EnvVisualizer.redraw();
+                      }}
+                    />
+                  </Button>
+                  <Button
+                    large={true}
+                    outlined={true}
                     style={{
                       backgroundColor: EnvVisualizer.getPrintableMode()
                         ? Config.PRINT_BACKGROUND.toString()
@@ -419,8 +564,8 @@ export class Layout extends React.Component {
                     {...ShapeDefaultProps}
                     x={0}
                     y={0}
-                    width={Layout.width}
-                    height={Layout.height}
+                    width={Layout.width()}
+                    height={Layout.height()}
                     fill={
                       EnvVisualizer.getPrintableMode()
                         ? Config.PRINT_BACKGROUND.toString()
@@ -429,7 +574,9 @@ export class Layout extends React.Component {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {Layout.grid.draw()}
+                  {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    Layout.compactLevels.map(level => level.draw())}
                 </Layer>
               </Stage>
             </div>
@@ -437,10 +584,18 @@ export class Layout extends React.Component {
         </div>
       );
       Layout.prevLayout = layout;
-      if (EnvVisualizer.getPrintableMode()) {
-        Layout.currentLight = layout;
+      if (EnvVisualizer.getCompactLayout()) {
+        if (EnvVisualizer.getPrintableMode()) {
+          Layout.currentCompactLight = layout;
+        } else {
+          Layout.currentCompactDark = layout;
+        }
       } else {
-        Layout.currentDark = layout;
+        if (EnvVisualizer.getPrintableMode()) {
+          Layout.currentLight = layout;
+        } else {
+          Layout.currentDark = layout;
+        }
       }
 
       return layout;

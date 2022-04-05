@@ -142,11 +142,24 @@ const codeSamples = [
 
 codeSamples.forEach((code, idx) => {
   test('EnvVisualizer calculates correct layout for code sample ' + idx, async () => {
+    if (EnvVisualizer.getCompactLayout()) {
+      EnvVisualizer.toggleCompactLayout();
+    }
     const context = createContext(4);
     await runInContext(code, context);
     Layout.setContext(context);
+
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];
+    Layout.compactLevels.forEach(({ frames }) => {
+      frames.forEach(({ environment, bindings }) => {
+        environmentsToTest.push(environment);
+        bindings.forEach(({ keyString, data }) => {
+          toTest.push(keyString);
+          toTest.push(data);
+        });
+      });
+    });
     Layout.grid.frameLevels.forEach(({ frames }) => {
       frames.forEach(({ environment, bindings, xCoord, yCoord }) => {
         environmentsToTest.push(environment);
@@ -158,14 +171,13 @@ codeSamples.forEach((code, idx) => {
         });
       });
     });
-
     environmentsToTest.forEach(environment => {
       expect(environment).toMatchSnapshot({
         id: expect.any(String)
       });
     });
     expect(toTest).toMatchSnapshot();
-    const checkLayout = () => {
+    const checkNonCompactLayout = () => {
       Layout.draw();
       Layout.values.forEach(v => {
         if (v instanceof GlobalFnValue || v instanceof FnValue) {
@@ -207,8 +219,15 @@ codeSamples.forEach((code, idx) => {
         }
       });
     };
-    checkLayout();
+    const checkCompactLayout = () => {
+      Layout.draw();
+    };
+    checkCompactLayout();
     EnvVisualizer.togglePrintableMode();
-    checkLayout();
+    checkCompactLayout();
+    EnvVisualizer.toggleCompactLayout();
+    checkNonCompactLayout();
+    EnvVisualizer.togglePrintableMode();
+    checkNonCompactLayout();
   });
 });

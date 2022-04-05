@@ -10,12 +10,19 @@ export default class EnvVisualizer {
   /** callback function to update the visualization state in the SideContentEnvVis component */
   private static setVis: SetVis;
   private static printableMode: boolean = false;
+  private static compactLayout: boolean = true;
   private static context: Context;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
   }
+  public static toggleCompactLayout(): void {
+    EnvVisualizer.compactLayout = !EnvVisualizer.compactLayout;
+  }
   public static getPrintableMode(): boolean {
     return EnvVisualizer.printableMode;
+  }
+  public static getCompactLayout(): boolean {
+    return EnvVisualizer.compactLayout;
   }
 
   /** SideContentEnvVis initializes this onMount with the callback function */
@@ -27,6 +34,7 @@ export default class EnvVisualizer {
 
   static clear() {
     Layout.values.clear();
+    Layout.compactValues.clear();
   }
 
   /** updates the visualization state in the SideContentEnvVis component based on
@@ -35,6 +43,8 @@ export default class EnvVisualizer {
     EnvVisualizer.context = context;
     Layout.currentDark = undefined;
     Layout.currentLight = undefined;
+    Layout.currentCompactDark = undefined;
+    Layout.currentCompactLight = undefined;
     if (!this.setVis) throw new Error('env visualizer not initialized');
 
     Layout.setContext(context);
@@ -46,9 +56,30 @@ export default class EnvVisualizer {
   }
 
   static redraw() {
-    if (EnvVisualizer.getPrintableMode() && Layout.currentLight !== undefined) {
+    // checks if the required diagram exists, and updates the dom node using setVis
+    if (
+      EnvVisualizer.getCompactLayout() &&
+      EnvVisualizer.getPrintableMode() &&
+      Layout.currentCompactLight !== undefined
+    ) {
+      this.setVis(Layout.currentCompactLight);
+    } else if (
+      EnvVisualizer.getCompactLayout() &&
+      !EnvVisualizer.getPrintableMode() &&
+      Layout.currentCompactDark !== undefined
+    ) {
+      this.setVis(Layout.currentCompactDark);
+    } else if (
+      !EnvVisualizer.getCompactLayout() &&
+      EnvVisualizer.getPrintableMode() &&
+      Layout.currentLight !== undefined
+    ) {
       this.setVis(Layout.currentLight);
-    } else if (!EnvVisualizer.getPrintableMode() && Layout.currentDark !== undefined) {
+    } else if (
+      !EnvVisualizer.getCompactLayout() &&
+      !EnvVisualizer.getPrintableMode() &&
+      Layout.currentDark !== undefined
+    ) {
       this.setVis(Layout.currentDark);
     } else {
       Layout.setContext(EnvVisualizer.context);
