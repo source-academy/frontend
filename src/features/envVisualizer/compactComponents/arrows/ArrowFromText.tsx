@@ -12,7 +12,7 @@ export class ArrowFromText extends GenericArrow {
 
     const steps: StepsArray = [(x, y) => [x + from.width(), y + from.height() / 2]];
 
-    if (to.x < from.x) {
+    if (to.x() < from.x()) {
       if (to instanceof ArrayValue) {
         steps.push((x, y) => [x + CompactConfig.TextMargin, y]);
         steps.push((x, y) => [x, to.y() - CompactConfig.DataUnitHeight / 3]);
