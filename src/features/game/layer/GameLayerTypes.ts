@@ -11,7 +11,6 @@ export enum Layer {
   BBox,
   Escape,
   Selector,
-  Collectibles,
   Dashboard,
   WorkerMessage
 }
@@ -20,7 +19,6 @@ export enum Layer {
 export const defaultLayerSequence = [
   Layer.Background,
   Layer.Selector,
-  Layer.Collectibles,
   Layer.Objects,
   Layer.BBox,
   Layer.Character,
