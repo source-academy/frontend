@@ -1,7 +1,7 @@
+/* eslint-disable simple-import-sort/imports */
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext } from 'react';
-
 import {
   AchievementContext,
   getAbilityBackground,
@@ -15,11 +15,11 @@ import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
   focusUuid: string;
+  comments: string;
 };
 
 function AchievementView(props: AchievementViewProps) {
   const { focusUuid } = props;
-
   const inferencer = useContext(AchievementContext);
 
   if (focusUuid === '') {
@@ -60,17 +60,18 @@ function AchievementView(props: AchievementViewProps) {
           ))}
         </span>
       </div>
-      {/* Demo Purposes */}
-      <AchievementCommentCard comment={'Hello!'} />
-      {/* Demo Purposes */}
 
-      {false && <AchievementViewGoal goals={goals} />}
-      {false && status === AchievementStatus.COMPLETED && (
+      <AchievementViewGoal goals={goals} />
+      {status === AchievementStatus.COMPLETED && (
         <>
           <hr />
           <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />
         </>
       )}
+
+      {/* Demo Purposes */}
+      <AchievementCommentCard comment={props.comments} />
+      {/* Demo Purposes */}
     </div>
   );
 }
