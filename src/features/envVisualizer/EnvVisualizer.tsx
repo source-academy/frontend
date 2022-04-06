@@ -44,10 +44,6 @@ export default class EnvVisualizer {
   static drawEnv(context: Context) {
     // store environmentTree at last breakpoint.
     EnvVisualizer.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
-    Layout.currentDark = undefined;
-    Layout.currentLight = undefined;
-    Layout.currentCompactDark = undefined;
-    Layout.currentCompactLight = undefined;
     if (!this.setVis) throw new Error('env visualizer not initialized');
 
     Layout.setContext(context.runtime.environmentTree as EnvTree);

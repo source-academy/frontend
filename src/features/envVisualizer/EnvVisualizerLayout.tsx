@@ -118,6 +118,10 @@ export class Layout extends React.Component {
 
   /** processes the runtime context from JS Slang */
   static setContext(envTree: EnvTree): void {
+    Layout.currentLight = undefined;
+    Layout.currentDark = undefined;
+    Layout.currentCompactLight = undefined;
+    Layout.currentCompactDark = undefined;
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
