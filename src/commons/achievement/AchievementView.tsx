@@ -8,6 +8,7 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
+import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
@@ -59,8 +60,12 @@ function AchievementView(props: AchievementViewProps) {
           ))}
         </span>
       </div>
-      <AchievementViewGoal goals={goals} />
-      {status === AchievementStatus.COMPLETED && (
+      {/* Demo Purposes */}
+      <AchievementCommentCard comment={'Hello!'} />
+      {/* Demo Purposes */}
+
+      {false && <AchievementViewGoal goals={goals} />}
+      {false && status === AchievementStatus.COMPLETED && (
         <>
           <hr />
           <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />
