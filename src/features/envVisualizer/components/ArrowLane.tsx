@@ -98,7 +98,7 @@ export class ArrowLane {
       } else {
         return (
           Grid.cumHeights[this.id] -
-          Config.FrameMarginY * 0.5 +
+          Config.FrameMarginY * 0.6 +
           (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
         );
       }

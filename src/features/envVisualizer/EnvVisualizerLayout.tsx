@@ -494,6 +494,10 @@ export class Layout extends React.Component {
                         ? Config.SA_BLUE.toString()
                         : Config.PRINT_BACKGROUND.toString()
                     }}
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleCompactLayout();
+                      EnvVisualizer.redraw();
+                    }}
                   >
                     <Checkbox
                       checked={EnvVisualizer.getCompactLayout()}
@@ -503,10 +507,6 @@ export class Layout extends React.Component {
                         color: EnvVisualizer.getPrintableMode()
                           ? Config.SA_BLUE.toString()
                           : Config.PRINT_BACKGROUND.toString()
-                      }}
-                      onChange={() => {
-                        EnvVisualizer.toggleCompactLayout();
-                        EnvVisualizer.redraw();
                       }}
                     />
                   </Button>
@@ -522,6 +522,10 @@ export class Layout extends React.Component {
                         ? Config.SA_BLUE.toString()
                         : Config.PRINT_BACKGROUND.toString()
                     }}
+                    onMouseUp={() => {
+                      EnvVisualizer.togglePrintableMode();
+                      EnvVisualizer.redraw();
+                    }}
                   >
                     <Checkbox
                       checked={EnvVisualizer.getPrintableMode()}
@@ -531,10 +535,6 @@ export class Layout extends React.Component {
                         color: EnvVisualizer.getPrintableMode()
                           ? Config.SA_BLUE.toString()
                           : Config.PRINT_BACKGROUND.toString()
-                      }}
-                      onChange={() => {
-                        EnvVisualizer.togglePrintableMode();
-                        EnvVisualizer.redraw();
                       }}
                     />
                   </Button>

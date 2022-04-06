@@ -28,7 +28,6 @@ export class ArrowFromText extends GenericArrow {
         ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
         y
       ]);
-
       // move to horizontal lane only if lane exists between source and target
       const potentialHorizontalLaneY = ArrowLane.getHorizontalLaneBeforeTarget(
         target,
@@ -135,42 +134,8 @@ export class ArrowFromText extends GenericArrow {
         }
       }
     } else {
-      if (target.x() < source.x()) {
-        // move target the left of current frame above the binding.
-        steps.push((x, y) => [x + Config.TextMargin, y]);
-        steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
-
-        // vertical lane, horizontal lane, vertical lane,
-        steps.push((x, y) => [
-          ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
-          y
-        ]);
-        steps.push((x, y) => [
-          x,
-          ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
-        ]);
-        steps.push((x, y) => [
-          ArrowLane.getVerticalLaneBeforeTarget(target, x).getPosition(target),
-          y
-        ]);
-        steps.push((x, y) => [x, target.y()]);
-        steps.push((x, y) => [target.x(), y]);
-      } else {
-        steps.push((x, y) => [
-          ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
-          y
-        ]);
-        steps.push((x, y) => [
-          x,
-          ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
-        ]);
-        steps.push((x, y) => [
-          ArrowLane.getVerticalLaneBeforeTarget(target, x).getPosition(target),
-          y
-        ]);
-        steps.push((x, y) => [x, target.y()]);
-        steps.push((x, y) => [target.x(), y]);
-      }
+      steps.push((x, y) => [x, target.y()]);
+      steps.push((x, y) => [target.x(), y]);
     }
     return steps;
   }

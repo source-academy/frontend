@@ -94,6 +94,11 @@ export class Grid implements Visible {
     nodes.forEach(node => {
       this.frameLevels[node[0]].addFrame(node[1]);
     });
+    this.frameLevels.forEach(level => {
+      level.frames.forEach(frame => {
+        frame.updatePosition(Frame.cumWidths[frame.xCoord], frame.y());
+      });
+    });
     Layout.values.forEach((v, d, m) => {
       if (v instanceof ArrayValue) {
         let bindings = v.referencedBy.filter(r => r instanceof Binding) as Binding[];

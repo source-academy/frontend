@@ -56,7 +56,7 @@ export class FrameLevel extends Level {
     // array not at left of immediate parent frame.
     const coordinate: number = Math.max(this.lastXcoord + 1, node.parent?.frame?.xCoord ?? 0);
     this.lastXcoord = coordinate;
-    FrameLevel.maxXcoord = coordinate;
+    FrameLevel.maxXcoord = Math.max(FrameLevel.maxXcoord, coordinate);
     node.level = this;
     if (this.frames[coordinate] !== undefined) {
       this.frames[coordinate].update(node);
