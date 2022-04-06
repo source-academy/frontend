@@ -4,7 +4,6 @@ import { ArrayUnit } from '../ArrayUnit';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
-import { Arrow } from './Arrow';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
@@ -49,58 +48,25 @@ export class ArrowFromArrayUnit extends GenericArrow {
         steps.push((x, y) => [target.x(), target.y() + Config.DataUnitHeight / 2]);
       } else {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
-        const yOffset =
-          (source.y() < target.y()
-            ? -0.5
-            : source.y() > target.y()
-            ? 0.5
-            : source.x() <= target.x()
-            ? -0.5
-            : 0.5) * Config.DataUnitHeight;
-        if (source.x() > target.x() + target.units.length * Config.DataUnitWidth) {
-          steps.push((x, y) => [
-            target.x() +
-              Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
-              Config.DataMinWidth,
-            target.y() + Config.DataUnitHeight / 2 + yOffset
-          ]);
-          steps.push((x, y) => [x - Config.DataMinWidth, y - yOffset]);
-        } else if (source.x() < target.x()) {
-          steps.push((x, y) => [
-            target.x() - Config.DataMinWidth,
-            target.y() + Config.DataUnitHeight / 2 + yOffset
-          ]);
-          steps.push((x, y) => [x + Config.DataMinWidth, y - yOffset]);
-        } else {
-          steps.push((x, y) => {
-            const index = Math.floor((source.x() - target.x()) / Config.DataUnitWidth);
-            if (
-              target.units.length >= index &&
-              target.units[index] &&
-              target.units[index].arrow !== undefined
-            ) {
-              const targetUnitArrow = ((target.units[index].arrow as Arrow).path() ?? '').split(
-                ' '
-              );
-              // check if arrow will overlap with arrow pointing out of array.
-              const arrowClash =
-                targetUnitArrow.length > 9 &&
-                targetUnitArrow[7] === targetUnitArrow[4] &&
-                targetUnitArrow[8] < targetUnitArrow[5];
-              return [
-                target.x() +
-                  Config.DataUnitWidth * index +
-                  (arrowClash ? 0 : Config.DataUnitWidth / 2),
-                target.y() + Config.DataUnitHeight / 2 + yOffset
-              ];
-            } else {
-              return [
-                target.x() + Config.DataUnitWidth * index + Config.DataUnitWidth / 2,
-                target.y() + Config.DataUnitHeight / 2 + yOffset
-              ];
-            }
-          });
-        }
+
+        steps.push((x, y) => {
+          const index = Math.floor((x - target.x()) / Config.DataUnitWidth);
+          const newY = target.y() + (y <= target.y() ? 0 : 1) * Config.DataUnitHeight;
+          if (x < target.x()) {
+            return [target.x(), newY];
+          } else if (x >= target.x() + target.units.length * Config.DataUnitWidth) {
+            return [target.x() + target.units.length * Config.DataUnitWidth, newY];
+          } else {
+            return [
+              target.x() +
+                Config.DataUnitWidth * index +
+                (Math.abs(source.y() - target.y()) <= Config.DataUnitHeight * 3
+                  ? Config.DataUnitWidth / 2
+                  : 0),
+              newY
+            ];
+          }
+        });
       }
     } else {
       // this shouldn't happen.

@@ -25,8 +25,26 @@ export class ArrowLane {
     ArrowLane.arrayLevelLanes = [];
   };
 
-  static getVerticalLane = (target: Visible, currentX: number): ArrowLane => {
-    const xCoord = Frame.lastXCoordBelow(currentX) + (currentX > target.x() ? 0 : 1);
+  static getVerticalLaneBeforeTarget = (target: Visible, currentX: number): ArrowLane => {
+    // get the lane between currentX and target right before the target
+    let xCoord = Frame.lastXCoordBelow(target.x()) + (currentX > target.x() ? 0 : 1);
+    const x = Frame.cumWidths[xCoord];
+    if (target.x() > x && currentX > x) {
+      xCoord++;
+    }
+    if (ArrowLane.verticalLanes[xCoord] === undefined) {
+      ArrowLane.verticalLanes[xCoord] = new ArrowLane(xCoord, true);
+    }
+    return ArrowLane.verticalLanes[xCoord];
+  };
+
+  static getVerticalLaneAfterSource = (target: Visible, currentX: number): ArrowLane => {
+    // get the lane between currentX and target right after currentX
+    let xCoord = Frame.lastXCoordBelow(currentX) + (currentX > target.x() ? 0 : 1);
+    const x = Frame.cumWidths[xCoord];
+    if (target.x() > x && currentX > x) {
+      xCoord++;
+    }
     if (ArrowLane.verticalLanes[xCoord] === undefined) {
       ArrowLane.verticalLanes[xCoord] = new ArrowLane(xCoord, true);
     }
@@ -34,6 +52,7 @@ export class ArrowLane {
   };
 
   static getHorizontalLaneBeforeTarget = (target: Visible, currentY: number): ArrowLane => {
+    // get the horizontal lane between currentY and target right before target
     const yCoord = Grid.lastYCoordBelow(target.y()) + (currentY > target.y() ? 1 : 0);
     if (ArrowLane.horizontalLanes[yCoord] === undefined) {
       ArrowLane.horizontalLanes[yCoord] = new ArrowLane(yCoord, false);
@@ -42,6 +61,7 @@ export class ArrowLane {
   };
 
   static getHorizontalLaneAfterSource = (target: Visible, currentY: number): ArrowLane => {
+    // get the horizontal lane between currentY and target right after currentY
     const yCoord = Grid.lastYCoordBelow(currentY) + (currentY > target.y() ? 0 : 1);
     if (ArrowLane.horizontalLanes[yCoord] === undefined) {
       ArrowLane.horizontalLanes[yCoord] = new ArrowLane(yCoord, false);
@@ -78,8 +98,8 @@ export class ArrowLane {
       } else {
         return (
           Grid.cumHeights[this.id] -
-          Config.FrameMarginY * 0.95 +
-          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.55
+          Config.FrameMarginY * 0.5 +
+          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
         );
       }
     }

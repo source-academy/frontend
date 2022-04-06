@@ -17,54 +17,74 @@ export class ArrowFromText extends GenericArrow {
 
     const steps: StepsArray = [(x, y) => [x + source.width(), y + source.height() / 2]];
     if (target instanceof ArrayValue) {
-      // Case where there's a single column of frames, so arrays are beside frames.
-      const yOffset =
-        source.x() < target.x() && target.x() - source.x() < 500
-          ? 0
-          : (source.y() >= target.y() ? 0.5 : -0.5) * Config.DataUnitHeight;
-      if (Frame.maxXCoord <= 0) {
-        // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-        steps.push((x, y) => [
-          target.x() - Config.DataMinWidth,
-          target.y() + Config.DataUnitHeight / 2 + yOffset
-        ]);
-        steps.push((x, y) => [x + Config.DataMinWidth, y - yOffset]);
-      } else {
-        if (source.x() > target.x() + target.units.length * Config.DataUnitWidth) {
-          steps.push((x, y) => [x + Config.TextMargin, y]);
-          steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
-          steps.push((x, y) => [source.x() - Config.TextMargin - Config.TextPaddingX, y]);
-          // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-          // steps.push((x, y) => [x, ArrowLane.getHorizontalLaneAfterSource(target, y).getPosition(target)]);
-          steps.push((x, y) => [
-            target.x() +
-              Math.max(Config.DataMinWidth, target.units.length * Config.DataUnitWidth) +
-              Config.DataMinWidth,
-            target.y() + Config.DataUnitHeight / 2 + yOffset
-          ]);
-          steps.push((x, y) => [x - Config.DataMinWidth, y - yOffset]);
-        } else if (source.x() < target.x()) {
-          steps.push((x, y) => [x + Config.TextMargin + Config.TextPaddingX, y]);
-          // steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
-          // steps.push((x, y) => [x, ArrowLane.getHorizontalLaneAfterSource(target, y).getPosition(target)]);
-          steps.push((x, y) => [
-            target.x() - Config.DataMinWidth,
-            target.y() + Config.DataUnitHeight / 2 + yOffset
-          ]);
-          steps.push((x, y) => [x + Config.DataMinWidth, y - yOffset]);
-        } else {
-          steps.push((x, y) => [
-            target.x() +
-              Config.DataUnitWidth * Math.floor((source.x() - target.x()) / Config.DataUnitWidth),
-            target.y() + Config.DataUnitHeight / 2 + yOffset
-          ]);
-        }
+      steps.push((x, y) => [x + Config.TextMargin + Config.TextPaddingX, y]); // Spacing to right of text in frame
+      steps.push((x, y) => {
+        const newX = ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target);
+        return newX < x
+          ? [x, y - Math.sign(source.y() - target.y()) * (source.height() + Config.TextMargin)]
+          : [x, y];
+      }); // if the potential vertical lane is to the left, loop above or below text to allow arrow to move left.
+      steps.push((x, y) => [
+        ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
+        y
+      ]);
+
+      // move to horizontal lane only if lane exists between source and target
+      const potentialHorizontalLaneY = ArrowLane.getHorizontalLaneBeforeTarget(
+        target,
+        source.y()
+      ).getPosition(target);
+      if ((potentialHorizontalLaneY - source.y()) * (potentialHorizontalLaneY - target.y()) < 0) {
+        steps.push((x, y) => {
+          const newY = ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target);
+          return (newY - y) * (newY - target.y()) > 0
+            ? [x, y]
+            : [x, ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)];
+        });
       }
+
+      // Move to x position closer to array on horizontal lane
+      steps.push((x, y) => {
+        let newX = x;
+        const yDiff = source.y() - (target.y() + Config.DataUnitHeight / 2);
+        const newY =
+          target.y() +
+          Config.DataUnitHeight / 2 +
+          (Math.abs(yDiff) < Config.DataUnitHeight ? 0 : Math.sign(yDiff)) * Config.DataUnitHeight;
+        if (x < target.x()) {
+          newX = Math.max(x, target.x() - Math.abs(y - target.y()));
+        } else if (x >= target.x() + target.units.length * Config.DataUnitWidth) {
+          newX = target.x() + target.units.length * Config.DataUnitWidth;
+          newX = Math.min(x, newX + Math.abs(y - target.y()));
+        } else {
+          const index = Math.floor((x - target.x()) / Config.DataUnitWidth);
+          newX = target.x() + Config.DataUnitWidth * index;
+        }
+        return [newX, newY];
+      });
+      // Move to array pointing to corner of some arrayunit
+      steps.push((x, y) => {
+        const index = Math.floor((x - target.x()) / Config.DataUnitWidth);
+        const yDiff = source.y() - (target.y() + Config.DataUnitHeight / 2);
+        const newY =
+          target.y() +
+          Config.DataUnitHeight / 2 +
+          ((Math.abs(yDiff) < Config.DataUnitHeight ? 0 : Math.sign(yDiff)) *
+            Config.DataUnitHeight) /
+            2;
+        if (x < target.x()) {
+          return [target.x(), newY];
+        } else if (x >= target.x() + target.units.length * Config.DataUnitWidth) {
+          return [target.x() + target.units.length * Config.DataUnitWidth, newY];
+        } else {
+          return [target.x() + Config.DataUnitWidth * index, newY];
+        }
+      });
     } else if (target instanceof FnValue || target instanceof GlobalFnValue) {
       if (target.x() < source.x()) {
         // move target the left of current frame above the binding.
         steps.push((x, y) => [x + Config.TextMargin, y]);
-        steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
+        steps.push((x, y) => [x, y - Math.sign(source.y() - target.y()) * source.height()]);
         if (
           Grid.lastYCoordBelow(target.y()) === Grid.lastYCoordBelow(source.y()) &&
           Frame.lastXCoordBelow(source.x()) === Frame.lastXCoordBelow(target.x()) + 1
@@ -75,16 +95,16 @@ export class ArrowFromText extends GenericArrow {
           steps.push((x, y) => [x - Config.FnRadius, y]);
         } else {
           // vertical lane, horizontal lane, vertical lane,
-          steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+          steps.push((x, y) => [
+            ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
+            y
+          ]);
           steps.push((x, y) => [
             x,
             ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
           ]);
           steps.push((x, y) => [
-            ArrowLane.getVerticalLane(
-              target,
-              Frame.cumWidths[Frame.lastXCoordBelow(target.x()) + 1]
-            ).getPosition(target),
+            ArrowLane.getVerticalLaneBeforeTarget(target, x).getPosition(target),
             y
           ]);
           steps.push((x, y) => [x, target.y()]);
@@ -98,16 +118,16 @@ export class ArrowFromText extends GenericArrow {
           steps.push((x, y) => [target.x(), y]);
           steps.push((x, y) => [x, target.y()]);
         } else {
-          steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+          steps.push((x, y) => [
+            ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
+            y
+          ]);
           steps.push((x, y) => [
             x,
             ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
           ]);
           steps.push((x, y) => [
-            ArrowLane.getVerticalLane(
-              target,
-              Frame.cumWidths[Frame.lastXCoordBelow(target.x()) + 1]
-            ).getPosition(target),
+            ArrowLane.getVerticalLaneBeforeTarget(target, x).getPosition(target),
             y
           ]);
           steps.push((x, y) => [x, target.y()]);
@@ -121,31 +141,31 @@ export class ArrowFromText extends GenericArrow {
         steps.push((x, y) => [x, y - source.height() - Config.TextMargin]);
 
         // vertical lane, horizontal lane, vertical lane,
-        steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+        steps.push((x, y) => [
+          ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
+          y
+        ]);
         steps.push((x, y) => [
           x,
           ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
         ]);
         steps.push((x, y) => [
-          ArrowLane.getVerticalLane(
-            target,
-            Frame.cumWidths[Frame.lastXCoordBelow(target.x()) + 1]
-          ).getPosition(target),
+          ArrowLane.getVerticalLaneBeforeTarget(target, x).getPosition(target),
           y
         ]);
         steps.push((x, y) => [x, target.y()]);
         steps.push((x, y) => [target.x(), y]);
       } else {
-        steps.push((x, y) => [ArrowLane.getVerticalLane(target, x).getPosition(target), y]);
+        steps.push((x, y) => [
+          ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
+          y
+        ]);
         steps.push((x, y) => [
           x,
           ArrowLane.getHorizontalLaneBeforeTarget(target, y).getPosition(target)
         ]);
         steps.push((x, y) => [
-          ArrowLane.getVerticalLane(
-            target,
-            Frame.cumWidths[Frame.lastXCoordBelow(target.x()) + 1]
-          ).getPosition(target),
+          ArrowLane.getVerticalLaneBeforeTarget(target, x).getPosition(target),
           y
         ]);
         steps.push((x, y) => [x, target.y()]);

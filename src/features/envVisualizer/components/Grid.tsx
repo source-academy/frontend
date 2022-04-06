@@ -132,12 +132,12 @@ export class Grid implements Visible {
           const x =
             Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
             0.8 * Config.FrameMarginX;
-          // array at horizontal mean of bindings
+          // move array closer to horizontal mean of bindings (might improve readability for certain larger diagrams)
           // const meanX = (xCoordSum / count);
-          // const x =
-          //   Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
-          //   Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
-          //   0.6 * Config.FrameMarginX;
+          // x = Math.max(x,
+          //     Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
+          //     Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
+          //     0.8 * Config.FrameMarginX);
           this.arrayLevels[Math.floor(y)].addArray(v, x);
         } else if (v.referencedBy[0] instanceof ArrayUnit) {
           const y = v.referencedBy[0].parent.level?.parentLevel?.yCoord ?? 0;

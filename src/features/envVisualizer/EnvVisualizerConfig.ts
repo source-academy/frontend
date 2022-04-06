@@ -12,7 +12,7 @@ export enum Config {
   FramePaddingX = 20,
   FramePaddingY = 30,
   FrameMarginX = 60,
-  FrameMarginY = 80,
+  FrameMarginY = 100,
   FrameCornerRadius = 3,
 
   FnRadius = 15,
@@ -40,7 +40,7 @@ export enum Config {
   HoveredColor = '#32CD32',
 
   ArrowHeadSize = 10,
-  ArrowStrokeWidth = 1.4,
+  ArrowStrokeWidth = 1,
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
   ArrowUnhoveredOpacity = 0.8,
