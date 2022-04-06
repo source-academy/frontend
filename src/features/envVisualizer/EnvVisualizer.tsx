@@ -2,6 +2,8 @@ import { Context } from 'js-slang';
 import React from 'react';
 
 import { Layout } from './EnvVisualizerLayout';
+import { EnvTree } from './EnvVisualizerTypes';
+import { deepCopyTree } from './EnvVisualizerUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
 
@@ -11,7 +13,7 @@ export default class EnvVisualizer {
   private static setVis: SetVis;
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
-  private static context: Context;
+  private static environmentTree: EnvTree;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
   }
@@ -40,14 +42,15 @@ export default class EnvVisualizer {
   /** updates the visualization state in the SideContentEnvVis component based on
    * the JS Slang context passed in */
   static drawEnv(context: Context) {
-    EnvVisualizer.context = context;
+    // store environmentTree at last breakpoint.
+    EnvVisualizer.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     Layout.currentDark = undefined;
     Layout.currentLight = undefined;
     Layout.currentCompactDark = undefined;
     Layout.currentCompactLight = undefined;
     if (!this.setVis) throw new Error('env visualizer not initialized');
 
-    Layout.setContext(context);
+    Layout.setContext(context.runtime.environmentTree as EnvTree);
     this.setVis(Layout.draw());
 
     // icon to blink
@@ -82,7 +85,7 @@ export default class EnvVisualizer {
     ) {
       this.setVis(Layout.currentDark);
     } else {
-      Layout.setContext(EnvVisualizer.context);
+      Layout.setContext(EnvVisualizer.environmentTree);
       this.setVis(Layout.draw());
     }
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);

@@ -1,5 +1,4 @@
 import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
-import { Context } from 'js-slang';
 import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -118,7 +117,7 @@ export class Layout extends React.Component {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(context: Context): void {
+  static setContext(envTree: EnvTree): void {
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
@@ -130,7 +129,7 @@ export class Layout extends React.Component {
     Layout.compactValues.clear();
     Layout.key = 0;
     // deep copy so we don't mutate the context
-    Layout.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
+    Layout.environmentTree = deepCopyTree(envTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
 
     // remove program environment and merge bindings into global env
