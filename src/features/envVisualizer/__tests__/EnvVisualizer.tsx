@@ -10,7 +10,7 @@ import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import EnvVisualizer from '../EnvVisualizer';
 import { Layout } from '../EnvVisualizerLayout';
-import { Env } from '../EnvVisualizerTypes';
+import { Env, EnvTree } from '../EnvVisualizerTypes';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -147,7 +147,7 @@ codeSamples.forEach((code, idx) => {
     }
     const context = createContext(4);
     await runInContext(code, context);
-    Layout.setContext(context);
+    Layout.setContext(context.runtime.environmentTree as EnvTree);
 
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];
