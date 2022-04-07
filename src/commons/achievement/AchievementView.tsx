@@ -8,13 +8,19 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-import AchievementCommentCard from './AchievementCommentCard';
+// import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
+// import AchievementCommentCard from './AchievementCommentCard';
+import AchievementCommentCardContainer from './AchievementCommentCardContainer';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
   focusUuid: string;
+};
+
+export type OwnProps = {
+  assessmentId: number;
 };
 
 function AchievementView(props: AchievementViewProps) {
@@ -30,6 +36,13 @@ function AchievementView(props: AchievementViewProps) {
       </div>
     );
   }
+
+  const hello = () => {
+    const assessmentWorkspaceProps: OwnProps = {
+      assessmentId: +focusUuid
+    };
+    return <AchievementCommentCardContainer {...assessmentWorkspaceProps} />;
+  };
 
   const achievement = inferencer.getAchievement(focusUuid);
   const { deadline, title, view } = achievement;
@@ -61,9 +74,8 @@ function AchievementView(props: AchievementViewProps) {
         </span>
       </div>
       {/* Demo Purposes */}
-      <AchievementCommentCard comment={'Hello!'} />
+      {hello()}
       {/* Demo Purposes */}
-
       {false && <AchievementViewGoal goals={goals} />}
       {false && status === AchievementStatus.COMPLETED && (
         <>
