@@ -63,6 +63,14 @@ export default class GameDialogueStorageManager {
     this.dialogueStorage = new Array<DialogueStorageLine>();
   }
 
+  /**
+   * Returns the current dialogue storage as an Array of strings.
+   *
+   * This method is called by the Dashboard in order to fetch the dialogues currently stored,
+   * and subsequently display them in order.
+   *
+   * @returns the Dialogue storage as an Array of strings.
+   */
   public getDialogueStorage(): Array<String> {
     if (!this.dialogueStorage) {
       return new Array<String>();
