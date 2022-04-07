@@ -71,11 +71,13 @@ function AchievementView(props: AchievementViewProps) {
           ))}
         </span>
       </div>
+
       {/* Demo Purposes */}
       {hello()}
       {/* Demo Purposes */}
-      {false && <AchievementViewGoal goals={goals} />}
-      {false && status === AchievementStatus.COMPLETED && (
+
+      {<AchievementViewGoal goals={goals} />}
+      {status === AchievementStatus.COMPLETED && (
         <>
           <hr />
           <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />

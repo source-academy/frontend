@@ -25,7 +25,17 @@ const AchievementCommentCard: React.FC<AssessmentWorkspaceProps> = props => {
     }
   });
 
-  return <div>{props.assessment?.questions[0].comments || 'No comments here'}</div>;
+  return (
+    <ul>
+      {props.assessment?.questions.map((question, index) => (
+        <div key={index}>
+          <h2>{'Q' + (index + 1)}</h2>
+          <p>{question.comments}</p>
+          <p>{question.xp + '/' + question.maxXp}</p>
+        </div>
+      ))}
+    </ul>
+  );
 };
 
 export default AchievementCommentCard;
