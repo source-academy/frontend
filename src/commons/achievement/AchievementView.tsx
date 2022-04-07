@@ -1,15 +1,13 @@
-/* eslint-disable simple-import-sort/imports */
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext } from 'react';
+
 import {
   AchievementContext,
   getAbilityBackground,
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-// import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
-// import AchievementCommentCard from './AchievementCommentCard';
 import AchievementCommentCardContainer from './AchievementCommentCardContainer';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
@@ -17,7 +15,6 @@ import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
   focusUuid: string;
-  comments: string;
 };
 
 export type OwnProps = {
@@ -26,6 +23,7 @@ export type OwnProps = {
 
 function AchievementView(props: AchievementViewProps) {
   const { focusUuid } = props;
+
   const inferencer = useContext(AchievementContext);
 
   if (focusUuid === '') {

@@ -2,7 +2,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
-  Assessment,
   AssessmentConfiguration,
   AssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
@@ -23,7 +22,6 @@ import {
 
 export type DispatchProps = {
   fetchAssessmentOverviews: () => void;
-  fetchAssessment: (assessmentId: number) => void;
   getAchievements: () => void;
   getGoals: (studentCourseRegId: number) => void;
   getOwnGoals: () => void;
@@ -38,7 +36,6 @@ export type StateProps = {
   id?: number;
   name?: string;
   role?: Role;
-  assessment?: Assessment;
   assessmentConfigs?: AssessmentConfiguration[];
   assessmentOverviews?: AssessmentOverview[];
   achievementAssessmentOverviews: AssessmentOverview[];
@@ -71,7 +68,6 @@ function Dashboard(props: DispatchProps & StateProps) {
     getAchievements,
     getOwnGoals,
     getGoals,
-    fetchAssessment,
     getUserAssessmentOverviews,
     getUsers,
     updateGoalProgress,
@@ -101,13 +97,10 @@ function Dashboard(props: DispatchProps & StateProps) {
       : fetchAssessmentOverviews();
 
     getAchievements();
-    fetchAssessment(11);
-    console.log('calling');
   }, [
     selectedUser,
     getAchievements,
     getGoals,
-    fetchAssessment,
     getOwnGoals,
     getUserAssessmentOverviews,
     fetchAssessmentOverviews
@@ -181,15 +174,9 @@ function Dashboard(props: DispatchProps & StateProps) {
               focusState
             )}
           </ul>
+
           <div className="view-container">
-            <AchievementView
-              focusUuid={focusUuid}
-              comments={
-                props.assessment?.questions[0].comments
-                  ? props.assessment?.questions[0].comments
-                  : ''
-              }
-            />
+            <AchievementView focusUuid={focusUuid} />
           </div>
         </div>
       </div>

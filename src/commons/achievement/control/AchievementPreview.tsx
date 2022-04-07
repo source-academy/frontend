@@ -49,7 +49,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
       </div>
       {viewMode ? (
         <div className="preview-container">
-          <AchievementView comments={''} focusUuid={focusUuid} />
+          <AchievementView focusUuid={focusUuid} />
         </div>
       ) : (
         <ul className="preview-container">
