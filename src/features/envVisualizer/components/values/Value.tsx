@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from "react";
+import React from 'react';
 
 import { Data, IHoverable, ReferenceType } from '../../EnvVisualizerTypes';
 import { Visible } from '../Visible';

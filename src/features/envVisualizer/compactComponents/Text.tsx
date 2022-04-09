@@ -57,7 +57,9 @@ export class Text extends Visible implements IHoverable {
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText = CompactConfig.Ellipsis.toString();
       let i = 0;
-      while (widthOf(this.partialStr.substring(0, i) + CompactConfig.Ellipsis.toString()) < maxWidth) {
+      while (
+        widthOf(this.partialStr.substring(0, i) + CompactConfig.Ellipsis.toString()) < maxWidth
+      ) {
         truncatedText = this.partialStr.substring(0, i++) + CompactConfig.Ellipsis.toString();
       }
       this._width = widthOf(truncatedText);

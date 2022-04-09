@@ -15,10 +15,7 @@ export class ArrowFromFn extends GenericArrow {
       steps.push((x, y) => [x, y - CompactConfig.FnRadius * 2]);
       steps.push((x, y) => [to.x() + (from.x() < to.x() ? 0 : to.width()), y]);
     } else {
-      steps.push(() => [
-        to.x() + to.width() / 2,
-        to.y() + (to.y() < from.y() ? to.height() : 0)
-      ]);
+      steps.push(() => [to.x() + to.width() / 2, to.y() + (to.y() < from.y() ? to.height() : 0)]);
     }
 
     return steps;

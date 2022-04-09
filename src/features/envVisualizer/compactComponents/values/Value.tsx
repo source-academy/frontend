@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import { CompactReferenceType, Data } from '../../EnvVisualizerTypes';
 import { Visible } from '../Visible';

@@ -99,13 +99,13 @@ export class Grid extends Visible {
           bindings = p.parent.referencedBy.filter(r => r instanceof Binding) as Binding[];
           p = p.parent.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
         }
-        
+
         if (belongsToFrame) {
           const y = (v.referencedBy[0] as Binding).frame.yCoord;
           // array close to first declaration, aligned to the frame to its right for clarity.
           const x =
-          Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
-          0.8 * Config.FrameMarginX;
+            Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
+            0.8 * Config.FrameMarginX;
           // Alternative approach to move array closer to horizontal mean of bindings
           // (might improve readability for certain larger diagrams e.g. reverse but increase height alot.)
           // const references = v.units
