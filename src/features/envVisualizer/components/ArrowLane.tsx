@@ -76,7 +76,7 @@ export class ArrowLane {
       if (index === -1) {
         index = this.frames.push(target) - 1;
       }
-      const lane: number = index % Config.ArrowNumLanes;
+      const lane: number = (index * 2) % Config.ArrowNumLanes;
       return (
         Grid.cumHeights[this.id] -
         Config.FrameMarginY * 0.4 +
@@ -87,7 +87,7 @@ export class ArrowLane {
       if (index === -1) {
         index = this.objects.push(target instanceof Value ? target.data : target) - 1;
       }
-      const lane: number = index % Config.ArrowNumLanes;
+      const lane: number = (index * 2) % Config.ArrowNumLanes;
       if (this.isVertical) {
         return (
           Frame.cumWidths[this.id] -

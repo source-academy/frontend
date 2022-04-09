@@ -51,6 +51,7 @@ export class FnValue extends Value implements Hoverable {
   /** the parent/enclosing environment of this fn value */
   readonly enclosingEnvNode: EnvTreeNode;
   readonly ref: RefObject<any> = React.createRef();
+  readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -106,13 +107,15 @@ export class FnValue extends Value implements Hoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (EnvVisualizer.getPrintableMode()) return;
     this.ref.current.moveToTop();
-    this.ref.current.show();
+    this.labelRef.current.show();
     setHoveredStyle(currentTarget);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    this.ref.current.hide();
+    if (EnvVisualizer.getPrintableMode()) return;
+    this.labelRef.current.hide();
     setUnhoveredStyle(currentTarget);
   };
   x(): number {
@@ -196,7 +199,7 @@ export class FnValue extends Value implements Hoverable {
             x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
             y={this.y() - CompactConfig.TextPaddingY}
             visible={true}
-            ref={this.ref}
+            ref={this.labelRef}
           >
             <KonvaTag
               stroke="black"
@@ -217,7 +220,7 @@ export class FnValue extends Value implements Hoverable {
             x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
             y={this.y() - CompactConfig.TextPaddingY}
             visible={false}
-            ref={this.ref}
+            ref={this.labelRef}
           >
             <KonvaTag
               stroke="black"

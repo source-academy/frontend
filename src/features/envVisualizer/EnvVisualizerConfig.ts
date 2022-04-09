@@ -46,7 +46,7 @@ export enum Config {
   ArrowUnhoveredOpacity = 0.8,
   ArrowCornerRadius = 10,
   ArrowMinHeight = 100,
-  ArrowNumLanes = 5,
+  ArrowNumLanes = 5, // odd number so all arrow lanes will be used (arrow i added to lanes (i * 2) % num_lanes)
   FrameArrowStrokeWidth = 2,
   FrameArrowHoveredStrokeWidth = 2.5,
   MaxExportWidth = 20000,

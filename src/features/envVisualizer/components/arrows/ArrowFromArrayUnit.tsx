@@ -55,7 +55,12 @@ export class ArrowFromArrayUnit extends GenericArrow {
           if (x < target.x()) {
             return [target.x(), newY];
           } else if (x >= target.x() + target.units.length * Config.DataUnitWidth) {
-            return [target.x() + target.units.length * Config.DataUnitWidth, newY];
+            return [
+              target.x() +
+                target.units.length * Config.DataUnitWidth +
+                (target.units.length === 0 ? Config.DataMinWidth : 0),
+              newY
+            ];
           } else {
             return [
               target.x() +
