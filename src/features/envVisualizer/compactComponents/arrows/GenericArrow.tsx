@@ -1,49 +1,31 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
-import { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import EnvVisualizer from '../../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { StepsArray, Visible } from '../../EnvVisualizerTypes';
+import { IVisible, StepsArray } from '../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
-import { Arrow } from './Arrow';
+import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow implements Arrow {
-  private _x: number;
-  private _y: number;
-  private _height: number = 0;
-  private _width: number = 0;
+export class GenericArrow extends Visible {
   private _path: string = '';
   points: number[] = [];
-  source: Visible;
-  target: Visible | undefined;
+  source: IVisible;
+  target: IVisible | undefined;
 
-  constructor(from: Visible) {
+  constructor(from: IVisible) {
+    super();
     this.source = from;
     this._x = from.x();
     this._y = from.y();
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  width(): number {
-    return this._width;
-  }
-  height(): number {
-    return this._height;
-  }
-  ref: RefObject<any> = React.createRef();
   path(): string {
     return this._path;
   }
 
-  to(to: Visible) {
+  to(to: IVisible): GenericArrow {
     this.target = to;
     this._width = Math.abs(to.x() - this.source.x());
     this._height = Math.abs(to.y() - this.source.y());
@@ -69,7 +51,7 @@ export class GenericArrow implements Arrow {
   protected calculateSteps(): StepsArray {
     const to = this.target;
     if (!to) return [];
-    return [(x, y) => [to.x(), to.y()]];
+    return [() => [to.x(), to.y()]];
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -83,7 +65,7 @@ export class GenericArrow implements Arrow {
       strokeWidth: Number(CompactConfig.ArrowStrokeWidth)
     });
   };
-  onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {}
+  onClick() {}
 
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(

@@ -1,11 +1,12 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Data, IHoverable } from '../EnvVisualizerTypes';
 import { getTextWidth } from '../EnvVisualizerUtils';
+import { Visible } from './Visible';
 
 export interface TextOptions {
   maxWidth: number;
@@ -26,7 +27,7 @@ export const defaultOptions: TextOptions = {
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
-export class Text implements Visible, Hoverable {
+export class Text extends Visible implements IHoverable {
   readonly _height: number;
   readonly _width: number;
 
@@ -34,7 +35,6 @@ export class Text implements Visible, Hoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  ref: RefObject<any> = React.createRef();
 
   constructor(
     readonly data: Data,
@@ -43,6 +43,7 @@ export class Text implements Visible, Hoverable {
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
+    super();
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
@@ -56,26 +57,14 @@ export class Text implements Visible, Hoverable {
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText = CompactConfig.Ellipsis.toString();
       let i = 0;
-      while (widthOf(this.partialStr.substr(0, i) + CompactConfig.Ellipsis.toString()) < maxWidth) {
-        truncatedText = this.partialStr.substr(0, i++) + CompactConfig.Ellipsis.toString();
+      while (widthOf(this.partialStr.substring(0, i) + CompactConfig.Ellipsis.toString()) < maxWidth) {
+        truncatedText = this.partialStr.substring(0, i++) + CompactConfig.Ellipsis.toString();
       }
       this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
     } else {
       this._width = Math.max(CompactConfig.TextMinWidth, widthOf(this.partialStr));
     }
-  }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  width(): number {
-    return this._width;
-  }
-  height(): number {
-    return this._height;
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {

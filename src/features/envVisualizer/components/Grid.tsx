@@ -3,7 +3,7 @@ import { Group, Rect } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { EnvTreeNode, Visible } from '../EnvVisualizerTypes';
+import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { ArrayLevel } from './ArrayLevel';
 import { ArrayUnit } from './ArrayUnit';
 import { ArrowLane } from './ArrowLane';
@@ -12,18 +12,13 @@ import { Frame } from './Frame';
 import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';
-import { FnValue } from './values/FnValue';
-import { GlobalFnValue } from './values/GlobalFnValue';
+import { Visible } from './Visible';
 
 /**
  * Grid class encapsulates a grid of frames to be drawn.
  * Grid contains alternating layers of ArrayLevel and FrameLevel.
  */
-export class Grid implements Visible {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
+export class Grid extends Visible {
   /** list of all levels */
   frameLevels: FrameLevel[];
   arrayLevels: ArrayLevel[];
@@ -35,6 +30,7 @@ export class Grid implements Visible {
     /** the environment tree nodes */
     readonly envTreeNodes: EnvTreeNode[][]
   ) {
+    super();
     this._x = Config.CanvasPaddingX;
     this._y = Config.CanvasPaddingY;
     this.frameLevels = [];
@@ -45,18 +41,6 @@ export class Grid implements Visible {
     this._height = 0;
     this._width = 0;
     this.update(envTreeNodes);
-  }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
   }
 
   destroy = () => {
@@ -115,36 +99,37 @@ export class Grid implements Visible {
           bindings = p.parent.referencedBy.filter(r => r instanceof Binding) as Binding[];
           p = p.parent.referencedBy.find(x => x instanceof ArrayUnit) as ArrayUnit;
         }
-        const references = v.units
-          .filter(x => x.value instanceof FnValue || x.value instanceof GlobalFnValue)
-          .map(x => x.value as FnValue);
-
-        let [yCoordSum, xCoordSum, count] = bindings.reduce(
-          (acc, binding) => {
-            const [yCoordSum, xCoordSum, count] = acc;
-            return [yCoordSum + binding.frame.yCoord, xCoordSum + binding.frame.xCoord, count + 1];
-          },
-          [0, 0, 0]
-        );
-        // Move array closer to fn objects they are pointing to
-        [yCoordSum, xCoordSum, count] = references.reduce(
-          (acc, ref) => {
-            const [yCoordSum, xCoordSum, count] = acc;
-            return [
-              yCoordSum + (ref?.enclosingEnvNode?.frame?.yCoord || 0),
-              xCoordSum + (ref?.enclosingEnvNode?.frame?.xCoord || 0),
-              count + (ref.enclosingEnvNode === undefined ? 0 : 1)
-            ];
-          },
-          [yCoordSum, xCoordSum, count]
-        );
+        
         if (belongsToFrame) {
           const y = (v.referencedBy[0] as Binding).frame.yCoord;
           // array close to first declaration, aligned to the frame to its right for clarity.
           const x =
-            Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
-            0.8 * Config.FrameMarginX;
-          // move array closer to horizontal mean of bindings (might improve readability for certain larger diagrams)
+          Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
+          0.8 * Config.FrameMarginX;
+          // Alternative approach to move array closer to horizontal mean of bindings
+          // (might improve readability for certain larger diagrams e.g. reverse but increase height alot.)
+          // const references = v.units
+          //   .filter(x => x.value instanceof FnValue || x.value instanceof GlobalFnValue)
+          //   .map(x => x.value as FnValue);
+          // let [yCoordSum, xCoordSum, count] = bindings.reduce(
+          //   (acc, binding) => {
+          //     const [yCoordSum, xCoordSum, count] = acc;
+          //     return [yCoordSum + binding.frame.yCoord, xCoordSum + binding.frame.xCoord, count + 1];
+          //   },
+          //   [0, 0, 0]
+          // );
+          // // Move array closer to fn objects they are pointing to
+          // [yCoordSum, xCoordSum, count] = references.reduce(
+          //   (acc, ref) => {
+          //     const [yCoordSum, xCoordSum, count] = acc;
+          //     return [
+          //       yCoordSum + (ref?.enclosingEnvNode?.frame?.yCoord || 0),
+          //       xCoordSum + (ref?.enclosingEnvNode?.frame?.xCoord || 0),
+          //       count + (ref.enclosingEnvNode === undefined ? 0 : 1)
+          //     ];
+          //   },
+          //   [yCoordSum, xCoordSum, count]
+          // );
           // const meanX = (xCoordSum / count);
           // x = Math.max(x,
           //     Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +

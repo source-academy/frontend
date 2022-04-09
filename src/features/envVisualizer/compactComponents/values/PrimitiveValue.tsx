@@ -11,12 +11,6 @@ import { Value } from './Value';
 
 /** this classes encapsulates a primitive value in Source: number, string or null */
 export class PrimitiveValue extends Value {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
-  private _isDrawn: boolean = false;
-
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;
 
@@ -51,24 +45,7 @@ export class PrimitiveValue extends Value {
     this._width = this.text.width();
     this._height = this.text.height();
   }
-
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
-  reset(): void {}
-  updatePosition(pos?: { x: number; y: number }): void {}
+  updatePosition(): void {}
   draw(): React.ReactNode {
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }

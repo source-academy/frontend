@@ -1,12 +1,10 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
-import { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { StepsArray, Visible } from '../../EnvVisualizerTypes';
+import { IHoverable, IVisible, StepsArray } from '../../EnvVisualizerTypes';
 import {
   setHoveredCursor,
   setHoveredStyle,
@@ -15,47 +13,29 @@ import {
 } from '../../EnvVisualizerUtils';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
-import { Arrow } from './Arrow';
+import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow implements Arrow {
+export class GenericArrow extends Visible implements IHoverable {
   points: number[] = [];
-  source: Visible;
-  target: Visible | undefined;
-  ref: RefObject<any> = React.createRef();
-  private _x: number;
-  private _y: number;
-  private _height: number = 0;
-  private _width: number = 0;
+  source: IVisible;
+  target: IVisible | undefined;
+
   private _path: string = '';
   private selected: boolean = false;
   readonly unhovered_opacity: number = Config.ArrowUnhoveredOpacity;
   readonly hovered_opacity: number = 1;
 
-  constructor(source: Visible) {
+  constructor(source: IVisible) {
+    super();
     this.source = source;
     this._x = source.x();
     this._y = source.y();
   }
-  from(from: Visible) {
-    throw new Error('Method not implemented.');
-  }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
   path() {
     return this._path;
   }
-  to(target: Visible) {
+  to(target: IVisible) {
     this.target = target;
     this._width = Math.abs(target.x() - this.source.x());
     this._height = Math.abs(target.y() - this.source.y());
@@ -83,7 +63,7 @@ export class GenericArrow implements Arrow {
   protected calculateSteps(): StepsArray {
     const to = this.target;
     if (!to) return [];
-    return [(x, y) => [to.x(), to.y()]];
+    return [() => [to.x(), to.y()]];
   }
   getStrokeWidth(): number {
     return Number(Config.ArrowStrokeWidth);

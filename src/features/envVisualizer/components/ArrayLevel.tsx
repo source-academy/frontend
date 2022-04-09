@@ -1,5 +1,4 @@
-// import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
@@ -11,15 +10,10 @@ import { Value } from './values/Value';
 
 /** this class encapsulates a level of arrays to be drawn between two frame levels */
 export class ArrayLevel extends Level {
-  private _x: number;
-  private _y: number;
-  private _height: number = 0;
-  private _width: number;
   private _minX: number = Infinity;
   private _count: number = 0;
   position: [x: number, y: number][][] = [[]];
 
-  ref: RefObject<any> = React.createRef();
   // Prevent new arrays from being placed above existing arrays in the array level
   private _rowCount: number = 0;
 
@@ -37,23 +31,11 @@ export class ArrayLevel extends Level {
     this._rowCount = 0;
   }
 
-  x(): number {
-    return this._x;
-  }
   minX(): number {
     return this._minX;
   }
   count(): number {
     return this._count;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
   }
   getNumLanes = (): number => {
     return this._rowCount;
@@ -89,8 +71,6 @@ export class ArrayLevel extends Level {
         if (position[0] < x + width + Config.DataMinWidth && position[1] > x) {
           level++;
           continue positions;
-        } else {
-          continue;
         }
       }
       break;

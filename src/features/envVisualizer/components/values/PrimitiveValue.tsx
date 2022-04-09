@@ -11,12 +11,6 @@ import { Value } from './Value';
 
 /** this classes encapsulates a primitive value in Source: number, string or null */
 export class PrimitiveValue extends Value {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
-  private _isDrawn: boolean = false;
-
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;
 
@@ -51,23 +45,8 @@ export class PrimitiveValue extends Value {
     this._height = this.text.height();
   }
 
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
   reset(): void {
-    this._isDrawn = false;
+    super.reset();
     this.referencedBy.length = 0;
   }
   updatePosition = () => {
@@ -85,6 +64,8 @@ export class PrimitiveValue extends Value {
       ? this.text.updatePosition(this.x(), this.y())
       : this.text.updatePosition();
   };
+  onMouseEnter(): void {}
+  onMouseLeave(): void {}
 
   draw(): React.ReactNode {
     this._isDrawn = true;

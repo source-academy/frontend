@@ -3,9 +3,10 @@ import React from 'react';
 import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Visible } from '../EnvVisualizerTypes';
+import { Data } from '../EnvVisualizerTypes';
 import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
@@ -14,16 +15,13 @@ import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { UnassignedValue } from './values/UnassignedValue';
 import { Value } from './values/Value';
+import { Visible } from './Visible';
 
 /** a `binding` is a key-value pair in a frame */
-export class Binding implements Visible {
-  private _x: number;
-  private _y: number;
+export class Binding extends Visible {
   readonly offsetY: number;
-  private _width: number;
   /** The maximum width of binding when hovered or clicked (takes tooltip into consideration) */
-  private _hoveredWidth: number;
-  private _height: number;
+  readonly _hoveredWidth: number;
   readonly isMainReference: boolean;
 
   /** value associated with this binding */
@@ -36,8 +34,8 @@ export class Binding implements Visible {
    */
   readonly isDummyBinding: boolean = false;
   keyYOffset: number;
-  private arrow: Arrow | undefined = undefined;
-  public getArrow = (): Arrow | undefined => {
+  private arrow: GenericArrow | undefined = undefined;
+  public getArrow = (): GenericArrow | undefined => {
     return this.arrow;
   };
 
@@ -52,6 +50,7 @@ export class Binding implements Visible {
     readonly prevBinding: Binding | null,
     readonly isConstant: boolean = false
   ) {
+    super();
     this.isDummyBinding = isDummyKey(this.keyString);
 
     // derive the coordinates from the binding above it
@@ -103,18 +102,6 @@ export class Binding implements Visible {
     }
     this._y = this.offsetY;
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
   hoveredWidth(): number {
     return EnvVisualizer.getPrintableMode()
       ? this._hoveredWidth
@@ -163,7 +150,6 @@ export class Binding implements Visible {
           : this.key.draw()}
         {this.arrow && this.arrow.draw()}
         {!(this.value instanceof ArrayValue) && this.isMainReference ? this.value.draw() : null}
-        {/* {!(this.value instanceof ArrayValue) && this.value.draw()} */}
       </React.Fragment>
     );
   }

@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
@@ -10,14 +10,10 @@ import { Level } from './Level';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */
 export class FrameLevel extends Level {
-  private _x: number;
-  private _y: number;
-  private _width: number;
   static maxXcoord: number = 0;
   static maxYcoord: number = 0;
   lastXcoord: number;
   readonly yCoord: number;
-  ref: RefObject<any> = React.createRef();
 
   /** all the frames in this level */
   readonly frames: Frame[] = [];
@@ -33,17 +29,9 @@ export class FrameLevel extends Level {
     this.lastXcoord = -1;
     this.yCoord = FrameLevel.maxYcoord++;
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
+
   height(): number {
     return Frame.heights[this.yCoord] + Config.FrameMarginY;
-  }
-  width(): number {
-    return this._width;
   }
 
   /**

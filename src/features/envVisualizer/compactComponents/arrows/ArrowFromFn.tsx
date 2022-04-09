@@ -2,7 +2,7 @@ import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
 import { GenericArrow } from './GenericArrow';
 
-/** this class encapsulates an arrow to be drawn between 2 points */
+/** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromFn extends GenericArrow {
   protected calculateSteps() {
     const from = this.source;
@@ -15,7 +15,7 @@ export class ArrowFromFn extends GenericArrow {
       steps.push((x, y) => [x, y - CompactConfig.FnRadius * 2]);
       steps.push((x, y) => [to.x() + (from.x() < to.x() ? 0 : to.width()), y]);
     } else {
-      steps.push((x, y) => [
+      steps.push(() => [
         to.x() + to.width() / 2,
         to.y() + (to.y() < from.y() ? to.height() : 0)
       ]);

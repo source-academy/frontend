@@ -1,11 +1,11 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
 import {
   getNonEmptyEnv,
   getTextWidth,
@@ -15,10 +15,11 @@ import {
   setHoveredStyle,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
-import { Arrow } from './arrows/Arrow';
+import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
+import { Visible } from './Visible';
 
 const frameNames = new Map([
   ['global', 'Global'],
@@ -30,11 +31,7 @@ const frameNames = new Map([
 ]);
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
-export class Frame implements Visible, Hoverable {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number = CompactConfig.FrameMinWidth;
+export class Frame extends Visible implements IHoverable {
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
@@ -50,7 +47,6 @@ export class Frame implements Visible, Hoverable {
   readonly environment: Env;
   /** the parent/enclosing frame of this frame (the frame above it) */
   readonly parentFrame: Frame | undefined;
-  ref: RefObject<any> = React.createRef();
 
   constructor(
     /** environment tree node that contains this frame */
@@ -58,6 +54,8 @@ export class Frame implements Visible, Hoverable {
     /** the frame to the left of this frame, on the same level. used for calculating this frame's position */
     readonly leftSiblingFrame: Frame | null
   ) {
+    super();
+    this._width = CompactConfig.FrameMinWidth;
     this.level = envTreeNode.compactLevel as Level;
     this.environment = envTreeNode.environment;
     this.parentFrame = envTreeNode.parent?.compactFrame;
@@ -131,19 +129,6 @@ export class Frame implements Visible, Hoverable {
     this.totalHeight = this.height() + this.name.height() + CompactConfig.TextPaddingY / 2;
   }
 
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  width(): number {
-    return this._width;
-  }
-  height(): number {
-    return this._height;
-  }
-
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredStyle(currentTarget);
   };
@@ -173,7 +158,7 @@ export class Frame implements Visible, Hoverable {
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && Arrow.from(this).to(this.parentFrame).draw()}
+        {this.parentFrame && new ArrowFromFrame(this).to(this.parentFrame).draw()}
       </Group>
     );
   }

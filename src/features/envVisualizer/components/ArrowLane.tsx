@@ -1,18 +1,18 @@
 import { Config } from '../EnvVisualizerConfig';
-import { Data, Visible } from '../EnvVisualizerTypes';
+import { Data, IVisible } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
 import { Grid } from './Grid';
 import { Value } from './values/Value';
 
 /** this class tracks the target objects for each lane. */
 export class ArrowLane {
-  private id: number;
+  readonly id: number;
   static verticalLanes: ArrowLane[] = [];
   static horizontalLanes: ArrowLane[] = [];
   static arrayLevelLanes: ArrowLane[] = [];
-  public objects: (Data | Visible)[] = [];
+  public objects: (Data | IVisible)[] = [];
   public frames: Frame[] = [];
-  private isVertical: boolean = true;
+  readonly isVertical: boolean = true;
 
   constructor(coord: number, isVertical: boolean) {
     this.id = coord;
@@ -25,7 +25,7 @@ export class ArrowLane {
     ArrowLane.arrayLevelLanes = [];
   };
 
-  static getVerticalLaneBeforeTarget = (target: Visible, currentX: number): ArrowLane => {
+  static getVerticalLaneBeforeTarget = (target: IVisible, currentX: number): ArrowLane => {
     // get the lane between currentX and target right before the target
     let xCoord = Frame.lastXCoordBelow(target.x()) + (currentX > target.x() ? 0 : 1);
     const x = Frame.cumWidths[xCoord];
@@ -38,7 +38,7 @@ export class ArrowLane {
     return ArrowLane.verticalLanes[xCoord];
   };
 
-  static getVerticalLaneAfterSource = (target: Visible, currentX: number): ArrowLane => {
+  static getVerticalLaneAfterSource = (target: IVisible, currentX: number): ArrowLane => {
     // get the lane between currentX and target right after currentX
     let xCoord = Frame.lastXCoordBelow(currentX) + (currentX > target.x() ? 0 : 1);
     const x = Frame.cumWidths[xCoord];
@@ -51,7 +51,7 @@ export class ArrowLane {
     return ArrowLane.verticalLanes[xCoord];
   };
 
-  static getHorizontalLaneBeforeTarget = (target: Visible, currentY: number): ArrowLane => {
+  static getHorizontalLaneBeforeTarget = (target: IVisible, currentY: number): ArrowLane => {
     // get the horizontal lane between currentY and target right before target
     const yCoord = Grid.lastYCoordBelow(target.y()) + (currentY > target.y() ? 1 : 0);
     if (ArrowLane.horizontalLanes[yCoord] === undefined) {
@@ -60,7 +60,7 @@ export class ArrowLane {
     return ArrowLane.horizontalLanes[yCoord];
   };
 
-  static getHorizontalLaneAfterSource = (target: Visible, currentY: number): ArrowLane => {
+  static getHorizontalLaneAfterSource = (target: IVisible, currentY: number): ArrowLane => {
     // get the horizontal lane between currentY and target right after currentY
     const yCoord = Grid.lastYCoordBelow(currentY) + (currentY > target.y() ? 0 : 1);
     if (ArrowLane.horizontalLanes[yCoord] === undefined) {
@@ -69,7 +69,7 @@ export class ArrowLane {
     return ArrowLane.horizontalLanes[yCoord];
   };
 
-  getPosition = (target: Value | Visible): number => {
+  getPosition = (target: Value | IVisible): number => {
     // place frame arrows on bottom half of horizontal lanes
     if (target instanceof Frame) {
       let index = this.frames.indexOf(target);

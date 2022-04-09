@@ -1,13 +1,14 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Data, IHoverable } from '../EnvVisualizerTypes';
 import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
 import { Frame } from './Frame';
+import { Visible } from './Visible';
 
 export interface TextOptions {
   maxWidth: number;
@@ -28,18 +29,13 @@ export const defaultOptions: TextOptions = {
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
-export class Text implements Visible, Hoverable {
-  private _height: number;
-  private _width: number;
-  private _hoveredWidth: number;
+export class Text extends Visible implements IHoverable {
+  readonly _hoveredWidth: number;
 
   readonly partialStr: string; // truncated string representation of data
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  ref: RefObject<any> = React.createRef();
-  private _x: number;
-  private _y: number;
   readonly frame?: Frame;
 
   constructor(
@@ -50,6 +46,7 @@ export class Text implements Visible, Hoverable {
     options: Partial<TextOptions> = {},
     frame?: Frame
   ) {
+    super();
     this._x = x;
     this._y = y;
     this.frame = frame;
@@ -67,8 +64,8 @@ export class Text implements Visible, Hoverable {
     if (this._hoveredWidth > maxWidth) {
       let truncatedText = Config.Ellipsis.toString();
       let i = 0;
-      while (widthOf(this.partialStr.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
-        truncatedText = this.partialStr.substr(0, i++) + Config.Ellipsis.toString();
+      while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis.toString()) < maxWidth) {
+        truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis.toString();
       }
       this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
@@ -76,18 +73,7 @@ export class Text implements Visible, Hoverable {
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
+
   hoveredWidth(): number {
     return this._hoveredWidth;
   }
@@ -95,7 +81,6 @@ export class Text implements Visible, Hoverable {
     this._x = x;
     this._y = y;
   };
-
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
@@ -125,7 +110,7 @@ export class Text implements Visible, Hoverable {
         <KonvaLabel x={this.x()} y={this.y()}>
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
-        <KonvaLabel x={this._x} y={this._y} ref={this.ref} visible={false} listening={false}>
+        <KonvaLabel x={this.x()} y={this.y()} ref={this.ref} visible={false} listening={false}>
           <KonvaTag
             {...ShapeDefaultProps}
             fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}

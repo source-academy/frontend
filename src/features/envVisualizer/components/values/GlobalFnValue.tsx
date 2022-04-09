@@ -11,7 +11,7 @@ import {
 import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
+import { ReferenceType } from '../../EnvVisualizerTypes';
 import {
   getBodyText,
   getParamsText,
@@ -19,24 +19,19 @@ import {
   setHoveredStyle,
   setUnhoveredStyle
 } from '../../EnvVisualizerUtils';
-import { Arrow } from '../arrows/Arrow';
+import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value implements Hoverable {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
-  private _isDrawn: boolean = false;
+export class GlobalFnValue extends Value {
   centerX: number;
   readonly tooltipWidth: number;
   readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  private _arrow: Arrow | undefined;
+  private _arrow: ArrowFromFn | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
@@ -95,25 +90,11 @@ export class GlobalFnValue extends Value implements Hoverable {
       getTextWidth(this.exportBodyText)
     );
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
+
   isSelected(): boolean {
     return this.selected;
   }
-  arrow(): Arrow | undefined {
+  arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
 
@@ -165,13 +146,10 @@ export class GlobalFnValue extends Value implements Hoverable {
     }
   };
 
-  reset(): void {
-    this._isDrawn = false;
-  }
-
   draw(): React.ReactNode {
     this._isDrawn = true;
-    this._arrow = Layout.globalEnvNode.frame && Arrow.from(this).to(Layout.globalEnvNode.frame);
+    this._arrow =
+      Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame);
     return (
       <React.Fragment key={Layout.key++}>
         <Group

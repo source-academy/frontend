@@ -1,26 +1,23 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Visible } from '../EnvVisualizerTypes';
+import { Data } from '../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
-import { Arrow } from './arrows/Arrow';
+import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
+import { Visible } from './Visible';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */
-export class ArrayUnit implements Visible {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
+export class ArrayUnit extends Visible {
   readonly value: Value;
 
   /** check if this is the first unit in the array */
@@ -30,11 +27,9 @@ export class ArrayUnit implements Visible {
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
   /** check if the value is already drawn */
-  private isDrawn: boolean = false;
-  ref: RefObject<any> = React.createRef();
 
   parent: ArrayValue;
-  arrow: Arrow | undefined = undefined;
+  arrow: ArrowFromArrayUnit | undefined = undefined;
 
   constructor(
     /** index of this unit in its parent */
@@ -44,6 +39,7 @@ export class ArrayUnit implements Visible {
     /** parent of this unit */
     parent: ArrayValue
   ) {
+    super();
     this.parent = parent;
     this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
     this._y = this.parent.y();
@@ -55,27 +51,10 @@ export class ArrayUnit implements Visible {
     this.isMainReference = this.value.referencedBy.length > 1;
   }
 
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-
   updatePosition = () => {
     this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
     this._y = this.parent.y();
     this.value instanceof PrimitiveValue && this.value.updatePosition();
-  };
-
-  reset = () => {
-    this.isDrawn = false;
   };
 
   onMouseEnter = () => {
@@ -100,8 +79,8 @@ export class ArrayUnit implements Visible {
   };
 
   draw(): React.ReactNode {
-    if (this.isDrawn) return null;
-    this.isDrawn = true;
+    if (this._isDrawn) return null;
+    this._isDrawn = true;
 
     const cornerRadius = {
       upperLeft: 0,
@@ -115,7 +94,7 @@ export class ArrayUnit implements Visible {
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Number(Config.DataCornerRadius);
     if (!(this.value instanceof PrimitiveValue)) {
-      this.arrow = Arrow.from(this).to(this.value);
+      this.arrow = new ArrowFromArrayUnit(this).to(this.value);
       this.parent.addArrow(this.arrow);
       if (this.value instanceof ArrayValue) {
         this.value.addArrow(this.arrow);

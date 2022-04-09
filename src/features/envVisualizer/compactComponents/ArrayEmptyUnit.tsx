@@ -1,24 +1,21 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Rect } from 'react-konva';
 
+import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Visible } from '../EnvVisualizerTypes';
+import { Data } from '../EnvVisualizerTypes';
 import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
-export class ArrayEmptyUnit implements Visible {
-  private _x: number;
-  private _y: number;
-  readonly _height: number;
-  readonly _width: number;
+export class ArrayEmptyUnit extends Visible {
   readonly value: null = null;
 
   readonly data: Data = [];
-  ref: RefObject<any> = React.createRef();
 
   constructor(readonly parent: ArrayValue) {
+    super();
     this._x = this.parent.x();
     this._y = this.parent.y();
     this._height = this.parent.height();

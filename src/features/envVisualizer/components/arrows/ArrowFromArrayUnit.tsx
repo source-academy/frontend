@@ -1,14 +1,14 @@
 import { Config } from '../../EnvVisualizerConfig';
-import { StepsArray, Visible } from '../../EnvVisualizerTypes';
+import { IVisible, StepsArray } from '../../EnvVisualizerTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { GenericArrow } from './GenericArrow';
 
-/** this class encapsulates an arrow to be drawn between 2 points */
+/** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromArrayUnit extends GenericArrow {
-  private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: Visible) {
+  private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: IVisible) {
     // Move up if target above source or to the right with same vertical position.
     // Moves up slightly more if target is to the right.
     steps.push((x, y) => [
@@ -29,10 +29,10 @@ export class ArrowFromArrayUnit extends GenericArrow {
     if (target instanceof FnValue || target instanceof GlobalFnValue) {
       if (Math.abs(target.y() - source.y()) < Config.DataUnitHeight * 2) {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
-        steps.push((x, y) => [target.centerX + Config.FnRadius * 2 + Config.FnRadius, target.y()]);
+        steps.push(() => [target.centerX + Config.FnRadius * 2 + Config.FnRadius, target.y()]);
         steps.push((x, y) => [x - Config.FnRadius, y]);
       } else {
-        steps.push((x, y) => [target.centerX + Config.FnRadius * 2, target.y()]);
+        steps.push(() => [target.centerX + Config.FnRadius * 2, target.y()]);
       }
     } else if (target instanceof ArrayValue) {
       if (source.parent === target) {
@@ -45,7 +45,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
         target.x() > source.x() &&
         target.level === source.parent.level
       ) {
-        steps.push((x, y) => [target.x(), target.y() + Config.DataUnitHeight / 2]);
+        steps.push(() => [target.x(), target.y() + Config.DataUnitHeight / 2]);
       } else {
         ArrowFromArrayUnit.emergeFromTopOrBottom(steps, source, target);
 
@@ -75,7 +75,7 @@ export class ArrowFromArrayUnit extends GenericArrow {
       }
     } else {
       // this shouldn't happen.
-      steps.push((x, y) => [target.x(), target.y()]);
+      steps.push(() => [target.x(), target.y()]);
     }
     return steps;
   }

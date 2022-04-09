@@ -3,7 +3,7 @@ import { StepsArray } from '../../EnvVisualizerTypes';
 import { ArrowLane } from '../ArrowLane';
 import { GenericArrow } from './GenericArrow';
 
-/** this class encapsulates an arrow to be drawn between 2 points */
+/** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromFn extends GenericArrow {
   protected calculateSteps() {
     const source = this.source;

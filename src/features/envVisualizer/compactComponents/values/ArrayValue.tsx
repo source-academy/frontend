@@ -12,12 +12,6 @@ import { Value } from './Value';
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
 export class ArrayValue extends Value {
-  private _x: number;
-  private _y: number;
-  private _width: number;
-  private _height: number;
-  private _isDrawn: boolean = false;
-
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
 
@@ -75,23 +69,8 @@ export class ArrayValue extends Value {
       this.units = [unit, ...this.units];
     }
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
   reset(): void {
-    this._isDrawn = false;
+    super.reset();
     this.units.map(x => x.reset());
     this.referencedBy.length = 0;
   }

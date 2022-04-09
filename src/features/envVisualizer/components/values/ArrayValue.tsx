@@ -1,35 +1,26 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Config } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { Data, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
+import { Data, ReferenceType } from '../../EnvVisualizerTypes';
 import { setUnhoveredStyle } from '../../EnvVisualizerUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayLevel } from '../ArrayLevel';
 import { ArrayUnit } from '../ArrayUnit';
-import { Arrow } from '../arrows/Arrow';
+import { ArrowFromText } from '../arrows/ArrowFromText';
 import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
-export class ArrayValue extends Value implements Hoverable {
-  private _x: number;
-  private _y: number;
-  private _width: number;
-  private _height: number;
-
-  /** check if the value is already drawn */
-  private _isDrawn: boolean = false;
+export class ArrayValue extends Value {
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
   private emptyUnit: ArrayEmptyUnit | undefined = undefined;
   level: ArrayLevel | undefined;
-  private _arrows: Arrow[] = [];
-  // private childrenArrows: Arrow[] = [];
+  private _arrows: GenericArrow[] = [];
   private selected: boolean = false;
   ref: RefObject<any> = React.createRef();
   parentArray: ArrayValue | undefined = undefined;
@@ -66,38 +57,19 @@ export class ArrayValue extends Value implements Hoverable {
     // initialize array units from the last index
     for (let i = this.data.length - 1; i >= 0; i--) {
       const unit = new ArrayUnit(i, this.data[i], this);
-
-      // update the dimensions, so that children array values can derive their coordinates
-      // from these intermediate dimensions
-
       this.units = [unit, ...this.units];
     }
   }
-  onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
-  onMouseLeave(e: KonvaEventObject<MouseEvent>): void {}
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
+  onMouseEnter(): void {}
+  onMouseLeave(): void {}
   isSelected(): boolean {
     return this.selected;
   }
-  arrows(): Arrow[] {
+  arrows(): GenericArrow[] {
     return this._arrows;
   }
   reset(): void {
-    this._isDrawn = false;
+    super.reset();
     this.units.map(x => x.reset());
     this.referencedBy.length = 0;
     this._arrows = [];
@@ -126,7 +98,7 @@ export class ArrayValue extends Value implements Hoverable {
     });
   }
 
-  addArrow = (arrow: Arrow) => {
+  addArrow = (arrow: GenericArrow) => {
     this._arrows.push(arrow);
   };
 
@@ -136,7 +108,7 @@ export class ArrayValue extends Value implements Hoverable {
     }
     this._isDrawn = true;
     this._arrows = (this.referencedBy.filter(x => x instanceof Binding) as Binding[]).map(x => {
-      const arrow: Arrow = Arrow.from(x.key).to(this);
+      const arrow: GenericArrow = new ArrowFromText(x.key).to(this);
       x.frame.trackObjects(this);
       x.frame.trackObjects(arrow);
       return arrow;
@@ -145,13 +117,7 @@ export class ArrayValue extends Value implements Hoverable {
       this.emptyUnit = new ArrayEmptyUnit(this);
     }
     return (
-      <Group
-        key={Layout.key++}
-        ref={this.ref}
-        // onClick={this.onClick}
-        // onMouseEnter={this.onMouseEnter}
-        // onMouseLeave={this.onMouseLeave}
-      >
+      <Group key={Layout.key++} ref={this.ref}>
         {this._arrows.map(arrow => arrow.draw())}
         {this.units.length > 0 && this.units.map(unit => unit.draw())}
         {this.emptyUnit && this.emptyUnit.draw()}

@@ -1,11 +1,11 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Env, EnvTreeNode, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
 import {
   getNonEmptyEnv,
   getTextWidth,
@@ -17,11 +17,12 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
-import { Arrow } from './arrows/Arrow';
+import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
+import { Visible } from './Visible';
 
 const frameNames = new Map([
   ['global', 'Global'],
@@ -33,12 +34,7 @@ const frameNames = new Map([
 ]);
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
-export class Frame implements Visible, Hoverable {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number = Config.FrameMinWidth;
-
+export class Frame extends Visible implements IHoverable {
   /** total height = frame height + frame title height */
   totalHeight: number;
   /** width of this frame + max width of the bound values */
@@ -60,9 +56,8 @@ export class Frame implements Visible, Hoverable {
   static cumWidths: number[] = [Config.CanvasPaddingX.valueOf()];
   static heights: number[] = [Config.CanvasPaddingY.valueOf()];
   offsetY: number;
-  ref: RefObject<any> = React.createRef();
   /** set of values to highlight when frame is over. */
-  private values: Hoverable[] = [];
+  private values: Visible[] = [];
   private selected: boolean = false;
 
   constructor(
@@ -72,6 +67,8 @@ export class Frame implements Visible, Hoverable {
     readonly xCoord: number,
     readonly yCoord: number
   ) {
+    super();
+    this._width = Config.FrameMinWidth;
     this.level = envTreeNode.level as Level;
     this.environment = envTreeNode.environment;
     this.parentFrame = envTreeNode.parent?.frame;
@@ -96,19 +93,6 @@ export class Frame implements Visible, Hoverable {
     this.update(envTreeNode);
   }
 
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-
   /**
    * Find the frame x-coordinate given a x-position.
    * @param x absolute position
@@ -124,7 +108,7 @@ export class Frame implements Visible, Hoverable {
     return 0;
   }
 
-  trackObjects(value: Hoverable): boolean {
+  trackObjects(value: Visible): boolean {
     const exists: boolean = this.values.includes(value);
     !exists && this.values.push(value);
     return !exists;
@@ -302,9 +286,9 @@ export class Frame implements Visible, Hoverable {
   };
 
   draw(): React.ReactNode {
-    let arrowToParentFrame: Arrow | undefined = undefined;
+    let arrowToParentFrame: ArrowFromFrame | undefined = undefined;
     if (this.parentFrame !== undefined) {
-      arrowToParentFrame = Arrow.from(this).to(this.parentFrame);
+      arrowToParentFrame = new ArrowFromFrame(this).to(this.parentFrame);
       this.trackObjects(arrowToParentFrame);
     }
     return (

@@ -12,7 +12,7 @@ import {
 import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { EnvTreeNode, FnTypes, Hoverable, ReferenceType } from '../../EnvVisualizerTypes';
+import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../EnvVisualizerTypes';
 import {
   getBodyText,
   getNonEmptyEnv,
@@ -21,18 +21,13 @@ import {
   setHoveredStyle,
   setUnhoveredStyle
 } from '../../EnvVisualizerUtils';
-import { Arrow } from '../arrows/Arrow';
+import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */
-export class FnValue extends Value implements Hoverable {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
-  private _isDrawn: boolean = false;
+export class FnValue extends Value implements IHoverable {
   centerX: number;
   readonly tooltipWidth: number;
   readonly exportTooltipWidth: number;
@@ -47,7 +42,7 @@ export class FnValue extends Value implements Hoverable {
   readonly tooltip: string;
   readonly exportTooltip: string;
   private selected: boolean = false;
-  private _arrow: Arrow | undefined;
+  private _arrow: ArrowFromFn | undefined;
 
   /** the parent/enclosing environment of this fn value */
   readonly enclosingEnvNode: EnvTreeNode;
@@ -105,25 +100,11 @@ export class FnValue extends Value implements Hoverable {
       getTextWidth(this.exportBodyText)
     );
   }
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
+
   isSelected(): boolean {
     return this.selected;
   }
-  arrow(): Arrow | undefined {
+  arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
   updatePosition(): void {
@@ -149,7 +130,7 @@ export class FnValue extends Value implements Hoverable {
     this._y += this.radius;
   }
   reset(): void {
-    this._isDrawn = false;
+    super.reset();
     this.referencedBy.length = 0;
   }
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -183,7 +164,8 @@ export class FnValue extends Value implements Hoverable {
 
   draw(): React.ReactNode {
     this._isDrawn = true;
-    this._arrow = this.enclosingEnvNode.frame && Arrow.from(this).to(this.enclosingEnvNode.frame);
+    this._arrow =
+      this.enclosingEnvNode.frame && new ArrowFromFn(this).to(this.enclosingEnvNode.frame);
     return (
       <React.Fragment key={Layout.key++}>
         <Group

@@ -10,11 +10,6 @@ import { Value } from './Value';
 
 /** this class encapsulates an unassigned value in Source, internally represented as a symbol */
 export class UnassignedValue extends Value {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
-  private _isDrawn: boolean = false;
   readonly data: UnassignedData = Symbol();
   readonly text: Text;
 
@@ -45,23 +40,8 @@ export class UnassignedValue extends Value {
     this._height = this.text.height();
   }
 
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
-  }
-  isDrawn(): boolean {
-    return this._isDrawn;
-  }
   reset(): void {
-    this._isDrawn = false;
+    super.reset();
     this.referencedBy.length = 0;
   }
   updatePosition(): void {}

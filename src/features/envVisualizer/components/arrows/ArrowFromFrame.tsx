@@ -7,7 +7,7 @@ import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
-/** this class encapsulates an arrow to be drawn between 2 points */
+/** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromFrame extends GenericArrow {
   protected calculateSteps() {
     const target = this.target;

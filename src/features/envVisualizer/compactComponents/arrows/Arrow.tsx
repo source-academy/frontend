@@ -1,12 +1,12 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
-import { Hoverable, Visible } from '../../EnvVisualizerTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
+import { Visible } from '../Visible';
 import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';
@@ -14,7 +14,7 @@ import { ArrowFromText } from './ArrowFromText';
 import { GenericArrow } from './GenericArrow';
 
 /** this class contains a factory method for an arrow to be drawn between 2 points */
-export abstract class Arrow implements Visible, Hoverable {
+export abstract class Arrow {
   abstract draw: (key?: number) => React.ReactNode;
   abstract onMouseEnter(e: KonvaEventObject<MouseEvent>): void;
   abstract onMouseLeave(e: KonvaEventObject<MouseEvent>): void;
@@ -26,10 +26,11 @@ export abstract class Arrow implements Visible, Hoverable {
   abstract y(): number;
   abstract height(): number;
   abstract width(): number;
+  abstract isSelected(): boolean;
   abstract path(): string;
 
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
-  public static from(source: Visible): Arrow {
+  public static from(source: Visible): GenericArrow {
     if (source instanceof Frame) return new ArrowFromFrame(source);
     if (source instanceof FnValue || source instanceof GlobalFnValue)
       return new ArrowFromFn(source);

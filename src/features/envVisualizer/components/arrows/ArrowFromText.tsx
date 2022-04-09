@@ -8,7 +8,7 @@ import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { GenericArrow } from './GenericArrow';
 
-/** this class encapsulates an arrow to be drawn between 2 points */
+/** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromText extends GenericArrow {
   protected calculateSteps() {
     const source = this.source;
@@ -23,7 +23,7 @@ export class ArrowFromText extends GenericArrow {
         return newX < x
           ? [x, y - Math.sign(source.y() - target.y()) * (source.height() + Config.TextMargin)]
           : [x, y];
-      }); // if the potential vertical lane is to the left, loop above or below text to allow arrow to move left.
+      }); // if the potential vertical lane is to the left, loop above or below text to allow GenericArrow to move left.
       steps.push((x, y) => [
         ArrowLane.getVerticalLaneAfterSource(target, x).getPosition(target),
         y
@@ -44,7 +44,7 @@ export class ArrowFromText extends GenericArrow {
 
       // Move to x position closer to array on horizontal lane
       steps.push((x, y) => {
-        let newX = x;
+        let newX: number;
         const yDiff = source.y() - (target.y() + Config.DataUnitHeight / 2);
         const newY =
           target.y() +

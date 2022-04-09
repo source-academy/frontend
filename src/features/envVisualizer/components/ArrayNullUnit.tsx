@@ -1,41 +1,25 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 
 import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { ReferenceType, Visible } from '../EnvVisualizerTypes';
+import { ReferenceType } from '../EnvVisualizerTypes';
+import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
-export class ArrayNullUnit implements Visible {
-  private _x: number;
-  private _y: number;
-  private _height: number;
-  private _width: number;
+export class ArrayNullUnit extends Visible {
   arrayUnit: ReferenceType;
   referencedBy: ReferenceType[];
-  ref: RefObject<any> = React.createRef();
 
   constructor(referencedBy: ReferenceType[]) {
+    super();
     this.referencedBy = referencedBy;
     this.arrayUnit = referencedBy[0];
     this._x = this.arrayUnit.x();
     this._y = this.arrayUnit.y();
     this._height = this.arrayUnit.height();
     this._width = this.arrayUnit.width();
-  }
-
-  x(): number {
-    return this._x;
-  }
-  y(): number {
-    return this._y;
-  }
-  height(): number {
-    return this._height;
-  }
-  width(): number {
-    return this._width;
   }
 
   updatePosition = () => {
