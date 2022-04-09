@@ -438,6 +438,7 @@ export class Layout extends React.Component {
     download_images();
   };
 
+  /** Calculate the test to be displayed for button to save the images.*/
   private static saveButtonText(): String {
     return `Save ${
       Layout.width() > Config.MaxExportWidth || Layout.height() > Config.MaxExportHeight
@@ -446,6 +447,19 @@ export class Layout extends React.Component {
           ' images'
         : 'image'
     }`;
+  }
+
+  /**
+   * Calculates the required transformation for the stage given the scroll-container div scroll position.
+   * @param x x position of the scroll container
+   * @param y y position of the scroll container
+   */
+  private static handleScrollPosition(x: number, y: number) {
+    const dx = x - Layout.invisiblePaddingHorizontal;
+    const dy = y - Layout.invisiblePaddingVertical;
+    this.stageRef.current.container().style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+    this.stageRef.current.x(-dx);
+    this.stageRef.current.y(-dy);
   }
 
   static draw(): React.ReactNode {
@@ -457,14 +471,9 @@ export class Layout extends React.Component {
           <div
             id="scroll-container"
             ref={Layout.scrollContainerRef}
-            onScroll={e => {
-              const dx = e.currentTarget.scrollLeft - Layout.invisiblePaddingHorizontal;
-              const dy = e.currentTarget.scrollTop - Layout.invisiblePaddingVertical;
-              this.stageRef.current.container().style.transform =
-                'translate(' + dx + 'px, ' + dy + 'px)';
-              this.stageRef.current.x(-dx);
-              this.stageRef.current.y(-dy);
-            }}
+            onScroll={e =>
+              Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
+            }
             style={{
               width: Layout.visibleWidth,
               height: Layout.visibleHeight,

@@ -4,7 +4,7 @@ import {
 } from 'js-slang/dist/createContext';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 
 import { ArrayUnit as CompactArrayUnit } from './compactComponents/ArrayUnit';
 import { Binding as CompactBinding } from './compactComponents/Binding';
@@ -22,18 +22,13 @@ export interface Drawable {
 }
 
 /** this interface defines a Hoverable object */
-export interface Hoverable {
-  ref: RefObject<any>;
+export interface IHoverable {
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void;
   onMouseLeave(e: KonvaEventObject<MouseEvent>): void;
 }
 
-// export interface Clickable {
-//   onClick: (e: KonvaEventObject<MouseEvent>) => void;
-// }
-
 /** this interface defines coordinates and dimensions */
-export interface Visible extends Drawable {
+export interface IVisible extends Drawable {
   /** x coordinate of top-left corner */
   x(): number;
 
