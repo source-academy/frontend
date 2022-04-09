@@ -4,8 +4,6 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
-import { Binding as CompactBinding } from './compactComponents/Binding';
-import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
@@ -129,18 +127,7 @@ export function isMainReference(value: Value, reference: ReferenceType) {
 
 /** Returns `true` if `reference` is the main reference of `value` */
 export function isCompactMainReference(value: CompactValue, reference: CompactReferenceType) {
-  if (value instanceof FnValue) {
-    // chooses the frame of the enclosing environment, not necessarily the first in referencedBy.
-    return (
-      reference instanceof CompactBinding &&
-      value.enclosingEnvNode === (reference as CompactBinding).frame.envTreeNode &&
-      value.referencedBy.findIndex(x => x instanceof CompactBinding && x === reference) !== -1
-    );
-  } else if (value instanceof CompactGlobalFnValue) {
-    return value.referencedBy.find(x => x instanceof CompactBinding) === reference;
-  } else {
-    return value.referencedBy[0] === reference;
-  }
+  return value.referencedBy[0] === reference;
 }
 
 /** checks if `value` is a `number` */
