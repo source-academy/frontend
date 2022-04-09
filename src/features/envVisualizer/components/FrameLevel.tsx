@@ -47,14 +47,13 @@ export class FrameLevel extends Level {
   }
 
   /**
-   * Insert the next frame into this FrameLevel.
+   * Insert the next frame into this FrameLevel. Places new frame not to the left of the last frame added.
+   * (calculate xCoord of frames, and addFrames in order from left to right and top to bottom.)
    * @param node
    */
   addFrame = (node: EnvTreeNode) => {
     // const coordinate: number = this.lastXcoord + 1;
-    // const coordinate: number = Math.max(FrameLevel.maxXcoord, this.lastXcoord + 1);
-    // array not at left of immediate parent frame.
-    const coordinate: number = Math.max(this.lastXcoord + 1, node.parent?.frame?.xCoord ?? 0);
+    const coordinate: number = Math.max(FrameLevel.maxXcoord, this.lastXcoord + 1);
     this.lastXcoord = coordinate;
     FrameLevel.maxXcoord = Math.max(FrameLevel.maxXcoord, coordinate);
     node.level = this;

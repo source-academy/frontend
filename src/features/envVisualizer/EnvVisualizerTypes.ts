@@ -86,6 +86,7 @@ export type EnvTreeNode = EnvironmentTreeNode & {
   frame?: Frame;
   compactLevel: CompactLevel;
   compactFrame?: CompactFrame;
+  xCoord?: number;
 };
 
 /** empty object type  */

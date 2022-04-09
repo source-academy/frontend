@@ -91,14 +91,21 @@ export class Grid implements Visible {
     nodes.sort((a, b) => parseInt(a[1].environment.id) - parseInt(b[1].environment.id));
     this.widths = [];
     Grid.cumHeights = [];
+    // Compute the x coordinate of each frame by the max of 1 + the last xcoord of all frames before that frame on the same level
+    // and the xcoord of its immediate parent
+    const coordinateGrid: number[] = [];
     nodes.forEach(node => {
-      this.frameLevels[node[0]].addFrame(node[1]);
+      node[1].xCoord = Math.max(
+        (coordinateGrid[node[0]] ?? 0) + 1,
+        (node[1] as EnvTreeNode).parent?.xCoord ?? 0
+      );
+      coordinateGrid[node[0]] = node[1].xCoord;
     });
-    this.frameLevels.forEach(level => {
-      level.frames.forEach(frame => {
-        frame.updatePosition(Frame.cumWidths[frame.xCoord], frame.y());
-      });
-    });
+    // ordered by increasing y coord (since frame guaranteed to be to the right of its parent, and all frames are sorted by frame id)
+    // followed by increasing xCoord
+    nodes.sort((a, b) => (a[1].xCoord ?? 0) - (b[1].xCoord ?? 0));
+    nodes.forEach(node => this.frameLevels[node[0]].addFrame(node[1]));
+
     Layout.values.forEach((v, d, m) => {
       if (v instanceof ArrayValue) {
         let bindings = v.referencedBy.filter(r => r instanceof Binding) as Binding[];
