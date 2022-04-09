@@ -55,36 +55,38 @@ export default class EnvVisualizer {
   }
 
   static redraw() {
-    // checks if the required diagram exists, and updates the dom node using setVis
-    if (
-      EnvVisualizer.getCompactLayout() &&
-      EnvVisualizer.getPrintableMode() &&
-      Layout.currentCompactLight !== undefined
-    ) {
-      this.setVis(Layout.currentCompactLight);
-    } else if (
-      EnvVisualizer.getCompactLayout() &&
-      !EnvVisualizer.getPrintableMode() &&
-      Layout.currentCompactDark !== undefined
-    ) {
-      this.setVis(Layout.currentCompactDark);
-    } else if (
-      !EnvVisualizer.getCompactLayout() &&
-      EnvVisualizer.getPrintableMode() &&
-      Layout.currentLight !== undefined
-    ) {
-      this.setVis(Layout.currentLight);
-    } else if (
-      !EnvVisualizer.getCompactLayout() &&
-      !EnvVisualizer.getPrintableMode() &&
-      Layout.currentDark !== undefined
-    ) {
-      this.setVis(Layout.currentDark);
-    } else {
-      Layout.setContext(EnvVisualizer.environmentTree);
-      this.setVis(Layout.draw());
+    if (this.environmentTree) {
+      // checks if the required diagram exists, and updates the dom node using setVis
+      if (
+        EnvVisualizer.getCompactLayout() &&
+        EnvVisualizer.getPrintableMode() &&
+        Layout.currentCompactLight !== undefined
+      ) {
+        this.setVis(Layout.currentCompactLight);
+      } else if (
+        EnvVisualizer.getCompactLayout() &&
+        !EnvVisualizer.getPrintableMode() &&
+        Layout.currentCompactDark !== undefined
+      ) {
+        this.setVis(Layout.currentCompactDark);
+      } else if (
+        !EnvVisualizer.getCompactLayout() &&
+        EnvVisualizer.getPrintableMode() &&
+        Layout.currentLight !== undefined
+      ) {
+        this.setVis(Layout.currentLight);
+      } else if (
+        !EnvVisualizer.getCompactLayout() &&
+        !EnvVisualizer.getPrintableMode() &&
+        Layout.currentDark !== undefined
+      ) {
+        this.setVis(Layout.currentDark);
+      } else {
+        Layout.setContext(EnvVisualizer.environmentTree);
+        this.setVis(Layout.draw());
+      }
+      Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
     }
-    Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
   static updateDimensions(width: number, height: number) {

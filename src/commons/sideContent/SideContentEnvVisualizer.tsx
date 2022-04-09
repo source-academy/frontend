@@ -73,6 +73,7 @@ class SideContentEnvVisualizer extends React.Component<
   componentDidMount() {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
+    EnvVisualizer.redraw();
   }
   componentWillUnmount() {
     this.handleResize.cancel();
