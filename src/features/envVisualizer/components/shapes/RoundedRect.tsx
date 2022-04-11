@@ -19,6 +19,9 @@ interface Props {
   onClick?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
 }
 
+/**
+ * Represents Rectangle with rounded corners, for boundary of arrays (compact and non-compact).
+ */
 export const RoundedRect: React.FC<Props> = ({
   x,
   y,

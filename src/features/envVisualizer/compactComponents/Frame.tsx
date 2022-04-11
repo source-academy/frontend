@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
+import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
@@ -19,7 +20,6 @@ import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
-import { Visible } from './Visible';
 
 const frameNames = new Map([
   ['global', 'Global'],

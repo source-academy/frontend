@@ -1,6 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 
+import { RoundedRect } from '../components/shapes/RoundedRect';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { CompactConfig } from '../EnvVisualizerCompactConfig';
@@ -9,7 +10,6 @@ import { Data } from '../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
-import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
@@ -92,6 +92,7 @@ export class ArrayUnit extends Visible {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           cornerRadius={cornerRadius}
+          forwardRef={this.ref}
         />
         {this.value.draw()}
         {this.value instanceof PrimitiveValue || new ArrowFromArrayUnit(this).to(this.value).draw()}

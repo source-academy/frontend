@@ -1,11 +1,11 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
+import { Visible } from '../components/Visible';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
-import { Visible } from './Visible';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */
 export class Level extends Visible {

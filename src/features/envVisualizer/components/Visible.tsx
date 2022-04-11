@@ -3,6 +3,9 @@ import { RefObject } from 'react';
 
 import { IVisible } from '../EnvVisualizerTypes';
 
+/**
+ * class to implement the IVisible interface, used by both compact and non-compact components.
+ */
 export abstract class Visible implements IVisible {
   protected _x: number = 0;
   protected _y: number = 0;

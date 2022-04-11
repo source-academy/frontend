@@ -2,11 +2,11 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
+import { Visible } from '../components/Visible';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, IHoverable } from '../EnvVisualizerTypes';
 import { getTextWidth } from '../EnvVisualizerUtils';
-import { Visible } from './Visible';
 
 export interface TextOptions {
   maxWidth: number;
