@@ -101,19 +101,21 @@ export class ArrowLane {
       } else {
         if (this.id % 2 === 0) {
           // arrow between array level (above) and above horizontal frame arows (below)
-          return Grid.cumHeights[this.id]
-          - Config.FrameMarginY * 0.8
-          + (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4;
+          return (
+            Grid.cumHeights[this.id] -
+            Config.FrameMarginY * 0.8 +
+            (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
+          );
         } else {
           // arrows below frame level and above array level
           // twice as many arrow lanes since it doesn't have to share space with the frame - frame arrows..
           lane = (index * Config.ArrowLaneInterval) % (Config.ArrowNumLanes * 2 + 1);
           return (
-            Grid.cumHeights[this.id]
-            - Config.FrameMarginY * 0.4 + (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
+            Grid.cumHeights[this.id] -
+            Config.FrameMarginY * 0.4 +
+            (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
           );
         }
-        
       }
     }
   };
