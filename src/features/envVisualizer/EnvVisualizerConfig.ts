@@ -47,7 +47,7 @@ export enum Config {
   ArrowCornerRadius = 10,
   ArrowMinHeight = 100,
   ArrowNumLanes = 5,
-  ArrowLaneInterval = 2, // lane for next arrow = previous lane + lane interval % num lanes.
+  ArrowLaneInterval = 1, // lane for next arrow = previous lane + lane interval % num lanes.
   FrameArrowStrokeWidth = 2,
   FrameArrowHoveredStrokeWidth = 2.5,
   MaxExportWidth = 20000,
