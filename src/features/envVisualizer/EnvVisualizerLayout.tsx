@@ -394,33 +394,35 @@ export class Layout extends React.Component {
    * Scrolls diagram to top left, and saves the diagram as multiple images of width < MaxExportWidth.
    */
   static exportImage = () => {
-    Layout.stageRef.current?.y(0);
-    Layout.stageRef.current?.x(0);
-    const horizontalImages = Math.ceil(Layout.width() / Config.MaxExportWidth);
-    const verticalImages = Math.ceil(Layout.height() / Config.MaxExportHeight);
+    const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
+    container.scrollTo({ left: 0, top: 0 });
+    Layout.handleScrollPosition(0, 0);
+    const height = Layout.height();
+    const width = Layout.width();
+    const horizontalImages = Math.ceil(width / Config.MaxExportWidth);
+    const verticalImages = Math.ceil(height / Config.MaxExportHeight);
     const download_images = () => {
       const download_next = (n: number) => {
         if (n >= horizontalImages * verticalImages) {
           Layout.stageRef.current?.width(Layout.stageWidth);
           Layout.stageRef.current?.height(Layout.stageHeight);
-          Layout.stageRef.current?.y(Layout.invisiblePaddingVertical);
-          Layout.stageRef.current?.x(Layout.invisiblePaddingHorizontal);
+          container.scrollTo({ left: 0, top: 0 });
           EnvVisualizer.redraw();
           return;
         }
         const x = n % horizontalImages;
         const y = Math.floor(n / horizontalImages);
         Layout.stageRef.current?.width(
-          Math.min(Layout.width() - x * Config.MaxExportWidth, Config.MaxExportWidth)
+          Math.min(width - x * Config.MaxExportWidth, Config.MaxExportWidth)
         );
         Layout.stageRef.current?.height(
-          Math.min(Layout.height() - y * Config.MaxExportHeight, Config.MaxExportHeight)
+          Math.min(height - y * Config.MaxExportHeight, Config.MaxExportHeight)
         );
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = this.stageRef.current.toDataURL({
-          x: x * Config.MaxExportWidth,
-          y: y * Config.MaxExportHeight,
+          x: x * Config.MaxExportWidth + Layout.invisiblePaddingHorizontal,
+          y: y * Config.MaxExportHeight + Layout.invisiblePaddingVertical,
           mimeType: 'image/jpeg'
         });
 
@@ -512,8 +514,8 @@ export class Layout extends React.Component {
                     }}
                   >
                     <Checkbox
-                      checked={EnvVisualizer.getCompactLayout()}
-                      label="Compact"
+                      checked={!EnvVisualizer.getCompactLayout()}
+                      label="Experimental"
                       style={{
                         marginBottom: '0px',
                         color: EnvVisualizer.getPrintableMode()
