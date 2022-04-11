@@ -5,7 +5,7 @@ import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data } from '../EnvVisualizerTypes';
 import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
-import { Arrow } from './arrows/Arrow';
+import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
@@ -34,8 +34,8 @@ export class Binding extends Visible {
    */
   readonly isDummyBinding: boolean = false;
   keyYOffset: number;
-  private arrow: GenericArrow | undefined = undefined;
-  public getArrow = (): GenericArrow | undefined => {
+  private arrow: GenericArrow<Text, Value> | undefined = undefined;
+  public getArrow = (): GenericArrow<Text, Value> | undefined => {
     return this.arrow;
   };
 
@@ -141,7 +141,7 @@ export class Binding extends Visible {
         this.value instanceof ArrayValue
       )
     ) {
-      this.arrow = Arrow.from(this.key).to(this.value);
+      this.arrow = new ArrowFromText(this.key).to(this.value);
     }
     return (
       <React.Fragment key={Layout.key++}>

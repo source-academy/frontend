@@ -8,7 +8,7 @@ import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromFrame extends GenericArrow {
+export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
   protected calculateSteps() {
     const target = this.target;
     if (!target) return [];

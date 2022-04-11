@@ -1,10 +1,13 @@
 import { Config } from '../../EnvVisualizerConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
 import { ArrowLane } from '../ArrowLane';
+import { Frame } from '../Frame';
+import { FnValue } from '../values/FnValue';
+import { GlobalFnValue } from '../values/GlobalFnValue';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromFn extends GenericArrow {
+export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue, Frame> {
   protected calculateSteps() {
     const source = this.source;
     const target = this.target;

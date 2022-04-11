@@ -18,6 +18,7 @@ import {
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -286,7 +287,7 @@ export class Frame extends Visible implements IHoverable {
   };
 
   draw(): React.ReactNode {
-    let arrowToParentFrame: ArrowFromFrame | undefined = undefined;
+    let arrowToParentFrame: GenericArrow<Frame, Frame> | undefined = undefined;
     if (this.parentFrame !== undefined) {
       arrowToParentFrame = new ArrowFromFrame(this).to(this.parentFrame);
       this.trackObjects(arrowToParentFrame);

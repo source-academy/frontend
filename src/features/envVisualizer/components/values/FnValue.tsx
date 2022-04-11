@@ -22,7 +22,10 @@ import {
   setUnhoveredStyle
 } from '../../EnvVisualizerUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
+import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
+import { Frame } from '../Frame';
+import { GlobalFnValue } from './GlobalFnValue';
 import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
@@ -42,7 +45,7 @@ export class FnValue extends Value implements IHoverable {
   readonly tooltip: string;
   readonly exportTooltip: string;
   private selected: boolean = false;
-  private _arrow: ArrowFromFn | undefined;
+  private _arrow: GenericArrow<FnValue | GlobalFnValue, Frame> | undefined;
 
   /** the parent/enclosing environment of this fn value */
   readonly enclosingEnvNode: EnvTreeNode;
@@ -104,7 +107,7 @@ export class FnValue extends Value implements IHoverable {
   isSelected(): boolean {
     return this.selected;
   }
-  arrow(): ArrowFromFn | undefined {
+  arrow(): GenericArrow<FnValue | GlobalFnValue, Frame> | undefined {
     return this._arrow;
   }
   updatePosition(): void {

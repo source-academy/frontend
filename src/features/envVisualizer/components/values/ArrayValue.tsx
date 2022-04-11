@@ -11,6 +11,7 @@ import { ArrayUnit } from '../ArrayUnit';
 import { ArrowFromText } from '../arrows/ArrowFromText';
 import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
+import { Text } from '../Text';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
@@ -20,7 +21,7 @@ export class ArrayValue extends Value {
   units: ArrayUnit[] = [];
   private emptyUnit: ArrayEmptyUnit | undefined = undefined;
   level: ArrayLevel | undefined;
-  private _arrows: GenericArrow[] = [];
+  private _arrows: (GenericArrow<Text, ArrayValue> | GenericArrow<ArrayUnit, Value>)[] = [];
   private selected: boolean = false;
   ref: RefObject<any> = React.createRef();
   parentArray: ArrayValue | undefined = undefined;
@@ -65,7 +66,7 @@ export class ArrayValue extends Value {
   isSelected(): boolean {
     return this.selected;
   }
-  arrows(): GenericArrow[] {
+  arrows(): (GenericArrow<Text, ArrayValue> | GenericArrow<ArrayUnit, Value>)[] {
     return this._arrows;
   }
   reset(): void {
@@ -98,7 +99,7 @@ export class ArrayValue extends Value {
     });
   }
 
-  addArrow = (arrow: GenericArrow) => {
+  addArrow = (arrow: GenericArrow<Text, ArrayValue> | GenericArrow<ArrayUnit, Value>) => {
     this._arrows.push(arrow);
   };
 
@@ -108,11 +109,11 @@ export class ArrayValue extends Value {
     }
     this._isDrawn = true;
     this._arrows = (this.referencedBy.filter(x => x instanceof Binding) as Binding[]).map(x => {
-      const arrow: GenericArrow = new ArrowFromText(x.key).to(this);
+      const arrow: GenericArrow<Text, ArrayValue> = new ArrowFromText<ArrayValue>(x.key).to(this);
       x.frame.trackObjects(this);
       x.frame.trackObjects(arrow);
       return arrow;
-    }) as GenericArrow[];
+    }) as GenericArrow<Text, ArrayValue>[];
     if (this.units.length === 0) {
       this.emptyUnit = new ArrayEmptyUnit(this);
     }

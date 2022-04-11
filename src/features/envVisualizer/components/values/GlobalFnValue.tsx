@@ -20,7 +20,10 @@ import {
   setUnhoveredStyle
 } from '../../EnvVisualizerUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
+import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
+import { Frame } from '../Frame';
+import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
@@ -31,7 +34,7 @@ export class GlobalFnValue extends Value {
   readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  private _arrow: ArrowFromFn | undefined;
+  private _arrow: GenericArrow<FnValue | GlobalFnValue, Frame> | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
@@ -94,7 +97,7 @@ export class GlobalFnValue extends Value {
   isSelected(): boolean {
     return this.selected;
   }
-  arrow(): ArrowFromFn | undefined {
+  arrow(): GenericArrow<FnValue | GlobalFnValue, Frame> | undefined {
     return this._arrow;
   }
 

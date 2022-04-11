@@ -4,10 +4,11 @@ import { ArrayUnit } from '../ArrayUnit';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
+import { Value } from '../values/Value';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromArrayUnit extends GenericArrow {
+export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
   private static emergeFromTopOrBottom(steps: StepsArray, from: ArrayUnit, to: IVisible) {
     // Move up if target above source or to the right with same vertical position.
     // Moves up slightly more if target is to the right.

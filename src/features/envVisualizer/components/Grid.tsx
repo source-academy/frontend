@@ -107,34 +107,7 @@ export class Grid extends Visible {
             Frame.cumWidths[(v.referencedBy[0] as Binding).frame.xCoord + 1] +
             0.8 * Config.FrameMarginX;
           // Alternative approach to move array closer to horizontal mean of bindings
-          // (might improve readability for certain larger diagrams e.g. reverse but increase height alot.)
-          // const references = v.units
-          //   .filter(x => x.value instanceof FnValue || x.value instanceof GlobalFnValue)
-          //   .map(x => x.value as FnValue);
-          // let [yCoordSum, xCoordSum, count] = bindings.reduce(
-          //   (acc, binding) => {
-          //     const [yCoordSum, xCoordSum, count] = acc;
-          //     return [yCoordSum + binding.frame.yCoord, xCoordSum + binding.frame.xCoord, count + 1];
-          //   },
-          //   [0, 0, 0]
-          // );
-          // // Move array closer to fn objects they are pointing to
-          // [yCoordSum, xCoordSum, count] = references.reduce(
-          //   (acc, ref) => {
-          //     const [yCoordSum, xCoordSum, count] = acc;
-          //     return [
-          //       yCoordSum + (ref?.enclosingEnvNode?.frame?.yCoord || 0),
-          //       xCoordSum + (ref?.enclosingEnvNode?.frame?.xCoord || 0),
-          //       count + (ref.enclosingEnvNode === undefined ? 0 : 1)
-          //     ];
-          //   },
-          //   [yCoordSum, xCoordSum, count]
-          // );
-          // const meanX = (xCoordSum / count);
-          // x = Math.max(x,
-          //     Frame.cumWidths[Math.floor(meanX)] * (meanX - Math.floor(meanX)) +
-          //     Frame.cumWidths[Math.floor(meanX) + 1] * (Math.floor(meanX) + 1 - meanX) +
-          //     0.8 * Config.FrameMarginX);
+          // https://github.com/source-academy/frontend/blob/dcd34c1cb792b96123d9163d2e31c960bedf123d/src/features/envVisualizer/components/Grid.tsx#L109
           this.arrayLevels[Math.floor(y)].addArray(v, x);
         } else if (v.referencedBy[0] instanceof ArrayUnit) {
           const y = v.referencedBy[0].parent.level?.parentLevel?.yCoord ?? 0;

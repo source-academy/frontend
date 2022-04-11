@@ -7,6 +7,7 @@ import { Layout } from '../EnvVisualizerLayout';
 import { Data } from '../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
+import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
 import { FnValue } from './values/FnValue';
@@ -29,7 +30,7 @@ export class ArrayUnit extends Visible {
   /** check if the value is already drawn */
 
   parent: ArrayValue;
-  arrow: ArrowFromArrayUnit | undefined = undefined;
+  arrow: GenericArrow<ArrayUnit, Value> | undefined = undefined;
 
   constructor(
     /** index of this unit in its parent */

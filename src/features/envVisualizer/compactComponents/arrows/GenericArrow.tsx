@@ -9,15 +9,16 @@ import { IVisible, StepsArray } from '../../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow extends Visible {
+export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {
   private _path: string = '';
   points: number[] = [];
-  source: IVisible;
-  target: IVisible | undefined;
+  source: Source;
+  target: Target | undefined;
 
-  constructor(from: IVisible) {
+  constructor(from: Source) {
     super();
     this.source = from;
+    this.target = undefined;
     this._x = from.x();
     this._y = from.y();
   }
@@ -25,7 +26,7 @@ export class GenericArrow extends Visible {
     return this._path;
   }
 
-  to(to: IVisible): GenericArrow {
+  to(to: Target): GenericArrow<Source, Target> {
     this.target = to;
     this._width = Math.abs(to.x() - this.source.x());
     this._height = Math.abs(to.y() - this.source.y());

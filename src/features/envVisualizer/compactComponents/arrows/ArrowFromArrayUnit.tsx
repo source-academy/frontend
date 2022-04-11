@@ -1,12 +1,14 @@
 import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
+import { ArrayUnit } from '../ArrayUnit';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
+import { Value } from '../values/Value';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromArrayUnit extends GenericArrow {
+export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
@@ -36,8 +38,6 @@ export class ArrowFromArrayUnit extends GenericArrow {
           to.y() + (from.y() > to.y() ? CompactConfig.DataUnitHeight : 0)
         ]);
       }
-    } else {
-      steps.push(() => [to.x(), to.y()]);
     }
 
     return steps;

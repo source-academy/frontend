@@ -30,7 +30,7 @@ export abstract class Arrow {
   abstract path(): string;
 
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
-  public static from(source: Visible): GenericArrow {
+  public static from(source: Visible): GenericArrow<Visible, Visible> {
     if (source instanceof Frame) return new ArrowFromFrame(source);
     if (source instanceof FnValue || source instanceof GlobalFnValue)
       return new ArrowFromFn(source);

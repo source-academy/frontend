@@ -27,8 +27,8 @@ export class Binding extends Visible {
    * i.e. the value is anonymous
    */
   readonly isDummyBinding: boolean = false;
-  private arrow: GenericArrow | undefined = undefined;
-  public getArrow = (): GenericArrow | undefined => {
+  private arrow: GenericArrow<Text, Value> | undefined = undefined;
+  public getArrow = (): GenericArrow<Text, Value> | undefined => {
     return this.arrow;
   };
 

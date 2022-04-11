@@ -3,13 +3,15 @@ import { StepsArray } from '../../EnvVisualizerTypes';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { Grid } from '../Grid';
+import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
+import { Value } from '../values/Value';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromText extends GenericArrow {
+export class ArrowFromText<V extends Value> extends GenericArrow<Text, V> {
   protected calculateSteps() {
     const source = this.source;
     const target = this.target;

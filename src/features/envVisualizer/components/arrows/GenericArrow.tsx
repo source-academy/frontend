@@ -16,17 +16,20 @@ import { Text } from '../Text';
 import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow extends Visible implements IHoverable {
+export class GenericArrow<Source extends IVisible, Target extends IVisible>
+  extends Visible
+  implements IHoverable
+{
   points: number[] = [];
-  source: IVisible;
-  target: IVisible | undefined;
+  source: Source;
+  target: Target | undefined;
 
   private _path: string = '';
   private selected: boolean = false;
   readonly unhovered_opacity: number = Config.ArrowUnhoveredOpacity;
   readonly hovered_opacity: number = 1;
 
-  constructor(source: IVisible) {
+  constructor(source: Source) {
     super();
     this.source = source;
     this._x = source.x();
@@ -35,7 +38,7 @@ export class GenericArrow extends Visible implements IHoverable {
   path() {
     return this._path;
   }
-  to(target: IVisible) {
+  to(target: Target): GenericArrow<Source, Target> {
     this.target = target;
     this._width = Math.abs(target.x() - this.source.x());
     this._height = Math.abs(target.y() - this.source.y());
