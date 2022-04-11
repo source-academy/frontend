@@ -47,21 +47,18 @@ export class ArrowFromText<V extends Value> extends GenericArrow<Text, V> {
       // Move to x position closer to array on horizontal lane
       steps.push((x, y) => {
         let newX: number;
-        const yDiff = source.y() - (target.y() + Config.DataUnitHeight / 2);
-        const newY =
-          target.y() +
-          Config.DataUnitHeight / 2 +
-          (Math.abs(yDiff) < Config.DataUnitHeight ? 0 : Math.sign(yDiff)) * Config.DataUnitHeight;
         if (x < target.x()) {
-          newX = Math.max(x, target.x() - Math.abs(y - target.y()));
+          newX = Math.max(x + Config.DataUnitWidth, target.x() - Math.abs(y - target.y()));
         } else if (x >= target.x() + target.units.length * Config.DataUnitWidth) {
           newX = target.x() + target.units.length * Config.DataUnitWidth;
-          newX = Math.min(x, newX + Math.abs(y - target.y()));
+          newX = Math.min(x - Config.DataUnitWidth, newX + Math.abs(y - target.y()));
         } else {
+          // if current point of arrow is somewhere above / below array, move halfway to corner of some arrayunit.
           const index = Math.floor((x - target.x()) / Config.DataUnitWidth);
           newX = target.x() + Config.DataUnitWidth * index;
+          return [(x + newX) / 2, (y + target.y()) / 2];
         }
-        return [newX, newY];
+        return [newX, y];
       });
       // Move to array pointing to corner of some arrayunit
       steps.push((x, y) => {

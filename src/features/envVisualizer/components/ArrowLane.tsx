@@ -70,13 +70,16 @@ export class ArrowLane {
   };
 
   getPosition = (target: Value | IVisible): number => {
+    // this method of calculating the position of arrows can be improved,
+    // currently just tries to fit arrows into the padding of the frame/array levels, might be better
+    // to place the arrow lanes between the levels, so we can reduce the padding between levels.
     // place frame arrows on bottom half of horizontal lanes
     if (target instanceof Frame) {
       let index = this.frames.indexOf(target);
       if (index === -1) {
         index = this.frames.push(target) - 1;
       }
-      const lane: number = (index * 2) % Config.ArrowNumLanes;
+      const lane: number = (index * Config.ArrowLaneInterval) % Config.ArrowNumLanes;
       return (
         Grid.cumHeights[this.id] -
         Config.FrameMarginY * 0.4 +
@@ -87,7 +90,7 @@ export class ArrowLane {
       if (index === -1) {
         index = this.objects.push(target instanceof Value ? target.data : target) - 1;
       }
-      const lane: number = (index * 2) % Config.ArrowNumLanes;
+      let lane: number = (index * Config.ArrowLaneInterval) % Config.ArrowNumLanes;
       if (this.isVertical) {
         return (
           Frame.cumWidths[this.id] -
@@ -96,11 +99,21 @@ export class ArrowLane {
           (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginX * 0.8
         );
       } else {
-        return (
-          Grid.cumHeights[this.id] -
-          Config.FrameMarginY * 0.6 +
-          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
-        );
+        if (this.id % 2 === 0) {
+          // arrow between array level (above) and above horizontal frame arows (below)
+          return Grid.cumHeights[this.id]
+          - Config.FrameMarginY * 0.8
+          + (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4;
+        } else {
+          // arrows below frame level and above array level
+          // twice as many arrow lanes since it doesn't have to share space with the frame - frame arrows..
+          lane = (index * Config.ArrowLaneInterval) % (Config.ArrowNumLanes * 2 + 1);
+          return (
+            Grid.cumHeights[this.id]
+            - Config.FrameMarginY * 0.4 + (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
+          );
+        }
+        
       }
     }
   };
