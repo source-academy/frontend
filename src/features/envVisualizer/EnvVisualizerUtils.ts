@@ -306,3 +306,15 @@ export function deepCopyTree(value: EnvTree): EnvTree {
   copyOwnPropertyDescriptors(value, clone);
   return clone;
 }
+
+export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
+  if (isEmptyEnvironment(c.environment)) {
+    const nextChildren: EnvTreeNode[] = [];
+    c.children.forEach(gc => {
+      nextChildren.push(...getNextChildren(gc as EnvTreeNode));
+    });
+    return nextChildren;
+  } else {
+    return [c];
+  }
+}

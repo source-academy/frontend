@@ -4,6 +4,7 @@ import { Group, Rect } from 'react-konva';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
+import { getNextChildren } from '../EnvVisualizerUtils';
 import { ArrayLevel } from './ArrayLevel';
 import { ArrayUnit } from './ArrayUnit';
 import { ArrowLane } from './ArrowLane';
@@ -79,11 +80,38 @@ export class Grid extends Visible {
     // and the xcoord of its immediate parent
     const coordinateGrid: number[] = [];
     nodes.forEach(node => {
+      // children frame not to left of parent.
       node[1].xCoord = Math.max(
-        (coordinateGrid[node[0]] ?? 0) + 1,
+        (coordinateGrid[node[0]] ?? -1) + 1,
         (node[1] as EnvTreeNode).parent?.xCoord ?? 0
       );
       coordinateGrid[node[0]] = node[1].xCoord;
+      if (node[1].parent) {
+        let currentNode = node[1];
+        let level = node[0];
+        let updatedParent = true;
+        // if current frame is the first child of its parent frame and parent is last in level, move parent above current frame.
+        // repeat if parent frame moved.
+        while (updatedParent) {
+          const parentNode = currentNode.parent;
+          if (
+            parentNode.xCoord &&
+            parentNode.xCoord === coordinateGrid[level - 1] &&
+            parentNode.children.flatMap(x => getNextChildren(x as EnvTreeNode))[0] === currentNode
+          ) {
+            parentNode.xCoord = currentNode.xCoord;
+            if (currentNode.xCoord === undefined) {
+              updatedParent = false;
+            } else {
+              coordinateGrid[level - 1] = currentNode.xCoord;
+              level = level - 1;
+              currentNode = parentNode;
+            }
+          } else {
+            updatedParent = false;
+          }
+        }
+      }
     });
     // ordered by increasing y coord (since frame guaranteed to be to the right of its parent, and all frames are sorted by frame id)
     // followed by increasing xCoord

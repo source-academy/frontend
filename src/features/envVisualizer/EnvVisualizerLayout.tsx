@@ -28,9 +28,9 @@ import {
 } from './EnvVisualizerTypes';
 import {
   deepCopyTree,
+  getNextChildren,
   isArray,
   isDummyKey,
-  isEmptyEnvironment,
   isFn,
   isFunction,
   isGlobalFn,
@@ -253,18 +253,6 @@ export class Layout extends React.Component {
 
   /** initializes grid */
   private static initializeGrid(): void {
-    const getNextChildren = (c: EnvTreeNode): EnvTreeNode[] => {
-      if (isEmptyEnvironment(c.environment)) {
-        const nextChildren: EnvTreeNode[] = [];
-        c.children.forEach(gc => {
-          nextChildren.push(...getNextChildren(gc as EnvTreeNode));
-        });
-        return nextChildren;
-      } else {
-        return [c];
-      }
-    };
-
     if (EnvVisualizer.getCompactLayout()) {
       this.compactLevels = [];
       let frontier: EnvTreeNode[] = [Layout.globalEnvNode];

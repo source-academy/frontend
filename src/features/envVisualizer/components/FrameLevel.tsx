@@ -35,13 +35,15 @@ export class FrameLevel extends Level {
   }
 
   /**
-   * Insert the next frame into this FrameLevel. Places new frame not to the left of the last frame added.
+   * Insert the next frame into this FrameLevel.
+   * If node.xCoord is specified and is valid (right of existing frames on level), uses it.
+   * else, places the frame to the right of the last frame on level.
    * (calculate xCoord of frames, and addFrames in order from left to right and top to bottom.)
    * @param node
    */
   addFrame = (node: EnvTreeNode) => {
-    // const coordinate: number = this.lastXcoord + 1;
-    const coordinate: number = Math.max(FrameLevel.maxXcoord, this.lastXcoord + 1);
+    // use the node's xCoord if its set and to right of last frame in level, else use put at right of last frame in level.
+    const coordinate = Math.max(node.xCoord ?? 0, FrameLevel.maxXcoord, this.lastXcoord + 1);
     this.lastXcoord = coordinate;
     FrameLevel.maxXcoord = Math.max(FrameLevel.maxXcoord, coordinate);
     node.level = this;
