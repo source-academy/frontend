@@ -82,38 +82,36 @@ export class ArrowLane {
       const lane: number = (index * Config.ArrowLaneInterval) % Config.ArrowNumLanes;
       return (
         Grid.cumHeights[this.id] -
-        Config.FrameMarginY * 0.4 +
-        (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.4
+        Config.FrameMarginY * 0.4 -
+        (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.35
       );
     } else {
       let index = this.objects.indexOf(target instanceof Value ? target.data : target);
       if (index === -1) {
         index = this.objects.push(target instanceof Value ? target.data : target) - 1;
       }
-      let lane: number = (index * Config.ArrowLaneInterval) % Config.ArrowNumLanes;
+      const lane: number = (index * Config.ArrowLaneInterval) % Config.ArrowNumLanes;
       if (this.isVertical) {
         return (
           Frame.cumWidths[this.id] -
           Config.FrameMarginX * 0.9 +
           Config.FnRadius +
-          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginX * 0.8
+          (lane / Config.ArrowNumLanes) * Config.FrameMarginX * 0.8
         );
       } else {
         if (this.id % 2 === 0) {
           // arrow between array level (above) and above horizontal frame arows (below)
           return (
             Grid.cumHeights[this.id] -
-            Config.FrameMarginY * 0.8 +
-            (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
+            Config.FrameMarginY * 0.1 -
+            (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.35
           );
         } else {
           // arrows below frame level and above array level
-          // twice as many arrow lanes since it doesn't have to share space with the frame - frame arrows..
-          lane = (index * Config.ArrowLaneInterval) % (Config.ArrowNumLanes * 2 + 1);
           return (
             Grid.cumHeights[this.id] -
-            Config.FrameMarginY * 0.4 +
-            (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginY * 0.4
+            Config.FrameMarginY * 0.1 -
+            (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.35
           );
         }
       }

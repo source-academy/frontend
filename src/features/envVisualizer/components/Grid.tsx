@@ -159,7 +159,9 @@ export class Grid extends Visible {
             Frame.cumWidths[(b as FrameLevel).lastXcoord + 1] <= arrayLevel.minX()
               ? 0
               : Frame.heights[Math.floor(i / 2)] +
-                (Frame.heights[Math.floor(i / 2)] > 0 ? Config.FrameMarginY / 2 : 0);
+                (Frame.heights[Math.floor(i / 2)] > 0
+                  ? Config.FrameMarginY / 2
+                  : Config.FrameMarginY / 2);
         } else {
           const frameLevel = this.frameLevels[Math.floor(i / 2)] as FrameLevel;
           height =
@@ -170,7 +172,9 @@ export class Grid extends Visible {
               height = Math.max(
                 height,
                 this.arrayLevels[Math.floor((i - 1) / 2)].height() +
-                  (this.arrayLevels[Math.floor((i - 1) / 2)].height() > 0 ? Config.FrameMarginY : 0)
+                  (this.arrayLevels[Math.floor((i - 1) / 2)].height() > 0
+                    ? Config.FrameMarginY
+                    : Config.FrameMarginY / 2)
               );
             } else {
               height = this.arrayLevels[Math.floor((i - 1) / 2)].height() + Config.FrameMarginY;
@@ -188,10 +192,11 @@ export class Grid extends Visible {
     // get the cumulative height of all the array and frame levels
     this._height = Grid.cumHeights[Grid.cumHeights.length - 1];
     // get the maximum width of all the array and frame levels
-    this._width = Math.max(
-      this.frameLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0),
-      this.arrayLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0)
-    );
+    this._width =
+      Math.max(
+        this.frameLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0),
+        this.arrayLevels.reduce<number>((a, b) => Math.max(a, b.width()), 0)
+      ) + Config.FrameMarginX;
   }
 
   /**
