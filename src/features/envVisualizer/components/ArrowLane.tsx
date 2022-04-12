@@ -96,7 +96,7 @@ export class ArrowLane {
           Frame.cumWidths[this.id] -
           Config.FrameMarginX * 0.9 +
           Config.FnRadius +
-          (lane / Config.ArrowNumLanes) * Config.FrameMarginX * 0.8
+          (lane / (Config.ArrowNumLanes + 1)) * Config.FrameMarginX * 0.7
         );
       } else {
         if (this.id % 2 === 0) {
