@@ -82,7 +82,7 @@ export class ArrowLane {
       const lane: number = (index * Config.ArrowLaneInterval) % Config.ArrowNumLanes;
       return (
         Grid.cumHeights[this.id] -
-        Config.FrameMarginY * 0.4 -
+        Config.FrameMarginY * 0.45 -
         (lane / Config.ArrowNumLanes) * Config.FrameMarginY * 0.35
       );
     } else {
