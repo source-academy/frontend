@@ -48,6 +48,7 @@ export default class EnvVisualizer {
 
     Layout.setContext(context.runtime.environmentTree as EnvTree);
     this.setVis(Layout.draw());
+    Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
 
     // icon to blink
     const icon = document.getElementById('env_visualizer-icon');
