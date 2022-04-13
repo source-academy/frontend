@@ -76,6 +76,7 @@ function AchievementView(props: AchievementViewProps) {
       {hello()}
       {/* Demo Purposes */}
 
+      <h1 style={{ paddingLeft: '2rem' }}>Progress</h1>
       {<AchievementViewGoal goals={goals} />}
       {status === AchievementStatus.COMPLETED && (
         <>

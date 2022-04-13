@@ -67,6 +67,7 @@
       }
 
       .milestone {
+        border-radius: 0.5em;
         background-color: rgba(0, 0, 0, 0.9);
         border: 1px solid yellow;
         box-shadow: 0 0 10px yellow;
@@ -211,12 +212,14 @@
 
       .task {
         .achievement-card {
+          border-radius: 0.3rem;
           cursor: pointer;
           display: flex;
           flex-direction: row;
           height: $card-height;
           transition: box-shadow 0.2s ease-out;
           width: $card-width;
+          padding-bottom: 5.6em;
 
           .dropdown-button {
             align-items: center;
@@ -231,6 +234,7 @@
             flex-direction: column;
             height: $card-height;
             width: $card-width - $card-height;
+            
 
             .heading {
               align-items: center;
@@ -256,6 +260,7 @@
 
               .deadline,
               .xp {
+                
                 align-items: center;
                 display: flex;
                 flex: 1 1 25%;
@@ -267,7 +272,6 @@
             }
 
             .progress {
-              height: 0.2em;
               margin: 0.2em 0 0 0;
               width: 95%;
             }
@@ -338,9 +342,11 @@
         justify-content: center;
         margin: auto;
         width: $view-width;
+        border-radius: 1rem;
       }
 
       .view {
+        border-radius: 1rem;
         text-shadow: black 1px 1px;
         color: white;
         display: flex;
@@ -350,6 +356,8 @@
         width: $view-width;
 
         .cover {
+          border-top-left-radius: 1rem;
+border-top-right-radius: 1rem; 
           display: flex;
           flex-direction: column;
           height: $cover-height;
