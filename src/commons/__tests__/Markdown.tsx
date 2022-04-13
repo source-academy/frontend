@@ -1,9 +1,10 @@
 import { mount } from 'enzyme';
+import { Variant } from 'js-slang/dist/types';
 
 import Markdown from '../Markdown';
 import { generateSourceIntroduction } from '../utils/IntroductionHelper';
 
-const mockProps = (sourceChapter: number, sourceVariant: string) => {
+const mockProps = (sourceChapter: number, sourceVariant: Variant) => {
   return {
     content: generateSourceIntroduction(sourceChapter, sourceVariant),
     openLinksInNewWindow: true
