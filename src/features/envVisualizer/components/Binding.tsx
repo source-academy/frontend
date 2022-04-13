@@ -107,7 +107,7 @@ export class Binding extends Visible {
       ? this._hoveredWidth
       : this._width +
           (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-            ? this.value.exportTooltipWidth
+            ? this.value.tooltipWidth
             : 0);
   }
   exportWidth(): number {

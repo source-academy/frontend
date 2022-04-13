@@ -213,7 +213,8 @@ export class Frame extends Visible implements IHoverable {
         : Math.max(Frame.cumWidths[this.xCoord + 1], nextX);
     Frame.maxX = Math.max(
       Frame.maxX,
-      Frame.cumWidths[this.xCoord] + this.totalHoveredWidth,
+      Frame.cumWidths[this.xCoord] +
+        (EnvVisualizer.getPrintableMode() ? this.totalWidth : this.totalHoveredWidth),
       Frame.cumWidths[Frame.cumWidths.length - 1]
     );
     Frame.heights[this.yCoord] = Math.max(Frame.heights[this.yCoord] || 0, this.totalHeight);
