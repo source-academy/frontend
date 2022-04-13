@@ -32,8 +32,8 @@ export class Grid extends Visible {
     readonly envTreeNodes: EnvTreeNode[][]
   ) {
     super();
-    this._x = Config.CanvasPaddingX;
-    this._y = Config.CanvasPaddingY;
+    this._x = 0;
+    this._y = 0;
     this.frameLevels = [];
     this.arrayLevels = [];
     this.levels = [];
@@ -78,34 +78,60 @@ export class Grid extends Visible {
     Grid.cumHeights = [];
     // Compute the x coordinate of each frame by the max of 1 + the last xcoord of all frames before that frame on the same level
     // and the xcoord of its immediate parent
-    const coordinateGrid: number[] = [];
+    const grid: (EnvTreeNode | undefined)[][] = [];
     nodes.forEach(node => {
       // children frame not to left of parent.
+      grid[node[0]] = grid[node[0]] ?? [];
       node[1].xCoord = Math.max(
-        (coordinateGrid[node[0]] ?? -1) + 1,
+        grid[node[0]].length - 1 + 1,
         (node[1] as EnvTreeNode).parent?.xCoord ?? 0
       );
-      coordinateGrid[node[0]] = node[1].xCoord;
+      grid[node[0]][node[1].xCoord] = node[1];
       if (node[1].parent) {
         let currentNode = node[1];
         let level = node[0];
         let updatedParent = true;
-        // if current frame is the first child of its parent frame and parent is last in level, move parent above current frame.
-        // repeat if parent frame moved.
+        // if current frame is the first child of its parent frame and none of the frames to the left of the current frame
+        // is pointing to any frame to the right of the parent frame, shift the parent frame above the current frame
+        // (and move all frames to its right.) This will not violate the rule that all frames mustn't be at the left of its parent frame
+        // since the parent frame will not be at the right of the current frame, and any children frame of frames to the right of the parent frame
+        // will be created to right of those frames.
         while (updatedParent) {
           const parentNode = currentNode.parent;
           if (
             parentNode.xCoord &&
-            parentNode.xCoord === coordinateGrid[level - 1] &&
             parentNode.children.flatMap(x => getNextChildren(x as EnvTreeNode))[0] === currentNode
           ) {
-            parentNode.xCoord = currentNode.xCoord;
-            if (currentNode.xCoord === undefined) {
+            if (currentNode.xCoord === undefined || parentNode.xCoord === undefined) {
               updatedParent = false;
             } else {
-              coordinateGrid[level - 1] = currentNode.xCoord;
-              level = level - 1;
-              currentNode = parentNode;
+              const diff: number = currentNode.xCoord - parentNode.xCoord;
+              const oldParentCoord = parentNode.xCoord;
+              if (
+                diff > 0 &&
+                grid[level]
+                  .slice(oldParentCoord, currentNode.xCoord)
+                  .every(
+                    x =>
+                      x === undefined ||
+                      parseInt(x.parent.environment.id ?? 0) < parseInt(parentNode.environment.id)
+                  )
+              ) {
+                grid[level - 1].slice(oldParentCoord).forEach(x => {
+                  if (x !== undefined) {
+                    x.xCoord = x.xCoord ? x.xCoord + diff : x.xCoord;
+                  }
+                });
+                grid[level - 1] = [
+                  ...grid[level - 1].slice(0, oldParentCoord),
+                  ...Array(diff).fill(undefined),
+                  ...grid[level - 1].slice(oldParentCoord)
+                ];
+                level = level - 1;
+                currentNode = parentNode;
+              } else {
+                updatedParent = false;
+              }
             }
           } else {
             updatedParent = false;
@@ -183,7 +209,7 @@ export class Grid extends Visible {
         }
         return [...res, res[res.length - 1] + height];
       },
-      [Config.FrameMarginY.valueOf()]
+      [Config.CanvasPaddingY.valueOf()]
     );
     this.levels.forEach((level, i) => {
       level.setY(Grid.cumHeights[i]);

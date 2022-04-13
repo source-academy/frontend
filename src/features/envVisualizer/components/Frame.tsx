@@ -76,7 +76,7 @@ export class Frame extends Visible implements IHoverable {
     this.xCoord = xCoord;
     this.yCoord = yCoord;
     Frame.maxXCoord = Math.max(xCoord, Frame.maxXCoord);
-    this._x = xCoord === 0 ? Config.FrameMarginX : Frame.cumWidths[xCoord];
+    this._x = xCoord === 0 ? Config.CanvasPaddingX : Frame.cumWidths[xCoord];
 
     this.name = new Text(
       frameNames.get(this.environment.name) || this.environment.name,
