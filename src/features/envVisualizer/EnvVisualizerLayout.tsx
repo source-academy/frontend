@@ -392,25 +392,17 @@ export class Layout extends React.Component {
     const download_images = () => {
       const download_next = (n: number) => {
         if (n >= horizontalImages * verticalImages) {
-          Layout.stageRef.current?.width(Layout.stageWidth);
-          Layout.stageRef.current?.height(Layout.stageHeight);
-          container.scrollTo({ left: 0, top: 0 });
-          EnvVisualizer.redraw();
           return;
         }
         const x = n % horizontalImages;
         const y = Math.floor(n / horizontalImages);
-        Layout.stageRef.current?.width(
-          Math.min(width - x * Config.MaxExportWidth, Config.MaxExportWidth)
-        );
-        Layout.stageRef.current?.height(
-          Math.min(height - y * Config.MaxExportHeight, Config.MaxExportHeight)
-        );
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = this.stageRef.current.toDataURL({
           x: x * Config.MaxExportWidth + Layout.invisiblePaddingHorizontal,
           y: y * Config.MaxExportHeight + Layout.invisiblePaddingVertical,
+          width: Math.min(width - x * Config.MaxExportWidth, Config.MaxExportWidth),
+          height: Math.min(height - y * Config.MaxExportHeight, Config.MaxExportHeight),
           mimeType: 'image/jpeg'
         });
 
