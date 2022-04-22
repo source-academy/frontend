@@ -40,6 +40,8 @@ export default class ActionConditionChecker {
         );
       case GameStateStorage.ChecklistState:
         return GameGlobalAPI.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
+      case GameStateStorage.TasklistState:
+        return GameGlobalAPI.getInstance().isTaskComplete(conditionParams.id) === boolean;
       default:
         return true;
     }

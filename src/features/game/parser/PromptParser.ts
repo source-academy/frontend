@@ -30,7 +30,7 @@ export default class PromptParser {
    * corresponding goto
    */
   public static splitChoice(rawChoice: string): [string, string] {
-    const choice = StringUtils.splitWithLimit(rawChoice, '->', 0);
+    const choice = StringUtils.splitWithLimit(rawChoice, '->', 1);
     return [choice[0].trim(), choice[1].split(' ')[1].trim()];
   }
 }

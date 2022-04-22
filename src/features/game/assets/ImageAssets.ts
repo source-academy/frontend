@@ -56,6 +56,10 @@ const ImageAssets: AssetMap<ImageAsset> = {
   // Awards Hall
   awardsBackground: { type: AssetType.Image, key: 'award-hall-bg', path: '/ui/awardsHall.png' },
 
+  // Toolbar
+  gear: { type: AssetType.Image, key: 'gear', path: '/ui/settings.png' },
+  journal: { type: AssetType.Image, key: 'journal', path: '/ui/journal.png' },
+
   // Chapter Select
   chapterRepeatButton: {
     type: AssetType.Image,
@@ -66,6 +70,21 @@ const ImageAssets: AssetMap<ImageAsset> = {
     type: AssetType.Image,
     key: 'chapter-continue',
     path: '/ui/chapterContinue.png'
+  },
+  StarGold: {
+    type: AssetType.Image,
+    key: 'StarGold',
+    path: '/ui/StarGold.png'
+  },
+  StarSilver: {
+    type: AssetType.Image,
+    key: 'StarSilver',
+    path: '/ui/StarSilver.png'
+  },
+  StarBronze: {
+    type: AssetType.Image,
+    key: 'StarBronze',
+    path: '/ui/StarBronze.png'
   },
   chapterSelectFrame: {
     type: AssetType.Image,
