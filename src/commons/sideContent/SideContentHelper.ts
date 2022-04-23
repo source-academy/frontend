@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
@@ -51,7 +52,7 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
   const unprocessedTabs: ModuleSideContent[] = [];
   for (const moduleContext of rawModuleContexts.values()) {
     for (const tab of moduleContext.tabs) {
-      unprocessedTabs.push(tab(React));
+      unprocessedTabs.push(tab(React, ReactDOM));
     }
   }
 
