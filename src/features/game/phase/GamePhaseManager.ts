@@ -1,7 +1,7 @@
 import { Constants } from '../commons/CommonConstants';
 import { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
-import { GamePhaseType } from './GamePhaseTypes';
+import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
 
 /**
  * State machine in charge of keeping track
@@ -102,7 +102,7 @@ export default class GamePhaseManager {
    */
   public async pushPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
-    if (newPhase === prevPhase || this.isCurrentPhase(GamePhaseType.EscapeMenu)) return;
+    if (newPhase === prevPhase) return;
     this.phaseStack.push(newPhase);
     await this.executePhaseTransition(prevPhase, newPhase);
   }
@@ -115,7 +115,7 @@ export default class GamePhaseManager {
    */
   public async swapPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
-    if (newPhase === prevPhase || this.isCurrentPhase(GamePhaseType.EscapeMenu)) return;
+    if (newPhase === prevPhase) return;
     this.phaseStack.pop();
     this.phaseStack.push(newPhase);
     await this.executePhaseTransition(prevPhase, newPhase);
@@ -164,6 +164,15 @@ export default class GamePhaseManager {
    */
   public isCurrentPhase(phase: GamePhaseType): boolean {
     return this.getCurrentPhase() === phase;
+  }
+
+  /**
+   * Checks whether the current phase is a terminal phase.
+   *
+   * @returns {boolean}
+   */
+  public isCurrentPhaseTerminal(): boolean {
+    return Object.values(GameTerminalPhaseType).includes(this.getCurrentPhase());
   }
 
   /**
