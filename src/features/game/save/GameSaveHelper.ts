@@ -30,6 +30,8 @@ export function gameStateToJson(
         currentLocation: gameManager.currentLocationId,
         currentPhase: phaseManager.getCurrentPhase(),
         chapterNewlyCompleted: gameStateManager.getChapterNewlyCompleted(),
+        incompleteTasks: gameStateManager.getIncompleteTasks(),
+        completedTasks: gameStateManager.getCompletedTasks(),
         completedObjectives: gameStateManager.getCompletedObjectives(),
         triggeredInteractions: gameStateManager.getTriggeredInteractions(),
         triggeredStateChangeActions: gameStateManager.getTriggeredStateChangeActions()
@@ -74,6 +76,8 @@ export const createEmptyGameSaveState = (): GameSaveState => {
     currentLocation: undefined,
     currentPhase: GamePhaseType.Menu,
     chapterNewlyCompleted: false,
+    incompleteTasks: [],
+    completedTasks: [],
     completedObjectives: [],
     triggeredInteractions: [],
     triggeredStateChangeActions: []

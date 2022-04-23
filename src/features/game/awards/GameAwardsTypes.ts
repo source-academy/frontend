@@ -1,10 +1,5 @@
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
 
-export enum AwardPage {
-  Collectibles = 'Collectibles',
-  Achievements = 'Achievements'
-}
-
 export type AwardProperty = {
   id: ItemId;
   assetKey: AssetKey;
