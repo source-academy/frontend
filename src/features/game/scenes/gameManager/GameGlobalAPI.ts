@@ -2,7 +2,7 @@ import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { Character } from '../../character/GameCharacterTypes';
+import { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
 import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
@@ -17,6 +17,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
+import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
@@ -165,8 +166,8 @@ class GameGlobalAPI {
   //  Game Objective //
   /////////////////////
 
-  public isAllComplete(): boolean {
-    return this.getGameManager().getStateManager().isAllComplete();
+  public areAllObjectivesComplete(): boolean {
+    return this.getGameManager().getStateManager().areAllObjectivesComplete();
   }
 
   public isObjectiveComplete(key: string): boolean {
@@ -179,6 +180,32 @@ class GameGlobalAPI {
 
   public completeObjective(key: string): void {
     this.getGameManager().getStateManager().completeObjective(key);
+  }
+
+  /////////////////////
+  //  Game Task      //
+  /////////////////////
+
+  public isTaskComplete(key: string): boolean {
+    return this.getGameManager().getStateManager().isTaskComplete(key);
+  }
+
+  public areTasksComplete(keys: string[]): boolean {
+    return this.getGameManager().getStateManager().areTasksComplete(keys);
+  }
+
+  public completeTask(key: string): void {
+    this.getGameManager().getStateManager().completeTask(key);
+    displayMiniMessage(this.getGameManager(), 'Task completed!');
+  }
+
+  public showTask(key: string): void {
+    this.getGameManager().getStateManager().showTask(key);
+    displayMiniMessage(this.getGameManager(), 'New task added');
+  }
+
+  public getAllVisibleTaskData(): Array<[TaskDetail, boolean]> {
+    return this.getGameManager().getStateManager().getAllVisibleTaskData();
   }
 
   /////////////////////
@@ -254,6 +281,18 @@ class GameGlobalAPI {
 
   public async showDialogueInSamePhase(dialogueId: ItemId) {
     await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
+  }
+
+  /////////////////////
+  //   Storage      //
+  /////////////////////
+
+  public storeDialogueLine(newLine: string, newSpeakerDetail?: SpeakerDetail | null) {
+    this.getGameManager().getDialogueStorageManager().storeLine(newLine, newSpeakerDetail);
+  }
+
+  public getDialogueStorage() {
+    return this.getGameManager().getDialogueStorageManager().getDialogueStorage();
   }
 
   /////////////////////
