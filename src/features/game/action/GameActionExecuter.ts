@@ -57,6 +57,12 @@ export default class GameActionExecuter {
       case GameActionType.CompleteObjective:
         globalAPI.completeObjective(actionParams.id);
         return;
+      case GameActionType.CompleteTask:
+        globalAPI.completeTask(actionParams.id);
+        return;
+      case GameActionType.ShowTask:
+        globalAPI.showTask(actionParams.id);
+        return;
       case GameActionType.ShowDialogue:
         if (globalAPI.isCurrentPhase(GamePhaseType.Sequence)) {
           await globalAPI.showDialogueInSamePhase(actionParams.id);
@@ -125,6 +131,8 @@ export default class GameActionExecuter {
       case GameActionType.StopAnimation:
       case GameActionType.ObtainCollectible:
       case GameActionType.CompleteObjective:
+      case GameActionType.CompleteTask:
+      case GameActionType.ShowTask:
       case GameActionType.ShowDialogue:
       case GameActionType.AddPopup:
       case GameActionType.MakeObjectBlink:

@@ -8,7 +8,10 @@ import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
 import { AssetKey } from '../../commons/CommonTypes';
+import GameDashboardManager from '../../dashboard/GameDashboardManager';
+import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
+import GameDialogueStorageManager from '../../dialogue/GameDialogueStorageManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
@@ -16,12 +19,15 @@ import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
+import GameLogManager from '../../log/GameLogManager';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
+import GameTaskLogManager from '../../task/GameTaskLogManager';
+import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
@@ -59,7 +65,13 @@ class GameManager extends Phaser.Scene {
   private animationManager?: GameAnimationManager;
   private inputManager?: GameInputManager;
   private escapeManager?: GameEscapeManager;
-  private awardManager?: GameAwardsManager;
+  private collectibleManager?: GameAwardsManager;
+  private achievementManager?: GameAwardsManager;
+  private logManager?: GameLogManager;
+  private dialogueStorageManager?: GameDialogueStorageManager;
+  private toolbarManager?: GameToolbarManager;
+  private taskLogManager?: GameTaskLogManager;
+  private dashboardManager?: GameDashboardManager;
 
   constructor() {
     super('GameManager');
@@ -88,7 +100,28 @@ class GameManager extends Phaser.Scene {
     this.animationManager = new GameAnimationManager();
     this.popUpManager = new GamePopUpManager();
     this.escapeManager = new GameEscapeManager(this);
-    this.awardManager = new GameAwardsManager(this);
+    this.collectibleManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+    );
+    this.achievementManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+    );
+    this.logManager = new GameLogManager(this);
+    this.dialogueStorageManager = new GameDialogueStorageManager();
+    this.toolbarManager = new GameToolbarManager(this);
+    this.taskLogManager = new GameTaskLogManager(this);
+    this.dashboardManager = new GameDashboardManager(
+      this,
+      [
+        DashboardPage.Log,
+        DashboardPage.Tasks,
+        DashboardPage.Collectibles,
+        DashboardPage.Achievements
+      ],
+      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
+    );
   }
 
   //////////////////////
@@ -167,6 +200,9 @@ class GameManager extends Phaser.Scene {
   private async renderLocation(locationId: LocationId, startAction: boolean) {
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
 
+    // Render the toolbar in every location
+    this.getToolbarManager().renderToolbarContainer();
+
     // Play the BGM attached to the location
     await GameGlobalAPI.getInstance().playBgMusic(gameLocation.bgmKey);
 
@@ -225,14 +261,14 @@ class GameManager extends Phaser.Scene {
   }
 
   /**
-   * Bind escape menu and awards menu to keyboard triggers.
+   * Bind escape menu and dashboard to keyboard triggers.
    */
   private bindKeyboardTriggers() {
     this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        if (this.getPhaseManager().isCurrentPhaseTerminal()) {
           await this.getPhaseManager().popPhase();
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
@@ -243,10 +279,12 @@ class GameManager extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.TAB,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
           await this.getPhaseManager().popPhase();
+        } else if (this.getPhaseManager().isCurrentPhaseTerminal()) {
+          await this.getPhaseManager().swapPhase(GamePhaseType.Dashboard);
         } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.AwardMenu);
+          await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
         }
       }
     );
@@ -258,6 +296,7 @@ class GameManager extends Phaser.Scene {
   public cleanUp() {
     this.getInputManager().clearListeners();
     this.getLayerManager().clearAllLayers();
+    this.getDialogueStorageManager().clearDialogueStorage();
   }
 
   /**
@@ -283,7 +322,7 @@ class GameManager extends Phaser.Scene {
     return (
       !this.hasTransitioned &&
       newPhase !== GamePhaseType.Sequence &&
-      GameGlobalAPI.getInstance().isAllComplete() &&
+      GameGlobalAPI.getInstance().areAllObjectivesComplete() &&
       !this.getStateManager().getChapterNewlyCompleted()
     );
   }
@@ -309,7 +348,10 @@ class GameManager extends Phaser.Scene {
     this.tweens.add(fadeIn([blackScreen(this).setAlpha(0)], Constants.fadeDuration));
     await sleep(Constants.fadeDuration);
 
+    // Clean up all layers & current storage
     this.cleanUp();
+
+    // Start the next Checkpoint
     this.scene.start('CheckpointTransition');
   }
 
@@ -348,7 +390,13 @@ class GameManager extends Phaser.Scene {
   public getAnimationManager = () => mandatory(this.animationManager);
   public getPopupManager = () => mandatory(this.popUpManager);
   public getEscapeManager = () => mandatory(this.escapeManager);
-  public getAwardManager = () => mandatory(this.awardManager);
+  public getCollectibleManager = () => mandatory(this.collectibleManager);
+  public getAchievementManager = () => mandatory(this.achievementManager);
+  public getLogManager = () => mandatory(this.logManager);
+  public getDialogueStorageManager = () => mandatory(this.dialogueStorageManager);
+  public getToolbarManager = () => mandatory(this.toolbarManager);
+  public getTaskLogManager = () => mandatory(this.taskLogManager);
+  public getDashboardManager = () => mandatory(this.dashboardManager);
 }
 
 export default GameManager;

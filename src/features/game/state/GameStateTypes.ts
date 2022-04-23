@@ -2,7 +2,8 @@ import { ItemId } from '../commons/CommonTypes';
 
 export enum GameStateStorage {
   UserState = 'UserState',
-  ChecklistState = 'ChecklistState'
+  ChecklistState = 'ChecklistState',
+  TasklistState = 'TasklistState'
 }
 
 /**

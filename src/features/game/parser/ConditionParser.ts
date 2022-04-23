@@ -32,6 +32,16 @@ export default class ConditionParser {
           boolean: !hasExclamation
         };
 
+      case GameStateStorage.TasklistState:
+        Parser.validator.assertEntityType(GameEntityType.tasks, condParams[0]);
+        return {
+          state: GameStateStorage.TasklistState,
+          conditionParams: {
+            id: condParams[0]
+          },
+          boolean: !hasExclamation
+        };
+
       case GameStateStorage.UserState:
         return {
           state: GameStateStorage.UserState,
