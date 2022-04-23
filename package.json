@@ -113,7 +113,7 @@
     "@types/redux-mock-store": "^1.0.3",
     "@types/showdown": "^1.9.4",
     "@types/xml2js": "^0.4.9",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "babel-core": "6",
     "babel-runtime": "^6.26.0",
     "canvas": "^2.9.0",
