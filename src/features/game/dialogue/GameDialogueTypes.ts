@@ -32,6 +32,17 @@ export type DialogueLine = IGameActionable & {
   prompt?: Prompt;
 };
 
+/**
+ * @typedef DialogueStorageLine - dialogue line containing only the speaker name and the line itself.
+ * This is primarily used for storing minimal information in the dialogue storage.
+ * @param speaker - the name of the speaker
+ * @param line - the spoken text for this line
+ */
+export type DialogueStorageLine = {
+  speaker: string;
+  line: string;
+};
+
 export type Dialogue = {
   title: string;
   content: DialogueObject;
