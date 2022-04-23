@@ -63,8 +63,12 @@ class GameObjective {
    *
    * @param key key of the objective
    */
-  public getObjectiveState(key: string): boolean | undefined {
-    return this.objective.get(key);
+  public getObjectiveState(key: string): boolean {
+    const objState = this.objective.get(key);
+    if (objState === undefined) {
+      throw new Error(`Cannot find objective with the given task id "${key}"`);
+    }
+    return objState;
   }
 
   /**

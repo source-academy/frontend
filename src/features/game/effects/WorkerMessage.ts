@@ -82,7 +82,7 @@ async function showLines(scene: ILayeredScene, lines: string[]) {
   const textConfig = { x: screenCenter.x, y: 0, oriX: 0.5, oriY: 0.5 };
   const yStartPos = screenCenter.y - lines.length * WorkerConstants.yInterval * 0.5;
 
-  scene.getLayerManager().addToLayer(Layer.Effects, blackOverlay);
+  scene.getLayerManager().addToLayer(Layer.WorkerMessage, blackOverlay);
   scene.add.tween(fadeIn([blackOverlay], Constants.fadeDuration));
 
   // Play SFX
@@ -96,7 +96,7 @@ async function showLines(scene: ILayeredScene, lines: string[]) {
       ...textConfig,
       y: linesPos[index][1] + yStartPos
     });
-    textFrames.forEach(frame => scene.getLayerManager().addToLayer(Layer.Effects, frame));
+    textFrames.forEach(frame => scene.getLayerManager().addToLayer(Layer.WorkerMessage, frame));
     setTimeout(() => textFrames.forEach(frame => frame.destroy()), WorkerConstants.messageDuration);
   });
 

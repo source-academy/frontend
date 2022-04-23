@@ -57,6 +57,9 @@ export default class DialogueManager {
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
 
+    // Store the current line into the storage
+    GameGlobalAPI.getInstance().storeDialogueLine(lineWithName, speakerDetail);
+
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
     if (prompt) {

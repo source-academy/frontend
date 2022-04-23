@@ -133,7 +133,10 @@ export default class DialogueParser {
           dialogueLines[dialogueLines.length - 1].speakerDetail = SpeakerParser.parse(rawStr);
           break;
         default:
+          // Dialogue lines without speaker are by default treated as lines by narrator
+          // This also ensures that lines without speaker are displayed on the dialogue log
           dialogueLines.push({ line: rawStr });
+          dialogueLines[dialogueLines.length - 1].speakerDetail = SpeakerParser.parse('@narrator');
           break;
       }
       currIndex++;

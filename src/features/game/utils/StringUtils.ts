@@ -8,10 +8,10 @@ export default class StringUtils {
    * Example input:
    * ["objectives",
    * "    talkToHartin"
-   * "    completeQuest"]
+   * "    completeTask"]
    *
    * Example output:
-   * [ ["objectives"], ["talkToHartin", "completeQuest"] ]
+   * [ ["objectives"], ["talkToHartin", "completeTask"] ]
    *
    * @param lines raw text strings
    * @returns {Array<[string, string[]]>} several parargraphs that have
@@ -70,33 +70,23 @@ export default class StringUtils {
    * Split using separator, but limit number of separators to split with.
    * After splitting, trim each entry to get rid of whitespaces.
    *
-   * Example input: splitByChar("whatHappened, What Happened, Scottie?\n", ",", 1)
+   * Example input: splitWithLimit("whatHappened, What Happened, Scottie?\n", ",", 1)
    * Example output: ["whatHappened", "What Happened, Scottie?"]
    * Explanation: This splits the string only using the first 1 comma then trims whitespaces
    *
    * @param line line to be split
    * @param sep separator to be used
-   * @param limit the number of separators to split the string, undefined if use all separators
-   * @param {Array<string>}
+   * @param limit limit the number of separators to split the string, undefined if use all separators
+   * @returns {Array<string>}
    */
   public static splitWithLimit(line: string, sep: string, limit: number): string[] {
-    let lines = [];
-    if (limit) {
-      let currWord = '';
-      for (let i = 0; i < line.length; i++) {
-        const letter = line[i];
-        if (letter === sep && lines.length < limit) {
-          lines.push(currWord);
-          currWord = '';
-        } else {
-          currWord += letter;
-        }
-      }
-      lines.push(currWord);
-    } else {
-      lines = line.split(sep);
+    if (limit >= 0) {
+      const lines = line.split(sep);
+      const substrings = lines.slice(0, limit);
+      substrings.push(lines.slice(limit).join(sep));
+      return substrings.map((phrase: string) => phrase.trim());
     }
-    return lines.map((phrase: string) => phrase.trim());
+    return StringUtils.splitByChar(line, sep);
   }
 
   /**

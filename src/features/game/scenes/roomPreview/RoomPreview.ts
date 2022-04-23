@@ -4,10 +4,11 @@ import { createContext } from 'src/commons/utils/JsSlangHelper';
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
-import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonTextHover from '../../commons/CommonTextHover';
 import { ItemId } from '../../commons/CommonTypes';
+import GameDashboardManager from '../../dashboard/GameDashboardManager';
+import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
@@ -16,6 +17,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
+import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
 import { loadImage, loadSound, loadSpritesheet } from '../../utils/LoaderUtils';
@@ -43,7 +45,10 @@ export default class RoomPreview extends Phaser.Scene {
   private inputManager?: GameInputManager;
   private phaseManager?: GamePhaseManager;
   private escapeManager?: GameEscapeManager;
-  private awardManager?: GameAwardsManager;
+  private collectibleManager?: GameAwardsManager;
+  private achievementManager?: GameAwardsManager;
+  private toolbarManager?: GameToolbarManager;
+  private dashboardManager?: GameDashboardManager;
 
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
@@ -118,12 +123,6 @@ export default class RoomPreview extends Phaser.Scene {
       'Refresh Room'
     );
 
-    const backButton = new CommonBackButton(this, () => {
-      this.getLayerManager().clearAllLayers();
-      this.sound.stopAll();
-      this.scene.start('MainMenu');
-    });
-
     const refreshButton = createButton(this, {
       assetKey: ImageAssets.chapterRepeatButton.key,
       onUp: async () => {
@@ -151,9 +150,10 @@ export default class RoomPreview extends Phaser.Scene {
 
     // Add verified tag
     this.getLayerManager().addToLayer(Layer.UI, this.getVerifCont());
-    this.getLayerManager().addToLayer(Layer.UI, backButton);
     this.getLayerManager().addToLayer(Layer.UI, refreshButton);
     this.getLayerManager().addToLayer(Layer.UI, roomRefreshHover);
+
+    this.getToolbarManager().renderToolbarContainer();
   }
 
   public update() {
@@ -188,30 +188,30 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   /**
-   * Bind the escape menu and awards menu to keyboard keys.
+   * Bind the escape menu and dashboard to keyboard keys.
    */
   private bindKeyboardTriggers() {
-    // Bind escape menu
     this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        if (this.getPhaseManager().isCurrentPhaseTerminal()) {
           await this.getPhaseManager().popPhase();
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
         }
       }
     );
-    // Bind award menu
     this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.TAB,
       'up',
       async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
           await this.getPhaseManager().popPhase();
+        } else if (this.getPhaseManager().isCurrentPhaseTerminal()) {
+          await this.getPhaseManager().swapPhase(GamePhaseType.Dashboard);
         } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.AwardMenu);
+          await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
         }
       }
     );
@@ -329,7 +329,20 @@ export default class RoomPreview extends Phaser.Scene {
     this.inputManager = new GameInputManager(this);
     this.phaseManager = new GamePhaseManager(createCMRGamePhases(), this.inputManager);
     this.escapeManager = new GameEscapeManager(this);
-    this.awardManager = new GameAwardsManager(this);
+    this.collectibleManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+    );
+    this.achievementManager = new GameAwardsManager(
+      this,
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+    );
+    this.toolbarManager = new GameToolbarManager(this);
+    this.dashboardManager = new GameDashboardManager(
+      this,
+      [DashboardPage.Collectibles, DashboardPage.Achievements],
+      [this.collectibleManager, this.achievementManager]
+    );
   }
 
   private getVerifCont = () => mandatory(this.verifCont);
@@ -339,5 +352,8 @@ export default class RoomPreview extends Phaser.Scene {
   public getLayerManager = () => mandatory(this.layerManager);
   public getPhaseManager = () => mandatory(this.phaseManager);
   public getEscapeManager = () => mandatory(this.escapeManager);
-  public getAwardManager = () => mandatory(this.awardManager);
+  public getCollectibleManager = () => mandatory(this.collectibleManager);
+  public getAchievementManager = () => mandatory(this.achievementManager);
+  public getToolbarManager = () => mandatory(this.toolbarManager);
+  public getDashboardManager = () => mandatory(this.dashboardManager);
 }

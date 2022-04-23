@@ -6,6 +6,7 @@ import Parser from './Parser';
 export enum GameEntityType {
   locations = 'locations',
   objectives = 'objectives',
+  tasks = 'tasks',
   bgms = 'bgms',
   sfxs = 'sfxs'
 }
@@ -188,6 +189,15 @@ export default class ParserValidator {
                   this.actionAssertionError(itemId, gameEntityType, actionType);
                 }
                 throw new Error(`Cannot find objective id "${itemId}"`);
+              }
+              break;
+
+            case GameEntityType.tasks:
+              if (Parser.checkpoint.tasks.getAllTasks().get(itemId) === undefined) {
+                if (actionType) {
+                  this.actionAssertionError(itemId, gameEntityType, actionType);
+                }
+                throw new Error(`Cannot find task id "${itemId}"`);
               }
               break;
 
