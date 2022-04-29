@@ -1,34 +1,52 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
+import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { Hoverable, StepsArray, Visible } from '../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
+import { IHoverable, IVisible, StepsArray } from '../../EnvVisualizerTypes';
+import {
+  setHoveredCursor,
+  setHoveredStyle,
+  setUnhoveredCursor,
+  setUnhoveredStyle
+} from '../../EnvVisualizerUtils';
+import { Frame } from '../Frame';
+import { Text } from '../Text';
+import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
-  height: number = 0;
-  width: number = 0;
+export class GenericArrow<Source extends IVisible, Target extends IVisible>
+  extends Visible
+  implements IHoverable
+{
   points: number[] = [];
-  from: Visible;
-  target: Visible | undefined;
+  source: Source;
+  target: Target | undefined;
 
-  constructor(from: Visible) {
-    this.from = from;
-    this.x = from.x;
-    this.y = from.y;
+  private _path: string = '';
+  private selected: boolean = false;
+  readonly unhovered_opacity: number = Config.ArrowUnhoveredOpacity;
+  readonly hovered_opacity: number = 1;
+
+  constructor(source: Source) {
+    super();
+    this.source = source;
+    this._x = source.x();
+    this._y = source.y();
   }
-
-  to(to: Visible) {
-    this.target = to;
-    this.width = Math.abs(to.x - this.from.x);
-    this.height = Math.abs(to.y - this.from.y);
+  path() {
+    return this._path;
+  }
+  to(target: Target): GenericArrow<Source, Target> {
+    this.target = target;
+    this._width = Math.abs(target.x() - this.source.x());
+    this._height = Math.abs(target.y() - this.source.y());
     return this;
   }
-
+  isSelected(): boolean {
+    return this.selected;
+  }
   /**
    * Calculates the steps that this arrows takes.
    * The arrow is decomposed into numerous straight line segments, each of which we
@@ -48,25 +66,60 @@ export class GenericArrow implements Visible, Hoverable {
   protected calculateSteps(): StepsArray {
     const to = this.target;
     if (!to) return [];
-    return [(x, y) => [to.x, to.y]];
+    return [() => [to.x(), to.y()]];
   }
-
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget, {
+  getStrokeWidth(): number {
+    return Number(Config.ArrowStrokeWidth);
+  }
+  onMouseEnter(e: KonvaEventObject<MouseEvent>) {
+    setHoveredCursor(e.target);
+    setHoveredStyle(e.currentTarget, {
       strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
     });
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget, {
-      strokeWidth: Number(Config.ArrowStrokeWidth)
-    });
-  };
-
+    this.ref.current.opacity = this.unhovered_opacity;
+  }
+  onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
+    this.selected = !this.selected;
+    if (!this.isSelected()) {
+      if (
+        !(this.source instanceof Text && this.source.frame?.isSelected()) &&
+        !(this.source instanceof Frame && this.source.isSelected())
+      ) {
+        setUnhoveredStyle(currentTarget, {
+          strokeWidth: this.getStrokeWidth()
+        });
+        this.ref.current.opacity = this.unhovered_opacity;
+      } else {
+        setHoveredStyle(currentTarget, {
+          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
+        });
+        this.ref.current.opacity = this.hovered_opacity;
+      }
+    }
+  }
+  onMouseLeave(e: KonvaEventObject<MouseEvent>) {
+    setUnhoveredCursor(e.target);
+    if (!this.isSelected()) {
+      if (
+        (this.source instanceof Text && this.source.frame?.isSelected()) ||
+        (this.source instanceof Frame && this.source.isSelected())
+      ) {
+        setHoveredStyle(e.currentTarget, {
+          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
+        });
+        this.ref.current.opacity = this.hovered_opacity;
+      } else {
+        setUnhoveredStyle(e.currentTarget, {
+          strokeWidth: this.getStrokeWidth()
+        });
+        this.ref.current.opacity = this.unhovered_opacity;
+      }
+    }
+  }
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
-      [this.from.x, this.from.y]
+      [this.source.x(), this.source.y()]
     );
     points.splice(0, 2);
 
@@ -80,37 +133,43 @@ export class GenericArrow implements Visible, Hoverable {
       let n = 0;
       while (n < points.length - 4) {
         const [xa, ya, xb, yb, xc, yc] = points.slice(n, n + 6);
-        const dx1 = xb - xa;
-        const dx2 = xc - xb;
-        const dy1 = yb - ya;
-        const dy2 = yc - yb;
-        const br = Math.min(
-          Config.ArrowCornerRadius,
-          Math.max(Math.abs(dx1), Math.abs(dy1)) / 2,
-          Math.max(Math.abs(dx2), Math.abs(dy2)) / 2
-        );
-        const x1 = xb - br * Math.sign(dx1);
-        const y1 = yb - br * Math.sign(dy1);
-        const x2 = xb + br * Math.sign(dx2);
-        const y2 = yb + br * Math.sign(dy2);
+        const dx1 = (xb - xa) / 2;
+        const dx2 = (xc - xb) / 2;
+        const dy1 = (yb - ya) / 2;
+        const dy2 = (yc - yb) / 2;
+        const r1 = Math.sqrt(Math.pow(dx1, 2) + Math.pow(dy1, 2)) / 2;
+        const r2 = Math.sqrt(Math.pow(dx2, 2) + Math.pow(dy2, 2)) / 2;
+        const br = Math.min(Config.ArrowCornerRadius, r1, r2);
+        const x1 = xb - (br * dx1) / r1;
+        const y1 = yb - (br * dy1) / r1;
+        const x2 = xb + (br * dx2) / r2;
+        const y2 = yb + (br * dy2) / r2;
 
         // draw quadratic curves over corners
-        path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2}`;
+        path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2} `;
         n += 2;
       }
     }
     // end path
     path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
+    this._path = path;
     return (
       <KonvaGroup
         key={Layout.key++}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        ref={this.ref}
+        onMouseEnter={e => this.onMouseEnter(e)}
+        onMouseLeave={e => this.onMouseLeave(e)}
+        onClick={e => this.onClick(e)}
+        opacity={this.unhovered_opacity}
       >
         <KonvaPath
           {...ShapeDefaultProps}
-          stroke={Config.SA_WHITE.toString()}
-          strokeWidth={Number(Config.ArrowStrokeWidth)}
+          stroke={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
+          strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}
           key={Layout.key++}
@@ -118,9 +177,14 @@ export class GenericArrow implements Visible, Hoverable {
         <KonvaArrow
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
-          fill={Config.SA_WHITE.toString()}
+          fill={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
+          pointerLength={Number(Config.ArrowHeadSize)}
           key={Layout.key++}
         />
       </KonvaGroup>

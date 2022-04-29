@@ -8159,10 +8159,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.32:
-  version "0.5.32"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.32.tgz#97c22250a9c1653675010e03ce81d834892b8cfe"
-  integrity sha512-bUUi1muU5xS+DRfiJMYrE3jLX3dxGfbKPVnqGgqjsUZNm+9ymsl2aLW2huExEY5qu6pQpc9ccYJCpk+kKQlhYw==
+js-slang@^0.5.33:
+  version "0.5.33"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.33.tgz#62bb1be0ac0a6463b36d24a3209cb1f9d03c5c9c"
+  integrity sha512-BxZXR8ewvckTcPNBC7ICfjHa1kJBCrYaMqmxtAYmnLiznWkOi/4YB96S0aKXh8PZlsv0Zg10B5VJrlVZtIKmCw==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.51"
@@ -11293,10 +11293,10 @@ react-shallow-renderer@^16.13.1:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0"
 
-react-simple-keyboard@^3.4.71:
-  version "3.4.71"
-  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-3.4.71.tgz#63f66bc857b791a8394638b0fbe25e1bca9fd82f"
-  integrity sha512-YkYJaoqPQ8n4XlBgu4zbG0yWX8CXjOf4nCuurTJkSM2Y31S36jGJD7vcYNBtIg6uWg6RoFOj1FJ/adxcsGw+wQ==
+react-simple-keyboard@^3.4.112:
+  version "3.4.112"
+  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-3.4.112.tgz#a2c38ce16243abbac7163e5907379e30ed2ff68f"
+  integrity sha512-9DzEOh5KBIA1ElC2Tvjgn8l+IDJJLXCHV/Ai5Su6d8KhLLO/WSBW1lRbfS8qL4h0C7YuN1LqvQdzSr0wxjMy2w==
 
 react-sortable-hoc@^2.0.0:
   version "2.0.0"

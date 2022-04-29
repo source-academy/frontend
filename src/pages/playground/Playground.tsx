@@ -755,7 +755,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
       tabs,
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
+      sideContentHeight: props.sideContentHeight,
+      editorWidth: props.editorWidth
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };

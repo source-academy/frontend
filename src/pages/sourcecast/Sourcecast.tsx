@@ -317,7 +317,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
       tabs: tabs,
-      workspaceLocation: 'sourcecast'
+      workspaceLocation: 'sourcecast',
+      sideContentHeight: props.sideContentHeight,
+      editorWidth: props.editorWidth
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {

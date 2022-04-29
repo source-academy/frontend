@@ -62,8 +62,10 @@ export const changeExternalLibrary = (newExternal: string, workspaceLocation: Wo
 export const changeEditorHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_EDITOR_HEIGHT, { height, workspaceLocation });
 
-export const changeEditorWidth = (widthChange: string, workspaceLocation: WorkspaceLocation) =>
-  action(CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
+export const changeEditorWidth = (widthChange: string, workspaceLocation: WorkspaceLocation) => {
+  window.dispatchEvent(new Event('resize'));
+  return action(CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
+};
 
 export const changeExecTime = (execTime: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_EXEC_TIME, { execTime, workspaceLocation });

@@ -1,23 +1,24 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
+import { Data } from '../EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
-import { Arrow } from './arrows/Arrow';
+import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
+import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { ArrayValue } from './values/ArrayValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
+import { Visible } from './Visible';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */
-export class ArrayUnit implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
-  readonly height: number;
-  readonly width: number;
+export class ArrayUnit extends Visible {
   readonly value: Value;
 
   /** check if this is the first unit in the array */
@@ -27,7 +28,9 @@ export class ArrayUnit implements Visible, Hoverable {
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
   /** check if the value is already drawn */
-  private isDrawn: boolean = false;
+
+  parent: ArrayValue;
+  arrow: GenericArrow<ArrayUnit, Value> | undefined = undefined;
 
   constructor(
     /** index of this unit in its parent */
@@ -35,29 +38,50 @@ export class ArrayUnit implements Visible, Hoverable {
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
-    readonly parent: ArrayValue
+    parent: ArrayValue
   ) {
-    this.x = this.parent.x + this.idx * Config.DataUnitWidth;
-    this.y = this.parent.y;
-    this.height = Config.DataUnitHeight;
-    this.width = Config.DataUnitWidth;
+    super();
+    this.parent = parent;
+    this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
+    this._y = this.parent.y();
+    this._height = Config.DataUnitHeight;
+    this._width = Config.DataUnitWidth;
     this.isFirstUnit = this.idx === 0;
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.referencedBy.length > 1;
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
+  updatePosition = () => {
+    this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
+    this._y = this.parent.y();
+    this.value instanceof PrimitiveValue && this.value.updatePosition();
+  };
+
+  onMouseEnter = () => {
+    this.parent.units.forEach(u => {
+      setHoveredStyle(u.ref.current);
+    });
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
+    if (!this.parent.isSelected()) {
+      this.parent.units.forEach(u => {
+        setUnhoveredStyle(u.ref.current);
+      });
+    } else {
+      const container = currentTarget.getStage()?.container();
+      container && (container.style.cursor = 'default');
+    }
+  };
+
+  onClick = () => {
+    this.parent.onClick();
   };
 
   draw(): React.ReactNode {
-    if (this.isDrawn) return null;
-    this.isDrawn = true;
+    if (this._isDrawn) return null;
+    this._isDrawn = true;
 
     const cornerRadius = {
       upperLeft: 0,
@@ -70,24 +94,38 @@ export class ArrayUnit implements Visible, Hoverable {
       cornerRadius.upperLeft = cornerRadius.lowerLeft = Number(Config.DataCornerRadius);
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Number(Config.DataCornerRadius);
+    if (!(this.value instanceof PrimitiveValue)) {
+      this.arrow = new ArrowFromArrayUnit(this).to(this.value);
+      this.parent.addArrow(this.arrow);
+      if (this.value instanceof ArrayValue) {
+        this.value.addArrow(this.arrow);
+      }
+    }
 
     return (
       <React.Fragment key={Layout.key++}>
         <RoundedRect
           key={Layout.key++}
-          x={this.x}
-          y={this.y}
-          width={this.width}
-          height={this.height}
-          stroke={Config.SA_WHITE.toString()}
+          x={this.x()}
+          y={this.y()}
+          width={this.width()}
+          height={this.height()}
+          stroke={
+            EnvVisualizer.getPrintableMode()
+              ? Config.SA_BLUE.toString()
+              : Config.SA_WHITE.toString()
+          }
           hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
           fillEnabled={false}
+          forwardRef={this.ref}
+          cornerRadius={cornerRadius}
+          onClick={this.onClick}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
-          cornerRadius={cornerRadius}
         />
-        {this.value.draw()}
-        {this.value instanceof PrimitiveValue || Arrow.from(this).to(this.value).draw()}
+        {!(this.value instanceof FnValue || this.value instanceof GlobalFnValue) &&
+          this.value.draw()}
+        {this.arrow && this.arrow.draw()}
       </React.Fragment>
     );
   }

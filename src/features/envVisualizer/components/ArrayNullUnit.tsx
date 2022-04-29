@@ -1,33 +1,30 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
-import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Hoverable, ReferenceType, Visible } from '../EnvVisualizerTypes';
+import { ReferenceType } from '../EnvVisualizerTypes';
+import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
-export class ArrayNullUnit implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
-  readonly height: number;
-  readonly width: number;
+export class ArrayNullUnit extends Visible {
+  arrayUnit: ReferenceType;
+  referencedBy: ReferenceType[];
 
-  constructor(readonly referencedBy: ReferenceType[]) {
-    const arrayUnit = referencedBy[0];
-    this.x = arrayUnit.x;
-    this.y = arrayUnit.y;
-    this.height = arrayUnit.height;
-    this.width = arrayUnit.width;
+  constructor(referencedBy: ReferenceType[]) {
+    super();
+    this.referencedBy = referencedBy;
+    this.arrayUnit = referencedBy[0];
+    this._x = this.arrayUnit.x();
+    this._y = this.arrayUnit.y();
+    this._height = this.arrayUnit.height();
+    this._width = this.arrayUnit.width();
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
+  updatePosition = () => {
+    this._x = this.arrayUnit.x();
+    this._y = this.arrayUnit.y();
   };
 
   draw(): React.ReactNode {
@@ -35,11 +32,13 @@ export class ArrayNullUnit implements Visible, Hoverable {
       <KonvaLine
         {...ShapeDefaultProps}
         key={Layout.key++}
-        points={[this.x, this.y + this.height, this.x + this.width, this.y]}
-        stroke={Config.SA_WHITE.toString()}
+        points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
+        stroke={
+          EnvVisualizer.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+        }
         hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        ref={this.ref}
+        listening={false}
       />
     );
   }

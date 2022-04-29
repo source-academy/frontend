@@ -4,9 +4,15 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
+import { Value as CompactValue } from './compactComponents/values/Value';
+import { Binding } from './components/Binding';
+import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
+import EnvVisualizer from './EnvVisualizer';
 import { Config } from './EnvVisualizerConfig';
 import {
+  CompactReferenceType,
   Data,
   EmptyObject,
   Env,
@@ -105,6 +111,22 @@ export function isPrimitiveData(data: Data): data is PrimitiveTypes {
 
 /** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
+  if (value instanceof FnValue) {
+    // chooses the frame of the enclosing environment, not necessarily the first in referencedBy.
+    return (
+      reference instanceof Binding &&
+      value.enclosingEnvNode === (reference as Binding).frame.envTreeNode &&
+      value.referencedBy.findIndex(x => x instanceof Binding && x === reference) !== -1
+    );
+  } else if (value instanceof GlobalFnValue) {
+    return value.referencedBy.find(x => x instanceof Binding) === reference;
+  } else {
+    return value.referencedBy[0] === reference;
+  }
+}
+
+/** Returns `true` if `reference` is the main reference of `value` */
+export function isCompactMainReference(value: CompactValue, reference: CompactReferenceType) {
   return value.referencedBy[0] === reference;
 }
 
@@ -179,11 +201,18 @@ export function getBodyText(data: () => any): string {
   }
 }
 
-/** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
-export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): void {
+export function setHoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
   container && (container.style.cursor = 'pointer');
+}
 
+export function setUnhoveredCursor(target: Node | Group) {
+  const container = target.getStage()?.container();
+  container && (container.style.cursor = 'default');
+}
+
+/** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
+export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): void {
   const nodes: (Group | Shape | Node)[] =
     target instanceof Group ? Array.from(target.children || []) : [];
   nodes.push(target);
@@ -194,34 +223,29 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
       ...hoveredAttrs
     });
   });
-
-  // TODO: it is not recommended to use node.zIndex(5), node.moveToTop()
-  // when you are working with the React framework.
-  // see here: https://konvajs.org/docs/react/zIndex.html
-  target.moveToTop();
-  // TODO: likewise, re-implement Layout.tsx to
-  // achieve setHoveredStyle by manipulating the state.
-  target.getLayer()?.draw();
 }
 
 /** Updates the styles of a Konva node and its children on unhover, and then redraw the layer */
 export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}): void {
-  const container = target.getStage()?.container();
-  container && (container.style.cursor = 'default');
-
   const nodes: (Group | Shape | Node)[] =
     target instanceof Group ? Array.from(target.children || []) : [];
   nodes.push(target);
 
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.SA_WHITE.toString() : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.SA_WHITE.toString() : node.attrs.fill,
+      stroke: node.attrs.stroke
+        ? EnvVisualizer.getPrintableMode()
+          ? Config.SA_BLUE.toString()
+          : Config.SA_WHITE.toString()
+        : node.attrs.stroke,
+      fill: node.attrs.fill
+        ? EnvVisualizer.getPrintableMode()
+          ? Config.SA_BLUE.toString()
+          : Config.SA_WHITE.toString()
+        : node.attrs.fill,
       ...unhoveredAttrs
     });
   });
-
-  target.getLayer()?.draw();
 }
 
 /** Extracts the non-empty tail environment from the given environment */
@@ -271,4 +295,16 @@ export function deepCopyTree(value: EnvTree): EnvTree {
   const clone = cloneDeep(value);
   copyOwnPropertyDescriptors(value, clone);
   return clone;
+}
+
+export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
+  if (isEmptyEnvironment(c.environment)) {
+    const nextChildren: EnvTreeNode[] = [];
+    c.children.forEach(gc => {
+      nextChildren.push(...getNextChildren(gc as EnvTreeNode));
+    });
+    return nextChildren;
+  } else {
+    return [c];
+  }
 }

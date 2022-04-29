@@ -1,11 +1,14 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
-import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
+import React from 'react';
+import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
-import { getTextWidth } from '../EnvVisualizerUtils';
+import { Data, IHoverable } from '../EnvVisualizerTypes';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
+import { Frame } from './Frame';
+import { Visible } from './Visible';
 
 export interface TextOptions {
   maxWidth: number;
@@ -26,23 +29,27 @@ export const defaultOptions: TextOptions = {
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
-export class Text implements Visible, Hoverable {
-  readonly height: number;
-  readonly width: number;
+export class Text extends Visible implements IHoverable {
+  readonly _hoveredWidth: number;
 
   readonly partialStr: string; // truncated string representation of data
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  private labelRef: RefObject<any> = React.createRef();
+  readonly frame?: Frame;
 
   constructor(
     readonly data: Data,
-    readonly x: number,
-    readonly y: number,
+    x: number,
+    y: number,
     /** additional options (for customization of text) */
-    options: Partial<TextOptions> = {}
+    options: Partial<TextOptions> = {},
+    frame?: Frame
   ) {
+    super();
+    this._x = x;
+    this._y = y;
+    this.frame = frame;
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
@@ -50,34 +57,42 @@ export class Text implements Visible, Hoverable {
     this.fullStr = this.partialStr = isStringIdentifiable
       ? JSON.stringify(data) || String(data)
       : String(data);
-    this.height = fontSize;
+    this._height = fontSize;
 
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    if (widthOf(this.partialStr) > maxWidth) {
+    this._hoveredWidth = widthOf(this.partialStr);
+    if (this._hoveredWidth > maxWidth) {
       let truncatedText = Config.Ellipsis.toString();
       let i = 0;
-      while (widthOf(this.partialStr.substr(0, i) + Config.Ellipsis.toString()) < maxWidth) {
-        truncatedText = this.partialStr.substr(0, i++) + Config.Ellipsis.toString();
+      while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis.toString()) < maxWidth) {
+        truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis.toString();
       }
-      this.width = widthOf(truncatedText);
+      this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
     } else {
-      this.width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
+      this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
 
+  hoveredWidth(): number {
+    return this._hoveredWidth;
+  }
+  updatePosition = (x: number, y: number) => {
+    this._x = x;
+    this._y = y;
+  };
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'pointer');
-    this.labelRef.current.moveToTop();
-    this.labelRef.current.show();
+    if (EnvVisualizer.getPrintableMode()) return;
+    setHoveredCursor(currentTarget);
+    this.ref.current.moveToTop();
+    this.ref.current.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'default');
-    this.labelRef.current.hide();
+    if (EnvVisualizer.getPrintableMode()) return;
+    setUnhoveredCursor(currentTarget);
+    this.ref.current.hide();
     currentTarget.getLayer()?.draw();
   };
 
@@ -86,30 +101,31 @@ export class Text implements Visible, Hoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: Config.SA_WHITE.toString()
+      fill: EnvVisualizer.getPrintableMode()
+        ? Config.SA_BLUE.toString()
+        : Config.SA_WHITE.toString()
     };
     return (
-      <React.Fragment key={Layout.key++}>
-        <KonvaLabel
-          x={this.x}
-          y={this.y}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
+      <Group key={Layout.key++} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <KonvaLabel x={this.x()} y={this.y()}>
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
-        <KonvaLabel
-          x={this.x}
-          y={this.y}
-          ref={this.labelRef}
-          visible={false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
-          <KonvaTag {...ShapeDefaultProps} fill={'black'} opacity={0.5} />
-          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
+        <KonvaLabel x={this.x()} y={this.y()} ref={this.ref} visible={false} listening={false}>
+          <KonvaTag
+            {...ShapeDefaultProps}
+            fill={EnvVisualizer.getPrintableMode() ? 'white' : 'black'}
+            opacity={0.5}
+            listening={false}
+          />
+          <KonvaText
+            {...ShapeDefaultProps}
+            key={Layout.key++}
+            text={this.fullStr}
+            {...props}
+            listening={false}
+          />
         </KonvaLabel>
-      </React.Fragment>
+      </Group>
     );
   }
 }

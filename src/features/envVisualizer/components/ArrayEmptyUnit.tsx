@@ -1,35 +1,31 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Rect } from 'react-konva';
 
+import EnvVisualizer from '../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
 import { Layout } from '../EnvVisualizerLayout';
-import { Data, Hoverable, Visible } from '../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
+import { Data } from '../EnvVisualizerTypes';
 import { ArrayValue } from './values/ArrayValue';
+import { Visible } from './Visible';
 
 /** this classes encapsulates an empty array */
-export class ArrayEmptyUnit implements Visible, Hoverable {
-  readonly x: number;
-  readonly y: number;
-  readonly height: number;
-  readonly width: number;
+export class ArrayEmptyUnit extends Visible {
+  readonly value: null = null;
 
   readonly data: Data = [];
+  ref: RefObject<any> = React.createRef();
 
   constructor(readonly parent: ArrayValue) {
-    this.x = this.parent.x;
-    this.y = this.parent.y;
-    this.height = this.parent.height;
-    this.width = this.parent.width;
+    super();
+    this._x = this.parent.x();
+    this._y = this.parent.y();
+    this._height = this.parent.height();
+    this._width = this.parent.width();
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
-
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
+  updatePosition = () => {
+    this._x = this.parent.x();
+    this._y = this.parent.y();
   };
 
   draw(): React.ReactNode {
@@ -37,13 +33,14 @@ export class ArrayEmptyUnit implements Visible, Hoverable {
       <Rect
         {...ShapeDefaultProps}
         key={Layout.key++}
-        x={this.x}
-        y={this.y}
-        width={this.width}
-        height={this.height}
-        stroke={Config.SA_WHITE.toString()}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        x={this.x()}
+        y={this.y()}
+        width={this.width()}
+        height={this.height()}
+        stroke={
+          EnvVisualizer.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+        }
+        ref={this.ref}
       />
     );
   }

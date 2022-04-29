@@ -201,9 +201,10 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           editorWidth:
-            (
+            Math.min(
               parseFloat(state[workspaceLocation].editorWidth.slice(0, -1)) +
-              parseFloat(action.payload.widthChange)
+                parseFloat(action.payload.widthChange),
+              100
             ).toString() + '%'
         }
       };
