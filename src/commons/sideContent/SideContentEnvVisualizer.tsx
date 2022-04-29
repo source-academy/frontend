@@ -48,7 +48,8 @@ class SideContentEnvVisualizer extends React.Component<
     const verticalPadding = 150;
     const maxHeight = 5000; // limit for visible diagram height for huge screens
     let height;
-    if (window.innerWidth < Constants.mobileBreakpoint) { // mobile mode
+    if (window.innerWidth < Constants.mobileBreakpoint) {
+      // mobile mode
       height = window.innerHeight - verticalPadding;
     } else if (sideContentHeight === undefined) {
       height = window.innerHeight - verticalPadding;
