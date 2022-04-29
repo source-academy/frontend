@@ -31,7 +31,7 @@ class SideContentEnvVisualizer extends React.Component<
 
   private calculateWidth(editorWidth?: string) {
     const horizontalPadding = 50;
-    const maxWidth = 5000;
+    const maxWidth = 5000; // limit for visible diagram width for huge screens
     let width;
     if (editorWidth === undefined) {
       width = window.innerWidth - horizontalPadding;
@@ -46,12 +46,12 @@ class SideContentEnvVisualizer extends React.Component<
 
   private calculateHeight(sideContentHeight?: number) {
     const verticalPadding = 150;
-    const maxHeight = 5000;
+    const maxHeight = 5000; // limit for visible diagram height for huge screens
     let height;
-    if (window.innerWidth < Constants.mobileBreakpoint) {
-      height = Math.min(window.innerHeight - 150, window.innerHeight - verticalPadding);
+    if (window.innerWidth < Constants.mobileBreakpoint) { // mobile mode
+      height = window.innerHeight - verticalPadding;
     } else if (sideContentHeight === undefined) {
-      height = Math.min(window.innerHeight - 350, window.innerHeight - verticalPadding);
+      height = window.innerHeight - verticalPadding;
     } else {
       height = sideContentHeight - verticalPadding;
     }

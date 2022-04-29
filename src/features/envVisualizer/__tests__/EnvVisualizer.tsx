@@ -14,6 +14,7 @@ import { Env, EnvTree } from '../EnvVisualizerTypes';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
+// Old code samples: https://github.com/source-academy/frontend/blob/006fcd47abea62f704c9d5901bd8e80097122705/src/features/envVisualizer/__tests__/EnvVisualizer.tsx
 const codeSamples = [
   `
     const fn = () => "L";
@@ -48,54 +49,6 @@ const codeSamples = [
     }
     const z = f(11);
     debugger;`,
-  //   `
-  //     let x = 0;
-  //     let y = 10;
-  //     function f(x) {
-  //         function g(x) {
-  //             x = x + 1;
-  //             y = y + 1;
-  //         }
-  //         return g;
-  //     }
-  //     const z = f(11);
-  //     debugger;
-  //        `,
-  // `
-  //     function longfn(a) {
-  //         a = (x) => {
-  //             debugger;
-  //         };
-  //         a(10);
-  //     }
-  //     longfn(undefined);`,
-  //   `
-  //     function fn0() {
-  //         const a = fn1(10);
-  //         debugger;
-  //     }
-  //     function fn1(x) {
-  //         return () => 1;
-  //     }
-  //     fn0();`,
-  //   `
-  //     const y = enum_list(1,20);
-  //     debugger;`,
-  //   `
-  //     function fib(n) {
-  //         if (n<=1) {
-  //             return n;
-  //         } else {
-  //             debugger;
-  //             return fib(n-1)+fib(n-2);
-  //         }
-  //     }
-  //     fib(5);`,
-  //   `
-  //     const y = list(4,5,6);
-  //     const x = [1,"hello world", ()=>1, list(1,2,3), y, null];
-  //     const z = ()=>2;
-  //     debugger;`,
   `
     const x = list(1,pair, accumulate);
     debugger;`,
@@ -120,24 +73,6 @@ const codeSamples = [
     }
     eval_stream(integers_from(1), 2);
     let x = 1;`
-  //   `
-  //     let x = null;
-  //     for (let i = 0; i < 5; i = i + 1) {
-  //         x = pair(() => i, x);
-  //     }
-  //     debugger;`,
-  //   `
-  //     function f(n) {
-  //         if (n <= 1) {
-  //             debugger;
-  //             return 1;
-  //         } else {
-  //             return n * f(n-1);
-  //         }
-  //     }
-  //     f(5);`,
-  //   `
-  //     (w => x => y => { const a = 1; debugger; })(1)(2)(3);`
 ];
 
 codeSamples.forEach((code, idx) => {
