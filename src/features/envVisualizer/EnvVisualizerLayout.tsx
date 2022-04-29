@@ -39,7 +39,7 @@ import {
 } from './EnvVisualizerUtils';
 
 /** this class encapsulates the logic for calculating the layout */
-export class Layout extends React.Component {
+export class Layout {
   /** the height of the stage */
   static nonCompactHeight: number;
   /** the width of the non-compact stage */
@@ -83,6 +83,7 @@ export class Layout extends React.Component {
   static scrollContainerRef: RefObject<any> = React.createRef();
 
   static updateDimensions(width: number, height: number) {
+    // update the size of the scroll container and stage given the width and height of the sidebar content.
     Layout.visibleWidth = width;
     Layout.visibleHeight = height;
     if (
