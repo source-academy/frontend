@@ -19,6 +19,7 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue, Frame> {
       steps.push((x, y) => [x, y - Config.FnRadius * 2]);
       steps.push((x, y) => [target.x() + (source.x() < target.x() ? 0 : target.width()), y]);
     } else {
+      steps.push((x, y) => [x, y - Config.FnRadius * 2]);
       steps.push((x, y) => [
         ArrowLane.getVerticalLaneBeforeTarget(source, x).getPosition(source),
         y

@@ -223,14 +223,6 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
       ...hoveredAttrs
     });
   });
-
-  // TODO: it is not recommended to use node.zIndex(5), node.moveToTop()
-  // when you are working with the React framework.
-  // see here: https://konvajs.org/docs/react/zIndex.html
-  // target.moveToTop();
-  // TODO: likewise, re-implement Layout.tsx to
-  // achieve setHoveredStyle by manipulating the state.
-  // target.getLayer()?.draw();
 }
 
 /** Updates the styles of a Konva node and its children on unhover, and then redraw the layer */
@@ -254,8 +246,6 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
       ...unhoveredAttrs
     });
   });
-
-  // target.getLayer()?.draw();
 }
 
 /** Extracts the non-empty tail environment from the given environment */

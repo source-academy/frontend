@@ -82,8 +82,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     this.selected = !this.selected;
     if (!this.isSelected()) {
       if (
-        // !(this.source instanceof ArrayUnit && this.source.parent.isSelected()) &&
-        // !(this.target instanceof ArrayValue && this.target.isSelected()) &&
         !(this.source instanceof Text && this.source.frame?.isSelected()) &&
         !(this.source instanceof Frame && this.source.isSelected())
       ) {
@@ -103,8 +101,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     setUnhoveredCursor(e.target);
     if (!this.isSelected()) {
       if (
-        // (this.source instanceof ArrayUnit && this.source.parent.isSelected()) ||
-        // (this.target instanceof ArrayValue && this.target.isSelected()) ||
         (this.source instanceof Text && this.source.frame?.isSelected()) ||
         (this.source instanceof Frame && this.source.isSelected())
       ) {

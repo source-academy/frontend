@@ -91,9 +91,6 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
             // move left up to the point diagonally to the right of the end of the array.
             newX = target.x() + target.units.length * Config.DataUnitWidth;
             newX = Math.min(x - Config.DataUnitWidth, newX + Math.abs(yDiff));
-            // if (newX < target.x() + target.units.length * Config.DataUnitWidth) {
-            //   return [(x + target.x()) / 2, (y + newY) / 2];
-            // }
           } else {
             // if current point of arrow is somewhere above / below array, move halfway to corner of some arrayunit.
             if (x < target.x()) {
