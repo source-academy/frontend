@@ -30,6 +30,8 @@ type StateProps = {
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
+  width?: number;
+  height?: number;
 };
 
 type MobileControlBarProps = {

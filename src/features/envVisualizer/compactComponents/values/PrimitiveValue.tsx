@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Config } from '../../EnvVisualizerConfig';
+import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { PrimitiveTypes, ReferenceType } from '../../EnvVisualizerTypes';
+import { CompactReferenceType, PrimitiveTypes } from '../../EnvVisualizerTypes';
 import { getTextWidth, isNull } from '../../EnvVisualizerUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
@@ -18,21 +18,22 @@ export class PrimitiveValue extends Value {
     /** data */
     readonly data: PrimitiveTypes,
     /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
+    readonly referencedBy: CompactReferenceType[]
   ) {
     super();
 
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._x =
+        mainReference.x() + getTextWidth(mainReference.keyString) + CompactConfig.TextPaddingX;
       this._y = mainReference.y();
-      this.text = new Text(this.data, this._x, this._y, { isStringIdentifiable: true });
+      this.text = new Text(this.data, this.x(), this.y(), { isStringIdentifiable: true });
     } else {
       const maxWidth = mainReference.width();
       const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
       this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
-      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
+      this._y = mainReference.y() + (mainReference.height() - CompactConfig.FontSize) / 2;
       this.text = isNull(this.data)
         ? new ArrayNullUnit([mainReference])
         : new Text(this.data, this.x(), this.y(), {
@@ -44,31 +45,8 @@ export class PrimitiveValue extends Value {
     this._width = this.text.width();
     this._height = this.text.height();
   }
-
-  reset(): void {
-    super.reset();
-    this.referencedBy.length = 0;
-  }
-  updatePosition = () => {
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
-      this._y = mainReference.y();
-    } else {
-      const maxWidth = mainReference.width();
-      const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
-      this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
-      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
-    }
-    this.text instanceof Text
-      ? this.text.updatePosition(this.x(), this.y())
-      : this.text.updatePosition();
-  };
-  onMouseEnter(): void {}
-  onMouseLeave(): void {}
-
+  updatePosition(): void {}
   draw(): React.ReactNode {
-    this._isDrawn = true;
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }
 }

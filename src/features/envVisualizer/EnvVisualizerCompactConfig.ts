@@ -1,5 +1,5 @@
 /** configs for dimensions */
-export enum Config {
+export enum CompactConfig {
   CanvasMinHeight = 300,
   CanvasMinWidth = 300,
   CanvasPaddingX = 30,
@@ -11,25 +11,22 @@ export enum Config {
   FrameMinWidth = 100,
   FramePaddingX = 20,
   FramePaddingY = 30,
-  FrameMarginX = 60,
-  FrameMarginY = 100,
+  FrameMarginX = 30,
+  FrameMarginY = 10,
   FrameCornerRadius = 3,
 
   FnRadius = 15,
   FnInnerRadius = 3,
-  FnTooltipOpacity = 0.6,
+  FnTooltipOpacity = 0.3,
 
   DataMinWidth = 20,
   DataUnitWidth = 40,
-  DataUnitPaddingY = 40,
-  DataUnitPaddingX = 50,
   DataUnitHeight = 40,
   DataCornerRadius = 3,
   DataHitStrokeWidth = 5,
-  DataGroupMaxDist = 500,
 
   TextPaddingX = 10,
-  TextPaddingY = 20,
+  TextPaddingY = 30,
   TextMargin = 5,
   TextMinWidth = 30,
   FontFamily = 'monospace, monospace',
@@ -43,15 +40,7 @@ export enum Config {
   ArrowStrokeWidth = 1,
   ArrowHitStrokeWidth = 5,
   ArrowHoveredStrokeWidth = 2,
-  ArrowUnhoveredOpacity = 0.8,
-  ArrowCornerRadius = 10,
-  ArrowMinHeight = 100,
-  ArrowNumLanes = 5,
-  ArrowLaneInterval = 1, // lane for next arrow = previous lane + lane interval % num lanes.
-  FrameArrowStrokeWidth = 2,
-  FrameArrowHoveredStrokeWidth = 2.5,
-  MaxExportWidth = 20000,
-  MaxExportHeight = 12000,
+  ArrowCornerRadius = 40,
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',

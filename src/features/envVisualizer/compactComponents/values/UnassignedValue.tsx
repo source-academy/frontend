@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Config } from '../../EnvVisualizerConfig';
+import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
-import { ReferenceType, UnassignedData } from '../../EnvVisualizerTypes';
+import { CompactReferenceType, UnassignedData } from '../../EnvVisualizerTypes';
 import { getTextWidth } from '../../EnvVisualizerUtils';
 import { Binding } from '../Binding';
 import { Text } from '../Text';
@@ -13,23 +13,24 @@ export class UnassignedValue extends Value {
   readonly data: UnassignedData = Symbol();
   readonly text: Text;
 
-  constructor(readonly referencedBy: ReferenceType[]) {
+  constructor(readonly referencedBy: CompactReferenceType[]) {
     super();
 
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._x =
+        mainReference.x() + getTextWidth(mainReference.keyString) + CompactConfig.TextPaddingX;
       this._y = mainReference.y();
-      this.text = new Text(Config.UnassignedData.toString(), this._x, this._y, {
+      this.text = new Text(CompactConfig.UnassignedData.toString(), this._x, this._y, {
         isStringIdentifiable: false
       });
     } else {
       const maxWidth = mainReference.width();
       const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
       this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
-      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
-      this.text = new Text(Config.UnassignedData.toString(), this._x, this._y, {
+      this._y = mainReference.y() + (mainReference.height() - CompactConfig.FontSize) / 2;
+      this.text = new Text(CompactConfig.UnassignedData.toString(), this._x, this._y, {
         maxWidth: maxWidth,
         isStringIdentifiable: false
       });
@@ -43,21 +44,7 @@ export class UnassignedValue extends Value {
     super.reset();
     this.referencedBy.length = 0;
   }
-  updatePosition(): void {
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
-      this._y = mainReference.y();
-    } else {
-      const maxWidth = mainReference.width();
-      const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
-      this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
-      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
-    }
-    this.text.updatePosition(this._x, this._y);
-  }
-  onMouseEnter(): void {}
-  onMouseLeave(): void {}
+  updatePosition(): void {}
 
   draw(): React.ReactNode {
     this._isDrawn = true;
