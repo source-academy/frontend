@@ -4,6 +4,9 @@ import { Assessment } from '../assessment/AssessmentTypes';
 import { useEffect } from 'react';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { history } from '../utils/HistoryHelper';
+import { useDispatch, useSelector } from 'react-redux';
+import { OverallState } from '../application/ApplicationTypes';
+import { GET_USER_ASSESSMENT_OVERVIEWS } from 'src/features/achievement/AchievementTypes';
 // import { MouseEvent } from 'react';
 
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
@@ -21,6 +24,11 @@ export type StateProps = {
 };
 
 const AchievementCommentCard: React.FC<AssessmentWorkspaceProps> = props => {
+  const dispatch = useDispatch();
+  const courseRegId = useSelector((store: OverallState) => store.session.courseRegId);
+  dispatch({ type: GET_USER_ASSESSMENT_OVERVIEWS, payload: courseRegId });
+  const assesments = useSelector((store: OverallState) => store.achievement.assessmentOverviews);
+  console.log(assesments);
   //NEED TO MAKE THIS ONLY CALL END ONCE WE GET THE DATA
   useEffect(() => {
     if (!Number.isNaN(props.assessmentId)) {
