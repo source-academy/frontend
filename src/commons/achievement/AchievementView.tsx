@@ -35,7 +35,7 @@ function AchievementView(props: AchievementViewProps) {
     dispatch({ type: FETCH_ASSESSMENT, payload: +focusUuid });
   }
   const assessments = useSelector((store: OverallState) => store.session.assessments);
-  const assessment: Assessment = assessments.values().next().value;
+  const assessment: Assessment | undefined = assessments.get(+focusUuid);
 
   if (focusUuid === '') {
     return (
