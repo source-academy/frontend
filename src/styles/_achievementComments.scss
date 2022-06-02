@@ -1,26 +1,20 @@
-.commentsxxx {
-  // flex: auto;
-  // flex: 1 1 0%;
+.mission-comments {
   display: flex;
-  // .commentsh {
-  //     display: inline-block;
-  //     vertical-align: text-top;
-  // }
 
-  .boxcomment {
+  .box-comment {
     flex-grow: 1;
     display: block;
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
-  .missionbutton {
+  .mission-button {
     flex: none;
 
     height: 2rem;
     width: 6rem;
 
-    margin-top: 1rem;
+    margin-top: 0rem;
     margin-bottom: 1rem;
     border-radius: 5px;
 

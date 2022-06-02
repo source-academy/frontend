@@ -344,6 +344,8 @@
       }
 
       .view {
+        overflow-y: auto;
+        overflow-x: hidden;
         border-radius: 1rem;
         text-shadow: black 1px 1px;
         color: white;
@@ -352,15 +354,16 @@
         margin: $default-spacing;
         min-height: $view-height;
         width: $view-width;
+        padding-bottom: 20px;
 
         .cover {
           border-top-left-radius: 1rem;
           border-top-right-radius: 1rem;
           display: flex;
           flex-direction: column;
-          height: $cover-height;
           text-align: center;
-          width: $cover-width;
+          min-height: $cover-height;
+          min-width: $cover-width;
 
           h1 {
             margin: 0.5em auto 0;
