@@ -1,73 +1,46 @@
-/* eslint-disable simple-import-sort/imports */
+import { useSelector } from 'react-redux';
 
-import { Assessment } from '../assessment/AssessmentTypes';
-import { useEffect } from 'react';
-import { assessmentTypeLink } from '../utils/ParamParseHelper';
-import { history } from '../utils/HistoryHelper';
-import { useDispatch, useSelector } from 'react-redux';
 import { OverallState } from '../application/ApplicationTypes';
-import { GET_USER_ASSESSMENT_OVERVIEWS } from 'src/features/achievement/AchievementTypes';
-// import { MouseEvent } from 'react';
-
-export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
-
-export type DispatchProps = {
-  handleAssessmentFetch: (assessmentId: number) => void;
-};
+import { Assessment } from '../assessment/AssessmentTypes';
+import { history } from '../utils/HistoryHelper';
+import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 export type OwnProps = {
-  assessmentId: number;
+  assessment: Assessment;
 };
 
-export type StateProps = {
-  assessment?: Assessment;
-};
-
-const AchievementCommentCard: React.FC<AssessmentWorkspaceProps> = props => {
-  const dispatch = useDispatch();
-  const courseRegId = useSelector((store: OverallState) => store.session.courseRegId);
-  dispatch({ type: GET_USER_ASSESSMENT_OVERVIEWS, payload: courseRegId });
-  const assesments = useSelector((store: OverallState) => store.achievement.assessmentOverviews);
-  console.log(assesments);
-  //NEED TO MAKE THIS ONLY CALL END ONCE WE GET THE DATA
-  useEffect(() => {
-    if (!Number.isNaN(props.assessmentId)) {
-      props.handleAssessmentFetch(props.assessmentId);
-    }
-  });
+const AchievementCommentCard = ({ assessment }: OwnProps) => {
+  const courseId = useSelector((store: OverallState) => store.session.courseId);
 
   const toMission = (questionId: number) => {
-    //HACKY METHOD, MUST CHANGE
-    const listingPath = `/courses/5/${assessmentTypeLink(props.assessment!.type)}`;
-    const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
-    // const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
-
+    const listingPath = `/courses/${courseId}/${assessmentTypeLink(assessment?.type)}`;
+    const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
     history.push(assessmentWorkspacePath + `/${questionId}`);
-    //setSelectedTab(SideContentType.questionOverview);
   };
 
   return (
     <div>
       <h1 style={{ paddingLeft: '2rem' }}>Feedback</h1>
       <ul>
-        {props.assessment?.questions.map((question, index) => (
-          <div className="commentsxxx" key={index}>
-            <span className="commentsh">
-              <h2 style={{ marginTop: 0 }}>{'Q' + (index + 1)}</h2>
-            </span>
+        {assessment &&
+          assessment.questions.map((question, index) => (
+            <div className="commentsxxx" key={index}>
+              <span className="commentsh">
+                <h2 style={{ marginTop: 0 }}>{'Q' + (index + 1)}</h2>
+              </span>
 
-            <div className="boxcomment">
-              <p>{question.comments === null ? 'Not Graded' : question.comments}</p>
-              <p style={{ fontWeight: 700, color: 'orange' }}>
-                {'XP: ' + question.xp + '/' + question.maxXp}
-              </p>
+              <div className="boxcomment">
+                <p>{question.comments === null ? 'Not Graded' : question.comments}</p>
+                <p style={{ fontWeight: 700, color: 'orange' }}>
+                  {'XP: ' + question.xp + '/' + question.maxXp}
+                </p>
+              </div>
+
+              <button className="missionbutton" onClick={() => toMission(index)}>
+                {'To Question'}{' '}
+              </button>
             </div>
-
-            <button className="missionbutton" onClick={() => toMission(index)}>
-              {'To Question'}{' '}
-            </button>
-          </div>
-        ))}
+          ))}
       </ul>
     </div>
   );

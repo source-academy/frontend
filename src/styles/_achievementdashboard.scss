@@ -234,7 +234,6 @@
             flex-direction: column;
             height: $card-height;
             width: $card-width - $card-height;
-            
 
             .heading {
               align-items: center;
@@ -260,7 +259,6 @@
 
               .deadline,
               .xp {
-                
                 align-items: center;
                 display: flex;
                 flex: 1 1 25%;
@@ -357,7 +355,7 @@
 
         .cover {
           border-top-left-radius: 1rem;
-border-top-right-radius: 1rem; 
+          border-top-right-radius: 1rem;
           display: flex;
           flex-direction: column;
           height: $cover-height;

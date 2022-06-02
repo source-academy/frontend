@@ -1,6 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   AchievementContext,
@@ -8,7 +9,10 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-import AchievementCommentCardContainer from './AchievementCommentCardContainer';
+import { OverallState } from '../application/ApplicationTypes';
+import { FETCH_ASSESSMENT } from '../application/types/SessionTypes';
+import { Assessment } from '../assessment/AssessmentTypes';
+import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
@@ -26,6 +30,13 @@ function AchievementView(props: AchievementViewProps) {
 
   const inferencer = useContext(AchievementContext);
 
+  const dispatch = useDispatch();
+  if (!Number.isNaN(+focusUuid) && +focusUuid !== 0) {
+    dispatch({ type: FETCH_ASSESSMENT, payload: +focusUuid });
+  }
+  const assessments = useSelector((store: OverallState) => store.session.assessments);
+  const assessment: Assessment = assessments.values().next().value;
+
   if (focusUuid === '') {
     return (
       <div className="no-view">
@@ -34,13 +45,6 @@ function AchievementView(props: AchievementViewProps) {
       </div>
     );
   }
-
-  const hello = () => {
-    const assessmentWorkspaceProps: OwnProps = {
-      assessmentId: +focusUuid
-    };
-    return <AchievementCommentCardContainer {...assessmentWorkspaceProps} />;
-  };
 
   const achievement = inferencer.getAchievement(focusUuid);
   const { deadline, title, view } = achievement;
@@ -72,9 +76,9 @@ function AchievementView(props: AchievementViewProps) {
         </span>
       </div>
 
-      {/* Demo Purposes */}
-      {hello()}
-      {/* Demo Purposes */}
+      {status === AchievementStatus.COMPLETED && assessment && assessment.type === 'Missions' && (
+        <AchievementCommentCard assessment={assessment} />
+      )}
 
       <h1 style={{ paddingLeft: '2rem' }}>Progress</h1>
       {<AchievementViewGoal goals={goals} />}
