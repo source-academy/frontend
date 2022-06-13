@@ -39,7 +39,12 @@ const mapGoalToJSX = (goal: AchievementGoal) => {
 function AchievementViewGoal(props: AchievementViewGoalProps) {
   const { goals } = props;
 
-  return <>{goals.map(goal => mapGoalToJSX(goal))}</>;
+  return (
+    <>
+      <h1 className="progress-header">Progress</h1>
+      {goals.map(goal => mapGoalToJSX(goal))}
+    </>
+  );
 }
 
 export default AchievementViewGoal;

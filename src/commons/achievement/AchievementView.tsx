@@ -80,12 +80,15 @@ function AchievementView(props: AchievementViewProps) {
         <AchievementCommentCard assessment={assessment} />
       )}
 
-      <h1 style={{ paddingLeft: '2rem' }}>Progress</h1>
-      {<AchievementViewGoal goals={goals} />}
-      {status === AchievementStatus.COMPLETED && (
+      {goals.length !== 0 && (
         <>
-          <hr />
-          <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />
+          <AchievementViewGoal goals={goals} />
+          {status === AchievementStatus.COMPLETED && (
+            <>
+              <hr />
+              <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />
+            </>
+          )}
         </>
       )}
     </div>
