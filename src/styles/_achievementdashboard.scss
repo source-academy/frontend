@@ -344,17 +344,14 @@
       }
 
       .view {
-        overflow-y: auto;
-        overflow-x: hidden;
         border-radius: 1rem;
         text-shadow: black 1px 1px;
         color: white;
         display: flex;
         flex-direction: column;
         margin: $default-spacing;
-        min-height: $view-height;
         width: $view-width;
-        padding-bottom: 20px;
+        padding-bottom: 2rem;
 
         .cover {
           border-top-left-radius: 1rem;

@@ -20,28 +20,26 @@ const AchievementCommentCard = ({ assessment }: OwnProps) => {
 
   return (
     <div>
-      <h1 style={{ paddingLeft: '2rem' }}>Feedback</h1>
-      <ul>
+      <h1 className="assessment-feedback">Feedback</h1>
+      <div className="feedback-list">
         {assessment &&
           assessment.questions.map((question, index) => (
-            <div className="mission-comments" key={index}>
+            <div className="assessment-comments" key={index}>
               <span>
-                <h2 style={{ marginTop: 0 }}>{'Q' + (index + 1)}</h2>
+                <h2 className="question-header">{'Q' + (index + 1)}</h2>
               </span>
 
               <div className="box-comment">
                 <p>{question.comments === null ? 'Not Graded' : question.comments}</p>
-                <p style={{ fontWeight: 700, color: 'orange' }}>
-                  {'XP: ' + question.xp + '/' + question.maxXp}
-                </p>
+                <p className="xp">{'XP: ' + question.xp + '/' + question.maxXp}</p>
               </div>
 
-              <button className="mission-button" onClick={() => toMission(index)}>
-                {'To Question'}{' '}
+              <button className="to-assessment-button" onClick={() => toMission(index)}>
+                {'To Question'}
               </button>
             </div>
           ))}
-      </ul>
+      </div>
     </div>
   );
 };
