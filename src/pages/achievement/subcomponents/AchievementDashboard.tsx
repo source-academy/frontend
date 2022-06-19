@@ -1,5 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -85,6 +87,7 @@ function Dashboard(props: DispatchProps & StateProps) {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
+  const courseRegId = useSelector((store: OverallState) => store.session.courseRegId);
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
@@ -176,7 +179,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           </ul>
 
           <div className="view-container">
-            <AchievementView focusUuid={focusUuid} />
+            <AchievementView courseRegId={courseRegId ?? 0} focusUuid={focusUuid} />
           </div>
         </div>
       </div>

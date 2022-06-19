@@ -1,7 +1,8 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { GET_USER_ASSESSMENT_OVERVIEWS } from 'src/features/achievement/AchievementTypes';
 
 import {
   AchievementContext,
@@ -19,23 +20,31 @@ import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
   focusUuid: string;
+  courseRegId?: number;
 };
 
 export type OwnProps = {
   assessmentId: number;
 };
 
-function AchievementView(props: AchievementViewProps) {
-  const { focusUuid } = props;
+function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!Number.isNaN(+focusUuid) && +focusUuid !== 0) {
+      dispatch({ type: FETCH_ASSESSMENT, payload: +focusUuid });
+      dispatch({ type: GET_USER_ASSESSMENT_OVERVIEWS, payload: courseRegId });
+    }
+  }, [focusUuid, courseRegId, dispatch]);
 
   const inferencer = useContext(AchievementContext);
+  const courseId = useSelector((store: OverallState) => store.session.courseId);
 
-  const dispatch = useDispatch();
-  if (!Number.isNaN(+focusUuid) && +focusUuid !== 0) {
-    dispatch({ type: FETCH_ASSESSMENT, payload: +focusUuid });
-  }
   const assessments = useSelector((store: OverallState) => store.session.assessments);
-  const assessment: Assessment | undefined = assessments.get(+focusUuid);
+  const allAssessmentConfigs = useSelector(
+    (store: OverallState) => store.achievement.assessmentOverviews
+  );
+  const selectedAssessment: Assessment | undefined = assessments.get(+focusUuid);
+  const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === +focusUuid);
 
   if (focusUuid === '') {
     return (
@@ -76,9 +85,12 @@ function AchievementView(props: AchievementViewProps) {
         </span>
       </div>
 
-      {status === AchievementStatus.COMPLETED && assessment && assessment.type === 'Missions' && (
-        <AchievementCommentCard assessment={assessment} />
-      )}
+      {status === AchievementStatus.COMPLETED &&
+        selectedAssessment &&
+        selectedAssessmentConfig &&
+        selectedAssessmentConfig.isManuallyGraded && (
+          <AchievementCommentCard courseId={courseId ?? 0} assessment={selectedAssessment} />
+        )}
 
       {goals.length !== 0 && (
         <>

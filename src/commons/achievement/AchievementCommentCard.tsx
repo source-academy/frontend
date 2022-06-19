@@ -1,17 +1,13 @@
-import { useSelector } from 'react-redux';
-
-import { OverallState } from '../application/ApplicationTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { history } from '../utils/HistoryHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 export type OwnProps = {
   assessment: Assessment;
+  courseId: number;
 };
 
-const AchievementCommentCard = ({ assessment }: OwnProps) => {
-  const courseId = useSelector((store: OverallState) => store.session.courseId);
-
+const AchievementCommentCard = ({ assessment, courseId }: OwnProps) => {
   const toMission = (questionId: number) => {
     const listingPath = `/courses/${courseId}/${assessmentTypeLink(assessment?.type)}`;
     const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
