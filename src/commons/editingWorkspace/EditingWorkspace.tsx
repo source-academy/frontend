@@ -1,4 +1,12 @@
-import { ButtonGroup, Classes, Dialog, Intent, NonIdealState, Spinner } from '@blueprintjs/core';
+import {
+  ButtonGroup,
+  Classes,
+  Dialog,
+  Intent,
+  NonIdealState,
+  Spinner,
+  SpinnerSize
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
@@ -153,7 +161,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         <NonIdealState
           className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting mission ready..."
-          icon={<Spinner size={Spinner.SIZE_LARGE} />}
+          icon={<Spinner size={SpinnerSize.LARGE} />}
         />
       );
     }

@@ -2,20 +2,20 @@
 
 exports[`Navbar renders correctly 1`] = `
 "<Fragment>
-  <Blueprint3.Navbar className=\\"SicpNavigationBar secondary-navbar\\">
-    <Blueprint3.NavbarGroup align=\\"left\\">
+  <Blueprint4.Navbar className=\\"SicpNavigationBar secondary-navbar\\">
+    <Blueprint4.NavbarGroup align=\\"left\\">
       <TableOfContentsButton handleOpenToc={[Function: handleOpenToc]} />
-    </Blueprint3.NavbarGroup>
-    <Blueprint3.NavbarGroup align=\\"right\\">
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup align=\\"right\\">
       <div>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function (anonymous)]}>
+        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function (anonymous)]}>
           Next
-        </Blueprint3.Button>
+        </Blueprint4.Button>
       </div>
-    </Blueprint3.NavbarGroup>
-  </Blueprint3.Navbar>
-  <Blueprint3.Drawer onClose={[Function: handleCloseToc]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" style={{...}} vertical={false}>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
+  <Blueprint4.Drawer onClose={[Function: handleCloseToc]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" style={{...}}>
     <SicpToc handleCloseToc={[Function: handleCloseToc]} />
-  </Blueprint3.Drawer>
+  </Blueprint4.Drawer>
 </Fragment>"
 `;
