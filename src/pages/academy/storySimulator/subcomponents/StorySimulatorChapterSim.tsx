@@ -36,7 +36,7 @@ const ChapterSim = React.memo(() => {
   return (
     <>
       <h3>Chapter Simulator</h3>
-      <select className="bp3-menu" onChange={(e: any) => setChosenIndex(e.target.value)}>
+      <select className="bp4-menu" onChange={(e: any) => setChosenIndex(e.target.value)}>
         {chapters.map((chapter, chapterIndex) => (
           <option value={chapterIndex} key={chapterIndex}>
             {`Chapter ${chapterIndex}: ${chapter.title}`}

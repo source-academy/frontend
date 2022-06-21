@@ -260,13 +260,13 @@ export const processingFunctions = {
 
   SUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <AnchorLink id={obj['id']} refs={refs} top={2}>
-      <h2 className="bp3-heading">{parseArr(obj['child']!, refs)}</h2>
+      <h2 className="bp4-heading">{parseArr(obj['child']!, refs)}</h2>
     </AnchorLink>
   ),
 
   SUBSUBHEADING: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
     <AnchorLink id={obj['id']} refs={refs} top={16}>
-      <h4 className="bp3-heading">
+      <h4 className="bp4-heading">
         <br />
         {parseArr(obj['child']!, refs)}
       </h4>

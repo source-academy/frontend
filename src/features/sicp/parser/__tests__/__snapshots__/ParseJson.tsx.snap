@@ -348,7 +348,7 @@ exports[`Parse heading SUBHEADING  successful 1`] = `
   <Router history={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={2}>
       <div className=\\"sicp-anchor-link-container\\">
-        <h2 className=\\"bp3-heading\\">
+        <h2 className=\\"bp4-heading\\">
           Mock Text
         </h2>
       </div>
@@ -362,7 +362,7 @@ exports[`Parse heading SUBSUBHEADING  successful 1`] = `
   <Router history={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={16}>
       <div className=\\"sicp-anchor-link-container\\">
-        <h4 className=\\"bp3-heading\\">
+        <h4 className=\\"bp4-heading\\">
           <br />
           Mock Text
         </h4>
