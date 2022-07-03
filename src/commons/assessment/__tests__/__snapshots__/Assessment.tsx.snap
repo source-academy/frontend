@@ -14,7 +14,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                     <Blueprint3.NonIdealState description=\\"Fetching assessment...\\" icon={{...}}>
                       <div className=\\"bp3-non-ideal-state\\">
                         <div className=\\"bp3-non-ideal-state-visual\\">
-                          <Blueprint3.Icon icon={{...}} size={60}>
+                          <Blueprint3.Icon icon={{...}} size={60} aria-hidden={true} tabIndex={-1}>
                             <Blueprint3.Spinner>
                               <div className=\\"bp3-spinner\\" role=\\"progressbar\\">
                                 <div className=\\"bp3-spinner-animation\\">
@@ -60,7 +60,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
                       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint3.Icon icon={{...}}>
+                        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -101,8 +101,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                                          <Blueprint3.Icon icon=\\"confirm\\">
-                                            <span icon=\\"confirm\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"confirm\\" aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"confirm\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <path d=\\"M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -157,7 +157,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     </Blueprint3.Collapse>
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleOpenAssessments]}>
                       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint3.Icon icon={{...}}>
+                        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -198,8 +198,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                                          <Blueprint3.Icon icon=\\"confirm\\">
-                                            <span icon=\\"confirm\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"confirm\\" aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"confirm\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <path d=\\"M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -250,8 +250,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/1/missions/2/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint3.Icon icon=\\"play\\">
-                                                    <span icon=\\"play\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\" aria-hidden={true} tabIndex={-1}>
+                                                    <span icon=\\"play\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
                                                       </svg>
@@ -301,8 +301,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={false} icon=\\"confirm\\" intent=\\"danger\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                          <Blueprint3.Icon icon=\\"confirm\\">
-                                            <span icon=\\"confirm\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"confirm\\" aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"confirm\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <path d=\\"M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -353,8 +353,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/1/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint3.Icon icon=\\"edit\\">
-                                                    <span icon=\\"edit\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"edit\\" aria-hidden={true} tabIndex={-1}>
+                                                    <span icon=\\"edit\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
                                                       </svg>
@@ -386,7 +386,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     </Blueprint3.Collapse>
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleClosedAssessments]}>
                       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint3.Icon icon={{...}}>
+                        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
                           <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
                             <span icon=\\"caret-right\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -435,8 +435,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                     <Blueprint3.NonIdealState title=\\"There are no assessments.\\" icon=\\"flame\\">
                       <div className=\\"bp3-non-ideal-state\\">
                         <div className=\\"bp3-non-ideal-state-visual\\">
-                          <Blueprint3.Icon icon=\\"flame\\" size={60}>
-                            <span icon=\\"flame\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-flame\\" title={[undefined]}>
+                          <Blueprint3.Icon icon=\\"flame\\" size={60} aria-hidden={true} tabIndex={-1}>
+                            <span icon=\\"flame\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-flame\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"flame\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
                                 <path d=\\"M11.622 0c0 1.71.49 3.077 1.472 4.103C16.364 6.496 18 9.23 18 12.308c0 3.418-1.962 5.983-5.887 7.692 2.887-3 2.453-4.23-.49-8C8.5 13.5 9 14.5 9.5 16.5c-1.048 0-2 0-2.5-.5 0 .684 1.197 2.5 1.952 4-3.924-1.026-8.123-7.18-6.651-7.692.981-.342 2.126-.171 3.434.513C4.1 6.667 6.062 2.393 11.622 0z\\" fillRule=\\"evenodd\\" />
                               </svg>
@@ -478,7 +478,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                   <div className=\\"bp3-card bp3-elevation-3 contentdisplay-content\\">
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
                       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint3.Icon icon={{...}}>
+                        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -519,8 +519,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                                          <Blueprint3.Icon icon=\\"confirm\\">
-                                            <span icon=\\"confirm\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"confirm\\" aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"confirm\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <path d=\\"M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -571,8 +571,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/1/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint3.Icon icon=\\"play\\">
-                                                    <span icon=\\"play\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\" aria-hidden={true} tabIndex={-1}>
+                                                    <span icon=\\"play\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
                                                       </svg>
@@ -602,7 +602,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     </Blueprint3.Collapse>
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleOpenAssessments]}>
                       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint3.Icon icon={{...}}>
+                        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
                           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
                             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -643,8 +643,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                                          <Blueprint3.Icon icon=\\"confirm\\">
-                                            <span icon=\\"confirm\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"confirm\\" aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"confirm\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <path d=\\"M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -695,8 +695,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/1/missions/2/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint3.Icon icon=\\"play\\">
-                                                    <span icon=\\"play\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\" aria-hidden={true} tabIndex={-1}>
+                                                    <span icon=\\"play\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
                                                       </svg>
@@ -746,8 +746,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={false} icon=\\"confirm\\" intent=\\"danger\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                          <Blueprint3.Icon icon=\\"confirm\\">
-                                            <span icon=\\"confirm\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"confirm\\" aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"confirm\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <path d=\\"M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -798,8 +798,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/1/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint3.Icon icon=\\"edit\\">
-                                                    <span icon=\\"edit\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"edit\\" aria-hidden={true} tabIndex={-1}>
+                                                    <span icon=\\"edit\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
                                                       </svg>
@@ -831,7 +831,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     </Blueprint3.Collapse>
                     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleClosedAssessments]}>
                       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint3.Icon icon={{...}}>
+                        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
                           <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
                             <span icon=\\"caret-right\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">

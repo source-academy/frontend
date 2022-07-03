@@ -5,8 +5,8 @@ exports[`Autograder renders autograder results with different statuses correctly
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+        <Blueprint3.Icon icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1}>
+          <span icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
@@ -17,7 +17,7 @@ exports[`Autograder renders autograder results with different statuses correctly
             Testcases
           </span>
           <Blueprint3.Tooltip2 content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-            <Component>
+            <Tooltip2Provider>
               <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
                 <Manager>
                   <Reference>
@@ -38,7 +38,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
-            </Component>
+            </Tooltip2Provider>
           </Blueprint3.Tooltip2>
         </span>
         <Blueprint3.Icon icon={[undefined]} />
@@ -55,7 +55,7 @@ exports[`Autograder renders autograder results with different statuses correctly
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon={{...}}>
+        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -253,8 +253,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+        <Blueprint3.Icon icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1}>
+          <span icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
@@ -265,7 +265,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
             Testcases
           </span>
           <Blueprint3.Tooltip2 content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-            <Component>
+            <Tooltip2Provider>
               <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
                 <Manager>
                   <Reference>
@@ -286,7 +286,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
-            </Component>
+            </Tooltip2Provider>
           </Blueprint3.Tooltip2>
         </span>
         <Blueprint3.Icon icon={[undefined]} />
@@ -386,7 +386,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon={{...}}>
+        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -419,8 +419,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+        <Blueprint3.Icon icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1}>
+          <span icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
@@ -431,7 +431,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
             Testcases
           </span>
           <Blueprint3.Tooltip2 content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-            <Component>
+            <Tooltip2Provider>
               <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
                 <Manager>
                   <Reference>
@@ -452,7 +452,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
-            </Component>
+            </Tooltip2Provider>
           </Blueprint3.Tooltip2>
         </span>
         <Blueprint3.Icon icon={[undefined]} />
@@ -592,7 +592,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon={{...}}>
+        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -651,8 +651,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+        <Blueprint3.Icon icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1}>
+          <span icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
@@ -663,7 +663,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
             Testcases
           </span>
           <Blueprint3.Tooltip2 content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-            <Component>
+            <Tooltip2Provider>
               <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
                 <Manager>
                   <Reference>
@@ -684,7 +684,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
-            </Component>
+            </Tooltip2Provider>
           </Blueprint3.Tooltip2>
         </span>
         <Blueprint3.Icon icon={[undefined]} />
@@ -847,7 +847,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon={{...}}>
+        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -880,8 +880,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
       <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon=\\"caret-down\\">
-          <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+        <Blueprint3.Icon icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1}>
+          <span icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
               <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
             </svg>
@@ -892,7 +892,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
             Testcases
           </span>
           <Blueprint3.Tooltip2 content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-            <Component>
+            <Tooltip2Provider>
               <Blueprint3.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} placement=\\"left\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
                 <Manager>
                   <Reference>
@@ -913,7 +913,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
                   </Popper>
                 </Manager>
               </Blueprint3.Popover2>
-            </Component>
+            </Tooltip2Provider>
           </Blueprint3.Tooltip2>
         </span>
         <Blueprint3.Icon icon={[undefined]} />
@@ -1076,7 +1076,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint3.Icon icon={{...}}>
+        <Blueprint3.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">

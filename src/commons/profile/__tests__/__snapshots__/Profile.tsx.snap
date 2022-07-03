@@ -38,7 +38,7 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                           </Component>
                           <Blueprint3.Button aria-label=\\"Close\\" className=\\"bp3-dialog-close-button\\" icon={{...}} minimal={true} onClick={[Function: onClose]}>
                             <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                              <Blueprint3.Icon icon={{...}}>
+                              <Blueprint3.Icon icon={{...}} aria-hidden={false} tabIndex={0}>
                                 <Blueprint3.Icon icon=\\"small-cross\\" size={20}>
                                   <span icon=\\"small-cross\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-small-cross\\" title={[undefined]}>
                                     <svg fill={[undefined]} data-icon=\\"small-cross\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
@@ -96,8 +96,8 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                                     <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/courses/1/quests/5/0\\" onClick={[Function: onClick]}>
                                       <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (fully graded) Sidequest\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
-                                          <Blueprint3.Icon icon=\\"lightbulb\\" size={20}>
-                                            <span icon=\\"lightbulb\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"lightbulb\\" size={20} aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"lightbulb\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"lightbulb\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                                 <path d=\\"M6.33 13.39c0 .34.27.61.6.61h6.13c.33 0 .6-.27.6-.61C14.03 9.78 16 9.4 16 6.09 16 2.72 13.31 0 10 0S4 2.72 4 6.09c0 3.31 1.97 3.69 2.33 7.3zM13 15H7c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-1 3H8c-.55 0-1 .45-1 1s.45 1 1 1h4c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -137,8 +137,8 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
                                     <a aria-current={{...}} className=\\"profile-summary-navlink\\" style={[undefined]} target=\\"_blank\\" href=\\"/courses/1/quests/5/0\\" onClick={[Function: onClick]}>
                                       <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Ungraded assessment\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
-                                          <Blueprint3.Icon icon=\\"lightbulb\\" size={20}>
-                                            <span icon=\\"lightbulb\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
+                                          <Blueprint3.Icon icon=\\"lightbulb\\" size={20} aria-hidden={true} tabIndex={-1}>
+                                            <span icon=\\"lightbulb\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
                                               <svg fill={[undefined]} data-icon=\\"lightbulb\\" width={20} height={20} viewBox=\\"0 0 20 20\\">
                                                 <path d=\\"M6.33 13.39c0 .34.27.61.6.61h6.13c.33 0 .6-.27.6-.61C14.03 9.78 16 9.4 16 6.09 16 2.72 13.31 0 10 0S4 2.72 4 6.09c0 3.31 1.97 3.69 2.33 7.3zM13 15H7c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-1 3H8c-.55 0-1 .45-1 1s.45 1 1 1h4c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
                                               </svg>
@@ -230,7 +230,7 @@ exports[`Profile renders correctly when there are no closed assessments 1`] = `
                           </Component>
                           <Blueprint3.Button aria-label=\\"Close\\" className=\\"bp3-dialog-close-button\\" icon={{...}} minimal={true} onClick={[Function: onClose]}>
                             <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                              <Blueprint3.Icon icon={{...}}>
+                              <Blueprint3.Icon icon={{...}} aria-hidden={false} tabIndex={0}>
                                 <Blueprint3.Icon icon=\\"small-cross\\" size={20}>
                                   <span icon=\\"small-cross\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-small-cross\\" title={[undefined]}>
                                     <svg fill={[undefined]} data-icon=\\"small-cross\\" width={20} height={20} viewBox=\\"0 0 20 20\\">

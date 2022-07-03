@@ -10,7 +10,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   Foreword
                 </span>
@@ -26,7 +26,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   Foreword to Structure and Interpretation of Computer Programs, 1984
                 </span>
@@ -42,7 +42,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   Preface
                 </span>
@@ -58,7 +58,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   Prefaces to Structure and Interpretation of Computer Programs, 1996 &amp; 1984
                 </span>
@@ -74,7 +74,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   Acknowledgments
                 </span>
@@ -99,7 +99,7 @@ exports[`Sicp toc renders correctly 1`] = `
                     </svg>
                   </span>
                 </Blueprint3.Icon>
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   1 Building Abstractions with Functions
                 </span>
@@ -124,7 +124,7 @@ exports[`Sicp toc renders correctly 1`] = `
                     </svg>
                   </span>
                 </Blueprint3.Icon>
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   2 Building Abstractions with Data
                 </span>
@@ -149,7 +149,7 @@ exports[`Sicp toc renders correctly 1`] = `
                     </svg>
                   </span>
                 </Blueprint3.Icon>
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   3 Modularity, Objects, and State
                 </span>
@@ -174,7 +174,7 @@ exports[`Sicp toc renders correctly 1`] = `
                     </svg>
                   </span>
                 </Blueprint3.Icon>
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   4 Metalinguistic Abstraction
                 </span>
@@ -199,7 +199,7 @@ exports[`Sicp toc renders correctly 1`] = `
                     </svg>
                   </span>
                 </Blueprint3.Icon>
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   5 Computing with Register Machines
                 </span>
@@ -215,7 +215,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   References
                 </span>
@@ -231,7 +231,7 @@ exports[`Sicp toc renders correctly 1`] = `
             <li className=\\"bp3-tree-node\\">
               <div className=\\"bp3-tree-node-content bp3-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                 <span className=\\"bp3-tree-node-caret-none\\" />
-                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} />
+                <Blueprint3.Icon className=\\"bp3-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                 <span className=\\"bp3-tree-node-label\\">
                   About the SICP JS Project
                 </span>

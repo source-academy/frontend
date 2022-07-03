@@ -4,8 +4,8 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" size={60}>
-        <span icon=\\"error\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
+      <Blueprint3.Icon icon=\\"error\\" size={60} aria-hidden={true} tabIndex={-1}>
+        <span icon=\\"error\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
           </svg>
@@ -33,8 +33,8 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" size={60}>
-        <span icon=\\"error\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
+      <Blueprint3.Icon icon=\\"error\\" size={60} aria-hidden={true} tabIndex={-1}>
+        <span icon=\\"error\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
           </svg>
@@ -62,8 +62,8 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
 "<Blueprint3.NonIdealState title=\\"Something went wrong :(\\" description={{...}} icon=\\"error\\">
   <div className=\\"bp3-non-ideal-state\\">
     <div className=\\"bp3-non-ideal-state-visual\\">
-      <Blueprint3.Icon icon=\\"error\\" size={60}>
-        <span icon=\\"error\\" aria-hidden={true} className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
+      <Blueprint3.Icon icon=\\"error\\" size={60} aria-hidden={true} tabIndex={-1}>
+        <span icon=\\"error\\" aria-hidden={true} tabIndex={-1} className=\\"bp3-icon bp3-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
             <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
           </svg>

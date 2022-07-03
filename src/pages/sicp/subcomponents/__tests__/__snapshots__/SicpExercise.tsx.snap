@@ -15,7 +15,7 @@ exports[`Sicp exercise renders correctly 1`] = `
       <div className=\\"sicp-button-container\\">
         <Blueprint3.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
           <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-large sicp-show-solution-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-            <Blueprint3.Icon icon={[undefined]} />
+            <Blueprint3.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
             <span className=\\"bp3-button-text\\">
               Show Solution
             </span>
