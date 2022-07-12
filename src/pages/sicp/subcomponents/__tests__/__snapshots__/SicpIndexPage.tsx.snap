@@ -150,10 +150,10 @@ exports[`Sicp index page 1`] = `
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
                       <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                          <desc>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-0\\" role=\\"img\\">
+                          <title id=\\"iconTitle-0\\">
                             Expand group
-                          </desc>
+                          </title>
                           <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
                         </svg>
                       </span>
@@ -175,10 +175,10 @@ exports[`Sicp index page 1`] = `
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
                       <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                          <desc>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-1\\" role=\\"img\\">
+                          <title id=\\"iconTitle-1\\">
                             Expand group
-                          </desc>
+                          </title>
                           <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
                         </svg>
                       </span>
@@ -200,10 +200,10 @@ exports[`Sicp index page 1`] = `
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
                       <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                          <desc>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-2\\" role=\\"img\\">
+                          <title id=\\"iconTitle-2\\">
                             Expand group
-                          </desc>
+                          </title>
                           <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
                         </svg>
                       </span>
@@ -225,10 +225,10 @@ exports[`Sicp index page 1`] = `
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
                       <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                          <desc>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-3\\" role=\\"img\\">
+                          <title id=\\"iconTitle-3\\">
                             Expand group
-                          </desc>
+                          </title>
                           <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
                         </svg>
                       </span>
@@ -250,10 +250,10 @@ exports[`Sicp index page 1`] = `
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
                       <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-                          <desc>
+                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-4\\" role=\\"img\\">
+                          <title id=\\"iconTitle-4\\">
                             Expand group
-                          </desc>
+                          </title>
                           <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
                         </svg>
                       </span>

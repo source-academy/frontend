@@ -60,7 +60,7 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
   const handleFormatDate = (date: Date) => moment(date).format(dateDisplayFormat);
 
   const handleDateChange = React.useCallback(
-    (selectedDate: Date) => setNewDate(moment(selectedDate)),
+    (selectedDate: Date | null) => setNewDate(moment(selectedDate)),
     []
   );
   const handleDateError = React.useCallback(() => {
