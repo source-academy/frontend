@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer component renders correctly 1`] = `
-"<div className=\\"bp3-dark\\">
-  <p id=\\"env-visualizer-default-text\\" className=\\"bp3-running-text\\">
+"<div className=\\"bp4-dark\\">
+  <p id=\\"env-visualizer-default-text\\" className=\\"bp4-running-text\\">
     The environment model visualizer generates environment model diagrams following a notation introduced in
      
     <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">

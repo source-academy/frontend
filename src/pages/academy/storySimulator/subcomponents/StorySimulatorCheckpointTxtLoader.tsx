@@ -41,7 +41,7 @@ function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
 
   const chooseS3Txt = (
     <>
-      <select className="bp3-menu" onChange={changeChosenFilename}>
+      <select className="bp4-menu" onChange={changeChosenFilename}>
         {s3TxtFiles.map(file => (
           <option value={file} key={file}>
             {file}

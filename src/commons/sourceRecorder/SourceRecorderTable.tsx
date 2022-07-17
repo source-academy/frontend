@@ -1,6 +1,13 @@
 import 'ag-grid-community/dist/styles/ag-grid.css';
 
-import { Divider, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import {
+  Divider,
+  FormGroup,
+  InputGroup,
+  NonIdealState,
+  Spinner,
+  SpinnerSize
+} from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
@@ -138,7 +145,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
       <NonIdealState
         className="Sourcecast"
         description="Fetching sourcecast index..."
-        icon={<Spinner size={Spinner.SIZE_LARGE} />}
+        icon={<Spinner size={SpinnerSize.LARGE} />}
       />
     );
     const data = sortBy(this.props.sourcecastIndex, [(a: SourcecastData) => -a.id]);

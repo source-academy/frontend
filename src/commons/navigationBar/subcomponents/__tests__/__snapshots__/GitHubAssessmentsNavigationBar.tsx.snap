@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Navbar renders correctly 1`] = `
-"<Blueprint3.Navbar className=\\"NavigationBar secondary-navbar\\">
-  <Blueprint3.NavbarGroup align=\\"left\\">
-    <NavLink to={{...}} activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"flame\\" />
+"<Blueprint4.Navbar className=\\"NavigationBar secondary-navbar\\">
+  <Blueprint4.NavbarGroup align=\\"left\\">
+    <NavLink to={{...}} activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+      <Blueprint4.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
     </NavLink>
-    <NavLink to={{...}} activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
-      <Blueprint3.Icon icon=\\"lightbulb\\" />
+    <NavLink to={{...}} activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+      <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
     </NavLink>
-  </Blueprint3.NavbarGroup>
-  <Blueprint3.NavbarGroup align=\\"right\\">
-    <Blueprint3.InputGroup disabled={true} leftElement={{...}} placeholder=\\"Select Course\\" onChange={[Function: changeCourseHandler]} value=\\"\\" />
+  </Blueprint4.NavbarGroup>
+  <Blueprint4.NavbarGroup align=\\"right\\">
+    <Blueprint4.InputGroup disabled={true} leftElement={{...}} placeholder=\\"Select Course\\" onChange={[Function: changeCourseHandler]} value=\\"\\" />
     <ControlBarGitHubLoginButton onClickLogIn={[Function: handleGitHubLogIn]} onClickLogOut={[Function: handleGitHubLogOut]} />
-  </Blueprint3.NavbarGroup>
-</Blueprint3.Navbar>"
+  </Blueprint4.NavbarGroup>
+</Blueprint4.Navbar>"
 `;

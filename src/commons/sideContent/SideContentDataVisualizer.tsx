@@ -85,7 +85,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
               >
                 Previous
               </Button>
-              <h3 className="bp3-text-large">
+              <h3 className="bp4-text-large">
                 Call {this.state.currentStep + 1}/{this.state.steps.length}
               </h3>
               <Button
@@ -119,7 +119,7 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
                   <Card style={{ background: '#1a2530', padding: 10 }}>
                     {step.length > 1 && (
                       <h5
-                        className="bp3-heading bp3-monospace-text"
+                        className="bp4-heading bp4-monospace-text"
                         style={{ marginTop: 0, marginBottom: 20, whiteSpace: 'nowrap' }}
                       >
                         Structure {i + 1}
