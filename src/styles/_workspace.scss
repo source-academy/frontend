@@ -103,10 +103,12 @@ $code-color-error: #ff4444;
     flex-direction: column;
     height: 100%;
     width: 100%;
+    background-color: $cadet-color-2;
 
     .editor-react-ace {
       flex: 1;
       height: 100%;
+      margin: 2px;
 
       #brace-editor {
         height: 100%;

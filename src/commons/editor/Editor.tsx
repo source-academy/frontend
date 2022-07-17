@@ -378,7 +378,7 @@ const EditorBase = React.memo(
     });
 
     return (
-      <HotKeys className="Editor" handlers={handlers}>
+      <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
         </div>
