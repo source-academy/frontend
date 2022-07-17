@@ -89,7 +89,7 @@
     "@types/draft-js": "^0.11.9",
     "@types/enzyme": "3.10.12",
     "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/estree": "0.0.51",
+    "@types/estree": "1.0.0",
     "@types/gapi": "^0.0.42",
     "@types/gapi.auth2": "^0.0.56",
     "@types/gapi.client": "^1.0.5",
