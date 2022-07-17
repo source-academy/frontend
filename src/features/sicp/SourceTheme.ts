@@ -1,10 +1,12 @@
+import React from 'react';
+
 /**
  * Source Theme for use with react-syntax-highlighter.
  * Tries to match the Source Theme for Ace Editor in js-slang
  */
 const SourceThemeBackground = '#2c3e50';
 
-export const SourceTheme = {
+export const SourceTheme: { [key: string]: React.CSSProperties } = {
   'code[class*="language-"]': {
     color: 'white',
     background: 'transparent',

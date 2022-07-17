@@ -1,29 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Code output renders correctly 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"codeOutput\\">
     display(&#39;&#39;);
   </Component>
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   &#39;&#39;
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"errorOutput\\">
     Line &lt;unknown&gt;: Expected , got .
   </Component>
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"logOutput\\">
     a
     bb
@@ -34,7 +34,7 @@ exports[`Error output (with consoleLogs) renders correctly 1`] = `
   <Component className=\\"errorOutput\\">
     Line &lt;unknown&gt;: Expected , got .
   </Component>
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;
 
 exports[`Repl renders correctly 1`] = `
@@ -44,7 +44,7 @@ exports[`Repl renders correctly 1`] = `
     <Output output={{...}} usingSubst={false} />
     <Output output={{...}} usingSubst={false} />
     <Output output={{...}} usingSubst={false} />
-    <HotKeysEnabled className=\\"repl-input-parent row bp3-card bp3-elevation-0\\" handlers={{...}}>
+    <HotKeysEnabled className=\\"repl-input-parent row bp4-card bp4-elevation-0\\" handlers={{...}}>
       <ForwardRef handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" sourceChapter={1} sourceVariant=\\"default\\" externalLibrary=\\"NONE\\" replButtons={{...}} />
     </HotKeysEnabled>
   </div>
@@ -52,15 +52,15 @@ exports[`Repl renders correctly 1`] = `
 `;
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"resultOutput\\">
     42
   </Component>
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"logOutput\\">
     a
     bb
@@ -70,16 +70,16 @@ exports[`Result output (with consoleLogs) renders correctly 1`] = `
   <Component className=\\"resultOutput\\">
     42
   </Component>
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;
 
 exports[`Running output renders correctly 1`] = `
-"<Blueprint3.Card elevation={0} interactive={false}>
+"<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"logOutput\\">
     a
     bb
     cccccccccccccccccccccccccccccccc
     d
   </Component>
-</Blueprint3.Card>"
+</Blueprint4.Card>"
 `;

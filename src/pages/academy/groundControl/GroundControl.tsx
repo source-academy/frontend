@@ -3,7 +3,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import * as React from 'react';
 
@@ -42,6 +42,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   private columnDefs: ColDef[];
   private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
+  private columnApi?: ColumnApi;
 
   public constructor(props: GroundControlProps) {
     super(props);
@@ -213,13 +214,16 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
+    this.columnApi = params.columnApi;
     this.gridApi.sizeColumnsToFit();
 
     // Sort assessments by opening date, breaking ties by later of closing dates
-    this.gridApi.setSortModel([
-      { colId: 'openAt', sort: 'desc' },
-      { colId: 'closeAt', sort: 'desc' }
-    ]);
+    this.columnApi.applyColumnState({
+      state: [
+        { colId: 'openAt', sort: 'desc' },
+        { colId: 'closeAt', sort: 'desc' }
+      ]
+    });
   };
 
   private resizeGrid = () => {

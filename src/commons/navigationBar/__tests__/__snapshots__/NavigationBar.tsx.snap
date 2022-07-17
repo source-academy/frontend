@@ -2,34 +2,34 @@
 
 exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 "<Fragment>
-  <Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
-    <Blueprint3.NavbarGroup align=\\"left\\">
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/welcome\\" isActive={[Function: matchExceptSourcecastAchievement]}>
-        <Blueprint3.Icon icon=\\"symbol-diamond\\" />
-        <Blueprint3.NavbarHeading style={{...}}>
+  <Blueprint4.Navbar className=\\"NavigationBar primary-navbar bp4-dark\\">
+    <Blueprint4.NavbarGroup align=\\"left\\">
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/welcome\\" isActive={[Function: matchExceptSourcecastAchievement]}>
+        <Blueprint4.Icon icon=\\"symbol-diamond\\" />
+        <Blueprint4.NavbarHeading style={{...}}>
           Source Academy @ NUS
-        </Blueprint3.NavbarHeading>
+        </Blueprint4.NavbarHeading>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
-        <Blueprint3.Icon icon=\\"briefcase\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/githubassessments\\">
+        <Blueprint4.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
           Classroom
         </div>
       </NavLink>
-    </Blueprint3.NavbarGroup>
-    <Blueprint3.NavbarGroup align=\\"right\\">
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
-        <Blueprint3.Icon icon=\\"heart\\" />
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup align=\\"right\\">
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
+        <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
       <div className=\\"visible-xs\\">
-        <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
+        <Blueprint4.NavbarDivider className=\\"thin-divider\\" />
       </div>
       <div className=\\"hidden-xs\\">
-        <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+        <Blueprint4.NavbarDivider className=\\"default-divider\\" />
       </div>
       <Dropdown handleLogOut={[Function: handleLogOut]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={[undefined]} name={[undefined]} />
-    </Blueprint3.NavbarGroup>
-  </Blueprint3.Navbar>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
   <Switch>
     <Route path=\\"/playground\\" />
     <Route path=\\"/githubassessments\\" />
@@ -46,58 +46,58 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 
 exports[`NavigationBar renders correctly for student with course 1`] = `
 "<Fragment>
-  <Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
-    <Blueprint3.NavbarGroup align=\\"left\\">
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/courses/1\\" isActive={[Function: matchExceptSourcecastAchievement]}>
-        <Blueprint3.Icon icon=\\"symbol-diamond\\" />
-        <Blueprint3.NavbarHeading style={{...}}>
+  <Blueprint4.Navbar className=\\"NavigationBar primary-navbar bp4-dark\\">
+    <Blueprint4.NavbarGroup align=\\"left\\">
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/courses/1\\" isActive={[Function: matchExceptSourcecastAchievement]}>
+        <Blueprint4.Icon icon=\\"symbol-diamond\\" />
+        <Blueprint4.NavbarHeading style={{...}}>
           CS1101S
-        </Blueprint3.NavbarHeading>
+        </Blueprint4.NavbarHeading>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/courses/1/sourcecast\\">
-        <Blueprint3.Icon icon=\\"music\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/courses/1/sourcecast\\">
+        <Blueprint4.Icon icon=\\"music\\" />
         <div className=\\"navbar-button-text\\">
           Sourcecast
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\">
-        <Blueprint3.Icon icon=\\"code\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/playground\\">
+        <Blueprint4.Icon icon=\\"code\\" />
         <div className=\\"navbar-button-text\\">
           Playground
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
-        <Blueprint3.Icon icon=\\"briefcase\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/githubassessments\\">
+        <Blueprint4.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
           Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/\\">
-        <Blueprint3.Icon icon=\\"book\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/sicpjs/\\">
+        <Blueprint4.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/courses/1/achievements\\">
-        <Blueprint3.Icon icon=\\"mountain\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/courses/1/achievements\\">
+        <Blueprint4.Icon icon=\\"mountain\\" />
         <div className=\\"navbar-button-text\\">
           Achievements
         </div>
       </NavLink>
-    </Blueprint3.NavbarGroup>
-    <Blueprint3.NavbarGroup align=\\"right\\">
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
-        <Blueprint3.Icon icon=\\"heart\\" />
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup align=\\"right\\">
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
+        <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
       <div className=\\"visible-xs\\">
-        <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
+        <Blueprint4.NavbarDivider className=\\"thin-divider\\" />
       </div>
       <div className=\\"hidden-xs\\">
-        <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+        <Blueprint4.NavbarDivider className=\\"default-divider\\" />
       </div>
       <Dropdown handleLogOut={[Function: handleLogOut]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={1} name=\\"Bob\\" />
-    </Blueprint3.NavbarGroup>
-  </Blueprint3.Navbar>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
   <Switch>
     <Route path=\\"/playground\\" />
     <Route path=\\"/githubassessments\\" />
@@ -116,40 +116,40 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
 
 exports[`NavigationBar renders correctly for student without course 1`] = `
 "<Fragment>
-  <Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
-    <Blueprint3.NavbarGroup align=\\"left\\">
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/welcome\\" isActive={[Function: matchExceptSourcecastAchievement]}>
-        <Blueprint3.Icon icon=\\"symbol-diamond\\" />
-        <Blueprint3.NavbarHeading style={{...}}>
+  <Blueprint4.Navbar className=\\"NavigationBar primary-navbar bp4-dark\\">
+    <Blueprint4.NavbarGroup align=\\"left\\">
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/welcome\\" isActive={[Function: matchExceptSourcecastAchievement]}>
+        <Blueprint4.Icon icon=\\"symbol-diamond\\" />
+        <Blueprint4.NavbarHeading style={{...}}>
           Source Academy @ NUS
-        </Blueprint3.NavbarHeading>
+        </Blueprint4.NavbarHeading>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/githubassessments\\">
-        <Blueprint3.Icon icon=\\"briefcase\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/githubassessments\\">
+        <Blueprint4.Icon icon=\\"briefcase\\" />
         <div className=\\"navbar-button-text\\">
           Classroom
         </div>
       </NavLink>
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sicpjs/\\">
-        <Blueprint3.Icon icon=\\"book\\" />
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/sicpjs/\\">
+        <Blueprint4.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
         </div>
       </NavLink>
-    </Blueprint3.NavbarGroup>
-    <Blueprint3.NavbarGroup align=\\"right\\">
-      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
-        <Blueprint3.Icon icon=\\"heart\\" />
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup align=\\"right\\">
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
+        <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
       <div className=\\"visible-xs\\">
-        <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
+        <Blueprint4.NavbarDivider className=\\"thin-divider\\" />
       </div>
       <div className=\\"hidden-xs\\">
-        <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+        <Blueprint4.NavbarDivider className=\\"default-divider\\" />
       </div>
       <Dropdown handleLogOut={[Function: handleLogOut]} handleCreateCourse={[Function: handleCreateCourse]} courses={{...}} courseId={[undefined]} name=\\"Bob\\" />
-    </Blueprint3.NavbarGroup>
-  </Blueprint3.Navbar>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
   <Switch>
     <Route path=\\"/playground\\" />
     <Route path=\\"/githubassessments\\" />

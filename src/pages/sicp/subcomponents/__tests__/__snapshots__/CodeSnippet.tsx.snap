@@ -2,12 +2,12 @@
 
 exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
 "<div className=\\"sicp-code-snippet\\">
-  <Blueprint3.Card className=\\"sicp-code-snippet-closed\\" interactive={true} elevation={2}>
+  <Blueprint4.Card className=\\"sicp-code-snippet-closed\\" interactive={true} elevation={2}>
     <SyntaxHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
       const a = 1;
       a+1;
     </SyntaxHighlighter>
-  </Blueprint3.Card>
+  </Blueprint4.Card>
   <Component>
     <em>
       2
@@ -18,12 +18,12 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
 
 exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
 "<div className=\\"sicp-code-snippet\\">
-  <Blueprint3.Card className=\\"sicp-code-snippet-closed\\" interactive={true} elevation={2}>
+  <Blueprint4.Card className=\\"sicp-code-snippet-closed\\" interactive={true} elevation={2}>
     <SyntaxHighlighter language=\\"javascript\\" style={{...}} onClick={[Function: handleOpen]}>
       const a = 1;
       a+1;
     </SyntaxHighlighter>
-  </Blueprint3.Card>
+  </Blueprint4.Card>
   <Component>
     <em>
       2
