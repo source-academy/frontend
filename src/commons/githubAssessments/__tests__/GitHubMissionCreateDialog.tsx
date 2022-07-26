@@ -78,8 +78,8 @@ test('Selecting Confirm with repository name causes ResolveDialog to be called w
 
   await screen.findByText('Please confirm your save');
   const textArea = screen.getByPlaceholderText('Enter Repository Title');
-  userEvent.clear(textArea);
-  userEvent.type(textArea, 'repoName');
+  await userEvent.clear(textArea);
+  await userEvent.type(textArea, 'repoName');
   fireEvent.click(screen.getByText('Confirm'));
   expect(outsideValue).toStrictEqual({ confirmSave: true, repoName: 'repoName' });
 });
