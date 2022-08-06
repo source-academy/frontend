@@ -10,10 +10,6 @@ import { Value } from './Value';
 
 /** this class encapsulates an unassigned value in Source, internally represented as a symbol */
 export class UnassignedValue extends Value {
-  readonly x: number;
-  readonly y: number;
-  readonly height: number;
-  readonly width: number;
   readonly data: UnassignedData = Symbol();
   readonly text: Text;
 
@@ -23,27 +19,48 @@ export class UnassignedValue extends Value {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this.x = mainReference.x + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
-      this.y = mainReference.y;
-      this.text = new Text(Config.UnassignedData.toString(), this.x, this.y, {
+      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._y = mainReference.y();
+      this.text = new Text(Config.UnassignedData.toString(), this._x, this._y, {
         isStringIdentifiable: false
       });
     } else {
-      const maxWidth = mainReference.width;
+      const maxWidth = mainReference.width();
       const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
-      this.x = mainReference.x + (mainReference.width - textWidth) / 2;
-      this.y = mainReference.y + (mainReference.height - Config.FontSize) / 2;
-      this.text = new Text(Config.UnassignedData.toString(), this.x, this.y, {
+      this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
+      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
+      this.text = new Text(Config.UnassignedData.toString(), this._x, this._y, {
         maxWidth: maxWidth,
         isStringIdentifiable: false
       });
     }
 
-    this.width = this.text.width;
-    this.height = this.text.height;
+    this._width = this.text.width();
+    this._height = this.text.height();
   }
 
+  reset(): void {
+    super.reset();
+    this.referencedBy.length = 0;
+  }
+  updatePosition(): void {
+    const mainReference = this.referencedBy[0];
+    if (mainReference instanceof Binding) {
+      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._y = mainReference.y();
+    } else {
+      const maxWidth = mainReference.width();
+      const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
+      this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
+      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
+    }
+    this.text.updatePosition(this._x, this._y);
+  }
+  onMouseEnter(): void {}
+  onMouseLeave(): void {}
+
   draw(): React.ReactNode {
+    this._isDrawn = true;
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }
 }

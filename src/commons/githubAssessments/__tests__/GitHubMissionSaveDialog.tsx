@@ -81,7 +81,7 @@ test('Selecting Confirm causes resolveDialog to be called with confirmSave = tru
   await waitFor(() => expect(screen.getAllByText('Q1/StarterCode.js').length).toBe(1));
   await waitFor(() => expect(screen.getAllByText('Q2').length).toBe(1));
   await screen.findByText('Please confirm your save');
-  userEvent.type(screen.getByPlaceholderText('Enter Commit Message'), 'message');
+  await userEvent.type(screen.getByPlaceholderText('Enter Commit Message'), 'message');
   fireEvent.click(screen.getByText('Confirm'));
   expect(outsideValue).toStrictEqual({ confirmSave: true, commitMessage: 'message' });
 });

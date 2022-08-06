@@ -6,7 +6,8 @@ import {
   Dialog,
   Intent,
   NonIdealState,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -717,7 +718,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <NonIdealState
         className={classNames('WorkspaceParent', Classes.DARK)}
         description="Getting mission ready..."
-        icon={<Spinner size={Spinner.SIZE_LARGE} />}
+        icon={<Spinner size={SpinnerSize.LARGE} />}
       />
     );
   }

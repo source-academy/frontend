@@ -1,5 +1,5 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { GridApi, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
@@ -31,7 +31,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
   );
 
-  const columnDefs = [
+  const columnDefs: ColDef[] = [
     {
       headerName: 'Name',
       field: 'name',

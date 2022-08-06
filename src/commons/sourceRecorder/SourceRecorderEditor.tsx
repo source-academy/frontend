@@ -195,7 +195,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
   public render() {
     return (
-      <HotKeys className="Editor" handlers={handlers}>
+      <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"

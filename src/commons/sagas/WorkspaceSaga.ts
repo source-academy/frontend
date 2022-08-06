@@ -22,6 +22,7 @@ import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
@@ -385,6 +386,7 @@ export default function* WorkspaceSaga(): SagaIterator {
         }
       }
       DataVisualizer.clear();
+      EnvVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;

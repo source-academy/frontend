@@ -1,4 +1,4 @@
-import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
@@ -173,7 +173,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         <NonIdealState
           className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting assessment ready..."
-          icon={<Spinner size={Spinner.SIZE_LARGE} />}
+          icon={<Spinner size={SpinnerSize.LARGE} />}
         />
       );
     }

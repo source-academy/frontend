@@ -1,21 +1,24 @@
-import { Data, ReferenceType, Visible } from '../../EnvVisualizerTypes';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React from 'react';
+
+import { Data, IHoverable, ReferenceType } from '../../EnvVisualizerTypes';
+import { Visible } from '../Visible';
 
 /** the value of a `Binding` or an `ArrayUnit` */
-export abstract class Value implements Visible {
+export abstract class Value extends Visible implements IHoverable {
+  abstract onMouseEnter(e: KonvaEventObject<MouseEvent>): void;
+  abstract onMouseLeave(e: KonvaEventObject<MouseEvent>): void;
+
   /** draw logic */
-  abstract draw(): React.ReactNode;
+  abstract draw(key?: number): React.ReactNode;
   /** add reference (binding / array unit) to this value */
   addReference(newReference: ReferenceType): void {
     this.referencedBy.push(newReference);
   }
+  abstract updatePosition(pos?: { x: number; y: number }): void;
 
   /** references to this value */
-  abstract readonly referencedBy: ReferenceType[];
+  abstract referencedBy: ReferenceType[];
   /** the underlying data of this value */
   abstract readonly data: Data;
-  /** coordinates and dimensions */
-  abstract readonly x: number;
-  abstract readonly y: number;
-  abstract readonly height: number;
-  abstract readonly width: number;
 }
