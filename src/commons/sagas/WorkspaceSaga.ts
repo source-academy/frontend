@@ -133,8 +133,8 @@ export default function* WorkspaceSaga(): SagaIterator {
           caption: name.name,
           value: name.name,
           score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
-          name: undefined,
-        }
+          name: undefined
+        };
       });
 
       let chapterName = context.chapter.toString();
