@@ -20,7 +20,7 @@ function reportInfiniteLoopError(
 ) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
-    scope.setLevel(Sentry.Severity.Info);
+    scope.setLevel('info');
     scope.setTag('error-type', InfiniteLoopErrorType[errorType]);
     scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('is-stream', isStream ? 'yes' : 'no');
@@ -52,7 +52,7 @@ function reportPotentialInfiniteLoop(
 ) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
-    scope.setLevel(Sentry.Severity.Info);
+    scope.setLevel('info');
     scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('error-type', 'Undetected');
     scope.setExtra('sessionId', sessionId.toString());
@@ -78,7 +78,7 @@ function reportPotentialInfiniteLoop(
 function reportNonErrorProgram(sessionId: number, code: string[]) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
-    scope.setLevel(Sentry.Severity.Info);
+    scope.setLevel('info');
     scope.setExtra('sessionId', sessionId.toString());
     scope.setExtra('code', JSON.stringify(code));
     scope.setFingerprint(['INFINITE_LOOP_LOGGING_FINGERPRINT_2022_NONERROR']);
