@@ -42,11 +42,7 @@ function reportInfiniteLoopError(
  * @param {string} message - the error's message
  * @param {string} code - code to be sent along with the error
  */
-function reportPotentialInfiniteLoop(
-  sessionId: number,
-  message: string,
-  code: string[]
-) {
+function reportPotentialInfiniteLoop(sessionId: number, message: string, code: string[]) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
     scope.setLevel('info');
