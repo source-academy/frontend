@@ -12,7 +12,6 @@ import {
  */
 function reportInfiniteLoopError(
   sessionId: number,
-  coinflip: boolean,
   errorType: InfiniteLoopErrorType,
   isStream: boolean,
   message: string,
@@ -22,7 +21,6 @@ function reportInfiniteLoopError(
     scope.clearBreadcrumbs();
     scope.setLevel('info');
     scope.setTag('error-type', InfiniteLoopErrorType[errorType]);
-    scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('is-stream', isStream ? 'yes' : 'no');
     scope.setExtra('sessionId', sessionId.toString());
     scope.setExtra('message', message);
@@ -46,14 +44,12 @@ function reportInfiniteLoopError(
  */
 function reportPotentialInfiniteLoop(
   sessionId: number,
-  coinflip: boolean,
   message: string,
   code: string[]
 ) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
     scope.setLevel('info');
-    scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('error-type', 'Undetected');
     scope.setExtra('sessionId', sessionId.toString());
     scope.setExtra('message', message);
