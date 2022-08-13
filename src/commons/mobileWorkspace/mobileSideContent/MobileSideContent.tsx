@@ -4,12 +4,12 @@ import classNames from 'classnames';
 import React from 'react';
 import ReactAce from 'react-ace/lib/ace';
 import { useSelector } from 'react-redux';
+import { getModuleTabs } from 'src/commons/sideContent/SideContentHelper';
 
 import { OverallState } from '../../application/ApplicationTypes';
 import { ControlBarProps } from '../../controlBar/ControlBar';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
-import { DebuggerContext, WorkspaceLocation } from '../../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './../../sideContent/SideContentHelper';
+import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import MobileControlBar from './MobileControlBar';
 
 export type MobileSideContentProps = DispatchProps & StateProps & MobileControlBarProps;
@@ -61,10 +61,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     const copy = [...tabs];
     const runTab = copy.pop();
 
-    const allActiveTabs = copy.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
+    const moduleTabNames = debuggerContext?.context?.moduleContexts.moduleTabs ?? [];
+    const allActiveTabs = !debuggerContext ? tabs : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
     allActiveTabs.push(runTab!);
     setDynamicTabs(allActiveTabs);
-  }, [tabs, debuggerContext]);
+  }, [tabs, debuggerContext]); 
 
   /**
    * Generates an icon id given a TabId.

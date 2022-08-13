@@ -4,8 +4,8 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './SideContentHelper';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { getModuleTabs } from './SideContentHelper';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -56,8 +56,13 @@ const SideContent = (props: SideContentProps) => {
     (state: OverallState) =>
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
+
+  React.useEffect(() => console.log('module tabs changed:', debuggerContext?.context?.moduleContexts.moduleTabs), [debuggerContext?.context?.moduleContexts?.moduleTabs])
+
   React.useEffect(() => {
-    const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
+    const moduleTabNames = debuggerContext?.context?.moduleContexts.moduleTabs ?? [];
+    const allActiveTabs = !debuggerContext ? tabs : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
+    // console.log('tabs', allActiveTabs.map(x => x.label));
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 
