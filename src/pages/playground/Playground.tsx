@@ -249,11 +249,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   React.useEffect(() => {
-    if (
-      isMobileBreakpoint &&
-      (selectedTab === SideContentType.introduction ||
-        selectedTab === SideContentType.remoteExecution)
-    ) {
+    if (isMobileBreakpoint && selectedTab === SideContentType.introduction) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (
       !isMobileBreakpoint &&
@@ -629,9 +625,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs].filter(
-    x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
-  );
+  const mobileTabs = [...tabs].filter(x => x !== playgroundIntroductionTab);
 
   const onLoadMethod = React.useCallback(
     (editor: Ace.Editor) => {
