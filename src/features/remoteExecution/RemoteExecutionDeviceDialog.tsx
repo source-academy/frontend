@@ -1,4 +1,12 @@
-import { Button, Callout, Classes, Dialog, FormGroup, HTMLSelect } from '@blueprintjs/core';
+import {
+  Button,
+  Callout,
+  Classes,
+  Dialog,
+  FormGroup,
+  HTMLSelect,
+  InputGroup
+} from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -113,15 +121,11 @@ export default function RemoteExecutionDeviceDialog({
         </FormGroup>
 
         <FormGroup label="Secret" labelFor="sa-remote-execution-secret">
-          <input
+          <InputGroup
             id="sa-remote-execution-secret"
-            className={classNames(
-              Classes.INPUT,
-              Classes.FILL,
-              secretField.isValid || Classes.INTENT_DANGER
-            )}
+            className={classNames(Classes.FILL, secretField.isValid || Classes.INTENT_DANGER)}
             type="text"
-            ref={secretField.ref}
+            inputRef={secretField.ref}
             onChange={secretField.onChange}
             disabled={isSubmitting}
             readOnly={!!deviceToEdit}
