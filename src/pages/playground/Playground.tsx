@@ -249,13 +249,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   React.useEffect(() => {
-    if (isMobileBreakpoint && selectedTab === SideContentType.introduction) {
+    if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
-    } else if (
-      !isMobileBreakpoint &&
-      (selectedTab === SideContentType.mobileEditor ||
-        selectedTab === SideContentType.mobileEditorRun)
-    ) {
+    } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, selectedTab]);
@@ -625,7 +621,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs].filter(x => x !== playgroundIntroductionTab);
+  const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
   const onLoadMethod = React.useCallback(
     (editor: Ace.Editor) => {
@@ -823,6 +819,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     </HotKeys>
   );
 };
+
+const mobileOnlyTabIds: readonly SideContentType[] = [
+  SideContentType.mobileEditor,
+  SideContentType.mobileEditorRun
+];
+const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
 const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
