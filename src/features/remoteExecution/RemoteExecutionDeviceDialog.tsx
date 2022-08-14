@@ -7,8 +7,10 @@ import {
   HTMLSelect,
   InputGroup
 } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
+import { QrReader } from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
 
 import { editDevice, registerDevice } from '../../commons/sagas/RequestsSaga';
@@ -39,6 +41,7 @@ export default function RemoteExecutionDeviceDialog({
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
+  const [showScanner, setShowScanner] = React.useState(false);
 
   const onSubmit = async () => {
     const fields = collectFieldValues(nameField, typeField, secretField);
@@ -66,6 +69,12 @@ export default function RemoteExecutionDeviceDialog({
     onClose();
     setIsSubmitting(false);
   };
+
+  const scanButton = (
+    <Tooltip2 content="Scan QR Code">
+      <Button minimal icon="clip" onClick={() => setShowScanner(() => !showScanner)} />
+    </Tooltip2>
+  );
 
   return (
     <Dialog
@@ -129,9 +138,30 @@ export default function RemoteExecutionDeviceDialog({
             onChange={secretField.onChange}
             disabled={isSubmitting}
             readOnly={!!deviceToEdit}
-            {...(deviceToEdit ? { value: deviceToEdit.secret } : undefined)}
+            {...(deviceToEdit ? { value: deviceToEdit.secret } : { rightElement: scanButton })}
           />
         </FormGroup>
+
+        {showScanner && (
+          <QrReader
+            onResult={(result, err) => {
+              if (result) {
+                setShowScanner(false);
+                const element = secretField.ref.current;
+                if (element) {
+                  element.value = result.getText();
+                }
+              }
+            }}
+            constraints={{
+              aspectRatio: 1,
+              frameRate: { ideal: 12 },
+              deviceId: { ideal: '0' }
+            }}
+            containerStyle={{ width: '50%', marginInline: 'auto' }}
+            videoStyle={{ borderRadius: '0.3em' }}
+          />
+        )}
 
         {errorMessage && <Callout intent="danger">{errorMessage}</Callout>}
       </div>
