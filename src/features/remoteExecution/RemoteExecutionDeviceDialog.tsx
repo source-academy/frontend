@@ -27,12 +27,14 @@ export interface RemoteExecutionDeviceDialogProps {
   isOpen: boolean;
   onClose: () => void;
   deviceToEdit?: Device;
+  defaultSecret?: string;
 }
 
 export default function RemoteExecutionDeviceDialog({
   isOpen,
   onClose,
-  deviceToEdit
+  deviceToEdit,
+  defaultSecret
 }: RemoteExecutionDeviceDialogProps) {
   const dispatch = useDispatch();
   const nameField = useField<HTMLInputElement>(validateNotEmpty);
@@ -138,6 +140,7 @@ export default function RemoteExecutionDeviceDialog({
             onChange={secretField.onChange}
             disabled={isSubmitting}
             readOnly={!!deviceToEdit}
+            defaultValue={defaultSecret}
             {...(deviceToEdit ? { value: deviceToEdit.secret } : { rightElement: scanButton })}
           />
         </FormGroup>

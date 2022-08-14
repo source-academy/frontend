@@ -25,6 +25,7 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
+  secretParams?: string;
 }
 
 interface DeviceMenuItemButtonsProps {
@@ -116,7 +117,10 @@ const DeviceContent = ({ session }: { session?: DeviceSession }) => {
 };
 
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
-  const [dialogState, setDialogState] = React.useState<Device | true | undefined>(undefined);
+  const [dialogState, setDialogState] = React.useState<Device | true | undefined>(
+    props.secretParams ? true : undefined
+  );
+  const [secretParams, setSecretParams] = React.useState(props.secretParams);
 
   const [isLoggedIn, devices, currentSession]: [
     boolean,
@@ -212,7 +216,11 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       <RemoteExecutionAddDeviceDialog
         isOpen={!!dialogState}
         deviceToEdit={typeof dialogState === 'object' ? dialogState : undefined}
-        onClose={() => setDialogState(undefined)}
+        defaultSecret={dialogState === true ? secretParams : undefined}
+        onClose={() => {
+          setDialogState(undefined);
+          setSecretParams(undefined);
+        }}
       />
     </div>
   );

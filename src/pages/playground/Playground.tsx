@@ -11,7 +11,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 
 import {
@@ -171,15 +171,47 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
+
+  const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
+  const location = useLocation();
+  const history = useHistory();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldAddDevice = searchParams.get('add_device');
+
+  // Hide search query from URL to maintain an illusion of security. The device secret
+  // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
+  if (shouldAddDevice && !deviceSecret) {
+    setDeviceSecret(shouldAddDevice);
+    history.replace(location.pathname);
+  }
+
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
+  const [selectedTab, setSelectedTab] = React.useState(
+    shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
+  );
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       editorValue: propsRef.current.editorValue,
       chapter: propsRef.current.playgroundSourceChapter
     })
+  );
+
+  const remoteExecutionTab: SideContentTab = React.useMemo(
+    () => ({
+      label: 'Remote Execution',
+      iconName: IconNames.SATELLITE,
+      body: (
+        <SideContentRemoteExecution
+          workspace="playground"
+          secretParams={deviceSecret || undefined}
+        />
+      ),
+      id: SideContentType.remoteExecution,
+      toSpawn: () => true
+    }),
+    [deviceSecret]
   );
 
   const usingRemoteExecution =
@@ -592,7 +624,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.output,
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
-    usingRemoteExecution
+    usingRemoteExecution,
+    remoteExecutionTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -810,14 +843,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer,
-  toSpawn: () => true
-};
-
-const remoteExecutionTab: SideContentTab = {
-  label: 'Remote Execution',
-  iconName: IconNames.SATELLITE,
-  body: <SideContentRemoteExecution workspace="playground" />,
-  id: SideContentType.remoteExecution,
   toSpawn: () => true
 };
 
