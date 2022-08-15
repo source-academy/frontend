@@ -99,7 +99,6 @@ export type SessionState = {
 
   // For infinite loop research data collection
   readonly agreedToResearch?: boolean | null;
-  readonly experimentCoinflip: boolean;
   readonly hadPreviousInfiniteLoop: boolean;
   readonly sessionId: number;
 
