@@ -194,12 +194,20 @@ const Assessment: React.FC<AssessmentProps> = props => {
               <Markdown content={overview.shortSummary} />
             </div>
             <div className="listing-footer">
-              <Text className="listing-due-date">
-                <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-                {beforeNow(overview.openAt)
-                  ? `Due: ${getPrettyDate(overview.closeAt)}`
-                  : `Opens at: ${getPrettyDate(overview.openAt)}`}
-              </Text>
+              <div>
+                <Text className="listing-due-date">
+                  <Icon className="listing-due-icon" iconSize={12} icon={IconNames.CALENDAR} />
+                  {`${beforeNow(overview.openAt) ? 'Opened' : 'Opens'}: ${getPrettyDate(
+                    overview.openAt
+                  )}`}
+                </Text>
+                {beforeNow(overview.openAt) && (
+                  <Text className="listing-due-date">
+                    <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+                    {`Due: ${getPrettyDate(overview.closeAt)}`}
+                  </Text>
+                )}
+              </div>
               <div className="listing-button">
                 {renderAttemptButton ? makeAssessmentInteractButton(overview) : null}
               </div>
