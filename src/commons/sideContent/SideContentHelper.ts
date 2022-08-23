@@ -36,30 +36,33 @@ import { ModuleSideContent, SideContentTab, SideContentType } from './SideConten
 const loadTab = (name: string) => {
   const request = new XMLHttpRequest();
   try {
-    request.open('GET', `http://localhost:8022/tabs/${name}.js`, false)
+    request.open('GET', `http://localhost:8022/tabs/${name}.js`, false);
     request.send(null);
   } catch (error) {
-    if (!(error instanceof DOMException)) throw error
-  } 
+    if (!(error instanceof DOMException)) throw error;
+  }
   if (request.status !== 200 && request.status !== 304) throw new Error(); // throw new ModuleConnectionError()
   return request.responseText;
-}
+};
 export const memoizedLoadTab = memoize(loadTab);
 
 /**
  * Extracts and processes included Modules' side contents from DebuggerContext
  * @param debuggerContext - DebuggerContext object from redux store
  */
-export const getModuleTabs = (tabNames: string[], debuggerContext: DebuggerContext): SideContentTab[] => {
+export const getModuleTabs = (
+  tabNames: string[],
+  debuggerContext: DebuggerContext
+): SideContentTab[] => {
   // Pass React into functions
-  const moduleTabs  = tabNames.map(tabName => {
-    const sideContent: ModuleSideContent =  eval(memoizedLoadTab(tabName))(React, ReactDOM);
+  const moduleTabs = tabNames.map(tabName => {
+    const sideContent: ModuleSideContent = eval(memoizedLoadTab(tabName))(React, ReactDOM);
     return {
       ...sideContent,
       body: sideContent.body(debuggerContext),
-      id: SideContentType.module,
-    }
-  })
+      id: SideContentType.module
+    };
+  });
 
   return moduleTabs;
 };

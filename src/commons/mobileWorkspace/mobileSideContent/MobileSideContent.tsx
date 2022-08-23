@@ -62,10 +62,12 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     const runTab = copy.pop();
 
     const moduleTabNames = debuggerContext?.context?.moduleContexts.moduleTabs ?? [];
-    const allActiveTabs = !debuggerContext ? tabs : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
+    const allActiveTabs = !debuggerContext
+      ? tabs
+      : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
     allActiveTabs.push(runTab!);
     setDynamicTabs(allActiveTabs);
-  }, [tabs, debuggerContext]); 
+  }, [tabs, debuggerContext]);
 
   /**
    * Generates an icon id given a TabId.

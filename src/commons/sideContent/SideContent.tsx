@@ -57,11 +57,16 @@ const SideContent = (props: SideContentProps) => {
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
 
-  React.useEffect(() => console.log('module tabs changed:', debuggerContext?.context?.moduleContexts.moduleTabs), [debuggerContext?.context?.moduleContexts?.moduleTabs])
+  React.useEffect(
+    () => console.log('module tabs changed:', debuggerContext?.context?.moduleContexts.moduleTabs),
+    [debuggerContext?.context?.moduleContexts?.moduleTabs]
+  );
 
   React.useEffect(() => {
     const moduleTabNames = debuggerContext?.context?.moduleContexts.moduleTabs ?? [];
-    const allActiveTabs = !debuggerContext ? tabs : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
+    const allActiveTabs = !debuggerContext
+      ? tabs
+      : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
     // console.log('tabs', allActiveTabs.map(x => x.label));
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
