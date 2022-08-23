@@ -2,7 +2,6 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_USER_ASSESSMENT_OVERVIEWS } from 'src/features/achievement/AchievementTypes';
 
 import {
   AchievementContext,
@@ -12,6 +11,7 @@ import {
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import { FETCH_ASSESSMENT } from '../application/types/SessionTypes';
+import { FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
@@ -32,7 +32,7 @@ function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
   useEffect(() => {
     if (!Number.isNaN(+focusUuid) && +focusUuid !== 0) {
       dispatch({ type: FETCH_ASSESSMENT, payload: +focusUuid });
-      dispatch({ type: GET_USER_ASSESSMENT_OVERVIEWS, payload: courseRegId });
+      dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS });
     }
   }, [focusUuid, courseRegId, dispatch]);
 
@@ -40,9 +40,8 @@ function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
   const courseId = useSelector((store: OverallState) => store.session.courseId);
 
   const assessments = useSelector((store: OverallState) => store.session.assessments);
-  const allAssessmentConfigs = useSelector(
-    (store: OverallState) => store.achievement.assessmentOverviews
-  );
+  const allAssessmentConfigs =
+    useSelector((store: OverallState) => store.session.assessmentOverviews) ?? [];
   const selectedAssessment: Assessment | undefined = assessments.get(+focusUuid);
   const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === +focusUuid);
 
