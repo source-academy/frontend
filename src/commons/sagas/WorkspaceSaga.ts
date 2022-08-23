@@ -759,9 +759,6 @@ export function* evalCode(
   const isNonDet: boolean = context.variant === 'non-det';
   const isLazy: boolean = context.variant === 'lazy';
   const isWasm: boolean = context.variant === 'wasm';
-  const throwInfiniteLoops: boolean = yield select(
-    (state: OverallState) => state.session.experimentCoinflip
-  );
 
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void = isFullJSChapter(context.chapter)
@@ -778,7 +775,7 @@ export function* evalCode(
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
-            throwInfiniteLoops: throwInfiniteLoops,
+            throwInfiniteLoops: true,
             useSubst: substActiveAndCorrectChapter
           }),
 
@@ -834,9 +831,8 @@ export function* evalCode(
 
     // report infinite loops but only for 'vanilla'/default source
     if (context.variant === undefined || context.variant === 'default') {
-      const [approval, coinflip, sessionId] = yield select((state: OverallState) => [
+      const [approval, sessionId] = yield select((state: OverallState) => [
         state.session.agreedToResearch,
-        state.session.experimentCoinflip,
         state.session.sessionId
       ]);
       if (approval) {
@@ -845,13 +841,12 @@ export function* evalCode(
         if (infiniteLoopData) {
           events.push(EventType.INFINITE_LOOP);
           yield put(actions.updateInfiniteLoopEncountered());
-          yield call(reportInfiniteLoopError, sessionId, coinflip, ...infiniteLoopData);
+          yield call(reportInfiniteLoopError, sessionId, ...infiniteLoopData);
         } else if (isPotentialInfiniteLoop(lastError)) {
           events.push(EventType.INFINITE_LOOP);
           yield call(
             reportPotentialInfiniteLoop,
             sessionId,
-            coinflip,
             lastError.explain(),
             context.previousCode
           );
@@ -913,14 +908,11 @@ export function* evalTestCode(
   type: TestcaseType
 ) {
   yield put(actions.resetTestcase(workspaceLocation, index));
-  const throwInfiniteLoops: boolean = yield select(
-    (state: OverallState) => state.session.experimentCoinflip
-  );
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
       scheduler: 'preemptive',
       originalMaxExecTime: execTime,
-      throwInfiniteLoops: throwInfiniteLoops
+      throwInfiniteLoops: true
     }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,

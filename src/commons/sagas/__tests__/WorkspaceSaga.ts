@@ -72,7 +72,6 @@ function generateDefaultState(
     session: {
       ...defaultState.session,
       agreedToResearch: false,
-      experimentCoinflip: true,
       sessionId: 10
     },
     workspaces: {
@@ -768,7 +767,7 @@ describe('evalCode', () => {
     test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true }
       };
       const thisContext = createContext(3);
       context = thisContext;
@@ -785,7 +784,6 @@ describe('evalCode', () => {
           .call(
             reportInfiniteLoopError,
             defaultSessionId,
-            true,
             InfiniteLoopErrorType.NoBaseCase,
             false,
             'The function f has encountered an infinite loop. It has no base case.',
@@ -798,7 +796,7 @@ describe('evalCode', () => {
     test('does not send correct data to sentry if approval is false', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: false, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: false }
       };
       context = createContext(3);
       const theCode = 'function f(x){f(x);} f(1);';
@@ -808,7 +806,6 @@ describe('evalCode', () => {
         .not.call(
           reportInfiniteLoopError,
           defaultSessionId,
-          true,
           InfiniteLoopErrorType.NoBaseCase,
           false,
           'The function f has encountered an infinite loop. It has no base case.',
@@ -817,40 +814,10 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('shows infinite loop error if coinflip is true', () => {
-      state = { ...state, session: { ...state.session, experimentCoinflip: true } };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){f(x);} f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .silentRun()
-        .then(result => {
-          const lastError = thisContext.errors[thisContext.errors.length - 1];
-          expect(lastError.explain()).toContain('no base case');
-        });
-    });
-
-    test('does not show infinite loop error if coinflip is false', () => {
-      state = { ...state, session: { ...state.session, experimentCoinflip: false } };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){f(x);} f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .silentRun()
-        .then(result => {
-          const lastError = thisContext.errors[thisContext.errors.length - 1];
-          expect(lastError.explain()).not.toContain('no base case');
-        });
-    });
-
     test('infinite loops call updateInfiniteLoopEncountered', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true }
       };
       const thisContext = createContext(3);
       context = thisContext;
@@ -868,8 +835,7 @@ describe('evalCode', () => {
         session: {
           ...state.session,
           hadPreviousInfiniteLoop: true,
-          agreedToResearch: true,
-          experimentCoinflip: true
+          agreedToResearch: true
         }
       };
       const thisContext = createContext(3);
@@ -885,7 +851,7 @@ describe('evalCode', () => {
     test('does not report non error code before infinite loop', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true }
       };
       const thisContext = createContext(3);
       context = thisContext;

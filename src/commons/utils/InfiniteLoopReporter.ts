@@ -12,7 +12,6 @@ import {
  */
 function reportInfiniteLoopError(
   sessionId: number,
-  coinflip: boolean,
   errorType: InfiniteLoopErrorType,
   isStream: boolean,
   message: string,
@@ -20,9 +19,8 @@ function reportInfiniteLoopError(
 ) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
-    scope.setLevel(Sentry.Severity.Info);
+    scope.setLevel('info');
     scope.setTag('error-type', InfiniteLoopErrorType[errorType]);
-    scope.setTag('coinflip', coinflip ? 'yes' : 'no');
     scope.setTag('is-stream', isStream ? 'yes' : 'no');
     scope.setExtra('sessionId', sessionId.toString());
     scope.setExtra('message', message);
@@ -44,16 +42,10 @@ function reportInfiniteLoopError(
  * @param {string} message - the error's message
  * @param {string} code - code to be sent along with the error
  */
-function reportPotentialInfiniteLoop(
-  sessionId: number,
-  coinflip: boolean,
-  message: string,
-  code: string[]
-) {
+function reportPotentialInfiniteLoop(sessionId: number, message: string, code: string[]) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
-    scope.setLevel(Sentry.Severity.Info);
-    scope.setTag('coinflip', coinflip ? 'yes' : 'no');
+    scope.setLevel('info');
     scope.setTag('error-type', 'Undetected');
     scope.setExtra('sessionId', sessionId.toString());
     scope.setExtra('message', message);
@@ -78,7 +70,7 @@ function reportPotentialInfiniteLoop(
 function reportNonErrorProgram(sessionId: number, code: string[]) {
   Sentry.withScope(function (scope) {
     scope.clearBreadcrumbs();
-    scope.setLevel(Sentry.Severity.Info);
+    scope.setLevel('info');
     scope.setExtra('sessionId', sessionId.toString());
     scope.setExtra('code', JSON.stringify(code));
     scope.setFingerprint(['INFINITE_LOOP_LOGGING_FINGERPRINT_2022_NONERROR']);
