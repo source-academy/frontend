@@ -37,6 +37,9 @@ const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
 
+// For achievements feature (CA - Continual Assessment)
+const caFulfillmentLevel = process.env.REACT_APP_CA_FULFILLMENT_LEVEL || 0;
+
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
 
@@ -136,7 +139,8 @@ const Constants = {
   disablePeriods,
   cadetLoggerInterval,
   sicpBackendUrl: sicpBackendUrl,
-  workspaceSettingsLocalStorageKey
+  workspaceSettingsLocalStorageKey,
+  caFulfillmentLevel
 };
 
 export default Constants;
