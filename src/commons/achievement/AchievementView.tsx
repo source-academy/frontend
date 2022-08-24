@@ -23,10 +23,6 @@ type AchievementViewProps = {
   courseRegId?: number;
 };
 
-export type OwnProps = {
-  assessmentId: number;
-};
-
 function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -88,10 +84,10 @@ function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
         selectedAssessment &&
         selectedAssessmentConfig &&
         selectedAssessmentConfig.isManuallyGraded && (
-          <AchievementCommentCard courseId={courseId ?? 0} assessment={selectedAssessment} />
+          <AchievementCommentCard courseId={courseId} assessment={selectedAssessment} />
         )}
 
-      {goals.length !== 0 && (
+      {goals.length > 0 && (
         <>
           <AchievementViewGoal goals={goals} />
           {status === AchievementStatus.COMPLETED && (
