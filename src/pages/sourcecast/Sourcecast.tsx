@@ -253,7 +253,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
           />
         </div>
       ),
-      id: SideContentType.introduction,
+      id: SideContentType.introduction
     },
     dataVisualizerTab,
     envVisualizerTab
@@ -379,14 +379,14 @@ const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer,
+  id: SideContentType.dataVisualizer
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer,
+  id: SideContentType.envVisualizer
 };
 
 export default Sourcecast;

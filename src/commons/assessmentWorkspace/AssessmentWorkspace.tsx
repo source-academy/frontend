@@ -375,13 +375,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             label: `Task ${questionId + 1}`,
             iconName: IconNames.NINJA,
             body: <Markdown content={props.assessment!.questions[questionId].content} />,
-            id: SideContentType.questionOverview,
+            id: SideContentType.questionOverview
           },
           {
             label: `Contest Voting Briefing`,
             iconName: IconNames.BRIEFCASE,
             body: <Markdown content={props.assessment!.longSummary} />,
-            id: SideContentType.briefing,
+            id: SideContentType.briefing
           },
           {
             label: 'Contest Voting',
@@ -402,11 +402,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 }
               />
             ),
-            id: SideContentType.contestVoting,
-          },
-          // This tab has a toSpawn value of false, so 
+            id: SideContentType.contestVoting
+          }
+          // This tab has a toSpawn value of false, so
           // I am not sure what to do with it
-        
+
           // {
           //   label: 'Contest Leaderboard',
           //   iconName: IconNames.CROWN,
@@ -433,7 +433,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 content={props.assessment!.questions[questionId].content}
               />
             ),
-            id: SideContentType.questionOverview,
+            id: SideContentType.questionOverview
           },
           {
             label: `Briefing`,
@@ -441,7 +441,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             body: (
               <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
             ),
-            id: SideContentType.briefing,
+            id: SideContentType.briefing
           },
           {
             label: `Autograder`,
@@ -459,7 +459,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 workspaceLocation="assessment"
               />
             ),
-            id: SideContentType.autograder,
+            id: SideContentType.autograder
           }
         ];
 
@@ -476,7 +476,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             comments={props.assessment!.questions[questionId].comments}
           />
         ),
-        id: SideContentType.grading,
+        id: SideContentType.grading
       });
     }
 
@@ -487,7 +487,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
+        id: SideContentType.toneMatrix
       });
     }
 
@@ -499,7 +499,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         label: 'Video Display',
         iconName: IconNames.MOBILE_VIDEO,
         body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-        id: SideContentType.videoDisplay,
+        id: SideContentType.videoDisplay
       });
     }
 
