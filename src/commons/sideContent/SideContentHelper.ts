@@ -50,7 +50,7 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
 
   // Pass React into functions
   const unprocessedTabs: ModuleSideContent[] = [];
-  for (const moduleContext of rawModuleContexts.values()) {
+  for (const moduleContext of Object.values(rawModuleContexts)) {
     for (const tab of moduleContext.tabs) {
       unprocessedTabs.push(tab(React, ReactDOM));
     }
