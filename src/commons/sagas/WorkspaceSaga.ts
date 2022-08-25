@@ -127,12 +127,15 @@ export default function* WorkspaceSaga(): SagaIterator {
         return;
       }
 
-      const editorSuggestions = editorNames.map((name: any) => ({
-        caption: name.name,
-        value: name.name,
-        meta: name.meta,
-        score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
-      }));
+      const editorSuggestions = editorNames.map((name: any) => {
+        return {
+          ...name,
+          caption: name.name,
+          value: name.name,
+          score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
+          name: undefined
+        };
+      });
 
       let chapterName = context.chapter.toString();
       const variant = context.variant ?? 'default';
