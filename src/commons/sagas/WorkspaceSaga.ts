@@ -27,7 +27,12 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { isFullJSChapter, OverallState, styliseSublanguage } from '../application/ApplicationTypes';
+import {
+  isFullJSLanguage,
+  isOtherLanguage,
+  OverallState,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -252,7 +257,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     ]);
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean = isFullJSChapter(newChapter)
+    const toChangeChapter: boolean = isFullJSLanguage(newChapter, newVariant)
       ? chapterChanged && (yield call(showFullJSDisclaimer))
       : chapterChanged;
 
@@ -549,7 +554,7 @@ export function* evalEditor(
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
-    if (!isFullJSChapter(context.chapter)) {
+    if (!isOtherLanguage(context.chapter)) {
       parse(value, context);
     }
     if (!context.errors.length) {
@@ -564,7 +569,7 @@ export function* evalEditor(
         context.errors = [];
         exploded[index] = 'debugger;' + exploded[index];
         value = exploded.join('\n');
-        if (!isFullJSChapter(context.chapter)) {
+        if (!isOtherLanguage(context.chapter)) {
           parse(value, context);
         }
         if (context.errors.length) {
@@ -764,7 +769,7 @@ export function* evalCode(
   const isWasm: boolean = context.variant === 'wasm';
 
   // Handles `console.log` statements in fullJS
-  const detachConsole: () => void = isFullJSChapter(context.chapter)
+  const detachConsole: () => void = isFullJSLanguage(context.chapter, context.variant)
     ? DisplayBufferService.attachConsole(workspaceLocation)
     : () => {};
 

@@ -1,6 +1,10 @@
 import { Variant } from 'js-slang/dist/types';
 
-import { isFullJSChapter, styliseSublanguage, sublanguages } from '../application/ApplicationTypes';
+import {
+  isFullJSLanguage,
+  styliseSublanguage,
+  sublanguages
+} from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
@@ -17,7 +21,7 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 `;
 
 const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) => {
-  if (isFullJSChapter(sourceChapter)) {
+  if (isFullJSLanguage(sourceChapter, sourceVariant)) {
     return (
       `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
       '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab. ' +

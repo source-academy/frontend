@@ -124,20 +124,25 @@ const variantDisplay: Map<Variant, string> = new Map([
 // and not to introduce unnecessary new types to handle "other" languages (for now)
 export const fullJSLanguage: SourceLanguage = {
   chapter: -1,
-  variant: 'default',
+  variant: 'js',
   displayName: 'full JavaScript'
 };
 
-export const isFullJSChapter = (chapter: number) => {
+export const isOtherLanguage = (chapter: number) => {
   return chapter === -1;
 };
 
+export const isFullJSLanguage = (chapter: number, variant: Variant) => {
+  return isOtherLanguage(chapter) && variant === 'js';
+};
+
 export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
-  return isFullJSChapter(chapter)
-    ? fullJSLanguage.displayName
-    : `Source \xa7${chapter}${
-        variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
-      }`;
+  if (isFullJSLanguage(chapter, variant)) {
+    return fullJSLanguage.displayName;
+  }
+  return `Source \xa7${chapter}${
+    variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
+  }`;
 };
 
 export const sublanguages: { chapter: number; variant: Variant }[] = [

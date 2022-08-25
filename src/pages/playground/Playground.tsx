@@ -16,7 +16,7 @@ import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 
 import {
   InterpreterOutput,
-  isFullJSChapter,
+  isFullJSLanguage,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -143,7 +143,9 @@ export function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
-  if (chapter && isFullJSChapter(chapter)) {
+  // All hashes with chapter -1 are defaulted to js variant
+  const variant = (qs.variant || 'js') as Variant;
+  if (chapter && isFullJSLanguage(chapter, variant)) {
     showFullJSWarningOnUrlLoad();
   } else {
     const programLz = qs.lz ?? qs.prgrm;
@@ -320,8 +322,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         // Disable pause for FullJS, because: one cannot stop `eval()`
         pauseDisabled={
           usingRemoteExecution ||
-          (!(props.playgroundSourceChapter === undefined) &&
-            isFullJSChapter(props.playgroundSourceChapter))
+          isFullJSLanguage(props.playgroundSourceChapter, props.playgroundSourceVariant)
         }
       />
     ),
@@ -336,6 +337,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.isEditorAutorun,
       props.isRunning,
       props.playgroundSourceChapter,
+      props.playgroundSourceVariant,
       usingRemoteExecution
     ]
   );
@@ -549,7 +551,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     // (TEMP) Remove tabs for fullJS until support is integrated
-    if (isFullJSChapter(props.playgroundSourceChapter)) {
+    if (isFullJSLanguage(props.playgroundSourceChapter, props.playgroundSourceVariant)) {
       return [...tabs, dataVisualizerTab];
     }
 
@@ -731,12 +733,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        isFullJSChapter(props.playgroundSourceChapter) ? null : shareButton,
+        isFullJSLanguage(props.playgroundSourceChapter, props.playgroundSourceVariant)
+          ? null
+          : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || isFullJSChapter(props.playgroundSourceChapter)
+        usingRemoteExecution ||
+        isFullJSLanguage(props.playgroundSourceChapter, props.playgroundSourceVariant)
           ? null
           : props.usingSubst
           ? stepperStepLimit
@@ -770,7 +775,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          isFullJSChapter(props.playgroundSourceChapter) ? null : shareButton,
+          isFullJSLanguage(props.playgroundSourceChapter, props.playgroundSourceVariant)
+            ? null
+            : shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons
