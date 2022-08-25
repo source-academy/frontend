@@ -56,7 +56,7 @@ import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/Mob
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
-import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
+// import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
@@ -376,14 +376,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             iconName: IconNames.NINJA,
             body: <Markdown content={props.assessment!.questions[questionId].content} />,
             id: SideContentType.questionOverview,
-            toSpawn: () => true
           },
           {
             label: `Contest Voting Briefing`,
             iconName: IconNames.BRIEFCASE,
             body: <Markdown content={props.assessment!.longSummary} />,
             id: SideContentType.briefing,
-            toSpawn: () => true
           },
           {
             label: 'Contest Voting',
@@ -405,23 +403,25 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               />
             ),
             id: SideContentType.contestVoting,
-            toSpawn: () => true
           },
-          {
-            label: 'Contest Leaderboard',
-            iconName: IconNames.CROWN,
-            body: (
-              <SideContentContestLeaderboard
-                handleContestEntryClick={handleContestEntryClick}
-                orderedContestEntries={
-                  (props.assessment?.questions[questionId] as IContestVotingQuestion)
-                    ?.contestLeaderboard ?? []
-                }
-              />
-            ),
-            id: SideContentType.contestLeaderboard,
-            toSpawn: () => false
-          }
+          // This tab has a toSpawn value of false, so 
+          // I am not sure what to do with it
+        
+          // {
+          //   label: 'Contest Leaderboard',
+          //   iconName: IconNames.CROWN,
+          //   body: (
+          //     <SideContentContestLeaderboard
+          //       handleContestEntryClick={handleContestEntryClick}
+          //       orderedContestEntries={
+          //         (props.assessment?.questions[questionId] as IContestVotingQuestion)
+          //           ?.contestLeaderboard ?? []
+          //       }
+          //     />
+          //   ),
+          //   id: SideContentType.contestLeaderboard,
+          // toSpawn: () => false
+          // }
         ]
       : [
           {
@@ -434,7 +434,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               />
             ),
             id: SideContentType.questionOverview,
-            toSpawn: () => true
           },
           {
             label: `Briefing`,
@@ -443,7 +442,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
             ),
             id: SideContentType.briefing,
-            toSpawn: () => true
           },
           {
             label: `Autograder`,
@@ -462,7 +460,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               />
             ),
             id: SideContentType.autograder,
-            toSpawn: () => true
           }
         ];
 
@@ -480,7 +477,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           />
         ),
         id: SideContentType.grading,
-        toSpawn: () => true
       });
     }
 
@@ -492,7 +488,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
-        toSpawn: () => true
       });
     }
 
@@ -505,7 +500,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.MOBILE_VIDEO,
         body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
         id: SideContentType.videoDisplay,
-        toSpawn: () => true
       });
     }
 

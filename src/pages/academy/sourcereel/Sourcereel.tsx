@@ -413,7 +413,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer,
-  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
@@ -421,7 +420,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer,
-  toSpawn: () => true
 };
 
 export default Sourcereel;

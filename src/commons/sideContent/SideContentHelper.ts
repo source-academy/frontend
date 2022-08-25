@@ -57,6 +57,7 @@ export const getModuleTabs = (
   // Pass React into functions
   const moduleTabs = tabNames.map(tabName => {
     const sideContent: ModuleSideContent = eval(memoizedLoadTab(tabName))(React, ReactDOM);
+
     return {
       ...sideContent,
       body: sideContent.body(debuggerContext),

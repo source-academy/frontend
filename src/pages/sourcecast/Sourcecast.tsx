@@ -254,7 +254,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
         </div>
       ),
       id: SideContentType.introduction,
-      toSpawn: () => true
     },
     dataVisualizerTab,
     envVisualizerTab
@@ -381,7 +380,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer,
-  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
@@ -389,7 +387,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer,
-  toSpawn: () => true
 };
 
 export default Sourcecast;

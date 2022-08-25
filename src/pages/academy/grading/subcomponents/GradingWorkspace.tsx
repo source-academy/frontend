@@ -324,14 +324,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
           />
         ),
         id: SideContentType.grading,
-        toSpawn: () => true
       },
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
         id: SideContentType.questionOverview,
-        toSpawn: () => true
       },
       {
         label: `Autograder`,
@@ -345,7 +343,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
           />
         ),
         id: SideContentType.autograder,
-        toSpawn: () => true
       }
     ];
 
@@ -357,7 +354,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
-        toSpawn: () => true
       });
     }
 
@@ -370,7 +366,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         iconName: IconNames.MOBILE_VIDEO,
         body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
         id: SideContentType.videoDisplay,
-        toSpawn: () => true
       });
     }
 

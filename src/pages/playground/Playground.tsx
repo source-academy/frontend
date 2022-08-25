@@ -577,7 +577,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
         id: SideContentType.substVisualizer,
-        toSpawn: () => true
       });
     }
 
@@ -802,7 +801,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer,
-  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
@@ -810,7 +808,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer,
-  toSpawn: () => true
 };
 
 const remoteExecutionTab: SideContentTab = {
@@ -818,7 +815,6 @@ const remoteExecutionTab: SideContentTab = {
   iconName: IconNames.SATELLITE,
   body: <SideContentRemoteExecution workspace="playground" />,
   id: SideContentType.remoteExecution,
-  toSpawn: () => true
 };
 
 export default Playground;

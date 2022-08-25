@@ -462,14 +462,12 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorQuestionOverview,
-          toSpawn: () => true
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
           id: SideContentType.editorQuestionTemplate,
-          toSpawn: () => true
         },
         {
           label: `Manage Local Deployment`,
@@ -485,7 +483,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorLocalDeployment,
-          toSpawn: () => true
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -502,7 +499,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorLocalGraderDeployment,
-          toSpawn: () => true
         },
         {
           label: `Grading`,
@@ -515,7 +511,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorGrading,
-          toSpawn: () => true
         }
       ];
       if (qnType === 'programming') {
@@ -531,7 +526,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorAutograder,
-          toSpawn: () => true
         });
       }
       const functionsAttached = assessment!.globalDeployment!.external.symbols;
@@ -541,7 +535,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.GRID_VIEW,
           body: <SideContentToneMatrix />,
           id: SideContentType.toneMatrix,
-          toSpawn: () => true
         });
       }
     } else {
@@ -557,7 +550,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorBriefing,
-          toSpawn: () => true
         },
         {
           label: `Manage Question`,
@@ -571,7 +563,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorManageQuestion,
-          toSpawn: () => true
         },
         {
           label: `Manage Global Deployment`,
@@ -587,7 +578,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorGlobalDeployment,
-          toSpawn: () => true
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -603,7 +593,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorGlobalGraderDeployment,
-          toSpawn: () => true
         }
       ];
     }
