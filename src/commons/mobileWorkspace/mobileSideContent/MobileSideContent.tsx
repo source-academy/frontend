@@ -79,6 +79,10 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
   const renderedPanels = () => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+      if (!tab.body) {
+        return;
+      }
+
       const tabBody: JSX.Element = workspaceLocation
         ? {
             ...tab.body,
@@ -89,23 +93,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           }
         : tab.body;
 
-      if (tab.id === SideContentType.mobileEditorRun) {
-        return;
-      }
-
-      return tab.id === SideContentType.mobileEditor ? (
-        // Render the Editor Panel when the selected tab is 'Editor' or 'Run'
-        selectedTabId === SideContentType.mobileEditor ||
-        selectedTabId === SideContentType.mobileEditorRun ? (
-          <div className="mobile-editor-panel" key={'editor'}>
-            {tabBody}
-          </div>
-        ) : (
-          <div className="mobile-unselected-panel" key={'editor'}>
-            {tabBody}
-          </div>
-        )
-      ) : tab.id === selectedTabId ? (
+      return tab.id === selectedTabId ? (
         // Render the other panels only when their corresponding tab is selected
         <div className="mobile-selected-panel" key={tab.id}>
           {tabBody}
