@@ -1,3 +1,5 @@
+import { Chapter } from 'js-slang/dist/types';
+
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
@@ -35,7 +37,7 @@ test('saveSourcecastData generates correct action object', () => {
   const playbackData: PlaybackData = {
     init: {
       editorValue: 'Editor Init Value',
-      chapter: 1,
+      chapter: Chapter.SOURCE_1,
       externalLibrary: ExternalLibraryName.NONE
     },
     inputs: []
@@ -135,7 +137,7 @@ test('setSourcecastData generates correct action object', () => {
   };
   const playbackData: PlaybackData = {
     init: {
-      chapter: 1,
+      chapter: Chapter.SOURCE_1,
       externalLibrary: ExternalLibraryName.NONE,
       editorValue: ''
     },

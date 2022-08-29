@@ -3,6 +3,7 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
+import { Chapter } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
@@ -270,7 +271,7 @@ function convertMetadataStringToMissionMetadata(metadataString: string) {
   } catch (err) {
     console.error(err);
     return {
-      sourceVersion: 4
+      sourceVersion: Chapter.SOURCE_4
     } as MissionMetadata;
   }
 }
@@ -449,7 +450,7 @@ export function convertToMCQQuestionIfMCQText(possibleMCQText: string): [boolean
     content: '',
     grade: 0,
     id: 0,
-    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    library: { chapter: Chapter.SOURCE_4, external: { name: 'NONE', symbols: [] }, globals: [] },
     maxGrade: 0,
     xp: 0,
     maxXp: 0

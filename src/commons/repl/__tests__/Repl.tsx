@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 import {
@@ -42,8 +43,8 @@ test('Repl renders correctly', () => {
     handleReplOutputClear: () => {},
     output: [mockResultOutput, mockCodeOutput, mockErrorOutput, mockRunningOutput],
     replValue: '',
-    sourceChapter: 1,
-    sourceVariant: 'default' as const,
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: []
   };

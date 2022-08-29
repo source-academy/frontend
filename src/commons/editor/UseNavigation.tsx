@@ -1,4 +1,5 @@
 import { createContext, hasDeclaration } from 'js-slang';
+import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import { Documentation } from '../documentation/Documentation';
@@ -40,7 +41,9 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
 
     const url = Links.sourceDocs;
     const sourceVariant =
-      propsRef.current.sourceVariant === 'default' ? '' : `_${propsRef.current.sourceVariant}`;
+      propsRef.current.sourceVariant === Variant.DEFAULT
+        ? ''
+        : `_${propsRef.current.sourceVariant}`;
     const external =
       propsRef.current.externalLibraryName === undefined
         ? 'NONE'

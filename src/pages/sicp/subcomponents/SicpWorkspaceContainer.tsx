@@ -1,4 +1,4 @@
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -100,7 +100,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),
       handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, workspaceLocation),
-      handleChapterSelect: (chapter: number, variant: Variant) =>
+      handleChapterSelect: (chapter: Chapter, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),

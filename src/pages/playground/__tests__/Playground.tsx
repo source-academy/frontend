@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
@@ -20,8 +20,8 @@ const baseProps = {
   editorWidth: '50%',
   isEditorAutorun: false,
   sideContentHeight: 40,
-  playgroundSourceChapter: 2,
-  playgroundSourceVariant: 'default' as Variant,
+  playgroundSourceChapter: Chapter.SOURCE_2,
+  playgroundSourceVariant: Variant.DEFAULT,
   output: [],
   replValue: '',
   sharedbConnected: false,
@@ -34,7 +34,7 @@ const baseProps = {
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
   handleChangeStepLimit: (stepLimit: number) => {},
-  handleChapterSelect: (chapter: number) => {},
+  handleChapterSelect: (chapter: Chapter) => {},
   handleDeclarationNavigate: (cursorPosition: Position) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},

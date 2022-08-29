@@ -10,7 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -88,7 +88,7 @@ export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteC
 export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: number, variant: Variant) => void;
+  handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -125,7 +125,7 @@ export type StateProps = {
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
-  sourceChapter: number;
+  sourceChapter: Chapter;
 };
 
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
@@ -921,7 +921,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       <ControlBarChapterSelect
         handleChapterSelect={() => {}}
         sourceChapter={missionMetadata.sourceVersion}
-        sourceVariant={Constants.defaultSourceVariant as Variant}
+        sourceVariant={Constants.defaultSourceVariant}
         disabled={true}
         key="chapter"
       />
@@ -1082,8 +1082,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleReplValueChange: props.handleReplValueChange,
     output: props.output,
     replValue: props.replValue,
-    sourceChapter: missionMetadata.sourceVersion || 4,
-    sourceVariant: 'default' as Variant,
+    sourceChapter: missionMetadata.sourceVersion || Chapter.SOURCE_4,
+    sourceVariant: Variant.DEFAULT,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()
   };

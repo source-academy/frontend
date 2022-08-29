@@ -1,7 +1,7 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import AceEditor from 'react-ace';
@@ -21,7 +21,7 @@ type StateProps = {
   hidden?: boolean;
   inputHidden?: boolean;
   usingSubst?: boolean;
-  sourceChapter: number;
+  sourceChapter: Chapter;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;

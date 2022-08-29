@@ -1,3 +1,5 @@
+import { Chapter } from 'js-slang/dist/types';
+
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
 import { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
@@ -29,7 +31,7 @@ function dateIsCloseEnough(dateA: number, dateB: number) {
 test('recordInit generates correct action object', () => {
   const initData: PlaybackData['init'] = {
     editorValue: 'Init Value',
-    chapter: 1,
+    chapter: Chapter.SOURCE_1,
     externalLibrary: ExternalLibraryName.NONE
   };
   const action = recordInit(initData, sourcereelWorkspace);

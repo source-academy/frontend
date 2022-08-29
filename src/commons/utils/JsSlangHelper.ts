@@ -1,6 +1,6 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
+import { Chapter, Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
@@ -122,10 +122,10 @@ export const externalBuiltIns = {
  * externalBuiltIns, such as display and prompt.
  */
 export function createContext<T>(
-  chapter: number,
+  chapter: Chapter,
   externals: string[],
   externalContext: T,
-  variant: Variant = 'default',
+  variant: Variant = Variant.DEFAULT,
   moduleParams?: any
 ) {
   return createSlangContext<T>(

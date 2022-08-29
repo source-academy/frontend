@@ -1,8 +1,10 @@
 /* eslint-disable */
 import * as ace from 'ace-builds/src-noconflict/ace';
+import { Variant } from 'js-slang/dist/types';
+
 export function HighlightRulesSelector_native(
   id,
-  variant = 'default',
+  variant = Variant.DEFAULT,
   external = 'NONE',
   externalLibraries = []
 ) {
@@ -14,7 +16,7 @@ export function HighlightRulesSelector_native(
     ).DocCommentHighlightRules;
     const TextHighlightRules = acequire('./text_highlight_rules').TextHighlightRules;
     const identifierRegex = '[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*';
-    const chapter = variant === 'default' ? id.toString() : id.toString() + '_' + variant;
+    const chapter = variant === Variant.DEFAULT ? id.toString() : id.toString() + '_' + variant;
 
     // Currently there are no builtin libraries for NativeJS
     // const builtin_lib = SourceDocumentation.builtins[chapter];

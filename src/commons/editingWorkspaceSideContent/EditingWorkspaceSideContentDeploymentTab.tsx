@@ -1,14 +1,10 @@
 import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import {
-  SourceLanguage,
-  sourceLanguages,
-  styliseSublanguage
-} from '../application/ApplicationTypes';
+import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
 import {
   External,
   externalLibraries,
@@ -196,7 +192,7 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
-  private handleChapterSelect = (i: SourceLanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
+  private handleChapterSelect = (i: SALanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.chapter = i.chapter;
@@ -244,9 +240,9 @@ const altEval = (str: string): any => {
 };
 
 const chapterSelect = (
-  currentChap: number,
-  variant: Variant = 'default',
-  handleSelect = (i: SourceLanguage, e?: React.SyntheticEvent<HTMLElement>) => {}
+  currentChap: Chapter,
+  variant: Variant = Variant.DEFAULT,
+  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {}
 ) => (
   <ChapterSelectComponent
     className={Classes.MINIMAL}
@@ -263,9 +259,9 @@ const chapterSelect = (
   </ChapterSelectComponent>
 );
 
-const ChapterSelectComponent = Select.ofType<SourceLanguage>();
+const ChapterSelectComponent = Select.ofType<SALanguage>();
 
-const chapterRenderer: ItemRenderer<SourceLanguage> = (chap, { handleClick, modifiers, query }) => (
+const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
 );
 
