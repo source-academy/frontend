@@ -2,7 +2,6 @@ import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { useSelector } from 'react-redux';
 
 import { OverallState } from '../../application/ApplicationTypes';
@@ -42,7 +41,6 @@ type OwnProps = {
   handleShowRepl: () => void;
   handleHideRepl: () => void;
   disableRepl: (newState: boolean) => void;
-  editorRef: React.RefObject<ReactAce>;
 };
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
@@ -168,16 +166,6 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       } else {
         onChange(newTabId, prevTabId, event);
         resetAlert(prevTabId);
-      }
-
-      /**
-       * ReactAce's editor value is not updated visually despite state change
-       * when the component is 'hidden'. We have to manually trigger the editor
-       * to update the visible value when switching to the mobile editor tab.
-       */
-      if (newTabId === SideContentType.mobileEditor) {
-        // props.editorRef.current is null when MCQ is rendered instead of the editor
-        props.editorRef.current?.editor.renderer.updateFull();
       }
 
       // Evaluate program upon pressing the 'Run' tab on mobile
