@@ -1,8 +1,8 @@
 import { Label } from '@blueprintjs/core';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/types';
 import React from 'react';
 
-import { SourceLanguage } from '../../application/ApplicationTypes';
+import { SALanguage } from '../../application/ApplicationTypes';
 import { ControlBarChapterSelect } from '../../controlBar/ControlBarChapterSelect';
 import { MissionMetadata } from '../../githubAssessments/GitHubMissionTypes';
 import Constants from '../../utils/Constants';
@@ -22,7 +22,7 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
         <div className="SideContentMissionEditorOptionColumn">
           <ControlBarChapterSelect
             sourceChapter={props.missionMetadata.sourceVersion}
-            sourceVariant={Constants.defaultSourceVariant as Variant}
+            sourceVariant={Constants.defaultSourceVariant}
             key="chapter"
             disabled={false}
             handleChapterSelect={handleChapterSelect}
@@ -38,8 +38,8 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
     props.setMissionMetadata(newMetadata);
   }
 
-  function handleChapterSelect(i: SourceLanguage, e?: React.SyntheticEvent<HTMLElement>) {
-    setMissionMetadataWrapper<number>('sourceVersion', i.chapter);
+  function handleChapterSelect(i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) {
+    setMissionMetadataWrapper<Chapter>('sourceVersion', i.chapter);
   }
 };
 

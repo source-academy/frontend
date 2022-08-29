@@ -1,9 +1,9 @@
 import { Context } from 'js-slang';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SourceLanguage } from '../application/ApplicationTypes';
+import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -77,7 +77,7 @@ export const changeStepLimit = (stepLimit: number, workspaceLocation: WorkspaceL
   action(CHANGE_STEP_LIMIT, { stepLimit, workspaceLocation });
 
 export const chapterSelect = (
-  chapter: number,
+  chapter: Chapter,
   variant: Variant,
   workspaceLocation: WorkspaceLocation
 ) =>
@@ -250,11 +250,9 @@ export const updateHasUnsavedChanges = (
     hasUnsavedChanges
   });
 
-export const changeSublanguage = (sublang: SourceLanguage) =>
-  action(CHANGE_SUBLANGUAGE, { sublang });
+export const changeSublanguage = (sublang: SALanguage) => action(CHANGE_SUBLANGUAGE, { sublang });
 
-export const updateSublanguage = (sublang: SourceLanguage) =>
-  action(UPDATE_SUBLANGUAGE, { sublang });
+export const updateSublanguage = (sublang: SALanguage) => action(UPDATE_SUBLANGUAGE, { sublang });
 
 export const promptAutocomplete = (
   workspaceLocation: WorkspaceLocation,

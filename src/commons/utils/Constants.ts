@@ -1,3 +1,4 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
 import moment, { Moment } from 'moment';
 
 function isTrue(value?: string, defaultTo?: boolean): boolean {
@@ -16,8 +17,8 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
-const defaultSourceChapter = 4;
-const defaultSourceVariant = 'default';
+const defaultSourceChapter = Chapter.SOURCE_4;
+const defaultSourceVariant = Variant.DEFAULT;
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;

@@ -1,4 +1,5 @@
 import { Intent } from '@blueprintjs/core';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
@@ -82,8 +83,8 @@ export function* persistenceSaga(): SagaIterator {
       if (meta && meta.appProperties) {
         yield put(
           actions.chapterSelect(
-            parseInt(meta.appProperties.chapter || '4', 10),
-            meta.appProperties.variant || 'default',
+            parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
+            meta.appProperties.variant || Variant.DEFAULT,
             'playground'
           )
         );

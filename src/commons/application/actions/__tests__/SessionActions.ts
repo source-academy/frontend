@@ -1,4 +1,4 @@
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
@@ -230,8 +230,8 @@ test('setCourseConfiguration generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
-    sourceChapter: 1,
-    sourceVariant: 'default' as Variant,
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
@@ -611,8 +611,8 @@ test('updateCourseConfig generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
-    sourceChapter: 1,
-    sourceVariant: 'default' as Variant,
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };

@@ -1,3 +1,5 @@
+import { Chapter } from 'js-slang/dist/types';
+
 import { Testcase } from '../assessment/AssessmentTypes';
 
 /**
@@ -17,7 +19,7 @@ export type TaskData = {
  * An code representation of a GitHub-hosted mission's '.metadata' file.
  */
 export type MissionMetadata = {
-  sourceVersion: number;
+  sourceVersion: Chapter;
 };
 
 /**

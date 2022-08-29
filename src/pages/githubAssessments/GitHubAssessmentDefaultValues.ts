@@ -1,3 +1,5 @@
+import { Chapter } from 'js-slang/dist/types';
+
 import { IMCQQuestion } from '../../commons/assessment/AssessmentTypes';
 import { MissionMetadata, TaskData } from '../../commons/githubAssessments/GitHubMissionTypes';
 
@@ -70,7 +72,7 @@ If you need a more detailed cheatsheet, please click [here](https://www.markdown
 export const defaultStarterCode = '// Your program here!\n';
 
 export const defaultMissionMetadata = {
-  sourceVersion: 1
+  sourceVersion: Chapter.SOURCE_1
 } as MissionMetadata;
 
 export const defaultTask = {
@@ -91,7 +93,7 @@ export const defaultMCQQuestion = {
   content: '',
   grade: 0,
   id: 0,
-  library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+  library: { chapter: Chapter.SOURCE_4, external: { name: 'NONE', symbols: [] }, globals: [] },
   maxGrade: 0,
   xp: 0,
   maxXp: 0

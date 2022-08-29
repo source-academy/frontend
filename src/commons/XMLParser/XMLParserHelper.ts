@@ -1,3 +1,4 @@
+import { Chapter } from 'js-slang/dist/types';
 import { Builder } from 'xml2js';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -7,6 +8,7 @@ import {
   AssessmentStatuses,
   AssessmentType,
   BaseQuestion,
+  emptyLibrary,
   GradingStatuses,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -112,14 +114,7 @@ const altEval = (str: string): any => {
 
 const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Library => {
   if (deploymentArr === undefined) {
-    return {
-      chapter: -1,
-      external: {
-        name: 'NONE' as ExternalLibraryName,
-        symbols: []
-      },
-      globals: []
-    };
+    return emptyLibrary();
   } else {
     const deployment = deploymentArr[0];
     const external = deployment.IMPORT || deployment.EXTERNAL;
@@ -131,7 +126,7 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
         >)
       : [];
     return {
-      chapter: parseInt(deployment.$.interpreter, 10),
+      chapter: parseInt(deployment.$.interpreter, 10) as Chapter,
       external: {
         name: nameVal as ExternalLibraryName,
         symbols: symbolsVal

@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
@@ -152,7 +152,7 @@ export type CourseConfiguration = {
   enableGame: boolean;
   enableAchievements: boolean;
   enableSourcecast: boolean;
-  sourceChapter: number;
+  sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;

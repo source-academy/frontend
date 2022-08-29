@@ -1,4 +1,4 @@
-import { SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
 
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 
@@ -149,7 +149,7 @@ export type BaseQuestion = {
 export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
 export type Library = {
-  chapter: number;
+  chapter: Chapter;
   variant?: Variant;
   execTimeMs?: number;
   external: ExternalLibrary;
@@ -216,7 +216,7 @@ export const emptyLibrary = (): Library => {
 
 export const normalLibrary = (): Library => {
   return {
-    chapter: 1,
+    chapter: Chapter.SOURCE_1,
     external: {
       name: 'NONE' as ExternalLibraryName,
       symbols: []
