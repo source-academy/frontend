@@ -13,10 +13,13 @@ import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
+import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 
 import {
   InterpreterOutput,
+  isSourceLanguage,
   OverallState,
+  ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -341,8 +344,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={props.playgroundSourceChapter}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        // Disable pause for FullJS, because: one cannot stop `eval()`
-        pauseDisabled={usingRemoteExecution || props.playgroundSourceChapter === Chapter.FULL_JS}
+        // Disable pause for non-Source languages since they cannot be paused
+        pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
     ),
     [
@@ -568,6 +571,20 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
+    // For HTML, show only introduction tab, HTML Display tab only appears after running code
+    if (props.playgroundSourceChapter === Chapter.HTML) {
+      if (props.output.length > 0) {
+        tabs.push({
+          label: 'HTML Display',
+          iconName: IconNames.MODAL,
+          body: <SideContentHtmlDisplay content={(props.output[0] as ResultOutput).value} />,
+          id: SideContentType.htmlDisplay,
+          toSpawn: () => true
+        });
+      }
+      return tabs;
+    }
+
     // (TEMP) Remove tabs for fullJS until support is integrated
     if (props.playgroundSourceChapter === Chapter.FULL_JS) {
       return [...tabs, dataVisualizerTab];
@@ -705,7 +722,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.playgroundSourceVariant === Variant.CONCURRENT || usingRemoteExecution;
+  const replDisabled =
+    props.playgroundSourceChapter === Chapter.HTML ||
+    props.playgroundSourceVariant === Variant.CONCURRENT ||
+    usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -756,7 +776,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || props.playgroundSourceChapter === Chapter.FULL_JS
+        usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit

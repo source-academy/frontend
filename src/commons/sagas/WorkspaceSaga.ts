@@ -27,7 +27,11 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
+import {
+  isSourceLanguage,
+  OverallState,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -39,6 +43,7 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
 import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
+import { showHTMLDisclaimer } from '../html/HTMLUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -255,6 +260,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     const toChangeChapter: boolean =
       newChapter === Chapter.FULL_JS
         ? chapterChanged && (yield call(showFullJSDisclaimer))
+        : newChapter === Chapter.HTML
+        ? chapterChanged && (yield call(showHTMLDisclaimer))
         : chapterChanged;
 
     if (toChangeChapter) {
@@ -550,7 +557,7 @@ export function* evalEditor(
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
-    if (context.chapter !== Chapter.FULL_JS) {
+    if (isSourceLanguage(context.chapter)) {
       parse(value, context);
     }
     if (!context.errors.length) {
@@ -565,7 +572,7 @@ export function* evalEditor(
         context.errors = [];
         exploded[index] = 'debugger;' + exploded[index];
         value = exploded.join('\n');
-        if (context.chapter !== Chapter.FULL_JS) {
+        if (isSourceLanguage(context.chapter)) {
           parse(value, context);
         }
         if (context.errors.length) {

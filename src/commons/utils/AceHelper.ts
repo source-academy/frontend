@@ -31,5 +31,9 @@ export const selectMode = (chapter: Chapter, variant: Variant, library: string) 
   ModeSelector(chapter, variant, library);
 };
 
-export const getModeString = (chapter: Chapter, variant: Variant, library: string) =>
-  `source${chapter}${variant}${library}`;
+export const getModeString = (chapter: Chapter, variant: Variant, library: string) => {
+  if (chapter === Chapter.HTML) {
+    return 'html';
+  }
+  return `source${chapter}${variant}${library}`;
+};

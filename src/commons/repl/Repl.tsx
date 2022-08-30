@@ -40,7 +40,12 @@ type OwnProps = {
 
 const Repl = React.forwardRef<AceEditor, ReplProps>((props, ref) => {
   const cards = props.output.map((slice, index) => (
-    <Output output={slice} key={index} usingSubst={props.usingSubst || false} />
+    <Output
+      output={slice}
+      key={index}
+      usingSubst={props.usingSubst || false}
+      isHtml={props.sourceChapter === Chapter.HTML}
+    />
   ));
   return (
     <div className="Repl" style={{ display: props.hidden ? 'none' : undefined }}>
@@ -79,6 +84,12 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
         return (
           <Card>
             <Pre className="logOutput">Check out the Stepper tab!</Pre>
+          </Card>
+        );
+      } else if (props.isHtml) {
+        return (
+          <Card>
+            <Pre className="logOutput">Check out the HTML Display tab!</Pre>
           </Card>
         );
       } else if (props.output.consoleLogs.length === 0) {

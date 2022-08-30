@@ -71,7 +71,7 @@ const SideContent = (props: SideContentProps) => {
    * Adds'side-content-tab-alert' style to newly spawned module tabs
    */
   const generateClassName = (id: string | undefined) =>
-    id === SideContentType.module
+    id === SideContentType.module || id === SideContentType.htmlDisplay
       ? 'side-content-tooltip side-content-tab-alert'
       : 'side-content-tooltip';
 

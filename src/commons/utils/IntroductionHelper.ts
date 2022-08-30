@@ -25,6 +25,10 @@ const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) 
     );
   }
 
+  if (sourceChapter === Chapter.HTML) {
+    return 'However, you have chosen HTML, which renders your code directly as a HTML document.';
+  }
+
   // `.includes` and `.find` are not used here since we are dealing with reference types
   if (
     sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
