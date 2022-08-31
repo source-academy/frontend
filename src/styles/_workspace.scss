@@ -103,6 +103,7 @@ $code-color-error: #ff4444;
     flex-direction: column;
     height: 100%;
     width: 100%;
+    padding: 0;
     background-color: $cadet-color-2;
 
     .editor-react-ace {
