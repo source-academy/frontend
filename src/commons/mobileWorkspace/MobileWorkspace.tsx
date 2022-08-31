@@ -212,9 +212,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
       )}
 
-      <div className="mobile-editor-panel">{createWorkspaceInput()}</div>
-
-      <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+      <div>
+        <div className="mobile-editor-panel">{createWorkspaceInput()}</div>
+        <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+      </div>
 
       <DraggableRepl
         key={'repl'}
