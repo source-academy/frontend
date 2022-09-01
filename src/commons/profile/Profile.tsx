@@ -16,6 +16,7 @@ type ProfileProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
+  handleTotalXpFetch: () => void;
 };
 
 export type StateProps = {
@@ -23,6 +24,7 @@ export type StateProps = {
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
   assessmentConfigurations?: AssessmentConfiguration[];
+  xp?: number;
   courseId?: number;
 };
 
@@ -33,6 +35,9 @@ type OwnProps = {
 
 class Profile extends React.Component<ProfileProps, {}> {
   public componentDidMount() {
+    if (!this.props.xp) {
+      this.props.handleTotalXpFetch();
+    }
     if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
@@ -54,6 +59,7 @@ class Profile extends React.Component<ProfileProps, {}> {
       const userDetails = (
         <div className="profile-header">
           <div className="profile-username">
+            <div>{this.props.xp}</div>
             <div className="name">{this.props.name}</div>
             <div className="role">{this.props.role}</div>
           </div>
