@@ -170,19 +170,18 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     () => ({
       label: 'Editor',
       iconName: IconNames.EDIT,
-      body: createWorkspaceInput(),
+      body: null,
       id: SideContentType.mobileEditor,
       toSpawn: () => true
     }),
-    // eslint-disable-next-line
-    [props.customEditor, props.editorProps, props.mcqProps]
+    []
   );
 
   const mobileRunTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Run',
       iconName: IconNames.PLAY,
-      body: <div></div>, // placeholder div since run tab does not have a specific panel body
+      body: null,
       id: SideContentType.mobileEditorRun,
       toSpawn: () => true
     }),
@@ -213,11 +212,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
       )}
 
-      <MobileSideContent
-        {...updatedMobileSideContentProps()}
-        {...draggableReplProps}
-        editorRef={editorRef}
-      />
+      <div>
+        <div className="mobile-editor-panel">{createWorkspaceInput()}</div>
+        <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+      </div>
 
       <DraggableRepl
         key={'repl'}

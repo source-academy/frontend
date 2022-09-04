@@ -1,4 +1,4 @@
-import { Card, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
+import { Card, Icon, Tab, TabId, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
@@ -91,6 +91,16 @@ const SideContent = (props: SideContentProps) => {
           </div>
         </Tooltip2>
       );
+      const tabProps: Partial<TabProps> = {
+        id: tabId,
+        title: tabTitle,
+        disabled: tab.disabled,
+        className: 'side-content-tab'
+      };
+
+      if (!tab.body) {
+        return <Tab key={tabId} {...tabProps} />;
+      }
 
       const tabBody: JSX.Element = workspaceLocation
         ? {
@@ -105,16 +115,7 @@ const SideContent = (props: SideContentProps) => {
         : tab.body;
       const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
-      return (
-        <Tab
-          key={tabId}
-          id={tabId}
-          title={tabTitle}
-          panel={tabPanel}
-          disabled={tab.disabled}
-          className="side-content-tab"
-        />
-      );
+      return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
     };
 
     return dynamicTabs.map(tab =>

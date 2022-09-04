@@ -2,7 +2,6 @@ import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { useSelector } from 'react-redux';
 
 import { OverallState } from '../../application/ApplicationTypes';
@@ -42,7 +41,6 @@ type OwnProps = {
   handleShowRepl: () => void;
   handleHideRepl: () => void;
   disableRepl: (newState: boolean) => void;
-  editorRef: React.RefObject<ReactAce>;
 };
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
@@ -79,6 +77,10 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
   const renderedPanels = () => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+      if (!tab.body) {
+        return;
+      }
+
       const tabBody: JSX.Element = workspaceLocation
         ? {
             ...tab.body,
@@ -89,23 +91,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           }
         : tab.body;
 
-      if (tab.id === SideContentType.mobileEditorRun) {
-        return;
-      }
-
-      return tab.id === SideContentType.mobileEditor ? (
-        // Render the Editor Panel when the selected tab is 'Editor' or 'Run'
-        selectedTabId === SideContentType.mobileEditor ||
-        selectedTabId === SideContentType.mobileEditorRun ? (
-          <div className="mobile-editor-panel" key={'editor'}>
-            {tabBody}
-          </div>
-        ) : (
-          <div className="mobile-unselected-panel" key={'editor'}>
-            {tabBody}
-          </div>
-        )
-      ) : tab.id === selectedTabId ? (
+      return tab.id === selectedTabId ? (
         // Render the other panels only when their corresponding tab is selected
         <div className="mobile-selected-panel" key={tab.id}>
           {tabBody}
@@ -180,16 +166,6 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       } else {
         onChange(newTabId, prevTabId, event);
         resetAlert(prevTabId);
-      }
-
-      /**
-       * ReactAce's editor value is not updated visually despite state change
-       * when the component is 'hidden'. We have to manually trigger the editor
-       * to update the visible value when switching to the mobile editor tab.
-       */
-      if (newTabId === SideContentType.mobileEditor) {
-        // props.editorRef.current is null when MCQ is rendered instead of the editor
-        props.editorRef.current?.editor.renderer.updateFull();
       }
 
       // Evaluate program upon pressing the 'Run' tab on mobile
