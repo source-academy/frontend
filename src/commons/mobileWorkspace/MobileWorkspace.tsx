@@ -160,10 +160,32 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     document.documentElement.style.setProperty('--mobile-repl-height', '0px');
   };
 
-  const draggableReplProps = {
-    handleShowRepl: handleShowRepl(-300),
-    handleHideRepl: handleHideRepl,
-    disableRepl: setIsDraggableReplDisabled
+  const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
+    // Evaluate program upon pressing the 'Run' tab on mobile
+    if (
+      (prevTabId === SideContentType.substVisualizer ||
+        prevTabId === SideContentType.autograder ||
+        prevTabId === SideContentType.testcases) &&
+      newTabId === SideContentType.mobileEditorRun
+    ) {
+      props.editorProps?.handleEditorEval();
+    } else if (newTabId === SideContentType.mobileEditorRun) {
+      props.editorProps?.handleEditorEval();
+      handleShowRepl(-300)();
+    } else {
+      handleHideRepl();
+    }
+
+    // Disable draggable Repl when on stepper tab
+    if (
+      newTabId === SideContentType.substVisualizer ||
+      (prevTabId === SideContentType.substVisualizer &&
+        newTabId === SideContentType.mobileEditorRun)
+    ) {
+      setIsDraggableReplDisabled(true);
+    } else {
+      setIsDraggableReplDisabled(false);
+    }
   };
 
   const mobileEditorTab: SideContentTab = React.useMemo(
@@ -191,6 +213,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const updatedMobileSideContentProps = () => {
     return {
       ...props.mobileSideContentProps,
+      onChange: (
+        newTabId: SideContentType,
+        prevTabId: SideContentType,
+        event: React.MouseEvent<HTMLElement>
+      ) => {
+        props.mobileSideContentProps.onChange(newTabId, prevTabId, event);
+        handleTabChangeForRepl(newTabId, prevTabId);
+      },
       tabs: [mobileEditorTab, ...props.mobileSideContentProps.tabs, mobileRunTab]
     };
   };
@@ -214,7 +244,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
       <div>
         <div className="mobile-editor-panel">{createWorkspaceInput()}</div>
-        <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+        <MobileSideContent {...updatedMobileSideContentProps()} />
       </div>
 
       <DraggableRepl

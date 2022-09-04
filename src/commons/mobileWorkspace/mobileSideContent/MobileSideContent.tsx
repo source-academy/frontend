@@ -19,8 +19,6 @@ type DispatchProps = {
     prevTabId: SideContentType,
     event: React.MouseEvent<HTMLElement>
   ) => void;
-
-  handleEditorEval: () => void;
 };
 
 type StateProps = {
@@ -37,13 +35,7 @@ type MobileControlBarProps = {
   mobileControlBarProps: ControlBarProps;
 };
 
-type OwnProps = {
-  handleShowRepl: () => void;
-  handleHideRepl: () => void;
-  disableRepl: (newState: boolean) => void;
-};
-
-const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
+const MobileSideContent: React.FC<MobileSideContentProps> = props => {
   const { tabs, selectedTabId, onChange } = props;
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
   const isIOS = /iPhone|iPod/.test(navigator.platform);
@@ -167,34 +159,8 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         onChange(newTabId, prevTabId, event);
         resetAlert(prevTabId);
       }
-
-      // Evaluate program upon pressing the 'Run' tab on mobile
-      if (
-        (prevTabId === SideContentType.substVisualizer ||
-          prevTabId === SideContentType.autograder ||
-          prevTabId === SideContentType.testcases) &&
-        newTabId === SideContentType.mobileEditorRun
-      ) {
-        props.handleEditorEval();
-      } else if (newTabId === SideContentType.mobileEditorRun) {
-        props.handleEditorEval();
-        props.handleShowRepl();
-      } else {
-        props.handleHideRepl();
-      }
-
-      // Disable draggable Repl when on stepper tab
-      if (
-        newTabId === SideContentType.substVisualizer ||
-        (prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun)
-      ) {
-        props.disableRepl(true);
-      } else {
-        props.disableRepl(false);
-      }
     },
-    [onChange, props]
+    [onChange]
   );
 
   return (

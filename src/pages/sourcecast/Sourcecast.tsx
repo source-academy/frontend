@@ -338,8 +338,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
       tabs: tabs,
-      workspaceLocation: 'sourcecast',
-      handleEditorEval: props.handleEditorEval
+      workspaceLocation: 'sourcecast'
     }
   };
 
