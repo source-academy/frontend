@@ -161,22 +161,26 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
-    // Evaluate program upon pressing the 'Run' tab on mobile
+    // Evaluate program upon pressing the run tab.
+    if (newTabId === SideContentType.mobileEditorRun) {
+      props.editorProps?.handleEditorEval();
+    }
+
+    // Show the REPL upon pressing the run tab if the previous tab is not listed below.
     if (
-      (prevTabId === SideContentType.substVisualizer ||
+      newTabId === SideContentType.mobileEditorRun &&
+      !(
+        prevTabId === SideContentType.substVisualizer ||
         prevTabId === SideContentType.autograder ||
-        prevTabId === SideContentType.testcases) &&
-      newTabId === SideContentType.mobileEditorRun
+        prevTabId === SideContentType.testcases
+      )
     ) {
-      props.editorProps?.handleEditorEval();
-    } else if (newTabId === SideContentType.mobileEditorRun) {
-      props.editorProps?.handleEditorEval();
       handleShowRepl(-300);
     } else {
       handleHideRepl();
     }
 
-    // Disable draggable Repl when on stepper tab
+    // Disable draggable REPL when on the stepper tab,
     if (
       newTabId === SideContentType.substVisualizer ||
       (prevTabId === SideContentType.substVisualizer &&
