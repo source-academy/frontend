@@ -113,7 +113,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      return props.customEditor(editorRef, handleShowRepl(-100));
+      return props.customEditor(editorRef, () => handleShowRepl(-100));
     } else if (props.editorProps) {
       return <Editor {...props.editorProps} ref={editorRef} />;
     } else {
@@ -150,7 +150,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     setDraggableReplPosition(position);
   };
 
-  const handleShowRepl = (offset: number) => () => {
+  const handleShowRepl = (offset: number) => {
     document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
     setDraggableReplPosition({ x: 0, y: offset });
   };
@@ -171,7 +171,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       props.editorProps?.handleEditorEval();
     } else if (newTabId === SideContentType.mobileEditorRun) {
       props.editorProps?.handleEditorEval();
-      handleShowRepl(-300)();
+      handleShowRepl(-300);
     } else {
       handleHideRepl();
     }
