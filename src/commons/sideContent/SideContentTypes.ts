@@ -43,7 +43,7 @@ export enum SideContentType {
  *   icon which will be displayed over the SideContent panel.
  *
  * @property body The element to be rendered in the SideContent panel
- *  when the tab is selected.
+ *  when the tab is selected. If null, the panel will not be rendered.
  *
  * @property id A string/number that will be used as the tab ID and key.
  *  If id is undefined, id will be set to label by the renderTab function.
@@ -55,7 +55,7 @@ export enum SideContentType {
 export type SideContentTab = {
   label: string;
   iconName: IconName;
-  body: JSX.Element;
+  body: JSX.Element | null;
   toSpawn: (context: DebuggerContext) => boolean;
   id?: SideContentType;
   disabled?: boolean;
