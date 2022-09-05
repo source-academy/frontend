@@ -833,8 +833,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
       tabs: mobileTabs,
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      handleEditorEval: props.handleEditorEval
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     }
   };
 

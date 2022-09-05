@@ -113,7 +113,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      return props.customEditor(editorRef, handleShowRepl(-100));
+      return props.customEditor(editorRef, () => handleShowRepl(-100));
     } else if (props.editorProps) {
       return <Editor {...props.editorProps} ref={editorRef} />;
     } else {
@@ -150,7 +150,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     setDraggableReplPosition(position);
   };
 
-  const handleShowRepl = (offset: number) => () => {
+  const handleShowRepl = (offset: number) => {
     document.documentElement.style.setProperty('--mobile-repl-height', Math.max(-offset, 0) + 'px');
     setDraggableReplPosition({ x: 0, y: offset });
   };
@@ -160,10 +160,36 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     document.documentElement.style.setProperty('--mobile-repl-height', '0px');
   };
 
-  const draggableReplProps = {
-    handleShowRepl: handleShowRepl(-300),
-    handleHideRepl: handleHideRepl,
-    disableRepl: setIsDraggableReplDisabled
+  const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
+    // Evaluate program upon pressing the run tab.
+    if (newTabId === SideContentType.mobileEditorRun) {
+      props.editorProps?.handleEditorEval();
+    }
+
+    // Show the REPL upon pressing the run tab if the previous tab is not listed below.
+    if (
+      newTabId === SideContentType.mobileEditorRun &&
+      !(
+        prevTabId === SideContentType.substVisualizer ||
+        prevTabId === SideContentType.autograder ||
+        prevTabId === SideContentType.testcases
+      )
+    ) {
+      handleShowRepl(-300);
+    } else {
+      handleHideRepl();
+    }
+
+    // Disable draggable REPL when on the stepper tab.
+    if (
+      newTabId === SideContentType.substVisualizer ||
+      (prevTabId === SideContentType.substVisualizer &&
+        newTabId === SideContentType.mobileEditorRun)
+    ) {
+      setIsDraggableReplDisabled(true);
+    } else {
+      setIsDraggableReplDisabled(false);
+    }
   };
 
   const mobileEditorTab: SideContentTab = React.useMemo(
@@ -191,6 +217,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const updatedMobileSideContentProps = () => {
     return {
       ...props.mobileSideContentProps,
+      onChange: (
+        newTabId: SideContentType,
+        prevTabId: SideContentType,
+        event: React.MouseEvent<HTMLElement>
+      ) => {
+        props.mobileSideContentProps.onChange(newTabId, prevTabId, event);
+        handleTabChangeForRepl(newTabId, prevTabId);
+      },
       tabs: [mobileEditorTab, ...props.mobileSideContentProps.tabs, mobileRunTab]
     };
   };
@@ -214,7 +248,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
       <div>
         <div className="mobile-editor-panel">{createWorkspaceInput()}</div>
-        <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
+        <MobileSideContent {...updatedMobileSideContentProps()} />
       </div>
 
       <DraggableRepl
