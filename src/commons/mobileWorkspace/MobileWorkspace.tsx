@@ -180,7 +180,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       handleHideRepl();
     }
 
-    // Disable draggable REPL when on the stepper tab,
+    // Disable draggable REPL when on the stepper tab.
     if (
       newTabId === SideContentType.substVisualizer ||
       (prevTabId === SideContentType.substVisualizer &&
