@@ -169,8 +169,10 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public createContext() {
-    this.context = createContext(4, [], 'playground', 'default', {
-      game: {
+    this.context = createContext(4, [], 'playground', 'default');
+    this.context.moduleContexts.game = {
+      tabs: [],
+      state: {
         scene: this,
         preloadImageMap: this.preloadImageMap,
         preloadSoundMap: this.preloadSoundMap,
@@ -179,7 +181,7 @@ export default class RoomPreview extends Phaser.Scene {
         screenSize: screenSize,
         createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
       }
-    });
+    };
   }
 
   private async eval(code: string) {
