@@ -89,7 +89,11 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       } else if (props.isHtml) {
         return (
           <Card>
-            <Pre className="logOutput">Check out the HTML Display tab!</Pre>
+            <Pre className="logOutput">
+              Check out the HTML Display tab!
+              <br />
+              Please check the browser console for any errors.
+            </Pre>
           </Card>
         );
       } else if (props.output.consoleLogs.length === 0) {

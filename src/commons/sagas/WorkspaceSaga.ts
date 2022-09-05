@@ -43,7 +43,6 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
 import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
-import { showHTMLDisclaimer } from '../html/HTMLUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -260,8 +259,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     const toChangeChapter: boolean =
       newChapter === Chapter.FULL_JS
         ? chapterChanged && (yield call(showFullJSDisclaimer))
-        : newChapter === Chapter.HTML
-        ? chapterChanged && (yield call(showHTMLDisclaimer))
         : chapterChanged;
 
     if (toChangeChapter) {

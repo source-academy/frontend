@@ -2,14 +2,14 @@ import { showSimpleConfirmDialog, SimpleConfirmDialogProps } from '../utils/Dial
 
 const DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   icon: 'warning-sign',
-  title: 'You are switching to an unsafe feature!',
+  title: 'Beware when running shared HTML code!',
   contents: (
     <p>
-      <code>HTML</code> allows you to run arbitrary JS code beyond Source.
+      You are about to access HTML code written by others, which may contain malicious scripts.
       <br />
       <br />
-      This might pose a security concern if you are not careful and fully aware of what program you
-      are running!
+      This might pose a security concern if you are not careful and fully aware of what the shared
+      HTML code contains!
       <br />
       <br />
       <strong>Do you still want to proceed?</strong>

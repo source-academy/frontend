@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
+import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 
 import {
@@ -141,13 +142,19 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-export function handleHash(hash: string, props: PlaygroundProps) {
+export async function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else {
+    if (chapter === Chapter.HTML) {
+      const continueToHtml = await showHTMLDisclaimer();
+      if (!continueToHtml) {
+        return;
+      }
+    }
     const programLz = qs.lz ?? qs.prgrm;
     const program = programLz && decompressFromEncodedURIComponent(programLz);
     if (program) {
