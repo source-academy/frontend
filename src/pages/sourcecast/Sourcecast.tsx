@@ -316,7 +316,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs: tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: 'sourcecast',
       sideContentHeight: props.sideContentHeight,
       editorWidth: props.editorWidth

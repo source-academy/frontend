@@ -875,7 +875,10 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     return {
       selectedTabId: selectedTab,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       onChange: onChangeTabs,
       workspaceLocation: 'githubAssessment'
     };
@@ -1019,10 +1022,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       ...sideContent,
       onChange: onChangeTabs,
       selectedTabId: selectedTab,
-      tabs: {
-        beforeDynamicTabs: sideContent.tabs,
-        afterDynamicTabs: []
-      },
       handleEditorEval: handleEval
     };
   };

@@ -754,7 +754,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
       sideContentHeight: props.sideContentHeight,
       editorWidth: props.editorWidth
