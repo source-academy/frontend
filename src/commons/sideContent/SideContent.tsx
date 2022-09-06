@@ -41,7 +41,10 @@ type StateProps = {
   animate?: boolean;
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
-  tabs: SideContentTab[];
+  tabs: {
+    beforeDynamicTabs: SideContentTab[];
+    afterDynamicTabs: SideContentTab[];
+  };
   workspaceLocation?: WorkspaceLocation;
   editorWidth?: string;
   sideContentHeight?: number;
@@ -49,7 +52,9 @@ type StateProps = {
 
 const SideContent = (props: SideContentProps) => {
   const { tabs, onChange } = props;
-  const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
+  const [dynamicTabs, setDynamicTabs] = React.useState(
+    tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
+  );
 
   // Fetch debuggerContext from store
   const debuggerContext = useSelector(
@@ -57,7 +62,9 @@ const SideContent = (props: SideContentProps) => {
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
   React.useEffect(() => {
-    const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
+    const allActiveTabs = tabs.beforeDynamicTabs
+      .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))
+      .concat(tabs.afterDynamicTabs);
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 

@@ -225,7 +225,13 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         props.mobileSideContentProps.onChange(newTabId, prevTabId, event);
         handleTabChangeForRepl(newTabId, prevTabId);
       },
-      tabs: [mobileEditorTab, ...props.mobileSideContentProps.tabs, mobileRunTab]
+      tabs: {
+        beforeDynamicTabs: [
+          mobileEditorTab,
+          ...props.mobileSideContentProps.tabs.beforeDynamicTabs
+        ],
+        afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
+      }
     };
   };
 

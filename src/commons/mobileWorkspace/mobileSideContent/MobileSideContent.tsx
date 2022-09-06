@@ -25,7 +25,10 @@ type StateProps = {
   animate?: boolean;
   selectedTabId: SideContentType;
   renderActiveTabPanelOnly?: boolean;
-  tabs: SideContentTab[];
+  tabs: {
+    beforeDynamicTabs: SideContentTab[];
+    afterDynamicTabs: SideContentTab[];
+  };
   workspaceLocation?: WorkspaceLocation;
   width?: number;
   height?: number;
@@ -37,7 +40,9 @@ type MobileControlBarProps = {
 
 const MobileSideContent: React.FC<MobileSideContentProps> = props => {
   const { tabs, selectedTabId, onChange } = props;
-  const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
+  const [dynamicTabs, setDynamicTabs] = React.useState(
+    tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
+  );
   const isIOS = /iPhone|iPod/.test(navigator.platform);
 
   // Fetch debuggerContext from store
@@ -47,12 +52,9 @@ const MobileSideContent: React.FC<MobileSideContentProps> = props => {
   );
 
   React.useEffect(() => {
-    // Ensures that the 'Run' tab is at the end of the resulting array
-    const copy = [...tabs];
-    const runTab = copy.pop();
-
-    const allActiveTabs = copy.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
-    allActiveTabs.push(runTab!);
+    const allActiveTabs = tabs.beforeDynamicTabs
+      .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))
+      .concat(tabs.afterDynamicTabs);
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 
