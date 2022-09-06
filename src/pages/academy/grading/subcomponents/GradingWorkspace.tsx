@@ -386,7 +386,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         }
         this.setState({ selectedTab: newTabId });
       },
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: 'grading'
     };
 

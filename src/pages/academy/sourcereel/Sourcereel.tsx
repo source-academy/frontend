@@ -308,56 +308,59 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
          * This is a known issue with ag-grid, and is okay since only staff and admins have
          * access to Sourcereel. For more info, see issue #1152 in frontend.
          */
-        tabs: [
-          {
-            label: 'Recording Panel',
-            iconName: IconNames.COMPASS,
-            body: (
-              <div>
-                <span className="Multi-line">
-                  <Pre> {INTRODUCTION} </Pre>
-                </span>
-                <SourcereelControlbar
-                  currentPlayerTime={this.props.currentPlayerTime}
-                  editorValue={this.props.editorValue}
-                  getTimerDuration={this.getTimerDuration}
-                  playbackData={this.props.playbackData}
-                  handleRecordInit={this.handleRecordInit}
-                  handleRecordPause={this.handleRecordPause}
-                  handleResetInputs={this.props.handleResetInputs}
-                  handleSaveSourcecastData={this.props.handleSaveSourcecastData}
-                  handleSetSourcecastData={this.props.handleSetSourcecastData}
-                  handleSetEditorReadonly={this.props.handleSetEditorReadonly}
-                  handleTimerPause={this.props.handleTimerPause}
-                  handleTimerReset={this.props.handleTimerReset}
-                  handleTimerResume={this.props.handleTimerResume}
-                  handleTimerStart={this.props.handleTimerStart}
-                  handleTimerStop={this.props.handleTimerStop}
-                  recordingStatus={this.props.recordingStatus}
-                />
-              </div>
-            ),
-            id: SideContentType.sourcereel,
-            toSpawn: () => true
-          },
-          {
-            label: 'Sourcecast Table',
-            iconName: IconNames.EDIT,
-            body: (
-              <div>
-                <SourcecastTable
-                  handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
-                  sourcecastIndex={this.props.sourcecastIndex}
-                  courseId={this.props.courseId}
-                />
-              </div>
-            ),
-            id: SideContentType.introduction,
-            toSpawn: () => true
-          },
-          dataVisualizerTab,
-          envVisualizerTab
-        ],
+        tabs: {
+          beforeDynamicTabs: [
+            {
+              label: 'Recording Panel',
+              iconName: IconNames.COMPASS,
+              body: (
+                <div>
+                  <span className="Multi-line">
+                    <Pre> {INTRODUCTION} </Pre>
+                  </span>
+                  <SourcereelControlbar
+                    currentPlayerTime={this.props.currentPlayerTime}
+                    editorValue={this.props.editorValue}
+                    getTimerDuration={this.getTimerDuration}
+                    playbackData={this.props.playbackData}
+                    handleRecordInit={this.handleRecordInit}
+                    handleRecordPause={this.handleRecordPause}
+                    handleResetInputs={this.props.handleResetInputs}
+                    handleSaveSourcecastData={this.props.handleSaveSourcecastData}
+                    handleSetSourcecastData={this.props.handleSetSourcecastData}
+                    handleSetEditorReadonly={this.props.handleSetEditorReadonly}
+                    handleTimerPause={this.props.handleTimerPause}
+                    handleTimerReset={this.props.handleTimerReset}
+                    handleTimerResume={this.props.handleTimerResume}
+                    handleTimerStart={this.props.handleTimerStart}
+                    handleTimerStop={this.props.handleTimerStop}
+                    recordingStatus={this.props.recordingStatus}
+                  />
+                </div>
+              ),
+              id: SideContentType.sourcereel,
+              toSpawn: () => true
+            },
+            {
+              label: 'Sourcecast Table',
+              iconName: IconNames.EDIT,
+              body: (
+                <div>
+                  <SourcecastTable
+                    handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
+                    sourcecastIndex={this.props.sourcecastIndex}
+                    courseId={this.props.courseId}
+                  />
+                </div>
+              ),
+              id: SideContentType.introduction,
+              toSpawn: () => true
+            },
+            dataVisualizerTab,
+            envVisualizerTab
+          ],
+          afterDynamicTabs: []
+        },
         workspaceLocation: 'sourcereel'
       }
     };
