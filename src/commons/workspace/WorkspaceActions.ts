@@ -10,6 +10,7 @@ import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
+  ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -284,3 +285,6 @@ export const notifyProgramEvaluated = (
 
 export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
+
+export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: WorkspaceLocation) =>
+  action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation });

@@ -30,6 +30,7 @@ const baseProps = {
   persistenceFile: undefined,
   githubOctokitObject: { octokit: undefined },
   githubSaveInfo: { repoName: '', filePath: '' },
+  handleAddHtmlConsoleError: (errorMsg: string) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},

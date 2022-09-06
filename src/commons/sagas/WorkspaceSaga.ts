@@ -66,6 +66,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
+  ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
   END_CLEAR_CONTEXT,
@@ -88,6 +89,15 @@ import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './Sa
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
   let context: Context;
+
+  yield takeEvery(
+    ADD_HTML_CONSOLE_ERROR,
+    function* (action: ReturnType<typeof actions.addHtmlConsoleError>): any {
+      yield put(
+        actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
+      );
+    }
+  );
 
   yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;

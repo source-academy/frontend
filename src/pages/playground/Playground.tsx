@@ -68,6 +68,7 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleAddHtmlConsoleError: (errorMsg: string) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -580,11 +581,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     // For HTML, show only introduction tab, HTML Display tab only appears after running code
     if (props.playgroundSourceChapter === Chapter.HTML) {
-      if (props.output.length > 0) {
+      if (props.output.length > 0 && props.output[0].type === 'result') {
         tabs.push({
           label: 'HTML Display',
           iconName: IconNames.MODAL,
-          body: <SideContentHtmlDisplay content={(props.output[0] as ResultOutput).value} />,
+          body: (
+            <SideContentHtmlDisplay
+              content={(props.output[0] as ResultOutput).value}
+              handleAddHtmlConsoleError={props.handleAddHtmlConsoleError}
+            />
+          ),
           id: SideContentType.htmlDisplay,
           toSpawn: () => true
         });
@@ -638,7 +644,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
     usingRemoteExecution,
-    remoteExecutionTab
+    remoteExecutionTab,
+    props.handleAddHtmlConsoleError
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile

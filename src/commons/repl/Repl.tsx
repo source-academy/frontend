@@ -92,7 +92,7 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
             <Pre className="logOutput">
               Check out the HTML Display tab!
               <br />
-              Please check the browser console for any errors.
+              Please check the browser console for more detailed errors and warnings.
             </Pre>
           </Card>
         );
