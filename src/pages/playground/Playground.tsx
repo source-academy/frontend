@@ -778,7 +778,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
       },
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs: mobileTabs,
+      tabs: {
+        beforeDynamicTabs: mobileTabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     }
   };

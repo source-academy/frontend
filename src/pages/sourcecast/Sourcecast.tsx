@@ -337,7 +337,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       },
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs: tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: 'sourcecast'
     }
   };

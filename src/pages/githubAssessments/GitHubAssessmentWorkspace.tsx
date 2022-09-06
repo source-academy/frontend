@@ -1010,13 +1010,19 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     };
 
+    const sideContent = sideContentProps(props);
+
     return {
       mobileControlBarProps: {
         ...controlBarProps()
       },
-      ...sideContentProps(props),
+      ...sideContent,
       onChange: onChangeTabs,
       selectedTabId: selectedTab,
+      tabs: {
+        beforeDynamicTabs: sideContent.tabs,
+        afterDynamicTabs: []
+      },
       handleEditorEval: handleEval
     };
   };

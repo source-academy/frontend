@@ -683,13 +683,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         setSelectedTab(newTabId);
       }
     };
+
+    const sideContent = sideContentProps(props, questionId);
+
     return {
       mobileControlBarProps: {
         ...controlBarProps(questionId)
       },
-      ...sideContentProps(props, questionId),
+      ...sideContent,
       onChange: onChangeTabs,
       selectedTabId: selectedTab,
+      tabs: {
+        beforeDynamicTabs: sideContent.tabs,
+        afterDynamicTabs: []
+      },
       handleEditorEval: handleEval
     };
   };
