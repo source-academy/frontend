@@ -11,7 +11,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
@@ -650,8 +650,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         handleChapterSelect={handleChapterSelect}
         sourceChapter={props.assessment!.questions[questionId].library.chapter}
         sourceVariant={
-          props.assessment!.questions[questionId].library.variant ??
-          (Constants.defaultSourceVariant as Variant)
+          props.assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant
         }
         disabled={true}
         key="chapter"
@@ -783,8 +782,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? {
           editorSessionId: '',
           editorValue: props.editorValue!,
-          sourceChapter: question.library.chapter || 4,
-          sourceVariant: question.library.variant ?? ('default' as const),
+          sourceChapter: question.library.chapter || Chapter.SOURCE_4,
+          sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibrary: question.library.external.name || 'NONE',
           handleDeclarationNavigate: props.handleDeclarationNavigate,
           handleEditorEval: handleEval,
@@ -813,8 +812,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleReplValueChange: props.handleReplValueChange,
     output: props.output,
     replValue: props.replValue,
-    sourceChapter: question?.library?.chapter || 4,
-    sourceVariant: question.library.variant ?? ('default' as const),
+    sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+    sourceVariant: question.library.variant ?? Variant.DEFAULT,
     externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons()
   };

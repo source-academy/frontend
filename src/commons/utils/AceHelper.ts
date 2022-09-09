@@ -1,15 +1,14 @@
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { HighlightRulesSelector_native } from '../../features/fullJS/fullJSHighlight';
-import { isFullJSChapter } from '../application/ApplicationTypes';
 import { Documentation } from '../documentation/Documentation';
 /**
  * This _modifies global state_ and defines a new Ace mode globally, if it does not already exist.
  *
  * You can call this directly in render functions.
  */
-export const selectMode = (chapter: number, variant: Variant, library: string) => {
+export const selectMode = (chapter: Chapter, variant: Variant, library: string) => {
   if (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -19,7 +18,7 @@ export const selectMode = (chapter: number, variant: Variant, library: string) =
     return;
   }
 
-  if (!isFullJSChapter(chapter)) {
+  if (chapter !== Chapter.FULL_JS) {
     HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
   } else {
     HighlightRulesSelector_native(
@@ -32,5 +31,5 @@ export const selectMode = (chapter: number, variant: Variant, library: string) =
   ModeSelector(chapter, variant, library);
 };
 
-export const getModeString = (chapter: number, variant: Variant, library: string) =>
+export const getModeString = (chapter: Chapter, variant: Variant, library: string) =>
   `source${chapter}${variant}${library}`;

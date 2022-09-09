@@ -1,6 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 import MediaQuery from 'react-responsive';
@@ -20,7 +20,7 @@ type DispatchProps = {
 
 type StateProps = {
   replValue: string;
-  sourceChapter: number;
+  sourceChapter: Chapter;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;

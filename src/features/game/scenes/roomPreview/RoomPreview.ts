@@ -1,4 +1,5 @@
 import { Context, runInContext } from 'js-slang';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 
 import ImageAssets from '../../assets/ImageAssets';
@@ -169,9 +170,9 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public createContext() {
-    this.context = createContext(4, [], 'playground', 'default');
+    this.context = createContext(4, [], 'playground', Variant.DEFAULT);
     this.context.moduleContexts.game = {
-      tabs: [],
+      tabs: null,
       state: {
         scene: this,
         preloadImageMap: this.preloadImageMap,

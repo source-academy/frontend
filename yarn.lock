@@ -2083,7 +2083,7 @@
     "@types/estree" "*"
     "@types/json-schema" "*"
 
-"@types/estree@*", "@types/estree@0.0.51":
+"@types/estree@*":
   version "0.0.51"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.51.tgz#cfd70924a25a3fd32b218e5e420e6897e1ac4f40"
   integrity sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==
@@ -2092,6 +2092,11 @@
   version "0.0.39"
   resolved "https://registry.npmjs.org/@types/estree/-/estree-0.0.39.tgz"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
+
+"@types/estree@0.0.52":
+  version "0.0.52"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.52.tgz#7f1f57ad5b741f3d5b210d3b1f145640d89bf8fe"
+  integrity sha512-BZWrtCU0bMVAIliIV+HJO1f1PR41M7NKjfxrFJwwhKI1KwhwOxYw1SXg9ao+CIMt774nFuGiG6eU+udtbEI9oQ==
 
 "@types/estree@1.0.0":
   version "1.0.0"
@@ -8262,13 +8267,13 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^0.5.33:
-  version "0.5.33"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.33.tgz#62bb1be0ac0a6463b36d24a3209cb1f9d03c5c9c"
-  integrity sha512-BxZXR8ewvckTcPNBC7ICfjHa1kJBCrYaMqmxtAYmnLiznWkOi/4YB96S0aKXh8PZlsv0Zg10B5VJrlVZtIKmCw==
+js-slang@^0.5.36:
+  version "0.5.36"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.5.36.tgz#3683658709c0c2aa9832532c234984cd272c573c"
+  integrity sha512-jMRzyDc1icfqLvR/5cQpV+VOcVp7QsRAlYiX95UBQdGNDf2AubBSJ0NM72mCc7nfX+7D9w0NTUezkVPA7QJzUw==
   dependencies:
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
-    "@types/estree" "0.0.51"
+    "@types/estree" "0.0.52"
     acorn "^8.0.3"
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
@@ -8277,7 +8282,7 @@ js-slang@^0.5.33:
     gpu.js "^2.10.4"
     lodash "^4.17.20"
     node-getopt "^0.3.2"
-    source-map "^0.7.3"
+    source-map "0.7.3"
     xmlhttprequest-ts "^1.0.1"
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
@@ -12513,15 +12518,15 @@ source-map@0.6.1, source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.0, sourc
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
+source-map@0.7.3, source-map@^0.7.3, source-map@~0.7.2:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
+  integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
+
 source-map@^0.5.0, source-map@^0.5.6, source-map@^0.5.7:
   version "0.5.7"
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
-
-source-map@^0.7.3, source-map@~0.7.2:
-  version "0.7.3"
-  resolved "https://registry.npmjs.org/source-map/-/source-map-0.7.3.tgz"
-  integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
 sourcemap-codec@^1.4.4:
   version "1.4.8"

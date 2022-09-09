@@ -1,3 +1,4 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -22,8 +23,8 @@ const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';
 const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
-const SOURCE_CHAPTER = 3;
-const SOURCE_VARIANT = 'lazy';
+const SOURCE_CHAPTER = Chapter.SOURCE_3;
+const SOURCE_VARIANT = Variant.LAZY;
 const SOURCE_LIBRARY = ExternalLibraryName.MACHINELEARNING;
 
 beforeAll(() => {
