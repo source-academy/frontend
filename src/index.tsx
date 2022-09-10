@@ -13,6 +13,8 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+import FileSystemProvider from './pages/fileSystem/FileSystemProvider';
+
 if (Constants.sentryDsn) {
   Sentry.init({
     dsn: Constants.sentryDsn,
@@ -36,9 +38,11 @@ console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
 render(
   <Provider store={store}>
-    <Router history={history}>
-      <ApplicationContainer />
-    </Router>
+    <FileSystemProvider>
+      <Router history={history}>
+        <ApplicationContainer />
+      </Router>
+    </FileSystemProvider>
   </Provider>,
   rootContainer
 );
