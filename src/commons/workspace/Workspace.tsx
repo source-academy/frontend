@@ -148,14 +148,18 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         />
       ) : null}
       <ControlBar {...controlBarProps()} />
-      <div className="row workspace-parent">
-        <div className="editor-divider" ref={editorDividerDiv} />
-        <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
-        <div className="right-parent">
-          {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
-            ? resizableSideContent
-            : sideContent}
-          <Repl {...props.replProps} />
+      <div className="workspace-parent">
+        {/* TODO: Remove this. Temporary component for testing workspace layout. */}
+        <div className="temp" />
+        <div className="row content-parent">
+          <div className="editor-divider" ref={editorDividerDiv} />
+          <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
+          <div className="right-parent">
+            {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
+              ? resizableSideContent
+              : sideContent}
+            <Repl {...props.replProps} />
+          </div>
         </div>
       </div>
     </div>
