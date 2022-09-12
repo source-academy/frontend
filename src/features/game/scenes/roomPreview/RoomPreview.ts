@@ -170,7 +170,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public createContext() {
-    this.context = createContext(4, [], 'playground', Variant.DEFAULT);
+    this.context = createContext(Chapter.SOURCE_4, [], 'playground', Variant.DEFAULT);
     this.context.moduleContexts.game = {
       tabs: null,
       state: {
