@@ -125,7 +125,7 @@ export function createContext<T>(
   chapter: Chapter,
   externals: string[],
   externalContext: T,
-  variant: Variant = Variant.DEFAULT,
+  variant: Variant = Variant.DEFAULT
 ) {
   return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
 }
