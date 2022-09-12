@@ -7,6 +7,7 @@ import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
+import SideBar from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 
 export type WorkspaceProps = DispatchProps & StateProps;
@@ -149,8 +150,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       ) : null}
       <ControlBar {...controlBarProps()} />
       <div className="workspace-parent">
-        {/* TODO: Remove this. Temporary component for testing workspace layout. */}
-        <div className="temp" />
+        <SideBar />
         <div className="row content-parent">
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>

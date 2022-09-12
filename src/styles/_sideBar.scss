@@ -1,0 +1,10 @@
+.tab {
+  // Not supported in all browsers, see
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation#browser_compatibility.
+  // writing-mode: sideways-lr;
+  // The following CSS properties are equivalent & universally supported:
+  // --- Start ---
+  writing-mode: vertical-rl;
+  transform: scale(-1);
+  // --- End ---
+}
