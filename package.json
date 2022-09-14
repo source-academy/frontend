@@ -30,7 +30,7 @@
     "@blueprintjs/popover2": "^1.4.3",
     "@blueprintjs/select": "^4.5.1",
     "@octokit/rest": "^19.0.3",
-    "@sentry/browser": "^7.8.0",
+    "@sentry/browser": "^7.12.1",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.0.1",
     "@types/react-syntax-highlighter": "^15.5.3",
