@@ -1,4 +1,4 @@
-import { SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
@@ -101,71 +101,67 @@ export enum Role {
 }
 
 /**
- * Defines the Source sublanguages available for use.
+ * Defines the languages available for use on Source Academy,
+ * including Source sublanguages and other languages e.g. full JS.
  * For external libraries, see ExternalLibrariesTypes.ts
  */
-export type SourceLanguage = {
-  chapter: number;
-  variant: Variant;
+export interface SALanguage extends Language {
   displayName: string;
-};
+}
 
 const variantDisplay: Map<Variant, string> = new Map([
-  ['wasm', 'WebAssembly'],
-  ['non-det', 'Non-Det'],
-  ['concurrent', 'Concurrent'],
-  ['lazy', 'Lazy'],
-  ['gpu', 'GPU'],
-  ['native', 'Native']
+  [Variant.WASM, 'WebAssembly'],
+  [Variant.NON_DET, 'Non-Det'],
+  [Variant.CONCURRENT, 'Concurrent'],
+  [Variant.LAZY, 'Lazy'],
+  [Variant.GPU, 'GPU'],
+  [Variant.NATIVE, 'Native']
 ]);
 
-// We will treat chapter === -1 as full JS for now
-// This is because we want to separate it from being a Source sub-language
-// and not to introduce unnecessary new types to handle "other" languages (for now)
-export const fullJSLanguage: SourceLanguage = {
-  chapter: -1,
-  variant: 'default',
+export const fullJSLanguage: SALanguage = {
+  chapter: Chapter.FULL_JS,
+  variant: Variant.DEFAULT,
   displayName: 'full JavaScript'
 };
 
-export const isFullJSChapter = (chapter: number) => {
-  return chapter === -1;
-};
-
-export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
-  return isFullJSChapter(chapter)
+export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
+  return chapter === Chapter.FULL_JS
     ? fullJSLanguage.displayName
     : `Source \xa7${chapter}${
         variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
       }`;
 };
 
-export const sublanguages: { chapter: number; variant: Variant }[] = [
-  { chapter: 1, variant: 'default' },
-  { chapter: 1, variant: 'wasm' },
-  { chapter: 1, variant: 'lazy' },
-  { chapter: 1, variant: 'native' },
-  { chapter: 2, variant: 'default' },
-  { chapter: 2, variant: 'lazy' },
-  { chapter: 2, variant: 'native' },
-  { chapter: 3, variant: 'default' },
-  { chapter: 3, variant: 'concurrent' },
-  { chapter: 3, variant: 'non-det' },
-  { chapter: 3, variant: 'native' },
-  { chapter: 4, variant: 'default' },
-  { chapter: 4, variant: 'gpu' },
-  { chapter: 4, variant: 'native' }
+export const sublanguages: Language[] = [
+  { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
+  { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
+  { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
+  { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
+  { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
+  { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
+  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE }
 ];
 
-export const sourceLanguages = sublanguages.map(sublang => {
+export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
   return {
     ...sublang,
     displayName: styliseSublanguage(sublang.chapter, sublang.variant)
   };
 });
 
-export const defaultLanguages = sourceLanguages.filter(sublang => sublang.variant === 'default');
-export const variantLanguages = sourceLanguages.filter(sublang => sublang.variant !== 'default');
+export const defaultLanguages = sourceLanguages.filter(
+  sublang => sublang.variant === Variant.DEFAULT
+);
+export const variantLanguages = sourceLanguages.filter(
+  sublang => sublang.variant !== Variant.DEFAULT
+);
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -219,7 +215,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     Constants.defaultSourceChapter,
     [],
     workspaceLocation,
-    Constants.defaultSourceVariant as Variant
+    Constants.defaultSourceVariant
   ),
   editorPrepend: '',
   editorSessionId: '',
@@ -276,7 +272,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     description: null,
     inputToApply: null,
     playbackData: {
-      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryName.NONE },
+      init: {
+        editorValue: '',
+        chapter: Chapter.SOURCE_1,
+        externalLibrary: ExternalLibraryName.NONE
+      },
       inputs: []
     },
     playbackDuration: 0,
@@ -288,7 +288,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sourcereel: {
     ...createDefaultWorkspace('sourcereel'),
     playbackData: {
-      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryName.NONE },
+      init: {
+        editorValue: '',
+        chapter: Chapter.SOURCE_1,
+        externalLibrary: ExternalLibraryName.NONE
+      },
       inputs: []
     },
     recordingStatus: RecordingStatus.notStarted,
@@ -320,7 +324,6 @@ export const defaultSession: SessionState = {
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
-  experimentCoinflip: Math.random() < 0.5,
   hadPreviousInfiniteLoop: false,
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },

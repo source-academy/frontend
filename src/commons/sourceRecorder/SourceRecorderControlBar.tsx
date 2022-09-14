@@ -1,5 +1,6 @@
 import { ButtonGroup, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Chapter } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import {
@@ -23,7 +24,7 @@ type DispatchProps = {
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
-  handleChapterSelect: (chapter: number) => void;
+  handleChapterSelect: (chapter: Chapter) => void;
   handleExternalSelect: (name: ExternalLibraryName) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };

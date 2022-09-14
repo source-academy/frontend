@@ -6,7 +6,7 @@ import { Grading, GradingOverview, GradingQuestion } from '../../features/gradin
 import {
   OverallState,
   Role,
-  SourceLanguage,
+  SALanguage,
   styliseSublanguage
 } from '../application/ApplicationTypes';
 import {
@@ -76,7 +76,7 @@ export function* mockBackendSaga(): SagaIterator {
     const courseRegistration = { ...mockCourseRegistrations[0] };
     const courseConfiguration = { ...mockCourseConfigurations[0] };
     const assessmentConfigurations = [...mockAssessmentConfigurations[0]];
-    const sublanguage: SourceLanguage = {
+    const sublanguage: SALanguage = {
       chapter: courseConfiguration.sourceChapter,
       variant: courseConfiguration.sourceVariant,
       displayName: styliseSublanguage(

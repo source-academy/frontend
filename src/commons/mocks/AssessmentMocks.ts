@@ -1,3 +1,5 @@
+import { Chapter } from 'js-slang/dist/types';
+
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
@@ -283,7 +285,7 @@ const mockGlobals: Array<[string, any]> = [
 ];
 
 const mockSoundLibrary: Library = {
-  chapter: 4,
+  chapter: Chapter.SOURCE_4,
   external: {
     name: ExternalLibraryName.SOUNDS,
     symbols: externalLibraries.get(ExternalLibraryName.SOUNDS)!
@@ -292,7 +294,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 1,
+  chapter: Chapter.SOURCE_1,
   external: {
     name: ExternalLibraryName.RUNES,
     symbols: externalLibraries.get(ExternalLibraryName.RUNES)!
@@ -301,7 +303,7 @@ export const mockRuneLibrary: Library = {
 };
 
 const mockBinaryTreeLibrary: Library = {
-  chapter: 4,
+  chapter: Chapter.SOURCE_4,
   external: {
     name: ExternalLibraryName.BINARYTREES,
     symbols: externalLibraries.get(ExternalLibraryName.BINARYTREES)!
@@ -310,7 +312,7 @@ const mockBinaryTreeLibrary: Library = {
 };
 
 const mockToneMatrixLibrary: Library = {
-  chapter: 4,
+  chapter: Chapter.SOURCE_4,
   external: {
     name: ExternalLibraryName.SOUNDS,
     symbols: ['get_matrix']

@@ -179,7 +179,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           </ul>
 
           <div className="view-container">
-            <AchievementView courseRegId={courseRegId ?? 0} focusUuid={focusUuid} />
+            <AchievementView courseRegId={courseRegId} focusUuid={focusUuid} />
           </div>
         </div>
       </div>

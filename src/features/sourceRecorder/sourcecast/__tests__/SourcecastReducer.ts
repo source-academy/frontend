@@ -1,3 +1,4 @@
+import { Chapter } from 'js-slang/dist/types';
 import { action as generateAction } from 'typesafe-actions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
@@ -39,7 +40,7 @@ describe('SAVE_SOURCECAST_DATA', () => {
     };
     const playbackData: PlaybackData = {
       init: {
-        chapter: 1,
+        chapter: Chapter.SOURCE_1,
         externalLibrary: ExternalLibraryName.NONE,
         editorValue: ''
       },
@@ -159,7 +160,7 @@ describe('SET_SOURCECAST_DATA', () => {
     };
     const playbackData: PlaybackData = {
       init: {
-        chapter: 1,
+        chapter: Chapter.SOURCE_1,
         externalLibrary: ExternalLibraryName.NONE,
         editorValue: ''
       },

@@ -1,3 +1,5 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
+
 import { GameState, Role } from '../application/ApplicationTypes';
 import {
   AdminPanelCourseRegistration,
@@ -128,8 +130,8 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableGame: false,
     enableAchievements: true,
     enableSourcecast: true,
-    sourceChapter: 1,
-    sourceVariant: 'default',
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
     assetsPrefix: ''
   },
@@ -140,8 +142,8 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableGame: false,
     enableAchievements: false,
     enableSourcecast: false,
-    sourceChapter: 2,
-    sourceVariant: 'default',
+    sourceChapter: Chapter.SOURCE_2,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text!',
     assetsPrefix: ''
   }

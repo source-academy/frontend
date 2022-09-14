@@ -20,7 +20,7 @@ const mockChangedStoredState: SavedState = {
   playgroundEditorValue: 'Nihao everybody',
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
-  playgroundSourceVariant: 'default' as Variant,
+  playgroundSourceVariant: Variant.DEFAULT,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName
 };
 

@@ -1,4 +1,3 @@
-import { Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import Constants from 'src/commons/utils/Constants';
@@ -10,7 +9,7 @@ import DefaultChapterSelect, { DispatchProps, StateProps } from './DefaultChapte
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   // Temporarily load the defaults when the course configuration fetch has yet to return
   sourceChapter: state.session.sourceChapter || Constants.defaultSourceChapter,
-  sourceVariant: state.session.sourceVariant || (Constants.defaultSourceVariant as Variant)
+  sourceVariant: state.session.sourceVariant || Constants.defaultSourceVariant
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

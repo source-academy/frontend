@@ -1,3 +1,4 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
 import moment, { Moment } from 'moment';
 
 function isTrue(value?: string, defaultTo?: boolean): boolean {
@@ -16,8 +17,8 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
-const defaultSourceChapter = 4;
-const defaultSourceVariant = 'default';
+const defaultSourceChapter = Chapter.SOURCE_4;
+const defaultSourceVariant = Variant.DEFAULT;
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;
@@ -36,6 +37,9 @@ const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
+
+// For achievements feature (CA - Continual Assessment)
+const caFulfillmentLevel = process.env.REACT_APP_CA_FULFILLMENT_LEVEL || 0;
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();
@@ -136,7 +140,8 @@ const Constants = {
   disablePeriods,
   cadetLoggerInterval,
   sicpBackendUrl: sicpBackendUrl,
-  workspaceSettingsLocalStorageKey
+  workspaceSettingsLocalStorageKey,
+  caFulfillmentLevel
 };
 
 export default Constants;

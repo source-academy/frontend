@@ -1,7 +1,7 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import ReactAce from 'react-ace/lib/ace';
 import { useMediaQuery } from 'react-responsive';
@@ -45,7 +45,7 @@ export type SourcecastProps = DispatchProps &
 export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: number) => void;
+  handleChapterSelect: (chapter: Chapter) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -105,7 +105,7 @@ export type StateProps = {
   replValue: string;
   sideContentHeight?: number;
   sourcecastIndex: SourcecastData[] | null;
-  sourceChapter: number;
+  sourceChapter: Chapter;
   sourceVariant: Variant;
   uid: string | null;
   courseId?: number;
@@ -198,7 +198,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     />
   );
 
-  const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
+  const chapterSelectHandler = ({ chapter }: { chapter: Chapter }, e: any) =>
     props.handleChapterSelect(chapter);
 
   const chapterSelect = (

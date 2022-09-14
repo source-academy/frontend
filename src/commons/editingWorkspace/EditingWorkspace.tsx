@@ -9,6 +9,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -210,8 +211,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
         replValue: this.props.replValue,
-        sourceChapter: question?.library?.chapter || 4,
-        sourceVariant: 'default',
+        sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+        sourceVariant: Variant.DEFAULT,
         externalLibrary: question?.library?.external?.name || 'NONE',
         replButtons: this.replButtons()
       }

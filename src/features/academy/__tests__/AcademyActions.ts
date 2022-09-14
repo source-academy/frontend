@@ -1,3 +1,4 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
@@ -30,8 +31,8 @@ test('createCourse generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
-    sourceChapter: 1,
-    sourceVariant: 'default',
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'
   };
 

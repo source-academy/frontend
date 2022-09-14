@@ -1,6 +1,6 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Finished, Variant } from 'js-slang/dist/types';
+import { Chapter, Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -72,7 +72,6 @@ function generateDefaultState(
     session: {
       ...defaultState.session,
       agreedToResearch: false,
-      experimentCoinflip: true,
       sessionId: 10
     },
     workspaces: {
@@ -100,7 +99,7 @@ describe('EVAL_EDITOR', () => {
     const editorPostpend = '42;';
     const execTime = 1000;
     const context = createContext();
-    const variant: Variant = 'default';
+    const variant = Variant.DEFAULT;
     const globals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -338,7 +337,7 @@ describe('EVAL_TESTCASE', () => {
 
     const library: Library = {
       chapter: context.chapter,
-      variant: 'default',
+      variant: Variant.DEFAULT,
       external: {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
@@ -425,15 +424,15 @@ describe('CHAPTER_SELECT', () => {
     ];
     context = {
       ...mockRuntimeContext(),
-      chapter: 4
+      chapter: Chapter.SOURCE_4
     };
   });
 
   test('puts beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const newChapter = 3;
+    const newChapter = Chapter.SOURCE_3;
     const library: Library = {
       chapter: newChapter,
-      variant: 'default',
+      variant: Variant.DEFAULT,
       external: {
         name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
@@ -450,14 +449,14 @@ describe('CHAPTER_SELECT', () => {
       .call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
         type: CHAPTER_SELECT,
-        payload: { chapter: newChapter, variant: 'default', workspaceLocation }
+        payload: { chapter: newChapter, variant: Variant.DEFAULT, workspaceLocation }
       })
       .silentRun();
   });
 
   test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
-    const newChapter = 4;
-    const newVariant: Variant = 'default';
+    const newChapter = Chapter.SOURCE_4;
+    const newVariant = Variant.DEFAULT;
     const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
 
     return expectSaga(workspaceSaga)
@@ -529,7 +528,7 @@ describe('CHAPTER_SELECT', () => {
 describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   let workspaceLocation: WorkspaceLocation;
   let globals: Array<[string, any]>;
-  let chapter: number;
+  let chapter: Chapter;
   let context: Context;
 
   beforeEach(() => {
@@ -539,7 +538,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
       ['testObject', { a: 1, b: 2 }],
       ['testArray', [1, 2, 'a', 'b']]
     ];
-    chapter = 4;
+    chapter = Chapter.SOURCE_4;
     context = {
       ...mockRuntimeContext(),
       chapter
@@ -612,7 +611,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   let loadLib: any;
   let getReadyWebGLForCanvas: any;
   let getReadyStringifyForRunes: any;
-  let chapter: number;
+  let chapter: Chapter;
   let globals: Array<[string, any]>;
   let workspaceLocation: WorkspaceLocation;
 
@@ -626,7 +625,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     (window as any).getReadyStringifyForRunes = getReadyStringifyForRunes;
 
     workspaceLocation = 'grading';
-    chapter = 4;
+    chapter = Chapter.SOURCE_4;
     globals = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -768,7 +767,7 @@ describe('evalCode', () => {
     test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true }
       };
       const thisContext = createContext(3);
       context = thisContext;
@@ -785,7 +784,6 @@ describe('evalCode', () => {
           .call(
             reportInfiniteLoopError,
             defaultSessionId,
-            true,
             InfiniteLoopErrorType.NoBaseCase,
             false,
             'The function f has encountered an infinite loop. It has no base case.',
@@ -798,7 +796,7 @@ describe('evalCode', () => {
     test('does not send correct data to sentry if approval is false', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: false, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: false }
       };
       context = createContext(3);
       const theCode = 'function f(x){f(x);} f(1);';
@@ -808,7 +806,6 @@ describe('evalCode', () => {
         .not.call(
           reportInfiniteLoopError,
           defaultSessionId,
-          true,
           InfiniteLoopErrorType.NoBaseCase,
           false,
           'The function f has encountered an infinite loop. It has no base case.',
@@ -817,40 +814,10 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('shows infinite loop error if coinflip is true', () => {
-      state = { ...state, session: { ...state.session, experimentCoinflip: true } };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){f(x);} f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .silentRun()
-        .then(result => {
-          const lastError = thisContext.errors[thisContext.errors.length - 1];
-          expect(lastError.explain()).toContain('no base case');
-        });
-    });
-
-    test('does not show infinite loop error if coinflip is false', () => {
-      state = { ...state, session: { ...state.session, experimentCoinflip: false } };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){f(x);} f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .silentRun()
-        .then(result => {
-          const lastError = thisContext.errors[thisContext.errors.length - 1];
-          expect(lastError.explain()).not.toContain('no base case');
-        });
-    });
-
     test('infinite loops call updateInfiniteLoopEncountered', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true }
       };
       const thisContext = createContext(3);
       context = thisContext;
@@ -868,8 +835,7 @@ describe('evalCode', () => {
         session: {
           ...state.session,
           hadPreviousInfiniteLoop: true,
-          agreedToResearch: true,
-          experimentCoinflip: true
+          agreedToResearch: true
         }
       };
       const thisContext = createContext(3);
@@ -885,7 +851,7 @@ describe('evalCode', () => {
     test('does not report non error code before infinite loop', () => {
       state = {
         ...state,
-        session: { ...state.session, agreedToResearch: true, experimentCoinflip: true }
+        session: { ...state.session, agreedToResearch: true }
       };
       const thisContext = createContext(3);
       context = thisContext;
@@ -1095,7 +1061,7 @@ describe('NAV_DECLARATION', () => {
     editorValue = 'const foo = (x) => -1; foo(2);';
     context = {
       ...mockRuntimeContext(),
-      chapter: 4
+      chapter: Chapter.SOURCE_4
     };
     state = generateDefaultState(workspaceLocation, { editorValue, context });
   });

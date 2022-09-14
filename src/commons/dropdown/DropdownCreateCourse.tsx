@@ -12,7 +12,7 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
@@ -35,17 +35,22 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
-    sourceChapter: 1,
-    sourceVariant: 'default',
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: ''
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
-  const sourceChapterOptions = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }];
+  const sourceChapterOptions = [
+    { value: Chapter.SOURCE_1 },
+    { value: Chapter.SOURCE_2 },
+    { value: Chapter.SOURCE_3 },
+    { value: Chapter.SOURCE_4 }
+  ];
 
-  const sourceVariantOptions = (chapter: number) =>
+  const sourceVariantOptions = (chapter: Chapter) =>
     sourceLanguages
       .filter(e => e.chapter === chapter)
       .map(e => {

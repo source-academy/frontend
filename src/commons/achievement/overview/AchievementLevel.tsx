@@ -2,6 +2,7 @@ import { ProgressBar } from '@blueprintjs/core';
 import { useState } from 'react';
 
 import { xpPerLevel } from '../../../features/achievement/AchievementConstants';
+import Constants from '../../utils/Constants';
 import AchievementMilestone from './AchievementMilestone';
 
 type AchievementLevelProps = {
@@ -37,7 +38,9 @@ function AchievementLevel(props: AchievementLevelProps) {
           {progress} / {xpPerLevel} XP
         </p>
       </span>
-      {showMilestone && <AchievementMilestone studentXp={studentXp} />}
+      {Constants.caFulfillmentLevel !== 0 && showMilestone && (
+        <AchievementMilestone studentXp={studentXp} />
+      )}
     </div>
   );
 }

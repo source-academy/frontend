@@ -4,7 +4,7 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import * as AceBuilds from 'ace-builds';
@@ -62,7 +62,7 @@ type StateProps = {
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
-  sourceChapter?: number;
+  sourceChapter?: Chapter;
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
@@ -227,8 +227,8 @@ const EditorBase = React.memo(
     }, []);
 
     const [sourceChapter, sourceVariant, externalLibraryName] = [
-      props.sourceChapter || 1,
-      props.sourceVariant || 'default',
+      props.sourceChapter || Chapter.SOURCE_1,
+      props.sourceVariant || Variant.DEFAULT,
       props.externalLibraryName || 'NONE'
     ];
 

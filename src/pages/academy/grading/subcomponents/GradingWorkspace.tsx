@@ -1,6 +1,7 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
@@ -201,8 +202,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false,
-              sourceChapter: question?.library?.chapter || 4,
-              sourceVariant: question?.library?.variant ?? ('default' as const),
+              sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+              sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
               externalLibraryName: question?.library?.external?.name || 'NONE'
             }
           : undefined,
@@ -224,8 +225,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
         replValue: this.props.replValue,
-        sourceChapter: question?.library?.chapter || 4,
-        sourceVariant: question?.library?.variant ?? ('default' as const),
+        sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+        sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
         externalLibrary: question?.library?.external?.name || 'NONE',
         replButtons: this.replButtons()
       }

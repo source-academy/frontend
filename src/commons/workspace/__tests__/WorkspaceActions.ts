@@ -1,4 +1,6 @@
-import { createDefaultWorkspace, SourceLanguage } from '../../application/ApplicationTypes';
+import { Chapter, Variant } from 'js-slang/dist/types';
+
+import { createDefaultWorkspace, SALanguage } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
@@ -140,8 +142,8 @@ test('changeSideContentHeight generates correct action object', () => {
 });
 
 test('chapterSelect generates correct action object', () => {
-  const chapter = 3;
-  const variant = 'default';
+  const chapter = Chapter.SOURCE_3;
+  const variant = Variant.DEFAULT;
   const action = chapterSelect(chapter, variant, playgroundWorkspace);
   expect(action).toEqual({
     type: CHAPTER_SELECT,
@@ -178,7 +180,7 @@ test('toggleEditorAutorun generates correct action object', () => {
 
 test('beginClearContext generates correct action object', () => {
   const library: Library = {
-    chapter: 4,
+    chapter: Chapter.SOURCE_4,
     external: {
       name: ExternalLibraryName.SOUNDS,
       symbols: []
@@ -229,7 +231,7 @@ test('clearReplOutput generates correct action object', () => {
 
 test('endClearContext generates correct action object', () => {
   const library: Library = {
-    chapter: 4,
+    chapter: Chapter.SOURCE_4,
     external: {
       name: ExternalLibraryName.SOUNDS,
       symbols: []
@@ -437,9 +439,9 @@ test('moveCursor generates correct action object', () => {
 });
 
 test('changeSublanguage generates correct action object', () => {
-  const sublang: SourceLanguage = {
-    chapter: 2,
-    variant: 'default',
+  const sublang: SALanguage = {
+    chapter: Chapter.SOURCE_2,
+    variant: Variant.DEFAULT,
     displayName: 'Source \xa72'
   };
   const action = changeSublanguage(sublang);
@@ -452,9 +454,9 @@ test('changeSublanguage generates correct action object', () => {
 });
 
 test('updateChapter generates correct action object', () => {
-  const sublang: SourceLanguage = {
-    chapter: 2,
-    variant: 'default',
+  const sublang: SALanguage = {
+    chapter: Chapter.SOURCE_2,
+    variant: Variant.DEFAULT,
     displayName: 'Source \xa72'
   };
   const action = updateSublanguage(sublang);

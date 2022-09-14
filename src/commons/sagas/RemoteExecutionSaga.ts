@@ -1,6 +1,7 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compile, Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 
@@ -146,8 +147,8 @@ export function* remoteExecutionSaga(): SagaIterator {
         actions.beginClearContext(
           workspace,
           {
-            chapter: deviceType?.languageChapter || 3,
-            variant: 'default',
+            chapter: deviceType?.languageChapter || Chapter.SOURCE_3,
+            variant: Variant.DEFAULT,
             external: {
               name: deviceType?.deviceLibraryName || ExternalLibraryName.NONE,
               symbols: deviceType?.internalFunctions || []

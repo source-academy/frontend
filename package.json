@@ -30,7 +30,7 @@
     "@blueprintjs/popover2": "^1.4.3",
     "@blueprintjs/select": "^4.5.1",
     "@octokit/rest": "^19.0.3",
-    "@sentry/browser": "^6.17.3",
+    "@sentry/browser": "^7.8.0",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.0.1",
     "@types/react-syntax-highlighter": "^15.5.3",
@@ -43,7 +43,7 @@
     "classnames": "^2.3.1",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",
-    "js-slang": "^0.5.33",
+    "js-slang": "^0.5.36",
     "konva": "^8.3.2",
     "lodash": "^4.17.21",
     "lz-string": "^1.4.4",
@@ -126,11 +126,17 @@
     "husky": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
+    "react-error-overlay": "6.0.9",
     "react-scripts": "^4.0.3",
     "react-test-renderer": "^18.2.0",
     "redux-saga-test-plan": "^4.0.5",
     "sass": "^1.54.0",
     "typescript": "~4.7.4"
+  },
+  "resolutions": {
+    "//": "See https://github.com/facebook/create-react-app/issues/11773 for more information.",
+    "//": "FIXME: Remove this selective dependency resolution (along with the devDependency) once react-scripts is updated past 4.0.3.",
+    "react-error-overlay": "6.0.9"
   },
   "browserslist": {
     "production": [

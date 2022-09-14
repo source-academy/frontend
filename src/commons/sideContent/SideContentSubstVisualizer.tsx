@@ -7,6 +7,7 @@ import { HotKeys } from 'react-hotkeys';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
+import classNames from 'classnames';
 
 const SubstDefaultText = () => {
   return (
@@ -111,7 +112,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
         <div>
-          <div className="sa-substituter">
+          <div className={classNames('sa-substituter', Classes.DARK)}>
             <Slider
               disabled={!hasRunCode}
               min={1}

@@ -1,3 +1,4 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -63,8 +64,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, 'default', workspaceLocation),
+      handleChapterSelect: (chapter: Chapter, changeEvent: any) =>
+        chapterSelect(chapter, Variant.DEFAULT, workspaceLocation),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         beginClearContext(workspaceLocation, library, shouldInitLibrary),
       handleDeclarationNavigate: (cursorPosition: Position) =>
