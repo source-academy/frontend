@@ -809,7 +809,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   return isMobileBreakpoint ? (
-    <MobileWorkspace {...mobileWorkspaceProps} />
+    <div className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}>
+      <MobileWorkspace {...mobileWorkspaceProps} />
+    </div>
   ) : (
     <HotKeys
       className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
