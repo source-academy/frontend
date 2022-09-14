@@ -9,7 +9,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -26,6 +26,7 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 export interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
   secretParams?: string;
+  callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
 interface DeviceMenuItemButtonsProps {
@@ -220,6 +221,9 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
         onClose={() => {
           setDialogState(undefined);
           setSecretParams(undefined);
+          if (props.callbackFunction) {
+            props.callbackFunction(undefined);
+          }
         }}
       />
     </div>

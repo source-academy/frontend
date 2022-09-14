@@ -206,6 +206,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         <SideContentRemoteExecution
           workspace="playground"
           secretParams={deviceSecret || undefined}
+          callbackFunction={setDeviceSecret}
         />
       ),
       id: SideContentType.remoteExecution,
