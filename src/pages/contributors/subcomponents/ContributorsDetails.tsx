@@ -15,24 +15,21 @@ class ContributorsDetails extends React.Component {
           <p className="description">
             The <i>Source Academy</i> is designed and developed by a team of students, most of who
             have used the system to learn the fundamentals of computing and enjoyed it. This page
-            includes all developers who contributed to the Source Academy <i>Rook</i> (2022) and its
-            precursors <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded Source
-            Academy 2 (2017) and ultimately the original Source Academy (2016).
+            includes all developers who contributed to the Source Academy <i>Merlin</i> (2023) and
+            its precursors <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i> (2018). These
+            versions succeeded Source Academy 2 (2017) and ultimately the original Source Academy
+            (2016).
           </p>
           <div className="leadership">
             <H5>
               <strong>
-                <u>2022 Leadership</u>
+                <u>2023 Leadership (Merlin)</u>
               </strong>
             </H5>
             <p>
-              Tee Hao Wei
+              Chow En Rong,
               <br />
-              <strong>(CTO)</strong>
-            </p>
-            {dot}
-            <p>
-              Chow En Rong
+              Shen Yihong
               <br />
               <strong>(Frontend)</strong>
             </p>
@@ -41,12 +38,6 @@ class ContributorsDetails extends React.Component {
               Chen Yanyu
               <br />
               <strong>(Backend)</strong>
-            </p>
-            {dot}
-            <p>
-              Samuel Fang
-              <br />
-              <strong>(SICP JS)</strong>
             </p>
             {dot}
             <p>
@@ -62,17 +53,21 @@ class ContributorsDetails extends React.Component {
               <br />
               Zhan Jie,
               <br />
-              Thomas Tan
-              <br />
               <strong>(Source)</strong>
             </p>
             {dot}
             <p>
-              Bryan Loh,
+              Lee Yi,
               <br />
-              Marcus Tang
+              Joel Leow
               <br />
               <strong>(Modules)</strong>
+            </p>
+            {dot}
+            <p>
+              Richard Dominick
+              <br />
+              <strong>(Robotics)</strong>
             </p>
             {dot}
             <p>
@@ -214,6 +209,61 @@ class ContributorsDetails extends React.Component {
               Tee Hao Wei
               <br />
               (Backend &amp; DevOps)
+            </p>
+          </div>
+          <div className="leadership">
+            <p className="evenWider">
+              <strong>2022 Leadership (Rook)</strong>
+            </p>
+            <br />
+            <p>
+              Tee Hao Wei
+              <br />
+              (CTO)
+            </p>
+            {dot}
+            <p>
+              Chow En Rong
+              <br />
+              (Frontend)
+            </p>
+            {dot}
+            <p>
+              Chen Yanyu
+              <br />
+              (Backend)
+            </p>
+            {dot}
+            <p>
+              Samuel Fang
+              <br />
+              (SICP JS)
+            </p>
+            {dot}
+            <p>
+              Gokul Rajiv,
+              <br />
+              Lee Hyung Woon
+              <br />
+              (Game)
+            </p>
+            {dot}
+            <p>
+              Shen Yi Hong,
+              <br />
+              Zhan Jie,
+              <br />
+              Thomas Tan
+              <br />
+              (Source)
+            </p>
+            {dot}
+            <p>
+              Bryan Loh,
+              <br />
+              Marcus Tang
+              <br />
+              (Modules)
             </p>
           </div>
           <div className="contributors">
