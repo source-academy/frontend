@@ -1,10 +1,11 @@
+import { Card } from '@blueprintjs/core';
 import React from 'react';
 
 const SideBar: React.FC = () => {
   return (
-    <div>
-      <div className="tab">Project</div>
-      <div className="tab">Test</div>
+    <div className="tab-container">
+      <Card className="tab">Project</Card>
+      <Card className="tab">Test</Card>
     </div>
   );
 };

@@ -1,3 +1,11 @@
+.tab-container {
+  margin-left: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
 .tab {
   // Not supported in all browsers, see
   // https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation#browser_compatibility.
@@ -7,4 +15,10 @@
   writing-mode: vertical-rl;
   transform: scale(-1);
   // --- End ---
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  // !important is necessary to override the default Card background-color property.
+  background-color: $cadet-color-2 !important;
 }
