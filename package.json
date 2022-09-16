@@ -59,7 +59,7 @@
     "react-draggable": "^4.4.5",
     "react-dropzone": "^14.2.2",
     "react-hotkeys": "^2.0.0",
-    "react-konva": "^17.0.2-5",
+    "react-konva": "^17.0.2-6",
     "react-latex-next": "^2.1.0",
     "react-mde": "^11.5.0",
     "react-papaparse": "^4.0.2",

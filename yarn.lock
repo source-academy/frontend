@@ -2290,6 +2290,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-reconciler@~0.26.2":
+  version "0.26.7"
+  resolved "https://registry.yarnpkg.com/@types/react-reconciler/-/react-reconciler-0.26.7.tgz#0c4643f30821ae057e401b0d9037e03e8e9b2a36"
+  integrity sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^7.1.24":
   version "7.1.24"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.24.tgz#6caaff1603aba17b27d20f8ad073e4c077e975c0"
@@ -11271,11 +11278,12 @@ react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-konva@^17.0.2-5:
-  version "17.0.2-5"
-  resolved "https://registry.npmjs.org/react-konva/-/react-konva-17.0.2-5.tgz"
-  integrity sha512-IyzdfqRDK8r1ulp/jbLPX18AuO+n5yNtL0+4T0QEUsgArRqIl/VRCG1imA5mYJBk0cBNC5+fWDHN+HWEW62ZEQ==
+react-konva@^17.0.2-6:
+  version "17.0.2-6"
+  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-17.0.2-6.tgz#80b3fdebfd915878eafe554c191bec282cdda0de"
+  integrity sha512-cfRsBKxqAQ6gTBmyrKptKRWhHD+C068dvyqcZ4h8qzKbAacTXQtfLMSpOI+d+ptxSMvayIbbCdbsBmk3bWiClQ==
   dependencies:
+    "@types/react-reconciler" "~0.26.2"
     react-reconciler "~0.26.2"
     scheduler "^0.20.2"
 
