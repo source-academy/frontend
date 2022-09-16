@@ -83,7 +83,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.5",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.3.0",
     "@types/acorn": "^6.0.0",
     "@types/common-tags": "^1.8.1",
