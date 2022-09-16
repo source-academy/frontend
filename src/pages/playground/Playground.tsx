@@ -11,7 +11,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 
 import {
@@ -170,15 +170,48 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
+
+  const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
+  const location = useLocation();
+  const history = useHistory();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldAddDevice = searchParams.get('add_device');
+
+  // Hide search query from URL to maintain an illusion of security. The device secret
+  // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
+  if (shouldAddDevice && !deviceSecret) {
+    setDeviceSecret(shouldAddDevice);
+    history.replace(location.pathname);
+  }
+
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
+  const [selectedTab, setSelectedTab] = React.useState(
+    shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
+  );
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       editorValue: propsRef.current.editorValue,
       chapter: propsRef.current.playgroundSourceChapter
     })
+  );
+
+  const remoteExecutionTab: SideContentTab = React.useMemo(
+    () => ({
+      label: 'Remote Execution',
+      iconName: IconNames.SATELLITE,
+      body: (
+        <SideContentRemoteExecution
+          workspace="playground"
+          secretParams={deviceSecret || undefined}
+          callbackFunction={setDeviceSecret}
+        />
+      ),
+      id: SideContentType.remoteExecution,
+      toSpawn: () => true
+    }),
+    [deviceSecret]
   );
 
   const usingRemoteExecution =
@@ -216,17 +249,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   React.useEffect(() => {
-    if (
-      isMobileBreakpoint &&
-      (selectedTab === SideContentType.introduction ||
-        selectedTab === SideContentType.remoteExecution)
-    ) {
+    if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
-    } else if (
-      !isMobileBreakpoint &&
-      (selectedTab === SideContentType.mobileEditor ||
-        selectedTab === SideContentType.mobileEditorRun)
-    ) {
+    } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, selectedTab]);
@@ -588,13 +613,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.output,
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
-    usingRemoteExecution
+    usingRemoteExecution,
+    remoteExecutionTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs].filter(
-    x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
-  );
+  const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
   const onLoadMethod = React.useCallback(
     (editor: Ace.Editor) => {
@@ -781,7 +805,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   return isMobileBreakpoint ? (
-    <MobileWorkspace {...mobileWorkspaceProps} />
+    <div className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}>
+      <MobileWorkspace {...mobileWorkspaceProps} />
+    </div>
   ) : (
     <HotKeys
       className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
@@ -792,6 +818,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     </HotKeys>
   );
 };
+
+const mobileOnlyTabIds: readonly SideContentType[] = [
+  SideContentType.mobileEditor,
+  SideContentType.mobileEditorRun
+];
+const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
 const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
@@ -806,14 +838,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer,
-  toSpawn: () => true
-};
-
-const remoteExecutionTab: SideContentTab = {
-  label: 'Remote Execution',
-  iconName: IconNames.SATELLITE,
-  body: <SideContentRemoteExecution workspace="playground" />,
-  id: SideContentType.remoteExecution,
   toSpawn: () => true
 };
 

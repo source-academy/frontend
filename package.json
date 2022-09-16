@@ -63,6 +63,7 @@
     "react-latex-next": "^2.1.0",
     "react-mde": "^11.5.0",
     "react-papaparse": "^4.0.2",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-redux": "^8.0.2",
     "react-responsive": "^9.0.0-beta.10",
     "react-router-dom": "^5.3.0",
@@ -125,11 +126,16 @@
     "husky": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
+    "react-error-overlay": "6.0.9",
     "react-scripts": "^4.0.3",
     "react-test-renderer": "^18.2.0",
     "redux-saga-test-plan": "^4.0.5",
     "sass": "^1.54.0",
     "typescript": "~4.7.4"
+  },
+  "resolutions": {
+    "//": "FIXME: Remove this selective dependency resolution (along with the devDependency) once react-scripts is updated past 4.0.3.",
+    "react-error-overlay": "6.0.9"
   },
   "browserslist": {
     "production": [
