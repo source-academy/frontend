@@ -9,7 +9,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -25,6 +25,8 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
+  secretParams?: string;
+  callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
 interface DeviceMenuItemButtonsProps {
@@ -116,7 +118,10 @@ const DeviceContent = ({ session }: { session?: DeviceSession }) => {
 };
 
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
-  const [dialogState, setDialogState] = React.useState<Device | true | undefined>(undefined);
+  const [dialogState, setDialogState] = React.useState<Device | true | undefined>(
+    props.secretParams ? true : undefined
+  );
+  const [secretParams, setSecretParams] = React.useState(props.secretParams);
 
   const [isLoggedIn, devices, currentSession]: [
     boolean,
@@ -212,7 +217,14 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       <RemoteExecutionAddDeviceDialog
         isOpen={!!dialogState}
         deviceToEdit={typeof dialogState === 'object' ? dialogState : undefined}
-        onClose={() => setDialogState(undefined)}
+        defaultSecret={dialogState === true ? secretParams : undefined}
+        onClose={() => {
+          setDialogState(undefined);
+          setSecretParams(undefined);
+          if (props.callbackFunction) {
+            props.callbackFunction(undefined);
+          }
+        }}
       />
     </div>
   );
