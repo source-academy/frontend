@@ -29,7 +29,7 @@ class ContributorsDetails extends React.Component {
             <p>
               Chow En Rong,
               <br />
-              Shen Yihong
+              Shen Yi Hong
               <br />
               <strong>(Frontend)</strong>
             </p>
