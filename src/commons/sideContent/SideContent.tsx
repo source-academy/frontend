@@ -63,7 +63,7 @@ const SideContent = (props: SideContentProps) => {
   );
 
   React.useEffect(() => {
-    const moduleTabNames = debuggerContext?.context?.moduleContexts.moduleTabs ?? [];
+    const moduleTabNames = Object.values(debuggerContext?.context?.moduleContexts ?? {}).flatMap(each => each.tabs);
     const allActiveTabs = !debuggerContext
       ? tabs
       : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));

@@ -134,7 +134,6 @@ export function createContext<T>(
     externals,
     externalContext,
     externalBuiltIns,
-    moduleParams
   );
 }
 
