@@ -80,12 +80,3 @@ export type ModuleSideContent = {
   body: (props: any) => JSX.Element;
   toSpawn: (context: DebuggerContext) => boolean;
 };
-
-/**
- * Module imported from js-slang
- *
- * @propety functions from the imported module
- *
- * @property sideContents an array of side content tabs to display on the front end
- */
-export type Modules = (React: any) => ModuleSideContent;
