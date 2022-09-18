@@ -1,6 +1,12 @@
+.sidebar-container {
+  padding-bottom: 0.6rem;
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+}
+
 .tab-container {
   margin-left: 8px;
-  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   row-gap: 8px;
@@ -33,4 +39,10 @@
     // !important is necessary to override the default Card background-color property.
     background-color: $cadet-color-1 !important;
   }
+}
+
+.panel {
+  // !important is necessary to override the default Card background-color property.
+  background-color: $cadet-color-2 !important;
+  width: 200px;
 }
