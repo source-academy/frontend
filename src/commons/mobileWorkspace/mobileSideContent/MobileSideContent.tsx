@@ -61,7 +61,9 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     const copy = [...tabs];
     const runTab = copy.pop();
 
-    const moduleTabNames = Object.values(debuggerContext?.context?.moduleContexts ?? {}).flatMap(each => each.tabs);
+    const moduleTabNames = Object.values(debuggerContext?.context?.moduleContexts ?? {}).flatMap(
+      each => each.tabs
+    );
     const allActiveTabs = !debuggerContext
       ? tabs
       : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
