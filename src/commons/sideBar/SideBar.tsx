@@ -10,13 +10,21 @@ const SideBar: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = React.useState<number | null>(null);
   const tabs: SideBarTab[] = [{ label: 'Project' }, { label: 'Test' }];
 
+  const handleTabSelection = (tabIndex: number) => {
+    if (selectedTabIndex === tabIndex) {
+      setSelectedTabIndex(null);
+      return;
+    }
+    setSelectedTabIndex(tabIndex);
+  };
+
   return (
     <div className="tab-container">
       {tabs.map((tab, index) => (
         <Card
           key={index}
           className={classNames('tab', { selected: selectedTabIndex === index })}
-          onClick={() => setSelectedTabIndex(index)}
+          onClick={() => handleTabSelection(index)}
         >
           {tab.label}
         </Card>
