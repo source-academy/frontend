@@ -462,15 +462,13 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorQuestionOverview,
-          toSpawn: () => true
+          id: SideContentType.editorQuestionOverview
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
-          id: SideContentType.editorQuestionTemplate,
-          toSpawn: () => true
+          id: SideContentType.editorQuestionTemplate
         },
         {
           label: `Manage Local Deployment`,
@@ -485,8 +483,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalDeployment,
-          toSpawn: () => true
+          id: SideContentType.editorLocalDeployment
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -502,8 +499,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalGraderDeployment,
-          toSpawn: () => true
+          id: SideContentType.editorLocalGraderDeployment
         },
         {
           label: `Grading`,
@@ -515,8 +511,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorGrading,
-          toSpawn: () => true
+          id: SideContentType.editorGrading
         }
       ];
       if (qnType === 'programming') {
@@ -531,8 +526,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorAutograder,
-          toSpawn: () => true
+          id: SideContentType.editorAutograder
         });
       }
       const functionsAttached = assessment!.globalDeployment!.external.symbols;
@@ -541,8 +535,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
           body: <SideContentToneMatrix />,
-          id: SideContentType.toneMatrix,
-          toSpawn: () => true
+          id: SideContentType.toneMatrix
         });
       }
     } else {
@@ -557,8 +550,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorBriefing,
-          toSpawn: () => true
+          id: SideContentType.editorBriefing
         },
         {
           label: `Manage Question`,
@@ -571,8 +563,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateAndSaveAssessment}
             />
           ),
-          id: SideContentType.editorManageQuestion,
-          toSpawn: () => true
+          id: SideContentType.editorManageQuestion
         },
         {
           label: `Manage Global Deployment`,
@@ -587,8 +578,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={false}
             />
           ),
-          id: SideContentType.editorGlobalDeployment,
-          toSpawn: () => true
+          id: SideContentType.editorGlobalDeployment
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -603,8 +593,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorGlobalGraderDeployment,
-          toSpawn: () => true
+          id: SideContentType.editorGlobalGraderDeployment
         }
       ];
     }

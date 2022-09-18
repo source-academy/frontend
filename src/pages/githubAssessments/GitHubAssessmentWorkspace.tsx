@@ -817,8 +817,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             setTaskDescriptions={setTaskDescriptions}
           />
         ),
-        id: SideContentType.questionOverview,
-        toSpawn: () => true
+        id: SideContentType.questionOverview
       },
       {
         label: 'Briefing',
@@ -830,8 +829,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             setContent={setBriefingContentWrapper}
           />
         ),
-        id: SideContentType.briefing,
-        toSpawn: () => true
+        id: SideContentType.briefing
       }
     ];
 
@@ -853,8 +851,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           handleTestcaseEval={props.handleTestcaseEval}
         />
       ),
-      id: SideContentType.testcases,
-      toSpawn: () => true
+      id: SideContentType.testcases
     });
 
     if (isTeacherMode) {
@@ -868,8 +865,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             setMissionMetadata={setMissionMetadataWrapper}
           />
         ),
-        id: SideContentType.missionMetadata,
-        toSpawn: () => true
+        id: SideContentType.missionMetadata
       });
     }
 
