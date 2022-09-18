@@ -18,6 +18,7 @@
   padding: 12px 3px;
   // !important is necessary to override the default Card background-color property.
   background-color: $cadet-color-2 !important;
+  user-select: none;
 
   &.selected {
     // !important is necessary to override the default Card background-color property.
