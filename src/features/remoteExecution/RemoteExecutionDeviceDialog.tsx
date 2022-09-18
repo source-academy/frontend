@@ -30,6 +30,13 @@ export interface RemoteExecutionDeviceDialogProps {
   defaultSecret?: string;
 }
 
+const enum FACING_MODE {
+  USER = 'user',
+  ENVIRONMENT = 'environment',
+  LEFT = 'left',
+  RIGHT = 'right'
+}
+
 export default function RemoteExecutionDeviceDialog({
   isOpen,
   onClose,
@@ -44,6 +51,7 @@ export default function RemoteExecutionDeviceDialog({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
   const [showScanner, setShowScanner] = React.useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = React.useState(FACING_MODE.ENVIRONMENT);
 
   const onSubmit = async () => {
     const fields = collectFieldValues(nameField, typeField, secretField);
@@ -146,24 +154,48 @@ export default function RemoteExecutionDeviceDialog({
         </FormGroup>
 
         {showScanner && (
-          <QrReader
-            onResult={(result, err) => {
-              if (result) {
-                setShowScanner(false);
-                const element = secretField.ref.current;
-                if (element) {
-                  element.value = result.getText();
+          <div
+            style={{
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              rowGap: '0.5rem'
+            }}
+          >
+            <QrReader
+              onResult={(result, err) => {
+                if (result) {
+                  setShowScanner(false);
+                  const element = secretField.ref.current;
+                  if (element) {
+                    element.value = result.getText();
+                  }
                 }
-              }
-            }}
-            constraints={{
-              aspectRatio: 1,
-              frameRate: { ideal: 12 },
-              deviceId: { ideal: '0' }
-            }}
-            containerStyle={{ width: '50%', marginInline: 'auto' }}
-            videoStyle={{ borderRadius: '0.3em' }}
-          />
+              }}
+              constraints={{
+                aspectRatio: 1,
+                frameRate: { ideal: 12 },
+                deviceId: { ideal: '0' },
+                facingMode: { ideal: cameraFacingMode }
+              }}
+              containerStyle={{ width: '50%', marginInline: 'auto' }}
+              videoStyle={{ borderRadius: '0.3em' }}
+            />
+            <Button
+              style={{ margin: 'auto' }}
+              icon="refresh"
+              onClick={() => {
+                // Need to do this to force a refresh of the scanner component
+                setShowScanner(false);
+                setCameraFacingMode(() =>
+                  cameraFacingMode === FACING_MODE.USER ? FACING_MODE.ENVIRONMENT : FACING_MODE.USER
+                );
+                setTimeout(() => setShowScanner(true), 1);
+              }}
+            >
+              Change Camera
+            </Button>
+          </div>
         )}
 
         {errorMessage && <Callout intent="danger">{errorMessage}</Callout>}
