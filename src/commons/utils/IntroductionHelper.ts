@@ -1,6 +1,6 @@
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { isFullJSChapter, styliseSublanguage, sublanguages } from '../application/ApplicationTypes';
+import { styliseSublanguage, sublanguages } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
@@ -16,8 +16,8 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
 
-const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) => {
-  if (isFullJSChapter(sourceChapter)) {
+const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
+  if (sourceChapter === Chapter.FULL_JS) {
     return (
       `However, you have chosen full JavaScript, which runs your program directly, using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
       '\n\n<b>Warning:</b> If your program freezes during execution, you can try refreshing the tab. ' +
@@ -34,7 +34,7 @@ const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) =
   }
 
   const sourceDocsLink: string = `${Links.sourceDocs}source_${sourceChapter}${
-    sourceVariant !== 'default' && sourceVariant !== 'native' ? `_${sourceVariant}` : ''
+    sourceVariant !== Variant.DEFAULT && sourceVariant !== Variant.NATIVE ? `_${sourceVariant}` : ''
   }/`;
 
   return `You have chosen the sublanguage [_${styliseSublanguage(
@@ -43,12 +43,12 @@ const generateSourceDocsLink = (sourceChapter: number, sourceVariant: Variant) =
   )}_](${sourceDocsLink}).`;
 };
 
-const generateIntroductionText = (sourceChapter: number, sourceVariant: Variant) => {
+const generateIntroductionText = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return (
     MAIN_INTRODUCTION + generateSourceDocsLink(sourceChapter, sourceVariant) + HOTKEYS_INTRODUCTION
   );
 };
 
-export const generateSourceIntroduction = (sourceChapter: number, sourceVariant: Variant) => {
+export const generateSourceIntroduction = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return generateIntroductionText(sourceChapter, sourceVariant);
 };

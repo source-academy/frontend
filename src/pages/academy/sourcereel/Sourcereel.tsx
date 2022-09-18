@@ -1,7 +1,7 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
@@ -39,7 +39,7 @@ type SourcereelProps = DispatchProps & StateProps;
 export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: number) => void;
+  handleChapterSelect: (chapter: Chapter) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -115,7 +115,7 @@ export type StateProps = {
   timeElapsedBeforePause: number;
   sideContentHeight?: number;
   sourcecastIndex: SourcecastData[] | null;
-  sourceChapter: number;
+  sourceChapter: Chapter;
   sourceVariant: Variant;
   timeResumed: number;
   courseId?: number;
@@ -188,7 +188,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       />
     );
 
-    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) => {
+    const chapterSelectHandler = ({ chapter }: { chapter: Chapter }, e: any) => {
       this.props.handleChapterSelect(chapter);
       if (this.props.recordingStatus !== RecordingStatus.recording) {
         return;

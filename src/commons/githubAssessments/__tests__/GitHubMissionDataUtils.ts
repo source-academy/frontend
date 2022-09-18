@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import { Chapter } from 'js-slang/dist/types';
 
 import { IMCQQuestion } from '../../assessment/AssessmentTypes';
 import * as GitHubMissionDataUtils from '../GitHubMissionDataUtils';
@@ -788,7 +789,7 @@ test('convertToMCQQuestionIfMCQText works properly', () => {
     content: '',
     grade: 0,
     id: 0,
-    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    library: { chapter: Chapter.SOURCE_4, external: { name: 'NONE', symbols: [] }, globals: [] },
     maxGrade: 0,
     xp: 0,
     maxXp: 0
@@ -815,7 +816,7 @@ test('convertIMCQQuestionToMCQText works properly', () => {
     content: '',
     grade: 0,
     id: 0,
-    library: { chapter: 4, external: { name: 'NONE', symbols: [] }, globals: [] },
+    library: { chapter: Chapter.SOURCE_4, external: { name: 'NONE', symbols: [] }, globals: [] },
     maxGrade: 0,
     xp: 0,
     maxXp: 0

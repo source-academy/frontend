@@ -14,7 +14,7 @@ import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
@@ -27,7 +27,7 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { isFullJSChapter, OverallState, styliseSublanguage } from '../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -36,7 +36,7 @@ import {
   DEBUG_RESUME,
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
-import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
 import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
@@ -138,8 +138,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       });
 
       let chapterName = context.chapter.toString();
-      const variant = context.variant ?? 'default';
-      if (variant !== 'default') {
+      const variant = context.variant ?? Variant.DEFAULT;
+      if (variant !== Variant.DEFAULT) {
         chapterName += '_' + variant;
       }
 
@@ -239,7 +239,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
     const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
       Variant,
-      number,
+      Chapter,
       string[],
       Array<[string, any]>,
       ExternalLibraryName
@@ -252,12 +252,13 @@ export default function* WorkspaceSaga(): SagaIterator {
     ]);
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean = isFullJSChapter(newChapter)
-      ? chapterChanged && (yield call(showFullJSDisclaimer))
-      : chapterChanged;
+    const toChangeChapter: boolean =
+      newChapter === Chapter.FULL_JS
+        ? chapterChanged && (yield call(showFullJSDisclaimer))
+        : chapterChanged;
 
     if (toChangeChapter) {
-      const library = {
+      const library: Library = {
         chapter: newChapter,
         variant: newVariant,
         external: {
@@ -293,7 +294,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.externalLibrarySelect>) {
       const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
       const [chapter, globals, oldExternalLibraryName]: [
-        number,
+        Chapter,
         Array<[string, any]>,
         ExternalLibraryName
       ] = yield select((state: OverallState) => [
@@ -302,7 +303,7 @@ export default function* WorkspaceSaga(): SagaIterator {
         state.workspaces[workspaceLocation].externalLibrary
       ]);
       const symbols = externalLibraries.get(newExternalLibraryName)!;
-      const library = {
+      const library: Library = {
         chapter,
         external: {
           name: newExternalLibraryName,
@@ -549,7 +550,7 @@ export function* evalEditor(
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
-    if (!isFullJSChapter(context.chapter)) {
+    if (context.chapter !== Chapter.FULL_JS) {
       parse(value, context);
     }
     if (!context.errors.length) {
@@ -564,7 +565,7 @@ export function* evalEditor(
         context.errors = [];
         exploded[index] = 'debugger;' + exploded[index];
         value = exploded.join('\n');
-        if (!isFullJSChapter(context.chapter)) {
+        if (context.chapter !== Chapter.FULL_JS) {
           parse(value, context);
         }
         if (context.errors.length) {
@@ -712,7 +713,7 @@ export function* evalCode(
   }
 
   function call_variant(variant: Variant) {
-    if (variant === 'non-det') {
+    if (variant === Variant.NON_DET) {
       return code.trim() === TRY_AGAIN
         ? call(resume, lastNonDetResult)
         : call(runInContext, code, context, {
@@ -721,14 +722,14 @@ export function* evalCode(
             stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           });
-    } else if (variant === 'lazy') {
+    } else if (variant === Variant.LAZY) {
       return call(runInContext, code, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
         stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter
       });
-    } else if (variant === 'wasm') {
+    } else if (variant === Variant.WASM) {
       return call(wasm_compile_and_run, code, context, actionType === EVAL_REPL);
     } else {
       throw new Error('Unknown variant: ' + variant);
@@ -759,14 +760,15 @@ export function* evalCode(
       );
   }
 
-  const isNonDet: boolean = context.variant === 'non-det';
-  const isLazy: boolean = context.variant === 'lazy';
-  const isWasm: boolean = context.variant === 'wasm';
+  const isNonDet: boolean = context.variant === Variant.NON_DET;
+  const isLazy: boolean = context.variant === Variant.LAZY;
+  const isWasm: boolean = context.variant === Variant.WASM;
 
   // Handles `console.log` statements in fullJS
-  const detachConsole: () => void = isFullJSChapter(context.chapter)
-    ? DisplayBufferService.attachConsole(workspaceLocation)
-    : () => {};
+  const detachConsole: () => void =
+    context.chapter === Chapter.FULL_JS
+      ? DisplayBufferService.attachConsole(workspaceLocation)
+      : () => {};
 
   const { result, interrupted, paused } = yield race({
     result:
@@ -833,7 +835,7 @@ export function* evalCode(
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
     // report infinite loops but only for 'vanilla'/default source
-    if (context.variant === undefined || context.variant === 'default') {
+    if (context.variant === undefined || context.variant === Variant.DEFAULT) {
       const [approval, sessionId] = yield select((state: OverallState) => [
         state.session.agreedToResearch,
         state.session.sessionId
@@ -874,7 +876,7 @@ export function* evalCode(
       result.value = undefined;
     }
     lastNonDetResult = result;
-  } else if (context.variant === undefined || context.variant === 'default') {
+  } else if (context.variant === undefined || context.variant === Variant.DEFAULT) {
     // Finished execution with no errors
     const [approval, sessionId, previousInfiniteLoop] = yield select((state: OverallState) => [
       state.session.agreedToResearch,

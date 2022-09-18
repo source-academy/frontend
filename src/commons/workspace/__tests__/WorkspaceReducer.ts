@@ -1,3 +1,4 @@
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -502,7 +503,7 @@ describe('END_CLEAR_CONTEXT', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
     const library: Library = {
-      chapter: 4,
+      chapter: Chapter.SOURCE_4,
       external: {
         name: 'SOUNDS' as ExternalLibraryName,
         symbols: []
@@ -519,7 +520,7 @@ describe('END_CLEAR_CONTEXT', () => {
         library.chapter,
         library.external.symbols,
         location,
-        'default'
+        Variant.DEFAULT
       );
 
       // Note: we stringify because context contains functions which cause

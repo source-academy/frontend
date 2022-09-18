@@ -1,4 +1,5 @@
 import { Ace } from 'ace-builds/ace';
+import { Chapter } from 'js-slang/dist/types';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';
@@ -51,7 +52,7 @@ export type Input = keyof InputTypeShape extends infer K
 
 export type PlaybackData = {
   init: {
-    chapter: number;
+    chapter: Chapter;
     externalLibrary: ExternalLibraryName;
     editorValue: string;
   };

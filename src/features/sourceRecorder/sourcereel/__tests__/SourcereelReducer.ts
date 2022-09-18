@@ -1,3 +1,4 @@
+import { Chapter } from 'js-slang/dist/types';
 import { action as generateAction } from 'typesafe-actions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
@@ -18,7 +19,7 @@ describe('RECORD_INIT', () => {
   test('records editorInitValue correctly', () => {
     const initData: PlaybackData['init'] = {
       editorValue: 'test init value',
-      chapter: 1,
+      chapter: Chapter.SOURCE_1,
       externalLibrary: ExternalLibraryName.NONE
     };
     const action = generateAction(RECORD_INIT, { initData, workspaceLocation: undefined! });

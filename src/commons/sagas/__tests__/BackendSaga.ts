@@ -1,4 +1,4 @@
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { history } from 'src/commons/utils/HistoryHelper';
@@ -24,7 +24,7 @@ import {
   updateLatestViewedCourse,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, SourceLanguage, Story } from '../../application/ApplicationTypes';
+import { GameState, Role, SALanguage, Story } from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -164,8 +164,8 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableGame: true,
   enableAchievements: true,
   enableSourcecast: true,
-  sourceChapter: 1,
-  sourceVariant: 'default' as Variant,
+  sourceChapter: Chapter.SOURCE_1,
+  sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: ''
 };
@@ -194,8 +194,8 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableGame: true,
   enableAchievements: true,
   enableSourcecast: true,
-  sourceChapter: 4,
-  sourceVariant: 'default' as Variant,
+  sourceChapter: Chapter.SOURCE_4,
+  sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: ''
 };
@@ -770,9 +770,9 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
 
 describe('Test CHANGE_SUBLANGUAGE action', () => {
   test('when chapter is changed', () => {
-    const sublang: SourceLanguage = {
-      chapter: 4,
-      variant: 'gpu',
+    const sublang: SALanguage = {
+      chapter: Chapter.SOURCE_4,
+      variant: Variant.GPU,
       displayName: 'Source \xa74 GPU'
     };
 
@@ -787,7 +787,10 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
       )
       .provide([
         [
-          call(putCourseConfig, mockTokens, { sourceChapter: 4, sourceVariant: 'gpu' }),
+          call(putCourseConfig, mockTokens, {
+            sourceChapter: Chapter.SOURCE_4,
+            sourceVariant: Variant.GPU
+          }),
           { ok: true }
         ]
       ])
@@ -861,8 +864,8 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableGame: false,
     enableAchievements: false,
     enableSourcecast: false,
-    sourceChapter: 4,
-    sourceVariant: 'default',
+    sourceChapter: Chapter.SOURCE_4,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
     assetsPrefix: ''
   };
@@ -958,8 +961,8 @@ describe('Test CREATE_COURSE action', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
-    sourceChapter: 1,
-    sourceVariant: 'default',
+    sourceChapter: Chapter.SOURCE_1,
+    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'
   };
   const user = mockUser;

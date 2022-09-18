@@ -4,19 +4,18 @@ import { Octokit } from '@octokit/rest';
 import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 
 import {
   InterpreterOutput,
-  isFullJSChapter,
   OverallState,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -69,7 +68,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
   handleChangeStepLimit: (stepLimit: number) => void;
-  handleChapterSelect: (chapter: number, variant: Variant) => void;
+  handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -143,7 +142,7 @@ export function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
-  if (chapter && isFullJSChapter(chapter)) {
+  if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else {
     const programLz = qs.lz ?? qs.prgrm;
@@ -154,7 +153,7 @@ export function handleHash(hash: string, props: PlaygroundProps) {
     const variant: Variant =
       sourceLanguages.find(
         language => language.chapter === chapter && language.variant === qs.variant
-      )?.variant ?? 'default';
+      )?.variant ?? Variant.DEFAULT;
     if (chapter) {
       props.handleChapterSelect(chapter, variant);
     }
@@ -171,15 +170,48 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
+
+  const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
+  const location = useLocation();
+  const history = useHistory();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldAddDevice = searchParams.get('add_device');
+
+  // Hide search query from URL to maintain an illusion of security. The device secret
+  // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
+  if (shouldAddDevice && !deviceSecret) {
+    setDeviceSecret(shouldAddDevice);
+    history.replace(location.pathname);
+  }
+
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
+  const [selectedTab, setSelectedTab] = React.useState(
+    shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
+  );
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       editorValue: propsRef.current.editorValue,
       chapter: propsRef.current.playgroundSourceChapter
     })
+  );
+
+  const remoteExecutionTab: SideContentTab = React.useMemo(
+    () => ({
+      label: 'Remote Execution',
+      iconName: IconNames.SATELLITE,
+      body: (
+        <SideContentRemoteExecution
+          workspace="playground"
+          secretParams={deviceSecret || undefined}
+          callbackFunction={setDeviceSecret}
+        />
+      ),
+      id: SideContentType.remoteExecution,
+      toSpawn: () => true
+    }),
+    [deviceSecret]
   );
 
   const usingRemoteExecution =
@@ -217,17 +249,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   React.useEffect(() => {
-    if (
-      isMobileBreakpoint &&
-      (selectedTab === SideContentType.introduction ||
-        selectedTab === SideContentType.remoteExecution)
-    ) {
+    if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
-    } else if (
-      !isMobileBreakpoint &&
-      (selectedTab === SideContentType.mobileEditor ||
-        selectedTab === SideContentType.mobileEditorRun)
-    ) {
+    } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, selectedTab]);
@@ -318,11 +342,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         // Disable pause for FullJS, because: one cannot stop `eval()`
-        pauseDisabled={
-          usingRemoteExecution ||
-          (!(props.playgroundSourceChapter === undefined) &&
-            isFullJSChapter(props.playgroundSourceChapter))
-        }
+        pauseDisabled={usingRemoteExecution || props.playgroundSourceChapter === Chapter.FULL_JS}
       />
     ),
     [
@@ -341,7 +361,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const chapterSelectHandler = React.useCallback(
-    ({ chapter, variant }: { chapter: number; variant: Variant }, e: any) => {
+    ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
       const { handleUsingSubst, handleReplOutputClear, handleChapterSelect } = propsRef.current;
       if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
         handleUsingSubst(true);
@@ -549,7 +569,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     // (TEMP) Remove tabs for fullJS until support is integrated
-    if (isFullJSChapter(props.playgroundSourceChapter)) {
+    if (props.playgroundSourceChapter === Chapter.FULL_JS) {
       return [...tabs, dataVisualizerTab];
     }
 
@@ -559,8 +579,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
     if (
       props.playgroundSourceChapter >= 3 &&
-      props.playgroundSourceVariant !== 'concurrent' &&
-      props.playgroundSourceVariant !== 'non-det' &&
+      props.playgroundSourceVariant !== Variant.CONCURRENT &&
+      props.playgroundSourceVariant !== Variant.NON_DET &&
       !usingRemoteExecution
     ) {
       // Enable Env Visualizer for Source Chapter 3 and above
@@ -569,7 +589,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     if (
       props.playgroundSourceChapter <= 2 &&
-      (props.playgroundSourceVariant === 'default' || props.playgroundSourceVariant === 'native')
+      (props.playgroundSourceVariant === Variant.DEFAULT ||
+        props.playgroundSourceVariant === Variant.NATIVE)
     ) {
       // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push({
@@ -591,13 +612,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.output,
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
-    usingRemoteExecution
+    usingRemoteExecution,
+    remoteExecutionTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
-  const mobileTabs = [...tabs].filter(
-    x => x !== playgroundIntroductionTab && x !== remoteExecutionTab
-  );
+  const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
   const onLoadMethod = React.useCallback(
     (editor: Ace.Editor) => {
@@ -684,7 +704,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.playgroundSourceVariant === 'concurrent' || usingRemoteExecution;
+  const replDisabled = props.playgroundSourceVariant === Variant.CONCURRENT || usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -730,12 +750,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        isFullJSChapter(props.playgroundSourceChapter) ? null : shareButton,
+        props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || isFullJSChapter(props.playgroundSourceChapter)
+        usingRemoteExecution || props.playgroundSourceChapter === Chapter.FULL_JS
           ? null
           : props.usingSubst
           ? stepperStepLimit
@@ -769,7 +789,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          isFullJSChapter(props.playgroundSourceChapter) ? null : shareButton,
+          props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons
@@ -784,7 +804,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   return isMobileBreakpoint ? (
-    <MobileWorkspace {...mobileWorkspaceProps} />
+    <div className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}>
+      <MobileWorkspace {...mobileWorkspaceProps} />
+    </div>
   ) : (
     <HotKeys
       className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
@@ -795,6 +817,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     </HotKeys>
   );
 };
+
+const mobileOnlyTabIds: readonly SideContentType[] = [
+  SideContentType.mobileEditor,
+  SideContentType.mobileEditorRun
+];
+const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
 const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
@@ -808,13 +836,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer
-};
-
-const remoteExecutionTab: SideContentTab = {
-  label: 'Remote Execution',
-  iconName: IconNames.SATELLITE,
-  body: <SideContentRemoteExecution workspace="playground" />,
-  id: SideContentType.remoteExecution
 };
 
 export default Playground;
