@@ -5,12 +5,17 @@ export interface SideContentHtmlDisplayProps {
   handleAddHtmlConsoleError: (errorMsg: string) => void;
 }
 
+const ERROR_MESSAGE_REGEX = /^Line [\d]+: /i;
+
 const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
   const { content, handleAddHtmlConsoleError } = props;
 
   useEffect(() => {
-    const handleEvent = (event: any) => {
-      handleAddHtmlConsoleError(event.message || event.data);
+    const handleEvent = (event: MessageEvent) => {
+      const msg: string = event.data;
+      if (msg.match(ERROR_MESSAGE_REGEX)) {
+        handleAddHtmlConsoleError(msg);
+      }
     };
 
     window.addEventListener('message', handleEvent);
