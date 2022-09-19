@@ -197,8 +197,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       label: 'Editor',
       iconName: IconNames.EDIT,
       body: null,
-      id: SideContentType.mobileEditor,
-      toSpawn: () => true
+      id: SideContentType.mobileEditor
     }),
     []
   );
@@ -208,8 +207,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       label: 'Run',
       iconName: IconNames.PLAY,
       body: null,
-      id: SideContentType.mobileEditorRun,
-      toSpawn: () => true
+      id: SideContentType.mobileEditorRun
     }),
     []
   );

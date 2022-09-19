@@ -15,12 +15,14 @@ const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
  */
 export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
   const tabsToSpawn = getModuleTabs(debuggerContext).filter(tab => tab.toSpawn(debuggerContext));
-  const spawnedTabs = [
-    ...tabsToSpawn.map(tab => {
+  // Convert ModuleSideContent to SideContentTab.
+  const spawnedTabs: SideContentTab[] = [
+    ...tabsToSpawn.map(tab => ({
+      ...tab,
+      body: tab.body(debuggerContext),
       // set tab.id as module
-      tab.id = SideContentType.module;
-      return tab;
-    })
+      id: SideContentType.module
+    }))
   ];
   // only set if debuggerContext.workspaceLocation is not undefined
   if (debuggerContext.workspaceLocation) {
@@ -33,10 +35,10 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
 };
 
 /**
- * Extracts and processes included Modules' side contents from DebuggerContext
+ * Extracts included Modules' side contents from DebuggerContext.
  * @param debuggerContext - DebuggerContext object from redux store
  */
-export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
+export const getModuleTabs = (debuggerContext: DebuggerContext): ModuleSideContent[] => {
   // Check if js-slang's context object is null
   if (debuggerContext.context == null) {
     return [];
@@ -49,17 +51,12 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): SideContentTab[
   }
 
   // Pass React into functions
-  const unprocessedTabs: ModuleSideContent[] = [];
+  const moduleTabs: ModuleSideContent[] = [];
   for (const moduleContext of rawModuleContexts.values()) {
     for (const tab of moduleContext.tabs) {
-      unprocessedTabs.push(tab(React, ReactDOM));
+      moduleTabs.push(tab(React, ReactDOM));
     }
   }
 
-  // Initialize module side contents to convert to SideContentTab type
-  const moduleTabs: SideContentTab[] = unprocessedTabs.map((sideContent: ModuleSideContent) => ({
-    ...sideContent,
-    body: sideContent.body(debuggerContext)
-  }));
   return moduleTabs;
 };

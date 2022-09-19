@@ -534,8 +534,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction,
-      toSpawn: () => true
+      id: SideContentType.introduction
     }),
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
@@ -572,8 +571,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-        id: SideContentType.substVisualizer,
-        toSpawn: () => true
+        id: SideContentType.substVisualizer
       });
     }
 
@@ -802,24 +800,21 @@ const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer,
-  toSpawn: () => true
+  id: SideContentType.dataVisualizer
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer,
-  toSpawn: () => true
+  id: SideContentType.envVisualizer
 };
 
 const remoteExecutionTab: SideContentTab = {
   label: 'Remote Execution',
   iconName: IconNames.SATELLITE,
   body: <SideContentRemoteExecution workspace="playground" />,
-  id: SideContentType.remoteExecution,
-  toSpawn: () => true
+  id: SideContentType.remoteExecution
 };
 
 export default Playground;
