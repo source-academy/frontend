@@ -338,8 +338,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
                   />
                 </div>
               ),
-              id: SideContentType.sourcereel,
-              toSpawn: () => true
+              id: SideContentType.sourcereel
             },
             {
               label: 'Sourcecast Table',
@@ -353,8 +352,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
                   />
                 </div>
               ),
-              id: SideContentType.introduction,
-              toSpawn: () => true
+              id: SideContentType.introduction
             },
             dataVisualizerTab,
             envVisualizerTab
@@ -415,16 +413,14 @@ const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer,
-  toSpawn: () => true
+  id: SideContentType.dataVisualizer
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer,
-  toSpawn: () => true
+  id: SideContentType.envVisualizer
 };
 
 export default Sourcereel;
