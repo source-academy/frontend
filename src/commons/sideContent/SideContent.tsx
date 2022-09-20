@@ -1,11 +1,11 @@
-import { Card, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
+import { Card, Icon, Tab, TabId, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
-import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { getModuleTabs } from './SideContentHelper';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { getDynamicTabs } from './SideContentHelper';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -41,7 +41,10 @@ type StateProps = {
   animate?: boolean;
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
-  tabs: SideContentTab[];
+  tabs: {
+    beforeDynamicTabs: SideContentTab[];
+    afterDynamicTabs: SideContentTab[];
+  };
   workspaceLocation?: WorkspaceLocation;
   editorWidth?: string;
   sideContentHeight?: number;
@@ -49,7 +52,9 @@ type StateProps = {
 
 const SideContent = (props: SideContentProps) => {
   const { tabs, onChange } = props;
-  const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
+  const [dynamicTabs, setDynamicTabs] = React.useState(
+    tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
+  );
 
   // Fetch debuggerContext from store
   const debuggerContext = useSelector(
@@ -57,19 +62,15 @@ const SideContent = (props: SideContentProps) => {
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
 
-  React.useEffect(
-    () => console.log('module tabs changed:', debuggerContext?.context?.moduleContexts.moduleTabs),
-    [debuggerContext?.context?.moduleContexts?.moduleTabs]
-  );
+  // React.useEffect(
+  //   () => console.log('module tabs changed:', debuggerContext?.context?.moduleContexts.moduleTabs),
+  //   [debuggerContext?.context?.moduleContexts?.moduleTabs]
+  // );
 
   React.useEffect(() => {
-    const moduleTabNames = Object.values(debuggerContext?.context?.moduleContexts ?? {}).flatMap(
-      each => each.tabs
-    );
-    const allActiveTabs = !debuggerContext
-      ? tabs
-      : tabs.concat(getModuleTabs(moduleTabNames, debuggerContext));
-    // console.log('tabs', allActiveTabs.map(x => x.label));
+    const allActiveTabs = tabs.beforeDynamicTabs
+      .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))
+      .concat(tabs.afterDynamicTabs);
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 
@@ -103,6 +104,16 @@ const SideContent = (props: SideContentProps) => {
           </div>
         </Tooltip2>
       );
+      const tabProps: Partial<TabProps> = {
+        id: tabId,
+        title: tabTitle,
+        disabled: tab.disabled,
+        className: 'side-content-tab'
+      };
+
+      if (!tab.body) {
+        return <Tab key={tabId} {...tabProps} />;
+      }
 
       const tabBody: JSX.Element = workspaceLocation
         ? {
@@ -117,16 +128,7 @@ const SideContent = (props: SideContentProps) => {
         : tab.body;
       const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
-      return (
-        <Tab
-          key={tabId}
-          id={tabId}
-          title={tabTitle}
-          panel={tabPanel}
-          disabled={tab.disabled}
-          className="side-content-tab"
-        />
-      );
+      return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
     };
 
     return dynamicTabs.map(tab =>

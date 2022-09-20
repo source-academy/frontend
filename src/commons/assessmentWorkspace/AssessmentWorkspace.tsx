@@ -56,6 +56,7 @@ import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/Mob
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
+import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 // import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
@@ -403,6 +404,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               />
             ),
             id: SideContentType.contestVoting
+          },
+          {
+            label: 'Contest Leaderboard',
+            iconName: IconNames.CROWN,
+            body: (
+              <SideContentContestLeaderboard
+                handleContestEntryClick={handleContestEntryClick}
+                orderedContestEntries={
+                  (props.assessment?.questions[questionId] as IContestVotingQuestion)
+                    ?.contestLeaderboard ?? []
+                }
+              />
+            ),
+            id: SideContentType.contestLeaderboard
           }
           // This tab has a toSpawn value of false, so
           // I am not sure what to do with it
@@ -516,7 +531,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     return {
       selectedTabId: selectedTab,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       onChange: onChangeTabs,
       workspaceLocation: 'assessment'
     };
@@ -676,6 +694,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         setSelectedTab(newTabId);
       }
     };
+
     return {
       mobileControlBarProps: {
         ...controlBarProps(questionId)

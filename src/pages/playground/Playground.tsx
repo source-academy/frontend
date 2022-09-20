@@ -559,8 +559,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction,
-      toSpawn: () => true
+      id: SideContentType.introduction
     }),
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
@@ -773,7 +772,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
       sideContentHeight: props.sideContentHeight,
       editorWidth: props.editorWidth
@@ -797,9 +799,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
       },
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs: mobileTabs,
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      handleEditorEval: props.handleEditorEval
+      tabs: {
+        beforeDynamicTabs: mobileTabs,
+        afterDynamicTabs: []
+      },
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     }
   };
 
@@ -837,5 +841,12 @@ const envVisualizerTab: SideContentTab = {
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualizer
 };
+
+// const remoteExecutionTab: SideContentTab = {
+//   label: 'Remote Execution',
+//   iconName: IconNames.SATELLITE,
+//   body: <SideContentRemoteExecution workspace="playground" />,
+//   id: SideContentType.remoteExecution
+// };
 
 export default Playground;

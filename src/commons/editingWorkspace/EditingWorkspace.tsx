@@ -598,7 +598,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       ];
     }
 
-    return { handleActiveTabChange: this.handleActiveTabChange, tabs };
+    return {
+      handleActiveTabChange: this.handleActiveTabChange,
+      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] }
+    };
   };
 
   /** Pre-condition: IAssessment has been loaded */
