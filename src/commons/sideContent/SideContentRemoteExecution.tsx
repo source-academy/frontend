@@ -13,7 +13,16 @@ import React, { SetStateAction } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import BrickSvg from 'src/assets/BrickSvg';
+import MotorL from 'src/assets/motorL.svg';
+import MotorM from 'src/assets/motorM.svg';
+import PortSvg from 'src/assets/PortSvg';
+import SensorColor from 'src/assets/sColor.svg';
+import SensorGyro from 'src/assets/sGyro.svg';
+import SensorTouch from 'src/assets/sTouch.svg';
+import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
 
+import PeripheralContainer from '../../features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from '../../features/remoteExecution/RemoteExecutionDeviceDialog';
 import { Device, DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState } from '../application/ApplicationTypes';
@@ -177,56 +186,77 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
   const currentDevice = currentSession?.device;
 
   return (
-    <div className="sa-remote-execution row">
-      <div className="col-xs-6">
-        <DeviceContent session={currentSession} />
+    <>
+      <div className="sa-remote-execution row">
+        <div className="col-xs-6">
+          <DeviceContent session={currentSession} />
+        </div>
+        <div className="col-xs-6 devices-menu-container">
+          <Menu className={classNames(Classes.ELEVATION_0)}>
+            <MenuItem
+              text="Browser"
+              onClick={() => dispatch(actions.remoteExecDisconnect())}
+              icon={!currentDevice ? 'tick' : undefined}
+              intent={!currentDevice ? 'success' : undefined}
+            />
+            {devices &&
+              devices.map(device => {
+                const thisDevice = currentDevice?.id === device.id;
+                return (
+                  <MenuItem
+                    key={device.id}
+                    onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
+                    text={`${device.title} (${device.type})`}
+                    icon={thisDevice ? 'tick' : undefined}
+                    labelElement={
+                      <DeviceMenuItemButtons
+                        onEditDevice={setDialogState}
+                        isConnected={thisDevice && isConnected}
+                        device={device}
+                        dispatch={dispatch}
+                      />
+                    }
+                    intent={thisDevice && isConnected ? 'success' : undefined}
+                  />
+                );
+              })}
+            <MenuDivider />
+            <MenuItem text="Add new device..." icon="add" onClick={() => setDialogState(true)} />
+          </Menu>
+        </div>
+        <RemoteExecutionAddDeviceDialog
+          isOpen={!!dialogState}
+          deviceToEdit={typeof dialogState === 'object' ? dialogState : undefined}
+          defaultSecret={dialogState === true ? secretParams : undefined}
+          onClose={() => {
+            setDialogState(undefined);
+            setSecretParams(undefined);
+            if (props.callbackFunction) {
+              props.callbackFunction(undefined);
+            }
+          }}
+        />
       </div>
-      <div className="col-xs-6 devices-menu-container">
-        <Menu className={classNames(Classes.ELEVATION_0)}>
-          <MenuItem
-            text="Browser"
-            onClick={() => dispatch(actions.remoteExecDisconnect())}
-            icon={!currentDevice ? 'tick' : undefined}
-            intent={!currentDevice ? 'success' : undefined}
-          />
-          {devices &&
-            devices.map(device => {
-              const thisDevice = currentDevice?.id === device.id;
-              return (
-                <MenuItem
-                  key={device.id}
-                  onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
-                  text={`${device.title} (${device.type})`}
-                  icon={thisDevice ? 'tick' : undefined}
-                  labelElement={
-                    <DeviceMenuItemButtons
-                      onEditDevice={setDialogState}
-                      isConnected={thisDevice && isConnected}
-                      device={device}
-                      dispatch={dispatch}
-                    />
-                  }
-                  intent={thisDevice && isConnected ? 'success' : undefined}
-                />
-              );
-            })}
-          <MenuDivider />
-          <MenuItem text="Add new device..." icon="add" onClick={() => setDialogState(true)} />
-        </Menu>
+      <div>
+        <div
+          style={{ textAlign: 'center', maxWidth: 480, marginInline: 'auto', marginBlock: '2rem' }}
+        >
+          <div className="sa-remote-execution row">
+            <PeripheralContainer src={MotorM} text="Speed: 0°/s" />
+            <PeripheralContainer src={MotorL} text="Speed: 270°/s" />
+            <PeripheralContainer src={MotorL} text="Speed: 270°/s" />
+            <PeripheralContainer src={<PortSvg port="D" />} />
+          </div>
+          <BrickSvg />
+          <div className="sa-remote-execution row">
+            <PeripheralContainer src={SensorTouch} text="Touch: No" />
+            <PeripheralContainer src={SensorGyro} text="Angle: 53°" />
+            <PeripheralContainer src={SensorColor} text="Color: Red" />
+            <PeripheralContainer src={SensorUltrasonic} text="Dist: 23cm" />
+          </div>
+        </div>
       </div>
-      <RemoteExecutionAddDeviceDialog
-        isOpen={!!dialogState}
-        deviceToEdit={typeof dialogState === 'object' ? dialogState : undefined}
-        defaultSecret={dialogState === true ? secretParams : undefined}
-        onClose={() => {
-          setDialogState(undefined);
-          setSecretParams(undefined);
-          if (props.callbackFunction) {
-            props.callbackFunction(undefined);
-          }
-        }}
-      />
-    </div>
+    </>
   );
 };
 
