@@ -14,9 +14,7 @@ import { ModuleSideContent, SideContentTab, SideContentType } from './SideConten
  * Extracts included Modules' side contents from DebuggerContext.
  * @param debuggerContext - DebuggerContext object from redux store
  */
-export const getDynamicTabs = (
-  debuggerContext: DebuggerContext
-): SideContentTab[] => {
+export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
   // Pass React into functions
   const tabNames = debuggerContext?.context?.modules.moduleTabs ?? [];
 
