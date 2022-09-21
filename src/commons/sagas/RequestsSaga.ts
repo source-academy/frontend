@@ -468,9 +468,7 @@ export const getAssessmentOverviews = async (
 /**
  * GET /courses/{courseId}/user/total_xp
  */
- export const getTotalXp = async (
-  tokens: Tokens
-): Promise<number | null> => {
+export const getTotalXp = async (tokens: Tokens): Promise<number | null> => {
   const resp = await request(`${courseId()}/user/total_xp`, 'GET', {
     ...tokens,
     shouldRefresh: true

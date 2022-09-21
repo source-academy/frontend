@@ -39,7 +39,7 @@ const sicpBackendUrl =
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
 
 // For achievements feature (CA - Continual Assessment)
-const caFulfillmentLevel = process.env.REACT_APP_CA_FULFILLMENT_LEVEL || 0;
+const caFulfillmentLevel = parseInt(process.env.REACT_APP_CA_FULFILLMENT_LEVEL || '0');
 
 const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
   new Map();

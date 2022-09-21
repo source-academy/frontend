@@ -10,6 +10,7 @@ import {
   AssessmentType,
   GradingStatuses
 } from '../assessment/AssessmentTypes';
+import Constants from '../utils/Constants';
 import ProfileCard from './ProfileCard';
 
 type ProfileProps = DispatchProps & StateProps & OwnProps;
@@ -35,9 +36,6 @@ type OwnProps = {
 
 class Profile extends React.Component<ProfileProps, {}> {
   public componentDidMount() {
-    if (!this.props.xp) {
-      this.props.handleTotalXpFetch();
-    }
     if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
@@ -57,7 +55,7 @@ class Profile extends React.Component<ProfileProps, {}> {
       ).length;
 
       const userXp = this.props.xp || 0;
-      const caFulfillmentLevel = parseInt(process.env.REACT_APP_CA_FULFILLMENT_LEVEL || '0');
+      const caFulfillmentLevel = Constants.caFulfillmentLevel;
       const fullXp = caFulfillmentLevel * 1000;
 
       const userDetails = (
@@ -140,7 +138,6 @@ class Profile extends React.Component<ProfileProps, {}> {
             );
           });
 
-        // Compute the user's maximum total grade and XP from submitted assessments
         content = (
           <div className="profile-content">
             {userDetails}

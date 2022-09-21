@@ -238,7 +238,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(GET_TOTAL_XP, function* () {
     const tokens: Tokens = yield selectTokens();
 
-    const res : {totalXp: number} = yield call(getTotalXp, tokens);
+    const res: { totalXp: number } = yield call(getTotalXp, tokens);
     if (res) {
       yield put(actions.updateTotalXp(res.totalXp));
     }

@@ -99,7 +99,7 @@ export const SessionsReducer: Reducer<SessionState> = (
         assessmentOverviews: action.payload
       };
     case UPDATE_TOTAL_XP:
-      return {...state, xp: action.payload};
+      return { ...state, xp: action.payload };
     case UPDATE_GRADING:
       const newGradings = new Map(state.gradings);
       newGradings.set(action.payload.submissionId, action.payload.grading);
