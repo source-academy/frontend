@@ -119,7 +119,6 @@ export function* remoteExecutionSaga(): SagaIterator {
         );
       });
       client.on('monitor', message => {
-        console.log(message);
         const port = message[0].split(':')[1];
         const key = `port${port.substring(port.length - 1)}` as keyof Ev3DevicePeripherals;
         const currentSession = store.getState().session.remoteExecutionSession!; // Guaranteed valid session
