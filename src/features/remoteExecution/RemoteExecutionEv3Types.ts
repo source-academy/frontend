@@ -136,7 +136,7 @@ export const ev3SensorModeToValueTransformerMap: {
   [Ev3TouchSensorModes.TOUCH]: (value: Ev3TouchSensorData['value']) =>
     `Touch: ${value ? 'Yes' : 'No'}`,
   [Ev3UltrasonicSensorModes.DISTANCE_CM]: (value: Ev3UltrasonicSensorData['value']) =>
-    `Dist: ${value}cm`
+    `Dist: ${value / 10}cm`
 });
 
 type DateNumber = number;
