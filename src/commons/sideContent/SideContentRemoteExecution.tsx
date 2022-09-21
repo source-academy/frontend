@@ -242,17 +242,38 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
           style={{ textAlign: 'center', maxWidth: 480, marginInline: 'auto', marginBlock: '2rem' }}
         >
           <div className="sa-remote-execution row">
-            <PeripheralContainer src={MotorM} text="Speed: 0°/s" />
-            <PeripheralContainer src={MotorL} text="Speed: 270°/s" />
-            <PeripheralContainer src={MotorL} text="Speed: 270°/s" />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.portA ? MotorM : <PortSvg port="A" />}
+              text="Speed: 0°/s"
+            />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.portB ? MotorL : <PortSvg port="B" />}
+              text="Speed: 270°/s"
+            />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.portC ? MotorL : <PortSvg port="C" />}
+              text="Speed: 270°/s"
+            />
             <PeripheralContainer src={<PortSvg port="D" />} />
           </div>
           <BrickSvg />
           <div className="sa-remote-execution row">
-            <PeripheralContainer src={SensorTouch} text="Touch: No" />
-            <PeripheralContainer src={SensorGyro} text="Angle: 53°" />
-            <PeripheralContainer src={SensorColor} text="Color: Red" />
-            <PeripheralContainer src={SensorUltrasonic} text="Dist: 23cm" />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.port1 ? SensorTouch : <PortSvg port="1" />}
+              text="Touch: No"
+            />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.port2 ? SensorGyro : <PortSvg port="2" />}
+              text="Angle: 53°"
+            />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.port3 ? SensorColor : <PortSvg port="3" />}
+              text="Color: Red"
+            />
+            <PeripheralContainer
+              src={currentDevice?.peripherals?.port4 ? SensorUltrasonic : <PortSvg port="4" />}
+              text="Dist: 23cm"
+            />
           </div>
         </div>
       </div>

@@ -2,9 +2,16 @@ import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compile, Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 
+import {
+  Ev3DevicePeripherals,
+  Ev3MotorData,
+  Ev3SensorData,
+  WithLastUpdated
+} from '../../features/remoteExecution/RemoteExecutionEv3Types';
 import {
   Device,
   DeviceSession,
@@ -109,6 +116,53 @@ export function* remoteExecutionSaga(): SagaIterator {
             isRunning
           })
         );
+      });
+      client.on('monitor', message => {
+        console.log(message);
+        const port = message[0].split(':')[1];
+        const peripheral = message[1].slice(9);
+        const common = { port, device: peripheral, lastUpdated: Date.now() };
+        const key = `port${port.substring(port.length - 1)}` as keyof Ev3DevicePeripherals;
+        const currentSession = store.getState().session.remoteExecutionSession!; // Guaranteed valid session
+        if (peripheral.endsWith('motor')) {
+          const position = parseInt(message[2]);
+          const speed = parseInt(message[3]);
+          const peripheralData: WithLastUpdated<Ev3MotorData> = { ...common, position, speed };
+          store.dispatch(
+            actions.remoteExecUpdateSession({
+              ...currentSession,
+              device: {
+                ...currentSession.device,
+                peripherals: {
+                  ..._.pickBy(
+                    currentSession.device.peripherals,
+                    p => Date.now() - p.lastUpdated < 3000
+                  ),
+                  [key]: peripheralData
+                }
+              }
+            })
+          );
+        } else {
+          const mode = message[2] as any;
+          const value = parseInt(message[3]);
+          const peripheralData: WithLastUpdated<Ev3SensorData> = { ...common, mode, value };
+          store.dispatch(
+            actions.remoteExecUpdateSession({
+              ...currentSession,
+              device: {
+                ...currentSession.device,
+                peripherals: {
+                  ..._.pickBy(
+                    currentSession.device.peripherals,
+                    p => Date.now() - p.lastUpdated < 3000
+                  ),
+                  [key]: peripheralData
+                }
+              }
+            })
+          );
+        }
       });
       client.on('display', (message, type) => {
         switch (type) {

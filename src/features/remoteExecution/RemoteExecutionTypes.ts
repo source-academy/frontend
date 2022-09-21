@@ -3,6 +3,7 @@ import { Chapter } from 'js-slang/dist/types';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { Ev3DevicePeripherals } from './RemoteExecutionEv3Types';
 
 export const REMOTE_EXEC_FETCH_DEVICES = 'REMOTE_EXEC_FETCH_DEVICES';
 export const REMOTE_EXEC_UPDATE_DEVICES = 'REMOTE_EXEC_UPDATE_DEVICES';
@@ -19,6 +20,7 @@ export interface Device {
   title: string;
   secret: string;
   type: string;
+  peripherals?: Ev3DevicePeripherals;
 }
 
 export interface WebSocketEndpointInformation {
