@@ -48,6 +48,7 @@ test('Profile renders correctly when there are no closed assessments', () => {
     assessmentConfigurations,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
+    handleTotalXpFetch: () => {},
     onClose: () => {}
   };
   const tree = mount(
@@ -77,6 +78,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
     assessmentConfigurations,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
+    handleTotalXpFetch: () => {},
     onClose: () => {}
   };
   const tree = mount(

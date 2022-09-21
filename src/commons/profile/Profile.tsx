@@ -40,6 +40,9 @@ class Profile extends React.Component<ProfileProps, {}> {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
     }
+    if (!this.props.xp) {
+      this.props.handleTotalXpFetch();
+    }
   }
 
   public render() {
