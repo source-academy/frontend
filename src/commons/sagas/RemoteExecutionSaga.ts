@@ -9,8 +9,9 @@ import { call, put, race, select, take } from 'redux-saga/effects';
 import {
   Ev3DevicePeripherals,
   Ev3MotorData,
+  Ev3MotorTypes,
   Ev3SensorData,
-  WithLastUpdated
+  Ev3SensorTypes
 } from '../../features/remoteExecution/RemoteExecutionEv3Types';
 import {
   Device,
@@ -120,50 +121,41 @@ export function* remoteExecutionSaga(): SagaIterator {
       client.on('monitor', message => {
         console.log(message);
         const port = message[0].split(':')[1];
-        const peripheral = message[1].slice(9);
-        const common = { port, device: peripheral, lastUpdated: Date.now() };
         const key = `port${port.substring(port.length - 1)}` as keyof Ev3DevicePeripherals;
         const currentSession = store.getState().session.remoteExecutionSession!; // Guaranteed valid session
-        if (peripheral.endsWith('motor')) {
+
+        const dispatchAction = (peripheralData: Ev3MotorData | Ev3SensorData) =>
+          store.dispatch(
+            actions.remoteExecUpdateSession({
+              ...currentSession,
+              device: {
+                ...currentSession.device,
+                peripherals: {
+                  ..._.pickBy(
+                    currentSession.device.peripherals,
+                    p => Date.now() - p.lastUpdated < 3000
+                  ),
+                  [key]: { ...peripheralData, lastUpdated: Date.now() }
+                }
+              }
+            })
+          );
+
+        if (message[1].endsWith('motor')) {
+          const type = message[1] as Ev3MotorTypes;
           const position = parseInt(message[2]);
           const speed = parseInt(message[3]);
-          const peripheralData: WithLastUpdated<Ev3MotorData> = { ...common, position, speed };
-          store.dispatch(
-            actions.remoteExecUpdateSession({
-              ...currentSession,
-              device: {
-                ...currentSession.device,
-                peripherals: {
-                  ..._.pickBy(
-                    currentSession.device.peripherals,
-                    p => Date.now() - p.lastUpdated < 3000
-                  ),
-                  [key]: peripheralData
-                }
-              }
-            })
-          );
+          const peripheralData: Ev3MotorData = { type, position, speed };
+          dispatchAction(peripheralData);
         } else {
+          const type = message[1] as Ev3SensorTypes;
           const mode = message[2] as any;
           const value = parseInt(message[3]);
-          const peripheralData: WithLastUpdated<Ev3SensorData> = { ...common, mode, value };
-          store.dispatch(
-            actions.remoteExecUpdateSession({
-              ...currentSession,
-              device: {
-                ...currentSession.device,
-                peripherals: {
-                  ..._.pickBy(
-                    currentSession.device.peripherals,
-                    p => Date.now() - p.lastUpdated < 3000
-                  ),
-                  [key]: peripheralData
-                }
-              }
-            })
-          );
+          const peripheralData: Ev3SensorData = { type, mode, value };
+          dispatchAction(peripheralData);
         }
       });
+
       client.on('display', (message, type) => {
         switch (type) {
           case 'output':

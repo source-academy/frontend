@@ -4,6 +4,7 @@ export enum Ev3MotorTypes {
 }
 
 export type Ev3MotorData = {
+  type: Ev3MotorTypes;
   position: number;
   speed: number;
 };
@@ -104,6 +105,7 @@ export enum Ev3SensorTypes {
 }
 
 export type Ev3SensorData = {
+  type: Ev3SensorTypes;
   mode: Ev3ColorSensorModes | Ev3UltrasonicSensorModes | Ev3TouchSensorModes | Ev3GyroSensorModes;
   value:
     | Ev3ColorSensorData['value']
