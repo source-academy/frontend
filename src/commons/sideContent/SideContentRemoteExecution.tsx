@@ -15,14 +15,14 @@ import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
+import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
+import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {
   ev3PeripheralToComponentMap,
   ev3SensorModeToValueTransformerMap
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
+import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
-import PeripheralContainer from '../../features/remoteExecution/PeripheralContainer';
-import RemoteExecutionAddDeviceDialog from '../../features/remoteExecution/RemoteExecutionDeviceDialog';
-import { Device, DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import { deleteDevice } from '../sagas/RequestsSaga';
 import { actions } from '../utils/ActionsHelper';

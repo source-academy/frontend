@@ -5,14 +5,13 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
-
 import {
   Ev3DevicePeripherals,
   Ev3MotorData,
   Ev3MotorTypes,
   Ev3SensorData,
   Ev3SensorTypes
-} from '../../features/remoteExecution/RemoteExecutionEv3Types';
+} from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import {
   Device,
   DeviceSession,
@@ -22,8 +21,9 @@ import {
   REMOTE_EXEC_FETCH_DEVICES,
   REMOTE_EXEC_RUN,
   WebSocketEndpointInformation
-} from '../../features/remoteExecution/RemoteExecutionTypes';
-import { store } from '../../pages/createStore';
+} from 'src/features/remoteExecution/RemoteExecutionTypes';
+import { store } from 'src/pages/createStore';
+
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { BEGIN_INTERRUPT_EXECUTION } from '../application/types/InterpreterTypes';
