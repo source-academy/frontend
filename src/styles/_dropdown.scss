@@ -68,7 +68,7 @@ div.#{$ns}-dialog.help {
       flex: 0 0 auto;
       display: flex;
       flex-direction: row;
-      padding-bottom: 1.75em;
+      padding-bottom: 0.75em;
       justify-content: space-around;
       align-items: stretch;
 
@@ -112,11 +112,17 @@ div.#{$ns}-dialog.help {
       }
     }
 
+    .profile-xp-footer {
+      font-style: italic;
+      text-align: center;
+      padding-bottom: 0.75em;
+    }
+
     div.profile-callouts {
       flex-grow: 1;
       flex-shrink: 1;
       overflow-y: auto;
-
+      
       .profile-summary-navlink {
         color: black;
         text-decoration: none;
@@ -124,6 +130,7 @@ div.#{$ns}-dialog.help {
         .profile-summary-callout {
           line-height: 1em;
           padding: 4px 12px 6px 30px;
+          border-radius: 6px;
 
           &:hover {
             background-color: rgba(138, 155, 168, 0.25);
@@ -173,7 +180,7 @@ div.#{$ns}-dialog.help {
       }
 
       .profile-summary-navlink:not(:last-child) > .profile-summary-callout {
-        margin-bottom: 0.25em;
+        margin-bottom: 0.5em;
       }
     }
   }

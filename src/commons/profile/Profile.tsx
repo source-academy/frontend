@@ -56,10 +56,13 @@ class Profile extends React.Component<ProfileProps, {}> {
         item => item.status === AssessmentStatuses.submitted
       ).length;
 
+      const userXp = this.props.xp || 0;
+      const caFulfillmentLevel = parseInt(process.env.REACT_APP_CA_FULFILLMENT_LEVEL || '0');
+      const fullXp = caFulfillmentLevel * 1000;
+
       const userDetails = (
         <div className="profile-header">
           <div className="profile-username">
-            <div>{this.props.xp}</div>
             <div className="name">{this.props.name}</div>
             <div className="role">{this.props.role}</div>
           </div>
@@ -76,17 +79,6 @@ class Profile extends React.Component<ProfileProps, {}> {
           </div>
         );
       } else {
-        // Compute the user's current total XP from submitted and graded assessments, and submitted and not manually graded assessments
-        const [currentXp, maxXp] = this.props.assessmentOverviews!.reduce(
-          (acc, item) =>
-            item.status === AssessmentStatuses.submitted &&
-            (item.gradingStatus === GradingStatuses.graded ||
-              item.gradingStatus === GradingStatuses.excluded)
-              ? [acc[0] + item.xp, acc[1] + item.maxXp]
-              : acc,
-          [0, 0]
-        );
-
         // Performs boundary checks if denominator is 0 or if it exceeds 1 (100%)
         const getFrac = (num: number, den: number): number => {
           return den <= 0 || num / den > 1 ? 1 : num / den;
@@ -152,19 +144,23 @@ class Profile extends React.Component<ProfileProps, {}> {
         content = (
           <div className="profile-content">
             {userDetails}
+
             <div className="profile-progress">
               <div className="profile-xp">
                 <Spinner
-                  className={'profile-spinner' + parseColour(getFrac(currentXp, maxXp))}
+                  className={'profile-spinner' + parseColour(getFrac(userXp, fullXp))}
                   size={144}
-                  value={getFrac(currentXp, maxXp)}
+                  value={getFrac(userXp, fullXp)}
                 />
-                <div className="type">XP</div>
+                <div className="type">XP Progress</div>
                 <div className="total-value">
-                  {currentXp} / {maxXp}
+                  {userXp} / {fullXp}*
                 </div>
-                <div className="percentage">{(getFrac(currentXp, maxXp) * 100).toFixed(2)}%</div>
+                <div className="percentage">{(getFrac(userXp, fullXp) * 100).toFixed(2)}%</div>
               </div>
+            </div>
+            <div className="profile-xp-footer">
+              *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
             </div>
             <div className="profile-callouts">{summaryCallouts}</div>
           </div>
