@@ -14,13 +14,11 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import BrickSvg from 'src/assets/BrickSvg';
-import MotorL from 'src/assets/motorL.svg';
-import MotorM from 'src/assets/motorM.svg';
 import PortSvg from 'src/assets/PortSvg';
-import SensorColor from 'src/assets/sColor.svg';
-import SensorGyro from 'src/assets/sGyro.svg';
-import SensorTouch from 'src/assets/sTouch.svg';
-import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
+import {
+  ev3PeripheralToComponentMap,
+  ev3SensorModeToValueTransformerMap
+} from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 
 import PeripheralContainer from '../../features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from '../../features/remoteExecution/RemoteExecutionDeviceDialog';
@@ -125,6 +123,9 @@ const DeviceContent = ({ session }: { session?: DeviceSession }) => {
       );
   }
 };
+
+const motorPorts = ['portA', 'portB', 'portC', 'portD'] as const;
+const sensorPorts = ['port1', 'port2', 'port3', 'port4'] as const;
 
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
   const [dialogState, setDialogState] = React.useState<Device | true | undefined>(
@@ -237,46 +238,46 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
           }}
         />
       </div>
-      <div>
-        <div
-          style={{ textAlign: 'center', maxWidth: 480, marginInline: 'auto', marginBlock: '2rem' }}
-        >
-          <div className="sa-remote-execution row">
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.portA ? MotorM : <PortSvg port="A" />}
-              text="Speed: 0°/s"
-            />
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.portB ? MotorL : <PortSvg port="B" />}
-              text="Speed: 270°/s"
-            />
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.portC ? MotorL : <PortSvg port="C" />}
-              text="Speed: 270°/s"
-            />
-            <PeripheralContainer src={<PortSvg port="D" />} />
-          </div>
-          <BrickSvg />
-          <div className="sa-remote-execution row">
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.port1 ? SensorTouch : <PortSvg port="1" />}
-              text="Touch: No"
-            />
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.port2 ? SensorGyro : <PortSvg port="2" />}
-              text="Angle: 53°"
-            />
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.port3 ? SensorColor : <PortSvg port="3" />}
-              text="Color: Red"
-            />
-            <PeripheralContainer
-              src={currentDevice?.peripherals?.port4 ? SensorUltrasonic : <PortSvg port="4" />}
-              text="Dist: 23cm"
-            />
+      {isConnected && currentDevice && (
+        <div>
+          <div
+            style={{
+              textAlign: 'center',
+              maxWidth: 480,
+              marginInline: 'auto',
+              marginBlock: '2rem'
+            }}
+          >
+            <div className="sa-remote-execution row">
+              {motorPorts.map(port => {
+                const portData = currentDevice.peripherals?.[port];
+                return portData ? (
+                  <PeripheralContainer
+                    src={ev3PeripheralToComponentMap[portData.type]}
+                    text={`Speed: ${portData.speed}°/s\nPosition: ${portData.position}°`}
+                  />
+                ) : (
+                  <PeripheralContainer src={<PortSvg port={port.substring(port.length - 1)} />} />
+                );
+              })}
+            </div>
+            <BrickSvg />
+            <div className="sa-remote-execution row">
+              {sensorPorts.map(port => {
+                const portData = currentDevice.peripherals?.[port];
+                return portData ? (
+                  <PeripheralContainer
+                    src={ev3PeripheralToComponentMap[portData.type]}
+                    text={ev3SensorModeToValueTransformerMap[portData.mode](portData.value)}
+                  />
+                ) : (
+                  <PeripheralContainer src={<PortSvg port={port.substring(port.length - 1)} />} />
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

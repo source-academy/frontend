@@ -15,7 +15,7 @@ const PeripheralContainer: React.FC<PeripheralContainerProps> = ({ src, alt = 'I
         style={{ textAlign: 'center', padding: 12, backgroundColor: '#2f343c' }}
       >
         {typeof src == 'string' ? <img style={{ maxWidth: 72 }} src={src} alt={alt} /> : src}
-        <span>{text}</span>
+        <span style={{ whiteSpace: 'pre-wrap' }}>{text}</span>
       </div>
     </div>
   );

@@ -1,3 +1,10 @@
+import MotorL from 'src/assets/motorL.svg';
+import MotorM from 'src/assets/motorM.svg';
+import SensorColor from 'src/assets/sColor.svg';
+import SensorGyro from 'src/assets/sGyro.svg';
+import SensorTouch from 'src/assets/sTouch.svg';
+import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
+
 export enum Ev3MotorTypes {
   LARGE = 'lego-ev3-l-motor',
   MEDIUM = 'lego-ev3-m-motor'
@@ -146,3 +153,16 @@ export type Ev3DevicePeripherals = Partial<{
   port3: WithLastUpdated<Ev3SensorData>;
   port4: WithLastUpdated<Ev3SensorData>;
 }>;
+
+export const ev3PeripheralToComponentMap: {
+  [key in Ev3SensorTypes]: string;
+} & {
+  [key in Ev3MotorTypes]: string;
+} = Object.freeze({
+  [Ev3SensorTypes.COLOR_SENSOR]: SensorColor,
+  [Ev3SensorTypes.GYRO_SENSOR]: SensorGyro,
+  [Ev3SensorTypes.TOUCH_SENSOR]: SensorTouch,
+  [Ev3SensorTypes.ULTRASONIC_SENSOR]: SensorUltrasonic,
+  [Ev3MotorTypes.LARGE]: MotorL,
+  [Ev3MotorTypes.MEDIUM]: MotorM
+});
