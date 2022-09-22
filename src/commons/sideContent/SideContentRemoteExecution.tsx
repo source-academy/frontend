@@ -238,7 +238,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
           }}
         />
       </div>
-      {isConnected && currentDevice && (
+      {isConnected && currentDevice && currentDevice.peripherals && (
         <div>
           <div
             style={{
