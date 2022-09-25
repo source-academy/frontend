@@ -1098,6 +1098,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
+    sideBarProps: {
+      tabs: []
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props),
     replProps: replProps

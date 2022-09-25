@@ -744,6 +744,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
+    sideBarProps: {
+      tabs: [
+        { label: 'Project', body: <div>Hello World!</div> },
+        { label: 'Test', body: <div></div> }
+      ]
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,

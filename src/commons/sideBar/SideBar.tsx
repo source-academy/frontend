@@ -7,12 +7,12 @@ export type SideBarTab = {
   body: JSX.Element;
 };
 
-const SideBar: React.FC = () => {
+export type SideBarProps = {
+  tabs: SideBarTab[];
+};
+
+const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   const [selectedTabIndex, setSelectedTabIndex] = React.useState<number | null>(null);
-  const tabs: SideBarTab[] = [
-    { label: 'Project', body: <div>Hello World!</div> },
-    { label: 'Test', body: <div></div> }
-  ];
 
   const handleTabSelection = (tabIndex: number) => {
     if (selectedTabIndex === tabIndex) {
@@ -22,10 +22,15 @@ const SideBar: React.FC = () => {
     setSelectedTabIndex(tabIndex);
   };
 
+  // Do not render the sidebar if there are no tabs.
+  if (props.tabs.length === 0) {
+    return <></>;
+  }
+
   return (
     <div className="sidebar-container">
       <div className="tab-container">
-        {tabs.map((tab, index) => (
+        {props.tabs.map((tab, index) => (
           <Card
             key={index}
             className={classNames('tab', { selected: selectedTabIndex === index })}
@@ -35,7 +40,9 @@ const SideBar: React.FC = () => {
           </Card>
         ))}
       </div>
-      {selectedTabIndex !== null && <Card className="panel">{tabs[selectedTabIndex].body}</Card>}
+      {selectedTabIndex !== null && (
+        <Card className="panel">{props.tabs[selectedTabIndex].body}</Card>
+      )}
     </div>
   );
 };

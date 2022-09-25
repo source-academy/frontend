@@ -216,6 +216,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (i: number) => {}
       },
+      sideBarProps: {
+        tabs: []
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {

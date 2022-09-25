@@ -202,6 +202,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         handleMCQSubmit: (option: number) =>
           this.props.handleSave(this.state.assessment!.questions[questionId].id, option)
       },
+      sideBarProps: {
+        tabs: []
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
