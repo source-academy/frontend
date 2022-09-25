@@ -31,6 +31,7 @@ import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareB
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -746,7 +747,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replProps: replProps,
     sideBarProps: {
       tabs: [
-        { label: 'Project', body: <div>Hello World!</div> },
+        { label: 'Project', body: <FileSystemView basePath="/playground" /> },
+        // TODO: Remove this before merging PR.
         { label: 'Test', body: <div></div> }
       ]
     },
