@@ -19,7 +19,11 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
 
   return (
     <div className="file-system-view-container">
-      <FileSystemViewList fileSystem={fileSystem} basePath={basePath} />
+      <FileSystemViewList
+        fileSystem={fileSystem}
+        basePath={basePath}
+        shouldIndentOneLevel={false}
+      />
     </div>
   );
 };

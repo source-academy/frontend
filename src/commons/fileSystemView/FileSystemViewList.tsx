@@ -1,4 +1,5 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import classNames from 'classnames';
 import React from 'react';
 
 import FileSystemViewNode from './FileSystemViewNode';
@@ -6,10 +7,11 @@ import FileSystemViewNode from './FileSystemViewNode';
 export type FileSystemViewListProps = {
   fileSystem: FSModule;
   basePath: string;
+  shouldIndentOneLevel: boolean;
 };
 
 const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystemViewListProps) => {
-  const { fileSystem, basePath } = props;
+  const { fileSystem, basePath, shouldIndentOneLevel } = props;
 
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
 
@@ -29,7 +31,11 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
   }
 
   return (
-    <div className="file-system-view-list-container">
+    <div
+      className={classNames('file-system-view-list-container', {
+        'file-system-view-list-indentation': shouldIndentOneLevel
+      })}
+    >
       {fileNames.map(fileName => {
         return (
           <FileSystemViewNode

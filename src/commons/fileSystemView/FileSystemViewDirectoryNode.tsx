@@ -29,7 +29,9 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
         {dirName}
       </div>
-      {isExpanded && <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} />}
+      {isExpanded && (
+        <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} shouldIndentOneLevel />
+      )}
     </>
   );
 };
