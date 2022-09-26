@@ -1930,6 +1930,14 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
+"@szhsin/react-menu@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@szhsin/react-menu/-/react-menu-3.2.0.tgz#32f4c6e3a8b7ffd4f11dd5eaadfb12425f99b3b7"
+  integrity sha512-1WHULX+sQPrho+mUxg2snSOFgpybJylCDtFPk/6b2B9KUn7rDDu0NmUUYznlpH/TrVpzxwinO1KKqFUhTtlUEA==
+  dependencies:
+    prop-types "^15.7.2"
+    react-transition-state "^1.1.4"
+
 "@testing-library/dom@^8.0.0":
   version "8.11.1"
   resolved "https://registry.npmjs.org/@testing-library/dom/-/dom-8.11.1.tgz"
@@ -11523,6 +11531,11 @@ react-transition-group@^4.4.1:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-transition-state@^1.1.4:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-transition-state/-/react-transition-state-1.1.5.tgz#22accee21d0011b1d0245be24b6262ae67f494c3"
+  integrity sha512-ITY2mZqc2dWG2eitJkYNdcSFW8aKeOlkL2A/vowRrLL8GH3J6Re/SpD/BLvQzrVOTqjsP0b5S9N10vgNNzwMUQ==
 
 react@^17.0.2:
   version "17.0.2"
