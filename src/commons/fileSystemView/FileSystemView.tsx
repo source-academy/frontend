@@ -40,7 +40,14 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   return (
     <div className="file-system-view-container">
       {fileNames.map(fileName => {
-        return <FileSystemViewNode fileSystem={fileSystem} path={basePath} fileName={fileName} />;
+        return (
+          <FileSystemViewNode
+            key={fileName}
+            fileSystem={fileSystem}
+            basePath={basePath}
+            fileName={fileName}
+          />
+        );
       })}
     </div>
   );
