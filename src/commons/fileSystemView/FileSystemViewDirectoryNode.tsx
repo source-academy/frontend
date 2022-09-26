@@ -1,3 +1,5 @@
+import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
@@ -22,7 +24,9 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
 
   return (
     <>
-      <div className="file-system-view-dir-node-container" onClick={toggleIsExpanded}>
+      <div className="file-system-view-node-container" onClick={toggleIsExpanded}>
+        {isExpanded && <Icon icon={IconNames.CHEVRON_DOWN} />}
+        {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
         {dirName}
       </div>
       {isExpanded && <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} />}
