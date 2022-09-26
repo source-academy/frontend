@@ -9,7 +9,7 @@ export type FileSystemViewNodeProps = {
 
 const FileSystemViewNode: React.FC<FileSystemViewNodeProps> = (props: FileSystemViewNodeProps) => {
   const { fileName } = props;
-  return <>{fileName}</>;
+  return <div className="file-system-view-node-container">{fileName}</div>;
 };
 
 export default FileSystemViewNode;
