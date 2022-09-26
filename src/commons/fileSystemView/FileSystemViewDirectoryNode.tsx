@@ -16,10 +16,16 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   const { fileSystem, basePath, dirName } = props;
   const fullPath = path.join(basePath, dirName);
 
+  const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
+
+  const toggleIsExpanded = () => setIsExpanded(!isExpanded);
+
   return (
     <>
-      <div className="file-system-view-dir-node-container">{dirName}</div>
-      <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} />
+      <div className="file-system-view-dir-node-container" onClick={toggleIsExpanded}>
+        {dirName}
+      </div>
+      {isExpanded && <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} />}
     </>
   );
 };
