@@ -2,6 +2,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 
+import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
@@ -49,18 +50,20 @@ const FileSystemViewNode: React.FC<FileSystemViewNodeProps> = (props: FileSystem
   }
 
   return (
-    <>
-      {fileType === FileType.FILE && (
-        <FileSystemViewFileNode fileSystem={fileSystem} basePath={basePath} fileName={fileName} />
-      )}
-      {fileType === FileType.DIRECTORY && (
-        <FileSystemViewDirectoryNode
-          fileSystem={fileSystem}
-          basePath={basePath}
-          dirName={fileName}
-        />
-      )}
-    </>
+    <FileSystemViewContextMenu>
+      <>
+        {fileType === FileType.FILE && (
+          <FileSystemViewFileNode fileSystem={fileSystem} basePath={basePath} fileName={fileName} />
+        )}
+        {fileType === FileType.DIRECTORY && (
+          <FileSystemViewDirectoryNode
+            fileSystem={fileSystem}
+            basePath={basePath}
+            dirName={fileName}
+          />
+        )}
+      </>
+    </FileSystemViewContextMenu>
   );
 };
 
