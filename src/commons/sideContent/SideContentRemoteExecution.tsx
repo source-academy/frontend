@@ -13,9 +13,16 @@ import React, { SetStateAction } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import BrickSvg from 'src/assets/BrickSvg';
+import PortSvg from 'src/assets/PortSvg';
+import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
+import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
+import {
+  ev3PeripheralToComponentMap,
+  ev3SensorModeToValueTransformerMap
+} from 'src/features/remoteExecution/RemoteExecutionEv3Types';
+import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
-import RemoteExecutionAddDeviceDialog from '../../features/remoteExecution/RemoteExecutionDeviceDialog';
-import { Device, DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import { deleteDevice } from '../sagas/RequestsSaga';
 import { actions } from '../utils/ActionsHelper';
@@ -117,6 +124,9 @@ const DeviceContent = ({ session }: { session?: DeviceSession }) => {
   }
 };
 
+const motorPorts = ['portA', 'portB', 'portC', 'portD'] as const;
+const sensorPorts = ['port1', 'port2', 'port3', 'port4'] as const;
+
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
   const [dialogState, setDialogState] = React.useState<Device | true | undefined>(
     props.secretParams ? true : undefined
@@ -177,56 +187,98 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
   const currentDevice = currentSession?.device;
 
   return (
-    <div className="sa-remote-execution row">
-      <div className="col-xs-6">
-        <DeviceContent session={currentSession} />
+    <>
+      <div className="sa-remote-execution row">
+        <div className="col-xs-6">
+          <DeviceContent session={currentSession} />
+        </div>
+        <div className="col-xs-6 devices-menu-container">
+          <Menu className={classNames(Classes.ELEVATION_0)}>
+            <MenuItem
+              text="Browser"
+              onClick={() => dispatch(actions.remoteExecDisconnect())}
+              icon={!currentDevice ? 'tick' : undefined}
+              intent={!currentDevice ? 'success' : undefined}
+            />
+            {devices &&
+              devices.map(device => {
+                const thisDevice = currentDevice?.id === device.id;
+                return (
+                  <MenuItem
+                    key={device.id}
+                    onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
+                    text={`${device.title} (${device.type})`}
+                    icon={thisDevice ? 'tick' : undefined}
+                    labelElement={
+                      <DeviceMenuItemButtons
+                        onEditDevice={setDialogState}
+                        isConnected={thisDevice && isConnected}
+                        device={device}
+                        dispatch={dispatch}
+                      />
+                    }
+                    intent={thisDevice && isConnected ? 'success' : undefined}
+                  />
+                );
+              })}
+            <MenuDivider />
+            <MenuItem text="Add new device..." icon="add" onClick={() => setDialogState(true)} />
+          </Menu>
+        </div>
+        <RemoteExecutionAddDeviceDialog
+          isOpen={!!dialogState}
+          deviceToEdit={typeof dialogState === 'object' ? dialogState : undefined}
+          defaultSecret={dialogState === true ? secretParams : undefined}
+          onClose={() => {
+            setDialogState(undefined);
+            setSecretParams(undefined);
+            if (props.callbackFunction) {
+              props.callbackFunction(undefined);
+            }
+          }}
+        />
       </div>
-      <div className="col-xs-6 devices-menu-container">
-        <Menu className={classNames(Classes.ELEVATION_0)}>
-          <MenuItem
-            text="Browser"
-            onClick={() => dispatch(actions.remoteExecDisconnect())}
-            icon={!currentDevice ? 'tick' : undefined}
-            intent={!currentDevice ? 'success' : undefined}
-          />
-          {devices &&
-            devices.map(device => {
-              const thisDevice = currentDevice?.id === device.id;
-              return (
-                <MenuItem
-                  key={device.id}
-                  onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
-                  text={`${device.title} (${device.type})`}
-                  icon={thisDevice ? 'tick' : undefined}
-                  labelElement={
-                    <DeviceMenuItemButtons
-                      onEditDevice={setDialogState}
-                      isConnected={thisDevice && isConnected}
-                      device={device}
-                      dispatch={dispatch}
-                    />
-                  }
-                  intent={thisDevice && isConnected ? 'success' : undefined}
-                />
-              );
-            })}
-          <MenuDivider />
-          <MenuItem text="Add new device..." icon="add" onClick={() => setDialogState(true)} />
-        </Menu>
-      </div>
-      <RemoteExecutionAddDeviceDialog
-        isOpen={!!dialogState}
-        deviceToEdit={typeof dialogState === 'object' ? dialogState : undefined}
-        defaultSecret={dialogState === true ? secretParams : undefined}
-        onClose={() => {
-          setDialogState(undefined);
-          setSecretParams(undefined);
-          if (props.callbackFunction) {
-            props.callbackFunction(undefined);
-          }
-        }}
-      />
-    </div>
+      {isConnected && currentDevice && currentDevice.peripherals && (
+        <div>
+          <div
+            style={{
+              textAlign: 'center',
+              maxWidth: 480,
+              marginInline: 'auto',
+              marginBlock: '2rem'
+            }}
+          >
+            <div className="sa-remote-execution row">
+              {motorPorts.map(port => {
+                const portData = currentDevice.peripherals?.[port];
+                return portData ? (
+                  <PeripheralContainer
+                    src={ev3PeripheralToComponentMap[portData.type]}
+                    text={`Speed: ${portData.speed}°/s\nPosition: ${portData.position}°`}
+                  />
+                ) : (
+                  <PeripheralContainer src={<PortSvg port={port.substring(port.length - 1)} />} />
+                );
+              })}
+            </div>
+            <BrickSvg />
+            <div className="sa-remote-execution row">
+              {sensorPorts.map(port => {
+                const portData = currentDevice.peripherals?.[port];
+                return portData ? (
+                  <PeripheralContainer
+                    src={ev3PeripheralToComponentMap[portData.type]}
+                    text={ev3SensorModeToValueTransformerMap[portData.mode](portData.value)}
+                  />
+                ) : (
+                  <PeripheralContainer src={<PortSvg port={port.substring(port.length - 1)} />} />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
