@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews } from '../application/actions/SessionActions';
+import { fetchAssessmentOverviews, getTotalXp } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import Profile, { DispatchProps, StateProps } from './Profile';
 
@@ -9,6 +9,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   assessmentOverviews: state.session.assessmentOverviews,
   name: state.session.name,
   role: state.session.role,
+  xp: state.session.xp,
   assessmentConfigurations: state.session.assessmentConfigurations,
   courseId: state.session.courseId
 });
@@ -16,7 +17,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleAssessmentOverviewFetch: fetchAssessmentOverviews
+      handleAssessmentOverviewFetch: fetchAssessmentOverviews,
+      handleTotalXpFetch: getTotalXp
     },
     dispatch
   );

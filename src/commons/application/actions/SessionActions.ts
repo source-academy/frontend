@@ -30,6 +30,7 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   FETCH_USER_AND_COURSE,
+  GET_TOTAL_XP,
   LOGIN,
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
@@ -63,6 +64,7 @@ import {
   UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
+  UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
@@ -78,6 +80,8 @@ export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 
 export const fetchAssessmentOverviews = () => action(FETCH_ASSESSMENT_OVERVIEWS);
+
+export const getTotalXp = () => action(GET_TOTAL_XP);
 
 export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
 
@@ -173,6 +177,8 @@ export const reautogradeAnswer = (submissionId: number, questionId: number) =>
 
 export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
   action(UPDATE_ASSESSMENT_OVERVIEWS, overviews);
+
+export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalXp);
 
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 

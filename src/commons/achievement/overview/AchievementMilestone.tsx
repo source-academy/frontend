@@ -10,7 +10,10 @@ function AchievementMilestone(props: AchievementMilestoneProps) {
 
   return (
     <div className="milestone">
-      <h2>ACHIEVEMENT LEVEL</h2>
+      <h3>Your Total XP</h3>
+      <div className="user-xp">{studentXp} XP</div>
+
+      <h3>CA Achievement Level</h3>
       <div className="details">
         <div className="level-badge">
           <span className="level-icon" />
@@ -26,8 +29,7 @@ function AchievementMilestone(props: AchievementMilestoneProps) {
         <p className="description">Counts towards CS1010R</p>
       </div>
       <div className="footer">
-        <p>Total XP: {studentXp}</p>
-        <p>Note: subject to change</p>
+        <p>Full CA level of {Constants.caFulfillmentLevel} is subjected to change.</p>
       </div>
     </div>
   );

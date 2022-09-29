@@ -10,12 +10,14 @@ import {
   AssessmentType,
   GradingStatuses
 } from '../assessment/AssessmentTypes';
+import Constants from '../utils/Constants';
 import ProfileCard from './ProfileCard';
 
 type ProfileProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
+  handleTotalXpFetch: () => void;
 };
 
 export type StateProps = {
@@ -23,6 +25,7 @@ export type StateProps = {
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
   assessmentConfigurations?: AssessmentConfiguration[];
+  xp?: number;
   courseId?: number;
 };
 
@@ -37,6 +40,9 @@ class Profile extends React.Component<ProfileProps, {}> {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
     }
+    if (!this.props.xp) {
+      this.props.handleTotalXpFetch();
+    }
   }
 
   public render() {
@@ -50,6 +56,10 @@ class Profile extends React.Component<ProfileProps, {}> {
       const numClosed = this.props.assessmentOverviews!.filter(
         item => item.status === AssessmentStatuses.submitted
       ).length;
+
+      const userXp = this.props.xp || 0;
+      const caFulfillmentLevel = Constants.caFulfillmentLevel;
+      const fullXp = caFulfillmentLevel * 1000;
 
       const userDetails = (
         <div className="profile-header">
@@ -70,17 +80,6 @@ class Profile extends React.Component<ProfileProps, {}> {
           </div>
         );
       } else {
-        // Compute the user's current total XP from submitted and graded assessments, and submitted and not manually graded assessments
-        const [currentXp, maxXp] = this.props.assessmentOverviews!.reduce(
-          (acc, item) =>
-            item.status === AssessmentStatuses.submitted &&
-            (item.gradingStatus === GradingStatuses.graded ||
-              item.gradingStatus === GradingStatuses.excluded)
-              ? [acc[0] + item.xp, acc[1] + item.maxXp]
-              : acc,
-          [0, 0]
-        );
-
         // Performs boundary checks if denominator is 0 or if it exceeds 1 (100%)
         const getFrac = (num: number, den: number): number => {
           return den <= 0 || num / den > 1 ? 1 : num / den;
@@ -142,23 +141,26 @@ class Profile extends React.Component<ProfileProps, {}> {
             );
           });
 
-        // Compute the user's maximum total grade and XP from submitted assessments
         content = (
           <div className="profile-content">
             {userDetails}
+
             <div className="profile-progress">
               <div className="profile-xp">
                 <Spinner
-                  className={'profile-spinner' + parseColour(getFrac(currentXp, maxXp))}
+                  className={'profile-spinner' + parseColour(getFrac(userXp, fullXp))}
                   size={144}
-                  value={getFrac(currentXp, maxXp)}
+                  value={getFrac(userXp, fullXp)}
                 />
-                <div className="type">XP</div>
+                <div className="type">XP Progress</div>
                 <div className="total-value">
-                  {currentXp} / {maxXp}
+                  {userXp} / {fullXp}*
                 </div>
-                <div className="percentage">{(getFrac(currentXp, maxXp) * 100).toFixed(2)}%</div>
+                <div className="percentage">{(getFrac(userXp, fullXp) * 100).toFixed(2)}%</div>
               </div>
+            </div>
+            <div className="profile-xp-footer">
+              *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
             </div>
             <div className="profile-callouts">{summaryCallouts}</div>
           </div>

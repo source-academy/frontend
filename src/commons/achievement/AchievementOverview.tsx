@@ -1,6 +1,6 @@
-import { useContext } from 'react';
-import { AchievementContext } from 'src/features/achievement/AchievementConstants';
+import { useSelector } from 'react-redux';
 
+import { OverallState } from '../application/ApplicationTypes';
 import AchievementLevel from './overview/AchievementLevel';
 
 type AchievementOverviewProps = {
@@ -10,8 +10,7 @@ type AchievementOverviewProps = {
 function AchievementOverview(props: AchievementOverviewProps) {
   const { name } = props;
 
-  const inferencer = useContext(AchievementContext);
-  const studentXp = inferencer.getTotalXp();
+  const studentXp = useSelector((store: OverallState) => store.session.xp);
 
   return (
     <div className="achievement-overview">

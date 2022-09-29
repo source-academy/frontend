@@ -53,6 +53,7 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   FETCH_USER_AND_COURSE,
+  GET_TOTAL_XP,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -85,6 +86,7 @@ import {
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
   getSourcecastIndex,
+  getTotalXp,
   getUser,
   getUserCourseRegistrations,
   handleResponseError,
@@ -230,6 +232,15 @@ function* BackendSaga(): SagaIterator {
     );
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
+    }
+  });
+
+  yield takeEvery(GET_TOTAL_XP, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const res: { totalXp: number } = yield call(getTotalXp, tokens);
+    if (res) {
+      yield put(actions.updateTotalXp(res.totalXp));
     }
   });
 
