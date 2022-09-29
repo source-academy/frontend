@@ -265,8 +265,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant,
-            action.payload.library.moduleParams
+            action.payload.library.variant
           ),
           globals: action.payload.library.globals,
           externalLibrary: action.payload.library.external.name
