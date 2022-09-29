@@ -125,17 +125,9 @@ export function createContext<T>(
   chapter: Chapter,
   externals: string[],
   externalContext: T,
-  variant: Variant = Variant.DEFAULT,
-  moduleParams?: any
+  variant: Variant = Variant.DEFAULT
 ) {
-  return createSlangContext<T>(
-    chapter,
-    variant,
-    externals,
-    externalContext,
-    externalBuiltIns,
-    moduleParams
-  );
+  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
