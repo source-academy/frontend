@@ -3,6 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import React from 'react';
 
+import FileSystemViewContextMenu from './FileSystemViewContextMenu';
+
 export type FileSystemViewFileNodeProps = {
   fileSystem: FSModule;
   basePath: string;
@@ -15,10 +17,12 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   const { fileName } = props;
 
   return (
-    <div className="file-system-view-node-container">
-      <Icon icon={IconNames.DOCUMENT} />
-      {fileName}
-    </div>
+    <FileSystemViewContextMenu>
+      <div className="file-system-view-node-container">
+        <Icon icon={IconNames.DOCUMENT} />
+        {fileName}
+      </div>
+    </FileSystemViewContextMenu>
   );
 };
 
