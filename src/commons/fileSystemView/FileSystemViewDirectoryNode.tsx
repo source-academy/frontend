@@ -28,8 +28,8 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   const handleRenameDir = () => setIsEditing(true);
 
   return (
-    <FileSystemViewContextMenu rename={handleRenameDir}>
-      <>
+    <>
+      <FileSystemViewContextMenu rename={handleRenameDir}>
         <div className="file-system-view-node-container" onClick={toggleIsExpanded}>
           {isExpanded && <Icon icon={IconNames.CHEVRON_DOWN} />}
           {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
@@ -42,11 +42,11 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
             refreshDirectory={refreshDirectory}
           />
         </div>
-        {isExpanded && (
-          <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} shouldIndentOneLevel />
-        )}
-      </>
-    </FileSystemViewContextMenu>
+      </FileSystemViewContextMenu>
+      {isExpanded && (
+        <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} shouldIndentOneLevel />
+      )}
+    </>
   );
 };
 
