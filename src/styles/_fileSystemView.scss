@@ -1,7 +1,7 @@
 .file-system-view-container {
   width: 100%;
   height: 100%;
-  padding: 5px;
+  padding: 1px;
 }
 
 .file-system-view-list-container {
@@ -16,8 +16,11 @@
   flex-direction: row;
   column-gap: 3px;
   user-select: none;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding: 2px 5px;
+
+  &:hover {
+    background: $cadet-color-3;
+  }
 }
 
 .file-system-view-list-indentation {
