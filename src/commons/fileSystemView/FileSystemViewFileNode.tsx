@@ -25,19 +25,31 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEditedFileName(e.target.value);
   const handleInputOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== 'Enter') {
-      return;
-    }
-    setIsEditing(false);
-    const oldPath = path.join(basePath, fileName);
-    const newPath = path.join(basePath, editedFileName);
-    fileSystem.rename(oldPath, newPath, err => {
-      if (err) {
-        console.error(err);
+    if (e.key === 'Enter') {
+      setIsEditing(false);
+
+      const oldPath = path.join(basePath, fileName);
+      const newPath = path.join(basePath, editedFileName);
+      if (oldPath === newPath) {
         return;
       }
-      refreshDirectory();
-    });
+
+      // Check whether the new path already exists to prevent overwriting of existing files & directories.
+      fileSystem.exists(newPath, newPathExists => {
+        if (newPathExists) {
+          setEditedFileName(fileName);
+          // TODO: Implement modal that informs the user that the path already exists.
+          return;
+        }
+
+        fileSystem.rename(oldPath, newPath, err => {
+          if (err) {
+            console.error(err);
+          }
+          refreshDirectory();
+        });
+      });
+    }
   };
   const handleInputOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsEditing(false);
