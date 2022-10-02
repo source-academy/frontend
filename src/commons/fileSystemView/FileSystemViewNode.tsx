@@ -22,6 +22,7 @@ const FileSystemViewNode: React.FC<FileSystemViewNodeProps> = (props: FileSystem
   const { fileSystem, basePath, fileName, refreshDirectory } = props;
 
   const [fileType, setFileType] = React.useState<FileType | undefined>(undefined);
+
   const fullPath = path.join(basePath, fileName);
 
   React.useEffect(() => {
