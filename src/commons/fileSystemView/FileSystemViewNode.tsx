@@ -65,6 +65,7 @@ const FileSystemViewNode: React.FC<FileSystemViewNodeProps> = (props: FileSystem
           fileSystem={fileSystem}
           basePath={basePath}
           dirName={fileName}
+          refreshDirectory={refreshDirectory}
         />
       )}
     </>
