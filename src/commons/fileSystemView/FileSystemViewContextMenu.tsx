@@ -5,12 +5,13 @@ export type FileSystemViewContextMenuProps = {
   children: JSX.Element;
   createNewFile?: () => void;
   createNewDirectory?: () => void;
+  rename?: () => void;
 };
 
 const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   props: FileSystemViewContextMenuProps
 ) => {
-  const { children, createNewFile, createNewDirectory } = props;
+  const { children, createNewFile, createNewDirectory, rename } = props;
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
 
@@ -26,6 +27,7 @@ const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
       <ControlledMenu {...menuProps} anchorPoint={anchorPoint} onClose={() => toggleMenu(false)}>
         {createNewFile && <MenuItem onClick={createNewFile}>New File</MenuItem>}
         {createNewDirectory && <MenuItem onClick={createNewDirectory}>New Directory</MenuItem>}
+        {rename && <MenuItem onClick={rename}>Rename</MenuItem>}
       </ControlledMenu>
     </div>
   );

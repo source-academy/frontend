@@ -15,14 +15,16 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
 
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
 
-  React.useEffect(() => {
+  const readDirectory = () => {
     fileSystem.readdir(basePath, (err, files) => {
       if (err) {
         console.error(err);
       }
       setFileNames(files);
     });
-  }, [fileSystem, basePath]);
+  };
+
+  React.useEffect(readDirectory, [fileSystem, basePath]);
 
   // Display a spinner if the list of files has not been loaded.
   if (!fileNames) {
@@ -43,6 +45,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
             fileSystem={fileSystem}
             basePath={basePath}
             fileName={fileName}
+            refreshDirectory={readDirectory}
           />
         );
       })}

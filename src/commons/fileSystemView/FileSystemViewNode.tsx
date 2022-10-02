@@ -9,6 +9,7 @@ export type FileSystemViewNodeProps = {
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
+  refreshDirectory: () => void;
 };
 
 enum FileType {
@@ -18,7 +19,7 @@ enum FileType {
 }
 
 const FileSystemViewNode: React.FC<FileSystemViewNodeProps> = (props: FileSystemViewNodeProps) => {
-  const { fileSystem, basePath, fileName } = props;
+  const { fileSystem, basePath, fileName, refreshDirectory } = props;
 
   const [fileType, setFileType] = React.useState<FileType | undefined>(undefined);
   const fullPath = path.join(basePath, fileName);
@@ -51,7 +52,12 @@ const FileSystemViewNode: React.FC<FileSystemViewNodeProps> = (props: FileSystem
   return (
     <>
       {fileType === FileType.FILE && (
-        <FileSystemViewFileNode fileSystem={fileSystem} basePath={basePath} fileName={fileName} />
+        <FileSystemViewFileNode
+          fileSystem={fileSystem}
+          basePath={basePath}
+          fileName={fileName}
+          refreshDirectory={refreshDirectory}
+        />
       )}
       {fileType === FileType.DIRECTORY && (
         <FileSystemViewDirectoryNode
