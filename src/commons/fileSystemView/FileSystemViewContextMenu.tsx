@@ -1,4 +1,6 @@
+import { Classes } from '@blueprintjs/core';
 import { ControlledMenu, MenuItem, useMenuState } from '@szhsin/react-menu';
+import classNames from 'classnames';
 import React from 'react';
 
 export type FileSystemViewContextMenuProps = {
@@ -24,10 +26,27 @@ const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   return (
     <div onContextMenu={onContextMenu}>
       {children}
-      <ControlledMenu {...menuProps} anchorPoint={anchorPoint} onClose={() => toggleMenu(false)}>
-        {createNewFile && <MenuItem onClick={createNewFile}>New File</MenuItem>}
-        {createNewDirectory && <MenuItem onClick={createNewDirectory}>New Directory</MenuItem>}
-        {rename && <MenuItem onClick={rename}>Rename</MenuItem>}
+      <ControlledMenu
+        menuClassName={classNames(Classes.CARD, Classes.DARK, 'context-menu')}
+        {...menuProps}
+        anchorPoint={anchorPoint}
+        onClose={() => toggleMenu(false)}
+      >
+        {createNewFile && (
+          <MenuItem className="context-menu-item" onClick={createNewFile}>
+            New File
+          </MenuItem>
+        )}
+        {createNewDirectory && (
+          <MenuItem className="context-menu-item" onClick={createNewDirectory}>
+            New Directory
+          </MenuItem>
+        )}
+        {rename && (
+          <MenuItem className="context-menu-item" onClick={rename}>
+            Rename
+          </MenuItem>
+        )}
       </ControlledMenu>
     </div>
   );
