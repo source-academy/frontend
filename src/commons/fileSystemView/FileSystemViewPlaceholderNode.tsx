@@ -1,0 +1,38 @@
+import React from 'react';
+
+export type FileSystemViewPlaceholderNodeProps = {
+  processFileName: (fileName: string) => void;
+  removePlaceholder: () => void;
+};
+
+const FileSystemViewPlaceholderNode: React.FC<FileSystemViewPlaceholderNodeProps> = (
+  props: FileSystemViewPlaceholderNodeProps
+) => {
+  const { processFileName, removePlaceholder } = props;
+
+  const [fileName, setFileName] = React.useState<string>('');
+
+  const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFileName(e.target.value);
+  const handleInputOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      processFileName(fileName);
+      removePlaceholder();
+    }
+  };
+  const handleInputOnBlur = (_e: React.FocusEvent<HTMLInputElement>) => removePlaceholder();
+
+  return (
+    <input
+      type="text"
+      autoFocus
+      className="file-system-view-input"
+      value={fileName}
+      onChange={handleInputOnChange}
+      onKeyDown={handleInputOnKeyDown}
+      onBlur={handleInputOnBlur}
+    />
+  );
+};
+
+export default FileSystemViewPlaceholderNode;

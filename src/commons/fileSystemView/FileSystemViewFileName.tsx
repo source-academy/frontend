@@ -47,7 +47,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
       });
     }
   };
-  const handleInputOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleInputOnBlur = (_e: React.FocusEvent<HTMLInputElement>) => {
     setIsEditing(false);
     setEditedFileName(fileName);
   };

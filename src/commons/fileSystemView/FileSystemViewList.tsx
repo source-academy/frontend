@@ -75,7 +75,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
             basePath={basePath}
             dirName={dirName}
             indentationLevel={indentationLevel}
-            refreshDirectory={readDirectory}
+            refreshParentDirectory={readDirectory}
           />
         );
       })}
