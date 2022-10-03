@@ -27,6 +27,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
+  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState<number>(0);
 
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
   const handleCreateNewFile = () => {
@@ -34,6 +35,10 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
     setIsAddingNewFile(true);
   };
   const handleRenameDir = () => setIsEditing(true);
+  // Forcibly re-render any child components in which the value `key` is passed as the prop `key`.
+  // See https://github.com/source-academy/frontend/wiki/File-System#handling-file-system-updates.
+  const forceRefreshFileSystemViewList = () =>
+    setFileSystemViewListKey((fileSystemViewListKey + 1) % 2);
 
   const createNewFile = (fileName: string) => {
     const newFilePath = path.join(basePath, dirName, fileName);
@@ -50,7 +55,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
           console.error(err);
         }
 
-        // TODO: Force child FileSystemViewList component to re-render.
+        forceRefreshFileSystemViewList();
       });
     });
   };
@@ -84,6 +89,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
       )}
       {isExpanded && (
         <FileSystemViewList
+          key={fileSystemViewListKey}
           fileSystem={fileSystem}
           basePath={fullPath}
           indentationLevel={indentationLevel + 1}
