@@ -1,6 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import path from 'path';
 import React from 'react';
 
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
@@ -23,9 +24,20 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
 
   const handleRenameFile = () => setIsEditing(true);
+  const handleRemoveFile = () => {
+    // TODO: Prompt user for confirmation before deleting file.
+    const fullPath = path.join(basePath, fileName);
+    fileSystem.unlink(fullPath, err => {
+      if (err) {
+        console.error(err);
+      }
+
+      refreshDirectory();
+    });
+  };
 
   return (
-    <FileSystemViewContextMenu rename={handleRenameFile}>
+    <FileSystemViewContextMenu rename={handleRenameFile} remove={handleRemoveFile}>
       <div className="file-system-view-node-container">
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
         <Icon icon={IconNames.DOCUMENT} />
