@@ -6,19 +6,21 @@ import React from 'react';
 
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
+import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
 
 export type FileSystemViewDirectoryNodeProps = {
   fileSystem: FSModule;
   basePath: string;
   dirName: string;
+  indentationLevel: number;
   refreshDirectory: () => void;
 };
 
 const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = (
   props: FileSystemViewDirectoryNodeProps
 ) => {
-  const { fileSystem, basePath, dirName, refreshDirectory } = props;
+  const { fileSystem, basePath, dirName, indentationLevel, refreshDirectory } = props;
   const fullPath = path.join(basePath, dirName);
 
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
@@ -31,6 +33,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
     <>
       <FileSystemViewContextMenu rename={handleRenameDir}>
         <div className="file-system-view-node-container" onClick={toggleIsExpanded}>
+          <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
           {isExpanded && <Icon icon={IconNames.CHEVRON_DOWN} />}
           {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
           <FileSystemViewFileName
@@ -44,7 +47,11 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         </div>
       </FileSystemViewContextMenu>
       {isExpanded && (
-        <FileSystemViewList fileSystem={fileSystem} basePath={fullPath} shouldIndentOneLevel />
+        <FileSystemViewList
+          fileSystem={fileSystem}
+          basePath={fullPath}
+          indentationLevel={indentationLevel + 1}
+        />
       )}
     </>
   );
