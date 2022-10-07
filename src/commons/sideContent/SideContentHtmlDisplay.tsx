@@ -12,8 +12,10 @@ const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
 
   useEffect(() => {
     const handleEvent = (event: MessageEvent) => {
-      const msg: string = event.data;
-      if (msg.match(ERROR_MESSAGE_REGEX)) {
+      const msg = event.data;
+      // Only displays message if it matches the error message format,
+      // since there may be other message events not sent by iframe
+      if (typeof msg === 'string' && msg.match(ERROR_MESSAGE_REGEX)) {
         handleAddHtmlConsoleError(msg);
       }
     };
