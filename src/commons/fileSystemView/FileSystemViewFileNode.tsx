@@ -4,6 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 
+import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -26,13 +27,33 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   const handleRenameFile = () => setIsEditing(true);
   const handleRemoveFile = () => {
     // TODO: Prompt user for confirmation before deleting file.
-    const fullPath = path.join(basePath, fileName);
-    fileSystem.unlink(fullPath, err => {
-      if (err) {
-        console.error(err);
+    showSimpleConfirmDialog({
+      icon: 'warning-sign',
+      title: `Are you sure you want to delete '${fileName}'?`,
+      contents: (
+        <p>
+          Once a file is deleted, it cannot be recovered!
+          <br />
+          <br />
+          <strong>Do you still want to proceed?</strong>
+        </p>
+      ),
+      positiveIntent: 'danger',
+      positiveLabel: 'Proceed',
+      negativeLabel: 'Cancel'
+    }).then((shouldProceed: boolean) => {
+      if (!shouldProceed) {
+        return;
       }
 
-      refreshDirectory();
+      const fullPath = path.join(basePath, fileName);
+      fileSystem.unlink(fullPath, err => {
+        if (err) {
+          console.error(err);
+        }
+
+        refreshDirectory();
+      });
     });
   };
 
