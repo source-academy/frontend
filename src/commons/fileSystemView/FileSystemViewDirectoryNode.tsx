@@ -4,6 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 
+import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -51,7 +52,16 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
     // Check whether the new file path already exists to prevent overwriting of existing files & directories.
     fileSystem.exists(newFilePath, newFilePathExists => {
       if (newFilePathExists) {
-        // TODO: Implement modal that informs the user that the path already exists.
+        showSimpleErrorDialog({
+          title: 'Unable to create file',
+          contents: (
+            <p>
+              A file or folder <b>{fileName}</b> already exists in this location. Please choose a
+              different name.
+            </p>
+          ),
+          label: 'OK'
+        }).then(() => {});
         return;
       }
 
@@ -70,7 +80,16 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
     // Check whether the new directory path already exists to prevent overwriting of existing files & directories.
     fileSystem.exists(newDirectoryPath, newDirectoryPathExists => {
       if (newDirectoryPathExists) {
-        // TODO: Implement modal that informs the user that the path already exists.
+        showSimpleErrorDialog({
+          title: 'Unable to create directory',
+          contents: (
+            <p>
+              A file or folder <b>{subdirectoryName}</b> already exists in this location. Please
+              choose a different name.
+            </p>
+          ),
+          label: 'OK'
+        }).then(() => {});
         return;
       }
 
