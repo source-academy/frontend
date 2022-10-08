@@ -2,10 +2,13 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 
+import { showSimpleErrorDialog } from '../utils/DialogHelper';
+
 export type FileSystemViewFileNameProps = {
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
+  isDirectory: boolean;
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
   refreshDirectory: () => void;
@@ -14,7 +17,8 @@ export type FileSystemViewFileNameProps = {
 const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
   props: FileSystemViewFileNameProps
 ) => {
-  const { fileSystem, basePath, fileName, isEditing, setIsEditing, refreshDirectory } = props;
+  const { fileSystem, basePath, fileName, isDirectory, isEditing, setIsEditing, refreshDirectory } =
+    props;
 
   const [editedFileName, setEditedFileName] = React.useState<string>(fileName);
 
@@ -33,8 +37,16 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
       // Check whether the new path already exists to prevent overwriting of existing files & directories.
       fileSystem.exists(newPath, newPathExists => {
         if (newPathExists) {
-          setEditedFileName(fileName);
-          // TODO: Implement modal that informs the user that the path already exists.
+          showSimpleErrorDialog({
+            title: `Unable to rename ${isDirectory ? 'directory' : 'file'}`,
+            contents: (
+              <p>
+                A file or folder <b>{editedFileName}</b> already exists in this location. Please
+                choose a different name.
+              </p>
+            ),
+            label: 'OK'
+          }).then(() => setEditedFileName(fileName));
           return;
         }
 

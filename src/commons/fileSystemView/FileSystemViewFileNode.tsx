@@ -45,6 +45,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
           fileSystem={fileSystem}
           basePath={basePath}
           fileName={fileName}
+          isDirectory={false}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
           refreshDirectory={refreshDirectory}
