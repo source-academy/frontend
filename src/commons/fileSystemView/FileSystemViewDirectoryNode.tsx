@@ -41,6 +41,17 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
     setIsAddingNewDirectory(true);
   };
   const handleRenameDirectory = () => setIsEditing(true);
+  const handleRemoveDirectory = () => {
+    // TODO: Prompt user for confirmation before deleting directory.
+    const fullPath = path.join(basePath, directoryName);
+    fileSystem.rmdir(fullPath, err => {
+      if (err) {
+        console.error(err);
+      }
+
+      refreshParentDirectory();
+    });
+  };
   // Forcibly re-render any child components in which the value `key` is passed as the prop `key`.
   // See https://github.com/source-academy/frontend/wiki/File-System#handling-file-system-updates.
   const forceRefreshFileSystemViewList = () =>
@@ -109,6 +120,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}
         rename={handleRenameDirectory}
+        remove={handleRemoveDirectory}
       >
         <div className="file-system-view-node-container" onClick={toggleIsExpanded}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
