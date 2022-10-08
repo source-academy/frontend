@@ -45,9 +45,11 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           refreshDirectory();
         });
       });
+    } else if (e.key === 'Escape') {
+      handleInputOnBlur();
     }
   };
-  const handleInputOnBlur = (_e: React.FocusEvent<HTMLInputElement>) => {
+  const handleInputOnBlur = () => {
     setIsEditing(false);
     setEditedFileName(fileName);
   };

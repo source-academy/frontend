@@ -18,9 +18,11 @@ const FileSystemViewPlaceholderNode: React.FC<FileSystemViewPlaceholderNodeProps
     if (e.key === 'Enter') {
       processFileName(fileName);
       removePlaceholder();
+    } else if (e.key === 'Escape') {
+      handleInputOnBlur();
     }
   };
-  const handleInputOnBlur = (_e: React.FocusEvent<HTMLInputElement>) => removePlaceholder();
+  const handleInputOnBlur = () => removePlaceholder();
 
   return (
     <input
