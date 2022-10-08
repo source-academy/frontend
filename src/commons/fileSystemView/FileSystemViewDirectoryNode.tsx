@@ -5,6 +5,7 @@ import path from 'path';
 import React from 'react';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
+import { rmdirRecursively } from '../utils/FileSystemUtils';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -44,13 +45,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   const handleRemoveDirectory = () => {
     // TODO: Prompt user for confirmation before deleting directory.
     const fullPath = path.join(basePath, directoryName);
-    fileSystem.rmdir(fullPath, err => {
-      if (err) {
-        console.error(err);
-      }
-
-      refreshParentDirectory();
-    });
+    rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
   };
   // Forcibly re-render any child components in which the value `key` is passed as the prop `key`.
   // See https://github.com/source-academy/frontend/wiki/File-System#handling-file-system-updates.
