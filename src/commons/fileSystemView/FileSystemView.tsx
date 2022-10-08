@@ -11,10 +11,8 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   const { basePath } = props;
   const fileSystem = useContext(FileSystemContext);
 
-  // Display an error message if the file system cannot be loaded.
   if (!fileSystem) {
-    // TODO: Style this.
-    return <>Unable to load file system.</>;
+    return <div className="file-system-view-container">Unable to load file system.</div>;
   }
 
   return (
