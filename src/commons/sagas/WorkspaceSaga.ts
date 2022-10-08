@@ -92,7 +92,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(
     ADD_HTML_CONSOLE_ERROR,
-    function* (action: ReturnType<typeof actions.addHtmlConsoleError>): any {
+    function* (action: ReturnType<typeof actions.addHtmlConsoleError>) {
       yield put(
         actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
       );

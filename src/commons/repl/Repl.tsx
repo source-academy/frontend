@@ -43,7 +43,7 @@ const Repl = React.forwardRef<AceEditor, ReplProps>((props, ref) => {
     <Output
       output={slice}
       key={index}
-      usingSubst={props.usingSubst || false}
+      usingSubst={props.usingSubst ?? false}
       isHtml={props.sourceChapter === Chapter.HTML}
     />
   ));

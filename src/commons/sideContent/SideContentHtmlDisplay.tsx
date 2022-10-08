@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
-export interface SideContentHtmlDisplayProps {
+type SideContentHtmlDisplayProps = {
   content: string;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
 }
 
-const ERROR_MESSAGE_REGEX = /^Line [\d]+: /i;
+const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
 const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
   const { content, handleAddHtmlConsoleError } = props;
