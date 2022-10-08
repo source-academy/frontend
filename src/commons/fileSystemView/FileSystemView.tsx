@@ -19,9 +19,11 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   const fileSystem = useContext(FileSystemContext);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
+  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);
   const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState<number>(0);
 
   const handleCreateNewFile = () => setIsAddingNewFile(true);
+  const handleCreateNewDirectory = () => setIsAddingNewDirectory(true);
   // Forcibly re-render any child components in which the value `key` is passed as the prop `key`.
   // See https://github.com/source-academy/frontend/wiki/File-System#handling-file-system-updates.
   const forceRefreshFileSystemViewList = () =>
@@ -59,6 +61,34 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
       });
     });
   };
+  const createNewDirectory = (directoryName: string) => {
+    const newDirectoryPath = path.join(basePath, directoryName);
+
+    // Check whether the new directory path already exists to prevent overwriting of existing files & directories.
+    fileSystem.exists(newDirectoryPath, newDirectoryPathExists => {
+      if (newDirectoryPathExists) {
+        showSimpleErrorDialog({
+          title: 'Unable to create directory',
+          contents: (
+            <p>
+              A file or folder <b>{directoryName}</b> already exists in this location. Please choose
+              a different name.
+            </p>
+          ),
+          label: 'OK'
+        }).then(() => {});
+        return;
+      }
+
+      fileSystem.mkdir(newDirectoryPath, 777, err => {
+        if (err) {
+          console.error(err);
+        }
+
+        forceRefreshFileSystemViewList();
+      });
+    });
+  };
 
   return (
     <div className="file-system-view-container">
@@ -78,9 +108,20 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
           />
         </div>
       )}
+      {isAddingNewDirectory && (
+        <div className="file-system-view-node-container">
+          <FileSystemViewIndentationPadding indentationLevel={0} />
+          <Icon icon={IconNames.CHEVRON_RIGHT} />
+          <FileSystemViewPlaceholderNode
+            processFileName={createNewDirectory}
+            removePlaceholder={() => setIsAddingNewDirectory(false)}
+          />
+        </div>
+      )}
       <FileSystemViewContextMenu
         className="file-system-view-empty-space"
         createNewFile={handleCreateNewFile}
+        createNewDirectory={handleCreateNewDirectory}
       />
     </div>
   );
