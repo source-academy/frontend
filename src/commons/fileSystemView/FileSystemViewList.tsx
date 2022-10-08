@@ -3,6 +3,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 
+import Delay from '../delay/Delay';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
@@ -61,7 +62,11 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
   React.useEffect(readDirectory, [fileSystem, basePath]);
 
   if (!fileNames || !dirNames) {
-    return <Spinner className="file-system-view-spinner" size={SpinnerSize.SMALL} />;
+    return (
+      <Delay waitBeforeRender={200}>
+        <Spinner className="file-system-view-spinner" size={SpinnerSize.SMALL} />
+      </Delay>
+    );
   }
 
   return (
