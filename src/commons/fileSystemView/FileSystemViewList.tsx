@@ -1,3 +1,4 @@
+import { Spinner, SpinnerSize } from '@blueprintjs/core';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
@@ -59,10 +60,8 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
 
   React.useEffect(readDirectory, [fileSystem, basePath]);
 
-  // Display a spinner if the list of files or directories have not been loaded.
   if (!fileNames || !dirNames) {
-    // TODO: Style this.
-    return <></>;
+    return <Spinner className="file-system-view-spinner" size={SpinnerSize.SMALL} />;
   }
 
   return (
