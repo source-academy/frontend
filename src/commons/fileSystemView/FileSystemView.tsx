@@ -13,7 +13,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   const fileSystem = useContext(FileSystemContext);
 
   if (!fileSystem) {
-    return <div className="file-system-view-container">Unable to load file system.</div>;
+    return <div className="file-system-view-error">Unable to load file system.</div>;
   }
 
   return (

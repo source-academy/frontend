@@ -2,9 +2,12 @@
   width: 100%;
   height: 100%;
   padding: 1px;
-  text-align: center;
   display: flex;
   flex-direction: column;
+}
+
+.file-system-view-error {
+  text-align: center;
 }
 
 .file-system-view-empty-space {
