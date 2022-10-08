@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 type SideContentHtmlDisplayProps = {
   content: string;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
-}
+};
 
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
