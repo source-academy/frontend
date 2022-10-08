@@ -579,7 +579,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    // For HTML, show only introduction tab, HTML Display tab only appears after running code
+    // For HTML Chapter, HTML Display tab is added only after code is run
     if (props.playgroundSourceChapter === Chapter.HTML) {
       if (props.output.length > 0 && props.output[0].type === 'result') {
         tabs.push({

@@ -68,7 +68,7 @@ const SideContent = (props: SideContentProps) => {
   const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 
   /**
-   * Adds'side-content-tab-alert' style to newly spawned module tabs
+   * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
    */
   const generateClassName = (id: string | undefined) =>
     id === SideContentType.module || id === SideContentType.htmlDisplay
