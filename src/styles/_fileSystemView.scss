@@ -3,6 +3,12 @@
   height: 100%;
   padding: 1px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-system-view-empty-space {
+  flex-grow: 1;
 }
 
 .file-system-view-list-container {

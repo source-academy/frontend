@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import React from 'react';
 
 export type FileSystemViewContextMenuProps = {
-  children: JSX.Element;
+  children?: JSX.Element;
+  className?: string;
   createNewFile?: () => void;
   createNewDirectory?: () => void;
   rename?: () => void;
@@ -14,7 +15,7 @@ export type FileSystemViewContextMenuProps = {
 const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   props: FileSystemViewContextMenuProps
 ) => {
-  const { children, createNewFile, createNewDirectory, rename, remove } = props;
+  const { children, className, createNewFile, createNewDirectory, rename, remove } = props;
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
 
@@ -25,7 +26,7 @@ const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   };
 
   return (
-    <div onContextMenu={onContextMenu}>
+    <div className={className} onContextMenu={onContextMenu}>
       {children}
       <ControlledMenu
         menuClassName={classNames(Classes.CARD, Classes.DARK, 'context-menu')}
