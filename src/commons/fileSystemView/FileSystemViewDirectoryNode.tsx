@@ -4,7 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 
-import { showSimpleErrorDialog } from '../utils/DialogHelper';
+import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { rmdirRecursively } from '../utils/FileSystemUtils';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
@@ -43,9 +43,29 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   };
   const handleRenameDirectory = () => setIsEditing(true);
   const handleRemoveDirectory = () => {
-    // TODO: Prompt user for confirmation before deleting directory.
-    const fullPath = path.join(basePath, directoryName);
-    rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
+    showSimpleConfirmDialog({
+      icon: 'warning-sign',
+      title: `Are you sure you want to delete '${directoryName}' and its contents?`,
+      contents: (
+        <p>
+          This will result in all of its contained files & subdirectories being deleted. Once a
+          directory is deleted, its contents cannot be recovered!
+          <br />
+          <br />
+          <strong>Do you still want to proceed?</strong>
+        </p>
+      ),
+      positiveIntent: 'danger',
+      positiveLabel: 'Proceed',
+      negativeLabel: 'Cancel'
+    }).then((shouldProceed: boolean) => {
+      if (!shouldProceed) {
+        return;
+      }
+
+      const fullPath = path.join(basePath, directoryName);
+      rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
+    });
   };
   // Forcibly re-render any child components in which the value `key` is passed as the prop `key`.
   // See https://github.com/source-academy/frontend/wiki/File-System#handling-file-system-updates.
