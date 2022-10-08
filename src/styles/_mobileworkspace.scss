@@ -216,7 +216,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     .sa-html-display {
       background-color: white;
       width: 100%;
-      height: 100%;
+      height: calc(100% - 4px);
     }
   }
 
