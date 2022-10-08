@@ -755,15 +755,15 @@ $code-color-error: #ff4444;
         font: 16px / normal 'Inconsolata', 'Consolas', monospace;
       }
 
-      .codeOutput {
+      .code-output {
         color: $code-color-code;
       }
 
-      .logOutput {
+      .log-output {
         color: $code-color-log;
       }
 
-      .resultOutput {
+      .result-output {
         color: $code-color-result;
 
         .canvas-container {
@@ -779,7 +779,7 @@ $code-color-error: #ff4444;
         }
       }
 
-      .errorOutput {
+      .error-output {
         color: $code-color-error;
       }
     }

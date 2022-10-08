@@ -56,7 +56,7 @@ const substKeyMap = {
 const SubstCodeDisplay = (props: { content: string }) => {
   return (
     <Card>
-      <Pre className="resultOutput">{props.content}</Pre>
+      <Pre className="result-output">{props.content}</Pre>
     </Card>
   );
 };

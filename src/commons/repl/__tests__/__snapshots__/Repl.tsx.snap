@@ -2,7 +2,7 @@
 
 exports[`Code output renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"codeOutput\\">
+  <Component className=\\"code-output\\">
     display(&#39;&#39;);
   </Component>
 </Blueprint4.Card>"
@@ -16,7 +16,7 @@ exports[`Empty output renders an empty card 1`] = `
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"errorOutput\\">
+  <Component className=\\"error-output\\">
     Line &lt;unknown&gt;: Expected , got .
   </Component>
 </Blueprint4.Card>"
@@ -24,14 +24,14 @@ exports[`Error output (no consoleLogs) renders correctly 1`] = `
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"logOutput\\">
+  <Component className=\\"log-output\\">
     a
     bb
     cccccccccccccccccccccccccccccccc
     d
   </Component>
   <br />
-  <Component className=\\"errorOutput\\">
+  <Component className=\\"error-output\\">
     Line &lt;unknown&gt;: Expected , got .
   </Component>
 </Blueprint4.Card>"
@@ -53,7 +53,7 @@ exports[`Repl renders correctly 1`] = `
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"resultOutput\\">
+  <Component className=\\"result-output\\">
     42
   </Component>
 </Blueprint4.Card>"
@@ -61,13 +61,13 @@ exports[`Result output (no consoleLogs) renders correctly 1`] = `
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"logOutput\\">
+  <Component className=\\"log-output\\">
     a
     bb
     cccccccccccccccccccccccccccccccc
     d
   </Component>
-  <Component className=\\"resultOutput\\">
+  <Component className=\\"result-output\\">
     42
   </Component>
 </Blueprint4.Card>"
@@ -75,7 +75,7 @@ exports[`Result output (with consoleLogs) renders correctly 1`] = `
 
 exports[`Running output renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"logOutput\\">
+  <Component className=\\"log-output\\">
     a
     bb
     cccccccccccccccccccccccccccccccc

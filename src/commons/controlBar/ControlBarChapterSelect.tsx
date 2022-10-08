@@ -37,12 +37,12 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
     const defaultChoices = defaultLanguages.map(renderItem);
     const variantChoices = variantLanguages.map(renderItem);
     const fullJSChoice = renderItem(fullJSLanguage, 0);
-    const htmlCHoice = renderItem(htmlLanguage, 0);
+    const htmlChoice = renderItem(htmlLanguage, 0);
     return (
       <Menu ulRef={itemsParentRef}>
         {defaultChoices}
         {Constants.playgroundOnly && fullJSChoice}
-        {Constants.playgroundOnly && htmlCHoice}
+        {Constants.playgroundOnly && htmlChoice}
         <MenuItem key="variant-menu" text="Variants" icon="cog">
           {variantChoices}
         </MenuItem>

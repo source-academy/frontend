@@ -69,13 +69,13 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
     case 'code':
       return (
         <Card>
-          <Pre className="codeOutput">{props.output.value}</Pre>
+          <Pre className="code-output">{props.output.value}</Pre>
         </Card>
       );
     case 'running':
       return (
         <Card>
-          <Pre className="logOutput">{props.output.consoleLogs.join('\n')}</Pre>
+          <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
         </Card>
       );
     case 'result':
@@ -83,13 +83,13 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       if (props.usingSubst && props.output.value instanceof Array) {
         return (
           <Card>
-            <Pre className="logOutput">Check out the Stepper tab!</Pre>
+            <Pre className="log-output">Check out the Stepper tab!</Pre>
           </Card>
         );
       } else if (props.isHtml) {
         return (
           <Card>
-            <Pre className="logOutput">
+            <Pre className="log-output">
               Check out the HTML Display tab!
               <br />
               Please check the browser console for more detailed errors and warnings.
@@ -99,14 +99,14 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>
+            <Pre className="result-output">{renderResult(props.output.value)}</Pre>
           </Card>
         );
       } else {
         return (
           <Card>
-            <Pre className="logOutput">{props.output.consoleLogs.join('\n')}</Pre>
-            <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>
+            <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
+            <Pre className="result-output">{renderResult(props.output.value)}</Pre>
           </Card>
         );
       }
@@ -114,15 +114,15 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <Pre className="errorOutput">{parseError(props.output.errors)}</Pre>
+            <Pre className="error-output">{parseError(props.output.errors)}</Pre>
           </Card>
         );
       } else {
         return (
           <Card>
-            <Pre className="logOutput">{props.output.consoleLogs.join('\n')}</Pre>
+            <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
             <br />
-            <Pre className="errorOutput">{parseError(props.output.errors)}</Pre>
+            <Pre className="error-output">{parseError(props.output.errors)}</Pre>
           </Card>
         );
       }
