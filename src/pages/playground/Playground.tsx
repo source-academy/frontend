@@ -746,11 +746,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
     sideBarProps: {
-      tabs: [
-        { label: 'Project', body: <FileSystemView basePath="/playground" /> },
-        // TODO: Remove this before merging PR.
-        { label: 'Test', body: <div></div> }
-      ]
+      tabs: [{ label: 'Project', body: <FileSystemView basePath="/playground" /> }]
     },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
