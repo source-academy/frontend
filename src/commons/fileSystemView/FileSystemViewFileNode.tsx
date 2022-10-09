@@ -26,7 +26,6 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
 
   const handleRenameFile = () => setIsEditing(true);
   const handleRemoveFile = () => {
-    // TODO: Prompt user for confirmation before deleting file.
     showSimpleConfirmDialog({
       icon: 'warning-sign',
       title: `Are you sure you want to delete '${fileName}'?`,
