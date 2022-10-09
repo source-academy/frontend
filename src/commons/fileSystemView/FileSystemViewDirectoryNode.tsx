@@ -130,7 +130,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   };
 
   return (
-    <>
+    <div className="file-system-view-directory-node-container">
       <FileSystemViewContextMenu
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}
@@ -180,7 +180,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
           indentationLevel={indentationLevel + 1}
         />
       )}
-    </>
+    </div>
   );
 };
 
