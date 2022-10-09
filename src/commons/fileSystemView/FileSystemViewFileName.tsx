@@ -61,6 +61,15 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
       handleInputOnBlur();
     }
   };
+  const handleInputOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const fileExtensionIndex = e.target.value.lastIndexOf('.');
+    const fileExtensionExists = fileExtensionIndex !== -1;
+    if (fileExtensionExists) {
+      e.target.setSelectionRange(0, fileExtensionIndex);
+      return;
+    }
+    e.target.select();
+  };
   const handleInputOnBlur = () => {
     setIsEditing(false);
     setEditedFileName(fileName);
@@ -76,6 +85,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           value={editedFileName}
           onChange={handleInputOnChange}
           onKeyDown={handleInputOnKeyDown}
+          onFocus={handleInputOnFocus}
           onBlur={handleInputOnBlur}
         />
       )}
