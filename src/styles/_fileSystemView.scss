@@ -41,4 +41,11 @@
   width: 100%;
   background: transparent;
   border: thin solid $cadet-color-4;
+  padding: 0;
+}
+
+.file-system-view-file-name {
+  // Should be the line-width & line-style as the border of .file-system-view-input
+  // to prevent shifting of file entries in the file system view when renaming.
+  border: thin solid transparent;
 }

@@ -89,7 +89,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           onBlur={handleInputOnBlur}
         />
       )}
-      {!isEditing && fileName}
+      {!isEditing && <div className="file-system-view-file-name">{fileName}</div>}
     </>
   );
 };
