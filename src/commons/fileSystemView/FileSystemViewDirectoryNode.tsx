@@ -32,7 +32,12 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);
   const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState<number>(0);
 
-  const toggleIsExpanded = () => setIsExpanded(!isExpanded);
+  const toggleIsExpanded = () => {
+    if (isEditing) {
+      return;
+    }
+    setIsExpanded(!isExpanded);
+  };
   const handleCreateNewFile = () => {
     setIsExpanded(true);
     setIsAddingNewFile(true);
