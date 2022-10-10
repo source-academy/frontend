@@ -5,6 +5,12 @@
   padding: 1px;
   display: flex;
   flex-direction: column;
+
+  // Remove the white space at the intersection of the x-axis & y-axis
+  // scrollbars on Chromium browsers.
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }
 
 .file-system-view-error {
