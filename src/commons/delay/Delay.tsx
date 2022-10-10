@@ -2,18 +2,21 @@ import React from 'react';
 
 export type DelayProps = {
   children: JSX.Element;
-  waitBeforeRender: number;
+  waitInMsBeforeRender: number;
 };
 
+/**
+ * Delays the rendering of child components by a set time.
+ */
 const Delay: React.FC<DelayProps> = (props: DelayProps) => {
-  const { children, waitBeforeRender } = props;
+  const { children, waitInMsBeforeRender } = props;
 
   const [isRendered, setIsRendered] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const timeoutId = setTimeout(() => setIsRendered(true), waitBeforeRender);
+    const timeoutId = setTimeout(() => setIsRendered(true), waitInMsBeforeRender);
     return () => clearTimeout(timeoutId);
-  }, [waitBeforeRender]);
+  }, [waitInMsBeforeRender]);
 
   return isRendered ? children : <></>;
 };

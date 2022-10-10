@@ -63,7 +63,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
 
   if (!fileNames || !dirNames) {
     return (
-      <Delay waitBeforeRender={200}>
+      <Delay waitInMsBeforeRender={200}>
         <Spinner className="file-system-view-spinner" size={SpinnerSize.SMALL} />
       </Delay>
     );
