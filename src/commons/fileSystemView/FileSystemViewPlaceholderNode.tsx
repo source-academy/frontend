@@ -28,6 +28,7 @@ const FileSystemViewPlaceholderNode: React.FC<FileSystemViewPlaceholderNodeProps
     <input
       type="text"
       autoFocus
+      spellCheck={false}
       className="file-system-view-input"
       value={fileName}
       onChange={handleInputOnChange}

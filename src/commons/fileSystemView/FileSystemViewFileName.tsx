@@ -81,6 +81,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
         <input
           type="text"
           autoFocus
+          spellCheck={false}
           className="file-system-view-input"
           value={editedFileName}
           onChange={handleInputOnChange}
