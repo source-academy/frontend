@@ -27,7 +27,11 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
+import {
+  isSourceLanguage,
+  OverallState,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -62,6 +66,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
+  ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
   END_CLEAR_CONTEXT,
@@ -84,6 +89,15 @@ import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './Sa
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
   let context: Context;
+
+  yield takeEvery(
+    ADD_HTML_CONSOLE_ERROR,
+    function* (action: ReturnType<typeof actions.addHtmlConsoleError>) {
+      yield put(
+        actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
+      );
+    }
+  );
 
   yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -550,7 +564,7 @@ export function* evalEditor(
     let value = editorCode;
     // Check for initial syntax errors. If there are errors, we continue with
     // eval and let it print the error messages.
-    if (context.chapter !== Chapter.FULL_JS) {
+    if (isSourceLanguage(context.chapter)) {
       parse(value, context);
     }
     if (!context.errors.length) {
@@ -565,7 +579,7 @@ export function* evalEditor(
         context.errors = [];
         exploded[index] = 'debugger;' + exploded[index];
         value = exploded.join('\n');
-        if (context.chapter !== Chapter.FULL_JS) {
+        if (isSourceLanguage(context.chapter)) {
           parse(value, context);
         }
         if (context.errors.length) {

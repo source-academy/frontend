@@ -191,7 +191,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
         padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         margin: 2rem 0 0.5rem 0;
 
-        .resultOutput {
+        .result-output {
           background-color: transparent;
           -webkit-box-shadow: none;
           box-shadow: none;
@@ -211,6 +211,12 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
     .SourcecastContainer {
       white-space: normal;
+    }
+
+    .sa-html-display {
+      background-color: white;
+      width: 100%;
+      height: calc(100% - 4px);
     }
   }
 

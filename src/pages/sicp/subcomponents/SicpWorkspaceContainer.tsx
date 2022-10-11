@@ -22,6 +22,7 @@ import {
 } from '../../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../../commons/editor/EditorTypes';
 import {
+  addHtmlConsoleError,
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeEditorHeight,
@@ -96,6 +97,8 @@ const workspaceLocation: WorkspaceLocation = 'sicp';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
+      handleAddHtmlConsoleError: (errorMsg: string) =>
+        addHtmlConsoleError(errorMsg, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),

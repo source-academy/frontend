@@ -124,12 +124,23 @@ export const fullJSLanguage: SALanguage = {
   displayName: 'full JavaScript'
 };
 
+export const htmlLanguage: SALanguage = {
+  chapter: Chapter.HTML,
+  variant: Variant.DEFAULT,
+  displayName: 'HTML'
+};
+
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
-  return chapter === Chapter.FULL_JS
-    ? fullJSLanguage.displayName
-    : `Source \xa7${chapter}${
+  switch (chapter) {
+    case Chapter.FULL_JS:
+      return fullJSLanguage.displayName;
+    case Chapter.HTML:
+      return htmlLanguage.displayName;
+    default:
+      return `Source \xa7${chapter}${
         variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
       }`;
+  }
 };
 
 export const sublanguages: Language[] = [
@@ -159,9 +170,13 @@ export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
 export const defaultLanguages = sourceLanguages.filter(
   sublang => sublang.variant === Variant.DEFAULT
 );
+
 export const variantLanguages = sourceLanguages.filter(
   sublang => sublang.variant !== Variant.DEFAULT
 );
+
+export const isSourceLanguage = (chapter: Chapter) =>
+  [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {

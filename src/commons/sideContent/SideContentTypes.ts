@@ -33,7 +33,8 @@ export enum SideContentType {
   substVisualizer = 'subst_visualiser',
   testcases = 'testcases',
   toneMatrix = 'tone_matrix',
-  videoDisplay = 'video_display'
+  videoDisplay = 'video_display',
+  htmlDisplay = 'html_display'
 }
 
 /**

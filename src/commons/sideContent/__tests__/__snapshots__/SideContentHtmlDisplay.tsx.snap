@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HTML Display renders correctly 1`] = `
+"<SideContentHtmlDisplay content=\\"<p>Hello World!</p>\\" handleAddHtmlConsoleError={[Function: handleAddHtmlConsoleError]}>
+  <iframe className=\\"sa-html-display\\" title=\\"HTML Display\\" sandbox=\\"allow-scripts\\" srcDoc=\\"<p>Hello World!</p>\\" src=\\"about:blank\\" />
+</SideContentHtmlDisplay>"
+`;

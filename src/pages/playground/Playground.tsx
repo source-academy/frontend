@@ -13,10 +13,14 @@ import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
+import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
+import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 
 import {
   InterpreterOutput,
+  isSourceLanguage,
   OverallState,
+  ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -64,6 +68,7 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleAddHtmlConsoleError: (errorMsg: string) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -138,13 +143,19 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-export function handleHash(hash: string, props: PlaygroundProps) {
+export async function handleHash(hash: string, props: PlaygroundProps) {
   const qs = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else {
+    if (chapter === Chapter.HTML) {
+      const continueToHtml = await showHTMLDisclaimer();
+      if (!continueToHtml) {
+        return;
+      }
+    }
     const programLz = qs.lz ?? qs.prgrm;
     const program = programLz && decompressFromEncodedURIComponent(programLz);
     if (program) {
@@ -341,8 +352,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={props.playgroundSourceChapter}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        // Disable pause for FullJS, because: one cannot stop `eval()`
-        pauseDisabled={usingRemoteExecution || props.playgroundSourceChapter === Chapter.FULL_JS}
+        // Disable pause for non-Source languages since they cannot be paused
+        pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
     ),
     [
@@ -568,6 +579,25 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
+    // For HTML Chapter, HTML Display tab is added only after code is run
+    if (props.playgroundSourceChapter === Chapter.HTML) {
+      if (props.output.length > 0 && props.output[0].type === 'result') {
+        tabs.push({
+          label: 'HTML Display',
+          iconName: IconNames.MODAL,
+          body: (
+            <SideContentHtmlDisplay
+              content={(props.output[0] as ResultOutput).value}
+              handleAddHtmlConsoleError={props.handleAddHtmlConsoleError}
+            />
+          ),
+          id: SideContentType.htmlDisplay,
+          toSpawn: () => true
+        });
+      }
+      return tabs;
+    }
+
     // (TEMP) Remove tabs for fullJS until support is integrated
     if (props.playgroundSourceChapter === Chapter.FULL_JS) {
       return [...tabs, dataVisualizerTab];
@@ -614,7 +644,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
     usingRemoteExecution,
-    remoteExecutionTab
+    remoteExecutionTab,
+    props.handleAddHtmlConsoleError
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -705,7 +736,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
-  const replDisabled = props.playgroundSourceVariant === Variant.CONCURRENT || usingRemoteExecution;
+  const replDisabled =
+    props.playgroundSourceChapter === Chapter.HTML ||
+    props.playgroundSourceVariant === Variant.CONCURRENT ||
+    usingRemoteExecution;
 
   const editorProps = {
     onChange: onChangeMethod,
@@ -756,7 +790,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isSicpEditor ? null : sessionButtons,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || props.playgroundSourceChapter === Chapter.FULL_JS
+        usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
