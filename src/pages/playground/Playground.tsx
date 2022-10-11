@@ -219,8 +219,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           callbackFunction={setDeviceSecret}
         />
       ),
-      id: SideContentType.remoteExecution,
-      toSpawn: () => true
+      id: SideContentType.remoteExecution
     }),
     [deviceSecret]
   );
@@ -590,8 +589,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
               handleAddHtmlConsoleError={props.handleAddHtmlConsoleError}
             />
           ),
-          id: SideContentType.htmlDisplay,
-          toSpawn: () => true
+          id: SideContentType.htmlDisplay
         });
       }
       return tabs;
