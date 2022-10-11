@@ -311,6 +311,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
+    sideBarProps: {
+      tabs: []
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,

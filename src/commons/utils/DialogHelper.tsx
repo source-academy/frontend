@@ -104,6 +104,31 @@ export function showSimpleConfirmDialog(props: SimpleConfirmDialogProps): Promis
   });
 }
 
+export interface SimpleErrorDialogProps {
+  title?: string;
+  contents?: React.ReactNode;
+  label?: string;
+  props?: Partial<ConfirmDialogProps<boolean>>;
+}
+
+export function showSimpleErrorDialog(props: SimpleErrorDialogProps): Promise<boolean> {
+  return showConfirmDialog<boolean>({
+    title: props.title,
+    contents: props.contents,
+    choices: [
+      {
+        key: true,
+        label: props.label || 'OK',
+        intent: Intent.PRIMARY,
+        props: { type: 'submit' }
+      }
+    ],
+    escapeResponse: false,
+    icon: 'error',
+    ...props.props
+  });
+}
+
 export function showSimplePromptDialog(props: {
   title?: string;
   contents?: React.ReactNode;

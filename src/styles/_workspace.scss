@@ -55,9 +55,16 @@ $code-color-error: #ff4444;
     height: 100%;
     width: 100%;
     display: flex;
-    flex: 1 1 100%;
     flex-direction: row;
     overflow: hidden;
+  }
+
+  .content-parent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: row;
 
     > div {
       height: inherit; // Fix for Firefox not autoscrolling when repl overflows
@@ -84,10 +91,6 @@ $code-color-error: #ff4444;
     display: flex;
     flex-direction: column;
     height: 100%;
-  }
-
-  .editor-content-divider {
-    flex: initial;
   }
 
   .editor-divider {

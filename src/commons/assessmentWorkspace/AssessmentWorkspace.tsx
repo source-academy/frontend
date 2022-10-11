@@ -821,6 +821,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
+    sideBarProps: {
+      tabs: []
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps

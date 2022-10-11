@@ -35,6 +35,7 @@ import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareB
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -802,6 +803,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
+    sideBarProps: {
+      tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,

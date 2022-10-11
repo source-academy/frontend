@@ -298,6 +298,9 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
         externalLibrary: this.props.externalLibraryName,
         replButtons: [evalButton, clearButton]
       },
+      sideBarProps: {
+        tabs: []
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         onChange: activeTabChangeHandler,
