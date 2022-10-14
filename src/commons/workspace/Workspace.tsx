@@ -7,6 +7,7 @@ import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
+import SideBar, { SideBarProps } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 
 export type WorkspaceProps = DispatchProps & StateProps;
@@ -27,6 +28,7 @@ type StateProps = {
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
   replProps: ReplProps;
+  sideBarProps: SideBarProps;
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
@@ -148,14 +150,17 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         />
       ) : null}
       <ControlBar {...controlBarProps()} />
-      <div className="row workspace-parent">
-        <div className="editor-divider" ref={editorDividerDiv} />
-        <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
-        <div className="right-parent">
-          {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
-            ? resizableSideContent
-            : sideContent}
-          <Repl {...props.replProps} />
+      <div className="workspace-parent">
+        <SideBar {...props.sideBarProps} />
+        <div className="row content-parent">
+          <div className="editor-divider" ref={editorDividerDiv} />
+          <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
+          <div className="right-parent">
+            {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
+              ? resizableSideContent
+              : sideContent}
+            <Repl {...props.replProps} />
+          </div>
         </div>
       </div>
     </div>

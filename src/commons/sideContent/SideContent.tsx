@@ -1,4 +1,4 @@
-import { Card, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
+import { Card, Icon, Tab, TabId, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
@@ -41,7 +41,10 @@ type StateProps = {
   animate?: boolean;
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
-  tabs: SideContentTab[];
+  tabs: {
+    beforeDynamicTabs: SideContentTab[];
+    afterDynamicTabs: SideContentTab[];
+  };
   workspaceLocation?: WorkspaceLocation;
   editorWidth?: string;
   sideContentHeight?: number;
@@ -49,7 +52,9 @@ type StateProps = {
 
 const SideContent = (props: SideContentProps) => {
   const { tabs, onChange } = props;
-  const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
+  const [dynamicTabs, setDynamicTabs] = React.useState(
+    tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
+  );
 
   // Fetch debuggerContext from store
   const debuggerContext = useSelector(
@@ -57,7 +62,9 @@ const SideContent = (props: SideContentProps) => {
       props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
   React.useEffect(() => {
-    const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
+    const allActiveTabs = tabs.beforeDynamicTabs
+      .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))
+      .concat(tabs.afterDynamicTabs);
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 
@@ -91,6 +98,16 @@ const SideContent = (props: SideContentProps) => {
           </div>
         </Tooltip2>
       );
+      const tabProps: Partial<TabProps> = {
+        id: tabId,
+        title: tabTitle,
+        disabled: tab.disabled,
+        className: 'side-content-tab'
+      };
+
+      if (!tab.body) {
+        return <Tab key={tabId} {...tabProps} />;
+      }
 
       const tabBody: JSX.Element = workspaceLocation
         ? {
@@ -105,16 +122,7 @@ const SideContent = (props: SideContentProps) => {
         : tab.body;
       const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
-      return (
-        <Tab
-          key={tabId}
-          id={tabId}
-          title={tabTitle}
-          panel={tabPanel}
-          disabled={tab.disabled}
-          className="side-content-tab"
-        />
-      );
+      return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
     };
 
     return dynamicTabs.map(tab =>

@@ -817,8 +817,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             setTaskDescriptions={setTaskDescriptions}
           />
         ),
-        id: SideContentType.questionOverview,
-        toSpawn: () => true
+        id: SideContentType.questionOverview
       },
       {
         label: 'Briefing',
@@ -830,8 +829,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             setContent={setBriefingContentWrapper}
           />
         ),
-        id: SideContentType.briefing,
-        toSpawn: () => true
+        id: SideContentType.briefing
       }
     ];
 
@@ -853,8 +851,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           handleTestcaseEval={props.handleTestcaseEval}
         />
       ),
-      id: SideContentType.testcases,
-      toSpawn: () => true
+      id: SideContentType.testcases
     });
 
     if (isTeacherMode) {
@@ -868,14 +865,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
             setMissionMetadata={setMissionMetadataWrapper}
           />
         ),
-        id: SideContentType.missionMetadata,
-        toSpawn: () => true
+        id: SideContentType.missionMetadata
       });
     }
 
     return {
       selectedTabId: selectedTab,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       onChange: onChangeTabs,
       workspaceLocation: 'githubAssessment'
     };
@@ -1010,11 +1009,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     };
 
+    const sideContent = sideContentProps(props);
+
     return {
       mobileControlBarProps: {
         ...controlBarProps()
       },
-      ...sideContentProps(props),
+      ...sideContent,
       onChange: onChangeTabs,
       selectedTabId: selectedTab,
       handleEditorEval: handleEval
@@ -1097,6 +1098,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
+    sideBarProps: {
+      tabs: []
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props),
     replProps: replProps

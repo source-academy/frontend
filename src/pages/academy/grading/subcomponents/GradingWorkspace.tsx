@@ -216,6 +216,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (i: number) => {}
       },
+      sideBarProps: {
+        tabs: []
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
@@ -324,15 +327,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
             }
           />
         ),
-        id: SideContentType.grading,
-        toSpawn: () => true
+        id: SideContentType.grading
       },
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
-        id: SideContentType.questionOverview,
-        toSpawn: () => true
+        id: SideContentType.questionOverview
       },
       {
         label: `Autograder`,
@@ -345,8 +346,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
             workspaceLocation="grading"
           />
         ),
-        id: SideContentType.autograder,
-        toSpawn: () => true
+        id: SideContentType.autograder
       }
     ];
 
@@ -357,8 +357,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
-        toSpawn: () => true
+        id: SideContentType.toneMatrix
       });
     }
 
@@ -370,8 +369,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         label: 'Video Display',
         iconName: IconNames.MOBILE_VIDEO,
         body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-        id: SideContentType.videoDisplay,
-        toSpawn: () => true
+        id: SideContentType.videoDisplay
       });
     }
 
@@ -386,7 +384,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         }
         this.setState({ selectedTab: newTabId });
       },
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: 'grading'
     };
 

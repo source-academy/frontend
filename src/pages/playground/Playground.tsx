@@ -219,8 +219,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           callbackFunction={setDeviceSecret}
         />
       ),
-      id: SideContentType.remoteExecution,
-      toSpawn: () => true
+      id: SideContentType.remoteExecution
     }),
     [deviceSecret]
   );
@@ -570,8 +569,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction,
-      toSpawn: () => true
+      id: SideContentType.introduction
     }),
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
@@ -591,8 +589,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
               handleAddHtmlConsoleError={props.handleAddHtmlConsoleError}
             />
           ),
-          id: SideContentType.htmlDisplay,
-          toSpawn: () => true
+          id: SideContentType.htmlDisplay
         });
       }
       return tabs;
@@ -627,8 +624,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-        id: SideContentType.substVisualizer,
-        toSpawn: () => true
+        id: SideContentType.substVisualizer
       });
     }
 
@@ -804,11 +800,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
+    sideBarProps: {
+      // TODO: Re-enable on master once the feature is production-ready.
+      // tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
+      tabs: []
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
       sideContentHeight: props.sideContentHeight,
       editorWidth: props.editorWidth
@@ -832,9 +836,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
       },
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
-      tabs: mobileTabs,
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      handleEditorEval: props.handleEditorEval
+      tabs: {
+        beforeDynamicTabs: mobileTabs,
+        afterDynamicTabs: []
+      },
+      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
     }
   };
 
@@ -863,16 +869,14 @@ const dataVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer,
-  toSpawn: () => true
+  id: SideContentType.dataVisualizer
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer,
-  toSpawn: () => true
+  id: SideContentType.envVisualizer
 };
 
 export default Playground;

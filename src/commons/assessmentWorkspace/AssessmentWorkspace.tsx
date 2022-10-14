@@ -375,15 +375,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             label: `Task ${questionId + 1}`,
             iconName: IconNames.NINJA,
             body: <Markdown content={props.assessment!.questions[questionId].content} />,
-            id: SideContentType.questionOverview,
-            toSpawn: () => true
+            id: SideContentType.questionOverview
           },
           {
             label: `Contest Voting Briefing`,
             iconName: IconNames.BRIEFCASE,
             body: <Markdown content={props.assessment!.longSummary} />,
-            id: SideContentType.briefing,
-            toSpawn: () => true
+            id: SideContentType.briefing
           },
           {
             label: 'Contest Voting',
@@ -404,8 +402,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 }
               />
             ),
-            id: SideContentType.contestVoting,
-            toSpawn: () => true
+            id: SideContentType.contestVoting
           },
           {
             label: 'Contest Leaderboard',
@@ -419,8 +416,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 }
               />
             ),
-            id: SideContentType.contestLeaderboard,
-            toSpawn: () => false
+            id: SideContentType.contestLeaderboard
           }
         ]
       : [
@@ -433,8 +429,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 content={props.assessment!.questions[questionId].content}
               />
             ),
-            id: SideContentType.questionOverview,
-            toSpawn: () => true
+            id: SideContentType.questionOverview
           },
           {
             label: `Briefing`,
@@ -442,8 +437,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             body: (
               <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
             ),
-            id: SideContentType.briefing,
-            toSpawn: () => true
+            id: SideContentType.briefing
           },
           {
             label: `Autograder`,
@@ -461,8 +455,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 workspaceLocation="assessment"
               />
             ),
-            id: SideContentType.autograder,
-            toSpawn: () => true
+            id: SideContentType.autograder
           }
         ];
 
@@ -479,8 +472,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             comments={props.assessment!.questions[questionId].comments}
           />
         ),
-        id: SideContentType.grading,
-        toSpawn: () => true
+        id: SideContentType.grading
       });
     }
 
@@ -491,8 +483,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
-        toSpawn: () => true
+        id: SideContentType.toneMatrix
       });
     }
 
@@ -504,8 +495,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         label: 'Video Display',
         iconName: IconNames.MOBILE_VIDEO,
         body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-        id: SideContentType.videoDisplay,
-        toSpawn: () => true
+        id: SideContentType.videoDisplay
       });
     }
 
@@ -522,7 +512,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     return {
       selectedTabId: selectedTab,
-      tabs,
+      tabs: {
+        beforeDynamicTabs: tabs,
+        afterDynamicTabs: []
+      },
       onChange: onChangeTabs,
       workspaceLocation: 'assessment'
     };
@@ -682,6 +675,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         setSelectedTab(newTabId);
       }
     };
+
     return {
       mobileControlBarProps: {
         ...controlBarProps(questionId)
@@ -827,6 +821,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
+    sideBarProps: {
+      tabs: []
+    },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps

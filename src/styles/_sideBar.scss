@@ -1,0 +1,49 @@
+.sidebar-container {
+  padding-bottom: 0.6rem;
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+}
+
+.tab-container {
+  margin-left: 8px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.tab {
+  // FIXME: Remove if and when all of the major browsers support the CSS property.
+  // Not supported in all browsers, see
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation#browser_compatibility.
+  // writing-mode: sideways-lr;
+  // The following CSS properties are equivalent & universally supported:
+  // --- Start ---
+  writing-mode: vertical-rl;
+  transform: scale(-1);
+  // --- End ---
+  // FIXME: Remove if and when the linked bug is fixed.
+  // Width calculation does not work correctly on Firefox, see
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1166120.
+  // To get around this, we hardcode the width:
+  // --- Start ---
+  box-sizing: content-box;
+  width: 18px;
+  // --- End ---
+  padding: 12px 3px;
+  // !important is necessary to override the default Card background-color property.
+  background-color: $cadet-color-2 !important;
+  user-select: none;
+
+  &.selected {
+    // !important is necessary to override the default Card background-color property.
+    background-color: $cadet-color-1 !important;
+  }
+}
+
+.panel {
+  // !important is necessary to override the default Card background-color property.
+  background-color: $cadet-color-2 !important;
+  width: 200px;
+  padding: 0;
+}
