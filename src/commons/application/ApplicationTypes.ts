@@ -240,8 +240,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],
-  editorHeight: 150,
-  editorWidth: '50%',
   externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
   highlightedLines: [],

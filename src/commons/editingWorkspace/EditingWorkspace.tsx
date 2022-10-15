@@ -65,8 +65,6 @@ export type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
-  handleEditorHeightChange: (height: number) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -95,9 +93,7 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  editorHeight?: number;
   editorValue: string | null;
-  editorWidth: string;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
@@ -191,10 +187,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isEditorAutorun: false
             }
           : undefined,
-      editorHeight: this.props.editorHeight,
-      editorWidth: this.props.editorWidth,
-      handleEditorHeightChange: this.props.handleEditorHeightChange,
-      handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       hasUnsavedChanges: this.state.hasUnsavedChanges,
       mcqProps: {

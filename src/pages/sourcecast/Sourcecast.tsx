@@ -51,10 +51,8 @@ export type DispatchProps = {
   handleDebuggerReset: () => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleFetchSourcecastIndex: () => void;
@@ -87,8 +85,6 @@ export type StateProps = {
   description: string | null;
   editorReadonly: boolean;
   editorValue: string;
-  editorHeight?: number;
-  editorWidth: string;
   externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -305,10 +301,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
     },
     customEditor: <SourceRecorderEditor {...editorProps} />,
-    editorHeight: props.editorHeight,
-    editorWidth: props.editorWidth,
-    handleEditorHeightChange: props.handleEditorHeightChange,
-    handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
     sideBarProps: {
@@ -323,8 +315,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
         afterDynamicTabs: []
       },
       workspaceLocation: 'sourcecast',
-      sideContentHeight: props.sideContentHeight,
-      editorWidth: props.editorWidth
+      sideContentHeight: props.sideContentHeight
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {

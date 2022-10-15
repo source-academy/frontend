@@ -9,8 +9,6 @@ import { Position } from '../../commons/editor/EditorTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeEditorHeight,
-  changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
@@ -35,8 +33,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     editorValue: state.workspaces.githubAssessment.editorValue,
     editorPostpend: state.workspaces.githubAssessment.editorPostpend,
     editorTestcases: state.workspaces.githubAssessment.editorTestcases,
-    editorHeight: state.workspaces.githubAssessment.editorHeight,
-    editorWidth: state.workspaces.githubAssessment.editorWidth,
     breakpoints: state.workspaces.githubAssessment.breakpoints,
     highlightedLines: state.workspaces.githubAssessment.highlightedLines,
     hasUnsavedChanges: state.workspaces.githubAssessment.hasUnsavedChanges,
@@ -64,9 +60,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
-      handleEditorWidthChange: (widthChange: number) =>
-        changeEditorWidth(widthChange.toString(), workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),

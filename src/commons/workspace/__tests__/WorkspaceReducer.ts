@@ -33,8 +33,6 @@ import { WorkspaceReducer } from '../WorkspaceReducer';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_EDITOR_HEIGHT,
-  CHANGE_EDITOR_WIDTH,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
@@ -281,44 +279,6 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
             browseIndex: 1,
             originalValue: replValue
           }
-        }
-      });
-    });
-  });
-});
-
-describe('CHANGE_EDITOR_HEIGHT', () => {
-  test('sets editorHeight correctly', () => {
-    const height = 200;
-    const actions = generateActions(CHANGE_EDITOR_HEIGHT, { height });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          editorHeight: height
-        }
-      });
-    });
-  });
-});
-
-describe('CHANGE_EDITOR_WIDTH', () => {
-  test('sets editorWidth correctly', () => {
-    const widthChange = 20.5;
-    const actions = generateActions(CHANGE_EDITOR_WIDTH, { widthChange });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          editorWidth: '70.5%'
         }
       });
     });
@@ -1048,7 +1008,6 @@ describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const newPlayground: PlaygroundWorkspaceState = {
       ...createDefaultWorkspace('playground'),
-      editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [
         [1, 2],
@@ -1113,12 +1072,7 @@ describe('RESET_TESTCASE', () => {
 
 describe('RESET_WORKSPACE', () => {
   test('works correctly', () => {
-    const editorHeight = 200;
-    const editorWidth = '70%';
-    const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      editorHeight,
-      editorWidth
-    });
+    const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
 
     const workspaceOptions = {
       breakpoints: ['1', '3'],

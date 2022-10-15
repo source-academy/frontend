@@ -15,8 +15,6 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeEditorHeight,
-  changeEditorWidth,
   changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
@@ -46,8 +44,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     editorValue: state.workspaces.grading.editorValue,
     editorPostpend: state.workspaces.grading.editorPostpend,
     editorTestcases: state.workspaces.grading.editorTestcases,
-    editorHeight: state.workspaces.grading.editorHeight,
-    editorWidth: state.workspaces.grading.editorWidth,
     breakpoints: state.workspaces.grading.breakpoints,
     highlightedLines: state.workspaces.grading.highlightedLines,
     grading: state.session.gradings.get(props.submissionId),
@@ -76,9 +72,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
-      handleEditorWidthChange: (widthChange: number) =>
-        changeEditorWidth(widthChange.toString(), workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleGradingFetch: fetchGrading,

@@ -46,9 +46,7 @@ export type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
-  handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleFetchSourcecastIndex: () => void;
@@ -94,10 +92,8 @@ export type StateProps = {
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
   breakpoints: string[];
-  editorHeight?: string;
   editorReadonly: boolean;
   editorValue: string;
-  editorWidth: string;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
   highlightedLines: HighlightedLines[];
@@ -281,10 +277,6 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
       customEditor: <SourcecastEditor {...editorProps} />,
-      editorHeight: this.props.editorHeight,
-      editorWidth: this.props.editorWidth,
-      handleEditorHeightChange: this.props.handleEditorHeightChange,
-      handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
         output: this.props.output,

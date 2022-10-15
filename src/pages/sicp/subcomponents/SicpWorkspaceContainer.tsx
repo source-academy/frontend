@@ -25,8 +25,6 @@ import {
   addHtmlConsoleError,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeEditorHeight,
-  changeEditorWidth,
   changeExecTime,
   changeSideContentHeight,
   changeStepLimit,
@@ -65,7 +63,6 @@ import Playground, { DispatchProps, StateProps } from '../../playground/Playgrou
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   editorSessionId: state.workspaces.sicp.editorSessionId,
-  editorWidth: state.workspaces.sicp.editorWidth,
   editorValue: state.workspaces.sicp.editorValue!,
   execTime: state.workspaces.sicp.execTime,
   stepLimit: state.workspaces.sicp.stepLimit,
@@ -109,9 +106,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
-      handleEditorWidthChange: (widthChange: number) =>
-        changeEditorWidth(widthChange.toString(), workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleGenerateLz: generateLzString,

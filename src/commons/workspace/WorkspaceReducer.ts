@@ -33,8 +33,6 @@ import { createContext } from '../utils/JsSlangHelper';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_EDITOR_HEIGHT,
-  CHANGE_EDITOR_WIDTH,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -186,28 +184,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         };
       }
-
-    case CHANGE_EDITOR_HEIGHT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorHeight: action.payload.height
-        }
-      };
-    case CHANGE_EDITOR_WIDTH:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorWidth:
-            Math.min(
-              parseFloat(state[workspaceLocation].editorWidth.slice(0, -1)) +
-                parseFloat(action.payload.widthChange),
-              100
-            ).toString() + '%'
-        }
-      };
     case CHANGE_EXEC_TIME:
       return {
         ...state,
