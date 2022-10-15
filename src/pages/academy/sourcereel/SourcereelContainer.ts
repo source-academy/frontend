@@ -14,8 +14,6 @@ import { Position } from '../../../commons/editor/EditorTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeEditorHeight,
-  changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
@@ -67,7 +65,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,
-  editorWidth: state.workspaces.sourcereel.editorWidth,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
   externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
@@ -104,9 +101,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeleteSourcecastEntry: (id: number) => deleteSourcecastEntry(id, 'sourcecast'),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
-      handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),
-      handleEditorWidthChange: (widthChange: number) =>
-        changeEditorWidth(widthChange.toString(), location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>

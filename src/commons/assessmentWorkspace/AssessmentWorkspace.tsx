@@ -78,8 +78,6 @@ export type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
-  handleEditorHeightChange: (height: number) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -115,8 +113,6 @@ export type StateProps = {
   editorValue: string | null;
   editorPostpend: string;
   editorTestcases: Testcase[];
-  editorHeight?: number;
-  editorWidth: string;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
@@ -814,10 +810,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
     editorProps: editorProps,
-    editorHeight: props.editorHeight,
-    editorWidth: props.editorWidth,
-    handleEditorHeightChange: props.handleEditorHeightChange,
-    handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,

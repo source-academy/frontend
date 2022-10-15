@@ -13,8 +13,6 @@ import SideContent, { SideContentProps } from '../sideContent/SideContent';
 export type WorkspaceProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleEditorHeightChange: (height: number) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
   handleSideContentHeightChange: (height: number) => void;
 };
 
@@ -23,8 +21,6 @@ type StateProps = {
   controlBarProps: ControlBarProps;
   customEditor?: JSX.Element;
   editorProps?: EditorProps;
-  editorHeight?: string | number;
-  editorWidth: string;
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
   replProps: ReplProps;
@@ -53,16 +49,13 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   const editorResizableProps = () => {
-    const onResizeStop: ResizeCallback = (_a, _b, _c, diff) =>
-      props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
     return {
       className: 'resize-editor left-parent',
       enable: rightResizeOnly,
       minWidth: 0,
       onResize: toggleEditorDividerDisplay,
-      onResizeStop,
       ref: leftParentResizable,
-      size: { width: props.editorWidth, height: '100%' },
+      defaultSize: { width: '50%', height: '100%' },
       as: undefined as any // re-resizable bug - wrong typedef
     } as ResizableProps;
   };

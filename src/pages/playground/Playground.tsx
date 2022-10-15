@@ -76,9 +76,7 @@ export type DispatchProps = {
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
@@ -113,8 +111,6 @@ export type DispatchProps = {
 export type StateProps = {
   editorSessionId: string;
   editorValue: string;
-  editorHeight?: number;
-  editorWidth: string;
   execTime: number;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -794,10 +790,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       ]
     },
     editorProps: editorProps,
-    editorHeight: props.editorHeight,
-    editorWidth: props.editorWidth,
-    handleEditorHeightChange: props.handleEditorHeightChange,
-    handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
     sideBarProps: {
@@ -814,8 +806,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         afterDynamicTabs: []
       },
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      sideContentHeight: props.sideContentHeight,
-      editorWidth: props.editorWidth
+      sideContentHeight: props.sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };

@@ -12,8 +12,6 @@ export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
 export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';
 export const BROWSE_REPL_HISTORY_UP = 'BROWSE_REPL_HISTORY_UP';
-export const CHANGE_EDITOR_HEIGHT = 'CHANGE_EDITOR_HEIGHT';
-export const CHANGE_EDITOR_WIDTH = 'CHANGE_EDITOR_WIDTH';
 export const CHANGE_EXEC_TIME = 'CHANGE_EXEC_TIME';
 export const CHANGE_EXTERNAL_LIBRARY = 'CHANGE_EXTERNAL_LIBRARY';
 export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
@@ -90,8 +88,6 @@ export type WorkspaceState = {
   readonly editorValue: string | null;
   readonly editorPostpend: string;
   readonly editorTestcases: Testcase[];
-  readonly editorHeight: number;
-  readonly editorWidth: string;
   readonly execTime: number;
   readonly highlightedLines: HighlightedLines[];
   readonly newCursorPosition?: Position;

@@ -14,8 +14,6 @@ import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_EDITOR_HEIGHT,
-  CHANGE_EDITOR_WIDTH,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -59,14 +57,6 @@ export const browseReplHistoryUp = (workspaceLocation: WorkspaceLocation) =>
 
 export const changeExternalLibrary = (newExternal: string, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_EXTERNAL_LIBRARY, { newExternal, workspaceLocation });
-
-export const changeEditorHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
-  action(CHANGE_EDITOR_HEIGHT, { height, workspaceLocation });
-
-export const changeEditorWidth = (widthChange: string, workspaceLocation: WorkspaceLocation) => {
-  window.dispatchEvent(new Event('resize'));
-  return action(CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
-};
 
 export const changeExecTime = (execTime: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_EXEC_TIME, { execTime, workspaceLocation });
