@@ -80,6 +80,7 @@ import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareB
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -788,9 +789,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
     sideBarProps: {
-      // TODO: Re-enable on master once the feature is production-ready.
-      // tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
-      tabs: []
+      tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
     },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
