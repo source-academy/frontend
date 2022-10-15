@@ -8,8 +8,6 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeEditorHeight,
-  changeEditorWidth,
   changeExternalLibrary,
   changeSideContentHeight,
   changeSublanguage,
@@ -42,8 +40,6 @@ import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_EDITOR_HEIGHT,
-  CHANGE_EDITOR_WIDTH,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_SUBLANGUAGE,
@@ -101,30 +97,6 @@ test('changeExternalLibrary generates correct action object', () => {
     payload: {
       newExternal,
       workspaceLocation: playgroundWorkspace
-    }
-  });
-});
-
-test('changeEditorHeight generates correct action object', () => {
-  const height = 120;
-  const action = changeEditorHeight(height, assessmentWorkspace);
-  expect(action).toEqual({
-    type: CHANGE_EDITOR_HEIGHT,
-    payload: {
-      height,
-      workspaceLocation: assessmentWorkspace
-    }
-  });
-});
-
-test('changeEditorWidth generates correct action object', () => {
-  const widthChange = '120';
-  const action = changeEditorWidth(widthChange, assessmentWorkspace);
-  expect(action).toEqual({
-    type: CHANGE_EDITOR_WIDTH,
-    payload: {
-      widthChange,
-      workspaceLocation: assessmentWorkspace
     }
   });
 });
