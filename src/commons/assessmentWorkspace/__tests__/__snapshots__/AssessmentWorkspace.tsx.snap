@@ -26,7 +26,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -54,7 +54,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={[undefined]} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={[undefined]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -82,7 +82,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -110,7 +110,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -138,6 +138,6 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideBarProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
