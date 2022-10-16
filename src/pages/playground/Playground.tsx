@@ -794,10 +794,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
     sideBarProps: {
-      tabs: [
-        { label: 'Files', body: <FileSystemView basePath="/playground" /> },
-        { label: 'Test', body: <></> }
-      ]
+      tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
     },
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
