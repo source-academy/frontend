@@ -51,6 +51,12 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     return { ...props.controlBarProps };
   };
 
+  const sideBarResizableProps = () => {
+    return {
+      enable: rightResizeOnly
+    } as ResizableProps;
+  };
+
   const editorResizableProps = () => {
     return {
       className: 'resize-editor left-parent',
@@ -148,7 +154,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       ) : null}
       <ControlBar {...controlBarProps()} />
       <div className="workspace-parent">
-        <SideBar {...props.sideBarProps} />
+        <Resizable {...sideBarResizableProps()}>
+          <SideBar {...props.sideBarProps} />
+        </Resizable>
         <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
