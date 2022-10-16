@@ -1,5 +1,6 @@
 import { FocusStyleManager } from '@blueprintjs/core';
-import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
+import { NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
+import { Direction } from 're-resizable/lib/resizer';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
@@ -32,6 +33,7 @@ type StateProps = {
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {
+  const sideBarResizable = React.useRef<Resizable | null>(null);
   const contentContainerDiv = React.useRef<HTMLDivElement | null>(null);
   const editorDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const leftParentResizable = React.useRef<Resizable | null>(null);
@@ -56,7 +58,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     return {
       enable: isSideBarRendered ? rightResizeOnly : noResize,
       minWidth: isSideBarRendered ? 40 : 0,
-      maxWidth: '50%'
+      maxWidth: '50%',
+      onResize: toggleSideBarDividerDisplay,
+      ref: sideBarResizable
     } as ResizableProps;
   };
 
@@ -82,6 +86,23 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       onResize: toggleDividerDisplay,
       onResizeStop
     } as ResizableProps;
+  };
+
+  const toggleSideBarDividerDisplay: ResizeCallback = (
+    event: MouseEvent | TouchEvent,
+    direction: Direction,
+    elementRef: HTMLElement,
+    delta: NumberSize
+  ) => {
+    const minWidthThreshold = 100;
+    const sideBarWidth = elementRef.clientWidth;
+    if (sideBarWidth < minWidthThreshold) {
+      const sideBar = sideBarResizable.current;
+      if (sideBar === null) {
+        throw Error('Reference to SideBar not found when resizing.');
+      }
+      sideBar.updateSize({ width: 40, height: '100%' });
+    }
   };
 
   /**
