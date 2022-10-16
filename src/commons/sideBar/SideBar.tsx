@@ -26,7 +26,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
 
   // Do not render the sidebar if there are no tabs.
   if (tabs.length === 0) {
-    return <></>;
+    return <div className="sidebar-container" />;
   }
 
   return (
