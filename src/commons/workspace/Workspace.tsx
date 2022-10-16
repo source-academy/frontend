@@ -8,7 +8,7 @@ import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
-import SideBar, { SideBarProps } from '../sideBar/SideBar';
+import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 import { useDimensions } from '../utils/Hooks';
 
@@ -26,7 +26,9 @@ type StateProps = {
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
   replProps: ReplProps;
-  sideBarProps: SideBarProps;
+  sideBarProps: {
+    tabs: SideBarTab[];
+  };
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
@@ -40,6 +42,28 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const maxDividerHeight = React.useRef<number | null>(null);
   const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
+  const [lastExpandedSideBarWidth, setLastExpandedSideBarWidth] = React.useState<number>(200);
+  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(false);
+
+  const sideBarCollapsedWidth = 40;
+
+  const expandSideBar = () => {
+    setIsSideBarExpanded(true);
+    const sideBar = sideBarResizable.current;
+    if (sideBar === null) {
+      throw Error('Reference to SideBar not found when expanding.');
+    }
+    sideBar.updateSize({ width: lastExpandedSideBarWidth, height: '100%' });
+  };
+
+  const collapseSideBar = () => {
+    setIsSideBarExpanded(false);
+    const sideBar = sideBarResizable.current;
+    if (sideBar === null) {
+      throw Error('Reference to SideBar not found when collapsing.');
+    }
+    sideBar.updateSize({ width: sideBarCollapsedWidth, height: '100%' });
+  };
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -54,13 +78,26 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   const sideBarResizableProps = () => {
+    const onResizeStop: ResizeCallback = (
+      event: MouseEvent | TouchEvent,
+      direction: Direction,
+      elementRef: HTMLElement,
+      delta: NumberSize
+    ) => {
+      const sideBarWidth = elementRef.clientWidth;
+      if (sideBarWidth !== sideBarCollapsedWidth) {
+        setLastExpandedSideBarWidth(sideBarWidth);
+      }
+    };
     const isSideBarRendered = props.sideBarProps.tabs.length !== 0;
     return {
       enable: isSideBarRendered ? rightResizeOnly : noResize,
-      minWidth: isSideBarRendered ? 40 : 0,
+      minWidth: isSideBarRendered ? sideBarCollapsedWidth : 0,
       maxWidth: '50%',
       onResize: toggleSideBarDividerDisplay,
-      ref: sideBarResizable
+      onResizeStop,
+      ref: sideBarResizable,
+      defaultSize: { width: sideBarCollapsedWidth, height: '100%' }
     } as ResizableProps;
   };
 
@@ -102,6 +139,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         throw Error('Reference to SideBar not found when resizing.');
       }
       sideBar.updateSize({ width: 40, height: '100%' });
+      setIsSideBarExpanded(false);
+    } else {
+      setIsSideBarExpanded(true);
     }
   };
 
@@ -173,7 +213,12 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       <ControlBar {...controlBarProps()} />
       <div className="workspace-parent">
         <Resizable {...sideBarResizableProps()}>
-          <SideBar {...props.sideBarProps} />
+          <SideBar
+            {...props.sideBarProps}
+            isExpanded={isSideBarExpanded}
+            expandSideBar={expandSideBar}
+            collapseSideBar={collapseSideBar}
+          />
         </Resizable>
         <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />

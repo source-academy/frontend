@@ -9,21 +9,27 @@ export type SideBarTab = {
 
 export type SideBarProps = {
   tabs: SideBarTab[];
+  isExpanded: boolean;
+  expandSideBar: () => void;
+  collapseSideBar: () => void;
 };
 
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
-  const { tabs } = props;
+  const { tabs, isExpanded, expandSideBar, collapseSideBar } = props;
 
   const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
-  const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
 
   const handleTabSelection = (tabIndex: number) => {
     if (selectedTabIndex === tabIndex) {
-      setIsExpanded(!isExpanded);
+      if (isExpanded) {
+        collapseSideBar();
+      } else {
+        expandSideBar();
+      }
       return;
     }
     setSelectedTabIndex(tabIndex);
-    setIsExpanded(true);
+    expandSideBar();
   };
 
   // Do not render the sidebar if there are no tabs.
