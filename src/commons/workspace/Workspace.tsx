@@ -53,7 +53,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
 
   const sideBarResizableProps = () => {
     return {
-      enable: rightResizeOnly
+      enable: rightResizeOnly,
+      maxWidth: '50%'
     } as ResizableProps;
   };
 
