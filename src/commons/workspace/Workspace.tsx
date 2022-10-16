@@ -90,14 +90,15 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       }
     };
     const isSideBarRendered = props.sideBarProps.tabs.length !== 0;
+    const minWidth = isSideBarRendered ? sideBarCollapsedWidth : 'auto';
     return {
       enable: isSideBarRendered ? rightResizeOnly : noResize,
-      minWidth: isSideBarRendered ? sideBarCollapsedWidth : 0,
+      minWidth,
       maxWidth: '50%',
       onResize: toggleSideBarDividerDisplay,
       onResizeStop,
       ref: sideBarResizable,
-      defaultSize: { width: sideBarCollapsedWidth, height: '100%' }
+      defaultSize: { width: minWidth, height: '100%' }
     } as ResizableProps;
   };
 
