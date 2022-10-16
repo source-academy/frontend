@@ -52,8 +52,10 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   const sideBarResizableProps = () => {
+    const isSideBarRendered = props.sideBarProps.tabs.length !== 0;
     return {
-      enable: props.sideBarProps.tabs.length === 0 ? noResize : rightResizeOnly,
+      enable: isSideBarRendered ? rightResizeOnly : noResize,
+      minWidth: isSideBarRendered ? 40 : 0,
       maxWidth: '50%'
     } as ResizableProps;
   };
