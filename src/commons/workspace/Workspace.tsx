@@ -53,6 +53,18 @@ const Workspace: React.FC<WorkspaceProps> = props => {
 
   const sideBarResizableProps = () => {
     return {
+      handleStyles: {
+        // Necessary for the resize component to be positioned at the gap between the sidebar and the editor.
+        // This is because the gap is created using a left margin on the editor. Replacing the left margin on the
+        // editor with a right margin on the sidebar results in more edge cases to handle since the sidebar is
+        // conditionally rendered (i.e., it does not display when there are no sidebar tabs).
+        right: {
+          // Move the resize component 0.5rem (the left margin of the editor) to the right (default value is -5px).
+          right: 'calc(-5px - 0.5rem)',
+          // Render the resize component above the editor so that it can be selected.
+          zIndex: 1
+        }
+      },
       enable: rightResizeOnly,
       maxWidth: '50%'
     } as ResizableProps;
