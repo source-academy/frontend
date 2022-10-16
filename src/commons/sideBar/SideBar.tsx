@@ -9,40 +9,48 @@ export type SideBarTab = {
 
 export type SideBarProps = {
   tabs: SideBarTab[];
+  isExpanded: boolean;
+  expandSideBar: () => void;
+  collapseSideBar: () => void;
 };
 
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
-  const [selectedTabIndex, setSelectedTabIndex] = React.useState<number | null>(null);
+  const { tabs, isExpanded, expandSideBar, collapseSideBar } = props;
+
+  const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
 
   const handleTabSelection = (tabIndex: number) => {
     if (selectedTabIndex === tabIndex) {
-      setSelectedTabIndex(null);
+      if (isExpanded) {
+        collapseSideBar();
+      } else {
+        expandSideBar();
+      }
       return;
     }
     setSelectedTabIndex(tabIndex);
+    expandSideBar();
   };
 
   // Do not render the sidebar if there are no tabs.
-  if (props.tabs.length === 0) {
-    return <></>;
+  if (tabs.length === 0) {
+    return <div className="sidebar-container" />;
   }
 
   return (
     <div className="sidebar-container">
       <div className="tab-container">
-        {props.tabs.map((tab, index) => (
+        {tabs.map((tab, index) => (
           <Card
             key={index}
-            className={classNames('tab', { selected: selectedTabIndex === index })}
+            className={classNames('tab', { selected: isExpanded && selectedTabIndex === index })}
             onClick={() => handleTabSelection(index)}
           >
             {tab.label}
           </Card>
         ))}
       </div>
-      {selectedTabIndex !== null && (
-        <Card className="panel">{props.tabs[selectedTabIndex].body}</Card>
-      )}
+      {selectedTabIndex !== null && <Card className="panel">{tabs[selectedTabIndex].body}</Card>}
     </div>
   );
 };
