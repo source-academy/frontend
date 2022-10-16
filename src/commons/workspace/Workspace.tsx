@@ -9,6 +9,7 @@ import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
 import SideBar, { SideBarProps } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
+import { useDimensions } from '../utils/Hooks';
 
 export type WorkspaceProps = DispatchProps & StateProps;
 
@@ -31,10 +32,12 @@ type StateProps = {
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {
+  const contentContainerDiv = React.useRef<HTMLDivElement | null>(null);
   const editorDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const leftParentResizable = React.useRef<Resizable | null>(null);
   const maxDividerHeight = React.useRef<number | null>(null);
   const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
+  const [contentContainerWidth] = useDimensions(contentContainerDiv);
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -80,7 +83,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const toggleEditorDividerDisplay: ResizeCallback = (_a, _b, ref) => {
     const leftThreshold = 5;
     const rightThreshold = 95;
-    const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
+    const editorWidthPercentage =
+      ((ref as HTMLDivElement).clientWidth / contentContainerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
       leftParentResizable.current!.updateSize({ width: '100%', height: '100%' });
@@ -145,7 +149,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       <ControlBar {...controlBarProps()} />
       <div className="workspace-parent">
         <SideBar {...props.sideBarProps} />
-        <div className="row content-parent">
+        <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
           <div className="right-parent">
