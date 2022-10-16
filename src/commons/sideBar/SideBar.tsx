@@ -14,14 +14,16 @@ export type SideBarProps = {
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   const { tabs } = props;
 
-  const [selectedTabIndex, setSelectedTabIndex] = React.useState<number | null>(null);
+  const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
+  const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
 
   const handleTabSelection = (tabIndex: number) => {
     if (selectedTabIndex === tabIndex) {
-      setSelectedTabIndex(null);
+      setIsExpanded(!isExpanded);
       return;
     }
     setSelectedTabIndex(tabIndex);
+    setIsExpanded(true);
   };
 
   // Do not render the sidebar if there are no tabs.
@@ -35,7 +37,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
         {tabs.map((tab, index) => (
           <Card
             key={index}
-            className={classNames('tab', { selected: selectedTabIndex === index })}
+            className={classNames('tab', { selected: isExpanded && selectedTabIndex === index })}
             onClick={() => handleTabSelection(index)}
           >
             {tab.label}
