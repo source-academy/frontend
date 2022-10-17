@@ -775,7 +775,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const sideBarProps = {
-    tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
+    tabs: [
+      {
+        label: 'Files',
+        body: <FileSystemView basePath="/playground" />,
+        iconName: IconNames.FOLDER_CLOSE
+      }
+    ]
   };
 
   const workspaceProps: WorkspaceProps = {

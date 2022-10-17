@@ -36,11 +36,20 @@
   // !important is necessary to override the default Card background-color property.
   background-color: $cadet-color-2 !important;
   user-select: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 6px;
+  text-align: center;
 
   &.selected {
     // !important is necessary to override the default Card background-color property.
     background-color: $cadet-color-1 !important;
   }
+}
+
+.tab-icon {
+  transform: rotate(90deg);
 }
 
 .panel {

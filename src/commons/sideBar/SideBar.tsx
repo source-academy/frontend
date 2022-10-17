@@ -1,10 +1,11 @@
-import { Card } from '@blueprintjs/core';
+import { Card, Icon, IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
 export type SideBarTab = {
   label: string;
   body: JSX.Element;
+  iconName: IconName;
 };
 
 export type SideBarProps = {
@@ -46,6 +47,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
             className={classNames('tab', { selected: isExpanded && selectedTabIndex === index })}
             onClick={() => handleTabSelection(index)}
           >
+            <Icon className="tab-icon" icon={tab.iconName} size={14} />
             {tab.label}
           </Card>
         ))}
