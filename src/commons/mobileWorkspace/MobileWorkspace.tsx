@@ -10,6 +10,7 @@ import ControlBar from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
+import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
@@ -33,6 +34,9 @@ type StateProps = {
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
+  sideBarProps: {
+    tabs: SideBarTab[];
+  };
   mobileSideContentProps: MobileSideContentProps;
 };
 

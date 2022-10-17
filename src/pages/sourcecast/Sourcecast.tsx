@@ -296,6 +296,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     replButtons: [evalButton, clearButton]
   };
 
+  const sideBarProps = {
+    tabs: []
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
@@ -303,9 +307,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     customEditor: <SourceRecorderEditor {...editorProps} />,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
-    sideBarProps: {
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
@@ -327,6 +329,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       />
     ),
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
