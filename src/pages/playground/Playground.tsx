@@ -779,7 +779,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       {
         label: 'Files',
         body: <FileSystemView basePath="/playground" />,
-        iconName: IconNames.FOLDER_CLOSE
+        iconName: IconNames.FOLDER_CLOSE,
+        id: SideContentType.files
       }
     ]
   };

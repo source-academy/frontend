@@ -196,6 +196,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     }
   };
 
+  // Convert sidebar tabs with a side content tab ID into side content tabs.
+  const sideBarTabs: SideContentTab[] = props.sideBarProps.tabs.filter(tab => tab.id !== undefined);
+
   const mobileEditorTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Editor',
@@ -229,6 +232,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       },
       tabs: {
         beforeDynamicTabs: [
+          ...sideBarTabs,
           mobileEditorTab,
           ...props.mobileSideContentProps.tabs.beforeDynamicTabs
         ],
