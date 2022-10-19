@@ -10,6 +10,7 @@ import ControlBar from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
+import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
@@ -33,6 +34,9 @@ type StateProps = {
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
+  sideBarProps: {
+    tabs: SideBarTab[];
+  };
   mobileSideContentProps: MobileSideContentProps;
 };
 
@@ -180,8 +184,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       handleHideRepl();
     }
 
-    // Disable draggable REPL when on the stepper tab.
+    // Disable draggable REPL when on the files & stepper tab.
     if (
+      newTabId === SideContentType.files ||
       newTabId === SideContentType.substVisualizer ||
       (prevTabId === SideContentType.substVisualizer &&
         newTabId === SideContentType.mobileEditorRun)
@@ -191,6 +196,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       setIsDraggableReplDisabled(false);
     }
   };
+
+  // Convert sidebar tabs with a side content tab ID into side content tabs.
+  const sideBarTabs: SideContentTab[] = props.sideBarProps.tabs.filter(tab => tab.id !== undefined);
 
   const mobileEditorTab: SideContentTab = React.useMemo(
     () => ({
@@ -225,6 +233,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       },
       tabs: {
         beforeDynamicTabs: [
+          ...sideBarTabs,
           mobileEditorTab,
           ...props.mobileSideContentProps.tabs.beforeDynamicTabs
         ],

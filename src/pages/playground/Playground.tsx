@@ -774,6 +774,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
     disableScrolling: isSicpEditor
   };
 
+  const sideBarProps = {
+    tabs: [
+      {
+        label: 'Files',
+        body: <FileSystemView basePath="/playground" />,
+        iconName: IconNames.FOLDER_CLOSE,
+        id: SideContentType.files
+      }
+    ]
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -793,9 +804,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     editorProps: editorProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
-    sideBarProps: {
-      tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
@@ -813,6 +822,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorProps: editorProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
         editorButtons: [
