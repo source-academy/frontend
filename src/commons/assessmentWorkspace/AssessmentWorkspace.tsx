@@ -807,15 +807,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons()
   };
+  const sideBarProps = {
+    tabs: []
+  };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
     editorProps: editorProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
-    sideBarProps: {
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps
@@ -825,6 +826,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
 

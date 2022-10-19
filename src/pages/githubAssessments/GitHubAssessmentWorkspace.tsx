@@ -1084,15 +1084,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()
   };
+  const sideBarProps = {
+    tabs: []
+  };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
     editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
-    sideBarProps: {
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props),
     replProps: replProps
@@ -1100,6 +1101,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     mobileSideContentProps: mobileSideContentProps()
