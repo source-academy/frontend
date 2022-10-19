@@ -1,10 +1,21 @@
-import { Card } from '@blueprintjs/core';
+import { Card, Icon, IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
+import { SideContentType } from '../sideContent/SideContentTypes';
+
+/**
+ * @property label The displayed name of the tab.
+ * @property body The element to be rendered inside the sidebar tab.
+ * @property iconName The name of the displayed icon.
+ * @property id The ID of the tab when displayed as a side content on the mobile view.
+ *              Omit if the tab should only be shown in the sidebar on the desktop view.
+ */
 export type SideBarTab = {
   label: string;
   body: JSX.Element;
+  iconName: IconName;
+  id?: SideContentType;
 };
 
 export type SideBarProps = {
@@ -46,6 +57,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
             className={classNames('tab', { selected: isExpanded && selectedTabIndex === index })}
             onClick={() => handleTabSelection(index)}
           >
+            <Icon className="tab-icon" icon={tab.iconName} size={14} />
             {tab.label}
           </Card>
         ))}
