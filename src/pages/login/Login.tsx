@@ -27,17 +27,20 @@ const providers = [...Constants.authProviders.entries()].map(([id, { name }]) =>
 const Login: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { code, provider: providerId } = parseQuery(location.search);
+  const { code, ticket, provider: providerId } = parseQuery(location.search);
+
+  // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
+  const authCode = code || ticket;
 
   const handleLogin = React.useCallback(providerId => dispatch(login(providerId)), [dispatch]);
 
   React.useEffect(() => {
-    if (code) {
-      dispatch(fetchAuth(code, providerId));
+    if (authCode) {
+      dispatch(fetchAuth(authCode, providerId));
     }
-  }, [code, providerId, dispatch]);
+  }, [authCode, providerId, dispatch]);
 
-  if (code) {
+  if (authCode) {
     return (
       <div className={classNames('Login', Classes.DARK)}>
         <Card className={classNames('login-card', Classes.ELEVATION_4)}>
