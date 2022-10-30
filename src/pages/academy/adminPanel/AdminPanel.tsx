@@ -12,7 +12,7 @@ import {
 } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
+import AddUserPanel, { UsernameNameRoleGroup } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
@@ -29,7 +29,7 @@ export type DispatchProps = {
   handleDeleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => void;
   handleUpdateUserRole: (courseRegId: number, role: Role) => void;
   handleDeleteUserFromCourse: (courseRegId: number) => void;
-  handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;
+  handleAddNewUsersToCourse: (users: UsernameNameRoleGroup[], provider: string) => void;
 };
 
 export type StateProps = {

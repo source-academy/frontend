@@ -1,15 +1,15 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { UsernameNameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { addNewUsersToCourse, createCourse } from '../AcademyActions';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from '../AcademyTypes';
 
 test('addNewUsersToCourse generates correct action object', () => {
-  const users: UsernameRoleGroup[] = [
-    { username: 'student1', role: Role.Student },
-    { username: 'staff1', role: Role.Staff }
+  const users: UsernameNameRoleGroup[] = [
+    { username: 'student1', name: 'student1name', role: Role.Student },
+    { username: 'staff1', name: 'staff1name', role: Role.Staff }
   ];
   const provider: string = 'test';
 

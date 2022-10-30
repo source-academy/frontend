@@ -26,7 +26,7 @@ import {
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { UsernameNameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
   backendifyAchievementItem,
@@ -1088,7 +1088,7 @@ export const getUserCourseRegistrations = async (
  */
 export const putNewUsers = async (
   tokens: Tokens,
-  users: UsernameRoleGroup[],
+  users: UsernameNameRoleGroup[],
   provider: string
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'PUT', {

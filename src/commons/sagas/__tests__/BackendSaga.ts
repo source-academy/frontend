@@ -3,7 +3,7 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { history } from 'src/commons/utils/HistoryHelper';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { UsernameNameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
@@ -1030,9 +1030,9 @@ describe('Test CREATE_COURSE action', () => {
 });
 
 describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
-  const users: UsernameRoleGroup[] = [
-    { username: 'student1', role: Role.Student },
-    { username: 'staff1', role: Role.Staff }
+  const users: UsernameNameRoleGroup[] = [
+    { username: 'student1', name: 'student1name', role: Role.Student },
+    { username: 'staff1', name: 'staff1name', role: Role.Staff }
   ];
   const provider: string = 'test';
 

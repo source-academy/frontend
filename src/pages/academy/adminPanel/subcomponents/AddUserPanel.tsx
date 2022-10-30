@@ -24,17 +24,18 @@ import Constants from '../../../../commons/utils/Constants';
 export type AddUserPanelProps = OwnProps;
 
 type OwnProps = {
-  handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;
+  handleAddNewUsersToCourse: (users: UsernameNameRoleGroup[], provider: string) => void;
 };
 
-export type UsernameRoleGroup = {
+export type UsernameNameRoleGroup = {
   username: string;
+  name: string;
   role: Role;
   group?: string;
 };
 
 const AddUserPanel: React.FC<AddUserPanelProps> = props => {
-  const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
+  const [users, setUsers] = React.useState<UsernameNameRoleGroup[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
   const gridApi = React.useRef<GridApi>();
   const { CSVReader } = useCSVReader();
@@ -43,6 +44,10 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
     {
       headerName: 'Username',
       field: 'username'
+    },
+    {
+      headerName: 'Name',
+      field: 'name'
     },
     {
       headerName: 'Role',
@@ -101,7 +106,7 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
      * Terminate early if validation errors are encountered, and do not add to existing
      * valid uploaded entries in the table
      */
-    const processed: UsernameRoleGroup[] = [...users];
+    const processed: UsernameNameRoleGroup[] = [...users];
 
     if (data.length + users.length > 1000) {
       setInvalidCsvMsg('Please limit each upload to 1000 entries!');
@@ -110,16 +115,16 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
 
     for (let i = 0; i < data.length; i++) {
       // Incorrect number of columns
-      if (!(data[i].length === 2 || data[i].length === 3)) {
+      if (!(data[i].length === 3 || data[i].length === 4)) {
         setInvalidCsvMsg(
           <>
             <div>
-              Invalid format (line {i})! Please ensure that the username and role is specified for
-              each row entry!
+              Invalid format (line {i})! Please ensure that the username, name and role is specified
+              for each row entry!
             </div>
             <br />
             <div>
-              Format: <i>username,role</i> <b>OR</b> <i>username,role,group</i>
+              Format: <i>username,name,role</i> <b>OR</b> <i>username,name,role,group</i>
             </div>
             <br />
             <div>(please hover over the question mark above for more details)</div>
@@ -128,7 +133,7 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
         return;
       }
       // Invalid role specified
-      if (!Object.values(Role).includes(data[i][1] as Role)) {
+      if (!Object.values(Role).includes(data[i][2] as Role)) {
         setInvalidCsvMsg(
           `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: 'admin, staff, student'`
         );
@@ -139,8 +144,9 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
     data.forEach(e => {
       processed.push({
         username: e[0],
-        role: e[1] as Role,
-        group: e[2]
+        name: e[1],
+        role: e[2] as Role,
+        group: e[3]
       });
     });
 
@@ -184,13 +190,13 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
                       content={
                         <div>
                           <p>
-                            <u>CSV Format</u>: &nbsp;
+                            <u>CSV Format</u>: &nbsp; &nbsp;&nbsp;OR&nbsp;&nbsp;
                             <b>
-                              <i>username,role</i>
+                              <i>username,name,role</i>
                             </b>
                             &nbsp;&nbsp;OR&nbsp;&nbsp;
                             <b>
-                              <i>username,role,group</i>
+                              <i>username,name,role,group</i>
                             </b>
                           </p>
                           <p>
@@ -199,6 +205,13 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
                             </b>
                             : the username of the learner in the corresponding authentication
                             provider
+                          </p>
+                          <p>
+                            <b>
+                              <i>name</i>
+                            </b>
+                            : the user's name (note that this field is ignored if the user with
+                            corresponding username already exists in the database)
                           </p>
                           <p>
                             <b>
