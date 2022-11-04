@@ -71,17 +71,15 @@ function* githubOpenFile(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.repos.listForAuthenticatedUser
-  >;
-  const results: ListForAuthenticatedUserResponse = yield call(
-    octokit.repos.listForAuthenticatedUser
-  );
-
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
   >;
-  const userRepos: ListForAuthenticatedUserData = results.data;
+  const userRepos: ListForAuthenticatedUserData = yield call(
+    async () =>
+      await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+        per_page: 100
+      })
+  );
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
@@ -142,17 +140,15 @@ function* githubSaveFileAs(): any {
     repos: { listForAuthenticatedUser: () => {} }
   };
 
-  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.repos.listForAuthenticatedUser
-  >;
-  const results: ListForAuthenticatedUserResponse = yield call(
-    octokit.repos.listForAuthenticatedUser
-  );
-
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
   >;
-  const userRepos: ListForAuthenticatedUserData = results.data;
+  const userRepos: ListForAuthenticatedUserData = yield call(
+    async () =>
+      await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+        per_page: 100
+      })
+  );
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
