@@ -77,6 +77,7 @@ function* githubOpenFile(): any {
   const userRepos: ListForAuthenticatedUserData = yield call(
     async () =>
       await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+        // 100 is the maximum number of results that can be retrieved per page.
         per_page: 100
       })
   );
@@ -146,6 +147,7 @@ function* githubSaveFileAs(): any {
   const userRepos: ListForAuthenticatedUserData = yield call(
     async () =>
       await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+        // 100 is the maximum number of results that can be retrieved per page.
         per_page: 100
       })
   );
