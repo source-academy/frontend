@@ -66,10 +66,10 @@ function* githubLogoutSaga() {
 }
 
 function* githubOpenFile(): any {
-  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} },
-    repos: { listForAuthenticatedUser: () => {} }
-  };
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+  if (octokit === undefined) {
+    return;
+  }
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
@@ -135,10 +135,10 @@ function* githubSaveFile(): any {
 }
 
 function* githubSaveFileAs(): any {
-  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} },
-    repos: { listForAuthenticatedUser: () => {} }
-  };
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+  if (octokit === undefined) {
+    return;
+  }
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
