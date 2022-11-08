@@ -69,7 +69,8 @@ import {
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
-  User} from '../application/types/SessionTypes';
+  User
+} from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { history } from '../utils/HistoryHelper';
@@ -244,17 +245,20 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.updateTotalXp(res.totalXp));
     }
   });
-  
-  yield takeEvery(FETCH_TOTAL_XP_ADMIN, function* (action: ReturnType<typeof actions.fetchTotalXpAdmin>) {
-    const tokens: Tokens = yield selectTokens();
 
-    const courseRegId = action.payload;
+  yield takeEvery(
+    FETCH_TOTAL_XP_ADMIN,
+    function* (action: ReturnType<typeof actions.fetchTotalXpAdmin>) {
+      const tokens: Tokens = yield selectTokens();
 
-    const res: { totalXp: number } = yield call(getTotalXp, tokens, courseRegId);
-    if (res) {
-      yield put(actions.updateTotalXp(res.totalXp));
+      const courseRegId = action.payload;
+
+      const res: { totalXp: number } = yield call(getTotalXp, tokens, courseRegId);
+      if (res) {
+        yield put(actions.updateTotalXp(res.totalXp));
+      }
     }
-  });
+  );
 
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const tokens: Tokens = yield selectTokens();
@@ -266,17 +270,25 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.updateAssessment(assessment));
     }
   });
-  
-  yield takeEvery(FETCH_ASSESSMENT_ADMIN, function* (action: ReturnType<typeof actions.fetchAssessmentAdmin>) {
-    const tokens: Tokens = yield selectTokens();
 
-    const {assessmentId, courseRegId} = action.payload;
+  yield takeEvery(
+    FETCH_ASSESSMENT_ADMIN,
+    function* (action: ReturnType<typeof actions.fetchAssessmentAdmin>) {
+      const tokens: Tokens = yield selectTokens();
 
-    const assessment: Assessment | null = yield call(getAssessment, assessmentId, tokens, courseRegId);
-    if (assessment) {
-      yield put(actions.updateAssessment(assessment));
+      const { assessmentId, courseRegId } = action.payload;
+
+      const assessment: Assessment | null = yield call(
+        getAssessment,
+        assessmentId,
+        tokens,
+        courseRegId
+      );
+      if (assessment) {
+        yield put(actions.updateAssessment(assessment));
+      }
     }
-  });
+  );
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>): any {
     const tokens: Tokens = yield selectTokens();
