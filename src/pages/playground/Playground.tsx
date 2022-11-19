@@ -9,9 +9,14 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
+import {
+  beginDebuggerPause,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
@@ -96,9 +101,6 @@ export type DispatchProps = {
   handleSetSharedbConnected: (connected: boolean) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handlePersistenceOpenPicker: () => void;
@@ -183,6 +185,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
   propsRef.current = props;
+
+  const dispatch = useDispatch();
 
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
@@ -343,9 +347,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarAutorunButtons
         {..._.pick(
           props,
-          'handleDebuggerPause',
-          'handleDebuggerReset',
-          'handleDebuggerResume',
           'handleEditorEval',
           'handleInterruptEval',
           'handleToggleEditorAutorun',
@@ -354,6 +355,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           'isRunning',
           'playgroundSourceChapter'
         )}
+        handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
+        handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
+        handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         // Disable pause for non-Source languages since they cannot be paused

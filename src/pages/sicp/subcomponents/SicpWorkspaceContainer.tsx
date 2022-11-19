@@ -3,12 +3,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from '../../../commons/application/actions/InterpreterActions';
+import { beginInterruptExecution } from '../../../commons/application/actions/InterpreterActions';
 import {
   loginGitHub,
   logoutGitHub,
@@ -126,9 +121,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeSideContentHeight(heightChange, workspaceLocation),
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation),
-      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
-      handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handlePersistenceOpenPicker: persistenceOpenPicker,
