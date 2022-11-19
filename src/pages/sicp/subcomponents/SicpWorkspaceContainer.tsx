@@ -4,33 +4,17 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { beginInterruptExecution } from '../../../commons/application/actions/InterpreterActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import {
-  setEditorSessionId,
-  setSharedbConnected
-} from '../../../commons/collabEditing/CollabEditingActions';
-import { Position } from '../../../commons/editor/EditorTypes';
-import {
-  addHtmlConsoleError,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
-  changeStepLimit,
   chapterSelect,
   clearReplOutput,
   evalRepl,
   externalLibrarySelect,
-  navigateToDeclaration,
-  promptAutocomplete,
-  sendReplInputToOutput,
   setEditorBreakpoint,
-  toggleEditorAutorun,
   toggleUsingSubst,
-  updateEditorValue,
-  updateReplValue
+  updateEditorValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
@@ -71,36 +55,17 @@ const workspaceLocation: WorkspaceLocation = 'sicp';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleAddHtmlConsoleError: (errorMsg: string) =>
-        addHtmlConsoleError(errorMsg, workspaceLocation),
-      handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),
-      handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, workspaceLocation),
       handleChapterSelect: (chapter: Chapter, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleSetEditorSessionId: (editorSessionId: string) =>
-        setEditorSessionId(workspaceLocation, editorSessionId),
-      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleSetSharedbConnected: (connected: boolean) =>
-        setSharedbConnected(workspaceLocation, connected),
-      handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, workspaceLocation),
-      handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
-      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation),
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation)
     },
     dispatch
   );

@@ -14,6 +14,7 @@ import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import {
   beginDebuggerPause,
+  beginInterruptExecution,
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
@@ -22,10 +23,26 @@ import {
   logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
+import {
+  setEditorSessionId,
+  setSharedbConnected
+} from 'src/commons/collabEditing/CollabEditingActions';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
-import { evalEditor } from 'src/commons/workspace/WorkspaceActions';
+import {
+  addHtmlConsoleError,
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeSideContentHeight,
+  changeStepLimit,
+  evalEditor,
+  navigateToDeclaration,
+  promptAutocomplete,
+  sendReplInputToOutput,
+  toggleEditorAutorun,
+  updateReplValue
+} from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
@@ -101,26 +118,13 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
-  handleAddHtmlConsoleError: (errorMsg: string) => void;
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
-  handleChangeStepLimit: (stepLimit: number) => void;
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleSendReplInputToOutput: (code: string) => void;
-  handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetSharedbConnected: (connected: boolean) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
-  handleToggleEditorAutorun: () => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleUpdatePrepend?: (s: string) => void;
 };
 
@@ -358,15 +362,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
-        {..._.pick(
-          props,
-          'handleInterruptEval',
-          'handleToggleEditorAutorun',
-          'isDebugging',
-          'isEditorAutorun',
-          'isRunning',
-          'playgroundSourceChapter'
-        )}
+        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning', 'playgroundSourceChapter')}
+        handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
+        handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
         handleEditorEval={handleEditorEval}
         handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
         handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
@@ -502,11 +500,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     () => (
       <ControlBarStepLimit
         stepLimit={props.stepLimit}
-        handleChangeStepLimit={props.handleChangeStepLimit}
+        handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
         key="step_limit"
       />
     ),
-    [props.handleChangeStepLimit, props.stepLimit]
+    [dispatch, props.stepLimit, workspaceLocation]
   );
 
   const { handleEditorValueChange } = props;
@@ -516,7 +514,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     <ControlBarSessionButtons
       editorSessionId={props.editorSessionId}
       editorValue={props.editorValue}
-      handleSetEditorSessionId={props.handleSetEditorSessionId}
+      handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
       sharedbConnected={props.sharedbConnected}
       key="session"
     />
@@ -569,7 +567,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           body: (
             <SideContentHtmlDisplay
               content={(props.output[0] as ResultOutput).value}
-              handleAddHtmlConsoleError={props.handleAddHtmlConsoleError}
+              handleAddHtmlConsoleError={errorMsg =>
+                dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+              }
             />
           ),
           id: SideContentType.htmlDisplay
@@ -617,14 +617,15 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
     return tabs;
   }, [
-    isSicpEditor,
     playgroundIntroductionTab,
-    props.output,
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
+    props.output,
     usingRemoteExecution,
-    remoteExecutionTab,
-    props.handleAddHtmlConsoleError
+    isSicpEditor,
+    dispatch,
+    workspaceLocation,
+    remoteExecutionTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -725,16 +726,20 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       props,
       'editorValue',
       'editorSessionId',
-      'handleDeclarationNavigate',
-      'handleSendReplInputToOutput',
-      'handlePromptAutocomplete',
       'isEditorAutorun',
       'breakpoints',
       'highlightedLines',
-      'newCursorPosition',
-      'handleSetSharedbConnected'
+      'newCursorPosition'
     ),
+    handleDeclarationNavigate: (cursorPosition: Position) =>
+      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval,
+    handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+    handleSendReplInputToOutput: (code: string) =>
+      dispatch(sendReplInputToOutput(code, workspaceLocation)),
+    handleSetSharedbConnected: (connected: boolean) =>
+      dispatch(setSharedbConnected(workspaceLocation, connected)),
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
@@ -747,16 +752,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   };
 
   const replProps = {
-    ..._.pick(
-      props,
-      'output',
-      'replValue',
-      'handleBrowseHistoryDown',
-      'handleBrowseHistoryUp',
-      'handleReplEval',
-      'handleReplValueChange',
-      'usingSubst'
-    ),
+    ..._.pick(props, 'output', 'replValue', 'handleReplEval', 'usingSubst'),
+    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+    handleReplValueChange: (newValue: string) =>
+      dispatch(updateReplValue(newValue, workspaceLocation)),
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
@@ -783,7 +783,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       ]
     },
     editorProps: editorProps,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    handleSideContentHeightChange: change =>
+      dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
     sideBarProps: {
       // TODO: Re-enable on master once the feature is production-ready.
