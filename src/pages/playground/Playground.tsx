@@ -5,7 +5,7 @@ import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { isEqual } from 'lodash';
+import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
@@ -332,39 +332,29 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [sessionId]
   );
 
-  const autorunButtons = React.useMemo(
-    () => (
+  const autorunButtons = React.useMemo(() => {
+    return (
       <ControlBarAutorunButtons
-        handleDebuggerPause={props.handleDebuggerPause}
-        handleDebuggerReset={props.handleDebuggerReset}
-        handleDebuggerResume={props.handleDebuggerResume}
-        handleEditorEval={props.handleEditorEval}
-        handleInterruptEval={props.handleInterruptEval}
-        handleToggleEditorAutorun={props.handleToggleEditorAutorun}
-        isDebugging={props.isDebugging}
-        isEditorAutorun={props.isEditorAutorun}
-        isRunning={props.isRunning}
-        sourceChapter={props.playgroundSourceChapter}
+        {..._.pick(
+          props,
+          'handleDebuggerPause',
+          'handleDebuggerReset',
+          'handleDebuggerResume',
+          'handleEditorEval',
+          'handleInterruptEval',
+          'handleToggleEditorAutorun',
+          'isDebugging',
+          'isEditorAutorun',
+          'isRunning',
+          'playgroundSourceChapter'
+        )}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
-    ),
-    [
-      props.handleDebuggerPause,
-      props.handleDebuggerReset,
-      props.handleDebuggerResume,
-      props.handleEditorEval,
-      props.handleInterruptEval,
-      props.handleToggleEditorAutorun,
-      props.isDebugging,
-      props.isEditorAutorun,
-      props.isRunning,
-      props.playgroundSourceChapter,
-      usingRemoteExecution
-    ]
-  );
+    );
+  }, [props, usingRemoteExecution]);
 
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
@@ -734,6 +724,20 @@ const Playground: React.FC<PlaygroundProps> = props => {
     usingRemoteExecution;
 
   const editorProps = {
+    ..._.pick(
+      props,
+      'editorValue',
+      'editorSessionId',
+      'handleDeclarationNavigate',
+      'handleEditorEval',
+      'handleSendReplInputToOutput',
+      'handlePromptAutocomplete',
+      'isEditorAutorun',
+      'breakpoints',
+      'highlightedLines',
+      'newCursorPosition',
+      'handleSetSharedbConnected'
+    ),
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
@@ -741,34 +745,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: props.playgroundSourceChapter,
     externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
-    editorValue: props.editorValue,
-    editorSessionId: props.editorSessionId,
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
-    handleEditorEval: props.handleEditorEval,
     handleEditorValueChange: onEditorValueChange,
-    handleSendReplInputToOutput: props.handleSendReplInputToOutput,
-    handlePromptAutocomplete: props.handlePromptAutocomplete,
-    isEditorAutorun: props.isEditorAutorun,
-    breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-    handleSetSharedbConnected: props.handleSetSharedbConnected
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
   };
 
   const replProps = {
+    ..._.pick(
+      props,
+      'output',
+      'replValue',
+      'handleBrowseHistoryDown',
+      'handleBrowseHistoryUp',
+      'handleReplEval',
+      'handleReplValueChange',
+      'usingSubst'
+    ),
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
-    output: props.output,
-    replValue: props.replValue,
-    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-    handleReplEval: props.handleReplEval,
-    handleReplValueChange: props.handleReplValueChange,
     hidden: selectedTab === SideContentType.substVisualizer,
     inputHidden: replDisabled,
-    usingSubst: props.usingSubst,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor
   };

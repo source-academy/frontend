@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -60,28 +61,31 @@ import {
 import Playground, { DispatchProps, StateProps } from './Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  editorSessionId: state.workspaces.playground.editorSessionId,
+  ..._.pick(
+    state.workspaces.playground,
+    'editorSessionId',
+    'execTime',
+    'stepLimit',
+    'isEditorAutorun',
+    'breakpoints',
+    'highlightedLines',
+    'isRunning',
+    'isDebugging',
+    'enableDebugging',
+    'newCursorPosition',
+    'output',
+    'replValue',
+    'sideContentHeight',
+    'sharedbConnected',
+    'usingSubst'
+  ),
   editorValue: state.workspaces.playground.editorValue!,
-  execTime: state.workspaces.playground.execTime,
-  stepLimit: state.workspaces.playground.stepLimit,
-  isEditorAutorun: state.workspaces.playground.isEditorAutorun,
-  breakpoints: state.workspaces.playground.breakpoints,
-  highlightedLines: state.workspaces.playground.highlightedLines,
-  isRunning: state.workspaces.playground.isRunning,
-  isDebugging: state.workspaces.playground.isDebugging,
-  enableDebugging: state.workspaces.playground.enableDebugging,
-  newCursorPosition: state.workspaces.playground.newCursorPosition,
-  output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
-  replValue: state.workspaces.playground.replValue,
-  sideContentHeight: state.workspaces.playground.sideContentHeight,
   playgroundSourceChapter: state.workspaces.playground.context.chapter,
   playgroundSourceVariant: state.workspaces.playground.context.variant,
   courseSourceChapter: state.session.sourceChapter,
   courseSourceVariant: state.session.sourceVariant,
-  sharedbConnected: state.workspaces.playground.sharedbConnected,
-  usingSubst: state.workspaces.playground.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitObject: state.session.githubOctokitObject,
