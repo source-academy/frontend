@@ -5,7 +5,6 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { beginInterruptExecution } from '../../../commons/application/actions/InterpreterActions';
-import { logoutGoogle } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import {
@@ -35,12 +34,6 @@ import {
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import {
-  persistenceInitialise,
-  persistenceOpenPicker,
-  persistenceSaveFile,
-  persistenceSaveFileAs
-} from '../../../features/persistence/PersistenceActions';
 import {
   generateLzString,
   shortenURL,
@@ -117,12 +110,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback),
-      handlePersistenceOpenPicker: persistenceOpenPicker,
-      handlePersistenceSaveFile: persistenceSaveFileAs,
-      handlePersistenceUpdateFile: persistenceSaveFile,
-      handlePersistenceInitialise: persistenceInitialise,
-      handlePersistenceLogOut: logoutGoogle
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );

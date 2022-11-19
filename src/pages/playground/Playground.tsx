@@ -17,7 +17,11 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
+import {
+  loginGitHub,
+  logoutGitHub,
+  logoutGoogle
+} from 'src/commons/application/actions/SessionActions';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
@@ -27,6 +31,12 @@ import {
   githubSaveFile,
   githubSaveFileAs
 } from 'src/features/github/GitHubActions';
+import {
+  persistenceInitialise,
+  persistenceOpenPicker,
+  persistenceSaveFile,
+  persistenceSaveFileAs
+} from 'src/features/persistence/PersistenceActions';
 
 import {
   InterpreterOutput,
@@ -109,11 +119,6 @@ export type DispatchProps = {
   handleUsingSubst: (usingSubst: boolean) => void;
   handleToggleEditorAutorun: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handlePersistenceOpenPicker: () => void;
-  handlePersistenceSaveFile: () => void;
-  handlePersistenceUpdateFile: (file: PersistenceFile) => void;
-  handlePersistenceInitialise: () => void;
-  handlePersistenceLogOut: () => void;
   handleUpdatePrepend?: (s: string) => void;
 };
 
@@ -432,7 +437,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [props.handleReplEval, props.isRunning, selectedTab]
   );
 
-  const { persistenceUser, persistenceFile, handlePersistenceUpdateFile } = props;
+  const { persistenceUser, persistenceFile } = props;
   // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
@@ -443,25 +448,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         key="googledrive"
-        onClickSaveAs={props.handlePersistenceSaveFile}
-        onClickOpen={props.handlePersistenceOpenPicker}
+        onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
+        onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
-          persistenceFile ? () => handlePersistenceUpdateFile(persistenceFile) : undefined
+          persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
-        onClickLogOut={props.handlePersistenceLogOut}
-        onPopoverOpening={props.handlePersistenceInitialise}
+        onClickLogOut={() => dispatch(logoutGoogle())}
+        onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [
-    persistenceUser,
-    persistenceFile,
-    persistenceIsDirty,
-    props.handlePersistenceSaveFile,
-    props.handlePersistenceOpenPicker,
-    props.handlePersistenceLogOut,
-    props.handlePersistenceInitialise,
-    handlePersistenceUpdateFile
-  ]);
+  }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
 
   const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
