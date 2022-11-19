@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -57,27 +58,30 @@ import {
 import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  editorSessionId: state.workspaces.sicp.editorSessionId,
+  ..._.pick(
+    state.workspaces.sicp,
+    'editorSessionId',
+    'execTime',
+    'stepLimit',
+    'isEditorAutorun',
+    'breakpoints',
+    'highlightedLines',
+    'isRunning',
+    'isDebugging',
+    'enableDebugging',
+    'newCursorPosition',
+    'output',
+    'replValue',
+    'sideContentHeight',
+    'sharedbConnected',
+    'usingSubst'
+  ),
   editorValue: state.workspaces.sicp.editorValue!,
-  execTime: state.workspaces.sicp.execTime,
-  stepLimit: state.workspaces.sicp.stepLimit,
-  isEditorAutorun: state.workspaces.sicp.isEditorAutorun,
-  breakpoints: state.workspaces.sicp.breakpoints,
-  highlightedLines: state.workspaces.sicp.highlightedLines,
-  isRunning: state.workspaces.sicp.isRunning,
-  isDebugging: state.workspaces.sicp.isDebugging,
-  enableDebugging: state.workspaces.sicp.enableDebugging,
-  newCursorPosition: state.workspaces.sicp.newCursorPosition,
-  output: state.workspaces.sicp.output,
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
-  replValue: state.workspaces.sicp.replValue,
-  sideContentHeight: state.workspaces.sicp.sideContentHeight,
   playgroundSourceChapter: state.workspaces.sicp.context.chapter,
   playgroundSourceVariant: state.workspaces.sicp.context.variant,
-  sharedbConnected: state.workspaces.sicp.sharedbConnected,
   externalLibraryName: state.workspaces.sicp.externalLibrary,
-  usingSubst: state.workspaces.sicp.usingSubst,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitObject: state.session.githubOctokitObject,
