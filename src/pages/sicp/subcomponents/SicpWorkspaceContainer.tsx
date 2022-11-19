@@ -148,6 +148,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
 /**
  * Playground container for SICP snippets.
  */
-const SicpWorkspaceContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
+const SicpWorkspaceContainer = () => {
+  const Component = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
+  return <Component workspaceLocation={workspaceLocation} />;
+};
 
 export default SicpWorkspaceContainer;

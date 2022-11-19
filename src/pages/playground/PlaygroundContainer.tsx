@@ -146,6 +146,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const PlaygroundContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
+const PlaygroundContainer = () => {
+  const Component = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
+  return <Component workspaceLocation={workspaceLocation} />;
+};
 
 export default PlaygroundContainer;

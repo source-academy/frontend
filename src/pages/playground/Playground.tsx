@@ -15,6 +15,7 @@ import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 import {
   InterpreterOutput,
@@ -58,7 +59,12 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
-export type PlaygroundProps = OwnProps & DispatchProps & StateProps & RouteComponentProps<{}>;
+export type PlaygroundProps = OwnProps &
+  DispatchProps &
+  StateProps &
+  RouteComponentProps<{}> & {
+    workspaceLocation?: WorkspaceLocation;
+  };
 
 export type OwnProps = {
   isSicpEditor?: boolean;
@@ -172,7 +178,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
   }
 }
 
-const Playground: React.FC<PlaygroundProps> = props => {
+const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const propsRef = React.useRef(props);
