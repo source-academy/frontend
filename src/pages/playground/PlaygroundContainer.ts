@@ -108,8 +108,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleGenerateLz: generateLzString,
-      handleShortenURL: (s: string) => shortenURL(s),
-      handleUpdateShortURL: (s: string) => updateShortURL(s),
+      handleShortenURL: shortenURL,
+      handleUpdateShortURL: updateShortURL,
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
