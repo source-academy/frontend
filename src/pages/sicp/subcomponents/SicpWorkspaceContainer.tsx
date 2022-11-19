@@ -21,7 +21,6 @@ import {
   changeStepLimit,
   chapterSelect,
   clearReplOutput,
-  evalEditor,
   evalRepl,
   externalLibrarySelect,
   navigateToDeclaration,
@@ -34,11 +33,6 @@ import {
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import {
-  generateLzString,
-  shortenURL,
-  updateShortURL
-} from '../../../features/playground/PlaygroundActions';
 import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -87,13 +81,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
-      handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleGenerateLz: generateLzString,
-      handleShortenURL: (s: string) => shortenURL(s),
-      handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),

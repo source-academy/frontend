@@ -25,6 +25,7 @@ import {
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import { evalEditor } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
@@ -37,6 +38,11 @@ import {
   persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
+import {
+  generateLzString,
+  shortenURL,
+  updateShortURL
+} from 'src/features/playground/PlaygroundActions';
 
 import {
   InterpreterOutput,
@@ -102,12 +108,8 @@ export type DispatchProps = {
   handleChangeStepLimit: (stepLimit: number) => void;
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
-  handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleGenerateLz: () => void;
-  handleShortenURL: (s: string) => void;
-  handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -348,12 +350,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [sessionId]
   );
 
+  const handleEditorEval = React.useCallback(
+    () => dispatch(evalEditor(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
         {..._.pick(
           props,
-          'handleEditorEval',
           'handleInterruptEval',
           'handleToggleEditorAutorun',
           'isDebugging',
@@ -361,6 +367,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           'isRunning',
           'playgroundSourceChapter'
         )}
+        handleEditorEval={handleEditorEval}
         handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
         handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
         handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
@@ -370,7 +377,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
     );
-  }, [props, usingRemoteExecution]);
+  }, [dispatch, handleEditorEval, props, usingRemoteExecution, workspaceLocation]);
 
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
@@ -521,24 +528,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       : props.queryString;
     return (
       <ControlBarShareButton
-        handleGenerateLz={props.handleGenerateLz}
-        handleShortenURL={props.handleShortenURL}
-        handleUpdateShortURL={props.handleUpdateShortURL}
+        handleGenerateLz={() => dispatch(generateLzString())}
+        handleShortenURL={s => dispatch(shortenURL(s))}
+        handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={queryString}
         shortURL={props.shortURL}
         isSicp={isSicpEditor}
         key="share"
       />
     );
-  }, [
-    isSicpEditor,
-    props.handleGenerateLz,
-    props.handleShortenURL,
-    props.handleUpdateShortURL,
-    props.initialEditorValueHash,
-    props.queryString,
-    props.shortURL
-  ]);
+  }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -727,7 +726,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       'editorValue',
       'editorSessionId',
       'handleDeclarationNavigate',
-      'handleEditorEval',
       'handleSendReplInputToOutput',
       'handlePromptAutocomplete',
       'isEditorAutorun',
@@ -736,6 +734,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       'newCursorPosition',
       'handleSetSharedbConnected'
     ),
+    handleEditorEval,
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
