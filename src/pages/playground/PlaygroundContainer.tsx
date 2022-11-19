@@ -5,11 +5,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { beginInterruptExecution } from '../../commons/application/actions/InterpreterActions';
-import {
-  loginGitHub,
-  logoutGitHub,
-  logoutGoogle
-} from '../../commons/application/actions/SessionActions';
+import { logoutGoogle } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import {
   setEditorSessionId,
@@ -37,11 +33,6 @@ import {
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import {
-  githubOpenFile,
-  githubSaveFile,
-  githubSaveFileAs
-} from '../../features/github/GitHubActions';
 import {
   persistenceInitialise,
   persistenceOpenPicker,
@@ -128,12 +119,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceSaveFile: persistenceSaveFileAs,
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
-      handlePersistenceLogOut: logoutGoogle,
-      handleGitHubOpenFile: githubOpenFile,
-      handleGitHubSaveFileAs: githubSaveFileAs,
-      handleGitHubSaveFile: githubSaveFile,
-      handleGitHubLogIn: loginGitHub,
-      handleGitHubLogOut: logoutGitHub
+      handlePersistenceLogOut: logoutGoogle
     },
     dispatch
   );

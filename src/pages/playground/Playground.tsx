@@ -17,10 +17,16 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import {
+  githubOpenFile,
+  githubSaveFile,
+  githubSaveFileAs
+} from 'src/features/github/GitHubActions';
 
 import {
   InterpreterOutput,
@@ -108,11 +114,6 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleGitHubOpenFile: () => void;
-  handleGitHubSaveFileAs: () => void;
-  handleGitHubSaveFile: () => void;
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
   handleUpdatePrepend?: (s: string) => void;
 };
 
@@ -474,23 +475,14 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         loggedInAs={octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
-        onClickOpen={props.handleGitHubOpenFile}
-        onClickSave={props.handleGitHubSaveFile}
-        onClickSaveAs={props.handleGitHubSaveFileAs}
-        onClickLogIn={props.handleGitHubLogIn}
-        onClickLogOut={props.handleGitHubLogOut}
+        onClickOpen={() => dispatch(githubOpenFile())}
+        onClickSaveAs={() => dispatch(githubSaveFileAs())}
+        onClickSave={() => dispatch(githubSaveFile())}
+        onClickLogIn={() => dispatch(loginGitHub())}
+        onClickLogOut={() => dispatch(logoutGitHub())}
       />
     );
-  }, [
-    githubOctokitObject,
-    githubPersistenceIsDirty,
-    githubSaveInfo,
-    props.handleGitHubOpenFile,
-    props.handleGitHubSaveFileAs,
-    props.handleGitHubSaveFile,
-    props.handleGitHubLogIn,
-    props.handleGitHubLogOut
-  ]);
+  }, [dispatch, githubOctokitObject, githubPersistenceIsDirty, githubSaveInfo]);
 
   const executionTime = React.useMemo(
     () => (
