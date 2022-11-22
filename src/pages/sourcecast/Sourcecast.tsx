@@ -2,6 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
 import * as React from 'react';
 import ReactAce from 'react-ace/lib/ace';
 import { useMediaQuery } from 'react-responsive';
@@ -342,22 +343,25 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   };
 
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
-    handleEditorValueChange: props.handleEditorValueChange,
-    handlePromptAutocomplete: props.handlePromptAutocomplete,
-    handleSetCurrentPlayerTime: props.handleSetCurrentPlayerTime,
-    handleSetCodeDeltasToApply: props.handleSetCodeDeltasToApply,
-    handleSetEditorReadonly: props.handleSetEditorReadonly,
-    handleSetInputToApply: props.handleSetInputToApply,
-    handleSetSourcecastDuration: props.handleSetSourcecastDuration,
-    handleSetSourcecastStatus: props.handleSetSourcecastStatus,
-    audioUrl: props.audioUrl,
-    currentPlayerTime: props.currentPlayerTime,
+    ..._.pick(
+      props,
+      'handleEditorValueChange',
+      'handlePromptAutocomplete',
+      'handleSetCurrentPlayerTime',
+      'handleSetCodeDeltasToApply',
+      'handleSetEditorReadonly',
+      'handleSetInputToApply',
+      'handleSetSourcecastDuration',
+      'handleSetSourcecastStatus',
+      'audioUrl',
+      'currentPlayerTime',
+      'playbackData',
+      'playbackStatus',
+      'handleChapterSelect',
+      'handleExternalSelect'
+    ),
     duration: props.playbackDuration,
-    playbackData: props.playbackData,
-    playbackStatus: props.playbackStatus,
-    handleChapterSelect: props.handleChapterSelect,
-    handleExternalSelect: props.handleExternalSelect,
-    setSelectedTab: setSelectedTab
+    setSelectedTab
   };
 
   return (
