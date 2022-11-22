@@ -5,8 +5,35 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
 import * as React from 'react';
 import ReactAce from 'react-ace/lib/ace';
+import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import {
+  beginDebuggerPause,
+  beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+import {
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeSideContentHeight,
+  clearReplOutput,
+  navigateToDeclaration,
+  promptAutocomplete,
+  setEditorBreakpoint,
+  setEditorReadonly,
+  toggleEditorAutorun,
+  updateReplValue
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
+import {
+  setCodeDeltasToApply,
+  setCurrentPlayerTime,
+  setInputToApply,
+  setSourcecastDuration
+} from 'src/features/sourceRecorder/SourceRecorderActions';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -44,27 +71,11 @@ export type SourcecastProps = DispatchProps &
   RouteComponentProps<{ sourcecastId: string }>;
 
 export type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: Chapter) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
-  handleFetchSourcecastIndex: () => void;
-  handleInterruptEval: () => void;
   handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleSetCurrentPlayerTime: (playTime: number) => void;
-  handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastData: (
     title: string,
     description: string,
@@ -72,10 +83,7 @@ export type DispatchProps = {
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
-  handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleToggleEditorAutorun: () => void;
 };
 
 export type StateProps = {
@@ -108,8 +116,12 @@ export type StateProps = {
   courseId?: number;
 };
 
+const workspaceLocation: WorkspaceLocation = 'sourcecast';
+
 const Sourcecast: React.FC<SourcecastProps> = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+
+  const dispatch = useDispatch();
 
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
@@ -135,7 +147,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   }, [props]);
 
   React.useEffect(() => {
-    props.handleFetchSourcecastIndex();
+    dispatch(fetchSourcecastIndex(workspaceLocation));
     // This effect should only fire once on component mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -182,12 +194,12 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const autorunButtons = (
     <ControlBarAutorunButtons
-      handleDebuggerPause={props.handleDebuggerPause}
-      handleDebuggerReset={props.handleDebuggerReset}
-      handleDebuggerResume={props.handleDebuggerResume}
+      handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
+      handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
+      handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
       handleEditorEval={props.handleEditorEval}
-      handleInterruptEval={props.handleInterruptEval}
-      handleToggleEditorAutorun={props.handleToggleEditorAutorun}
+      handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
+      handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
       isDebugging={props.isDebugging}
       isEditorAutorun={props.isEditorAutorun}
       isRunning={props.isRunning}
@@ -208,7 +220,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   );
 
   const clearButton = (
-    <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+    <ControlBarClearButton
+      handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
+      key="clear_repl"
+    />
   );
 
   const evalButton = (
@@ -272,7 +287,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     editorReadonly: props.editorReadonly,
     editorValue: props.editorValue,
     editorSessionId: '',
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleDeclarationNavigate: cursorPosition =>
+      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval: props.handleEditorEval,
     handleEditorValueChange: props.handleEditorValueChange,
     isEditorAutorun: props.isEditorAutorun,
@@ -281,16 +297,18 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     breakpoints: props.breakpoints,
     highlightedLines: props.highlightedLines,
     newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
+    handleEditorUpdateBreakpoints: breakpoints =>
+      dispatch(setEditorBreakpoint(breakpoints, workspaceLocation))
   };
 
   const replProps = {
     output: props.output,
     replValue: props.replValue,
-    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
     handleReplEval: props.handleReplEval,
-    handleReplValueChange: props.handleReplValueChange,
+    handleReplValueChange: (newValue: string) =>
+      dispatch(updateReplValue(newValue, workspaceLocation)),
     sourceChapter: props.sourceChapter,
     sourceVariant: props.sourceVariant,
     externalLibrary: props.externalLibraryName,
@@ -302,7 +320,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
     },
     customEditor: <SourceRecorderEditor {...editorProps} />,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    handleSideContentHeightChange: change =>
+      dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
     sideBarProps: {
       tabs: []
@@ -346,12 +365,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     ..._.pick(
       props,
       'handleEditorValueChange',
-      'handlePromptAutocomplete',
-      'handleSetCurrentPlayerTime',
-      'handleSetCodeDeltasToApply',
-      'handleSetEditorReadonly',
-      'handleSetInputToApply',
-      'handleSetSourcecastDuration',
       'handleSetSourcecastStatus',
       'audioUrl',
       'currentPlayerTime',
@@ -360,6 +373,18 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       'handleChapterSelect',
       'handleExternalSelect'
     ),
+    handlePromptAutocomplete: (row, col, callback) =>
+      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+    handleSetCurrentPlayerTime: (playerTime: number) =>
+      dispatch(setCurrentPlayerTime(playerTime, workspaceLocation)),
+    handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
+      dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
+    handleSetEditorReadonly: (editorReadonly: boolean) =>
+      dispatch(setEditorReadonly(workspaceLocation, editorReadonly)),
+    handleSetInputToApply: inputToApply =>
+      dispatch(setInputToApply(inputToApply, workspaceLocation)),
+    handleSetSourcecastDuration: (duration: number) =>
+      dispatch(setSourcecastDuration(duration, workspaceLocation)),
     duration: props.playbackDuration,
     setSelectedTab
   };

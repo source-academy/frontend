@@ -3,48 +3,21 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from '../../commons/application/actions/InterpreterActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Position } from '../../commons/editor/EditorTypes';
 import {
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeSideContentHeight,
   chapterSelect,
-  clearReplOutput,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  navigateToDeclaration,
-  promptAutocomplete,
-  setEditorBreakpoint,
-  setEditorReadonly,
-  toggleEditorAutorun,
-  updateEditorValue,
-  updateReplValue
+  updateEditorValue
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import { fetchSourcecastIndex } from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import {
-  setCodeDeltasToApply,
-  setCurrentPlayerTime,
-  setInputToApply,
   setSourcecastData,
-  setSourcecastDuration,
   setSourcecastStatus
 } from '../../features/sourceRecorder/SourceRecorderActions';
-import {
-  CodeDelta,
-  Input,
-  PlaybackData,
-  PlaybackStatus
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+import { PlaybackData, PlaybackStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -82,28 +55,12 @@ const location: WorkspaceLocation = 'sourcecast';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleBrowseHistoryDown: () => browseReplHistoryDown(location),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: Chapter) => chapterSelect(chapter, Variant.DEFAULT, location),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        navigateToDeclaration(location, cursorPosition),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, location),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         externalLibrarySelect(externalLibraryName, location),
-      handleFetchSourcecastIndex: () => fetchSourcecastIndex(location),
-      handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
-      handleReplOutputClear: () => clearReplOutput(location),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetCurrentPlayerTime: (playerTime: number) =>
-        setCurrentPlayerTime(playerTime, location),
-      handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => setCodeDeltasToApply(deltas, location),
-      handleSetEditorReadonly: (editorReadonly: boolean) =>
-        setEditorReadonly(location, editorReadonly),
-      handleSetInputToApply: (inputToApply: Input) => setInputToApply(inputToApply, location),
       handleSetSourcecastData: (
         title: string,
         description: string,
@@ -111,17 +68,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         audioUrl: string,
         playbackData: PlaybackData
       ) => setSourcecastData(title, description, uid, audioUrl, playbackData, location),
-      handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration, location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
-        setSourcecastStatus(playbackStatus, location),
-      handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location),
-      handleToggleEditorAutorun: () => toggleEditorAutorun(location),
-      handleDebuggerPause: () => beginDebuggerPause(location),
-      handleDebuggerResume: () => debuggerResume(location),
-      handleDebuggerReset: () => debuggerReset(location),
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(location, row, col, callback)
+        setSourcecastStatus(playbackStatus, location)
     },
     dispatch
   );
