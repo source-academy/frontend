@@ -2,6 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
@@ -358,21 +359,24 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {
-      handleEditorValueChange: this.props.handleEditorValueChange,
-      handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-      handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
-      handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
-      handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-      handleSetInputToApply: this.props.handleSetInputToApply,
-      handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
-      handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
-      audioUrl: this.props.audioUrl,
-      currentPlayerTime: this.props.currentPlayerTime,
-      duration: this.props.playbackDuration,
-      playbackData: this.props.playbackData,
-      playbackStatus: this.props.playbackStatus,
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleExternalSelect: this.props.handleExternalSelect
+      ..._.pick(
+        this.props,
+        'handleEditorValueChange',
+        'handlePromptAutocomplete',
+        'handleSetCurrentPlayerTime',
+        'handleSetCodeDeltasToApply',
+        'handleSetEditorReadonly',
+        'handleSetInputToApply',
+        'handleSetSourcecastDuration',
+        'handleSetSourcecastStatus',
+        'audioUrl',
+        'currentPlayerTime',
+        'playbackData',
+        'playbackStatus',
+        'handleChapterSelect',
+        'handleExternalSelect'
+      ),
+      duration: this.props.playbackDuration
     };
     return (
       <div className={classNames('Sourcereel', Classes.DARK)}>

@@ -283,20 +283,23 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   };
 
   const editorProps: SourceRecorderEditorProps = {
-    codeDeltasToApply: props.codeDeltasToApply,
-    editorReadonly: props.editorReadonly,
-    editorValue: props.editorValue,
+    ..._.pick(
+      props,
+      'codeDeltasToApply',
+      'editorReadonly',
+      'editorValue',
+      'handleEditorEval',
+      'handleEditorValueChange',
+      'isEditorAutorun',
+      'inputToApply',
+      'breakpoints',
+      'highlightedLines',
+      'newCursorPosition'
+    ),
     editorSessionId: '',
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-    handleEditorEval: props.handleEditorEval,
-    handleEditorValueChange: props.handleEditorValueChange,
-    isEditorAutorun: props.isEditorAutorun,
-    inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
     handleEditorUpdateBreakpoints: breakpoints =>
       dispatch(setEditorBreakpoint(breakpoints, workspaceLocation))
   };
