@@ -16,10 +16,10 @@ type StateProps = {
 };
 
 const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props => {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleCloseDialog = () => setDialogOpen(false);
-  const handleOpenDialog = () => setDialogOpen(true);
+  const handleCloseDialog = () => setIsDialogOpen(false);
+  const handleOpenDialog = () => setIsDialogOpen(true);
   const handleDelete = () => {
     const { data } = props;
     props.handleDeleteSourcecastEntry(data.id);
@@ -30,7 +30,7 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
       {controlButton('', IconNames.TRASH, handleOpenDialog)}
       <Dialog
         icon="info-sign"
-        isOpen={dialogOpen}
+        isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Delete Sourcecast"
         canOutsideClickClose={true}
