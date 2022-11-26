@@ -1,5 +1,5 @@
 import { Collapse } from '@blueprintjs/core';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import {
   AchievementContext,
@@ -14,9 +14,7 @@ type AchievementTaskProps = {
   focusState: [string, any];
 };
 
-function AchievementTask(props: AchievementTaskProps) {
-  const { uuid, filterStatus, focusState } = props;
-
+const AchievementTask: React.FC<AchievementTaskProps> = ({ uuid, filterStatus, focusState }) => {
   const inferencer = useContext(AchievementContext);
   const prerequisiteUuids = [...inferencer.getImmediateChildren(uuid)];
   const taskColor = getAbilityColor();
@@ -108,6 +106,6 @@ function AchievementTask(props: AchievementTaskProps) {
       )}
     </>
   );
-}
+};
 
 export default AchievementTask;
