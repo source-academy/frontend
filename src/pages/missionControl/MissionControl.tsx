@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import {
-  AssessmentOverview,
   AssessmentStatuses,
   AssessmentType,
   AssessmentWorkspaceParams
@@ -27,10 +26,6 @@ const nullFunction = () => {};
 const MissionControl: React.FC<MissionControlProps> = props => {
   const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
 
-  const updateEditingOverview = (overview: AssessmentOverview) => {
-    setEditingOverview(overview);
-  };
-
   const assessmentId: number | null = stringParamToInt(props.match.params.assessmentId);
   const questionId: number =
     stringParamToInt(props.match.params.questionId) || Constants.defaultQuestionId;
@@ -42,7 +37,7 @@ const MissionControl: React.FC<MissionControlProps> = props => {
       assessmentId,
       questionId,
       assessmentOverview: overview,
-      updateAssessmentOverview: updateEditingOverview,
+      updateAssessmentOverview: setEditingOverview,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       closeDate: overview.closeAt
     };
@@ -55,11 +50,11 @@ const MissionControl: React.FC<MissionControlProps> = props => {
 
   const display = (
     <>
-      <MissionCreator updateEditingOverview={updateEditingOverview} />
+      <MissionCreator updateEditingOverview={setEditingOverview} />
       {editingOverview && (
         <EditingOverviewCard
           overview={editingOverview}
-          updateEditingOverview={updateEditingOverview}
+          updateEditingOverview={setEditingOverview}
           listingPath="/mission-control"
           assessmentTypes={props.assessmentTypes}
         />
