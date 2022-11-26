@@ -107,7 +107,7 @@ export const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
   /**
    * Asks to save work.
    */
-  const confirmSaveOverlay = () => (
+  const confirmSaveOverlay = (
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
@@ -139,7 +139,7 @@ export const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
 
   return (
     <div>
-      {confirmSaveOverlay()}
+      {confirmSaveOverlay}
       {props.assessment.questions.map((q, index) => (
         <div key={index}>
           Question {index + 1}
