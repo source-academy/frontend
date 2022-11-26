@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import {
@@ -22,72 +22,57 @@ export type StateProps = {
   assessmentTypes: AssessmentType[];
 };
 
-type State = {
-  editOverview: string;
-  editingOverview: AssessmentOverview | null;
-};
-
 const nullFunction = () => {};
 
-class MissionControl extends React.Component<MissionControlProps, State> {
-  public constructor(props: MissionControlProps) {
-    super(props);
-    this.state = {
-      editOverview: '',
-      editingOverview: retrieveLocalAssessmentOverview()
+const MissionControl: React.FC<MissionControlProps> = props => {
+  const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
+
+  const updateEditingOverview = (overview: AssessmentOverview) => {
+    setEditingOverview(overview);
+  };
+
+  const assessmentId: number | null = stringParamToInt(props.match.params.assessmentId);
+  const questionId: number =
+    stringParamToInt(props.match.params.questionId) || Constants.defaultQuestionId;
+
+  // If mission for testing is to render, create workspace
+  if (assessmentId === -1 && editingOverview) {
+    const overview = editingOverview;
+    const assessmentProps: EditingWorkspaceOwnProps = {
+      assessmentId,
+      questionId,
+      assessmentOverview: overview,
+      updateAssessmentOverview: updateEditingOverview,
+      notAttempted: overview.status === AssessmentStatuses.not_attempted,
+      closeDate: overview.closeAt
     };
-  }
-
-  public render() {
-    const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
-    const questionId: number =
-      stringParamToInt(this.props.match.params.questionId) || Constants.defaultQuestionId;
-
-    // If mission for testing is to render, create workspace
-    if (assessmentId === -1 && this.state.editingOverview) {
-      const overview = this.state.editingOverview;
-      const assessmentProps: EditingWorkspaceOwnProps = {
-        assessmentId,
-        questionId,
-        assessmentOverview: overview,
-        updateAssessmentOverview: this.updateEditingOverview,
-        notAttempted: overview.status === AssessmentStatuses.not_attempted,
-        closeDate: overview.closeAt
-      };
-      return (
-        <div className="Academy">
-          <EditingWorkspaceContainer {...assessmentProps} />
-        </div>
-      );
-    }
-
-    const display = (
-      <>
-        <MissionCreator updateEditingOverview={this.updateEditingOverview} />
-        {this.state.editingOverview && (
-          <EditingOverviewCard
-            overview={this.state.editingOverview}
-            updateEditingOverview={this.updateEditingOverview}
-            listingPath="/mission-control"
-            assessmentTypes={this.props.assessmentTypes}
-          />
-        )}
-      </>
-    );
-
-    // Finally, render the ContentDisplay.
     return (
-      <div className="Assessment Academy">
-        <ContentDisplay display={display} loadContentDispatch={nullFunction} />
+      <div className="Academy">
+        <EditingWorkspaceContainer {...assessmentProps} />
       </div>
     );
   }
 
-  private updateEditingOverview = (overview: AssessmentOverview) => {
-    this.setState({
-      editingOverview: overview
-    });
-  };
-}
+  const display = (
+    <>
+      <MissionCreator updateEditingOverview={updateEditingOverview} />
+      {editingOverview && (
+        <EditingOverviewCard
+          overview={editingOverview}
+          updateEditingOverview={updateEditingOverview}
+          listingPath="/mission-control"
+          assessmentTypes={props.assessmentTypes}
+        />
+      )}
+    </>
+  );
+
+  // Finally, render the ContentDisplay.
+  return (
+    <div className="Assessment Academy">
+      <ContentDisplay display={display} loadContentDispatch={nullFunction} />
+    </div>
+  );
+};
 
 export default MissionControl;
