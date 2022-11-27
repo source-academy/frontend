@@ -15,33 +15,27 @@ type StateProps = {
   path: Array<string | number>;
 };
 
-export class GradingTab extends React.Component<GradingTabProps, {}> {
-  public constructor(props: GradingTabProps) {
-    super(props);
-  }
-
-  public render() {
-    return this.gradingTab();
-  }
-
-  private textareaContent = (path: Array<string | number>) => {
+export const GradingTab: React.FC<GradingTabProps> = props => {
+  const textareaContent = (path: Array<string | number>) => {
     return (
       <TextAreaContent
-        assessment={this.props.assessment}
+        assessment={props.assessment}
         isNumber={true}
         path={path}
         processResults={limitNumberRange(0)}
-        updateAssessment={this.props.updateAssessment}
+        updateAssessment={props.updateAssessment}
       />
     );
   };
 
-  private gradingTab = () => (
+  const gradingTab = () => (
     <div>
       Max Xp:
-      {this.textareaContent(this.props.path.concat(['maxXp']))}
+      {textareaContent(props.path.concat(['maxXp']))}
     </div>
   );
-}
+
+  return gradingTab();
+};
 
 export default GradingTab;
