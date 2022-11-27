@@ -28,14 +28,12 @@ export const GradingTab: React.FC<GradingTabProps> = props => {
     );
   };
 
-  const gradingTab = () => (
+  return (
     <div>
       Max Xp:
       {textareaContent(props.path.concat(['maxXp']))}
     </div>
   );
-
-  return gradingTab();
 };
 
 export default GradingTab;
