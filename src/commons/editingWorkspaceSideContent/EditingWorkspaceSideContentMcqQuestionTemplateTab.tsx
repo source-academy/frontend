@@ -20,8 +20,7 @@ type StateProps = {
 
 export const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
   const addOption = () => {
-    const assessment = props.assessment;
-    const questionId = props.questionId;
+    const { assessment, questionId } = props;
     const question = assessment!.questions[questionId] as IMCQQuestion;
     const choices = question.choices.concat([
       {
@@ -35,8 +34,7 @@ export const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = pro
   };
 
   const delOption = () => {
-    const assessment = props.assessment;
-    const questionId = props.questionId;
+    const { assessment, questionId } = props;
     const question = assessment!.questions[questionId] as IMCQQuestion;
     const choices = question.choices.slice(0, question.choices.length - 1);
     question.choices = choices;
@@ -71,7 +69,7 @@ export const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = pro
   };
 
   // Render
-  const questionId = props.questionId;
+  const { questionId } = props;
   const question = props.assessment!.questions[questionId] as IMCQQuestion;
   const mcqButton = question.choices.map((choice, i) => (
     <div key={i} className="mcq-option col-xs-12">
