@@ -9,17 +9,16 @@ import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
   InterpreterOutput,
   isSourceLanguage,
-  OverallState,
   ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -221,11 +220,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const usingRemoteExecution =
-    useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
+    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
-  const externalLibraryName = useSelector(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
+  const externalLibraryName = useTypedSelector(
+    state => state.workspaces.playground.externalLibrary
   );
 
   React.useEffect(() => {
@@ -462,7 +461,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  // FIXME: Remove any
+  const githubOctokitObject: any = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);

@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { SetStateAction } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import BrickSvg from 'src/assets/BrickSvg';
@@ -23,10 +23,10 @@ import {
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
-import { OverallState } from '../application/ApplicationTypes';
 import { deleteDevice } from '../sagas/RequestsSaga';
 import { actions } from '../utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -133,12 +133,13 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
   );
   const [secretParams, setSecretParams] = React.useState(props.secretParams);
 
+  // FIXME: Code quality
   const [isLoggedIn, devices, currentSession]: [
     boolean,
     Device[] | undefined,
     DeviceSession | undefined
-  ] = useSelector(
-    (store: OverallState) => [
+  ] = useTypedSelector(
+    store => [
       !!store.session.accessToken && !!store.session.role,
       store.session.remoteExecutionDevices,
       store.session.remoteExecutionSession

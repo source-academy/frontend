@@ -1,14 +1,14 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
   fetchNotifications,
   updateLatestViewedCourse
 } from '../../commons/application/actions/SessionActions';
-import { OverallState } from '../../commons/application/ApplicationTypes';
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
@@ -30,8 +30,9 @@ const Academy: React.FC<{}> = () => {
     dispatch(fetchNotifications());
   }, [dispatch]);
 
-  const { assessmentConfigurations, enableGame, role } = useSelector(
-    (state: OverallState) => ({
+  // FIXME: Code quality
+  const { assessmentConfigurations, enableGame, role } = useTypedSelector(
+    state => ({
       assessmentConfigurations: state.session.assessmentConfigurations,
       enableGame: state.session.enableGame,
       role: state.session.role
@@ -87,7 +88,7 @@ const Academy: React.FC<{}> = () => {
 
 const CourseSelectingAcademy: React.FC<{}> = () => {
   const dispatch = useDispatch();
-  const courseId = useSelector<OverallState>(state => state.session.courseId);
+  const courseId = useTypedSelector(state => state.session.courseId);
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
