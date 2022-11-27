@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { SetStateAction } from 'react';
-import { shallowEqual, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import BrickSvg from 'src/assets/BrickSvg';
@@ -133,19 +133,9 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
   );
   const [secretParams, setSecretParams] = React.useState(props.secretParams);
 
-  // FIXME: Code quality
-  const [isLoggedIn, devices, currentSession]: [
-    boolean,
-    Device[] | undefined,
-    DeviceSession | undefined
-  ] = useTypedSelector(
-    store => [
-      !!store.session.accessToken && !!store.session.role,
-      store.session.remoteExecutionDevices,
-      store.session.remoteExecutionSession
-    ],
-    shallowEqual
-  );
+  const isLoggedIn = useTypedSelector(state => !!state.session.accessToken && !!state.session.role);
+  const devices = useTypedSelector(state => state.session.remoteExecutionDevices);
+  const currentSession = useTypedSelector(state => state.session.remoteExecutionSession);
   const dispatch = useDispatch();
 
   const isConnected = currentSession?.connection.status === 'CONNECTED';
