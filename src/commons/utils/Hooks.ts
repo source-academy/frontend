@@ -1,5 +1,7 @@
 import React from 'react';
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
+import { OverallState } from '../application/ApplicationTypes';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 
 // The following section is licensed under the following terms:
@@ -99,3 +101,6 @@ export function useLocalStorageState<T>(
 
   return [value, setValue];
 }
+
+/** Typed version of useSelector. Use this instead of the useSelector hook. */
+export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
