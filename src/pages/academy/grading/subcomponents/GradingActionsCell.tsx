@@ -20,64 +20,19 @@ type StateProps = {
   role?: Role;
 };
 
-class GradingActionsCell extends React.Component<GradingActionsCellProps> {
-  public constructor(props: GradingActionsCellProps) {
-    super(props);
-
-    this.state = {
-      isAlertOpen: false
-    };
-  }
-
-  public render() {
-    const isOwnSubmission =
-      this.props.courseRegId && this.props.courseRegId === this.props.data.studentId;
-    const canReautograde = isOwnSubmission || this.props.data.submissionStatus === 'submitted';
-    const canUnsubmit =
-      this.props.data.submissionStatus === 'submitted' &&
-      this.props.courseRegId &&
-      (this.props.courseRegId === this.props.data.groupLeaderId ||
-        isOwnSubmission ||
-        this.props.role === Role.Admin);
-
-    return (
-      <>
-        <AnchorButtonLink
-          to={`/courses/${this.props.courseId}/grading/${this.props.data.submissionId}`}
-          icon="annotation"
-          minimal
-          title="Grade"
-        />
-        <Button
-          icon="refresh"
-          minimal
-          onClick={this.handleConfirmReautograde}
-          disabled={!canReautograde}
-          title="Reautograde"
-        />
-        <Button
-          icon="arrow-left"
-          minimal
-          onClick={this.handleConfirmUnsubmit}
-          disabled={!canUnsubmit}
-          title="Unsubmit"
-        />
-      </>
-    );
-  }
-
-  private handleConfirmUnsubmit = async () => {
+const GradingActionsCell: React.FC<GradingActionsCellProps> = props => {
+  const handleConfirmUnsubmit = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: 'Are you sure you want to unsubmit?',
       positiveIntent: 'danger',
       positiveLabel: 'Unsubmit'
     });
     if (confirm) {
-      this.props.handleUnsubmitSubmission(this.props.data.submissionId);
+      props.handleUnsubmitSubmission(props.data.submissionId);
     }
   };
 
-  private handleConfirmReautograde = async () => {
+  const handleConfirmReautograde = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: (
         <>
@@ -89,9 +44,43 @@ class GradingActionsCell extends React.Component<GradingActionsCellProps> {
       positiveLabel: 'Reautograde'
     });
     if (confirm) {
-      this.props.handleReautogradeSubmission(this.props.data.submissionId);
+      props.handleReautogradeSubmission(props.data.submissionId);
     }
   };
-}
+
+  const isOwnSubmission = props.courseRegId && props.courseRegId === props.data.studentId;
+  const canReautograde = isOwnSubmission || props.data.submissionStatus === 'submitted';
+  const canUnsubmit =
+    props.data.submissionStatus === 'submitted' &&
+    props.courseRegId &&
+    (props.courseRegId === props.data.groupLeaderId ||
+      isOwnSubmission ||
+      props.role === Role.Admin);
+
+  return (
+    <>
+      <AnchorButtonLink
+        to={`/courses/${props.courseId}/grading/${props.data.submissionId}`}
+        icon="annotation"
+        minimal
+        title="Grade"
+      />
+      <Button
+        icon="refresh"
+        minimal
+        onClick={handleConfirmReautograde}
+        disabled={!canReautograde}
+        title="Reautograde"
+      />
+      <Button
+        icon="arrow-left"
+        minimal
+        onClick={handleConfirmUnsubmit}
+        disabled={!canUnsubmit}
+        title="Unsubmit"
+      />
+    </>
+  );
+};
 
 export default GradingActionsCell;
