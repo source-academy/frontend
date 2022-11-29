@@ -16,6 +16,7 @@ import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer'
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
+import EfficiencyCellWithTabs from './subcomponents/GroundControlEfficiencyCellWithTabs';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 
 export type GroundControlProps = DispatchProps & StateProps;
@@ -104,6 +105,21 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         cellRendererFramework: PublishCell,
         cellRendererParams: {
           handlePublishAssessment: this.props.handlePublishAssessment
+        },
+        width: 100,
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: {
+          padding: 0
+        }
+      },
+      {
+        headerName: 'Efficiency',
+        field: '',
+        cellRendererFramework: EfficiencyCellWithTabs,
+        cellRendererParams: {
+          handleDeleteAssessment: this.props.handleDeleteAssessment
         },
         width: 100,
         filter: false,

@@ -126,6 +126,7 @@ export type StateProps = {
   storedAssessmentId?: number;
   storedQuestionId?: number;
   courseId?: number;
+  userId?: number;
 };
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
@@ -269,6 +270,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       type: 'keyboardCommand',
       data: KeyboardCommand.run
     };
+    
+    const assessmentId = props.assessmentId;
+    const userId = props.userId;
+    const questionId = props.questionId;
+    
+    fetch(`${Constants.backendUrl}/v2/runtimes/${assessmentId}/${questionId}/${userId}/runtimes`);
+
 
     pushLog(input);
   };
