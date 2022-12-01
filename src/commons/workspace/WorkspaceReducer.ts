@@ -334,7 +334,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
     case EVAL_INTERPRETER_SUCCESS:
       const newOutputEntry: Partial<ResultOutput> = {
-        type: 'result',
+        type: action.payload.type as 'result' | undefined,
         value: stringify(action.payload.value)
       };
 
