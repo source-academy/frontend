@@ -4,19 +4,22 @@
   "version": "1.4.3",
   "scripts-info": {
     "format": "Format source code",
-    "start": "Start the Webpack development server",
+    "start": "Start the development server",
     "build": "Build production bundle",
     "test": "Run unit tests",
     "update-ui-snapshots": "Update UI test snapshots"
   },
   "scripts": {
-    "build": "cross-env EXTEND_ESLINT=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
+    "build-old": "cross-env EXTEND_ESLINT=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
+    "build": "export NODE_OPTIONS='--max-old-space-size=15872' && tsc && vite build",
     "coverage": "./scripts/coverage-fix.sh do && craco test --coverage && ./scripts/coverage-fix.sh undo",
     "format": "eslint --ext \".js,.jsx,.ts,.tsx\" --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "yarn run format:tsx && yarn run format:scss",
-    "start": "cross-env EXTEND_ESLINT=true BROWSER=none PORT=8000 craco start",
+    "start-old": "cross-env EXTEND_ESLINT=true BROWSER=none PORT=8000 craco start",
+    "start": "vite",
+    "serve": "vite preview",
     "test": "TZ=UTF-8 craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
@@ -85,6 +88,8 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.5",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@svgr/webpack": "^6.3.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^14.3.0",
@@ -117,6 +122,7 @@
     "@types/redux-mock-store": "^1.0.3",
     "@types/showdown": "^2.0.0",
     "@types/xml2js": "^0.4.11",
+    "@vitejs/plugin-react": "^2.2.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "babel-core": "6",
     "babel-runtime": "^6.26.0",
@@ -134,7 +140,10 @@
     "react-test-renderer": "^18.2.0",
     "redux-saga-test-plan": "^4.0.5",
     "sass": "^1.54.0",
-    "typescript": "~4.7.4"
+    "typescript": "~4.7.4",
+    "vite": "^3.2.4",
+    "vite-plugin-wasm": "^3.1.0",
+    "vite-tsconfig-paths": "^3.6.0"
   },
   "resolutions": {
     "//": "FIXME: Remove this selective dependency resolution (along with the devDependency) once react-scripts is updated past 4.0.3.",

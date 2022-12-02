@@ -3,11 +3,11 @@
     "baseUrl": ".",
     "outDir": "build/dist",
     "module": "esnext",
-    "target": "es2016",
+    "target": "ESNext",
     "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
       "es6",
       "es2015",
       "es2017"
