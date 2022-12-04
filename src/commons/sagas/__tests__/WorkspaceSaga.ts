@@ -117,9 +117,7 @@ describe('EVAL_EDITOR', () => {
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorPrepend,
-      editorPostpend,
-      editors: [{ value: editorValue }],
+      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
       execTime,
       context,
       globals
@@ -351,9 +349,7 @@ describe('EVAL_TESTCASE', () => {
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorPrepend,
-      editorPostpend,
-      editors: [{ value: editorValue }],
+      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
       editorTestcases,
       execTime,
       context,
@@ -748,7 +744,9 @@ describe('evalCode', () => {
     // TODO: rewrite tests in a way that actually reflects known information.
     test('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
-      state = generateDefaultState(workspaceLocation, { editorPrepend: '// Prepend' });
+      state = generateDefaultState(workspaceLocation, {
+        editors: [{ prependValue: '// Prepend' }]
+      });
 
       runInContext(code, context, {
         scheduler: 'preemptive',

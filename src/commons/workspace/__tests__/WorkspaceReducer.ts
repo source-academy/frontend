@@ -1008,7 +1008,7 @@ describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const newPlayground: PlaygroundWorkspaceState = {
       ...createDefaultWorkspace('playground'),
-      editorValue: 'test program here',
+      editors: [{ value: 'test program here', prependValue: '', postpendValue: '' }],
       highlightedLines: [
         [1, 2],
         [3, 4]
@@ -1307,7 +1307,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorValue: newEditorValue
+          editors: [{ value: newEditorValue }]
         }
       });
     });
