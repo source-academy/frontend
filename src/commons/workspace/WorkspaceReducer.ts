@@ -583,7 +583,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorValue: action.payload.newEditorValue
+          editors: [{ value: action.payload.newEditorValue }]
         }
       };
     case HIGHLIGHT_LINE:
