@@ -168,7 +168,7 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
     .withState({
       workspaces: {
         playground: {
-          editorValue: FILE_DATA,
+          editors: [{ value: FILE_DATA }],
           externalLibrary: SOURCE_LIBRARY,
           context: {
             chapter: SOURCE_CHAPTER,
@@ -219,7 +219,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editors: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -276,7 +276,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editors: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -333,7 +333,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editors: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -392,7 +392,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editors: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -450,7 +450,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editors: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -491,7 +491,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editors: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,

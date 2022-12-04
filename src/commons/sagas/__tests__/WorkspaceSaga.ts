@@ -119,7 +119,7 @@ describe('EVAL_EDITOR', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorPrepend,
       editorPostpend,
-      editorValue,
+      editors: [{ value: editorValue }],
       execTime,
       context,
       globals
@@ -260,7 +260,10 @@ describe('DEBUG_RESUME', () => {
   });
 
   test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
-    const newDefaultState = generateDefaultState(workspaceLocation, { editorValue, context });
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      editors: [{ value: editorValue }],
+      context
+    });
 
     return (
       expectSaga(workspaceSaga)
@@ -294,7 +297,9 @@ describe('DEBUG_RESUME', () => {
 describe('DEBUG_RESET', () => {
   test('puts clearReplOutput correctly', () => {
     const workspaceLocation = 'assessment';
-    const newDefaultState = generateDefaultState(workspaceLocation, { editorValue: 'test-value' });
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      editors: [{ value: 'test-value' }]
+    });
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
@@ -348,7 +353,7 @@ describe('EVAL_TESTCASE', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorPrepend,
       editorPostpend,
-      editorValue,
+      editors: [{ value: editorValue }],
       editorTestcases,
       execTime,
       context,
@@ -1063,7 +1068,7 @@ describe('NAV_DECLARATION', () => {
       ...mockRuntimeContext(),
       chapter: Chapter.SOURCE_4
     };
-    state = generateDefaultState(workspaceLocation, { editorValue, context });
+    state = generateDefaultState(workspaceLocation, { editors: [{ value: editorValue }], context });
   });
 
   test('moves cursor to declaration correctly', () => {

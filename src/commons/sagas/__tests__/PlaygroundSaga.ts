@@ -40,7 +40,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -63,7 +63,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -87,7 +87,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -139,7 +139,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -191,7 +191,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -226,7 +226,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -280,7 +280,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -323,7 +323,7 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editors: [{ value: dummyEditorValue }],
           usingSubst: false
         }
       }
