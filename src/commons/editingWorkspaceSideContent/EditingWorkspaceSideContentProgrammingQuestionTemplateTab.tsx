@@ -19,7 +19,7 @@ type DispatchProps = {
 
 type StateProps = {
   assessment: Assessment;
-  editorValue: string | null;
+  editorValue: string;
   questionId: number;
 };
 

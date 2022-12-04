@@ -38,7 +38,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     'sharedbConnected',
     'usingSubst'
   ),
-  editorValue: state.workspaces.sicp.editorValue!,
+  editorValue: state.workspaces.sicp.editorValue,
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
   playgroundSourceChapter: state.workspaces.sicp.context.chapter,

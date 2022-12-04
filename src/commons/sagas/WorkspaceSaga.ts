@@ -113,7 +113,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
       const code: string = yield select((state: OverallState) => {
         const prependCode = state.workspaces[workspaceLocation].editorPrepend;
-        const editorCode = state.workspaces[workspaceLocation].editorValue!;
+        const editorCode = state.workspaces[workspaceLocation].editorValue;
         return [prependCode, editorCode] as [string, string];
       });
       const [prepend, editorValue] = code;
@@ -544,7 +544,7 @@ export function* evalEditor(
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
     state.workspaces[workspaceLocation].editorPrepend,
-    state.workspaces[workspaceLocation].editorValue!,
+    state.workspaces[workspaceLocation].editorValue,
     state.workspaces[workspaceLocation].execTime,
     state.session.remoteExecutionSession
   ]);
@@ -608,7 +608,7 @@ export function* runTestCase(
   const [prepend, value, postpend, testcase]: [string, string, string, string] = yield select(
     (state: OverallState) => {
       const prepend = state.workspaces[workspaceLocation].editorPrepend;
-      const value = state.workspaces[workspaceLocation].editorValue!;
+      const value = state.workspaces[workspaceLocation].editorValue;
       const postpend = state.workspaces[workspaceLocation].editorPostpend;
       const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
       return [prepend, value, postpend, testcase] as [string, string, string, string];
