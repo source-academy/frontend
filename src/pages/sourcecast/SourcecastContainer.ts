@@ -54,7 +54,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
-  editorValue: state.workspaces.sourcecast.editorValue!,
+  editorValue: state.workspaces.sourcecast.editorValue,
   externalLibraryName: state.workspaces.sourcecast.externalLibrary,
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
   inputToApply: state.workspaces.sourcecast.inputToApply,

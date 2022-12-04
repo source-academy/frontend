@@ -64,7 +64,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
-  editorValue: state.workspaces.sourcereel.editorValue!,
+  editorValue: state.workspaces.sourcereel.editorValue,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
   externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
