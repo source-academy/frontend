@@ -159,7 +159,7 @@ function* githubSaveFileAs(): any {
     }));
   const repoName = yield call(getRepoName);
 
-  const editorContent = store.getState().workspaces.playground.editorValue || '';
+  const editorContent = store.getState().workspaces.playground.editorValue;
 
   if (repoName !== '') {
     const pickerType = 'Save';
