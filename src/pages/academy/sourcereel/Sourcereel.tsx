@@ -23,6 +23,7 @@ import SourcecastEditor, {
 } from '../../../commons/sourceRecorder/SourceRecorderEditor';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
+import { EditorState } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -92,8 +93,8 @@ export type StateProps = {
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
   breakpoints: string[];
+  editors: EditorState[];
   editorReadonly: boolean;
-  editorValue: string;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
   highlightedLines: HighlightedLines[];
@@ -243,7 +244,8 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
     const editorProps: SourceRecorderEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
-      editorValue: this.props.editorValue,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue: this.props.editors[0].value,
       editorSessionId: '',
       getTimerDuration: this.getTimerDuration,
       handleDeclarationNavigate: this.props.handleDeclarationNavigate,
@@ -315,7 +317,8 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
                   </span>
                   <SourcereelControlbar
                     currentPlayerTime={this.props.currentPlayerTime}
-                    editorValue={this.props.editorValue}
+                    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                    editorValue={this.props.editors[0].value}
                     getTimerDuration={this.getTimerDuration}
                     playbackData={this.props.playbackData}
                     handleRecordInit={this.handleRecordInit}
@@ -391,7 +394,8 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
     this.props.handleRecordInit({
       chapter: this.props.sourceChapter,
       externalLibrary: this.props.externalLibraryName as ExternalLibraryName,
-      editorValue: this.props.editorValue
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue: this.props.editors[0].value
     });
 
   private handleRecordPause = () =>

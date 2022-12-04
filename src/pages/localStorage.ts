@@ -58,7 +58,8 @@ export const saveState = (state: OverallState) => {
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
-      playgroundEditorValue: state.workspaces.playground.editorValue,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      playgroundEditorValue: state.workspaces.playground.editors[0].value,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,

@@ -66,7 +66,7 @@ import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorState, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
@@ -109,8 +109,8 @@ export type OwnProps = {
 export type StateProps = {
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
+  editors: EditorState[];
   editorPrepend: string;
-  editorValue: string;
   editorPostpend: string;
   editorTestcases: Testcase[];
   breakpoints: string[];
@@ -336,8 +336,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
+      editors: [{ value: editorValue }],
       editorPrepend,
-      editorValue,
       editorPostpend,
       editorTestcases
     });
@@ -579,8 +579,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       };
     };
 
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     const onClickSave = () =>
-      props.handleSave(props.assessment!.questions[questionId].id, props.editorValue);
+      props.handleSave(props.assessment!.questions[questionId].id, props.editors[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -771,7 +772,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorSessionId: '',
-          editorValue: props.editorValue,
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorValue: props.editors[0].value,
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibrary: question.library.external.name || 'NONE',

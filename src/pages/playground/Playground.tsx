@@ -50,6 +50,7 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { EditorState } from '../../commons/workspace/WorkspaceTypes';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -110,8 +111,8 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  editors: EditorState[];
   editorSessionId: string;
-  editorValue: string;
   execTime: number;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -200,7 +201,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
-      editorValue: propsRef.current.editorValue,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue: propsRef.current.editors[0].value,
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -233,7 +235,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
-        editorValue: propsRef.current.editorValue,
+        editorValue: propsRef.current.editors[0].value,
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
@@ -521,7 +523,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const sessionButtons = (
     <ControlBarSessionButtons
       editorSessionId={props.editorSessionId}
-      editorValue={props.editorValue}
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue={props.editors[0].value}
       handleSetEditorSessionId={props.handleSetEditorSessionId}
       sharedbConnected={props.sharedbConnected}
       key="session"
@@ -742,7 +745,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: props.playgroundSourceChapter,
     externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
-    editorValue: props.editorValue,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editors[0].value,
     editorSessionId: props.editorSessionId,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,

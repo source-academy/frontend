@@ -67,7 +67,7 @@ import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/Di
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
+import { EditorState, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
@@ -107,8 +107,8 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  editors: EditorState[];
   editorPrepend: string;
-  editorValue: string;
   editorTestcases: Testcase[];
   editorPostpend: string;
   breakpoints: string[];
@@ -184,7 +184,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       const actualTaskIndex = newTaskNumber - 1;
 
       handleUpdateWorkspace({
-        editorValue: currentTaskList[actualTaskIndex].savedCode,
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editors: [{ value: currentTaskList[actualTaskIndex].savedCode }],
         editorPrepend: currentTaskList[actualTaskIndex].testPrepend,
         editorPostpend: currentTaskList[actualTaskIndex].testPostpend,
         editorTestcases: currentTaskList[actualTaskIndex].testCases
@@ -1060,7 +1061,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const editorProps = {
     editorSessionId: '',
-    editorValue: props.editorValue,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editors[0].value,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,

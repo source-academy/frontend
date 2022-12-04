@@ -33,7 +33,7 @@ import SideContentToneMatrix from '../../../../commons/sideContent/SideContentTo
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import { EditorState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
@@ -74,8 +74,8 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
+  editors: EditorState[];
   editorPrepend: string;
-  editorValue: string;
   editorPostpend: string;
   editorTestcases: Testcase[];
   breakpoints: string[];
@@ -188,7 +188,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
               editorSessionId: '',
-              editorValue: this.props.editorValue,
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              editorValue: this.props.editors[0].value,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
@@ -273,7 +274,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleResetWorkspace({
       autogradingResults,
       editorPrepend,
-      editorValue,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editors: [{ value: editorValue }],
       editorPostpend,
       editorTestcases
     });

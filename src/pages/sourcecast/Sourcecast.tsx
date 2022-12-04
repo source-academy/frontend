@@ -30,6 +30,7 @@ import SourceRecorderEditor, {
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Constants from '../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { EditorState } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -83,8 +84,8 @@ export type StateProps = {
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
+  editors: EditorState[];
   editorReadonly: boolean;
-  editorValue: string;
   externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -269,7 +270,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const editorProps: SourceRecorderEditorProps = {
     codeDeltasToApply: props.codeDeltasToApply,
     editorReadonly: props.editorReadonly,
-    editorValue: props.editorValue,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editors[0].value,
     editorSessionId: '',
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
