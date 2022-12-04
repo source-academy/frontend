@@ -74,6 +74,7 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
+  activeEditorIndex: number | null;
   editors: EditorState[];
   editorPrepend: string;
   editorPostpend: string;

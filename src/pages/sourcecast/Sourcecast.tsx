@@ -84,6 +84,7 @@ export type StateProps = {
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
+  activeEditorIndex: number | null;
   editors: EditorState[];
   editorReadonly: boolean;
   externalLibraryName: ExternalLibraryName;

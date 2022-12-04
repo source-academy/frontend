@@ -109,6 +109,7 @@ export type OwnProps = {
 export type StateProps = {
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
+  activeEditorIndex: number | null;
   editors: EditorState[];
   editorPrepend: string;
   editorPostpend: string;

@@ -40,6 +40,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     courseId: state.session.courseId,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
+    activeEditorIndex: state.workspaces.assessment.activeEditorIndex,
     editors: state.workspaces.assessment.editors,
     editorPrepend: state.workspaces.assessment.editorPrepend,
     editorPostpend: state.workspaces.assessment.editorPostpend,

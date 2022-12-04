@@ -53,6 +53,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
+  activeEditorIndex: state.workspaces.sourcecast.activeEditorIndex,
   editors: state.workspaces.sourcecast.editors,
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
   externalLibraryName: state.workspaces.sourcecast.externalLibrary,

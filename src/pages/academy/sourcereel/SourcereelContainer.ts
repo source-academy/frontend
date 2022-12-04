@@ -63,6 +63,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   currentPlayerTime: state.workspaces.sourcecast.currentPlayerTime,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   breakpoints: state.workspaces.sourcereel.breakpoints,
+  activeEditorIndex: state.workspaces.sourcereel.activeEditorIndex,
   editors: state.workspaces.sourcereel.editors,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,

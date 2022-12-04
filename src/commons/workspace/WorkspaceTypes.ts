@@ -86,6 +86,7 @@ export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
   readonly breakpoints: string[];
   readonly context: Context;
+  readonly activeEditorIndex: number | null;
   readonly editors: EditorState[];
   readonly editorPrepend: string;
   readonly editorReadonly: boolean;

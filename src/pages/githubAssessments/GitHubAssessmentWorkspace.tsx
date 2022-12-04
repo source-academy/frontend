@@ -107,6 +107,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  activeEditorIndex: number | null;
   editors: EditorState[];
   editorPrepend: string;
   editorTestcases: Testcase[];

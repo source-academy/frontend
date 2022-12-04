@@ -93,6 +93,7 @@ export type OwnProps = {
 };
 
 export type StateProps = {
+  activeEditorIndex: number | null;
   editors: EditorState[];
   breakpoints: string[];
   highlightedLines: HighlightedLines[];

@@ -111,6 +111,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  activeEditorIndex: number | null;
   editors: EditorState[];
   editorSessionId: string;
   execTime: number;

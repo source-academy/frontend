@@ -93,6 +93,7 @@ export type StateProps = {
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
   breakpoints: string[];
+  activeEditorIndex: number | null;
   editors: EditorState[];
   editorReadonly: boolean;
   enableDebugging: boolean;
