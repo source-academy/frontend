@@ -108,7 +108,7 @@ export type DispatchProps = {
 
 export type StateProps = {
   editorPrepend: string;
-  editorValue: string | null;
+  editorValue: string;
   editorTestcases: Testcase[];
   editorPostpend: string;
   breakpoints: string[];
@@ -1060,7 +1060,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const editorProps = {
     editorSessionId: '',
-    editorValue: props.editorValue!,
+    editorValue: props.editorValue,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,

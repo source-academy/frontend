@@ -75,7 +75,7 @@ export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorPrepend: string;
-  editorValue: string | null;
+  editorValue: string;
   editorPostpend: string;
   editorTestcases: Testcase[];
   breakpoints: string[];
@@ -188,7 +188,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
               editorSessionId: '',
-              editorValue: this.props.editorValue!,
+              editorValue: this.props.editorValue,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,

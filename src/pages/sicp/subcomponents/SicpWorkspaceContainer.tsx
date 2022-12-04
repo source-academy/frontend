@@ -63,7 +63,7 @@ import Playground, { DispatchProps, StateProps } from '../../playground/Playgrou
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   editorSessionId: state.workspaces.sicp.editorSessionId,
-  editorValue: state.workspaces.sicp.editorValue!,
+  editorValue: state.workspaces.sicp.editorValue,
   execTime: state.workspaces.sicp.execTime,
   stepLimit: state.workspaces.sicp.stepLimit,
   isEditorAutorun: state.workspaces.sicp.isEditorAutorun,

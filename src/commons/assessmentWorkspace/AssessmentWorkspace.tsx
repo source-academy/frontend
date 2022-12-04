@@ -110,7 +110,7 @@ export type StateProps = {
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
-  editorValue: string | null;
+  editorValue: string;
   editorPostpend: string;
   editorTestcases: Testcase[];
   breakpoints: string[];
@@ -580,7 +580,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     const onClickSave = () =>
-      props.handleSave(props.assessment!.questions[questionId].id, props.editorValue!);
+      props.handleSave(props.assessment!.questions[questionId].id, props.editorValue);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -771,7 +771,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorSessionId: '',
-          editorValue: props.editorValue!,
+          editorValue: props.editorValue,
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibrary: question.library.external.name || 'NONE',

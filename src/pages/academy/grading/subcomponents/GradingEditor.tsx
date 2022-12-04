@@ -275,7 +275,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           this.props.submissionId,
           this.props.questionId,
           xpAdjustmentInput,
-          this.state.editorValue!
+          this.state.editorValue
         );
       }
     };

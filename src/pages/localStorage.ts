@@ -10,7 +10,7 @@ import { AchievementItem } from '../features/achievement/AchievementTypes';
 export type SavedState = {
   session: Partial<SessionState>;
   achievements: AchievementItem[];
-  playgroundEditorValue: string | null;
+  playgroundEditorValue: string;
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
   playgroundSourceVariant: Variant;
