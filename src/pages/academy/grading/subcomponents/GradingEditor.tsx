@@ -182,7 +182,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 
         <div className="react-mde-parent">
           <ReactMde
-            value={this.state.editorValue || ''}
+            value={this.state.editorValue}
             onChange={this.handleEditorValueChange}
             selectedTab={this.state.selectedTab}
             onTabChange={onTabChange}
