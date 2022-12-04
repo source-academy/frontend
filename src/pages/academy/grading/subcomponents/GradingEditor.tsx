@@ -47,7 +47,7 @@ type OwnProps = {
   xpAdjustment: number;
   maxXp: number;
   studentName: string;
-  comments?: string;
+  comments: string;
   graderName?: string;
   gradedAt?: string;
 };
@@ -78,7 +78,7 @@ type OwnProps = {
  */
 type State = {
   xpAdjustmentInput: string | null;
-  editorValue?: string;
+  editorValue: string;
   selectedTab: ReactMdeProps['selectedTab'];
   currentlySaving: boolean;
 };
@@ -322,7 +322,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         {
           ...this.state,
           xpAdjustmentInput: this.props.xpAdjustment!.toString(),
-          editorValue: this.props.comments || ''
+          editorValue: this.props.comments
         },
         () => {
           showSuccessMessage('Discarded!', 1000);
