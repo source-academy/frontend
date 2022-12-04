@@ -80,6 +80,8 @@ export type WorkspaceManagerState = {
 
 export type EditorState = {
   readonly value: string;
+  readonly prependValue: string;
+  readonly postpendValue: string;
 };
 
 export type WorkspaceState = {
@@ -88,10 +90,8 @@ export type WorkspaceState = {
   readonly context: Context;
   readonly activeEditorIndex: number | null;
   readonly editors: EditorState[];
-  readonly editorPrepend: string;
   readonly editorReadonly: boolean;
   readonly editorSessionId: string;
-  readonly editorPostpend: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
   readonly highlightedLines: HighlightedLines[];

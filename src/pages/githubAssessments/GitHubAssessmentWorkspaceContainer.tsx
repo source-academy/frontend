@@ -31,8 +31,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   return {
     activeEditorIndex: state.workspaces.githubAssessment.activeEditorIndex,
     editors: state.workspaces.githubAssessment.editors,
-    editorPrepend: state.workspaces.githubAssessment.editorPrepend,
-    editorPostpend: state.workspaces.githubAssessment.editorPostpend,
     editorTestcases: state.workspaces.githubAssessment.editorTestcases,
     breakpoints: state.workspaces.githubAssessment.breakpoints,
     highlightedLines: state.workspaces.githubAssessment.highlightedLines,

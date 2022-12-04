@@ -111,8 +111,6 @@ export type StateProps = {
   autogradingResults: AutogradingResult[];
   activeEditorIndex: number | null;
   editors: EditorState[];
-  editorPrepend: string;
-  editorPostpend: string;
   editorTestcases: Testcase[];
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -337,9 +335,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
-      editors: [{ value: editorValue }],
-      editorPrepend,
-      editorPostpend,
+      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
       editorTestcases
     });
     props.handleChangeExecTime(

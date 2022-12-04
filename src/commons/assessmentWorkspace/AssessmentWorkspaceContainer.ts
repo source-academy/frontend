@@ -42,8 +42,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     autogradingResults: state.workspaces.assessment.autogradingResults,
     activeEditorIndex: state.workspaces.assessment.activeEditorIndex,
     editors: state.workspaces.assessment.editors,
-    editorPrepend: state.workspaces.assessment.editorPrepend,
-    editorPostpend: state.workspaces.assessment.editorPostpend,
     editorTestcases: state.workspaces.assessment.editorTestcases,
     breakpoints: state.workspaces.assessment.breakpoints,
     highlightedLines: state.workspaces.assessment.highlightedLines,

@@ -76,8 +76,6 @@ export type StateProps = {
   grading?: Grading;
   activeEditorIndex: number | null;
   editors: EditorState[];
-  editorPrepend: string;
-  editorPostpend: string;
   editorTestcases: Testcase[];
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -274,10 +272,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
-      editorPrepend,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editors: [{ value: editorValue }],
-      editorPostpend,
+      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
       editorTestcases
     });
     props.handleChangeExecTime(

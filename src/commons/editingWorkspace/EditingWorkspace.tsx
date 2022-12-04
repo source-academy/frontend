@@ -11,6 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -70,8 +71,8 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -344,10 +345,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     }
 
     this.props.handleResetWorkspace({
-      editorPrepend,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editors: [{ value: editorValue }],
-      editorPostpend
+      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }]
     });
     this.props.handleEditorValueChange(editorValue);
   };

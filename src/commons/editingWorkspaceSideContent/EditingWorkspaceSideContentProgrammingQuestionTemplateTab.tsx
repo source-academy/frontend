@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
+import { DeepPartial } from 'redux';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
@@ -14,7 +15,7 @@ type QuestionEditorProps = DispatchProps & StateProps;
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (val: string) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
 };
 
 type StateProps = {
@@ -207,10 +208,10 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
 
         if (this.state.activeEditor.id === 'prepend') {
           const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPrepend });
+          this.props.handleUpdateWorkspace({ editors: [{ prependValue: editorPrepend }] });
         } else if (this.state.activeEditor.id === 'postpend') {
           const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPostpend });
+          this.props.handleUpdateWorkspace({ editors: [{ postpendValue: editorPostpend }] });
         }
 
         this.setState({

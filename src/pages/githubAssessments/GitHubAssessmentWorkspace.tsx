@@ -109,9 +109,7 @@ export type DispatchProps = {
 export type StateProps = {
   activeEditorIndex: number | null;
   editors: EditorState[];
-  editorPrepend: string;
   editorTestcases: Testcase[];
-  editorPostpend: string;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
@@ -186,9 +184,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
       handleUpdateWorkspace({
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editors: [{ value: currentTaskList[actualTaskIndex].savedCode }],
-        editorPrepend: currentTaskList[actualTaskIndex].testPrepend,
-        editorPostpend: currentTaskList[actualTaskIndex].testPostpend,
+        editors: [
+          {
+            value: currentTaskList[actualTaskIndex].savedCode,
+            prependValue: currentTaskList[actualTaskIndex].testPrepend,
+            postpendValue: currentTaskList[actualTaskIndex].testPostpend
+          }
+        ],
         editorTestcases: currentTaskList[actualTaskIndex].testCases
       });
       handleReplOutputClear();

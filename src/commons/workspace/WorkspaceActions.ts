@@ -1,5 +1,6 @@
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { DeepPartial } from 'redux';
 import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -198,7 +199,7 @@ export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition:
  */
 export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: Partial<WorkspaceState>
+  workspaceOptions?: DeepPartial<WorkspaceState>
 ) =>
   action(RESET_WORKSPACE, {
     workspaceLocation,
@@ -207,7 +208,7 @@ export const resetWorkspace = (
 
 export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: Partial<WorkspaceState>
+  workspaceOptions?: DeepPartial<WorkspaceState>
 ) =>
   action(UPDATE_WORKSPACE, {
     workspaceLocation,
