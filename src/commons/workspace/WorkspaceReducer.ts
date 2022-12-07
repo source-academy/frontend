@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import {
   CodeOutput,
@@ -524,12 +524,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
 
-    case SET_EDITOR_READONLY:
+    case SET_IS_EDITOR_READONLY:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorReadonly: action.payload.editorReadonly
+          isEditorReadonly: action.payload.isEditorReadonly
         }
       };
     case SET_SHAREDB_CONNECTED:

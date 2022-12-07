@@ -23,7 +23,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   setEditorBreakpoint,
-  setEditorReadonly,
+  setIsEditorReadonly,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue
@@ -65,13 +65,13 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   breakpoints: state.workspaces.sourcereel.breakpoints,
   activeEditorIndex: state.workspaces.sourcereel.activeEditorIndex,
   editors: state.workspaces.sourcereel.editors,
-  editorReadonly: state.workspaces.sourcereel.editorReadonly,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
   externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
+  isEditorReadonly: state.workspaces.sourcereel.isEditorReadonly,
   isRunning: state.workspaces.sourcereel.isRunning,
   newCursorPosition: state.workspaces.sourcereel.newCursorPosition,
   output: state.workspaces.sourcereel.output,
@@ -135,7 +135,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         setSourcecastDuration(duration, 'sourcecast'),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus, 'sourcecast'),
-      handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
+      handleSetIsEditorReadonly: (readonly: boolean) => setIsEditorReadonly(location, readonly),
       handleResetInputs: (inputs: Input[]) => resetInputs(inputs, location),
       handleRecordInit: (initData: PlaybackData['init']) => recordInit(initData, location),
       handleSideContentHeightChange: (heightChange: number) =>

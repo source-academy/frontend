@@ -24,7 +24,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   setEditorBreakpoint,
-  setEditorReadonly,
+  setIsEditorReadonly,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue
@@ -55,9 +55,9 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   description: state.workspaces.sourcecast.description,
   activeEditorIndex: state.workspaces.sourcecast.activeEditorIndex,
   editors: state.workspaces.sourcecast.editors,
-  editorReadonly: state.workspaces.sourcecast.editorReadonly,
   externalLibraryName: state.workspaces.sourcecast.externalLibrary,
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
+  isEditorReadonly: state.workspaces.sourcecast.isEditorReadonly,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   breakpoints: state.workspaces.sourcecast.breakpoints,
   highlightedLines: state.workspaces.sourcecast.highlightedLines,
@@ -102,8 +102,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSetCurrentPlayerTime: (playerTime: number) =>
         setCurrentPlayerTime(playerTime, location),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => setCodeDeltasToApply(deltas, location),
-      handleSetEditorReadonly: (editorReadonly: boolean) =>
-        setEditorReadonly(location, editorReadonly),
+      handleSetIsEditorReadonly: (isEditorReadonly: boolean) =>
+        setIsEditorReadonly(location, isEditorReadonly),
       handleSetInputToApply: (inputToApply: Input) => setInputToApply(inputToApply, location),
       handleSetSourcecastData: (
         title: string,

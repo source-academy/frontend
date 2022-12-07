@@ -3,7 +3,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { DeepPartial } from 'redux';
 import { action } from 'typesafe-actions';
 
-import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
@@ -215,10 +215,13 @@ export const updateWorkspace = (
     workspaceOptions
   });
 
-export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
-  action(SET_EDITOR_READONLY, {
+export const setIsEditorReadonly = (
+  workspaceLocation: WorkspaceLocation,
+  isEditorReadonly: boolean
+) =>
+  action(SET_IS_EDITOR_READONLY, {
     workspaceLocation,
-    editorReadonly
+    isEditorReadonly: isEditorReadonly
   });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>

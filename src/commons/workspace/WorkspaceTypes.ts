@@ -90,7 +90,6 @@ export type WorkspaceState = {
   readonly context: Context;
   readonly activeEditorIndex: number | null;
   readonly editors: EditorState[];
-  readonly editorReadonly: boolean;
   readonly editorSessionId: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
@@ -100,6 +99,7 @@ export type WorkspaceState = {
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorAutorun: boolean;
+  readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;

@@ -22,7 +22,7 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
  *           for the react-ace editor's `onChange`
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
- * @property editorReadonly - Used for sourcecast only
+ * @property isEditorReadonly - Used for sourcecast only
  */
 export type SourceRecorderEditorProps = DispatchProps & StateProps & OwnProps;
 
@@ -39,11 +39,11 @@ type DispatchProps = {
 type StateProps = {
   breakpoints: string[];
   codeDeltasToApply?: CodeDelta[] | null;
-  editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
+  isEditorReadonly?: boolean;
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
@@ -229,7 +229,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             onChange={this.onChangeMethod}
             onCursorChange={this.onCursorChange}
             onSelectionChange={this.onSelectionChange}
-            readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
+            readOnly={this.props.isEditorReadonly ? this.props.isEditorReadonly : false}
             theme="source"
             value={this.props.editorValue}
             width="100%"

@@ -63,7 +63,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetIsEditorReadonly: (isEditorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastData: (
     title: string,
@@ -86,11 +86,11 @@ export type StateProps = {
   description: string | null;
   activeEditorIndex: number | null;
   editors: EditorState[];
-  editorReadonly: boolean;
   externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
+  isEditorReadonly: boolean;
   inputToApply: Input | null;
   isRunning: boolean;
   isDebugging: boolean;
@@ -270,7 +270,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const editorProps: SourceRecorderEditorProps = {
     codeDeltasToApply: props.codeDeltasToApply,
-    editorReadonly: props.editorReadonly,
+    isEditorReadonly: props.isEditorReadonly,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     editorValue: props.editors[0].value,
     editorSessionId: '',
@@ -352,7 +352,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     handleSetCurrentPlayerTime: props.handleSetCurrentPlayerTime,
     handleSetCodeDeltasToApply: props.handleSetCodeDeltasToApply,
-    handleSetEditorReadonly: props.handleSetEditorReadonly,
+    handleSetIsEditorReadonly: props.handleSetIsEditorReadonly,
     handleSetInputToApply: props.handleSetInputToApply,
     handleSetSourcecastDuration: props.handleSetSourcecastDuration,
     handleSetSourcecastStatus: props.handleSetSourcecastStatus,

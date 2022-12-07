@@ -243,7 +243,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     }
   ],
   editorSessionId: '',
-  editorReadonly: false,
+  isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,

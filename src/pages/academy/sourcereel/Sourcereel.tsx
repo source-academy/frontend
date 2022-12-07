@@ -75,7 +75,7 @@ export type DispatchProps = {
   ) => void;
   handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetIsEditorReadonly: (isEditorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
@@ -95,7 +95,7 @@ export type StateProps = {
   breakpoints: string[];
   activeEditorIndex: number | null;
   editors: EditorState[];
-  editorReadonly: boolean;
+  isEditorReadonly: boolean;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
   highlightedLines: HighlightedLines[];
@@ -244,7 +244,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
 
     const editorProps: SourceRecorderEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
-      editorReadonly: this.props.editorReadonly,
+      isEditorReadonly: this.props.isEditorReadonly,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: this.props.editors[0].value,
       editorSessionId: '',
@@ -327,7 +327,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
                     handleResetInputs={this.props.handleResetInputs}
                     handleSaveSourcecastData={this.props.handleSaveSourcecastData}
                     handleSetSourcecastData={this.props.handleSetSourcecastData}
-                    handleSetEditorReadonly={this.props.handleSetEditorReadonly}
+                    handleSetIsEditorReadonly={this.props.handleSetIsEditorReadonly}
                     handleTimerPause={this.props.handleTimerPause}
                     handleTimerReset={this.props.handleTimerReset}
                     handleTimerResume={this.props.handleTimerResume}
@@ -366,7 +366,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       handlePromptAutocomplete: this.props.handlePromptAutocomplete,
       handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
       handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
-      handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+      handleSetIsEditorReadonly: this.props.handleSetIsEditorReadonly,
       handleSetInputToApply: this.props.handleSetInputToApply,
       handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
       handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,

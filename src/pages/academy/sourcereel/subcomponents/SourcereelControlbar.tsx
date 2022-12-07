@@ -30,7 +30,7 @@ type DispatchProps = {
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
-  handleSetEditorReadonly: (readonly: boolean) => void;
+  handleSetIsEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
   handleTimerResume: (timeBefore: number) => void;
@@ -201,9 +201,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
     if (!this.recorder) {
       return;
     }
-    const { handleSetEditorReadonly, handleSetSourcecastData, handleTimerPause } = this.props;
+    const { handleSetIsEditorReadonly, handleSetSourcecastData, handleTimerPause } = this.props;
     clearInterval(this.state.updater!);
-    handleSetEditorReadonly(true);
+    handleSetIsEditorReadonly(true);
     handleTimerPause();
     this.recorder.pause();
     const audioUrl = window.URL.createObjectURL(this.recorder.exportWAV());
@@ -212,11 +212,11 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
 
   private handleRecorderStarting = () => {
     this.recorder = new Recorder();
-    const { handleRecordInit, handleSetEditorReadonly, handleTimerStart } = this.props;
+    const { handleRecordInit, handleSetIsEditorReadonly, handleTimerStart } = this.props;
     this.recorder.start().then(
       () => {
         handleRecordInit();
-        handleSetEditorReadonly(false);
+        handleSetIsEditorReadonly(false);
         handleTimerStart();
         const updater = setInterval(this.updateTimerDuration, 100);
         this.setState({ updater });
@@ -232,8 +232,8 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
     if (!this.recorder) {
       return;
     }
-    const { handleSetEditorReadonly, handleTimerResume } = this.props;
-    handleSetEditorReadonly(false);
+    const { handleSetIsEditorReadonly, handleTimerResume } = this.props;
+    handleSetIsEditorReadonly(false);
     // -1 means resume from the end
     handleTimerResume(-1);
     const updater = setInterval(this.updateTimerDuration, 100);
@@ -245,9 +245,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
     if (!this.recorder) {
       return;
     }
-    const { currentPlayerTime, handleSetEditorReadonly, handleTimerResume } = this.props;
+    const { currentPlayerTime, handleSetIsEditorReadonly, handleTimerResume } = this.props;
     this.handleTruncatePlaybackData();
-    handleSetEditorReadonly(false);
+    handleSetIsEditorReadonly(false);
     handleTimerResume(currentPlayerTime * 1000);
     const updater = setInterval(this.updateTimerDuration, 100);
     this.setState({ updater });
@@ -258,8 +258,8 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
     if (!this.recorder) {
       return;
     }
-    const { handleSetEditorReadonly, handleTimerStop } = this.props;
-    handleSetEditorReadonly(false);
+    const { handleSetIsEditorReadonly, handleTimerStop } = this.props;
+    handleSetIsEditorReadonly(false);
     handleTimerStop();
     clearInterval(this.state.updater!);
     this.recorder.stop();
@@ -270,8 +270,8 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   };
 
   private handleRecorderResetting = () => {
-    const { handleSetEditorReadonly, handleTimerReset } = this.props;
-    handleSetEditorReadonly(false);
+    const { handleSetIsEditorReadonly, handleTimerReset } = this.props;
+    handleSetIsEditorReadonly(false);
     handleTimerReset();
     clearInterval(this.state.updater!);
     this.setState({ duration: 0 });
