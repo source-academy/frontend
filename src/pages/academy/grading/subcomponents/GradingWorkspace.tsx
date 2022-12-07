@@ -33,7 +33,7 @@ import SideContentToneMatrix from '../../../../commons/sideContent/SideContentTo
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { EditorState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
@@ -74,8 +74,8 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
-  activeEditorIndex: number | null;
-  editors: EditorState[];
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
@@ -188,7 +188,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
           ? {
               editorSessionId: '',
               // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              editorValue: this.props.editors[0].value,
+              editorValue: this.props.editorTabs[0].value,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
@@ -273,7 +273,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleResetWorkspace({
       autogradingResults,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       editorTestcases
     });
     props.handleChangeExecTime(

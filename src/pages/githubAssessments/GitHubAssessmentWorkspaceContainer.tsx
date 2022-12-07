@@ -29,8 +29,8 @@ import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWork
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {
   return {
-    activeEditorIndex: state.workspaces.githubAssessment.activeEditorIndex,
-    editors: state.workspaces.githubAssessment.editors,
+    activeEditorTabIndex: state.workspaces.githubAssessment.activeEditorTabIndex,
+    editorTabs: state.workspaces.githubAssessment.editorTabs,
     editorTestcases: state.workspaces.githubAssessment.editorTestcases,
     breakpoints: state.workspaces.githubAssessment.breakpoints,
     highlightedLines: state.workspaces.githubAssessment.highlightedLines,

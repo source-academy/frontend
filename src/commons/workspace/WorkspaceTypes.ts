@@ -78,7 +78,7 @@ export type WorkspaceManagerState = {
   readonly githubAssessment: GitHubAssessmentWorkspaceState;
 };
 
-export type EditorState = {
+export type EditorTabState = {
   readonly value: string;
   readonly prependValue: string;
   readonly postpendValue: string;
@@ -88,8 +88,8 @@ export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
   readonly breakpoints: string[];
   readonly context: Context;
-  readonly activeEditorIndex: number | null;
-  readonly editors: EditorState[];
+  readonly activeEditorTabIndex: number | null;
+  readonly editorTabs: EditorTabState[];
   readonly editorSessionId: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;

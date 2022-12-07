@@ -117,7 +117,9 @@ describe('EVAL_EDITOR', () => {
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       execTime,
       context,
       globals
@@ -259,7 +261,7 @@ describe('DEBUG_RESUME', () => {
 
   test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editors: [{ value: editorValue }],
+      editorTabs: [{ value: editorValue }],
       context
     });
 
@@ -296,7 +298,7 @@ describe('DEBUG_RESET', () => {
   test('puts clearReplOutput correctly', () => {
     const workspaceLocation = 'assessment';
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editors: [{ value: 'test-value' }]
+      editorTabs: [{ value: 'test-value' }]
     });
 
     return expectSaga(workspaceSaga)
@@ -349,7 +351,9 @@ describe('EVAL_TESTCASE', () => {
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }],
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       editorTestcases,
       execTime,
       context,
@@ -745,7 +749,7 @@ describe('evalCode', () => {
     test('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
       state = generateDefaultState(workspaceLocation, {
-        editors: [{ prependValue: '// Prepend' }]
+        editorTabs: [{ prependValue: '// Prepend' }]
       });
 
       runInContext(code, context, {
@@ -1066,7 +1070,10 @@ describe('NAV_DECLARATION', () => {
       ...mockRuntimeContext(),
       chapter: Chapter.SOURCE_4
     };
-    state = generateDefaultState(workspaceLocation, { editors: [{ value: editorValue }], context });
+    state = generateDefaultState(workspaceLocation, {
+      editorTabs: [{ value: editorValue }],
+      context
+    });
   });
 
   test('moves cursor to declaration correctly', () => {

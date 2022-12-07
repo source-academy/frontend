@@ -62,8 +62,8 @@ import {
 import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  activeEditorIndex: state.workspaces.sicp.activeEditorIndex,
-  editors: state.workspaces.sicp.editors,
+  activeEditorTabIndex: state.workspaces.sicp.activeEditorTabIndex,
+  editorTabs: state.workspaces.sicp.editorTabs,
   editorSessionId: state.workspaces.sicp.editorSessionId,
   execTime: state.workspaces.sicp.execTime,
   stepLimit: state.workspaces.sicp.stepLimit,

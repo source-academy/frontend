@@ -27,7 +27,7 @@ const defaultProps: AssessmentWorkspaceProps = {
     earlySubmissionXp: 200
   },
   editorPrepend: '',
-  editors: [{ value: '' }],
+  editorTabs: [{ value: '' }],
   editorPostpend: '',
   editorTestcases: [],
   breakpoints: [],

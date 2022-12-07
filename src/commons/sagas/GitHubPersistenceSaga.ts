@@ -122,7 +122,7 @@ function* githubSaveFile(): any {
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-  const content = store.getState().workspaces.playground.editors[0].value;
+  const content = store.getState().workspaces.playground.editorTabs[0].value;
 
   GitHubUtils.performOverwritingSave(
     octokit,
@@ -161,7 +161,7 @@ function* githubSaveFileAs(): any {
   const repoName = yield call(getRepoName);
 
   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-  const editorContent = store.getState().workspaces.playground.editors[0].value;
+  const editorContent = store.getState().workspaces.playground.editorTabs[0].value;
 
   if (repoName !== '') {
     const pickerType = 'Save';

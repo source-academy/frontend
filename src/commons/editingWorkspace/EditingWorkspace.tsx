@@ -49,7 +49,7 @@ import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { EditorState, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -94,8 +94,8 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  activeEditorIndex: number | null;
-  editors: EditorState[];
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
@@ -175,7 +175,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               editorSessionId: '',
               editorValue:
                 // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                this.props.editors[0].value ||
+                this.props.editorTabs[0].value ||
                 question.editorValue ||
                 (question as IProgrammingQuestion).solutionTemplate,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
@@ -346,7 +346,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
 
     this.props.handleResetWorkspace({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editors: [{ value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }]
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ]
     });
     this.props.handleEditorValueChange(editorValue);
   };
@@ -360,7 +362,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
   private handleSave = () => {
     const assessment = this.state.assessment!;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    assessment.questions[this.formatedQuestionId()].editorValue = this.props.editors[0].value;
+    assessment.questions[this.formatedQuestionId()].editorValue = this.props.editorTabs[0].value;
     this.setState({
       assessment,
       hasUnsavedChanges: false
@@ -444,7 +446,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             questionId={questionId}
             updateAssessment={this.updateEditAssessmentState}
             // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-            editorValue={this.props.editors[0].value}
+            editorValue={this.props.editorTabs[0].value}
             handleEditorValueChange={this.props.handleEditorValueChange}
             handleUpdateWorkspace={this.props.handleUpdateWorkspace}
           />

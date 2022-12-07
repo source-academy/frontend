@@ -113,8 +113,8 @@ export default function* WorkspaceSaga(): SagaIterator {
 
       const code: string = yield select((state: OverallState) => {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        const prependCode = state.workspaces[workspaceLocation].editors[0].prependValue;
-        const editorCode = state.workspaces[workspaceLocation].editors[0].value;
+        const prependCode = state.workspaces[workspaceLocation].editorTabs[0].prependValue;
+        const editorCode = state.workspaces[workspaceLocation].editorTabs[0].value;
         return [prependCode, editorCode] as [string, string];
       });
       const [prepend, editorValue] = code;
@@ -204,7 +204,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editors[0].value
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
     );
     const execTime: number = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].execTime
@@ -430,7 +430,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       const workspaceLocation = action.payload.workspaceLocation;
       const code: string = yield select(
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        (state: OverallState) => state.workspaces[workspaceLocation].editors[0].value
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
       );
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
@@ -547,8 +547,8 @@ export function* evalEditor(
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    state.workspaces[workspaceLocation].editors[0].prependValue,
-    state.workspaces[workspaceLocation].editors[0].value,
+    state.workspaces[workspaceLocation].editorTabs[0].prependValue,
+    state.workspaces[workspaceLocation].editorTabs[0].value,
     state.workspaces[workspaceLocation].execTime,
     state.session.remoteExecutionSession
   ]);
@@ -612,9 +612,9 @@ export function* runTestCase(
   const [prepend, value, postpend, testcase]: [string, string, string, string] = yield select(
     (state: OverallState) => {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      const prepend = state.workspaces[workspaceLocation].editors[0].prependValue;
-      const value = state.workspaces[workspaceLocation].editors[0].value;
-      const postpend = state.workspaces[workspaceLocation].editors[0].postpendValue;
+      const prepend = state.workspaces[workspaceLocation].editorTabs[0].prependValue;
+      const value = state.workspaces[workspaceLocation].editorTabs[0].value;
+      const postpend = state.workspaces[workspaceLocation].editorTabs[0].postpendValue;
       const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
       return [prepend, value, postpend, testcase] as [string, string, string, string];
     }

@@ -232,8 +232,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
-  activeEditorIndex: 0,
-  editors: [
+  activeEditorTabIndex: 0,
+  editorTabs: [
     {
       value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
         ? defaultEditorValue

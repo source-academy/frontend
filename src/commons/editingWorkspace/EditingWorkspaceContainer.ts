@@ -37,8 +37,8 @@ import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './Editing
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
-    activeEditorIndex: state.workspaces.assessment.activeEditorIndex,
-    editors: state.workspaces.assessment.editors,
+    activeEditorTabIndex: state.workspaces.assessment.activeEditorTabIndex,
+    editorTabs: state.workspaces.assessment.editorTabs,
     breakpoints: state.workspaces.assessment.breakpoints,
     highlightedLines: state.workspaces.assessment.highlightedLines,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,

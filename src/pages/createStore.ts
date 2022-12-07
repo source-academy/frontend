@@ -56,10 +56,10 @@ function loadStore(loadedStore: SavedState | undefined) {
       ...defaultState.workspaces,
       playground: {
         ...defaultState.workspaces.playground,
-        editors: loadedStore.playgroundEditorValue
+        editorTabs: loadedStore.playgroundEditorValue
           ? // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
             [{ value: loadedStore.playgroundEditorValue }]
-          : defaultState.workspaces.playground.editors,
+          : defaultState.workspaces.playground.editorTabs,
         isEditorAutorun: loadedStore.playgroundIsEditorAutorun
           ? loadedStore.playgroundIsEditorAutorun
           : defaultState.workspaces.playground.isEditorAutorun,

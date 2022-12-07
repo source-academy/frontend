@@ -39,7 +39,7 @@ const mockChangedState: OverallState = {
     ...defaultState.workspaces,
     playground: {
       ...defaultState.workspaces.playground,
-      editors: [{ value: 'Nihao everybody' }],
+      editorTabs: [{ value: 'Nihao everybody' }],
       isEditorAutorun: true
     }
   }

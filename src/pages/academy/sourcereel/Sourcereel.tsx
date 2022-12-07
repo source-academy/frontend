@@ -23,7 +23,7 @@ import SourcecastEditor, {
 } from '../../../commons/sourceRecorder/SourceRecorderEditor';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
-import { EditorState } from '../../../commons/workspace/WorkspaceTypes';
+import { EditorTabState } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -93,8 +93,8 @@ export type StateProps = {
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
   breakpoints: string[];
-  activeEditorIndex: number | null;
-  editors: EditorState[];
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   isEditorReadonly: boolean;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
@@ -246,7 +246,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       codeDeltasToApply: this.props.codeDeltasToApply,
       isEditorReadonly: this.props.isEditorReadonly,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: this.props.editors[0].value,
+      editorValue: this.props.editorTabs[0].value,
       editorSessionId: '',
       getTimerDuration: this.getTimerDuration,
       handleDeclarationNavigate: this.props.handleDeclarationNavigate,
@@ -319,7 +319,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
                   <SourcereelControlbar
                     currentPlayerTime={this.props.currentPlayerTime}
                     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                    editorValue={this.props.editors[0].value}
+                    editorValue={this.props.editorTabs[0].value}
                     getTimerDuration={this.getTimerDuration}
                     playbackData={this.props.playbackData}
                     handleRecordInit={this.handleRecordInit}
@@ -396,7 +396,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       chapter: this.props.sourceChapter,
       externalLibrary: this.props.externalLibraryName as ExternalLibraryName,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: this.props.editors[0].value
+      editorValue: this.props.editorTabs[0].value
     });
 
   private handleRecordPause = () =>

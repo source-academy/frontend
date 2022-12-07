@@ -57,7 +57,7 @@ export default function* PlaygroundSaga(): SagaIterator {
 function* updateQueryString() {
   const code: string = yield select(
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    (state: OverallState) => state.workspaces.playground.editors[0].value
+    (state: OverallState) => state.workspaces.playground.editorTabs[0].value
   );
   if (!code || code === defaultEditorValue) {
     yield put(changeQueryString(''));

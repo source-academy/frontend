@@ -208,10 +208,10 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
 
         if (this.state.activeEditor.id === 'prepend') {
           const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editors: [{ prependValue: editorPrepend }] });
+          this.props.handleUpdateWorkspace({ editorTabs: [{ prependValue: editorPrepend }] });
         } else if (this.state.activeEditor.id === 'postpend') {
           const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editors: [{ postpendValue: editorPostpend }] });
+          this.props.handleUpdateWorkspace({ editorTabs: [{ postpendValue: editorPostpend }] });
         }
 
         this.setState({

@@ -115,7 +115,7 @@ export function* persistenceSaga(): SagaIterator {
 
       const [code, chapter, variant, external] = yield select((state: OverallState) => [
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        state.workspaces.playground.editors[0].value,
+        state.workspaces.playground.editorTabs[0].value,
         state.workspaces.playground.context.chapter,
         state.workspaces.playground.context.variant,
         state.workspaces.playground.externalLibrary
@@ -237,7 +237,7 @@ export function* persistenceSaga(): SagaIterator {
         yield call(ensureInitialisedAndAuthorised);
 
         const [code, chapter, variant, external] = yield select((state: OverallState) => [
-          state.workspaces.playground.editors[0].value,
+          state.workspaces.playground.editorTabs[0].value,
           state.workspaces.playground.context.chapter,
           state.workspaces.playground.context.variant,
           state.workspaces.playground.externalLibrary
