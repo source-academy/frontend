@@ -594,7 +594,13 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          highlightedLines: action.payload.highlightedLines
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            {
+              ...state[workspaceLocation].editorTabs[0],
+              highlightedLines: action.payload.highlightedLines
+            }
+          ]
         }
       };
     case MOVE_CURSOR:
@@ -602,7 +608,13 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          newCursorPosition: action.payload.cursorPosition
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            {
+              ...state[workspaceLocation].editorTabs[0],
+              newCursorPosition: action.payload.cursorPosition
+            }
+          ]
         }
       };
     case UPDATE_REPL_VALUE:
