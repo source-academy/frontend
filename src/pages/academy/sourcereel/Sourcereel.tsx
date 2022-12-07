@@ -102,7 +102,6 @@ export type StateProps = {
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackData: PlaybackData;
   playbackDuration: number;
@@ -258,7 +257,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       breakpoints: this.props.breakpoints,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       highlightedLines: this.props.editorTabs[0].highlightedLines,
-      newCursorPosition: this.props.newCursorPosition,
+      newCursorPosition: this.props.editorTabs[0].newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput
     };

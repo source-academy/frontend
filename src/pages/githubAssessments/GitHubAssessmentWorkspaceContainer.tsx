@@ -37,7 +37,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     isRunning: state.workspaces.githubAssessment.isRunning,
     isDebugging: state.workspaces.githubAssessment.isDebugging,
     enableDebugging: state.workspaces.githubAssessment.enableDebugging,
-    newCursorPosition: state.workspaces.githubAssessment.newCursorPosition,
     output: state.workspaces.githubAssessment.output,
     replValue: state.workspaces.githubAssessment.replValue,
     sideContentHeight: state.workspaces.githubAssessment.sideContentHeight,

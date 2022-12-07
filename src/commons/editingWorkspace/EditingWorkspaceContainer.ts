@@ -44,7 +44,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,
     enableDebugging: state.workspaces.assessment.enableDebugging,
-    newCursorPosition: state.workspaces.assessment.newCursorPosition,
     output: state.workspaces.assessment.output,
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,

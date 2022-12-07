@@ -72,7 +72,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   isRunning: state.workspaces.sicp.isRunning,
   isDebugging: state.workspaces.sicp.isDebugging,
   enableDebugging: state.workspaces.sicp.enableDebugging,
-  newCursorPosition: state.workspaces.sicp.newCursorPosition,
   output: state.workspaces.sicp.output,
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,

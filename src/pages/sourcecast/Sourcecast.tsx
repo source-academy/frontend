@@ -94,7 +94,6 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackDuration: number;
   playbackData: PlaybackData;
@@ -282,7 +281,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     breakpoints: props.breakpoints,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     highlightedLines: props.editorTabs[0].highlightedLines,
-    newCursorPosition: props.newCursorPosition,
+    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
   };
 

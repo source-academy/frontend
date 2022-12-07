@@ -118,7 +118,6 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -783,7 +782,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           breakpoints: props.breakpoints,
           // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
           highlightedLines: props.editorTabs[0].highlightedLines,
-          newCursorPosition: props.newCursorPosition,
+          newCursorPosition: props.editorTabs[0].newCursorPosition,
           handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: props.handlePromptAutocomplete,
           isEditorAutorun: false,

@@ -120,7 +120,6 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   queryString?: string;
   shortURL?: string;
@@ -757,7 +756,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     breakpoints: props.breakpoints,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     highlightedLines: props.editorTabs[0].highlightedLines,
-    newCursorPosition: props.newCursorPosition,
+    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     handleSetSharedbConnected: props.handleSetSharedbConnected
   };

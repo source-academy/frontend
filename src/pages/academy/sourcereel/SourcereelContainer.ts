@@ -72,7 +72,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
   isEditorReadonly: state.workspaces.sourcereel.isEditorReadonly,
   isRunning: state.workspaces.sourcereel.isRunning,
-  newCursorPosition: state.workspaces.sourcereel.newCursorPosition,
   output: state.workspaces.sourcereel.output,
   playbackData: state.workspaces.sourcereel.playbackData,
   playbackDuration: state.workspaces.sourcecast.playbackDuration,

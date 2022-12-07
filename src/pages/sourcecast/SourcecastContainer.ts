@@ -63,7 +63,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   isRunning: state.workspaces.sourcecast.isRunning,
   isDebugging: state.workspaces.sourcecast.isDebugging,
   enableDebugging: state.workspaces.sourcecast.enableDebugging,
-  newCursorPosition: state.workspaces.sourcecast.newCursorPosition,
   output: state.workspaces.sourcecast.output,
   playbackDuration: state.workspaces.sourcecast.playbackDuration,
   playbackData: state.workspaces.sourcecast.playbackData,

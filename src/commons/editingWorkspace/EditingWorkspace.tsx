@@ -101,7 +101,6 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -183,7 +182,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               breakpoints: this.props.breakpoints,
               // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
               highlightedLines: this.props.editorTabs[0].highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
+              newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,

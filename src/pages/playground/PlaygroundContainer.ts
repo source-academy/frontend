@@ -70,7 +70,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   isRunning: state.workspaces.playground.isRunning,
   isDebugging: state.workspaces.playground.isDebugging,
   enableDebugging: state.workspaces.playground.enableDebugging,
-  newCursorPosition: state.workspaces.playground.newCursorPosition,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,

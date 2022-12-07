@@ -83,6 +83,7 @@ export type EditorTabState = {
   readonly prependValue: string;
   readonly postpendValue: string;
   readonly highlightedLines: HighlightedLines[];
+  readonly newCursorPosition?: Position;
 };
 
 export type WorkspaceState = {
@@ -94,7 +95,6 @@ export type WorkspaceState = {
   readonly editorSessionId: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
-  readonly newCursorPosition?: Position;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
