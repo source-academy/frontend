@@ -15,6 +15,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -32,7 +33,7 @@ import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSave
 import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
 import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
 import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { Position } from '../../commons/editor/EditorTypes';
 import {
   GitHubMissionCreateDialog,
   GitHubMissionCreateDialogProps,
@@ -96,7 +97,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   handleRunAllTestcases: () => void;
@@ -111,7 +112,6 @@ export type StateProps = {
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -1071,7 +1071,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
     breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    highlightedLines: props.editorTabs[0].highlightedLines,
     newCursorPosition: props.newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
     handlePromptAutocomplete: props.handlePromptAutocomplete,

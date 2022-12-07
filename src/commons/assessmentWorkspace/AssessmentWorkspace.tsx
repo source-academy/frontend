@@ -16,6 +16,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { DeepPartial } from 'redux';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -50,7 +51,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
@@ -84,7 +85,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleChangeExecTime: (execTimeMs: number) => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -113,7 +114,6 @@ export type StateProps = {
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -781,7 +781,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           handleEditorValueChange: props.handleEditorValueChange,
           handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
           breakpoints: props.breakpoints,
-          highlightedLines: props.highlightedLines,
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          highlightedLines: props.editorTabs[0].highlightedLines,
           newCursorPosition: props.newCursorPosition,
           handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: props.handlePromptAutocomplete,

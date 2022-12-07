@@ -67,7 +67,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   editorTabs: state.workspaces.sourcereel.editorTabs,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
   externalLibraryName: state.workspaces.sourcereel.externalLibrary,
-  highlightedLines: state.workspaces.sourcereel.highlightedLines,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,

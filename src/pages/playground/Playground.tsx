@@ -34,7 +34,7 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { Position } from '../../commons/editor/EditorTypes';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -116,7 +116,6 @@ export type StateProps = {
   editorSessionId: string;
   execTime: number;
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -756,7 +755,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     isEditorAutorun: props.isEditorAutorun,
     breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    highlightedLines: props.editorTabs[0].highlightedLines,
     newCursorPosition: props.newCursorPosition,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     handleSetSharedbConnected: props.handleSetSharedbConnected

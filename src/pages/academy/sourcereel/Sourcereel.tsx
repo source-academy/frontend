@@ -11,7 +11,7 @@ import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarC
 import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
+import { Position } from '../../../commons/editor/EditorTypes';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
@@ -98,7 +98,6 @@ export type StateProps = {
   isEditorReadonly: boolean;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
-  highlightedLines: HighlightedLines[];
   inputToApply: Input | null;
   isDebugging: boolean;
   isEditorAutorun: boolean;
@@ -257,7 +256,8 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
       breakpoints: this.props.breakpoints,
-      highlightedLines: this.props.highlightedLines,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      highlightedLines: this.props.editorTabs[0].highlightedLines,
       newCursorPosition: this.props.newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput

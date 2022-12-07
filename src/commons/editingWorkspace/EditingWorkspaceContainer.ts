@@ -40,7 +40,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     activeEditorTabIndex: state.workspaces.assessment.activeEditorTabIndex,
     editorTabs: state.workspaces.assessment.editorTabs,
     breakpoints: state.workspaces.assessment.breakpoints,
-    highlightedLines: state.workspaces.assessment.highlightedLines,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,

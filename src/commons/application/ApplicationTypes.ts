@@ -239,7 +239,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
         ? defaultEditorValue
         : '',
       prependValue: '',
-      postpendValue: ''
+      postpendValue: '',
+      highlightedLines: []
     }
   ],
   editorSessionId: '',
@@ -247,7 +248,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
-  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,

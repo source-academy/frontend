@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { DeepPartial } from 'redux';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
 
@@ -25,7 +26,7 @@ import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarN
 import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { HighlightedLines, Position } from '../../../../commons/editor/EditorTypes';
+import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
@@ -53,7 +54,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleChangeExecTime: (execTimeMs: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -78,7 +79,6 @@ export type StateProps = {
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -193,7 +193,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              highlightedLines: this.props.editorTabs[0].highlightedLines,
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,

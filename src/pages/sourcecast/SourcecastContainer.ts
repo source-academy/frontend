@@ -60,7 +60,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   isEditorReadonly: state.workspaces.sourcecast.isEditorReadonly,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   breakpoints: state.workspaces.sourcecast.breakpoints,
-  highlightedLines: state.workspaces.sourcecast.highlightedLines,
   isRunning: state.workspaces.sourcecast.isRunning,
   isDebugging: state.workspaces.sourcecast.isDebugging,
   enableDebugging: state.workspaces.sourcecast.enableDebugging,

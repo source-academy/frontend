@@ -42,7 +42,7 @@ import { ManageQuestionTab } from '../editingWorkspaceSideContent/EditingWorkspa
 import { MCQQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
@@ -97,7 +97,6 @@ export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -182,7 +181,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              highlightedLines: this.props.editorTabs[0].highlightedLines,
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,

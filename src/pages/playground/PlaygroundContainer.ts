@@ -67,7 +67,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   stepLimit: state.workspaces.playground.stepLimit,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   breakpoints: state.workspaces.playground.breakpoints,
-  highlightedLines: state.workspaces.playground.highlightedLines,
   isRunning: state.workspaces.playground.isRunning,
   isDebugging: state.workspaces.playground.isDebugging,
   enableDebugging: state.workspaces.playground.enableDebugging,

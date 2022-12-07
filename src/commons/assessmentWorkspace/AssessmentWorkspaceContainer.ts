@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
 
 import {
   beginDebuggerPause,
@@ -44,7 +44,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     editorTabs: state.workspaces.assessment.editorTabs,
     editorTestcases: state.workspaces.assessment.editorTestcases,
     breakpoints: state.workspaces.assessment.breakpoints,
-    highlightedLines: state.workspaces.assessment.highlightedLines,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,
@@ -79,7 +78,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+      handleResetWorkspace: (options: DeepPartial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleChangeExecTime: (execTimeMs: number) => changeExecTime(execTimeMs, workspaceLocation),
       handleSave: submitAnswer,

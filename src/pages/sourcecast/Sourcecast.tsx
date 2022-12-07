@@ -14,7 +14,7 @@ import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChap
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { Position } from '../../commons/editor/EditorTypes';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -88,7 +88,6 @@ export type StateProps = {
   editorTabs: EditorTabState[];
   externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isEditorReadonly: boolean;
   inputToApply: Input | null;
@@ -281,7 +280,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
     breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    highlightedLines: props.editorTabs[0].highlightedLines,
     newCursorPosition: props.newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
   };
