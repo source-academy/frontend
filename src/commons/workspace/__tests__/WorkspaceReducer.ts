@@ -1307,7 +1307,9 @@ describe('UPDATE_EDITOR_VALUE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorTabs: [{ value: newEditorValue }]
+          editorTabs: [
+            { ...defaultWorkspaceManager[location].editorTabs[0], value: newEditorValue }
+          ]
         }
       });
     });
