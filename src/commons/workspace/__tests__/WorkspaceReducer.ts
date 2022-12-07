@@ -997,7 +997,7 @@ describe('HIGHLIGHT_LINE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          highlightedLines
+          editorTabs: [{ ...defaultWorkspaceManager[location].editorTabs[0], highlightedLines }]
         }
       });
     });
@@ -1006,12 +1006,17 @@ describe('HIGHLIGHT_LINE', () => {
 
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
+    const defaultPlayground = createDefaultWorkspace('playground');
     const newPlayground: PlaygroundWorkspaceState = {
-      ...createDefaultWorkspace('playground'),
-      editorTabs: [{ value: 'test program here', prependValue: '', postpendValue: '' }],
-      highlightedLines: [
-        [1, 2],
-        [3, 4]
+      ...defaultPlayground,
+      editorTabs: [
+        {
+          ...defaultPlayground.editorTabs[0],
+          highlightedLines: [
+            [1, 2],
+            [3, 4]
+          ]
+        }
       ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
