@@ -1006,12 +1006,12 @@ describe('HIGHLIGHT_LINE', () => {
 
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
-    const defaultPlayground = createDefaultWorkspace('playground');
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const newPlayground: PlaygroundWorkspaceState = {
-      ...defaultPlayground,
+      ...defaultPlaygroundState,
       editorTabs: [
         {
-          ...defaultPlayground.editorTabs[0],
+          ...defaultPlaygroundState.editorTabs[0],
           highlightedLines: [
             [1, 2],
             [3, 4]
