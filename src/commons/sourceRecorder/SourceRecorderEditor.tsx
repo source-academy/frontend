@@ -43,7 +43,7 @@ type StateProps = {
   editorValue: string;
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
-  isEditorReadonly?: boolean;
+  isEditorReadonly: boolean;
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
@@ -229,7 +229,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             onChange={this.onChangeMethod}
             onCursorChange={this.onCursorChange}
             onSelectionChange={this.onSelectionChange}
-            readOnly={this.props.isEditorReadonly ? this.props.isEditorReadonly : false}
+            readOnly={this.props.isEditorReadonly}
             theme="source"
             value={this.props.editorValue}
             width="100%"
