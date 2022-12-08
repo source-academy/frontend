@@ -24,7 +24,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   setEditorBreakpoint,
-  setEditorReadonly,
+  setIsEditorReadonly,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue
@@ -53,17 +53,16 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
-  editorReadonly: state.workspaces.sourcecast.editorReadonly,
-  editorValue: state.workspaces.sourcecast.editorValue,
+  activeEditorTabIndex: state.workspaces.sourcecast.activeEditorTabIndex,
+  editorTabs: state.workspaces.sourcecast.editorTabs,
   externalLibraryName: state.workspaces.sourcecast.externalLibrary,
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
+  isEditorReadonly: state.workspaces.sourcecast.isEditorReadonly,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   breakpoints: state.workspaces.sourcecast.breakpoints,
-  highlightedLines: state.workspaces.sourcecast.highlightedLines,
   isRunning: state.workspaces.sourcecast.isRunning,
   isDebugging: state.workspaces.sourcecast.isDebugging,
   enableDebugging: state.workspaces.sourcecast.enableDebugging,
-  newCursorPosition: state.workspaces.sourcecast.newCursorPosition,
   output: state.workspaces.sourcecast.output,
   playbackDuration: state.workspaces.sourcecast.playbackDuration,
   playbackData: state.workspaces.sourcecast.playbackData,
@@ -101,8 +100,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSetCurrentPlayerTime: (playerTime: number) =>
         setCurrentPlayerTime(playerTime, location),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => setCodeDeltasToApply(deltas, location),
-      handleSetEditorReadonly: (editorReadonly: boolean) =>
-        setEditorReadonly(location, editorReadonly),
+      handleSetIsEditorReadonly: (isEditorReadonly: boolean) =>
+        setIsEditorReadonly(location, isEditorReadonly),
       handleSetInputToApply: (inputToApply: Input) => setInputToApply(inputToApply, location),
       handleSetSourcecastData: (
         title: string,

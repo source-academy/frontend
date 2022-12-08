@@ -14,7 +14,7 @@ import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChap
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { Position } from '../../commons/editor/EditorTypes';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -30,6 +30,7 @@ import SourceRecorderEditor, {
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Constants from '../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -62,7 +63,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetIsEditorReadonly: (isEditorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastData: (
     title: string,
@@ -83,17 +84,16 @@ export type StateProps = {
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
-  editorReadonly: boolean;
-  editorValue: string;
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
+  isEditorReadonly: boolean;
   inputToApply: Input | null;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackDuration: number;
   playbackData: PlaybackData;
@@ -268,8 +268,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const editorProps: SourceRecorderEditorProps = {
     codeDeltasToApply: props.codeDeltasToApply,
-    editorReadonly: props.editorReadonly,
-    editorValue: props.editorValue,
+    isEditorReadonly: props.isEditorReadonly,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editorTabs[0].value,
     editorSessionId: '',
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
@@ -278,8 +279,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
     breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    highlightedLines: props.editorTabs[0].highlightedLines,
+    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
   };
 
@@ -349,7 +351,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     handleSetCurrentPlayerTime: props.handleSetCurrentPlayerTime,
     handleSetCodeDeltasToApply: props.handleSetCodeDeltasToApply,
-    handleSetEditorReadonly: props.handleSetEditorReadonly,
+    handleSetIsEditorReadonly: props.handleSetIsEditorReadonly,
     handleSetInputToApply: props.handleSetInputToApply,
     handleSetSourcecastDuration: props.handleSetSourcecastDuration,
     handleSetSourcecastStatus: props.handleSetSourcecastStatus,

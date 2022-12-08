@@ -1,8 +1,9 @@
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { DeepPartial } from 'redux';
 import { action } from 'typesafe-actions';
 
-import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
@@ -198,7 +199,7 @@ export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition:
  */
 export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: Partial<WorkspaceState>
+  workspaceOptions?: DeepPartial<WorkspaceState>
 ) =>
   action(RESET_WORKSPACE, {
     workspaceLocation,
@@ -207,17 +208,20 @@ export const resetWorkspace = (
 
 export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: Partial<WorkspaceState>
+  workspaceOptions?: DeepPartial<WorkspaceState>
 ) =>
   action(UPDATE_WORKSPACE, {
     workspaceLocation,
     workspaceOptions
   });
 
-export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
-  action(SET_EDITOR_READONLY, {
+export const setIsEditorReadonly = (
+  workspaceLocation: WorkspaceLocation,
+  isEditorReadonly: boolean
+) =>
+  action(SET_IS_EDITOR_READONLY, {
     workspaceLocation,
-    editorReadonly
+    isEditorReadonly: isEditorReadonly
   });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>

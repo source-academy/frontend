@@ -62,17 +62,16 @@ import {
 import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
+  activeEditorTabIndex: state.workspaces.sicp.activeEditorTabIndex,
+  editorTabs: state.workspaces.sicp.editorTabs,
   editorSessionId: state.workspaces.sicp.editorSessionId,
-  editorValue: state.workspaces.sicp.editorValue,
   execTime: state.workspaces.sicp.execTime,
   stepLimit: state.workspaces.sicp.stepLimit,
   isEditorAutorun: state.workspaces.sicp.isEditorAutorun,
   breakpoints: state.workspaces.sicp.breakpoints,
-  highlightedLines: state.workspaces.sicp.highlightedLines,
   isRunning: state.workspaces.sicp.isRunning,
   isDebugging: state.workspaces.sicp.isDebugging,
   enableDebugging: state.workspaces.sicp.enableDebugging,
-  newCursorPosition: state.workspaces.sicp.newCursorPosition,
   output: state.workspaces.sicp.output,
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
