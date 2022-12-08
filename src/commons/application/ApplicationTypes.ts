@@ -234,17 +234,22 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
-  editorPrepend: '',
+  activeEditorTabIndex: 0,
+  editorTabs: [
+    {
+      value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+        ? defaultEditorValue
+        : '',
+      prependValue: '',
+      postpendValue: '',
+      highlightedLines: []
+    }
+  ],
   editorSessionId: '',
-  editorValue: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
-    ? defaultEditorValue
-    : '',
-  editorPostpend: '',
-  editorReadonly: false,
+  isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
-  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,

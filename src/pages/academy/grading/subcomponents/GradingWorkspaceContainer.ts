@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
 
 import {
   beginDebuggerPause,
@@ -40,18 +40,15 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
-    editorPrepend: state.workspaces.grading.editorPrepend,
-    editorValue: state.workspaces.grading.editorValue,
-    editorPostpend: state.workspaces.grading.editorPostpend,
+    activeEditorTabIndex: state.workspaces.grading.activeEditorTabIndex,
+    editorTabs: state.workspaces.grading.editorTabs,
     editorTestcases: state.workspaces.grading.editorTestcases,
     breakpoints: state.workspaces.grading.breakpoints,
-    highlightedLines: state.workspaces.grading.highlightedLines,
     grading: state.session.gradings.get(props.submissionId),
     hasUnsavedChanges: state.workspaces.grading.hasUnsavedChanges,
     isRunning: state.workspaces.grading.isRunning,
     isDebugging: state.workspaces.grading.isDebugging,
     enableDebugging: state.workspaces.grading.enableDebugging,
-    newCursorPosition: state.workspaces.grading.newCursorPosition,
     output: state.workspaces.grading.output,
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
@@ -80,7 +77,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+      handleResetWorkspace: (options: DeepPartial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleChangeExecTime: (execTimeMs: number) => changeExecTime(execTimeMs, workspaceLocation),
       handleSideContentHeightChange: (heightChange: number) =>

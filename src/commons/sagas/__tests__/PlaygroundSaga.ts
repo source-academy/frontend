@@ -33,14 +33,15 @@ describe('Playground saga tests', () => {
 
   test('puts changeQueryString action with undefined argument when passed an empty string', () => {
     const dummyEditorValue: string = '';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -56,14 +57,15 @@ describe('Playground saga tests', () => {
 
   test('puts changeQueryString action with correct string argument when passed a dummy string', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -80,14 +82,15 @@ describe('Playground saga tests', () => {
 
   test('puts updateShortURL with correct params when shorten request is successful', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -132,14 +135,15 @@ describe('Playground saga tests', () => {
 
   test('puts updateShortURL with correct params when shorten request with keyword is successful', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -184,14 +188,15 @@ describe('Playground saga tests', () => {
 
   test('shows warning message when shorten request failed', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -219,14 +224,15 @@ describe('Playground saga tests', () => {
 
   test('shows message and gives url when shorten request returns duplicate error', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -273,14 +279,15 @@ describe('Playground saga tests', () => {
 
   test('shows warning when shorten request returns some error without url', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }
@@ -316,14 +323,15 @@ describe('Playground saga tests', () => {
 
   test('returns errMsg when API call timesout', () => {
     const dummyEditorValue: string = '1 + 1;';
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace('playground'),
+          ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorValue: dummyEditorValue,
+          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
           usingSubst: false
         }
       }

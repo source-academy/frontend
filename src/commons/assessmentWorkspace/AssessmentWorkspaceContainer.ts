@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
 
 import {
   beginDebuggerPause,
@@ -40,17 +40,14 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     courseId: state.session.courseId,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
-    editorPrepend: state.workspaces.assessment.editorPrepend,
-    editorValue: state.workspaces.assessment.editorValue,
-    editorPostpend: state.workspaces.assessment.editorPostpend,
+    activeEditorTabIndex: state.workspaces.assessment.activeEditorTabIndex,
+    editorTabs: state.workspaces.assessment.editorTabs,
     editorTestcases: state.workspaces.assessment.editorTestcases,
     breakpoints: state.workspaces.assessment.breakpoints,
-    highlightedLines: state.workspaces.assessment.highlightedLines,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,
     enableDebugging: state.workspaces.assessment.enableDebugging,
-    newCursorPosition: state.workspaces.assessment.newCursorPosition,
     output: state.workspaces.assessment.output,
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
@@ -80,7 +77,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+      handleResetWorkspace: (options: DeepPartial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleChangeExecTime: (execTimeMs: number) => changeExecTime(execTimeMs, workspaceLocation),
       handleSave: submitAnswer,
