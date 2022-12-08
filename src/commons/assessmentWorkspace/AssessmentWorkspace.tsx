@@ -334,6 +334,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
         { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
       ],

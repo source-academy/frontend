@@ -234,6 +234,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         editorValue: propsRef.current.editorTabs[0].value,
         chapter: propsRef.current.playgroundSourceChapter
       })
