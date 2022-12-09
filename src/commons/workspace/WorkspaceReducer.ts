@@ -51,6 +51,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -576,6 +577,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
+        }
+      };
+    case UPDATE_EDITOR_BREAKPOINTS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          breakpoints: action.payload.breakpoints
         }
       };
     case UPDATE_EDITOR_VALUE:

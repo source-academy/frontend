@@ -81,12 +81,10 @@ import {
   PROMPT_AUTOCOMPLETE,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
-  UPDATE_EDITOR_BREAKPOINTS,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './SafeEffects';
 
-let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
   let context: Context;
 
@@ -232,14 +230,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.highlightEditorLine>) {
       const workspaceLocation = action.payload.highlightedLines;
       highlightLine(workspaceLocation[0]);
-      yield;
-    }
-  );
-
-  yield takeEvery(
-    UPDATE_EDITOR_BREAKPOINTS,
-    function* (action: ReturnType<typeof actions.setEditorBreakpoint>) {
-      breakpoints = action.payload.breakpoints;
       yield;
     }
   );
@@ -574,6 +564,9 @@ export function* evalEditor(
     if (!context.errors.length) {
       // Otherwise we step through the breakpoints one by one and check them.
       const exploded = editorCode.split('\n');
+      const breakpoints: string[] = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].breakpoints
+      );
       for (const b in breakpoints) {
         if (typeof b !== 'string') {
           continue;
