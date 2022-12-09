@@ -59,7 +59,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
   isEditorReadonly: state.workspaces.sourcecast.isEditorReadonly,
   inputToApply: state.workspaces.sourcecast.inputToApply,
-  breakpoints: state.workspaces.sourcecast.breakpoints,
   isRunning: state.workspaces.sourcecast.isRunning,
   isDebugging: state.workspaces.sourcecast.isDebugging,
   enableDebugging: state.workspaces.sourcecast.enableDebugging,

@@ -225,7 +225,6 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
-  breakpoints: [],
   context: createContext<WorkspaceLocation>(
     Constants.defaultSourceChapter,
     [],
@@ -240,7 +239,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
         : '',
       prependValue: '',
       postpendValue: '',
-      highlightedLines: []
+      highlightedLines: [],
+      breakpoints: []
     }
   ],
   editorSessionId: '',

@@ -115,7 +115,6 @@ export type StateProps = {
   editorTabs: EditorTabState[];
   editorSessionId: string;
   execTime: number;
-  breakpoints: string[];
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -754,9 +753,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleSendReplInputToOutput: props.handleSendReplInputToOutput,
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     isEditorAutorun: props.isEditorAutorun,
-    breakpoints: props.breakpoints,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
     newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     handleSetSharedbConnected: props.handleSetSharedbConnected

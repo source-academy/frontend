@@ -111,7 +111,6 @@ export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
-  breakpoints: string[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -1069,9 +1068,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    breakpoints: props.breakpoints,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
     newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
     handlePromptAutocomplete: props.handlePromptAutocomplete,

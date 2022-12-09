@@ -39,7 +39,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
   return {
     activeEditorTabIndex: state.workspaces.assessment.activeEditorTabIndex,
     editorTabs: state.workspaces.assessment.editorTabs,
-    breakpoints: state.workspaces.assessment.breakpoints,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,

@@ -565,7 +565,8 @@ export function* evalEditor(
       // Otherwise we step through the breakpoints one by one and check them.
       const exploded = editorCode.split('\n');
       const breakpoints: string[] = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].breakpoints
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].breakpoints
       );
       for (const b in breakpoints) {
         if (typeof b !== 'string') {

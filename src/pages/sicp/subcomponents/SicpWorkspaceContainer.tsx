@@ -68,7 +68,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   execTime: state.workspaces.sicp.execTime,
   stepLimit: state.workspaces.sicp.stepLimit,
   isEditorAutorun: state.workspaces.sicp.isEditorAutorun,
-  breakpoints: state.workspaces.sicp.breakpoints,
   isRunning: state.workspaces.sicp.isRunning,
   isDebugging: state.workspaces.sicp.isDebugging,
   enableDebugging: state.workspaces.sicp.enableDebugging,

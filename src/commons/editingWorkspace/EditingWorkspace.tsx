@@ -96,7 +96,6 @@ export type OwnProps = {
 export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
-  breakpoints: string[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -179,9 +178,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
               // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
               highlightedLines: this.props.editorTabs[0].highlightedLines,
+              breakpoints: this.props.editorTabs[0].breakpoints,
               newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
