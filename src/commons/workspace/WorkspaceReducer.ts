@@ -354,9 +354,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           output: newOutput,
           isRunning: false,
           // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          editorTabs: [
-            { ...state[workspaceLocation].editorTabs[0], highlightedLines: [], breakpoints: [] }
-          ]
+          editorTabs: [{ ...state[workspaceLocation].editorTabs[0], highlightedLines: [] }]
         }
       };
     case EVAL_TESTCASE_SUCCESS:
