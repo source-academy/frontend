@@ -62,7 +62,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   audioUrl: state.workspaces.sourcecast.audioUrl,
   currentPlayerTime: state.workspaces.sourcecast.currentPlayerTime,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
-  breakpoints: state.workspaces.sourcereel.breakpoints,
   activeEditorTabIndex: state.workspaces.sourcereel.activeEditorTabIndex,
   editorTabs: state.workspaces.sourcereel.editorTabs,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,

@@ -78,7 +78,6 @@ export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
-  breakpoints: string[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -191,9 +190,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
               // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
               highlightedLines: this.props.editorTabs[0].highlightedLines,
+              breakpoints: this.props.editorTabs[0].breakpoints,
               newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,

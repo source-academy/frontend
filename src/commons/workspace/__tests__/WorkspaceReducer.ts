@@ -672,8 +672,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      breakpoints,
-      highlightedLines
+      editorTabs: [{ highlightedLines, breakpoints }]
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
@@ -686,8 +685,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: [],
+          editorTabs: [{ highlightedLines: [], breakpoints: [] }],
           output: [
             {
               ...outputWithRunningOutput[0]
@@ -709,8 +707,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      breakpoints,
-      highlightedLines
+      editorTabs: [{ highlightedLines, breakpoints }]
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
@@ -723,8 +720,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: [],
+          editorTabs: [{ highlightedLines: [], breakpoints: [] }],
           output: [
             {
               ...outputWithRunningAndCodeOutput[0]
@@ -1080,8 +1076,12 @@ describe('RESET_WORKSPACE', () => {
     const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
 
     const workspaceOptions = {
-      breakpoints: ['1', '3'],
-      highlightedLines: [[1], [10]],
+      editorTabs: [
+        {
+          highlightedLines: [[1], [10]],
+          breakpoints: ['1', '3']
+        }
+      ],
       replValue: 'test repl value'
     };
 

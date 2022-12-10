@@ -135,7 +135,6 @@ export type StateProps = {
   editorTabs: EditorTabState[];
   editorSessionId: string;
   execTime: number;
-  breakpoints: string[];
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -727,10 +726,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     usingRemoteExecution;
 
   const editorProps = {
-    ..._.pick(props, 'editorSessionId', 'isEditorAutorun', 'breakpoints'),
+    ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     editorValue: props.editorTabs[0].value,
     highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
     newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

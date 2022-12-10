@@ -26,7 +26,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     'execTime',
     'stepLimit',
     'isEditorAutorun',
-    'breakpoints',
     'isRunning',
     'isDebugging',
     'enableDebugging',

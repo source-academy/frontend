@@ -87,7 +87,6 @@ export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   externalLibraryName: ExternalLibraryName;
-  breakpoints: string[];
   isEditorAutorun: boolean;
   isEditorReadonly: boolean;
   inputToApply: Input | null;
@@ -278,9 +277,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     isEditorAutorun: props.isEditorAutorun,
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    breakpoints: props.breakpoints,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
     newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
   };

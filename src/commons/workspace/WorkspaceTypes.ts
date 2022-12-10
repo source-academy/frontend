@@ -83,12 +83,12 @@ export type EditorTabState = {
   readonly prependValue: string;
   readonly postpendValue: string;
   readonly highlightedLines: HighlightedLines[];
+  readonly breakpoints: string[];
   readonly newCursorPosition?: Position;
 };
 
 export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
-  readonly breakpoints: string[];
   readonly context: Context;
   readonly activeEditorTabIndex: number | null;
   readonly editorTabs: EditorTabState[];

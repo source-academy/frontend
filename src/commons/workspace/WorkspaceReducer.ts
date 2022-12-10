@@ -51,6 +51,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -352,8 +353,10 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state[workspaceLocation],
           output: newOutput,
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: []
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            { ...state[workspaceLocation].editorTabs[0], highlightedLines: [], breakpoints: [] }
+          ]
         }
       };
     case EVAL_TESTCASE_SUCCESS:
@@ -576,6 +579,17 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
+        }
+      };
+    case UPDATE_EDITOR_BREAKPOINTS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            { ...state[workspaceLocation].editorTabs[0], breakpoints: action.payload.breakpoints }
+          ]
         }
       };
     case UPDATE_EDITOR_VALUE:
