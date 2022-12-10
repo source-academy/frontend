@@ -10,12 +10,13 @@ import Playground, { handleHash, PlaygroundProps } from '../Playground';
 const baseProps = {
   execTime: 1000,
   stepLimit: 1000,
-  breakpoints: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
   activeEditorTabIndex: 0,
-  editorTabs: [{ value: '', prependValue: '', postpendValue: '', highlightedLines: [] }],
+  editorTabs: [
+    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
+  ],
   editorSessionId: '',
   isEditorAutorun: false,
   sideContentHeight: 40,

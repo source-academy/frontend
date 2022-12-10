@@ -32,7 +32,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     activeEditorTabIndex: state.workspaces.githubAssessment.activeEditorTabIndex,
     editorTabs: state.workspaces.githubAssessment.editorTabs,
     editorTestcases: state.workspaces.githubAssessment.editorTestcases,
-    breakpoints: state.workspaces.githubAssessment.breakpoints,
     hasUnsavedChanges: state.workspaces.githubAssessment.hasUnsavedChanges,
     isRunning: state.workspaces.githubAssessment.isRunning,
     isDebugging: state.workspaces.githubAssessment.isDebugging,

@@ -27,9 +27,10 @@ const defaultProps: AssessmentWorkspaceProps = {
     earlySubmissionXp: 200
   },
   activeEditorTabIndex: 0,
-  editorTabs: [{ value: '', prependValue: '', postpendValue: '', highlightedLines: [] }],
+  editorTabs: [
+    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
+  ],
   editorTestcases: [],
-  breakpoints: [],
   hasUnsavedChanges: false,
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},

@@ -92,7 +92,6 @@ export type StateProps = {
   audioUrl: string;
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
-  breakpoints: string[];
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   isEditorReadonly: boolean;
@@ -254,9 +253,9 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       inputToApply: this.props.inputToApply,
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
-      breakpoints: this.props.breakpoints,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       highlightedLines: this.props.editorTabs[0].highlightedLines,
+      breakpoints: this.props.editorTabs[0].breakpoints,
       newCursorPosition: this.props.editorTabs[0].newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput

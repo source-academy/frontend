@@ -43,7 +43,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     activeEditorTabIndex: state.workspaces.grading.activeEditorTabIndex,
     editorTabs: state.workspaces.grading.editorTabs,
     editorTestcases: state.workspaces.grading.editorTestcases,
-    breakpoints: state.workspaces.grading.breakpoints,
     grading: state.session.gradings.get(props.submissionId),
     hasUnsavedChanges: state.workspaces.grading.hasUnsavedChanges,
     isRunning: state.workspaces.grading.isRunning,
