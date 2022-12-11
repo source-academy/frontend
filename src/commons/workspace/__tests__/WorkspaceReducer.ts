@@ -685,7 +685,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          editorTabs: [{ highlightedLines: [], breakpoints: [] }],
+          editorTabs: [{ ...evalEditorDefaultState[location].editorTabs[0], highlightedLines: [] }],
           output: [
             {
               ...outputWithRunningOutput[0]
@@ -720,7 +720,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          editorTabs: [{ highlightedLines: [], breakpoints: [] }],
+          editorTabs: [{ ...evalEditorDefaultState[location].editorTabs[0], highlightedLines: [] }],
           output: [
             {
               ...outputWithRunningAndCodeOutput[0]
