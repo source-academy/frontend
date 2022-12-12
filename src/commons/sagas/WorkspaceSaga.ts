@@ -219,6 +219,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
+    yield put(actions.highlightEditorLine([], workspaceLocation));
     highlightLine(undefined);
     yield put(actions.clearReplOutput(workspaceLocation));
     context.runtime.break = false;
