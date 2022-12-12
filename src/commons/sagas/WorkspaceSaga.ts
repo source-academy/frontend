@@ -58,6 +58,7 @@ import {
   getDifferenceInMethods,
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
+  highlightClean,
   highlightLine,
   makeElevatedContext,
   visualizeEnv
@@ -219,8 +220,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
-    highlightLine(undefined);
-    yield put(actions.clearReplOutput(workspaceLocation));
+    yield put(actions.highlightEditorLine([], workspaceLocation));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
@@ -228,8 +228,12 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     HIGHLIGHT_LINE,
     function* (action: ReturnType<typeof actions.highlightEditorLine>) {
-      const workspaceLocation = action.payload.highlightedLines;
-      highlightLine(workspaceLocation[0]);
+      const highlightedLines = action.payload.highlightedLines;
+      if (highlightedLines.length === 0) {
+        highlightClean();
+      } else {
+        highlightLine(highlightedLines[0]);
+      }
       yield;
     }
   );
