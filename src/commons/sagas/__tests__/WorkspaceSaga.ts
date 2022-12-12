@@ -295,7 +295,7 @@ describe('DEBUG_RESUME', () => {
 });
 
 describe('DEBUG_RESET', () => {
-  test('puts clearReplOutput correctly', () => {
+  test('puts clearReplOutput and highlightEditorLine correctly', () => {
     const workspaceLocation = 'assessment';
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [{ value: 'test-value' }]
@@ -304,6 +304,7 @@ describe('DEBUG_RESET', () => {
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
       .put(clearReplOutput(workspaceLocation))
+      .put(highlightEditorLine([], workspaceLocation))
       .dispatch({
         type: DEBUG_RESET,
         payload: { workspaceLocation }
