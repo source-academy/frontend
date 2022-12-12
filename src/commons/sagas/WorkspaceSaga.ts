@@ -221,7 +221,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.clearReplOutput(workspaceLocation));
     yield put(actions.highlightEditorLine([], workspaceLocation));
     highlightLine(undefined);
-    yield put(actions.clearReplOutput(workspaceLocation));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
