@@ -97,14 +97,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
 
-  // TODO: Enable mobile keyboard for REPL.
-  // React.useEffect(() => {
-  //   replRef.current?.editor.on('focus', () => {
-  //     setKeyboardInputTarget(replRef);
-  //   });
-  //   replRef.current?.editor.on('blur', clearRef);
-  // }, []);
-
   const enableMobileKeyboardForEditor = (props: EditorProps): EditorProps => {
     const onFocus = (event: any, editor?: Ace.Editor) => {
       if (props.onFocus) {
@@ -121,6 +113,26 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       }
       if (!editor) {
         return;
+      }
+      clearTargetKeyboardInput();
+    };
+    return {
+      ...props,
+      onFocus,
+      onBlur
+    };
+  };
+
+  const enableMobileKeyboardForRepl = (props: ReplProps): ReplProps => {
+    const onFocus = (editor: Ace.Editor) => {
+      if (props.onFocus) {
+        props.onFocus(editor);
+      }
+      setTargetKeyboardInput(editor);
+    };
+    const onBlur = () => {
+      if (props.onBlur) {
+        props.onBlur();
       }
       clearTargetKeyboardInput();
     };
@@ -286,7 +298,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         position={draggableReplPosition}
         onDrag={onDrag}
         disabled={isDraggableReplDisabled}
-        replProps={props.replProps}
+        replProps={enableMobileKeyboardForRepl(props.replProps)}
       />
 
       <MobileKeyboard targetKeyboardInput={targetKeyboardInput} />
