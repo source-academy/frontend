@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 
 import { OverallState } from '../../application/ApplicationTypes';
 import { ControlBarProps } from '../../controlBar/ControlBar';
+import { getDynamicTabs } from '../../sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
 import { DebuggerContext, WorkspaceLocation } from '../../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './../../sideContent/SideContentHelper';
 import MobileControlBar from './MobileControlBar';
 
 export type MobileSideContentProps = DispatchProps & StateProps & MobileControlBarProps;

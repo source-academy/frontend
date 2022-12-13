@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import {
@@ -9,6 +8,7 @@ import {
   AssessmentConfiguration,
   AssessmentOverview
 } from '../../assessment/AssessmentTypes';
+import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 

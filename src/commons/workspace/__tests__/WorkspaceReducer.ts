@@ -1,7 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -10,6 +9,7 @@ import {
   RunningOutput
 } from '../../application/ApplicationTypes';
 import { LOG_OUT } from '../../application/types/CommonsTypes';
+import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
