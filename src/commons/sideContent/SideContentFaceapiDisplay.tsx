@@ -12,6 +12,39 @@ const SideContentFaceapiDisplay: React.FC = () => {
   const resetPhotoB = () => browserWindow.resetPhotoB();
   const resetPhotoC = () => browserWindow.resetPhotoC();
 
+  const makeVideoContainer = (
+    takePhoto: () => any,
+    resetPhoto: () => any,
+    canvasId: string,
+    canvasHeight: number
+  ) => (
+    <div className="sa-video-header">
+      <div className="sa-video-header-element">
+        <Button
+          className={'sa-live-video-button'}
+          style={{ height: 20 }}
+          icon={IconNames.CAMERA}
+          onClick={takePhoto}
+          text={'Take picture'}
+        />
+      </div>
+      <Divider />
+      <div className="sa-video-header-element">
+        <canvas id={canvasId} style={{ height: canvasHeight }} />
+      </div>
+      <Divider />
+      <div className="sa-video-header-element">
+        <Button
+          className={'sa-still-image-button'}
+          style={{ height: 20 }}
+          icon={IconNames.RESET}
+          onClick={resetPhoto}
+          text={'Reset'}
+        />
+      </div>
+    </div>
+  );
+
   // TODO: UI can be improved
   return (
     <div className="sa-video">
@@ -31,86 +64,10 @@ const SideContentFaceapiDisplay: React.FC = () => {
           height={250}
         />
       </div>
-
       <Divider />
-
-      <div className="sa-video-header">
-        <div className="sa-video-header-element">
-          <Button
-            className={'sa-live-video-button'}
-            style={{ height: 20 }}
-            icon={IconNames.CAMERA}
-            onClick={takePhotoA}
-            text={'Take picture'}
-          />
-        </div>
-        <Divider />
-        <div className="sa-video-header-element">
-          <canvas id="canvas-capture-a" style={{ height: 30 }} />
-        </div>
-        <Divider />
-        <div className="sa-video-header-element">
-          <Button
-            className={'sa-still-image-button'}
-            style={{ height: 20 }}
-            icon={IconNames.RESET}
-            onClick={resetPhotoA}
-            text={'Reset'}
-          />
-        </div>
-      </div>
-
-      <div className="sa-video-header">
-        <div className="sa-video-header-element">
-          <Button
-            className={'sa-live-video-button'}
-            style={{ height: 20 }}
-            icon={IconNames.CAMERA}
-            onClick={takePhotoB}
-            text={'Take picture'}
-          />
-        </div>
-        <Divider />
-        <div className="sa-video-header-element">
-          <canvas id="canvas-capture-b" style={{ height: 20 }} />
-        </div>
-        <Divider />
-        <div className="sa-video-header-element">
-          <Button
-            className={'sa-still-image-button'}
-            style={{ height: 20 }}
-            icon={IconNames.RESET}
-            onClick={resetPhotoB}
-            text={'Reset'}
-          />
-        </div>
-      </div>
-
-      <div className="sa-video-header">
-        <div className="sa-video-header-element">
-          <Button
-            className={'sa-live-video-button'}
-            style={{ height: 20 }}
-            icon={IconNames.CAMERA}
-            onClick={takePhotoC}
-            text={'Take picture'}
-          />
-        </div>
-        <Divider />
-        <div className="sa-video-header-element">
-          <canvas id="canvas-capture-c" style={{ height: 20 }} />
-        </div>
-        <Divider />
-        <div className="sa-video-header-element">
-          <Button
-            className={'sa-still-image-button'}
-            style={{ height: 20 }}
-            icon={IconNames.RESET}
-            onClick={resetPhotoC}
-            text={'Reset'}
-          />
-        </div>
-      </div>
+      {makeVideoContainer(takePhotoA, resetPhotoA, 'canvas-capture-a', 30)}
+      {makeVideoContainer(takePhotoB, resetPhotoB, 'canvas-capture-b', 20)}
+      {makeVideoContainer(takePhotoC, resetPhotoC, 'canvas-capture-c', 20)}
     </div>
   );
 };
