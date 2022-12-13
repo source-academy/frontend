@@ -242,23 +242,26 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   );
 
   const editorProps: SourceRecorderEditorProps = {
-    codeDeltasToApply: props.codeDeltasToApply,
-    editorReadonly: props.editorReadonly,
-    editorValue: props.editorValue,
+    ..._.pick(
+      props,
+      'codeDeltasToApply',
+      'editorReadonly',
+      'editorValue',
+      'handleDeclarationNavigate',
+      'handleEditorEval',
+      'handleEditorValueChange',
+      'isEditorAutorun',
+      'inputToApply',
+      'breakpoints',
+      'highlightedLines',
+      'newCursorPosition',
+      'handleEditorUpdateBreakpoints',
+      'handleRecordInput'
+    ),
     editorSessionId: '',
     getTimerDuration: getTimerDuration,
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
-    handleEditorEval: props.handleEditorEval,
-    handleEditorValueChange: props.handleEditorValueChange,
-    isEditorAutorun: props.isEditorAutorun,
-    inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    isRecording: props.recordingStatus === RecordingStatus.recording,
-    breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
-    handleRecordInput: props.handleRecordInput
+    isRecording: props.recordingStatus === RecordingStatus.recording
   };
 
   const activeTabChangeHandler = (activeTab: SideContentType) => {
