@@ -24,7 +24,7 @@ type State = {
   modifyAssessment: () => void;
 };
 
-export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, State> {
+class ManageQuestionTab extends React.Component<ManageQuestionTabProps, State> {
   public constructor(props: ManageQuestionTabProps) {
     super(props);
     this.state = {

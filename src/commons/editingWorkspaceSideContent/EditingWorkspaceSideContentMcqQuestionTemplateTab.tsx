@@ -18,7 +18,7 @@ type StateProps = {
   questionId: number;
 };
 
-export class MCQQuestionTemplateTab extends React.Component<MCQQuestionTemplateTabProps, {}> {
+class MCQQuestionTemplateTab extends React.Component<MCQQuestionTemplateTabProps, {}> {
   public constructor(props: MCQQuestionTemplateTabProps) {
     super(props);
   }

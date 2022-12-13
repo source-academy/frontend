@@ -15,7 +15,7 @@ type StateProps = {
   path: Array<string | number>;
 };
 
-export class GradingTab extends React.Component<GradingTabProps, {}> {
+class GradingTab extends React.Component<GradingTabProps, {}> {
   public constructor(props: GradingTabProps) {
     super(props);
   }
