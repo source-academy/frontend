@@ -362,7 +362,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
-        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning', 'playgroundSourceChapter')}
+        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning')}
         handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
         handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
         handleEditorEval={handleEditorEval}
@@ -371,6 +371,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
+        sourceChapter={props.playgroundSourceChapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
