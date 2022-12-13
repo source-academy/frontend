@@ -2,20 +2,7 @@ import { Button, Divider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-type State = {
-  width: number;
-  height: number;
-};
-
-class SideContentFaceapiDisplay extends React.Component<{}, State> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      width: (window as any)._WIDTH,
-      height: (window as any)._HEIGHT
-    };
-  }
-
+class SideContentFaceapiDisplay extends React.Component<{}> {
   public takePhotoA() {
     (window as any).video.takePhotoA();
   }
