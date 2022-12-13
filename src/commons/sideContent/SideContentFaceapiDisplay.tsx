@@ -3,29 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
 const SideContentFaceapiDisplay: React.FC = () => {
-  function takePhotoA() {
-    (window as any).video.takePhotoA();
-  }
+  const browserWindow = window as any;
 
-  function takePhotoB() {
-    (window as any).video.takePhotoB();
-  }
-
-  function takePhotoC() {
-    (window as any).video.takePhotoC();
-  }
-
-  function resetPhotoA() {
-    (window as any).resetPhotoA();
-  }
-
-  function resetPhotoB() {
-    (window as any).resetPhotoB();
-  }
-
-  function resetPhotoC() {
-    (window as any).resetPhotoC();
-  }
+  const takePhotoA = () => browserWindow.video.takePhotoA();
+  const takePhotoB = () => browserWindow.video.takePhotoB();
+  const takePhotoC = () => browserWindow.video.takePhotoC();
+  const resetPhotoA = () => browserWindow.resetPhotoA();
+  const resetPhotoB = () => browserWindow.resetPhotoB();
+  const resetPhotoC = () => browserWindow.resetPhotoC();
 
   // TODO: UI can be improved
   return (
