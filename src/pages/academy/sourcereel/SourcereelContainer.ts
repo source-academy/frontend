@@ -14,15 +14,8 @@ import {
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import { setSourcecastStatus } from '../../../features/sourceRecorder/SourceRecorderActions';
-import {
-  Input,
-  PlaybackData,
-  PlaybackStatus
-} from '../../../features/sourceRecorder/SourceRecorderTypes';
-import {
-  recordInit,
-  recordInput
-} from '../../../features/sourceRecorder/sourcereel/SourcereelActions';
+import { Input, PlaybackStatus } from '../../../features/sourceRecorder/SourceRecorderTypes';
+import { recordInput } from '../../../features/sourceRecorder/sourcereel/SourcereelActions';
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -69,8 +62,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus, 'sourcecast'),
-      handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
-      handleRecordInit: (initData: PlaybackData['init']) => recordInit(initData, location)
+      handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly)
     },
     dispatch
   );

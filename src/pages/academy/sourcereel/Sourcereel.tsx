@@ -22,6 +22,7 @@ import {
 } from 'src/features/sourceRecorder/SourceRecorderActions';
 import {
   deleteSourcecastEntry,
+  recordInit,
   resetInputs,
   timerPause,
   timerReset,
@@ -81,7 +82,6 @@ export type DispatchProps = {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
-  handleRecordInit: (initData: PlaybackData['init']) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
 };
@@ -151,12 +151,14 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
 
   const getTimerDuration = () => props.timeElapsedBeforePause + Date.now() - props.timeResumed;
 
-  const handleRecordInit = () =>
-    props.handleRecordInit({
+  const handleRecordInit = () => {
+    const initData: PlaybackData['init'] = {
       chapter: props.sourceChapter,
       externalLibrary: props.externalLibraryName as ExternalLibraryName,
       editorValue: props.editorValue
-    });
+    };
+    dispatch(recordInit(initData, workspaceLocation));
+  };
 
   const handleRecordPause = () =>
     props.handleRecordInput({
