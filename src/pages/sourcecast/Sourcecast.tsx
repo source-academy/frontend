@@ -321,8 +321,15 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    customEditor: (handleShowDraggableRepl: () => void) => (
-      <SourceRecorderEditor {...editorProps} setDraggableReplPosition={handleShowDraggableRepl} />
+    customEditor: (
+      handleShowDraggableRepl: () => void,
+      overrideEditorProps: Partial<SourceRecorderEditorProps>
+    ) => (
+      <SourceRecorderEditor
+        {...editorProps}
+        {...overrideEditorProps}
+        setDraggableReplPosition={handleShowDraggableRepl}
+      />
     ),
     replProps: replProps,
     sideBarProps: sideBarProps,

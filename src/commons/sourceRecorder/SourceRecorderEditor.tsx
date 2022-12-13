@@ -2,6 +2,7 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { Ace } from 'ace-builds';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
@@ -33,6 +34,8 @@ type DispatchProps = {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleRecordInput?: (input: Input) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
+  onFocus?: (editor: Ace.Editor) => void;
+  onBlur?: () => void;
 };
 
 type StateProps = {
@@ -166,6 +169,14 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation' as any, this.handleAnnotationChange(session));
+
+    const { onFocus, onBlur } = this.props;
+    if (onFocus) {
+      editor.on('focus', () => onFocus(editor));
+    }
+    if (onBlur) {
+      editor.on('blur', onBlur);
+    }
   }
 
   public componentWillUnmount() {

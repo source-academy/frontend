@@ -12,6 +12,7 @@ import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import { SourceRecorderEditorProps } from '../sourceRecorder/SourceRecorderEditor';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
@@ -27,7 +28,10 @@ type StateProps = {
    * This is to allow for the MobileKeyboard component to work with custom editors.
    * A handler for showing the draggable repl is also passed into the customEditor.
    */
-  customEditor?: (handleShowDraggableRepl: () => void) => JSX.Element;
+  customEditor?: (
+    handleShowDraggableRepl: () => void,
+    overrideEditorProps: Partial<SourceRecorderEditorProps>
+  ) => JSX.Element;
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
@@ -143,10 +147,16 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
+  const enableMobileKeyboardForCustomEditor = (): Partial<SourceRecorderEditorProps> => {
+    return {
+      onFocus: (editor: Ace.Editor) => setTargetKeyboardInput(editor),
+      onBlur: () => clearTargetKeyboardInput()
+    };
+  };
+
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      // TODO: Enable mobile keyboard for custom editor.
-      return props.customEditor(() => handleShowRepl(-100));
+      return props.customEditor(() => handleShowRepl(-100), enableMobileKeyboardForCustomEditor());
     } else if (props.editorProps) {
       return <Editor {...enableMobileKeyboardForEditor(props.editorProps)} />;
     } else {
