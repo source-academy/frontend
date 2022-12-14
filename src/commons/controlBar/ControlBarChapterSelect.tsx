@@ -44,18 +44,18 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, ren
   );
 };
 
+const chapterRenderer: ItemRenderer<SALanguage> = (lang, { handleClick }) => (
+  <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
+);
+
+const ChapterSelectComponent = Select.ofType<SALanguage>();
+
 export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  const chapterRenderer: ItemRenderer<SALanguage> = (lang, { handleClick }) => (
-    <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
-  );
-
-  const ChapterSelectComponent = Select.ofType<SALanguage>();
-
   return (
     <ChapterSelectComponent
       items={sourceLanguages}
