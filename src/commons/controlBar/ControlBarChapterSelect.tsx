@@ -25,42 +25,41 @@ type StateProps = {
   sourceChapter: Chapter;
   sourceVariant: Variant;
   disabled?: boolean;
-  key: string;
 };
 
-export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
+const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
+  const defaultChoices = defaultLanguages.map(renderItem);
+  const variantChoices = variantLanguages.map(renderItem);
+  const fullJSChoice = renderItem(fullJSLanguage, 0);
+  const htmlChoice = renderItem(htmlLanguage, 0);
+  return (
+    <Menu ulRef={itemsParentRef}>
+      {defaultChoices}
+      {Constants.playgroundOnly && fullJSChoice}
+      {Constants.playgroundOnly && htmlChoice}
+      <MenuItem key="variant-menu" text="Variants" icon="cog">
+        {variantChoices}
+      </MenuItem>
+    </Menu>
+  );
+};
+
+export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+  sourceChapter,
+  sourceVariant,
+  handleChapterSelect = () => {},
+  disabled = false
+}) => {
   const chapterRenderer: ItemRenderer<SALanguage> = (lang, { handleClick }) => (
     <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
   );
 
-  const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-    const defaultChoices = defaultLanguages.map(renderItem);
-    const variantChoices = variantLanguages.map(renderItem);
-    const fullJSChoice = renderItem(fullJSLanguage, 0);
-    const htmlChoice = renderItem(htmlLanguage, 0);
-    return (
-      <Menu ulRef={itemsParentRef}>
-        {defaultChoices}
-        {Constants.playgroundOnly && fullJSChoice}
-        {Constants.playgroundOnly && htmlChoice}
-        <MenuItem key="variant-menu" text="Variants" icon="cog">
-          {variantChoices}
-        </MenuItem>
-      </Menu>
-    );
-  };
-
   const ChapterSelectComponent = Select.ofType<SALanguage>();
 
-  const chapSelect = (
-    currentChap: number,
-    currentVariant: Variant,
-    handleSelect: (item: SALanguage, event?: React.SyntheticEvent<HTMLElement>) => void,
-    disabled: boolean = false
-  ) => (
+  return (
     <ChapterSelectComponent
       items={sourceLanguages}
-      onItemSelect={handleSelect}
+      onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer}
       itemListRenderer={chapterListRenderer}
       filterable={false}
@@ -68,17 +67,10 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
     >
       <Button
         className={Classes.MINIMAL}
-        text={styliseSublanguage(currentChap, currentVariant)}
+        text={styliseSublanguage(sourceChapter, sourceVariant)}
         rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
         disabled={disabled}
       />
     </ChapterSelectComponent>
   );
-
-  return chapSelect(
-    props.sourceChapter,
-    props.sourceVariant,
-    props.handleChapterSelect ?? (() => {}),
-    props.disabled || false
-  );
-}
+};
