@@ -8,7 +8,7 @@ import {
 } from '../SourceRecorderTypes';
 
 export const FETCH_SOURCECAST_INDEX = 'FETCH_SOURCECAST_INDEX';
-export const SET_EDITOR_READONLY = 'SET_EDITOR_READONLY';
+export const SET_IS_EDITOR_READONLY = 'SET_IS_EDITOR_READONLY';
 export const UPDATE_SOURCECAST_INDEX = 'UPDATE_SOURCECAST_INDEX';
 
 type SourcecastWorkspaceAttr = {

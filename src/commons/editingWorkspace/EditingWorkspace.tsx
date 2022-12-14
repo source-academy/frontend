@@ -11,6 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useState } from 'react';
+import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -41,14 +42,14 @@ import { ManageQuestionTab } from '../editingWorkspaceSideContent/EditingWorkspa
 import { MCQQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -70,8 +71,8 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -93,14 +94,12 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  editorValue: string | null;
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -259,9 +258,10 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
 
     props.handleResetWorkspace({
-      editorPrepend,
-      editorValue,
-      editorPostpend
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ]
     });
     props.handleEditorValueChange(editorValue);
   };
@@ -273,7 +273,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   };
 
   const handleSave = () => {
-    assessment!.questions[formatedQuestionId()].editorValue = props.editorValue;
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    assessment!.questions[formatedQuestionId()].editorValue = props.editorTabs[0].value;
     setAssessment(assessment);
     setHasUnsavedChanges(false);
     storeLocalAssessment(assessment);
@@ -345,7 +346,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             assessment={currentAssessment}
             questionId={questionId}
             updateAssessment={updateEditAssessmentState}
-            editorValue={props.editorValue}
+            // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+            editorValue={props.editorTabs[0].value}
             handleEditorValueChange={props.handleEditorValueChange}
             handleUpdateWorkspace={props.handleUpdateWorkspace}
           />
@@ -596,15 +598,17 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         ? {
             editorSessionId: '',
             editorValue:
-              props.editorValue ||
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              props.editorTabs[0].value ||
               question.editorValue ||
               (question as IProgrammingQuestion).solutionTemplate,
             handleDeclarationNavigate: props.handleDeclarationNavigate,
             handleEditorEval: props.handleEditorEval,
             handleEditorValueChange: props.handleEditorValueChange,
-            breakpoints: props.breakpoints,
-            highlightedLines: props.highlightedLines,
-            newCursorPosition: props.newCursorPosition,
+            // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+            highlightedLines: props.editorTabs[0].highlightedLines,
+            breakpoints: props.editorTabs[0].breakpoints,
+            newCursorPosition: props.editorTabs[0].newCursorPosition,
             handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
             handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
             handlePromptAutocomplete: props.handlePromptAutocomplete,
