@@ -163,7 +163,7 @@ export default function RemoteExecutionDeviceDialog({
             }}
           >
             <QrReader
-              onResult={(result, err) => {
+              onResult={result => {
                 if (result) {
                   setShowScanner(false);
                   const element = secretField.ref.current;
