@@ -18,7 +18,7 @@ type StateProps = {
   questionId: number;
 };
 
-export const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
+const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
   const addOption = () => {
     const { assessment, questionId } = props;
     const question = assessment!.questions[questionId] as IMCQQuestion;

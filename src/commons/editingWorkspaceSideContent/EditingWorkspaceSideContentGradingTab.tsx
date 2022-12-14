@@ -15,7 +15,7 @@ type StateProps = {
   path: Array<string | number>;
 };
 
-export const GradingTab: React.FC<GradingTabProps> = props => {
+const GradingTab: React.FC<GradingTabProps> = props => {
   const textareaContent = (path: Array<string | number>) => {
     return (
       <TextAreaContent

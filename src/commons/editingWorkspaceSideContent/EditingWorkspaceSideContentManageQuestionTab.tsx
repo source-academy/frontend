@@ -19,7 +19,7 @@ type StateProps = {
   questionId: number;
 };
 
-export const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
+const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
   const [showSaveOverlay, setShowSaveOverlay] = useState(false);
   const [modifyAssessment, setModifyAssessment] = useState<VoidFunction>(() => {});
 
