@@ -566,6 +566,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.19.1.tgz#6f6d6c2e621aad19a92544cc217ed13f1aac5b4c"
   integrity sha512-h7RCSorm1DdTVGJf3P2Mhj3kdnkmF/EiysUkzS2TdgAYqyjFdMQJbVuXOBej2SBJaXan/lIVtT6KkGbyyq753A==
 
+"@babel/parser@^7.19.4":
+  version "7.20.5"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.20.5.tgz#7f3c7335fe417665d929f34ae5dceae4c04015e8"
+  integrity sha512-r27t/cy/m9uKLXQNWWebeCUHgnAZq0CpG1OwKRxzJMP1vpSU4bSIK2hq+/cp0bQxetkXx38n09rNu8jVkcK/zA==
+
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@^7.16.2":
   version "7.16.2"
   resolved "https://registry.npmjs.org/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/-/plugin-bugfix-safari-id-destructuring-collision-in-function-expression-7.16.2.tgz"
@@ -3826,6 +3831,13 @@ ace-builds@^1.4.14:
   resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.4.14.tgz#2c41ccbccdd09e665d3489f161a20baeb3a3c852"
   integrity sha512-NBOQlm9+7RBqRqZwimpgquaLeTJFayqb9UEPtTkpC3TkkwDnlsT/TwsCC0svjt9kEZ6G9mH5AEOHSz6Q/HrzQQ==
 
+acorn-class-fields@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/acorn-class-fields/-/acorn-class-fields-1.0.0.tgz#b413793e6b3ddfcd17a02f9c7a850f4bbfdc1c7a"
+  integrity sha512-l+1FokF34AeCXGBHkrXFmml9nOIRI+2yBnBpO5MaVAaTIJ96irWLtcCxX+7hAp6USHFCe+iyyBB4ZhxV807wmA==
+  dependencies:
+    acorn-private-class-elements "^1.0.0"
+
 acorn-globals@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/acorn-globals/-/acorn-globals-6.0.0.tgz"
@@ -3845,6 +3857,11 @@ acorn-loose@^8.0.0:
   integrity sha512-75lAs9H19ldmW+fAbyqHdjgdCrz0pWGXKmnqFoh8PyVd1L2RIb4RzYrSjmopeqv3E1G3/Pimu6GgLlrGbrkF7w==
   dependencies:
     acorn "^8.5.0"
+
+acorn-private-class-elements@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/acorn-private-class-elements/-/acorn-private-class-elements-1.0.0.tgz#c5805bf8a46cd065dc9b3513bfebb504c88cd706"
+  integrity sha512-zYNcZtxKgVCg1brS39BEou86mIao1EV7eeREG+6WMwKbuYTeivRRs6S2XdWnboRde6G9wKh2w+WBydEyJsJ6mg==
 
 acorn-walk@^7.1.1:
   version "7.2.0"
@@ -9390,14 +9407,16 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.3.tgz#824bb054e2bd29872ba8d71b315f5c422d777140"
-  integrity sha512-/eGW1FYM3fs7f5ZnYwCi4ESWJMgvw4ZuL0F+q27ayf5rhQ0e5qgCFS/wV+8bHCj8axslau4dlN4cdSSR+VuY+g==
+js-slang@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.4.tgz#531ea5a5ff6713d5e337fce432047d93544214c7"
+  integrity sha512-gQWwHt4NANmwd1gtcspHcQolhlJVlvKc6NXJcaJhH+3uVNgk/zbIVnoarDRgQqkn7yIKgHDFjNQJCpVa0I8lUg==
   dependencies:
+    "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.52"
     acorn "^8.0.3"
+    acorn-class-fields "^1.0.0"
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
     astring "^1.4.3"
