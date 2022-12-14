@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
+import { DeepPartial } from 'redux';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
@@ -14,12 +15,12 @@ type QuestionEditorProps = DispatchProps & StateProps;
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (val: string) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
 };
 
 type StateProps = {
   assessment: Assessment;
-  editorValue: string | null;
+  editorValue: string;
   questionId: number;
 };
 
@@ -67,7 +68,7 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
+class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
   public constructor(props: QuestionEditorProps) {
     super(props);
     this.state = {
@@ -207,10 +208,10 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
 
         if (this.state.activeEditor.id === 'prepend') {
           const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPrepend });
+          this.props.handleUpdateWorkspace({ editorTabs: [{ prependValue: editorPrepend }] });
         } else if (this.state.activeEditor.id === 'postpend') {
           const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPostpend });
+          this.props.handleUpdateWorkspace({ editorTabs: [{ postpendValue: editorPostpend }] });
         }
 
         this.setState({

@@ -11,6 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -35,20 +36,20 @@ import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
 import controlButton from '../ControlButton';
 import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
-import { DeploymentTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
-import { GradingTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
-import { ManageQuestionTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentManageQuestionTab';
-import { MCQQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
-import { ProgrammingQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
+import DeploymentTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
+import GradingTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
+import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentManageQuestionTab';
+import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
+import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -70,8 +71,8 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -93,14 +94,12 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  editorValue: string | null;
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -172,15 +171,17 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           ? {
               editorSessionId: '',
               editorValue:
-                this.props.editorValue ||
+                // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                this.props.editorTabs[0].value ||
                 question.editorValue ||
                 (question as IProgrammingQuestion).solutionTemplate,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              highlightedLines: this.props.editorTabs[0].highlightedLines,
+              breakpoints: this.props.editorTabs[0].breakpoints,
+              newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
@@ -342,9 +343,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     }
 
     this.props.handleResetWorkspace({
-      editorPrepend,
-      editorValue,
-      editorPostpend
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ]
     });
     this.props.handleEditorValueChange(editorValue);
   };
@@ -357,7 +359,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
 
   private handleSave = () => {
     const assessment = this.state.assessment!;
-    assessment.questions[this.formatedQuestionId()].editorValue = this.props.editorValue;
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    assessment.questions[this.formatedQuestionId()].editorValue = this.props.editorTabs[0].value;
     this.setState({
       assessment,
       hasUnsavedChanges: false
@@ -440,7 +443,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             assessment={assessment}
             questionId={questionId}
             updateAssessment={this.updateEditAssessmentState}
-            editorValue={this.props.editorValue}
+            // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+            editorValue={this.props.editorTabs[0].value}
             handleEditorValueChange={this.props.handleEditorValueChange}
             handleUpdateWorkspace={this.props.handleUpdateWorkspace}
           />

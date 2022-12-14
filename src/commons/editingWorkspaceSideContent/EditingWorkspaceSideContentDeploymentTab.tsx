@@ -30,7 +30,7 @@ type StateProps = {
   isOptionalDeployment: boolean;
 };
 
-export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
+class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
   public render() {
     if (!this.props.isOptionalDeployment) {
       return (
