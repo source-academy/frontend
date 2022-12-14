@@ -931,7 +931,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         onClickNext={onClickNext}
         onClickReturn={onClickReturn}
         questionProgress={[currentTaskNumber, taskList.length]}
-        key={'next_question'}
+        key="next_question"
       />
     );
 
@@ -939,13 +939,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       <ControlBarPreviousButton
         onClick={onClickPrevious}
         questionProgress={[currentTaskNumber, taskList.length]}
-        key={'previous_question'}
+        key="previous_question"
       />
     );
 
     const questionView = (
       <ControlBarQuestionViewButton
-        key={'task_view'}
+        key="task_view"
         questionProgress={[currentTaskNumber, taskList.length]}
       />
     );
@@ -959,14 +959,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         <ControlBarTaskAddButton
           addNewQuestion={addNewQuestion}
           numberOfTasks={taskList.length}
-          key={'add_task'}
+          key="add_task"
         />
       );
       const deleteTaskButton = (
         <ControlBarTaskDeleteButton
           deleteCurrentQuestion={deleteCurrentQuestion}
           numberOfTasks={taskList.length}
-          key={'delete_task'}
+          key="delete_task"
         />
       );
       const showMCQButton = (
@@ -974,13 +974,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           displayMCQInEditor={() => setDisplayMCQInEditorWrapper(true)}
           displayTextInEditor={() => setDisplayMCQInEditorWrapper(false)}
           mcqDisplayed={displayMCQInEditor}
-          key={'display MCQ'}
+          key="display MCQ"
         />
       );
 
-      editorButtons.push(addTaskButton);
-      editorButtons.push(deleteTaskButton);
-      editorButtons.push(showMCQButton);
+      editorButtons.push(addTaskButton, deleteTaskButton, showMCQButton);
     }
 
     const flowButtons = [previousButton, questionView, nextButton];
