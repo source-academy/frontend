@@ -26,12 +26,11 @@ const defaultProps: AssessmentWorkspaceProps = {
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
-  editorPrepend: '',
-  editorValue: null,
-  editorPostpend: '',
+  activeEditorTabIndex: 0,
+  editorTabs: [
+    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
+  ],
   editorTestcases: [],
-  breakpoints: [],
-  highlightedLines: [],
   hasUnsavedChanges: false,
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},

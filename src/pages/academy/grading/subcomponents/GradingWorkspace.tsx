@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { DeepPartial } from 'redux';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
 
@@ -25,7 +26,7 @@ import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarN
 import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { HighlightedLines, Position } from '../../../../commons/editor/EditorTypes';
+import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
@@ -33,7 +34,7 @@ import SideContentToneMatrix from '../../../../commons/sideContent/SideContentTo
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
@@ -53,7 +54,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleChangeExecTime: (execTimeMs: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -74,17 +75,13 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
-  editorPrepend: string;
-  editorValue: string | null;
-  editorPostpend: string;
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -188,13 +185,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
               editorSessionId: '',
-              editorValue: this.props.editorValue!,
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              editorValue: this.props.editorTabs[0].value,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              highlightedLines: this.props.editorTabs[0].highlightedLines,
+              breakpoints: this.props.editorTabs[0].breakpoints,
+              newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false,
@@ -272,9 +271,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
-      editorPrepend,
-      editorValue,
-      editorPostpend,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       editorTestcases
     });
     props.handleChangeExecTime(

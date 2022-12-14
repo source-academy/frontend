@@ -117,9 +117,9 @@ describe('EVAL_EDITOR', () => {
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorPrepend,
-      editorPostpend,
-      editorValue,
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       execTime,
       context,
       globals
@@ -260,7 +260,10 @@ describe('DEBUG_RESUME', () => {
   });
 
   test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
-    const newDefaultState = generateDefaultState(workspaceLocation, { editorValue, context });
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      editorTabs: [{ value: editorValue }],
+      context
+    });
 
     return (
       expectSaga(workspaceSaga)
@@ -292,13 +295,16 @@ describe('DEBUG_RESUME', () => {
 });
 
 describe('DEBUG_RESET', () => {
-  test('puts clearReplOutput correctly', () => {
+  test('puts clearReplOutput and highlightEditorLine correctly', () => {
     const workspaceLocation = 'assessment';
-    const newDefaultState = generateDefaultState(workspaceLocation, { editorValue: 'test-value' });
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      editorTabs: [{ value: 'test-value' }]
+    });
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
       .put(clearReplOutput(workspaceLocation))
+      .put(highlightEditorLine([], workspaceLocation))
       .dispatch({
         type: DEBUG_RESET,
         payload: { workspaceLocation }
@@ -346,9 +352,9 @@ describe('EVAL_TESTCASE', () => {
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorPrepend,
-      editorPostpend,
-      editorValue,
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       editorTestcases,
       execTime,
       context,
@@ -743,7 +749,9 @@ describe('evalCode', () => {
     // TODO: rewrite tests in a way that actually reflects known information.
     test('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
-      state = generateDefaultState(workspaceLocation, { editorPrepend: '// Prepend' });
+      state = generateDefaultState(workspaceLocation, {
+        editorTabs: [{ prependValue: '// Prepend' }]
+      });
 
       runInContext(code, context, {
         scheduler: 'preemptive',
@@ -1063,7 +1071,10 @@ describe('NAV_DECLARATION', () => {
       ...mockRuntimeContext(),
       chapter: Chapter.SOURCE_4
     };
-    state = generateDefaultState(workspaceLocation, { editorValue, context });
+    state = generateDefaultState(workspaceLocation, {
+      editorTabs: [{ value: editorValue }],
+      context
+    });
   });
 
   test('moves cursor to declaration correctly', () => {
