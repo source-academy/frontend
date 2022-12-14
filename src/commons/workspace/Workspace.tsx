@@ -1,5 +1,5 @@
 import { FocusStyleManager } from '@blueprintjs/core';
-import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
+import { Enable, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
@@ -61,7 +61,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   const sideContentResizableProps = () => {
-    const onResizeStop: ResizeCallback = (_a, _b, ref, _c) =>
+    const onResizeStop: ResizeCallback = (_a, _b, ref) =>
       props.handleSideContentHeightChange(ref.clientHeight);
     return {
       bounds: 'parent',
@@ -160,26 +160,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   );
 };
 
-const rightResizeOnly = {
-  top: false,
-  right: true,
-  bottom: false,
-  left: false,
-  topRight: false,
-  bottomRight: false,
-  bottomLeft: false,
-  topLeft: false
-};
+const rightResizeOnly: Enable = { right: true };
 
-const bottomResizeOnly = {
-  top: false,
-  right: false,
-  bottom: true,
-  left: false,
-  topRight: false,
-  bottomRight: false,
-  bottomLeft: false,
-  topLeft: false
-};
+const bottomResizeOnly: Enable = { bottom: true };
 
 export default Workspace;
