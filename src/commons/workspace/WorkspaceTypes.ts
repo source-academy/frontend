@@ -78,23 +78,28 @@ export type WorkspaceManagerState = {
   readonly githubAssessment: GitHubAssessmentWorkspaceState;
 };
 
+export type EditorTabState = {
+  readonly value: string;
+  readonly prependValue: string;
+  readonly postpendValue: string;
+  readonly highlightedLines: HighlightedLines[];
+  readonly breakpoints: string[];
+  readonly newCursorPosition?: Position;
+};
+
 export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
-  readonly breakpoints: string[];
   readonly context: Context;
-  readonly editorPrepend: string;
-  readonly editorReadonly: boolean;
+  readonly activeEditorTabIndex: number | null;
+  readonly editorTabs: EditorTabState[];
   readonly editorSessionId: string;
-  readonly editorValue: string | null;
-  readonly editorPostpend: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
-  readonly highlightedLines: HighlightedLines[];
-  readonly newCursorPosition?: Position;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorAutorun: boolean;
+  readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;

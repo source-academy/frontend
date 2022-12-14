@@ -206,7 +206,7 @@ export async function performOverwritingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string | null
+  content: string
 ) {
   if (octokit === undefined) return;
 
@@ -261,7 +261,7 @@ export async function performCreatingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string | null
+  content: string
 ) {
   if (octokit === undefined) return;
 

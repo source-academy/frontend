@@ -227,24 +227,29 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
-  breakpoints: [],
   context: createContext<WorkspaceLocation>(
     Constants.defaultSourceChapter,
     [],
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
-  editorPrepend: '',
+  activeEditorTabIndex: 0,
+  editorTabs: [
+    {
+      value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+        ? defaultEditorValue
+        : '',
+      prependValue: '',
+      postpendValue: '',
+      highlightedLines: [],
+      breakpoints: []
+    }
+  ],
   editorSessionId: '',
-  editorValue: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
-    ? defaultEditorValue
-    : '',
-  editorPostpend: '',
-  editorReadonly: false,
+  isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
-  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,

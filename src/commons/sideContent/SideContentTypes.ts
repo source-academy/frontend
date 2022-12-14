@@ -21,6 +21,7 @@ export enum SideContentType {
   editorQuestionOverview = 'editor_question_overview',
   editorQuestionTemplate = 'editor_question_template',
   envVisualizer = 'env_visualizer',
+  files = 'files',
   grading = 'grading',
   introduction = 'introduction',
   module = 'module',
