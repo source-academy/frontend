@@ -65,6 +65,15 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
         </NavLink>
 
         <NavLink
+          to={`/courses/${props.courseId}/xpcalculation`}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.CALCULATOR} />
+          <div className="navbar-button-text hidden-xs hidden-sm">XP Calculation</div>
+        </NavLink>
+
+        <NavLink
           to={`/courses/${props.courseId}/grading`}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}

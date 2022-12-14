@@ -22,6 +22,7 @@ import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
+import XpCalculation from './xpCalculation/XpCalculationContainer';
 
 const Academy: React.FC<{}> = () => {
   const { path, url } = useRouteMatch();
@@ -44,9 +45,10 @@ const Academy: React.FC<{}> = () => {
       ? [
           <Route path={`${path}/groundcontrol`} component={GroundControl} key={0} />,
           <Route path={`${path}/grading/${gradingRegExp}`} component={Grading} key={1} />,
-          <Route path={`${path}/sourcereel`} component={Sourcereel} key={2} />,
-          <Route path={`${path}/storysimulator`} component={StorySimulator} key={3} />,
-          <Route path={`${path}/dashboard`} component={DashboardContainer} key={4} />
+          <Route path={`${path}/xpcalculation`} component={XpCalculation} key={2} />,
+          <Route path={`${path}/sourcereel`} component={Sourcereel} key={3} />,
+          <Route path={`${path}/storysimulator`} component={StorySimulator} key={4} />,
+          <Route path={`${path}/dashboard`} component={DashboardContainer} key={5} />
         ]
       : null;
   return (
