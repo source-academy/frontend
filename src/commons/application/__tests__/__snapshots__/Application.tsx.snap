@@ -7,7 +7,7 @@ exports[`Application renders correctly 1`] = `
     <div className=\\"Application__main\\">
       <Switch>
         <Route path=\\"/login\\" component={[Function: Login]} />
-        <Route path=\\"/contributors\\" component={[function]} />
+        <Route path=\\"/contributors\\" component={[Function: Contributors]} />
         <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
         <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
         <Route path=\\"/sicpjs/:section?\\" component={[Function: Sicp]} />
