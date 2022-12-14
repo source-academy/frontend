@@ -110,6 +110,7 @@ export interface SALanguage extends Language {
 }
 
 const variantDisplay: Map<Variant, string> = new Map([
+  [Variant.TYPED, 'Typed'],
   [Variant.WASM, 'WebAssembly'],
   [Variant.NON_DET, 'Non-Det'],
   [Variant.CONCURRENT, 'Concurrent'],
@@ -145,6 +146,7 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
 
 export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
