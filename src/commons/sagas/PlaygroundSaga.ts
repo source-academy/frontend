@@ -55,14 +55,14 @@ export default function* PlaygroundSaga(): SagaIterator {
 }
 
 function* updateQueryString() {
-  const code: string | null = yield select(
-    (state: OverallState) => state.workspaces.playground.editorValue
+  const code: string = yield select(
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    (state: OverallState) => state.workspaces.playground.editorTabs[0].value
   );
   if (!code || code === defaultEditorValue) {
     yield put(changeQueryString(''));
     return;
   }
-  const codeString: string = code as string;
   const chapter: Chapter = yield select(
     (state: OverallState) => state.workspaces.playground.context.chapter
   );
@@ -76,7 +76,7 @@ function* updateQueryString() {
     (state: OverallState) => state.workspaces.playground.execTime
   );
   const newQueryString: string = qs.stringify({
-    prgrm: compressToEncodedURIComponent(codeString),
+    prgrm: compressToEncodedURIComponent(code),
     chap: chapter,
     variant,
     ext: external,

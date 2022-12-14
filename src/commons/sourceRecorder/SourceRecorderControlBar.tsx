@@ -20,7 +20,7 @@ type DispatchProps = {
   handleEditorValueChange: (newCode: string) => void;
   handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetIsEditorReadonly: (isEditorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
@@ -169,7 +169,7 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
   private handlePlayerPausing = () => {
     const audio = this.audio.current;
     audio!.pause();
-    this.props.handleSetEditorReadonly(false);
+    this.props.handleSetIsEditorReadonly(false);
     this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
     this.stopCurrentPlayback();
   };
@@ -177,7 +177,7 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
   private handlePlayerPlaying = () => {
     const audio = this.audio.current;
     audio!.play();
-    this.props.handleSetEditorReadonly(true);
+    this.props.handleSetIsEditorReadonly(true);
     this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
     this.stopPreviousPlaybackAndApplyFromStart(this.props.playbackData);
     if (this.props.setSelectedTab) {
@@ -186,7 +186,7 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
   };
 
   private handlePlayerStopping = () => {
-    this.props.handleSetEditorReadonly(false);
+    this.props.handleSetIsEditorReadonly(false);
     this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
     this.props.handleSetCurrentPlayerTime(0);
     this.setState({
