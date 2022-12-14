@@ -9407,10 +9407,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.4.tgz#531ea5a5ff6713d5e337fce432047d93544214c7"
-  integrity sha512-gQWwHt4NANmwd1gtcspHcQolhlJVlvKc6NXJcaJhH+3uVNgk/zbIVnoarDRgQqkn7yIKgHDFjNQJCpVa0I8lUg==
+js-slang@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.5.tgz#40ce59f5769ea7aaba331cd8957a92bb0de4e34e"
+  integrity sha512-swQwISbRqPaDHmbi3x3Z4UMbjKtoLiZyImpWdZVD22ooxT4A0QVehSV0vQMPdQKrQzgdKk3SK+UQ3YyQ50WBaw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
