@@ -2,7 +2,6 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import _ from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
@@ -21,7 +20,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   setEditorBreakpoint,
-  setEditorReadonly,
+  setIsEditorReadonly,
   toggleEditorAutorun,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
@@ -41,7 +40,6 @@ import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChap
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { Position } from '../../commons/editor/EditorTypes';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -376,7 +374,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
       dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
     handleSetIsEditorReadonly: (editorReadonly: boolean) =>
-      dispatch(setEditorReadonly(workspaceLocation, editorReadonly)),
+      dispatch(setIsEditorReadonly(workspaceLocation, editorReadonly)),
     handleSetInputToApply: inputToApply =>
       dispatch(setInputToApply(inputToApply, workspaceLocation)),
     handleSetSourcecastDuration: (duration: number) =>

@@ -256,7 +256,6 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'handleEditorValueChange',
       'isEditorAutorun',
       'inputToApply',
-      'newCursorPosition',
       'handleRecordInput'
     ),
     isEditorReadonly: props.isEditorReadonly,
@@ -264,6 +263,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     editorValue: props.editorTabs[0].value,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     highlightedLines: props.editorTabs[0].highlightedLines,
+    newCursorPosition: props.editorTabs[0].newCursorPosition,
     breakpoints: props.editorTabs[0].breakpoints,
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
@@ -332,7 +332,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                 <SourcereelControlbar
                   currentPlayerTime={props.currentPlayerTime}
                   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                  editorValue={this.props.editorTabs[0].value}
+                  editorValue={props.editorTabs[0].value}
                   getTimerDuration={getTimerDuration}
                   playbackData={props.playbackData}
                   handleRecordInit={handleRecordInit}

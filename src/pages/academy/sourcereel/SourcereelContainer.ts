@@ -9,7 +9,7 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  setEditorReadonly,
+  setIsEditorReadonly,
   updateEditorValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
@@ -60,7 +60,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus, 'sourcecast'),
-      handleSetIsEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly)
+      handleSetIsEditorReadonly: (readonly: boolean) => setIsEditorReadonly(location, readonly)
     },
     dispatch
   );
