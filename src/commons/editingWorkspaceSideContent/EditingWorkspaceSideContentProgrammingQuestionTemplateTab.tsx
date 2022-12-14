@@ -68,7 +68,7 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
+class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
   public constructor(props: QuestionEditorProps) {
     super(props);
     this.state = {
