@@ -8,14 +8,15 @@ import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import Playground, { handleHash, PlaygroundProps } from '../Playground';
 
 const baseProps = {
-  editorValue: '',
   execTime: 1000,
   stepLimit: 1000,
-  breakpoints: [],
-  highlightedLines: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
+  activeEditorTabIndex: 0,
+  editorTabs: [
+    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
+  ],
   editorSessionId: '',
   isEditorAutorun: false,
   sideContentHeight: 40,
@@ -73,13 +74,13 @@ const baseProps = {
 const testValueProps: PlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/academy', {}),
-  editorValue: 'Test value'
+  editorTabs: [{ ...baseProps.editorTabs[0], value: 'Test value' }]
 };
 
 const playgroundLinkProps: PlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
-  editorValue: 'This should not show up'
+  editorTabs: [{ ...baseProps.editorTabs[0], value: 'This should not show up' }]
 };
 
 const mockStore = mockInitialStore();

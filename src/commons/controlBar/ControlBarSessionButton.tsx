@@ -16,7 +16,7 @@ type DispatchProps = {
 
 type StateProps = {
   editorSessionId?: string;
-  editorValue?: string | null;
+  editorValue: string;
   sharedbConnected?: boolean;
   key: string;
 };

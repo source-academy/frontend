@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
 import * as React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
@@ -42,7 +41,7 @@ import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChap
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { Position } from '../../commons/editor/EditorTypes';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -58,6 +57,7 @@ import SourceRecorderEditor, {
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Constants from '../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -92,17 +92,15 @@ export type StateProps = {
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
-  editorReadonly: boolean;
-  editorValue: string;
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   externalLibraryName: ExternalLibraryName;
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
+  isEditorReadonly: boolean;
   inputToApply: Input | null;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackDuration: number;
   playbackData: PlaybackData;
@@ -283,23 +281,22 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   };
 
   const editorProps: SourceRecorderEditorProps = {
-    ..._.pick(
-      props,
-      'codeDeltasToApply',
-      'editorReadonly',
-      'editorValue',
-      'handleEditorEval',
-      'handleEditorValueChange',
-      'isEditorAutorun',
-      'inputToApply',
-      'breakpoints',
-      'highlightedLines',
-      'newCursorPosition'
-    ),
+    codeDeltasToApply: props.codeDeltasToApply,
+    isEditorReadonly: props.isEditorReadonly,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editorTabs[0].value,
     editorSessionId: '',
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+    handleEditorEval: props.handleEditorEval,
+    handleEditorValueChange: props.handleEditorValueChange,
+    isEditorAutorun: props.isEditorAutorun,
+    inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
+    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: breakpoints =>
       dispatch(setEditorBreakpoint(breakpoints, workspaceLocation))
   };
@@ -318,6 +315,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     replButtons: [evalButton, clearButton]
   };
 
+  const sideBarProps = {
+    tabs: []
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
@@ -326,9 +327,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     handleSideContentHeightChange: change =>
       dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
-    sideBarProps: {
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
@@ -342,14 +341,18 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    customEditor: (ref: React.RefObject<ReactAce>, handleShowDraggableRepl: () => void) => (
+    customEditor: (
+      handleShowDraggableRepl: () => void,
+      overrideEditorProps: Partial<SourceRecorderEditorProps>
+    ) => (
       <SourceRecorderEditor
         {...editorProps}
-        forwardedRef={ref}
+        {...overrideEditorProps}
         setDraggableReplPosition={handleShowDraggableRepl}
       />
     ),
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
@@ -365,31 +368,28 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   };
 
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
-    ..._.pick(
-      props,
-      'handleEditorValueChange',
-      'handleSetSourcecastStatus',
-      'audioUrl',
-      'currentPlayerTime',
-      'playbackData',
-      'playbackStatus',
-      'handleChapterSelect',
-      'handleExternalSelect'
-    ),
+    handleEditorValueChange: props.handleEditorValueChange,
     handlePromptAutocomplete: (row, col, callback) =>
       dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
     handleSetCurrentPlayerTime: (playerTime: number) =>
       dispatch(setCurrentPlayerTime(playerTime, workspaceLocation)),
     handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
       dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
-    handleSetEditorReadonly: (editorReadonly: boolean) =>
+    handleSetIsEditorReadonly: (editorReadonly: boolean) =>
       dispatch(setEditorReadonly(workspaceLocation, editorReadonly)),
     handleSetInputToApply: inputToApply =>
       dispatch(setInputToApply(inputToApply, workspaceLocation)),
     handleSetSourcecastDuration: (duration: number) =>
       dispatch(setSourcecastDuration(duration, workspaceLocation)),
+    handleSetSourcecastStatus: props.handleSetSourcecastStatus,
+    audioUrl: props.audioUrl,
+    currentPlayerTime: props.currentPlayerTime,
     duration: props.playbackDuration,
-    setSelectedTab
+    playbackData: props.playbackData,
+    playbackStatus: props.playbackStatus,
+    handleChapterSelect: props.handleChapterSelect,
+    handleExternalSelect: props.handleExternalSelect,
+    setSelectedTab: setSelectedTab
   };
 
   return (

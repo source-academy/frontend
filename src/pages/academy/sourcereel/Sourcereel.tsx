@@ -38,7 +38,6 @@ import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarC
 import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { HighlightedLines, Position } from '../../../commons/editor/EditorTypes';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
@@ -61,7 +60,7 @@ import {
   toggleEditorAutorun,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -82,7 +81,7 @@ export type DispatchProps = {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetIsEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
 };
 
@@ -90,17 +89,15 @@ export type StateProps = {
   audioUrl: string;
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
-  breakpoints: string[];
-  editorReadonly: boolean;
-  editorValue: string;
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
+  isEditorReadonly: boolean;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
-  highlightedLines: HighlightedLines[];
   inputToApply: Input | null;
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackData: PlaybackData;
   playbackDuration: number;
@@ -156,7 +153,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     const initData: PlaybackData['init'] = {
       chapter: props.sourceChapter,
       externalLibrary: props.externalLibraryName as ExternalLibraryName,
-      editorValue: props.editorValue
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue: props.editorTabs[0].value
     };
     dispatch(recordInit(initData, workspaceLocation));
   };
@@ -254,17 +252,19 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     ..._.pick(
       props,
       'codeDeltasToApply',
-      'editorReadonly',
-      'editorValue',
       'handleEditorEval',
       'handleEditorValueChange',
       'isEditorAutorun',
       'inputToApply',
-      'breakpoints',
-      'highlightedLines',
       'newCursorPosition',
       'handleRecordInput'
     ),
+    isEditorReadonly: props.isEditorReadonly,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editorTabs[0].value,
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorUpdateBreakpoints: breakpoints =>
@@ -331,7 +331,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                 </span>
                 <SourcereelControlbar
                   currentPlayerTime={props.currentPlayerTime}
-                  editorValue={props.editorValue}
+                  // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                  editorValue={this.props.editorTabs[0].value}
                   getTimerDuration={getTimerDuration}
                   playbackData={props.playbackData}
                   handleRecordInit={handleRecordInit}
@@ -356,7 +357,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                       )
                     )
                   }
-                  handleSetEditorReadonly={props.handleSetEditorReadonly}
+                  handleSetIsEditorReadonly={props.handleSetIsEditorReadonly}
                   handleTimerPause={() => dispatch(timerPause(workspaceLocation))}
                   handleTimerReset={() => dispatch(timerReset(workspaceLocation))}
                   handleTimerResume={timeBefore =>
@@ -398,7 +399,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     ..._.pick(
       props,
       'handleEditorValueChange',
-      'handleSetEditorReadonly',
+      'handleSetIsEditorReadonly',
       'handleSetSourcecastStatus',
       'audioUrl',
       'currentPlayerTime',

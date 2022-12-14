@@ -1,42 +1,6 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
-
-// The following section is licensed under the following terms:
-//
-// MIT License
-//
-// Copyright (c) 2019 Jared Lunde
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-
-// The following hook is from
-// https://github.com/jaredLunde/react-hook/blob/master/packages/merged-ref/src/index.tsx
-export const useMergedRef =
-  <T>(...refs: React.Ref<T>[]): React.RefCallback<T> =>
-  (element: T) =>
-    refs.forEach(ref => {
-      if (typeof ref === 'function') ref(element);
-      else if (ref && typeof ref === 'object') (ref as React.MutableRefObject<T>).current = element;
-    });
-
-// End
 
 /**
  * This hook sends a request to the backend to fetch the initial state of the field
@@ -99,3 +63,40 @@ export function useLocalStorageState<T>(
 
   return [value, setValue];
 }
+
+/**
+ * Dynamically returns the dimensions (width & height) of an HTML element, updating whenever the
+ * element is loaded or resized.
+ *
+ * @param ref A reference to the underlying HTML element.
+ */
+export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, height: number] => {
+  const [width, setWidth] = React.useState<number>(0);
+  const [height, setHeight] = React.useState<number>(0);
+
+  const resizeObserver = React.useMemo(
+    () =>
+      new ResizeObserver((entries: ResizeObserverEntry[], observer: ResizeObserver) => {
+        if (entries.length !== 1) {
+          throw new Error(
+            'Expected only a single HTML element to be observed by the ResizeObserver.'
+          );
+        }
+        const contentRect = entries[0].contentRect;
+        setWidth(contentRect.width);
+        setHeight(contentRect.height);
+      }),
+    []
+  );
+
+  React.useEffect(() => {
+    const htmlElement = ref.current;
+    if (htmlElement === null) {
+      return;
+    }
+    resizeObserver.observe(htmlElement);
+    return () => resizeObserver.disconnect();
+  }, [ref, resizeObserver]);
+
+  return [width, height];
+};

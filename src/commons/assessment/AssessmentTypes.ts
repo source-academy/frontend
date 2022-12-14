@@ -129,7 +129,7 @@ export type BaseQuestion = {
   answer: string | number | ContestEntry[] | null;
   comments?: string;
   content: string;
-  editorValue?: string | null;
+  editorValue?: string;
   gradedAt?: string;
   grader?: {
     name: string;
