@@ -13,8 +13,20 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import {
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeSideContentHeight,
+  evalTestcase,
+  navigateToDeclaration,
+  promptAutocomplete,
+  runAllTestcases,
+  setEditorBreakpoint,
+  updateReplValue
+} from 'src/commons/workspace/WorkspaceActions';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -67,7 +79,7 @@ import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/Di
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
@@ -86,22 +98,13 @@ import { GHAssessmentOverview } from './GitHubClassroom';
 export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
 
 export type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleTestcaseEval: (testcaseId: number) => void;
-  handleRunAllTestcases: () => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };
 
 export type StateProps = {
@@ -122,7 +125,10 @@ export type StateProps = {
   sourceChapter: Chapter;
 };
 
+const workspaceLocation: WorkspaceLocation = 'githubAssessment';
+
 const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+  const dispatch = useDispatch();
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
@@ -736,7 +742,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
     // Run testcases when the GitHub testcases tab is selected
     if (activeTab.current === SideContentType.testcases) {
-      props.handleRunAllTestcases();
+      dispatch(runAllTestcases(workspaceLocation));
     }
   };
 
@@ -842,7 +848,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           setTaskTestcases={setTaskTestcases}
           setTestPrepend={setTestPrepend}
           setTestPostpend={setTestPostpend}
-          handleTestcaseEval={props.handleTestcaseEval}
+          handleTestcaseEval={testcaseId => dispatch(evalTestcase(workspaceLocation, testcaseId))}
         />
       ),
       id: SideContentType.testcases
@@ -1059,22 +1065,26 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const editorProps = {
     editorSessionId: '',
     editorValue: props.editorValue!,
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleDeclarationNavigate: (cursorPosition: Position) =>
+      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
     breakpoints: props.breakpoints,
     highlightedLines: props.highlightedLines,
     newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
-    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
+      dispatch(setEditorBreakpoint(breakpoints, workspaceLocation)),
+    handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
     isEditorAutorun: false
   };
   const replProps = {
-    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
     handleReplEval: props.handleReplEval,
-    handleReplValueChange: props.handleReplValueChange,
+    handleReplValueChange: (newValue: string) =>
+      dispatch(updateReplValue(newValue, workspaceLocation)),
     output: props.output,
     replValue: props.replValue,
     sourceChapter: missionMetadata.sourceVersion || Chapter.SOURCE_4,
@@ -1085,7 +1095,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
     editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    handleSideContentHeightChange: heightChange =>
+      dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: {
