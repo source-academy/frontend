@@ -1,12 +1,12 @@
+import { Ace } from 'ace-builds';
 import React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import Draggable, { DraggableEvent, DraggableEventHandler } from 'react-draggable';
 import Keyboard from 'react-simple-keyboard';
 
 export type MobileKeyboardProps = OwnProps;
 
 type OwnProps = {
-  editorRef: React.RefObject<ReactAce>;
+  targetKeyboardInput: Ace.Editor | null;
 };
 
 const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
@@ -52,10 +52,10 @@ const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
   };
 
   const handleKeyPress = (button: string) => {
-    if (!props.editorRef.current) {
+    if (!props.targetKeyboardInput) {
       return;
     }
-    const editor = props.editorRef.current.editor;
+    const editor = props.targetKeyboardInput;
     if (button === '{arrowleft}') {
       editor.navigateLeft();
     } else if (button === '{arrowright}') {

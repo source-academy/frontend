@@ -79,7 +79,7 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -94,6 +94,7 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -129,16 +130,14 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   editorSessionId: string;
-  editorValue: string;
   execTime: number;
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   queryString?: string;
   shortURL?: string;
@@ -221,7 +220,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
-      editorValue: propsRef.current.editorValue,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue: propsRef.current.editorTabs[0].value,
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -254,7 +254,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
-        editorValue: propsRef.current.editorValue,
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorValue: propsRef.current.editorTabs[0].value,
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
@@ -514,7 +515,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const sessionButtons = (
     <ControlBarSessionButtons
       editorSessionId={props.editorSessionId}
-      editorValue={props.editorValue}
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue={props.editorTabs[0].value}
       handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
       sharedbConnected={props.sharedbConnected}
       key="session"
@@ -723,15 +725,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     usingRemoteExecution;
 
   const editorProps = {
-    ..._.pick(
-      props,
-      'editorValue',
-      'editorSessionId',
-      'isEditorAutorun',
-      'breakpoints',
-      'highlightedLines',
-      'newCursorPosition'
-    ),
+    ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    editorValue: props.editorTabs[0].value,
+    highlightedLines: props.editorTabs[0].highlightedLines,
+    breakpoints: props.editorTabs[0].breakpoints,
+    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval,
@@ -767,6 +766,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     disableScrolling: isSicpEditor
   };
 
+  const sideBarProps = {
+    tabs: [
+      // TODO: Re-enable on master once the feature is production-ready.
+      // {
+      //   label: 'Files',
+      //   body: <FileSystemView basePath="/playground" />,
+      //   iconName: IconNames.FOLDER_CLOSE,
+      //   id: SideContentType.files
+      // }
+    ]
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -787,11 +798,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     handleSideContentHeightChange: change =>
       dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
-    sideBarProps: {
-      // TODO: Re-enable on master once the feature is production-ready.
-      // tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
@@ -809,6 +816,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorProps: editorProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
         editorButtons: [

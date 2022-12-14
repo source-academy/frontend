@@ -16,6 +16,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { DeepPartial } from 'redux';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -50,7 +51,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
@@ -66,7 +67,7 @@ import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
@@ -84,7 +85,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleChangeExecTime: (execTimeMs: number) => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -109,17 +110,13 @@ export type OwnProps = {
 export type StateProps = {
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
-  editorPrepend: string;
-  editorValue: string | null;
-  editorPostpend: string;
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -336,9 +333,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
-      editorPrepend,
-      editorValue,
-      editorPostpend,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorTabs: [
+        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+      ],
       editorTestcases
     });
     props.handleChangeExecTime(
@@ -579,8 +577,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       };
     };
 
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     const onClickSave = () =>
-      props.handleSave(props.assessment!.questions[questionId].id, props.editorValue!);
+      props.handleSave(props.assessment!.questions[questionId].id, props.editorTabs[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -771,7 +770,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorSessionId: '',
-          editorValue: props.editorValue!,
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorValue: props.editorTabs[0].value,
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibrary: question.library.external.name || 'NONE',
@@ -779,9 +779,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,
           handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
-          breakpoints: props.breakpoints,
-          highlightedLines: props.highlightedLines,
-          newCursorPosition: props.newCursorPosition,
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          highlightedLines: props.editorTabs[0].highlightedLines,
+          breakpoints: props.editorTabs[0].breakpoints,
+          newCursorPosition: props.editorTabs[0].newCursorPosition,
           handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: props.handlePromptAutocomplete,
           isEditorAutorun: false,
@@ -807,15 +808,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons()
   };
+  const sideBarProps = {
+    tabs: []
+  };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
     editorProps: editorProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
-    sideBarProps: {
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps
@@ -825,6 +827,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
 
