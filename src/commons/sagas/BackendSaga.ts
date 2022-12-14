@@ -53,6 +53,7 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   FETCH_USER_AND_COURSE,
+  GET_ALL_USER_XP,
   GET_TOTAL_XP,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
@@ -76,6 +77,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHe
 import {
   deleteAssessment,
   deleteSourcecastEntry,
+  getAllUserXp,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -232,6 +234,15 @@ function* BackendSaga(): SagaIterator {
     );
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
+    }
+  });
+
+  yield takeEvery(GET_ALL_USER_XP, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
+    if (res) {
+      yield put(actions.updateAllUserXp(res.all_users_xp));
     }
   });
 

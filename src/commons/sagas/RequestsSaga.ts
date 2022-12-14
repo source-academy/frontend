@@ -481,6 +481,21 @@ export const getTotalXp = async (tokens: Tokens): Promise<number | null> => {
 };
 
 /**
+ * GET /courses/{courseId}/admin/users/total_xp
+ */
+export const getAllUserXp = async (tokens: Tokens): Promise<number | null> => {
+  const resp = await request(`${courseId()}/admin/users/total_xp`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const totalXp = await resp.json();
+  return totalXp;
+};
+
+/**
  * GET /courses/{courseId}/admin/users/{course_reg_id}/assessments
  */
 export const getUserAssessmentOverviews = async (
