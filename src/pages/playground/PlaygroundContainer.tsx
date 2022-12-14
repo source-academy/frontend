@@ -4,24 +4,22 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { OverallState } from '../../commons/application/ApplicationTypes';
 import {
   changeExecTime,
   chapterSelect,
   clearReplOutput,
   evalRepl,
-  externalLibrarySelect,
   setEditorBreakpoint,
   toggleUsingSubst,
   updateEditorValue
-} from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
+} from '../../commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import Playground, { DispatchProps, StateProps } from './Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   ..._.pick(
-    state.workspaces.sicp,
+    state.workspaces.playground,
     'activeEditorTabIndex',
     'editorTabs',
     'editorSessionId',
@@ -39,16 +37,17 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   ),
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
-  playgroundSourceChapter: state.workspaces.sicp.context.chapter,
-  playgroundSourceVariant: state.workspaces.sicp.context.variant,
-  externalLibraryName: state.workspaces.sicp.externalLibrary,
+  playgroundSourceChapter: state.workspaces.playground.context.chapter,
+  playgroundSourceVariant: state.workspaces.playground.context.variant,
+  courseSourceChapter: state.session.sourceChapter,
+  courseSourceVariant: state.session.sourceVariant,
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
   githubOctokitObject: state.session.githubOctokitObject,
   githubSaveInfo: state.playground.githubSaveInfo
 });
 
-const workspaceLocation: WorkspaceLocation = 'sicp';
+const workspaceLocation: WorkspaceLocation = 'playground';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
@@ -59,8 +58,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation)
@@ -68,13 +65,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-/**
- * Playground container for SICP snippets.
- */
-const SicpWorkspaceContainer = (props: any) => {
-  // FIXME: Remove any
+const PlaygroundContainer = () => {
   const Component = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
-  return <Component workspaceLocation={workspaceLocation} {...props} />;
+  return <Component workspaceLocation={workspaceLocation} />;
 };
 
-export default SicpWorkspaceContainer;
+export default PlaygroundContainer;

@@ -672,8 +672,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      breakpoints,
-      highlightedLines
+      editorTabs: [{ highlightedLines, breakpoints }]
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
@@ -686,8 +685,6 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: [],
           output: [
             {
               ...outputWithRunningOutput[0]
@@ -710,8 +707,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      breakpoints,
-      highlightedLines
+      editorTabs: [{ highlightedLines, breakpoints }]
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
@@ -724,8 +720,6 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: [],
           output: [
             {
               ...outputWithRunningAndCodeOutput[0]
@@ -999,7 +993,7 @@ describe('HIGHLIGHT_LINE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          highlightedLines
+          editorTabs: [{ ...defaultWorkspaceManager[location].editorTabs[0], highlightedLines }]
         }
       });
     });
@@ -1008,12 +1002,17 @@ describe('HIGHLIGHT_LINE', () => {
 
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const newPlayground: PlaygroundWorkspaceState = {
-      ...createDefaultWorkspace('playground'),
-      editorValue: 'test program here',
-      highlightedLines: [
-        [1, 2],
-        [3, 4]
+      ...defaultPlaygroundState,
+      editorTabs: [
+        {
+          ...defaultPlaygroundState.editorTabs[0],
+          highlightedLines: [
+            [1, 2],
+            [3, 4]
+          ]
+        }
       ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
@@ -1077,8 +1076,12 @@ describe('RESET_WORKSPACE', () => {
     const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
 
     const workspaceOptions = {
-      breakpoints: ['1', '3'],
-      highlightedLines: [[1], [10]],
+      editorTabs: [
+        {
+          highlightedLines: [[1], [10]],
+          breakpoints: ['1', '3']
+        }
+      ],
       replValue: 'test repl value'
     };
 
@@ -1309,7 +1312,9 @@ describe('UPDATE_EDITOR_VALUE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorValue: newEditorValue
+          editorTabs: [
+            { ...defaultWorkspaceManager[location].editorTabs[0], value: newEditorValue }
+          ]
         }
       });
     });

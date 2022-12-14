@@ -2,7 +2,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import {
   CodeOutput,
@@ -52,6 +52,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -356,9 +357,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           output: newOutput,
-          isRunning: false,
-          breakpoints: [],
-          highlightedLines: []
+          isRunning: false
         }
       };
     case EVAL_TESTCASE_SUCCESS:
@@ -529,12 +528,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
 
-    case SET_EDITOR_READONLY:
+    case SET_IS_EDITOR_READONLY:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorReadonly: action.payload.editorReadonly
+          isEditorReadonly: action.payload.isEditorReadonly
         }
       };
     case SET_SHAREDB_CONNECTED:
@@ -583,12 +582,26 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
+    case UPDATE_EDITOR_BREAKPOINTS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            { ...state[workspaceLocation].editorTabs[0], breakpoints: action.payload.breakpoints }
+          ]
+        }
+      };
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorValue: action.payload.newEditorValue
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            { ...state[workspaceLocation].editorTabs[0], value: action.payload.newEditorValue }
+          ]
         }
       };
     case HIGHLIGHT_LINE:
@@ -596,7 +609,13 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          highlightedLines: action.payload.highlightedLines
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            {
+              ...state[workspaceLocation].editorTabs[0],
+              highlightedLines: action.payload.highlightedLines
+            }
+          ]
         }
       };
     case MOVE_CURSOR:
@@ -604,7 +623,13 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          newCursorPosition: action.payload.cursorPosition
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorTabs: [
+            {
+              ...state[workspaceLocation].editorTabs[0],
+              newCursorPosition: action.payload.cursorPosition
+            }
+          ]
         }
       };
     case UPDATE_REPL_VALUE:

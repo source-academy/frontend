@@ -1,8 +1,10 @@
 import { Classes } from '@blueprintjs/core';
+import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor from 'react-ace';
+import ReactAce from 'react-ace/lib/ace';
 import MediaQuery from 'react-responsive';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -16,6 +18,8 @@ type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
   handleReplEval: () => void;
+  onFocus?: (editor: Ace.Editor) => void;
+  onBlur?: () => void;
 };
 
 type StateProps = {
@@ -30,7 +34,10 @@ type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref) => {
+export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
+  const { onFocus, onBlur } = props;
+
+  const replInput = React.useRef<ReactAce>(null);
   const replInputBottom = React.useRef<HTMLDivElement>(null);
 
   const execBrowseHistoryDown: () => void = props.handleBrowseHistoryDown;
@@ -45,6 +52,19 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
       replInputBottom.current.scrollIntoView();
     }
   };
+
+  React.useEffect(() => {
+    if (!replInput.current) {
+      return;
+    }
+    const editor = replInput.current.editor;
+    if (onFocus) {
+      editor.on('focus', () => onFocus(editor));
+    }
+    if (onBlur) {
+      editor.on('blur', onBlur);
+    }
+  });
 
   React.useEffect(() => {
     if (!replInputBottom.current || props.disableScrolling) {
@@ -115,7 +135,7 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
         setOptions={{
           fontFamily: "'Inconsolata', 'Consolas', monospace"
         }}
-        ref={ref}
+        ref={replInput}
       />
       <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
       <MediaQuery minWidth={769}>
@@ -123,4 +143,4 @@ export const ReplInput = React.forwardRef<AceEditor, ReplInputProps>((props, ref
       </MediaQuery>
     </>
   );
-});
+};

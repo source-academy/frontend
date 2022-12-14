@@ -45,7 +45,7 @@ exports[`Repl renders correctly 1`] = `
     <Output output={{...}} usingSubst={false} isHtml={false} />
     <Output output={{...}} usingSubst={false} isHtml={false} />
     <HotKeysEnabled className=\\"repl-input-parent row bp4-card bp4-elevation-0\\" handlers={{...}}>
-      <ForwardRef handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" sourceChapter={1} sourceVariant=\\"default\\" externalLibrary=\\"NONE\\" replButtons={{...}} />
+      <ReplInput handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" sourceChapter={1} sourceVariant=\\"default\\" externalLibrary=\\"NONE\\" replButtons={{...}} />
     </HotKeysEnabled>
   </div>
 </div>"
