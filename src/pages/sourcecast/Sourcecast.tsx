@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 
@@ -322,10 +321,13 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    customEditor: (ref: React.RefObject<ReactAce>, handleShowDraggableRepl: () => void) => (
+    customEditor: (
+      handleShowDraggableRepl: () => void,
+      overrideEditorProps: Partial<SourceRecorderEditorProps>
+    ) => (
       <SourceRecorderEditor
         {...editorProps}
-        forwardedRef={ref}
+        {...overrideEditorProps}
         setDraggableReplPosition={handleShowDraggableRepl}
       />
     ),

@@ -2,10 +2,10 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { Ace } from 'ace-builds';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
-import ReactAce from 'react-ace/lib/ace';
 import { HotKeys } from 'react-hotkeys';
 
 import {
@@ -34,6 +34,8 @@ type DispatchProps = {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleRecordInput?: (input: Input) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
+  onFocus?: (editor: Ace.Editor) => void;
+  onBlur?: () => void;
 };
 
 type StateProps = {
@@ -51,7 +53,6 @@ type StateProps = {
 };
 
 type OwnProps = {
-  forwardedRef?: React.RefObject<ReactAce>; // for the mobile Sourcecast Workspace
   setDraggableReplPosition?: () => void; // for the mobile Sourcecast Workspace
 };
 
@@ -168,6 +169,14 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation' as any, this.handleAnnotationChange(session));
+
+    const { onFocus, onBlur } = this.props;
+    if (onFocus) {
+      editor.on('focus', () => onFocus(editor));
+    }
+    if (onBlur) {
+      editor.on('blur', onBlur);
+    }
   }
 
   public componentWillUnmount() {
@@ -220,7 +229,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             editorProps={{
               $blockScrolling: Infinity
             }}
-            ref={mergeRefs(this.AceEditor, this.props.forwardedRef)}
+            ref={this.AceEditor}
             markers={this.getMarkers()}
             fontSize={17}
             height="100%"
@@ -312,31 +321,6 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
   goGreen: () => {}
-};
-
-/**
- * Custom mergeRef function for class components.
- * For functional components, please use useMergedRef defined in commons/utils/Hooks.ts
- *
- * This function is defined here as it is used only in SourceRecorderEditor.tsx
- * It will unlikely be used elsewhere since we are migrating to React Hooks.
- */
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const mergeRefs = (...refs) => {
-  const filteredRefs = refs.filter(Boolean);
-  if (!filteredRefs.length) return null;
-  if (filteredRefs.length === 1) return filteredRefs[0];
-  return (inst: any) => {
-    for (const ref of filteredRefs) {
-      if (typeof ref === 'function') {
-        ref(inst);
-      } else if (ref) {
-        ref.current = inst;
-      }
-    }
-  };
 };
 
 export default SourcecastEditor;

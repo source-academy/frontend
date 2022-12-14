@@ -1,7 +1,7 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Ace } from 'ace-builds';
 import React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
@@ -12,6 +12,7 @@ import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import { SourceRecorderEditorProps } from '../sourceRecorder/SourceRecorderEditor';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
@@ -28,8 +29,8 @@ type StateProps = {
    * A handler for showing the draggable repl is also passed into the customEditor.
    */
   customEditor?: (
-    ref: React.RefObject<ReactAce>,
-    handleShowDraggableRepl: () => void
+    handleShowDraggableRepl: () => void,
+    overrideEditorProps: Partial<SourceRecorderEditorProps>
   ) => JSX.Element;
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
@@ -96,30 +97,68 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   }, [isPortrait, isAndroid]);
 
-  // Handle custom keyboard input into AceEditor (Editor and Repl Components)
-  const editorRef = React.useRef<ReactAce>(null);
-  const replRef = React.useRef<ReactAce>(null);
-  const emptyRef = React.useRef<ReactAce>(null);
-  const [keyboardInputRef, setKeyboardInputRef] =
-    React.useState<React.RefObject<ReactAce>>(emptyRef);
+  const [targetKeyboardInput, setTargetKeyboardInput] = React.useState<Ace.Editor | null>(null);
 
-  React.useEffect(() => {
-    editorRef.current?.editor.on('focus', () => {
-      setKeyboardInputRef(editorRef);
-    });
-    replRef.current?.editor.on('focus', () => {
-      setKeyboardInputRef(replRef);
-    });
-    const clearRef = () => setKeyboardInputRef(emptyRef);
-    editorRef.current?.editor.on('blur', clearRef);
-    replRef.current?.editor.on('blur', clearRef);
-  }, []);
+  const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
+
+  const enableMobileKeyboardForEditor = (props: EditorProps): EditorProps => {
+    const onFocus = (event: any, editor?: Ace.Editor) => {
+      if (props.onFocus) {
+        props.onFocus(event, editor);
+      }
+      if (!editor) {
+        return;
+      }
+      setTargetKeyboardInput(editor);
+    };
+    const onBlur = (event: any, editor?: Ace.Editor) => {
+      if (props.onBlur) {
+        props.onBlur(event, editor);
+      }
+      if (!editor) {
+        return;
+      }
+      clearTargetKeyboardInput();
+    };
+    return {
+      ...props,
+      onFocus,
+      onBlur
+    };
+  };
+
+  const enableMobileKeyboardForRepl = (props: ReplProps): ReplProps => {
+    const onFocus = (editor: Ace.Editor) => {
+      if (props.onFocus) {
+        props.onFocus(editor);
+      }
+      setTargetKeyboardInput(editor);
+    };
+    const onBlur = () => {
+      if (props.onBlur) {
+        props.onBlur();
+      }
+      clearTargetKeyboardInput();
+    };
+    return {
+      ...props,
+      onFocus,
+      onBlur
+    };
+  };
+
+  const enableMobileKeyboardForCustomEditor = (): Partial<SourceRecorderEditorProps> => {
+    return {
+      onFocus: (editor: Ace.Editor) => setTargetKeyboardInput(editor),
+      onBlur: () => clearTargetKeyboardInput()
+    };
+  };
 
   const createWorkspaceInput = () => {
     if (props.customEditor) {
-      return props.customEditor(editorRef, () => handleShowRepl(-100));
+      return props.customEditor(() => handleShowRepl(-100), enableMobileKeyboardForCustomEditor());
     } else if (props.editorProps) {
-      return <Editor {...props.editorProps} ref={editorRef} />;
+      return <Editor {...enableMobileKeyboardForEditor(props.editorProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }
@@ -269,11 +308,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         position={draggableReplPosition}
         onDrag={onDrag}
         disabled={isDraggableReplDisabled}
-        replProps={props.replProps}
-        ref={replRef}
+        replProps={enableMobileKeyboardForRepl(props.replProps)}
       />
 
-      <MobileKeyboard editorRef={keyboardInputRef} />
+      <MobileKeyboard targetKeyboardInput={targetKeyboardInput} />
     </div>
   );
 };
