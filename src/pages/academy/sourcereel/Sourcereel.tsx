@@ -147,6 +147,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
         props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.inputToApply]);
 
   const getTimerDuration = () => props.timeElapsedBeforePause + Date.now() - props.timeResumed;
