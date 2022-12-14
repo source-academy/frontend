@@ -35,7 +35,7 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
   const mainButton = controlButton(
     (props.currentFile && props.currentFile.name) || 'Google Drive',
     IconNames.CLOUD,
-    null,
+    undefined,
     {
       intent: stateToIntent[state]
     }

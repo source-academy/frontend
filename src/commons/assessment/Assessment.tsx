@@ -365,8 +365,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, setBetchaAssessmentNull, { minimal: false })}
-          {controlButton('Finalise', null, submitAssessment, {
+          {controlButton('Cancel', undefined, setBetchaAssessmentNull, { minimal: false })}
+          {controlButton('Finalise', undefined, submitAssessment, {
             minimal: false,
             intent: Intent.DANGER
           })}

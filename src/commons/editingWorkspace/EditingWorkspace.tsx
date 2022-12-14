@@ -257,12 +257,12 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => this.setState({ showResetTemplateOverlay: false }), {
+          {controlButton('Cancel', undefined, () => this.setState({ showResetTemplateOverlay: false }), {
             minimal: false
           })}
           {controlButton(
             'Confirm',
-            null,
+            undefined,
             () => {
               const assessment = retrieveLocalAssessment()!;
               this.setState({

@@ -120,12 +120,12 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => setShowSaveOverlay(false), {
+          {controlButton('Cancel', undefined, () => setShowSaveOverlay(false), {
             minimal: false
           })}
           {controlButton(
             'Confirm',
-            null,
+            undefined,
             () => {
               modifyAssessment();
               setShowSaveOverlay(false);

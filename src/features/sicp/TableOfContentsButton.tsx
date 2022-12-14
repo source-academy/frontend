@@ -8,5 +8,5 @@ type OwnProps = {
 };
 
 export function TableOfContentsButton(props: TableOfContentsButtonProps) {
-  return controlButton('Table of Contents', null, props.handleOpenToc);
+  return controlButton('Table of Contents', undefined, props.handleOpenToc);
 }

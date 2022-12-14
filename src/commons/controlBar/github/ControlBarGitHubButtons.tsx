@@ -43,7 +43,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     mainButtonIntent = props.isDirty ? Intent.WARNING : Intent.PRIMARY;
   }
 
-  const mainButton = controlButton(mainButtonDisplayText, IconNames.GIT_BRANCH, null, {
+  const mainButton = controlButton(mainButtonDisplayText, IconNames.GIT_BRANCH, undefined, {
     intent: mainButtonIntent
   });
 

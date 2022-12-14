@@ -14,8 +14,8 @@ type StateProps = {
 export function ControlBarQuestionViewButton(props: ControlBarQuestionViewButtonProps) {
   return controlButton(
     `Question ${props.questionProgress![0]} of ${props.questionProgress![1]}  `,
-    null,
-    null,
+    undefined,
+    undefined,
     {},
     true
   );

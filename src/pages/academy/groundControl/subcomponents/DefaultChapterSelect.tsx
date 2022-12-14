@@ -89,8 +89,8 @@ const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> =
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          {controlButton('Cancel', null, handleCloseDialog, { minimal: false })}
-          {controlButton('Confirm', null, handleConfirmDialog, {
+          {controlButton('Cancel', undefined, handleCloseDialog, { minimal: false })}
+          {controlButton('Confirm', undefined, handleConfirmDialog, {
             minimal: false,
             intent: Intent.DANGER
           })}

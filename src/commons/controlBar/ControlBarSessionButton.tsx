@@ -97,7 +97,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
       <form onSubmit={handleStartJoining}>
         <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
         <span className={Classes.POPOVER_DISMISS}>
-          {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+          {controlButton('', IconNames.KEY_ENTER, undefined, { type: 'submit' })}
         </span>
       </form>
     );
