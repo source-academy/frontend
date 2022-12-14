@@ -7,8 +7,8 @@ type ControlBarClearButtonProps = {
   handleReplOutputClear: () => void;
 };
 
-export const ControlBarClearButton: React.FC<ControlBarClearButtonProps> = props => {
-  return (
-    <ControlButton label="Clear" icon={IconNames.REMOVE} onClick={props.handleReplOutputClear} />
-  );
+export const ControlBarClearButton: React.FC<ControlBarClearButtonProps> = ({
+  handleReplOutputClear
+}) => {
+  return <ControlButton label="Clear" icon={IconNames.REMOVE} onClick={handleReplOutputClear} />;
 };

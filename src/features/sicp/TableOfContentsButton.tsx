@@ -1,12 +1,9 @@
 import ControlButton from '../../commons/ControlButton';
 
-type TableOfContentsButtonProps = OwnProps;
-
-type OwnProps = {
-  key: string;
+type TableOfContentsButtonProps = {
   handleOpenToc: () => void;
 };
 
-export function TableOfContentsButton(props: TableOfContentsButtonProps) {
-  return <ControlButton label="Table of Contents" onClick={props.handleOpenToc} />;
+export function TableOfContentsButton({ handleOpenToc }: TableOfContentsButtonProps) {
+  return <ControlButton label="Table of Contents" onClick={handleOpenToc} />;
 }
