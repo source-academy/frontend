@@ -55,8 +55,8 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (item: SALanguage, event?: React.SyntheticEvent<HTMLElement>) => {},
-    disabled: boolean
+    handleSelect: (item: SALanguage, event?: React.SyntheticEvent<HTMLElement>) => void,
+    disabled: boolean = false
   ) => (
     <ChapterSelectComponent
       items={sourceLanguages}
@@ -64,13 +64,13 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
       itemRenderer={chapterRenderer}
       itemListRenderer={chapterListRenderer}
       filterable={false}
-      disabled={disabled || false}
+      disabled={disabled}
     >
       <Button
         className={Classes.MINIMAL}
         text={styliseSublanguage(currentChap, currentVariant)}
         rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
-        disabled={disabled || false}
+        disabled={disabled}
       />
     </ChapterSelectComponent>
   );
@@ -78,7 +78,7 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   return chapSelect(
     props.sourceChapter,
     props.sourceVariant,
-    props.handleChapterSelect,
+    props.handleChapterSelect ?? (() => {}),
     props.disabled || false
   );
 }
