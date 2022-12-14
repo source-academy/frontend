@@ -11,7 +11,7 @@ import {
   styliseSublanguage,
   variantLanguages
 } from '../../../../commons/application/ApplicationTypes';
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 
 export type DefaultChapterSelectProps = DispatchProps & StateProps;
 
@@ -89,11 +89,12 @@ const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> =
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          {controlButton('Cancel', undefined, handleCloseDialog, { minimal: false })}
-          {controlButton('Confirm', undefined, handleConfirmDialog, {
-            minimal: false,
-            intent: Intent.DANGER
-          })}
+          <ControlButton label="Cancel" onClick={handleCloseDialog} options={{ minimal: false }} />
+          <ControlButton
+            label="Confirm"
+            onClick={handleConfirmDialog}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </div>
       </div>
     </Dialog>

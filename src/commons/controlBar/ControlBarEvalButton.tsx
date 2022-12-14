@@ -1,7 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlBarEvalButtonProps = DispatchProps & StateProps;
 
@@ -17,7 +17,7 @@ type StateProps = {
 export function ControlBarEvalButton(props: ControlBarEvalButtonProps) {
   return props.isRunning ? null : (
     <Tooltip2 content="...or press shift-enter in the REPL">
-      {controlButton('Eval', IconNames.CODE, props.handleReplEval)}
+      <ControlButton label="Eval" icon={IconNames.CODE} onClick={props.handleReplEval} />
     </Tooltip2>
   );
 }

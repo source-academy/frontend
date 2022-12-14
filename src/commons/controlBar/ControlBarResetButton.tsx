@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlBarResetButtonProps = DispatchProps & StateProps;
 
@@ -13,5 +13,5 @@ type StateProps = {
 };
 
 export function ControlBarResetButton(props: ControlBarResetButtonProps) {
-  return controlButton('Reset', IconNames.REPEAT, props.onClick);
+  return <ControlButton label="Reset" icon={IconNames.REPEAT} onClick={props.onClick} />;
 }

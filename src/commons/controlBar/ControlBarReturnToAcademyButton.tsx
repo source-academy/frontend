@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlBarReturnToAcademyButtonProps = DispatchProps & StateProps;
 
@@ -13,7 +13,12 @@ type StateProps = {
 };
 
 export function ControlBarReturnToAcademyButton(props: ControlBarReturnToAcademyButtonProps) {
-  return controlButton('Return to Academy', IconNames.ARROW_RIGHT, props.onClick, {
-    iconOnRight: true
-  });
+  return (
+    <ControlButton
+      label="Return to Academy"
+      icon={IconNames.ARROW_RIGHT}
+      onClick={props.onClick}
+      options={{ iconOnRight: true }}
+    />
+  );
 }

@@ -33,7 +33,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
 import DeploymentTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
 import GradingTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
@@ -257,13 +257,14 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', undefined, () => this.setState({ showResetTemplateOverlay: false }), {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            undefined,
-            () => {
+          <ControlButton
+            label="Cancel"
+            onClick={() => this.setState({ showResetTemplateOverlay: false })}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Confirm"
+            onClick={() => {
               const assessment = retrieveLocalAssessment()!;
               this.setState({
                 assessment,
@@ -273,9 +274,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               });
               this.handleRefreshLibrary();
               this.resetWorkspaceValues();
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
+            }}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>

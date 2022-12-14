@@ -28,7 +28,7 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
 import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from '../ContentDisplay';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
@@ -365,11 +365,16 @@ const Assessment: React.FC<AssessmentProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', undefined, setBetchaAssessmentNull, { minimal: false })}
-          {controlButton('Finalise', undefined, submitAssessment, {
-            minimal: false,
-            intent: Intent.DANGER
-          })}
+          <ControlButton
+            label="Cancel"
+            onClick={setBetchaAssessmentNull}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Finalise"
+            onClick={submitAssessment}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>
@@ -420,10 +425,16 @@ const makeGradingStatus = (gradingStatus: string) => {
   );
 };
 
-const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
-  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-    minimal: true,
-    className: 'collapse-button'
-  });
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
+  <ControlButton
+    label={label}
+    icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+    onClick={toggleFunc}
+    options={{
+      minimal: true,
+      className: 'collapse-button'
+    }}
+  />
+);
 
 export default Assessment;

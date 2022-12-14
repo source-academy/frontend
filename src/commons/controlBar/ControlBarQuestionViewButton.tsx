@@ -1,4 +1,4 @@
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where
@@ -12,11 +12,10 @@ type StateProps = {
 };
 
 export function ControlBarQuestionViewButton(props: ControlBarQuestionViewButtonProps) {
-  return controlButton(
-    `Question ${props.questionProgress![0]} of ${props.questionProgress![1]}  `,
-    undefined,
-    undefined,
-    {},
-    true
+  return (
+    <ControlButton
+      label={`Question ${props.questionProgress![0]} of ${props.questionProgress![1]}  `}
+      isDisabled
+    />
   );
 }

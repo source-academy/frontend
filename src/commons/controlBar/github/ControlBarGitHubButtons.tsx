@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
-import controlButton from '../../ControlButton';
+import ControlButton from '../../ControlButton';
 import Constants from '../../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
@@ -43,37 +43,48 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     mainButtonIntent = props.isDirty ? Intent.WARNING : Intent.PRIMARY;
   }
 
-  const mainButton = controlButton(mainButtonDisplayText, IconNames.GIT_BRANCH, undefined, {
-    intent: mainButtonIntent
-  });
-
-  const openButton = controlButton(
-    'Open',
-    IconNames.DOCUMENT_OPEN,
-    props.onClickOpen,
-    undefined,
-    shouldDisableButtons
+  const mainButton = (
+    <ControlButton
+      label={mainButtonDisplayText}
+      icon={IconNames.GIT_BRANCH}
+      options={{
+        intent: mainButtonIntent
+      }}
+    />
   );
 
-  const saveButton = controlButton(
-    'Save',
-    IconNames.FLOPPY_DISK,
-    props.onClickSave,
-    undefined,
-    shouldDisableButtons || !hasOpenFile
+  const openButton = (
+    <ControlButton
+      label="Open"
+      icon={IconNames.DOCUMENT_OPEN}
+      onClick={props.onClickOpen}
+      isDisabled={shouldDisableButtons}
+    />
   );
 
-  const saveAsButton = controlButton(
-    'Save As',
-    IconNames.SEND_TO,
-    props.onClickSaveAs,
-    undefined,
-    shouldDisableButtons
+  const saveButton = (
+    <ControlButton
+      label="Save"
+      icon={IconNames.FLOPPY_DISK}
+      onClick={props.onClickSave}
+      isDisabled={shouldDisableButtons || !hasOpenFile}
+    />
   );
 
-  const loginButton = isLoggedIn
-    ? controlButton('Log Out', IconNames.LOG_OUT, props.onClickLogOut)
-    : controlButton('Log In', IconNames.LOG_IN, props.onClickLogIn);
+  const saveAsButton = (
+    <ControlButton
+      label="Save As"
+      icon={IconNames.SEND_TO}
+      onClick={props.onClickSaveAs}
+      isDisabled={shouldDisableButtons}
+    />
+  );
+
+  const loginButton = isLoggedIn ? (
+    <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
+  ) : (
+    <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
+  );
 
   return (
     <Popover2

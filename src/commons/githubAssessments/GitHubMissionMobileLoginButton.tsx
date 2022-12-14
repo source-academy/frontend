@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { OverallState } from '../application/ApplicationTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
 export type ControlBarGitHubMobileLoginButtonProps = {
@@ -25,9 +25,11 @@ export const ControlBarGitHubMobileLoginButton: React.FC<
   const isLoggedIn =
     useSelector((store: OverallState) => store.session.githubOctokitObject).octokit !== undefined;
 
-  const loginButton = isLoggedIn
-    ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
-    : controlButton('Log In', IconNames.GIT_BRANCH, props.onClickLogIn);
+  const loginButton = isLoggedIn ? (
+    <ControlButton label="Log Out" icon={IconNames.GIT_BRANCH} onClick={props.onClickLogOut} />
+  ) : (
+    <ControlButton label="Log In" icon={IconNames.GIT_BRANCH} onClick={props.onClickLogIn} />
+  );
 
   return <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>;
 };

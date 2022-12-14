@@ -49,7 +49,7 @@ import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionVi
 import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,
   NormalEditorContainerProps
@@ -749,21 +749,24 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', undefined, closeOverlay, {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            undefined,
-            () => {
+          <ControlButton
+            label="Cancel"
+            onClick={closeOverlay}
+            options={{
+              minimal: false
+            }}
+          />
+          <ControlButton
+            label="Confirm"
+            onClick={() => {
               closeOverlay();
               props.handleEditorValueChange(
                 (props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
               );
               props.handleUpdateHasUnsavedChanges(true);
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
+            }}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>

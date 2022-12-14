@@ -2,7 +2,7 @@ import { Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlButtonRunButtonProps = DispatchProps & StateProps;
 
@@ -19,10 +19,15 @@ type StateProps = {
 export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
   return (
     <Tooltip2 content="...or press shift-enter in the editor" placement={Position.TOP}>
-      {controlButton('Run', IconNames.PLAY, props.handleEditorEval, {
-        iconColor: props.color,
-        className: props.className
-      })}
+      <ControlButton
+        label="Run"
+        icon={IconNames.PLAY}
+        onClick={props.handleEditorEval}
+        options={{
+          iconColor: props.color,
+          className: props.className
+        }}
+      />
     </Tooltip2>
   );
 }

@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlBarCloseButtonProps = OwnProps;
 
@@ -10,5 +10,5 @@ type OwnProps = {
 };
 
 export function ControlBarCloseButton(props: ControlBarCloseButtonProps) {
-  return controlButton('Close', IconNames.CROSS, props.handleClose);
+  return <ControlButton label="Close" icon={IconNames.CROSS} onClick={props.handleClose} />;
 }
