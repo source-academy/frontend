@@ -102,8 +102,6 @@ export type DispatchProps = {
   handleRunAllTestcases: () => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
 };
 
 export type StateProps = {

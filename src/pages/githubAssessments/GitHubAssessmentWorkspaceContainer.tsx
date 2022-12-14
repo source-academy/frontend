@@ -3,7 +3,6 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { Position } from '../../commons/editor/EditorTypes';
 import {
@@ -74,9 +73,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback),
-      handleGitHubLogIn: loginGitHub,
-      handleGitHubLogOut: logoutGitHub
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );
