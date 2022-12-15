@@ -13,8 +13,8 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -159,7 +159,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
 
   /**
    * Unpacked properties

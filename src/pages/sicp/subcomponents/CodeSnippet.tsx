@@ -2,11 +2,10 @@ import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
-import Constants from 'src/commons/utils/Constants';
+import { useResponsive } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
 import { CodeSnippetContext } from '../Sicp';
@@ -43,7 +42,7 @@ const resizableProps = {
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
   const context = React.useContext(CodeSnippetContext);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
 
   const handleOpen = () => {
     context.setActive(id);

@@ -1,5 +1,7 @@
 import React, { RefObject } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
+import Constants from './Constants';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 
 /**
@@ -99,4 +101,13 @@ export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, heig
   }, [ref, resizeObserver]);
 
   return [width, height];
+};
+
+/**
+ * Returns whether the current view falls under mobile
+ * or desktop as defined by the constants file.
+ */
+export const useResponsive = () => {
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  return isMobileBreakpoint;
 };

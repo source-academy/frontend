@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -27,7 +27,6 @@ import SourceRecorderEditor, {
   SourceRecorderEditorProps
 } from '../../commons/sourceRecorder/SourceRecorderEditor';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
-import Constants from '../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import {
@@ -106,7 +105,7 @@ export type StateProps = {
 };
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
 
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,

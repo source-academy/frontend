@@ -11,12 +11,11 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useMemo } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
 import Markdown from '../../commons/Markdown';
-import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
@@ -30,7 +29,7 @@ type GitHubAssessmentListingProps = {
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
 const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
 
   let display: JSX.Element;
 

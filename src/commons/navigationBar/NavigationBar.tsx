@@ -16,7 +16,6 @@ import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { Location } from 'history';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { match, NavLink, Route, Switch, useLocation } from 'react-router-dom';
 
 import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
@@ -27,6 +26,7 @@ import Dropdown from '../dropdown/Dropdown';
 import NotificationBadgeContainer from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
+import { useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
@@ -66,7 +66,7 @@ const matchExceptSourcecastAchievement = (match: match | null, location: Locatio
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
   const location = useLocation();
 
   FocusStyleManager.onlyShowFocusOnTabs();

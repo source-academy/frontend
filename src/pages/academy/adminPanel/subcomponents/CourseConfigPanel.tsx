@@ -10,11 +10,10 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
-import Constants from '../../../../commons/utils/Constants';
 
 export type CourseConfigPanelProps = OwnProps;
 
@@ -29,7 +28,7 @@ export enum CourseHelpTextEditorTab {
 }
 
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 

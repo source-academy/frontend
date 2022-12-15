@@ -15,7 +15,6 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -63,6 +62,7 @@ import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes
 import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
+import { useResponsive } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -133,7 +133,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? SideContentType.grading
       : SideContentType.questionOverview
   );
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const isMobileBreakpoint = useResponsive();
 
   React.useEffect(() => {
     props.handleEditorValueChange('');
