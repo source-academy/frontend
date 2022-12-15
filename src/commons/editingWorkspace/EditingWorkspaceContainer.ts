@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginDebuggerPause,
@@ -26,13 +26,14 @@ import {
   promptAutocomplete,
   resetWorkspace,
   setEditorBreakpoint,
+  updateActiveEditorTab,
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
 } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
@@ -72,10 +73,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: DeepPartial<WorkspaceState>) =>
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
-      handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) =>
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
+      handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) =>
+        updateActiveEditorTab(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
