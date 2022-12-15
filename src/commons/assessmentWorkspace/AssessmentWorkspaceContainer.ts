@@ -1,12 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from '../application/actions/InterpreterActions';
 import { submitAnswer } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import {
@@ -46,14 +40,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleSave: submitAnswer,
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
-      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
-      handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation)
+        updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)
     },
     dispatch
   );
