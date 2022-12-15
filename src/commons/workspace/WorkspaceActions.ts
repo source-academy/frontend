@@ -1,6 +1,5 @@
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { DeepPartial } from 'redux';
 import { action } from 'typesafe-actions';
 
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -24,6 +23,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_EDITOR_AND_TESTCASES,
@@ -38,6 +38,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -156,6 +157,11 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
+export const updateActiveEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  activeEditorTabOptions?: Partial<EditorTabState>
+) => action(UPDATE_ACTIVE_EDITOR_TAB, { workspaceLocation, activeEditorTabOptions });
+
 export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
 
@@ -199,7 +205,7 @@ export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition:
  */
 export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: DeepPartial<WorkspaceState>
+  workspaceOptions?: Partial<WorkspaceState>
 ) =>
   action(RESET_WORKSPACE, {
     workspaceLocation,
@@ -208,7 +214,7 @@ export const resetWorkspace = (
 
 export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: DeepPartial<WorkspaceState>
+  workspaceOptions?: Partial<WorkspaceState>
 ) =>
   action(UPDATE_WORKSPACE, {
     workspaceLocation,

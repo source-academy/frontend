@@ -16,7 +16,6 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { DeepPartial } from 'redux';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -85,7 +84,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleChangeExecTime: (execTimeMs: number) => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -335,7 +334,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       autogradingResults,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
-        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+        {
+          value: editorValue,
+          prependValue: editorPrepend,
+          postpendValue: editorPostpend,
+          highlightedLines: [],
+          breakpoints: []
+        }
       ],
       editorTestcases
     });
