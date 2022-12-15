@@ -322,10 +322,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     resetWorkspaceValues();
   };
 
-  const handleActiveTabChange = (tab: SideContentType) => {
-    setActiveTab(tab);
-  };
-
   const toggleEditingMode = () => {
     const toggle = editingMode === 'question' ? 'global' : 'question';
     setEditingMode(toggle);
@@ -507,7 +503,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
 
     return {
-      handleActiveTabChange: handleActiveTabChange,
+      handleActiveTabChange: setActiveTab,
       tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] }
     };
   };
