@@ -11,7 +11,6 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -71,8 +70,9 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
-  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -345,7 +345,13 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     this.props.handleResetWorkspace({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
-        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+        {
+          value: editorValue,
+          prependValue: editorPrepend,
+          postpendValue: editorPostpend,
+          highlightedLines: [],
+          breakpoints: []
+        }
       ]
     });
     this.props.handleEditorValueChange(editorValue);
@@ -446,7 +452,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
             editorValue={this.props.editorTabs[0].value}
             handleEditorValueChange={this.props.handleEditorValueChange}
-            handleUpdateWorkspace={this.props.handleUpdateWorkspace}
+            handleUpdateActiveEditorTab={this.props.handleUpdateActiveEditorTab}
           />
         );
 

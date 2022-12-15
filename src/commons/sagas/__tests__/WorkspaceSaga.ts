@@ -118,7 +118,13 @@ describe('EVAL_EDITOR', () => {
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [
-        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+        {
+          value: editorValue,
+          prependValue: editorPrepend,
+          postpendValue: editorPostpend,
+          highlightedLines: [],
+          breakpoints: []
+        }
       ],
       execTime,
       context,
@@ -353,7 +359,13 @@ describe('EVAL_TESTCASE', () => {
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [
-        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+        {
+          value: editorValue,
+          prependValue: editorPrepend,
+          postpendValue: editorPostpend,
+          highlightedLines: [],
+          breakpoints: []
+        }
       ],
       editorTestcases,
       execTime,
