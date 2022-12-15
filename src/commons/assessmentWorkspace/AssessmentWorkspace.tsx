@@ -36,7 +36,6 @@ import {
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library,
   Question,
   QuestionTypes,
   Testcase
@@ -69,11 +68,13 @@ import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import {
+  beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
+  evalEditor,
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
@@ -88,8 +89,6 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
-  handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
@@ -264,7 +263,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     if (activeTab.current === SideContentType.autograder) {
       dispatch(runAllTestcases(workspaceLocation));
     } else {
-      props.handleEditorEval();
+      dispatch(evalEditor(workspaceLocation));
     }
 
     const input: Input = {
@@ -353,7 +352,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         workspaceLocation
       )
     );
-    props.handleClearContext(question.library, true);
+    dispatch(beginClearContext(workspaceLocation, question.library, true));
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       props.handleEditorValueChange(editorValue);

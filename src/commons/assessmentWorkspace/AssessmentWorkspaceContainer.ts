@@ -9,10 +9,7 @@ import {
 } from '../application/actions/InterpreterActions';
 import { submitAnswer } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
-import { Library } from '../assessment/AssessmentTypes';
 import {
-  beginClearContext,
-  evalEditor,
   evalRepl,
   setEditorBreakpoint,
   updateEditorValue,
@@ -46,9 +43,6 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        beginClearContext(workspaceLocation, library, shouldInitLibrary),
-      handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
