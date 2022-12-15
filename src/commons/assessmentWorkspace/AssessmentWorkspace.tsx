@@ -337,7 +337,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     props.handleEditorUpdateBreakpoints([]);
     dispatch(updateCurrentAssessmentId(assessmentId, questionId));
-
     dispatch(
       resetWorkspace(workspaceLocation, {
         autogradingResults,
@@ -502,7 +501,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.MOBILE_VIDEO,
         body: (
           <SideContentVideoDisplay
-            replChange={(code: string) => dispatch(sendReplInputToOutput(code, workspaceLocation))}
+            replChange={code => dispatch(sendReplInputToOutput(code, workspaceLocation))}
           />
         ),
         id: SideContentType.videoDisplay
