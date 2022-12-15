@@ -466,17 +466,15 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
 
-  // FIXME: Remove any
-  const githubOctokitObject: any = useTypedSelector(store => store.session.githubOctokitObject);
+  const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
-    const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
         key="github"
-        loggedInAs={octokit}
+        loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
         onClickOpen={() => dispatch(githubOpenFile())}
