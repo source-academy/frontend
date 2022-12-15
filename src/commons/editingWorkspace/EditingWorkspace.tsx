@@ -109,13 +109,10 @@ export type StateProps = {
 
 const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [assessment, setAssessment] = useState(retrieveLocalAssessment());
-  const [activeTab, setActiveTab] = useState(SideContentType.editorQuestionOverview);
   const [editingMode, setEditingMode] = useState('question');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
-
-  console.log(activeTab);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -503,7 +500,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
 
     return {
-      handleActiveTabChange: setActiveTab,
       tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] }
     };
   };
