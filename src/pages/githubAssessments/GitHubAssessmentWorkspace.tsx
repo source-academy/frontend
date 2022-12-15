@@ -15,7 +15,6 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -97,7 +96,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   handleRunAllTestcases: () => void;
@@ -186,7 +185,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           {
             value: currentTaskList[actualTaskIndex].savedCode,
             prependValue: currentTaskList[actualTaskIndex].testPrepend,
-            postpendValue: currentTaskList[actualTaskIndex].testPostpend
+            postpendValue: currentTaskList[actualTaskIndex].testPostpend,
+            highlightedLines: [],
+            breakpoints: []
           }
         ],
         editorTestcases: currentTaskList[actualTaskIndex].testCases

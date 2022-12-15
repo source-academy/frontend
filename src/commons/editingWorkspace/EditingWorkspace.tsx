@@ -11,7 +11,6 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { DeepPartial } from 'redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -72,7 +71,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
   handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;

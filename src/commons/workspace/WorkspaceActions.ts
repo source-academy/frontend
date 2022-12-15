@@ -1,6 +1,5 @@
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { DeepPartial } from 'redux';
 import { action } from 'typesafe-actions';
 
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -215,7 +214,7 @@ export const resetWorkspace = (
 
 export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: DeepPartial<WorkspaceState>
+  workspaceOptions?: Partial<WorkspaceState>
 ) =>
   action(UPDATE_WORKSPACE, {
     workspaceLocation,

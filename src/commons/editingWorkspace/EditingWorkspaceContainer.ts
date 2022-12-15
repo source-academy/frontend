@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginDebuggerPause,
@@ -75,7 +75,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
-      handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) =>
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
       handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) =>
         updateActiveEditorTab(workspaceLocation, options),
