@@ -22,11 +22,14 @@ export const assertType =
   // Currying to allow for TS 4.7 instantion expressions to make this generic function specific
   <
     T extends {
+      // Do not allow keys that are not in S
       [key in Exclude<keyof T, keyof S>]: never;
     } & {
+      // Keys of S should be optional to allow extension
       [key in keyof S]?: S[key];
     } = any
   >(
     obj: T
+    // Keep the original type as inferred by TS
   ): T =>
     obj;
