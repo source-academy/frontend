@@ -72,7 +72,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: DeepPartial<WorkspaceState>) =>
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),

@@ -71,7 +71,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -345,7 +345,13 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     this.props.handleResetWorkspace({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
-        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+        {
+          value: editorValue,
+          prependValue: editorPrepend,
+          postpendValue: editorPostpend,
+          highlightedLines: [],
+          breakpoints: []
+        }
       ]
     });
     this.props.handleEditorValueChange(editorValue);

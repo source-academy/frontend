@@ -199,7 +199,7 @@ export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition:
  */
 export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: DeepPartial<WorkspaceState>
+  workspaceOptions?: Partial<WorkspaceState>
 ) =>
   action(RESET_WORKSPACE, {
     workspaceLocation,
