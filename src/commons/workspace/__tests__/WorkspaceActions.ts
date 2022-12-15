@@ -29,6 +29,7 @@ import {
   setEditorBreakpoint,
   toggleEditorAutorun,
   toggleUsingSubst,
+  updateActiveEditorTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -47,6 +48,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -59,6 +61,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -249,6 +252,18 @@ test('evalTestcase generates correct action object', () => {
     payload: {
       testcaseId,
       workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
+test('updateActiveEditorTab generates correct action object', () => {
+  const newEditorTab: Partial<EditorTabState> = { prependValue: 'Hello', postpendValue: 'World' };
+  const action = updateActiveEditorTab(assessmentWorkspace, newEditorTab);
+  expect(action).toEqual({
+    type: UPDATE_ACTIVE_EDITOR_TAB,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      activeEditorTabOptions: newEditorTab
     }
   });
 });
