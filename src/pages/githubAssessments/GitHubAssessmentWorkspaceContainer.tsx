@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
-import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
@@ -67,7 +67,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleRunAllTestcases: () => runAllTestcases(workspaceLocation),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
-      handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) =>
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),

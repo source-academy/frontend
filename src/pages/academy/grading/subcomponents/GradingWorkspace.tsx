@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { DeepPartial } from 'redux';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
 
@@ -54,7 +53,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleChangeExecTime: (execTimeMs: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -273,7 +272,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       autogradingResults,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
-        { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+        {
+          value: editorValue,
+          prependValue: editorPrepend,
+          postpendValue: editorPostpend,
+          highlightedLines: [],
+          breakpoints: []
+        }
       ],
       editorTestcases
     });
