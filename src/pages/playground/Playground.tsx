@@ -126,7 +126,6 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleUsingSubst: (usingSubst: boolean) => void;
-  handleUpdatePrepend?: (s: string) => void;
 };
 
 export type StateProps = {
