@@ -337,7 +337,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         autogradingResults,
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         editorTabs: [
-          { value: editorValue, prependValue: editorPrepend, postpendValue: editorPostpend }
+          {
+            value: editorValue,
+            prependValue: editorPrepend,
+            postpendValue: editorPostpend,
+            highlightedLines: [],
+            breakpoints: []
+          }
         ],
         editorTestcases
       })

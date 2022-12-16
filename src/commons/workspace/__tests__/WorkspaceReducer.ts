@@ -38,6 +38,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -48,6 +49,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -1294,6 +1296,85 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
         currentSubmission: submissionId,
         currentQuestion: questionId
       }
+    });
+  });
+});
+
+describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
+  const activeEditorTabOptions: Partial<EditorTabState> = {
+    value: 'Goodbye World!',
+    prependValue: 'Prepend value',
+    postpendValue: 'Postpend value'
+  };
+
+  test('overrides the active editor tab correctly', () => {
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs: [
+        {
+          value: 'Hello World!',
+          prependValue: 'This is a prepend value.',
+          postpendValue: 'This is a postpend value.',
+          highlightedLines: [],
+          breakpoints: []
+        },
+        {
+          value: 'Hello World!',
+          prependValue: 'This is a prepend value.',
+          postpendValue: 'This is a postpend value.',
+          highlightedLines: [],
+          breakpoints: []
+        }
+      ]
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB, { activeEditorTabOptions });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      const newContext = createDefaultWorkspace(location);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            ...newContext,
+            activeEditorTabIndex: 1,
+            editorTabs: [
+              {
+                value: 'Hello World!',
+                prependValue: 'This is a prepend value.',
+                postpendValue: 'This is a postpend value.',
+                highlightedLines: [],
+                breakpoints: []
+              },
+              {
+                ...activeEditorTabOptions,
+                highlightedLines: [],
+                breakpoints: []
+              }
+            ],
+            context: newContext.context
+          }
+        })
+      );
+    });
+  });
+
+  test('does nothing when there is no active editor tab', () => {
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: null,
+      editorTabs: []
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB, { activeEditorTabOptions });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      expect(result).toEqual(defaultWorkspaceState);
     });
   });
 });

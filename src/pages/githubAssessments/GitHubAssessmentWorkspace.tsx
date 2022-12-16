@@ -16,7 +16,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { DeepPartial } from 'redux';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -105,7 +104,7 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
-  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
 };
 
@@ -191,7 +190,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           {
             value: currentTaskList[actualTaskIndex].savedCode,
             prependValue: currentTaskList[actualTaskIndex].testPrepend,
-            postpendValue: currentTaskList[actualTaskIndex].testPostpend
+            postpendValue: currentTaskList[actualTaskIndex].testPostpend,
+            highlightedLines: [],
+            breakpoints: []
           }
         ],
         editorTestcases: currentTaskList[actualTaskIndex].testCases
