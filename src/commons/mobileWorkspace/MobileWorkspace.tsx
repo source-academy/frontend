@@ -7,11 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
 import ControlBar from '../controlBar/ControlBar';
-import EditorContainer, {
-  EditorContainerProps,
-  NormalEditorContainerProps,
-  SourcecastEditorContainerProps
-} from '../editor/EditorContainer';
+import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
@@ -93,9 +89,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
 
-  const enableMobileKeyboardForEditor = (
-    props: NormalEditorContainerProps
-  ): NormalEditorContainerProps => {
+  const enableMobileKeyboardForEditor = (props: EditorContainerProps): EditorContainerProps => {
     const onFocus = (event: any, editor?: Ace.Editor) => {
       if (props.onFocus) {
         props.onFocus(event, editor);
@@ -108,9 +102,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     const onBlur = (event: any, editor?: Ace.Editor) => {
       if (props.onBlur) {
         props.onBlur(event, editor);
-      }
-      if (!editor) {
-        return;
       }
       clearTargetKeyboardInput();
     };
@@ -141,25 +132,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
-  const enableMobileKeyboardForCustomEditor = (
-    props: SourcecastEditorContainerProps
-  ): SourcecastEditorContainerProps => {
-    return {
-      ...props,
-      onFocus: (editor: Ace.Editor) => setTargetKeyboardInput(editor),
-      onBlur: () => clearTargetKeyboardInput()
-    };
-  };
-
   const createWorkspaceInput = () => {
-    if (props.editorContainerProps?.editorVariant === 'sourcecast') {
-      return (
-        <EditorContainer
-          {...enableMobileKeyboardForCustomEditor(props.editorContainerProps)}
-          setDraggableReplPosition={() => handleShowRepl(-100)}
-        />
-      );
-    } else if (props.editorContainerProps) {
+    if (props.editorContainerProps) {
+      const editorContainerProps = {
+        ...props.editorContainerProps
+      };
+      if (editorContainerProps.editorVariant === 'sourcecast') {
+        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
+      }
       return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;

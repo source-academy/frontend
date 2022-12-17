@@ -38,8 +38,8 @@ type DispatchProps = {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleRecordInput?: (input: Input) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-  onFocus?: (editor: Ace.Editor) => void;
-  onBlur?: () => void;
+  onFocus?: (event: any, editor?: Ace.Editor) => void;
+  onBlur?: (event: any, editor?: Ace.Editor) => void;
 };
 
 type EditorStateProps = {
@@ -172,10 +172,10 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
     const { onFocus, onBlur } = this.props;
     if (onFocus) {
-      editor.on('focus', () => onFocus(editor));
+      editor.on('focus', (event: Event) => onFocus(event, editor));
     }
     if (onBlur) {
-      editor.on('blur', onBlur);
+      editor.on('blur', (event: Event) => onBlur(event, editor));
     }
   }
 
