@@ -59,13 +59,12 @@ const MobileSideContent: React.FC<MobileSideContentProps> = props => {
           }
         : tab.body;
 
-      return tab.id === selectedTabId ? (
-        // Render the other panels only when their corresponding tab is selected
-        <div className="mobile-selected-panel" key={tab.id}>
-          {tabBody}
-        </div>
-      ) : (
-        <div className="mobile-unselected-panel" key={tab.id}>
+      // Render the other panels only when their corresponding tab is selected
+      return (
+        <div
+          className={tab.id === selectedTabId ? 'mobile-selected-panel' : 'mobile-unselected-panel'}
+          key={tab.id}
+        >
           {tabBody}
         </div>
       );
