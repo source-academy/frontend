@@ -1,11 +1,9 @@
-import { Card, Icon, Tab, TabId, TabProps, Tabs } from '@blueprintjs/core';
+import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './SideContentHelper';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import GenericSideContent, { generateIconId } from './GenericSideContent';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -51,29 +49,6 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
-  const { tabs, onChange } = props;
-  const [dynamicTabs, setDynamicTabs] = React.useState(
-    tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
-  );
-
-  // Fetch debuggerContext from store
-  const debuggerContext = useSelector(
-    (state: OverallState) =>
-      props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
-  );
-  React.useEffect(() => {
-    const allActiveTabs = tabs.beforeDynamicTabs
-      .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))
-      .concat(tabs.afterDynamicTabs);
-    setDynamicTabs(allActiveTabs);
-  }, [tabs, debuggerContext]);
-
-  /**
-   * Generates an icon id given a TabId.
-   * Used to set and remove the 'side-content-tab-alert' style to the tabs.
-   */
-  const generateIconId = (tabId: TabId) => `${tabId}-icon`;
-
   /**
    * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
    */
@@ -82,100 +57,80 @@ const SideContent = (props: SideContentProps) => {
       ? 'side-content-tooltip side-content-tab-alert'
       : 'side-content-tooltip';
 
-  const renderedTabs = React.useMemo(() => {
-    const renderTab = (
-      tab: SideContentTab,
-      workspaceLocation?: WorkspaceLocation,
-      editorWidth?: string,
-      sideContentHeight?: number
-    ) => {
-      const iconSize = 20;
-      const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-      const tabTitle: JSX.Element = (
-        <Tooltip2 content={tab.label}>
-          <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
-            <Icon icon={tab.iconName} iconSize={iconSize} />
-          </div>
-        </Tooltip2>
-      );
-      const tabProps: Partial<TabProps> = {
-        id: tabId,
-        title: tabTitle,
-        disabled: tab.disabled,
-        className: 'side-content-tab'
-      };
+  const renderTabs = React.useCallback(
+    (dynamicTabs: SideContentTab[]) => {
+      const renderTab = (
+        tab: SideContentTab,
+        workspaceLocation?: WorkspaceLocation,
+        editorWidth?: string,
+        sideContentHeight?: number
+      ) => {
+        const iconSize = 20;
+        const tabId =
+          tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+        const tabTitle: JSX.Element = (
+          <Tooltip2 content={tab.label}>
+            <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
+              <Icon icon={tab.iconName} iconSize={iconSize} />
+            </div>
+          </Tooltip2>
+        );
+        const tabProps: Partial<TabProps> = {
+          id: tabId,
+          title: tabTitle,
+          disabled: tab.disabled,
+          className: 'side-content-tab'
+        };
 
-      if (!tab.body) {
-        return <Tab key={tabId} {...tabProps} />;
-      }
-
-      const tabBody: JSX.Element = workspaceLocation
-        ? {
-            ...tab.body,
-            props: {
-              ...tab.body.props,
-              workspaceLocation,
-              editorWidth,
-              sideContentHeight
-            }
-          }
-        : tab.body;
-      const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
-
-      return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
-    };
-
-    return dynamicTabs.map(tab =>
-      renderTab(tab, props.workspaceLocation, props.editorWidth, props.sideContentHeight)
-    );
-  }, [dynamicTabs, props.workspaceLocation, props.editorWidth, props.sideContentHeight]);
-
-  const changeTabsCallback = React.useCallback(
-    (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ): void => {
-      /**
-       * Remove the 'side-content-tab-alert' class that causes tabs flash.
-       * To be run when tabs are changed.
-       * Currently this style is only used for the "Env Visualizer" tab.
-       */
-      const resetAlert = (prevTabId: TabId) => {
-        const iconId = generateIconId(prevTabId);
-        const icon = document.getElementById(iconId);
-
-        // The new selected tab will still have the "side-content-tab-alert" class, but the CSS hides it
-        if (icon) {
-          icon.classList.remove('side-content-tab-alert');
+        if (!tab.body) {
+          return <Tab key={tabId} {...tabProps} />;
         }
+
+        const tabBody: JSX.Element = workspaceLocation
+          ? {
+              ...tab.body,
+              props: {
+                ...tab.body.props,
+                workspaceLocation,
+                editorWidth,
+                sideContentHeight
+              }
+            }
+          : tab.body;
+        const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
+
+        return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
       };
 
-      if (onChange === undefined) {
-        resetAlert(prevTabId);
-      } else {
-        onChange(newTabId, prevTabId, event);
-        resetAlert(prevTabId);
-      }
+      return dynamicTabs.map(tab =>
+        renderTab(tab, props.workspaceLocation, props.editorWidth, props.sideContentHeight)
+      );
     },
-    [onChange]
+    [props.workspaceLocation, props.editorWidth, props.sideContentHeight]
   );
 
   return (
-    <div className="side-content">
-      <Card>
-        <div className="side-content-tabs">
-          <Tabs
-            id="side-content-tabs"
-            onChange={changeTabsCallback}
-            renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
-            selectedTabId={props.selectedTabId}
-          >
-            {renderedTabs}
-          </Tabs>
-        </div>
-      </Card>
-    </div>
+    <GenericSideContent
+      {...props}
+      renderFunction={(dynamicTabs, changeTabsCallback) => {
+        return (
+          <div className="side-content">
+            <Card>
+              <div className="side-content-tabs">
+                <Tabs
+                  id="side-content-tabs"
+                  onChange={changeTabsCallback}
+                  renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
+                  selectedTabId={props.selectedTabId}
+                >
+                  {renderTabs(dynamicTabs)}
+                </Tabs>
+              </div>
+            </Card>
+          </div>
+        );
+      }}
+    />
   );
 };
 
