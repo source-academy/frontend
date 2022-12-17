@@ -44,60 +44,59 @@ type StateProps = {
   sideContentHeight?: number;
 };
 
-const SideContent = (props: SideContentProps) => {
-  /**
-   * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
-   */
-  const generateClassName = (id: string | undefined) =>
-    id === SideContentType.module || id === SideContentType.htmlDisplay
-      ? 'side-content-tooltip side-content-tab-alert'
-      : 'side-content-tooltip';
+/**
+ * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
+ */
+const generateClassName = (id: string | undefined) =>
+  id === SideContentType.module || id === SideContentType.htmlDisplay
+    ? 'side-content-tooltip side-content-tab-alert'
+    : 'side-content-tooltip';
 
+const renderTab = (
+  tab: SideContentTab,
+  workspaceLocation?: WorkspaceLocation,
+  editorWidth?: string,
+  sideContentHeight?: number
+) => {
+  const iconSize = 20;
+  const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+  const tabTitle: JSX.Element = (
+    <Tooltip2 content={tab.label}>
+      <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
+        <Icon icon={tab.iconName} iconSize={iconSize} />
+      </div>
+    </Tooltip2>
+  );
+  const tabProps: Partial<TabProps> = {
+    id: tabId,
+    title: tabTitle,
+    disabled: tab.disabled,
+    className: 'side-content-tab'
+  };
+
+  if (!tab.body) {
+    return <Tab key={tabId} {...tabProps} />;
+  }
+
+  const tabBody: JSX.Element = workspaceLocation
+    ? {
+        ...tab.body,
+        props: {
+          ...tab.body.props,
+          workspaceLocation,
+          editorWidth,
+          sideContentHeight
+        }
+      }
+    : tab.body;
+  const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
+
+  return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
+};
+
+const SideContent = (props: SideContentProps) => {
   const renderTabs = React.useCallback(
     (dynamicTabs: SideContentTab[]) => {
-      const renderTab = (
-        tab: SideContentTab,
-        workspaceLocation?: WorkspaceLocation,
-        editorWidth?: string,
-        sideContentHeight?: number
-      ) => {
-        const iconSize = 20;
-        const tabId =
-          tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-        const tabTitle: JSX.Element = (
-          <Tooltip2 content={tab.label}>
-            <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
-              <Icon icon={tab.iconName} iconSize={iconSize} />
-            </div>
-          </Tooltip2>
-        );
-        const tabProps: Partial<TabProps> = {
-          id: tabId,
-          title: tabTitle,
-          disabled: tab.disabled,
-          className: 'side-content-tab'
-        };
-
-        if (!tab.body) {
-          return <Tab key={tabId} {...tabProps} />;
-        }
-
-        const tabBody: JSX.Element = workspaceLocation
-          ? {
-              ...tab.body,
-              props: {
-                ...tab.body.props,
-                workspaceLocation,
-                editorWidth,
-                sideContentHeight
-              }
-            }
-          : tab.body;
-        const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
-
-        return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
-      };
-
       return dynamicTabs.map(tab =>
         renderTab(tab, props.workspaceLocation, props.editorWidth, props.sideContentHeight)
       );
