@@ -71,9 +71,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   const renderedPanels = (dynamicTabs: SideContentTab[]) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
-      if (!tab.body) {
-        return;
-      }
+      if (!tab.body) return;
 
       const tabBody: JSX.Element = workspaceLocation
         ? {
@@ -99,13 +97,6 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
     return dynamicTabs.map(tab => renderPanel(tab, otherProps.workspaceLocation));
   };
 
-  const renderTabs = React.useCallback(
-    (dynamicTabs: SideContentTab[]) => {
-      return dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation));
-    },
-    [otherProps.workspaceLocation, isIOS]
-  );
-
   return (
     <GenericSideContent
       {...otherProps}
@@ -121,7 +112,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
                 selectedTabId={selectedTabId}
                 className={classNames(Classes.DARK, 'mobile-side-content')}
               >
-                {renderTabs(dynamicTabs)}
+                {dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation))}
 
                 {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
                 {(otherProps.workspaceLocation === 'playground' ||
