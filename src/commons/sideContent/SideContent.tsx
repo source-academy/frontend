@@ -2,6 +2,7 @@ import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
+import { assertType } from '../utils/TypeHelper';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import GenericSideContent, { generateIconId, GenericSideContentProps } from './GenericSideContent';
 import { SideContentTab, SideContentType } from './SideContentTypes';
@@ -46,19 +47,19 @@ const renderTab = (
 ) => {
   const iconSize = 20;
   const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-  const tabTitle: JSX.Element = (
+  const tabTitle = (
     <Tooltip2 content={tab.label}>
       <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
         <Icon icon={tab.iconName} iconSize={iconSize} />
       </div>
     </Tooltip2>
   );
-  const tabProps: Partial<TabProps> = {
+  const tabProps = assertType<TabProps>()({
     id: tabId,
     title: tabTitle,
     disabled: tab.disabled,
     className: 'side-content-tab'
-  };
+  });
 
   if (!tab.body) {
     return <Tab key={tabId} {...tabProps} />;
@@ -87,36 +88,27 @@ const SideContent: React.FC<SideContentProps> = ({
   sideContentHeight,
   ...otherProps
 }) => {
-  const renderTabs = React.useCallback(
-    (dynamicTabs: SideContentTab[]) => {
-      return dynamicTabs.map(tab =>
-        renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
-      );
-    },
-    [otherProps.workspaceLocation, editorWidth, sideContentHeight]
-  );
-
   return (
     <GenericSideContent
       {...otherProps}
-      renderFunction={(dynamicTabs, changeTabsCallback) => {
-        return (
-          <div className="side-content">
-            <Card>
-              <div className="side-content-tabs">
-                <Tabs
-                  id="side-content-tabs"
-                  onChange={changeTabsCallback}
-                  renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                  selectedTabId={selectedTabId}
-                >
-                  {renderTabs(dynamicTabs)}
-                </Tabs>
-              </div>
-            </Card>
-          </div>
-        );
-      }}
+      renderFunction={(dynamicTabs, changeTabsCallback) => (
+        <div className="side-content">
+          <Card>
+            <div className="side-content-tabs">
+              <Tabs
+                id="side-content-tabs"
+                onChange={changeTabsCallback}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTabId}
+              >
+                {dynamicTabs.map(tab =>
+                  renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
+                )}
+              </Tabs>
+            </div>
+          </Card>
+        </div>
+      )}
     />
   );
 };
