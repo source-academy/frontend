@@ -41,6 +41,7 @@ import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSi
 import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
+import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
@@ -169,18 +170,22 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       editorContainerProps:
         question.type === QuestionTypes.programming
           ? {
-              editorTabs: [
-                {
+              editorTabs: this.props.editorTabs
+                .map(convertEditorTabStateToProps)
+                .map((editorTabStateProps, index) => {
                   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                  editorValue:
-                    this.props.editorTabs[0].value ||
-                    question.editorValue ||
-                    (question as IProgrammingQuestion).solutionTemplate,
-                  highlightedLines: this.props.editorTabs[0].highlightedLines,
-                  breakpoints: this.props.editorTabs[0].breakpoints,
-                  newCursorPosition: this.props.editorTabs[0].newCursorPosition
-                }
-              ],
+                  //       Specifically, need to update questions such that they can span multiple files.
+                  if (index !== 0) {
+                    return editorTabStateProps;
+                  }
+                  return {
+                    ...editorTabStateProps,
+                    editorValue:
+                      editorTabStateProps.editorValue ||
+                      question.editorValue ||
+                      (question as IProgrammingQuestion).solutionTemplate
+                  };
+                }),
               editorSessionId: '',
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,

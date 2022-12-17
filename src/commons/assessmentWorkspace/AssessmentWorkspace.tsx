@@ -50,6 +50,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
+import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
@@ -774,15 +775,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const editorContainerProps =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
-          editorTabs: [
-            {
-              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              editorValue: props.editorTabs[0].value,
-              highlightedLines: props.editorTabs[0].highlightedLines,
-              breakpoints: props.editorTabs[0].breakpoints,
-              newCursorPosition: props.editorTabs[0].newCursorPosition
-            }
-          ],
+          editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,

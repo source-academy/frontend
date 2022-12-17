@@ -79,6 +79,7 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
+import { convertEditorTabStateToProps } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -726,15 +727,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const editorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
-    editorTabs: [
-      {
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue: props.editorTabs[0].value,
-        highlightedLines: props.editorTabs[0].highlightedLines,
-        breakpoints: props.editorTabs[0].breakpoints,
-        newCursorPosition: props.editorTabs[0].newCursorPosition
-      }
-    ],
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval,
