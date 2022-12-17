@@ -1,3 +1,7 @@
+// Necessary to prevent "ReferenceError: ace is not defined" error.
+// See https://github.com/securingsincity/react-ace/issues/1233 (although there is no explanation).
+import 'ace-builds/src-noconflict/ace';
+
 import _ from 'lodash';
 import React from 'react';
 
