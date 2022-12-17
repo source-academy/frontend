@@ -3,7 +3,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import GenericSideContent, { generateIconId } from './GenericSideContent';
+import GenericSideContent, { generateIconId, GenericSideContentProps } from './GenericSideContent';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -21,25 +21,11 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
  * mounting of the SideContent component. Switching tabs
  * will merely hide them from view.
  */
-export type SideContentProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  // Optional due to uncontrolled tab component in EditingWorkspace
-  onChange?: (
-    newTabId: SideContentType,
-    prevTabId: SideContentType,
-    event: React.MouseEvent<HTMLElement>
-  ) => void;
-};
+export type SideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
 
 type StateProps = {
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
-  tabs: {
-    beforeDynamicTabs: SideContentTab[];
-    afterDynamicTabs: SideContentTab[];
-  };
-  workspaceLocation?: WorkspaceLocation;
   editorWidth?: string;
   sideContentHeight?: number;
 };
@@ -94,19 +80,25 @@ const renderTab = (
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent = (props: SideContentProps) => {
+const SideContent: React.FC<SideContentProps> = ({
+  selectedTabId,
+  renderActiveTabPanelOnly,
+  editorWidth,
+  sideContentHeight,
+  ...otherProps
+}) => {
   const renderTabs = React.useCallback(
     (dynamicTabs: SideContentTab[]) => {
       return dynamicTabs.map(tab =>
-        renderTab(tab, props.workspaceLocation, props.editorWidth, props.sideContentHeight)
+        renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
       );
     },
-    [props.workspaceLocation, props.editorWidth, props.sideContentHeight]
+    [otherProps.workspaceLocation, editorWidth, sideContentHeight]
   );
 
   return (
     <GenericSideContent
-      {...props}
+      {...otherProps}
       renderFunction={(dynamicTabs, changeTabsCallback) => {
         return (
           <div className="side-content">
@@ -115,8 +107,8 @@ const SideContent = (props: SideContentProps) => {
                 <Tabs
                   id="side-content-tabs"
                   onChange={changeTabsCallback}
-                  renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
-                  selectedTabId={props.selectedTabId}
+                  renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                  selectedTabId={selectedTabId}
                 >
                   {renderTabs(dynamicTabs)}
                 </Tabs>
