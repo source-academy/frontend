@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
-import Editor, { EditorProps } from '../editor/Editor';
+import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
 import SideBar, { SideBarTab } from '../sideBar/SideBar';
@@ -22,7 +22,7 @@ type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
   customEditor?: JSX.Element;
-  editorProps?: EditorProps;
+  editorContainerProps?: EditorContainerProps;
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
   replProps: ReplProps;
@@ -189,8 +189,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.customEditor) {
       return props.customEditor;
-    } else if (props.editorProps) {
-      return <Editor {...props.editorProps} />;
+    } else if (props.editorContainerProps) {
+      return <EditorContainer {...props.editorContainerProps} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }

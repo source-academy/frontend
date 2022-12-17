@@ -724,13 +724,17 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
-  const editorProps = {
+  const editorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    editorValue: props.editorTabs[0].value,
-    highlightedLines: props.editorTabs[0].highlightedLines,
-    breakpoints: props.editorTabs[0].breakpoints,
-    newCursorPosition: props.editorTabs[0].newCursorPosition,
+    editorTabs: [
+      {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorValue: props.editorTabs[0].value,
+        highlightedLines: props.editorTabs[0].highlightedLines,
+        breakpoints: props.editorTabs[0].breakpoints,
+        newCursorPosition: props.editorTabs[0].newCursorPosition
+      }
+    ],
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval,
@@ -794,7 +798,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           : executionTime
       ]
     },
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: change =>
       dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
@@ -814,7 +818,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
     mobileSideContentProps: {

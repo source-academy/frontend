@@ -1061,18 +1061,21 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
-  const editorProps = {
+  const editorContainerProps = {
+    editorTabs: [
+      {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorValue: props.editorTabs[0].value,
+        highlightedLines: props.editorTabs[0].highlightedLines,
+        breakpoints: props.editorTabs[0].breakpoints,
+        newCursorPosition: props.editorTabs[0].newCursorPosition
+      }
+    ],
     editorSessionId: '',
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    editorValue: props.editorTabs[0].value,
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    highlightedLines: props.editorTabs[0].highlightedLines,
-    breakpoints: props.editorTabs[0].breakpoints,
-    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
     handlePromptAutocomplete: props.handlePromptAutocomplete,
     isEditorAutorun: false
@@ -1094,7 +1097,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
-    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
+    editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
@@ -1104,7 +1107,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
+    editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
     hasUnsavedChanges: hasUnsavedChanges,

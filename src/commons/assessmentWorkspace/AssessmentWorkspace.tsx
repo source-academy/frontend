@@ -771,12 +771,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? props.assessment.questions.length - 1
       : props.questionId;
   const question: Question = props.assessment.questions[questionId];
-  const editorProps =
+  const editorContainerProps =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
+          editorTabs: [
+            {
+              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+              editorValue: props.editorTabs[0].value,
+              highlightedLines: props.editorTabs[0].highlightedLines,
+              breakpoints: props.editorTabs[0].breakpoints,
+              newCursorPosition: props.editorTabs[0].newCursorPosition
+            }
+          ],
           editorSessionId: '',
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          editorValue: props.editorTabs[0].value,
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibrary: question.library.external.name || 'NONE',
@@ -784,10 +791,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,
           handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          highlightedLines: props.editorTabs[0].highlightedLines,
-          breakpoints: props.editorTabs[0].breakpoints,
-          newCursorPosition: props.editorTabs[0].newCursorPosition,
           handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: props.handlePromptAutocomplete,
           isEditorAutorun: false,
@@ -818,7 +821,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
@@ -828,7 +831,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     hasUnsavedChanges: props.hasUnsavedChanges,
     mcqProps: mcqProps,
     replProps: replProps,
