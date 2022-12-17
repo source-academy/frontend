@@ -184,6 +184,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       editorContainerProps:
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
+              editorVariant: 'normal',
               editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
               editorSessionId: '',
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,

@@ -14,7 +14,8 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { EditorTabStateProps } from '../editor/Editor';
+import { Position } from '../editor/EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -24,7 +25,10 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
  *           of the editor's content, using `slang`
  * @property isEditorReadonly - Used for sourcecast only
  */
-export type SourceRecorderEditorProps = DispatchProps & StateProps & OwnProps;
+export type SourceRecorderEditorProps = DispatchProps &
+  EditorStateProps &
+  EditorTabStateProps &
+  OwnProps;
 
 type DispatchProps = {
   getTimerDuration?: () => number;
@@ -38,18 +42,14 @@ type DispatchProps = {
   onBlur?: () => void;
 };
 
-type StateProps = {
-  breakpoints: string[];
+type EditorStateProps = {
   codeDeltasToApply?: CodeDelta[] | null;
   editorSessionId: string;
-  editorValue: string;
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isEditorReadonly: boolean;
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
-  newCursorPosition?: Position;
 };
 
 type OwnProps = {

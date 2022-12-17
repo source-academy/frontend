@@ -11,6 +11,10 @@ import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarC
 import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
+import {
+  convertEditorTabStateToProps,
+  SourcecastEditorContainerProps
+} from '../../../commons/editor/EditorContainer';
 import { Position } from '../../../commons/editor/EditorTypes';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
@@ -18,9 +22,6 @@ import { SideContentTab, SideContentType } from '../../../commons/sideContent/Si
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
-import SourcecastEditor, {
-  SourceRecorderEditorProps
-} from '../../../commons/sourceRecorder/SourceRecorderEditor';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import { EditorTabState } from '../../../commons/workspace/WorkspaceTypes';
@@ -239,11 +240,11 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       />
     );
 
-    const editorProps: SourceRecorderEditorProps = {
+    const editorContainerProps: SourcecastEditorContainerProps = {
+      editorVariant: 'sourcecast',
+      editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
       codeDeltasToApply: this.props.codeDeltasToApply,
       isEditorReadonly: this.props.isEditorReadonly,
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: this.props.editorTabs[0].value,
       editorSessionId: '',
       getTimerDuration: this.getTimerDuration,
       handleDeclarationNavigate: this.props.handleDeclarationNavigate,
@@ -253,10 +254,6 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       inputToApply: this.props.inputToApply,
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      highlightedLines: this.props.editorTabs[0].highlightedLines,
-      breakpoints: this.props.editorTabs[0].breakpoints,
-      newCursorPosition: this.props.editorTabs[0].newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput
     };
@@ -277,7 +274,7 @@ class Sourcereel extends React.Component<SourcereelProps, State> {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
-      customEditor: <SourcecastEditor {...editorProps} />,
+      editorContainerProps: editorContainerProps,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
         output: this.props.output,

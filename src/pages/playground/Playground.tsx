@@ -79,7 +79,10 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
-import { convertEditorTabStateToProps } from '../../commons/editor/EditorContainer';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -725,8 +728,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
-  const editorContainerProps = {
+  const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
+    editorVariant: 'normal',
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

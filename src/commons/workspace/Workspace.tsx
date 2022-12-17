@@ -21,7 +21,6 @@ type DispatchProps = {
 type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
-  customEditor?: JSX.Element;
   editorContainerProps?: EditorContainerProps;
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
@@ -187,9 +186,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
    * XOR `props.mcq` are defined.
    */
   const createWorkspaceInput = (props: WorkspaceProps) => {
-    if (props.customEditor) {
-      return props.customEditor;
-    } else if (props.editorContainerProps) {
+    if (props.editorContainerProps) {
       return <EditorContainer {...props.editorContainerProps} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
