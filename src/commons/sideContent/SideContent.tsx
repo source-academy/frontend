@@ -7,9 +7,6 @@ import GenericSideContent, { generateIconId } from './GenericSideContent';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
- * @property animate Set this to false to disable the movement
- * of the selected tab indicator. Default value: true.
- *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
  *
@@ -36,7 +33,6 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  animate?: boolean;
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
   tabs: {

@@ -20,7 +20,6 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  animate?: boolean;
   selectedTabId: SideContentType;
   renderActiveTabPanelOnly?: boolean;
   tabs: {
@@ -28,8 +27,6 @@ type StateProps = {
     afterDynamicTabs: SideContentTab[];
   };
   workspaceLocation?: WorkspaceLocation;
-  width?: number;
-  height?: number;
 };
 
 type MobileControlBarProps = {

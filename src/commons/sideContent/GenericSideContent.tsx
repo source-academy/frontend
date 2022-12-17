@@ -14,22 +14,12 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
 export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 
 /**
- * @property animate Set this to false to disable the movement
- * of the selected tab indicator. Default value: true.
- *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
  *
  * @property tabs An array of SideContentTabs.
  *  The tabs will be rendered in order of the array.
  *  If this array is empty, no tabs will be rendered.
- *
- * @property renderActiveTabPanelOnly Set this property to
- * true to enable unmounting of tab panels whenever tabs are
- * switched. If it is left undefined, the value will default
- * to false, and the tab panels will all be loaded with the
- * mounting of the GenericSideContent component. Switching tabs
- * will merely hide them from view.
  */
 export type GenericSideContentProps = DispatchProps &
   StateProps & {
@@ -53,16 +43,11 @@ type DispatchProps = {
 };
 
 type StateProps = {
-  animate?: boolean;
-  selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
-  renderActiveTabPanelOnly?: boolean;
   tabs: {
     beforeDynamicTabs: SideContentTab[];
     afterDynamicTabs: SideContentTab[];
   };
   workspaceLocation?: WorkspaceLocation;
-  editorWidth?: string;
-  sideContentHeight?: number;
 };
 
 const GenericSideContent = (props: GenericSideContentProps) => {
