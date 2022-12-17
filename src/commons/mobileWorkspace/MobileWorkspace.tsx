@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
 import ControlBar from '../controlBar/ControlBar';
-import Editor, { EditorProps } from '../editor/Editor';
+import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
@@ -20,7 +20,7 @@ import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/M
 export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
-  editorProps?: EditorProps; // Either editorProps or mcqProps must be provided
+  editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
   /**
    * The customEditor prop is only used in Sourcecast and Sourcereel thus far.
    * The component is wrapped in a lambda function in order to pass the editorRef
@@ -101,7 +101,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
 
-  const enableMobileKeyboardForEditor = (props: EditorProps): EditorProps => {
+  const enableMobileKeyboardForEditor = (props: EditorContainerProps): EditorContainerProps => {
     const onFocus = (event: any, editor?: Ace.Editor) => {
       if (props.onFocus) {
         props.onFocus(event, editor);
@@ -157,8 +157,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const createWorkspaceInput = () => {
     if (props.customEditor) {
       return props.customEditor(() => handleShowRepl(-100), enableMobileKeyboardForCustomEditor());
-    } else if (props.editorProps) {
-      return <Editor {...enableMobileKeyboardForEditor(props.editorProps)} />;
+    } else if (props.editorContainerProps) {
+      return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }
@@ -206,7 +206,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
     // Evaluate program upon pressing the run tab.
     if (newTabId === SideContentType.mobileEditorRun) {
-      props.editorProps?.handleEditorEval();
+      props.editorContainerProps?.handleEditorEval();
     }
 
     // Show the REPL upon pressing the run tab if the previous tab is not listed below.
