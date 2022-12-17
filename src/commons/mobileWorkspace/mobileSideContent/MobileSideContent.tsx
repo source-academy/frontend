@@ -26,6 +26,36 @@ type MobileControlBarProps = {
   mobileControlBarProps: ControlBarProps;
 };
 
+const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: WorkspaceLocation) => {
+  const iconSize = 20;
+  const tabId = tab.id === undefined ? tab.label : tab.id;
+  const tabTitle: JSX.Element = (
+    <Tooltip2
+      content={tab.label}
+      onOpening={() => {
+        // Handles iOS hover requiring double taps to press the button
+        if (isIOS) {
+          document.getElementById(generateIconId(tabId))?.click();
+        }
+      }}
+    >
+      <div className="side-content-tooltip" id={generateIconId(tabId)}>
+        <Icon icon={tab.iconName} iconSize={iconSize} />
+      </div>
+    </Tooltip2>
+  );
+
+  return (
+    <Tab
+      key={tabId}
+      id={tabId}
+      title={tabTitle}
+      disabled={tab.disabled}
+      className="side-content-tab"
+    />
+  );
+};
+
 const MobileSideContent: React.FC<MobileSideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
@@ -71,37 +101,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
 
   const renderTabs = React.useCallback(
     (dynamicTabs: SideContentTab[]) => {
-      const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
-        const iconSize = 20;
-        const tabId = tab.id === undefined ? tab.label : tab.id;
-        const tabTitle: JSX.Element = (
-          <Tooltip2
-            content={tab.label}
-            onOpening={() => {
-              // Handles iOS hover requiring double taps to press the button
-              if (isIOS) {
-                document.getElementById(generateIconId(tabId))?.click();
-              }
-            }}
-          >
-            <div className="side-content-tooltip" id={generateIconId(tabId)}>
-              <Icon icon={tab.iconName} iconSize={iconSize} />
-            </div>
-          </Tooltip2>
-        );
-
-        return (
-          <Tab
-            key={tabId}
-            id={tabId}
-            title={tabTitle}
-            disabled={tab.disabled}
-            className="side-content-tab"
-          />
-        );
-      };
-
-      return dynamicTabs.map(tab => renderTab(tab, otherProps.workspaceLocation));
+      return dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation));
     },
     [otherProps.workspaceLocation, isIOS]
   );
