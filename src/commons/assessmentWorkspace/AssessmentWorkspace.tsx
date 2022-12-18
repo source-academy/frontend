@@ -50,7 +50,10 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
-import { convertEditorTabStateToProps } from '../editor/EditorContainer';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
@@ -772,14 +775,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? props.assessment.questions.length - 1
       : props.questionId;
   const question: Question = props.assessment.questions[questionId];
-  const editorContainerProps =
+  const editorContainerProps: NormalEditorContainerProps | undefined =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
+          editorVariant: 'normal',
           editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
-          externalLibrary: question.library.external.name || 'NONE',
+          externalLibraryName: question.library.external.name || 'NONE',
           handleDeclarationNavigate: props.handleDeclarationNavigate,
           handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,

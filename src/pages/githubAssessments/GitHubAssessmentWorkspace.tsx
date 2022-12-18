@@ -32,7 +32,10 @@ import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSave
 import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
 import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
 import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
-import { convertEditorTabStateToProps } from '../../commons/editor/EditorContainer';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import {
   GitHubMissionCreateDialog,
@@ -1062,7 +1065,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
-  const editorContainerProps = {
+  const editorContainerProps: NormalEditorContainerProps = {
+    editorVariant: 'normal',
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: props.handleDeclarationNavigate,

@@ -12,7 +12,6 @@ import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import { SourceRecorderEditorProps } from '../sourceRecorder/SourceRecorderEditor';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
@@ -21,17 +20,6 @@ export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
   editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
-  /**
-   * The customEditor prop is only used in Sourcecast and Sourcereel thus far.
-   * The component is wrapped in a lambda function in order to pass the editorRef
-   * created in MobileWorkspace.tsx into the customEditor component's Ace Editor child.
-   * This is to allow for the MobileKeyboard component to work with custom editors.
-   * A handler for showing the draggable repl is also passed into the customEditor.
-   */
-  customEditor?: (
-    handleShowDraggableRepl: () => void,
-    overrideEditorProps: Partial<SourceRecorderEditorProps>
-  ) => JSX.Element;
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
@@ -115,9 +103,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       if (props.onBlur) {
         props.onBlur(event, editor);
       }
-      if (!editor) {
-        return;
-      }
       clearTargetKeyboardInput();
     };
     return {
@@ -147,17 +132,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
-  const enableMobileKeyboardForCustomEditor = (): Partial<SourceRecorderEditorProps> => {
-    return {
-      onFocus: (editor: Ace.Editor) => setTargetKeyboardInput(editor),
-      onBlur: () => clearTargetKeyboardInput()
-    };
-  };
-
   const createWorkspaceInput = () => {
-    if (props.customEditor) {
-      return props.customEditor(() => handleShowRepl(-100), enableMobileKeyboardForCustomEditor());
-    } else if (props.editorContainerProps) {
+    if (props.editorContainerProps) {
+      const editorContainerProps = {
+        ...props.editorContainerProps
+      };
+      if (editorContainerProps.editorVariant === 'sourcecast') {
+        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
+      }
       return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;

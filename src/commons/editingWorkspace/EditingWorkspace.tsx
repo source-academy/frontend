@@ -170,6 +170,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       editorContainerProps:
         question.type === QuestionTypes.programming
           ? {
+              editorVariant: 'normal',
               editorTabs: this.props.editorTabs
                 .map(convertEditorTabStateToProps)
                 .map((editorTabStateProps, index) => {
