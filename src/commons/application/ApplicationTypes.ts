@@ -155,6 +155,7 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
   { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
