@@ -7,12 +7,11 @@ import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
 import ControlBar from '../controlBar/ControlBar';
-import Editor, { EditorProps } from '../editor/Editor';
+import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import { SourceRecorderEditorProps } from '../sourceRecorder/SourceRecorderEditor';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
@@ -20,18 +19,7 @@ import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/M
 export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
-  editorProps?: EditorProps; // Either editorProps or mcqProps must be provided
-  /**
-   * The customEditor prop is only used in Sourcecast and Sourcereel thus far.
-   * The component is wrapped in a lambda function in order to pass the editorRef
-   * created in MobileWorkspace.tsx into the customEditor component's Ace Editor child.
-   * This is to allow for the MobileKeyboard component to work with custom editors.
-   * A handler for showing the draggable repl is also passed into the customEditor.
-   */
-  customEditor?: (
-    handleShowDraggableRepl: () => void,
-    overrideEditorProps: Partial<SourceRecorderEditorProps>
-  ) => JSX.Element;
+  editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
@@ -101,7 +89,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
 
-  const enableMobileKeyboardForEditor = (props: EditorProps): EditorProps => {
+  const enableMobileKeyboardForEditor = (props: EditorContainerProps): EditorContainerProps => {
     const onFocus = (event: any, editor?: Ace.Editor) => {
       if (props.onFocus) {
         props.onFocus(event, editor);
@@ -114,9 +102,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     const onBlur = (event: any, editor?: Ace.Editor) => {
       if (props.onBlur) {
         props.onBlur(event, editor);
-      }
-      if (!editor) {
-        return;
       }
       clearTargetKeyboardInput();
     };
@@ -147,18 +132,15 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   };
 
-  const enableMobileKeyboardForCustomEditor = (): Partial<SourceRecorderEditorProps> => {
-    return {
-      onFocus: (editor: Ace.Editor) => setTargetKeyboardInput(editor),
-      onBlur: () => clearTargetKeyboardInput()
-    };
-  };
-
   const createWorkspaceInput = () => {
-    if (props.customEditor) {
-      return props.customEditor(() => handleShowRepl(-100), enableMobileKeyboardForCustomEditor());
-    } else if (props.editorProps) {
-      return <Editor {...enableMobileKeyboardForEditor(props.editorProps)} />;
+    if (props.editorContainerProps) {
+      const editorContainerProps = {
+        ...props.editorContainerProps
+      };
+      if (editorContainerProps.editorVariant === 'sourcecast') {
+        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
+      }
+      return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }
@@ -206,7 +188,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
     // Evaluate program upon pressing the run tab.
     if (newTabId === SideContentType.mobileEditorRun) {
-      props.editorProps?.handleEditorEval();
+      props.editorContainerProps?.handleEditorEval();
     }
 
     // Show the REPL upon pressing the run tab if the previous tab is not listed below.

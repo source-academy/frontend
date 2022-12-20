@@ -41,6 +41,7 @@ import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSi
 import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
+import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
@@ -591,22 +592,30 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
-    editorProps:
+    editorContainerProps:
       question.type === QuestionTypes.programming
         ? {
-            editorSessionId: '',
-            editorValue:
+          editorVariant: 'normal',
+          editorTabs: props.editorTabs
+            .map(convertEditorTabStateToProps)
+            .map((editorTabStateProps, index) => {
               // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              props.editorTabs[0].value ||
-              question.editorValue ||
-              (question as IProgrammingQuestion).solutionTemplate,
+              //       Specifically, need to update questions such that they can span multiple files.
+              if (index !== 0) {
+                return editorTabStateProps;
+              }
+              return {
+                ...editorTabStateProps,
+                editorValue:
+                  editorTabStateProps.editorValue ||
+                  question.editorValue ||
+                  (question as IProgrammingQuestion).solutionTemplate
+              };
+            }),
+            editorSessionId: '',
             handleDeclarationNavigate: props.handleDeclarationNavigate,
             handleEditorEval: props.handleEditorEval,
             handleEditorValueChange: props.handleEditorValueChange,
-            // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-            highlightedLines: props.editorTabs[0].highlightedLines,
-            breakpoints: props.editorTabs[0].breakpoints,
-            newCursorPosition: props.editorTabs[0].newCursorPosition,
             handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
             handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
             handlePromptAutocomplete: props.handlePromptAutocomplete,
