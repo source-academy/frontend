@@ -41,6 +41,7 @@ import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSi
 import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
+import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
@@ -166,22 +167,30 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     const question: Question = this.state.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
-      editorProps:
+      editorContainerProps:
         question.type === QuestionTypes.programming
           ? {
+              editorVariant: 'normal',
+              editorTabs: this.props.editorTabs
+                .map(convertEditorTabStateToProps)
+                .map((editorTabStateProps, index) => {
+                  // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                  //       Specifically, need to update questions such that they can span multiple files.
+                  if (index !== 0) {
+                    return editorTabStateProps;
+                  }
+                  return {
+                    ...editorTabStateProps,
+                    editorValue:
+                      editorTabStateProps.editorValue ||
+                      question.editorValue ||
+                      (question as IProgrammingQuestion).solutionTemplate
+                  };
+                }),
               editorSessionId: '',
-              editorValue:
-                // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                this.props.editorTabs[0].value ||
-                question.editorValue ||
-                (question as IProgrammingQuestion).solutionTemplate,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              highlightedLines: this.props.editorTabs[0].highlightedLines,
-              breakpoints: this.props.editorTabs[0].breakpoints,
-              newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
