@@ -44,6 +44,10 @@ import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSave
 import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
 import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
 import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import {
   GitHubMissionCreateDialog,
@@ -1064,19 +1068,15 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
-  const editorProps = {
+  const editorContainerProps: NormalEditorContainerProps = {
+    editorVariant: 'normal',
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    editorValue: props.editorTabs[0].value,
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    highlightedLines: props.editorTabs[0].highlightedLines,
-    breakpoints: props.editorTabs[0].breakpoints,
-    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
       dispatch(setEditorBreakpoint(breakpoints, workspaceLocation)),
     handlePromptAutocomplete: (row: number, col: number, callback: any) =>
@@ -1101,7 +1101,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
-    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
+    editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
     handleSideContentHeightChange: heightChange =>
       dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     hasUnsavedChanges: hasUnsavedChanges,
@@ -1112,7 +1112,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
+    editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
     hasUnsavedChanges: hasUnsavedChanges,
