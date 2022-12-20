@@ -13,6 +13,10 @@ import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChap
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import {
+  convertEditorTabStateToProps,
+  SourcecastEditorContainerProps
+} from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -23,9 +27,6 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../commons/sourceRecorder/SourceRecorderControlBar';
-import SourceRecorderEditor, {
-  SourceRecorderEditorProps
-} from '../../commons/sourceRecorder/SourceRecorderEditor';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
@@ -263,11 +264,11 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     setSelectedTab(newTabId);
   };
 
-  const editorProps: SourceRecorderEditorProps = {
+  const editorContainerProps: SourcecastEditorContainerProps = {
+    editorVariant: 'sourcecast',
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: props.codeDeltasToApply,
     isEditorReadonly: props.isEditorReadonly,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    editorValue: props.editorTabs[0].value,
     editorSessionId: '',
     handleDeclarationNavigate: props.handleDeclarationNavigate,
     handleEditorEval: props.handleEditorEval,
@@ -275,10 +276,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     isEditorAutorun: props.isEditorAutorun,
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    highlightedLines: props.editorTabs[0].highlightedLines,
-    breakpoints: props.editorTabs[0].breakpoints,
-    newCursorPosition: props.editorTabs[0].newCursorPosition,
     handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints
   };
 
@@ -303,7 +300,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
     },
-    customEditor: <SourceRecorderEditor {...editorProps} />,
+    editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
     replProps: replProps,
     sideBarProps: sideBarProps,
@@ -320,16 +317,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    customEditor: (
-      handleShowDraggableRepl: () => void,
-      overrideEditorProps: Partial<SourceRecorderEditorProps>
-    ) => (
-      <SourceRecorderEditor
-        {...editorProps}
-        {...overrideEditorProps}
-        setDraggableReplPosition={handleShowDraggableRepl}
-      />
-    ),
+    editorContainerProps: editorContainerProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
     mobileSideContentProps: {
