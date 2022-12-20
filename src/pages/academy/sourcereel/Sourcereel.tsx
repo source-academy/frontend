@@ -38,15 +38,16 @@ import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarC
 import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
+import {
+  convertEditorTabStateToProps,
+  SourcecastEditorContainerProps
+} from '../../../commons/editor/EditorContainer';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
-import SourcecastEditor, {
-  SourceRecorderEditorProps
-} from '../../../commons/sourceRecorder/SourceRecorderEditor';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import {
@@ -248,7 +249,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     />
   );
 
-  const editorProps: SourceRecorderEditorProps = {
+  const editorContainerProps: SourcecastEditorContainerProps = {
     ..._.pick(
       props,
       'codeDeltasToApply',
@@ -258,13 +259,9 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'inputToApply',
       'handleRecordInput'
     ),
+    editorVariant: 'sourcecast',
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     isEditorReadonly: props.isEditorReadonly,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    editorValue: props.editorTabs[0].value,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    highlightedLines: props.editorTabs[0].highlightedLines,
-    newCursorPosition: props.editorTabs[0].newCursorPosition,
-    breakpoints: props.editorTabs[0].breakpoints,
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorUpdateBreakpoints: breakpoints =>
@@ -291,7 +288,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
     },
-    customEditor: <SourcecastEditor {...editorProps} />,
+    editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: heightChange =>
       dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     replProps: {

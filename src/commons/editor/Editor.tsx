@@ -32,21 +32,12 @@ export type EditorHook = (
   reactAceRef: React.MutableRefObject<AceEditor | null>
 ) => void;
 
-/**
- * @property editorValue - The string content of the react-ace editor
- * @property handleEditorChange  - A callback function
- *           for the react-ace editor's `onChange`
- * @property handleEvalEditor  - A callback function for evaluation
- *           of the editor's content, using `slang`
- */
-export type EditorProps = DispatchProps & StateProps & OnEvent;
+export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps & OnEvent;
 
 type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
-  handleReplValueChange?: (newCode: string) => void;
-  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
@@ -54,17 +45,20 @@ type DispatchProps = {
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 };
 
-type StateProps = {
-  breakpoints: string[];
+type EditorStateProps = {
   editorSessionId: string;
-  editorValue: string;
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
-  newCursorPosition?: Position;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
+};
+
+export type EditorTabStateProps = {
+  editorValue: string;
+  highlightedLines: HighlightedLines[];
+  breakpoints: string[];
+  newCursorPosition?: Position;
 };
 
 type LocalStateProps = {
@@ -104,7 +98,7 @@ const EventT: Array<keyof OnEvent> = [
 ];
 
 const getMarkers = (
-  highlightedLines: StateProps['highlightedLines']
+  highlightedLines: EditorTabStateProps['highlightedLines']
 ): IAceEditorProps['markers'] => {
   return highlightedLines.map(lineNums => ({
     startRow: lineNums[0],
