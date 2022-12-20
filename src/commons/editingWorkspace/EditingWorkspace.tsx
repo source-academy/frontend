@@ -595,23 +595,23 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     editorContainerProps:
       question.type === QuestionTypes.programming
         ? {
-          editorVariant: 'normal',
-          editorTabs: props.editorTabs
-            .map(convertEditorTabStateToProps)
-            .map((editorTabStateProps, index) => {
-              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              //       Specifically, need to update questions such that they can span multiple files.
-              if (index !== 0) {
-                return editorTabStateProps;
-              }
-              return {
-                ...editorTabStateProps,
-                editorValue:
-                  editorTabStateProps.editorValue ||
-                  question.editorValue ||
-                  (question as IProgrammingQuestion).solutionTemplate
-              };
-            }),
+            editorVariant: 'normal',
+            editorTabs: props.editorTabs
+              .map(convertEditorTabStateToProps)
+              .map((editorTabStateProps, index) => {
+                // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                //       Specifically, need to update questions such that they can span multiple files.
+                if (index !== 0) {
+                  return editorTabStateProps;
+                }
+                return {
+                  ...editorTabStateProps,
+                  editorValue:
+                    editorTabStateProps.editorValue ||
+                    question.editorValue ||
+                    (question as IProgrammingQuestion).solutionTemplate
+                };
+              }),
             editorSessionId: '',
             handleDeclarationNavigate: props.handleDeclarationNavigate,
             handleEditorEval: props.handleEditorEval,
