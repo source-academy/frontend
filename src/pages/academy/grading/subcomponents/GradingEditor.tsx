@@ -199,10 +199,10 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
     Promise.resolve(
       <Markdown
         content={markdown}
-        simplifiedAutoLink={true}
-        strikethrough={true}
-        tasklists={true}
-        openLinksInNewWindow={true}
+        simplifiedAutoLink
+        strikethrough
+        tasklists
+        openLinksInNewWindow
       />
     );
 
