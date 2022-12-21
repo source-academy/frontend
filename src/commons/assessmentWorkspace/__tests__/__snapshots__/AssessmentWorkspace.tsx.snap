@@ -17,12 +17,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
     </div>
     <div className=\\"bp4-dialog-footer\\">
       <Blueprint4.ButtonGroup>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
-          Cancel
-        </Blueprint4.Button>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
-          Confirm
-        </Blueprint4.Button>
+        <ControlButton label=\\"Cancel\\" onClick={[Function: closeOverlay]} options={{...}} />
+        <ControlButton label=\\"Confirm\\" onClick={[Function: onClick]} options={{...}} />
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
@@ -45,12 +41,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
     </div>
     <div className=\\"bp4-dialog-footer\\">
       <Blueprint4.ButtonGroup>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
-          Cancel
-        </Blueprint4.Button>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
-          Confirm
-        </Blueprint4.Button>
+        <ControlButton label=\\"Cancel\\" onClick={[Function: closeOverlay]} options={{...}} />
+        <ControlButton label=\\"Confirm\\" onClick={[Function: onClick]} options={{...}} />
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
@@ -73,12 +65,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
     </div>
     <div className=\\"bp4-dialog-footer\\">
       <Blueprint4.ButtonGroup>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
-          Cancel
-        </Blueprint4.Button>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
-          Confirm
-        </Blueprint4.Button>
+        <ControlButton label=\\"Cancel\\" onClick={[Function: closeOverlay]} options={{...}} />
+        <ControlButton label=\\"Confirm\\" onClick={[Function: onClick]} options={{...}} />
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
@@ -101,12 +89,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
     </div>
     <div className=\\"bp4-dialog-footer\\">
       <Blueprint4.ButtonGroup>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
-          Cancel
-        </Blueprint4.Button>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
-          Confirm
-        </Blueprint4.Button>
+        <ControlButton label=\\"Cancel\\" onClick={[Function: closeOverlay]} options={{...}} />
+        <ControlButton label=\\"Confirm\\" onClick={[Function: onClick]} options={{...}} />
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
@@ -129,12 +113,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
     </div>
     <div className=\\"bp4-dialog-footer\\">
       <Blueprint4.ButtonGroup>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
-          Cancel
-        </Blueprint4.Button>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
-          Confirm
-        </Blueprint4.Button>
+        <ControlButton label=\\"Cancel\\" onClick={[Function: closeOverlay]} options={{...}} />
+        <ControlButton label=\\"Confirm\\" onClick={[Function: onClick]} options={{...}} />
       </Blueprint4.ButtonGroup>
     </div>
   </Blueprint4.Dialog>
