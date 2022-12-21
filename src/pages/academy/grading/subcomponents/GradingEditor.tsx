@@ -185,10 +185,6 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
     setXpAdjustmentInput(valueAsString);
   };
 
-  const handleEditorValueChange = (editorValue: string) => {
-    setEditorValue(editorValue);
-  };
-
   const checkHasUnsavedChanges = () => {
     const newXpAdjustmentInput = stringParamToInt(xpAdjustmentInput || undefined);
     return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== editorValue;
@@ -283,7 +279,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
       <div className="react-mde-parent">
         <ReactMde
           value={editorValue}
-          onChange={handleEditorValueChange}
+          onChange={setEditorValue}
           selectedTab={selectedTab}
           onTabChange={onTabChange}
           generateMarkdownPreview={generateMarkdownPreview}
