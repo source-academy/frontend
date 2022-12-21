@@ -182,8 +182,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
    * @param valueAsString a string that contains the input. To be parsed by another function.
    */
   const onXpAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
-    // FIXME: Null safety violation after converting to FC.
-    setXpAdjustmentInput(valueAsString!);
+    setXpAdjustmentInput(valueAsString);
   };
 
   const handleEditorValueChange = (editorValue: string) => {
