@@ -330,6 +330,20 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
   );
 };
 
+const mdeToBlueprintIconMap: Readonly<Record<string, readonly [IconName, string?]>> = {
+  header: [IconNames.HEADER, 'Header Styles'],
+  bold: [IconNames.BOLD, 'Bold'],
+  italic: [IconNames.ITALIC, 'Italic'],
+  strikethrough: [IconNames.STRIKETHROUGH, 'Strikethrough'],
+  link: [IconNames.LINK, 'Link'],
+  quote: [IconNames.CITATION, 'Quote'],
+  code: [IconNames.CODE, 'Monospaced'],
+  image: [IconNames.MEDIA, 'Image'],
+  'unordered-list': [IconNames.UNGROUP_OBJECTS, 'Bullets'],
+  'ordered-list': [IconNames.NUMBERED_LIST, 'Numbering'],
+  'checked-list': [IconNames.SQUARE, 'Checkboxes']
+} as const;
+
 /**
  * Maps react-mde icon names to blueprintjs counterparts
  * to reduce the number of dependencies on icons and
@@ -343,60 +357,18 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
 const mdeToBlueprintIconMapping = (name: string): { iconName: IconName; title?: string } => {
   switch (name) {
     case 'header':
-      return {
-        iconName: IconNames.HEADER,
-        title: 'Header Styles'
-      };
     case 'bold':
-      return {
-        iconName: IconNames.BOLD,
-        title: 'Bold'
-      };
     case 'italic':
-      return {
-        iconName: IconNames.ITALIC,
-        title: 'Italic'
-      };
     case 'strikethrough':
-      return {
-        iconName: IconNames.STRIKETHROUGH,
-        title: 'Strikethrough'
-      };
     case 'link':
-      return {
-        iconName: IconNames.LINK,
-        title: 'Link'
-      };
     case 'quote':
-      return {
-        iconName: IconNames.CITATION,
-        title: 'Quote'
-      };
     case 'code':
-      return {
-        iconName: IconNames.CODE,
-        title: 'Monospaced'
-      };
     case 'image':
-      return {
-        iconName: IconNames.MEDIA,
-        title: 'Image'
-      };
     case 'unordered-list':
-      return {
-        iconName: IconNames.UNGROUP_OBJECTS,
-        title: 'Bullets'
-      };
     case 'ordered-list':
-      return {
-        iconName: IconNames.NUMBERED_LIST,
-        title: 'Numbering'
-      };
     case 'checked-list':
-      return {
-        iconName: IconNames.SQUARE,
-        title: 'Checkboxes'
-      };
+      const [iconName, title] = mdeToBlueprintIconMap[name];
+      return { iconName, title };
     default:
       // For unknown icons, a question mark icon is returned
       return {
