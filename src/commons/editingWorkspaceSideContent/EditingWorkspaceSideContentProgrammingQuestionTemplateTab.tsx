@@ -124,7 +124,7 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
     return (
       <div className="side-content">
         <Card>
-          {editorSelect(activeEditor, handleChangeActiveEditor)}
+          {editorSelect(activeEditor, setActiveEditor)}
           <Divider />
           <div className="side-content-text">{editorPanel}</div>
         </Card>
@@ -145,21 +145,13 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
           fontSize={14}
           highlightActiveLine={false}
           mode="javascript"
-          onChange={handleTemplateChange}
+          onChange={setTemplateValue}
           theme="source"
           value={value}
           width="100%"
         />
       </div>
     );
-  };
-
-  const handleChangeActiveEditor = (editor: QuestionEditor) => {
-    setActiveEditor(editor);
-  };
-
-  const handleTemplateChange = (newCode: string) => {
-    setTemplateValue(newCode);
   };
 
   const focusEditor =
