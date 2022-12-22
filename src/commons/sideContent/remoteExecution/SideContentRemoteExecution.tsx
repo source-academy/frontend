@@ -23,12 +23,12 @@ import {
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { deleteDevice } from '../sagas/RequestsSaga';
-import { actions } from '../utils/ActionsHelper';
-import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { showWarningMessage } from '../utils/NotificationsHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { OverallState } from '../../application/ApplicationTypes';
+import { deleteDevice } from '../../sagas/RequestsSaga';
+import { actions } from '../../utils/ActionsHelper';
+import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
+import { showWarningMessage } from '../../utils/NotificationsHelper';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 export interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
