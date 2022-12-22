@@ -1,5 +1,4 @@
 import {
-  Button,
   Callout,
   Classes,
   Menu,
@@ -12,7 +11,6 @@ import classNames from 'classnames';
 import React, { SetStateAction } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { Dispatch } from 'redux';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
@@ -24,76 +22,15 @@ import {
 import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { OverallState } from '../../application/ApplicationTypes';
-import { deleteDevice } from '../../sagas/RequestsSaga';
 import { actions } from '../../utils/ActionsHelper';
-import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
-import { showWarningMessage } from '../../utils/NotificationsHelper';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
 export interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
   secretParams?: string;
   callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
 }
-
-interface DeviceMenuItemButtonsProps {
-  isConnected: boolean;
-  device: Device;
-  dispatch: Dispatch;
-  onEditDevice: (device: Device) => void;
-}
-
-const DeviceMenuItemButtons = ({
-  isConnected,
-  device,
-  dispatch,
-  onEditDevice
-}: DeviceMenuItemButtonsProps) => (
-  <>
-    {isConnected && <>Connected</>}
-    <div className="edit-buttons">
-      <Button
-        icon="edit"
-        small
-        minimal
-        onClick={(e: React.MouseEvent) => {
-          e.stopPropagation();
-          onEditDevice(device);
-        }}
-      />
-      <Button
-        intent="danger"
-        icon="trash"
-        small
-        minimal
-        onClick={async (e: React.MouseEvent) => {
-          e.stopPropagation();
-          const confirm = await showSimpleConfirmDialog({
-            title: 'Really delete device?',
-            contents: `Are you sure you want to delete ${device.title} (${device.type})?`,
-            positiveLabel: 'Delete',
-            positiveIntent: 'danger',
-            negativeLabel: 'No',
-            icon: 'trash'
-          });
-          if (!confirm) {
-            return;
-          }
-          try {
-            await deleteDevice(device);
-          } catch (e) {
-            showWarningMessage(e.message || 'Unknown error occurred.');
-            return;
-          }
-          if (isConnected) {
-            dispatch(actions.remoteExecDisconnect());
-          }
-          dispatch(actions.remoteExecFetchDevices());
-        }}
-      />
-    </div>
-  </>
-);
 
 const DeviceContent = ({ session }: { session?: DeviceSession }) => {
   if (!session) {
