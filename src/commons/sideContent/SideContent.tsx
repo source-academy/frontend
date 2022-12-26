@@ -1,9 +1,8 @@
 import { Card, Icon, Tab, TabId, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
-import { OverallState } from '../application/ApplicationTypes';
+import { useTypedSelector } from '../utils/Hooks';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './SideContentHelper';
 import { SideContentTab, SideContentType } from './SideContentTypes';
@@ -57,9 +56,8 @@ const SideContent = (props: SideContentProps) => {
   );
 
   // Fetch debuggerContext from store
-  const debuggerContext = useSelector(
-    (state: OverallState) =>
-      props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
+  const debuggerContext = useTypedSelector(
+    state => props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
   React.useEffect(() => {
     const allActiveTabs = tabs.beforeDynamicTabs

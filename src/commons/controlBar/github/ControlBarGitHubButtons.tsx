@@ -9,7 +9,7 @@ import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import controlButton from '../../ControlButton';
 
 export type ControlBarGitHubButtonsProps = {
-  loggedInAs: Octokit;
+  loggedInAs?: Octokit;
   githubSaveInfo: GitHubSaveInfo;
   isDirty: boolean;
   onClickOpen?: () => void;
