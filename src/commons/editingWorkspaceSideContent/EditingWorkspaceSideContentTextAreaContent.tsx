@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Textarea from 'react-textarea-autosize';
 
 import { Assessment } from '../assessment/AssessmentTypes';
@@ -19,95 +19,76 @@ type StateProps = {
   useRawValue?: boolean;
 };
 
-type State = {
-  isEditing: boolean;
-  isNumber: boolean;
-  fieldValue: string;
-  useRawValue: boolean;
-};
+export const TextAreaContent: React.FC<TextAreaContentProps> = props => {
+  const isNumberVal = props.isNumber || false;
 
-export class TextAreaContent extends React.Component<TextAreaContentProps, State> {
-  public constructor(props: TextAreaContentProps) {
-    super(props);
-    const isNumberVal = this.props.isNumber || false;
-    this.state = {
-      isEditing: false,
-      isNumber: isNumberVal,
-      fieldValue: '',
-      useRawValue: this.props.useRawValue || isNumberVal
-    };
-  }
+  const [isEditing, setIsEditing] = useState(false);
+  const [isNumber] = useState(isNumberVal);
+  const [fieldValue, setFieldValue] = useState('');
+  const [useRawValue] = useState(props.useRawValue || isNumberVal);
 
-  public render() {
-    let display;
-    if (this.state.isEditing) {
-      display = this.makeEditingTextarea();
-    } else {
-      const filler = 'Please enter value (if applicable)';
-      let value = getValueFromPath(this.props.path, this.props.assessment);
-      if (!this.props.isNumber) {
-        value = value || '';
-        value = value.match(/^\s*$/) ? filler : value;
-      }
-      if (this.state.useRawValue) {
-        display = value;
-      } else {
-        display = <Markdown content={value} />;
-      }
-    }
-    return <div onClick={this.toggleEditField()}>{display}</div>;
-  }
-
-  private saveEditAssessment = (e: any) => {
-    let fieldValue: number | string;
-    if (this.state.isNumber) {
-      fieldValue = parseInt(this.state.fieldValue, 10);
-      if (isNaN(fieldValue)) {
-        fieldValue = getValueFromPath(this.props.path, this.props.assessment);
+  const saveEditAssessment = (e: any) => {
+    let parsedFieldValue: number | string;
+    if (isNumber) {
+      parsedFieldValue = parseInt(fieldValue, 10);
+      if (isNaN(parsedFieldValue)) {
+        parsedFieldValue = getValueFromPath(props.path, props.assessment);
       }
     } else {
-      fieldValue = this.state.fieldValue;
+      parsedFieldValue = fieldValue;
     }
-    const originalVal = getValueFromPath(this.props.path, this.props.assessment);
-    if (this.props.processResults) {
-      fieldValue = this.props.processResults(fieldValue);
+    const originalVal = getValueFromPath(props.path, props.assessment);
+    if (props.processResults) {
+      parsedFieldValue = props.processResults(parsedFieldValue);
     }
-    if (fieldValue !== originalVal) {
-      const assessmentVal = this.props.assessment;
-      assignToPath(this.props.path, fieldValue, assessmentVal);
-      this.props.updateAssessment(assessmentVal);
+    if (parsedFieldValue !== originalVal) {
+      const assessmentVal = props.assessment;
+      assignToPath(props.path, parsedFieldValue, assessmentVal);
+      props.updateAssessment(assessmentVal);
     }
 
-    this.setState({
-      isEditing: false
-    });
+    setIsEditing(false);
   };
 
-  private handleEditAssessment = (e: any) => {
-    this.setState({
-      fieldValue: e.target.value
-    });
+  const handleEditAssessment = (e: any) => {
+    setFieldValue(e.target.value);
   };
 
-  private makeEditingTextarea = () => (
+  const makeEditingTextarea = () => (
     <Textarea
       autoFocus={true}
       className={'editing-textarea'}
-      onChange={this.handleEditAssessment}
-      onBlur={this.saveEditAssessment}
-      value={this.state.fieldValue}
+      onChange={handleEditAssessment}
+      onBlur={saveEditAssessment}
+      value={fieldValue}
     />
   );
 
-  private toggleEditField = () => (e: any) => {
-    if (!this.state.isEditing) {
-      const fieldVal = getValueFromPath(this.props.path, this.props.assessment) || '';
-      this.setState({
-        isEditing: true,
-        fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString()
-      });
+  const toggleEditField = () => (e: any) => {
+    if (!isEditing) {
+      const fieldVal = getValueFromPath(props.path, props.assessment) || '';
+      setIsEditing(true);
+      setFieldValue(typeof fieldVal === 'string' ? fieldVal : fieldVal.toString());
     }
   };
-}
+
+  let display;
+  if (isEditing) {
+    display = makeEditingTextarea();
+  } else {
+    const filler = 'Please enter value (if applicable)';
+    let value = getValueFromPath(props.path, props.assessment);
+    if (!props.isNumber) {
+      value = value || '';
+      value = value.match(/^\s*$/) ? filler : value;
+    }
+    if (useRawValue) {
+      display = value;
+    } else {
+      display = <Markdown content={value} />;
+    }
+  }
+  return <div onClick={toggleEditField()}>{display}</div>;
+};
 
 export default TextAreaContent;
