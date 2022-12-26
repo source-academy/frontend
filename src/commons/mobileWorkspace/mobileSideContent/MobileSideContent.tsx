@@ -2,9 +2,8 @@ import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import { OverallState } from '../../application/ApplicationTypes';
 import { ControlBarProps } from '../../controlBar/ControlBar';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
 import { DebuggerContext, WorkspaceLocation } from '../../workspace/WorkspaceTypes';
@@ -46,9 +45,8 @@ const MobileSideContent: React.FC<MobileSideContentProps> = props => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
 
   // Fetch debuggerContext from store
-  const debuggerContext = useSelector(
-    (state: OverallState) =>
-      props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
+  const debuggerContext = useTypedSelector(
+    state => props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
 
   React.useEffect(() => {
