@@ -1,7 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   AchievementContext,
@@ -9,10 +9,9 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-import { OverallState } from '../application/ApplicationTypes';
 import { FETCH_ASSESSMENT } from '../application/types/SessionTypes';
-import { FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
-import { Assessment } from '../assessment/AssessmentTypes';
+import { Assessment, FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
+import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
@@ -33,11 +32,10 @@ function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
   }, [focusUuid, courseRegId, dispatch]);
 
   const inferencer = useContext(AchievementContext);
-  const courseId = useSelector((store: OverallState) => store.session.courseId);
+  const courseId = useTypedSelector(store => store.session.courseId);
 
-  const assessments = useSelector((store: OverallState) => store.session.assessments);
-  const allAssessmentConfigs =
-    useSelector((store: OverallState) => store.session.assessmentOverviews) ?? [];
+  const assessments = useTypedSelector(store => store.session.assessments);
+  const allAssessmentConfigs = useTypedSelector(store => store.session.assessmentOverviews) ?? [];
   const selectedAssessment: Assessment | undefined = assessments.get(+focusUuid);
   const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === +focusUuid);
 

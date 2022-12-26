@@ -1,5 +1,7 @@
 import React, { RefObject } from 'react';
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
+import { OverallState } from '../application/ApplicationTypes';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 
 /**
@@ -64,12 +66,15 @@ export function useLocalStorageState<T>(
   return [value, setValue];
 }
 
+/** Typed version of useSelector. Use this instead of the useSelector hook. */
+export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
 /**
  * Dynamically returns the dimensions (width & height) of an HTML element, updating whenever the
  * element is loaded or resized.
  *
  * @param ref A reference to the underlying HTML element.
  */
+
 export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, height: number] => {
   const [width, setWidth] = React.useState<number>(0);
   const [height, setHeight] = React.useState<number>(0);
