@@ -47,9 +47,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     <ControlButton
       label={mainButtonDisplayText}
       icon={IconNames.GIT_BRANCH}
-      options={{
-        intent: mainButtonIntent
-      }}
+      options={{ intent: mainButtonIntent }}
     />
   );
 

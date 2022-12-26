@@ -749,13 +749,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          <ControlButton
-            label="Cancel"
-            onClick={closeOverlay}
-            options={{
-              minimal: false
-            }}
-          />
+          <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
           <ControlButton
             label="Confirm"
             onClick={() => {

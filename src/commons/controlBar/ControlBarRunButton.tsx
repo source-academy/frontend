@@ -23,10 +23,7 @@ export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
         label="Run"
         icon={IconNames.PLAY}
         onClick={props.handleEditorEval}
-        options={{
-          iconColor: props.color,
-          className: props.className
-        }}
+        options={{ iconColor: props.color, className: props.className }}
       />
     </Tooltip2>
   );

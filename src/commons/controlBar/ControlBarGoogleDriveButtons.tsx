@@ -36,9 +36,7 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
     <ControlButton
       label={(props.currentFile && props.currentFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
-      options={{
-        intent: stateToIntent[state]
-      }}
+      options={{ intent: stateToIntent[state] }}
     />
   );
   const openButton = (
