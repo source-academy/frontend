@@ -1,7 +1,7 @@
 import { Menu, MenuItem, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
 import ControlButton from '../ControlButton';
@@ -25,83 +25,30 @@ type StateProps = {
   courseId?: number;
 };
 
-type State = {
-  isSettingsOpen: boolean;
-  isAboutOpen: boolean;
-  isHelpOpen: boolean;
-  isProfileOpen: boolean;
-  isMyCoursesOpen: boolean;
-  isCreateCourseOpen: boolean;
-};
+const Dropdown: React.FC<DropdownProps> = props => {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
+  const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
 
-class Dropdown extends React.Component<DropdownProps, State> {
-  constructor(props: DropdownProps) {
-    super(props);
-    this.state = {
-      isSettingsOpen: false,
-      isAboutOpen: false,
-      isHelpOpen: false,
-      isProfileOpen: false,
-      isMyCoursesOpen: false,
-      isCreateCourseOpen: false
-    };
-  }
-
-  public render() {
-    return (
-      <>
-        <Popover2
-          content={this.menu(this.props)}
-          inheritDarkTheme={false}
-          placement={Position.BOTTOM}
-        >
-          <ControlButton icon={IconNames.CARET_DOWN} />
-        </Popover2>
-        <DropdownSettings isOpen={this.state.isSettingsOpen} onClose={this.toggleSettingsOpen} />
-        <DropdownAbout isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
-        <DropdownHelp isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
-        {this.props.name ? (
-          <DropdownCourses
-            isOpen={this.state.isMyCoursesOpen}
-            onClose={this.toggleMyCoursesOpen}
-            courses={this.props.courses}
-            courseId={this.props.courseId}
-          />
-        ) : null}
-        {this.props.name ? (
-          <DropdownCreateCourse
-            isOpen={this.state.isCreateCourseOpen}
-            onClose={this.toggleCreateCourseOpen}
-            handleCreateCourse={this.props.handleCreateCourse}
-          />
-        ) : null}
-        {this.props.name ? (
-          <Profile isOpen={this.state.isProfileOpen} onClose={this.toggleProfileOpen} />
-        ) : null}
-      </>
-    );
-  }
-
-  private menu(props: DropdownProps) {
+  function menu(props: DropdownProps) {
     const profile =
-      this.props.name && this.props.courseId != null ? (
-        <MenuItem
-          icon={IconNames.USER}
-          onClick={this.toggleProfileOpen}
-          text={titleCase(this.props.name)}
-        />
+      props.name && props.courseId != null ? (
+        <MenuItem icon={IconNames.USER} onClick={toggleProfileOpen} text={titleCase(props.name)} />
       ) : null;
 
-    const myCourses = this.props.name ? (
-      <MenuItem icon={IconNames.PROPERTIES} onClick={this.toggleMyCoursesOpen} text="My Courses" />
+    const myCourses = props.name ? (
+      <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text="My Courses" />
     ) : null;
 
-    const createCourse = this.props.name ? (
-      <MenuItem icon={IconNames.ADD} onClick={this.toggleCreateCourseOpen} text="Create Course" />
+    const createCourse = props.name ? (
+      <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text="Create Course" />
     ) : null;
 
-    const logout = this.props.name ? (
-      <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={this.props.handleLogOut} />
+    const logout = props.name ? (
+      <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={props.handleLogOut} />
     ) : null;
 
     return (
@@ -109,34 +56,57 @@ class Dropdown extends React.Component<DropdownProps, State> {
         {profile}
         {myCourses}
         {createCourse}
-        <MenuItem icon={IconNames.COG} onClick={this.toggleSettingsOpen} text="Settings" />
-        <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="About" />
-        <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
+        <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text="Settings" />
+        <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text="About" />
+        <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text="Help" />
         {logout}
       </Menu>
     );
   }
 
-  private toggleSettingsOpen = () => {
-    this.setState({ ...this.state, isSettingsOpen: !this.state.isSettingsOpen });
+  const toggleSettingsOpen = () => {
+    setIsSettingsOpen(oldValue => !oldValue);
   };
 
-  private toggleAboutOpen = () => {
-    this.setState({ ...this.state, isAboutOpen: !this.state.isAboutOpen });
+  const toggleAboutOpen = () => {
+    setIsAboutOpen(oldValue => !oldValue);
   };
 
-  private toggleHelpOpen = () =>
-    this.setState({ ...this.state, isHelpOpen: !this.state.isHelpOpen });
+  const toggleHelpOpen = () => setIsHelpOpen(oldValue => !oldValue);
 
-  private toggleProfileOpen = () =>
-    this.setState({ ...this.state, isProfileOpen: !this.state.isProfileOpen });
+  const toggleProfileOpen = () => setIsProfileOpen(oldValue => !oldValue);
 
-  private toggleMyCoursesOpen = () =>
-    this.setState({ ...this.state, isMyCoursesOpen: !this.state.isMyCoursesOpen });
+  const toggleMyCoursesOpen = () => setIsMyCoursesOpen(oldValue => !oldValue);
 
-  private toggleCreateCourseOpen = () =>
-    this.setState({ ...this.state, isCreateCourseOpen: !this.state.isCreateCourseOpen });
-}
+  const toggleCreateCourseOpen = () => setIsCreateCourseOpen(oldValue => !oldValue);
+
+  return (
+    <>
+      <Popover2 content={menu(props)} inheritDarkTheme={false} placement={Position.BOTTOM}>
+        <ControlButton icon={IconNames.CARET_DOWN} />
+      </Popover2>
+      <DropdownSettings isOpen={isSettingsOpen} onClose={toggleSettingsOpen} />
+      <DropdownAbout isOpen={isAboutOpen} onClose={toggleAboutOpen} />
+      <DropdownHelp isOpen={isHelpOpen} onClose={toggleHelpOpen} />
+      {props.name ? (
+        <DropdownCourses
+          isOpen={isMyCoursesOpen}
+          onClose={toggleMyCoursesOpen}
+          courses={props.courses}
+          courseId={props.courseId}
+        />
+      ) : null}
+      {props.name ? (
+        <DropdownCreateCourse
+          isOpen={isCreateCourseOpen}
+          onClose={toggleCreateCourseOpen}
+          handleCreateCourse={props.handleCreateCourse}
+        />
+      ) : null}
+      {props.name ? <Profile isOpen={isProfileOpen} onClose={toggleProfileOpen} /> : null}
+    </>
+  );
+};
 
 const titleCase = (str: string) =>
   str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase());
