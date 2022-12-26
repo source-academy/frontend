@@ -1,11 +1,10 @@
 import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
-import { OverallState } from '../application/ApplicationTypes';
 import Markdown from '../Markdown';
 import { Links } from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 
 type DialogProps = {
   isOpen: boolean;
@@ -13,7 +12,7 @@ type DialogProps = {
 };
 
 const DropdownHelp: React.SFC<DialogProps> = props => {
-  const moduleHelpText = useSelector((store: OverallState) => store.session.moduleHelpText);
+  const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
 
   return (
     <Dialog
