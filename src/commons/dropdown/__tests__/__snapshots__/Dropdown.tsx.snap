@@ -5,12 +5,12 @@ exports[`Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateC
   <Blueprint4.Popover2 content={{...}} inheritDarkTheme={false} placement=\\"bottom\\" boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} />
   </Blueprint4.Popover2>
-  <DropdownSettings isOpen={false} onClose={[Function (anonymous)]} />
-  <DropdownAbout isOpen={false} onClose={[Function (anonymous)]} />
-  <DropdownHelp isOpen={false} onClose={[Function (anonymous)]} />
-  <DropdownCourses isOpen={false} onClose={[Function (anonymous)]} courses={{...}} courseId={[undefined]} />
-  <DropdownCreateCourse isOpen={false} onClose={[Function (anonymous)]} handleCreateCourse={[Function: handleCreateCourse]} />
-  <Connect(Profile) isOpen={false} onClose={[Function (anonymous)]} />
+  <DropdownSettings isOpen={false} onClose={[Function: toggleSettingsOpen]} />
+  <DropdownAbout isOpen={false} onClose={[Function: toggleAboutOpen]} />
+  <DropdownHelp isOpen={false} onClose={[Function: toggleHelpOpen]} />
+  <DropdownCourses isOpen={false} onClose={[Function: toggleMyCoursesOpen]} courses={{...}} courseId={[undefined]} />
+  <DropdownCreateCourse isOpen={false} onClose={[Function: toggleCreateCourseOpen]} handleCreateCourse={[Function: handleCreateCourse]} />
+  <Connect(Profile) isOpen={false} onClose={[Function: toggleProfileOpen]} />
 </Fragment>"
 `;
 
@@ -19,8 +19,8 @@ exports[`Dropdown does not mount Profile, DropdownCourses and DropdownCreateCour
   <Blueprint4.Popover2 content={{...}} inheritDarkTheme={false} placement=\\"bottom\\" boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
     <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} />
   </Blueprint4.Popover2>
-  <DropdownSettings isOpen={false} onClose={[Function (anonymous)]} />
-  <DropdownAbout isOpen={false} onClose={[Function (anonymous)]} />
-  <DropdownHelp isOpen={false} onClose={[Function (anonymous)]} />
+  <DropdownSettings isOpen={false} onClose={[Function: toggleSettingsOpen]} />
+  <DropdownAbout isOpen={false} onClose={[Function: toggleAboutOpen]} />
+  <DropdownHelp isOpen={false} onClose={[Function: toggleHelpOpen]} />
 </Fragment>"
 `;

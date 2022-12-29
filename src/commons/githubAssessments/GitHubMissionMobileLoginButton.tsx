@@ -1,12 +1,11 @@
 import { ButtonGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
-import { OverallState } from '../application/ApplicationTypes';
 import controlButton from '../ControlButton';
 import Constants from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 
 export type ControlBarGitHubMobileLoginButtonProps = {
   onClickLogIn: () => void;
@@ -23,7 +22,7 @@ export const ControlBarGitHubMobileLoginButton: React.FC<
 > = props => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   const isLoggedIn =
-    useSelector((store: OverallState) => store.session.githubOctokitObject).octokit !== undefined;
+    useTypedSelector(store => store.session.githubOctokitObject).octokit !== undefined;
 
   const loginButton = isLoggedIn
     ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
