@@ -3,11 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
-import Constants from '../../utils/Constants';
 
 export type ControlBarGitHubButtonsProps = {
   loggedInAs?: Octokit;
@@ -27,7 +26,7 @@ export type ControlBarGitHubButtonsProps = {
  * @param props Component properties
  */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
   const fileName = (filePath.split('\\').pop() || '').split('/').pop() || '';
