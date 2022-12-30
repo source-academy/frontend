@@ -101,23 +101,25 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleEval]} tabIndex={0}>
-                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                      <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
-                                        <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                          <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                            <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                          </svg>
-                                        </span>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                        <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
+                                          <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                              <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint4.Icon>
                                       </Blueprint4.Icon>
-                                    </Blueprint4.Icon>
-                                    <span className=\\"bp4-button-text\\">
-                                      Run
-                                    </span>
-                                    <Blueprint4.Icon icon={[undefined]} />
-                                  </button>
-                                </Blueprint4.Button>
+                                      <span className=\\"bp4-button-text\\">
+                                        Run
+                                      </span>
+                                      <Blueprint4.Icon icon={false} />
+                                    </button>
+                                  </Blueprint4.Button>
+                                </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
                           </Reference>
@@ -130,23 +132,25 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                   </Blueprint4.Tooltip2>
                 </ControlBarRunButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickResetTemplate]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
-                          <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
+                            <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Reset
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Reset
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
                   <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function: chapterRenderer]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
@@ -184,35 +188,39 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
               <div className=\\"ControlBar_flow bp4-button-group\\">
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
-                  <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]}>
-                    <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Question 1 of 1  
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                  <ControlButton label=\\"Question 1 of 1  \\" isDisabled={true}>
+                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                        <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Question 1 of 1  
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
                   <ControlBarReturnToAcademyButton onClick={[Function: onClickReturn]}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function: onClickReturn]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickReturn]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                        <span className=\\"bp4-button-text\\">
-                          Return to Academy
-                        </span>
-                        <Blueprint4.Icon icon={{...}}>
-                          <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
-                            <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Return to Academy\\" icon=\\"arrow-right\\" onClick={[Function: onClickReturn]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickReturn]} icon={false} rightIcon={{...}}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickReturn]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={false} aria-hidden={true} tabIndex={-1} />
+                          <span className=\\"bp4-button-text\\">
+                            Return to Academy
+                          </span>
+                          <Blueprint4.Icon icon={{...}}>
+                            <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
+                              <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                      </button>
-                    </Blueprint4.Button>
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                   </ControlBarReturnToAcademyButton>
                 </ControlBarNextButton>
               </div>
@@ -753,23 +761,25 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                           <Reference>
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplEval]} tabIndex={0}>
-                                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                      <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
-                                                        <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
-                                                          <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                            <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-                                                          </svg>
-                                                        </span>
+                                                <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                        <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
+                                                          <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                              <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
+                                                          </span>
+                                                        </Blueprint4.Icon>
                                                       </Blueprint4.Icon>
-                                                    </Blueprint4.Icon>
-                                                    <span className=\\"bp4-button-text\\">
-                                                      Eval
-                                                    </span>
-                                                    <Blueprint4.Icon icon={[undefined]} />
-                                                  </button>
-                                                </Blueprint4.Button>
+                                                      <span className=\\"bp4-button-text\\">
+                                                        Eval
+                                                      </span>
+                                                      <Blueprint4.Icon icon={false} />
+                                                    </button>
+                                                  </Blueprint4.Button>
+                                                </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
                                           </Reference>
@@ -782,23 +792,25 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                   </Blueprint4.Tooltip2>
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplOutputClear]}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                        <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
-                                          <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
+                                  <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
+                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                          <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
+                                            <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint4.Icon>
                                         </Blueprint4.Icon>
-                                      </Blueprint4.Icon>
-                                      <span className=\\"bp4-button-text\\">
-                                        Clear
-                                      </span>
-                                      <Blueprint4.Icon icon={[undefined]} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                        <span className=\\"bp4-button-text\\">
+                                          Clear
+                                        </span>
+                                        <Blueprint4.Icon icon={false} />
+                                      </button>
+                                    </Blueprint4.Button>
+                                  </ControlButton>
                                 </ControlBarClearButton>
                               </div>
                               <MediaQuery minWidth={769} />
@@ -842,23 +854,25 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleEval]} tabIndex={0}>
-                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                      <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
-                                        <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                          <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                            <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                          </svg>
-                                        </span>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                        <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
+                                          <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                              <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint4.Icon>
                                       </Blueprint4.Icon>
-                                    </Blueprint4.Icon>
-                                    <span className=\\"bp4-button-text\\">
-                                      Run
-                                    </span>
-                                    <Blueprint4.Icon icon={[undefined]} />
-                                  </button>
-                                </Blueprint4.Button>
+                                      <span className=\\"bp4-button-text\\">
+                                        Run
+                                      </span>
+                                      <Blueprint4.Icon icon={false} />
+                                    </button>
+                                  </Blueprint4.Button>
+                                </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
                           </Reference>
@@ -905,53 +919,59 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
               </div>
               <div className=\\"ControlBar_flow bp4-button-group\\">
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickPrevious]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickPrevious]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"arrow-left\\" color={[undefined]}>
-                          <span icon=\\"arrow-left\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-left\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"arrow-left\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M13.99 6.99H4.41L7.7 3.7a1.003 1.003 0 00-1.42-1.42l-5 5a1.014 1.014 0 000 1.42l5 5a1.003 1.003 0 001.42-1.42L4.41 8.99H14c.55 0 1-.45 1-1s-.46-1-1.01-1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Previous\\" icon=\\"arrow-left\\" onClick={[Function: onClickPrevious]}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickPrevious]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickPrevious]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"arrow-left\\" color={[undefined]}>
+                            <span icon=\\"arrow-left\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-left\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"arrow-left\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M13.99 6.99H4.41L7.7 3.7a1.003 1.003 0 00-1.42-1.42l-5 5a1.014 1.014 0 000 1.42l5 5a1.003 1.003 0 001.42-1.42L4.41 8.99H14c.55 0 1-.45 1-1s-.46-1-1.01-1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Previous
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Previous
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarPreviousButton>
                 <ControlBarQuestionViewButton questionProgress={{...}}>
-                  <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]}>
-                    <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Question 3 of 5  
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                  <ControlButton label=\\"Question 3 of 5  \\" isDisabled={true}>
+                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                        <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Question 3 of 5  
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function: onClickNext]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Next
-                      </span>
-                      <Blueprint4.Icon icon={{...}}>
-                        <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
-                          <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={false} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Next
+                        </span>
+                        <Blueprint4.Icon icon={{...}}>
+                          <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
+                            <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                    </button>
-                  </Blueprint4.Button>
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarNextButton>
               </div>
               <div className=\\"ControlBar_editingWorkspace bp4-button-group\\" />
@@ -1204,23 +1224,25 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                               </div>
                                             </div>
                                           </Blueprint4.Collapse>
-                                          <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                                            <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                              <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                    </svg>
-                                                  </span>
+                                          <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
+                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                      </svg>
+                                                    </span>
+                                                  </Blueprint4.Icon>
                                                 </Blueprint4.Icon>
-                                              </Blueprint4.Icon>
-                                              <span className=\\"bp4-button-text\\">
-                                                Autograder Results
-                                              </span>
-                                              <Blueprint4.Icon icon={[undefined]} />
-                                            </button>
-                                          </Blueprint4.Button>
+                                                <span className=\\"bp4-button-text\\">
+                                                  Autograder Results
+                                                </span>
+                                                <Blueprint4.Icon icon={false} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </ControlButton>
                                           <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                             <div className=\\"bp4-collapse\\" style={{...}}>
                                               <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -1268,23 +1290,25 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                           <Reference>
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplEval]} tabIndex={0}>
-                                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                      <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
-                                                        <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
-                                                          <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                            <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-                                                          </svg>
-                                                        </span>
+                                                <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                        <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
+                                                          <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                              <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
+                                                          </span>
+                                                        </Blueprint4.Icon>
                                                       </Blueprint4.Icon>
-                                                    </Blueprint4.Icon>
-                                                    <span className=\\"bp4-button-text\\">
-                                                      Eval
-                                                    </span>
-                                                    <Blueprint4.Icon icon={[undefined]} />
-                                                  </button>
-                                                </Blueprint4.Button>
+                                                      <span className=\\"bp4-button-text\\">
+                                                        Eval
+                                                      </span>
+                                                      <Blueprint4.Icon icon={false} />
+                                                    </button>
+                                                  </Blueprint4.Button>
+                                                </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
                                           </Reference>
@@ -1297,23 +1321,25 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                   </Blueprint4.Tooltip2>
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplOutputClear]}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                        <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
-                                          <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
+                                  <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
+                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                          <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
+                                            <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint4.Icon>
                                         </Blueprint4.Icon>
-                                      </Blueprint4.Icon>
-                                      <span className=\\"bp4-button-text\\">
-                                        Clear
-                                      </span>
-                                      <Blueprint4.Icon icon={[undefined]} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                        <span className=\\"bp4-button-text\\">
+                                          Clear
+                                        </span>
+                                        <Blueprint4.Icon icon={false} />
+                                      </button>
+                                    </Blueprint4.Button>
+                                  </ControlButton>
                                 </ControlBarClearButton>
                               </div>
                               <MediaQuery minWidth={769} />
@@ -1405,23 +1431,25 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleEval]} tabIndex={0}>
-                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                      <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
-                                        <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                          <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                            <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                          </svg>
-                                        </span>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                        <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
+                                          <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                              <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint4.Icon>
                                       </Blueprint4.Icon>
-                                    </Blueprint4.Icon>
-                                    <span className=\\"bp4-button-text\\">
-                                      Run
-                                    </span>
-                                    <Blueprint4.Icon icon={[undefined]} />
-                                  </button>
-                                </Blueprint4.Button>
+                                      <span className=\\"bp4-button-text\\">
+                                        Run
+                                      </span>
+                                      <Blueprint4.Icon icon={false} />
+                                    </button>
+                                  </Blueprint4.Button>
+                                </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
                           </Reference>
@@ -1434,23 +1462,25 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                   </Blueprint4.Tooltip2>
                 </ControlBarRunButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickResetTemplate]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
-                          <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
+                            <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Reset
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Reset
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} sourceChapter={4} sourceVariant=\\"default\\" disabled={true}>
                   <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function: chapterRenderer]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
@@ -1488,34 +1518,38 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
               <div className=\\"ControlBar_flow bp4-button-group\\">
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
-                  <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]}>
-                    <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Question 1 of 5  
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                  <ControlButton label=\\"Question 1 of 5  \\" isDisabled={true}>
+                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                        <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Question 1 of 5  
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function: onClickNext]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Next
-                      </span>
-                      <Blueprint4.Icon icon={{...}}>
-                        <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
-                          <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={false} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Next
+                        </span>
+                        <Blueprint4.Icon icon={{...}}>
+                          <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
+                            <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                    </button>
-                  </Blueprint4.Button>
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarNextButton>
               </div>
               <div className=\\"ControlBar_editingWorkspace bp4-button-group\\" />
@@ -1721,23 +1755,25 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                               </div>
                                             </div>
                                           </Blueprint4.Collapse>
-                                          <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                                            <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                              <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                    </svg>
-                                                  </span>
+                                          <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
+                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                      </svg>
+                                                    </span>
+                                                  </Blueprint4.Icon>
                                                 </Blueprint4.Icon>
-                                              </Blueprint4.Icon>
-                                              <span className=\\"bp4-button-text\\">
-                                                Autograder Results
-                                              </span>
-                                              <Blueprint4.Icon icon={[undefined]} />
-                                            </button>
-                                          </Blueprint4.Button>
+                                                <span className=\\"bp4-button-text\\">
+                                                  Autograder Results
+                                                </span>
+                                                <Blueprint4.Icon icon={false} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </ControlButton>
                                           <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                             <div className=\\"bp4-collapse\\" style={{...}}>
                                               <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -1785,23 +1821,25 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                           <Reference>
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplEval]} tabIndex={0}>
-                                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                      <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
-                                                        <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
-                                                          <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                            <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-                                                          </svg>
-                                                        </span>
+                                                <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                        <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
+                                                          <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                              <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
+                                                          </span>
+                                                        </Blueprint4.Icon>
                                                       </Blueprint4.Icon>
-                                                    </Blueprint4.Icon>
-                                                    <span className=\\"bp4-button-text\\">
-                                                      Eval
-                                                    </span>
-                                                    <Blueprint4.Icon icon={[undefined]} />
-                                                  </button>
-                                                </Blueprint4.Button>
+                                                      <span className=\\"bp4-button-text\\">
+                                                        Eval
+                                                      </span>
+                                                      <Blueprint4.Icon icon={false} />
+                                                    </button>
+                                                  </Blueprint4.Button>
+                                                </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
                                           </Reference>
@@ -1814,23 +1852,25 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                   </Blueprint4.Tooltip2>
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplOutputClear]}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                        <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
-                                          <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
+                                  <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
+                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                          <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
+                                            <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint4.Icon>
                                         </Blueprint4.Icon>
-                                      </Blueprint4.Icon>
-                                      <span className=\\"bp4-button-text\\">
-                                        Clear
-                                      </span>
-                                      <Blueprint4.Icon icon={[undefined]} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                        <span className=\\"bp4-button-text\\">
+                                          Clear
+                                        </span>
+                                        <Blueprint4.Icon icon={false} />
+                                      </button>
+                                    </Blueprint4.Button>
+                                  </ControlButton>
                                 </ControlBarClearButton>
                               </div>
                               <MediaQuery minWidth={769} />
@@ -1922,23 +1962,25 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleEval]} tabIndex={0}>
-                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                      <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
-                                        <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                          <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                            <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                          </svg>
-                                        </span>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                        <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
+                                          <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                              <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint4.Icon>
                                       </Blueprint4.Icon>
-                                    </Blueprint4.Icon>
-                                    <span className=\\"bp4-button-text\\">
-                                      Run
-                                    </span>
-                                    <Blueprint4.Icon icon={[undefined]} />
-                                  </button>
-                                </Blueprint4.Button>
+                                      <span className=\\"bp4-button-text\\">
+                                        Run
+                                      </span>
+                                      <Blueprint4.Icon icon={false} />
+                                    </button>
+                                  </Blueprint4.Button>
+                                </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
                           </Reference>
@@ -1951,42 +1993,46 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                   </Blueprint4.Tooltip2>
                 </ControlBarRunButton>
                 <ControlButtonSaveButton hasUnsavedChanges={false} onClickSave={[Function: onClickSave]}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickSave]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"floppy-disk\\" color={[undefined]}>
-                          <span icon=\\"floppy-disk\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-floppy-disk\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"floppy-disk\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M15.71 2.29l-2-2A.997.997 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71zM14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v6zM11 1H9v4h2V1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Save\\" icon=\\"floppy-disk\\" onClick={[Function: onClickSave]} options={{...}}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickSave]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"floppy-disk\\" color={[undefined]}>
+                            <span icon=\\"floppy-disk\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-floppy-disk\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"floppy-disk\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M15.71 2.29l-2-2A.997.997 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71zM14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v6zM11 1H9v4h2V1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Save
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Save
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlButtonSaveButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickResetTemplate]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
-                          <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
+                            <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Reset
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Reset
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} sourceChapter={4} sourceVariant=\\"default\\" disabled={true}>
                   <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function: chapterRenderer]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
@@ -2024,34 +2070,38 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
               <div className=\\"ControlBar_flow bp4-button-group\\">
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
-                  <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]}>
-                    <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Question 1 of 5  
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                  <ControlButton label=\\"Question 1 of 5  \\" isDisabled={true}>
+                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                        <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Question 1 of 5  
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function: onClickNext]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Next
-                      </span>
-                      <Blueprint4.Icon icon={{...}}>
-                        <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
-                          <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={false} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Next
+                        </span>
+                        <Blueprint4.Icon icon={{...}}>
+                          <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
+                            <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                    </button>
-                  </Blueprint4.Button>
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarNextButton>
               </div>
               <div className=\\"ControlBar_editingWorkspace bp4-button-group\\" />
@@ -2257,23 +2307,25 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                               </div>
                                             </div>
                                           </Blueprint4.Collapse>
-                                          <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                                            <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                              <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                    </svg>
-                                                  </span>
+                                          <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
+                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                      </svg>
+                                                    </span>
+                                                  </Blueprint4.Icon>
                                                 </Blueprint4.Icon>
-                                              </Blueprint4.Icon>
-                                              <span className=\\"bp4-button-text\\">
-                                                Autograder Results
-                                              </span>
-                                              <Blueprint4.Icon icon={[undefined]} />
-                                            </button>
-                                          </Blueprint4.Button>
+                                                <span className=\\"bp4-button-text\\">
+                                                  Autograder Results
+                                                </span>
+                                                <Blueprint4.Icon icon={false} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </ControlButton>
                                           <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                             <div className=\\"bp4-collapse\\" style={{...}}>
                                               <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -2321,23 +2373,25 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                           <Reference>
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplEval]} tabIndex={0}>
-                                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                      <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
-                                                        <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
-                                                          <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                            <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-                                                          </svg>
-                                                        </span>
+                                                <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                        <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
+                                                          <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                              <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
+                                                          </span>
+                                                        </Blueprint4.Icon>
                                                       </Blueprint4.Icon>
-                                                    </Blueprint4.Icon>
-                                                    <span className=\\"bp4-button-text\\">
-                                                      Eval
-                                                    </span>
-                                                    <Blueprint4.Icon icon={[undefined]} />
-                                                  </button>
-                                                </Blueprint4.Button>
+                                                      <span className=\\"bp4-button-text\\">
+                                                        Eval
+                                                      </span>
+                                                      <Blueprint4.Icon icon={false} />
+                                                    </button>
+                                                  </Blueprint4.Button>
+                                                </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
                                           </Reference>
@@ -2350,23 +2404,25 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                   </Blueprint4.Tooltip2>
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplOutputClear]}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                        <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
-                                          <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
+                                  <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
+                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                          <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
+                                            <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint4.Icon>
                                         </Blueprint4.Icon>
-                                      </Blueprint4.Icon>
-                                      <span className=\\"bp4-button-text\\">
-                                        Clear
-                                      </span>
-                                      <Blueprint4.Icon icon={[undefined]} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                        <span className=\\"bp4-button-text\\">
+                                          Clear
+                                        </span>
+                                        <Blueprint4.Icon icon={false} />
+                                      </button>
+                                    </Blueprint4.Button>
+                                  </ControlButton>
                                 </ControlBarClearButton>
                               </div>
                               <MediaQuery minWidth={769} />
@@ -2458,23 +2514,25 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleEval]} tabIndex={0}>
-                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                      <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
-                                        <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                          <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                            <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                          </svg>
-                                        </span>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                        <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
+                                          <span icon=\\"play\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                              <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint4.Icon>
                                       </Blueprint4.Icon>
-                                    </Blueprint4.Icon>
-                                    <span className=\\"bp4-button-text\\">
-                                      Run
-                                    </span>
-                                    <Blueprint4.Icon icon={[undefined]} />
-                                  </button>
-                                </Blueprint4.Button>
+                                      <span className=\\"bp4-button-text\\">
+                                        Run
+                                      </span>
+                                      <Blueprint4.Icon icon={false} />
+                                    </button>
+                                  </Blueprint4.Button>
+                                </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
                           </Reference>
@@ -2487,42 +2545,46 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                   </Blueprint4.Tooltip2>
                 </ControlBarRunButton>
                 <ControlButtonSaveButton hasUnsavedChanges={false} onClickSave={[Function: onClickSave]}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickSave]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"floppy-disk\\" color={[undefined]}>
-                          <span icon=\\"floppy-disk\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-floppy-disk\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"floppy-disk\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M15.71 2.29l-2-2A.997.997 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71zM14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v6zM11 1H9v4h2V1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Save\\" icon=\\"floppy-disk\\" onClick={[Function: onClickSave]} options={{...}}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickSave]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"floppy-disk\\" color={[undefined]}>
+                            <span icon=\\"floppy-disk\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-floppy-disk\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"floppy-disk\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M15.71 2.29l-2-2A.997.997 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71zM14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v6zM11 1H9v4h2V1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Save
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Save
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlButtonSaveButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: onClickResetTemplate]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                        <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
-                          <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                          <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
+                            <span icon=\\"repeat\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"repeat\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                      <span className=\\"bp4-button-text\\">
-                        Reset
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                        <span className=\\"bp4-button-text\\">
+                          Reset
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
                   <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function: chapterRenderer]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
@@ -2560,34 +2622,38 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
               <div className=\\"ControlBar_flow bp4-button-group\\">
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
-                  <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]}>
-                    <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Question 1 of 2  
-                      </span>
-                      <Blueprint4.Icon icon={[undefined]} />
-                    </button>
-                  </Blueprint4.Button>
+                  <ControlButton label=\\"Question 1 of 2  \\" isDisabled={true}>
+                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                        <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Question 1 of 2  
+                        </span>
+                        <Blueprint4.Icon icon={false} />
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
-                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function: onClickNext]}>
-                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                      <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                      <span className=\\"bp4-button-text\\">
-                        Next
-                      </span>
-                      <Blueprint4.Icon icon={{...}}>
-                        <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
-                          <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
+                  <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
+                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                        <Blueprint4.Icon icon={false} aria-hidden={true} tabIndex={-1} />
+                        <span className=\\"bp4-button-text\\">
+                          Next
+                        </span>
+                        <Blueprint4.Icon icon={{...}}>
+                          <Blueprint4.Icon icon=\\"arrow-right\\" color={[undefined]}>
+                            <span icon=\\"arrow-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-arrow-right\\" title={[undefined]}>
+                              <svg fill={[undefined]} data-icon=\\"arrow-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                <path d=\\"M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z\\" fillRule=\\"evenodd\\" />
+                              </svg>
+                            </span>
+                          </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </Blueprint4.Icon>
-                    </button>
-                  </Blueprint4.Button>
+                      </button>
+                    </Blueprint4.Button>
+                  </ControlButton>
                 </ControlBarNextButton>
               </div>
               <div className=\\"ControlBar_editingWorkspace bp4-button-group\\" />
@@ -2823,23 +2889,25 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                               </div>
                                             </div>
                                           </Blueprint4.Collapse>
-                                          <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-                                            <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                              <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                  <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                    </svg>
-                                                  </span>
+                                          <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
+                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                      </svg>
+                                                    </span>
+                                                  </Blueprint4.Icon>
                                                 </Blueprint4.Icon>
-                                              </Blueprint4.Icon>
-                                              <span className=\\"bp4-button-text\\">
-                                                Autograder Results
-                                              </span>
-                                              <Blueprint4.Icon icon={[undefined]} />
-                                            </button>
-                                          </Blueprint4.Button>
+                                                <span className=\\"bp4-button-text\\">
+                                                  Autograder Results
+                                                </span>
+                                                <Blueprint4.Icon icon={false} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </ControlButton>
                                           <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                             <div className=\\"bp4-collapse\\" style={{...}}>
                                               <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -2955,23 +3023,25 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                           <Reference>
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                                <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplEval]} tabIndex={0}>
-                                                  <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
-                                                    <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                      <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
-                                                        <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
-                                                          <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                            <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-                                                          </svg>
-                                                        </span>
+                                                <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                        <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
+                                                          <span icon=\\"code\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
+                                                            <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                              <path d=\\"M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                            </svg>
+                                                          </span>
+                                                        </Blueprint4.Icon>
                                                       </Blueprint4.Icon>
-                                                    </Blueprint4.Icon>
-                                                    <span className=\\"bp4-button-text\\">
-                                                      Eval
-                                                    </span>
-                                                    <Blueprint4.Icon icon={[undefined]} />
-                                                  </button>
-                                                </Blueprint4.Button>
+                                                      <span className=\\"bp4-button-text\\">
+                                                        Eval
+                                                      </span>
+                                                      <Blueprint4.Icon icon={false} />
+                                                    </button>
+                                                  </Blueprint4.Button>
+                                                </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
                                           </Reference>
@@ -2984,23 +3054,25 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                   </Blueprint4.Tooltip2>
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function: handleReplOutputClear]}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                      <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                        <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
-                                          <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
+                                  <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
+                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                          <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
+                                            <span icon=\\"remove\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"remove\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                <path d=\\"M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint4.Icon>
                                         </Blueprint4.Icon>
-                                      </Blueprint4.Icon>
-                                      <span className=\\"bp4-button-text\\">
-                                        Clear
-                                      </span>
-                                      <Blueprint4.Icon icon={[undefined]} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                        <span className=\\"bp4-button-text\\">
+                                          Clear
+                                        </span>
+                                        <Blueprint4.Icon icon={false} />
+                                      </button>
+                                    </Blueprint4.Button>
+                                  </ControlButton>
                                 </ControlBarClearButton>
                               </div>
                               <MediaQuery minWidth={769} />
