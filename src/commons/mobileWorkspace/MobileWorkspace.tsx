@@ -286,7 +286,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       </div>
 
       <DraggableRepl
-        key={'repl'}
+        key="repl"
         position={draggableReplPosition}
         onDrag={onDrag}
         disabled={isDraggableReplDisabled}
