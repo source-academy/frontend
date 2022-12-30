@@ -1,8 +1,10 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { assertType } from 'src/commons/utils/TypeHelper';
 
-import { ContestEntry, Library } from '../../assessment/AssessmentTypes';
+import { ContestEntry } from '../../assessment/AssessmentTypes';
 import { EditorProps } from '../../editor/Editor';
-import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
 const MockEditor = (props: EditorProps) => <div id="mock-editor">{props.editorValue}</div>;
@@ -13,7 +15,7 @@ jest.mock('../../editor/Editor', () => (props: EditorProps) => (
 
 const mockedHandleEditorValueChange = jest.fn();
 
-const defaultProps: AssessmentWorkspaceProps = {
+const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
   autogradingResults: [],
   notAttempted: true,
@@ -32,38 +34,18 @@ const defaultProps: AssessmentWorkspaceProps = {
   ],
   editorTestcases: [],
   hasUnsavedChanges: false,
-  handleAssessmentFetch: (assessmentId: number) => {},
-  handleBrowseHistoryDown: () => {},
-  handleBrowseHistoryUp: () => {},
-  handleClearContext: (library: Library, shouldInitLibrary: boolean) => {},
-  handleDeclarationNavigate: (cursorPosition: Position) => {},
-  handleEditorEval: () => {},
   handleEditorValueChange: mockedHandleEditorValueChange,
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
-  handleInterruptEval: () => {},
   handleReplEval: () => {},
-  handleReplOutputClear: () => {},
-  handleReplValueChange: (newValue: string) => {},
-  handleSendReplInputToOutput: (code: string) => {},
-  handleResetWorkspace: () => {},
-  handleChangeExecTime: () => {},
   handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
-  handleSideContentHeightChange: (heightChange: number) => {},
-  handleTestcaseEval: (testcaseId: number) => {},
-  handleRunAllTestcases: () => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
-  handleUpdateCurrentAssessmentId: (a: number, q: number) => {},
-  handleDebuggerPause: () => {},
-  handleDebuggerResume: () => {},
-  handleDebuggerReset: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   isRunning: false,
   isDebugging: false,
   enableDebugging: false,
   output: [],
   questionId: 0,
   replValue: ''
-};
+});
 
 const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps
@@ -103,69 +85,65 @@ const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   questionId: 0
 };
 
+const mockStore = mockInitialStore();
+
 test('AssessmentWorkspace page "loading" content renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockUndefinedAssessmentWorkspaceProps} />;
-  const tree = shallow(app);
+  const app = (
+    <Provider store={mockStore}>
+      <AssessmentWorkspace {...mockUndefinedAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('AssessmentWorkspace page with programming question renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockProgrammingAssessmentWorkspaceProps} />;
-  const tree = shallow(app);
+  const app = (
+    <Provider store={mockStore}>
+      <AssessmentWorkspace {...mockProgrammingAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('AssessmentWorkspace page with overdue assessment renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockClosedProgrammingAssessmentWorkspaceProps} />;
-  const tree = shallow(app);
+  const app = (
+    <Provider store={mockStore}>
+      <AssessmentWorkspace {...mockClosedProgrammingAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('AssessmentWorkspace page with MCQ question renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockMcqAssessmentWorkspaceProps} />;
-  const tree = shallow(app);
+  const app = (
+    <Provider store={mockStore}>
+      <AssessmentWorkspace {...mockMcqAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
-/*  ===== Tester comments =====
-    Issue:
-      https://stackoverflow.com/questions/42813342/react-createelement-type-is-invalid-expected-a-string
-    Description:
-      Mounting the AssessmentWorkspace deeply (rendering all recursive subcomponents) in Enzyme with mount
-      results in the test failing with the error
-          Warning: React.createElement: type is invalid -- expected a string (for built-in components) or
-          a class/function (for composite components) but got: undefined. You likely forgot to export your
-          component from the file it's defined in, or you might have mixed up default and named imports.
-
-          Check the render method of `Workspace`.
-
-          The above error occurred in the <div> component:
-            in div (created by Workspace)
-            in div (created by Workspace)
-            in Workspace (created by AssessmentWorkspace)
-            in div (created by AssessmentWorkspace)
-            in AssessmentWorkspace (created by WrapperComponent)
-            in WrapperComponent
-
-      whereas mounting it one-level deep in Enzyme using shallow throws no errors
-    Fix:
-      Stack trace suggests one of the React subcomponents of AssessmentWorkspace works in production
-      but is not set up correctly - requires re-examination of every single React component and
-      sub-component used in AssessmentWorkspace
-
-      Current workaround is to mount AssessmentWorkspace shallowly since the behaviour is correct
-      during user testing
-*/
-
 test('AssessmentWorkspace page with ContestVoting question renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />;
-  const tree = shallow(app);
+  const app = (
+    <Provider store={mockStore}>
+      <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', () => {
-  const app = <AssessmentWorkspace {...mockGradedProgrammingAssessmentWorkspaceProps} />;
-  const tree = shallow(app);
+  const app = (
+    <Provider store={mockStore}>
+      <AssessmentWorkspace {...mockGradedProgrammingAssessmentWorkspaceProps} />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Uncomment when fixed
   // expect(tree.find('.grading-icon').hostNodes()).toHaveLength(1);

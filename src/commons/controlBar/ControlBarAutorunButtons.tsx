@@ -1,9 +1,8 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useMediaQuery } from 'react-responsive';
 
 import controlButton from '../ControlButton';
-import Constants from '../utils/Constants';
+import { useResponsive } from '../utils/Hooks';
 import { ControlBarRunButton } from './ControlBarRunButton';
 
 type ControlBarAutorunButtonProps = DispatchProps & StateProps;
@@ -59,7 +58,7 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
   const showDebuggerReset = (label: string) =>
     props.isDebugging && controlButton(label, IconNames.STOP, props.handleDebuggerReset);
 
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
 
   return isMobileBreakpoint ? (
     <>
