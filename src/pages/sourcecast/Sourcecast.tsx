@@ -106,7 +106,7 @@ export type StateProps = {
 };
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,

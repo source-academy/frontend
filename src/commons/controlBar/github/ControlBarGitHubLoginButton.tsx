@@ -16,7 +16,7 @@ export type ControlBarGitHubLoginButtonProps = {
  * @param props Component properties
  */
 export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonProps> = props => {
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
   const isLoggedIn =
     useTypedSelector(store => store.session.githubOctokitObject).octokit !== undefined;
 

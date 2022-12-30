@@ -65,7 +65,7 @@ export type StateProps = {
 
 const Assessment: React.FC<AssessmentProps> = props => {
   const params = useParams<AssessmentWorkspaceParams>();
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);

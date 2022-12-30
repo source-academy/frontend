@@ -163,7 +163,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   /**
    * Unpacked properties

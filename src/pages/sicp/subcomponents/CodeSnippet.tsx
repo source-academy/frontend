@@ -42,7 +42,7 @@ const resizableProps = {
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
   const context = React.useContext(CodeSnippetContext);
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   const handleOpen = () => {
     context.setActive(id);

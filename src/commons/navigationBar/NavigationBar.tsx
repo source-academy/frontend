@@ -66,7 +66,7 @@ const matchExceptSourcecastAchievement = (match: match | null, location: Locatio
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
 
   FocusStyleManager.onlyShowFocusOnTabs();

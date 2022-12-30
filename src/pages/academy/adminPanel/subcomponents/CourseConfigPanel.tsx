@@ -28,7 +28,7 @@ export enum CourseHelpTextEditorTab {
 }
 
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 

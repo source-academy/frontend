@@ -29,7 +29,7 @@ type GitHubAssessmentListingProps = {
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
 const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props => {
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   let display: JSX.Element;
 

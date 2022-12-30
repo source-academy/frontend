@@ -58,7 +58,7 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
   const showDebuggerReset = (label: string) =>
     props.isDebugging && controlButton(label, IconNames.STOP, props.handleDebuggerReset);
 
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   return isMobileBreakpoint ? (
     <>

@@ -26,7 +26,7 @@ export type ControlBarGitHubButtonsProps = {
  * @param props Component properties
  */
 export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
   const fileName = (filePath.split('\\').pop() || '').split('/').pop() || '';

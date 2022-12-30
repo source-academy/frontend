@@ -196,7 +196,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
 
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
   const propsRef = React.useRef(props);
   propsRef.current = props;
 

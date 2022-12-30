@@ -25,7 +25,7 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 };
 
 export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
   const state: PersistenceState = props.currentFile
     ? props.isDirty
       ? 'DIRTY'

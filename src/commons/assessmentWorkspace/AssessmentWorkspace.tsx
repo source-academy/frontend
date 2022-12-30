@@ -137,7 +137,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? SideContentType.grading
       : SideContentType.questionOverview
   );
-  const isMobileBreakpoint = useResponsive();
+  const { isMobileBreakpoint } = useResponsive();
 
   React.useEffect(() => {
     props.handleEditorValueChange('');
