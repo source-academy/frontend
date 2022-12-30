@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
 import {
   beginDebuggerPause,
@@ -12,6 +11,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { useResponsive } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -54,7 +54,6 @@ import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
-import Constants from '../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import {
@@ -116,7 +115,7 @@ export type StateProps = {
 const workspaceLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcecast: React.FC<SourcecastProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
 
   const dispatch = useDispatch();
 
