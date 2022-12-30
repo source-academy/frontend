@@ -10,7 +10,6 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import {
   beginDebuggerPause,
@@ -30,7 +29,7 @@ import {
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addHtmlConsoleError,
   browseReplHistoryDown,
@@ -93,7 +92,7 @@ import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVi
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import Constants, { Links } from '../../commons/utils/Constants';
+import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
@@ -196,7 +195,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
 
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const propsRef = React.useRef(props);
   propsRef.current = props;
 

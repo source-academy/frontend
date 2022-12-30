@@ -14,8 +14,8 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
+import { useResponsive } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -168,7 +168,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
 
   /**
    * Unpacked properties
