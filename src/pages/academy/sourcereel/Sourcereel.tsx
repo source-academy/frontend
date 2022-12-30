@@ -257,11 +257,11 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'handleEditorValueChange',
       'isEditorAutorun',
       'inputToApply',
-      'handleRecordInput'
+      'handleRecordInput',
+      'isEditorReadonly'
     ),
     editorVariant: 'sourcecast',
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
-    isEditorReadonly: props.isEditorReadonly,
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorUpdateBreakpoints: breakpoints =>
