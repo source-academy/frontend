@@ -1,16 +1,13 @@
-import { Card, Icon, Tab, TabId, TabProps, Tabs } from '@blueprintjs/core';
+import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
-import { useTypedSelector } from '../utils/Hooks';
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { getDynamicTabs } from './SideContentHelper';
+import { assertType } from '../utils/TypeHelper';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import GenericSideContent, { generateIconId, GenericSideContentProps } from './GenericSideContent';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
- * @property animate Set this to false to disable the movement
- * of the selected tab indicator. Default value: true.
- *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
  *
@@ -25,155 +22,94 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
  * mounting of the SideContent component. Switching tabs
  * will merely hide them from view.
  */
-export type SideContentProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  // Optional due to uncontrolled tab component in EditingWorkspace
-  onChange?: (
-    newTabId: SideContentType,
-    prevTabId: SideContentType,
-    event: React.MouseEvent<HTMLElement>
-  ) => void;
-};
+export type SideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
 
 type StateProps = {
-  animate?: boolean;
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
-  tabs: {
-    beforeDynamicTabs: SideContentTab[];
-    afterDynamicTabs: SideContentTab[];
-  };
-  workspaceLocation?: WorkspaceLocation;
   editorWidth?: string;
   sideContentHeight?: number;
 };
 
-const SideContent = (props: SideContentProps) => {
-  const { tabs, onChange } = props;
-  const [dynamicTabs, setDynamicTabs] = React.useState(
-    tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
+/**
+ * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
+ */
+const generateClassName = (id: string | undefined) =>
+  id === SideContentType.module || id === SideContentType.htmlDisplay
+    ? 'side-content-tooltip side-content-tab-alert'
+    : 'side-content-tooltip';
+
+const renderTab = (
+  tab: SideContentTab,
+  workspaceLocation?: WorkspaceLocation,
+  editorWidth?: string,
+  sideContentHeight?: number
+) => {
+  const iconSize = 20;
+  const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+  const tabTitle = (
+    <Tooltip2 content={tab.label}>
+      <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
+        <Icon icon={tab.iconName} iconSize={iconSize} />
+      </div>
+    </Tooltip2>
   );
+  const tabProps = assertType<TabProps>()({
+    id: tabId,
+    title: tabTitle,
+    disabled: tab.disabled,
+    className: 'side-content-tab'
+  });
 
-  // Fetch debuggerContext from store
-  const debuggerContext = useTypedSelector(
-    state => props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
-  );
-  React.useEffect(() => {
-    const allActiveTabs = tabs.beforeDynamicTabs
-      .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))
-      .concat(tabs.afterDynamicTabs);
-    setDynamicTabs(allActiveTabs);
-  }, [tabs, debuggerContext]);
+  if (!tab.body) {
+    return <Tab key={tabId} {...tabProps} />;
+  }
 
-  /**
-   * Generates an icon id given a TabId.
-   * Used to set and remove the 'side-content-tab-alert' style to the tabs.
-   */
-  const generateIconId = (tabId: TabId) => `${tabId}-icon`;
-
-  /**
-   * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
-   */
-  const generateClassName = (id: string | undefined) =>
-    id === SideContentType.module || id === SideContentType.htmlDisplay
-      ? 'side-content-tooltip side-content-tab-alert'
-      : 'side-content-tooltip';
-
-  const renderedTabs = React.useMemo(() => {
-    const renderTab = (
-      tab: SideContentTab,
-      workspaceLocation?: WorkspaceLocation,
-      editorWidth?: string,
-      sideContentHeight?: number
-    ) => {
-      const iconSize = 20;
-      const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-      const tabTitle: JSX.Element = (
-        <Tooltip2 content={tab.label}>
-          <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
-            <Icon icon={tab.iconName} iconSize={iconSize} />
-          </div>
-        </Tooltip2>
-      );
-      const tabProps: Partial<TabProps> = {
-        id: tabId,
-        title: tabTitle,
-        disabled: tab.disabled,
-        className: 'side-content-tab'
-      };
-
-      if (!tab.body) {
-        return <Tab key={tabId} {...tabProps} />;
-      }
-
-      const tabBody: JSX.Element = workspaceLocation
-        ? {
-            ...tab.body,
-            props: {
-              ...tab.body.props,
-              workspaceLocation,
-              editorWidth,
-              sideContentHeight
-            }
-          }
-        : tab.body;
-      const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
-
-      return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
-    };
-
-    return dynamicTabs.map(tab =>
-      renderTab(tab, props.workspaceLocation, props.editorWidth, props.sideContentHeight)
-    );
-  }, [dynamicTabs, props.workspaceLocation, props.editorWidth, props.sideContentHeight]);
-
-  const changeTabsCallback = React.useCallback(
-    (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ): void => {
-      /**
-       * Remove the 'side-content-tab-alert' class that causes tabs flash.
-       * To be run when tabs are changed.
-       * Currently this style is only used for the "Env Visualizer" tab.
-       */
-      const resetAlert = (prevTabId: TabId) => {
-        const iconId = generateIconId(prevTabId);
-        const icon = document.getElementById(iconId);
-
-        // The new selected tab will still have the "side-content-tab-alert" class, but the CSS hides it
-        if (icon) {
-          icon.classList.remove('side-content-tab-alert');
+  const tabBody: JSX.Element = workspaceLocation
+    ? {
+        ...tab.body,
+        props: {
+          ...tab.body.props,
+          workspaceLocation,
+          editorWidth,
+          sideContentHeight
         }
-      };
-
-      if (onChange === undefined) {
-        resetAlert(prevTabId);
-      } else {
-        onChange(newTabId, prevTabId, event);
-        resetAlert(prevTabId);
       }
-    },
-    [onChange]
-  );
+    : tab.body;
+  const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
+  return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
+};
+
+const SideContent: React.FC<SideContentProps> = ({
+  selectedTabId,
+  renderActiveTabPanelOnly,
+  editorWidth,
+  sideContentHeight,
+  ...otherProps
+}) => {
   return (
-    <div className="side-content">
-      <Card>
-        <div className="side-content-tabs">
-          <Tabs
-            id="side-content-tabs"
-            onChange={changeTabsCallback}
-            renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
-            selectedTabId={props.selectedTabId}
-          >
-            {renderedTabs}
-          </Tabs>
+    <GenericSideContent
+      {...otherProps}
+      renderFunction={(dynamicTabs, changeTabsCallback) => (
+        <div className="side-content">
+          <Card>
+            <div className="side-content-tabs">
+              <Tabs
+                id="side-content-tabs"
+                onChange={changeTabsCallback}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTabId}
+              >
+                {dynamicTabs.map(tab =>
+                  renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
+                )}
+              </Tabs>
+            </div>
+          </Card>
         </div>
-      </Card>
-    </div>
+      )}
+    />
   );
 };
 
