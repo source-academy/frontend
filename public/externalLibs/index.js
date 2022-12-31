@@ -37,8 +37,6 @@ function loadAllLibs() {
     // binary tree library
     '/externalLibs/tree.js',
     // support for Practical Assessments (presently none)
-    // video
-    '/externalLibs/video/video_lib.js',
     // inspector
     '/externalLibs/inspector/inspector.js',
   ]
