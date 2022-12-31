@@ -193,7 +193,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                       <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                         <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                         <span className=\\"bp4-button-text\\">
-                          Question 1 of 1
+                          Question 1 of 1  
                         </span>
                         <Blueprint4.Icon icon={false} />
                       </button>
@@ -947,7 +947,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                       <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                         <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                         <span className=\\"bp4-button-text\\">
-                          Question 3 of 5
+                          Question 3 of 5  
                         </span>
                         <Blueprint4.Icon icon={false} />
                       </button>
@@ -1228,24 +1228,24 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
+                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                    <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                      <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                        <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                          <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                        </svg>
+                                                      </span>
+                                                    </Blueprint4.Icon>
                                                   </Blueprint4.Icon>
-                                                </Blueprint4.Icon>
-                                                <span className=\\"bp4-button-text\\">
-                                                  Autograder Results
-                                                </span>
-                                                <Blueprint4.Icon icon={false} />
-                                              </button>
-                                            </Blueprint4.Button>
-                                          </ControlButton>
+                                                  <span className=\\"bp4-button-text\\">
+                                                    Autograder Results
+                                                  </span>
+                                                  <Blueprint4.Icon icon={false} />
+                                                </button>
+                                              </Blueprint4.Button>
+                                            </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
                                                 <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -1527,7 +1527,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                       <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                         <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                         <span className=\\"bp4-button-text\\">
-                          Question 1 of 5
+                          Question 1 of 5  
                         </span>
                         <Blueprint4.Icon icon={false} />
                       </button>
@@ -1761,24 +1761,24 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
+                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                    <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                      <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                        <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                          <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                        </svg>
+                                                      </span>
+                                                    </Blueprint4.Icon>
                                                   </Blueprint4.Icon>
-                                                </Blueprint4.Icon>
-                                                <span className=\\"bp4-button-text\\">
-                                                  Autograder Results
-                                                </span>
-                                                <Blueprint4.Icon icon={false} />
-                                              </button>
-                                            </Blueprint4.Button>
-                                          </ControlButton>
+                                                  <span className=\\"bp4-button-text\\">
+                                                    Autograder Results
+                                                  </span>
+                                                  <Blueprint4.Icon icon={false} />
+                                                </button>
+                                              </Blueprint4.Button>
+                                            </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
                                                 <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -2081,7 +2081,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                       <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                         <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                         <span className=\\"bp4-button-text\\">
-                          Question 1 of 5
+                          Question 1 of 5  
                         </span>
                         <Blueprint4.Icon icon={false} />
                       </button>
@@ -2315,24 +2315,24 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
+                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                    <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                      <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                        <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                          <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                        </svg>
+                                                      </span>
+                                                    </Blueprint4.Icon>
                                                   </Blueprint4.Icon>
-                                                </Blueprint4.Icon>
-                                                <span className=\\"bp4-button-text\\">
-                                                  Autograder Results
-                                                </span>
-                                                <Blueprint4.Icon icon={false} />
-                                              </button>
-                                            </Blueprint4.Button>
-                                          </ControlButton>
+                                                  <span className=\\"bp4-button-text\\">
+                                                    Autograder Results
+                                                  </span>
+                                                  <Blueprint4.Icon icon={false} />
+                                                </button>
+                                              </Blueprint4.Button>
+                                            </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
                                                 <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -2635,7 +2635,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                       <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
                         <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
                         <span className=\\"bp4-button-text\\">
-                          Question 1 of 2
+                          Question 1 of 2  
                         </span>
                         <Blueprint4.Icon icon={false} />
                       </button>
@@ -2899,24 +2899,24 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                            <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                              <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                                                  <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                                                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
+                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                                                    <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                                                      <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                                        <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                          <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                                        </svg>
+                                                      </span>
+                                                    </Blueprint4.Icon>
                                                   </Blueprint4.Icon>
-                                                </Blueprint4.Icon>
-                                                <span className=\\"bp4-button-text\\">
-                                                  Autograder Results
-                                                </span>
-                                                <Blueprint4.Icon icon={false} />
-                                              </button>
-                                            </Blueprint4.Button>
-                                          </ControlButton>
+                                                  <span className=\\"bp4-button-text\\">
+                                                    Autograder Results
+                                                  </span>
+                                                  <Blueprint4.Icon icon={false} />
+                                                </button>
+                                              </Blueprint4.Button>
+                                            </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
                                                 <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -2946,7 +2946,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                                         <Blueprint4.Text ellipsize={false}>
                                                           <div className=\\"\\" title={[undefined]}>
                                                             0
-                                                             /
+                                                             / 
                                                             2
                                                           </div>
                                                         </Blueprint4.Text>
@@ -2984,11 +2984,11 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                               <div className=\\"grading-result-info\\">
                                                 <Blueprint4.Text ellipsize={false}>
                                                   <div className=\\"\\" title={[undefined]}>
-                                                    Graded by
+                                                    Graded by 
                                                     <b>
                                                       avenger
                                                     </b>
-                                                     on
+                                                     on 
                                                     18th June, 13:24
                                                   </div>
                                                 </Blueprint4.Text>
