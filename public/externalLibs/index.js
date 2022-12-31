@@ -34,10 +34,6 @@ function loadAllLibs() {
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
     '/externalLibs/sound/microphone.js',
-    // graphics
-    '/externalLibs/graphics/gl-matrix.js',
-    '/externalLibs/graphics/webGLgraphics.js',
-    '/externalLibs/graphics/webGLrune.js',
     // binary tree library
     '/externalLibs/tree.js',
     // support for Practical Assessments (presently none)
@@ -60,19 +56,6 @@ function loadAllLibs() {
 function loadLib(externalLibraryName) {
   let files
   switch (externalLibraryName) {
-    /**
-     * Appears that loadAllLibs() have loaded the libraries 
-     * for RUNES, and no longer necessary for 
-     * WorkspaceSaga.ts to call loadLib() for individual libraries.
-     */
-    case 'RUNES':
-      files = [
-        // graphics
-        // '/externalLibs/graphics/gl-matrix.js',
-        // '/externalLibs/graphics/webGLgraphics.js',
-        // '/externalLibs/graphics/webGLrune.js'
-      ]
-      break
     case 'MACHINELEARNING':
       files = [
         // faceAPI
