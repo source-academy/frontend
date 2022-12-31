@@ -50,6 +50,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -580,6 +581,24 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
+        }
+      };
+    case UPDATE_ACTIVE_EDITOR_TAB:
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      // Do not modify the workspace state if there is no active editor tab.
+      if (activeEditorTabIndex === null) {
+        return state;
+      }
+      const updatedEditorTabs = [...state[workspaceLocation].editorTabs];
+      updatedEditorTabs[activeEditorTabIndex] = {
+        ...updatedEditorTabs[activeEditorTabIndex],
+        ...action.payload.activeEditorTabOptions
+      };
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: updatedEditorTabs
         }
       };
     case UPDATE_EDITOR_BREAKPOINTS:

@@ -20,7 +20,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
@@ -35,6 +34,7 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
+import { useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -65,7 +65,7 @@ export type StateProps = {
 
 const Assessment: React.FC<AssessmentProps> = props => {
   const params = useParams<AssessmentWorkspaceParams>();
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);

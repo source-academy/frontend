@@ -3,11 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
-import { DeepPartial } from 'redux';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type QuestionEditorProps = DispatchProps & StateProps;
@@ -15,7 +14,7 @@ type QuestionEditorProps = DispatchProps & StateProps;
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (val: string) => void;
-  handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) => void;
+  handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) => void;
 };
 
 type StateProps = {
@@ -208,10 +207,10 @@ class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps
 
         if (this.state.activeEditor.id === 'prepend') {
           const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorTabs: [{ prependValue: editorPrepend }] });
+          this.props.handleUpdateActiveEditorTab({ prependValue: editorPrepend });
         } else if (this.state.activeEditor.id === 'postpend') {
           const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorTabs: [{ postpendValue: editorPostpend }] });
+          this.props.handleUpdateActiveEditorTab({ postpendValue: editorPostpend });
         }
 
         this.setState({

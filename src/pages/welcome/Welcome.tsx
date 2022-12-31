@@ -1,10 +1,9 @@
 import { Card, H2, UL } from '@blueprintjs/core';
-import { useSelector } from 'react-redux';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
 import Constants, { Links } from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 const Welcome: React.FC = () => {
-  const name = useSelector((store: OverallState) => store.session.name);
+  const name = useTypedSelector(store => store.session.name);
 
   return (
     <div className="fullpage">

@@ -150,6 +150,7 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },

@@ -9,8 +9,7 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useDispatch, useSelector } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import {
   beginDebuggerPause,
@@ -30,6 +29,7 @@ import {
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addHtmlConsoleError,
   browseReplHistoryDown,
@@ -64,7 +64,6 @@ import {
 import {
   InterpreterOutput,
   isSourceLanguage,
-  OverallState,
   ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -79,6 +78,10 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -89,7 +92,7 @@ import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVi
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import Constants, { Links } from '../../commons/utils/Constants';
+import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
@@ -126,7 +129,6 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleUsingSubst: (usingSubst: boolean) => void;
-  handleUpdatePrepend?: (s: string) => void;
 };
 
 export type StateProps = {
@@ -193,7 +195,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
 
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const propsRef = React.useRef(props);
   propsRef.current = props;
 
@@ -243,11 +245,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const usingRemoteExecution =
-    useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
+    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
-  const externalLibraryName = useSelector(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
+  const externalLibraryName = useTypedSelector(
+    state => state.workspaces.playground.externalLibrary
   );
 
   React.useEffect(() => {
@@ -466,16 +468,15 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
 
-  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
-    const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
         key="github"
-        loggedInAs={octokit}
+        loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
         onClickOpen={() => dispatch(githubOpenFile())}
@@ -724,13 +725,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
-  const editorProps = {
+  const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    editorValue: props.editorTabs[0].value,
-    highlightedLines: props.editorTabs[0].highlightedLines,
-    breakpoints: props.editorTabs[0].breakpoints,
-    newCursorPosition: props.editorTabs[0].newCursorPosition,
+    editorVariant: 'normal',
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval,
@@ -794,7 +792,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           : executionTime
       ]
     },
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: change =>
       dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
@@ -814,7 +812,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
     mobileSideContentProps: {
