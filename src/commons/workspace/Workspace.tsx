@@ -72,10 +72,6 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     }
   });
 
-  const controlBarProps = () => {
-    return { ...props.controlBarProps };
-  };
-
   const sideBarResizableProps = () => {
     const onResizeStop: ResizeCallback = (
       event: MouseEvent | TouchEvent,
@@ -208,7 +204,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
           message={'You have changes that may not be saved. Are you sure you want to leave?'}
         />
       ) : null}
-      <ControlBar {...controlBarProps()} />
+      <ControlBar {...props.controlBarProps} />
       <div className="workspace-parent">
         <Resizable {...sideBarResizableProps()}>
           <SideBar

@@ -9,7 +9,7 @@ import {
   assessmentTemplate,
   overviewTemplate
 } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import {
   makeEntireAssessment,
   retrieveLocalAssessment,
@@ -61,7 +61,13 @@ class MissionCreator extends React.Component<MissionCreatorProps, State> {
             onChange={this.handleChangeFile}
           />
         </div>
-        <div>{controlButton('Make New Mission', IconNames.NEW_OBJECT, this.makeMission)}</div>
+        <div>
+          <ControlButton
+            label="Make New Mission"
+            icon={IconNames.NEW_OBJECT}
+            onClick={this.makeMission}
+          />
+        </div>
       </div>
     );
   }

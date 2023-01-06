@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 
-import controlButton from '../../ControlButton';
+import ControlButton from '../../ControlButton';
 
 export type ControlBarGitHubLoginButtonProps = {
   onClickLogIn: () => void;
@@ -20,9 +20,11 @@ export const ControlBarGitHubLoginButton: React.FC<ControlBarGitHubLoginButtonPr
   const isLoggedIn =
     useTypedSelector(store => store.session.githubOctokitObject).octokit !== undefined;
 
-  const loginButton = isLoggedIn
-    ? controlButton('Log Out', IconNames.GIT_BRANCH, props.onClickLogOut)
-    : controlButton('Log In', IconNames.GIT_BRANCH, props.onClickLogIn);
+  const loginButton = isLoggedIn ? (
+    <ControlButton label="Log Out" icon={IconNames.GIT_BRANCH} onClick={props.onClickLogOut} />
+  ) : (
+    <ControlButton label="Log In" icon={IconNames.GIT_BRANCH} onClick={props.onClickLogIn} />
+  );
 
   return <ButtonGroup large={!isMobileBreakpoint}>{loginButton}</ButtonGroup>;
 };

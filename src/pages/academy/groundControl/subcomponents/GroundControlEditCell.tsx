@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
 export type EditCellProps = DispatchProps & StateProps;
@@ -88,7 +88,7 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
   return (
     <>
       <span className="date-cell-text">{currentDate.format(dateDisplayFormat)}</span>
-      {controlButton('', IconNames.EDIT, handleOpenDialog)}
+      <ControlButton icon={IconNames.EDIT} onClick={handleOpenDialog} />
       <Dialog
         icon={IconNames.INFO_SIGN}
         isOpen={isDialogOpen}
@@ -102,11 +102,18 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {controlButton('Cancel', IconNames.CROSS, handleCloseDialog, { minimal: false })}
-            {controlButton('Confirm', IconNames.TICK, handleUpdateDate, {
-              minimal: false,
-              intent: Intent.DANGER
-            })}
+            <ControlButton
+              label="Cancel"
+              icon={IconNames.CROSS}
+              onClick={handleCloseDialog}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              icon={IconNames.TICK}
+              onClick={handleUpdateDate}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
           </div>
         </div>
       </Dialog>

@@ -33,7 +33,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
 import DeploymentTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
 import GradingTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
@@ -171,13 +171,14 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => setShowResetTemplateOverlay(false), {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            null,
-            () => {
+          <ControlButton
+            label="Cancel"
+            onClick={() => setShowResetTemplateOverlay(false)}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Confirm"
+            onClick={() => {
               const assessment = retrieveLocalAssessment()!;
               setAssessment(assessment);
               setHasUnsavedChanges(false);
@@ -185,9 +186,9 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               setOriginalMaxXp(getMaxXp());
               handleRefreshLibrary();
               resetWorkspaceValues();
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
+            }}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>
