@@ -34,9 +34,6 @@ function loadAllLibs() {
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
     '/externalLibs/sound/microphone.js',
-    // binary tree library
-    '/externalLibs/tree.js',
-    // support for Practical Assessments (presently none)
     // inspector
     '/externalLibs/inspector/inspector.js',
   ]
