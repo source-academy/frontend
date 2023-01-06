@@ -28,8 +28,6 @@ function dynamicallyLoadScript(url) {
  */
 function loadAllLibs() {
   const files = [
-    // list library
-    '/externalLibs/list.js',
     // sound
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
