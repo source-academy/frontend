@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import { history } from '../utils/HistoryHelper';
 
@@ -19,84 +19,54 @@ type StateProps = {
   questionId: number;
 };
 
-type State = {
-  showSaveOverlay: boolean;
-  modifyAssessment: () => void;
-};
+const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
+  const [showSaveOverlay, setShowSaveOverlay] = useState(false);
+  const [modifyAssessment, setModifyAssessment] = useState<VoidFunction>(() => {});
 
-export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, State> {
-  public constructor(props: ManageQuestionTabProps) {
-    super(props);
-    this.state = {
-      showSaveOverlay: false,
-      modifyAssessment: () => {}
-    };
-  }
-
-  public render() {
+  const manageQuestionTab = (index: number) => {
     return (
       <div>
-        {this.confirmSaveOverlay()}
-        {this.props.assessment.questions.map((q, index) => (
-          <div key={index}>
-            Question {index + 1}
-            <br />
-            <Button className="mcq-option col-xs-12" minimal={true}>
-              <Markdown
-                content={q.content.length > 200 ? q.content.substring(0, 300) + '...' : q.content}
-              />
-            </Button>
-            {this.manageQuestionTab(index)}
-            <br />
-            <br />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  private manageQuestionTab = (index: number) => {
-    return (
-      <div>
-        {controlButton(
-          `Clone`,
-          IconNames.DOCUMENT,
-          this.confirmSave(
-            this.makeQuestion(() => deepCopy(this.props.assessment.questions[index]), index)
-          )
-        )}
-        {controlButton(`Delete`, IconNames.REMOVE, this.confirmSave(this.deleteQuestion(index)))}
-        {controlButton(
-          `Shift Up`,
-          IconNames.CARET_UP,
-          this.confirmSave(this.shiftQuestion(-1, index)),
-          {},
-          index === 0
-        )}
-        {controlButton(
-          `Shift Down`,
-          IconNames.CARET_DOWN,
-          this.confirmSave(this.shiftQuestion(1, index)),
-          {},
-          index >= this.props.assessment.questions.length - 1
-        )}
+        <ControlButton
+          label="Clone"
+          icon={IconNames.DOCUMENT}
+          onClick={confirmSave(
+            makeQuestion(() => deepCopy(props.assessment.questions[index]), index)
+          )}
+        />
+        <ControlButton
+          label="Delete"
+          icon={IconNames.REMOVE}
+          onClick={confirmSave(deleteQuestion(index))}
+        />
+        <ControlButton
+          label="Shift Up"
+          icon={IconNames.CARET_UP}
+          onClick={confirmSave(shiftQuestion(-1, index))}
+          isDisabled={index === 0}
+        />
+        <ControlButton
+          label="Shift Down"
+          icon={IconNames.CARET_DOWN}
+          onClick={confirmSave(shiftQuestion(1, index))}
+          isDisabled={index >= props.assessment.questions.length - 1}
+        />
         <br />
-        {controlButton(
-          'Insert Programming Question',
-          IconNames.FONT,
-          this.confirmSave(this.makeQuestion(programmingTemplate, index))
-        )}
-        {controlButton(
-          'Insert MCQ Question',
-          IconNames.CONFIRM,
-          this.confirmSave(this.makeQuestion(mcqTemplate, index))
-        )}
+        <ControlButton
+          label="Insert Programming Question"
+          icon={IconNames.FONT}
+          onClick={confirmSave(makeQuestion(programmingTemplate, index))}
+        />
+        <ControlButton
+          label="Insert MCQ Question"
+          icon={IconNames.CONFIRM}
+          onClick={confirmSave(makeQuestion(mcqTemplate, index))}
+        />
       </div>
     );
   };
 
-  private shiftQuestion = (dir: number, index: number) => () => {
-    const assessment = this.props.assessment;
+  const shiftQuestion = (dir: number, index: number) => () => {
+    const assessment = props.assessment;
     const newIndex = index + dir;
     if (newIndex >= 0 && newIndex < assessment.questions.length) {
       const question = assessment.questions[index];
@@ -104,37 +74,35 @@ export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, S
       questions[index] = questions[newIndex];
       questions[newIndex] = question;
       assessment.questions = questions;
-      this.props.updateAssessment(assessment);
+      props.updateAssessment(assessment);
       history.push('/mission-control/-1/' + newIndex.toString());
     }
   };
 
-  private makeQuestion = (template: () => any, index: number) => () => {
-    const assessment = this.props.assessment;
+  const makeQuestion = (template: () => any, index: number) => () => {
+    const assessment = props.assessment;
     index = index + 1;
     const questions = assessment.questions;
     questions.splice(index, 0, template());
     assessment.questions = questions;
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
     history.push('/mission-control/-1/' + index.toString());
   };
 
-  private deleteQuestion = (index: number) => () => {
-    const assessment = this.props.assessment;
+  const deleteQuestion = (index: number) => () => {
+    const assessment = props.assessment;
     let questions = assessment.questions;
     if (questions.length > 1) {
       questions = questions.slice(0, index).concat(questions.slice(index + 1));
     }
     assessment.questions = questions;
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private confirmSave = (modifyAssessment: () => void) => () => {
-    if (this.props.hasUnsavedChanges) {
-      this.setState({
-        showSaveOverlay: true,
-        modifyAssessment
-      });
+  const confirmSave = (modifyAssessment: () => void) => () => {
+    if (props.hasUnsavedChanges) {
+      setShowSaveOverlay(true);
+      setModifyAssessment(modifyAssessment);
     } else {
       modifyAssessment();
     }
@@ -143,12 +111,12 @@ export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, S
   /**
    * Asks to save work.
    */
-  private confirmSaveOverlay = () => (
+  const confirmSaveOverlay = (
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
       isCloseButtonShown={true}
-      isOpen={this.state.showSaveOverlay}
+      isOpen={showSaveOverlay}
       title="Confirmation: Save unsaved changes?"
     >
       <div className={Classes.DIALOG_BODY}>
@@ -156,25 +124,44 @@ export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, S
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => this.setState({ showSaveOverlay: false }), {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            null,
-            () => {
-              this.state.modifyAssessment();
-              this.setState({
-                showSaveOverlay: false
-              });
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
+          <ControlButton
+            label="Cancel"
+            onClick={() => setShowSaveOverlay(false)}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Confirm"
+            onClick={() => {
+              modifyAssessment();
+              setShowSaveOverlay(false);
+            }}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>
   );
-}
+
+  return (
+    <div>
+      {confirmSaveOverlay}
+      {props.assessment.questions.map((q, index) => (
+        <div key={index}>
+          Question {index + 1}
+          <br />
+          <Button className="mcq-option col-xs-12" minimal={true}>
+            <Markdown
+              content={q.content.length > 200 ? q.content.substring(0, 300) + '...' : q.content}
+            />
+          </Button>
+          {manageQuestionTab(index)}
+          <br />
+          <br />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const deepCopy = (arr: any) => {
   return JSON.parse(JSON.stringify(arr));

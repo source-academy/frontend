@@ -8,9 +8,7 @@ exports[`Navbar renders correctly 1`] = `
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
       <div>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function (anonymous)]}>
-          Next
-        </Blueprint4.Button>
+        <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClick]} options={{...}} />
       </div>
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>

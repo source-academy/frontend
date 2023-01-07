@@ -2,7 +2,7 @@ import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 
 type DeleteRowCellProps = OwnProps;
 
@@ -45,13 +45,18 @@ const DeleteRowCell: React.FC<DeleteRowCellProps> = props => {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {controlButton('Cancel', IconNames.CROSS, () => setIsDialogOpen(false), {
-              minimal: false
-            })}
-            {controlButton('Ok', IconNames.TICK, handleDelete, {
-              minimal: false,
-              intent: Intent.WARNING
-            })}
+            <ControlButton
+              label="Cancel"
+              icon={IconNames.CROSS}
+              onClick={() => setIsDialogOpen(false)}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Ok"
+              icon={IconNames.TICK}
+              onClick={handleDelete}
+              options={{ minimal: false, intent: Intent.WARNING }}
+            />
           </div>
         </div>
       </Dialog>

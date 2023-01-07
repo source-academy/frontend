@@ -150,10 +150,12 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
   { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
@@ -227,24 +229,29 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
-  breakpoints: [],
   context: createContext<WorkspaceLocation>(
     Constants.defaultSourceChapter,
     [],
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
-  editorPrepend: '',
+  activeEditorTabIndex: 0,
+  editorTabs: [
+    {
+      value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+        ? defaultEditorValue
+        : '',
+      prependValue: '',
+      postpendValue: '',
+      highlightedLines: [],
+      breakpoints: []
+    }
+  ],
   editorSessionId: '',
-  editorValue: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
-    ? defaultEditorValue
-    : '',
-  editorPostpend: '',
-  editorReadonly: false,
+  isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
-  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,

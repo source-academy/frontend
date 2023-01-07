@@ -3,19 +3,20 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
-import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
+import { assertType } from '../../../commons/utils/TypeHelper';
 import Playground, { handleHash, PlaygroundProps } from '../Playground';
 
-const baseProps = {
-  editorValue: '',
+const baseProps = assertType<PlaygroundProps>()({
   execTime: 1000,
   stepLimit: 1000,
-  breakpoints: [],
-  highlightedLines: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
+  activeEditorTabIndex: 0,
+  editorTabs: [
+    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
+  ],
   editorSessionId: '',
   isEditorAutorun: false,
   sideContentHeight: 40,
@@ -29,57 +30,25 @@ const baseProps = {
   persistenceFile: undefined,
   githubOctokitObject: { octokit: undefined },
   githubSaveInfo: { repoName: '', filePath: '' },
-  handleAddHtmlConsoleError: (errorMsg: string) => {},
-  handleBrowseHistoryDown: () => {},
-  handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
-  handleChangeStepLimit: (stepLimit: number) => {},
   handleChapterSelect: (chapter: Chapter) => {},
-  handleDeclarationNavigate: (cursorPosition: Position) => {},
-  handleEditorEval: () => {},
   handleEditorValueChange: () => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
-  handleFetchSublanguage: () => {},
-  handleGenerateLz: () => {},
-  handleShortenURL: () => {},
-  handleUpdateShortURL: (s: string) => {},
-  handleInterruptEval: () => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
-  handleReplValueChange: (code: string) => {},
-  handleSendReplInputToOutput: (code: string) => {},
-  handleSetEditorSessionId: (editorSessionId: string) => {},
-  handleSetSharedbConnected: (connected: boolean) => {},
-  handleSideContentHeightChange: (h: number) => {},
-  handleToggleEditorAutorun: () => {},
-  handleUsingSubst: (usingSubst: boolean) => {},
-  handleDebuggerPause: () => {},
-  handleDebuggerResume: () => {},
-  handleDebuggerReset: () => {},
-  handleFetchChapter: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
-  handlePersistenceOpenPicker: () => {},
-  handlePersistenceSaveFile: () => {},
-  handlePersistenceInitialise: () => {},
-  handlePersistenceUpdateFile: () => {},
-  handlePersistenceLogOut: () => {},
-  handleGitHubOpenFile: () => {},
-  handleGitHubSaveFileAs: () => {},
-  handleGitHubSaveFile: () => {},
-  handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {}
-};
+  handleUsingSubst: (usingSubst: boolean) => {}
+});
 
 const testValueProps: PlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/academy', {}),
-  editorValue: 'Test value'
+  editorTabs: [{ ...baseProps.editorTabs[0], value: 'Test value' }]
 };
 
 const playgroundLinkProps: PlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
-  editorValue: 'This should not show up'
+  editorTabs: [{ ...baseProps.editorTabs[0], value: 'This should not show up' }]
 };
 
 const mockStore = mockInitialStore();

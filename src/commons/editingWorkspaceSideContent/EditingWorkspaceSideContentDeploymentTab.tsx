@@ -11,7 +11,7 @@ import {
   ExternalLibraryName
 } from '../application/types/ExternalTypes';
 import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
@@ -30,7 +30,7 @@ type StateProps = {
   isOptionalDeployment: boolean;
 };
 
-export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
+class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
   public render() {
     if (!this.props.isOptionalDeployment) {
       return (
@@ -62,7 +62,11 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
       <tr key={i}>
         <td>{this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
         <td style={{ width: '100px' }}>
-          {controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}
+          <ControlButton
+            label="Delete"
+            icon={IconNames.MINUS}
+            onClick={this.handleSymbolDelete(i)}
+          />
         </td>
       </tr>
     ));
@@ -74,13 +78,21 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
         </td>
         <td>{this.globalValueTextareaContent(i)}</td>
         <td style={{ width: '90px' }}>
-          {controlButton('Delete', IconNames.MINUS, this.handleGlobalDelete(i))}
+          <ControlButton
+            label="Delete"
+            icon={IconNames.MINUS}
+            onClick={this.handleGlobalDelete(i)}
+          />
         </td>
       </tr>
     ));
 
-    const resetLibrary = controlButton('Use this Library', IconNames.REFRESH, () =>
-      this.props.handleRefreshLibrary(deployment)
+    const resetLibrary = (
+      <ControlButton
+        label="Use this Library"
+        icon={IconNames.REFRESH}
+        onClick={() => this.props.handleRefreshLibrary(deployment)}
+      />
     );
 
     const symbolsFragment = (
@@ -94,7 +106,7 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
         <table style={{ width: '100%' }}>
           <tbody>{symbols}</tbody>
         </table>
-        {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
+        <ControlButton label="New Symbol" icon={IconNames.PLUS} onClick={this.handleNewSymbol} />
       </React.Fragment>
     );
 
@@ -105,7 +117,7 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
         <table style={{ width: '100%', borderSpacing: '5px' }}>
           <tbody>{globals}</tbody>
         </table>
-        {controlButton('New Global', IconNames.PLUS, this.handleNewGlobal)}
+        <ControlButton label="New Global" icon={IconNames.PLUS} onClick={this.handleNewGlobal} />
       </React.Fragment>
     );
 

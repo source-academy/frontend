@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 
 export type DeleteCellProps = DispatchProps & StateProps;
 
@@ -31,7 +31,7 @@ const DeleteCell: React.FunctionComponent<DeleteCellProps> = props => {
 
   return (
     <>
-      {controlButton('', IconNames.TRASH, handleOpenDialog)}
+      <ControlButton icon={IconNames.TRASH} onClick={handleOpenDialog} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
@@ -49,11 +49,18 @@ const DeleteCell: React.FunctionComponent<DeleteCellProps> = props => {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {controlButton('Cancel', IconNames.CROSS, handleCloseDialog, { minimal: false })}
-            {controlButton('Confirm', IconNames.TRASH, handleDelete, {
-              minimal: false,
-              intent: Intent.DANGER
-            })}
+            <ControlButton
+              label="Cancel"
+              icon={IconNames.CROSS}
+              onClick={handleCloseDialog}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              icon={IconNames.TRASH}
+              onClick={handleDelete}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
           </div>
         </div>
       </Dialog>

@@ -20,7 +20,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
@@ -28,13 +27,14 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
 import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from '../ContentDisplay';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
+import { useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -65,7 +65,7 @@ export type StateProps = {
 
 const Assessment: React.FC<AssessmentProps> = props => {
   const params = useParams<AssessmentWorkspaceParams>();
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
@@ -365,11 +365,16 @@ const Assessment: React.FC<AssessmentProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, setBetchaAssessmentNull, { minimal: false })}
-          {controlButton('Finalise', null, submitAssessment, {
-            minimal: false,
-            intent: Intent.DANGER
-          })}
+          <ControlButton
+            label="Cancel"
+            onClick={setBetchaAssessmentNull}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Finalise"
+            onClick={submitAssessment}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>
@@ -420,10 +425,13 @@ const makeGradingStatus = (gradingStatus: string) => {
   );
 };
 
-const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
-  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-    minimal: true,
-    className: 'collapse-button'
-  });
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
+  <ControlButton
+    label={label}
+    icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+    onClick={toggleFunc}
+    options={{ minimal: true, className: 'collapse-button' }}
+  />
+);
 
 export default Assessment;

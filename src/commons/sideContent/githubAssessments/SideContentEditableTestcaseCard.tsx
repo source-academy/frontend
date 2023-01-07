@@ -6,7 +6,6 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
 import { Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import SideContentCanvasOutput from './../SideContentCanvasOutput';
 
 type SideContentEditableTestcaseCardProps = DispatchProps & StateProps;
 
@@ -20,16 +19,6 @@ type DispatchProps = {
 type StateProps = {
   index: number;
   testcase: Testcase;
-};
-
-const renderResult = (value: any) => {
-  /** A class which is the output of the show() function */
-  const ShapeDrawn = (window as any).ShapeDrawn;
-  if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-    return <SideContentCanvasOutput canvas={value.$canvas} />;
-  } else {
-    return stringify(value);
-  }
 };
 
 const SideContentEditableTestcaseCard: React.FunctionComponent<
@@ -80,7 +69,7 @@ const SideContentEditableTestcaseCard: React.FunctionComponent<
       answer = parseError(testcase.errors);
     } else {
       if (testcase.result !== undefined) {
-        answer = renderResult(testcase.result) as string;
+        answer = stringify(testcase.result) as string;
       }
     }
     return answer;

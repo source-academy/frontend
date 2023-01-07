@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../../ControlButton';
+import ControlButton from '../../ControlButton';
 
 type ControlBarDisplayMCQButtonProps = DispatchProps & StateProps;
 
@@ -18,5 +18,5 @@ export const ControlBarDisplayMCQButton: React.FC<ControlBarDisplayMCQButtonProp
   const label = props.mcqDisplayed ? 'Show MCQ Text' : 'Hide MCQ Text';
   const behaviour = props.mcqDisplayed ? props.displayTextInEditor : props.displayMCQInEditor;
 
-  return controlButton(label, IconNames.REFRESH, behaviour);
+  return <ControlButton label={label} icon={IconNames.REFRESH} onClick={behaviour} />;
 };

@@ -10,7 +10,6 @@ import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import * as AceBuilds from 'ace-builds';
 import { HotKeys } from 'react-hotkeys';
 
-import { useMergedRef } from '../utils/Hooks';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
@@ -33,21 +32,12 @@ export type EditorHook = (
   reactAceRef: React.MutableRefObject<AceEditor | null>
 ) => void;
 
-/**
- * @property editorValue - The string content of the react-ace editor
- * @property handleEditorChange  - A callback function
- *           for the react-ace editor's `onChange`
- * @property handleEvalEditor  - A callback function for evaluation
- *           of the editor's content, using `slang`
- */
-export type EditorProps = DispatchProps & StateProps & OnEvent;
+export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps & OnEvent;
 
 type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
-  handleReplValueChange?: (newCode: string) => void;
-  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
@@ -55,17 +45,20 @@ type DispatchProps = {
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 };
 
-type StateProps = {
-  breakpoints: string[];
+type EditorStateProps = {
   editorSessionId: string;
-  editorValue: string;
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
-  newCursorPosition?: Position;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
+};
+
+export type EditorTabStateProps = {
+  editorValue: string;
+  highlightedLines: HighlightedLines[];
+  breakpoints: string[];
+  newCursorPosition?: Position;
 };
 
 type LocalStateProps = {
@@ -105,7 +98,7 @@ const EventT: Array<keyof OnEvent> = [
 ];
 
 const getMarkers = (
-  highlightedLines: StateProps['highlightedLines']
+  highlightedLines: EditorTabStateProps['highlightedLines']
 ): IAceEditorProps['markers'] => {
   return highlightedLines.map(lineNums => ({
     startRow: lineNums[0],
@@ -196,211 +189,199 @@ const handlers = {
   goGreen: () => {}
 };
 
-const EditorBase = React.memo(
-  React.forwardRef<AceEditor, EditorProps & LocalStateProps>(function EditorBase(
-    props,
-    forwardedRef
-  ) {
-    const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
+const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
+  const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
 
-    // Refs for things that technically shouldn't change... but just in case.
-    const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
-    const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+  // Refs for things that technically shouldn't change... but just in case.
+  const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
+  const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
 
-    React.useEffect(() => {
-      handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
-      handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
-    }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
+  React.useEffect(() => {
+    handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
+    handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
+  }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
-    // Handles input into AceEditor causing app to scroll to the top on iOS Safari
-    React.useEffect(() => {
-      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-      if (isIOS) {
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
-      }
-
-      return () => {
-        document.body.style.position = '';
-        document.body.style.width = '';
-      };
-    }, []);
-
-    const [sourceChapter, sourceVariant, externalLibraryName] = [
-      props.sourceChapter || Chapter.SOURCE_1,
-      props.sourceVariant || Variant.DEFAULT,
-      props.externalLibraryName || 'NONE'
-    ];
-
-    // this function defines the Ace language and highlighting mode for the
-    // given combination of chapter, variant and external library. it CANNOT be
-    // put in useEffect as it MUST be called before the mode is set on the Ace
-    // editor, and use(Layout)Effect runs after that happens.
-    //
-    // this used to be in useMemo, but selectMode now checks if the mode is
-    // already defined and doesn't do it, so it is now OK to keep calling this
-    // unconditionally.
-    selectMode(sourceChapter, sourceVariant, externalLibraryName);
-
-    React.useLayoutEffect(() => {
-      if (!reactAceRef.current) {
-        return;
-      }
-      const editor = reactAceRef.current.editor;
-      const session = editor.getSession();
-      // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
-      // The () => ref.current() are designed to use the latest instance only.
-
-      // NOTE: the two `any`s below are because the Ace editor typedefs are
-      // hopelessly incomplete
-      editor.on(
-        'gutterclick' as any,
-        makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
-      );
-
-      // Change all info annotations to error annotations
-      session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
-
-      // Start autocompletion
-      acequire('ace/ext/language_tools').setCompleters([
-        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
-      ]);
-      // This should run exactly once.
-    }, []);
-
-    React.useLayoutEffect(() => {
-      if (!reactAceRef.current) {
-        return;
-      }
-      const newCursorPosition = props.newCursorPosition;
-      if (newCursorPosition) {
-        moveCursor(reactAceRef.current.editor, newCursorPosition);
-      }
-    }, [props.newCursorPosition]);
-
-    const {
-      handleUpdateHasUnsavedChanges,
-      handleEditorValueChange,
-      isEditorAutorun,
-      handleEditorEval
-    } = props;
-    const keyHandlers: EditorKeyBindingHandlers = {
-      evaluate: handleEditorEval
-    };
-
-    const aceEditorProps: IAceEditorProps = {
-      className: 'react-ace',
-      editorProps: {
-        $blockScrolling: Infinity
-      },
-      markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
-      fontSize: 17,
-      height: '100%',
-      highlightActiveLine: false,
-      mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
-      theme: 'source',
-      value: props.editorValue,
-      width: '100%',
-      setOptions: {
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        fontFamily: "'Inconsolata', 'Consolas', monospace"
-      },
-      keyboardHandler: props.editorBinding
-    };
-
-    // Hooks must not change after an editor is instantiated, so to prevent that
-    // we store the original value and always use that only
-    const [hooks] = React.useState(props.hooks);
-    if (hooks) {
-      // Note: the following is extremely non-standard use of hooks
-      // DO NOT refactor this into any form where the hook is called from a lambda
-      for (const hook of hooks) {
-        hook(props, aceEditorProps, keyHandlers, reactAceRef);
-      }
+  // Handles input into AceEditor causing app to scroll to the top on iOS Safari
+  React.useEffect(() => {
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
     }
 
-    const hooksOnChange = aceEditorProps.onChange;
+    return () => {
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, []);
 
-    aceEditorProps.onChange = React.useCallback(
-      (newCode: string, delta: Ace.Delta) => {
-        if (!reactAceRef.current) {
-          return;
-        }
-        handleEditorValueChange(newCode);
-        if (handleUpdateHasUnsavedChanges) {
-          handleUpdateHasUnsavedChanges(true);
-        }
-        const annotations = reactAceRef.current.editor.getSession().getAnnotations();
-        if (isEditorAutorun && annotations.length === 0) {
-          handleEditorEval();
-        }
-        hooksOnChange && hooksOnChange(newCode, delta);
-      },
-      [
-        handleEditorValueChange,
-        handleUpdateHasUnsavedChanges,
-        isEditorAutorun,
-        hooksOnChange,
-        handleEditorEval
-      ]
+  const [sourceChapter, sourceVariant, externalLibraryName] = [
+    props.sourceChapter || Chapter.SOURCE_1,
+    props.sourceVariant || Variant.DEFAULT,
+    props.externalLibraryName || 'NONE'
+  ];
+
+  // this function defines the Ace language and highlighting mode for the
+  // given combination of chapter, variant and external library. it CANNOT be
+  // put in useEffect as it MUST be called before the mode is set on the Ace
+  // editor, and use(Layout)Effect runs after that happens.
+  //
+  // this used to be in useMemo, but selectMode now checks if the mode is
+  // already defined and doesn't do it, so it is now OK to keep calling this
+  // unconditionally.
+  selectMode(sourceChapter, sourceVariant, externalLibraryName);
+
+  React.useLayoutEffect(() => {
+    if (!reactAceRef.current) {
+      return;
+    }
+    const editor = reactAceRef.current.editor;
+    const session = editor.getSession();
+    // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
+    // The () => ref.current() are designed to use the latest instance only.
+
+    // NOTE: the two `any`s below are because the Ace editor typedefs are
+    // hopelessly incomplete
+    editor.on(
+      'gutterclick' as any,
+      makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
     );
 
-    aceEditorProps.commands = Object.entries(keyHandlers)
-      .filter(([_, exec]) => exec)
-      .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+    // Change all info annotations to error annotations
+    session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
 
-    // Merge in .onEvent ace editor props
-    // This prevents user errors such as
-    // TRYING TO ADD AN ONCHANGE PROP WHICH KILLS THE ABOVE ONCHANGE.
-    // **triggered**
-    EventT.forEach(eventT => {
-      const propFn = props[eventT];
-      if (propFn) {
-        /* eslint-disable */
+    // Start autocompletion
+    acequire('ace/ext/language_tools').setCompleters([
+      makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
+    ]);
+    // This should run exactly once.
+  }, []);
 
-        const currFn = aceEditorProps[eventT];
-        if (!currFn) {
-          // Typescript isn't smart enough to know that the types of both LHS/RHS are the same.
-          // @ts-ignore
-          aceEditorProps[eventT] = propFn;
-        } else {
-          aceEditorProps[eventT] = function (...args: any[]) {
-            // Impossible to define a function which takes in the arbitrary number of correct arguments...
-            // @ts-ignore
-            currFn(...args);
-            // @ts-ignore
-            propFn(...args);
-          };
-        }
-        /* eslint-enable */
+  React.useLayoutEffect(() => {
+    if (!reactAceRef.current) {
+      return;
+    }
+    const newCursorPosition = props.newCursorPosition;
+    if (newCursorPosition) {
+      moveCursor(reactAceRef.current.editor, newCursorPosition);
+    }
+  }, [props.newCursorPosition]);
+
+  const {
+    handleUpdateHasUnsavedChanges,
+    handleEditorValueChange,
+    isEditorAutorun,
+    handleEditorEval
+  } = props;
+  const keyHandlers: EditorKeyBindingHandlers = {
+    evaluate: handleEditorEval
+  };
+
+  const aceEditorProps: IAceEditorProps = {
+    className: 'react-ace',
+    editorProps: {
+      $blockScrolling: Infinity
+    },
+    markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
+    fontSize: 17,
+    height: '100%',
+    highlightActiveLine: false,
+    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    theme: 'source',
+    value: props.editorValue,
+    width: '100%',
+    setOptions: {
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true,
+      fontFamily: "'Inconsolata', 'Consolas', monospace"
+    },
+    keyboardHandler: props.editorBinding
+  };
+
+  // Hooks must not change after an editor is instantiated, so to prevent that
+  // we store the original value and always use that only
+  const [hooks] = React.useState(props.hooks);
+  if (hooks) {
+    // Note: the following is extremely non-standard use of hooks
+    // DO NOT refactor this into any form where the hook is called from a lambda
+    for (const hook of hooks) {
+      hook(props, aceEditorProps, keyHandlers, reactAceRef);
+    }
+  }
+
+  const hooksOnChange = aceEditorProps.onChange;
+
+  aceEditorProps.onChange = React.useCallback(
+    (newCode: string, delta: Ace.Delta) => {
+      if (!reactAceRef.current) {
+        return;
       }
-    });
+      handleEditorValueChange(newCode);
+      if (handleUpdateHasUnsavedChanges) {
+        handleUpdateHasUnsavedChanges(true);
+      }
+      const annotations = reactAceRef.current.editor.getSession().getAnnotations();
+      if (isEditorAutorun && annotations.length === 0) {
+        handleEditorEval();
+      }
+      hooksOnChange && hooksOnChange(newCode, delta);
+    },
+    [
+      handleEditorValueChange,
+      handleUpdateHasUnsavedChanges,
+      isEditorAutorun,
+      hooksOnChange,
+      handleEditorEval
+    ]
+  );
 
-    return (
-      <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
-        <div className="row editor-react-ace">
-          <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
-        </div>
-      </HotKeys>
-    );
-  })
-);
+  aceEditorProps.commands = Object.entries(keyHandlers)
+    .filter(([_, exec]) => exec)
+    .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+
+  // Merge in .onEvent ace editor props
+  // This prevents user errors such as
+  // TRYING TO ADD AN ONCHANGE PROP WHICH KILLS THE ABOVE ONCHANGE.
+  // **triggered**
+  EventT.forEach(eventT => {
+    const propFn = props[eventT];
+    if (propFn) {
+      /* eslint-disable */
+
+      const currFn = aceEditorProps[eventT];
+      if (!currFn) {
+        // Typescript isn't smart enough to know that the types of both LHS/RHS are the same.
+        // @ts-ignore
+        aceEditorProps[eventT] = propFn;
+      } else {
+        aceEditorProps[eventT] = function (...args: any[]) {
+          // Impossible to define a function which takes in the arbitrary number of correct arguments...
+          // @ts-ignore
+          currFn(...args);
+          // @ts-ignore
+          propFn(...args);
+        };
+      }
+      /* eslint-enable */
+    }
+  });
+
+  return (
+    <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
+      <div className="row editor-react-ace">
+        <AceEditor {...aceEditorProps} ref={reactAceRef} />
+      </div>
+    </HotKeys>
+  );
+});
 
 // don't create a new list every render.
 const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
 
-const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => {
+const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
 
-  return (
-    <EditorBase
-      {...props}
-      editorBinding={workspaceSettings.editorBinding}
-      hooks={hooks}
-      ref={ref}
-    />
-  );
-});
+  return <EditorBase {...props} editorBinding={workspaceSettings.editorBinding} hooks={hooks} />;
+};
 
 export default Editor;

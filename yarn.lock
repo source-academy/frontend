@@ -9407,10 +9407,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.4.tgz#531ea5a5ff6713d5e337fce432047d93544214c7"
-  integrity sha512-gQWwHt4NANmwd1gtcspHcQolhlJVlvKc6NXJcaJhH+3uVNgk/zbIVnoarDRgQqkn7yIKgHDFjNQJCpVa0I8lUg==
+js-slang@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.7.tgz#4e9569c8e48c7159bc7f8dc356f8355ea9c4ba66"
+  integrity sha512-zEZeAHZLjNpvMgvxjPSsrYL295PE8jKlpHP4nhRyIYkOufqryLI60tfMhzRaYK9/vj5FEhdOJ6yAZUwpY2coVw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -13024,6 +13024,11 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
+
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
