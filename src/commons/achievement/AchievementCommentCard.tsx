@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
-import { OverallState } from '../application/ApplicationTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { history } from '../utils/HistoryHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
@@ -14,7 +13,7 @@ const AchievementCommentCard = ({
   assessment: Assessment;
   showToQuestion: boolean;
 }) => {
-  const courseId = useSelector((store: OverallState) => store.session.courseId);
+  const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
     () => (questionId: number) => {
       if (!courseId) {
