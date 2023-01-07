@@ -470,7 +470,7 @@ export const getAssessmentOverviews = async (
  */
 export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<number | null> => {
   let resp;
-  if (courseRegId) {
+  if (courseRegId !== undefined) {
     // If courseRegId is provided, get the total XP of a specific student
     resp = await request(`${courseId()}/admin/users/${courseRegId}/total_xp`, 'GET', {
       ...tokens,
@@ -531,7 +531,7 @@ export const getAssessment = async (
   courseRegId?: number
 ): Promise<Assessment | null> => {
   let resp;
-  if (courseRegId) {
+  if (courseRegId !== undefined) {
     // If courseRegId is provided, we are getting the assessment for another user as an admin
     resp = await request(
       `${courseId()}/admin/users/${courseRegId}/assessments/${assessmentId}`,
