@@ -14,7 +14,8 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { EditorTabStateProps } from '../editor/Editor';
+import { Position } from '../editor/EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -24,7 +25,10 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
  *           of the editor's content, using `slang`
  * @property isEditorReadonly - Used for sourcecast only
  */
-export type SourceRecorderEditorProps = DispatchProps & StateProps & OwnProps;
+export type SourceRecorderEditorProps = DispatchProps &
+  EditorStateProps &
+  EditorTabStateProps &
+  OwnProps;
 
 type DispatchProps = {
   getTimerDuration?: () => number;
@@ -34,22 +38,18 @@ type DispatchProps = {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleRecordInput?: (input: Input) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-  onFocus?: (editor: Ace.Editor) => void;
-  onBlur?: () => void;
+  onFocus?: (event: any, editor?: Ace.Editor) => void;
+  onBlur?: (event: any, editor?: Ace.Editor) => void;
 };
 
-type StateProps = {
-  breakpoints: string[];
+type EditorStateProps = {
   codeDeltasToApply?: CodeDelta[] | null;
   editorSessionId: string;
-  editorValue: string;
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isEditorReadonly: boolean;
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
-  newCursorPosition?: Position;
 };
 
 type OwnProps = {
@@ -172,10 +172,10 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
     const { onFocus, onBlur } = this.props;
     if (onFocus) {
-      editor.on('focus', () => onFocus(editor));
+      editor.on('focus', (event: Event) => onFocus(event, editor));
     }
     if (onBlur) {
-      editor.on('blur', onBlur);
+      editor.on('blur', (event: Event) => onBlur(event, editor));
     }
   }
 

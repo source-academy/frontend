@@ -8,7 +8,7 @@ import {
   Testcase,
   testcaseTemplate
 } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
@@ -79,8 +79,16 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
             </div>
             <div className="listing-controls">
               <div>
-                {controlButton('Test', IconNames.PLAY, () => props.handleTestcaseEval(testcase))}
-                {controlButton('Delete', IconNames.DELETE, () => removeTestcase(testcases, index))}
+                <ControlButton
+                  label="Test"
+                  icon={IconNames.PLAY}
+                  onClick={() => props.handleTestcaseEval(testcase)}
+                />
+                <ControlButton
+                  label="Delete"
+                  icon={IconNames.DELETE}
+                  onClick={() => removeTestcase(testcases, index)}
+                />
               </div>
             </div>
           </div>
@@ -105,16 +113,20 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
     <div>
       Public Testcases
       {publicTestcases}
-      {controlButton('New public testcase', IconNames.PLUS, addTestcase(question.testcases))}
+      <ControlButton
+        label="New public testcase"
+        icon={IconNames.PLUS}
+        onClick={addTestcase(question.testcases)}
+      />
       <br />
       <br />
       Private Testcases
       {privateTestcases}
-      {controlButton(
-        'New private testcase',
-        IconNames.PLUS,
-        addTestcase(question.testcasesPrivate!)
-      )}
+      <ControlButton
+        label="New private testcase"
+        icon={IconNames.PLUS}
+        onClick={addTestcase(question.testcasesPrivate!)}
+      />
     </div>
   );
 };

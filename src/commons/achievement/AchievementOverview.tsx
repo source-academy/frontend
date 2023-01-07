@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AchievementUser } from 'src/features/achievement/AchievementTypes';
 
-import { OverallState } from '../application/ApplicationTypes';
 import { FETCH_TOTAL_XP, FETCH_TOTAL_XP_ADMIN } from '../application/types/SessionTypes';
+import { useTypedSelector } from '../utils/Hooks';
 import AchievementLevel from './overview/AchievementLevel';
 
 type AchievementOverviewProps = {
@@ -15,7 +15,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
   const { name, userState } = props;
   const [selectedUser] = userState;
   const crid = selectedUser?.courseRegId;
-  const userCrid = useSelector((store: OverallState) => store.session.courseRegId);
+  const userCrid = useTypedSelector(store => store.session.courseRegId);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -27,7 +27,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
     }
   }, [crid, userCrid, dispatch]);
 
-  const studentXp = useSelector((store: OverallState) => store.session.xp);
+  const studentXp = useTypedSelector(store => store.session.xp);
 
   return (
     <div className="achievement-overview">

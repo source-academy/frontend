@@ -1,7 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   AchievementContext,
@@ -9,10 +9,10 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
-import { OverallState } from '../application/ApplicationTypes';
 import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from '../application/types/SessionTypes';
 import { FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
+import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
@@ -32,7 +32,7 @@ function AchievementView({ focusUuid, userState }: AchievementViewProps) {
     const [selectedUser] = userState!;
     courseRegId = selectedUser?.courseRegId;
   }
-  const userCrid = useSelector((store: OverallState) => store.session.courseRegId);
+  const userCrid = useTypedSelector(store => store.session.courseRegId);
   const isAdminView: boolean = courseRegId !== undefined && courseRegId !== userCrid;
 
   const dispatch = useDispatch();
@@ -51,11 +51,9 @@ function AchievementView({ focusUuid, userState }: AchievementViewProps) {
   }, [dispatch, assessmentId, courseRegId, isAdminView]);
 
   const inferencer = useContext(AchievementContext);
-  const assessments = useSelector((store: OverallState) => store.session.assessments);
+  const assessments = useTypedSelector(store => store.session.assessments);
   const selectedAssessment: Assessment | undefined = assessments.get(assessmentId!);
-
-  const allAssessmentConfigs =
-    useSelector((store: OverallState) => store.session.assessmentOverviews) ?? [];
+  const allAssessmentConfigs = useTypedSelector(store => store.session.assessmentOverviews) ?? [];
   const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === assessmentId);
 
   if (focusUuid === '') {

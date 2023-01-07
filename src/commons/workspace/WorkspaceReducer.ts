@@ -1,3 +1,4 @@
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
@@ -49,6 +50,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -333,20 +335,24 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     case EVAL_INTERPRETER_SUCCESS:
+      const newOutputEntry: Partial<ResultOutput> = {
+        type: action.payload.type as 'result' | undefined,
+        value: stringify(action.payload.value)
+      };
+
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[workspaceLocation].output.slice(0, -1).concat({
-          type: action.payload.type,
-          value: action.payload.value,
-          consoleLogs: lastOutput.consoleLogs
+          consoleLogs: lastOutput.consoleLogs,
+          ...newOutputEntry
         } as ResultOutput);
       } else {
         newOutput = state[workspaceLocation].output.concat({
-          type: action.payload.type,
-          value: action.payload.value,
-          consoleLogs: []
+          consoleLogs: [],
+          ...newOutputEntry
         } as ResultOutput);
       }
+
       return {
         ...state,
         [workspaceLocation]: {
@@ -575,6 +581,24 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
+        }
+      };
+    case UPDATE_ACTIVE_EDITOR_TAB:
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      // Do not modify the workspace state if there is no active editor tab.
+      if (activeEditorTabIndex === null) {
+        return state;
+      }
+      const updatedEditorTabs = [...state[workspaceLocation].editorTabs];
+      updatedEditorTabs[activeEditorTabIndex] = {
+        ...updatedEditorTabs[activeEditorTabIndex],
+        ...action.payload.activeEditorTabOptions
+      };
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: updatedEditorTabs
         }
       };
     case UPDATE_EDITOR_BREAKPOINTS:

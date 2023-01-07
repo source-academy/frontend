@@ -4,7 +4,7 @@ import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
@@ -51,7 +51,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
           <input defaultValue={this.props.queryString!} readOnly={true} ref={this.shareInputElem} />
           <Tooltip2 content="Copy link to clipboard">
             <CopyToClipboard text={this.props.queryString!}>
-              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+              <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
             </CopyToClipboard>
           </Tooltip2>
         </div>
@@ -66,10 +66,14 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
                   onChange={this.handleChange}
                   style={{ width: 175 }}
                 />
-                {controlButton('Get Link', IconNames.SHARE, () => {
-                  this.props.handleShortenURL(this.state.keyword);
-                  this.setState({ isLoading: true });
-                })}
+                <ControlButton
+                  label="Get Link"
+                  icon={IconNames.SHARE}
+                  onClick={() => {
+                    this.props.handleShortenURL(this.state.keyword);
+                    this.setState({ isLoading: true });
+                  }}
+                />
               </div>
             ) : (
               <div>
@@ -84,7 +88,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
               <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} />
               <Tooltip2 content="Copy link to clipboard">
                 <CopyToClipboard text={this.props.shortURL}>
-                  {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
                 </CopyToClipboard>
               </Tooltip2>
             </div>
@@ -99,7 +103,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
         content={shareButtonPopoverContent}
       >
         <Tooltip2 content="Get shareable link" placement={Position.TOP}>
-          {controlButton('Share', IconNames.SHARE, () => this.toggleButton())}
+          <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
         </Tooltip2>
       </Popover2>
     );

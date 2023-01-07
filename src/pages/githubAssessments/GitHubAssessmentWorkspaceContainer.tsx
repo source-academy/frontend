@@ -1,27 +1,16 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
-import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
-import { loginGitHub, logoutGitHub } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
-import { Position } from '../../commons/editor/EditorTypes';
 import {
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
-  evalTestcase,
-  navigateToDeclaration,
-  promptAutocomplete,
-  runAllTestcases,
-  setEditorBreakpoint,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue,
   updateWorkspace
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
@@ -48,31 +37,16 @@ const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: Chapter) =>
         chapterSelect(chapter, Variant.DEFAULT, workspaceLocation),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, workspaceLocation),
-      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
-      handleRunAllTestcases: () => runAllTestcases(workspaceLocation),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
-      handleUpdateWorkspace: (options: DeepPartial<WorkspaceState>) =>
-        updateWorkspace(workspaceLocation, options),
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback),
-      handleGitHubLogIn: loginGitHub,
-      handleGitHubLogOut: logoutGitHub
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
+        updateWorkspace(workspaceLocation, options)
     },
     dispatch
   );

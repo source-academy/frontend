@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, DeepPartial, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginDebuggerPause,
@@ -76,7 +76,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleResetWorkspace: (options: DeepPartial<WorkspaceState>) =>
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleChangeExecTime: (execTimeMs: number) => changeExecTime(execTimeMs, workspaceLocation),
       handleSideContentHeightChange: (heightChange: number) =>

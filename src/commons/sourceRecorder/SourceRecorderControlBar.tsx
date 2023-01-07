@@ -11,7 +11,7 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { SideContentType } from '../sideContent/SideContentTypes';
 
 export type SourceRecorderControlBarProps = DispatchProps & StateProps & OwnProps;
@@ -67,14 +67,17 @@ class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControl
   }
 
   public render() {
-    const PlayerPlayButton = controlButton(
-      'Play',
-      IconNames.PLAY,
-      this.handlePlayerPlaying,
-      {},
-      !this.props.duration
+    const PlayerPlayButton = (
+      <ControlButton
+        label="Play"
+        icon={IconNames.PLAY}
+        onClick={this.handlePlayerPlaying}
+        isDisabled={!this.props.duration}
+      />
     );
-    const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
+    const PlayerPauseButton = (
+      <ControlButton label="Pause" icon={IconNames.PAUSE} onClick={this.handlePlayerPausing} />
+    );
     return (
       <div className="SourcecastControlBar">
         <audio

@@ -14,7 +14,7 @@ import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
 
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
@@ -197,30 +197,30 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         {this.state.selectedTab === 'write' && (
           <div className="grading-editor-draft-buttons">
             <div className="grading-editor-save-button">
-              {controlButton(
-                'Save Changes',
-                IconNames.FLOPPY_DISK,
-                this.validateXpBeforeSave(this.props.handleGradingSave),
-                saveButtonOpts
-              )}
+              <ControlButton
+                label="Save Changes"
+                icon={IconNames.FLOPPY_DISK}
+                onClick={this.validateXpBeforeSave(this.props.handleGradingSave)}
+                options={saveButtonOpts}
+              />
             </div>
             <div className="grading-editor-discard-button">
-              {controlButton(
-                'Discard Changes',
-                IconNames.TRASH,
-                this.discardChanges,
-                discardButtonOpts
-              )}
+              <ControlButton
+                label="Discard Changes"
+                icon={IconNames.TRASH}
+                onClick={this.discardChanges}
+                options={discardButtonOpts}
+              />
             </div>
           </div>
         )}
         <div className="grading-editor-save-continue-button">
-          {controlButton(
-            'Save and Continue',
-            IconNames.UPDATED,
-            this.validateXpBeforeSave(this.onClickSaveAndContinue),
-            saveAndContinueButtonOpts
-          )}
+          <ControlButton
+            label="Save and Continue"
+            icon={IconNames.UPDATED}
+            onClick={this.validateXpBeforeSave(this.onClickSaveAndContinue)}
+            options={saveAndContinueButtonOpts}
+          />
         </div>
         {this.props.graderName && this.props.gradedAt && (
           <>

@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 
 import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import { history } from '../utils/HistoryHelper';
 
@@ -26,37 +26,41 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
   const manageQuestionTab = (index: number) => {
     return (
       <div>
-        {controlButton(
-          `Clone`,
-          IconNames.DOCUMENT,
-          confirmSave(makeQuestion(() => deepCopy(props.assessment.questions[index]), index))
-        )}
-        {controlButton(`Delete`, IconNames.REMOVE, confirmSave(deleteQuestion(index)))}
-        {controlButton(
-          `Shift Up`,
-          IconNames.CARET_UP,
-          confirmSave(shiftQuestion(-1, index)),
-          {},
-          index === 0
-        )}
-        {controlButton(
-          `Shift Down`,
-          IconNames.CARET_DOWN,
-          confirmSave(shiftQuestion(1, index)),
-          {},
-          index >= props.assessment.questions.length - 1
-        )}
+        <ControlButton
+          label="Clone"
+          icon={IconNames.DOCUMENT}
+          onClick={confirmSave(
+            makeQuestion(() => deepCopy(props.assessment.questions[index]), index)
+          )}
+        />
+        <ControlButton
+          label="Delete"
+          icon={IconNames.REMOVE}
+          onClick={confirmSave(deleteQuestion(index))}
+        />
+        <ControlButton
+          label="Shift Up"
+          icon={IconNames.CARET_UP}
+          onClick={confirmSave(shiftQuestion(-1, index))}
+          isDisabled={index === 0}
+        />
+        <ControlButton
+          label="Shift Down"
+          icon={IconNames.CARET_DOWN}
+          onClick={confirmSave(shiftQuestion(1, index))}
+          isDisabled={index >= props.assessment.questions.length - 1}
+        />
         <br />
-        {controlButton(
-          'Insert Programming Question',
-          IconNames.FONT,
-          confirmSave(makeQuestion(programmingTemplate, index))
-        )}
-        {controlButton(
-          'Insert MCQ Question',
-          IconNames.CONFIRM,
-          confirmSave(makeQuestion(mcqTemplate, index))
-        )}
+        <ControlButton
+          label="Insert Programming Question"
+          icon={IconNames.FONT}
+          onClick={confirmSave(makeQuestion(programmingTemplate, index))}
+        />
+        <ControlButton
+          label="Insert MCQ Question"
+          icon={IconNames.CONFIRM}
+          onClick={confirmSave(makeQuestion(mcqTemplate, index))}
+        />
       </div>
     );
   };
@@ -120,18 +124,19 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => setShowSaveOverlay(false), {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            null,
-            () => {
+          <ControlButton
+            label="Cancel"
+            onClick={() => setShowSaveOverlay(false)}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Confirm"
+            onClick={() => {
               modifyAssessment();
               setShowSaveOverlay(false);
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
+            }}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>

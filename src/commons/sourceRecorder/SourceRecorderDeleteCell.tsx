@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type SourceRecorderDeleteCellProps = DispatchProps & StateProps;
 
@@ -27,7 +27,7 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
 
   return (
     <div>
-      {controlButton('', IconNames.TRASH, handleOpenDialog)}
+      <ControlButton icon={IconNames.TRASH} onClick={handleOpenDialog} />
       <Dialog
         icon="info-sign"
         isOpen={isDialogOpen}
@@ -40,8 +40,8 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {controlButton('Confirm Delete', IconNames.TRASH, handleDelete)}
-            {controlButton('Cancel', IconNames.CROSS, handleCloseDialog)}
+            <ControlButton label="Confirm Delete" icon={IconNames.TRASH} onClick={handleDelete} />
+            <ControlButton label="Cancel" icon={IconNames.CROSS} onClick={handleCloseDialog} />
           </div>
         </div>
       </Dialog>
