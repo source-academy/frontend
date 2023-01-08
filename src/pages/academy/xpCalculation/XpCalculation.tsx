@@ -7,7 +7,7 @@ import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getTotalUserXp } from 'src/commons/application/actions/SessionActions';
+import { fetchAllUserXp } from 'src/commons/application/actions/SessionActions';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -210,7 +210,7 @@ const XpCalculation: React.FC = () => {
 
   return (
     <ContentDisplay
-      loadContentDispatch={() => dispatch(getTotalUserXp())}
+      loadContentDispatch={() => dispatch(fetchAllUserXp())}
       display={!allUserXp ? LoadingDisplay : Content}
       fullWidth={false}
     />

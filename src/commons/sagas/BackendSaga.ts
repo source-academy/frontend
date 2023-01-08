@@ -45,6 +45,7 @@ import {
   DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
@@ -53,7 +54,6 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   FETCH_USER_AND_COURSE,
-  GET_ALL_USER_XP,
   GET_TOTAL_XP,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
@@ -237,7 +237,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(GET_ALL_USER_XP, function* () {
+  yield takeEvery(FETCH_ALL_USER_XP, function* () {
     const tokens: Tokens = yield selectTokens();
 
     const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
