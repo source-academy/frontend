@@ -5,7 +5,7 @@ import { Button, Divider, NonIdealState, Spinner, SpinnerSize } from '@blueprint
 import { IconNames } from '@blueprintjs/icons';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ContentDisplay from 'src/commons/ContentDisplay';
 
 export type StateProps = {
@@ -72,7 +72,7 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
     }
   }, [allUserXp]);
 
-  const exportCSV = () => {
+  const exportCSV = useCallback(() => {
     if (gridApi) {
       gridApi.exportDataAsCsv({
         fileName: `SA XP Count (${new Date().toISOString()}).csv`,
@@ -80,48 +80,38 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
         columnKeys: ['name', 'NUS Net ID', 'Assessment Xp', 'Achievement Xp']
       });
     }
-  };
+  }, [gridApi]);
 
   // Forcibly resizes columns to fit the width of the datagrid - prevents datagrid
   // from needing to render a horizontal scrollbar when columns overflow grid width
-  const resizeGrid = () => {
+  const resizeGrid = useCallback(() => {
     if (gridApi) {
       gridApi.sizeColumnsToFit();
     }
-  };
+  }, [gridApi]);
 
-  const changePaginationView = (type: string) => {
-    return () => {
-      if (gridApi) {
-        switch (type) {
-          case 'first':
-            return gridApi.paginationGoToFirstPage();
-          case 'prev':
-            return gridApi.paginationGoToPreviousPage();
-          case 'next':
-            return gridApi.paginationGoToNextPage();
-          case 'last':
-            return gridApi.paginationGoToLastPage();
-          default:
+  const changePaginationView = useCallback(
+    (type: string) => {
+      return () => {
+        if (gridApi) {
+          switch (type) {
+            case 'first':
+              return gridApi.paginationGoToFirstPage();
+            case 'prev':
+              return gridApi.paginationGoToPreviousPage();
+            case 'next':
+              return gridApi.paginationGoToNextPage();
+            case 'last':
+              return gridApi.paginationGoToLastPage();
+            default:
+          }
         }
-      }
-    };
-  };
+      };
+    },
+    [gridApi]
+  );
 
-  const formatRowCountString = (
-    pageSize: number,
-    currPage: number,
-    maxPages: number,
-    totalRows: number
-  ) => {
-    return maxPages === 0
-      ? '(none)'
-      : currPage !== maxPages
-      ? `(#${pageSize * currPage - 19} - #${pageSize * currPage})`
-      : `(#${pageSize * currPage - 19} - #${totalRows})`;
-  };
-
-  const updatePaginationState = () => {
+  const updatePaginationState = useCallback(() => {
     if (gridApi) {
       const newTotalPages = gridApi.paginationGetTotalPages();
       const newCurrPage = newTotalPages === 0 ? 0 : gridApi.paginationGetCurrentPage() + 1;
@@ -138,7 +128,7 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
         isForwardDisabled: newTotalPages === 0 || newCurrPage === newTotalPages
       });
     }
-  };
+  }, [gridApi, setPageState]);
 
   // const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   const changeVal = event.target.value;
@@ -157,10 +147,13 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
   //   }
   // };
 
-  const onGridReady = (params: GridReadyEvent) => {
-    setGridApi(params.api);
-    updatePaginationState();
-  };
+  const onGridReady = useCallback(
+    (params: GridReadyEvent) => {
+      setGridApi(params.api);
+      updatePaginationState();
+    },
+    [setGridApi, updatePaginationState]
+  );
 
   const Controls = () => {
     return (
@@ -244,6 +237,19 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
       fullWidth={false}
     />
   );
+};
+
+const formatRowCountString = (
+  pageSize: number,
+  currPage: number,
+  maxPages: number,
+  totalRows: number
+) => {
+  return maxPages === 0
+    ? '(none)'
+    : currPage !== maxPages
+    ? `(#${pageSize * currPage - 19} - #${pageSize * currPage})`
+    : `(#${pageSize * currPage - 19} - #${totalRows})`;
 };
 
 export default XpCalculation;
