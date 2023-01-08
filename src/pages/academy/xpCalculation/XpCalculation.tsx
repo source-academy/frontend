@@ -33,6 +33,18 @@ type PageState = {
   isForwardDisabled: boolean;
 };
 
+const columnDefs = [
+  { field: 'name' },
+  { field: 'NUS Net ID' },
+  { field: 'Assessment Xp' },
+  { field: 'Achievement Xp' }
+];
+
+const defaultColDef = {
+  resizable: true,
+  sortable: true
+};
+
 const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserXpFetch }) => {
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [gridApi, setGridApi] = useState<GridApi>();
@@ -59,18 +71,6 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
       setRowData(rowData);
     }
   }, [allUserXp]);
-
-  const columnDefs = [
-    { field: 'name' },
-    { field: 'NUS Net ID' },
-    { field: 'Assessment Xp' },
-    { field: 'Achievement Xp' }
-  ];
-
-  const defaultColDef = {
-    resizable: true,
-    sortable: true
-  };
 
   const exportCSV = () => {
     if (gridApi) {
