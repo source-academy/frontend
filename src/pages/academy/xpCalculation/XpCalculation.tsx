@@ -33,7 +33,7 @@ type PageState = {
   isForwardDisabled: boolean;
 };
 
-const XpCalculation = ({ allUserXp, handleAllUserXpFetch }: XpCalculationProps) => {
+const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserXpFetch }) => {
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [gridApi, setGridApi] = useState<GridApi>();
   const [pageState, setPageState] = useState<PageState>({
