@@ -55,7 +55,6 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
     isBackDisabled: true,
     isForwardDisabled: true
   });
-  // const [filterText, setFilterText] = useState<string>('');
 
   useEffect(() => {
     if (allUserXp) {
@@ -129,23 +128,6 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
       });
     }
   }, [gridApi, setPageState]);
-
-  // const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const changeVal = event.target.value;
-  //   setFilterText(changeVal);
-  // };
-
-  // const handleApplyFilter = () => {
-  //   if (gridApi) {
-  //     gridApi.setQuickFilter(filterText);
-  //   }
-  // };
-
-  // const handleFilterKeypress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (event.key === 'Enter') {
-  //     handleApplyFilter();
-  //   }
-  // };
 
   const onGridReady = useCallback(
     (params: GridReadyEvent) => {
