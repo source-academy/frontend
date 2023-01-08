@@ -22,7 +22,7 @@ import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
-import XpCalculation from './xpCalculation/XpCalculationContainer';
+import XpCalculation from './xpCalculation/XpCalculation';
 
 const Academy: React.FC<{}> = () => {
   const { path, url } = useRouteMatch();

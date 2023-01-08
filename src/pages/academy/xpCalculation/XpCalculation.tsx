@@ -6,17 +6,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getTotalUserXp } from 'src/commons/application/actions/SessionActions';
 import ContentDisplay from 'src/commons/ContentDisplay';
-
-export type StateProps = {
-  allUserXp: string[][] | undefined;
-};
-
-export type DispatchProps = {
-  handleAllUserXpFetch: () => void;
-};
-
-type XpCalculationProps = DispatchProps & StateProps;
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type RowData = {
   name: string;
@@ -45,7 +38,10 @@ const defaultColDef = {
   sortable: true
 };
 
-const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserXpFetch }) => {
+const XpCalculation: React.FC = () => {
+  const dispatch = useDispatch();
+  const allUserXp = useTypedSelector(state => state.session.allUserXp);
+
   const [rowData, setRowData] = useState<RowData[]>([]);
   const [gridApi, setGridApi] = useState<GridApi>();
   const [pageState, setPageState] = useState<PageState>({
@@ -214,7 +210,7 @@ const XpCalculation: React.FC<XpCalculationProps> = ({ allUserXp, handleAllUserX
 
   return (
     <ContentDisplay
-      loadContentDispatch={handleAllUserXpFetch}
+      loadContentDispatch={() => dispatch(getTotalUserXp())}
       display={!allUserXp ? LoadingDisplay : Content}
       fullWidth={false}
     />
