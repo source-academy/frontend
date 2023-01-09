@@ -296,8 +296,8 @@ const mockSoundLibrary: Library = {
 export const mockRuneLibrary: Library = {
   chapter: Chapter.SOURCE_1,
   external: {
-    name: ExternalLibraryName.RUNES,
-    symbols: externalLibraries.get(ExternalLibraryName.RUNES)!
+    name: ExternalLibraryName.NONE,
+    symbols: externalLibraries.get(ExternalLibraryName.NONE)!
   },
   globals: mockGlobals
 };
@@ -305,8 +305,8 @@ export const mockRuneLibrary: Library = {
 const mockBinaryTreeLibrary: Library = {
   chapter: Chapter.SOURCE_4,
   external: {
-    name: ExternalLibraryName.BINARYTREES,
-    symbols: externalLibraries.get(ExternalLibraryName.BINARYTREES)!
+    name: ExternalLibraryName.NONE,
+    symbols: externalLibraries.get(ExternalLibraryName.NONE)!
   },
   globals: mockGlobals
 };

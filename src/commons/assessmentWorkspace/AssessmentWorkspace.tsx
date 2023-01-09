@@ -26,7 +26,6 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { fetchAssessment } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager, InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -62,9 +61,7 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
-import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
 import { useResponsive } from '../utils/Hooks';
@@ -84,7 +81,6 @@ import {
   promptAutocomplete,
   resetWorkspace,
   runAllTestcases,
-  sendReplInputToOutput,
   updateCurrentAssessmentId,
   updateReplValue
 } from '../workspace/WorkspaceActions';
@@ -483,33 +479,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           />
         ),
         id: SideContentType.grading
-      });
-    }
-
-    const externalLibrary = props.assessment!.questions[questionId].library.external;
-    const functionsAttached = externalLibrary.symbols;
-    if (functionsAttached.includes('get_matrix')) {
-      tabs.push({
-        label: `Tone Matrix`,
-        iconName: IconNames.GRID_VIEW,
-        body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
-      });
-    }
-
-    if (
-      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
-      externalLibrary.name === ExternalLibraryName.ALL
-    ) {
-      tabs.push({
-        label: 'Video Display',
-        iconName: IconNames.MOBILE_VIDEO,
-        body: (
-          <SideContentVideoDisplay
-            replChange={code => dispatch(sendReplInputToOutput(code, workspaceLocation))}
-          />
-        ),
-        id: SideContentType.videoDisplay
       });
     }
 
