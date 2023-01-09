@@ -33,8 +33,6 @@ export enum SideContentType {
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
   testcases = 'testcases',
-  toneMatrix = 'tone_matrix',
-  videoDisplay = 'video_display',
   htmlDisplay = 'html_display'
 }
 
