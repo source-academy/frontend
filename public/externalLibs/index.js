@@ -29,9 +29,7 @@ function dynamicallyLoadScript(url) {
 function loadAllLibs() {
   const files = [
     // sound
-    '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
-    '/externalLibs/sound/microphone.js',
     // inspector
     '/externalLibs/inspector/inspector.js',
   ]
