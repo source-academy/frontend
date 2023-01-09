@@ -8,9 +8,10 @@ import {
   getAbilityBackground,
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
-import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-import { FETCH_ASSESSMENT } from '../application/types/SessionTypes';
-import { Assessment, FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
+import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
+import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from '../application/types/SessionTypes';
+import { FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
+import { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
@@ -19,25 +20,41 @@ import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
   focusUuid: string;
-  courseRegId?: number;
+  assessments?: Map<number, Assessment>;
+  userState?: [AchievementUser | undefined, any];
 };
 
-function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
+function AchievementView({ focusUuid, userState }: AchievementViewProps) {
+  const assessmentId = !Number.isNaN(+focusUuid) && +focusUuid !== 0 ? +focusUuid : undefined;
+  let courseRegId: number | undefined;
+
+  if (userState) {
+    const [selectedUser] = userState!;
+    courseRegId = selectedUser?.courseRegId;
+  }
+  const userCrid = useTypedSelector(store => store.session.courseRegId);
+  const isAdminView: boolean = courseRegId !== undefined && courseRegId !== userCrid;
+
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!Number.isNaN(+focusUuid) && +focusUuid !== 0) {
-      dispatch({ type: FETCH_ASSESSMENT, payload: +focusUuid });
-      dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS });
+    dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS });
+    if (!assessmentId) {
+      return;
     }
-  }, [focusUuid, courseRegId, dispatch]);
+    if (isAdminView) {
+      // Fetch selected user's assessment from admin route
+      dispatch({ type: FETCH_ASSESSMENT_ADMIN, payload: { assessmentId, courseRegId } });
+    } else {
+      // If user is student, fetch assessment details from assessment route instead, as seen below
+      dispatch({ type: FETCH_ASSESSMENT, payload: assessmentId });
+    }
+  }, [dispatch, assessmentId, courseRegId, isAdminView]);
 
   const inferencer = useContext(AchievementContext);
-  const courseId = useTypedSelector(store => store.session.courseId);
-
   const assessments = useTypedSelector(store => store.session.assessments);
+  const selectedAssessment: Assessment | undefined = assessments.get(assessmentId!);
   const allAssessmentConfigs = useTypedSelector(store => store.session.assessmentOverviews) ?? [];
-  const selectedAssessment: Assessment | undefined = assessments.get(+focusUuid);
-  const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === +focusUuid);
+  const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === assessmentId);
 
   if (focusUuid === '') {
     return (
@@ -47,7 +64,6 @@ function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
       </div>
     );
   }
-
   const achievement = inferencer.getAchievement(focusUuid);
   const { deadline, title, view } = achievement;
   const { coverImage, completionText, description } = view;
@@ -82,7 +98,9 @@ function AchievementView({ focusUuid, courseRegId }: AchievementViewProps) {
         selectedAssessment &&
         selectedAssessmentConfig &&
         selectedAssessmentConfig.isManuallyGraded && (
-          <AchievementCommentCard courseId={courseId} assessment={selectedAssessment} />
+          // TODO: showToQuestion is currently used to disable the goto question button for admins,
+          // as it has not been integrated with the grading view yet
+          <AchievementCommentCard assessment={selectedAssessment} showToQuestion={!isAdminView} />
         )}
 
       {goals.length > 0 && (
