@@ -22,6 +22,7 @@ import {
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -29,8 +30,9 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_TOTAL_XP,
+  FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
-  GET_TOTAL_XP,
   LOGIN,
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
@@ -77,11 +79,16 @@ export const fetchUserAndCourse = () => action(FETCH_USER_AND_COURSE);
 
 export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 
-export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
+export const fetchAssessment = (assessmentId: number) => action(FETCH_ASSESSMENT, assessmentId);
+
+export const fetchAssessmentAdmin = (assessmentId: number, courseRegId: number) =>
+  action(FETCH_ASSESSMENT_ADMIN, { assessmentId, courseRegId });
 
 export const fetchAssessmentOverviews = () => action(FETCH_ASSESSMENT_OVERVIEWS);
 
-export const getTotalXp = () => action(GET_TOTAL_XP);
+export const fetchTotalXp = () => action(FETCH_TOTAL_XP);
+
+export const fetchTotalXpAdmin = (courseRegId: number) => action(FETCH_TOTAL_XP_ADMIN, courseRegId);
 
 export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
 
