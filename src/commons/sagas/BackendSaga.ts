@@ -45,6 +45,7 @@ import {
   DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
@@ -78,6 +79,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHe
 import {
   deleteAssessment,
   deleteSourcecastEntry,
+  getAllUserXp,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -234,6 +236,15 @@ function* BackendSaga(): SagaIterator {
     );
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
+    }
+  });
+
+  yield takeEvery(FETCH_ALL_USER_XP, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
+    if (res) {
+      yield put(actions.updateAllUserXp(res.all_users_xp));
     }
   });
 

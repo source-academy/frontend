@@ -339,6 +339,7 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
+  allUserXp: undefined,
   story: {
     story: '',
     playStory: false
