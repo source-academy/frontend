@@ -41,26 +41,4 @@ function loadAllLibs() {
   }
 }
 
-/**
- * Loads libraries according to the name provided.
- * This is to faciliate a lack of namespace clash for
- * graphics libraries (@see #341)
- */
-function loadLib(externalLibraryName) {
-  let files
-  switch (externalLibraryName) {
-    case 'MACHINELEARNING':
-      files = [
-        // faceAPI
-        '/externalLibs/faceapi/faceapi.js',
-      ]
-      break
-    default:
-      break
-  }
-  for (var i = 0; i < files.length; i++) {
-    dynamicallyLoadScript(files[i])
-  }
-}
-
 loadAllLibs()

@@ -383,14 +383,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.beginClearContext>) {
       // TODO this check should no longer be needed
       yield* checkWebGLAvailable();
-      if (action.payload.shouldInitLibrary) {
-        const externalLibraryName = action.payload.library.external.name;
-        switch (externalLibraryName) {
-          case ExternalLibraryName.MACHINELEARNING:
-            (window as any).loadLib('MACHINELEARNING');
-            break;
-        }
-      }
       DataVisualizer.clear();
       EnvVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
