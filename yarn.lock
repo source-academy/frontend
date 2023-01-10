@@ -30,6 +30,7 @@
   integrity sha512-IF4EOMEV+bfYwOmNxGzSnjR2EmQod7f1UXOpZM3l4i4o4QNwzjtJAu/HxdjHq0aYBvdqMuQEY1eg0nqW9ZPORA==
   dependencies:
     "@babel/highlight" "^7.16.0"
+<<<<<<< Updated upstream
 
 "@babel/code-frame@^7.18.6":
   version "7.18.6"
@@ -48,6 +49,26 @@
   resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.19.1.tgz"
   integrity sha512-72a9ghR0gnESIa7jBN53U32FOVCEoztyIlKaNoU05zRhEecduGK9L9c3ww7Mp06JiR+0ls0GBPFJQwwtjn9ksg==
 
+=======
+
+"@babel/code-frame@^7.18.6":
+  version "7.18.6"
+  resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.18.6.tgz"
+  integrity sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==
+  dependencies:
+    "@babel/highlight" "^7.18.6"
+
+"@babel/compat-data@^7.13.11", "@babel/compat-data@^7.16.0", "@babel/compat-data@^7.16.4":
+  version "7.16.4"
+  resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.16.4.tgz"
+  integrity sha512-1o/jo7D+kC9ZjHX5v+EHrdjl3PhxMrLSOTGsOdHJ+KL8HCaEK6ehrVL2RS6oHDZp+L7xLirLrPmQtEng769J/Q==
+
+"@babel/compat-data@^7.17.7", "@babel/compat-data@^7.18.8", "@babel/compat-data@^7.19.1":
+  version "7.19.1"
+  resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.19.1.tgz"
+  integrity sha512-72a9ghR0gnESIa7jBN53U32FOVCEoztyIlKaNoU05zRhEecduGK9L9c3ww7Mp06JiR+0ls0GBPFJQwwtjn9ksg==
+
+>>>>>>> Stashed changes
 "@babel/core@7.12.3":
   version "7.12.3"
   resolved "https://registry.npmjs.org/@babel/core/-/core-7.12.3.tgz"
@@ -565,11 +586,14 @@
   version "7.19.1"
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.19.1.tgz"
   integrity sha512-h7RCSorm1DdTVGJf3P2Mhj3kdnkmF/EiysUkzS2TdgAYqyjFdMQJbVuXOBej2SBJaXan/lIVtT6KkGbyyq753A==
+<<<<<<< Updated upstream
 
 "@babel/parser@^7.19.4":
   version "7.20.7"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.20.7.tgz#66fe23b3c8569220817d5feb8b9dcdc95bb4f71b"
   integrity sha512-T3Z9oHybU+0vZlY9CiDSJQTD5ZapcW18ZctFMi0MOAl/4BjFF4ul7NVSARLdbGO5vDqy9eQiGTV0LtKfvCYvcg==
+=======
+>>>>>>> Stashed changes
 
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@^7.16.2":
   version "7.16.2"
@@ -3867,6 +3891,7 @@ ace-builds@^1.4.14:
   resolved "https://registry.npmjs.org/ace-builds/-/ace-builds-1.4.14.tgz"
   integrity sha512-NBOQlm9+7RBqRqZwimpgquaLeTJFayqb9UEPtTkpC3TkkwDnlsT/TwsCC0svjt9kEZ6G9mH5AEOHSz6Q/HrzQQ==
 
+<<<<<<< Updated upstream
 acorn-class-fields@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/acorn-class-fields/-/acorn-class-fields-1.0.0.tgz#b413793e6b3ddfcd17a02f9c7a850f4bbfdc1c7a"
@@ -3874,6 +3899,8 @@ acorn-class-fields@^1.0.0:
   dependencies:
     acorn-private-class-elements "^1.0.0"
 
+=======
+>>>>>>> Stashed changes
 acorn-globals@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/acorn-globals/-/acorn-globals-6.0.0.tgz"
@@ -3894,11 +3921,14 @@ acorn-loose@^8.0.0:
   dependencies:
     acorn "^8.5.0"
 
+<<<<<<< Updated upstream
 acorn-private-class-elements@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/acorn-private-class-elements/-/acorn-private-class-elements-1.0.0.tgz#c5805bf8a46cd065dc9b3513bfebb504c88cd706"
   integrity sha512-zYNcZtxKgVCg1brS39BEou86mIao1EV7eeREG+6WMwKbuYTeivRRs6S2XdWnboRde6G9wKh2w+WBydEyJsJ6mg==
 
+=======
+>>>>>>> Stashed changes
 acorn-walk@^7.1.1:
   version "7.2.0"
   resolved "https://registry.npmjs.org/acorn-walk/-/acorn-walk-7.2.0.tgz"
@@ -9531,16 +9561,26 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
+<<<<<<< Updated upstream
 js-slang@^1.0.7:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.8.tgz#fb32f78c8569e4ffbe1f06ce639371d7d3a1ae2e"
   integrity sha512-74feKdgVPsvg57C6t8hU/HXouT7AUGimMwvqThsHU8KdH7Z6vDtxiVsw3ZpVhWUvINn7DO795qAb6nIK1vOXhw==
+=======
+js-slang@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/js-slang/-/js-slang-1.0.3.tgz"
+  integrity sha512-/eGW1FYM3fs7f5ZnYwCi4ESWJMgvw4ZuL0F+q27ayf5rhQ0e5qgCFS/wV+8bHCj8axslau4dlN4cdSSR+VuY+g==
+>>>>>>> Stashed changes
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@types/estree" "0.0.52"
     acorn "^8.0.3"
+<<<<<<< Updated upstream
     acorn-class-fields "^1.0.0"
+=======
+>>>>>>> Stashed changes
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
     astring "^1.4.3"
@@ -13219,11 +13259,14 @@ requires-port@^1.0.0:
   resolved "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
+<<<<<<< Updated upstream
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
   integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
+=======
+>>>>>>> Stashed changes
 resolve-cwd@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/resolve-cwd/-/resolve-cwd-2.0.0.tgz"
