@@ -26,25 +26,24 @@ import {
   promptAutocomplete,
   resetWorkspace,
   setEditorBreakpoint,
+  updateActiveEditorTab,
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
 } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
-    editorValue: state.workspaces.assessment.editorValue,
-    breakpoints: state.workspaces.assessment.breakpoints,
-    highlightedLines: state.workspaces.assessment.highlightedLines,
+    activeEditorTabIndex: state.workspaces.assessment.activeEditorTabIndex,
+    editorTabs: state.workspaces.assessment.editorTabs,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,
     enableDebugging: state.workspaces.assessment.enableDebugging,
-    newCursorPosition: state.workspaces.assessment.newCursorPosition,
     output: state.workspaces.assessment.output,
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
@@ -78,6 +77,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         resetWorkspace(workspaceLocation, options),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
+      handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) =>
+        updateActiveEditorTab(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),

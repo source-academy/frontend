@@ -37,6 +37,7 @@ export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
+export const UPDATE_ACTIVE_EDITOR_TAB = 'UPDATE_ACTIVE_EDITOR_TAB';
 export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE';
 export const UPDATE_EDITOR_BREAKPOINTS = 'UPDATE_EDITOR_BREAKPOINTS';
 export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
@@ -78,23 +79,28 @@ export type WorkspaceManagerState = {
   readonly githubAssessment: GitHubAssessmentWorkspaceState;
 };
 
+export type EditorTabState = {
+  readonly value: string;
+  readonly prependValue: string;
+  readonly postpendValue: string;
+  readonly highlightedLines: HighlightedLines[];
+  readonly breakpoints: string[];
+  readonly newCursorPosition?: Position;
+};
+
 export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
-  readonly breakpoints: string[];
   readonly context: Context;
-  readonly editorPrepend: string;
-  readonly editorReadonly: boolean;
+  readonly activeEditorTabIndex: number | null;
+  readonly editorTabs: EditorTabState[];
   readonly editorSessionId: string;
-  readonly editorValue: string | null;
-  readonly editorPostpend: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
-  readonly highlightedLines: HighlightedLines[];
-  readonly newCursorPosition?: Position;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorAutorun: boolean;
+  readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;

@@ -2,7 +2,7 @@ import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
-import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
@@ -23,6 +23,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_EDITOR_AND_TESTCASES,
@@ -37,6 +38,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -155,6 +157,11 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
+export const updateActiveEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  activeEditorTabOptions?: Partial<EditorTabState>
+) => action(UPDATE_ACTIVE_EDITOR_TAB, { workspaceLocation, activeEditorTabOptions });
+
 export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
 
@@ -214,10 +221,13 @@ export const updateWorkspace = (
     workspaceOptions
   });
 
-export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
-  action(SET_EDITOR_READONLY, {
+export const setIsEditorReadonly = (
+  workspaceLocation: WorkspaceLocation,
+  isEditorReadonly: boolean
+) =>
+  action(SET_IS_EDITOR_READONLY, {
     workspaceLocation,
-    editorReadonly
+    isEditorReadonly: isEditorReadonly
   });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>

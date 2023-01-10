@@ -1,15 +1,13 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
+import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
-import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
 import { ReplInput } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
@@ -32,13 +30,15 @@ type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
+  onFocus?: (editor: Ace.Editor) => void;
+  onBlur?: () => void;
 };
 
 type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-const Repl = React.forwardRef<AceEditor, ReplProps>((props, ref) => {
+const Repl: React.FC<ReplProps> = (props: ReplProps) => {
   const cards = props.output.map((slice, index) => (
     <Output
       output={slice}
@@ -56,13 +56,13 @@ const Repl = React.forwardRef<AceEditor, ReplProps>((props, ref) => {
             className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
             handlers={handlers}
           >
-            <ReplInput {...props} ref={ref} />
+            <ReplInput {...props} />
           </HotKeys>
         )}
       </div>
     </div>
   );
-});
+};
 
 export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   switch (props.output.type) {
@@ -95,14 +95,14 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <Pre className="result-output">{renderResult(props.output.value)}</Pre>
+            <Pre className="result-output">{props.output.value}</Pre>
           </Card>
         );
       } else {
         return (
           <Card>
             <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
-            <Pre className="result-output">{renderResult(props.output.value)}</Pre>
+            <Pre className="result-output">{props.output.value}</Pre>
           </Card>
         );
       }
@@ -124,16 +124,6 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       }
     default:
       return <Card>''</Card>;
-  }
-};
-
-const renderResult = (value: any) => {
-  /** A class which is the output of the show() function */
-  const ShapeDrawn = (window as any).ShapeDrawn;
-  if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-    return <SideContentCanvasOutput canvas={value.$canvas} />;
-  } else {
-    return stringify(value);
   }
 };
 

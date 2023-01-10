@@ -5,8 +5,8 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { Assessment } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import ControlButton from '../ControlButton';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type QuestionEditorProps = DispatchProps & StateProps;
@@ -14,12 +14,12 @@ type QuestionEditorProps = DispatchProps & StateProps;
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (val: string) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
+  handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) => void;
 };
 
 type StateProps = {
   assessment: Assessment;
-  editorValue: string | null;
+  editorValue: string;
   questionId: number;
 };
 
@@ -67,7 +67,7 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
+class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
   public constructor(props: QuestionEditorProps) {
     super(props);
     this.state = {
@@ -85,16 +85,20 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
     const qnPath = ['questions', this.props.questionId];
     const path = qnPath.concat(this.state.activeEditor.id);
 
-    const copyFromEditorButton = controlButton(
-      'Copy from Editor',
-      IconNames.IMPORT,
-      this.handleCopyFromEditor(path)
+    const copyFromEditorButton = (
+      <ControlButton
+        label="Copy from Editor"
+        icon={IconNames.IMPORT}
+        onClick={this.handleCopyFromEditor(path)}
+      />
     );
 
-    const copyToEditorButton = controlButton(
-      'Copy to Editor',
-      IconNames.EXPORT,
-      this.handleCopyToEditor(path)
+    const copyToEditorButton = (
+      <ControlButton
+        label="Copy to Editor"
+        icon={IconNames.EXPORT}
+        onClick={this.handleCopyToEditor(path)}
+      />
     );
 
     const editorPanel = (
@@ -207,10 +211,10 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
 
         if (this.state.activeEditor.id === 'prepend') {
           const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPrepend });
+          this.props.handleUpdateActiveEditorTab({ prependValue: editorPrepend });
         } else if (this.state.activeEditor.id === 'postpend') {
           const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPostpend });
+          this.props.handleUpdateActiveEditorTab({ postpendValue: editorPostpend });
         }
 
         this.setState({

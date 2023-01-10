@@ -5,21 +5,65 @@ import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { isEqual } from 'lodash';
+import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useSelector } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
+import {
+  beginDebuggerPause,
+  beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+import {
+  loginGitHub,
+  logoutGitHub,
+  logoutGoogle
+} from 'src/commons/application/actions/SessionActions';
+import {
+  setEditorSessionId,
+  setSharedbConnected
+} from 'src/commons/collabEditing/CollabEditingActions';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import {
+  addHtmlConsoleError,
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeSideContentHeight,
+  changeStepLimit,
+  evalEditor,
+  navigateToDeclaration,
+  promptAutocomplete,
+  sendReplInputToOutput,
+  toggleEditorAutorun,
+  updateReplValue
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import {
+  githubOpenFile,
+  githubSaveFile,
+  githubSaveFileAs
+} from 'src/features/github/GitHubActions';
+import {
+  persistenceInitialise,
+  persistenceOpenPicker,
+  persistenceSaveFile,
+  persistenceSaveFileAs
+} from 'src/features/persistence/PersistenceActions';
+import {
+  generateLzString,
+  shortenURL,
+  updateShortURL
+} from 'src/features/playground/PlaygroundActions';
 
 import {
   InterpreterOutput,
   isSourceLanguage,
-  OverallState,
   ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -34,7 +78,11 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
+import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -44,11 +92,12 @@ import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVi
 import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import Constants, { Links } from '../../commons/utils/Constants';
+import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -58,7 +107,12 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
-export type PlaygroundProps = OwnProps & DispatchProps & StateProps & RouteComponentProps<{}>;
+export type PlaygroundProps = OwnProps &
+  DispatchProps &
+  StateProps &
+  RouteComponentProps<{}> & {
+    workspaceLocation?: WorkspaceLocation;
+  };
 
 export type OwnProps = {
   isSicpEditor?: boolean;
@@ -68,57 +122,24 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
-  handleAddHtmlConsoleError: (errorMsg: string) => void;
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
-  handleChangeStepLimit: (stepLimit: number) => void;
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
-  handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleGenerateLz: () => void;
-  handleShortenURL: (s: string) => void;
-  handleUpdateShortURL: (s: string) => void;
-  handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleSendReplInputToOutput: (code: string) => void;
-  handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetSharedbConnected: (connected: boolean) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
-  handleToggleEditorAutorun: () => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handlePersistenceOpenPicker: () => void;
-  handlePersistenceSaveFile: () => void;
-  handlePersistenceUpdateFile: (file: PersistenceFile) => void;
-  handlePersistenceInitialise: () => void;
-  handlePersistenceLogOut: () => void;
-  handleGitHubOpenFile: () => void;
-  handleGitHubSaveFileAs: () => void;
-  handleGitHubSaveFile: () => void;
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
-  handleUpdatePrepend?: (s: string) => void;
 };
 
 export type StateProps = {
+  activeEditorTabIndex: number | null;
+  editorTabs: EditorTabState[];
   editorSessionId: string;
-  editorValue: string;
   execTime: number;
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: Position;
   output: InterpreterOutput[];
   queryString?: string;
   shortURL?: string;
@@ -172,11 +193,13 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
   }
 }
 
-const Playground: React.FC<PlaygroundProps> = props => {
+const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const propsRef = React.useRef(props);
   propsRef.current = props;
+
+  const dispatch = useDispatch();
 
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
@@ -199,7 +222,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
-      editorValue: propsRef.current.editorValue,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue: propsRef.current.editorTabs[0].value,
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -221,18 +245,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const usingRemoteExecution =
-    useSelector((state: OverallState) => !!state.session.remoteExecutionSession) && !isSicpEditor;
+    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
-  const externalLibraryName = useSelector(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
+  const externalLibraryName = useTypedSelector(
+    state => state.workspaces.playground.externalLibrary
   );
 
   React.useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
-        editorValue: propsRef.current.editorValue,
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorValue: propsRef.current.editorTabs[0].value,
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
@@ -332,39 +357,29 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [sessionId]
   );
 
-  const autorunButtons = React.useMemo(
-    () => (
+  const handleEditorEval = React.useCallback(
+    () => dispatch(evalEditor(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+
+  const autorunButtons = React.useMemo(() => {
+    return (
       <ControlBarAutorunButtons
-        handleDebuggerPause={props.handleDebuggerPause}
-        handleDebuggerReset={props.handleDebuggerReset}
-        handleDebuggerResume={props.handleDebuggerResume}
-        handleEditorEval={props.handleEditorEval}
-        handleInterruptEval={props.handleInterruptEval}
-        handleToggleEditorAutorun={props.handleToggleEditorAutorun}
-        isDebugging={props.isDebugging}
-        isEditorAutorun={props.isEditorAutorun}
-        isRunning={props.isRunning}
-        sourceChapter={props.playgroundSourceChapter}
+        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning')}
+        handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
+        handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+        handleEditorEval={handleEditorEval}
+        handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
+        handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
+        handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
+        sourceChapter={props.playgroundSourceChapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
-    ),
-    [
-      props.handleDebuggerPause,
-      props.handleDebuggerReset,
-      props.handleDebuggerResume,
-      props.handleEditorEval,
-      props.handleInterruptEval,
-      props.handleToggleEditorAutorun,
-      props.isDebugging,
-      props.isEditorAutorun,
-      props.isRunning,
-      props.playgroundSourceChapter,
-      usingRemoteExecution
-    ]
-  );
+    );
+  }, [dispatch, handleEditorEval, props, usingRemoteExecution, workspaceLocation]);
 
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
@@ -431,7 +446,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [props.handleReplEval, props.isRunning, selectedTab]
   );
 
-  const { persistenceUser, persistenceFile, handlePersistenceUpdateFile } = props;
+  const { persistenceUser, persistenceFile } = props;
   // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
@@ -442,55 +457,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         key="googledrive"
-        onClickSaveAs={props.handlePersistenceSaveFile}
-        onClickOpen={props.handlePersistenceOpenPicker}
+        onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
+        onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
-          persistenceFile ? () => handlePersistenceUpdateFile(persistenceFile) : undefined
+          persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
-        onClickLogOut={props.handlePersistenceLogOut}
-        onPopoverOpening={props.handlePersistenceInitialise}
+        onClickLogOut={() => dispatch(logoutGoogle())}
+        onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [
-    persistenceUser,
-    persistenceFile,
-    persistenceIsDirty,
-    props.handlePersistenceSaveFile,
-    props.handlePersistenceOpenPicker,
-    props.handlePersistenceLogOut,
-    props.handlePersistenceInitialise,
-    handlePersistenceUpdateFile
-  ]);
+  }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
 
-  const githubOctokitObject = useSelector((store: any) => store.session.githubOctokitObject);
+  const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
-    const octokit = githubOctokitObject === undefined ? undefined : githubOctokitObject.octokit;
     return (
       <ControlBarGitHubButtons
         key="github"
-        loggedInAs={octokit}
+        loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
-        onClickOpen={props.handleGitHubOpenFile}
-        onClickSave={props.handleGitHubSaveFile}
-        onClickSaveAs={props.handleGitHubSaveFileAs}
-        onClickLogIn={props.handleGitHubLogIn}
-        onClickLogOut={props.handleGitHubLogOut}
+        onClickOpen={() => dispatch(githubOpenFile())}
+        onClickSaveAs={() => dispatch(githubSaveFileAs())}
+        onClickSave={() => dispatch(githubSaveFile())}
+        onClickLogIn={() => dispatch(loginGitHub())}
+        onClickLogOut={() => dispatch(logoutGitHub())}
       />
     );
-  }, [
-    githubOctokitObject,
-    githubPersistenceIsDirty,
-    githubSaveInfo,
-    props.handleGitHubOpenFile,
-    props.handleGitHubSaveFileAs,
-    props.handleGitHubSaveFile,
-    props.handleGitHubLogIn,
-    props.handleGitHubLogOut
-  ]);
+  }, [dispatch, githubOctokitObject, githubPersistenceIsDirty, githubSaveInfo]);
 
   const executionTime = React.useMemo(
     () => (
@@ -507,11 +503,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => (
       <ControlBarStepLimit
         stepLimit={props.stepLimit}
-        handleChangeStepLimit={props.handleChangeStepLimit}
+        handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
         key="step_limit"
       />
     ),
-    [props.handleChangeStepLimit, props.stepLimit]
+    [dispatch, props.stepLimit, workspaceLocation]
   );
 
   const { handleEditorValueChange } = props;
@@ -520,8 +516,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const sessionButtons = (
     <ControlBarSessionButtons
       editorSessionId={props.editorSessionId}
-      editorValue={props.editorValue}
-      handleSetEditorSessionId={props.handleSetEditorSessionId}
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorValue={props.editorTabs[0].value}
+      handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
       sharedbConnected={props.sharedbConnected}
       key="session"
     />
@@ -533,24 +530,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
       : props.queryString;
     return (
       <ControlBarShareButton
-        handleGenerateLz={props.handleGenerateLz}
-        handleShortenURL={props.handleShortenURL}
-        handleUpdateShortURL={props.handleUpdateShortURL}
+        handleGenerateLz={() => dispatch(generateLzString())}
+        handleShortenURL={s => dispatch(shortenURL(s))}
+        handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={queryString}
         shortURL={props.shortURL}
         isSicp={isSicpEditor}
         key="share"
       />
     );
-  }, [
-    isSicpEditor,
-    props.handleGenerateLz,
-    props.handleShortenURL,
-    props.handleUpdateShortURL,
-    props.initialEditorValueHash,
-    props.queryString,
-    props.shortURL
-  ]);
+  }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -582,7 +571,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
           body: (
             <SideContentHtmlDisplay
               content={(props.output[0] as ResultOutput).value}
-              handleAddHtmlConsoleError={props.handleAddHtmlConsoleError}
+              handleAddHtmlConsoleError={errorMsg =>
+                dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+              }
             />
           ),
           id: SideContentType.htmlDisplay
@@ -630,14 +621,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     return tabs;
   }, [
-    isSicpEditor,
     playgroundIntroductionTab,
-    props.output,
     props.playgroundSourceChapter,
     props.playgroundSourceVariant,
+    props.output,
     usingRemoteExecution,
-    remoteExecutionTab,
-    props.handleAddHtmlConsoleError
+    isSicpEditor,
+    dispatch,
+    workspaceLocation,
+    remoteExecutionTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -733,7 +725,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
-  const editorProps = {
+  const editorContainerProps: NormalEditorContainerProps = {
+    ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
+    editorVariant: 'normal',
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    handleDeclarationNavigate: (cursorPosition: Position) =>
+      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+    handleEditorEval,
+    handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+    handleSendReplInputToOutput: (code: string) =>
+      dispatch(sendReplInputToOutput(code, workspaceLocation)),
+    handleSetSharedbConnected: (connected: boolean) =>
+      dispatch(setSharedbConnected(workspaceLocation, connected)),
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
@@ -741,36 +745,35 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: props.playgroundSourceChapter,
     externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
-    editorValue: props.editorValue,
-    editorSessionId: props.editorSessionId,
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
-    handleEditorEval: props.handleEditorEval,
     handleEditorValueChange: onEditorValueChange,
-    handleSendReplInputToOutput: props.handleSendReplInputToOutput,
-    handlePromptAutocomplete: props.handlePromptAutocomplete,
-    isEditorAutorun: props.isEditorAutorun,
-    breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-    handleSetSharedbConnected: props.handleSetSharedbConnected
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
   };
 
   const replProps = {
+    ..._.pick(props, 'output', 'replValue', 'handleReplEval', 'usingSubst'),
+    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+    handleReplValueChange: (newValue: string) =>
+      dispatch(updateReplValue(newValue, workspaceLocation)),
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
-    output: props.output,
-    replValue: props.replValue,
-    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-    handleReplEval: props.handleReplEval,
-    handleReplValueChange: props.handleReplValueChange,
     hidden: selectedTab === SideContentType.substVisualizer,
     inputHidden: replDisabled,
-    usingSubst: props.usingSubst,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor
+  };
+
+  const sideBarProps = {
+    tabs: [
+      // TODO: Re-enable on master once the feature is production-ready.
+      // {
+      //   label: 'Files',
+      //   body: <FileSystemView basePath="/playground" />,
+      //   iconName: IconNames.FOLDER_CLOSE,
+      //   id: SideContentType.files
+      // }
+    ]
   };
 
   const workspaceProps: WorkspaceProps = {
@@ -789,14 +792,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
           : executionTime
       ]
     },
-    editorProps: editorProps,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    editorContainerProps: editorContainerProps,
+    handleSideContentHeightChange: change =>
+      dispatch(changeSideContentHeight(change, workspaceLocation)),
     replProps: replProps,
-    sideBarProps: {
-      // TODO: Re-enable on master once the feature is production-ready.
-      // tabs: [{ label: 'Files', body: <FileSystemView basePath="/playground" /> }]
-      tabs: []
-    },
+    sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
@@ -812,8 +812,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: editorProps,
+    editorContainerProps: editorContainerProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
         editorButtons: [

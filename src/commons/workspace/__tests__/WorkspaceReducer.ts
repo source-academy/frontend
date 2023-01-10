@@ -38,6 +38,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -48,6 +49,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_USING_SUBST,
+  UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -672,8 +674,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      breakpoints,
-      highlightedLines
+      editorTabs: [{ highlightedLines, breakpoints }]
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
@@ -686,14 +687,13 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: [],
           output: [
             {
               ...outputWithRunningOutput[0]
             },
             {
-              consoleLogs: ['console-log-test-2']
+              consoleLogs: ['console-log-test-2'],
+              value: 'undefined'
             }
           ]
         }
@@ -709,8 +709,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      breakpoints,
-      highlightedLines
+      editorTabs: [{ highlightedLines, breakpoints }]
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
@@ -723,8 +722,6 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          breakpoints: [],
-          highlightedLines: [],
           output: [
             {
               ...outputWithRunningAndCodeOutput[0]
@@ -733,7 +730,8 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
               ...outputWithRunningAndCodeOutput[1]
             },
             {
-              consoleLogs: []
+              consoleLogs: [],
+              value: 'undefined'
             }
           ]
         }
@@ -997,7 +995,7 @@ describe('HIGHLIGHT_LINE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          highlightedLines
+          editorTabs: [{ ...defaultWorkspaceManager[location].editorTabs[0], highlightedLines }]
         }
       });
     });
@@ -1006,12 +1004,17 @@ describe('HIGHLIGHT_LINE', () => {
 
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
+    const defaultPlaygroundState = createDefaultWorkspace('playground');
     const newPlayground: PlaygroundWorkspaceState = {
-      ...createDefaultWorkspace('playground'),
-      editorValue: 'test program here',
-      highlightedLines: [
-        [1, 2],
-        [3, 4]
+      ...defaultPlaygroundState,
+      editorTabs: [
+        {
+          ...defaultPlaygroundState.editorTabs[0],
+          highlightedLines: [
+            [1, 2],
+            [3, 4]
+          ]
+        }
       ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
@@ -1075,8 +1078,12 @@ describe('RESET_WORKSPACE', () => {
     const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
 
     const workspaceOptions = {
-      breakpoints: ['1', '3'],
-      highlightedLines: [[1], [10]],
+      editorTabs: [
+        {
+          highlightedLines: [[1], [10]],
+          breakpoints: ['1', '3']
+        }
+      ],
       replValue: 'test repl value'
     };
 
@@ -1295,6 +1302,85 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
   });
 });
 
+describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
+  const activeEditorTabOptions: Partial<EditorTabState> = {
+    value: 'Goodbye World!',
+    prependValue: 'Prepend value',
+    postpendValue: 'Postpend value'
+  };
+
+  test('overrides the active editor tab correctly', () => {
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs: [
+        {
+          value: 'Hello World!',
+          prependValue: 'This is a prepend value.',
+          postpendValue: 'This is a postpend value.',
+          highlightedLines: [],
+          breakpoints: []
+        },
+        {
+          value: 'Hello World!',
+          prependValue: 'This is a prepend value.',
+          postpendValue: 'This is a postpend value.',
+          highlightedLines: [],
+          breakpoints: []
+        }
+      ]
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB, { activeEditorTabOptions });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      const newContext = createDefaultWorkspace(location);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            ...newContext,
+            activeEditorTabIndex: 1,
+            editorTabs: [
+              {
+                value: 'Hello World!',
+                prependValue: 'This is a prepend value.',
+                postpendValue: 'This is a postpend value.',
+                highlightedLines: [],
+                breakpoints: []
+              },
+              {
+                ...activeEditorTabOptions,
+                highlightedLines: [],
+                breakpoints: []
+              }
+            ],
+            context: newContext.context
+          }
+        })
+      );
+    });
+  });
+
+  test('does nothing when there is no active editor tab', () => {
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: null,
+      editorTabs: []
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB, { activeEditorTabOptions });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      expect(result).toEqual(defaultWorkspaceState);
+    });
+  });
+});
+
 describe('UPDATE_EDITOR_VALUE', () => {
   test('sets editorValue correctly', () => {
     const newEditorValue = 'test new editor value';
@@ -1307,7 +1393,9 @@ describe('UPDATE_EDITOR_VALUE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorValue: newEditorValue
+          editorTabs: [
+            { ...defaultWorkspaceManager[location].editorTabs[0], value: newEditorValue }
+          ]
         }
       });
     });

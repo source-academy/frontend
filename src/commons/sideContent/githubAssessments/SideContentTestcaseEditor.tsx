@@ -5,7 +5,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { Testcase } from '../../assessment/AssessmentTypes';
-import controlButton from '../../ControlButton';
+import ControlButton from '../../ControlButton';
 import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
 import SideContentTestcaseCard from '../SideContentTestcaseCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
@@ -254,10 +254,13 @@ const testcasesHeader = (
   </div>
 );
 
-const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
-  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-    className: 'collapse-button',
-    minimal: true
-  });
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
+  <ControlButton
+    label={label}
+    icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+    onClick={toggleFunc}
+    options={{ className: 'collapse-button', minimal: true }}
+  />
+);
 
 export default SideContentTestcaseEditor;
