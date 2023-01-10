@@ -335,9 +335,10 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     case EVAL_INTERPRETER_SUCCESS:
+      const execType = state[workspaceLocation].context.executionMethod;
       const newOutputEntry: Partial<ResultOutput> = {
         type: action.payload.type as 'result' | undefined,
-        value: stringify(action.payload.value)
+        value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
       };
 
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
