@@ -468,8 +468,34 @@ export const getAssessmentOverviews = async (
 /**
  * GET /courses/{courseId}/user/total_xp
  */
-export const getTotalXp = async (tokens: Tokens): Promise<number | null> => {
-  const resp = await request(`${courseId()}/user/total_xp`, 'GET', {
+export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<number | null> => {
+  let resp;
+  if (courseRegId !== undefined) {
+    // If courseRegId is provided, get the total XP of a specific student
+    resp = await request(`${courseId()}/admin/users/${courseRegId}/total_xp`, 'GET', {
+      ...tokens,
+      shouldRefresh: true
+    });
+  } else {
+    // Otherwise, get the total XP of the current user
+    resp = await request(`${courseId()}/user/total_xp`, 'GET', {
+      ...tokens,
+      shouldRefresh: true
+    });
+  }
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const totalXp = await resp.json();
+  return totalXp;
+};
+
+/**
+ * GET /courses/{courseId}/admin/users/total_xp
+ */
+export const getAllUserXp = async (tokens: Tokens): Promise<number | null> => {
+  const resp = await request(`${courseId()}/admin/users/total_xp`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });
@@ -514,12 +540,30 @@ export const getUserAssessmentOverviews = async (
  * Note: if assessment is password-protected, a corresponding unlock request will be sent to
  * POST /courses/{courseId}/assessments/{assessmentId}/unlock
  */
-export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
-  let resp = await request(`${courseId()}/assessments/${id}`, 'GET', {
-    ...tokens,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+export const getAssessment = async (
+  assessmentId: number,
+  tokens: Tokens,
+  courseRegId?: number
+): Promise<Assessment | null> => {
+  let resp;
+  if (courseRegId !== undefined) {
+    // If courseRegId is provided, we are getting the assessment for another user as an admin
+    resp = await request(
+      `${courseId()}/admin/users/${courseRegId}/assessments/${assessmentId}`,
+      'GET',
+      {
+        ...tokens,
+        shouldRefresh: true
+      }
+    );
+  } else {
+    // Otherwise, we are getting the assessment for the current user
+    resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
+      ...tokens,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    });
+  }
 
   // Attempt to load password-protected assessment
   while (resp && resp.status === 403) {
@@ -530,7 +574,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
       return null;
     }
 
-    resp = await request(`${courseId()}/assessments/${id}/unlock`, 'POST', {
+    resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
       ...tokens,
       body: {
         password: input

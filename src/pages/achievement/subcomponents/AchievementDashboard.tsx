@@ -5,7 +5,6 @@ import {
   AssessmentConfiguration,
   AssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -86,7 +85,6 @@ function Dashboard(props: DispatchProps & StateProps) {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
-  const courseRegId = useTypedSelector(store => store.session.courseRegId);
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
@@ -112,7 +110,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     ? achievementAssessmentOverviews
     : assessmentOverviews;
 
-  // inserts assessment achievements for each assessment retrieved
+  // Inserts assessment achievements for each assessment retrieved
   // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
   userAssessmentOverviews &&
     assessmentConfigs &&
@@ -126,16 +124,22 @@ function Dashboard(props: DispatchProps & StateProps) {
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
   const focusState = useState<string>('');
-  const [focusUuid] = focusState;
+  const [focusUuid, setFocusUuid] = focusState;
 
   const hiddenState = useState<boolean>(false);
   const [seeHidden] = hiddenState;
+
+  // Resets AchievementView when the selected user changes
+  useEffect(() => {
+    setFocusUuid('');
+  }, [selectedUser, setFocusUuid]);
 
   return (
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview
           name={selectedUser ? selectedUser.name || selectedUser.username : name || 'User'}
+          userState={userIdState}
         />
         {role && role !== Role.Student && (
           <AchievementManualEditor
@@ -178,7 +182,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           </ul>
 
           <div className="view-container">
-            <AchievementView courseRegId={courseRegId} focusUuid={focusUuid} />
+            <AchievementView focusUuid={focusUuid} userState={userIdState} />
           </div>
         </div>
       </div>

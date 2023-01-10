@@ -60,23 +60,25 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
               <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint4.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp4-card bp4-elevation-3 contentdisplay-content\\">
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                          <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Upcoming\\" icon=\\"caret-down\\" onClick={[Function: toggleUpcomingAssessments]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                            <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                              <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                        <span className=\\"bp4-button-text\\">
-                          Upcoming
-                        </span>
-                        <Blueprint4.Icon icon={[undefined]} />
-                      </button>
-                    </Blueprint4.Button>
+                          <span className=\\"bp4-button-text\\">
+                            Upcoming
+                          </span>
+                          <Blueprint4.Icon icon={false} />
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
                         <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -159,23 +161,25 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         </div>
                       </div>
                     </Blueprint4.Collapse>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleOpenAssessments]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                          <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Open\\" icon=\\"caret-down\\" onClick={[Function: toggleOpenAssessments]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                            <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                              <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                        <span className=\\"bp4-button-text\\">
-                          Open
-                        </span>
-                        <Blueprint4.Icon icon={[undefined]} />
-                      </button>
-                    </Blueprint4.Button>
+                          <span className=\\"bp4-button-text\\">
+                            Open
+                          </span>
+                          <Blueprint4.Icon icon={false} />
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
                         <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -416,23 +420,25 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         </div>
                       </div>
                     </Blueprint4.Collapse>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleClosedAssessments]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                          <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
-                            <span icon=\\"caret-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 006 4.5v7a.495.495 0 00.83.37l4-3.5c.1-.09.17-.22.17-.37z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Closed\\" icon=\\"caret-right\\" onClick={[Function: toggleClosedAssessments]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                            <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
+                              <span icon=\\"caret-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 006 4.5v7a.495.495 0 00.83.37l4-3.5c.1-.09.17-.22.17-.37z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                        <span className=\\"bp4-button-text\\">
-                          Closed
-                        </span>
-                        <Blueprint4.Icon icon={[undefined]} />
-                      </button>
-                    </Blueprint4.Button>
+                          <span className=\\"bp4-button-text\\">
+                            Closed
+                          </span>
+                          <Blueprint4.Icon icon={false} />
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                     <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
                         <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
@@ -510,23 +516,25 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
               <div className=\\"col-md-10 col-xs-11 contentdisplay-content-parent\\">
                 <Blueprint4.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp4-card bp4-elevation-3 contentdisplay-content\\">
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleUpcomingAssessments]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                          <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Upcoming\\" icon=\\"caret-down\\" onClick={[Function: toggleUpcomingAssessments]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                            <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                              <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                        <span className=\\"bp4-button-text\\">
-                          Upcoming
-                        </span>
-                        <Blueprint4.Icon icon={[undefined]} />
-                      </button>
-                    </Blueprint4.Button>
+                          <span className=\\"bp4-button-text\\">
+                            Upcoming
+                          </span>
+                          <Blueprint4.Icon icon={false} />
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
                         <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -636,23 +644,25 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </div>
                       </div>
                     </Blueprint4.Collapse>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleOpenAssessments]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                          <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
-                            <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Open\\" icon=\\"caret-down\\" onClick={[Function: toggleOpenAssessments]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                            <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
+                              <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                        <span className=\\"bp4-button-text\\">
-                          Open
-                        </span>
-                        <Blueprint4.Icon icon={[undefined]} />
-                      </button>
-                    </Blueprint4.Button>
+                          <span className=\\"bp4-button-text\\">
+                            Open
+                          </span>
+                          <Blueprint4.Icon icon={false} />
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
                         <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
@@ -893,23 +903,25 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </div>
                       </div>
                     </Blueprint4.Collapse>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function: toggleClosedAssessments]}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                        <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
-                          <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
-                            <span icon=\\"caret-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
-                              <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                <path d=\\"M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 006 4.5v7a.495.495 0 00.83.37l4-3.5c.1-.09.17-.22.17-.37z\\" fillRule=\\"evenodd\\" />
-                              </svg>
-                            </span>
+                    <ControlButton label=\\"Closed\\" icon=\\"caret-right\\" onClick={[Function: toggleClosedAssessments]} options={{...}}>
+                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
+                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <Blueprint4.Icon icon={{...}} aria-hidden={true} tabIndex={-1}>
+                            <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
+                              <span icon=\\"caret-right\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
+                                <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                  <path d=\\"M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 006 4.5v7a.495.495 0 00.83.37l4-3.5c.1-.09.17-.22.17-.37z\\" fillRule=\\"evenodd\\" />
+                                </svg>
+                              </span>
+                            </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </Blueprint4.Icon>
-                        <span className=\\"bp4-button-text\\">
-                          Closed
-                        </span>
-                        <Blueprint4.Icon icon={[undefined]} />
-                      </button>
-                    </Blueprint4.Button>
+                          <span className=\\"bp4-button-text\\">
+                            Closed
+                          </span>
+                          <Blueprint4.Icon icon={false} />
+                        </button>
+                      </Blueprint4.Button>
+                    </ControlButton>
                     <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
                         <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />

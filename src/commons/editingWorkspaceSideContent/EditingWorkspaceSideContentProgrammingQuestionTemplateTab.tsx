@@ -5,7 +5,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { Assessment } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
@@ -85,16 +85,20 @@ class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps
     const qnPath = ['questions', this.props.questionId];
     const path = qnPath.concat(this.state.activeEditor.id);
 
-    const copyFromEditorButton = controlButton(
-      'Copy from Editor',
-      IconNames.IMPORT,
-      this.handleCopyFromEditor(path)
+    const copyFromEditorButton = (
+      <ControlButton
+        label="Copy from Editor"
+        icon={IconNames.IMPORT}
+        onClick={this.handleCopyFromEditor(path)}
+      />
     );
 
-    const copyToEditorButton = controlButton(
-      'Copy to Editor',
-      IconNames.EXPORT,
-      this.handleCopyToEditor(path)
+    const copyToEditorButton = (
+      <ControlButton
+        label="Copy to Editor"
+        icon={IconNames.EXPORT}
+        onClick={this.handleCopyToEditor(path)}
+      />
     );
 
     const editorPanel = (

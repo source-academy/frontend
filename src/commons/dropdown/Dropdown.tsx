@@ -4,7 +4,7 @@ import { Popover2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
 
 import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Profile from '../profile/ProfileContainer';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
@@ -83,7 +83,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
   return (
     <>
       <Popover2 content={menu(props)} inheritDarkTheme={false} placement={Position.BOTTOM}>
-        {controlButton('', IconNames.CARET_DOWN)}
+        <ControlButton icon={IconNames.CARET_DOWN} />
       </Popover2>
       <DropdownSettings isOpen={isSettingsOpen} onClose={toggleSettingsOpen} />
       <DropdownAbout isOpen={isAboutOpen} onClose={toggleAboutOpen} />

@@ -2,7 +2,7 @@ import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/c
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { useHistory, useParams } from 'react-router';
-import controlButton from 'src/commons/ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
@@ -31,16 +31,23 @@ const SicpNavigationBar: React.FC = () => {
   // Previous button only displayed when next page is valid.
   const prevButton = prev && (
     <div key="prev">
-      {controlButton('Previous', IconNames.ARROW_LEFT, () => handleNavigation(prev))}
+      <ControlButton
+        label="Previous"
+        icon={IconNames.ARROW_LEFT}
+        onClick={() => handleNavigation(prev)}
+      />
     </div>
   );
 
   // Next button only displayed when next page is valid.
   const nextButton = next && (
     <div key="next">
-      {controlButton('Next', IconNames.ARROW_RIGHT, () => handleNavigation(next), {
-        iconOnRight: true
-      })}
+      <ControlButton
+        label="Next"
+        icon={IconNames.ARROW_RIGHT}
+        onClick={() => handleNavigation(next)}
+        options={{ iconOnRight: true }}
+      />
     </div>
   );
 

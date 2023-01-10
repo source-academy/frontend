@@ -2,15 +2,18 @@ import { useMemo } from 'react';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import { history } from '../utils/HistoryHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
-export type OwnProps = {
+const AchievementCommentCard = ({
+  assessment,
+  showToQuestion
+}: {
   assessment: Assessment;
-  courseId?: number;
-};
-
-const AchievementCommentCard = ({ assessment, courseId }: OwnProps) => {
+  showToQuestion: boolean;
+}) => {
+  const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
     () => (questionId: number) => {
       if (!courseId) {
@@ -37,13 +40,15 @@ const AchievementCommentCard = ({ assessment, courseId }: OwnProps) => {
               </span>
 
               <div className="box-comment">
-                <p>{question.comments === null ? 'Not Graded' : question.comments}</p>
+                <p>{question.comments === null ? 'No Comments' : question.comments}</p>
                 <p className="xp">{'XP: ' + question.xp + '/' + question.maxXp}</p>
               </div>
 
-              <button className="to-assessment-button" onClick={() => toMission(index)}>
-                {'To Question'}
-              </button>
+              {showToQuestion && (
+                <button className="to-assessment-button" onClick={() => toMission(index)}>
+                  {'To Question'}
+                </button>
+              )}
             </div>
           ))}
       </div>

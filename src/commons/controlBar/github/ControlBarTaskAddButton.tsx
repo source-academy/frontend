@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../../ControlButton';
+import ControlButton from '../../ControlButton';
 import { maximumTasksPerMission } from '../../githubAssessments/GitHubMissionDataUtils';
 import { showWarningMessage } from '../../utils/NotificationsHelper';
 
@@ -22,5 +22,5 @@ export const ControlBarTaskAddButton: React.FC<ControlBarTaskAddButtonProps> = p
     props.addNewQuestion();
   }
 
-  return controlButton('Add Task', IconNames.ADD, onClickAdd);
+  return <ControlButton label="Add Task" icon={IconNames.ADD} onClick={onClickAdd} />;
 };

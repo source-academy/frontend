@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type SourceRecorderShareCellProps = StateProps;
 
@@ -36,7 +36,7 @@ class SourceRecorderShareCell extends React.Component<SourceRecorderShareCellPro
         <input defaultValue={this.state.shareURL} readOnly={true} ref={this.shareInputElem} />
         <Tooltip2 content="Copy link to clipboard">
           <CopyToClipboard text={this.state.shareURL}>
-            {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+            <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
           </CopyToClipboard>
         </Tooltip2>
       </div>
@@ -48,7 +48,9 @@ class SourceRecorderShareCell extends React.Component<SourceRecorderShareCellPro
         inheritDarkTheme={false}
         content={shareButtonPopoverContent}
       >
-        <Tooltip2 content="Get shareable link">{controlButton('', IconNames.SHARE)}</Tooltip2>
+        <Tooltip2 content="Get shareable link">
+          <ControlButton icon={IconNames.SHARE} />
+        </Tooltip2>
       </Popover2>
     );
   }
