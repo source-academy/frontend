@@ -692,8 +692,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
               ...outputWithRunningOutput[0]
             },
             {
-              consoleLogs: ['console-log-test-2'],
-              value: 'undefined'
+              consoleLogs: ['console-log-test-2']
             }
           ]
         }
@@ -730,8 +729,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
               ...outputWithRunningAndCodeOutput[1]
             },
             {
-              consoleLogs: [],
-              value: 'undefined'
+              consoleLogs: []
             }
           ]
         }

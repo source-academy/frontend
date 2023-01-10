@@ -3,11 +3,13 @@ import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
 import { ReplInput } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
@@ -95,14 +97,14 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <Pre className="result-output">{props.output.value}</Pre>
+            <Pre className="result-output">{renderResult(props.output.value)}</Pre>
           </Card>
         );
       } else {
         return (
           <Card>
             <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
-            <Pre className="result-output">{props.output.value}</Pre>
+            <Pre className="result-output">{renderResult(props.output.value)}</Pre>
           </Card>
         );
       }
@@ -124,6 +126,16 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       }
     default:
       return <Card>''</Card>;
+  }
+};
+
+const renderResult = (value: any) => {
+  /** A class which is the output of the show() function */
+  const ShapeDrawn = (window as any).ShapeDrawn;
+  if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
+    return <SideContentCanvasOutput canvas={value.$canvas} />;
+  } else {
+    return stringify(value);
   }
 };
 
