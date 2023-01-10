@@ -13,7 +13,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 //import Constants from '../../../../commons/utils/Constants';
 import EfficiencyPanel from './GroundControlEfficiencyPanel';
 
@@ -61,7 +61,7 @@ const EfficiencyCellWithTabs: React.FunctionComponent<DeleteCellProps> = props =
 
   return (
     <>
-      {controlButton('', IconNames.TIME, handleOpenDialog)}
+      <ControlButton icon={IconNames.TIME} onClick={handleOpenDialog} />
       <Dialog style={{width:550}}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
