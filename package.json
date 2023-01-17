@@ -45,7 +45,7 @@
     "classnames": "^2.3.2",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",
-    "js-slang": "^1.0.3",
+    "js-slang": "^1.0.8",
     "konva": "^8.3.14",
     "lodash": "^4.17.21",
     "lz-string": "^1.4.4",
@@ -133,6 +133,7 @@
     "react-scripts": "^4.0.3",
     "react-test-renderer": "^18.2.0",
     "redux-saga-test-plan": "^4.0.6",
+    "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.54.0",
     "typescript": "~4.7.4"
   },

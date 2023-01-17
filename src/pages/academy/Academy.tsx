@@ -1,14 +1,14 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
   fetchNotifications,
   updateLatestViewedCourse
 } from '../../commons/application/actions/SessionActions';
-import { OverallState } from '../../commons/application/ApplicationTypes';
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
@@ -22,6 +22,7 @@ import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
+import XpCalculation from './xpCalculation/XpCalculation';
 
 const Academy: React.FC<{}> = () => {
   const { path, url } = useRouteMatch();
@@ -30,23 +31,21 @@ const Academy: React.FC<{}> = () => {
     dispatch(fetchNotifications());
   }, [dispatch]);
 
-  const { assessmentConfigurations, enableGame, role } = useSelector(
-    (state: OverallState) => ({
-      assessmentConfigurations: state.session.assessmentConfigurations,
-      enableGame: state.session.enableGame,
-      role: state.session.role
-    }),
-    shallowEqual
+  const assessmentConfigurations = useTypedSelector(
+    state => state.session.assessmentConfigurations
   );
+  const enableGame = useTypedSelector(state => state.session.enableGame);
+  const role = useTypedSelector(state => state.session.role);
 
   const staffRoutes =
     role !== 'student'
       ? [
           <Route path={`${path}/groundcontrol`} component={GroundControl} key={0} />,
           <Route path={`${path}/grading/${gradingRegExp}`} component={Grading} key={1} />,
-          <Route path={`${path}/sourcereel`} component={Sourcereel} key={2} />,
-          <Route path={`${path}/storysimulator`} component={StorySimulator} key={3} />,
-          <Route path={`${path}/dashboard`} component={DashboardContainer} key={4} />
+          <Route path={`${path}/xpcalculation`} component={XpCalculation} key={2} />,
+          <Route path={`${path}/sourcereel`} component={Sourcereel} key={3} />,
+          <Route path={`${path}/storysimulator`} component={StorySimulator} key={4} />,
+          <Route path={`${path}/dashboard`} component={DashboardContainer} key={5} />
         ]
       : null;
   return (
@@ -87,7 +86,7 @@ const Academy: React.FC<{}> = () => {
 
 const CourseSelectingAcademy: React.FC<{}> = () => {
   const dispatch = useDispatch();
-  const courseId = useSelector<OverallState>(state => state.session.courseId);
+  const courseId = useTypedSelector(state => state.session.courseId);
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 

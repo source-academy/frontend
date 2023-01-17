@@ -4,7 +4,7 @@ import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
-import controlButton from 'src/commons/ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 type DeleteUserCellProps = OwnProps;
@@ -67,13 +67,18 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {controlButton('Cancel', IconNames.CROSS, () => setIsDialogOpen(false), {
-              minimal: false
-            })}
-            {controlButton('Confirm', IconNames.TRASH, handleDelete, {
-              minimal: false,
-              intent: Intent.DANGER
-            })}
+            <ControlButton
+              label="Cancel"
+              icon={IconNames.CROSS}
+              onClick={() => setIsDialogOpen(false)}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              icon={IconNames.TRASH}
+              onClick={handleDelete}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
           </div>
         </div>
       </Dialog>

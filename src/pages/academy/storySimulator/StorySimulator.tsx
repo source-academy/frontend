@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
@@ -23,7 +22,7 @@ import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
  * are able to control what is shown on the Story Simulator panel.
  */
 function StorySimulator() {
-  const session = useSelector((state: OverallState) => state.session);
+  const session = useTypedSelector(state => state.session);
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {

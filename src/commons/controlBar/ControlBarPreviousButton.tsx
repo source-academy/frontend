@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlBarPreviousButtonProps = DispatchProps & StateProps;
 
@@ -14,7 +14,7 @@ type StateProps = {
 };
 
 export function ControlBarPreviousButton(props: ControlBarPreviousButtonProps) {
-  return props.questionProgress![0] <= 1
-    ? null
-    : controlButton('Previous', IconNames.ARROW_LEFT, props.onClick);
+  return props.questionProgress![0] <= 1 ? null : (
+    <ControlButton label="Previous" icon={IconNames.ARROW_LEFT} onClick={props.onClick} />
+  );
 }

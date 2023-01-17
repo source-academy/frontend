@@ -1,15 +1,16 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Ace } from 'ace-builds';
 import React from 'react';
-import ReactAce from 'react-ace/lib/ace';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
 import ControlBar from '../controlBar/ControlBar';
-import Editor, { EditorProps } from '../editor/Editor';
+import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { ReplProps } from '../repl/Repl';
+import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
@@ -18,21 +19,13 @@ import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/M
 export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
-  editorProps?: EditorProps; // Either editorProps or mcqProps must be provided
-  /**
-   * The customEditor prop is only used in Sourcecast and Sourcereel thus far.
-   * The component is wrapped in a lambda function in order to pass the editorRef
-   * created in MobileWorkspace.tsx into the customEditor component's Ace Editor child.
-   * This is to allow for the MobileKeyboard component to work with custom editors.
-   * A handler for showing the draggable repl is also passed into the customEditor.
-   */
-  customEditor?: (
-    ref: React.RefObject<ReactAce>,
-    handleShowDraggableRepl: () => void
-  ) => JSX.Element;
+  editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
   replProps: ReplProps;
+  sideBarProps: {
+    tabs: SideBarTab[];
+  };
   mobileSideContentProps: MobileSideContentProps;
 };
 
@@ -92,30 +85,62 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   }, [isPortrait, isAndroid]);
 
-  // Handle custom keyboard input into AceEditor (Editor and Repl Components)
-  const editorRef = React.useRef<ReactAce>(null);
-  const replRef = React.useRef<ReactAce>(null);
-  const emptyRef = React.useRef<ReactAce>(null);
-  const [keyboardInputRef, setKeyboardInputRef] =
-    React.useState<React.RefObject<ReactAce>>(emptyRef);
+  const [targetKeyboardInput, setTargetKeyboardInput] = React.useState<Ace.Editor | null>(null);
 
-  React.useEffect(() => {
-    editorRef.current?.editor.on('focus', () => {
-      setKeyboardInputRef(editorRef);
-    });
-    replRef.current?.editor.on('focus', () => {
-      setKeyboardInputRef(replRef);
-    });
-    const clearRef = () => setKeyboardInputRef(emptyRef);
-    editorRef.current?.editor.on('blur', clearRef);
-    replRef.current?.editor.on('blur', clearRef);
-  }, []);
+  const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
+
+  const enableMobileKeyboardForEditor = (props: EditorContainerProps): EditorContainerProps => {
+    const onFocus = (event: any, editor?: Ace.Editor) => {
+      if (props.onFocus) {
+        props.onFocus(event, editor);
+      }
+      if (!editor) {
+        return;
+      }
+      setTargetKeyboardInput(editor);
+    };
+    const onBlur = (event: any, editor?: Ace.Editor) => {
+      if (props.onBlur) {
+        props.onBlur(event, editor);
+      }
+      clearTargetKeyboardInput();
+    };
+    return {
+      ...props,
+      onFocus,
+      onBlur
+    };
+  };
+
+  const enableMobileKeyboardForRepl = (props: ReplProps): ReplProps => {
+    const onFocus = (editor: Ace.Editor) => {
+      if (props.onFocus) {
+        props.onFocus(editor);
+      }
+      setTargetKeyboardInput(editor);
+    };
+    const onBlur = () => {
+      if (props.onBlur) {
+        props.onBlur();
+      }
+      clearTargetKeyboardInput();
+    };
+    return {
+      ...props,
+      onFocus,
+      onBlur
+    };
+  };
 
   const createWorkspaceInput = () => {
-    if (props.customEditor) {
-      return props.customEditor(editorRef, () => handleShowRepl(-100));
-    } else if (props.editorProps) {
-      return <Editor {...props.editorProps} ref={editorRef} />;
+    if (props.editorContainerProps) {
+      const editorContainerProps = {
+        ...props.editorContainerProps
+      };
+      if (editorContainerProps.editorVariant === 'sourcecast') {
+        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
+      }
+      return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }
@@ -163,7 +188,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
     // Evaluate program upon pressing the run tab.
     if (newTabId === SideContentType.mobileEditorRun) {
-      props.editorProps?.handleEditorEval();
+      props.editorContainerProps?.handleEditorEval();
     }
 
     // Show the REPL upon pressing the run tab if the previous tab is not listed below.
@@ -180,8 +205,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       handleHideRepl();
     }
 
-    // Disable draggable REPL when on the stepper tab.
+    // Disable draggable REPL when on the files & stepper tab.
     if (
+      newTabId === SideContentType.files ||
       newTabId === SideContentType.substVisualizer ||
       (prevTabId === SideContentType.substVisualizer &&
         newTabId === SideContentType.mobileEditorRun)
@@ -191,6 +217,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       setIsDraggableReplDisabled(false);
     }
   };
+
+  // Convert sidebar tabs with a side content tab ID into side content tabs.
+  const sideBarTabs: SideContentTab[] = props.sideBarProps.tabs.filter(tab => tab.id !== undefined);
 
   const mobileEditorTab: SideContentTab = React.useMemo(
     () => ({
@@ -225,6 +254,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       },
       tabs: {
         beforeDynamicTabs: [
+          ...sideBarTabs,
           mobileEditorTab,
           ...props.mobileSideContentProps.tabs.beforeDynamicTabs
         ],
@@ -256,15 +286,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       </div>
 
       <DraggableRepl
-        key={'repl'}
+        key="repl"
         position={draggableReplPosition}
         onDrag={onDrag}
         disabled={isDraggableReplDisabled}
-        replProps={props.replProps}
-        ref={replRef}
+        replProps={enableMobileKeyboardForRepl(props.replProps)}
       />
 
-      <MobileKeyboard editorRef={keyboardInputRef} />
+      <MobileKeyboard targetKeyboardInput={targetKeyboardInput} />
     </div>
   );
 };

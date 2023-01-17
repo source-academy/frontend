@@ -142,7 +142,7 @@ const Constants = {
   sharedbBackendUrl,
   disablePeriods,
   cadetLoggerInterval,
-  sicpBackendUrl: sicpBackendUrl,
+  sicpBackendUrl,
   workspaceSettingsLocalStorageKey,
   caFulfillmentLevel
 };
