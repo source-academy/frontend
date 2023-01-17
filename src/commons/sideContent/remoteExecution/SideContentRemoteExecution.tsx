@@ -8,11 +8,14 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
+import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {
@@ -26,7 +29,7 @@ import { useTypedSelector } from '../../utils/Hooks';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
-export interface SideContentRemoteExecutionProps {
+interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
   secretParams?: string;
   callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
@@ -104,6 +107,33 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
     [dispatch]
   );
 
+  const handleDelete = useCallback(
+    async (device: Device) => {
+      const confirm = await showSimpleConfirmDialog({
+        title: 'Really delete device?',
+        contents: `Are you sure you want to delete ${device.title} (${device.type})?`,
+        positiveLabel: 'Delete',
+        positiveIntent: 'danger',
+        negativeLabel: 'No',
+        icon: 'trash'
+      });
+      if (!confirm) {
+        return;
+      }
+      try {
+        await deleteDevice(device);
+      } catch (e) {
+        showWarningMessage(e.message || 'Unknown error occurred.');
+        return;
+      }
+      if (isConnected) {
+        dispatch(actions.remoteExecDisconnect());
+      }
+      dispatch(actions.remoteExecFetchDevices());
+    },
+    [dispatch, isConnected]
+  );
+
   if (!isLoggedIn) {
     return (
       <Callout intent="danger">
@@ -113,7 +143,6 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
   }
 
   const currentDevice = currentSession?.device;
-
   return (
     <>
       <div className="sa-remote-execution row">
@@ -128,27 +157,26 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
               icon={!currentDevice ? 'tick' : undefined}
               intent={!currentDevice ? 'success' : undefined}
             />
-            {devices &&
-              devices.map(device => {
-                const thisDevice = currentDevice?.id === device.id;
-                return (
-                  <MenuItem
-                    key={device.id}
-                    onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
-                    text={`${device.title} (${device.type})`}
-                    icon={thisDevice ? 'tick' : undefined}
-                    labelElement={
-                      <DeviceMenuItemButtons
-                        onEditDevice={setDialogState}
-                        isConnected={thisDevice && isConnected}
-                        device={device}
-                        dispatch={dispatch}
-                      />
-                    }
-                    intent={thisDevice && isConnected ? 'success' : undefined}
-                  />
-                );
-              })}
+            {devices?.map(device => {
+              const { id, title, type } = device;
+              const isSelected = currentDevice?.id === device.id;
+              return (
+                <MenuItem
+                  key={id}
+                  onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
+                  text={`${title} (${type})`}
+                  icon={isSelected && 'tick'}
+                  labelElement={
+                    <DeviceMenuItemButtons
+                      text={isSelected && isConnected ? 'Connected' : undefined}
+                      handleEdit={() => setDialogState(device)}
+                      handleDelete={async () => await handleDelete(device)}
+                    />
+                  }
+                  intent={isSelected && isConnected ? 'success' : undefined}
+                />
+              );
+            })}
             <MenuDivider />
             <MenuItem text="Add new device..." icon="add" onClick={() => setDialogState(true)} />
           </Menu>
