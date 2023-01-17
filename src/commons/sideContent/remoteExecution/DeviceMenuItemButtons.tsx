@@ -3,8 +3,8 @@ import React from 'react';
 
 type DeviceMenuItemProps = {
   text?: React.ReactNode;
-  handleDelete: () => void;
-  handleEdit: () => void;
+  handleDelete: React.MouseEventHandler;
+  handleEdit: React.MouseEventHandler;
 };
 
 const DeviceMenuItemButtons: React.FC<DeviceMenuItemProps> = ({
@@ -22,7 +22,7 @@ const DeviceMenuItemButtons: React.FC<DeviceMenuItemProps> = ({
           icon="edit"
           onClick={e => {
             e.stopPropagation();
-            handleEdit();
+            handleEdit(e);
           }}
         />
         <Button
@@ -32,7 +32,7 @@ const DeviceMenuItemButtons: React.FC<DeviceMenuItemProps> = ({
           icon="trash"
           onClick={e => {
             e.stopPropagation();
-            handleDelete();
+            handleDelete(e);
           }}
         />
       </div>
