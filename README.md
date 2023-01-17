@@ -20,7 +20,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS.
+1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS. ***17/1/2023 Latest version of LTS(v18) results in a compile error. Recommended to use v16.***
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.  
     - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
