@@ -20,7 +20,7 @@ import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
@@ -163,7 +163,7 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
                 Constants.defaultQuestionId
               }`}
             >
-              {controlButton('Edit mission', IconNames.EDIT)}
+              <ControlButton label="Edit mission" icon={IconNames.EDIT} />
             </NavLink>
           </div>
         </div>

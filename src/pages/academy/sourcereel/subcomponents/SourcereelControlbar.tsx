@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import Recorder from 'yareco';
 
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 import {
   Input,
   PlaybackData,
@@ -81,37 +81,41 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   }
 
   public render() {
-    const RecorderRecordPauseButton = controlButton(
-      'Record Pause',
-      IconNames.SNOWFLAKE,
-      this.props.handleRecordPause
+    const RecorderRecordPauseButton = (
+      <ControlButton
+        label="Record Pause"
+        icon={IconNames.SNOWFLAKE}
+        onClick={this.props.handleRecordPause}
+      />
     );
-    const RecorderPauseButton = controlButton('Pause', IconNames.PAUSE, this.handleRecorderPausing);
-    const RecorderResumeButton = controlButton(
-      'Resume',
-      IconNames.PLAY,
-      this.handleRecorderResuming
+    const RecorderPauseButton = (
+      <ControlButton label="Pause" icon={IconNames.PAUSE} onClick={this.handleRecorderPausing} />
     );
-    const RecorderResumeFromCurrentButton = controlButton(
-      'Resume Here',
-      IconNames.PLAY,
-      this.handleRecorderResumingFromCurrent
+    const RecorderResumeButton = (
+      <ControlButton label="Resume" icon={IconNames.PLAY} onClick={this.handleRecorderResuming} />
     );
-    const RecorderStartButton = controlButton(
-      'Record',
-      IconNames.PLAY,
-      this.handleRecorderStarting
+    const RecorderResumeFromCurrentButton = (
+      <ControlButton
+        label="Resume Here"
+        icon={IconNames.PLAY}
+        onClick={this.handleRecorderResumingFromCurrent}
+      />
     );
-    const RecorderStopButton = controlButton('Stop', IconNames.STOP, this.handleRecorderStopping);
-    const RecorderResetButton = controlButton(
-      'Reset',
-      IconNames.REFRESH,
-      this.handleRecorderResetting
+    const RecorderStartButton = (
+      <ControlButton label="Record" icon={IconNames.PLAY} onClick={this.handleRecorderStarting} />
     );
-    const RecorderSaveButton = controlButton(
-      'Upload',
-      IconNames.FLOPPY_DISK,
-      this.handleOpenDialog
+    const RecorderStopButton = (
+      <ControlButton label="Stop" icon={IconNames.STOP} onClick={this.handleRecorderStopping} />
+    );
+    const RecorderResetButton = (
+      <ControlButton
+        label="Reset"
+        icon={IconNames.REFRESH}
+        onClick={this.handleRecorderResetting}
+      />
+    );
+    const RecorderSaveButton = (
+      <ControlButton label="Upload" icon={IconNames.FLOPPY_DISK} onClick={this.handleOpenDialog} />
     );
     return (
       <div>
@@ -149,8 +153,16 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              {controlButton('Confirm Upload', IconNames.TICK, this.handleRecorderSaving)}
-              {controlButton('Cancel', IconNames.CROSS, this.handleCloseDialog)}
+              <ControlButton
+                label="Confirm Upload"
+                icon={IconNames.TICK}
+                onClick={this.handleRecorderSaving}
+              />
+              <ControlButton
+                label="Cancel"
+                icon={IconNames.CROSS}
+                onClick={this.handleCloseDialog}
+              />
             </div>
           </div>
         </Dialog>

@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from '../../ControlButton';
+import ControlButton from '../../ControlButton';
 import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
 import { showWarningMessage } from '../../utils/NotificationsHelper';
 
@@ -35,5 +35,7 @@ export const ControlBarTaskDeleteButton: React.FC<ControlBarTaskDeleteButtonProp
     }
   }
 
-  return controlButton('Delete Current Task', IconNames.DELETE, onClickDelete);
+  return (
+    <ControlButton label="Delete Current Task" icon={IconNames.DELETE} onClick={onClickDelete} />
+  );
 };

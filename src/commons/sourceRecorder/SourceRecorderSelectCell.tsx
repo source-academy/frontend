@@ -3,7 +3,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type SourceRecorderSelectCellProps = DispatchProps & StateProps;
 
@@ -29,7 +29,11 @@ class SourceRecorderSelectCell extends React.Component<SourceRecorderSelectCellP
   public render() {
     return (
       <Tooltip2 content="Load Sourcecast Recording">
-        {controlButton(`${this.props.data.title}`, IconNames.PAPERCLIP, this.handleSelect)}
+        <ControlButton
+          label={`${this.props.data.title}`}
+          icon={IconNames.PAPERCLIP}
+          onClick={this.handleSelect}
+        />
       </Tooltip2>
     );
   }

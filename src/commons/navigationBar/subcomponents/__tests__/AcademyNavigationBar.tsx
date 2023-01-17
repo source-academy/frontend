@@ -30,6 +30,9 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/adminpanel' }).exists())
   ).toHaveLength(0);
+  expect(
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/xpcalculation' }).exists())
+  ).toHaveLength(0);
 });
 
 test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and Grading NavLinks render for Role.Staff', () => {
@@ -57,11 +60,14 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and G
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/dashboard' }).exists())
   ).toHaveLength(1);
   expect(
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/xpcalculation' }).exists())
+  ).toHaveLength(0);
+  expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/adminpanel' }).exists())
   ).toHaveLength(0);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin', () => {
   const props = {
     role: Role.Admin,
     notifications: [],
@@ -84,6 +90,9 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   ).toHaveLength(1);
   expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/dashboard' }).exists())
+  ).toHaveLength(1);
+  expect(
+    tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/xpcalculation' }).exists())
   ).toHaveLength(1);
   expect(
     tree.filterWhere(shallowTree => shallowTree.find({ to: '/courses/0/adminpanel' }).exists())

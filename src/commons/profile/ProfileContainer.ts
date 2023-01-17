@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews, getTotalXp } from '../application/actions/SessionActions';
+import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import Profile, { DispatchProps, StateProps } from './Profile';
 
@@ -18,7 +18,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
-      handleTotalXpFetch: getTotalXp
+      handleTotalXpFetch: fetchTotalXp
     },
     dispatch
   );
